@@ -23,21 +23,21 @@ public class LocalSearchOptimiser implements IOptimiser {
 		
 		
 		IMoveGenerator moveGenerator;
-		
-		for (int iter = 0; iter < numIterations; ++iter) {
-			
-			IMove move = moveGenerator.generateMove();
+//		
+//		for (int iter = 0; iter < numIterations; ++iter) {
+//			
+//			IMove move = moveGenerator.generateMove();
 
-			if (testMove(move)) {
-				
-				move.apply(sequences);
-			} else {
-				
-			}
+//			if (testMove(move)) {
+//				
+//				move.apply(sequences);
+//			} else {
+//				
+//			}
 			
-			
-			++iter;
-		}
+//			
+//			++iter;
+//		}
 		
 
 		// Finalise optimisation process
