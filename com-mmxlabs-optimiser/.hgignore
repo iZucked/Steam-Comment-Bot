@@ -1,0 +1,9 @@
+
+syntax: regexp
+^optimiser-common/target$
+^optimiser-lso/target$
+
+syntax: regexp
+^optimiser-common/\.settings$
+syntax: regexp
+^optimiser-lso/\.settings$
