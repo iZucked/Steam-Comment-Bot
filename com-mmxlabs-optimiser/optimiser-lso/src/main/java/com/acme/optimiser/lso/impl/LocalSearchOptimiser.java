@@ -1,12 +1,13 @@
-package org.sgoodall.optimiser.lso.impl;
+package com.acme.optimiser.lso.impl;
 
 import java.util.Collection;
 
-import org.sgoodall.optimiser.IOptimisationContext;
-import org.sgoodall.optimiser.IOptimiser;
-import org.sgoodall.optimiser.ISolution;
-import org.sgoodall.optimiser.lso.IMove;
-import org.sgoodall.optimiser.lso.IMoveGenerator;
+
+import com.acme.optimiser.IOptimisationContext;
+import com.acme.optimiser.IOptimiser;
+import com.acme.optimiser.ISolution;
+import com.acme.optimiser.lso.IMove;
+import com.acme.optimiser.lso.IMoveGenerator;
 
 public class LocalSearchOptimiser implements IOptimiser {
 

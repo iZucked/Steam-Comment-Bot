@@ -1,9 +1,9 @@
-package org.sgoodall.optimiser.lso;
+package com.acme.optimiser.lso;
 
 import java.util.Collection;
 
-import org.sgoodall.optimiser.ISequence;
-import org.sgoodall.optimiser.ISequences;
+import com.acme.optimiser.ISequence;
+import com.acme.optimiser.ISequences;
 
 public interface IMove {
 	
