@@ -1,0 +1,81 @@
+package com.acme.optimiser.impl;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.acme.optimiser.ISequence;
+import com.acme.optimiser.impl.UnmodifiableSequenceWrapper;
+
+/**
+ * Ensure the {@link UnmodifiableSequenceWrapper} correctly invokes methods on
+ * the target object.
+ */
+@RunWith(JMock.class)
+public class UnmodifiableSequenceWrapperTest {
+
+	Mockery context = new JUnit4Mockery();
+
+	@Test
+	public void testGet() {
+
+		final ISequence target = context.mock(ISequence.class);
+
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
+				target);
+
+		context.checking(new Expectations() {
+			{
+				oneOf(target).get(0);
+			}
+		});
+
+		wrapped.get(0);
+
+		context.assertIsSatisfied();
+
+	}
+
+	@Test
+	public void tesIterator() {
+
+		final ISequence target = context.mock(ISequence.class);
+
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
+				target);
+
+		context.checking(new Expectations() {
+			{
+				oneOf(target).iterator();
+			}
+		});
+
+		wrapped.iterator();
+
+		context.assertIsSatisfied();
+
+	}
+
+	@Test
+	public void tesGetSegment() {
+
+		final ISequence target = context.mock(ISequence.class);
+
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
+				target);
+
+		context.checking(new Expectations() {
+			{
+				oneOf(target).size();
+			}
+		});
+
+		wrapped.size();
+
+		context.assertIsSatisfied();
+	}
+
+}

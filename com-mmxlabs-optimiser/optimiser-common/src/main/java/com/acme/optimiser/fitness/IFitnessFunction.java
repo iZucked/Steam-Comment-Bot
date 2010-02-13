@@ -1,4 +1,4 @@
-package org.sgoodall.optimiser;
+package com.acme.optimiser.fitness;
 
 public interface IFitnessFunction {
 
