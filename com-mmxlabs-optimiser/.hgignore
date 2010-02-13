@@ -7,3 +7,11 @@ syntax: regexp
 ^optimiser-common/\.settings$
 syntax: regexp
 ^optimiser-lso/\.settings$
+syntax: regexp
+^optimiser-lso/\.classpath$
+syntax: regexp
+^optimiser-lso/\.project$
+syntax: regexp
+^optimiser-common/\.classpath$
+syntax: regexp
+^optimiser-common/\.project$
