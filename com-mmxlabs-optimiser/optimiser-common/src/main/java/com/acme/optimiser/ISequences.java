@@ -1,5 +1,6 @@
 package com.acme.optimiser;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,8 +23,26 @@ public interface ISequences<T> {
 	ISequence<T> getSequence(IResource resource);
 
 	/**
-	 * Return 
+	 * Returns the {@link ISequence} for the given resource index.
+	 * 
+	 * @param index
+	 * @return
+	 */
+	ISequence<T> getSequence(int index);
+
+	/**
+	 * Return
+	 * 
 	 * @return
 	 */
 	Map<IResource, ISequence<T>> getSequences();
+
+	/**
+	 * Returns an indexed list of resources for which resources are keyed off.
+	 * The index of each resource can be passed to the {@link #getSequence(int)}
+	 * method.
+	 * 
+	 * @return
+	 */
+	List<IResource> getResources();
 }
