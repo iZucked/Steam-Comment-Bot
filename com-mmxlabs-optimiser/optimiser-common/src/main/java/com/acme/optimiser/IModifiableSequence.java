@@ -9,6 +9,7 @@ package com.acme.optimiser;
  * @author Simon Goodall
  * 
  * @param <T>
+ *            Sequence element type
  */
 public interface IModifiableSequence<T> extends ISequence<T> {
 

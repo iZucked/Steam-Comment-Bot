@@ -9,10 +9,12 @@ import java.util.Map;
  * @author Simon Goodall
  * 
  * @param <T>
+ *            Sequence element type
  */
 public interface ISequences<T> {
 
-	/** Returns the {@link ISequence} for the given {@link IResource}
+	/**
+	 * Returns the {@link ISequence} for the given {@link IResource}.
 	 * 
 	 * @param resource
 	 * @return

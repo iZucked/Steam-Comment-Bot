@@ -7,8 +7,16 @@ import com.acme.optimiser.IModifiableSequence;
 import com.acme.optimiser.ISegment;
 import com.acme.optimiser.ISequence;
 
-
-public class ListModifiableSequence<T> implements IModifiableSequence<T> {
+/**
+ * Implementation of {@link IModifiableSequence} which uses a {@link List} as
+ * the backing implementation.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type
+ */
+public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 
 	private final List<T> list;
 
@@ -73,7 +81,7 @@ public class ListModifiableSequence<T> implements IModifiableSequence<T> {
 
 	@Override
 	public ISegment<T> getSegment(final int start, final int end) {
-		// TODO Auto-generated method stub
+
 		return new ISegment<T>() {
 
 			List<T> l = list.subList(start, end);

@@ -6,6 +6,7 @@ package com.acme.optimiser;
  * @author Simon Goodall
  * 
  * @param <T>
+ *            Sequence element type
  */
 public interface ISequence<T> extends Iterable<T> {
 

@@ -2,7 +2,6 @@ package com.acme.optimiser.lso.impl;
 
 import java.util.Collection;
 
-
 import com.acme.optimiser.IOptimisationContext;
 import com.acme.optimiser.IOptimiser;
 import com.acme.optimiser.ISolution;
@@ -20,8 +19,7 @@ public class LocalSearchOptimiser implements IOptimiser {
 		
 		// Perform the optimisation
 		int numIterations;
-		
-		
+
 		IMoveGenerator moveGenerator;
 //		
 //		for (int iter = 0; iter < numIterations; ++iter) {

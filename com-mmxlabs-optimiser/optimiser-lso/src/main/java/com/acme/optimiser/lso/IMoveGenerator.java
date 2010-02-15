@@ -1,6 +1,20 @@
 package com.acme.optimiser.lso;
 
-public interface IMoveGenerator {
+/**
+ * Interface defining an object which can generate {@link IMove} instances to be
+ * used within a Local Search Optimisation.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type
+ */
+public interface IMoveGenerator<T> {
 
-	IMove generateMove();
+	/**
+	 * Returns a {@link IMove} object to change the current solution state.
+	 * 
+	 * @return
+	 */
+	IMove<T> generateMove();
 }

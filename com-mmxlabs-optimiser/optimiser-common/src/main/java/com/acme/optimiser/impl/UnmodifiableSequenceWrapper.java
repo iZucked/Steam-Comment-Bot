@@ -15,6 +15,7 @@ import com.acme.optimiser.ISequence;
  * @author Simon Goodall
  * 
  * @param <T>
+ *            Sequence element type
  */
 final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 
