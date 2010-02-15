@@ -40,7 +40,7 @@ public class UnmodifiableSequenceWrapperTest {
 	}
 
 	@Test
-	public void tesIterator() {
+	public void testIterator() {
 
 		final ISequence target = context.mock(ISequence.class);
 
@@ -60,7 +60,7 @@ public class UnmodifiableSequenceWrapperTest {
 	}
 
 	@Test
-	public void tesGetSegment() {
+	public void testGetSegment() {
 
 		final ISequence target = context.mock(ISequence.class);
 
