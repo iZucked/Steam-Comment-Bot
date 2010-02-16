@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.sgoodall.optimiser</groupId>
+  <groupId>com.acme.optimiser</groupId>
   <artifactId>optimiser-parent</artifactId>
   <packaging>pom</packaging>
   <name>Optimiser - Parent</name>
@@ -13,7 +13,6 @@
 
     <module>optimiser-lso</module>
   </modules>
-
  
   <properties>
         <slf4j.version>1.5.0</slf4j.version>
@@ -48,10 +47,7 @@
           <!-- Optional directory to put findbugs xml report -->
           <findbugsXmlOutputDirectory>target/site</findbugsXmlOutputDirectory>
         </configuration>
-
       </plugin>
     </plugins>
   </reporting>
- 
-  
 </project>
