@@ -10,7 +10,7 @@
  
   <modules>
     <module>optimiser-common</module>
-
+    <module>optimiser-builder</module>
     <module>optimiser-lso</module>
   </modules>
  
