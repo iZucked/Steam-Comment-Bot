@@ -12,11 +12,12 @@ import com.acme.optimiser.lso.IMoveGenerator;
 
 /**
  * Move generator to randomly generate moves with an equal probability
- * distribution
+ * distribution.
  * 
  * @author Simon Goodall
  * 
  * @param <T>
+ *            Sequence element type
  */
 
 public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
@@ -93,7 +94,7 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	private int generateBreakPoint(final ISequence<T> sequence) {
 		final int breakPoint = random.nextInt(sequence.size());
 
-		// Validate break point -- should it include depot?
+		// Validate break point -- should it include start/end elements?
 
 		return breakPoint;
 	}
@@ -134,6 +135,8 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 		while (resource2 != resource1) {
 			resource2 = random.nextInt(numResources);
 		}
+		
+		
 		final ISequence<T> sequence1 = sequences.getSequence(resource1);
 		final ISequence<T> sequence2 = sequences.getSequence(resource2);
 
