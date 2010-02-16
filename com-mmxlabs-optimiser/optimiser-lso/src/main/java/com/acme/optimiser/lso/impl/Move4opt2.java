@@ -20,7 +20,7 @@ import com.acme.optimiser.lso.impl.internal.MoveUtil;
  * @param <T>
  *            Sequence element type
  */
-public class Move4opt2<T> implements IMove<T> {
+public final class Move4opt2<T> implements IMove<T> {
 
 	private IResource resource1;
 
@@ -56,7 +56,7 @@ public class Move4opt2<T> implements IMove<T> {
 
 	@Override
 	public Collection<IResource> getAffectedResources() {
-		return MoveUtil.makeCollection(resource1, resource2);
+		return MoveUtil.makeArrayList(resource1, resource2);
 	}
 
 	@Override
@@ -86,7 +86,8 @@ public class Move4opt2<T> implements IMove<T> {
 		}
 
 		// Validate parameters against sequences object
-		final Map<IResource, ISequence<T>> sequenceMap = sequences.getSequences();
+		final Map<IResource, ISequence<T>> sequenceMap = sequences
+				.getSequences();
 
 		// Make sure resources exist
 		if (sequenceMap.containsKey(resource1) == false) {
