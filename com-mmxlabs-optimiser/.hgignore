@@ -1,17 +1,10 @@
 
 syntax: regexp
-^optimiser-common/target$
-^optimiser-lso/target$
+^optimiser-.*/target$
 
 syntax: regexp
-^optimiser-common/\.settings$
+^optimiser-.*/\.settings$
 syntax: regexp
-^optimiser-lso/\.settings$
+^optimiser-.*/\.classpath$
 syntax: regexp
-^optimiser-lso/\.classpath$
-syntax: regexp
-^optimiser-lso/\.project$
-syntax: regexp
-^optimiser-common/\.classpath$
-syntax: regexp
-^optimiser-common/\.project$
+^optimiser-.*/\.project$
