@@ -1,11 +1,11 @@
 package com.acme.optimiser.impl;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.acme.optimiser.IModifiableSequence;
 import com.acme.optimiser.ISegment;
-import com.acme.optimiser.ISequence;
 
 /**
  * Implementation of {@link IModifiableSequence} which uses a {@link List} as
@@ -82,41 +82,9 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	@Override
 	public ISegment<T> getSegment(final int start, final int end) {
 
-		return new ISegment<T>() {
-
-			List<T> l = list.subList(start, end);
-
-			@Override
-			public T get(final int index) {
-				return l.get(index);
-			}
-
-			@Override
-			public ISequence<T> getSequence() {
-				return ListModifiableSequence.this;
-			}
-
-			@Override
-			public int getSequenceEnd() {
-				return end;
-			}
-
-			@Override
-			public int getSequenceStart() {
-				return start;
-			}
-
-			@Override
-			public int size() {
-				return l.size();
-			}
-
-			@Override
-			public Iterator<T> iterator() {
-				return l.iterator();
-			}
-		};
-
+		// Copy of the sublist to make segment independent from sequence.
+		return new Segment<T>(new ArrayList<T>(list.subList(start, end)), this,
+				start, end);
 	}
 
 	@Override
