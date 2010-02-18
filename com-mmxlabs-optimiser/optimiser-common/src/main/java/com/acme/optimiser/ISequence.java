@@ -28,7 +28,7 @@ public interface ISequence<T> extends Iterable<T> {
 
 	/**
 	 * Return a {@link ISegment} instance from a subset of the sequence using
-	 * the specified range. TODO: Should the ISegment be shared or copied data?
+	 * the specified range. The segment will be independent from the sequence.
 	 * Throws IndexOutOfBoundsException if the start or end does is not a valid
 	 * value.
 	 * 
