@@ -83,7 +83,7 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	public ISegment<T> getSegment(final int start, final int end) {
 
 		// Copy of the sublist to make segment independent from sequence.
-		return new Segment<T>(new ArrayList<T>(list.subList(start, end)), this,
+		return new ListSegment<T>(new ArrayList<T>(list.subList(start, end)), this,
 				start, end);
 	}
 

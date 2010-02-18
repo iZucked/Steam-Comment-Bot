@@ -6,7 +6,15 @@ import java.util.List;
 import com.acme.optimiser.ISegment;
 import com.acme.optimiser.ISequence;
 
-public final class Segment<T> implements ISegment<T> {
+/**
+ * Default implementation of {@link ISegment} which uses a {@link List} as the
+ * backing implementation.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ */
+public final class ListSegment<T> implements ISegment<T> {
 
 	/**
 	 * List of segment items
@@ -27,7 +35,7 @@ public final class Segment<T> implements ISegment<T> {
 	 */
 	private final int end;
 
-	public Segment(final List<T> segment, final ISequence<T> sequence,
+	public ListSegment(final List<T> segment, final ISequence<T> sequence,
 			final int start, final int end) {
 		this.l = segment;
 		this.sequence = sequence;
