@@ -61,7 +61,9 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 	 * Remove a range of elements from the start index to the end index.
 	 * 
 	 * @param start
+	 *            Range start (inclusive)
 	 * @param end
+	 *            Range end (Exclusive)
 	 */
 	void remove(int start, int end);
 
