@@ -19,6 +19,7 @@ public class UnmodifiableSequenceWrapperTest {
 
 	Mockery context = new JUnit4Mockery();
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testGet() {
 
@@ -39,6 +40,7 @@ public class UnmodifiableSequenceWrapperTest {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testIterator() {
 
@@ -59,6 +61,7 @@ public class UnmodifiableSequenceWrapperTest {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetSegment() {
 
