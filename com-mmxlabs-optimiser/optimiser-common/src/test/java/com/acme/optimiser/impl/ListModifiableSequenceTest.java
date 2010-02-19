@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.acme.optimiser.ISegment;
+
 public class ListModifiableSequenceTest {
 
 	private ListModifiableSequence<Object> sequence;
@@ -151,9 +153,76 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testGetSegment() {
-		fail("Not yet implemented");
+		
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		ISegment<Object> segment = sequence.getSegment(0, 2);
+		
+		Assert.assertEquals(2, segment.size());
+		
+		Assert.assertEquals(0, segment.getSequenceStart());
+		Assert.assertEquals(2, segment.getSequenceEnd());
+
+		Assert.assertSame(sequence, segment.getSequence());
+		
+		Assert.assertSame(object1, segment.get(0));
+		Assert.assertSame(object2, segment.get(1));
+		
+		
+		Iterator<Object> iterator = segment.iterator();
+		
+		Assert.assertTrue(iterator.hasNext());
+		Object iterObject1 = iterator.next();
+		Assert.assertSame(object1, iterObject1);
+
+		Assert.assertTrue(iterator.hasNext());
+		Object iterObject2 = iterator.next();
+		Assert.assertSame(object2, iterObject2);
+
+		iterator.remove();
+
+		Assert.assertEquals(1, segment.size());
+		Assert.assertEquals(2, sequence.size());
+
+
+		Assert.assertSame(object1, segment.get(0));
+		
+		Assert.assertSame(object1, sequence.get(0));
+		Assert.assertSame(object2, sequence.get(1));
 	}
 
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void testGetSegment_2() {
+		
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		ISegment<Object> segment = sequence.getSegment(-1, 2);
+	}
+
+
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void testGetSegment_3() {
+		
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		ISegment<Object> segment = sequence.getSegment(0, 3);
+	}
+
+
+	
+	
 	@Test
 	public void testSize() {
 		Assert.assertEquals(0, sequence.size());
