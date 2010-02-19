@@ -33,7 +33,9 @@ public interface ISequence<T> extends Iterable<T> {
 	 * value.
 	 * 
 	 * @param start
+	 *            Range start (inclusive)
 	 * @param end
+	 *            Range end (exclusive)
 	 * @return
 	 */
 	ISegment<T> getSegment(int start, int end);
