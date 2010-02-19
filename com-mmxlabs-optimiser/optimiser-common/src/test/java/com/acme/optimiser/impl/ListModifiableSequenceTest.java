@@ -4,6 +4,8 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -76,22 +78,78 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testInsertIntT() {
-		fail("Not yet implemented");
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		Object object3 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		sequence.insert(1, object3);
+
+		Assert.assertEquals(3, sequence.size());
+
+		Assert.assertSame(object1, sequence.get(0));
+		Assert.assertSame(object3, sequence.get(1));
+		Assert.assertSame(object2, sequence.get(2));
 	}
 
 	@Test
 	public void testInsertIntISegmentOfT() {
-		fail("Not yet implemented");
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		Object object3 = new Object();
+		Object object4 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		List<Object> segmentList = new LinkedList<Object>();
+		segmentList.add(object3);
+		segmentList.add(object4);
+		ISegment<Object> segment = new ListSegment<Object>(
+				segmentList, sequence, 0, 1);
+		
+		sequence.insert(1, segment);
+
+		Assert.assertEquals(4, sequence.size());
+
+		Assert.assertSame(object1, sequence.get(0));
+		Assert.assertSame(object3, sequence.get(1));
+		Assert.assertSame(object4, sequence.get(2));
+		Assert.assertSame(object2, sequence.get(3));
 	}
 
 	@Test
 	public void testRemoveInt() {
-		fail("Not yet implemented");
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		sequence.remove(0);
+
+		Assert.assertEquals(1, sequence.size());
+		Assert.assertSame(object2, sequence.get(0));
 	}
 
 	@Test
 	public void testRemoveT() {
-		fail("Not yet implemented");
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		sequence.remove(object1);
+
+		Assert.assertEquals(1, sequence.size());
+		Assert.assertSame(object2, sequence.get(0));
 	}
 
 	@Test
@@ -101,7 +159,17 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testRemoveIntInt() {
-		fail("Not yet implemented");
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		sequence.remove(0, 1);
+
+		Assert.assertEquals(1, sequence.size());
+		Assert.assertSame(object2, sequence.get(0));
+
 	}
 
 	@Test
@@ -153,7 +221,7 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testGetSegment() {
-		
+
 		Object object1 = new Object();
 		Object object2 = new Object();
 
@@ -161,20 +229,19 @@ public class ListModifiableSequenceTest {
 		sequence.add(object2);
 
 		ISegment<Object> segment = sequence.getSegment(0, 2);
-		
+
 		Assert.assertEquals(2, segment.size());
-		
+
 		Assert.assertEquals(0, segment.getSequenceStart());
 		Assert.assertEquals(2, segment.getSequenceEnd());
 
 		Assert.assertSame(sequence, segment.getSequence());
-		
+
 		Assert.assertSame(object1, segment.get(0));
 		Assert.assertSame(object2, segment.get(1));
-		
-		
+
 		Iterator<Object> iterator = segment.iterator();
-		
+
 		Assert.assertTrue(iterator.hasNext());
 		Object iterObject1 = iterator.next();
 		Assert.assertSame(object1, iterObject1);
@@ -188,16 +255,15 @@ public class ListModifiableSequenceTest {
 		Assert.assertEquals(1, segment.size());
 		Assert.assertEquals(2, sequence.size());
 
-
 		Assert.assertSame(object1, segment.get(0));
-		
+
 		Assert.assertSame(object1, sequence.get(0));
 		Assert.assertSame(object2, sequence.get(1));
 	}
 
-	@Test(expected=IndexOutOfBoundsException.class)
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGetSegment_2() {
-		
+
 		Object object1 = new Object();
 		Object object2 = new Object();
 
@@ -207,10 +273,9 @@ public class ListModifiableSequenceTest {
 		ISegment<Object> segment = sequence.getSegment(-1, 2);
 	}
 
-
-	@Test(expected=IndexOutOfBoundsException.class)
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGetSegment_3() {
-		
+
 		Object object1 = new Object();
 		Object object2 = new Object();
 
@@ -220,9 +285,6 @@ public class ListModifiableSequenceTest {
 		ISegment<Object> segment = sequence.getSegment(0, 3);
 	}
 
-
-	
-	
 	@Test
 	public void testSize() {
 		Assert.assertEquals(0, sequence.size());
