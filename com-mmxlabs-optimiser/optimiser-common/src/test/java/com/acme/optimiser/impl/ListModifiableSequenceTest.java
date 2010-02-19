@@ -96,6 +96,34 @@ public class ListModifiableSequenceTest {
 		Assert.assertSame(object2, sequence.get(2));
 	}
 
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testInsertIntT_2() {
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		Object object3 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		sequence.insert(-1, object3);
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testInsertIntT_3() {
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		Object object3 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		sequence.insert(3, object3);
+	}
+
 	@Test
 	public void testInsertIntISegmentOfT() {
 		Object object1 = new Object();
@@ -110,9 +138,9 @@ public class ListModifiableSequenceTest {
 		List<Object> segmentList = new LinkedList<Object>();
 		segmentList.add(object3);
 		segmentList.add(object4);
-		ISegment<Object> segment = new ListSegment<Object>(
-				segmentList, sequence, 0, 1);
-		
+		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+				sequence, 0, 1);
+
 		sequence.insert(1, segment);
 
 		Assert.assertEquals(4, sequence.size());
@@ -121,6 +149,48 @@ public class ListModifiableSequenceTest {
 		Assert.assertSame(object3, sequence.get(1));
 		Assert.assertSame(object4, sequence.get(2));
 		Assert.assertSame(object2, sequence.get(3));
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testInsertIntISegmentOfT_2() {
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		Object object3 = new Object();
+		Object object4 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		List<Object> segmentList = new LinkedList<Object>();
+		segmentList.add(object3);
+		segmentList.add(object4);
+		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+				sequence, 0, 1);
+
+		sequence.insert(-1, segment);
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testInsertIntISegmentOfT_3() {
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		Object object3 = new Object();
+		Object object4 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		List<Object> segmentList = new LinkedList<Object>();
+		segmentList.add(object3);
+		segmentList.add(object4);
+		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+				sequence, 0, 1);
+
+		sequence.insert(3, segment);
 	}
 
 	@Test
@@ -153,8 +223,74 @@ public class ListModifiableSequenceTest {
 	}
 
 	@Test
+	public void testRemoveT_2() {
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+
+		// TODO: Backing list implementation returns a boolean to inidcate
+		// success.
+		// This information is currently lost and this method will silently
+		// fail.
+		sequence.remove(object2);
+
+		fail("Ambigous API");
+	}
+
+	@Test
 	public void testRemoveISegmentOfT() {
-		fail("Not yet implemented");
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		Object object3 = new Object();
+		Object object4 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+		sequence.add(object3);
+		sequence.add(object4);
+
+		List<Object> segmentList = new LinkedList<Object>();
+		segmentList.add(object2);
+		segmentList.add(object3);
+		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+				sequence, 1, 3);
+
+		sequence.remove(segment);
+
+		Assert.assertEquals(2, sequence.size());
+
+		Assert.assertSame(object1, sequence.get(0));
+		Assert.assertSame(object4, sequence.get(1));
+	}
+
+	@Test
+	public void testRemoveISegmentOfT_2() {
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		Object object3 = new Object();
+		Object object4 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object4);
+
+		List<Object> segmentList = new LinkedList<Object>();
+		segmentList.add(object2);
+		segmentList.add(object3);
+		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+				sequence, 1, 3);
+
+		// TODO: Backing list implementation returns a boolean to inidcate
+		// success.
+		// This information is currently lost and this method will silently
+		// fail.
+		sequence.remove(segment);
+		
+		fail("Ambigous API");
 	}
 
 	@Test
@@ -172,6 +308,31 @@ public class ListModifiableSequenceTest {
 
 	}
 
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void testRemoveIntInt_2() {
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		sequence.remove(-1, 1);
+	}
+
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testRemoveIntInt_3() {
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		sequence.remove(0, 3);
+	}
+
+	
+	
 	@Test
 	public void testSet() {
 		Assert.assertEquals(0, sequence.size());
