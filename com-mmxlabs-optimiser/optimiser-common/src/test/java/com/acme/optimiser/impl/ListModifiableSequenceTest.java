@@ -15,8 +15,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.acme.optimiser.IModifiableSequence;
 import com.acme.optimiser.ISegment;
 
+/**
+ * Test the {@link ListModifiableSequence} against the documented API. Most of
+ * this test case should be reusable against other {@link IModifiableSequence}
+ * implementations.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class ListModifiableSequenceTest {
 
 	private ListModifiableSequence<Object> sequence;
@@ -289,7 +298,7 @@ public class ListModifiableSequenceTest {
 		// This information is currently lost and this method will silently
 		// fail.
 		sequence.remove(segment);
-		
+
 		fail("Ambigous API");
 	}
 
@@ -308,7 +317,7 @@ public class ListModifiableSequenceTest {
 
 	}
 
-	@Test(expected=IndexOutOfBoundsException.class)
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRemoveIntInt_2() {
 		Object object1 = new Object();
 		Object object2 = new Object();
@@ -318,7 +327,6 @@ public class ListModifiableSequenceTest {
 
 		sequence.remove(-1, 1);
 	}
-
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRemoveIntInt_3() {
@@ -331,8 +339,6 @@ public class ListModifiableSequenceTest {
 		sequence.remove(0, 3);
 	}
 
-	
-	
 	@Test
 	public void testSet() {
 		Assert.assertEquals(0, sequence.size());
@@ -431,7 +437,7 @@ public class ListModifiableSequenceTest {
 		sequence.add(object1);
 		sequence.add(object2);
 
-		ISegment<Object> segment = sequence.getSegment(-1, 2);
+		sequence.getSegment(-1, 2);
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
@@ -443,7 +449,7 @@ public class ListModifiableSequenceTest {
 		sequence.add(object1);
 		sequence.add(object2);
 
-		ISegment<Object> segment = sequence.getSegment(0, 3);
+		sequence.getSegment(0, 3);
 	}
 
 	@Test
@@ -453,7 +459,5 @@ public class ListModifiableSequenceTest {
 		sequence.add(new Object());
 
 		Assert.assertEquals(1, sequence.size());
-
 	}
-
 }
