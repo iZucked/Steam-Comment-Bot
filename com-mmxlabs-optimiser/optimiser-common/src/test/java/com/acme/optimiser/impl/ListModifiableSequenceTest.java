@@ -3,6 +3,7 @@ package com.acme.optimiser.impl;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import junit.framework.Assert;
 
@@ -33,10 +34,32 @@ public class ListModifiableSequenceTest {
 	public void tearDown() throws Exception {
 	}
 
-
+	/**
+	 * Test sequence iterator method
+	 */
 	@Test
 	public void testIterator() {
-		fail("Not yet implemented");
+
+		Object object1 = new Object();
+		Object object2 = new Object();
+
+		sequence.add(object1);
+		sequence.add(object2);
+
+		Iterator<Object> iterator = sequence.iterator();
+		Assert.assertTrue(iterator.hasNext());
+		Object iterObject1 = iterator.next();
+		Assert.assertSame(object1, iterObject1);
+
+		Assert.assertTrue(iterator.hasNext());
+		Object iterObject2 = iterator.next();
+		Assert.assertSame(object2, iterObject2);
+
+		iterator.remove();
+
+		Assert.assertEquals(1, sequence.size());
+
+		Assert.assertSame(object1, sequence.get(0));
 	}
 
 	@Test
@@ -86,17 +109,14 @@ public class ListModifiableSequenceTest {
 		sequence.add(element);
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertEquals(element, sequence.get(0));
-		
+
 		Object element2 = new Object();
 		sequence.set(0, element2);
-			
+
 		Assert.assertEquals(element2, sequence.get(0));
 		Assert.assertNotSame(element, sequence.get(0));
-		
-		
+
 	}
-	
-	
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testSet_2() {
