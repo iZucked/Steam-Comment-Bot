@@ -118,7 +118,11 @@ public class Move4opt2Test {
 
 		move.apply(sequences);
 
-		Assert.fail("Not complete - check output sequences");
 
+		List<Integer> expectedSequence1 = MoveUtil.makeArrayList( 7, 8, 3, 4, 5);
+		List<Integer> expectedSequence2 = MoveUtil
+				.makeArrayList(6,1, 2, 9, 10);
+
+		Assert.fail("Not complete - check output sequences");
 	}
 }
