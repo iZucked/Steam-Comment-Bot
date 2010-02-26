@@ -33,6 +33,26 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	private List<IConstraintChecker<T>> constraintCheckers;
 
 	/**
+	 * Initialise method checking the object has all the correct pieces of data
+	 * to be able to perform the
+	 * {@link #optimise(IOptimisationContext, Collection, Object)} method.
+	 * Throws an {@link IllegalStateException} on error.
+	 */
+	public void init() {
+		if (moveGenerator == null) {
+			throw new IllegalStateException("Move Generator is not set");
+		}
+		
+		if (numberOfIterations < 1) {
+			throw new IllegalStateException("Number of iterations is less than 1");
+		}
+		
+		if (constraintCheckers == null) {
+			throw new IllegalStateException("Constraint Checkers list is not set");
+		}
+	}
+
+	/**
 	 * Sub-classes of {@link LocalSearchOptimiser} should implement this method
 	 * to perform the actual optimisation.
 	 */
