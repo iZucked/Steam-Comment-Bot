@@ -33,7 +33,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	 * to perform the actual optimisation.
 	 */
 	@Override
-	public abstract void optimise(IOptimisationContext optimiserContext,
+	public abstract void optimise(IOptimisationContext<T> optimiserContext,
 			Collection<ISolution> initialSolutions, Object archiverCallback);
 
 	/**

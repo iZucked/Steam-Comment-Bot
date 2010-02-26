@@ -17,7 +17,7 @@ import com.acme.optimiser.lso.IMove;
  */
 public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 	@Override
-	public void optimise(final IOptimisationContext optimiserContext,
+	public void optimise(final IOptimisationContext<T> optimiserContext,
 			final Collection<ISolution> initialSolutions,
 			final Object archiverCallback) {
 
