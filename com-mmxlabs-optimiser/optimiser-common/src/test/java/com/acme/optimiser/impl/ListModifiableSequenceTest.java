@@ -460,4 +460,10 @@ public class ListModifiableSequenceTest {
 
 		Assert.assertEquals(1, sequence.size());
 	}
+	
+	@Test
+	public void testReplaceAll() {
+		
+		fail("Not yet implemented");
+	}
 }

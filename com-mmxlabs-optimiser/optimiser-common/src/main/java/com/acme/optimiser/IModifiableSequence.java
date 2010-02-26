@@ -75,4 +75,12 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 	 * @param segment
 	 */
 	void insert(int index, ISegment<T> segment);
+
+	/**
+	 * Replaces all entries in the current sequence with those in the specified
+	 * sequence.
+	 * 
+	 * @param sequence
+	 */
+	void replaceAll(ISequence<T> sequence);
 }

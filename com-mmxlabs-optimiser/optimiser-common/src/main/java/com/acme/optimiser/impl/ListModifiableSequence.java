@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.acme.optimiser.IModifiableSequence;
 import com.acme.optimiser.ISegment;
+import com.acme.optimiser.ISequence;
 
 /**
  * Implementation of {@link IModifiableSequence} which uses a {@link List} as
@@ -83,12 +84,21 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	public ISegment<T> getSegment(final int start, final int end) {
 
 		// Copy of the sublist to make segment independent from sequence.
-		return new ListSegment<T>(new ArrayList<T>(list.subList(start, end)), this,
-				start, end);
+		return new ListSegment<T>(new ArrayList<T>(list.subList(start, end)),
+				this, start, end);
 	}
 
 	@Override
 	public int size() {
 		return list.size();
+	}
+
+	@Override
+	public void replaceAll(final ISequence<T> sequence) {
+		list.clear();
+
+		for (final T t : sequence) {
+			list.add(t);
+		}
 	}
 }
