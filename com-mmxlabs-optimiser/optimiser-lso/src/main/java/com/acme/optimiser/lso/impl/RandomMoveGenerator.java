@@ -118,6 +118,11 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 		Arrays.sort(breakPoints);
 	}
 
+	/**
+	 * Generate a 4opt2 move
+	 * 
+	 * @return
+	 */
 	private IMove<T> createMove4opt2() {
 
 		final List<IResource> resources = sequences.getResources();
@@ -135,8 +140,7 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 		while (resource2 != resource1) {
 			resource2 = random.nextInt(numResources);
 		}
-		
-		
+
 		final ISequence<T> sequence1 = sequences.getSequence(resource1);
 		final ISequence<T> sequence2 = sequences.getSequence(resource2);
 
@@ -156,6 +160,7 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 		// Set break points
 		move.setResource1Start(resource1StartEnd[0]);
 		move.setResource1End(resource1StartEnd[1]);
+
 		move.setResource2Start(resource2StartEnd[0]);
 		move.setResource2End(resource2StartEnd[1]);
 
