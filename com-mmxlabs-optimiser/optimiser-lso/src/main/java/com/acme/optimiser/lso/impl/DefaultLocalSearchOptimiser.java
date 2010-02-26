@@ -3,6 +3,7 @@ package com.acme.optimiser.lso.impl;
 import java.util.Collection;
 
 import com.acme.optimiser.IOptimisationContext;
+import com.acme.optimiser.ISequences;
 import com.acme.optimiser.ISolution;
 import com.acme.optimiser.impl.ModifiableSequences;
 import com.acme.optimiser.lso.IMove;
@@ -26,9 +27,11 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		int numberOfMovesTried = 0;
 		int numberOfMovesAccepted = 0;
 
-		final ModifiableSequences<T> currentRawSequences;
+		// Create a modifiable working copy of the initial sequences.
+		final ISequences<T> initialSequences = optimiserContext.getInitialSequences();
+		final ModifiableSequences<T> currentRawSequences = new ModifiableSequences<T>(initialSequences);
 
-		// Create a copy of the current sequences
+		// Create a copy of the current sequences as the starting point for the next state
 		final ModifiableSequences<T> potentialRawSequences = new ModifiableSequences<T>(
 				currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences,
