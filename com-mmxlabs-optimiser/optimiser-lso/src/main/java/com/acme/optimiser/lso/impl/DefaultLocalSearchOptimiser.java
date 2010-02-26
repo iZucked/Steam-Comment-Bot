@@ -1,7 +1,9 @@
 package com.acme.optimiser.lso.impl;
 
 import java.util.Collection;
+import java.util.List;
 
+import com.acme.optimiser.IConstraintChecker;
 import com.acme.optimiser.IOptimisationContext;
 import com.acme.optimiser.ISequences;
 import com.acme.optimiser.ISolution;
@@ -28,17 +30,22 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		int numberOfMovesAccepted = 0;
 
 		// Create a modifiable working copy of the initial sequences.
-		final ISequences<T> initialSequences = optimiserContext.getInitialSequences();
-		final ModifiableSequences<T> currentRawSequences = new ModifiableSequences<T>(initialSequences);
+		final ISequences<T> initialSequences = optimiserContext
+				.getInitialSequences();
+		final ModifiableSequences<T> currentRawSequences = new ModifiableSequences<T>(
+				initialSequences);
 
-		// Create a copy of the current sequences as the starting point for the next state
+		// Create a copy of the current sequences as the starting point for the
+		// next state
 		final ModifiableSequences<T> potentialRawSequences = new ModifiableSequences<T>(
 				currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences,
 				currentRawSequences.getResources());
 
+		final List<IConstraintChecker<T>> constraintCheckers = getConstraintCheckers();
+
 		// Perform the optimisation
-		for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
+		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
 
 			++numberOfMovesTried;
 
@@ -62,11 +69,20 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			// ... TODO ...
 			// ISequences<T> fullSequenes =
 			// manipulator.manipulate(potentialRawSquences);
+			final ISequences<T> potentialFullSequences = potentialRawSequences;
 
 			// Apply hard constraint checkers
-			// ... TODO ...
+			for (final IConstraintChecker<T> checker : constraintCheckers) {
+				if (checker.checkConstraints(potentialFullSequences) == false) {
+					// Reject Move
+					updateSequences(currentRawSequences, potentialRawSequences,
+							move.getAffectedResources());
+					// Break out
+					continue MAIN_LOOP;
+				}
+			}
 
-			if (evaluateSequences(potentialRawSequences)) {
+			if (evaluateSequences(potentialFullSequences)) {
 				// Success update state for new sequences
 
 				updateSequences(potentialRawSequences, currentRawSequences,
@@ -77,7 +93,6 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				++numberOfMovesAccepted;
 			} else {
 				// Failed, reset state for old sequences
-
 				updateSequences(currentRawSequences, potentialRawSequences,
 						move.getAffectedResources());
 			}
@@ -85,6 +100,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		}
 
 		// Finalise optimisation process
+		// ... TODO ...
 
 	}
 }
