@@ -7,7 +7,19 @@ import com.acme.optimiser.IOptimiser;
 import com.acme.optimiser.ISolution;
 import com.acme.optimiser.lso.IMoveGenerator;
 
-public class LocalSearchOptimiser implements IOptimiser {
+/**
+ * Main class implementing a Local Search Optimiser.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence Element Type
+ */
+public class LocalSearchOptimiser<T> implements IOptimiser<T> {
+
+	private IMoveGenerator<T> moveGenerator;
+
+	private int numberOfIterations;
 
 	@Override
 	public void optimise(IOptimisationContext optimiserContext,
