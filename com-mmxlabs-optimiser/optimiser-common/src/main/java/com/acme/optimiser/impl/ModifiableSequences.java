@@ -11,6 +11,7 @@ import com.acme.optimiser.IModifiableSequence;
 import com.acme.optimiser.IModifiableSequences;
 import com.acme.optimiser.IResource;
 import com.acme.optimiser.ISequence;
+import com.acme.optimiser.ISequences;
 
 /**
  * Default implementation of {@link IModifiableSequences}
@@ -56,6 +57,34 @@ public final class ModifiableSequences<T> implements IModifiableSequences<T> {
 			final Map<IResource, IModifiableSequence<T>> sequenceMap) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
+	}
+
+	/**
+	 * Constructor which creates a modifiable copy of the input
+	 * {@link ISequences} object.
+	 * 
+	 * @param sequences
+	 *            Source {@link ISequences} object
+	 */
+	public ModifiableSequences(final ISequences<T> sequences) {
+
+		this.resources = new ArrayList<IResource>(sequences.getResources());
+
+		this.sequenceMap = new HashMap<IResource, IModifiableSequence<T>>();
+		for (final IResource r : resources) {
+			// Get original sequence
+			final ISequence<T> seq = sequences.getSequence(r);
+
+			// Create a modifiable sequence object
+			final ListModifiableSequence<T> modifiableSequence = new ListModifiableSequence<T>(
+					new ArrayList<T>(seq.size()));
+
+			// Set contents
+			modifiableSequence.replaceAll(seq);
+
+			// store the new object
+			sequenceMap.put(r, modifiableSequence);
+		}
 	}
 
 	@Override
