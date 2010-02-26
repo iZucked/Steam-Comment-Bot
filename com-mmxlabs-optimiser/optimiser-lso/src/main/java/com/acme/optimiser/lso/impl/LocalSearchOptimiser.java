@@ -27,9 +27,9 @@ import com.acme.optimiser.lso.IMoveGenerator;
 public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 
 	private IMoveGenerator<T> moveGenerator;
-	
+
 	private int numberOfIterations;
-	
+
 	private List<IConstraintChecker<T>> constraintCheckers;
 
 	/**
@@ -80,7 +80,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		}
 	}
 
-	public final void setMoveGenerator(IMoveGenerator<T> moveGenerator) {
+	public final void setMoveGenerator(final IMoveGenerator<T> moveGenerator) {
 		this.moveGenerator = moveGenerator;
 	}
 
@@ -88,11 +88,20 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		return moveGenerator;
 	}
 
-	public final void setNumberOfIterations(int numberOfIterations) {
+	public final void setNumberOfIterations(final int numberOfIterations) {
 		this.numberOfIterations = numberOfIterations;
 	}
 
 	public final int getNumberOfIterations() {
 		return numberOfIterations;
+	}
+
+	public void setConstraintCheckers(
+			final List<IConstraintChecker<T>> constraintCheckers) {
+		this.constraintCheckers = constraintCheckers;
+	}
+
+	public List<IConstraintChecker<T>> getConstraintCheckers() {
+		return constraintCheckers;
 	}
 }
