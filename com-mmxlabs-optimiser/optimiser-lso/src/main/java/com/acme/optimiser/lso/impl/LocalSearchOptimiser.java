@@ -1,7 +1,9 @@
 package com.acme.optimiser.lso.impl;
 
 import java.util.Collection;
+import java.util.List;
 
+import com.acme.optimiser.IConstraintChecker;
 import com.acme.optimiser.IModifiableSequence;
 import com.acme.optimiser.IModifiableSequences;
 import com.acme.optimiser.IOptimisationContext;
@@ -25,8 +27,10 @@ import com.acme.optimiser.lso.IMoveGenerator;
 public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 
 	private IMoveGenerator<T> moveGenerator;
-
+	
 	private int numberOfIterations;
+	
+	private List<IConstraintChecker<T>> constraintCheckers;
 
 	/**
 	 * Sub-classes of {@link LocalSearchOptimiser} should implement this method
