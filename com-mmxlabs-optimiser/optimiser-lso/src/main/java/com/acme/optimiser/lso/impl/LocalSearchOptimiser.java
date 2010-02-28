@@ -12,7 +12,9 @@ import com.acme.optimiser.IResource;
 import com.acme.optimiser.ISequence;
 import com.acme.optimiser.ISequences;
 import com.acme.optimiser.ISolution;
+import com.acme.optimiser.fitness.IFitnessHelper;
 import com.acme.optimiser.lso.IMoveGenerator;
+import com.sun.xml.internal.txw2.IllegalSignatureException;
 
 /**
  * Main class implementing a Local Search Optimiser. While the actual
@@ -32,6 +34,8 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 
 	private List<IConstraintChecker<T>> constraintCheckers;
 
+	private IFitnessHelper<T> fitnessHelper;
+
 	/**
 	 * Initialise method checking the object has all the correct pieces of data
 	 * to be able to perform the
@@ -42,13 +46,19 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		if (moveGenerator == null) {
 			throw new IllegalStateException("Move Generator is not set");
 		}
-		
+
 		if (numberOfIterations < 1) {
-			throw new IllegalStateException("Number of iterations is less than 1");
+			throw new IllegalStateException(
+					"Number of iterations is less than 1");
 		}
-		
+
 		if (constraintCheckers == null) {
-			throw new IllegalStateException("Constraint Checkers list is not set");
+			throw new IllegalStateException(
+					"Constraint Checkers list is not set");
+		}
+
+		if (fitnessHelper == null) {
+			throw new IllegalSignatureException("Fitness Helper is not set");
 		}
 	}
 
@@ -123,5 +133,13 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 
 	public List<IConstraintChecker<T>> getConstraintCheckers() {
 		return constraintCheckers;
+	}
+
+	public void setFitnessHelper(final IFitnessHelper<T> fitnessHelper) {
+		this.fitnessHelper = fitnessHelper;
+	}
+
+	public IFitnessHelper<T> getFitnessHelper() {
+		return fitnessHelper;
 	}
 }
