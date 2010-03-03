@@ -14,7 +14,9 @@ import com.acme.optimiser.ISequence;
 import com.acme.optimiser.ISequences;
 
 /**
- * Default implementation of {@link IModifiableSequences}
+ * Default implementation of {@link IModifiableSequences}. Uses
+ * {@link ListModifiableSequence} instances when required.
+ * 
  * 
  * @author Simon Goodall
  * 
