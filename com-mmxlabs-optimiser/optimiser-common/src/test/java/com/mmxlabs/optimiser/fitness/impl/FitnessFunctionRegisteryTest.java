@@ -21,9 +21,9 @@ public class FitnessFunctionRegisteryTest {
 		
 		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
-		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "fectory1");
-		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "fectory2");
-		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "fectory3");
+		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "factory1");
+		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "factory2");
+		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "factory3");
 		
 		registery.registerFitnessFunction("factory1", factory1);
 		registery.registerFitnessFunction("factory2", factory2);
@@ -48,9 +48,9 @@ public class FitnessFunctionRegisteryTest {
 		
 		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
-		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "fectory1");
-		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "fectory2");
-		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "fectory3");
+		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "factory1");
+		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "factory2");
+		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "factory3");
 		
 		registery.registerFitnessFunction("factory1", factory1);
 		registery.registerFitnessFunction("factory2", factory2);
@@ -77,9 +77,9 @@ public class FitnessFunctionRegisteryTest {
 		
 		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
-		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "fectory1");
-		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "fectory2");
-		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "fectory3");
+		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "factory1");
+		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "factory2");
+		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "factory3");
 		
 		registery.registerFitnessFunction("factory1", factory1);
 		registery.registerFitnessFunction("factory2", factory2);
@@ -109,9 +109,9 @@ public class FitnessFunctionRegisteryTest {
 		
 		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
-		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "fectory1");
-		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "fectory2");
-		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "fectory3");
+		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "factory1");
+		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "factory2");
+		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "factory3");
 		
 		registery.registerFitnessFunction("factory1", factory1);
 		registery.registerFitnessFunction("factory2", factory2);
