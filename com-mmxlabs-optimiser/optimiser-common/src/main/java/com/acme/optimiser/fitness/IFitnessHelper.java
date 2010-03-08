@@ -1,9 +1,9 @@
 package com.acme.optimiser.fitness;
 
 import java.util.List;
+import java.util.Map;
 
 import com.acme.optimiser.ISequences;
-import com.acme.optimiser.fitness.IFitnessFunction;
 
 /**
  * {@link IFitnessHelper} implementations provide helper methods to evaluate the
@@ -25,4 +25,7 @@ public interface IFitnessHelper<T> {
 	 */
 	void evaluateSequences(ISequences<T> sequences,
 			List<IFitnessFunction<T>> fitnessFunctions);
+
+	void evaluateSequences(ISequences<T> sequences,
+			Map<IFitnessFunction<T>, Double> fitnessFunctions);
 }
