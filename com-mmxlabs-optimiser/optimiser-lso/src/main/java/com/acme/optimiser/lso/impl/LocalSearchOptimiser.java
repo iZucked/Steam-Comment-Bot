@@ -65,6 +65,21 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	/**
 	 * Sub-classes of {@link LocalSearchOptimiser} should implement this method
 	 * to perform the actual optimisation.
+	 * 
+	 * 
+	 * // customisable module, default as below:
+	 * 
+	 * <pre>
+	 * ISolutionBuilder solbuilder;
+	 * 		// Convert Sequence to a Solution through the following steps (not necessarily in this order):
+	 * 			// create Solution object
+	 * 			// insert extra points
+	 * 			// check hard constraints for early exit
+	 * 			// loop over fitness functions to calculate fitness values/deltas, check hard constraints
+	 * 			// populate Solution object as appropriate
+	 * 		// evaluate fitnesses
+	 * 		}
+	 * </pre>
 	 */
 	@Override
 	public abstract void optimise(IOptimisationContext<T> optimiserContext,

@@ -1,5 +1,9 @@
 package com.acme.optimiser;
 
+import java.util.Collection;
+
+import com.acme.optimiser.fitness.IFitnessFunction;
+
 /**
  * Interface defining an optimisation context. This tes together static
  * optimisation data, initial state, parameters and fitness components that will
@@ -11,6 +15,8 @@ package com.acme.optimiser;
  *            Sequence element type
  */
 public interface IOptimisationContext<T> {
+
+	Collection<IFitnessFunction> getFitnessFunctions();
 
 	/**
 	 * Returns the initial sequences state - i.e. the starting point of the
