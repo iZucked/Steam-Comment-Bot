@@ -7,20 +7,20 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.fitness.IFitnessFunctionFactory;
-import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistery;
+import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
 
 /**
- * An implementation of {@link IFitnessFunctionRegistery}.
+ * An implementation of {@link IFitnessFunctionRegistry}.
  * 
  * @author Simon Goodall
  * 
  */
-public final class FitnessFunctionRegistery implements
-		IFitnessFunctionRegistery {
+public final class FitnessFunctionRegistry implements
+		IFitnessFunctionRegistry {
 
 	private final Map<String, IFitnessFunctionFactory> functionFactories;
 
-	public FitnessFunctionRegistery() {
+	public FitnessFunctionRegistry() {
 		this.functionFactories = new HashMap<String, IFitnessFunctionFactory>();
 	}
 

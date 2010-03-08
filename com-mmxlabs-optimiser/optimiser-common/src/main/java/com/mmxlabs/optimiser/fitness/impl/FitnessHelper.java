@@ -19,13 +19,11 @@ public class FitnessHelper<T> implements IFitnessHelper<T> {
 	@Override
 	public void evaluateSequences(final ISequences<T> sequences,
 			final Map<IFitnessFunction<T>, Double> fitnessFunctions) {
-		
+
 		for (final IFitnessFunction<T> function : fitnessFunctions.keySet()) {
 			double fitness = function.evaluate(sequences);
 			fitnessFunctions.put(function, fitness);
 		}
 	}
-	
-	
-	
+
 }

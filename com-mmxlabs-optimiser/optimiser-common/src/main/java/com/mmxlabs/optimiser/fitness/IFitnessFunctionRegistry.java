@@ -4,15 +4,15 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * The {@link IFitnessFunctionRegistery} is a store for
- * {@link IFitnessFunctionFactory} instances. The Registery is to be used to
+ * The {@link IFitnessFunctionRegistry} is a store for
+ * {@link IFitnessFunctionFactory} instances. The Registry is to be used to
  * create new instances of fitness functions for use in optimisations.
  * 
  * 
  * @author Simon Goodall
  * 
  */
-public interface IFitnessFunctionRegistery {
+public interface IFitnessFunctionRegistry {
 
 	/**
 	 * Registers a {@link IFitnessFunctionFactory} instance.

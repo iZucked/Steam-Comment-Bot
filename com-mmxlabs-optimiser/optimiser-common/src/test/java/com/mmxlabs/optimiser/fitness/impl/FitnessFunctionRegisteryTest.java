@@ -19,7 +19,7 @@ public class FitnessFunctionRegisteryTest {
 	@Test
 	public void testGetFitnessFunctionFactories() {
 		
-		FitnessFunctionRegistery registery = new FitnessFunctionRegistery();
+		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
 		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "fectory1");
 		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "fectory2");
@@ -46,7 +46,7 @@ public class FitnessFunctionRegisteryTest {
 	@Test
 	public void testGetFitnessFunctionFactories_Str() {
 		
-		FitnessFunctionRegistery registery = new FitnessFunctionRegistery();
+		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
 		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "fectory1");
 		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "fectory2");
@@ -75,7 +75,7 @@ public class FitnessFunctionRegisteryTest {
 	public void testGetFitnessFunctionFactories_Str2() {
 
 		
-		FitnessFunctionRegistery registery = new FitnessFunctionRegistery();
+		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
 		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "fectory1");
 		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "fectory2");
@@ -107,7 +107,7 @@ public class FitnessFunctionRegisteryTest {
 	public void testGetFitnessFunctionFactories_Str3() {
 
 		
-		FitnessFunctionRegistery registery = new FitnessFunctionRegistery();
+		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
 		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "fectory1");
 		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "fectory2");
