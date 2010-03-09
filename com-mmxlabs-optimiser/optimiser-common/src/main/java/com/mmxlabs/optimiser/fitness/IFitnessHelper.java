@@ -1,6 +1,5 @@
 package com.mmxlabs.optimiser.fitness;
 
-import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.ISequences;
@@ -23,8 +22,6 @@ public interface IFitnessHelper<T> {
 	 * @param sequences
 	 * @param fitnessFunctions
 	 */
-	void evaluateSequences(ISequences<T> sequences,
-			List<IFitnessFunction<T>> fitnessFunctions);
 
 	void evaluateSequences(ISequences<T> sequences,
 			Map<IFitnessFunction<T>, Double> fitnessFunctions);
