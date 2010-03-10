@@ -14,7 +14,6 @@ import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISolution;
 import com.mmxlabs.optimiser.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.sun.xml.internal.txw2.IllegalSignatureException;
 
 /**
  * Main class implementing a Local Search Optimiser. While the actual
@@ -58,7 +57,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		}
 
 		if (fitnessHelper == null) {
-			throw new IllegalSignatureException("Fitness Helper is not set");
+			throw new IllegalStateException("Fitness Helper is not set");
 		}
 	}
 
