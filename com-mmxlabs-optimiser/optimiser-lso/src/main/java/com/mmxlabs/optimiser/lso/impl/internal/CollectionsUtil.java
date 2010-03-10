@@ -5,15 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.lso.IMove;
-
 /**
- * Utility class for {@link IMove} implementations.
+ * Utility class for to create java.util Collections objects.
  * 
  * @author Simon Goodall
  * 
  */
-public class MoveUtil {
+public final class CollectionsUtil {
 
 	/**
 	 * Create a {@link ArrayList} of objects from an unbounded list.

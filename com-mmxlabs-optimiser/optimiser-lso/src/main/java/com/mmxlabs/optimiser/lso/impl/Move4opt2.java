@@ -10,7 +10,7 @@ import com.mmxlabs.optimiser.ISegment;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.optimiser.lso.impl.internal.MoveUtil;
+import com.mmxlabs.optimiser.lso.impl.internal.CollectionsUtil;
 
 /**
  * The {@link Move4opt2} class swaps segments between two sequences.
@@ -56,7 +56,7 @@ public final class Move4opt2<T> implements IMove<T> {
 
 	@Override
 	public Collection<IResource> getAffectedResources() {
-		return MoveUtil.makeArrayList(resource1, resource2);
+		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 
 	@Override
