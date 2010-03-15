@@ -12,12 +12,12 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.lso.impl.internal.CollectionsUtil;
 
 @RunWith(JMock.class)
 public class Move4opt2Test {

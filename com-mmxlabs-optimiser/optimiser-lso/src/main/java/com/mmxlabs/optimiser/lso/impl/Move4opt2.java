@@ -3,6 +3,7 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.Collection;
 import java.util.Map;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IResource;
@@ -10,7 +11,6 @@ import com.mmxlabs.optimiser.ISegment;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.optimiser.lso.impl.internal.CollectionsUtil;
 
 /**
  * The {@link Move4opt2} class swaps segments between two sequences.
