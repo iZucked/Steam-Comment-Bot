@@ -24,6 +24,7 @@ public class Move4opt2Test {
 
 	Mockery context = new JUnit4Mockery();
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testApply() {
 
