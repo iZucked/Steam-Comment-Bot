@@ -46,8 +46,8 @@ public final class Move4opt2<T> implements IMove<T> {
 				resource2End);
 
 		// Insert the segments in the other sequence
-		sequence1.insert(resource2Start, segment2);
-		sequence2.insert(resource1Start, segment1);
+		sequence1.insert(resource1Start, segment2);
+		sequence2.insert(resource2Start, segment1);
 
 		// Remove segments from original sequences
 		sequence1.remove(segment1);

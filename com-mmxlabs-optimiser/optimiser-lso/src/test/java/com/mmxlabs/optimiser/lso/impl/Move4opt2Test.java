@@ -36,8 +36,8 @@ public class Move4opt2Test {
 		final IModifiableSequence<Object> sequence2 = context.mock(
 				IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1,
-				resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(
+				resource1, resource2);
 
 		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2);
@@ -90,8 +90,8 @@ public class Move4opt2Test {
 		final IModifiableSequence<Integer> sequence2 = new ListModifiableSequence<Integer>(
 				CollectionsUtil.makeArrayList(6, 7, 8, 9, 10));
 
-		List<IResource> resources = CollectionsUtil
-				.makeArrayList(resource1, resource2);
+		List<IResource> resources = CollectionsUtil.makeArrayList(resource1,
+				resource2);
 
 		Map<IResource, IModifiableSequence<Integer>> sequenceMap = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2);
@@ -118,11 +118,19 @@ public class Move4opt2Test {
 
 		move.apply(sequences);
 
+		List<Integer> expectedSequence1 = CollectionsUtil.makeArrayList(7, 8,
+				3, 4, 5);
+		List<Integer> expectedSequence2 = CollectionsUtil.makeArrayList(6, 1,
+				2, 9, 10);
 
-		List<Integer> expectedSequence1 = CollectionsUtil.makeArrayList( 7, 8, 3, 4, 5);
-		List<Integer> expectedSequence2 = CollectionsUtil
-				.makeArrayList(6,1, 2, 9, 10);
+		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
+		for (int i = 0; i < expectedSequence1.size(); ++i) {
+			Assert.assertEquals(expectedSequence1.get(i), sequence1.get(i));
+		}
 
-		Assert.fail("Not complete - check output sequences");
+		Assert.assertEquals(expectedSequence2.size(), sequence2.size());
+		for (int i = 0; i < expectedSequence2.size(); ++i) {
+			Assert.assertEquals(expectedSequence2.get(i), sequence2.get(i));
+		}
 	}
 }
