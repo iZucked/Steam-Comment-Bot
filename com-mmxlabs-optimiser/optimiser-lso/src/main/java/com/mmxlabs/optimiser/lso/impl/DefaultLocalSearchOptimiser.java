@@ -27,10 +27,12 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			final Collection<ISolution> initialSolutions,
 			final Object archiverCallback) {
 
-		IFitnessHelper<T> fitnessHelper = getFitnessHelper();
-		
+		final IFitnessHelper<T> fitnessHelper = getFitnessHelper();
+
 		// Get list of fitness components for this optimisation
-		List<IFitnessComponent<T>> fitnessComponents = optimiserContext.getFitnessComponents();
+		final List<IFitnessComponent<T>> fitnessComponents = optimiserContext
+				.getFitnessComponents();
+
 		// Get list of hard constraint checkers
 		final List<IConstraintChecker<T>> constraintCheckers = getConstraintCheckers();
 
@@ -104,7 +106,8 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				}
 			}
 
-			if (evaluateSequences(potentialFullSequences, fitnessComponents, move.getAffectedResources())) {
+			if (evaluateSequences(potentialFullSequences, fitnessComponents,
+					move.getAffectedResources())) {
 				// Success update state for new sequences
 
 				updateSequences(potentialRawSequences, currentRawSequences,
