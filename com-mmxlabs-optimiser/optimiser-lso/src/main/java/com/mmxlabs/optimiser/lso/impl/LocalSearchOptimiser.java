@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISolution;
+import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
@@ -91,8 +92,14 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	 * @param sequences
 	 * @return
 	 */
-	public boolean evaluateSequences(final ISequences<T> sequences) {
-		// TODO: Delegate to a FitnessUtility/Helper class?
+	public boolean evaluateSequences(final ISequences<T> sequences,
+			List<IFitnessComponent<T>> fitnessComponents,
+			Collection<IResource> affectedResources) {
+
+		getFitnessHelper().evaluateSequencesFromComponents(sequences,
+				fitnessComponents, affectedResources);
+
+		// TODO: get fitnesses and do checks
 
 		return true;
 	}

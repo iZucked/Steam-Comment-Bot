@@ -1,6 +1,6 @@
 package com.mmxlabs.optimiser;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 
@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.fitness.IFitnessComponent;
  */
 public interface IOptimisationContext<T> {
 
-	Collection<IFitnessComponent> getFitnessFunctions();
+	List<IFitnessComponent<T>> getFitnessComponents();
 
 	/**
 	 * Returns the initial sequences state - i.e. the starting point of the

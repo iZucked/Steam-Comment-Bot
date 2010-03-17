@@ -7,6 +7,8 @@ import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISolution;
+import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
@@ -24,8 +26,14 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			final Collection<ISolution> initialSolutions,
 			final Object archiverCallback) {
 
+		IFitnessHelper<T> fitnessHelper = getFitnessHelper();
+		
+		// Get list of fitness components for this optimisation
+		List<IFitnessComponent<T>> fitnessComponents = optimiserContext.getFitnessComponents();
+		// Get list of hard constraint checkers
+		final List<IConstraintChecker<T>> constraintCheckers = getConstraintCheckers();
+		
 		// Setup the optimisation process
-
 		int numberOfMovesTried = 0;
 		int numberOfMovesAccepted = 0;
 
@@ -42,7 +50,10 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		updateSequences(currentRawSequences, potentialRawSequences,
 				currentRawSequences.getResources());
 
-		final List<IConstraintChecker<T>> constraintCheckers = getConstraintCheckers();
+		// Evaluate initial sequences
+		fitnessHelper.initFitnessComponents(fitnessComponents);
+		
+		fitnessHelper.evaluateSequencesFromComponents(sequences, fitnessComponents, null);
 
 		// Perform the optimisation
 		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
@@ -82,13 +93,14 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				}
 			}
 
-			if (evaluateSequences(potentialFullSequences)) {
+			if (evaluateSequences(potentialFullSequences, fitnessComponents, move.getAffectedResources())) {
 				// Success update state for new sequences
 
 				updateSequences(potentialRawSequences, currentRawSequences,
 						move.getAffectedResources());
 
 				// TODO: Update current fitness state
+				assert false;
 
 				++numberOfMovesAccepted;
 			} else {
@@ -101,6 +113,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 
 		// Finalise optimisation process
 		// ... TODO ...
+		assert false;
 
 	}
 }
