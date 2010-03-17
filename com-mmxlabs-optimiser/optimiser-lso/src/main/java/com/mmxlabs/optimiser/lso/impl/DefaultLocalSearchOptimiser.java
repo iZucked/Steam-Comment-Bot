@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IOptimisationContext;
+import com.mmxlabs.optimiser.ISequenceManipulator;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISolution;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
@@ -32,7 +33,9 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		List<IFitnessComponent<T>> fitnessComponents = optimiserContext.getFitnessComponents();
 		// Get list of hard constraint checkers
 		final List<IConstraintChecker<T>> constraintCheckers = getConstraintCheckers();
-		
+
+		final ISequenceManipulator<T> manipulator = getSequenceManipulator();
+
 		// Setup the optimisation process
 		int numberOfMovesTried = 0;
 		int numberOfMovesAccepted = 0;
@@ -52,8 +55,17 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 
 		// Evaluate initial sequences
 		fitnessHelper.initFitnessComponents(fitnessComponents);
-		
-		fitnessHelper.evaluateSequencesFromComponents(sequences, fitnessComponents, null);
+
+		// TODO: Run sequence manipulator
+		{
+			// ISequences<T> fullSequences =
+			// manipulator.manipulate(currentRawSequences);
+
+			final ISequences<T> fullSequences = currentRawSequences;
+			// Prime fitness cores with initial sequences
+			fitnessHelper.evaluateSequencesFromComponents(fullSequences,
+					fitnessComponents, null);
+		}
 
 		// Perform the optimisation
 		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
@@ -77,9 +89,8 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			move.apply(potentialRawSequences);
 
 			// Apply sequence manipulators
-			// ... TODO ...
-			// ISequences<T> fullSequenes =
-			// manipulator.manipulate(potentialRawSquences);
+			// TODO: Define a better API
+			// manipulator.manipulate(potentialFullSequences);
 			final ISequences<T> potentialFullSequences = potentialRawSequences;
 
 			// Apply hard constraint checkers
