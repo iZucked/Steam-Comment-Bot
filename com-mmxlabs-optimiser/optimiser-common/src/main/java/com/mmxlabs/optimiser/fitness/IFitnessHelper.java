@@ -1,7 +1,7 @@
 package com.mmxlabs.optimiser.fitness;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
@@ -16,6 +16,22 @@ import com.mmxlabs.optimiser.ISequences;
  *            Sequence element type.
  */
 public interface IFitnessHelper<T> {
+
+	/**
+	 * Initialise a {@link Collection} of {@link IFitnessCore}s
+	 * 
+	 * @param fitnessCores
+	 */
+	void initFitnessCores(Collection<IFitnessCore<T>> fitnessCores);
+
+	/**
+	 * Initialise {@link IFitnessCore}s based upon the a {@link Collection} of
+	 * {@link IFitnessComponent}s
+	 * 
+	 * @param fitnessCores
+	 */
+	void initFitnessComponents(
+			Collection<IFitnessComponent<T>> fitnessComponents);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given
@@ -39,7 +55,7 @@ public interface IFitnessHelper<T> {
 
 	void evaluateSequencesFromCores(ISequences<T> sequences,
 			Collection<IFitnessCore<T>> fitnessCores,
-			List<IResource> affectedResources);
+			Collection<IResource> affectedResources);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given
@@ -62,5 +78,15 @@ public interface IFitnessHelper<T> {
 
 	void evaluateSequencesFromComponents(ISequences<T> sequences,
 			Collection<IFitnessComponent<T>> fitnessComponents,
-			List<IResource> affectedResources);
+			Collection<IResource> affectedResources);
+
+	/**
+	 * Returns the set of {@link IFitnessCore}s that are used by the given
+	 * {@link IFitnessComponent}s
+	 * 
+	 * @param fitnessComponents
+	 * @return
+	 */
+	Set<IFitnessCore<T>> getFitnessCores(
+			Collection<IFitnessComponent<T>> fitnessComponents);
 }

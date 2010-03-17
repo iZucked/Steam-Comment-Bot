@@ -2,7 +2,6 @@ package com.mmxlabs.optimiser.fitness.impl;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.mmxlabs.optimiser.IResource;
@@ -24,10 +23,7 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	@Override
 	public void evaluateSequencesFromComponents(final ISequences<T> sequences,
 			final Collection<IFitnessComponent<T>> fitnessComponents) {
-		final Set<IFitnessCore<T>> fitnessCores = new HashSet<IFitnessCore<T>>();
-		for (final IFitnessComponent<T> component : fitnessComponents) {
-			fitnessCores.add(component.getFitnessCore());
-		}
+		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
 
 		evaluateSequencesFromCores(sequences, fitnessCores);
 	}
@@ -44,11 +40,8 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	@Override
 	public void evaluateSequencesFromComponents(final ISequences<T> sequences,
 			final Collection<IFitnessComponent<T>> fitnessComponents,
-			final List<IResource> affectedResources) {
-		final Set<IFitnessCore<T>> fitnessCores = new HashSet<IFitnessCore<T>>();
-		for (final IFitnessComponent<T> component : fitnessComponents) {
-			fitnessCores.add(component.getFitnessCore());
-		}
+			final Collection<IResource> affectedResources) {
+		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
 
 		evaluateSequencesFromCores(sequences, fitnessCores, affectedResources);
 
@@ -57,9 +50,34 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	@Override
 	public void evaluateSequencesFromCores(final ISequences<T> sequences,
 			final Collection<IFitnessCore<T>> fitnessCores,
-			final List<IResource> affectedResources) {
+			final Collection<IResource> affectedResources) {
 		for (final IFitnessCore<T> core : fitnessCores) {
 			core.evaluate(sequences, affectedResources);
+		}
+	}
+
+	@Override
+	public void initFitnessComponents(
+			Collection<IFitnessComponent<T>> fitnessComponents) {
+		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
+		initFitnessCores(fitnessCores);
+
+	}
+
+	@Override
+	public Set<IFitnessCore<T>> getFitnessCores(
+			Collection<IFitnessComponent<T>> fitnessComponents) {
+		final Set<IFitnessCore<T>> fitnessCores = new HashSet<IFitnessCore<T>>();
+		for (final IFitnessComponent<T> component : fitnessComponents) {
+			fitnessCores.add(component.getFitnessCore());
+		}
+		return fitnessCores;
+	}
+
+	@Override
+	public void initFitnessCores(Collection<IFitnessCore<T>> fitnessCores) {
+		for (IFitnessCore<T> core : fitnessCores) {
+			core.init();
 		}
 	}
 }

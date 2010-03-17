@@ -26,4 +26,13 @@ public class FitnessHelperTest {
 		fail("Not yet implemented");
 	}
 
+	@Test
+	public void testInitFitnessCores() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testInitFitnessComponents() {
+		fail("Not yet implemented");
+	}
 }

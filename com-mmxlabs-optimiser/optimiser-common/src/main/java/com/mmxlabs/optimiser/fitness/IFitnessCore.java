@@ -52,5 +52,6 @@ public interface IFitnessCore<T> {
 	 * @param sequences
 	 * @return Fitness of sequences
 	 */
-	double evaluate(ISequences<T> sequences, List<IResource> affectedResources);
+	double evaluate(ISequences<T> sequences,
+			Collection<IResource> affectedResources);
 }
