@@ -16,8 +16,7 @@ public final class NullSequenceManipulator<T> implements
 		ISequenceManipulator<T> {
 
 	@Override
-	public void manipulate(IModifiableSequence<T> sequence) {
-
+	public void manipulate(final IModifiableSequence<T> sequence) {
+		// Do nothing
 	}
-
 }
