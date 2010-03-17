@@ -2,7 +2,7 @@ package com.mmxlabs.optimiser;
 
 import java.util.Collection;
 
-import com.mmxlabs.optimiser.fitness.IFitnessFunction;
+import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 
 /**
  * Interface defining an optimisation context. This tes together static
@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.fitness.IFitnessFunction;
  */
 public interface IOptimisationContext<T> {
 
-	Collection<IFitnessFunction> getFitnessFunctions();
+	Collection<IFitnessComponent> getFitnessFunctions();
 
 	/**
 	 * Returns the initial sequences state - i.e. the starting point of the

@@ -17,12 +17,12 @@ public interface IFitnessHelper<T> {
 
 	/**
 	 * Evaluate the full fitness of the given sequences using the given
-	 * {@link IFitnessFunction}s
+	 * {@link IFitnessComponent}s
 	 * 
 	 * @param sequences
 	 * @param fitnessFunctions
 	 */
 
 	void evaluateSequences(ISequences<T> sequences,
-			Map<IFitnessFunction<T>, Double> fitnessFunctions);
+			Map<IFitnessComponent<T>, Double> fitnessFunctions);
 }

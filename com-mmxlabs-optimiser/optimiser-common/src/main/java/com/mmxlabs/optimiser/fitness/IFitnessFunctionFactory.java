@@ -4,5 +4,5 @@ public interface IFitnessFunctionFactory {
 
 	String getName();
 
-	<T> IFitnessFunction<T> instantiate();
+	<T> IFitnessComponent<T> instantiate();
 }
