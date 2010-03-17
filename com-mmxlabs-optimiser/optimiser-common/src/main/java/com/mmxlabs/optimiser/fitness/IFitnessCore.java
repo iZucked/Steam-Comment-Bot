@@ -47,7 +47,8 @@ public interface IFitnessCore<T> {
 	 * changed since the previous evaluation. If this is the first invocation of
 	 * this method since the last {@link #init()} call, then a full evaluation
 	 * must be performed and subsequent calls can take advantage of the affected
-	 * list.
+	 * list. Likewise, passing null into the affectedResources will perform a
+	 * full evaluation.
 	 * 
 	 * @param sequences
 	 * @return Fitness of sequences
