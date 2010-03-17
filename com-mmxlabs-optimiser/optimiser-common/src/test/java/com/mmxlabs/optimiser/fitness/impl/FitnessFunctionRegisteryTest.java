@@ -10,7 +10,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.fitness.IFitnessFunctionFactory;
+import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
 
 public class FitnessFunctionRegisteryTest {
 
@@ -21,15 +21,15 @@ public class FitnessFunctionRegisteryTest {
 		
 		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
-		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "factory1");
-		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "factory2");
-		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "factory3");
+		IFitnessCoreFactory factory1 = context.mock(IFitnessCoreFactory.class, "factory1");
+		IFitnessCoreFactory factory2 = context.mock(IFitnessCoreFactory.class, "factory2");
+		IFitnessCoreFactory factory3 = context.mock(IFitnessCoreFactory.class, "factory3");
 		
 		registery.registerFitnessFunction("factory1", factory1);
 		registery.registerFitnessFunction("factory2", factory2);
 		registery.registerFitnessFunction("factory3", factory3);
 		
-		Collection<IFitnessFunctionFactory> fitnessFunctionFactories = registery.getFitnessFunctionFactories();
+		Collection<IFitnessCoreFactory> fitnessFunctionFactories = registery.getFitnessFunctionFactories();
 		Assert.assertEquals(3, fitnessFunctionFactories.size());
 		
 		Assert.assertTrue(fitnessFunctionFactories.contains(factory1));
@@ -48,9 +48,9 @@ public class FitnessFunctionRegisteryTest {
 		
 		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
-		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "factory1");
-		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "factory2");
-		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "factory3");
+		IFitnessCoreFactory factory1 = context.mock(IFitnessCoreFactory.class, "factory1");
+		IFitnessCoreFactory factory2 = context.mock(IFitnessCoreFactory.class, "factory2");
+		IFitnessCoreFactory factory3 = context.mock(IFitnessCoreFactory.class, "factory3");
 		
 		registery.registerFitnessFunction("factory1", factory1);
 		registery.registerFitnessFunction("factory2", factory2);
@@ -60,7 +60,7 @@ public class FitnessFunctionRegisteryTest {
 		names.add("factory3");
 		names.add("factory2");
 		
-		List<IFitnessFunctionFactory> fitnessFunctionFactories = registery.getFitnessFunctionFactories(names);
+		List<IFitnessCoreFactory> fitnessFunctionFactories = registery.getFitnessFunctionFactories(names);
 		Assert.assertEquals(2, fitnessFunctionFactories.size());
 		
 		Assert.assertEquals(factory3, fitnessFunctionFactories.get(0));
@@ -77,9 +77,9 @@ public class FitnessFunctionRegisteryTest {
 		
 		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
-		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "factory1");
-		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "factory2");
-		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "factory3");
+		IFitnessCoreFactory factory1 = context.mock(IFitnessCoreFactory.class, "factory1");
+		IFitnessCoreFactory factory2 = context.mock(IFitnessCoreFactory.class, "factory2");
+		IFitnessCoreFactory factory3 = context.mock(IFitnessCoreFactory.class, "factory3");
 		
 		registery.registerFitnessFunction("factory1", factory1);
 		registery.registerFitnessFunction("factory2", factory2);
@@ -89,7 +89,7 @@ public class FitnessFunctionRegisteryTest {
 		names.add("factory3");
 		names.add("factory3");
 		
-		List<IFitnessFunctionFactory> fitnessFunctionFactories = registery.getFitnessFunctionFactories(names);
+		List<IFitnessCoreFactory> fitnessFunctionFactories = registery.getFitnessFunctionFactories(names);
 		Assert.assertEquals(2, fitnessFunctionFactories.size());
 		
 		Assert.assertEquals(factory3, fitnessFunctionFactories.get(0));
@@ -109,9 +109,9 @@ public class FitnessFunctionRegisteryTest {
 		
 		FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 		
-		IFitnessFunctionFactory factory1 = context.mock(IFitnessFunctionFactory.class, "factory1");
-		IFitnessFunctionFactory factory2 = context.mock(IFitnessFunctionFactory.class, "factory2");
-		IFitnessFunctionFactory factory3 = context.mock(IFitnessFunctionFactory.class, "factory3");
+		IFitnessCoreFactory factory1 = context.mock(IFitnessCoreFactory.class, "factory1");
+		IFitnessCoreFactory factory2 = context.mock(IFitnessCoreFactory.class, "factory2");
+		IFitnessCoreFactory factory3 = context.mock(IFitnessCoreFactory.class, "factory3");
 		
 		registery.registerFitnessFunction("factory1", factory1);
 		registery.registerFitnessFunction("factory2", factory2);
@@ -122,7 +122,7 @@ public class FitnessFunctionRegisteryTest {
 		names.add("unknown");
 		names.add("factory1");
 		
-		List<IFitnessFunctionFactory> fitnessFunctionFactories = registery.getFitnessFunctionFactories(names);
+		List<IFitnessCoreFactory> fitnessFunctionFactories = registery.getFitnessFunctionFactories(names);
 		Assert.assertEquals(3, fitnessFunctionFactories.size());
 		
 		Assert.assertEquals(factory3, fitnessFunctionFactories.get(0));

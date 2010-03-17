@@ -1,12 +1,11 @@
 package com.mmxlabs.optimiser.fitness;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * The {@link IFitnessFunctionRegistry} is a store for
- * {@link IFitnessFunctionFactory} instances. The Registry is to be used to
- * create new instances of fitness functions for use in optimisations.
+ * {@link IFitnessCoreFactory} instances. The Registry is to be used to create
+ * new instances of {@link IFitnessCore} for use in optimisations.
  * 
  * 
  * @author Simon Goodall
@@ -15,36 +14,43 @@ import java.util.List;
 public interface IFitnessFunctionRegistry {
 
 	/**
-	 * Registers a {@link IFitnessFunctionFactory} instance.
+	 * Registers a {@link IFitnessCoreFactory} instance.
 	 * 
-	 * @param name
 	 * @param factory
 	 */
-	void registerFitnessFunction(String name, IFitnessFunctionFactory factory);
+	void registerFitnessCoreFactory(IFitnessCoreFactory factory);
 
 	/**
-	 * Return a {@link Collection} of the registered
-	 * {@link IFitnessFunctionFactory} instances.
+	 * Return a {@link Collection} of the registered {@link IFitnessCoreFactory}
+	 * instances.
 	 * 
 	 * @return
 	 */
 
-	Collection<IFitnessFunctionFactory> getFitnessFunctionFactories();
+	Collection<IFitnessCoreFactory> getFitnessCoreFactories();
 
 	/**
 	 * Returns a {@link Collection} of the registered
-	 * {@link IFitnessFunctionFactory} names.
+	 * {@link IFitnessCoreFactory} names.
 	 * 
 	 * @return
 	 */
-	Collection<String> getFitnessFunctionFactoryNames();
+	Collection<String> getFitnessCoreFactoryNames();
 
 	/**
-	 * Returns a {@link List} of {@link IFitnessFunctionFactory} instances
-	 * ordered by the given list of names.
+	 * Returns a {@link Collection} of the {@link IFitnessComponent} names
+	 * represented by the registered {@link IFitnessCoreFactory} objects.
+	 * 
+	 * @return
+	 */
+	Collection<String> getFitnessComponentNames();
+
+	/**
+	 * Returns a {@link Collection} of {@link IFitnessCoreFactory} instances
+	 * based on the list of {@link IFitnessComponent} names.
 	 * 
 	 * @param names
 	 * @return
 	 */
-	List<IFitnessFunctionFactory> getFitnessFunctionFactories(List<String> names);
+	Collection<IFitnessCoreFactory> getFitnessCoreFactories(Collection<String> names);
 }

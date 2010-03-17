@@ -1,12 +1,12 @@
 package com.mmxlabs.optimiser.fitness.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import com.mmxlabs.optimiser.fitness.IFitnessFunctionFactory;
+import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
 import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
 
 /**
@@ -15,55 +15,68 @@ import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
  * @author Simon Goodall
  * 
  */
-public final class FitnessFunctionRegistry implements
-		IFitnessFunctionRegistry {
+public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 
-	private final Map<String, IFitnessFunctionFactory> functionFactories;
+	private final Map<String, IFitnessCoreFactory> coreFactoriesByCoreName;
+	private final Map<String, IFitnessCoreFactory> coreFactoriesByComponentName;
 
 	public FitnessFunctionRegistry() {
-		this.functionFactories = new HashMap<String, IFitnessFunctionFactory>();
+		this.coreFactoriesByCoreName = new HashMap<String, IFitnessCoreFactory>();
+		this.coreFactoriesByComponentName = new HashMap<String, IFitnessCoreFactory>();
 	}
 
 	@Override
-	public void registerFitnessFunction(final String name,
-			final IFitnessFunctionFactory factory) {
+	public void registerFitnessCoreFactory(final IFitnessCoreFactory factory) {
 
-		if (functionFactories.containsKey(name)) {
-			throw new RuntimeException("Factory already registered");
+		if (coreFactoriesByCoreName.containsKey(factory.getFitnessCoreName())) {
+			throw new RuntimeException("Fitness core name already registered: "
+					+ factory.getFitnessCoreName());
 		}
 
-		functionFactories.put(name, factory);
+		coreFactoriesByCoreName.put(factory.getFitnessCoreName(), factory);
+
+		for (final String componentName : factory.getFitnessComponentNames()) {
+			if (coreFactoriesByComponentName.containsKey(factory
+					.getFitnessCoreName())) {
+				throw new RuntimeException(
+						"Fitness component name already registered: "
+								+ componentName);
+			}
+			coreFactoriesByComponentName.put(componentName, factory);
+		}
 	}
 
 	@Override
-	public Collection<String> getFitnessFunctionFactoryNames() {
-		return functionFactories.keySet();
+	public Collection<String> getFitnessCoreFactoryNames() {
+		return coreFactoriesByCoreName.keySet();
 	}
 
 	@Override
-	public Collection<IFitnessFunctionFactory> getFitnessFunctionFactories() {
-		return functionFactories.values();
+	public Collection<String> getFitnessComponentNames() {
+		return coreFactoriesByComponentName.keySet();
 	}
 
 	@Override
-	public List<IFitnessFunctionFactory> getFitnessFunctionFactories(
-			final List<String> names) {
+	public Collection<IFitnessCoreFactory> getFitnessCoreFactories() {
+		return coreFactoriesByCoreName.values();
+	}
 
-		final List<IFitnessFunctionFactory> factories = new ArrayList<IFitnessFunctionFactory>(
+	@Override
+	public Set<IFitnessCoreFactory> getFitnessCoreFactories(
+			final Collection<String> names) {
+
+		final Set<IFitnessCoreFactory> factories = new HashSet<IFitnessCoreFactory>(
 				names.size());
 
 		for (final String name : names) {
 
-			final IFitnessFunctionFactory factory;
+			final IFitnessCoreFactory factory;
 
-			if (functionFactories.containsKey(name)) {
-				factory = functionFactories.get(name);
-			} else {
-				// TODO: Should this just set null, or throw an exception?
-				factory = null;
+			if (coreFactoriesByComponentName.containsKey(name)) {
+				factory = coreFactoriesByComponentName.get(name);
+				factories.add(factory);
 			}
 
-			factories.add(factory);
 		}
 
 		return factories;
