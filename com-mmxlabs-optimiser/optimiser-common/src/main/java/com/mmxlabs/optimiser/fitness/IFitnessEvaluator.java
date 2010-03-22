@@ -1,5 +1,6 @@
 package com.mmxlabs.optimiser.fitness;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.optimiser.ISequences;
@@ -76,4 +77,14 @@ public interface IFitnessEvaluator<T> {
 	 * @return
 	 */
 	boolean checkSequences(ISequences<T> sequences);
+
+	/**
+	 * Returns the "best" {@link ISequences} instances seen by this
+	 * {@link IFitnessEvaluator}. The value of best is determined by the
+	 * implementation. However it is reasonable to assume the first item in the
+	 * {@link Collection} has the best fitness value.
+	 * 
+	 * @return
+	 */
+	Collection<ISequences<T>> getBestSequences();
 }
