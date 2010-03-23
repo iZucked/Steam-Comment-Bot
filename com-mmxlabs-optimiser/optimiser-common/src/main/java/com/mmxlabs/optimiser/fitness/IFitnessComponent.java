@@ -26,7 +26,7 @@ public interface IFitnessComponent<T> {
 	 * 
 	 * @return
 	 */
-	double getFitness();
+	long getFitness();
 
 	/**
 	 * Returns the shared {@link IFitnessCore} instance for this component.
