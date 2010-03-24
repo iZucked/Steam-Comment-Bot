@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
@@ -47,14 +48,14 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	private Random random = null;
 
 	@Override
-	public boolean checkSequences(final ISequences<T> sequences) {
+	public boolean checkSequences(final ISequences<T> sequences,
+			final Collection<IResource> affectedResources) {
 
-		// TODO: What about affected resources?
-
-		double totalFitness = evaluteSequences(sequences);
+		final double totalFitness = evaluteSequences(sequences,
+				affectedResources);
 
 		// Calculate fitness delta
-		double delta = totalFitness - currentFitness;
+		final double delta = totalFitness - currentFitness;
 
 		// If fitness change is within the threshold, then accept the change
 		if (delta < currentThreshold) {
@@ -78,10 +79,11 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		}
 	}
 
-	private double evaluteSequences(final ISequences<T> sequences) {
+	private double evaluteSequences(final ISequences<T> sequences,
+			final Collection<IResource> affectedResources) {
 		// Evaluates the current sequences
 		fitnessHelper.evaluateSequencesFromComponents(sequences,
-				fitnessComponents);
+				fitnessComponents, affectedResources);
 
 		// Sum up total fitness, combining raw values with weights
 		double totalFitness = 0.0;
@@ -118,7 +120,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 					"Initial sequences cannot be null");
 		}
 
-		double totalFitness = evaluteSequences(initialSequences);
+		final double totalFitness = evaluteSequences(initialSequences, null);
 		bestFitness = totalFitness;
 		currentFitness = totalFitness;
 		bestSequences = new Sequences<T>(initialSequences);
