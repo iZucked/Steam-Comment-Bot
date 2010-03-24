@@ -239,7 +239,7 @@ public class ListModifiableSequenceTest {
 
 		sequence.add(object1);
 
-		// TODO: Backing list implementation returns a boolean to inidcate
+		// TODO: Backing list implementation returns a boolean to indicate
 		// success.
 		// This information is currently lost and this method will silently
 		// fail.
