@@ -9,8 +9,7 @@ import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISolution;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.IFitnessHelper;
+import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
@@ -28,11 +27,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			final Collection<ISolution> initialSolutions,
 			final Object archiverCallback) {
 
-		final IFitnessHelper<T> fitnessHelper = getFitnessHelper();
-
-		// Get list of fitness components for this optimisation
-		final List<IFitnessComponent<T>> fitnessComponents = optimiserContext
-				.getFitnessComponents();
+		final IFitnessEvaluator<T> fitnessEvaluator = getFitnessEvaluator();
 
 		// Get list of hard constraint checkers
 		final List<IConstraintChecker<T>> constraintCheckers = getConstraintCheckers();
@@ -57,7 +52,6 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				currentRawSequences.getResources());
 
 		// Evaluate initial sequences
-		fitnessHelper.initFitnessComponents(fitnessComponents);
 
 		// TODO: Run sequence manipulator
 		{
@@ -66,8 +60,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			manipulator.manipulate(fullSequences);
 			
 			// Prime fitness cores with initial sequences
-			fitnessHelper.evaluateSequencesFromComponents(fullSequences,
-					fitnessComponents, null);
+			fitnessEvaluator.init(fullSequences);
 		}
 
 		// Perform the optimisation
@@ -106,15 +99,12 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				}
 			}
 
-			if (evaluateSequences(potentialFullSequences, fitnessComponents,
-					move.getAffectedResources())) {
+			if (fitnessEvaluator.checkSequences(potentialFullSequences, move
+					.getAffectedResources())) {
+				
 				// Success update state for new sequences
-
 				updateSequences(potentialRawSequences, currentRawSequences,
 						move.getAffectedResources());
-
-				// TODO: Update current fitness state
-				assert false;
 
 				++numberOfMovesAccepted;
 			} else {
@@ -124,10 +114,5 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			}
 
 		}
-
-		// Finalise optimisation process
-		// ... TODO ...
-		assert false;
-
 	}
 }

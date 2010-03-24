@@ -13,8 +13,7 @@ import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISolution;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.IFitnessHelper;
+import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 /**
@@ -35,7 +34,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 
 	private List<IConstraintChecker<T>> constraintCheckers;
 
-	private IFitnessHelper<T> fitnessHelper;
+	private IFitnessEvaluator<T> fitnessEvaluator;
 
 	private ISequencesManipulator<T> sequenceManipulator;
 
@@ -60,8 +59,8 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 					"Constraint Checkers list is not set");
 		}
 
-		if (fitnessHelper == null) {
-			throw new IllegalStateException("Fitness Helper is not set");
+		if (fitnessEvaluator == null) {
+			throw new IllegalStateException("Fitness Evaluator is not set");
 		}
 
 		if (sequenceManipulator == null) {
@@ -91,25 +90,6 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	@Override
 	public abstract void optimise(IOptimisationContext<T> optimiserContext,
 			Collection<ISolution> initialSolutions, Object archiverCallback);
-
-	/**
-	 * Evaluate the current sequences and return whether or not they are
-	 * acceptable for the next solution state.
-	 * 
-	 * @param sequences
-	 * @return
-	 */
-	public boolean evaluateSequences(final ISequences<T> sequences,
-			List<IFitnessComponent<T>> fitnessComponents,
-			Collection<IResource> affectedResources) {
-
-		getFitnessHelper().evaluateSequencesFromComponents(sequences,
-				fitnessComponents, affectedResources);
-
-		// TODO: get fitnesses and do checks
-
-		return true;
-	}
 
 	/**
 	 * Copy the {@link ISequences} for the specified {@link IResource}s from the
@@ -163,12 +143,12 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		return constraintCheckers;
 	}
 
-	public void setFitnessHelper(final IFitnessHelper<T> fitnessHelper) {
-		this.fitnessHelper = fitnessHelper;
+	public void setFitnessEvaluator(final IFitnessEvaluator<T> fitnessEvaluator) {
+		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
-	public IFitnessHelper<T> getFitnessHelper() {
-		return fitnessHelper;
+	public IFitnessEvaluator<T> getFitnessEvaluator() {
+		return fitnessEvaluator;
 	}
 
 	public void setSequenceManipulator(

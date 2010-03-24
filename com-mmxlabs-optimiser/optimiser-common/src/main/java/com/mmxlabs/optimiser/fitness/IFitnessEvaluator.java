@@ -3,6 +3,7 @@ package com.mmxlabs.optimiser.fitness;
 import java.util.Collection;
 import java.util.List;
 
+import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
 
 /**
@@ -76,7 +77,8 @@ public interface IFitnessEvaluator<T> {
 	 * @param sequences
 	 * @return
 	 */
-	boolean checkSequences(ISequences<T> sequences);
+	boolean checkSequences(ISequences<T> sequences,
+			Collection<IResource> affectedResources);
 
 	/**
 	 * Returns the "best" {@link ISequences} instances seen by this
