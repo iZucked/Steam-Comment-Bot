@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 
 @RunWith(JMock.class)
-public class Move4opt2Test {
+public class Move4over2Test {
 
 	Mockery context = new JUnit4Mockery();
 
@@ -46,7 +46,7 @@ public class Move4opt2Test {
 		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
 				resources, map);
 
-		final Move4opt2<Object> move = new Move4opt2<Object>();
+		final Move4over2<Object> move = new Move4over2<Object>();
 
 		final int resource1Start = 0;
 		final int resource1End = 2;
@@ -100,7 +100,7 @@ public class Move4opt2Test {
 		IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
 				resources, sequenceMap);
 
-		final Move4opt2<Integer> move = new Move4opt2<Integer>();
+		final Move4over2<Integer> move = new Move4over2<Integer>();
 
 		final int resource1Start = 0;
 		final int resource1End = 2;

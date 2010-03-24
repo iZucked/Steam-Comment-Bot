@@ -13,14 +13,14 @@ import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
 /**
- * The {@link Move4opt2} class swaps segments between two sequences.
+ * The {@link Move4over2} class swaps segments between two sequences.
  * 
  * @author Simon Goodall
  * 
  * @param <T>
  *            Sequence element type
  */
-public final class Move4opt2<T> implements IMove<T> {
+public final class Move4over2<T> implements IMove<T> {
 
 	private IResource resource1;
 

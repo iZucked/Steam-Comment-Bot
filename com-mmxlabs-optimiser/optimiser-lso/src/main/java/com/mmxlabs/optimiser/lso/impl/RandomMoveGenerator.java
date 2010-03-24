@@ -27,7 +27,7 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	private ISequences<T> sequences;
 
 	private static enum MoveTypes {
-		Move_2opt1, Move_2opt2, Move_3opt1, Move_3op2, Move_4opt1, Move_4opt2
+		Move_2over1, Move_2over2, Move_3over1, Move_3verver2, Move_4over1, Move_4over2
 	};
 
 	public RandomMoveGenerator() {
@@ -47,7 +47,7 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 
 		final IMove<T> move;
 		switch (moveType) {
-		case Move_4opt2:
+		case Move_4over2:
 			move = createMove4opt2();
 			break;
 		default:
@@ -119,7 +119,7 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	/**
-	 * Generate a 4opt2 move
+	 * Generate a 4over2 move
 	 * 
 	 * @return
 	 */
@@ -151,7 +151,7 @@ public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 		generateSortedBreakPoints(sequence2, resource2StartEnd);
 
 		// Create new move
-		final Move4opt2<T> move = new Move4opt2<T>();
+		final Move4over2<T> move = new Move4over2<T>();
 
 		// Set resources
 		move.setResource1(resources.get(resource1));

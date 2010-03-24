@@ -1,7 +1,5 @@
 package com.mmxlabs.optimiser.lso.impl;
 
-public class Move3opt2 {
+public class Move4over1 {
 
-	
-	
 }
