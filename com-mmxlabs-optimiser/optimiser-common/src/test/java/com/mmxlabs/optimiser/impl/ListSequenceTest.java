@@ -1,51 +1,24 @@
 package com.mmxlabs.optimiser.impl;
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.Assert;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.ISegment;
-import com.mmxlabs.optimiser.ISequence;
 
 /**
- * Test the {@link ListSequence} against the documented API. Most of
- * this test case should be reusable against other {@link ISequence}
- * implementations.
+ * Test the {@link ListSequence} against the documented API. TODO: Use JMock to
+ * test internal calls against a List object.
  * 
  * @author Simon Goodall
  * 
  */
 public class ListSequenceTest {
-
-	private ListSequence<Object> sequence;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		sequence = new ListSequence<Object>(new ArrayList<Object>(10));
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
 
 	/**
 	 * Test sequence iterator method
@@ -53,34 +26,51 @@ public class ListSequenceTest {
 	@Test
 	public void testIterator() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		sequence.add(object1);
-		sequence.add(object2);
+		final List<Object> l = CollectionsUtil.makeArrayList(object1, object2);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
 
-		Iterator<Object> iterator = sequence.iterator();
+		final Iterator<Object> iterator = sequence.iterator();
 		Assert.assertTrue(iterator.hasNext());
-		Object iterObject1 = iterator.next();
+		final Object iterObject1 = iterator.next();
 		Assert.assertSame(object1, iterObject1);
 
 		Assert.assertTrue(iterator.hasNext());
-		Object iterObject2 = iterator.next();
+		final Object iterObject2 = iterator.next();
 		Assert.assertSame(object2, iterObject2);
+	}
 
+	/**
+	 * Test sequence iterator remove method
+	 */
+	@Test(expected = UnsupportedOperationException.class)
+	public void testIterator_2() {
+
+		final Object object1 = new Object();
+		final Object object2 = new Object();
+
+		final List<Object> l = CollectionsUtil.makeArrayList(object1, object2);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
+
+		final Iterator<Object> iterator = sequence.iterator();
+		Assert.assertTrue(iterator.hasNext());
+		final Object iterObject1 = iterator.next();
+		Assert.assertSame(object1, iterObject1);
+
+		// Expect to fail here
 		iterator.remove();
-
-		Assert.assertEquals(1, sequence.size());
-
-		Assert.assertSame(object1, sequence.get(0));
 	}
 
 	@Test()
 	public void testGet() {
 
-		Assert.assertEquals(0, sequence.size());
-		Object element = new Object();
-		sequence.add(element);
+		final Object element = new Object();
+
+		final List<Object> l = CollectionsUtil.makeArrayList(element);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
+
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertEquals(element, sequence.get(0));
 
@@ -88,24 +78,30 @@ public class ListSequenceTest {
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGet_2() {
+		final ListSequence<Object> sequence = new ListSequence<Object>(
+				Collections.emptyList());
+
 		sequence.get(0);
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGet_3() {
+		final ListSequence<Object> sequence = new ListSequence<Object>(
+				Collections.emptyList());
+
 		sequence.get(-1);
 	}
 
 	@Test
 	public void testGetSegment() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		sequence.add(object1);
-		sequence.add(object2);
+		final List<Object> l = CollectionsUtil.makeArrayList(object1, object2);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
 
-		ISegment<Object> segment = sequence.getSegment(0, 2);
+		final ISegment<Object> segment = sequence.getSegment(0, 2);
 
 		Assert.assertEquals(2, segment.size());
 
@@ -117,14 +113,14 @@ public class ListSequenceTest {
 		Assert.assertSame(object1, segment.get(0));
 		Assert.assertSame(object2, segment.get(1));
 
-		Iterator<Object> iterator = segment.iterator();
+		final Iterator<Object> iterator = segment.iterator();
 
 		Assert.assertTrue(iterator.hasNext());
-		Object iterObject1 = iterator.next();
+		final Object iterObject1 = iterator.next();
 		Assert.assertSame(object1, iterObject1);
 
 		Assert.assertTrue(iterator.hasNext());
-		Object iterObject2 = iterator.next();
+		final Object iterObject2 = iterator.next();
 		Assert.assertSame(object2, iterObject2);
 
 		iterator.remove();
@@ -141,11 +137,11 @@ public class ListSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGetSegment_2() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		sequence.add(object1);
-		sequence.add(object2);
+		final List<Object> l = CollectionsUtil.makeArrayList(object1, object2);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
 
 		sequence.getSegment(-1, 2);
 	}
@@ -153,20 +149,21 @@ public class ListSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGetSegment_3() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		sequence.add(object1);
-		sequence.add(object2);
+		final List<Object> l = CollectionsUtil.makeArrayList(object1, object2);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
 
 		sequence.getSegment(0, 3);
 	}
 
 	@Test
 	public void testSize() {
-		Assert.assertEquals(0, sequence.size());
+		final Object element = new Object();
 
-		sequence.add(new Object());
+		final List<Object> l = CollectionsUtil.makeArrayList(element);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
 
 		Assert.assertEquals(1, sequence.size());
 	}
