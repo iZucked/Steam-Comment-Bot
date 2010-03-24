@@ -5,19 +5,19 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.IModifiableSequence;
+import com.mmxlabs.optimiser.IModifiableSequences;
 
 
-public class NullSequenceManipulatorTest {
+public class NullSequencesManipulatorTest {
 
 	Mockery context = new JUnit4Mockery();
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testManipulate() {
-		final IModifiableSequence<Object> sequence = context.mock(IModifiableSequence.class);
+		final IModifiableSequences<Object> sequences = context.mock(IModifiableSequences.class);
 		
-		final NullSequenceManipulator<Object> manipulator = new NullSequenceManipulator<Object>();
+		final NullSequencesManipulator<Object> manipulator = new NullSequencesManipulator<Object>();
 		
 		context.checking(new Expectations() {
 			{
@@ -25,7 +25,7 @@ public class NullSequenceManipulatorTest {
 			}
 		});
 
-		manipulator.manipulate(sequence);
+		manipulator.manipulate(sequences);
 		
 		context.assertIsSatisfied();
 	}

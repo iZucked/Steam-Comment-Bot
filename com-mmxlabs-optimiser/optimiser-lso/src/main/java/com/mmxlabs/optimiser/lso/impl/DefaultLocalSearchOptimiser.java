@@ -4,8 +4,9 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.optimiser.IConstraintChecker;
+import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IOptimisationContext;
-import com.mmxlabs.optimiser.ISequenceManipulator;
+import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISolution;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
@@ -36,7 +37,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		// Get list of hard constraint checkers
 		final List<IConstraintChecker<T>> constraintCheckers = getConstraintCheckers();
 
-		final ISequenceManipulator<T> manipulator = getSequenceManipulator();
+		final ISequencesManipulator<T> manipulator = getSequenceManipulator();
 
 		// Setup the optimisation process
 		int numberOfMovesTried = 0;
@@ -60,10 +61,10 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 
 		// TODO: Run sequence manipulator
 		{
-			// ISequences<T> fullSequences =
-			// manipulator.manipulate(currentRawSequences);
-
-			final ISequences<T> fullSequences = currentRawSequences;
+			// Apply sequence manipulators
+			IModifiableSequences<T> fullSequences = new ModifiableSequences<T>(currentRawSequences);
+			manipulator.manipulate(fullSequences);
+			
 			// Prime fitness cores with initial sequences
 			fitnessHelper.evaluateSequencesFromComponents(fullSequences,
 					fitnessComponents, null);
@@ -91,9 +92,8 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			move.apply(potentialRawSequences);
 
 			// Apply sequence manipulators
-			// TODO: Define a better API
-			// manipulator.manipulate(potentialFullSequences);
-			final ISequences<T> potentialFullSequences = potentialRawSequences;
+			IModifiableSequences<T> potentialFullSequences = new ModifiableSequences<T>(potentialRawSequences);
+			manipulator.manipulate(potentialFullSequences);
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker<T> checker : constraintCheckers) {

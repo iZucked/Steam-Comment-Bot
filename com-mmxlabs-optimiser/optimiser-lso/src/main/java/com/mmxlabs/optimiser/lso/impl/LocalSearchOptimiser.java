@@ -10,7 +10,7 @@ import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.ISequenceManipulator;
+import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISolution;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
@@ -37,7 +37,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 
 	private IFitnessHelper<T> fitnessHelper;
 
-	private ISequenceManipulator<T> sequenceManipulator;
+	private ISequencesManipulator<T> sequenceManipulator;
 
 	/**
 	 * Initialise method checking the object has all the correct pieces of data
@@ -172,11 +172,11 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	}
 
 	public void setSequenceManipulator(
-			ISequenceManipulator<T> sequenceManipulator) {
+			ISequencesManipulator<T> sequenceManipulator) {
 		this.sequenceManipulator = sequenceManipulator;
 	}
 
-	public ISequenceManipulator<T> getSequenceManipulator() {
+	public ISequencesManipulator<T> getSequenceManipulator() {
 		return sequenceManipulator;
 	}
 }

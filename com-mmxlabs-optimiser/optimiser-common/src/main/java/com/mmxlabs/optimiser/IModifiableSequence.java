@@ -3,7 +3,7 @@ package com.mmxlabs.optimiser;
 /**
  * The {@link IModifiableSequence} interface extends the {@link ISequence}
  * interface to allow sequence contents to be modified. It is expected that the
- * main users of this interface will be {@link ISequenceManipulator} instances
+ * main users of this interface will be {@link ISequencesManipulator} instances
  * and optimiser operators.
  * 
  * @author Simon Goodall

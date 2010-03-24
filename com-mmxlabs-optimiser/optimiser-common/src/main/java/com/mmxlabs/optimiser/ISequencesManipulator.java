@@ -1,7 +1,7 @@
 package com.mmxlabs.optimiser;
 
 /**
- * Interface defining an object to manipulate an {@link IModifiableSequence}.
+ * Interface defining an object to manipulate an {@link IModifiableSequences}.
  * Instances of this interface are likely to replace sequence elements with
  * alternative elements or insert new elements into the sequence. Some examples
  * cases are to change start or end elements based upon the other elements (e.g.
@@ -13,12 +13,12 @@ package com.mmxlabs.optimiser;
  * @param <T>
  *            Sequence element type
  */
-public interface ISequenceManipulator<T> {
+public interface ISequencesManipulator<T> {
 
 	/**
-	 * Manipulate the given sequence.
+	 * Manipulate the given {@link ISequences}
 	 * 
-	 * @param sequence
+	 * @param sequences
 	 */
-	void manipulate(IModifiableSequence<T> sequence);
+	void manipulate(IModifiableSequences<T> sequences);
 }
