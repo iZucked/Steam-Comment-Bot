@@ -21,7 +21,7 @@ public class NullSequencesManipulatorTest {
 		
 		context.checking(new Expectations() {
 			{
-				
+				// Expect nothing to happen
 			}
 		});
 
