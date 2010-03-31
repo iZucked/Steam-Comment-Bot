@@ -37,9 +37,8 @@ public interface IFitnessCore<T> {
 	 * Evaluates the full fitness of the given sequence.
 	 * 
 	 * @param sequences
-	 * @return Fitness of sequences
 	 */
-	double evaluate(ISequences<T> sequences);
+	void evaluate(ISequences<T> sequences);
 
 	/**
 	 * Evaluates the fitness of the given sequence. This method takes a list of
@@ -51,8 +50,7 @@ public interface IFitnessCore<T> {
 	 * full evaluation.
 	 * 
 	 * @param sequences
-	 * @return Fitness of sequences
 	 */
-	double evaluate(ISequences<T> sequences,
+	void evaluate(ISequences<T> sequences,
 			Collection<IResource> affectedResources);
 }
