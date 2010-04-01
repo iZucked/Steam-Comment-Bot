@@ -112,7 +112,6 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				updateSequences(currentRawSequences, potentialRawSequences,
 						move.getAffectedResources());
 			}
-
 		}
 	}
 }
