@@ -11,7 +11,7 @@ import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.fitness.IFitnessHelper;
 
 /**
- * Basic implementation of {@link IFitnessHelper}
+ * Basic implementation of {@link IFitnessHelper}.
  * 
  * @author Simon Goodall
  * 
@@ -58,7 +58,7 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 
 	@Override
 	public void initFitnessComponents(
-			Collection<IFitnessComponent<T>> fitnessComponents) {
+			final Collection<IFitnessComponent<T>> fitnessComponents) {
 		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
 		initFitnessCores(fitnessCores);
 
@@ -66,7 +66,7 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 
 	@Override
 	public Set<IFitnessCore<T>> getFitnessCores(
-			Collection<IFitnessComponent<T>> fitnessComponents) {
+			final Collection<IFitnessComponent<T>> fitnessComponents) {
 		final Set<IFitnessCore<T>> fitnessCores = new HashSet<IFitnessCore<T>>();
 		for (final IFitnessComponent<T> component : fitnessComponents) {
 			fitnessCores.add(component.getFitnessCore());
@@ -75,9 +75,27 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	}
 
 	@Override
-	public void initFitnessCores(Collection<IFitnessCore<T>> fitnessCores) {
-		for (IFitnessCore<T> core : fitnessCores) {
+	public void initFitnessCores(final Collection<IFitnessCore<T>> fitnessCores) {
+		for (final IFitnessCore<T> core : fitnessCores) {
 			core.init();
+		}
+	}
+
+	@Override
+	public void acceptFromComponents(
+			final Collection<IFitnessComponent<T>> fitnessComponents,
+			final ISequences<T> sequences,
+			final Collection<IResource> affectedResources) {
+		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
+		acceptFromCores(fitnessCores, sequences, affectedResources);
+	}
+
+	@Override
+	public void acceptFromCores(final Collection<IFitnessCore<T>> fitnessCores,
+			final ISequences<T> sequences,
+			final Collection<IResource> affectedResources) {
+		for (final IFitnessCore<T> core : fitnessCores) {
+			core.accepted(sequences, affectedResources);
 		}
 	}
 }

@@ -53,4 +53,16 @@ public interface IFitnessCore<T> {
 	 */
 	void evaluate(ISequences<T> sequences,
 			Collection<IResource> affectedResources);
+
+	/**
+	 * Notify the fitness core that the given sequences have been accepted.
+	 * These parameters should have been given to the last invocation of
+	 * {@link #evaluate(ISequences, Collection)}.
+	 * 
+	 * @param sequences
+	 * @param affectedResources
+	 */
+	void accepted(ISequences<T> sequences,
+			Collection<IResource> affectedResources);
+
 }

@@ -81,6 +81,41 @@ public interface IFitnessHelper<T> {
 			Collection<IResource> affectedResources);
 
 	/**
+	 * The {@link #accept(ISequences, Collection)} method is to be invoked when
+	 * a {@link ISequences} object is accepted as the new state. The
+	 * {@link ISequences} object must have been passed to the
+	 * {@link IFitnessCore#evaluate(ISequences, Collection) method previously.
+	 * This could be directly or via the @link
+	 * #evaluateSequencesFromComponents(ISequences, Collection, Collection)} or
+	 * 
+	 * @link{#evaluateSequencesFromCores(ISequences, Collection, Collection)}
+	 *                                               methods.
+	 * 
+	 * @param sequences
+	 * @param affectedResources
+	 */
+	void acceptFromCores(Collection<IFitnessCore<T>> fitnessCores,
+			ISequences<T> sequences, Collection<IResource> affectedResources);
+
+	/**
+	 * The {@link #accept(ISequences, Collection)} method is to be invoked when
+	 * a {@link ISequences} object is accepted as the new state. The
+	 * {@link ISequences} object must have been passed to the
+	 * {@link IFitnessCore#evaluate(ISequences, Collection) method previously.
+	 * This could be directly or via the
+	 * {@link #evaluateSequencesFromComponents(ISequences, Collection, Collection)}
+	 * or
+	 * {@link #evaluateSequencesFromCores(ISequences, Collection, Collection)}
+	 * methods.
+	 * 
+	 * @param sequences
+	 * @param affectedResources
+	 */
+	void acceptFromComponents(
+			Collection<IFitnessComponent<T>> fitnessComponents,
+			ISequences<T> sequences, Collection<IResource> affectedResources);
+
+	/**
 	 * Returns the set of {@link IFitnessCore}s that are used by the given
 	 * {@link IFitnessComponent}s
 	 * 
