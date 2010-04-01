@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
@@ -19,6 +18,8 @@ import com.mmxlabs.optimiser.impl.Sequences;
  * {@link IFitnessComponent} values. This implementation only tracks a single
  * best state.
  * 
+ * TODO: Split class up into difference parts, the SA rule, combiner etc...
+ * 
  * @author Simon Goodall
  * 
  * @param <T>
@@ -31,7 +32,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 	private List<IFitnessComponent<T>> fitnessComponents = null;
 
-	private double coolingOrders = Double.MAX_VALUE;
+	private double stepSize = Double.MAX_VALUE;
 
 	private double temperature = Double.MAX_VALUE;
 
@@ -41,11 +42,15 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 	private double bestFitness = Double.MAX_VALUE;
 
+	private ISequences<T> currentSequences = null;
+
 	private double currentFitness = Double.MAX_VALUE;
 
 	private double currentThreshold = Double.MAX_VALUE;
 
-	private Random random = null;
+	private int numberOfIterations = Integer.MAX_VALUE;
+
+	private int iteration;
 
 	@Override
 	public boolean checkSequences(final ISequences<T> sequences,
@@ -57,30 +62,39 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		// Calculate fitness delta
 		final double delta = totalFitness - currentFitness;
 
+		final boolean accept;
+
 		// If fitness change is within the threshold, then accept the change
 		if (delta < currentThreshold) {
 
+			// Store current fitness and sequences
 			currentFitness = totalFitness;
+			currentSequences = new Sequences<T>(sequences);
 
 			// If this is the best state seen so far, then record it.
 			if (currentFitness < bestFitness) {
-
+				// Store this as the new best
+				bestFitness = currentFitness;
 				bestSequences = new Sequences<T>(sequences);
 			}
 
-			step();
+			fitnessHelper.acceptFromComponents(fitnessComponents, sequences,
+					affectedResources);
 
-			return true;
+			accept = true;
 		} else {
 
-			step();
-
-			return false;
+			accept = false;
 		}
+
+		step();
+
+		return accept;
 	}
 
 	private double evaluteSequences(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
+
 		// Evaluates the current sequences
 		fitnessHelper.evaluateSequencesFromComponents(sequences,
 				fitnessComponents, affectedResources);
@@ -111,23 +125,32 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 			throw new IllegalStateException("No fitness component weights set");
 		}
 
-		if (random == null) {
-			throw new IllegalStateException("No random number generator set");
-		}
-
 		if (initialSequences == null) {
 			throw new IllegalArgumentException(
 					"Initial sequences cannot be null");
 		}
 
+		if (numberOfIterations == Integer.MAX_VALUE) {
+			throw new IllegalStateException("Number of iterations not set");
+		}
+
+		if (temperature == Double.MAX_VALUE) {
+			throw new IllegalStateException("Initial temperature not set");
+		}
+
+		// Initialise the fitness functions
+		fitnessHelper.initFitnessComponents(getFitnessComponents());
+
 		final double totalFitness = evaluteSequences(initialSequences, null);
 		bestFitness = totalFitness;
 		currentFitness = totalFitness;
 		bestSequences = new Sequences<T>(initialSequences);
+		currentSequences = new Sequences<T>(initialSequences);
 
-		// TODO: Init initial threshold.
-
-		throw new UnsupportedOperationException("Not yet implemented");
+		// Setup initial conditions
+		iteration = 0;
+		stepSize = temperature / (double) numberOfIterations;
+		currentThreshold = temperature;
 	}
 
 	/**
@@ -135,7 +158,9 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	 */
 	private void step() {
 
-		throw new UnsupportedOperationException("Not yet implemented");
+		++iteration;
+
+		currentThreshold -= stepSize;
 	}
 
 	@Override
@@ -181,15 +206,19 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		return fitnessComponentWeights;
 	}
 
-	public void setCoolingOrders(final double coolingOrders) {
-		this.coolingOrders = coolingOrders;
-	}
-
-	public double getCoolingOrders() {
-		return coolingOrders;
-	}
-
 	public double getBestFitness() {
 		return bestFitness;
+	}
+
+	public void setNumberOfIterations(final int numberOfIterations) {
+		this.numberOfIterations = numberOfIterations;
+	}
+
+	public int getNumberOfIterations() {
+		return numberOfIterations;
+	}
+
+	public ISequences<T> getCurrentSequences() {
+		return currentSequences;
 	}
 }
