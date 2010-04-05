@@ -41,4 +41,8 @@ public class SequencesTest {
 		fail("Not yet implemented");
 	}
 
+	@Test
+	public void testSize() {
+		fail("Not yet implemented");
+	}
 }

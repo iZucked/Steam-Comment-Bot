@@ -45,4 +45,13 @@ public interface ISequences<T> {
 	 * @return
 	 */
 	List<IResource> getResources();
+
+	/**
+	 * Returns the number of {@link IResource}s / {@link ISequence}s contained
+	 * in this object.
+	 * 
+	 * @return
+	 */
+	int size();
+
 }

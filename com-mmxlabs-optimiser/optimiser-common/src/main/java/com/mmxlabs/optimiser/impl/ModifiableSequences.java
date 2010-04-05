@@ -127,4 +127,10 @@ public final class ModifiableSequences<T> implements IModifiableSequences<T> {
 
 		return map;
 	}
+
+	@Override
+	public int size() {
+		
+		return sequenceMap.size();
+	}
 }

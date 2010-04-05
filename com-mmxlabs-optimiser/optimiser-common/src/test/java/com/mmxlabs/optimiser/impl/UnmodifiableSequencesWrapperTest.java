@@ -35,5 +35,10 @@ public class UnmodifiableSequencesWrapperTest {
 	public void testSetSequences() {
 		fail("Not yet implemented");
 	}
+	
+	@Test
+	public void testSize() {
+		fail("Not yet implemented");
+	}
 
 }

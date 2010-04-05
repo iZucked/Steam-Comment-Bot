@@ -70,4 +70,10 @@ public final class UnmodifiableSequencesWrapper<T> implements ISequences<T> {
 			}
 		}
 	}
+
+	@Override
+	public int size() {
+
+		return wrapped.size();
+	}
 }

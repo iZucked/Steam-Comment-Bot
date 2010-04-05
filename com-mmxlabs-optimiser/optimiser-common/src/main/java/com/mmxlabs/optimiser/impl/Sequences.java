@@ -104,4 +104,10 @@ public final class Sequences<T> implements ISequences<T> {
 				.unmodifiableMap(sequenceMap);
 		return map;
 	}
+	
+	@Override
+	public int size() {
+		
+		return sequenceMap.size();
+	}
 }

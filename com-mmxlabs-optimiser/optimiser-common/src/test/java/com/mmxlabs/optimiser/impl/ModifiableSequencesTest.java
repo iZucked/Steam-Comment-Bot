@@ -50,5 +50,9 @@ public class ModifiableSequencesTest {
 	public void testGetSequences() {
 		fail("Not yet implemented");
 	}
-
+	
+	@Test
+	public void testSize() {
+		fail("Not yet implemented");
+	}
 }
