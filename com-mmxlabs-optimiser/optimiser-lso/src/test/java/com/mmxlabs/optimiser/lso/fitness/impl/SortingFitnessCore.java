@@ -59,17 +59,20 @@ public final class SortingFitnessCore<T> implements IFitnessCore<T> {
 	private long evaluateSequences(final ISequences<T> sequences) {
 		long fitness = 0;
 
-		int numSequences = sequences.size();
+		final int numSequences = sequences.size();
 
 		for (int i = 0; i < numSequences; ++i) {
-			ISequence<T> sequence = sequences.getSequence(i);
+			final ISequence<T> sequence = sequences.getSequence(i);
 
-			int numElements = sequence.size();
+			final int numElements = sequence.size();
 			for (int j = 1; j < numElements; ++j) {
-				T a = sequence.get(j - i);
-				T b = sequence.get(j);
-				Integer ia = (Integer) a;
-				Integer ib = (Integer) b;
+				final T a = sequence.get(j - 1);
+				final T b = sequence.get(j);
+
+				// TODO: Check element type.
+
+				final Integer ia = (Integer) a;
+				final Integer ib = (Integer) b;
 
 				if (ia.intValue() > ib.intValue()) {
 					++fitness;
