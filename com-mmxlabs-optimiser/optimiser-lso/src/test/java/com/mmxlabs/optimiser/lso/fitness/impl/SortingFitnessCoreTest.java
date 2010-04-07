@@ -16,25 +16,26 @@ import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 
 public class SortingFitnessCoreTest {
 
 	private IFitnessComponent<Integer> component;
-	private SortingFitnessCore<Integer> core;
+	private IFitnessCore<Integer> core;
 
 	@Before
 	public void initPieces() {
 
-		core = new SortingFitnessCore<Integer>();
+		final SortingFitnessFactory factory = new SortingFitnessFactory();
+		core = factory.instantiate();
 		core.init();
 		final Collection<IFitnessComponent<Integer>> fitnessComponents = core
 				.getFitnessComponents();
 
 		Assert.assertEquals(1, fitnessComponents.size());
 		component = fitnessComponents.iterator().next();
-
 	}
 
 	@Test
