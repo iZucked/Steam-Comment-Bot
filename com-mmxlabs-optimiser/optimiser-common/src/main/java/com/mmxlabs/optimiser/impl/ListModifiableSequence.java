@@ -101,4 +101,9 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 			list.add(t);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return list.toString();
+	}
 }
