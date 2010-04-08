@@ -29,9 +29,10 @@ public class DefaultLocalSearchOptimiserTest {
 	@Test
 	public void testOptimise() {
 
-		// Init rng
-		Random random = new Random(1);
+		// Initialise random number generator
+		final Random random = new Random(1);
 
+		// Optimisation params
 		final int numberOfIterations = 100;
 		final double temperature = 5.0;
 
@@ -70,8 +71,10 @@ public class DefaultLocalSearchOptimiserTest {
 		lso.setMoveGenerator(moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 
-		IResource r1 = OptimiserTestUtil.makeResource();
-		IResource r2 = OptimiserTestUtil.makeResource();
+		// Create an initial set of sequences.
+
+		final IResource r1 = OptimiserTestUtil.makeResource();
+		final IResource r2 = OptimiserTestUtil.makeResource();
 
 		final Map<IResource, IModifiableSequence<Integer>> map = CollectionsUtil
 				.makeHashMap(r1, OptimiserTestUtil.makeSequence(1, 3, 2, 4),
@@ -80,8 +83,11 @@ public class DefaultLocalSearchOptimiserTest {
 		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
 				CollectionsUtil.makeArrayList(r1, r2), map);
 
-		// fail("THis is wrong iu think");
+		// TODO: Need to think about better API to keep move generator up to
+		// date with current sequences.
 		moveGenerator.setSequences(sequences);
+
+		// TODO: Create a default opt. context object
 		final IOptimisationContext<Integer> context = new IOptimisationContext<Integer>() {
 
 			@Override
@@ -95,17 +101,20 @@ public class DefaultLocalSearchOptimiserTest {
 			}
 		};
 
+		// Perform the optimisation
 		lso.optimise(context, null, null);
 
-		System.out.println(fitnessEvaluator.getBestFitness());
+		System.out
+				.println("Final fitness " + fitnessEvaluator.getBestFitness());
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testOptimiseInit1() {
+
+		// Test all init failure combinations in several methods.
+		// Code coverage utils should help here
+
 		fail("Not yet implemented");
-
-		// Test all init failure combinations
-
 	}
 
 }
