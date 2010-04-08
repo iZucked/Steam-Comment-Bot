@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
  *            Sequence element type
  */
 
-public class RandomMoveGenerator<T> implements IMoveGenerator<T> {
+public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 
 	private Random random;
 
