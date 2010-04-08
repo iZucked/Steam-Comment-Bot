@@ -58,21 +58,26 @@ public interface IFitnessEvaluator<T> {
 	void setFitnessHelper(IFitnessHelper<T> fitnessHelper);
 
 	/**
+	 * Initialise {@link IFitnessEvaluator} and ensure all the relevant setters
+	 * have been called.
+	 */
+	void init();
+
+	/**
 	 * Initialise the {@link IFitnessEvaluator} with the initial
-	 * {@link ISequences}. {@link #setFitnessComponents(List)} and
-	 * {@link #setFitnessHelper(IFitnessHelper)} must have been called prior to
-	 * invoking this method.
+	 * {@link ISequences}. This should be called once at the beginning of an
+	 * optimisation process.
 	 * 
 	 * @param initialSequences
 	 */
-	void init(ISequences<T> initialSequences);
+	void setInitialSequences(ISequences<T> initialSequences);
 
 	/**
 	 * Evaluate the given {@link ISequences} to determine whether or not they
 	 * are accepted as a better state than the previously accepted state. If
 	 * accepted, then the {@link ISequences} "state" will be recorded and used
-	 * as the basis for future checks. {@link #init(ISequences)} must have been
-	 * called previously to setup the initial state.
+	 * as the basis for future checks. {@link #setInitialSequences(ISequences)}
+	 * must have been called previously to setup the initial state.
 	 * 
 	 * @param sequences
 	 * @return

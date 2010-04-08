@@ -112,7 +112,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	}
 
 	@Override
-	public void init(final ISequences<T> initialSequences) {
+	public void init() {
 		if (fitnessComponents == null) {
 			throw new IllegalStateException("No fitness components set");
 		}
@@ -125,17 +125,21 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 			throw new IllegalStateException("No fitness component weights set");
 		}
 
-		if (initialSequences == null) {
-			throw new IllegalArgumentException(
-					"Initial sequences cannot be null");
-		}
-
 		if (numberOfIterations == Integer.MAX_VALUE) {
 			throw new IllegalStateException("Number of iterations not set");
 		}
 
 		if (temperature == Double.MAX_VALUE) {
 			throw new IllegalStateException("Initial temperature not set");
+		}
+	}
+
+	@Override
+	public void setInitialSequences(final ISequences<T> initialSequences) {
+
+		if (initialSequences == null) {
+			throw new IllegalArgumentException(
+					"Initial sequences cannot be null");
 		}
 
 		// Initialise the fitness functions

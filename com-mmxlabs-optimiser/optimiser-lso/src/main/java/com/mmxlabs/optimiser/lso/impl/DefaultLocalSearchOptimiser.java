@@ -61,7 +61,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			manipulator.manipulate(fullSequences);
 			
 			// Prime fitness cores with initial sequences
-			fitnessEvaluator.init(fullSequences);
+			fitnessEvaluator.setInitialSequences(fullSequences);
 		}
 
 		// Perform the optimisation

@@ -55,10 +55,7 @@ public class DefaultLocalSearchOptimiserTest {
 
 		fitnessEvaluator.setFitnessComponentWeights(weightsMap);
 
-		// Init part of LSO -- doesn't seem right as init also verifies things
-		// have been set correctly which would be best placed here. Perhaps we
-		// need init() and strart/begin(seq) methods
-		// fitnessEvaluator.init(initialSequences);
+		fitnessEvaluator.init();
 
 		final RandomMoveGenerator<Integer> moveGenerator = new RandomMoveGenerator<Integer>();
 		moveGenerator.setRandom(random);
