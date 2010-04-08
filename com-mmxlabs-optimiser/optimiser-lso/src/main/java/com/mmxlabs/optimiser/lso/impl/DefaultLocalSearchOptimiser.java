@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.ISolution;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
 
 /**
  * A sub-class of {@link LocalSearchOptimiser} implementing a default main loop.
