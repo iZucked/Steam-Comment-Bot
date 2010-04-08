@@ -177,7 +177,7 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 		int resource2 = random.nextInt(numResources);
 
 		// Ensure different resources
-		while (resource2 != resource1) {
+		while (resource2 == resource1) {
 			resource2 = random.nextInt(numResources);
 		}
 
