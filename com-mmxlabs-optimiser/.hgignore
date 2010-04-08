@@ -9,3 +9,6 @@ syntax: regexp
 ^optimiser-.*/\.classpath$
 syntax: regexp
 ^optimiser-.*/\.project$
+
+syntax: regexp
+^optimiser-bundle/META-INF/MANIFEST\.MF$
