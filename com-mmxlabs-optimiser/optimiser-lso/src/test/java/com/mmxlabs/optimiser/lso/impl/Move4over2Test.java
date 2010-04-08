@@ -65,7 +65,6 @@ public class Move4over2Test {
 
 		context.checking(new Expectations() {
 			{
-
 				// Expect these methods to be invoked once
 				oneOf(sequence1).getSegment(resource1Start, resource1End);
 				oneOf(sequence2).getSegment(resource2Start, resource2End);
