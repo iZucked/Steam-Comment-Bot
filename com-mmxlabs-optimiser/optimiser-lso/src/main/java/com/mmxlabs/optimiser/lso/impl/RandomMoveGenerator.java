@@ -93,7 +93,7 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	 * @return
 	 */
 	private int generateBreakPoint(final ISequence<T> sequence) {
-		final int breakPoint = random.nextInt(sequence.size());
+		final int breakPoint = random.nextInt(1 + sequence.size());
 
 		// Validate break point -- should it include start/end elements?
 
