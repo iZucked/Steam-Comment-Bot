@@ -159,4 +159,11 @@ public final class Move4over2<T> implements IMove<T> {
 	public void setResource2End(final int resource2End) {
 		this.resource2End = resource2End;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("r1 (%s) [%d -> %d], r2 (%s) [%d -> %d]",
+				getResource1(), getResource1Start(), getResource1End(),
+				getResource2(), getResource2Start(), getResource2End());
+	}
 }
