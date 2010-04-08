@@ -221,4 +221,8 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	public ISequences<T> getCurrentSequences() {
 		return currentSequences;
 	}
+
+	public double getCurrentFitness() {
+		return currentFitness;
+	}
 }
