@@ -29,11 +29,12 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 	void remove(int index);
 
 	/**
-	 * Remove the given element from the sequence.
+	 * Remove the given element from the sequence. Returns false if the element
+	 * did not exist or true on success.
 	 * 
 	 * @param element
 	 */
-	void remove(T element);
+	boolean remove(T element);
 
 	/**
 	 * Insert the given element at the specified index.

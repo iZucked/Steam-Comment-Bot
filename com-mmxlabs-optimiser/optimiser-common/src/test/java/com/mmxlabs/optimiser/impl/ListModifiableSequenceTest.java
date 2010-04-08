@@ -225,7 +225,7 @@ public class ListModifiableSequenceTest {
 		sequence.add(object1);
 		sequence.add(object2);
 
-		sequence.remove(object1);
+		Assert.assertTrue(sequence.remove(object1));
 
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertSame(object2, sequence.get(0));
@@ -243,9 +243,7 @@ public class ListModifiableSequenceTest {
 		// success.
 		// This information is currently lost and this method will silently
 		// fail.
-		sequence.remove(object2);
-
-		fail("Ambigous API");
+		Assert.assertFalse(sequence.remove(object2));
 	}
 
 	@Test
@@ -477,7 +475,6 @@ public class ListModifiableSequenceTest {
 
 		Assert.assertEquals(3, sequence.size());
 
-		
 		Assert.assertSame(o1, sequence.get(0));
 		Assert.assertSame(o2, sequence.get(1));
 		Assert.assertSame(o3, sequence.get(2));
@@ -491,16 +488,14 @@ public class ListModifiableSequenceTest {
 
 		Assert.assertEquals(3, sequence2.size());
 
-		
 		Assert.assertSame(o4, sequence2.get(0));
 		Assert.assertSame(o5, sequence2.get(1));
 		Assert.assertSame(o6, sequence2.get(2));
 
-		
 		sequence.replaceAll(sequence2);
-		
+
 		Assert.assertEquals(3, sequence.size());
-		
+
 		Assert.assertSame(o4, sequence.get(0));
 		Assert.assertSame(o5, sequence.get(1));
 		Assert.assertSame(o6, sequence.get(2));

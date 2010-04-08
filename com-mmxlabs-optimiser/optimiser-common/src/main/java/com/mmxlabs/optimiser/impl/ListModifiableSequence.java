@@ -53,8 +53,8 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	}
 
 	@Override
-	public void remove(final T element) {
-		list.remove(element);
+	public boolean remove(final T element) {
+		return list.remove(element);
 	}
 
 	@Override
