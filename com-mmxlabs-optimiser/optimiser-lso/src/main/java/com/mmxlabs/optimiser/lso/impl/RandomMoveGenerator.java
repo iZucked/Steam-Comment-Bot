@@ -34,11 +34,6 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 
 	}
 
-	public RandomMoveGenerator(final Random random,
-			final ISequences<T> sequences) {
-		this.random = random;
-	}
-
 	@Override
 	public IMove<T> generateMove() {
 
