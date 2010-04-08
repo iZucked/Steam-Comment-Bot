@@ -72,4 +72,9 @@ public final class ListSequence<T> implements ISequence<T> {
 	public int size() {
 		return list.size();
 	}
+	
+	@Override
+	public String toString() {
+		return list.toString();
+	}
 }
