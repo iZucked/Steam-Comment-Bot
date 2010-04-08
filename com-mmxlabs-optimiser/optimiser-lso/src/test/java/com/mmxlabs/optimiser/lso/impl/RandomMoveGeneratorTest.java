@@ -1,24 +1,51 @@
 package com.mmxlabs.optimiser.lso.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
+import java.util.Random;
+
+import junit.framework.Assert;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.IRandomMoveGeneratorUnit;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
+
+@RunWith(JMock.class)
 public class RandomMoveGeneratorTest {
 
-	@Test
-	public void testRandomMoveGenerator() {
-		fail("Not yet implemented");
-	}
+	Mockery context = new JUnit4Mockery();
 
-	@Test
-	public void testRandomMoveGeneratorRandomISequencesOfT() {
-		fail("Not yet implemented");
-	}
-
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testGenerateMove() {
-		fail("Not yet implemented");
+
+		final Random random = new Random(1);
+
+		final RandomMoveGenerator<Object> moveGenerator = new RandomMoveGenerator<Object>();
+
+		final IRandomMoveGeneratorUnit<Object> unit = context
+				.mock(IRandomMoveGeneratorUnit.class);
+
+		moveGenerator.setRandom(random);
+		moveGenerator.addMoveGeneratorUnit(unit);
+
+		context.checking(new Expectations() {
+			{
+				// Expect these methods to be invoked once
+				oneOf(unit).generateRandomMove(moveGenerator, null);
+			}
+		});
+
+		moveGenerator.generateMove();
+
+		context.assertIsSatisfied();
 	}
 
 	@Test
@@ -27,23 +54,41 @@ public class RandomMoveGeneratorTest {
 	}
 
 	@Test
-	public void testSetRandom() {
+	public void testRandomAccessors() {
+
+		RandomMoveGenerator<Object> moveGenerator = new RandomMoveGenerator<Object>();
+
+		// Initially should be null
+		Assert.assertNull(moveGenerator.getRandom());
+
+		Random random = new Random();
+
+		moveGenerator.setRandom(random);
+		Assert.assertSame(random, moveGenerator.getRandom());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSequencesAccessors() {
+
+		RandomMoveGenerator<Object> moveGenerator = new RandomMoveGenerator<Object>();
+
+		// Initially should be null
+		Assert.assertNull(moveGenerator.getSequences());
+
+		ISequences<Object> sequences = context.mock(ISequences.class);
+
+		moveGenerator.setSequences(sequences);
+		Assert.assertSame(sequences, moveGenerator.getSequences());
+	}
+
+	@Test
+	public void testGenerateBreakPoint() {
 		fail("Not yet implemented");
 	}
 
 	@Test
-	public void testGetRandom() {
+	public void testGenerateSortedBreakPoints() {
 		fail("Not yet implemented");
 	}
-
-	@Test
-	public void testSetSequences() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetSequences() {
-		fail("Not yet implemented");
-	}
-
 }
