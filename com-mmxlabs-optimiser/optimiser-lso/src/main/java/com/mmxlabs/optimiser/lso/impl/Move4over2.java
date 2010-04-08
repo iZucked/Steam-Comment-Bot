@@ -100,12 +100,12 @@ public final class Move4over2<T> implements IMove<T> {
 		// Make sure end is within range. This implies start would also be
 		// within range due to previous checks.
 		final ISequence<T> sequence1 = sequenceMap.get(resource1);
-		if (resource1End >= sequence1.size()) {
+		if (resource1End > sequence1.size()) {
 			return false;
 		}
 
 		final ISequence<T> sequence2 = sequenceMap.get(resource2);
-		if (resource2End >= sequence2.size()) {
+		if (resource2End > sequence2.size()) {
 			return false;
 		}
 
