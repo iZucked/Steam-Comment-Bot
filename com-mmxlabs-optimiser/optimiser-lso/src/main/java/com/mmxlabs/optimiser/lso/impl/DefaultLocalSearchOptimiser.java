@@ -6,8 +6,9 @@ import java.util.List;
 import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IOptimisationContext;
-import com.mmxlabs.optimiser.ISequencesManipulator;
+import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.ISolution;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
@@ -99,6 +100,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				}
 			}
 
+			
 			// Test move and update state if accepted
 			if (fitnessEvaluator.checkSequences(potentialFullSequences, move
 					.getAffectedResources())) {
@@ -107,6 +109,8 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				updateSequences(potentialRawSequences, currentRawSequences,
 						move.getAffectedResources());
 
+				((RandomMoveGenerator<T>)getMoveGenerator()).setSequences(potentialRawSequences);
+				
 				++numberOfMovesAccepted;
 			} else {
 				// Failed, reset state for old sequences
