@@ -297,7 +297,7 @@ public class ListModifiableSequenceTest {
 		// fail.
 		sequence.remove(segment);
 
-		fail("Ambigous API");
+		fail("Ambigous API: What about (non)consecutive elements? What about missing elements?");
 	}
 
 	@Test
