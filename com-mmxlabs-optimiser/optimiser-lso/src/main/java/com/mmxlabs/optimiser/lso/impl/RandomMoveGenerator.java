@@ -27,7 +27,7 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	private ISequences<T> sequences;
 
 	private static enum MoveTypes {
-		Move_2over1, Move_2over2, Move_3over1, Move_3verver2, Move_4over1, Move_4over2
+		Move_3over2, Move_4over1, Move_4over2
 	};
 
 	public RandomMoveGenerator() {
