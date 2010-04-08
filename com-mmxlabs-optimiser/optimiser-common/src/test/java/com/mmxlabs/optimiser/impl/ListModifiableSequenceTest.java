@@ -460,10 +460,49 @@ public class ListModifiableSequenceTest {
 
 		Assert.assertEquals(1, sequence.size());
 	}
-	
+
 	@Test
 	public void testReplaceAll() {
+
+		Object o1 = new Object();
+		Object o2 = new Object();
+		Object o3 = new Object();
+		Object o4 = new Object();
+		Object o5 = new Object();
+		Object o6 = new Object();
+
+		sequence.add(o1);
+		sequence.add(o2);
+		sequence.add(o3);
+
+		Assert.assertEquals(3, sequence.size());
+
 		
-		fail("Not yet implemented");
+		Assert.assertSame(o1, sequence.get(0));
+		Assert.assertSame(o2, sequence.get(1));
+		Assert.assertSame(o3, sequence.get(2));
+
+		ListModifiableSequence<Object> sequence2 = new ListModifiableSequence<Object>(
+				new ArrayList<Object>(10));
+
+		sequence2.add(o4);
+		sequence2.add(o5);
+		sequence2.add(o6);
+
+		Assert.assertEquals(3, sequence2.size());
+
+		
+		Assert.assertSame(o4, sequence2.get(0));
+		Assert.assertSame(o5, sequence2.get(1));
+		Assert.assertSame(o6, sequence2.get(2));
+
+		
+		sequence.replaceAll(sequence2);
+		
+		Assert.assertEquals(3, sequence.size());
+		
+		Assert.assertSame(o4, sequence.get(0));
+		Assert.assertSame(o5, sequence.get(1));
+		Assert.assertSame(o6, sequence.get(2));
 	}
 }
