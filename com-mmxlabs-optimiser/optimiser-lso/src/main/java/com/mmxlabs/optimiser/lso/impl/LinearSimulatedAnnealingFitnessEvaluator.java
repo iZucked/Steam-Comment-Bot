@@ -92,6 +92,13 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		return accept;
 	}
 
+	/**
+	 * Method used to perform the evaluation of {@link ISequences}.
+	 * 
+	 * @param sequences
+	 * @param affectedResources
+	 * @return
+	 */
 	private double evaluteSequences(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
 
@@ -193,39 +200,85 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		return Collections.singletonList(bestSequences);
 	}
 
+	/**
+	 * Set the initial temperature value
+	 * 
+	 * @param temperature
+	 */
 	public void setTemperature(final double temperature) {
 		this.temperature = temperature;
 	}
 
+	/**
+	 * Returns the initial temperature value
+	 * 
+	 * @return
+	 */
 	public double getTemperature() {
 		return temperature;
 	}
 
+	/**
+	 * Set a map of {@link IFitnessComponent} name to weight - used to calculate
+	 * the full fitness value.
+	 * 
+	 * @return
+	 */
 	public void setFitnessComponentWeights(
 			final Map<String, Double> fitnessComponentWeights) {
 		this.fitnessComponentWeights = fitnessComponentWeights;
 	}
 
+	/**
+	 * Returns a map of {@link IFitnessComponent} name to weight.
+	 * 
+	 * @return
+	 */
 	public Map<String, Double> getFitnessComponentWeights() {
 		return fitnessComponentWeights;
 	}
 
+	/**
+	 * Returns the best fitness so far
+	 * 
+	 * @return
+	 */
 	public double getBestFitness() {
 		return bestFitness;
 	}
 
+	/**
+	 * Set the number of iterations for this optimisation
+	 * 
+	 * @param numberOfIterations
+	 */
 	public void setNumberOfIterations(final int numberOfIterations) {
 		this.numberOfIterations = numberOfIterations;
 	}
 
+	/**
+	 * Returns the number of iterations for this optimisation
+	 * 
+	 * @return
+	 */
 	public int getNumberOfIterations() {
 		return numberOfIterations;
 	}
 
+	/**
+	 * Returns the current {@link ISequences}
+	 * 
+	 * @return
+	 */
 	public ISequences<T> getCurrentSequences() {
 		return currentSequences;
 	}
 
+	/**
+	 * Returns the fitness of the current {@link ISequences}
+	 * 
+	 * @return
+	 */
 	public double getCurrentFitness() {
 		return currentFitness;
 	}
