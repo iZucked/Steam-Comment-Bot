@@ -6,7 +6,6 @@ import java.util.List;
 import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IOptimisationContext;
-import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.ISolution;
@@ -53,13 +52,12 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				currentRawSequences.getResources());
 
 		// Evaluate initial sequences
-
-		// TODO: Run sequence manipulator
 		{
 			// Apply sequence manipulators
-			IModifiableSequences<T> fullSequences = new ModifiableSequences<T>(currentRawSequences);
+			IModifiableSequences<T> fullSequences = new ModifiableSequences<T>(
+					currentRawSequences);
 			manipulator.manipulate(fullSequences);
-			
+
 			// Prime fitness cores with initial sequences
 			fitnessEvaluator.setInitialSequences(fullSequences);
 		}
@@ -86,7 +84,8 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			move.apply(potentialRawSequences);
 
 			// Apply sequence manipulators
-			IModifiableSequences<T> potentialFullSequences = new ModifiableSequences<T>(potentialRawSequences);
+			IModifiableSequences<T> potentialFullSequences = new ModifiableSequences<T>(
+					potentialRawSequences);
 			manipulator.manipulate(potentialFullSequences);
 
 			// Apply hard constraint checkers
@@ -100,17 +99,18 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				}
 			}
 
-			
 			// Test move and update state if accepted
 			if (fitnessEvaluator.checkSequences(potentialFullSequences, move
 					.getAffectedResources())) {
-				
+
 				// Success update state for new sequences
 				updateSequences(potentialRawSequences, currentRawSequences,
 						move.getAffectedResources());
 
-				((RandomMoveGenerator<T>)getMoveGenerator()).setSequences(potentialRawSequences);
-				
+				// TODO: This needs to be handled by interface definition.
+				((RandomMoveGenerator<T>) getMoveGenerator())
+						.setSequences(potentialRawSequences);
+
 				++numberOfMovesAccepted;
 			} else {
 				// Failed, reset state for old sequences
