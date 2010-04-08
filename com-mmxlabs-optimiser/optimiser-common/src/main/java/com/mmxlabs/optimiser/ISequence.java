@@ -1,7 +1,8 @@
 package com.mmxlabs.optimiser;
 
 /**
- * This interface defines an immutable sequence of elements.
+ * This interface defines an immutable sequence of elements. It is assumed that
+ * each element appears only once in a given sequence.
  * 
  * @author Simon Goodall
  * 
