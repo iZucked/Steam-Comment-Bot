@@ -291,7 +291,7 @@ public class ListModifiableSequenceTest {
 		ISegment<Object> segment = new ListSegment<Object>(segmentList,
 				sequence, 1, 3);
 
-		// TODO: Backing list implementation returns a boolean to inidcate
+		// TODO: Backing list implementation returns a boolean to indicate
 		// success.
 		// This information is currently lost and this method will silently
 		// fail.
