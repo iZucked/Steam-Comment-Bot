@@ -1,17 +1,12 @@
 package com.mmxlabs.optimiser.impl;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.api.Expectation;
-import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
@@ -22,6 +17,7 @@ import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 
 @RunWith(JMock.class)
+@SuppressWarnings("unchecked")
 public class SequencesTest {
 
 	Mockery context = new JUnit4Mockery();
