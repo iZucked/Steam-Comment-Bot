@@ -58,7 +58,9 @@ public final class Sequences<T> implements ISequences<T> {
 	}
 
 	/**
-	 * Constructor which creates a copy of the input {@link ISequences} object.
+	 * Constructor which creates a deep copy of the input {@link ISequences}
+	 * object. This includes creating new {@link ISequence} objects, but not the
+	 * sequence elements.
 	 * 
 	 * @param sequences
 	 *            Source {@link ISequences} object
@@ -104,10 +106,10 @@ public final class Sequences<T> implements ISequences<T> {
 				.unmodifiableMap(sequenceMap);
 		return map;
 	}
-	
+
 	@Override
 	public int size() {
-		
+
 		return sequenceMap.size();
 	}
 }
