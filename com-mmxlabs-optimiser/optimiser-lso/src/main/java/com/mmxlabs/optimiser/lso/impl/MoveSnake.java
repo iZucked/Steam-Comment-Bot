@@ -1,7 +1,12 @@
 package com.mmxlabs.optimiser.lso.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISegment;
@@ -20,21 +25,138 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @param <T>
  *            Sequence element type.
  */
-public class MoveSnake<T> implements IMove<T> {
+public final class MoveSnake<T> implements IMove<T> {
+
+	private List<IResource> fromResources;
+
+	private List<IResource> toResources;
+
+	private List<Integer> segmentStarts;
+
+	private List<Integer> segmentEnds;
+
+	private List<Integer> insertionPositions;
 
 	@Override
-	public void apply(IModifiableSequences<T> sequences) {
-		throw new UnsupportedOperationException("Not implemented yet.");
+	public void apply(final IModifiableSequences<T> sequences) {
+
+		final int numChanges = fromResources.size();
+
+		final List<ISegment<T>> segments = new ArrayList<ISegment<T>>(
+				numChanges);
+
+		// Generate all the segments
+		for (int i = 0; i < numChanges; ++i) {
+			final IResource from = fromResources.get(i);
+			final IModifiableSequence<T> fromSequence = sequences
+					.getModifiableSequence(from);
+			final ISegment<T> segment = fromSequence.getSegment(segmentStarts
+					.get(i), segmentEnds.get(i));
+			segments.add(i, segment);
+		}
+
+		// Add all segments their new sequences
+		// Generate all the segments
+		for (int i = 0; i < numChanges; ++i) {
+			final IResource to = toResources.get(i);
+			final IModifiableSequence<T> toSequence = sequences
+					.getModifiableSequence(to);
+			toSequence.insert(insertionPositions.get(i), segments.get(i));
+		}
+
+		// Remove segments from old sequences
+		for (int i = 0; i < numChanges; ++i) {
+			final IResource from = fromResources.get(i);
+			final IModifiableSequence<T> fromSequence = sequences
+					.getModifiableSequence(from);
+
+			fromSequence.remove(segments.get(i));
+		}
 	}
 
 	@Override
 	public Collection<IResource> getAffectedResources() {
-		throw new UnsupportedOperationException("Not implemented yet.");
+
+		final Set<IResource> affectedResources = new HashSet<IResource>();
+		affectedResources.addAll(fromResources);
+		affectedResources.addAll(toResources);
+		return affectedResources;
 	}
 
 	@Override
-	public boolean validate(ISequences<T> sequences) {
-		throw new UnsupportedOperationException("Not implemented yet.");
+	public boolean validate(final ISequences<T> sequences) {
+
+		// Check unique froms
+		Set<IResource> froms = new HashSet<IResource>();
+		for (IResource from : fromResources) {
+			if (froms.add(from) == false) {
+				return false;
+			}
+		}
+
+		// Check unique tos
+		Set<IResource> tos = new HashSet<IResource>();
+		for (IResource to : toResources) {
+			if (tos.add(to) == false) {
+				return false;
+			}
+		}
+
+		final int numChanges = fromResources.size();
+
+		for (int i = 0; i < numChanges; ++i) {
+			if (segmentStarts.get(i) < 0) {
+				return false;
+			}
+			if (segmentEnds.get(i) > sequences.getSequence(i).size()) {
+				return false;
+			}
+
+		}
+		// TODO: Check for non-overlapping segments,
+		// TODO: Check insertionPosition within range
+
+		return true;
+	}
+
+	public List<IResource> getFromResources() {
+		return fromResources;
+	}
+
+	public void setFromResources(final List<IResource> fromResources) {
+		this.fromResources = fromResources;
+	}
+
+	public List<IResource> getToResources() {
+		return toResources;
+	}
+
+	public void setToResources(final List<IResource> toResources) {
+		this.toResources = toResources;
+	}
+
+	public List<Integer> getSegmentStarts() {
+		return segmentStarts;
+	}
+
+	public void setSegmentStarts(final List<Integer> segmentStarts) {
+		this.segmentStarts = segmentStarts;
+	}
+
+	public List<Integer> getSegmentEnds() {
+		return segmentEnds;
+	}
+
+	public void setSegmentEnds(final List<Integer> segmentEnds) {
+		this.segmentEnds = segmentEnds;
+	}
+
+	public List<Integer> getInsertionPositions() {
+		return insertionPositions;
+	}
+
+	public void setInsertionPositions(final List<Integer> insertionPositions) {
+		this.insertionPositions = insertionPositions;
 	}
 
 }
