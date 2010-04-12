@@ -1,5 +1,7 @@
 package com.mmxlabs.optimiser.lso.impl;
 
+import static junit.framework.Assert.fail;
+
 import java.util.List;
 import java.util.Map;
 
@@ -128,4 +130,10 @@ public class Move3over2Test {
 			Assert.assertEquals(expectedSequence2.get(i), sequence2.get(i));
 		}
 	}
+	
+	@Test
+	public void testValidate() {
+		fail("Not yet implemented");
+	}
+
 }
