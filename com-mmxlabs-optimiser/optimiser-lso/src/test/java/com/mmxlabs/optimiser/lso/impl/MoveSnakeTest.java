@@ -99,14 +99,14 @@ public class MoveSnakeTest {
 		final IModifiableSequence<Integer> sequence3 = new ListModifiableSequence<Integer>(
 				CollectionsUtil.makeArrayList(11, 12, 13, 14, 15));
 
-		List<IResource> resources = CollectionsUtil.makeArrayList(resource1,
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1,
 				resource2, resource3);
 
-		Map<IResource, IModifiableSequence<Integer>> sequenceMap = CollectionsUtil
+		final Map<IResource, IModifiableSequence<Integer>> sequenceMap = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2,
 						resource3, sequence3);
 
-		IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
+		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
 				resources, sequenceMap);
 
 		final MoveSnake<Integer> move = new MoveSnake<Integer>();
@@ -135,11 +135,11 @@ public class MoveSnakeTest {
 
 		move.apply(sequences);
 
-		List<Integer> expectedSequence1 = CollectionsUtil.makeArrayList(13, 14,
+		final List<Integer> expectedSequence1 = CollectionsUtil.makeArrayList(13, 14,
 				3, 4, 5);
-		List<Integer> expectedSequence2 = CollectionsUtil.makeArrayList(6, 1,
+		final List<Integer> expectedSequence2 = CollectionsUtil.makeArrayList(6, 1,
 				2, 9, 10);
-		List<Integer> expectedSequence3 = CollectionsUtil.makeArrayList(11, 12,
+		final List<Integer> expectedSequence3 = CollectionsUtil.makeArrayList(11, 12,
 				7, 8, 15);
 
 		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
