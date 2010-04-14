@@ -150,7 +150,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	}
 
 	public void setSequenceManipulator(
-			ISequencesManipulator<T> sequenceManipulator) {
+			final ISequencesManipulator<T> sequenceManipulator) {
 		this.sequenceManipulator = sequenceManipulator;
 	}
 
