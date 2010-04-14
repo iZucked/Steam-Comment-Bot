@@ -24,11 +24,14 @@ import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.impl.OptimisationContext;
+import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
+import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.MoveSnakeGeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
@@ -52,16 +55,14 @@ public class BasicLSOTest {
 	// * fitness tracking
 	// * Solution tracking
 	// * move tracking
-	// * MoveGen.set(...) improve
 	// * Check DMatrix works (fitness no change?)
 	// * Remove "failback" in evalutteSquences(seu, afected);
-	// * Make it "!optimise"
 
 	class Element {
 
 		int v;
 
-		Element(int v) {
+		Element(final int v) {
 			this.v = v;
 		}
 
@@ -71,12 +72,12 @@ public class BasicLSOTest {
 		}
 	}
 
-	IMatrixProvider<Element, Number> buildMatrix(List<Element> elements) {
-		HashMapMatrixProvider<Element, Number> matrix = new HashMapMatrixProvider<Element, Number>(
+	IMatrixProvider<Element, Number> buildMatrix(final List<Element> elements) {
+		final HashMapMatrixProvider<Element, Number> matrix = new HashMapMatrixProvider<Element, Number>(
 				Constants.DATA_PROVIDER_KEY_distance_matrix);
 
-		for (Element from : elements) {
-			for (Element to : elements) {
+		for (final Element from : elements) {
+			for (final Element to : elements) {
 				matrix.set(from, to, Math.abs(from.v - to.v));
 			}
 		}
@@ -84,21 +85,21 @@ public class BasicLSOTest {
 		return matrix;
 	}
 
-	public IOptimisationData<Element> buildData(int numElements,
-			int numResources) {
+	public IOptimisationData<Element> buildData(final int numElements,
+			final int numResources) {
 
 		// Create the elements locations
-		List<Element> elements = new ArrayList<Element>(numElements);
+		final List<Element> elements = new ArrayList<Element>(numElements);
 		for (int i = 0; i < numElements; ++i) {
-			Element e = new Element(i);
+			final Element e = new Element(i);
 			elements.add(e);
 		}
 
 		// Create resources
-		List<IResource> resources = new ArrayList<IResource>(numResources);
+		final List<IResource> resources = new ArrayList<IResource>(numResources);
 		for (int i = 0; i < numResources; ++i) {
 			final int id = i;
-			IResource resource = new IResource() {
+			final IResource resource = new IResource() {
 				@Override
 				public String toString() {
 					return "Resource: " + id;
@@ -108,9 +109,9 @@ public class BasicLSOTest {
 		}
 
 		// Create distance matrix
-		IMatrixProvider<Element, Number> distanceMatrix = buildMatrix(elements);
+		final IMatrixProvider<Element, Number> distanceMatrix = buildMatrix(elements);
 
-		OptimisationData<Element> data = new OptimisationData<Element>();
+		final OptimisationData<Element> data = new OptimisationData<Element>();
 		data.setResources(resources);
 		data.setSequenceElements(elements);
 
@@ -129,18 +130,18 @@ public class BasicLSOTest {
 	 * @param seed
 	 * @return
 	 */
-	<T> ISequences<T> createInitialSequences(IOptimisationData<T> data,
-			long seed) {
-		Random random = new Random(seed);
-		Collection<T> sequenceElements = data.getSequenceElements();
-		List<T> shuffledElements = new ArrayList<T>(sequenceElements);
+	<T> ISequences<T> createInitialSequences(final IOptimisationData<T> data,
+			final long seed) {
+		final Random random = new Random(seed);
+		final Collection<T> sequenceElements = data.getSequenceElements();
+		final List<T> shuffledElements = new ArrayList<T>(sequenceElements);
 		Collections.shuffle(shuffledElements, random);
 
-		List<IResource> resources = data.getResources();
-		IModifiableSequences<T> sequences = new ModifiableSequences<T>(
+		final List<IResource> resources = data.getResources();
+		final IModifiableSequences<T> sequences = new ModifiableSequences<T>(
 				resources);
-		for (T e : shuffledElements) {
-			int nextInt = random.nextInt(resources.size());
+		for (final T e : shuffledElements) {
+			final int nextInt = random.nextInt(resources.size());
 			sequences.getModifiableSequence(nextInt).add(e);
 		}
 		return sequences;
@@ -149,32 +150,36 @@ public class BasicLSOTest {
 	@Test
 	public void testLSO() {
 		// Build opt data
-		IOptimisationData<Element> data = buildData(10, 2);
+		final IOptimisationData<Element> data = buildData(10, 2);
 		// Generate initial state
-		ISequences<Element> initialSequences = createInitialSequences(data, 1);
-		
-		// 
-		DistanceMatrixFitnessCoreFactory factory = new DistanceMatrixFitnessCoreFactory();
+		final ISequences<Element> initialSequences = createInitialSequences(
+				data, 1);
 
-		List<IFitnessComponent<Element>> fitnessComponents = new ArrayList<IFitnessComponent<Element>>();
-		IFitnessCore<Element> fitnessCore = factory.instantiate();
+		// 
+		final DistanceMatrixFitnessCoreFactory factory = new DistanceMatrixFitnessCoreFactory();
+
+		final List<IFitnessComponent<Element>> fitnessComponents = new ArrayList<IFitnessComponent<Element>>();
+		final IFitnessCore<Element> fitnessCore = factory.instantiate();
 		fitnessComponents.addAll(fitnessCore.getFitnessComponents());
 
-		OptimisationContext<Element> context = new OptimisationContext<Element>(
+		final OptimisationContext<Element> context = new OptimisationContext<Element>(
 				data, fitnessComponents, initialSequences);
 
-		IOptimiser<Element> optimiser = buildOptimiser(2000, 50.0, context);
+		final IOptimiser<Element> optimiser = buildOptimiser(1000, 50.0,
+				context);
 
-		LinearSimulatedAnnealingFitnessEvaluator<Element> fitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<Element>) ((DefaultLocalSearchOptimiser<Element>) optimiser)
+		final LinearSimulatedAnnealingFitnessEvaluator<Element> fitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<Element>) ((DefaultLocalSearchOptimiser<Element>) optimiser)
 				.getFitnessEvaluator();
 
 		optimiser.optimise(context);
 		System.out
 				.println("Final fitness " + fitnessEvaluator.getBestFitness());
+
+		// TODO: How to verify result?
 	}
 
-	<T> IOptimiser<T> buildOptimiser(int numIterations, double temperature,
-			IOptimisationContext<T> context) {
+	<T> IOptimiser<T> buildOptimiser(final int numIterations,
+			final double temperature, final IOptimisationContext<T> context) {
 		// Initialise random number generator
 		final Random random = new Random(1);
 
@@ -184,26 +189,18 @@ public class BasicLSOTest {
 
 		fitnessEvaluator.setTemperature(temperature);
 		fitnessEvaluator.setNumberOfIterations(numIterations);
-		List<IFitnessComponent<T>> fitnessComponents = context
+		final List<IFitnessComponent<T>> fitnessComponents = context
 				.getFitnessComponents();
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
 
 		final Map<String, Double> weightsMap = CollectionsUtil.makeHashMap(
 				fitnessComponents.iterator().next().getName(), 1.0);
-
 		fitnessEvaluator.setFitnessComponentWeights(weightsMap);
-
 		fitnessEvaluator.init();
 
-		final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
-		moveGenerator.setRandom(random);
+		final IMoveGenerator<T> moveGenerator = createMoveGenerator(random);
 
-		// Register RNG move generator units
-		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
-
-		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
+		final LocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
 
 		final List<IConstraintChecker<T>> constraintCheckers = Collections
 				.emptyList();
@@ -216,5 +213,18 @@ public class BasicLSOTest {
 		lso.init();
 
 		return lso;
+	}
+
+	private <T> RandomMoveGenerator<T> createMoveGenerator(final Random random) {
+		final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
+		moveGenerator.setRandom(random);
+
+		// Register RNG move generator units
+		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
+		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
+		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
+		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
+		
+		return moveGenerator;
 	}
 }
