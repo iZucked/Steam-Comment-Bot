@@ -23,7 +23,8 @@ public final class Move4over2GeneratorUnit<T> implements
 
 		final int numResources = resources.size();
 
-		if (numResources == 1) {
+		// Requires two resources
+		if (numResources < 2) {
 			return null;
 		}
 
