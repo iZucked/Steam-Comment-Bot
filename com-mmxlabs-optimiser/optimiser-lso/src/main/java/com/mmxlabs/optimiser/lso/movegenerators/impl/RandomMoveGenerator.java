@@ -64,10 +64,12 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 		return random;
 	}
 
+	@Override
 	public void setSequences(final ISequences<T> sequences) {
 		this.sequences = sequences;
 	}
 
+	@Override
 	public ISequences<T> getSequences() {
 		return sequences;
 	}
