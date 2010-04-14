@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.lso.fitness.impl.SortingFitnessFactory;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.MoveSnakeGeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
 import com.mmxlabs.optimiser.scenario.impl.OptimisationData;
 
@@ -72,6 +73,8 @@ public class DefaultLocalSearchOptimiserTest {
 				.addMoveGeneratorUnit(new Move4over1GeneratorUnit<Integer>());
 		moveGenerator
 				.addMoveGeneratorUnit(new Move4over2GeneratorUnit<Integer>());
+		moveGenerator
+				.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<Integer>());
 
 		final DefaultLocalSearchOptimiser<Integer> lso = new DefaultLocalSearchOptimiser<Integer>();
 
