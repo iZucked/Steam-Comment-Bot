@@ -3,6 +3,7 @@ package com.mmxlabs.optimiser;
 import java.util.List;
 
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * Interface defining an optimisation context. This tes together static
@@ -26,4 +27,5 @@ public interface IOptimisationContext<T> {
 	 */
 	ISequences<T> getInitialSequences();
 
+	IOptimisationData<T> getOptimisationData();
 }
