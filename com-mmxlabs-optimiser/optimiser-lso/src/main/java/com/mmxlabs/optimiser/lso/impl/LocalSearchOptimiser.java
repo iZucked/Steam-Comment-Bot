@@ -10,9 +10,8 @@ import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.ISolution;
+import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
@@ -88,8 +87,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	 * </pre>
 	 */
 	@Override
-	public abstract void optimise(IOptimisationContext<T> optimiserContext,
-			Collection<ISolution> initialSolutions, Object archiverCallback);
+	public abstract void optimise(IOptimisationContext<T> optimisationContext);
 
 	/**
 	 * Copy the {@link ISequences} for the specified {@link IResource}s from the

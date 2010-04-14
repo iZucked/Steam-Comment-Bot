@@ -1,6 +1,5 @@
 package com.mmxlabs.optimiser.lso.impl;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.optimiser.IConstraintChecker;
@@ -8,11 +7,10 @@ import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISequencesManipulator;
-import com.mmxlabs.optimiser.ISolution;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * A sub-class of {@link LocalSearchOptimiser} implementing a default main loop.
@@ -24,9 +22,10 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
  */
 public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 	@Override
-	public void optimise(final IOptimisationContext<T> optimiserContext,
-			final Collection<ISolution> initialSolutions,
-			final Object archiverCallback) {
+	public void optimise(final IOptimisationContext<T> optimiserContext) {
+
+		final IOptimisationData<T> data = optimiserContext
+				.getOptimisationData();
 
 		final IFitnessEvaluator<T> fitnessEvaluator = getFitnessEvaluator();
 
