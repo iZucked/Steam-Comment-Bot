@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * The {@link IFitnessCore} is the main fitness function object. A single
@@ -23,7 +24,7 @@ public interface IFitnessCore<T> {
 	 * Initialise or re-initialise the fitness core. This will reset the state
 	 * associated with the {@link #evaluate(ISequences, List)} method.
 	 */
-	void init();
+	void init(IOptimisationData<T> data);
 
 	/**
 	 * Return a {@link Collection} of {@link IFitnessComponent} instances that

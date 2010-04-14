@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 @RunWith(JMock.class)
 @SuppressWarnings("unchecked")
@@ -188,6 +189,9 @@ public class FitnessHelperTest {
 	@Test
 	public void testInitFitnessCores() {
 
+		final IOptimisationData<Object> data= context
+				.mock(IOptimisationData.class);
+
 		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
 
 		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
@@ -202,19 +206,22 @@ public class FitnessHelperTest {
 
 		context.checking(new Expectations() {
 			{
-				one(core1).init();
-				one(core2).init();
-				one(core3).init();
+				one(core1).init(data);
+				one(core2).init(data);
+				one(core3).init(data);
 			}
 		});
 
-		helper.initFitnessCores(cores);
+		helper.initFitnessCores(cores, data);
 
 		context.assertIsSatisfied();
 	}
 
 	@Test
 	public void testInitFitnessComponents() {
+
+		final IOptimisationData<Object> data = context
+				.mock(IOptimisationData.class);
 
 		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
 
@@ -236,13 +243,13 @@ public class FitnessHelperTest {
 
 		context.checking(new Expectations() {
 			{
-				one(core1).init();
-				one(core2).init();
-				one(core3).init();
+				one(core1).init(data);
+				one(core2).init(data);
+				one(core3).init(data);
 			}
 		});
 
-		helper.initFitnessComponents(components);
+		helper.initFitnessComponents(components, data);
 
 		context.assertIsSatisfied();
 

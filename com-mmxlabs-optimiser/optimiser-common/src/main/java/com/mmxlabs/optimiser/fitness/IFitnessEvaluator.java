@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.ISequencesManipulator;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * The {@link IFitnessEvaluator} interface defines objects which can be used in
@@ -64,13 +66,21 @@ public interface IFitnessEvaluator<T> {
 	void init();
 
 	/**
-	 * Initialise the {@link IFitnessEvaluator} with the initial
-	 * {@link ISequences}. This should be called once at the beginning of an
-	 * optimisation process.
+	 * Initialise the {@link IFitnessEvaluator} with {@link IOptimisationData}
+	 * object. This should be called once at the beginning of an optimisation
+	 * process.
 	 * 
-	 * @param initialSequences
+	 * @param data
 	 */
-	void setInitialSequences(ISequences<T> initialSequences);
+	void setOptimisationData(IOptimisationData<T> data);
+
+	/**
+	 * Set the initial sequences. These should have had any manipulation from
+	 * {@link ISequencesManipulator} already applied.
+	 * 
+	 * @param sequences
+	 */
+	void setInitialSequences(ISequences<T> sequences);
 
 	/**
 	 * Evaluate the given {@link ISequences} to determine whether or not they

@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 public final class SortingFitnessCore<T> implements IFitnessCore<T> {
 	public static final String CORE_NAME = "Sorting Fitness Core";
@@ -47,7 +48,7 @@ public final class SortingFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public void init() {
+	public void init(IOptimisationData<T> data) {
 		fitness = Long.MAX_VALUE;
 	}
 

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * {@link IFitnessHelper} implementations provide helper methods to evaluate the
@@ -22,7 +23,8 @@ public interface IFitnessHelper<T> {
 	 * 
 	 * @param fitnessCores
 	 */
-	void initFitnessCores(Collection<IFitnessCore<T>> fitnessCores);
+	void initFitnessCores(Collection<IFitnessCore<T>> fitnessCores,
+			IOptimisationData<T> data);
 
 	/**
 	 * Initialise {@link IFitnessCore}s based upon the a {@link Collection} of
@@ -31,7 +33,8 @@ public interface IFitnessHelper<T> {
 	 * @param fitnessCores
 	 */
 	void initFitnessComponents(
-			Collection<IFitnessComponent<T>> fitnessComponents);
+			Collection<IFitnessComponent<T>> fitnessComponents,
+			IOptimisationData<T> data);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given
@@ -102,8 +105,8 @@ public interface IFitnessHelper<T> {
 	 * a {@link ISequences} object is accepted as the new state. The
 	 * {@link ISequences} object must have been passed to the
 	 * {@link IFitnessCore#evaluate(ISequences, Collection) method previously.
-	 * This could be directly or via the
-	 * {@link #evaluateSequencesFromComponents(ISequences, Collection, Collection)}
+	 * This could be directly or via the {
+	 * @link #evaluateSequencesFromComponents(ISequences, Collection, Collection)}
 	 * or
 	 * {@link #evaluateSequencesFromCores(ISequences, Collection, Collection)}
 	 * methods.

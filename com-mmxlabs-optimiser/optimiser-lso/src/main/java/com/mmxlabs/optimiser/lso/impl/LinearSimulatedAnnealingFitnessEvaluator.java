@@ -11,6 +11,7 @@ import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.impl.Sequences;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * A {@link IFitnessEvaluator} implementation to apply simulated annealing to
@@ -142,15 +143,19 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	}
 
 	@Override
-	public void setInitialSequences(final ISequences<T> initialSequences) {
+	public void setOptimisationData(IOptimisationData<T> data) {
+
+		// Initialise the fitness functions
+		fitnessHelper.initFitnessComponents(getFitnessComponents(), data);
+	}
+
+	@Override
+	public void setInitialSequences(ISequences<T> initialSequences) {
 
 		if (initialSequences == null) {
 			throw new IllegalArgumentException(
 					"Initial sequences cannot be null");
 		}
-
-		// Initialise the fitness functions
-		fitnessHelper.initFitnessComponents(getFitnessComponents());
 
 		final double totalFitness = evaluteSequences(initialSequences, null);
 		bestFitness = totalFitness;

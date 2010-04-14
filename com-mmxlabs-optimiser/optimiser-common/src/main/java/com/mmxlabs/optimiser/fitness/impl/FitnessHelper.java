@@ -9,6 +9,7 @@ import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.fitness.IFitnessHelper;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * Basic implementation of {@link IFitnessHelper}.
@@ -58,9 +59,10 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 
 	@Override
 	public void initFitnessComponents(
-			final Collection<IFitnessComponent<T>> fitnessComponents) {
+			final Collection<IFitnessComponent<T>> fitnessComponents,
+			final IOptimisationData<T> data) {
 		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
-		initFitnessCores(fitnessCores);
+		initFitnessCores(fitnessCores, data);
 
 	}
 
@@ -75,9 +77,11 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	}
 
 	@Override
-	public void initFitnessCores(final Collection<IFitnessCore<T>> fitnessCores) {
+	public void initFitnessCores(
+			final Collection<IFitnessCore<T>> fitnessCores,
+			final IOptimisationData<T> data) {
 		for (final IFitnessCore<T> core : fitnessCores) {
-			core.init();
+			core.init(data);
 		}
 	}
 

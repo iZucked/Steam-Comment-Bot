@@ -28,7 +28,7 @@ public class SortingFitnessCoreTest {
 
 		final SortingFitnessFactory factory = new SortingFitnessFactory();
 		core = factory.instantiate();
-		core.init();
+		core.init(null);
 		final Collection<IFitnessComponent<Integer>> fitnessComponents = core
 				.getFitnessComponents();
 

@@ -14,19 +14,19 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
+import com.mmxlabs.optimiser.impl.OptimisationContext;
 import com.mmxlabs.optimiser.lso.fitness.impl.SortingFitnessFactory;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
+import com.mmxlabs.optimiser.scenario.impl.OptimisationData;
 
 public class DefaultLocalSearchOptimiserTest {
 
@@ -95,26 +95,13 @@ public class DefaultLocalSearchOptimiserTest {
 		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
 				CollectionsUtil.makeArrayList(r1, r2), map);
 
-		// TODO: Need to think about better API to keep move generator up to
-		// date with current sequences.
-		moveGenerator.setSequences(sequences);
+		OptimisationData<Integer> data = new OptimisationData<Integer>();
 
-		// TODO: Create a default opt. context object
-		final IOptimisationContext<Integer> context = new IOptimisationContext<Integer>() {
-
-			@Override
-			public ISequences<Integer> getInitialSequences() {
-				return sequences;
-			}
-
-			@Override
-			public List<IFitnessComponent<Integer>> getFitnessComponents() {
-				return fitnessComponents;
-			}
-		};
+		final OptimisationContext<Integer> context = new OptimisationContext<Integer>(
+				data, fitnessComponents, sequences);
 
 		// Perform the optimisation
-		lso.optimise(context, null, null);
+		lso.optimise(context);
 
 		System.out
 				.println("Final fitness " + fitnessEvaluator.getBestFitness());
