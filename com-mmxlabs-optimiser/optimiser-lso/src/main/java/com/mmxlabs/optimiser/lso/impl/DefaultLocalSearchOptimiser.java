@@ -63,6 +63,9 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			fitnessEvaluator.setInitialSequences(fullSequences);
 		}
 
+		// Set initial sequences
+		getMoveGenerator().setSequences(potentialRawSequences);
+
 		// Perform the optimisation
 		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
 
@@ -108,9 +111,8 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				updateSequences(potentialRawSequences, currentRawSequences,
 						move.getAffectedResources());
 
-				// TODO: This needs to be handled by interface definition.
-				((RandomMoveGenerator<T>) getMoveGenerator())
-						.setSequences(potentialRawSequences);
+				// Update move sequences.
+				getMoveGenerator().setSequences(potentialRawSequences);
 
 				++numberOfMovesAccepted;
 			} else {
