@@ -137,8 +137,8 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	public void init(final IOptimisationData<T> data) {
 		oldFitnessByResource = new HashMap<IResource, Long>();
 		newFitnessByResource = new HashMap<IResource, Long>();
-		setMatrix(data.getDataComponentProvider(IMatrixProvider.class,
-				matrixProviderKey));
+		setMatrix(data.getDataComponentProvider(matrixProviderKey,
+				IMatrixProvider.class));
 	}
 
 	private long evaluateSequence(final ISequence<T> sequence) {
