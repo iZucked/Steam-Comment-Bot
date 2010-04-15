@@ -22,7 +22,11 @@ public interface IFitnessComponent<T> {
 
 	/**
 	 * Returns the last evaluated fitness value in the {@link IFitnessCore} for
-	 * this component.
+	 * this component. This is either the full fitness from
+	 * {@link IFitnessCore#evaluate(com.mmxlabs.optimiser.ISequences)} or the
+	 * incrementally updated fitness from
+	 * {@link IFitnessCore#evaluate(com.mmxlabs.optimiser.ISequences, java.util.Collection)}
+	 * - which ever was last invoked.
 	 * 
 	 * @return
 	 */
