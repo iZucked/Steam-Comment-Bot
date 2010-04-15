@@ -20,6 +20,24 @@ import com.mmxlabs.optimiser.ISegment;
  */
 public class ListSequenceTest {
 
+	@Test
+	public void testConstructor() {
+
+		final Object object1 = new Object();
+		final Object object2 = new Object();
+
+		final List<Object> l = CollectionsUtil.makeArrayList(object1, object2);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
+
+		Assert.assertSame(object1, sequence.get(0));
+		Assert.assertSame(object2, sequence.get(1));
+
+		final ListSequence<Object> sequence2 = new ListSequence<Object>(
+				sequence);
+		Assert.assertSame(object1, sequence2.get(0));
+		Assert.assertSame(object2, sequence2.get(1));
+	}
+
 	/**
 	 * Test sequence iterator method
 	 */
@@ -166,5 +184,12 @@ public class ListSequenceTest {
 		final ListSequence<Object> sequence = new ListSequence<Object>(l);
 
 		Assert.assertEquals(1, sequence.size());
+	}
+
+	@Test
+	public void testToString() {
+		final List<Object> l = Collections.emptyList();
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
+		Assert.assertNotNull(sequence.toString());
 	}
 }
