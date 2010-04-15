@@ -6,7 +6,7 @@ import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
- * Interface defining an optimisation context. This tes together static
+ * Interface defining an optimisation context. This ties together static
  * optimisation data, initial state, parameters and fitness components that will
  * compose an optimisation run.
  * 
@@ -17,6 +17,19 @@ import com.mmxlabs.optimiser.scenario.IOptimisationData;
  */
 public interface IOptimisationContext<T> {
 
+	/**
+	 * Return static input data to the optimisation.
+	 * 
+	 * @return
+	 */
+	IOptimisationData<T> getOptimisationData();
+
+	/**
+	 * Returns a list of {@link IFitnessComponent}s to be used to evaluate this
+	 * optimisation
+	 * 
+	 * @return
+	 */
 	List<IFitnessComponent<T>> getFitnessComponents();
 
 	/**
@@ -27,5 +40,4 @@ public interface IOptimisationContext<T> {
 	 */
 	ISequences<T> getInitialSequences();
 
-	IOptimisationData<T> getOptimisationData();
 }
