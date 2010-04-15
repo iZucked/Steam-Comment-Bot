@@ -56,7 +56,7 @@ public class BasicLSOTest {
 	// * Solution tracking
 	// * move tracking
 	// * Check DMatrix works (fitness no change?)
-	// * Remove "failback" in evalutteSquences(seu, afected);
+	// * Remove "failback" in evaluateSquences(seu, afected);
 
 	class Element {
 
@@ -180,6 +180,7 @@ public class BasicLSOTest {
 
 	<T> IOptimiser<T> buildOptimiser(final int numIterations,
 			final double temperature, final IOptimisationContext<T> context) {
+		
 		// Initialise random number generator
 		final Random random = new Random(1);
 
