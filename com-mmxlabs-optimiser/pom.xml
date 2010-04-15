@@ -30,6 +30,9 @@
 	<scm>
 		<url>https://mmxlabs.kilnhg.com/Repo/Repositories/Group/com-mmxlabs-optimiser</url>
 	</scm>
+	<organization>
+		<name>Minimax Labs</name>
+	</organization>
 	<build>
 		<pluginManagement>
 			<plugins>
