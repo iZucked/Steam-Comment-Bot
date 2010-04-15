@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
-			<artifactId>optimiser-common</artifactId>
+			<artifactId>optimiser-core</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 

@@ -76,7 +76,6 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 				factory = coreFactoriesByComponentName.get(name);
 				factories.add(factory);
 			}
-
 		}
 
 		return factories;
