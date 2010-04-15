@@ -1,6 +1,5 @@
 package com.mmxlabs.optimiser.scenario.impl;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,23 +7,31 @@ import java.util.Map;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.scenario.IResourceType;
 
+/**
+ * Implementation of {@link IOptimisationData}
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type
+ */
 public final class OptimisationData<T> implements IOptimisationData<T> {
 
-	private List<IResource> resources;
-
 	private final Map<String, IDataComponentProvider> dataComponentProviders;
+
+	private List<IResource> resources;
 
 	private List<T> sequenceElements;
 
 	public OptimisationData() {
+		// Init hash map
 		dataComponentProviders = new HashMap<String, IDataComponentProvider>();
 	}
 
 	@Override
 	public <U extends IDataComponentProvider> U getDataComponentProvider(
-			final Class<U> clazz, final String key) {
+			final String key, final Class<U> clazz) {
 
 		if (dataComponentProviders.containsKey(key)) {
 			final IDataComponentProvider dataComponentProvider = dataComponentProviders
@@ -32,7 +39,7 @@ public final class OptimisationData<T> implements IOptimisationData<T> {
 			if (clazz.isInstance(dataComponentProvider)) {
 				return clazz.cast(dataComponentProvider);
 			} else {
-				throw new RuntimeException("Keyed data is not instance of "
+				throw new ClassCastException("Keyed data is not instance of "
 						+ clazz.getCanonicalName());
 			}
 		}
@@ -46,14 +53,8 @@ public final class OptimisationData<T> implements IOptimisationData<T> {
 		return sequenceElements;
 	}
 
-	public void setSequenceElements(List<T> sequenceElements) {
+	public void setSequenceElements(final List<T> sequenceElements) {
 		this.sequenceElements = sequenceElements;
-	}
-
-	@Override
-	public Collection<IResourceType> getResourceTypes() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -61,12 +62,17 @@ public final class OptimisationData<T> implements IOptimisationData<T> {
 		return resources;
 	}
 
-	public void setResources(List<IResource> resources) {
+	public void setResources(final List<IResource> resources) {
 		this.resources = resources;
 	}
 
-	public void addDataComponentProvider(String key,
-			IDataComponentProvider dataComponentProvider) {
+	public void addDataComponentProvider(final String key,
+			final IDataComponentProvider dataComponentProvider) {
 		this.dataComponentProviders.put(key, dataComponentProvider);
+	}
+
+	@Override
+	public boolean hasDataComponentProvider(final String key) {
+		return dataComponentProviders.containsKey(key);
 	}
 }

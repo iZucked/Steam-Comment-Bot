@@ -1,6 +1,5 @@
 package com.mmxlabs.optimiser.scenario;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.optimiser.IResource;
@@ -17,13 +16,37 @@ import com.mmxlabs.optimiser.IResource;
  */
 public interface IOptimisationData<T> {
 
+	/**
+	 * Returns a list of all the sequence elements in the optimisation.
+	 * 
+	 * @return
+	 */
 	List<T> getSequenceElements();
 
-	Collection<IResourceType> getResourceTypes();
+	// Collection<IResourceType> getResourceTypes();
 
+	/**
+	 * Returns a list of all the {@link IResource}s in the optimisation.
+	 */
 	List<IResource> getResources();
 
-	/** Accessor for specialised data. */
-	<U extends IDataComponentProvider> U getDataComponentProvider(
-			Class<U> clazz, String key);
+	/**
+	 * Accessor for specialised data objects. Each object should have a unique
+	 * key and an expected class type.
+	 * 
+	 * @param <U>
+	 * @param key
+	 * @param clazz
+	 * @return
+	 */
+	<U extends IDataComponentProvider> U getDataComponentProvider(String key,
+			Class<U> clazz);
+
+	/**
+	 * Returns true if the named {@link IDataComponentProvider} exists.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	boolean hasDataComponentProvider(String key);
 }
