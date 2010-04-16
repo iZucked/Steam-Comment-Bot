@@ -2,6 +2,8 @@ package com.mmxlabs.optimiser;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
+
 /**
  * {@link IConstraintChecker} implementations check {@link ISequences} for
  * constraint violations. For example this could be to ensure sequence elements
@@ -42,4 +44,12 @@ public interface IConstraintChecker<T> {
 	 * @return Returns true if all constraints are satisfied.
 	 */
 	boolean checkConstraints(ISequences<T> sequences, List<String> messages);
+
+	/**
+	 * Provide the {@link IConstraintChecker} with the {@link IOptimisationData}
+	 * object, where it can obtain it's source data.
+	 * 
+	 * @param optimisationData
+	 */
+	void setOptimisationData(IOptimisationData<T> optimisationData);
 }
