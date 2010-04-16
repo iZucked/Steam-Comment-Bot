@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.dcproviders.IResourceAllocationConstraintDataComponentProvider;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * A {@link IConstraintChecker} implementation which enforces allocation of
@@ -22,7 +23,13 @@ import com.mmxlabs.optimiser.dcproviders.IResourceAllocationConstraintDataCompon
 public final class ResourceAllocationConstraintChecker<T> implements
 		IConstraintChecker<T> {
 
+	private final String dataProviderKey;
+
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
+
+	public ResourceAllocationConstraintChecker(final String dataProviderKey) {
+		this.dataProviderKey = dataProviderKey;
+	}
 
 	@Override
 	public boolean checkConstraints(final ISequences<T> sequences) {
@@ -80,11 +87,20 @@ public final class ResourceAllocationConstraintChecker<T> implements
 	}
 
 	public void setResourceAllocationConstraintDataComponentProvider(
-			IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider) {
+			final IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider) {
 		this.resourceAllocationConstraintDataComponentProvider = resourceAllocationConstraintDataComponentProvider;
 	}
 
 	public IResourceAllocationConstraintDataComponentProvider getResourceAllocationConstraintDataComponentProvider() {
 		return resourceAllocationConstraintDataComponentProvider;
+	}
+
+	@Override
+	public void setOptimisationData(final IOptimisationData<T> optimisationData) {
+		final IResourceAllocationConstraintDataComponentProvider provider = optimisationData
+				.getDataComponentProvider(
+						dataProviderKey,
+						IResourceAllocationConstraintDataComponentProvider.class);
+		setResourceAllocationConstraintDataComponentProvider(provider);
 	}
 }
