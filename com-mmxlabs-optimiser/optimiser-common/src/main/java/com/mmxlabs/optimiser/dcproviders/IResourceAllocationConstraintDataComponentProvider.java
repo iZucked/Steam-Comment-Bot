@@ -23,11 +23,6 @@ public interface IResourceAllocationConstraintDataComponentProvider extends
 	 * @param element
 	 * @return
 	 */
-	// TODO: Should this be templated?
-	public abstract Collection<IResource> getAllowedResources(
-			final Object element);
-
-	public abstract void setAllowedResources(final Object element,
-			final Collection<IResource> resources);
+	Collection<IResource> getAllowedResources(final Object element);
 
 }

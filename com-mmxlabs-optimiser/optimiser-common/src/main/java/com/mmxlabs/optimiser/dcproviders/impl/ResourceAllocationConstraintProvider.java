@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.dcproviders.IResourceAllocationConstraintDataComponentProvider;
+import com.mmxlabs.optimiser.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.scenario.IDataComponentProvider;
 
 /**
@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.scenario.IDataComponentProvider;
  * 
  */
 public final class ResourceAllocationConstraintProvider implements
-		IResourceAllocationConstraintDataComponentProvider {
+		IResourceAllocationConstraintDataComponentProviderEditor {
 
 	private final String name;
 
@@ -32,14 +32,7 @@ public final class ResourceAllocationConstraintProvider implements
 		return name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.dcproviders.IResourceAllocationDataComponentProvider
-	 * #getAllowedResources(java.lang.Object)
-	 */
-	// TODO: Should this be templated?
+	@Override
 	public Collection<IResource> getAllowedResources(final Object element) {
 
 		if (allowedResourceMap.containsKey(element)) {
@@ -49,16 +42,14 @@ public final class ResourceAllocationConstraintProvider implements
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.dcproviders.IResourceAllocationDataComponentProvider
-	 * #setAllowedResources(java.lang.Object, java.util.Collection)
-	 */
+	@Override
 	public void setAllowedResources(final Object element,
 			final Collection<IResource> resources) {
 		allowedResourceMap.put(element, resources);
 	}
 
+	@Override
+	public void dispose() {
+		allowedResourceMap.clear();
+	}
 }
