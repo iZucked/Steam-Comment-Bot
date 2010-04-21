@@ -3,19 +3,19 @@ package com.mmxlabs.optimiser.dcproviders.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.dcproviders.IOrderedSequenceElementsDataComponentProvider;
+import com.mmxlabs.optimiser.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 
 /**
- * Implementation of {@link IOrderedSequenceElementsDataComponentProvider} using
- * {@link HashMap} as the backing implementation.
+ * Implementation of {@link IOrderedSequenceElementsDataComponentProviderEditor}
+ * using {@link HashMap} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
  * @param <T>
  *            Sequence element type.
  */
-public class OrderedSequenceElementsDataComponentProvider<T> implements
-		IOrderedSequenceElementsDataComponentProvider<T> {
+public final class OrderedSequenceElementsDataComponentProvider<T> implements
+		IOrderedSequenceElementsDataComponentProviderEditor<T> {
 
 	private final String name;
 	private final Map<T, T> nextElements;
@@ -52,5 +52,11 @@ public class OrderedSequenceElementsDataComponentProvider<T> implements
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public void dispose() {
+		nextElements.clear();
+		previousElements.clear();
 	}
 }
