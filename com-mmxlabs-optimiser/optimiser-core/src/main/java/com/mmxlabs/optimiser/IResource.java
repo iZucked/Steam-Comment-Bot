@@ -1,7 +1,8 @@
 package com.mmxlabs.optimiser;
 
 /**
- * This interface defines object .....
+ * This interface defines an object representing the resource assigned to a
+ * {@link ISequence}.
  * 
  * @author Simon Goodall
  * 
