@@ -49,4 +49,12 @@ public interface IOptimisationData<T> {
 	 * @return
 	 */
 	boolean hasDataComponentProvider(String key);
+
+	/**
+	 * Notify {@link IOptimisationData} that it is no longer required and clean
+	 * up internal references. This should also invoke dispose on any contained
+	 * {@link IDataComponentProvider} implementations.
+	 */
+	void dispose();
+
 }
