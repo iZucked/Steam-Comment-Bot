@@ -19,13 +19,13 @@ import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
 public final class HashMapMatrixProvider<T, U> implements
 		IMatrixProvider<T, U>, IMatrixEditor<T, U> {
 
-	private HashMap<T, HashMap<T, U>> matrix;
+	private final HashMap<T, HashMap<T, U>> matrix;
 
 	private final String name;
 
 	public HashMapMatrixProvider(final String name) {
 		this.name = name;
-		this.matrix = new HashMap<T, HashMap<T,U>>();
+		this.matrix = new HashMap<T, HashMap<T, U>>();
 	}
 
 	@Override
@@ -56,5 +56,10 @@ public final class HashMapMatrixProvider<T, U> implements
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public void dispose() {
+		matrix.clear();
 	}
 }
