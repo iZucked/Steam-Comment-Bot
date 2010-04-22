@@ -1,0 +1,52 @@
+### default behavior
+#* text=auto
+## note: eol in text auto is fixed since git 2.10 (31 aug 2016)
+*.java text=auto diff=java
+.project text=auto
+*.prefs text=auto
+.classpath text=auto
+build.properties text=auto
+*.properties text=auto
+*.ecore text=auto
+*.genmodel text=auto
+*.product text=auto
+#*.csv eol=crlf
+*.html text=auto
+*.ini text=auto
+*.txt text=auto
+*.xml text=auto
+
+
+### windows (always crlf)
+*.bat eol=crlf
+*.cmd eol=crlf
+*.sln eol=crlf
+#*.filters eol=crlf
+#*.users eol=crlf
+#*.vcxproj eol=crlf
+#*.*proj eol=crlf
+
+### unix (always lf)
+*.sh eol=lf
+*.bash eol=lf
+#*.py eol=lf
+
+### archives (always binary)
+*.rar binary
+*.7z binary
+*.zip binary
+*.tar binary
+*.tgz binary
+*.tbz binary
+*.gz binary
+*.bz binary
+*.jar binary
+
+*.jpg binary
+*.gif binary
+*.bmp binary
+*.png binary
+*.exe binary
+
+*.scenario binary
+*.lingo binary

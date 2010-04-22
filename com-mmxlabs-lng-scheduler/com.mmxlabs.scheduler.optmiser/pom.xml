@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mmxlabs.scheduler</groupId>
+  <artifactId>com.mmxlabs.scheduler.optmiser</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Scheduler - Optimiser</name>
+  <description>	</description>
+  <inceptionYear>2010</inceptionYear>
+  <organization>
+  	<name>Minimax Labs</name>
+  </organization>
+  <build>
+  	<pluginManagement>
+  		<plugins>
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-compiler-plugin</artifactId>
+  				<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+  			</plugin>
+  		</plugins>
+  	</pluginManagement>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.mmxlabs.optimiser</groupId>
+      <artifactId>optimiser-builder</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mmxlabs.optimiser</groupId>
+      <artifactId>optimiser-common</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mmxlabs.optimiser</groupId>
+      <artifactId>optimiser-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mmxlabs.optimiser</groupId>
+      <artifactId>optimiser-lso</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

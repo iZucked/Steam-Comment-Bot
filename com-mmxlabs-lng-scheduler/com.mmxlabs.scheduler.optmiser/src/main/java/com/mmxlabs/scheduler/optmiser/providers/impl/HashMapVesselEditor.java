@@ -1,0 +1,64 @@
+package com.mmxlabs.scheduler.optmiser.providers.impl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.scheduler.optmiser.components.IVessel;
+import com.mmxlabs.scheduler.optmiser.providers.IVesselProviderEditor;
+
+/**
+ * Implementation of {@link IVesselProviderEditor} using a {@link HashMap} as
+ * the backing implementation.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class HashMapVesselEditor implements IVesselProviderEditor {
+
+	private final String name;
+
+	private final Map<IResource, IVessel> resourceVesselMap = new HashMap<IResource, IVessel>();
+	private final Map<IVessel, IResource> vesselResourceMap = new HashMap<IVessel, IResource>();
+
+	public HashMapVesselEditor(final String name) {
+		this.name = name;
+	}
+
+	@Override
+	public IVessel getVessel(final IResource resource) {
+		if (resourceVesselMap.containsKey(resource)) {
+			return resourceVesselMap.get(resource);
+		}
+
+		// TODO: Error?
+		return null;
+	}
+
+	@Override
+	public IResource getResource(final IVessel vessel) {
+		if (vesselResourceMap.containsKey(vessel)) {
+			return vesselResourceMap.get(vessel);
+		}
+
+		// TODO: Error?
+		return null;
+	}
+
+	@Override
+	public void setVesselResource(IResource resource, IVessel vessel) {
+		vesselResourceMap.put(vessel, resource);
+		resourceVesselMap.put(resource, vessel);
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void dispose() {
+		vesselResourceMap.clear();
+		resourceVesselMap.clear();
+	}
+}
