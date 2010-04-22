@@ -75,4 +75,20 @@ public final class OptimisationData<T> implements IOptimisationData<T> {
 	public boolean hasDataComponentProvider(final String key) {
 		return dataComponentProviders.containsKey(key);
 	}
+
+	@Override
+	public void dispose() {
+
+		// Dispose all IDataComponentProviders before clearing map.
+		for (final IDataComponentProvider provider : dataComponentProviders
+				.values()) {
+			provider.dispose();
+		}
+		dataComponentProviders.clear();
+
+		// TODO: Really clear these? API does not make it clear whether or not
+		// we own the lists, or even if they are modifiable
+		resources.clear();
+		sequenceElements.clear();
+	}
 }
