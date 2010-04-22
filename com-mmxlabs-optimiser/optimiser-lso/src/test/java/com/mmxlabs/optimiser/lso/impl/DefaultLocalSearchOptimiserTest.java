@@ -16,7 +16,8 @@ import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.fitness.impl.FitnessComponentInstantiator;
+import com.mmxlabs.optimiser.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
@@ -42,11 +43,15 @@ public class DefaultLocalSearchOptimiserTest {
 		final double temperature = 5.0;
 
 		final SortingFitnessFactory factory = new SortingFitnessFactory();
-		final IFitnessCore<Integer> core = factory.instantiate();
+		FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
+		registry.registerFitnessCoreFactory(factory);
+		List<String> fitnessComponentNames = new ArrayList<String>(factory
+				.getFitnessComponentNames());
 
-		final List<IFitnessComponent<Integer>> fitnessComponents = new ArrayList<IFitnessComponent<Integer>>(
-				1);
-		fitnessComponents.addAll(core.getFitnessComponents());
+		final FitnessComponentInstantiator fci = new FitnessComponentInstantiator();
+		final List<IFitnessComponent<Integer>> fitnessComponents = fci
+				.instantiateFitnesses(registry);
+
 
 		final FitnessHelper<Integer> fitnessHelper = new FitnessHelper<Integer>();
 		final LinearSimulatedAnnealingFitnessEvaluator<Integer> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<Integer>();
@@ -101,7 +106,7 @@ public class DefaultLocalSearchOptimiserTest {
 		OptimisationData<Integer> data = new OptimisationData<Integer>();
 
 		final OptimisationContext<Integer> context = new OptimisationContext<Integer>(
-				data, fitnessComponents, sequences);
+				data, fitnessComponentNames, sequences, registry);
 
 		// Perform the optimisation
 		lso.optimise(context);
