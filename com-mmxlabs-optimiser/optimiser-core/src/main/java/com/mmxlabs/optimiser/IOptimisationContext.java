@@ -3,6 +3,7 @@ package com.mmxlabs.optimiser;
 import java.util.List;
 
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
@@ -25,12 +26,20 @@ public interface IOptimisationContext<T> {
 	IOptimisationData<T> getOptimisationData();
 
 	/**
-	 * Returns a list of {@link IFitnessComponent}s to be used to evaluate this
-	 * optimisation
+	 * Returns the {@link IFitnessFunctionRegistry} instance to be used to
+	 * obtain {@link IFitnessComponent}s. @see {@link #getFitnessComponents()}.
 	 * 
 	 * @return
 	 */
-	List<IFitnessComponent<T>> getFitnessComponents();
+	IFitnessFunctionRegistry getFitnessFunctionRegistry();
+
+	/**
+	 * Returns a list of {@link IFitnessComponent} names to be used to evaluate
+	 * this optimisation.
+	 * 
+	 * @return
+	 */
+	List<String> getFitnessComponents();
 
 	/**
 	 * Returns the initial sequences state - i.e. the starting point of the
