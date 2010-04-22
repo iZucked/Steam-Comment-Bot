@@ -18,8 +18,9 @@ import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.fitness.distance.DistanceMatrixFitnessCoreFactory;
+import com.mmxlabs.optimiser.fitness.impl.FitnessComponentInstantiator;
+import com.mmxlabs.optimiser.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
@@ -155,15 +156,16 @@ public class BasicLSOTest {
 		final ISequences<Element> initialSequences = createInitialSequences(
 				data, 1);
 
-		// 
+		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
+
 		final DistanceMatrixFitnessCoreFactory factory = new DistanceMatrixFitnessCoreFactory();
 
-		final List<IFitnessComponent<Element>> fitnessComponents = new ArrayList<IFitnessComponent<Element>>();
-		final IFitnessCore<Element> fitnessCore = factory.instantiate();
-		fitnessComponents.addAll(fitnessCore.getFitnessComponents());
+		registry.registerFitnessCoreFactory(factory);
 
 		final OptimisationContext<Element> context = new OptimisationContext<Element>(
-				data, fitnessComponents, initialSequences);
+				data,
+				new ArrayList<String>(factory.getFitnessComponentNames()),
+				initialSequences, registry);
 
 		final IOptimiser<Element> optimiser = buildOptimiser(1000, 50.0,
 				context);
@@ -180,7 +182,7 @@ public class BasicLSOTest {
 
 	<T> IOptimiser<T> buildOptimiser(final int numIterations,
 			final double temperature, final IOptimisationContext<T> context) {
-		
+
 		// Initialise random number generator
 		final Random random = new Random(1);
 
@@ -190,8 +192,11 @@ public class BasicLSOTest {
 
 		fitnessEvaluator.setTemperature(temperature);
 		fitnessEvaluator.setNumberOfIterations(numIterations);
-		final List<IFitnessComponent<T>> fitnessComponents = context
-				.getFitnessComponents();
+
+		final FitnessComponentInstantiator fci = new FitnessComponentInstantiator();
+		final List<IFitnessComponent<T>> fitnessComponents = fci
+				.instantiateFitnesses(context.getFitnessFunctionRegistry());
+
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
 
 		final Map<String, Double> weightsMap = CollectionsUtil.makeHashMap(
@@ -225,7 +230,7 @@ public class BasicLSOTest {
 		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
-		
+
 		return moveGenerator;
 	}
 }
