@@ -70,14 +70,27 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 
 		for (final String name : names) {
 
-			final IFitnessCoreFactory factory;
-
 			if (coreFactoriesByComponentName.containsKey(name)) {
-				factory = coreFactoriesByComponentName.get(name);
+				final IFitnessCoreFactory factory = coreFactoriesByComponentName
+						.get(name);
 				factories.add(factory);
 			}
 		}
 
 		return factories;
+	}
+
+	/**
+	 * Setter to register a {@link Collection} of {@link IFitnessCoreFactory}
+	 * instances.
+	 * 
+	 * @param factories
+	 */
+	public void setFitnessCoreFactories(
+			final Collection<IFitnessCoreFactory> factories) {
+
+		for (final IFitnessCoreFactory factory : factories) {
+			registerFitnessCoreFactory(factory);
+		}
 	}
 }
