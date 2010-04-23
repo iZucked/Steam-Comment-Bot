@@ -3,7 +3,6 @@ package com.mmxlabs.optimiser.lso.impl;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -11,23 +10,19 @@ import java.util.Random;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.optimiser.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.constraints.impl.ConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.fitness.impl.FitnessComponentInstantiator;
-import com.mmxlabs.optimiser.fitness.impl.FitnessFunctionRegistry;
-import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.impl.OptimisationContext;
-import com.mmxlabs.optimiser.lso.fitness.impl.SortingFitnessFactory;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.MoveSnakeGeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
+import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.scenario.impl.OptimisationData;
 
 public class DefaultLocalSearchOptimiserTest {
@@ -42,54 +37,37 @@ public class DefaultLocalSearchOptimiserTest {
 		final int numberOfIterations = 100;
 		final double temperature = 5.0;
 
-		final SortingFitnessFactory factory = new SortingFitnessFactory();
-		FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
-		registry.registerFitnessCoreFactory(factory);
-		List<String> fitnessComponentNames = new ArrayList<String>(factory
-				.getFitnessComponentNames());
+		final IConstraintCheckerRegistry checkerRegistry = TestUtils
+				.createConstraintCheckerRegistry();
+		final IFitnessFunctionRegistry fitnessRegistry = TestUtils
+				.createFitnessRegistry();
 
-		final FitnessComponentInstantiator fci = new FitnessComponentInstantiator();
-		final List<IFitnessComponent<Integer>> fitnessComponents = fci
-				.instantiateFitnesses(registry);
+		final List<String> constraintCheckerNames = new ArrayList<String>(
+				checkerRegistry.getConstraintCheckerNames());
+		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
+		final List<IConstraintChecker<Integer>> constraintCheckers = constraintCheckerInstantiator
+				.instantiateConstraintCheckers(checkerRegistry,
+						constraintCheckerNames);
 
+		final List<String> fitnessComponentNames = new ArrayList<String>(
+				fitnessRegistry.getFitnessComponentNames());
+		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
+		final List<IFitnessComponent<Integer>> fitnessComponents = fitnessComponentInstantiator
+				.instantiateFitnesses(fitnessRegistry, fitnessComponentNames);
 
-		final FitnessHelper<Integer> fitnessHelper = new FitnessHelper<Integer>();
-		final LinearSimulatedAnnealingFitnessEvaluator<Integer> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<Integer>();
-		fitnessEvaluator.setFitnessHelper(fitnessHelper);
-
-		fitnessEvaluator.setTemperature(temperature);
-		fitnessEvaluator.setNumberOfIterations(numberOfIterations);
-		fitnessEvaluator.setFitnessComponents(fitnessComponents);
-
-		final Map<String, Double> weightsMap = CollectionsUtil.makeHashMap(
-				factory.getFitnessComponentNames().iterator().next(), 1.0);
-
-		fitnessEvaluator.setFitnessComponentWeights(weightsMap);
-
-		fitnessEvaluator.init();
-
-		final RandomMoveGenerator<Integer> moveGenerator = new RandomMoveGenerator<Integer>();
-		moveGenerator.setRandom(random);
-
-		// Register RNG move generator units
-		moveGenerator
-				.addMoveGeneratorUnit(new Move3over2GeneratorUnit<Integer>());
-		moveGenerator
-				.addMoveGeneratorUnit(new Move4over1GeneratorUnit<Integer>());
-		moveGenerator
-				.addMoveGeneratorUnit(new Move4over2GeneratorUnit<Integer>());
-		moveGenerator
-				.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<Integer>());
+		final LinearSimulatedAnnealingFitnessEvaluator<Integer> fitnessEvaluator = TestUtils
+				.createLinearSAFitnessEvaluator(temperature,
+						numberOfIterations, fitnessComponents);
+		final IMoveGenerator<Integer> moveGenerator = TestUtils
+				.createRandomMoveGenerator(random);
 
 		final DefaultLocalSearchOptimiser<Integer> lso = new DefaultLocalSearchOptimiser<Integer>();
 
-		final List<IConstraintChecker<Integer>> constraintCheckers = Collections
-				.emptyList();
-		lso.setConstraintCheckers(constraintCheckers);
 		lso.setNumberOfIterations(numberOfIterations);
 		lso.setSequenceManipulator(new NullSequencesManipulator<Integer>());
 		lso.setMoveGenerator(moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
+		lso.setConstraintCheckers(constraintCheckers);
 
 		// Create an initial set of sequences.
 
@@ -103,10 +81,11 @@ public class DefaultLocalSearchOptimiserTest {
 		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
 				CollectionsUtil.makeArrayList(r1, r2), map);
 
-		OptimisationData<Integer> data = new OptimisationData<Integer>();
+		final OptimisationData<Integer> data = new OptimisationData<Integer>();
 
 		final OptimisationContext<Integer> context = new OptimisationContext<Integer>(
-				data, fitnessComponentNames, sequences, registry);
+				data, sequences, fitnessComponentNames, fitnessRegistry,
+				constraintCheckerNames, checkerRegistry);
 
 		// Perform the optimisation
 		lso.optimise(context);
