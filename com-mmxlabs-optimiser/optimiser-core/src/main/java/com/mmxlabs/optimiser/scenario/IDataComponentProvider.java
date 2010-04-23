@@ -1,6 +1,6 @@
 package com.mmxlabs.optimiser.scenario;
 
-import com.mmxlabs.optimiser.IConstraintChecker;
+import com.mmxlabs.optimiser.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
 
 /**
