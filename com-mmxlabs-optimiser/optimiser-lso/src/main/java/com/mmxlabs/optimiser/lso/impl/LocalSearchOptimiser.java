@@ -3,7 +3,6 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.Collection;
 import java.util.List;
 
-import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IOptimisationContext;
@@ -12,6 +11,7 @@ import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISequencesManipulator;
+import com.mmxlabs.optimiser.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
