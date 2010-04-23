@@ -2,7 +2,6 @@ package com.mmxlabs.optimiser.constraints;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
@@ -23,11 +22,15 @@ import com.mmxlabs.optimiser.scenario.IOptimisationData;
 public final class OrderedSequenceElementsConstraintChecker<T> implements
 		IConstraintChecker<T> {
 
+	private final String name;
+
 	private final String dataProviderKey;
 
 	private IOrderedSequenceElementsDataComponentProvider<T> provider;
 
-	public OrderedSequenceElementsConstraintChecker(final String dataProviderKey) {
+	public OrderedSequenceElementsConstraintChecker(final String name,
+			final String dataProviderKey) {
+		this.name = name;
 		this.dataProviderKey = dataProviderKey;
 	}
 
@@ -98,5 +101,10 @@ public final class OrderedSequenceElementsConstraintChecker<T> implements
 				.getDataComponentProvider(dataProviderKey,
 						IOrderedSequenceElementsDataComponentProvider.class);
 		setProvider(provider);
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

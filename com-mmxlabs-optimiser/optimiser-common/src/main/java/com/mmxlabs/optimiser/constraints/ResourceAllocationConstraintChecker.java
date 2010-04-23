@@ -3,7 +3,6 @@ package com.mmxlabs.optimiser.constraints;
 import java.util.Collection;
 import java.util.List;
 
-import com.mmxlabs.optimiser.IConstraintChecker;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
@@ -23,11 +22,15 @@ import com.mmxlabs.optimiser.scenario.IOptimisationData;
 public final class ResourceAllocationConstraintChecker<T> implements
 		IConstraintChecker<T> {
 
+	private final String name;
+
 	private final String dataProviderKey;
 
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
 
-	public ResourceAllocationConstraintChecker(final String dataProviderKey) {
+	public ResourceAllocationConstraintChecker(final String name,
+			final String dataProviderKey) {
+		this.name = name;
 		this.dataProviderKey = dataProviderKey;
 	}
 
@@ -102,5 +105,10 @@ public final class ResourceAllocationConstraintChecker<T> implements
 						dataProviderKey,
 						IResourceAllocationConstraintDataComponentProvider.class);
 		setResourceAllocationConstraintDataComponentProvider(provider);
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }
