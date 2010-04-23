@@ -2,6 +2,8 @@ package com.mmxlabs.optimiser;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
@@ -26,6 +28,14 @@ public interface IOptimisationContext<T> {
 	IOptimisationData<T> getOptimisationData();
 
 	/**
+	 * Returns the initial sequences state - i.e. the starting point of the
+	 * optimisation process.
+	 * 
+	 * @return
+	 */
+	ISequences<T> getInitialSequences();
+
+	/**
 	 * Returns the {@link IFitnessFunctionRegistry} instance to be used to
 	 * obtain {@link IFitnessComponent}s. @see {@link #getFitnessComponents()}.
 	 * 
@@ -42,11 +52,20 @@ public interface IOptimisationContext<T> {
 	List<String> getFitnessComponents();
 
 	/**
-	 * Returns the initial sequences state - i.e. the starting point of the
-	 * optimisation process.
+	 * Returns the {@link IConstraintCheckerRegistry} instance to be used to
+	 * obtain {@link IConstraintChecker} instances. @see
+	 * {@link #getConstraintCheckers()}.
 	 * 
 	 * @return
 	 */
-	ISequences<T> getInitialSequences();
+	IConstraintCheckerRegistry getConstraintCheckerRegistry();
+
+	/**
+	 * Returns a list of {@link IConstraintChecker} names to be used in this
+	 * optimisation.
+	 * 
+	 * @return
+	 */
+	List<String> getConstraintCheckers();
 
 }
