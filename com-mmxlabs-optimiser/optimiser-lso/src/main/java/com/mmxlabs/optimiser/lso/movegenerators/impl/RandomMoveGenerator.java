@@ -2,6 +2,7 @@ package com.mmxlabs.optimiser.lso.movegenerators.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -124,5 +125,16 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	 */
 	public void removeMoveGeneratorUnit(final IRandomMoveGeneratorUnit<T> unit) {
 		units.remove(unit);
+	}
+
+	/**
+	 *Setter to register a {@link Collection} of
+	 * {@link IRandomMoveGeneratorUnit} objects.
+	 * 
+	 * @param units
+	 */
+	public void setMoveGeneratorUnits(
+			final Collection<IRandomMoveGeneratorUnit<T>> units) {
+		this.units.addAll(units);
 	}
 }
