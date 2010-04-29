@@ -7,12 +7,17 @@ import java.util.List;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.optimiser.components.impl.TimeWindow;
+import com.mmxlabs.optimiser.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProviderEditor;
+import com.mmxlabs.optimiser.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
+import com.mmxlabs.optimiser.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.impl.Resource;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.scenario.common.IMatrixEditor;
+import com.mmxlabs.optimiser.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optmiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optmiser.builder.SchedulerConstants;
 import com.mmxlabs.scheduler.optmiser.components.ICargo;
 import com.mmxlabs.scheduler.optmiser.components.IPort;
 import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
@@ -21,8 +26,12 @@ import com.mmxlabs.scheduler.optmiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optmiser.components.impl.Port;
 import com.mmxlabs.scheduler.optmiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optmiser.components.impl.Vessel;
+import com.mmxlabs.scheduler.optmiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optmiser.providers.ISequenceElementProviderEditor;
 import com.mmxlabs.scheduler.optmiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optmiser.providers.impl.HashMapPortEditor;
+import com.mmxlabs.scheduler.optmiser.providers.impl.HashMapSequenceElementProviderEditor;
+import com.mmxlabs.scheduler.optmiser.providers.impl.HashMapVesselEditor;
 
 public class SchedulerBuilder implements ISchedulerBuilder {
 
@@ -36,16 +45,31 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final List<IPort> ports = new LinkedList<IPort>();
 
-	private IVesselProviderEditor vesselProvider;
+	private final IVesselProviderEditor vesselProvider;
 
-	private ISequenceElementProviderEditor scheduleElementProvider;
+	private final IPortProviderEditor portProvider;
 
-	private ITimeWindowDataComponentProviderEditor timeWindowProvider;
+	private final ISequenceElementProviderEditor scheduleElementProvider;
 
-	private IMatrixEditor<IPort, Integer> portDistanceProvider;
+	private final IOrderedSequenceElementsDataComponentProviderEditor<ISequenceElement> orderedSequenceElementsEditor;
+
+	private final ITimeWindowDataComponentProviderEditor timeWindowProvider;
+
+	private final IMatrixEditor<IPort, Integer> portDistanceProvider;
 
 	public SchedulerBuilder() {
-
+		vesselProvider = new HashMapVesselEditor(
+				SchedulerConstants.DCP_vesselProvider);
+		portProvider = new HashMapPortEditor(
+				SchedulerConstants.DCP_portProvider);
+		scheduleElementProvider = new HashMapSequenceElementProviderEditor(
+				SchedulerConstants.DCP_sequenceElementProvider);
+		orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider<ISequenceElement>(
+				SchedulerConstants.DCP_orderedElementsProvider);
+		timeWindowProvider = new TimeWindowDataComponentProvider(
+				SchedulerConstants.DCP_timeWindowProvider);
+		portDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
+				SchedulerConstants.DCP_portDistanceProvider);
 	}
 
 	@Override
@@ -81,6 +105,14 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				.setSequenceElement(cargo, loadPort, loadElement);
 		scheduleElementProvider.setSequenceElement(cargo, dischargePort,
 				dischargeElement);
+
+		// Set fixed visit order
+		orderedSequenceElementsEditor.setElementOrder(loadElement,
+				dischargeElement);
+
+		// Register the port with the element
+		portProvider.setPortForElement(loadPort, loadElement);
+		portProvider.setPortForElement(dischargePort, dischargeElement);
 
 		return cargo;
 	}
@@ -133,10 +165,21 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		data.setResources(resources);
 		data.setSequenceElements(sequenceElements);
 
-		data.addDataComponentProvider("", vesselProvider);
-		data.addDataComponentProvider("", scheduleElementProvider);
-		data.addDataComponentProvider("", timeWindowProvider);
-		data.addDataComponentProvider("", portDistanceProvider);
+		data.addDataComponentProvider(SchedulerConstants.DCP_vesselProvider,
+				vesselProvider);
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_sequenceElementProvider,
+				scheduleElementProvider);
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_timeWindowProvider, timeWindowProvider);
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_portDistanceProvider,
+				portDistanceProvider);
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_orderedElementsProvider,
+				orderedSequenceElementsEditor);
+		data.addDataComponentProvider(SchedulerConstants.DCP_portProvider,
+				portProvider);
 
 		return data;
 	}
