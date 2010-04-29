@@ -21,5 +21,4 @@ public interface ISchedulerBuilder {
 	ITimeWindow createTimeWindow(int start, int end);
 
 	void setPortToPortDistance(IPort from, IPort to, int distance);
-
 }
