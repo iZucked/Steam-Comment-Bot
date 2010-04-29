@@ -13,6 +13,7 @@
 		<module>optimiser-builder</module>
 		<module>optimiser-lso</module>
 		<module>optimiser-bundle</module>
+		<module>optimiser-common</module>
 	</modules>
 
 	<properties>
