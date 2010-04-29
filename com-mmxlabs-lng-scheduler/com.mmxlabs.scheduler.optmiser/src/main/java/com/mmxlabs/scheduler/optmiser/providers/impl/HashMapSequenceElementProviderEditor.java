@@ -11,6 +11,14 @@ import com.mmxlabs.scheduler.optmiser.components.IPort;
 import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optmiser.providers.ISequenceElementProviderEditor;
 
+/**
+ * Implementation of {@link ISequenceElementProviderEditor}. TODO: What about a
+ * cargo with same load and discharge port?
+ * 
+ * @author Simon Goodall
+ * 
+ */
+
 public final class HashMapSequenceElementProviderEditor implements
 		ISequenceElementProviderEditor {
 
@@ -20,35 +28,48 @@ public final class HashMapSequenceElementProviderEditor implements
 	private final List<ISequenceElement> unmodifiableSequenceElements;
 
 	private final Map<ICargo, Map<IPort, ISequenceElement>> cargoPortElementMap;
-	
+
 	public HashMapSequenceElementProviderEditor(final String name) {
 		this.name = name;
 		sequenceElements = new LinkedList<ISequenceElement>();
 		// Create wrapper around real list
-		unmodifiableSequenceElements = Collections.unmodifiableList(sequenceElements);
-		
-		portCargoElementMap = new HashMap<ICargo, Map<IPort,ISequenceElement>>();
+		unmodifiableSequenceElements = Collections
+				.unmodifiableList(sequenceElements);
+
+		cargoPortElementMap = new HashMap<ICargo, Map<IPort, ISequenceElement>>();
 	}
 
 	@Override
-	public void setSequenceElement(ICargo cargo, IPort port,
-			ISequenceElement element) {
+	public void setSequenceElement(final ICargo cargo, final IPort port,
+			final ISequenceElement element) {
 
 		if (sequenceElements.contains(element)) {
 			throw new RuntimeException("Element has already been added");
 		}
-		
-		if (ca)
-		
+
+		if (!cargoPortElementMap.containsKey(cargo)) {
+			cargoPortElementMap.put(cargo,
+					new HashMap<IPort, ISequenceElement>());
+		}
+
+		cargoPortElementMap.get(cargo).put(port, element);
+
 		sequenceElements.add(element);
-		
-		
-		
+
 	}
 
 	@Override
-	public ISequenceElement getSequenceElement(ICargo cargo, IPort port) {
-		// TODO Auto-generated method stub
+	public ISequenceElement getSequenceElement(final ICargo cargo,
+			final IPort port) {
+
+		if (cargoPortElementMap.containsKey(cargo)) {
+			final Map<IPort, ISequenceElement> map = cargoPortElementMap
+					.get(cargo);
+			if (map.containsKey(port)) {
+				return map.get(port);
+			}
+		}
+
 		return null;
 	}
 
@@ -59,8 +80,8 @@ public final class HashMapSequenceElementProviderEditor implements
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		cargoPortElementMap.clear();
+		sequenceElements.clear();
 	}
 
 	@Override
