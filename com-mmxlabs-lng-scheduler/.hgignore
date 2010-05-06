@@ -1,2 +1,9 @@
 target/
 
+
+syntax: regexp
+^com\.mmxlabs\.scheduler\.optmiser/\.settings$
+syntax: regexp
+^com\.mmxlabs\.scheduler\.optmiser/\.classpath$
+syntax: regexp
+^com\.mmxlabs\.scheduler\.optmiser/\.project$
