@@ -1,6 +1,8 @@
 package com.mmxlabs.scheduler.optmiser.fitness;
 
+import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
+import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 
 /**
  * This class contains the logic required to schedule a {@link ISequence}. This
@@ -9,32 +11,17 @@ import com.mmxlabs.optimiser.ISequence;
  * @author Simon Goodall
  * 
  */
-public interface ISequenceScheduler<T> {
+public interface ISequenceScheduler {
 
 	/**
 	 * Attempt to schedule the given {@link ISequence}. Returns false if for
 	 * some reason a valid schedule is unable to be found.
 	 * 
+	 * @param resource
 	 * @param sequence
 	 * @return
 	 */
-	boolean schedule(ISequence<T> sequence);
-
-	/**
-	 * Returns the scheduled start time for the given sequence element.
-	 * 
-	 * @param element
-	 * @return
-	 */
-	int getStartTime(T element);
-
-	/**
-	 * Returns the scheduled end time for the given sequence element.
-	 * 
-	 * @param element
-	 * @return
-	 */
-	int getEndTime(T element);
+	boolean schedule(IResource resource, ISequence<ISequenceElement> sequence);
 
 	/**
 	 * Return an additional data object tied to the given sequence element.
@@ -44,5 +31,7 @@ public interface ISequenceScheduler<T> {
 	 * @param clz
 	 * @return
 	 */
-	<U> U getAdditionalInformation(T element, String key, Class<U> clz);
+	<U> U getAdditionalInformation(ISequenceElement element, String key,
+			Class<U> clz);
+
 }
