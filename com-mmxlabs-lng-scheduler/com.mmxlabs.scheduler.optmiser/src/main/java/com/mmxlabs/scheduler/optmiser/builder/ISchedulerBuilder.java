@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optmiser.builder;
 
+import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optmiser.components.ICargo;
@@ -21,4 +22,7 @@ public interface ISchedulerBuilder {
 	ITimeWindow createTimeWindow(int start, int end);
 
 	void setPortToPortDistance(IPort from, IPort to, int distance);
+
+	void setElementDurations(ISequenceElement element, IResource resource,
+			int duration);
 }
