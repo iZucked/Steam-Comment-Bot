@@ -11,7 +11,7 @@ import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
-import com.mmxlabs.scheduler.optmiser.builder.SchedulerConstants;
+import com.mmxlabs.scheduler.optmiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optmiser.components.IPort;
 import com.mmxlabs.scheduler.optmiser.providers.IPortProvider;
 
