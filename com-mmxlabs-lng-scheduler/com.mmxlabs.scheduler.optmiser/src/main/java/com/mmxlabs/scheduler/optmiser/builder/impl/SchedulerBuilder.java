@@ -7,8 +7,10 @@ import java.util.List;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.optimiser.components.impl.TimeWindow;
+import com.mmxlabs.optimiser.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProviderEditor;
+import com.mmxlabs.optimiser.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.impl.Resource;
@@ -57,6 +59,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IMatrixEditor<IPort, Integer> portDistanceProvider;
 
+	private final IElementDurationProviderEditor<ISequenceElement> elementDurationsProvider;
+
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
 				SchedulerConstants.DCP_vesselProvider);
@@ -70,6 +74,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_timeWindowProvider);
 		portDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
 				SchedulerConstants.DCP_portDistanceProvider);
+		elementDurationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
+				SchedulerConstants.DCP_elementDurationsProvider);
 	}
 
 	@Override
@@ -158,6 +164,13 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
+	public void setElementDurations(ISequenceElement element,
+			IResource resource, int duration) {
+		elementDurationsProvider
+				.setElementDuration(element, resource, duration);
+	}
+
+	@Override
 	public IOptimisationData<ISequenceElement> getOptimisationData() {
 
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
@@ -180,6 +193,9 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				orderedSequenceElementsEditor);
 		data.addDataComponentProvider(SchedulerConstants.DCP_portProvider,
 				portProvider);
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_elementDurationsProvider,
+				elementDurationsProvider);
 
 		return data;
 	}
