@@ -1,8 +1,8 @@
 package com.mmxlabs.scheduler.optmiser.fitness;
 
 import java.util.Collection;
-import java.util.Collections;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
 
@@ -12,9 +12,11 @@ public class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFactory {
 
 	public static final String DISTANCE_COMPONENT_NAME = "cargo-scheduler-distance";
 
+	public static final String LATENESS_COMPONENT_NAME = "cargo-scheduler-lateness";
+
 	@Override
 	public Collection<String> getFitnessComponentNames() {
-		return Collections.singletonList(DISTANCE_COMPONENT_NAME);
+		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME, LATENESS_COMPONENT_NAME);
 	}
 
 	@Override

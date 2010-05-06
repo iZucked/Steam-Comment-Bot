@@ -24,10 +24,14 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	private List<IFitnessComponent<T>> components;
 
 	public CargoSchedulerFitnessCore() {
-		components = new ArrayList<IFitnessComponent<T>>(1);
+		components = new ArrayList<IFitnessComponent<T>>(2);
 		components
 				.add(new DistanceComponent<T>(
 						CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME,
+						this));
+		components
+				.add(new LatenessComponent<T>(
+						CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME,
 						this));
 	}
 
@@ -96,6 +100,11 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	public long getDistanceFitness() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public long getLatenessFitness() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
