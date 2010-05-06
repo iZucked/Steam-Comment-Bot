@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optmiser.builder;
+package com.mmxlabs.scheduler.optmiser;
 
 public class SchedulerConstants {
 
@@ -8,4 +8,11 @@ public class SchedulerConstants {
 	public static final String DCP_portDistanceProvider = "provider-port-distances";
 	public static final String DCP_timeWindowProvider = "provider-time-windows";
 	public static final String DCP_orderedElementsProvider = "provider-ordered-elements";
+	public static final String DCP_elementDurationsProvider = "provider-element-durations";
+
+	
+	public static final String AI_idleInfo = "info-idle";
+	public static final String AI_journeyInfo = "info-journey";
+	public static final String AI_visitInfo = "info-visit";
 }
+
