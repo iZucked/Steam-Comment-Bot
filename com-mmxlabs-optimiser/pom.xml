@@ -9,11 +9,11 @@
 	<version>1.0-SNAPSHOT</version>
 
 	<modules>
+		<module>optimiser-core</module>
+		<module>optimiser-lso</module>
 		<module>optimiser-common</module>
 		<module>optimiser-builder</module>
-		<module>optimiser-lso</module>
 		<module>optimiser-bundle</module>
-		<module>optimiser-common</module>
 	</modules>
 
 	<properties>
