@@ -18,15 +18,26 @@ public final class SequenceElement implements ISequenceElement {
 
 	private IPort port;
 
-	public void setName(String name) {
+	public SequenceElement() {
+
+	}
+
+	public SequenceElement(final String name, final IPort port,
+			final ICargo cargo) {
+		setName(name);
+		setPort(port);
+		setCargo(cargo);
+	}
+
+	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public void setCargo(ICargo cargo) {
+	public void setCargo(final ICargo cargo) {
 		this.cargo = cargo;
 	}
 
-	public void setPort(IPort port) {
+	public void setPort(final IPort port) {
 		this.port = port;
 	}
 

@@ -6,6 +6,14 @@ public class Port implements IPort {
 
 	private String name;
 
+	public Port() {
+
+	}
+
+	public Port(final String name) {
+		setName(name);
+	}
+
 	@Override
 	public String getName() {
 		return name;
