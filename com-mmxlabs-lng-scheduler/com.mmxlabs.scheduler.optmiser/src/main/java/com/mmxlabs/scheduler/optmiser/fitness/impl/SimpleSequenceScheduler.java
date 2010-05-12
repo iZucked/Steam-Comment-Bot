@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optmiser.fitness.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,10 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 
 	private IMatrixProvider<IPort, Integer> distanceProvider;
 
+	public SimpleSequenceScheduler() {
+		additionalInfos = new HashMap<ISequenceElement, ISequenceSchedulerAdditionalInfo>();
+	}
+
 	@Override
 	public <U> U getAdditionalInformation(final ISequenceElement element,
 			final String key, final Class<U> clz) {
@@ -54,7 +59,6 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 		// current time will be incremented after each element
 		int currentTime = startTime;
 
-		ISequenceElement prevElement = null;
 		IPort prevPort = null;
 		for (final ISequenceElement element : sequence) {
 			final List<ITimeWindow> timeWindows = timeWindowProvider
@@ -95,7 +99,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 			visit.setSequenceElement(element);
 			visit.setPort(thisPort);
 			visit.setStartTime(nextTime);
-			visit.setEndTime(startTime + visitDuration);
+			visit.setEndTime(nextTime + visitDuration);
 			visit.setDuration(visitDuration);
 
 			setAdditionalInformation(element, SchedulerConstants.AI_visitInfo,
@@ -112,24 +116,24 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 			setAdditionalInformation(element, SchedulerConstants.AI_idleInfo,
 					idle);
 
-			JourneyElementImpl journey = new JourneyElementImpl();
+			if (prevPort != null) {
+				JourneyElementImpl journey = new JourneyElementImpl();
 
-			// TODO: Populate details
-			journey.setName("journey");
-			journey.setFromPort(prevPort);
-			journey.setToPort(thisPort);
-			journey.setSequenceElement(element);
-			journey.setStartTime(currentTime);
-			journey.setEndTime(currentTime + travelTime);
-			journey.setDistance(distance);
-			journey.setDuration(travelTime);
+				journey.setName("journey");
+				journey.setFromPort(prevPort);
+				journey.setToPort(thisPort);
+				journey.setSequenceElement(element);
+				journey.setStartTime(currentTime);
+				journey.setEndTime(currentTime + travelTime);
+				journey.setDistance(distance);
+				journey.setDuration(travelTime);
 
-			setAdditionalInformation(element,
-					SchedulerConstants.AI_journeyInfo, journey);
+				setAdditionalInformation(element,
+						SchedulerConstants.AI_journeyInfo, journey);
+			}
 
 			// Setup for next iteration
 			prevPort = thisPort;
-			prevElement = element;
 
 			// Set current time to after this element has finished
 			currentTime = nextTime + visitDuration;
@@ -148,5 +152,49 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 			additionalInfos.put(element, info);
 		}
 		info.put(key, value);
+	}
+
+	public final Map<ISequenceElement, ISequenceSchedulerAdditionalInfo> getAdditionalInfos() {
+		return additionalInfos;
+	}
+
+	public final void setAdditionalInfos(
+			Map<ISequenceElement, ISequenceSchedulerAdditionalInfo> additionalInfos) {
+		this.additionalInfos = additionalInfos;
+	}
+
+	public final IElementDurationProvider<ISequenceElement> getDurationsProvider() {
+		return durationsProvider;
+	}
+
+	public final void setDurationsProvider(
+			IElementDurationProvider<ISequenceElement> durationsProvider) {
+		this.durationsProvider = durationsProvider;
+	}
+
+	public final ITimeWindowDataComponentProvider getTimeWindowProvider() {
+		return timeWindowProvider;
+	}
+
+	public final void setTimeWindowProvider(
+			ITimeWindowDataComponentProvider timeWindowProvider) {
+		this.timeWindowProvider = timeWindowProvider;
+	}
+
+	public final IPortProvider getPortProvider() {
+		return portProvider;
+	}
+
+	public final void setPortProvider(IPortProvider portProvider) {
+		this.portProvider = portProvider;
+	}
+
+	public final IMatrixProvider<IPort, Integer> getDistanceProvider() {
+		return distanceProvider;
+	}
+
+	public final void setDistanceProvider(
+			IMatrixProvider<IPort, Integer> distanceProvider) {
+		this.distanceProvider = distanceProvider;
 	}
 }
