@@ -190,4 +190,21 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			final IMatrixProvider<IPort, Integer> distanceProvider) {
 		this.distanceProvider = distanceProvider;
 	}
+
+	public void init() {
+		// TODO Auto-generated method stub
+
+		// Verify that everything is in place
+
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	public void dispose() {
+		additionalInfos.clear();
+
+		portProvider = null;
+		timeWindowProvider = null;
+		distanceProvider = null;
+		durationsProvider = null;
+	}
 }
