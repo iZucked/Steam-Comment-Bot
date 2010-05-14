@@ -1,10 +1,9 @@
 package com.mmxlabs.scheduler.optmiser.fitness;
 
-import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 
-public interface IScheduledElement {
+public interface IScheduledElement<T> {
 
-	ISequenceElement getSequenceElement();
+	T getSequenceElement();
 	
 	int getStartTime();
 	

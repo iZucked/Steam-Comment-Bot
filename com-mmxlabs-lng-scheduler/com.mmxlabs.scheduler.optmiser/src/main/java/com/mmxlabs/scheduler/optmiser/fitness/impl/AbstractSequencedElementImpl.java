@@ -1,9 +1,8 @@
 package com.mmxlabs.scheduler.optmiser.fitness.impl;
 
-import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optmiser.fitness.IScheduledElement;
 
-public class AbstractSequencedElementImpl implements IScheduledElement {
+public class AbstractSequencedElementImpl<T> implements IScheduledElement<T> {
 
 	private String name;
 
@@ -13,7 +12,7 @@ public class AbstractSequencedElementImpl implements IScheduledElement {
 
 	private int endTime;
 
-	private ISequenceElement element;
+	private T element;
 
 	protected AbstractSequencedElementImpl() {
 
@@ -35,7 +34,7 @@ public class AbstractSequencedElementImpl implements IScheduledElement {
 	}
 
 	@Override
-	public ISequenceElement getSequenceElement() {
+	public T getSequenceElement() {
 		return element;
 	}
 
@@ -60,7 +59,7 @@ public class AbstractSequencedElementImpl implements IScheduledElement {
 		this.endTime = endTime;
 	}
 
-	public void setSequenceElement(final ISequenceElement element) {
+	public void setSequenceElement(final T element) {
 		this.element = element;
 	}
 }

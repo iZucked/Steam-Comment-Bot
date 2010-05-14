@@ -3,8 +3,8 @@ package com.mmxlabs.scheduler.optmiser.fitness.impl;
 import com.mmxlabs.scheduler.optmiser.components.IPort;
 import com.mmxlabs.scheduler.optmiser.fitness.IVisitElement;
 
-public final class VisitElementImpl extends AbstractSequencedElementImpl
-		implements IVisitElement {
+public final class VisitElementImpl<T> extends AbstractSequencedElementImpl<T>
+		implements IVisitElement<T> {
 
 	private IPort port;
 
