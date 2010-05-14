@@ -12,7 +12,6 @@ import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
 import com.mmxlabs.scheduler.optmiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optmiser.components.IPort;
-import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optmiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optmiser.fitness.ISequenceSchedulerAdditionalInfo;
 import com.mmxlabs.scheduler.optmiser.providers.IPortProvider;
@@ -23,11 +22,11 @@ import com.mmxlabs.scheduler.optmiser.providers.IPortProvider;
  * @author Simon Goodall
  * 
  */
-public final class SimpleSequenceScheduler implements ISequenceScheduler {
+public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
-	private Map<ISequenceElement, ISequenceSchedulerAdditionalInfo> additionalInfos;
+	private final Map<T, ISequenceSchedulerAdditionalInfo> additionalInfos;
 
-	private IElementDurationProvider<ISequenceElement> durationsProvider;
+	private IElementDurationProvider<T> durationsProvider;
 
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
@@ -36,11 +35,11 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 	private IMatrixProvider<IPort, Integer> distanceProvider;
 
 	public SimpleSequenceScheduler() {
-		additionalInfos = new HashMap<ISequenceElement, ISequenceSchedulerAdditionalInfo>();
+		additionalInfos = new HashMap<T, ISequenceSchedulerAdditionalInfo>();
 	}
 
 	@Override
-	public <U> U getAdditionalInformation(final ISequenceElement element,
+	public <U> U getAdditionalInformation(final T element,
 			final String key, final Class<U> clz) {
 		if (additionalInfos.containsKey(element)) {
 			return additionalInfos.get(element).get(key, clz);
@@ -51,7 +50,10 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 
 	@Override
 	public boolean schedule(final IResource resource,
-			final ISequence<ISequenceElement> sequence) {
+			final ISequence<T> sequence) {
+
+		// Clear additional infos
+		additionalInfos.clear();
 
 		// TODO: Get start time
 		final int startTime = 0;
@@ -60,7 +62,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 		int currentTime = startTime;
 
 		IPort prevPort = null;
-		for (final ISequenceElement element : sequence) {
+		for (final T element : sequence) {
 			final List<ITimeWindow> timeWindows = timeWindowProvider
 					.getTimeWindows(element);
 
@@ -85,16 +87,16 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 
 			final int nextTime = Math.max(left, right);
 
-			int visitDuration = durationsProvider.getElementDuration(element,
+			final int visitDuration = durationsProvider.getElementDuration(element,
 					resource);
-			int idleTime = nextTime - currentTime - travelTime;
+			final int idleTime = nextTime - currentTime - travelTime;
 
 			// TODO: Store details
 			// --> Store element start/end time
 			// --> Store time/distance between elements
 			// --> Store "idle" time
 
-			VisitElementImpl visit = new VisitElementImpl();
+			final VisitElementImpl<T> visit = new VisitElementImpl<T>();
 			visit.setName("visit");
 			visit.setSequenceElement(element);
 			visit.setPort(thisPort);
@@ -105,7 +107,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 			setAdditionalInformation(element, SchedulerConstants.AI_visitInfo,
 					visit);
 
-			IdleElementImpl idle = new IdleElementImpl();
+			final IdleElementImpl<T> idle = new IdleElementImpl<T>();
 			idle.setName("idle");
 			idle.setPort(thisPort);
 			idle.setStartTime(currentTime + travelTime);
@@ -117,7 +119,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 					idle);
 
 			if (prevPort != null) {
-				JourneyElementImpl journey = new JourneyElementImpl();
+				final JourneyElementImpl<T> journey = new JourneyElementImpl<T>();
 
 				journey.setName("journey");
 				journey.setFromPort(prevPort);
@@ -142,8 +144,8 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 		return true;
 	}
 
-	private void setAdditionalInformation(ISequenceElement element, String key,
-			Object value) {
+	private void setAdditionalInformation(final T element, final String key,
+			final Object value) {
 		final ISequenceSchedulerAdditionalInfo info;
 		if (additionalInfos.containsKey(element)) {
 			info = additionalInfos.get(element);
@@ -154,21 +156,12 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 		info.put(key, value);
 	}
 
-	public final Map<ISequenceElement, ISequenceSchedulerAdditionalInfo> getAdditionalInfos() {
-		return additionalInfos;
-	}
-
-	public final void setAdditionalInfos(
-			Map<ISequenceElement, ISequenceSchedulerAdditionalInfo> additionalInfos) {
-		this.additionalInfos = additionalInfos;
-	}
-
-	public final IElementDurationProvider<ISequenceElement> getDurationsProvider() {
+	public final IElementDurationProvider<T> getDurationsProvider() {
 		return durationsProvider;
 	}
 
 	public final void setDurationsProvider(
-			IElementDurationProvider<ISequenceElement> durationsProvider) {
+			final IElementDurationProvider<T> durationsProvider) {
 		this.durationsProvider = durationsProvider;
 	}
 
@@ -177,7 +170,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 	}
 
 	public final void setTimeWindowProvider(
-			ITimeWindowDataComponentProvider timeWindowProvider) {
+			final ITimeWindowDataComponentProvider timeWindowProvider) {
 		this.timeWindowProvider = timeWindowProvider;
 	}
 
@@ -185,7 +178,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 		return portProvider;
 	}
 
-	public final void setPortProvider(IPortProvider portProvider) {
+	public final void setPortProvider(final IPortProvider portProvider) {
 		this.portProvider = portProvider;
 	}
 
@@ -194,7 +187,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 	}
 
 	public final void setDistanceProvider(
-			IMatrixProvider<IPort, Integer> distanceProvider) {
+			final IMatrixProvider<IPort, Integer> distanceProvider) {
 		this.distanceProvider = distanceProvider;
 	}
 }

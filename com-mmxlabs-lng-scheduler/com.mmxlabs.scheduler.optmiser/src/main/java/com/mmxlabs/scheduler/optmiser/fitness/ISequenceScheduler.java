@@ -11,7 +11,7 @@ import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
  * @author Simon Goodall
  * 
  */
-public interface ISequenceScheduler {
+public interface ISequenceScheduler<T> {
 
 	/**
 	 * Attempt to schedule the given {@link ISequence}. Returns false if for
@@ -21,7 +21,7 @@ public interface ISequenceScheduler {
 	 * @param sequence
 	 * @return
 	 */
-	boolean schedule(IResource resource, ISequence<ISequenceElement> sequence);
+	boolean schedule(IResource resource, ISequence<T> sequence);
 
 	/**
 	 * Return an additional data object tied to the given sequence element.
@@ -31,7 +31,7 @@ public interface ISequenceScheduler {
 	 * @param clz
 	 * @return
 	 */
-	<U> U getAdditionalInformation(ISequenceElement element, String key,
+	<U> U getAdditionalInformation(T element, String key,
 			Class<U> clz);
 
 }
