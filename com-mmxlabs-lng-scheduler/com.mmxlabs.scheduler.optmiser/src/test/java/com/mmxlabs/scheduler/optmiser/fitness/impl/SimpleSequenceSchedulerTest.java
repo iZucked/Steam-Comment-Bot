@@ -42,7 +42,7 @@ public final class SimpleSequenceSchedulerTest {
 	@Test
 	public void testSchedule_1() {
 
-		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
+		SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
 
 		Port port1 = new Port("port1");
 		Port port2 = new Port("port2");
@@ -136,7 +136,7 @@ public final class SimpleSequenceSchedulerTest {
 		// TODO: look through additional info objects and validate expected
 		// output
 		{
-			IVisitElement visitElement = scheduler.getAdditionalInformation(
+			IVisitElement<ISequenceElement> visitElement = scheduler.getAdditionalInformation(
 					element1, SchedulerConstants.AI_visitInfo,
 					IVisitElement.class);
 			Assert.assertNotNull(visitElement);
@@ -148,7 +148,7 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element1, visitElement.getSequenceElement());
 
-			IIdleElement idleElement = scheduler.getAdditionalInformation(
+			IIdleElement<ISequenceElement> idleElement = scheduler.getAdditionalInformation(
 					element1, SchedulerConstants.AI_idleInfo,
 					IIdleElement.class);
 			Assert.assertNotNull(idleElement);
@@ -158,7 +158,7 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(5, idleElement.getEndTime());
 			Assert.assertEquals(5, idleElement.getDuration());
 
-			IJourneyElement journeyElement = scheduler
+			IJourneyElement<ISequenceElement> journeyElement = scheduler
 					.getAdditionalInformation(element1,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyElement.class);
@@ -283,7 +283,7 @@ public final class SimpleSequenceSchedulerTest {
 	@Test
 	public void testSchedule_2() {
 
-		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
+		SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
 
 		Port port1 = new Port("port1");
 		Port port2 = new Port("port2");
