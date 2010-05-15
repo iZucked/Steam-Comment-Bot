@@ -1,8 +1,17 @@
 package com.mmxlabs.scheduler.optmiser.fitness.impl;
 
-import com.mmxlabs.scheduler.optmiser.fitness.IScheduledElement;
+import com.mmxlabs.scheduler.optmiser.fitness.IScheduledEvent;
 
-public class AbstractSequencedElementImpl<T> implements IScheduledElement<T> {
+/**
+ * Abstract implementation of {@link IScheduledEvent} intended for use as a base
+ * class for {@link IScheduledEvent} based implementations.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type
+ */
+public abstract class AbstractScheduledEventImpl<T> implements IScheduledEvent<T> {
 
 	private String name;
 
@@ -14,7 +23,7 @@ public class AbstractSequencedElementImpl<T> implements IScheduledElement<T> {
 
 	private T element;
 
-	protected AbstractSequencedElementImpl() {
+	protected AbstractScheduledEventImpl() {
 
 	}
 

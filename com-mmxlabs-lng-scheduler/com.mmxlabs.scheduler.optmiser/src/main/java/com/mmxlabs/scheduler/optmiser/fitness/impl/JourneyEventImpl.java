@@ -1,10 +1,18 @@
 package com.mmxlabs.scheduler.optmiser.fitness.impl;
 
 import com.mmxlabs.scheduler.optmiser.components.IPort;
-import com.mmxlabs.scheduler.optmiser.fitness.IJourneyElement;
+import com.mmxlabs.scheduler.optmiser.fitness.IJourneyEvent;
 
-public class JourneyElementImpl<T> extends AbstractSequencedElementImpl<T> implements
-		IJourneyElement<T> {
+/**
+ * Implementation of {@link IJourneyEvent}.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type.
+ */
+public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
+		implements IJourneyEvent<T> {
 
 	private int distance;
 
