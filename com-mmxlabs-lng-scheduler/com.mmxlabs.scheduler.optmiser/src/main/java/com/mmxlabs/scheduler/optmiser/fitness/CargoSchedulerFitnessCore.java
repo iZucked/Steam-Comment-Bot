@@ -23,7 +23,7 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	private IOptimisationData<T> data;
 
-	private final ISequenceScheduler<T> scheduler;
+	private ISequenceScheduler<T> scheduler;
 
 	public CargoSchedulerFitnessCore() {
 		components = new ArrayList<ICargoSchedulerFitnessComponent<T>>(2);
@@ -35,8 +35,6 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				.add(new LatenessComponent<T>(
 						CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME,
 						this));
-
-		scheduler = createSequenceScheduler();
 	}
 
 	@Override
@@ -51,8 +49,6 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void evaluate(final ISequences<T> sequences) {
 
-		// TODO: Need to fix up so old and new are correctly populated 
-		
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.prepare();
 		}
@@ -60,7 +56,7 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			scheduler.schedule(resource, sequence);
-			evaluateSequence(resource, sequence, scheduler, true);
+			evaluateSequence(resource, sequence, scheduler, false);
 		}
 		
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
@@ -75,7 +71,7 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		for (final IResource resource : affectedResources) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			scheduler.schedule(resource, sequence);
-			evaluateSequence(resource, sequence, scheduler, false);
+			evaluateSequence(resource, sequence, scheduler, true);
 		}
 	}
 
@@ -89,6 +85,8 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		this.data = data;
 
+		scheduler = createSequenceScheduler();
+		
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.init(data);
 		}
