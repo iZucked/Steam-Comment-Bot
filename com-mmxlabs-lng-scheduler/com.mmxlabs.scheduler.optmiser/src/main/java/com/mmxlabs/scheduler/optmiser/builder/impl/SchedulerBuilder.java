@@ -199,4 +199,15 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 		return data;
 	}
+
+	@Override
+	public void dispose() {
+		//  TODO: Make sure we haven't passed any of these by ref into the IOptData object
+		// Passed into IOptData - resources.clear();
+		// Passed into IOptData - sequenceElements.clear();
+		vessels.clear();
+		cargoes.clear();
+		ports.clear();
+		// TODO: Null provider refs
+	}
 }

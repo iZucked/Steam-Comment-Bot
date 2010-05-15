@@ -32,4 +32,6 @@ public interface ISchedulerBuilder {
 
 	void setElementDurations(ISequenceElement element, IResource resource,
 			int duration);
+
+	void dispose();
 }
