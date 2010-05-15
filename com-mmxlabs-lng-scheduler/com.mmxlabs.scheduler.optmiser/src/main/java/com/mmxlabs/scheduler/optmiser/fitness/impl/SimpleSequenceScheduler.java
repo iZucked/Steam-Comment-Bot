@@ -195,8 +195,18 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 		// TODO Auto-generated method stub
 
 		// Verify that everything is in place
-
-		throw new UnsupportedOperationException("Not yet implemented");
+		if (portProvider == null) {
+			throw new IllegalStateException("No port provider set");
+		}
+		if (distanceProvider == null) {
+			throw new IllegalStateException("No port distance provider set");
+		}
+		if (timeWindowProvider == null) {
+			throw new IllegalStateException("No time window provider set");
+		}
+		if (durationsProvider == null) {
+			throw new IllegalStateException("No port durations provider set");
+		}
 	}
 
 	public void dispose() {
