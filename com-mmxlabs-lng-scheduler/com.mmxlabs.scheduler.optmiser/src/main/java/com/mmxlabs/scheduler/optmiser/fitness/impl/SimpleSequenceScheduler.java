@@ -96,7 +96,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			// --> Store time/distance between elements
 			// --> Store "idle" time
 
-			final VisitElementImpl<T> visit = new VisitElementImpl<T>();
+			final PortVisitEventImpl<T> visit = new PortVisitEventImpl<T>();
 			visit.setName("visit");
 			visit.setSequenceElement(element);
 			visit.setPort(thisPort);
@@ -107,7 +107,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			setAdditionalInformation(element, SchedulerConstants.AI_visitInfo,
 					visit);
 
-			final IdleElementImpl<T> idle = new IdleElementImpl<T>();
+			final IdleEventImpl<T> idle = new IdleEventImpl<T>();
 			idle.setName("idle");
 			idle.setPort(thisPort);
 			idle.setStartTime(currentTime + travelTime);
@@ -119,7 +119,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 					idle);
 
 			if (prevPort != null) {
-				final JourneyElementImpl<T> journey = new JourneyElementImpl<T>();
+				final JourneyEventImpl<T> journey = new JourneyEventImpl<T>();
 
 				journey.setName("journey");
 				journey.setFromPort(prevPort);

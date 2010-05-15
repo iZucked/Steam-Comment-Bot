@@ -2,7 +2,6 @@ package com.mmxlabs.scheduler.optmiser.fitness;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 
 /**
  * This class contains the logic required to schedule a {@link ISequence}. This
@@ -10,6 +9,8 @@ import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
  * 
  * @author Simon Goodall
  * 
+ * @param <T>
+ *            Sequence element type
  */
 public interface ISequenceScheduler<T> {
 
@@ -31,7 +32,11 @@ public interface ISequenceScheduler<T> {
 	 * @param clz
 	 * @return
 	 */
-	<U> U getAdditionalInformation(T element, String key,
-			Class<U> clz);
+	<U> U getAdditionalInformation(T element, String key, Class<U> clz);
+
+	/**
+	 * Release resources.
+	 */
+	void dispose();
 
 }

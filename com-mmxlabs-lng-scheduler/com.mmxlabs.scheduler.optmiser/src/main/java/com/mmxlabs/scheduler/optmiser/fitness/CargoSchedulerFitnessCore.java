@@ -7,7 +7,6 @@ import java.util.List;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.optimiser.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
@@ -15,24 +14,19 @@ import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
 import com.mmxlabs.scheduler.optmiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optmiser.components.IPort;
 import com.mmxlabs.scheduler.optmiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optmiser.providers.IPortProvider;
 
 public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
-	private IPortProvider portProvider;
-
-	private IMatrixProvider<IPort, Number> portDistances;
-
-	private ITimeWindowDataComponentProvider timeWindowProvider;
-	
-	private final List<IFitnessComponent<T>> components;
+	private final List<ICargoSchedulerFitnessComponent<T>> components;
 
 	private IOptimisationData<T> data;
 
+	private final ISequenceScheduler<T> scheduler;
+
 	public CargoSchedulerFitnessCore() {
-		components = new ArrayList<IFitnessComponent<T>>(2);
+		components = new ArrayList<ICargoSchedulerFitnessComponent<T>>(2);
 		components
 				.add(new DistanceComponent<T>(
 						CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME,
@@ -41,49 +35,53 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				.add(new LatenessComponent<T>(
 						CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME,
 						this));
+
+		scheduler = createSequenceScheduler();
 	}
 
 	@Override
 	public void accepted(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
-		// TODO Auto-generated method stub
 
+		for (final ICargoSchedulerFitnessComponent<T> c : components) {
+			c.accepted(sequences, affectedResources);
+		}
 	}
 
 	@Override
 	public void evaluate(final ISequences<T> sequences) {
 
-		// TODO Auto-generated method stub
-
-		final ISequenceScheduler scheduler = createSequenceScheduler();
-		for (final IResource resource : sequences.getResources()) {
-			final ISequence sequence = sequences.getSequence(resource);
-
-			scheduler.schedule(resource, sequence);
-
-			evaluateSequence(resource, sequence, scheduler);
+		// TODO: Need to fix up so old and new are correctly populated 
+		
+		for (final ICargoSchedulerFitnessComponent<T> c : components) {
+			c.prepare();
 		}
 
+		for (final IResource resource : sequences.getResources()) {
+			final ISequence<T> sequence = sequences.getSequence(resource);
+			scheduler.schedule(resource, sequence);
+			evaluateSequence(resource, sequence, scheduler, true);
+		}
+		
+		for (final ICargoSchedulerFitnessComponent<T> c : components) {
+			c.complete();
+		}
 	}
 
 	@Override
 	public void evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
-		// TODO Auto-generated method stub
 
-		final ISequenceScheduler scheduler = createSequenceScheduler();
 		for (final IResource resource : affectedResources) {
-			final ISequence sequence = sequences.getSequence(resource);
-
+			final ISequence<T> sequence = sequences.getSequence(resource);
 			scheduler.schedule(resource, sequence);
-
-			evaluateSequence(resource, sequence, scheduler);
+			evaluateSequence(resource, sequence, scheduler, false);
 		}
 	}
 
 	@Override
 	public Collection<IFitnessComponent<T>> getFitnessComponents() {
-		return components;
+		return new ArrayList<IFitnessComponent<T>>(components);
 	}
 
 	@Override
@@ -91,82 +89,23 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		this.data = data;
 
-		portProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_portProvider, IPortProvider.class);
-		portDistances = data.getDataComponentProvider(
-				SchedulerConstants.DCP_portDistanceProvider,
-				IMatrixProvider.class);
-
-		// init data structures
-	}
-
-	private long evaluateSequenceDistance(final IResource resource,
-			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler) {
-
-		long distance = 0;
-
-		for (final T element : sequence) {
-
-			IJourneyElement e = scheduler.getAdditionalInformation(element,
-					SchedulerConstants.AI_journeyInfo, IJourneyElement.class);
-			if (e != null) {
-				distance += e.getDistance();
-			}
-
+		for (final ICargoSchedulerFitnessComponent<T> c : components) {
+			c.init(data);
 		}
-		return distance;
+
 	}
 
-	private long evaluateSequenceLateness(final IResource resource,
-			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler) {
-
-		long lateness = 0;
-
-		for (final T element : sequence) {
-
-			
-			IVisitElement e = scheduler.getAdditionalInformation(element,
-					SchedulerConstants.AI_visitInfo, IVisitElement.class);
-			assert e != null;
-			if (e != null) {
-				int arrival= e.getStartTime();
-				List<ITimeWindow> tws = timeWindowProvider.getTimeWindows(element);
-				for (ITimeWindow tw : tws) {
-					if (arrival > tw.getEnd()) {
-						lateness += arrival - tw.getEnd();
-					}
-				}
-			}
-
-		}
-		return lateness;
-	}
-
-	
 	private void evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler) {
+			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler,
+			final boolean newSequence) {
 
-		// TODO: Move these into the components themselves
-		long distanceFitness = evaluateSequenceDistance(resource, sequence, scheduler);
-		long latenessFitness = evaluateSequenceLateness(resource, sequence, scheduler);
-		
-		// TODO: Do something with this data
-		
-		
+		for (final ICargoSchedulerFitnessComponent<T> c : components) {
+			c.evaluateSequence(resource, sequence, scheduler, newSequence);
+		}
 	}
 
-	public long getDistanceFitness() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public long getLatenessFitness() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	ISequenceScheduler createSequenceScheduler() {
-		final SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
+	ISequenceScheduler<T> createSequenceScheduler() {
+		final SimpleSequenceScheduler<T> scheduler = new SimpleSequenceScheduler<T>();
 
 		scheduler.setDistanceProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portDistanceProvider,
@@ -189,7 +128,10 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	public void dispose() {
 
 		this.data = null;
-		this.portDistances = null;
-		this.portProvider = null;
+		for (final ICargoSchedulerFitnessComponent<T> c : components) {
+			c.dispose();
+		}
+		components.clear();
+		scheduler.dispose();
 	}
 }
