@@ -8,6 +8,13 @@ import com.mmxlabs.scheduler.optmiser.components.IPort;
 import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optmiser.components.IVessel;
 
+/**
+ * A builder to create {@link IOptimisationData} instances for Scheduler
+ * problems.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public interface ISchedulerBuilder {
 
 	IOptimisationData<ISequenceElement> getOptimisationData();
