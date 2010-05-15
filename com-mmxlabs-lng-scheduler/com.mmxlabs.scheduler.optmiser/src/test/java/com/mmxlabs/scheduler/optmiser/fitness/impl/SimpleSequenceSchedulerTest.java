@@ -25,9 +25,9 @@ import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optmiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optmiser.components.impl.Port;
 import com.mmxlabs.scheduler.optmiser.components.impl.SequenceElement;
-import com.mmxlabs.scheduler.optmiser.fitness.IIdleElement;
-import com.mmxlabs.scheduler.optmiser.fitness.IJourneyElement;
-import com.mmxlabs.scheduler.optmiser.fitness.IVisitElement;
+import com.mmxlabs.scheduler.optmiser.fitness.IIdleEvent;
+import com.mmxlabs.scheduler.optmiser.fitness.IJourneyEvent;
+import com.mmxlabs.scheduler.optmiser.fitness.IPortVisitEvent;
 import com.mmxlabs.scheduler.optmiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optmiser.providers.ISequenceElementProviderEditor;
 import com.mmxlabs.scheduler.optmiser.providers.impl.HashMapPortEditor;
@@ -136,9 +136,9 @@ public final class SimpleSequenceSchedulerTest {
 		// TODO: look through additional info objects and validate expected
 		// output
 		{
-			IVisitElement<ISequenceElement> visitElement = scheduler.getAdditionalInformation(
+			IPortVisitEvent<ISequenceElement> visitElement = scheduler.getAdditionalInformation(
 					element1, SchedulerConstants.AI_visitInfo,
-					IVisitElement.class);
+					IPortVisitEvent.class);
 			Assert.assertNotNull(visitElement);
 			Assert.assertSame(port1, visitElement.getPort());
 			Assert.assertEquals(duration, visitElement.getDuration());
@@ -148,9 +148,9 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element1, visitElement.getSequenceElement());
 
-			IIdleElement<ISequenceElement> idleElement = scheduler.getAdditionalInformation(
+			IIdleEvent<ISequenceElement> idleElement = scheduler.getAdditionalInformation(
 					element1, SchedulerConstants.AI_idleInfo,
-					IIdleElement.class);
+					IIdleEvent.class);
 			Assert.assertNotNull(idleElement);
 			Assert.assertSame(port1, idleElement.getPort());
 			Assert.assertSame(element1, idleElement.getSequenceElement());
@@ -158,17 +158,17 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(5, idleElement.getEndTime());
 			Assert.assertEquals(5, idleElement.getDuration());
 
-			IJourneyElement<ISequenceElement> journeyElement = scheduler
+			IJourneyEvent<ISequenceElement> journeyElement = scheduler
 					.getAdditionalInformation(element1,
 							SchedulerConstants.AI_journeyInfo,
-							IJourneyElement.class);
+							IJourneyEvent.class);
 			Assert.assertNull(journeyElement);
 		}
 
 		{
-			IVisitElement visitElement = scheduler.getAdditionalInformation(
+			IPortVisitEvent visitElement = scheduler.getAdditionalInformation(
 					element2, SchedulerConstants.AI_visitInfo,
-					IVisitElement.class);
+					IPortVisitEvent.class);
 			Assert.assertNotNull(visitElement);
 			Assert.assertSame(port2, visitElement.getPort());
 			Assert.assertEquals(duration, visitElement.getDuration());
@@ -178,9 +178,9 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element2, visitElement.getSequenceElement());
 
-			IIdleElement idleElement = scheduler.getAdditionalInformation(
+			IIdleEvent idleElement = scheduler.getAdditionalInformation(
 					element2, SchedulerConstants.AI_idleInfo,
-					IIdleElement.class);
+					IIdleEvent.class);
 			Assert.assertNotNull(idleElement);
 			Assert.assertSame(port2, idleElement.getPort());
 			Assert.assertSame(element2, idleElement.getSequenceElement());
@@ -188,10 +188,10 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(10, idleElement.getEndTime());
 			Assert.assertEquals(0, idleElement.getDuration());
 
-			IJourneyElement journeyElement = scheduler
+			IJourneyEvent journeyElement = scheduler
 					.getAdditionalInformation(element2,
 							SchedulerConstants.AI_journeyInfo,
-							IJourneyElement.class);
+							IJourneyEvent.class);
 			Assert.assertNotNull(journeyElement);
 			Assert.assertSame(port1, journeyElement.getFromPort());
 			Assert.assertSame(port2, journeyElement.getToPort());
@@ -203,9 +203,9 @@ public final class SimpleSequenceSchedulerTest {
 		}
 
 		{
-			IVisitElement visitElement = scheduler.getAdditionalInformation(
+			IPortVisitEvent visitElement = scheduler.getAdditionalInformation(
 					element3, SchedulerConstants.AI_visitInfo,
-					IVisitElement.class);
+					IPortVisitEvent.class);
 			Assert.assertNotNull(visitElement);
 			Assert.assertSame(port3, visitElement.getPort());
 			Assert.assertEquals(duration, visitElement.getDuration());
@@ -215,9 +215,9 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element3, visitElement.getSequenceElement());
 
-			IIdleElement idleElement = scheduler.getAdditionalInformation(
+			IIdleEvent idleElement = scheduler.getAdditionalInformation(
 					element3, SchedulerConstants.AI_idleInfo,
-					IIdleElement.class);
+					IIdleEvent.class);
 			Assert.assertNotNull(idleElement);
 			Assert.assertSame(port3, idleElement.getPort());
 			Assert.assertSame(element3, idleElement.getSequenceElement());
@@ -225,10 +225,10 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(15, idleElement.getEndTime());
 			Assert.assertEquals(0, idleElement.getDuration());
 
-			IJourneyElement journeyElement = scheduler
+			IJourneyEvent journeyElement = scheduler
 					.getAdditionalInformation(element3,
 							SchedulerConstants.AI_journeyInfo,
-							IJourneyElement.class);
+							IJourneyEvent.class);
 			Assert.assertNotNull(journeyElement);
 			Assert.assertSame(port2, journeyElement.getFromPort());
 			Assert.assertSame(port3, journeyElement.getToPort());
@@ -240,9 +240,9 @@ public final class SimpleSequenceSchedulerTest {
 		}
 
 		{
-			IVisitElement visitElement = scheduler.getAdditionalInformation(
+			IPortVisitEvent visitElement = scheduler.getAdditionalInformation(
 					element4, SchedulerConstants.AI_visitInfo,
-					IVisitElement.class);
+					IPortVisitEvent.class);
 			Assert.assertNotNull(visitElement);
 			Assert.assertSame(port4, visitElement.getPort());
 			Assert.assertEquals(duration, visitElement.getDuration());
@@ -252,9 +252,9 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element4, visitElement.getSequenceElement());
 
-			IIdleElement idleElement = scheduler.getAdditionalInformation(
+			IIdleEvent idleElement = scheduler.getAdditionalInformation(
 					element4, SchedulerConstants.AI_idleInfo,
-					IIdleElement.class);
+					IIdleEvent.class);
 			Assert.assertNotNull(idleElement);
 			Assert.assertSame(port4, idleElement.getPort());
 			Assert.assertSame(element4, idleElement.getSequenceElement());
@@ -262,10 +262,10 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(20, idleElement.getEndTime());
 			Assert.assertEquals(0, idleElement.getDuration());
 
-			IJourneyElement journeyElement = scheduler
+			IJourneyEvent journeyElement = scheduler
 					.getAdditionalInformation(element4,
 							SchedulerConstants.AI_journeyInfo,
-							IJourneyElement.class);
+							IJourneyEvent.class);
 			Assert.assertNotNull(journeyElement);
 			Assert.assertSame(port3, journeyElement.getFromPort());
 			Assert.assertSame(port4, journeyElement.getToPort());
@@ -377,9 +377,9 @@ public final class SimpleSequenceSchedulerTest {
 		// TODO: look through additional info objects and validate expected
 		// output
 		{
-			IVisitElement visitElement = scheduler.getAdditionalInformation(
+			IPortVisitEvent visitElement = scheduler.getAdditionalInformation(
 					element1, SchedulerConstants.AI_visitInfo,
-					IVisitElement.class);
+					IPortVisitEvent.class);
 			Assert.assertNotNull(visitElement);
 			Assert.assertSame(port1, visitElement.getPort());
 			Assert.assertEquals(duration, visitElement.getDuration());
@@ -389,9 +389,9 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element1, visitElement.getSequenceElement());
 
-			IIdleElement idleElement = scheduler.getAdditionalInformation(
+			IIdleEvent idleElement = scheduler.getAdditionalInformation(
 					element1, SchedulerConstants.AI_idleInfo,
-					IIdleElement.class);
+					IIdleEvent.class);
 			Assert.assertNotNull(idleElement);
 			Assert.assertSame(port1, idleElement.getPort());
 			Assert.assertSame(element1, idleElement.getSequenceElement());
@@ -399,17 +399,17 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(5, idleElement.getEndTime());
 			Assert.assertEquals(5, idleElement.getDuration());
 
-			IJourneyElement journeyElement = scheduler
+			IJourneyEvent journeyElement = scheduler
 					.getAdditionalInformation(element1,
 							SchedulerConstants.AI_journeyInfo,
-							IJourneyElement.class);
+							IJourneyEvent.class);
 			Assert.assertNull(journeyElement);
 		}
 
 		{
-			IVisitElement visitElement = scheduler.getAdditionalInformation(
+			IPortVisitEvent visitElement = scheduler.getAdditionalInformation(
 					element2, SchedulerConstants.AI_visitInfo,
-					IVisitElement.class);
+					IPortVisitEvent.class);
 			Assert.assertNotNull(visitElement);
 			Assert.assertSame(port2, visitElement.getPort());
 			Assert.assertEquals(duration, visitElement.getDuration());
@@ -419,9 +419,9 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element2, visitElement.getSequenceElement());
 
-			IIdleElement idleElement = scheduler.getAdditionalInformation(
+			IIdleEvent idleElement = scheduler.getAdditionalInformation(
 					element2, SchedulerConstants.AI_idleInfo,
-					IIdleElement.class);
+					IIdleEvent.class);
 			Assert.assertNotNull(idleElement);
 			Assert.assertSame(port2, idleElement.getPort());
 			Assert.assertSame(element2, idleElement.getSequenceElement());
@@ -429,10 +429,10 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(10, idleElement.getEndTime());
 			Assert.assertEquals(0, idleElement.getDuration());
 
-			IJourneyElement journeyElement = scheduler
+			IJourneyEvent journeyElement = scheduler
 					.getAdditionalInformation(element2,
 							SchedulerConstants.AI_journeyInfo,
-							IJourneyElement.class);
+							IJourneyEvent.class);
 			Assert.assertNotNull(journeyElement);
 			Assert.assertSame(port1, journeyElement.getFromPort());
 			Assert.assertSame(port2, journeyElement.getToPort());
@@ -444,9 +444,9 @@ public final class SimpleSequenceSchedulerTest {
 		}
 
 		{
-			IVisitElement visitElement = scheduler.getAdditionalInformation(
+			IPortVisitEvent visitElement = scheduler.getAdditionalInformation(
 					element3, SchedulerConstants.AI_visitInfo,
-					IVisitElement.class);
+					IPortVisitEvent.class);
 			Assert.assertNotNull(visitElement);
 			Assert.assertSame(port3, visitElement.getPort());
 			Assert.assertEquals(duration, visitElement.getDuration());
@@ -456,9 +456,9 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element3, visitElement.getSequenceElement());
 
-			IIdleElement idleElement = scheduler.getAdditionalInformation(
+			IIdleEvent idleElement = scheduler.getAdditionalInformation(
 					element3, SchedulerConstants.AI_idleInfo,
-					IIdleElement.class);
+					IIdleEvent.class);
 			Assert.assertNotNull(idleElement);
 			Assert.assertSame(port3, idleElement.getPort());
 			Assert.assertSame(element3, idleElement.getSequenceElement());
@@ -466,10 +466,10 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(16, idleElement.getEndTime());
 			Assert.assertEquals(0, idleElement.getDuration());
 
-			IJourneyElement journeyElement = scheduler
+			IJourneyEvent journeyElement = scheduler
 					.getAdditionalInformation(element3,
 							SchedulerConstants.AI_journeyInfo,
-							IJourneyElement.class);
+							IJourneyEvent.class);
 			Assert.assertNotNull(journeyElement);
 			Assert.assertSame(port2, journeyElement.getFromPort());
 			Assert.assertSame(port3, journeyElement.getToPort());
@@ -481,9 +481,9 @@ public final class SimpleSequenceSchedulerTest {
 		}
 
 		{
-			IVisitElement visitElement = scheduler.getAdditionalInformation(
+			IPortVisitEvent visitElement = scheduler.getAdditionalInformation(
 					element4, SchedulerConstants.AI_visitInfo,
-					IVisitElement.class);
+					IPortVisitEvent.class);
 			Assert.assertNotNull(visitElement);
 			Assert.assertSame(port4, visitElement.getPort());
 			Assert.assertEquals(duration, visitElement.getDuration());
@@ -493,9 +493,9 @@ public final class SimpleSequenceSchedulerTest {
 					.getEndTime());
 			Assert.assertSame(element4, visitElement.getSequenceElement());
 
-			IIdleElement idleElement = scheduler.getAdditionalInformation(
+			IIdleEvent idleElement = scheduler.getAdditionalInformation(
 					element4, SchedulerConstants.AI_idleInfo,
-					IIdleElement.class);
+					IIdleEvent.class);
 			Assert.assertNotNull(idleElement);
 			Assert.assertSame(port4, idleElement.getPort());
 			Assert.assertSame(element4, idleElement.getSequenceElement());
@@ -503,10 +503,10 @@ public final class SimpleSequenceSchedulerTest {
 			Assert.assertEquals(21, idleElement.getEndTime());
 			Assert.assertEquals(0, idleElement.getDuration());
 
-			IJourneyElement journeyElement = scheduler
+			IJourneyEvent journeyElement = scheduler
 					.getAdditionalInformation(element4,
 							SchedulerConstants.AI_journeyInfo,
-							IJourneyElement.class);
+							IJourneyEvent.class);
 			Assert.assertNotNull(journeyElement);
 			Assert.assertSame(port3, journeyElement.getFromPort());
 			Assert.assertSame(port4, journeyElement.getToPort());
