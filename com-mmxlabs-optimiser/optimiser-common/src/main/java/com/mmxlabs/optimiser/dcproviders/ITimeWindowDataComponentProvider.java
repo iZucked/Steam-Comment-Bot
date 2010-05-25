@@ -17,7 +17,7 @@ public interface ITimeWindowDataComponentProvider extends
 
 	/**
 	 * Return a {@link List} of {@link ITimeWindow} for this sequence element,
-	 * or null if nothing has been set.
+	 * or an empty list if nothing has been set.
 	 * 
 	 * @param element
 	 * @return

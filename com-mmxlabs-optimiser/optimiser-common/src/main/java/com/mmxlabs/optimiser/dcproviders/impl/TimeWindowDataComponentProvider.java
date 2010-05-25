@@ -1,5 +1,6 @@
 package com.mmxlabs.optimiser.dcproviders.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public final class TimeWindowDataComponentProvider implements
 		if (timeWindowsMap.containsKey(element)) {
 			return timeWindowsMap.get(element);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
