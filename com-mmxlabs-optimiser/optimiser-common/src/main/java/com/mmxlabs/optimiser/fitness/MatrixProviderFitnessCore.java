@@ -177,4 +177,12 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	public long getNewFitness() {
 		return newFitness;
 	}
+	
+	@Override
+	public void dispose() {
+		matrix = null;
+		newFitnessByResource = null;
+		oldFitnessByResource = null;
+		// TODO: What about the component?
+	}
 }
