@@ -39,8 +39,8 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 	}
 
 	@Override
-	public <U> U getAdditionalInformation(final T element,
-			final String key, final Class<U> clz) {
+	public <U> U getAdditionalInformation(final T element, final String key,
+			final Class<U> clz) {
 		if (additionalInfos.containsKey(element)) {
 			return additionalInfos.get(element).get(key, clz);
 		}
@@ -87,14 +87,9 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
 			final int nextTime = Math.max(left, right);
 
-			final int visitDuration = durationsProvider.getElementDuration(element,
-					resource);
+			final int visitDuration = durationsProvider.getElementDuration(
+					element, resource);
 			final int idleTime = nextTime - currentTime - travelTime;
-
-			// TODO: Store details
-			// --> Store element start/end time
-			// --> Store time/distance between elements
-			// --> Store "idle" time
 
 			final PortVisitEventImpl<T> visit = new PortVisitEventImpl<T>();
 			visit.setName("visit");
@@ -192,7 +187,6 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 	}
 
 	public void init() {
-		// TODO Auto-generated method stub
 
 		// Verify that everything is in place
 		if (portProvider == null) {
