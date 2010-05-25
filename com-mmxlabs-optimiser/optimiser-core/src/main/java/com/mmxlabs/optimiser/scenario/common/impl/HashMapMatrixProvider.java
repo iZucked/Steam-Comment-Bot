@@ -23,9 +23,16 @@ public final class HashMapMatrixProvider<T, U> implements
 
 	private final String name;
 
+	private U defaultValue;
+
 	public HashMapMatrixProvider(final String name) {
+		this(name, null);
+	}
+
+	public HashMapMatrixProvider(final String name, final U defaultValue) {
 		this.name = name;
 		this.matrix = new HashMap<T, HashMap<T, U>>();
+		this.defaultValue = defaultValue;
 	}
 
 	@Override
@@ -38,8 +45,7 @@ public final class HashMapMatrixProvider<T, U> implements
 			}
 		}
 
-		// TODO: null or exception?
-		return null;
+		return defaultValue;
 	}
 
 	public void set(final T x, final T y, final U v) {
@@ -61,5 +67,13 @@ public final class HashMapMatrixProvider<T, U> implements
 	@Override
 	public void dispose() {
 		matrix.clear();
+	}
+
+	public void setDefaultValue(U defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
+	public U getDefaultValue() {
+		return defaultValue;
 	}
 }
