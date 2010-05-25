@@ -82,4 +82,9 @@ public final class SortingFitnessCore<T> implements IFitnessCore<T> {
 		}
 		return fitness;
 	}
+	
+	@Override
+	public void dispose() {
+		
+	}
 }

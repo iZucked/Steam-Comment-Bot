@@ -66,4 +66,9 @@ public interface IFitnessCore<T> {
 	void accepted(ISequences<T> sequences,
 			Collection<IResource> affectedResources);
 
+	/**
+	 * Clean up resources once the {@link IFitnessCore} is no longer required.
+	 */
+	void dispose();
+
 }
