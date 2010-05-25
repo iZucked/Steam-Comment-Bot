@@ -24,10 +24,12 @@ import com.mmxlabs.scheduler.optmiser.components.ICargo;
 import com.mmxlabs.scheduler.optmiser.components.IPort;
 import com.mmxlabs.scheduler.optmiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optmiser.components.IVessel;
+import com.mmxlabs.scheduler.optmiser.components.IXYPort;
 import com.mmxlabs.scheduler.optmiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optmiser.components.impl.Port;
 import com.mmxlabs.scheduler.optmiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optmiser.components.impl.Vessel;
+import com.mmxlabs.scheduler.optmiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optmiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optmiser.providers.ISequenceElementProviderEditor;
 import com.mmxlabs.scheduler.optmiser.providers.IVesselProviderEditor;
@@ -37,6 +39,10 @@ import com.mmxlabs.scheduler.optmiser.providers.impl.HashMapVesselEditor;
 
 public class SchedulerBuilder implements ISchedulerBuilder {
 
+	
+	XYPortEuclideanDistanceProvider distanceProvider = new XYPortEuclideanDistanceProvider();
+	
+	
 	private final List<IResource> resources = new ArrayList<IResource>();
 
 	private final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>();
@@ -73,7 +79,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);
 		portDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
-				SchedulerConstants.DCP_portDistanceProvider);
+				SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE);
 		elementDurationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
 				SchedulerConstants.DCP_elementDurationsProvider);
 	}
@@ -128,6 +134,19 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 		final Port port = new Port();
 		port.setName(name);
+
+		ports.add(port);
+
+		return port;
+	}
+
+	@Override
+	public IXYPort createPort(final String name, float x, float y) {
+
+		final XYPort port = new XYPort();
+		port.setName(name);
+		port.setX(x);
+		port.setY(y);
 
 		ports.add(port);
 
@@ -197,12 +216,29 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_elementDurationsProvider,
 				elementDurationsProvider);
 
+		
+		if (true) {
+			for (IPort from : ports) {
+				if (!(from instanceof IXYPort)) {
+					continue;
+				}
+				for (IPort to : ports) {
+					if (to instanceof IXYPort) {
+						double dist = distanceProvider.getDistance((IXYPort)from, (IXYPort)to);
+						int iDist = (int)dist;
+						portDistanceProvider.set(from, to, iDist);
+					}
+				}
+			}
+		}
+		
 		return data;
 	}
 
 	@Override
 	public void dispose() {
-		//  TODO: Make sure we haven't passed any of these by ref into the IOptData object
+		// TODO: Make sure we haven't passed any of these by ref into the
+		// IOptData object
 		// Passed into IOptData - resources.clear();
 		// Passed into IOptData - sequenceElements.clear();
 		vessels.clear();
