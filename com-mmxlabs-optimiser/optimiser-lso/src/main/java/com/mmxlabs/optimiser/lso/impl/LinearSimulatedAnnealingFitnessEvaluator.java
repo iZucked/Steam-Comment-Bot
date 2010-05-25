@@ -104,8 +104,13 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 			final Collection<IResource> affectedResources) {
 
 		// Evaluates the current sequences
-		fitnessHelper.evaluateSequencesFromComponents(sequences,
-				fitnessComponents, affectedResources);
+		if (affectedResources == null) {
+			fitnessHelper.evaluateSequencesFromComponents(sequences,
+					fitnessComponents);
+		} else {
+			fitnessHelper.evaluateSequencesFromComponents(sequences,
+					fitnessComponents, affectedResources);
+		}
 
 		// Sum up total fitness, combining raw values with weights
 		double totalFitness = 0.0;
