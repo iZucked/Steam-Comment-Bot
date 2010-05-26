@@ -65,10 +65,34 @@ public interface ISchedulerBuilder {
 	ICargo createCargo(IPort loadPort, ITimeWindow loadWindow,
 			IPort dischargePort, ITimeWindow dischargeWindow);
 
+	/**
+	 * Create a time window with the specified start and end time.
+	 * 
+	 * @param start
+	 *            Time window start
+	 * @param end
+	 *            Time window end
+	 * @return
+	 */
 	ITimeWindow createTimeWindow(int start, int end);
 
+	/**
+	 * Specify a one-way distance between two ports
+	 * 
+	 * @param from
+	 * @param to
+	 * @param distance
+	 */
 	void setPortToPortDistance(IPort from, IPort to, int distance);
 
+	/**
+	 * Specify an amount of time a given {@link IResource} must incur if
+	 * assigned to the given {@link ISequenceElement}.
+	 * 
+	 * @param element
+	 * @param resource
+	 * @param duration
+	 */
 	void setElementDurations(ISequenceElement element, IResource resource,
 			int duration);
 

@@ -2,7 +2,13 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
-public class Port implements IPort {
+/**
+ * Default implementation of {@link IPort}
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class Port implements IPort {
 
 	private String name;
 

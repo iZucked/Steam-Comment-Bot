@@ -17,7 +17,18 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 
-public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
+/**
+ * {@link IFitnessCore} which schedules {@link ISequences} objects using an
+ * {@link ISequenceScheduler}. Various {@link IFitnessComponent}s implementing
+ * {@link ICargoSchedulerFitnessComponent} calculate fitnesses on the scheduled
+ * {@link ISequences}.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type
+ */
+public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	private final List<ICargoSchedulerFitnessComponent<T>> components;
 
@@ -26,6 +37,9 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	private ISequenceScheduler<T> scheduler;
 
 	public CargoSchedulerFitnessCore() {
+
+		// Create the fitness components
+
 		components = new ArrayList<ICargoSchedulerFitnessComponent<T>>(2);
 		components
 				.add(new DistanceComponent<T>(
@@ -41,6 +55,7 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	public void accepted(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
 
+		// Notify fitness components last state was accepted.
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.accepted(sequences, affectedResources);
 		}
@@ -49,16 +64,21 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void evaluate(final ISequences<T> sequences) {
 
+		// Notify fitness components a new full evaluation is about to begin
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.prepare();
 		}
 
+		// For each ISequence, run the scheduler
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			scheduler.schedule(resource, sequence);
+			// Notify fitness components that the given ISequence has been
+			// scheduled and is ready to be evaluated.
 			evaluateSequence(resource, sequence, scheduler, false);
 		}
-		
+
+		// Notify fitness components that all sequences have been scheduled
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.complete();
 		}
@@ -68,6 +88,7 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	public void evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
 
+		// Re-schedule changed sequences
 		for (final IResource resource : affectedResources) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			scheduler.schedule(resource, sequence);
@@ -86,7 +107,8 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		this.data = data;
 
 		scheduler = createSequenceScheduler();
-		
+
+		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.init(data);
 		}
@@ -102,7 +124,13 @@ public class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		}
 	}
 
-	ISequenceScheduler<T> createSequenceScheduler() {
+	/**
+	 * Create a new {@link ISequenceScheduler} instance.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private ISequenceScheduler<T> createSequenceScheduler() {
 		final SimpleSequenceScheduler<T> scheduler = new SimpleSequenceScheduler<T>();
 
 		scheduler.setDistanceProvider(data.getDataComponentProvider(

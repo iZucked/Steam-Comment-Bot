@@ -121,14 +121,11 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 		// Copy across proposed values into accepted values
 		newFitness = oldFitness;
 
-		
-		for (Map.Entry<IResource, Long> entry : oldFitnessByResource.entrySet()) {
-			IResource key = entry.getKey();
+		for (final Map.Entry<IResource, Long> entry : oldFitnessByResource.entrySet()) {
+			final IResource key = entry.getKey();
 			newFitnessByResource.put(key, oldFitnessByResource.get(key));
 		}
 	}
-
-
 	
 	@Override
 	public void dispose() {

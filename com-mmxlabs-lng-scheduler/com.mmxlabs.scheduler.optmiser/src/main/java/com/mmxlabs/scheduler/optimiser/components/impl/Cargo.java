@@ -4,7 +4,13 @@ import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
-public class Cargo implements ICargo {
+/**
+ * Default implementation of {@link ICargo}.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class Cargo implements ICargo {
 
 	private IPort loadPort;
 
@@ -60,5 +66,4 @@ public class Cargo implements ICargo {
 	public String getId() {
 		return id;
 	}
-
 }

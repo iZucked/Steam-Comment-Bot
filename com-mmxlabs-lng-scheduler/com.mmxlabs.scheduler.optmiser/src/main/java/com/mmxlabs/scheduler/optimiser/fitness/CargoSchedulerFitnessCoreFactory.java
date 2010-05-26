@@ -6,7 +6,14 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
 
-public class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFactory {
+/**
+ * {@link IFitnessCoreFactory} to create the cargo scheduler fitness function
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class CargoSchedulerFitnessCoreFactory implements
+		IFitnessCoreFactory {
 
 	public static final String FITNESS_CORE_NAME = "CargoSchedulerCore";
 
@@ -16,7 +23,8 @@ public class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFactory {
 
 	@Override
 	public Collection<String> getFitnessComponentNames() {
-		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME, LATENESS_COMPONENT_NAME);
+		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME,
+				LATENESS_COMPONENT_NAME);
 	}
 
 	@Override
@@ -28,5 +36,4 @@ public class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFactory {
 	public <T> IFitnessCore<T> instantiate() {
 		return new CargoSchedulerFitnessCore<T>();
 	}
-
 }

@@ -6,7 +6,16 @@ import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
-public class DistanceComponent<T> extends
+/**
+ * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
+ * based on total distance travelled.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type
+ */
+public final class DistanceComponent<T> extends
 		AbstractCargoSchedulerFitnessComponent<T> implements
 		IFitnessComponent<T> {
 
@@ -20,11 +29,12 @@ public class DistanceComponent<T> extends
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluateSequence(final IResource resource,
 			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler,
 			final boolean newSequence) {
-
+		// Calculate sum distance travelled.
 		long distance = 0;
 
 		for (final T element : sequence) {
@@ -32,6 +42,7 @@ public class DistanceComponent<T> extends
 			final IJourneyEvent<T> e = scheduler.getAdditionalInformation(
 					element, SchedulerConstants.AI_journeyInfo,
 					IJourneyEvent.class);
+
 			if (e != null) {
 				distance += e.getDistance();
 			}

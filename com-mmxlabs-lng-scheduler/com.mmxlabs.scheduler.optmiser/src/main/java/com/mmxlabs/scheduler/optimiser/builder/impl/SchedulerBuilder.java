@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -37,12 +38,16 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSequenceElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
+/**
+ * Implementation of {@link ISchedulerBuilder}
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class SchedulerBuilder implements ISchedulerBuilder {
 
-	
-	XYPortEuclideanDistanceProvider distanceProvider = new XYPortEuclideanDistanceProvider();
-	
-	
+	private final IXYPortDistanceProvider distanceProvider = new XYPortEuclideanDistanceProvider();
+
 	private final List<IResource> resources = new ArrayList<IResource>();
 
 	private final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>();
@@ -216,7 +221,6 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_elementDurationsProvider,
 				elementDurationsProvider);
 
-		
 		if (true) {
 			for (IPort from : ports) {
 				if (!(from instanceof IXYPort)) {
@@ -224,19 +228,21 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				}
 				for (IPort to : ports) {
 					if (to instanceof IXYPort) {
-						double dist = distanceProvider.getDistance((IXYPort)from, (IXYPort)to);
-						int iDist = (int)dist;
+						double dist = distanceProvider.getDistance(
+								(IXYPort) from, (IXYPort) to);
+						int iDist = (int) dist;
 						portDistanceProvider.set(from, to, iDist);
 					}
 				}
 			}
 		}
-		
+
 		return data;
 	}
 
 	@Override
 	public void dispose() {
+
 		// TODO: Make sure we haven't passed any of these by ref into the
 		// IOptData object
 		// Passed into IOptData - resources.clear();
@@ -244,6 +250,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		vessels.clear();
 		cargoes.clear();
 		ports.clear();
+
 		// TODO: Null provider refs
 	}
 }

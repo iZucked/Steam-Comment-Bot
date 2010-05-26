@@ -10,7 +10,17 @@ import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
-public class LatenessComponent<T> extends
+/**
+ * 
+ * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
+ * based on lateness.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type
+ */
+public final class LatenessComponent<T> extends
 		AbstractCargoSchedulerFitnessComponent<T> implements
 		IFitnessComponent<T> {
 
@@ -21,6 +31,7 @@ public class LatenessComponent<T> extends
 		super(name, core);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluateSequence(final IResource resource,
 			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler,
@@ -39,6 +50,8 @@ public class LatenessComponent<T> extends
 				final List<ITimeWindow> tws = timeWindowProvider
 						.getTimeWindows(element);
 				for (final ITimeWindow tw : tws) {
+					// If we have arrived after our end window, then add the difference.
+					// TODO: Should the end be inclusive or exclusive?
 					if (arrival > tw.getEnd()) {
 						lateness += arrival - tw.getEnd();
 					}
