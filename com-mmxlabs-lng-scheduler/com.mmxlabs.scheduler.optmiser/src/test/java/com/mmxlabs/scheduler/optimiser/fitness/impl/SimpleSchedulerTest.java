@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IOptimisationContext;
-import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.components.ITimeWindow;
@@ -21,12 +20,15 @@ import com.mmxlabs.optimiser.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.fitness.impl.FitnessComponentInstantiator;
 import com.mmxlabs.optimiser.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.impl.OptimisationContext;
+import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
@@ -78,7 +80,7 @@ public class SimpleSchedulerTest {
 		final ITimeWindow tw4 = builder.createTimeWindow(20, 21);
 		final ITimeWindow tw5 = builder.createTimeWindow(25, 26);
 		final ITimeWindow tw6 = builder.createTimeWindow(30, 31);
-		
+
 		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
 		final ITimeWindow tw8 = builder.createTimeWindow(40, 41);
 		final ITimeWindow tw9 = builder.createTimeWindow(45, 46);
@@ -90,7 +92,6 @@ public class SimpleSchedulerTest {
 
 		builder.createCargo(port1, tw4, port6, tw6);
 
-		
 		builder.createCargo(port3, tw5, port4, tw6);
 		builder.createCargo(port3, tw7, port4, tw8);
 		builder.createCargo(port5, tw9, port6, tw10);
@@ -134,47 +135,69 @@ public class SimpleSchedulerTest {
 
 	@Test
 	public void testLSO() {
+
+		final long seed = 1;
+
 		// Build opt data
 		final IOptimisationData<ISequenceElement> data = createProblem();
 		// Generate initial state
 		final ISequences<ISequenceElement> initialSequences = createInitialSequences(
-				data, 1);
+				data, seed);
 
+		final IFitnessFunctionRegistry fitnessRegistry = createFitnessRegistry();
+		final IConstraintCheckerRegistry constraintRegistry = createConstraintRegistry();
+
+		final OptimisationContext<ISequenceElement> context = new OptimisationContext<ISequenceElement>(
+				data, initialSequences, new ArrayList<String>(fitnessRegistry
+						.getFitnessComponentNames()), fitnessRegistry,
+				new ArrayList<String>(constraintRegistry
+						.getConstraintCheckerNames()), constraintRegistry);
+
+		final ILocalSearchOptimiser<ISequenceElement> optimiser = buildLSOptimiser(
+				1000, 50.0, seed, context);
+
+		final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
+				.getFitnessEvaluator();
+
+		final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
+
+		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
+		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences());
+		
+		System.out.println("Initial fitness "
+				+ linearFitnessEvaluator.getBestFitness());
+		
+		optimiser.optimise(context);
+		
+		System.out.println("Final fitness "
+				+ linearFitnessEvaluator.getBestFitness());
+
+		// TODO: How to verify result?
+	}
+
+	private IConstraintCheckerRegistry createConstraintRegistry() {
+		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
+		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(
+				SchedulerConstants.DCP_orderedElementsProvider);
+		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
+		return constraintRegistry;
+	}
+
+	private FitnessFunctionRegistry createFitnessRegistry() {
 		final FitnessFunctionRegistry fitnessRegistry = new FitnessFunctionRegistry();
 
 		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
 
 		fitnessRegistry.registerFitnessCoreFactory(factory);
-
-		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
-		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(
-				SchedulerConstants.DCP_orderedElementsProvider);
-		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
-
-		final OptimisationContext<ISequenceElement> context = new OptimisationContext<ISequenceElement>(
-				data, initialSequences, new ArrayList<String>(factory
-						.getFitnessComponentNames()), fitnessRegistry,
-				Collections.singletonList(constraintFactory.getName()),
-				constraintRegistry);
-
-		final IOptimiser<ISequenceElement> optimiser = buildOptimiser(1000,
-				50.0, context);
-
-		final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> fitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) ((DefaultLocalSearchOptimiser<ISequenceElement>) optimiser)
-				.getFitnessEvaluator();
-
-		optimiser.optimise(context);
-		System.out
-				.println("Final fitness " + fitnessEvaluator.getBestFitness());
-
-		// TODO: How to verify result?
+		return fitnessRegistry;
 	}
 
-	<T> IOptimiser<T> buildOptimiser(final int numIterations,
-			final double temperature, final IOptimisationContext<T> context) {
+	<T> ILocalSearchOptimiser<T> buildLSOptimiser(final int numIterations,
+			final double temperature, final long seed,
+			final IOptimisationContext<T> context) {
 
 		// Initialise random number generator
-		final Random random = new Random(1);
+		final Random random = new Random(seed);
 
 		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
 		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<T>();
