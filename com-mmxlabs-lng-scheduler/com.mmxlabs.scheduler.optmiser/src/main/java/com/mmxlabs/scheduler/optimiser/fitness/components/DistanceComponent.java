@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.fitness;
+package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
@@ -6,6 +6,9 @@ import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
+import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 
 /**
  * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
@@ -20,7 +23,7 @@ public final class DistanceComponent<T> extends
 		AbstractCargoSchedulerFitnessComponent<T> implements
 		IFitnessComponent<T> {
 
-	protected DistanceComponent(final String name,
+	public DistanceComponent(final String name,
 			final CargoSchedulerFitnessCore<T> core) {
 		super(name, core);
 	}

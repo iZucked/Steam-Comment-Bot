@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.fitness;
+package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,6 +9,9 @@ import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 
 /**
  * Abstract implementation of {@link ICargoSchedulerFitnessComponent}
