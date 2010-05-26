@@ -114,19 +114,19 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 		oldFitnessByResource.clear();
 	}
 
-
 	@Override
 	public void complete() {
 
 		// Copy across proposed values into accepted values
 		newFitness = oldFitness;
 
-		for (final Map.Entry<IResource, Long> entry : oldFitnessByResource.entrySet()) {
+		for (final Map.Entry<IResource, Long> entry : oldFitnessByResource
+				.entrySet()) {
 			final IResource key = entry.getKey();
 			newFitnessByResource.put(key, oldFitnessByResource.get(key));
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
 		oldFitnessByResource.clear();
