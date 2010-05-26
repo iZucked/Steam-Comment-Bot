@@ -1,7 +1,7 @@
-package com.mmxlabs.scheduler.optimiser.fitness.impl;
+package com.mmxlabs.scheduler.optimiser.events.impl;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.fitness.IIdleEvent;
+import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 
 /**
  * Implementation of {@link IIdleEvent}.

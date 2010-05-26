@@ -1,6 +1,6 @@
-package com.mmxlabs.scheduler.optimiser.fitness.impl;
+package com.mmxlabs.scheduler.optimiser.events.impl;
 
-import com.mmxlabs.scheduler.optimiser.fitness.IScheduledEvent;
+import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
 
 /**
  * Abstract implementation of {@link IScheduledEvent} intended for use as a base

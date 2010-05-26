@@ -9,6 +9,7 @@ import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 
 /**
  * 

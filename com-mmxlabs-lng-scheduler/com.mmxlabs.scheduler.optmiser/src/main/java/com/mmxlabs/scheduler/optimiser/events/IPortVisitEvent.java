@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.fitness;
+package com.mmxlabs.scheduler.optimiser.events;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 

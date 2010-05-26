@@ -5,6 +5,7 @@ import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 
 /**
  * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
