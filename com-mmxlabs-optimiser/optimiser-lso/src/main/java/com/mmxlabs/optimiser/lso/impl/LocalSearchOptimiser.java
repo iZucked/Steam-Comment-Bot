@@ -6,13 +6,13 @@ import java.util.List;
 import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IOptimisationContext;
-import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.ISequencesManipulator;
 import com.mmxlabs.optimiser.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 /**
@@ -25,7 +25,8 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
  * @param <T>
  *            Sequence Element Type
  */
-public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
+public abstract class LocalSearchOptimiser<T> implements
+		ILocalSearchOptimiser<T> {
 
 	private IMoveGenerator<T> moveGenerator;
 
@@ -97,7 +98,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 	 * @param destination
 	 * @param affectedResources
 	 */
-	public final void updateSequences(final ISequences<T> source,
+	protected final void updateSequences(final ISequences<T> source,
 			final IModifiableSequences<T> destination,
 			final Collection<IResource> affectedResources) {
 
@@ -120,6 +121,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		this.moveGenerator = moveGenerator;
 	}
 
+	@Override
 	public final IMoveGenerator<T> getMoveGenerator() {
 		return moveGenerator;
 	}
@@ -128,6 +130,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		this.numberOfIterations = numberOfIterations;
 	}
 
+	@Override
 	public final int getNumberOfIterations() {
 		return numberOfIterations;
 	}
@@ -137,6 +140,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		this.constraintCheckers = constraintCheckers;
 	}
 
+	@Override
 	public List<IConstraintChecker<T>> getConstraintCheckers() {
 		return constraintCheckers;
 	}
@@ -145,6 +149,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
+	@Override
 	public IFitnessEvaluator<T> getFitnessEvaluator() {
 		return fitnessEvaluator;
 	}
@@ -154,6 +159,7 @@ public abstract class LocalSearchOptimiser<T> implements IOptimiser<T> {
 		this.sequenceManipulator = sequenceManipulator;
 	}
 
+	@Override
 	public ISequencesManipulator<T> getSequenceManipulator() {
 		return sequenceManipulator;
 	}

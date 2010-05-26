@@ -1,5 +1,6 @@
 package com.mmxlabs.optimiser;
 
+import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 
 /**
  * 
@@ -10,5 +11,18 @@ package com.mmxlabs.optimiser;
  */
 public interface IOptimiser<T> {
 
+	/**
+	 * Perform an optimisation using the given {@link IOptimisationContext}
+	 * 
+	 * @param optimisationContext
+	 */
 	void optimise(IOptimisationContext<T> optimisationContext);
+
+	/**
+	 * Returns the {@link IFitnessEvaluator} instance used within the
+	 * optimisation process.
+	 * 
+	 * @return
+	 */
+	IFitnessEvaluator<T> getFitnessEvaluator();
 }
