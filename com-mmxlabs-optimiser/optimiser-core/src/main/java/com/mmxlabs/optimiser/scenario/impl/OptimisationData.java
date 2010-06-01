@@ -53,6 +53,12 @@ public final class OptimisationData<T> implements IOptimisationData<T> {
 		return sequenceElements;
 	}
 
+	/**
+	 * Set reference to the {@link List} of sequence elements contained in this
+	 * optimisation.
+	 * 
+	 * @param sequenceElements
+	 */
 	public void setSequenceElements(final List<T> sequenceElements) {
 		this.sequenceElements = sequenceElements;
 	}
@@ -62,6 +68,12 @@ public final class OptimisationData<T> implements IOptimisationData<T> {
 		return resources;
 	}
 
+	/**
+	 * Set reference to {@link List} of {@link IResource}s used by this
+	 * optimisation.
+	 * 
+	 * @param resources
+	 */
 	public void setResources(final List<IResource> resources) {
 		this.resources = resources;
 	}
@@ -86,9 +98,7 @@ public final class OptimisationData<T> implements IOptimisationData<T> {
 		}
 		dataComponentProviders.clear();
 
-		// TODO: Really clear these? API does not make it clear whether or not
-		// we own the lists, or even if they are modifiable
-		resources.clear();
-		sequenceElements.clear();
+		resources = null;
+		sequenceElements = null;
 	}
 }
