@@ -18,12 +18,12 @@ public class FitnessFunctionRegistryTest {
 
 		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
 
-		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory("factory1",
-				CollectionsUtil.makeArrayList("component1"));
-		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory("factory2",
-				CollectionsUtil.makeArrayList("component2"));
-		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory("factory3",
-				CollectionsUtil.makeArrayList("component3"));
+		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component1"));
+		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory(
+				"factory2", CollectionsUtil.makeArrayList("component2"));
+		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory(
+				"factory3", CollectionsUtil.makeArrayList("component3"));
 
 		registry.registerFitnessCoreFactory(factory1);
 		registry.registerFitnessCoreFactory(factory2);
@@ -44,12 +44,12 @@ public class FitnessFunctionRegistryTest {
 
 		final FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 
-		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory("factory1",
-				CollectionsUtil.makeArrayList("component1"));
-		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory("factory2",
-				CollectionsUtil.makeArrayList("component2"));
-		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory("factory3",
-				CollectionsUtil.makeArrayList("component3"));
+		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component1"));
+		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory(
+				"factory2", CollectionsUtil.makeArrayList("component2"));
+		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory(
+				"factory3", CollectionsUtil.makeArrayList("component3"));
 
 		registery.registerFitnessCoreFactory(factory1);
 		registery.registerFitnessCoreFactory(factory2);
@@ -71,12 +71,12 @@ public class FitnessFunctionRegistryTest {
 
 		final FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 
-		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory("factory1",
-				CollectionsUtil.makeArrayList("component1"));
-		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory("factory2",
-				CollectionsUtil.makeArrayList("component2"));
-		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory("factory3",
-				CollectionsUtil.makeArrayList("component3"));
+		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component1"));
+		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory(
+				"factory2", CollectionsUtil.makeArrayList("component2"));
+		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory(
+				"factory3", CollectionsUtil.makeArrayList("component3"));
 
 		registery.registerFitnessCoreFactory(factory1);
 		registery.registerFitnessCoreFactory(factory2);
@@ -97,12 +97,12 @@ public class FitnessFunctionRegistryTest {
 
 		final FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
 
-		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory("factory1",
-				CollectionsUtil.makeArrayList("component1"));
-		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory("factory2",
-				CollectionsUtil.makeArrayList("component2"));
-		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory("factory3",
-				CollectionsUtil.makeArrayList("component3"));
+		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component1"));
+		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory(
+				"factory2", CollectionsUtil.makeArrayList("component2"));
+		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory(
+				"factory3", CollectionsUtil.makeArrayList("component3"));
 
 		registery.registerFitnessCoreFactory(factory1);
 		registery.registerFitnessCoreFactory(factory2);
@@ -157,6 +157,28 @@ public class FitnessFunctionRegistryTest {
 	@Test
 	public void testSetFitnessCoreFactories() {
 
-		Assert.fail("Not yet implemented");
+		final FitnessFunctionRegistry registery = new FitnessFunctionRegistry();
+
+		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component1"));
+		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory(
+				"factory2", CollectionsUtil.makeArrayList("component2"));
+		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory(
+				"factory3", CollectionsUtil.makeArrayList("component3"));
+
+		final List<IFitnessCoreFactory> factoryList = CollectionsUtil.makeArrayList(
+				factory2, factory3);
+
+		registery.registerFitnessCoreFactory(factory1);
+		registery.setFitnessCoreFactories(factoryList);
+
+		final Collection<IFitnessCoreFactory> fitnessFunctionFactories = registery
+				.getFitnessCoreFactories();
+
+		Assert.assertEquals(3, fitnessFunctionFactories.size());
+
+		Assert.assertTrue(fitnessFunctionFactories.contains(factory1));
+		Assert.assertTrue(fitnessFunctionFactories.contains(factory2));
+		Assert.assertTrue(fitnessFunctionFactories.contains(factory3));
 	}
 }
