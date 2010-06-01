@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optmiser.builder;
+package com.mmxlabs.scheduler.optimiser.builder;
 
 import static org.junit.Assert.*;
 
