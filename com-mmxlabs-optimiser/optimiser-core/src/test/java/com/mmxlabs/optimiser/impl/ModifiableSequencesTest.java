@@ -305,8 +305,8 @@ public class ModifiableSequencesTest {
 
 		Assert.assertEquals(2, sequences.size());
 
-		Assert.assertSame(sequence1, sequences.getSequence(resource1));
-		Assert.assertSame(sequence2, sequences.getSequence(resource2));
+		Assert.assertSame(sequence1, sequences.getModifiableSequence(resource1));
+		Assert.assertSame(sequence2, sequences.getModifiableSequence(resource2));
 
 	}
 
@@ -335,7 +335,7 @@ public class ModifiableSequencesTest {
 
 		Assert.assertEquals(2, sequences.size());
 
-		Assert.assertSame(sequence1, sequences.getSequence(0));
-		Assert.assertSame(sequence2, sequences.getSequence(1));
+		Assert.assertSame(sequence1, sequences.getModifiableSequence(0));
+		Assert.assertSame(sequence2, sequences.getModifiableSequence(1));
 	}
 }
