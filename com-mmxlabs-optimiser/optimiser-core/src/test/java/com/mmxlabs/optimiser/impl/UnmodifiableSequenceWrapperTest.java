@@ -94,7 +94,7 @@ public class UnmodifiableSequenceWrapperTest {
 				return target;
 			}
 		};
-		
+
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
 				sequence);
 
@@ -111,7 +111,6 @@ public class UnmodifiableSequenceWrapperTest {
 
 	}
 
-	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testIterator3() {
@@ -143,7 +142,7 @@ public class UnmodifiableSequenceWrapperTest {
 				return target;
 			}
 		};
-		
+
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
 				sequence);
 
@@ -159,9 +158,9 @@ public class UnmodifiableSequenceWrapperTest {
 		context.assertIsSatisfied();
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	@Test(expected=UnsupportedOperationException.class)
+	@Test(expected = UnsupportedOperationException.class)
 	public void testIterator4() {
 
 		final Iterator target = context.mock(Iterator.class);
@@ -191,7 +190,7 @@ public class UnmodifiableSequenceWrapperTest {
 				return target;
 			}
 		};
-		
+
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
 				sequence);
 
@@ -208,7 +207,6 @@ public class UnmodifiableSequenceWrapperTest {
 
 	}
 
-
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetSegment() {
@@ -218,13 +216,16 @@ public class UnmodifiableSequenceWrapperTest {
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
 				target);
 
+		final int start = 10;
+		final int end = 15;
+
 		context.checking(new Expectations() {
 			{
-				oneOf(target).size();
+				oneOf(target).getSegment(start, end);
 			}
 		});
 
-		wrapped.size();
+		wrapped.getSegment(start, end);
 
 		context.assertIsSatisfied();
 	}
