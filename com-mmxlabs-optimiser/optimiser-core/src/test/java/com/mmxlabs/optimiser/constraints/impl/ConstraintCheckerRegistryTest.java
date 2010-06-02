@@ -13,6 +13,42 @@ import com.mmxlabs.optimiser.constraints.IConstraintCheckerFactory;
 public class ConstraintCheckerRegistryTest {
 
 	@Test
+	public void testRegisterConstraintCheckerFactory() {
+
+		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
+				"factory1");
+
+		Assert.assertFalse(registry.getConstraintCheckerNames().contains(
+				"factory1"));
+
+		registry.registerConstraintCheckerFactory(factory1);
+
+		Assert.assertTrue(registry.getConstraintCheckerNames().contains(
+				"factory1"));
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testRegisterConstraintCheckerFactory2() {
+
+		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
+				"factory1");
+		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory(
+				"factory1");
+
+		Assert.assertFalse(registry.getConstraintCheckerNames().contains(
+				"factory1"));
+
+		registry.registerConstraintCheckerFactory(factory1);
+
+		Assert.assertTrue(registry.getConstraintCheckerNames().contains(
+				"factory1"));
+
+		registry.registerConstraintCheckerFactory(factory2);
+	}
+
+	@Test
 	public void testGetFitnessFunctionFactories() {
 
 		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
