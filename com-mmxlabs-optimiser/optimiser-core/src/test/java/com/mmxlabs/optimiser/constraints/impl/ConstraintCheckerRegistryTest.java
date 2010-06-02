@@ -8,9 +8,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.constraints.IConstraintCheckerFactory;
-import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
 
 public class ConstraintCheckerRegistryTest {
 
@@ -119,33 +117,6 @@ public class ConstraintCheckerRegistryTest {
 
 		Assert.assertTrue(constraintFactories.contains(factory1));
 		Assert.assertTrue(constraintFactories.contains(factory3));
-	}
-
-	/**
-	 * Mock implementation of an {@link IFitnessCoreFactory} which just return
-	 * the core name and a {@link Collection} of component names.
-	 * 
-	 * @author Simon Goodall
-	 * 
-	 */
-	private static class MockConstraintCheckerFactory implements
-			IConstraintCheckerFactory {
-
-		private final String checkerName;
-
-		public MockConstraintCheckerFactory(final String checkerName) {
-			this.checkerName = checkerName;
-		}
-
-		@Override
-		public <T> IConstraintChecker<T> instantiate() {
-			throw new UnsupportedOperationException("Not implemented");
-		}
-
-		@Override
-		public String getName() {
-			return checkerName;
-		}
 	}
 
 	@Test
