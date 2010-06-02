@@ -1,5 +1,7 @@
 package com.mmxlabs.optimiser.impl;
 
+import java.util.Iterator;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -7,8 +9,8 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.optimiser.ISegment;
 import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.impl.UnmodifiableSequenceWrapper;
 
 /**
  * Ensure the {@link UnmodifiableSequenceWrapper} correctly invokes methods on
@@ -63,6 +65,152 @@ public class UnmodifiableSequenceWrapperTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
+	public void testIterator2() {
+
+		final Iterator target = context.mock(Iterator.class);
+
+		final ISequence sequence = new ISequence() {
+
+			@Override
+			public Object get(int index) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public ISegment getSegment(int start, int end) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public int size() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public Iterator iterator() {
+				return target;
+			}
+		};
+		
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
+				sequence);
+
+		Iterator wrappedItr = wrapped.iterator();
+		context.checking(new Expectations() {
+			{
+				oneOf(target).next();
+			}
+		});
+
+		wrappedItr.next();
+
+		context.assertIsSatisfied();
+
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testIterator3() {
+
+		final Iterator target = context.mock(Iterator.class);
+
+		final ISequence sequence = new ISequence() {
+
+			@Override
+			public Object get(int index) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public ISegment getSegment(int start, int end) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public int size() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public Iterator iterator() {
+				return target;
+			}
+		};
+		
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
+				sequence);
+
+		Iterator wrappedItr = wrapped.iterator();
+		context.checking(new Expectations() {
+			{
+				oneOf(target).hasNext();
+			}
+		});
+
+		wrappedItr.hasNext();
+
+		context.assertIsSatisfied();
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test(expected=UnsupportedOperationException.class)
+	public void testIterator4() {
+
+		final Iterator target = context.mock(Iterator.class);
+
+		final ISequence sequence = new ISequence() {
+
+			@Override
+			public Object get(int index) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public ISegment getSegment(int start, int end) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public int size() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public Iterator iterator() {
+				return target;
+			}
+		};
+		
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
+				sequence);
+
+		Iterator wrappedItr = wrapped.iterator();
+		context.checking(new Expectations() {
+			{
+				// Exception should be thrown
+			}
+		});
+
+		wrappedItr.remove();
+
+		context.assertIsSatisfied();
+
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Test
 	public void testGetSegment() {
 
 		final ISequence target = context.mock(ISequence.class);
@@ -80,5 +228,4 @@ public class UnmodifiableSequenceWrapperTest {
 
 		context.assertIsSatisfied();
 	}
-
 }
