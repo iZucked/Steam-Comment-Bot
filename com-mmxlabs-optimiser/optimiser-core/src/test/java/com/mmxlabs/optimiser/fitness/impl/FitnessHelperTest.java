@@ -252,6 +252,76 @@ public class FitnessHelperTest {
 		helper.initFitnessComponents(components, data);
 
 		context.assertIsSatisfied();
-
 	}
+	
+	
+	@Test
+	public void testAcceptFromComponents() {
+
+		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+
+		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
+				"core-1");
+		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
+				"core-2");
+		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
+				"core-3");
+
+		final List<IFitnessComponent<Object>> components = CollectionsUtil
+				.makeArrayList(
+						(IFitnessComponent<Object>) new CoreWrapper<Object>(
+								core1),
+						(IFitnessComponent<Object>) new CoreWrapper<Object>(
+								core2),
+						(IFitnessComponent<Object>) new CoreWrapper<Object>(
+								core3));
+
+		final ISequences sequences = context.mock(ISequences.class);
+		final Collection<IResource> affectedResources = Collections.emptyList();
+		
+		context.checking(new Expectations() {
+			{
+				one(core1).accepted(sequences, affectedResources);
+				one(core2).accepted(sequences, affectedResources);
+				one(core3).accepted(sequences, affectedResources);
+			}
+		});
+
+		helper.acceptFromComponents(components, sequences, affectedResources);
+
+		context.assertIsSatisfied();
+	}
+	
+
+	@Test
+	public void testAcceptFromCores() {
+
+		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+
+		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
+				"core-1");
+		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
+				"core-2");
+		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
+				"core-3");
+
+		final List<IFitnessCore<Object>> cores = CollectionsUtil
+				.makeArrayList(core1, core2, core3);
+
+		final ISequences sequences = context.mock(ISequences.class);
+		final Collection<IResource> affectedResources = Collections.emptyList();
+		
+		context.checking(new Expectations() {
+			{
+				one(core1).accepted(sequences, affectedResources);
+				one(core2).accepted(sequences, affectedResources);
+				one(core3).accepted(sequences, affectedResources);
+			}
+		});
+
+		helper.acceptFromCores(cores, sequences, affectedResources);
+
+		context.assertIsSatisfied();
+	}
+
 }
