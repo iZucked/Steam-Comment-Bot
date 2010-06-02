@@ -6,8 +6,8 @@ import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
 
 /**
- * Mock implementation of an {@link IFitnessCoreFactory} which just return
- * the core name and a {@link Collection} of component names.
+ * Mock implementation of an {@link IFitnessCoreFactory} which just return the
+ * core name and a {@link Collection} of component names.
  * 
  * @author Simon Goodall
  * 
@@ -35,6 +35,6 @@ public final class MockFitnessCoreFactory implements IFitnessCoreFactory {
 
 	@Override
 	public <T> IFitnessCore<T> instantiate() {
-		throw new UnsupportedOperationException("Not implemented");
+		return new MockFitnessCore<T>(componentNames.iterator().next());
 	}
 }
