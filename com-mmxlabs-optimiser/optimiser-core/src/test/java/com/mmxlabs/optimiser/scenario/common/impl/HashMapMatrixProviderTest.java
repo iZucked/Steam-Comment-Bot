@@ -48,8 +48,8 @@ public class HashMapMatrixProviderTest {
 
 		provider.set(x, y, v);
 
-		Assert.assertEquals(v, provider.get(x, y));
-		Assert.assertEquals(d, provider.get(y, x));
+		Assert.assertSame(v, provider.get(x, y));
+		Assert.assertSame(d, provider.get(y, x));
 
 	}
 
@@ -73,8 +73,8 @@ public class HashMapMatrixProviderTest {
 
 		provider.dispose();
 
-		Assert.assertEquals(d, provider.get(x, y));
-		Assert.assertEquals(d, provider.get(x, y));
+		Assert.assertSame(d, provider.get(x, y));
+		Assert.assertSame(d, provider.get(x, y));
 
 	}
 
