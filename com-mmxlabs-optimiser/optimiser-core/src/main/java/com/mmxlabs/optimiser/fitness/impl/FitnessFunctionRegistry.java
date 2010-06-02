@@ -36,8 +36,7 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 		coreFactoriesByCoreName.put(factory.getFitnessCoreName(), factory);
 
 		for (final String componentName : factory.getFitnessComponentNames()) {
-			if (coreFactoriesByComponentName.containsKey(factory
-					.getFitnessCoreName())) {
+			if (coreFactoriesByComponentName.containsKey(componentName)) {
 				throw new RuntimeException(
 						"Fitness component name already registered: "
 								+ componentName);

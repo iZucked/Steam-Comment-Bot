@@ -13,6 +13,76 @@ import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
 public class FitnessFunctionRegistryTest {
 
 	@Test
+	public void testRegisterFitnessFunctionFactory() {
+
+		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
+		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component1"));
+
+		Assert.assertFalse(registry.getFitnessComponentNames().contains(
+				"component1"));
+		Assert.assertFalse(registry.getFitnessCoreFactoryNames().contains(
+				"factory1"));
+
+		registry.registerFitnessCoreFactory(factory1);
+
+		Assert.assertTrue(registry.getFitnessComponentNames().contains(
+				"component1"));
+		Assert.assertTrue(registry.getFitnessCoreFactoryNames().contains(
+				"factory1"));
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testRegisterFitnessFunctionFactory2() {
+
+		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
+		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component1"));
+
+		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component2"));
+
+		Assert.assertFalse(registry.getFitnessComponentNames().contains(
+				"component1"));
+		Assert.assertFalse(registry.getFitnessCoreFactoryNames().contains(
+				"factory1"));
+
+		registry.registerFitnessCoreFactory(factory1);
+
+		Assert.assertTrue(registry.getFitnessComponentNames().contains(
+				"component1"));
+		Assert.assertTrue(registry.getFitnessCoreFactoryNames().contains(
+				"factory1"));
+
+		registry.registerFitnessCoreFactory(factory2);
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testRegisterFitnessFunctionFactory3() {
+
+		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
+		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory(
+				"factory1", CollectionsUtil.makeArrayList("component1"));
+
+		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory(
+				"factory2", CollectionsUtil.makeArrayList("component1"));
+
+		Assert.assertFalse(registry.getFitnessComponentNames().contains(
+				"component1"));
+		Assert.assertFalse(registry.getFitnessCoreFactoryNames().contains(
+				"factory1"));
+
+		registry.registerFitnessCoreFactory(factory1);
+
+		Assert.assertTrue(registry.getFitnessComponentNames().contains(
+				"component1"));
+		Assert.assertTrue(registry.getFitnessCoreFactoryNames().contains(
+				"factory1"));
+
+		registry.registerFitnessCoreFactory(factory2);
+	}
+
+	@Test
 	public void testGetFitnessFunctionFactories() {
 
 		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
@@ -131,8 +201,8 @@ public class FitnessFunctionRegistryTest {
 		final IFitnessCoreFactory factory3 = new MockFitnessCoreFactory(
 				"factory3", CollectionsUtil.makeArrayList("component3"));
 
-		final List<IFitnessCoreFactory> factoryList = CollectionsUtil.makeArrayList(
-				factory2, factory3);
+		final List<IFitnessCoreFactory> factoryList = CollectionsUtil
+				.makeArrayList(factory2, factory3);
 
 		registery.registerFitnessCoreFactory(factory1);
 		registery.setFitnessCoreFactories(factoryList);
