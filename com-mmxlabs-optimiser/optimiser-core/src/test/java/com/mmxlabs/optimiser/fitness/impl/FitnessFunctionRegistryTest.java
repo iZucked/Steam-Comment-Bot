@@ -8,7 +8,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
 
 public class FitnessFunctionRegistryTest {
@@ -118,40 +117,6 @@ public class FitnessFunctionRegistryTest {
 
 		Assert.assertTrue(fitnessFunctionFactories.contains(factory1));
 		Assert.assertTrue(fitnessFunctionFactories.contains(factory3));
-	}
-
-	/**
-	 * Mock implementation of an {@link IFitnessCoreFactory} which just return
-	 * the core name and a {@link Collection} of component names.
-	 * 
-	 * @author Simon Goodall
-	 * 
-	 */
-	private static class MockFitnessCoreFactory implements IFitnessCoreFactory {
-
-		private final String coreName;
-		private final Collection<String> componentNames;
-
-		public MockFitnessCoreFactory(final String coreName,
-				final Collection<String> componentNames) {
-			this.coreName = coreName;
-			this.componentNames = componentNames;
-		}
-
-		@Override
-		public Collection<String> getFitnessComponentNames() {
-			return componentNames;
-		}
-
-		@Override
-		public String getFitnessCoreName() {
-			return coreName;
-		}
-
-		@Override
-		public <T> IFitnessCore<T> instantiate() {
-			throw new UnsupportedOperationException("Not implemented");
-		}
 	}
 
 	@Test
