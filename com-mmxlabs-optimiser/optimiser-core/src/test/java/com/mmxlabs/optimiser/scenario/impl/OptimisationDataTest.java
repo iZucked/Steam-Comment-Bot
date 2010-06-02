@@ -5,12 +5,20 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.scenario.IDataComponentProvider;
 
+@RunWith(JMock.class)
 public class OptimisationDataTest {
+
+	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testGetSetSequenceElements() {
@@ -40,18 +48,8 @@ public class OptimisationDataTest {
 
 		final OptimisationData<Integer> data = new OptimisationData<Integer>();
 
-		final IDataComponentProvider provider = new IDataComponentProvider() {
-
-			@Override
-			public String getName() {
-				return "test";
-			}
-
-			@Override
-			public void dispose() {
-
-			}
-		};
+		final IDataComponentProvider provider = context
+				.mock(IDataComponentProvider.class);
 
 		Assert.assertFalse(data.hasDataComponentProvider("test"));
 
@@ -63,24 +61,57 @@ public class OptimisationDataTest {
 	}
 
 	@Test
+	public void testAddHasGetDataComponentProvider2() {
+
+		final OptimisationData<Integer> data = new OptimisationData<Integer>();
+
+		final IDataComponentProvider provider = context
+				.mock(IDataComponentProvider.class);
+
+		Assert.assertFalse(data.hasDataComponentProvider("test"));
+
+		data.addDataComponentProvider("test", provider);
+
+		Assert.assertTrue(data.hasDataComponentProvider("test"));
+
+		Assert.assertNull(data.getDataComponentProvider("test2",
+				IDataComponentProvider.class));
+	}
+
+	@Test(expected = ClassCastException.class)
+	public void testAddHasGetDataComponentProvider3() {
+
+		final OptimisationData<Integer> data = new OptimisationData<Integer>();
+
+		final IDataComponentProvider provider = context
+				.mock(IDataComponentProvider.class);
+
+		Assert.assertFalse(data.hasDataComponentProvider("test"));
+
+		data.addDataComponentProvider("test", provider);
+
+		Assert.assertTrue(data.hasDataComponentProvider("test"));
+
+		final class A implements IDataComponentProvider {
+			public String getName() {
+				return null;
+			}
+
+			public void dispose() {
+			}
+		}
+		data.getDataComponentProvider("test", A.class);
+	}
+
+	@Test
 	public void testDispose() {
 		final OptimisationData<Integer> data = new OptimisationData<Integer>();
 
 		final List<Integer> elements = new ArrayList<Integer>();
 		final List<IResource> resources = new ArrayList<IResource>();
 
-		final IDataComponentProvider provider = new IDataComponentProvider() {
-
-			@Override
-			public String getName() {
-				return "test";
-			}
-
-			@Override
-			public void dispose() {
-
-			}
-		};
+		final IDataComponentProvider provider = context
+				.mock(IDataComponentProvider.class);
 
 		data.setSequenceElements(elements);
 		data.setResources(resources);
@@ -93,11 +124,19 @@ public class OptimisationDataTest {
 		Assert.assertSame(provider, data.getDataComponentProvider("test",
 				IDataComponentProvider.class));
 
+		context.checking(new Expectations() {
+			{
+				// Expect nothing to happen
+				one(provider).dispose();
+			}
+		});
+
 		data.dispose();
 
 		Assert.assertNull(data.getSequenceElements());
 		Assert.assertNull(data.getResources());
 		Assert.assertFalse(data.hasDataComponentProvider("test"));
 
+		context.assertIsSatisfied();
 	}
 }
