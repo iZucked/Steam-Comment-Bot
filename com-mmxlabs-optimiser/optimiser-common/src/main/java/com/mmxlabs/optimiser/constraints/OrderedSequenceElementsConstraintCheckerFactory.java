@@ -17,7 +17,7 @@ public final class OrderedSequenceElementsConstraintCheckerFactory implements
 	}
 
 	@Override
-	public <T> IConstraintChecker<T> instantiate() {
+	public <T> OrderedSequenceElementsConstraintChecker<T> instantiate() {
 		return new OrderedSequenceElementsConstraintChecker<T>(NAME, key);
 	}
 
