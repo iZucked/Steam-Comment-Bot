@@ -1,34 +1,64 @@
 package com.mmxlabs.optimiser.dcproviders.impl;
 
-import static org.junit.Assert.*;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
+
+import com.mmxlabs.optimiser.components.ITimeWindow;
 
 public class TimeWindowDataComponentProviderTest {
 
 	@Test
 	public void testTimeWindowDataComponentProvider() {
-		fail("Not yet implemented");
+		final String name = "name";
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
+				name);
+		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetTimeWindows() {
-		fail("Not yet implemented");
-	}
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
+				"name");
+		final Object obj1 = new Object();
 
-	@Test
-	public void testSetTimeWindows() {
-		fail("Not yet implemented");
-	}
+		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
+		Assert.assertNotNull(timeWindows);
+		Assert.assertTrue(timeWindows.isEmpty());
 
-	@Test
-	public void testGetName() {
-		fail("Not yet implemented");
+		final List<ITimeWindow> windows = new LinkedList<ITimeWindow>();
+		provider.setTimeWindows(obj1, windows);
+
+		List<ITimeWindow> timeWindows2 = provider.getTimeWindows(obj1);
+		Assert.assertNotNull(timeWindows2);
+		Assert.assertSame(windows, timeWindows2);
 	}
 
 	@Test
 	public void testDispose() {
-		fail("Not yet implemented");
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
+				"name");
+		final Object obj1 = new Object();
+
+		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
+		Assert.assertNotNull(timeWindows);
+		Assert.assertTrue(timeWindows.isEmpty());
+
+		final List<ITimeWindow> windows = new LinkedList<ITimeWindow>();
+		provider.setTimeWindows(obj1, windows);
+
+		List<ITimeWindow> timeWindows2 = provider.getTimeWindows(obj1);
+		Assert.assertNotNull(timeWindows2);
+		Assert.assertSame(windows, timeWindows2);
+
+		provider.dispose();
+
+		final List<ITimeWindow> timeWindows3 = provider.getTimeWindows(obj1);
+		Assert.assertNotNull(timeWindows3);
+		Assert.assertTrue(timeWindows3.isEmpty());
+
 	}
 
 }
