@@ -1,34 +1,73 @@
 package com.mmxlabs.optimiser.dcproviders.impl;
 
-import static org.junit.Assert.*;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class OrderedSequenceElementsDataComponentProviderTest {
 
 	@Test
 	public void testOrderedSequenceElementsDataComponentProvider() {
-		fail("Not yet implemented");
+
+		final String name = "name";
+		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
+				name);
+		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
-	public void testSetElementOrder() {
-		fail("Not yet implemented");
+	public void testElementOrder() {
+
+		final Object obj1 = new Object();
+		final Object obj2 = new Object();
+
+		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
+				"name");
+
+		Assert.assertNull(provider.getNextElement(obj1));
+		Assert.assertNull(provider.getPreviousElement(obj1));
+
+		Assert.assertNull(provider.getNextElement(obj2));
+		Assert.assertNull(provider.getPreviousElement(obj2));
+
+		provider.setElementOrder(obj1, obj2);
+
+		Assert.assertSame(obj2, provider.getNextElement(obj1));
+		Assert.assertNull(provider.getPreviousElement(obj1));
+
+		Assert.assertNull(provider.getNextElement(obj2));
+		Assert.assertSame(obj1, provider.getPreviousElement(obj2));
 	}
 
 	@Test
-	public void testGetNextElement() {
-		fail("Not yet implemented");
-	}
+	public void testDispose() {
 
-	@Test
-	public void testGetPreviousElement() {
-		fail("Not yet implemented");
-	}
+		final Object obj1 = new Object();
+		final Object obj2 = new Object();
 
-	@Test
-	public void testGetName() {
-		fail("Not yet implemented");
-	}
+		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
+				"name");
 
+		Assert.assertNull(provider.getNextElement(obj1));
+		Assert.assertNull(provider.getPreviousElement(obj1));
+
+		Assert.assertNull(provider.getNextElement(obj2));
+		Assert.assertNull(provider.getPreviousElement(obj2));
+
+		provider.setElementOrder(obj1, obj2);
+
+		Assert.assertSame(obj2, provider.getNextElement(obj1));
+		Assert.assertNull(provider.getPreviousElement(obj1));
+
+		Assert.assertNull(provider.getNextElement(obj2));
+		Assert.assertSame(obj1, provider.getPreviousElement(obj2));
+
+		provider.dispose();
+
+		Assert.assertNull(provider.getNextElement(obj1));
+		Assert.assertNull(provider.getPreviousElement(obj1));
+
+		Assert.assertNull(provider.getNextElement(obj2));
+		Assert.assertNull(provider.getPreviousElement(obj2));
+
+	}
 }
