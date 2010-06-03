@@ -59,15 +59,13 @@ public final class UnmodifiableSequencesWrapper<T> implements ISequences<T> {
 		this.wrapped = wrapped;
 		wrappedSequences.clear();
 		final Map<IResource, ISequence<T>> sequences = wrapped.getSequences();
-		if (sequences != null) {
-			for (final Map.Entry<IResource, ISequence<T>> entry : sequences
-					.entrySet()) {
-				final IResource resource = entry.getKey();
-				final ISequence<T> sequence = entry.getValue();
+		for (final Map.Entry<IResource, ISequence<T>> entry : sequences
+				.entrySet()) {
+			final IResource resource = entry.getKey();
+			final ISequence<T> sequence = entry.getValue();
 
-				wrappedSequences.put(resource,
-						new UnmodifiableSequenceWrapper<T>(sequence));
-			}
+			wrappedSequences.put(resource, new UnmodifiableSequenceWrapper<T>(
+					sequence));
 		}
 	}
 
