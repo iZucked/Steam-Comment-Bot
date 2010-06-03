@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class ElementTimeWindowDataComponentProviderTest {
+public class TimeWindowDataComponentProviderTest {
 
 	@Test
-	public void testElementTimeWindowDataComponentProvider() {
+	public void testTimeWindowDataComponentProvider() {
 		fail("Not yet implemented");
 	}
 
@@ -23,6 +23,11 @@ public class ElementTimeWindowDataComponentProviderTest {
 
 	@Test
 	public void testGetName() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testDispose() {
 		fail("Not yet implemented");
 	}
 
