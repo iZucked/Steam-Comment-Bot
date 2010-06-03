@@ -89,12 +89,12 @@ public final class ResourceAllocationConstraintChecker<T> implements
 		return true;
 	}
 
-	public void setResourceAllocationConstraintDataComponentProvider(
+	public void setProvider(
 			final IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider) {
 		this.resourceAllocationConstraintDataComponentProvider = resourceAllocationConstraintDataComponentProvider;
 	}
 
-	public IResourceAllocationConstraintDataComponentProvider getResourceAllocationConstraintDataComponentProvider() {
+	public IResourceAllocationConstraintDataComponentProvider getProvider() {
 		return resourceAllocationConstraintDataComponentProvider;
 	}
 
@@ -104,7 +104,7 @@ public final class ResourceAllocationConstraintChecker<T> implements
 				.getDataComponentProvider(
 						dataProviderKey,
 						IResourceAllocationConstraintDataComponentProvider.class);
-		setResourceAllocationConstraintDataComponentProvider(provider);
+		setProvider(provider);
 	}
 
 	@Override
