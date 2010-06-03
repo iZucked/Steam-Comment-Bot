@@ -24,7 +24,7 @@ public final class ResourceAllocationConstraintCheckerFactory implements
 	}
 
 	@Override
-	public <T> IConstraintChecker<T> instantiate() {
+	public <T> ResourceAllocationConstraintChecker<T> instantiate() {
 		return new ResourceAllocationConstraintChecker<T>(NAME, key);
 	}
 
