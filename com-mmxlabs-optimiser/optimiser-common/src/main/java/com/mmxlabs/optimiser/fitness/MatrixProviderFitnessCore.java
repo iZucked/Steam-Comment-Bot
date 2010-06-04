@@ -156,6 +156,12 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 		return scaleFactor;
 	}
 
+	/**
+	 * Set the fitness scale factor. A full evaluation needs to be performed
+	 * after calling this method.
+	 * 
+	 * @param scaleFactor
+	 */
 	public void setScaleFactor(final double scaleFactor) {
 		this.scaleFactor = scaleFactor;
 	}
@@ -171,7 +177,7 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	public long getNewFitness() {
 		return newFitness;
 	}
-	
+
 	@Override
 	public void dispose() {
 		matrix = null;
