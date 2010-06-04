@@ -101,12 +101,6 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	public void evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
 
-		// TODO: Remove need for this from API
-		if (affectedResources == null) {
-			evaluate(sequences);
-			return;
-		}
-
 		// Reset this value
 		newFitness = oldFitness;
 
