@@ -271,5 +271,4 @@ public class UnmodifiableSequencesWrapperTest {
 				sequences);
 		Assert.assertEquals(2, wrapper.size());
 	}
-
 }
