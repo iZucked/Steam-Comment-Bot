@@ -21,13 +21,13 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @param <T>
  *            Sequence element type
  */
-public class Move4over1<T> implements IMove<T> {
+public final class Move4over1<T> implements IMove<T> {
 
 	private IResource resource;
 
-	private int segment1Start, segment1End;
+	private int segment1Start = -1, segment1End = -1;
 
-	private int segment2Start, segment2End;
+	private int segment2Start = -1, segment2End = -1;
 
 	@Override
 	public void apply(final IModifiableSequences<T> sequences) {
