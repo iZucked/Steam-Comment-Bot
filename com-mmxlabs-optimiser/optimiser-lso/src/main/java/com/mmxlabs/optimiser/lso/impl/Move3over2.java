@@ -27,9 +27,11 @@ public class Move3over2<T> implements IMove<T> {
 
 	private IResource resource2;
 
-	private int resource1Start, resource1End;
+	private int resource1Start = -1;
+	
+	private int resource1End = -1;
 
-	private int resource2Position;
+	private int resource2Position = -1;
 
 	@Override
 	public void apply(final IModifiableSequences<T> sequences) {
