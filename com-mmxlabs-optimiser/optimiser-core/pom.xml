@@ -13,7 +13,6 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -29,7 +28,6 @@
 			<version>${jmock.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>com.mmxlabs.common</groupId>
