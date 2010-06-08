@@ -141,6 +141,7 @@ public class Move4over2Test {
 	public void testValidate() {
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 		final IResource resource2 = context.mock(IResource.class, "resource2");
+		final IResource resource3 = context.mock(IResource.class, "resource3");
 
 		final IModifiableSequence<Integer> sequence1 = new ListModifiableSequence<Integer>(
 				CollectionsUtil.makeArrayList(1, 2, 3, 4, 5));
@@ -182,7 +183,6 @@ public class Move4over2Test {
 		Assert.assertFalse(move.validate(sequences));
 
 		move.setResource2End(resource2End);
-		Assert.assertFalse(move.validate(sequences));
 
 		Assert.assertTrue(move.validate(sequences));
 
@@ -206,12 +206,35 @@ public class Move4over2Test {
 
 		move.setResource2End(100);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource2End(resource1End);
+		move.setResource2End(resource2End);
 
 		move.setResource2Start(100);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource2Start(resource2Start);
 
+		move.setResource1End(-1);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource1End(resource1End);
+
+		move.setResource1Start(-1);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource1Start(resource1Start);
+
+		move.setResource2End(-1);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource2End(resource1End);
+
+		move.setResource2Start(-1);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource2Start(resource2Start);
+
+		move.setResource1(resource3);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource1(resource1);
+		
+		move.setResource2(resource3);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource2(resource2);
 	}
 
 	@Test
