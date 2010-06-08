@@ -13,6 +13,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.IRandomMoveGeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
@@ -84,7 +85,19 @@ public class RandomMoveGeneratorTest {
 
 	@Test
 	public void testGenerateBreakPoint() {
-		fail("Not yet implemented");
+
+		RandomMoveGenerator<Integer> moveGenerator = new RandomMoveGenerator<Integer>();
+		moveGenerator.setRandom(new Random());
+
+		ISequence<Integer> sequence = OptimiserTestUtil.makeSequence(1);
+		
+		// Run it a few times to let rng take its course
+		for (int i = 0; i < 10; ++i) {
+			int bp = moveGenerator.generateBreakPoint(sequence);
+			Assert.assertTrue(bp >= 0);
+			Assert.assertTrue(bp <= sequence.size());
+
+		}
 	}
 
 	@Test
