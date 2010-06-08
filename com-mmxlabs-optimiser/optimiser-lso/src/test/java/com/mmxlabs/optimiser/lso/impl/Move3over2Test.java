@@ -190,13 +190,26 @@ public class Move3over2Test {
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource1End(resource1End);
 
+		move.setResource1End(-1);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource1End(resource1End);
+		
 		move.setResource1Start(100);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource1Start(resource1Start);
+
+		move.setResource1Start(-1);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource1Start(resource1Start);
 
 		move.setResource2Position(100);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource2Position(resource2Start);
+		
+		move.setResource2Position(-1);
+		Assert.assertFalse(move.validate(sequences));
+		move.setResource2Position(resource2Start);
+		
 	}
 
 	@Test
