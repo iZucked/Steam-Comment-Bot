@@ -98,7 +98,7 @@ public abstract class LocalSearchOptimiser<T> implements
 	 * @param destination
 	 * @param affectedResources
 	 */
-	protected final void updateSequences(final ISequences<T> source,
+	protected void updateSequences(final ISequences<T> source,
 			final IModifiableSequences<T> destination,
 			final Collection<IResource> affectedResources) {
 
