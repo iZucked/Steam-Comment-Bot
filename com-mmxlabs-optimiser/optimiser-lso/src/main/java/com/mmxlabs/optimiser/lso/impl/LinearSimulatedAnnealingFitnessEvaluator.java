@@ -134,7 +134,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 			throw new IllegalStateException("No fitness helper set");
 		}
 
-		if (getFitnessComponentWeights() == null) {
+		if (fitnessComponentWeights == null) {
 			throw new IllegalStateException("No fitness component weights set");
 		}
 
