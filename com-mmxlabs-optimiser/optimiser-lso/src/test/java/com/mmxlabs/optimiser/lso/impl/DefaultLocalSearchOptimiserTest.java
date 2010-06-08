@@ -1,7 +1,5 @@
 package com.mmxlabs.optimiser.lso.impl;
 
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -92,15 +90,6 @@ public class DefaultLocalSearchOptimiserTest {
 
 		System.out
 				.println("Final fitness " + fitnessEvaluator.getBestFitness());
-	}
-
-	@Test(expected = IllegalStateException.class)
-	public void testOptimiseInit1() {
-
-		// Test all init failure combinations in several methods.
-		// Code coverage utils should help here
-
-		fail("Not yet implemented");
 	}
 
 }
