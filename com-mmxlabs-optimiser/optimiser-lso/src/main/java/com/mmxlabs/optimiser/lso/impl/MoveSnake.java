@@ -86,6 +86,26 @@ public final class MoveSnake<T> implements IMove<T> {
 	@Override
 	public boolean validate(final ISequences<T> sequences) {
 
+		if (fromResources == null) {
+			return false;
+		}
+		
+		if (toResources == null) {
+			return false;
+		}
+		
+		if (insertionPositions == null) {
+			return false;
+		}
+		
+		if (segmentStarts == null) {
+			return false;
+		}
+		
+		if (segmentEnds == null) {
+			return false;
+		}
+		
 		// Check unique froms
 		Set<IResource> froms = new HashSet<IResource>();
 		for (IResource from : fromResources) {
@@ -108,6 +128,19 @@ public final class MoveSnake<T> implements IMove<T> {
 			if (segmentStarts.get(i) < 0) {
 				return false;
 			}
+
+			if (segmentEnds.get(i) < 0) {
+				return false;
+			}
+			
+			if (insertionPositions.get(i) < 0) {
+				return false;
+			}
+			
+			if (segmentEnds.get(i) < segmentStarts.get(i)) {
+				return false;
+			}
+			
 			if (segmentEnds.get(i) > sequences.getSequence(i).size()) {
 				return false;
 			}
