@@ -92,7 +92,7 @@ public interface IFitnessEvaluator<T> {
 	 * @param sequences
 	 * @return
 	 */
-	boolean checkSequences(ISequences<T> sequences,
+	boolean evaluateSequences(ISequences<T> sequences,
 			Collection<IResource> affectedResources);
 
 	/**

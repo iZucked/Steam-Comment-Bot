@@ -63,18 +63,29 @@ public final class TestUtils {
 
 		LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<T>();
 
-		fitnessEvaluator.setFitnessHelper(fitnessHelper);
-		fitnessEvaluator.setTemperature(temperature);
-		fitnessEvaluator.setNumberOfIterations(numIterations);
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
+		fitnessEvaluator.setFitnessHelper(fitnessHelper);
 
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
 		for (IFitnessComponent<T> component : fitnessComponents) {
 			weightsMap.put(component.getName(), 1.0);
 		}
 
-		fitnessEvaluator.setFitnessComponentWeights(weightsMap);
+		LinearFitnessCombiner combiner = new LinearFitnessCombiner();
+		combiner.setFitnessComponentWeights(weightsMap);
+		
+		fitnessEvaluator.setFitnessCombiner(combiner);
 
+		// Thresholder params
+		int stepSize = 1;
+		int initialThreshold = stepSize * numIterations;
+		
+		StepThresholder thresholder = new StepThresholder();
+		thresholder.setStepSize(stepSize);
+		thresholder.setInitialThreshold(initialThreshold);
+
+		fitnessEvaluator.setThresholder(thresholder);
+		
 		fitnessEvaluator.init();
 
 		return fitnessEvaluator;

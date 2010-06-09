@@ -104,7 +104,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			}
 
 			// Test move and update state if accepted
-			if (fitnessEvaluator.checkSequences(potentialFullSequences, move
+			if (fitnessEvaluator.evaluateSequences(potentialFullSequences, move
 					.getAffectedResources())) {
 
 				// Success update state for new sequences
