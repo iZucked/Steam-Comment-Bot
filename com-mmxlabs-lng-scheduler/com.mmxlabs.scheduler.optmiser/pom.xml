@@ -18,12 +18,16 @@
 
 
   <dependencies>
+
+<!--
     <dependency>
       <groupId>com.mmxlabs.optimiser</groupId>
       <artifactId>optimiser-builder</artifactId>
       <version>1.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
+-->
+
     <dependency>
       <groupId>com.mmxlabs.optimiser</groupId>
       <artifactId>optimiser-common</artifactId>
@@ -41,6 +45,13 @@
       <artifactId>optimiser-lso</artifactId>
       <version>1.0-SNAPSHOT</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mmxlabs.optimiser</groupId>
+      <artifactId>optimiser-lso</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
     </dependency>
     <dependency>
     	<groupId>junit</groupId>

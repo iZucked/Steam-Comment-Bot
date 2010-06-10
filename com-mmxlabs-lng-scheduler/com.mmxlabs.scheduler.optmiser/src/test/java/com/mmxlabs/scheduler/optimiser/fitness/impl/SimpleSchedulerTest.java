@@ -3,36 +3,27 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
 
 import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.components.ITimeWindow;
-import com.mmxlabs.optimiser.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.constraints.impl.ConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.fitness.impl.FitnessComponentInstantiator;
 import com.mmxlabs.optimiser.fitness.impl.FitnessFunctionRegistry;
-import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.impl.OptimisationContext;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.TestUtils;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
@@ -67,8 +58,6 @@ public class SimpleSchedulerTest {
 		final IPort port5 = builder.createPort("port-5", 0, 10);
 		final IPort port6 = builder.createPort("port-6", 5, 10);
 
-		// TODO: Build distance table
-		// builder.setPortToPortDistance(from, to, distance)
 
 		final IVessel vessel1 = builder.createVessel("vessel-1");
 		final IVessel vessel2 = builder.createVessel("vessel-2");
@@ -92,9 +81,11 @@ public class SimpleSchedulerTest {
 
 		builder.createCargo(port1, tw4, port6, tw6);
 
-		builder.createCargo(port3, tw5, port4, tw6);
-		builder.createCargo(port3, tw7, port4, tw8);
-		builder.createCargo(port5, tw9, port6, tw10);
+		builder.createCargo(port3, tw2, port4, tw3);
+		builder.createCargo(port3, tw4, port4, tw5);
+		builder.createCargo(port5, tw6, port6, tw7);
+
+		// TODO: Set port durations
 
 		// ....
 
@@ -153,8 +144,7 @@ public class SimpleSchedulerTest {
 				new ArrayList<String>(constraintRegistry
 						.getConstraintCheckerNames()), constraintRegistry);
 
-		final ILocalSearchOptimiser<ISequenceElement> optimiser = buildLSOptimiser(
-				1000, 50.0, seed, context);
+		final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils.buildOptimiser(context, new Random(seed), 1000, 5); 
 
 		final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
 				.getFitnessEvaluator();
@@ -163,7 +153,9 @@ public class SimpleSchedulerTest {
 
 		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
 		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences());
-		
+	
+		printSequences(context.getInitialSequences());
+	
 		System.out.println("Initial fitness "
 				+ linearFitnessEvaluator.getBestFitness());
 		
@@ -171,6 +163,8 @@ public class SimpleSchedulerTest {
 		
 		System.out.println("Final fitness "
 				+ linearFitnessEvaluator.getBestFitness());
+
+		printSequences(fitnessEvaluator.getBestSequences());
 
 		// TODO: How to verify result?
 	}
@@ -192,60 +186,78 @@ public class SimpleSchedulerTest {
 		return fitnessRegistry;
 	}
 
-	<T> ILocalSearchOptimiser<T> buildLSOptimiser(final int numIterations,
-			final double temperature, final long seed,
-			final IOptimisationContext<T> context) {
+//	<T> ILocalSearchOptimiser<T> buildLSOptimiser(final int numIterations,
+//			final double temperature, final long seed,
+//			final IOptimisationContext<T> context) {
+//
+//		// Initialise random number generator
+//		final Random random = new Random(seed);
+//
+//		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
+//		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<T>();
+//		fitnessEvaluator.setFitnessHelper(fitnessHelper);
+//
+//		fitnessEvaluator.setTemperature(temperature);
+//		fitnessEvaluator.setNumberOfIterations(numIterations);
+//
+//		final FitnessComponentInstantiator fci = new FitnessComponentInstantiator();
+//		final List<IFitnessComponent<T>> fitnessComponents = fci
+//				.instantiateFitnesses(context.getFitnessFunctionRegistry());
+//
+//		fitnessEvaluator.setFitnessComponents(fitnessComponents);
+//
+//		final Map<String, Double> weightsMap = new HashMap<String, Double>();
+//		for (final IFitnessComponent<T> fc : fitnessComponents) {
+//			weightsMap.put(fc.getName(), 1.0);
+//		}
+//		fitnessEvaluator.setFitnessComponentWeights(weightsMap);
+//		fitnessEvaluator.init();
+//
+//		final IMoveGenerator<T> moveGenerator = createMoveGenerator(random);
+//
+//		final LocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
+//
+//		final List<IConstraintChecker<T>> constraintCheckers = Collections
+//				.emptyList();
+//		lso.setConstraintCheckers(constraintCheckers);
+//		lso.setNumberOfIterations(numIterations);
+//		lso.setSequenceManipulator(new NullSequencesManipulator<T>());
+//		lso.setMoveGenerator(moveGenerator);
+//		lso.setFitnessEvaluator(fitnessEvaluator);
+//
+//		lso.init();
+//
+//		return lso;
+//	}
 
-		// Initialise random number generator
-		final Random random = new Random(seed);
+//	private <T> RandomMoveGenerator<T> createMoveGenerator(final Random random) {
+//		final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
+//		moveGenerator.setRandom(random);
+//
+//		// Register RNG move generator units
+//		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
+//		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
+//		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
+//		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
+//
+//		return moveGenerator;
+//	}
 
-		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
-		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<T>();
-		fitnessEvaluator.setFitnessHelper(fitnessHelper);
-
-		fitnessEvaluator.setTemperature(temperature);
-		fitnessEvaluator.setNumberOfIterations(numIterations);
-
-		final FitnessComponentInstantiator fci = new FitnessComponentInstantiator();
-		final List<IFitnessComponent<T>> fitnessComponents = fci
-				.instantiateFitnesses(context.getFitnessFunctionRegistry());
-
-		fitnessEvaluator.setFitnessComponents(fitnessComponents);
-
-		final Map<String, Double> weightsMap = new HashMap<String, Double>();
-		for (final IFitnessComponent<T> fc : fitnessComponents) {
-			weightsMap.put(fc.getName(), 1.0);
+	<T> void printSequences(final Collection<ISequences<T>> sequences) {
+		for (ISequences<T> s : sequences) {
+			printSequences(s);
 		}
-		fitnessEvaluator.setFitnessComponentWeights(weightsMap);
-		fitnessEvaluator.init();
-
-		final IMoveGenerator<T> moveGenerator = createMoveGenerator(random);
-
-		final LocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
-
-		final List<IConstraintChecker<T>> constraintCheckers = Collections
-				.emptyList();
-		lso.setConstraintCheckers(constraintCheckers);
-		lso.setNumberOfIterations(numIterations);
-		lso.setSequenceManipulator(new NullSequencesManipulator<T>());
-		lso.setMoveGenerator(moveGenerator);
-		lso.setFitnessEvaluator(fitnessEvaluator);
-
-		lso.init();
-
-		return lso;
 	}
 
-	private <T> RandomMoveGenerator<T> createMoveGenerator(final Random random) {
-		final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
-		moveGenerator.setRandom(random);
+	<T> void printSequences(final ISequences<T> sequences) {
+		for (ISequence<T> seq : sequences.getSequences().values()) {
+			System.out.print("[");
+			for (T t : seq) {
+				System.out.print(t);
+				System.out.print(",");
+			}
+			System.out.println("]");
+		}
 
-		// Register RNG move generator units
-		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
-
-		return moveGenerator;
 	}
 }
