@@ -4,36 +4,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.Constants;
 import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.distance.DistanceMatrixFitnessCoreFactory;
-import com.mmxlabs.optimiser.fitness.impl.FitnessComponentInstantiator;
+import com.mmxlabs.optimiser.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.fitness.MatrixProviderFitnessCoreFactory;
 import com.mmxlabs.optimiser.fitness.impl.FitnessFunctionRegistry;
-import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.impl.OptimisationContext;
-import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.MoveSnakeGeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
+import com.mmxlabs.optimiser.lso.impl.TestUtils;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.scenario.common.impl.HashMapMatrixProvider;
@@ -158,17 +145,19 @@ public class BasicLSOTest {
 
 		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
 
-		final DistanceMatrixFitnessCoreFactory factory = new DistanceMatrixFitnessCoreFactory();
+		final MatrixProviderFitnessCoreFactory factory = new MatrixProviderFitnessCoreFactory(
+				"Distance", "Distance",
+				Constants.DATA_PROVIDER_KEY_distance_matrix);
 
 		registry.registerFitnessCoreFactory(factory);
 
 		final OptimisationContext<Element> context = new OptimisationContext<Element>(
-				data,
-				new ArrayList<String>(factory.getFitnessComponentNames()),
-				initialSequences, registry);
+				data, initialSequences, new ArrayList<String>(factory
+						.getFitnessComponentNames()), registry,
+				new ArrayList<String>(), new ConstraintCheckerRegistry());
 
-		final IOptimiser<Element> optimiser = buildOptimiser(1000, 50.0,
-				context);
+		final IOptimiser<Element> optimiser = TestUtils.buildOptimiser(context,
+				new Random(1), 1000, 1);
 
 		final LinearSimulatedAnnealingFitnessEvaluator<Element> fitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<Element>) ((DefaultLocalSearchOptimiser<Element>) optimiser)
 				.getFitnessEvaluator();
@@ -178,59 +167,5 @@ public class BasicLSOTest {
 				.println("Final fitness " + fitnessEvaluator.getBestFitness());
 
 		// TODO: How to verify result?
-	}
-
-	<T> IOptimiser<T> buildOptimiser(final int numIterations,
-			final double temperature, final IOptimisationContext<T> context) {
-
-		// Initialise random number generator
-		final Random random = new Random(1);
-
-		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
-		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<T>();
-		fitnessEvaluator.setFitnessHelper(fitnessHelper);
-
-		fitnessEvaluator.setTemperature(temperature);
-		fitnessEvaluator.setNumberOfIterations(numIterations);
-
-		final FitnessComponentInstantiator fci = new FitnessComponentInstantiator();
-		final List<IFitnessComponent<T>> fitnessComponents = fci
-				.instantiateFitnesses(context.getFitnessFunctionRegistry());
-
-		fitnessEvaluator.setFitnessComponents(fitnessComponents);
-
-		final Map<String, Double> weightsMap = CollectionsUtil.makeHashMap(
-				fitnessComponents.iterator().next().getName(), 1.0);
-		fitnessEvaluator.setFitnessComponentWeights(weightsMap);
-		fitnessEvaluator.init();
-
-		final IMoveGenerator<T> moveGenerator = createMoveGenerator(random);
-
-		final LocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
-
-		final List<IConstraintChecker<T>> constraintCheckers = Collections
-				.emptyList();
-		lso.setConstraintCheckers(constraintCheckers);
-		lso.setNumberOfIterations(numIterations);
-		lso.setSequenceManipulator(new NullSequencesManipulator<T>());
-		lso.setMoveGenerator(moveGenerator);
-		lso.setFitnessEvaluator(fitnessEvaluator);
-
-		lso.init();
-
-		return lso;
-	}
-
-	private <T> RandomMoveGenerator<T> createMoveGenerator(final Random random) {
-		final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
-		moveGenerator.setRandom(random);
-
-		// Register RNG move generator units
-		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
-
-		return moveGenerator;
 	}
 }
