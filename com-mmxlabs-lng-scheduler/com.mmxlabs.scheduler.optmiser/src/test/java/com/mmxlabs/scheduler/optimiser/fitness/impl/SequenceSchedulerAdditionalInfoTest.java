@@ -18,13 +18,11 @@ public class SequenceSchedulerAdditionalInfoTest {
 		final SequenceSchedulerAdditionalInfo info = new SequenceSchedulerAdditionalInfo();
 
 		final String key = "key";
-
 		final Class1 object1 = new Class1();
 
 		info.put(key, object1);
 
 		Assert.assertSame(object1, info.get(key, Class1.class));
-
 		Assert.assertNull(info.get("unknown", Class1.class));
 	}
 
@@ -35,6 +33,7 @@ public class SequenceSchedulerAdditionalInfoTest {
 
 		final String key = "key";
 		final Class1 object1 = new Class1();
+
 		info.put(key, object1);
 		info.get(key, Class2.class);
 	}
