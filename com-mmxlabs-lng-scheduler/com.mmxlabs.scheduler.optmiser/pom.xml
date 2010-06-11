@@ -1,63 +1,75 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.mmxlabs.scheduler</groupId>
-  <artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Scheduler - Optimiser</name>
-  <description>	</description>
-  <inceptionYear>2010</inceptionYear>
-  <organization>
-  	<name>Minimax Labs</name>
-  </organization>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mmxlabs.scheduler</groupId>
+	<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Scheduler - Optimiser</name>
+	<description>	</description>
+	<inceptionYear>2010</inceptionYear>
+	<organization>
+		<name>Minimax Labs</name>
+	</organization>
 
-  <parent>
-    <groupId>com.mmxlabs.parent</groupId>
-    <artifactId>mmxlabs-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
+	<parent>
+		<groupId>com.mmxlabs.parent</groupId>
+		<artifactId>mmxlabs-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 
 
-  <dependencies>
+	<dependencies>
 
 <!--
-    <dependency>
-      <groupId>com.mmxlabs.optimiser</groupId>
-      <artifactId>optimiser-builder</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
+		<dependency>
+			<groupId>com.mmxlabs.optimiser</groupId>
+			<artifactId>optimiser-builder</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
 -->
 
-    <dependency>
-      <groupId>com.mmxlabs.optimiser</groupId>
-      <artifactId>optimiser-common</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.mmxlabs.optimiser</groupId>
-      <artifactId>optimiser-core</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.mmxlabs.optimiser</groupId>
-      <artifactId>optimiser-lso</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.mmxlabs.optimiser</groupId>
-      <artifactId>optimiser-lso</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <classifier>tests</classifier>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-    	<groupId>junit</groupId>
-    	<artifactId>junit</artifactId>
-    	<version>${junit.version}</version>
-    	<scope>test</scope>
-    </dependency>
-  </dependencies>
+		<dependency>
+			<groupId>com.mmxlabs.optimiser</groupId>
+			<artifactId>optimiser-common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mmxlabs.optimiser</groupId>
+			<artifactId>optimiser-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mmxlabs.optimiser</groupId>
+			<artifactId>optimiser-lso</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mmxlabs.optimiser</groupId>
+			<artifactId>optimiser-lso</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+                <dependency>
+                        <groupId>org.jmock</groupId>
+                        <artifactId>jmock-junit4</artifactId>
+                        <version>${jmock.version}</version>
+                        <scope>test</scope>
+                </dependency>
+
+	</dependencies>
 </project>
