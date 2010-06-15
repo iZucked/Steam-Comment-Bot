@@ -55,6 +55,13 @@ public final class MoveSnakeGeneratorUnit<T> implements
 		final List<Integer> insertPositions = new ArrayList<Integer>(
 				numChangedResources);
 
+		// Fill in array so set ops don't fail 
+		for (int i = 0; i < numChangedResources; ++i) {
+			startPositions.add(i, -1);
+			endPositions.add(i,-1);
+			insertPositions.add(i, -1);
+		}
+		
 		// Generate outgoing segment
 		final int[] breakPoints = new int[3];
 		for (int i = 0; i < numChangedResources; ++i) {
@@ -63,14 +70,15 @@ public final class MoveSnakeGeneratorUnit<T> implements
 
 			// Randomly pick the insertion point as first or last break point
 			if (random.nextBoolean()) {
-				startPositions.add(i, breakPoints[0]);
-				endPositions.add(i, breakPoints[1]);
-				insertPositions.add((i + 1) % numChangedResources,
+				startPositions.set(i, breakPoints[0]);
+				endPositions.set(i, breakPoints[1]);
+				// TODO: Why was this error not picked up before? -- only two routes?
+				insertPositions.set((i + 1) % numChangedResources,
 						breakPoints[2]);
 			} else {
-				startPositions.add(i, breakPoints[1]);
-				endPositions.add(i, breakPoints[2]);
-				insertPositions.add((i + 1) % numChangedResources,
+				startPositions.set(i, breakPoints[1]);
+				endPositions.set(i, breakPoints[2]);
+				insertPositions.set((i + 1) % numChangedResources,
 						breakPoints[0]);
 			}
 		}
