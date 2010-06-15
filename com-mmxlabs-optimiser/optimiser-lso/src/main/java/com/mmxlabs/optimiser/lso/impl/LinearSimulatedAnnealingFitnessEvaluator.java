@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.scenario.IOptimisationData;
  * {@link IFitnessComponent} values. This implementation only tracks a single
  * best state.
  * 
- * TODO: Split class up into difference parts, the SA rule, combiner etc...
+ * TODO: RENAME Class now it has been refactored
  * 
  * @author Simon Goodall
  * 
