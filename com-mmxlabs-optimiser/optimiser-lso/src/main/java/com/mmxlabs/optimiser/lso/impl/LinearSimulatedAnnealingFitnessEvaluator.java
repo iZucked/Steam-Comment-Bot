@@ -228,7 +228,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	 * 
 	 * @return
 	 */
-	public double getCurrentFitness() {
+	public long getCurrentFitness() {
 		return currentFitness;
 	}
 }
