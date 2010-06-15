@@ -12,11 +12,19 @@ import com.mmxlabs.optimiser.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 
 public class OptimiserTestUtil {
-	public static IModifiableSequence<Integer> makeSequence(
-			final Integer... elements) {
-		final List<Integer> elementsList = CollectionsUtil
-				.makeArrayList(elements);
-		return new ListModifiableSequence<Integer>(elementsList);
+
+	/**
+	 * Create a {@link IModifiableSequence} from an arbitrary list of inputs of
+	 * the same type.
+	 * 
+	 * @param <T>
+	 *            Sequence element type
+	 * @param elements
+	 * @return
+	 */
+	public static <T> IModifiableSequence<T> makeSequence(final T... elements) {
+		final List<T> elementsList = CollectionsUtil.makeArrayList(elements);
+		return new ListModifiableSequence<T>(elementsList);
 	}
 
 	public static IResource makeResource() {
@@ -24,13 +32,22 @@ public class OptimiserTestUtil {
 		};
 	}
 
-	public static IModifiableSequences<Integer> makeSequences(
-			final IResource res, final Integer... elements) {
+	/**
+	 * Create a {@link IModifiableSequences} instance with only a single
+	 * {@link IModifiableSequence}
+	 * 
+	 * @param <T>
+	 * @param res
+	 * @param elements
+	 * @return
+	 */
+	public static <T> IModifiableSequences<T> makeSequences(
+			final IResource res, final T... elements) {
 
-		final Map<IResource, IModifiableSequence<Integer>> map = CollectionsUtil
+		final Map<IResource, IModifiableSequence<T>> map = CollectionsUtil
 				.makeHashMap(res, makeSequence(elements));
 
-		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
+		final IModifiableSequences<T> sequences = new ModifiableSequences<T>(
 				Collections.singletonList(res), map);
 
 		return sequences;
