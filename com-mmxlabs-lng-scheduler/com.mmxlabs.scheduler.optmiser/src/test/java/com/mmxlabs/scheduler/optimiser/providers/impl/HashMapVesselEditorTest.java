@@ -1,7 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-import static org.junit.Assert.fail;
-
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
