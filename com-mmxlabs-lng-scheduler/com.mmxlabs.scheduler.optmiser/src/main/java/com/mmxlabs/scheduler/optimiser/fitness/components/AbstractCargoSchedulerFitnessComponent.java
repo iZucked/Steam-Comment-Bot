@@ -98,7 +98,7 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 	protected void updateFitness(final IResource resource, final long fitness,
 			final boolean newSequence) {
 		if (newSequence) {
-			final long oldValue = oldFitnessByResource.get(resource);
+			final long oldValue = newFitnessByResource.get(resource);
 			newFitness -= oldValue;
 
 			// Save resource fitness
