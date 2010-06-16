@@ -12,7 +12,7 @@ package com.mmxlabs.common;
 public interface ITransformer<T, U> {
 
 	/**
-	 * Transform object to another type.
+	 * Transform object to another type. Returns null if unable to transform.
 	 * 
 	 * @param t
 	 * @return
