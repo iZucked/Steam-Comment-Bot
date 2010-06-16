@@ -4,6 +4,8 @@ import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -56,14 +58,13 @@ public interface ISchedulerBuilder {
 	 * Create a cargo with the specific from and to ports and associated time
 	 * windows.
 	 * 
-	 * @param loadPort
-	 * @param loadWindow
-	 * @param dischargePort
-	 * @param dischargeWindow
+	 * @param id
+	 * @param loadSlot
+	 * @param dischargeSlot
 	 * @return
 	 */
-	ICargo createCargo(IPort loadPort, ITimeWindow loadWindow,
-			IPort dischargePort, ITimeWindow dischargeWindow);
+	ICargo createCargo(String id, ILoadSlot loadSlot,
+			IDischargeSlot dischargeSlot);
 
 	/**
 	 * Create a time window with the specified start and end time.
@@ -102,5 +103,35 @@ public interface ISchedulerBuilder {
 	 * should selectively clean these up.
 	 */
 	void dispose();
+
+	/**
+	 * Create a new {@link ILoadSlot} instance. This is currently expected to be
+	 * assigned to a cargo.
+	 * 
+	 * @param id
+	 * @param port
+	 * @param window
+	 * @param minVolume
+	 * @param maxVolume
+	 * @param price
+	 * @return
+	 */
+	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
+			long minVolume, long maxVolume, long price);
+
+	/**
+	 * Create a new {@link IDischargeSlot} instance. This is currently expected
+	 * to be assigned to a cargo.
+	 * 
+	 * @param id
+	 * @param port
+	 * @param window
+	 * @param minVolume
+	 * @param maxVolume
+	 * @param price
+	 * @return
+	 */
+	IDischargeSlot createDischargeSlot(String id, IPort port,
+			ITimeWindow window, long minVolume, long maxVolume, long price);
 
 }

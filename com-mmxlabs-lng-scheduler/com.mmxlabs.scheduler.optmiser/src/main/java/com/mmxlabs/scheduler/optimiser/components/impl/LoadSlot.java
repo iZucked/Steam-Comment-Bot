@@ -1,8 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
  * Default implementation of {@link ILoadSlot}.
@@ -10,46 +8,13 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * @author Simon Goodall
  * 
  */
-public final class LoadSlot implements ILoadSlot {
-
-	private IPort loadPort;
-
-	private ITimeWindow loadWindow;
-
-	private String loadID;
+public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	private long minLoadVolume;
 
 	private long maxLoadVolume;
 
 	private long purchasePrice;
-
-	@Override
-	public IPort getLoadPort() {
-		return loadPort;
-	}
-
-	public void setLoadPort(final IPort loadPort) {
-		this.loadPort = loadPort;
-	}
-
-	@Override
-	public ITimeWindow getLoadWindow() {
-		return loadWindow;
-	}
-
-	public void setLoadWindow(final ITimeWindow loadWindow) {
-		this.loadWindow = loadWindow;
-	}
-
-	@Override
-	public String getLoadID() {
-		return loadID;
-	}
-
-	public void setLoadID(final String loadID) {
-		this.loadID = loadID;
-	}
 
 	@Override
 	public long getMinLoadVolume() {

@@ -22,20 +22,24 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
+import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ISequenceElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSequenceElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
 /**
@@ -62,7 +66,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IPortProviderEditor portProvider;
 
-	private final ISequenceElementProviderEditor scheduleElementProvider;
+	private final IPortSlotProviderEditor<ISequenceElement> portSlotsProvider;
 
 	private final IOrderedSequenceElementsDataComponentProviderEditor<ISequenceElement> orderedSequenceElementsEditor;
 
@@ -72,64 +76,97 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IElementDurationProviderEditor<ISequenceElement> elementDurationsProvider;
 
+	private List<ILoadSlot> loadSlots = new LinkedList<ILoadSlot>();
+
+	private List<IDischargeSlot> dischargeSlots = new LinkedList<IDischargeSlot>();
+
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
 				SchedulerConstants.DCP_vesselProvider);
 		portProvider = new HashMapPortEditor(
 				SchedulerConstants.DCP_portProvider);
-		scheduleElementProvider = new HashMapSequenceElementProviderEditor(
-				SchedulerConstants.DCP_sequenceElementProvider);
 		orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider<ISequenceElement>(
 				SchedulerConstants.DCP_orderedElementsProvider);
 		timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);
 		portDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
 				SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE);
+		portSlotsProvider = new HashMapPortSlotEditor<ISequenceElement>(
+				SchedulerConstants.DCP_portSlotsProvider);
 		elementDurationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
 				SchedulerConstants.DCP_elementDurationsProvider);
 	}
 
 	@Override
-	public ICargo createCargo(final IPort loadPort,
-			final ITimeWindow loadWindow, final IPort dischargePort,
-			final ITimeWindow dischargeWindow) {
+	public ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
+			long minVolume, long maxVolume, long price) {
+		final LoadSlot slot = new LoadSlot();
+		slot.setId(id);
+		slot.setPort(port);
+		slot.setTimeWindow(window);
+		slot.setMinLoadVolume(minVolume);
+		slot.setMaxLoadVolume(maxVolume);
+		slot.setPurchasePrice(price);
+
+		loadSlots.add(slot);
+
+		final SequenceElement element = new SequenceElement();
+		element.setName(id + "-" + port.getName());
+		element.setPortSlot(slot);
+
+		sequenceElements.add(element);
+
+		// Register the port with the element
+		portProvider.setPortForElement(port, element);
+
+		portSlotsProvider.setPortSlot(element, slot);
+		
+		return slot;
+	}
+
+	@Override
+	public IDischargeSlot createDischargeSlot(String id, IPort port,
+			ITimeWindow window, long minVolume, long maxVolume, long price) {
+		final DischargeSlot slot = new DischargeSlot();
+		slot.setId(id);
+		slot.setPort(port);
+		slot.setTimeWindow(window);
+		slot.setMinDischargeVolume(minVolume);
+		slot.setMaxDischargeVolume(maxVolume);
+		slot.setSalesPrice(price);
+
+		dischargeSlots.add(slot);
+
+		final SequenceElement element = new SequenceElement();
+		element.setPortSlot(slot);
+		element.setName(id + "-" + port.getName());
+
+		sequenceElements.add(element);
+
+		// Register the port with the element
+		portProvider.setPortForElement(port, element);
+
+		portSlotsProvider.setPortSlot(element, slot);
+		
+		return slot;
+	}
+
+	@Override
+	public ICargo createCargo(final String id, ILoadSlot loadSlot,
+			IDischargeSlot dischargeSlot) {
 
 		final Cargo cargo = new Cargo();
-		cargo.setLoadPort(loadPort);
-		cargo.setLoadWindow(loadWindow);
-		cargo.setDischargePort(dischargePort);
-		cargo.setDischargeWindow(dischargeWindow);
+		cargo.setLoadSlot(loadSlot);
+		cargo.setDischargeSlot(dischargeSlot);
 
 		cargoes.add(cargo);
 
-		// Create sequence elements
-		final SequenceElement loadElement = new SequenceElement();
-		loadElement.setPort(loadPort);
-		loadElement.setCargo(cargo);
-		loadElement.setName(cargo.getId() + "-" + loadPort.getName());
-
-		sequenceElements.add(loadElement);
-
-		final SequenceElement dischargeElement = new SequenceElement();
-		dischargeElement.setPort(dischargePort);
-		dischargeElement.setCargo(cargo);
-		dischargeElement.setName(cargo.getId() + "-" + dischargePort.getName());
-
-		sequenceElements.add(dischargeElement);
-
-		// Register sequence element with sequence element provider
-		scheduleElementProvider
-				.setSequenceElement(cargo, loadPort, loadElement);
-		scheduleElementProvider.setSequenceElement(cargo, dischargePort,
-				dischargeElement);
-
+		ISequenceElement loadElement = portSlotsProvider.getElement(loadSlot);
+		ISequenceElement dischargeElement = portSlotsProvider.getElement(dischargeSlot);
+		
 		// Set fixed visit order
 		orderedSequenceElementsEditor.setElementOrder(loadElement,
 				dischargeElement);
-
-		// Register the port with the element
-		portProvider.setPortForElement(loadPort, loadElement);
-		portProvider.setPortForElement(dischargePort, dischargeElement);
 
 		return cargo;
 	}
@@ -205,9 +242,6 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		data.addDataComponentProvider(SchedulerConstants.DCP_vesselProvider,
 				vesselProvider);
 		data.addDataComponentProvider(
-				SchedulerConstants.DCP_sequenceElementProvider,
-				scheduleElementProvider);
-		data.addDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider, timeWindowProvider);
 		data.addDataComponentProvider(
 				SchedulerConstants.DCP_portDistanceProvider,
@@ -217,6 +251,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				orderedSequenceElementsEditor);
 		data.addDataComponentProvider(SchedulerConstants.DCP_portProvider,
 				portProvider);
+		data.addDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider,
+				portSlotsProvider);
 		data.addDataComponentProvider(
 				SchedulerConstants.DCP_elementDurationsProvider,
 				elementDurationsProvider);

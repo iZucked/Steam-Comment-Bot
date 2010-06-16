@@ -24,17 +24,13 @@ import com.mmxlabs.optimiser.impl.OptimisationContext;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.TestUtils;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.MoveSnakeGeneratorUnit;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
 /**
@@ -51,6 +47,8 @@ public class SimpleSchedulerTest {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
+		// Build XY ports so distance is automatically populated`
+		// TODO: Add API to determine which distance provider to use
 		final IPort port1 = builder.createPort("port-1", 0, 0);
 		final IPort port2 = builder.createPort("port-2", 0, 5);
 		final IPort port3 = builder.createPort("port-3", 5, 0);
@@ -58,32 +56,58 @@ public class SimpleSchedulerTest {
 		final IPort port5 = builder.createPort("port-5", 0, 10);
 		final IPort port6 = builder.createPort("port-6", 5, 10);
 
-
-		final IVessel vessel1 = builder.createVessel("vessel-1");
-		final IVessel vessel2 = builder.createVessel("vessel-2");
-		final IVessel vessel3 = builder.createVessel("vessel-3");
+		builder.createVessel("vessel-1");
+		builder.createVessel("vessel-2");
+		builder.createVessel("vessel-3");
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);
+
 		final ITimeWindow tw3 = builder.createTimeWindow(15, 16);
 		final ITimeWindow tw4 = builder.createTimeWindow(20, 21);
+
 		final ITimeWindow tw5 = builder.createTimeWindow(25, 26);
 		final ITimeWindow tw6 = builder.createTimeWindow(30, 31);
 
 		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
-		final ITimeWindow tw8 = builder.createTimeWindow(40, 41);
-		final ITimeWindow tw9 = builder.createTimeWindow(45, 46);
-		final ITimeWindow tw10 = builder.createTimeWindow(50, 51);
 
-		builder.createCargo(port1, tw1, port2, tw2);
-		builder.createCargo(port1, tw3, port2, tw4);
-		builder.createCargo(port1, tw5, port2, tw6);
+		ILoadSlot load1 = builder
+				.createLoadSlot("load1", port1, tw1, 0, 100, 5);
+		ILoadSlot load2 = builder
+				.createLoadSlot("load2", port1, tw3, 0, 100, 5);
+		ILoadSlot load3 = builder
+				.createLoadSlot("load3", port1, tw5, 0, 100, 5);
+		ILoadSlot load4 = builder
+				.createLoadSlot("load4", port1, tw4, 0, 100, 5);
+		ILoadSlot load5 = builder
+				.createLoadSlot("load5", port3, tw2, 0, 100, 5);
+		ILoadSlot load6 = builder
+				.createLoadSlot("load6", port3, tw4, 0, 100, 5);
+		ILoadSlot load7 = builder
+				.createLoadSlot("load7", port5, tw6, 0, 100, 5);
 
-		builder.createCargo(port1, tw4, port6, tw6);
+		IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1",
+				port2, tw2, 0, 100, 6);
+		IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2",
+				port2, tw4, 0, 100, 6);
+		IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3",
+				port2, tw6, 0, 100, 6);
+		IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4",
+				port6, tw6, 0, 100, 6);
+		IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5",
+				port4, tw3, 0, 100, 6);
+		IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6",
+				port4, tw5, 0, 100, 6);
+		IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7",
+				port6, tw7, 0, 100, 6);
 
-		builder.createCargo(port3, tw2, port4, tw3);
-		builder.createCargo(port3, tw4, port4, tw5);
-		builder.createCargo(port5, tw6, port6, tw7);
+		builder.createCargo("cargo1", load1, discharge1);
+		builder.createCargo("cargo2", load2, discharge2);
+		builder.createCargo("cargo3", load3, discharge3);
+		builder.createCargo("cargo4", load4, discharge4);
+		builder.createCargo("cargo5", load5, discharge5);
+		builder.createCargo("cargo6", load6, discharge6);
+		builder.createCargo("cargo7", load7, discharge7);
 
 		// TODO: Set port durations
 
@@ -144,23 +168,26 @@ public class SimpleSchedulerTest {
 				new ArrayList<String>(constraintRegistry
 						.getConstraintCheckerNames()), constraintRegistry);
 
-		final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils.buildOptimiser(context, new Random(seed), 1000, 5); 
+		final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils
+				.buildOptimiser(context, new Random(seed), 1000, 5);
 
 		final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
 				.getFitnessEvaluator();
 
 		final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
 
-		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
-		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences());
-	
+		linearFitnessEvaluator.setOptimisationData(context
+				.getOptimisationData());
+		linearFitnessEvaluator.setInitialSequences(context
+				.getInitialSequences());
+
 		printSequences(context.getInitialSequences());
-	
+
 		System.out.println("Initial fitness "
 				+ linearFitnessEvaluator.getBestFitness());
-		
+
 		optimiser.optimise(context);
-		
+
 		System.out.println("Final fitness "
 				+ linearFitnessEvaluator.getBestFitness());
 
@@ -186,63 +213,6 @@ public class SimpleSchedulerTest {
 		return fitnessRegistry;
 	}
 
-//	<T> ILocalSearchOptimiser<T> buildLSOptimiser(final int numIterations,
-//			final double temperature, final long seed,
-//			final IOptimisationContext<T> context) {
-//
-//		// Initialise random number generator
-//		final Random random = new Random(seed);
-//
-//		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
-//		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<T>();
-//		fitnessEvaluator.setFitnessHelper(fitnessHelper);
-//
-//		fitnessEvaluator.setTemperature(temperature);
-//		fitnessEvaluator.setNumberOfIterations(numIterations);
-//
-//		final FitnessComponentInstantiator fci = new FitnessComponentInstantiator();
-//		final List<IFitnessComponent<T>> fitnessComponents = fci
-//				.instantiateFitnesses(context.getFitnessFunctionRegistry());
-//
-//		fitnessEvaluator.setFitnessComponents(fitnessComponents);
-//
-//		final Map<String, Double> weightsMap = new HashMap<String, Double>();
-//		for (final IFitnessComponent<T> fc : fitnessComponents) {
-//			weightsMap.put(fc.getName(), 1.0);
-//		}
-//		fitnessEvaluator.setFitnessComponentWeights(weightsMap);
-//		fitnessEvaluator.init();
-//
-//		final IMoveGenerator<T> moveGenerator = createMoveGenerator(random);
-//
-//		final LocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
-//
-//		final List<IConstraintChecker<T>> constraintCheckers = Collections
-//				.emptyList();
-//		lso.setConstraintCheckers(constraintCheckers);
-//		lso.setNumberOfIterations(numIterations);
-//		lso.setSequenceManipulator(new NullSequencesManipulator<T>());
-//		lso.setMoveGenerator(moveGenerator);
-//		lso.setFitnessEvaluator(fitnessEvaluator);
-//
-//		lso.init();
-//
-//		return lso;
-//	}
-
-//	private <T> RandomMoveGenerator<T> createMoveGenerator(final Random random) {
-//		final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
-//		moveGenerator.setRandom(random);
-//
-//		// Register RNG move generator units
-//		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
-//		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
-//		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
-//		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
-//
-//		return moveGenerator;
-//	}
-
 	<T> void printSequences(final Collection<ISequences<T>> sequences) {
 		for (ISequences<T> s : sequences) {
 			printSequences(s);
@@ -258,6 +228,5 @@ public class SimpleSchedulerTest {
 			}
 			System.out.println("]");
 		}
-
 	}
 }

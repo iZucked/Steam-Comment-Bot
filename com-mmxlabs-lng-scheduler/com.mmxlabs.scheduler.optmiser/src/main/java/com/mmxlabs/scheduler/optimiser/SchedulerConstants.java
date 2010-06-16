@@ -11,7 +11,7 @@ public final class SchedulerConstants {
 	// Data Component Provider keys
 	public static final String DCP_vesselProvider = "provider-vessels";
 	public static final String DCP_portProvider = "provider-ports";
-	public static final String DCP_sequenceElementProvider = "provider-sequence-elements";
+	public static final String DCP_portSlotsProvider = "provider-port-slots";
 	public static final String DCP_portDistanceProvider = "provider-port-distances";
 	public static final String DCP_timeWindowProvider = "provider-time-windows";
 	public static final String DCP_orderedElementsProvider = "provider-ordered-elements";

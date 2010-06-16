@@ -23,17 +23,16 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
+import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ISequenceElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSequenceElementProviderEditor;
 
 public final class SimpleSequenceSchedulerTest {
 
@@ -57,36 +56,34 @@ public final class SimpleSequenceSchedulerTest {
 		ITimeWindow timeWindow3 = new TimeWindow(15, 16);
 		ITimeWindow timeWindow4 = new TimeWindow(20, 21);
 
+		LoadSlot loadSlot1 = new LoadSlot();
+		loadSlot1.setPort(port1);
+		loadSlot1.setTimeWindow(timeWindow1);
+		DischargeSlot dischargeSlot1 = new  DischargeSlot();
+		dischargeSlot1.setPort(port2);
+		dischargeSlot1.setTimeWindow(timeWindow2);
+		
 		Cargo cargo1 = new Cargo();
 		cargo1.setId("cargo1");
-		cargo1.setLoadPort(port1);
-		cargo1.setLoadWindow(timeWindow1);
-		cargo1.setDischargePort(port2);
-		cargo1.setDischargeWindow(timeWindow2);
+		cargo1.setLoadSlot(loadSlot1);
+		cargo1.setDischargeSlot(dischargeSlot1);
 
+		LoadSlot loadSlot2 = new LoadSlot();
+		loadSlot2.setPort(port3);
+		loadSlot2.setTimeWindow(timeWindow3);
+		DischargeSlot dischargeSlot2 = new  DischargeSlot();
+		dischargeSlot2.setPort(port4);
+		dischargeSlot2.setTimeWindow(timeWindow4);
+		
 		Cargo cargo2 = new Cargo();
 		cargo2.setId("cargo2");
-		cargo2.setLoadPort(port3);
-		cargo2.setLoadWindow(timeWindow3);
-		cargo2.setDischargePort(port4);
-		cargo2.setDischargeWindow(timeWindow4);
+		cargo2.setLoadSlot(loadSlot2);
+		cargo2.setDischargeSlot(dischargeSlot2);
 
-		ISequenceElement element1 = new SequenceElement("element1", port1,
-				cargo1);
-		ISequenceElement element2 = new SequenceElement("element2", port2,
-				cargo1);
-		ISequenceElement element3 = new SequenceElement("element3", port3,
-				cargo2);
-		ISequenceElement element4 = new SequenceElement("element4", port4,
-				cargo2);
-
-		ISequenceElementProviderEditor elementProvider = new HashMapSequenceElementProviderEditor(
-				SchedulerConstants.DCP_sequenceElementProvider);
-
-		elementProvider.setSequenceElement(cargo1, port1, element1);
-		elementProvider.setSequenceElement(cargo1, port2, element2);
-		elementProvider.setSequenceElement(cargo2, port3, element3);
-		elementProvider.setSequenceElement(cargo2, port4, element4);
+		ISequenceElement element1 = new SequenceElement("element1", loadSlot1);
+		ISequenceElement element2 = new SequenceElement("element2", dischargeSlot1);
+		ISequenceElement element3 = new SequenceElement("element3", loadSlot2);
+		ISequenceElement element4 = new SequenceElement("element4", dischargeSlot2);
 
 		ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);
@@ -293,36 +290,35 @@ public final class SimpleSequenceSchedulerTest {
 		ITimeWindow timeWindow3 = new TimeWindow(15, 16);
 		ITimeWindow timeWindow4 = new TimeWindow(20, 21);
 
+		
+		LoadSlot loadSlot1 = new LoadSlot();
+		loadSlot1.setPort(port1);
+		loadSlot1.setTimeWindow(timeWindow1);
+		DischargeSlot dischargeSlot1 = new  DischargeSlot();
+		dischargeSlot1.setPort(port2);
+		dischargeSlot1.setTimeWindow(timeWindow2);
+		
 		Cargo cargo1 = new Cargo();
 		cargo1.setId("cargo1");
-		cargo1.setLoadPort(port1);
-		cargo1.setLoadWindow(timeWindow1);
-		cargo1.setDischargePort(port2);
-		cargo1.setDischargeWindow(timeWindow2);
+		cargo1.setLoadSlot(loadSlot1);
+		cargo1.setDischargeSlot(dischargeSlot1);
 
+		LoadSlot loadSlot2 = new LoadSlot();
+		loadSlot2.setPort(port3);
+		loadSlot2.setTimeWindow(timeWindow3);
+		DischargeSlot dischargeSlot2 = new  DischargeSlot();
+		dischargeSlot2.setPort(port4);
+		dischargeSlot2.setTimeWindow(timeWindow4);
+		
 		Cargo cargo2 = new Cargo();
 		cargo2.setId("cargo2");
-		cargo2.setLoadPort(port3);
-		cargo2.setLoadWindow(timeWindow3);
-		cargo2.setDischargePort(port4);
-		cargo2.setDischargeWindow(timeWindow4);
+		cargo2.setLoadSlot(loadSlot2);
+		cargo2.setDischargeSlot(dischargeSlot2);
 
-		ISequenceElement element1 = new SequenceElement("element1", port1,
-				cargo1);
-		ISequenceElement element2 = new SequenceElement("element2", port2,
-				cargo1);
-		ISequenceElement element3 = new SequenceElement("element3", port3,
-				cargo2);
-		ISequenceElement element4 = new SequenceElement("element4", port4,
-				cargo2);
-
-		ISequenceElementProviderEditor elementProvider = new HashMapSequenceElementProviderEditor(
-				SchedulerConstants.DCP_sequenceElementProvider);
-
-		elementProvider.setSequenceElement(cargo1, port1, element1);
-		elementProvider.setSequenceElement(cargo1, port2, element2);
-		elementProvider.setSequenceElement(cargo2, port3, element3);
-		elementProvider.setSequenceElement(cargo2, port4, element4);
+		ISequenceElement element1 = new SequenceElement("element1", loadSlot1);
+		ISequenceElement element2 = new SequenceElement("element2", dischargeSlot1);
+		ISequenceElement element3 = new SequenceElement("element3", loadSlot2);
+		ISequenceElement element4 = new SequenceElement("element4", dischargeSlot2);
 
 		ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);

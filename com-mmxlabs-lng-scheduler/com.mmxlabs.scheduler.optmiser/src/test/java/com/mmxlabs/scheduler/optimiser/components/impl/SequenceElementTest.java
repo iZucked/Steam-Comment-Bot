@@ -8,8 +8,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 @RunWith(JMock.class)
 public class SequenceElementTest {
@@ -20,23 +19,21 @@ public class SequenceElementTest {
 	public void testSequenceElementStringIPortICargo() {
 
 		final String name = "name";
-		final IPort port = context.mock(IPort.class);
-		final ICargo cargo = context.mock(ICargo.class);
-		final SequenceElement element = new SequenceElement(name, port, cargo);
+		final IPortSlot slot = context.mock(IPortSlot.class);
+		final SequenceElement element = new SequenceElement(name, slot);
 
 		Assert.assertSame(name, element.getName());
-		Assert.assertSame(port, element.getPort());
-		Assert.assertSame(cargo, element.getCargo());
+		Assert.assertSame(slot, element.getPortSlot());
 	}
 
 	@Test
-	public void testGetSetPort() {
+	public void testGetSetPortSlot() {
 
 		final SequenceElement element = new SequenceElement();
-		Assert.assertNull(element.getPort());
-		final IPort port = context.mock(IPort.class);
-		element.setPort(port);
-		Assert.assertSame(port, element.getPort());
+		Assert.assertNull(element.getPortSlot());
+		final IPortSlot slot = context.mock(IPortSlot.class);
+		element.setPortSlot(slot);
+		Assert.assertSame(slot, element.getPortSlot());
 	}
 
 	@Test
@@ -47,15 +44,5 @@ public class SequenceElementTest {
 		final String name = "name";
 		element.setName(name);
 		Assert.assertSame(name, element.getName());
-	}
-
-	@Test
-	public void testGetSetCargo() {
-
-		final SequenceElement element = new SequenceElement();
-		Assert.assertNull(element.getCargo());
-		final ICargo cargo = context.mock(ICargo.class);
-		element.setCargo(cargo);
-		Assert.assertSame(cargo, element.getCargo());
 	}
 }

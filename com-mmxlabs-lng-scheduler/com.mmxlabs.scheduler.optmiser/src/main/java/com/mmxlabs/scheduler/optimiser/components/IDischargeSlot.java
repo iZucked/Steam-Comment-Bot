@@ -9,22 +9,7 @@ import com.mmxlabs.optimiser.components.ITimeWindow;
  * @author Simon Goodall
  * 
  */
-public interface IDischargeSlot {
-
-	/**
-	 * The {@link IPort} this cargo is destined for.
-	 * 
-	 * @return
-	 */
-	IPort getDischargePort();
-
-	/**
-	 * The {@link ITimeWindow} in which this cargo needs to be discharged.
-	 * 
-	 * @return
-	 */
-	ITimeWindow getDischargeWindow();
-
+public interface IDischargeSlot extends IPortSlot {
 	/**
 	 * Returns the minimum quantity that can be discharged.
 	 * 
@@ -38,13 +23,6 @@ public interface IDischargeSlot {
 	 * @return
 	 */
 	long getMaxDischargeVolume();
-
-	/**
-	 * Returns an id for this discharge slot.
-	 * 
-	 * @return
-	 */
-	String getDischargeID();
 
 	/**
 	 * Returns sales price per unit.

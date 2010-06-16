@@ -22,17 +22,9 @@ public interface ISequenceElement {
 	String getName();
 
 	/**
-	 * Returns the {@link IPort} this element is tied to.
+	 * Returns the {@link IPortSlot} associated with this element.
 	 * 
 	 * @return
 	 */
-	IPort getPort();
-
-	/**
-	 * Returns the cargo associated with this element. TODO: This is ok while we
-	 * are only sequencing ICargos.
-	 * 
-	 * @return
-	 */
-	ICargo getCargo();
+	IPortSlot getPortSlot();
 }

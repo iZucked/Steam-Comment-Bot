@@ -10,21 +10,7 @@ import com.mmxlabs.optimiser.components.ITimeWindow;
  * @author Simon Goodall
  * 
  */
-public interface ILoadSlot {
-
-	/**
-	 * The {@link IPort} this cargo originates from.
-	 * 
-	 * @return
-	 */
-	IPort getLoadPort();
-
-	/**
-	 * The {@link ITimeWindow} in which this cargo needs to be loaded.
-	 * 
-	 * @return
-	 */
-	ITimeWindow getLoadWindow();
+public interface ILoadSlot extends IPortSlot {
 
 	/**
 	 * Returns the minimum quantity that can be loaded.
@@ -38,12 +24,6 @@ public interface ILoadSlot {
 	 */
 	long getMaxLoadVolume();
 
-	/**
-	 * Returns an id for the load slot
-	 * @return
-	 */
-	String getLoadID();
-	
 	/**
 	 * Returns the purchase price per unit.
 	 * @return
