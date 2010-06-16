@@ -7,8 +7,8 @@ import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 
 /**
  * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
@@ -36,14 +36,14 @@ public final class DistanceComponent<T> extends
 	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler,
+			final ISequence<T> sequence, final IAnnotatedSequence<T> annotatedSequence,
 			final boolean newSequence) {
 		// Calculate sum distance travelled.
 		long distance = 0;
 
 		for (final T element : sequence) {
 
-			final IJourneyEvent<T> e = scheduler.getAdditionalInformation(
+			final IJourneyEvent<T> e = annotatedSequence.getAnnotation(
 					element, SchedulerConstants.AI_journeyInfo,
 					IJourneyEvent.class);
 

@@ -22,17 +22,7 @@ public interface ISequenceScheduler<T> {
 	 * @param sequence
 	 * @return
 	 */
-	boolean schedule(IResource resource, ISequence<T> sequence);
-
-	/**
-	 * Return an additional data object tied to the given sequence element.
-	 * 
-	 * @param <U>
-	 * @param key
-	 * @param clz
-	 * @return
-	 */
-	<U> U getAdditionalInformation(T element, String key, Class<U> clz);
+	boolean schedule(IResource resource, ISequence<T> sequence, IAnnotatedSequence<T> annotatedSequence);
 
 	/**
 	 * Release resources.

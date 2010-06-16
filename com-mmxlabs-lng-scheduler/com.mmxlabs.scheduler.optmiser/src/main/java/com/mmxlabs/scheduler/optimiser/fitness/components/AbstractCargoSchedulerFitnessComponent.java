@@ -10,8 +10,8 @@ import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 
 /**
  * Abstract implementation of {@link ICargoSchedulerFitnessComponent}
@@ -78,7 +78,7 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 
 	@Override
 	public abstract void evaluateSequence(IResource resource,
-			ISequence<T> sequence, ISequenceScheduler<T> scheduler,
+			ISequence<T> sequence, IAnnotatedSequence<T> annotatedSequence,
 			boolean newSequence);
 
 	@Override

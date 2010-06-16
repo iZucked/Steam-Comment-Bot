@@ -1,8 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
@@ -15,8 +13,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
+import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceSchedulerAdditionalInfo;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 
 /**
@@ -27,8 +25,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
  */
 public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
-	private final Map<T, ISequenceSchedulerAdditionalInfo> additionalInfos;
-
 	private IElementDurationProvider<T> durationsProvider;
 
 	private ITimeWindowDataComponentProvider timeWindowProvider;
@@ -37,26 +33,9 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
 	private IMatrixProvider<IPort, Integer> distanceProvider;
 
-	public SimpleSequenceScheduler() {
-		additionalInfos = new HashMap<T, ISequenceSchedulerAdditionalInfo>();
-	}
-
-	@Override
-	public <U> U getAdditionalInformation(final T element, final String key,
-			final Class<U> clz) {
-		if (additionalInfos.containsKey(element)) {
-			return additionalInfos.get(element).get(key, clz);
-		}
-
-		return null;
-	}
-
 	@Override
 	public boolean schedule(final IResource resource,
-			final ISequence<T> sequence) {
-
-		// Clear additional infos
-		additionalInfos.clear();
+			final ISequence<T> sequence, IAnnotatedSequence<T> annotatedSequence) {
 
 		// TODO: Get start time
 		final int startTime = 0;
@@ -102,8 +81,8 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			visit.setEndTime(nextTime + visitDuration);
 			visit.setDuration(visitDuration);
 
-			setAdditionalInformation(element, SchedulerConstants.AI_visitInfo,
-					visit);
+			annotatedSequence.setAnnotation(element,
+					SchedulerConstants.AI_visitInfo, visit);
 
 			final IdleEventImpl<T> idle = new IdleEventImpl<T>();
 			idle.setName("idle");
@@ -113,8 +92,8 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			idle.setEndTime(nextTime);
 			idle.setSequenceElement(element);
 
-			setAdditionalInformation(element, SchedulerConstants.AI_idleInfo,
-					idle);
+			annotatedSequence.setAnnotation(element,
+					SchedulerConstants.AI_idleInfo, idle);
 
 			if (prevPort != null) {
 				final JourneyEventImpl<T> journey = new JourneyEventImpl<T>();
@@ -128,7 +107,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				journey.setDistance(distance);
 				journey.setDuration(travelTime);
 
-				setAdditionalInformation(element,
+				annotatedSequence.setAnnotation(element,
 						SchedulerConstants.AI_journeyInfo, journey);
 			}
 
@@ -140,18 +119,6 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 		}
 
 		return true;
-	}
-
-	private void setAdditionalInformation(final T element, final String key,
-			final Object value) {
-		final ISequenceSchedulerAdditionalInfo info;
-		if (additionalInfos.containsKey(element)) {
-			info = additionalInfos.get(element);
-		} else {
-			info = new SequenceSchedulerAdditionalInfo();
-			additionalInfos.put(element, info);
-		}
-		info.put(key, value);
 	}
 
 	public final IElementDurationProvider<T> getDurationsProvider() {
@@ -207,7 +174,6 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 	}
 
 	public void dispose() {
-		additionalInfos.clear();
 
 		portProvider = null;
 		timeWindowProvider = null;

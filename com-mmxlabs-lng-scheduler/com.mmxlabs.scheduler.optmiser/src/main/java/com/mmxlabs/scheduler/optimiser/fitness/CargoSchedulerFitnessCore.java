@@ -16,6 +16,7 @@ import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.AnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 
@@ -74,10 +75,11 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// For each ISequence, run the scheduler
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
-			scheduler.schedule(resource, sequence);
+			final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
+			scheduler.schedule(resource, sequence, annotatedSequence);
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
-			evaluateSequence(resource, sequence, scheduler, false);
+			evaluateSequence(resource, sequence, annotatedSequence, false);
 		}
 
 		// Notify fitness components that all sequences have been scheduled
@@ -93,8 +95,9 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// Re-schedule changed sequences
 		for (final IResource resource : affectedResources) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
-			scheduler.schedule(resource, sequence);
-			evaluateSequence(resource, sequence, scheduler, true);
+			final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
+			scheduler.schedule(resource, sequence, annotatedSequence);
+			evaluateSequence(resource, sequence, annotatedSequence, true);
 		}
 	}
 
@@ -118,11 +121,13 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	private void evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler,
+			final ISequence<T> sequence,
+			final IAnnotatedSequence<T> annotatedSequence,
 			final boolean newSequence) {
 
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			c.evaluateSequence(resource, sequence, scheduler, newSequence);
+			c.evaluateSequence(resource, sequence, annotatedSequence,
+					newSequence);
 		}
 	}
 

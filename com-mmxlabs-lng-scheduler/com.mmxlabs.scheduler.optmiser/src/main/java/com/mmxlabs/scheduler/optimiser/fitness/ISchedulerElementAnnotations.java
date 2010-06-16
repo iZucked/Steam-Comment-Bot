@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness;
  * @author Simon Goodall
  * 
  */
-public interface ISequenceSchedulerAdditionalInfo {
+public interface ISchedulerElementAnnotations {
 
 	<U> U get(String key, Class<U> clz);
 

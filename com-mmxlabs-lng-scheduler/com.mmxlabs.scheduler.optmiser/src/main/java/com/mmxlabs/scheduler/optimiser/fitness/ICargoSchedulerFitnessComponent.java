@@ -31,20 +31,20 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	void init(IOptimisationData<T> data);
 
 	/**
-	 * Evaluate the given {@link ISequence}. THe {@link ISequenceScheduler} will
-	 * have already been used to schedule th sequence and can be queried. If
-	 * newSequence is set to false, then this method is being invoked as part of
-	 * a full evaluation. If it is true, then it is a partial/delta evaluation
-	 * as part of a {@link IMove} evaluation.
+	 * Evaluate the given {@link ISequence}. The {@link IAnnotatedSequence} will
+	 * have already been scheduled and can be queried. If newSequence is set to
+	 * false, then this method is being invoked as part of a full evaluation. If
+	 * it is true, then it is a partial/delta evaluation as part of a
+	 * {@link IMove} evaluation.
 	 * 
 	 * @param resource
 	 * @param sequence
-	 * @param scheduler
+	 * @param annotatedSequence
 	 * @param newSequence
 	 */
 	void evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler,
-			boolean newSequence);
+			final ISequence<T> sequence,
+			final IAnnotatedSequence<T> annotatedSequence, boolean newSequence);
 
 	/**
 	 * Notify fitness component that the last evaluation has been accepted.

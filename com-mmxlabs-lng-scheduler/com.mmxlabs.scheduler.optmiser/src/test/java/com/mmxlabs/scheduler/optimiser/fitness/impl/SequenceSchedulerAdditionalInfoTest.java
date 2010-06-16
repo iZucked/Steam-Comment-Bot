@@ -15,7 +15,7 @@ public class SequenceSchedulerAdditionalInfoTest {
 	@Test
 	public void testGet() {
 
-		final SequenceSchedulerAdditionalInfo info = new SequenceSchedulerAdditionalInfo();
+		final SchedulerElementAnnotations info = new SchedulerElementAnnotations();
 
 		final String key = "key";
 		final Class1 object1 = new Class1();
@@ -29,7 +29,7 @@ public class SequenceSchedulerAdditionalInfoTest {
 	@Test(expected = ClassCastException.class)
 	public void test2() {
 
-		final SequenceSchedulerAdditionalInfo info = new SequenceSchedulerAdditionalInfo();
+		final SchedulerElementAnnotations info = new SchedulerElementAnnotations();
 
 		final String key = "key";
 		final Class1 object1 = new Class1();

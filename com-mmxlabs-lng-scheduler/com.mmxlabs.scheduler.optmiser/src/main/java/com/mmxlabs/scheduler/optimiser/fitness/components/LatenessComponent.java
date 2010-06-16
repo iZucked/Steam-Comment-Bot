@@ -11,8 +11,8 @@ import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 
 /**
  * 
@@ -38,14 +38,14 @@ public final class LatenessComponent<T> extends
 	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final ISequenceScheduler<T> scheduler,
+			final ISequence<T> sequence, final IAnnotatedSequence<T> annotatedSequence,
 			final boolean newSequence) {
 
 		long lateness = 0;
 
 		for (final T element : sequence) {
 
-			final IPortVisitEvent<T> e = scheduler.getAdditionalInformation(
+			final IPortVisitEvent<T> e = annotatedSequence.getAnnotation(
 					element, SchedulerConstants.AI_visitInfo,
 					IPortVisitEvent.class);
 			assert e != null;
@@ -61,7 +61,6 @@ public final class LatenessComponent<T> extends
 					}
 				}
 			}
-
 		}
 		updateFitness(resource, lateness, newSequence);
 	}
