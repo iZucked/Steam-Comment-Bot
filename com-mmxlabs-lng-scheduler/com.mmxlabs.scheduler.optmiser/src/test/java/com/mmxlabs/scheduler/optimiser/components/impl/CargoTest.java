@@ -8,8 +8,8 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.optimiser.components.ITimeWindow;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 
 @RunWith(JMock.class)
 public class CargoTest {
@@ -27,42 +27,22 @@ public class CargoTest {
 	}
 
 	@Test
-	public void testGetSetDischargePort() {
+	public void testGetSetLoadSlot() {
 
 		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getDischargePort());
-		final IPort port = context.mock(IPort.class);
-		cargo.setDischargePort(port);
-		Assert.assertSame(port, cargo.getDischargePort());
+		Assert.assertNull(cargo.getLoadSlot());
+		final ILoadSlot slot = context.mock(ILoadSlot.class);
+		cargo.setLoadSlot(slot);
+		Assert.assertSame(slot, cargo.getLoadSlot());
 	}
 
 	@Test
-	public void testGetSetLoadPort() {
+	public void testGetSetDischargeSlot() {
 
 		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getLoadPort());
-		final IPort port = context.mock(IPort.class);
-		cargo.setLoadPort(port);
-		Assert.assertSame(port, cargo.getLoadPort());
-	}
-
-	@Test
-	public void testGetSetDischargeWindow() {
-
-		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getDischargeWindow());
-		final ITimeWindow window = context.mock(ITimeWindow.class);
-		cargo.setDischargeWindow(window);
-		Assert.assertSame(window, cargo.getDischargeWindow());
-	}
-
-	@Test
-	public void testGetSetLoadWindow() {
-
-		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getLoadWindow());
-		final ITimeWindow window = context.mock(ITimeWindow.class);
-		cargo.setLoadWindow(window);
-		Assert.assertSame(window, cargo.getLoadWindow());
+		Assert.assertNull(cargo.getDischargeSlot());
+		final IDischargeSlot slot = context.mock(IDischargeSlot.class);
+		cargo.setDischargeSlot(slot);
+		Assert.assertSame(slot, cargo.getDischargeSlot());
 	}
 }

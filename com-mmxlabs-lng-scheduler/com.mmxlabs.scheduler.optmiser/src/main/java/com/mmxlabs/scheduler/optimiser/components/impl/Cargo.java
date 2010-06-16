@@ -1,8 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 
 /**
  * Default implementation of {@link ICargo}.
@@ -12,58 +12,37 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  */
 public final class Cargo implements ICargo {
 
-	private IPort loadPort;
+	private ILoadSlot loadSlot;
 
-	private IPort dischargePort;
-
-	private ITimeWindow loadWindow;
-
-	private ITimeWindow dischargeWindow;
+	private IDischargeSlot dischargeSlot;
 
 	private String id;
 
-	public void setId(final String id) {
-		this.id = id;
+	@Override
+	public ILoadSlot getLoadSlot() {
+		return loadSlot;
+	}
+
+	public void setLoadSlot(final ILoadSlot loadSlot) {
+		this.loadSlot = loadSlot;
 	}
 
 	@Override
-	public IPort getDischargePort() {
-		return dischargePort;
+	public IDischargeSlot getDischargeSlot() {
+		return dischargeSlot;
 	}
 
-	@Override
-	public ITimeWindow getDischargeWindow() {
-		return dischargeWindow;
-	}
-
-	@Override
-	public IPort getLoadPort() {
-		return loadPort;
-	}
-
-	@Override
-	public ITimeWindow getLoadWindow() {
-		return loadWindow;
-	}
-
-	public void setLoadPort(final IPort loadPort) {
-		this.loadPort = loadPort;
-	}
-
-	public void setDischargePort(final IPort dischargePort) {
-		this.dischargePort = dischargePort;
-	}
-
-	public void setLoadWindow(final ITimeWindow loadWindow) {
-		this.loadWindow = loadWindow;
-	}
-
-	public void setDischargeWindow(final ITimeWindow dischargeWindow) {
-		this.dischargeWindow = dischargeWindow;
+	public void setDischargeSlot(final IDischargeSlot dischargeSlot) {
+		this.dischargeSlot = dischargeSlot;
 	}
 
 	@Override
 	public String getId() {
 		return id;
 	}
+
+	public void setId(final String id) {
+		this.id = id;
+	}
+
 }
