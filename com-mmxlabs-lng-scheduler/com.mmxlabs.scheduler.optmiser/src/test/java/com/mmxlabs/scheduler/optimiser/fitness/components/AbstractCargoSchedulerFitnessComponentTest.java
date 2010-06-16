@@ -19,20 +19,20 @@ import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 
-
 @RunWith(JMock.class)
 public class AbstractCargoSchedulerFitnessComponentTest {
 
 	Mockery context = new JUnit4Mockery();
-	
+
 	@Test
 	public void testAbstractCargoSchedulerFitnessComponent() {
-		
+
 		final String name = "name";
 
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		
-		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(name, core);
+
+		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(
+				name, core);
 
 		Assert.assertSame(name, component.getName());
 		Assert.assertSame(core, component.getFitnessCore());
@@ -40,16 +40,17 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 
 	@Test
 	public void testGetFitness() {
-		
+
 		final String name = "name";
 
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		
-		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(name, core);
+
+		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(
+				name, core);
 
 		component.setNewFitness(100);
 		component.setOldFitness(200);
-		
+
 		Assert.assertEquals(100, component.getFitness());
 	}
 
@@ -58,44 +59,45 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		final String name = "name";
 
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		
-		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(name, core);
 
-		
-		/// Set some initial state
-		
+		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(
+				name, core);
+
+		// / Set some initial state
+
 		final IResource r1 = context.mock(IResource.class, "r1");
 		final IResource r2 = context.mock(IResource.class, "r2");
-		
+
 		final long oldFitness = 15;
 		final long newFitness = 25;
-		
+
 		final Map<IResource, Long> oldFitnesses = new HashMap<IResource, Long>();
 		final Map<IResource, Long> newFitnesses = new HashMap<IResource, Long>();
-		
+
 		oldFitnesses.put(r1, 5l);
 		oldFitnesses.put(r2, 10l);
-		
+
 		newFitnesses.put(r1, 15l);
 		newFitnesses.put(r2, 20l);
-		
+
 		component.setNewFitness(newFitness);
 		component.setNewFitnessByResource(newFitnesses);
-		
+
 		component.setOldFitness(oldFitness);
 		component.setOldFitnessByResource(oldFitnesses);
-	
+
 		Assert.assertEquals(25, component.getFitness());
-		
-		/// Test the method
+
+		// / Test the method
 		component.accepted(null, CollectionsUtil.makeArrayList(r1, r2));
-		
+
 		Assert.assertEquals(25, component.getFitness());
-		
+
 		Assert.assertEquals(25, component.getOldFitness());
 		Assert.assertEquals(25, component.getNewFitness());
-		
-		final Map<IResource, Long> oldFitnessByResource = component.getOldFitnessByResource();
+
+		final Map<IResource, Long> oldFitnessByResource = component
+				.getOldFitnessByResource();
 		Assert.assertEquals(15, oldFitnessByResource.get(r1).longValue());
 		Assert.assertEquals(20, oldFitnessByResource.get(r2).longValue());
 	}
@@ -104,30 +106,31 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 	public void testUpdateFitness() {
 
 		final String name = "name";
-		
-		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		
-		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(name, core);
 
-		
-		/// Set some initial state
-		
+		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
+
+		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(
+				name, core);
+
+		// / Set some initial state
+
 		final IResource r1 = context.mock(IResource.class, "r1");
 		final IResource r2 = context.mock(IResource.class, "r2");
-		
-		/// Test the method
+
+		// / Test the method
 		component.prepare();
-		
+
 		Assert.assertEquals(0, component.getFitness());
-		
-		Map<IResource, Long> fitnessByResource = component.getOldFitnessByResource();
+
+		Map<IResource, Long> fitnessByResource = component
+				.getOldFitnessByResource();
 		Assert.assertTrue(fitnessByResource.isEmpty());
 
 		component.updateFitness(r1, 5, false);
 		component.updateFitness(r2, 10, false);
 
 		// Check old state is updated as expected
-		
+
 		Assert.assertEquals(15, component.getOldFitness());
 
 		fitnessByResource = component.getOldFitnessByResource();
@@ -135,32 +138,31 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		Assert.assertEquals(10, fitnessByResource.get(r2).longValue());
 
 		component.complete();
-		
+
 		// Check new state is updated as expected
-		
+
 		fitnessByResource = component.getNewFitnessByResource();
 		Assert.assertEquals(5, fitnessByResource.get(r1).longValue());
 		Assert.assertEquals(10, fitnessByResource.get(r2).longValue());
-		
-		
+
 		component.updateFitness(r1, 10, true);
-		
+
 		fitnessByResource = component.getNewFitnessByResource();
 		Assert.assertEquals(10, fitnessByResource.get(r1).longValue());
 		Assert.assertEquals(10, fitnessByResource.get(r2).longValue());
-		
+
 		Assert.assertEquals(20, component.getNewFitness());
 		Assert.assertEquals(20, component.getFitness());
-		
+
 		component.updateFitness(r1, 11, true);
-		
+
 		fitnessByResource = component.getNewFitnessByResource();
 		Assert.assertEquals(11, fitnessByResource.get(r1).longValue());
 		Assert.assertEquals(10, fitnessByResource.get(r2).longValue());
-		
+
 		Assert.assertEquals(21, component.getNewFitness());
 		Assert.assertEquals(21, component.getFitness());
-		
+
 	}
 
 	@Test
@@ -168,44 +170,44 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		final String name = "name";
 
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		
-		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(name, core);
 
-		
-		/// Set some initial state
-		
+		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(
+				name, core);
+
+		// / Set some initial state
+
 		final IResource r1 = context.mock(IResource.class, "r1");
 		final IResource r2 = context.mock(IResource.class, "r2");
-		
+
 		final long oldFitness = 15;
 		final long newFitness = 25;
-		
+
 		final Map<IResource, Long> oldFitnesses = new HashMap<IResource, Long>();
 		final Map<IResource, Long> newFitnesses = new HashMap<IResource, Long>();
-		
+
 		oldFitnesses.put(r1, 5l);
 		oldFitnesses.put(r2, 10l);
-		
+
 		newFitnesses.put(r1, 15l);
 		newFitnesses.put(r2, 20l);
-		
+
 		component.setNewFitness(newFitness);
 		component.setNewFitnessByResource(newFitnesses);
-		
+
 		component.setOldFitness(oldFitness);
 		component.setOldFitnessByResource(oldFitnesses);
-	
+
 		Assert.assertEquals(25, component.getFitness());
-		
-		/// Test the method
+
+		// / Test the method
 		component.prepare();
-		
+
 		Assert.assertEquals(0, component.getOldFitness());
 		// New fitness doesn't change
 		Assert.assertEquals(25, component.getFitness());
-		
-		
-		final Map<IResource, Long> fitnessByResource = component.getOldFitnessByResource();
+
+		final Map<IResource, Long> fitnessByResource = component
+				.getOldFitnessByResource();
 		Assert.assertTrue(fitnessByResource.isEmpty());
 	}
 
@@ -213,30 +215,31 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 	public void testComplete() {
 
 		final String name = "name";
-		
-		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		
-		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(name, core);
 
-		
-		/// Set some initial state
-		
+		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
+
+		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(
+				name, core);
+
+		// / Set some initial state
+
 		final IResource r1 = context.mock(IResource.class, "r1");
 		final IResource r2 = context.mock(IResource.class, "r2");
-		
-		/// Test the method
+
+		// / Test the method
 		component.prepare();
-		
+
 		Assert.assertEquals(0, component.getFitness());
-		
-		Map<IResource, Long> fitnessByResource = component.getOldFitnessByResource();
+
+		Map<IResource, Long> fitnessByResource = component
+				.getOldFitnessByResource();
 		Assert.assertTrue(fitnessByResource.isEmpty());
 
 		component.updateFitness(r1, 5, false);
 		component.updateFitness(r2, 10, false);
 
 		// Check old state is updated as expected
-		
+
 		Assert.assertEquals(15, component.getOldFitness());
 
 		fitnessByResource = component.getOldFitnessByResource();
@@ -244,9 +247,9 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		Assert.assertEquals(10, fitnessByResource.get(r2).longValue());
 
 		component.complete();
-		
+
 		// Check new state is updated as expected
-		
+
 		fitnessByResource = component.getNewFitnessByResource();
 		Assert.assertEquals(5, fitnessByResource.get(r1).longValue());
 		Assert.assertEquals(10, fitnessByResource.get(r2).longValue());
@@ -257,38 +260,38 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		final String name = "name";
 
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		
-		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(name, core);
 
-		
-		/// Set some initial state
-		
+		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(
+				name, core);
+
+		// / Set some initial state
+
 		final IResource r1 = context.mock(IResource.class, "r1");
 		final IResource r2 = context.mock(IResource.class, "r2");
-		
+
 		final long oldFitness = 15;
 		final long newFitness = 25;
-		
+
 		final Map<IResource, Long> oldFitnesses = new HashMap<IResource, Long>();
 		final Map<IResource, Long> newFitnesses = new HashMap<IResource, Long>();
-		
+
 		oldFitnesses.put(r1, 5l);
 		oldFitnesses.put(r2, 10l);
-		
+
 		newFitnesses.put(r1, 15l);
 		newFitnesses.put(r2, 20l);
-		
+
 		component.setNewFitness(newFitness);
 		component.setNewFitnessByResource(newFitnesses);
-		
+
 		component.setOldFitness(oldFitness);
 		component.setOldFitnessByResource(oldFitnesses);
 
 		component.dispose();
-		
+
 		Assert.assertTrue(component.getNewFitnessByResource().isEmpty());
 		Assert.assertTrue(component.getOldFitnessByResource().isEmpty());
-		
+
 	}
 
 	private class TestCargoSchedulerFitnessComponent<T> extends
@@ -300,19 +303,19 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		}
 
 		@Override
-		public void evaluateSequence(final IResource resource, final ISequence<T> sequence,
-				final IAnnotatedSequence<T> annotatedSequence, final boolean newSequence) {
+		public void evaluateSequence(final IResource resource,
+				final ISequence<T> sequence,
+				final IAnnotatedSequence<T> annotatedSequence,
+				final boolean newSequence) {
 			fail("This method is not part of the test");
 
 		}
 
 		@Override
 		public void init(final IOptimisationData<T> data) {
-			
-			
+
 			fail("This method is not part of the test");
 		}
-		
 
 		public long getOldFitness() {
 			return oldFitness;
@@ -334,7 +337,8 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 			return oldFitnessByResource;
 		}
 
-		public void setOldFitnessByResource(final Map<IResource, Long> oldFitnessByResource) {
+		public void setOldFitnessByResource(
+				final Map<IResource, Long> oldFitnessByResource) {
 			this.oldFitnessByResource = oldFitnessByResource;
 		}
 
@@ -342,9 +346,10 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 			return newFitnessByResource;
 		}
 
-		public void setNewFitnessByResource(final Map<IResource, Long> newFitnessByResource) {
+		public void setNewFitnessByResource(
+				final Map<IResource, Long> newFitnessByResource) {
 			this.newFitnessByResource = newFitnessByResource;
 		}
-		
+
 	}
 }

@@ -55,7 +55,6 @@ public final class HashMapSequenceElementProviderEditor implements
 		cargoPortElementMap.get(cargo).put(port, element);
 
 		sequenceElements.add(element);
-
 	}
 
 	@Override
