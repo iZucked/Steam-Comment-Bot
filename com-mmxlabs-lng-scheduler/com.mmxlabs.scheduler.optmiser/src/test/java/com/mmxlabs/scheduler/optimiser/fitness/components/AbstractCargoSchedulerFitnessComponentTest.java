@@ -254,7 +254,41 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 
 	@Test
 	public void testDispose() {
-		fail("Not yet implemented");
+		final String name = "name";
+
+		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
+		
+		final TestCargoSchedulerFitnessComponent<Object> component = new TestCargoSchedulerFitnessComponent<Object>(name, core);
+
+		
+		/// Set some initial state
+		
+		final IResource r1 = context.mock(IResource.class, "r1");
+		final IResource r2 = context.mock(IResource.class, "r2");
+		
+		final long oldFitness = 15;
+		final long newFitness = 25;
+		
+		final Map<IResource, Long> oldFitnesses = new HashMap<IResource, Long>();
+		final Map<IResource, Long> newFitnesses = new HashMap<IResource, Long>();
+		
+		oldFitnesses.put(r1, 5l);
+		oldFitnesses.put(r2, 10l);
+		
+		newFitnesses.put(r1, 15l);
+		newFitnesses.put(r2, 20l);
+		
+		component.setNewFitness(newFitness);
+		component.setNewFitnessByResource(newFitnesses);
+		
+		component.setOldFitness(oldFitness);
+		component.setOldFitnessByResource(oldFitnesses);
+
+		component.dispose();
+		
+		Assert.assertTrue(component.getNewFitnessByResource().isEmpty());
+		Assert.assertTrue(component.getOldFitnessByResource().isEmpty());
+		
 	}
 
 	private class TestCargoSchedulerFitnessComponent<T> extends
