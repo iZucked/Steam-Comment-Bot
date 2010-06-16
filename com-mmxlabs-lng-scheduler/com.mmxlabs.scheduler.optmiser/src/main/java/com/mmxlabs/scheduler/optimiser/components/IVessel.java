@@ -14,4 +14,19 @@ import com.mmxlabs.optimiser.IResource;
  */
 public interface IVessel extends IResource {
 
+	long getCargoCapacity();
+	
+	long getLadenNBORate();
+	
+	long getBallastNBORate();
+	
+	int getMinSpeed();
+	
+	int getMaxSpeed();
+
+	String getName();
+	
+	// getLadenConsumptionCurve
+	
+	// getBallastConsumptionCurve
 }
