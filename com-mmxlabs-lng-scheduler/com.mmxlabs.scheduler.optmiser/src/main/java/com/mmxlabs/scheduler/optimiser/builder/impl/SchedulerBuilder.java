@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -50,7 +50,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
  */
 public class SchedulerBuilder implements ISchedulerBuilder {
 
-	private final IXYPortDistanceProvider distanceProvider = new XYPortEuclideanDistanceProvider();
+	private final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
 
 	private final List<IResource> resources = new ArrayList<IResource>();
 
@@ -76,9 +76,9 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IElementDurationProviderEditor<ISequenceElement> elementDurationsProvider;
 
-	private List<ILoadSlot> loadSlots = new LinkedList<ILoadSlot>();
+	private final List<ILoadSlot> loadSlots = new LinkedList<ILoadSlot>();
 
-	private List<IDischargeSlot> dischargeSlots = new LinkedList<IDischargeSlot>();
+	private final List<IDischargeSlot> dischargeSlots = new LinkedList<IDischargeSlot>();
 
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
@@ -98,8 +98,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
-			long minVolume, long maxVolume, long price) {
+	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window,
+			final long minVolume, final long maxVolume, final long price) {
 		final LoadSlot slot = new LoadSlot();
 		slot.setId(id);
 		slot.setPort(port);
@@ -125,8 +125,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IDischargeSlot createDischargeSlot(String id, IPort port,
-			ITimeWindow window, long minVolume, long maxVolume, long price) {
+	public IDischargeSlot createDischargeSlot(final String id, final IPort port,
+			final ITimeWindow window, final long minVolume, final long maxVolume, final long price) {
 		final DischargeSlot slot = new DischargeSlot();
 		slot.setId(id);
 		slot.setPort(port);
@@ -152,8 +152,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ICargo createCargo(final String id, ILoadSlot loadSlot,
-			IDischargeSlot dischargeSlot) {
+	public ICargo createCargo(final String id, final ILoadSlot loadSlot,
+			final IDischargeSlot dischargeSlot) {
 
 		final Cargo cargo = new Cargo();
 		cargo.setLoadSlot(loadSlot);
@@ -161,8 +161,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 		cargoes.add(cargo);
 
-		ISequenceElement loadElement = portSlotsProvider.getElement(loadSlot);
-		ISequenceElement dischargeElement = portSlotsProvider.getElement(dischargeSlot);
+		final ISequenceElement loadElement = portSlotsProvider.getElement(loadSlot);
+		final ISequenceElement dischargeElement = portSlotsProvider.getElement(dischargeSlot);
 		
 		// Set fixed visit order
 		orderedSequenceElementsEditor.setElementOrder(loadElement,
@@ -183,7 +183,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IXYPort createPort(final String name, float x, float y) {
+	public IXYPort createPort(final String name, final float x, final float y) {
 
 		final XYPort port = new XYPort();
 		port.setName(name);
@@ -225,8 +225,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setElementDurations(ISequenceElement element,
-			IResource resource, int duration) {
+	public void setElementDurations(final ISequenceElement element,
+			final IResource resource, final int duration) {
 		elementDurationsProvider
 				.setElementDuration(element, resource, duration);
 	}
@@ -258,15 +258,15 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				elementDurationsProvider);
 
 		if (true) {
-			for (IPort from : ports) {
+			for (final IPort from : ports) {
 				if (!(from instanceof IXYPort)) {
 					continue;
 				}
-				for (IPort to : ports) {
+				for (final IPort to : ports) {
 					if (to instanceof IXYPort) {
-						double dist = distanceProvider.getDistance(
+						final double dist = distanceProvider.getDistance(
 								(IXYPort) from, (IXYPort) to);
-						int iDist = (int) dist;
+						final int iDist = (int) dist;
 						portDistanceProvider.set(from, to, iDist);
 					}
 				}

@@ -8,7 +8,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
  * @author Simon Goodall
  * 
  */
-public interface IXYPortDistanceProvider {
+public interface IXYPortDistanceCalculator {
 
 	/**
 	 * 

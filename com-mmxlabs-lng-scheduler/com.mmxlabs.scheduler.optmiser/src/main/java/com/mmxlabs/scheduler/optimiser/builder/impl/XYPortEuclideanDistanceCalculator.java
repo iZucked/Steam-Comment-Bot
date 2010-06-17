@@ -1,17 +1,17 @@
 package com.mmxlabs.scheduler.optimiser.builder.impl;
 
-import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 
 /**
- * {@link IXYPortDistanceProvider} implementation calculating the Euclidean
+ * {@link IXYPortDistanceCalculator} implementation calculating the Euclidean
  * distance between the X/Y co-ordinates of two ports.
  * 
  * @author Simon Goodall
  * 
  */
-public final class XYPortEuclideanDistanceProvider implements
-		IXYPortDistanceProvider {
+public final class XYPortEuclideanDistanceCalculator implements
+		IXYPortDistanceCalculator {
 
 	public double getDistance(final IXYPort from, final IXYPort to) {
 
