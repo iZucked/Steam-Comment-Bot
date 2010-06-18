@@ -1,9 +1,18 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+
+@RunWith(JMock.class)
 public class VesselTest {
+
+	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testGetSetName() {
@@ -15,49 +24,12 @@ public class VesselTest {
 	}
 
 	@Test
-	public void testGetSetLadenNBORate() {
-		final long value = 10;
+	public void testGetSetVesselClass() {
 		final Vessel vessel = new Vessel();
-		Assert.assertEquals(0, vessel.getLadenNBORate());
-		vessel.setLadenNBORate(value);
-		Assert.assertEquals(value, vessel.getLadenNBORate());
-
-	}
-
-	@Test
-	public void testGetSetBallastNBORate() {
-		final long value = 10;
-		final Vessel vessel = new Vessel();
-		Assert.assertEquals(0, vessel.getBallastNBORate());
-		vessel.setBallastNBORate(value);
-		Assert.assertEquals(value, vessel.getBallastNBORate());
-	}
-
-	@Test
-	public void testGetSetCargoCapacity() {
-		final long value = 10;
-		final Vessel vessel = new Vessel();
-		Assert.assertEquals(0, vessel.getCargoCapacity());
-		vessel.setCargoCapacity(value);
-		Assert.assertEquals(value, vessel.getCargoCapacity());
-	}
-
-	@Test
-	public void testGetSetMinSpeed() {
-		final int value = 10;
-		final Vessel vessel = new Vessel();
-		Assert.assertEquals(0, vessel.getMinSpeed());
-		vessel.setMinSpeed(value);
-		Assert.assertEquals(value, vessel.getMinSpeed());
-	}
-
-	@Test
-	public void testGetSetMaxnSpeed() {
-		final int value = 10;
-		final Vessel vessel = new Vessel();
-		Assert.assertEquals(0, vessel.getMaxSpeed());
-		vessel.setMaxSpeed(value);
-		Assert.assertEquals(value, vessel.getMaxSpeed());
+		Assert.assertNull(vessel.getVesselClass());
+		IVesselClass vesselClass = context.mock(IVesselClass.class);
+		vessel.setVesselClass(vesselClass);
+		Assert.assertSame(vesselClass, vessel.getVesselClass());
 	}
 
 }

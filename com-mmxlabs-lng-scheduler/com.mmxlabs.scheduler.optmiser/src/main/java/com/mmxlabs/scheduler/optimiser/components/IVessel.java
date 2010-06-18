@@ -10,23 +10,20 @@ import com.mmxlabs.optimiser.IResource;
  * through a data provider linked to a IResource.
  * 
  * @author Simon Goodall
- * 
  */
 public interface IVessel extends IResource {
 
-	long getCargoCapacity();
-	
-	long getLadenNBORate();
-	
-	long getBallastNBORate();
-	
-	int getMinSpeed();
-	
-	int getMaxSpeed();
-
+	/**
+	 * Returns the name of the vessel.
+	 * 
+	 * @return
+	 */
 	String getName();
-	
-	// getLadenConsumptionCurve
-	
-	// getBallastConsumptionCurve
+
+	/**
+	 * Return the {@link IVesselClass} instance containing generic vessel data.
+	 * 
+	 * @return
+	 */
+	IVesselClass getVesselClass();
 }
