@@ -18,7 +18,7 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 
 	private IVoyageOptions options;
 
-	private EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(
+	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(
 			FuelComponent.class);
 
 	private long idleTime;
@@ -28,8 +28,13 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	private int speed;
 
 	@Override
-	public long getFuelConsumption(FuelComponent fuel) {
-		return fuelConsumption.get(fuel);
+	public long getFuelConsumption(final FuelComponent fuel) {
+
+		if (fuelConsumption.containsKey(fuel)) {
+			return fuelConsumption.get(fuel);
+		} else {
+			return 0l;
+		}
 	}
 
 	@Override
@@ -53,27 +58,27 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	}
 
 	@Override
-	public void setFuelConsumption(FuelComponent fuel, long consumption) {
+	public void setFuelConsumption(final FuelComponent fuel, final long consumption) {
 		fuelConsumption.put(fuel, consumption);
 	}
 
 	@Override
-	public void setIdleTime(long idleTime) {
+	public void setIdleTime(final long idleTime) {
 		this.idleTime = idleTime;
 	}
 
 	@Override
-	public void setOptions(IVoyageOptions options) {
+	public void setOptions(final IVoyageOptions options) {
 		this.options = options;
 	}
 
 	@Override
-	public void setSpeed(int speed) {
+	public void setSpeed(final int speed) {
 		this.speed = speed;
 	}
 
 	@Override
-	public void setTravelTime(long travelTime) {
+	public void setTravelTime(final long travelTime) {
 		this.travelTime = travelTime;
 	}
 
