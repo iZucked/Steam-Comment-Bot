@@ -93,11 +93,11 @@ public class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				if (options.useFBOForSupplement()) {
 					// Use FBO for remaining quantity
 					output.setFuelConsumption(FuelComponent.FBO, diff);
-					output.setFuelConsumption(FuelComponent.Base, 0);
+					output.setFuelConsumption(FuelComponent.Base_Supplemental, 0);
 				} else {
 					// Use base for remaining quantity
 					output.setFuelConsumption(FuelComponent.FBO, 0);
-					output.setFuelConsumption(FuelComponent.Base, diff);
+					output.setFuelConsumption(FuelComponent.Base_Supplemental, diff);
 				}
 			}
 		} else {
