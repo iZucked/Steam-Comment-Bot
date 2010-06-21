@@ -6,7 +6,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
  * Data structure defining a set of options to use in a
- * {@link IVoyageCalculator} when calculating voyages.
+ * {@link ILNGVoyageCalculator} when calculating voyages.
  * 
  * @author Simon Goodall
  * 

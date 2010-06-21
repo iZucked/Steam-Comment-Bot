@@ -3,7 +3,7 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 /**
- * Data structure populated by a {@link IVoyageCalculator} when evaluating a
+ * Data structure populated by a {@link ILNGVoyageCalculator} when evaluating a
  * {@link IPortSlot} to {@link IPortSlot} voyage.
  * 
  * @author Simon Goodall
