@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
@@ -480,8 +481,14 @@ public class LNGVoyageCalculatorTest {
 		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
 		final IVessel vessel = context.mock(IVessel.class);
 
+		final IPortDetails loadDetails = new PortDetails();
+		final IPortDetails dischargeDetails = new PortDetails();
+
 		final ILoadSlot loadSlot = new LoadSlot();
 		final IDischargeSlot dischargeSlot = new DischargeSlot();
+
+		loadDetails.setPortSlot(loadSlot);
+		dischargeDetails.setPortSlot(dischargeSlot);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		final IVoyageOptions options = context.mock(IVoyageOptions.class);
@@ -489,8 +496,8 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
-		final Object[] sequence = new Object[] { loadSlot, details,
-				dischargeSlot };
+		final Object[] sequence = new Object[] { loadDetails, details,
+				dischargeDetails };
 
 		context.checking(new Expectations() {
 			{
@@ -536,9 +543,16 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
+		final IPortDetails loadDetails = new PortDetails();
+		final IPortDetails dischargeDetails = new PortDetails();
+
 		final LoadSlot loadSlot = new LoadSlot();
-		loadSlot.setMaxLoadVolume(150l);
 		final DischargeSlot dischargeSlot = new DischargeSlot();
+
+		loadDetails.setPortSlot(loadSlot);
+		dischargeDetails.setPortSlot(dischargeSlot);
+
+		loadSlot.setMaxLoadVolume(150l);
 		dischargeSlot.setMaxDischargeVolume(30l);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
@@ -554,8 +568,8 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
-		final Object[] sequence = new Object[] { loadSlot, details,
-				dischargeSlot };
+		final Object[] sequence = new Object[] { loadDetails, details,
+				dischargeDetails };
 
 		context.checking(new Expectations() {
 			{
@@ -602,9 +616,16 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
+		final IPortDetails loadDetails = new PortDetails();
+		final IPortDetails dischargeDetails = new PortDetails();
+
 		final LoadSlot loadSlot = new LoadSlot();
-		loadSlot.setMaxLoadVolume(119l);
 		final DischargeSlot dischargeSlot = new DischargeSlot();
+
+		loadDetails.setPortSlot(loadSlot);
+		dischargeDetails.setPortSlot(dischargeSlot);
+
+		loadSlot.setMaxLoadVolume(119l);
 		dischargeSlot.setMaxDischargeVolume(30l);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
@@ -620,8 +641,8 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
-		final Object[] sequence = new Object[] { loadSlot, details,
-				dischargeSlot };
+		final Object[] sequence = new Object[] { loadDetails, details,
+				dischargeDetails };
 
 		context.checking(new Expectations() {
 			{

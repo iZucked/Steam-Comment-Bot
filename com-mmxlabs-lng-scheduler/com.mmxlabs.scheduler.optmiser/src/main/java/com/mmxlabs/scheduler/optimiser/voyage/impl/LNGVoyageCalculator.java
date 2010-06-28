@@ -9,6 +9,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
@@ -162,10 +163,10 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 	}
 
 	/**
-	 * Given a sequence of {@link IPortSlot}s interleaved with
+	 * Given a sequence of {@link IPortDetails} interleaved with
 	 * {@link IVoyageDetails}, compute the total base fuel and LNG requirements,
 	 * taking into account initial conditions, load and discharge commitments
-	 * etc. It is assumed that the first and last {@link IPortSlot} will be a
+	 * etc. It is assumed that the first and last {@link IPortDetails} will be a
 	 * Loading slot or other slot where the vessel state is set to a known
 	 * state. Intermediate slots are any other type of slot (e.g. one discharge,
 	 * multiple waypoints, etc). If the first slot is a load slot, then this is
@@ -189,7 +190,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		for (int i = 0; i < sequence.length; ++i) {
 			if (i % 2 == 0) {
 				// Port Slot
-				final IPortSlot slot = (IPortSlot) sequence[i];
+				final IPortDetails details = (IPortDetails) sequence[i];
+				final IPortSlot slot = details.getPortSlot();
 				if (slot instanceof ILoadSlot) {
 					loadIdx = i;
 				} else if (slot instanceof IDischargeSlot) {
@@ -198,6 +200,14 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					// Currently another slot type, no LNG state to pull in as
 					// yet.
 				}
+				
+				// TODO: add up costs/consumptions
+				
+				for (final FuelComponent fc : FuelComponent.values()) {
+					fuelConsumptions[fc.ordinal()] += details
+							.getFuelConsumption(fc);
+				}
+				
 			} else {
 				// Voyage
 				final IVoyageDetails<?> details = (IVoyageDetails<?>) sequence[i];
@@ -235,8 +245,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		// Load/Discharge sequence
 		if (loadIdx != -1 && dischargeIdx != -1) {
-			final ILoadSlot loadSlot = (ILoadSlot) sequence[loadIdx];
-			final IDischargeSlot dischargeSlot = (IDischargeSlot) sequence[dischargeIdx];
+			final ILoadSlot loadSlot = (ILoadSlot)((IPortDetails) sequence[loadIdx]).getPortSlot();
+			final IDischargeSlot dischargeSlot = (IDischargeSlot)((IPortDetails) sequence[dischargeIdx]).getPortSlot();
 
 			final long lngConsumed = fuelConsumptions[FuelComponent.NBO
 					.ordinal()]
