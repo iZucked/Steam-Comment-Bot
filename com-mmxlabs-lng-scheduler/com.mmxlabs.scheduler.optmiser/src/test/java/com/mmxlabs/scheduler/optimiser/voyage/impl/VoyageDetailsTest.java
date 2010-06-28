@@ -28,7 +28,7 @@ public class VoyageDetailsTest {
 
 	@Test
 	public void testGetSetIdleTime() {
-		final long value = 100l;
+		final int value = 100;
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		Assert.assertEquals(0, details.getIdleTime());
 		details.setIdleTime(value);
@@ -58,7 +58,7 @@ public class VoyageDetailsTest {
 
 	@Test
 	public void testGetSetTravelTime() {
-		final long value = 100l;
+		final int value = 100;
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		Assert.assertEquals(0, details.getTravelTime());
 		details.setTravelTime(value);

@@ -32,28 +32,28 @@ public interface IVoyageDetails<T> {
 	 * 
 	 * @param travelTime
 	 */
-	void setTravelTime(long travelTime);
+	void setTravelTime(int travelTime);
 
 	/**
 	 * Returns the amount of time spent travelling between ports
 	 * 
 	 * @return
 	 */
-	long getTravelTime();
+	int getTravelTime();
 
 	/**
 	 * Set the amount of time spent idling outside of a port
 	 * 
 	 * @param idleTime
 	 */
-	void setIdleTime(long idleTime);
+	void setIdleTime(int idleTime);
 
 	/**
 	 * Returns the amount of time spent idling outside of a port
 	 * 
 	 * @return
 	 */
-	long getIdleTime();
+	int getIdleTime();
 
 	/**
 	 * Set the speed used to travel between ports.
