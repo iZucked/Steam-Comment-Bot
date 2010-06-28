@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.optimiser.components.ITimeWindow;
 
 /**
  * Interface representing a particular discharge slot defined by a port, time
@@ -11,14 +10,16 @@ import com.mmxlabs.optimiser.components.ITimeWindow;
  */
 public interface IDischargeSlot extends IPortSlot {
 	/**
-	 * Returns the minimum quantity that can be discharged.
+	 * Returns the minimum quantity that can be discharged. A value of zero is
+	 * equivalent to no minimum bound.
 	 * 
 	 * @return
 	 */
 	long getMinDischargeVolume();
 
 	/**
-	 * Returns the maximum quantity that can be discharged.
+	 * Returns the maximum quantity that can be discharged. A value of
+	 * {@link Long#MAX_VALUE} is equivalent to no maximum bound.
 	 * 
 	 * @return
 	 */
