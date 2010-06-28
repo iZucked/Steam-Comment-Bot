@@ -1,6 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -9,8 +11,17 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
-public class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
+/**
+ * Implementation of {@link ILNGVoyageCalculator}.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type.
+ */
+public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The
@@ -37,11 +48,11 @@ public class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		final long distance = options.getDistance();
 
 		// Get available time
-		final long availableTime = options.getAvailableTime();
+		final int availableTime = options.getAvailableTime();
 
 		// Calculate speed
 		// cast to int as if long is required, then what are we doing?
-		int speed = (int) Calculator.speedFromDistanceTime(distance,
+		int speed = Calculator.speedFromDistanceTime(distance,
 				availableTime);
 
 		// Check NBO speed
@@ -68,9 +79,9 @@ public class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// Calculate total, travel and idle time
 
 		// May be longer than available time
-		final long travelTime = Calculator.getTimeFromSpeedDistance(speed,
+		final int travelTime = Calculator.getTimeFromSpeedDistance(speed,
 				distance);
-		final long idleTime = Math.max(0, availableTime - travelTime);
+		final int idleTime = Math.max(0, availableTime - travelTime);
 
 		output.setTravelTime(travelTime);
 		output.setIdleTime(idleTime);
@@ -93,11 +104,13 @@ public class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				if (options.useFBOForSupplement()) {
 					// Use FBO for remaining quantity
 					output.setFuelConsumption(FuelComponent.FBO, diff);
-					output.setFuelConsumption(FuelComponent.Base_Supplemental, 0);
+					output.setFuelConsumption(FuelComponent.Base_Supplemental,
+							0);
 				} else {
 					// Use base for remaining quantity
 					output.setFuelConsumption(FuelComponent.FBO, 0);
-					output.setFuelConsumption(FuelComponent.Base_Supplemental, diff);
+					output.setFuelConsumption(FuelComponent.Base_Supplemental,
+							diff);
 				}
 			}
 		} else {
@@ -106,7 +119,7 @@ public class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			output.setFuelConsumption(FuelComponent.Base, requiredConsumption);
 		}
 
-		long idleNBORate = vesselClass.getIdleNBORate(vesselState);
+		final long idleNBORate = vesselClass.getIdleNBORate(vesselState);
 		if (options.useNBOForIdle()) {
 			final long nboProvided = Calculator.quantityFromRateTime(
 					idleNBORate, idleTime);
@@ -130,10 +143,10 @@ public class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				// work out how long we could provide energy for based on
 				// boil-off time rather than use the raw quantity directly.
 				final long minHeel = vesselClass.getMinHeel();
-				int deltaTime = Calculator.getTimeFromRateQuantity(idleNBORate,
-						minHeel);
-				long equivalentConsumption = Calculator.quantityFromRateTime(
-						idleRate, deltaTime);
+				final int deltaTime = Calculator.getTimeFromRateQuantity(
+						idleNBORate, minHeel);
+				final long equivalentConsumption = Calculator
+						.quantityFromRateTime(idleRate, deltaTime);
 
 				idleConsumption -= equivalentConsumption;
 				output.setFuelConsumption(FuelComponent.IdleNBO, minHeel);
@@ -146,5 +159,162 @@ public class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		}
 
 		// TODO: Calculate extras - route specific costs etc
+	}
+
+	/**
+	 * Given a sequence of {@link IPortSlot}s interleaved with
+	 * {@link IVoyageDetails}, compute the total base fuel and LNG requirements,
+	 * taking into account initial conditions, load and discharge commitments
+	 * etc. It is assumed that the first and last {@link IPortSlot} will be a
+	 * Loading slot or other slot where the vessel state is set to a known
+	 * state. Intermediate slots are any other type of slot (e.g. one discharge,
+	 * multiple waypoints, etc). If the first slot is a load slot, then this is
+	 * the only reason we should see a discharge slot.
+	 * 
+	 * @param sequence
+	 */
+	void calculateVoyagePlan(final IVoyagePlan voyagePlan,
+			final IVessel vessel, final Object... sequence) {
+
+		// Ensure odd number of elements
+		assert sequence.length % 2 == 1;
+
+		final IVesselClass vesselClass = vessel.getVesselClass();
+
+		int loadIdx = -1;
+		int dischargeIdx = -1;
+
+		final long[] fuelConsumptions = new long[FuelComponent.values().length];
+
+		for (int i = 0; i < sequence.length; ++i) {
+			if (i % 2 == 0) {
+				// Port Slot
+				final IPortSlot slot = (IPortSlot) sequence[i];
+				if (slot instanceof ILoadSlot) {
+					loadIdx = i;
+				} else if (slot instanceof IDischargeSlot) {
+					dischargeIdx = i;
+				} else {
+					// Currently another slot type, no LNG state to pull in as
+					// yet.
+				}
+			} else {
+				// Voyage
+				final IVoyageDetails<?> details = (IVoyageDetails<?>) sequence[i];
+				for (final FuelComponent fc : FuelComponent.values()) {
+					fuelConsumptions[fc.ordinal()] += details
+							.getFuelConsumption(fc);
+				}
+
+				// TODO: Assert that if discharge.heelOut set, then future
+				// voyages have no LNG
+				/*
+				 * assert dischargeIdx == -1 ||
+				 * ((IDischargeSlot)sequence[dischargeIdx]).getHeelOut() ==
+				 * false || (details.getFuelConsumption(FuelComponent.NBO) == 0
+				 * && details .getFuelConsumption(FuelComponent.FBO) == 0 &&
+				 * details .getFuelConsumption(FuelComponent.IdleNBO) == 0);
+				 */
+
+				// Assert Laden/Ballast state switches after load and discharge
+				assert (loadIdx == -1 && dischargeIdx == -1 && details
+						.getOptions().getVesselState() == VesselState.Ballast)
+						|| (loadIdx > -1 && dischargeIdx == -1 && details
+								.getOptions().getVesselState() == VesselState.Laden)
+						|| (loadIdx > -1 && dischargeIdx > -1 && details
+								.getOptions().getVesselState() == VesselState.Ballast);
+			}
+		}
+
+		// If load or discharge has been set, then the other must be too.
+		assert loadIdx == -1 || dischargeIdx != -1;
+		assert dischargeIdx == -1 || loadIdx != -1;
+
+		long loadVolume = 0;
+		long dischargeVolume = 0;
+
+		// Load/Discharge sequence
+		if (loadIdx != -1 && dischargeIdx != -1) {
+			final ILoadSlot loadSlot = (ILoadSlot) sequence[loadIdx];
+			final IDischargeSlot dischargeSlot = (IDischargeSlot) sequence[dischargeIdx];
+
+			final long lngConsumed = fuelConsumptions[FuelComponent.NBO
+					.ordinal()]
+					+ fuelConsumptions[FuelComponent.FBO.ordinal()]
+					+ fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
+
+			long cargoCapacity = vesselClass.getCargoCapacity();
+
+			long minLoadVolume = loadSlot.getMinLoadVolume();
+			long maxLoadVolume = loadSlot.getMaxLoadVolume();
+			long minDischargeVolume = dischargeSlot.getMinDischargeVolume();
+			long maxDischargeVolume = dischargeSlot.getMaxDischargeVolume();
+
+			// We cannot load more than is available or which would exceed
+			// vessel capacity.
+			long upperLoadLimit = Math.min(cargoCapacity, maxLoadVolume);
+
+			// Now find the amount of leeway we have between limits. By
+			// subtracting lngConsumed from the load limits, we bring the load
+			// and discharge limits into the same range. We can then find the
+			// highest intersecting point as the additional amount of lng we can
+			// load to max out load and discharge. This is the sales quantity.
+			
+			dischargeVolume = Math.min(upperLoadLimit - lngConsumed, maxDischargeVolume);
+			
+			
+			if (dischargeVolume < 0 ) {
+				throw new RuntimeException("Capacity violation");
+			}
+			loadVolume = dischargeVolume + lngConsumed;
+			
+			// These should be guaranteed by the Math.min call above
+			assert (loadVolume <=  upperLoadLimit);
+			assert (dischargeVolume <=  maxDischargeVolume);
+
+			// Check the bounds
+			if (loadVolume < minLoadVolume) {
+				//problem
+				throw new RuntimeException("Capacity violation");
+			}
+			
+			if (dischargeVolume < minDischargeVolume) {
+				//problem
+				throw new RuntimeException("Capacity violation");
+			}
+			
+			// Sanity checks
+			assert loadVolume <= cargoCapacity;
+			assert loadVolume <= maxLoadVolume;
+			assert loadVolume >= minLoadVolume;
+			assert dischargeVolume <= maxDischargeVolume;
+			assert dischargeVolume >= minDischargeVolume;
+
+		} else {
+			final long lngConsumed = fuelConsumptions[FuelComponent.NBO
+					.ordinal()]
+					+ fuelConsumptions[FuelComponent.FBO.ordinal()]
+					+ fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
+			if (lngConsumed > 0) {
+				throw new RuntimeException("LNG Required, but non loaded");
+			}
+		}
+
+		// Store results in plan
+		voyagePlan.setSequence(sequence);
+
+		for (final FuelComponent fc : FuelComponent.values()) {
+			final long consumption = fuelConsumptions[fc.ordinal()];
+			voyagePlan.setFuelConsumption(fc, consumption);
+
+			final long cost = consumption * 1;
+			voyagePlan.setFuelCost(fc, cost);
+		}
+
+		voyagePlan.setLoadVolume(loadVolume);
+		voyagePlan.setPurchaseCost(loadVolume * 1);
+
+		voyagePlan.setDischargeVolume(dischargeVolume);
+		voyagePlan.setSalesRevenue(dischargeVolume * 1);
 	}
 }
