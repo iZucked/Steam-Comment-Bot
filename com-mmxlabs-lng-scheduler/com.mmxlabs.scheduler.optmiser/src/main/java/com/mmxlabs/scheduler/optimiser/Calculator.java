@@ -12,17 +12,17 @@ public class Calculator {
 
 	public static final int ScaleFactor = 1000;
 
-	public static long speedFromDistanceTime(long distance, long time) {
+	public static int speedFromDistanceTime(long distance, int time) {
 
-		return (distance * ScaleFactor) / time;
+		return (int)((distance * ScaleFactor) / time);
 	}
 
-	public static long getTimeFromSpeedDistance(long speed, long distance) {
+	public static int getTimeFromSpeedDistance(int speed, long distance) {
 
-		return (distance * ScaleFactor) / speed;
+		return (int)((distance * ScaleFactor) / speed);
 	}
 
-	public static long quantityFromRateTime(long rate, long time) {
+	public static long quantityFromRateTime(long rate, int time) {
 
 		return (rate * time);
 	}
