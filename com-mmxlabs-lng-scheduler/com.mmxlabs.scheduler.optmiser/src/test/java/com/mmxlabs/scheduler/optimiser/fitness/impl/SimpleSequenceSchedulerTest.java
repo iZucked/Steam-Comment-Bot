@@ -1,10 +1,10 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+
 import java.util.Collections;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;

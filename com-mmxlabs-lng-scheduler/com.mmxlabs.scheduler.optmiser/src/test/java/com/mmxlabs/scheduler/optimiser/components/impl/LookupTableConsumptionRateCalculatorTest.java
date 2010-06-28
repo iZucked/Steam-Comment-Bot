@@ -1,11 +1,10 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import junit.framework.Assert;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -37,18 +36,18 @@ public class LookupTableConsumptionRateCalculatorTest {
 		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(
 				5, 10, calc);
 
-		Assert.assertEquals(100l,lookupCalc.getRate(5));
-		Assert.assertEquals(100l,lookupCalc.getRate(6));
-		Assert.assertEquals(100l,lookupCalc.getRate(7));
-		Assert.assertEquals(100l,lookupCalc.getRate(8));
-		Assert.assertEquals(100l,lookupCalc.getRate(9));
-		Assert.assertEquals(100l,lookupCalc.getRate(10));
-		
+		Assert.assertEquals(100l, lookupCalc.getRate(5));
+		Assert.assertEquals(100l, lookupCalc.getRate(6));
+		Assert.assertEquals(100l, lookupCalc.getRate(7));
+		Assert.assertEquals(100l, lookupCalc.getRate(8));
+		Assert.assertEquals(100l, lookupCalc.getRate(9));
+		Assert.assertEquals(100l, lookupCalc.getRate(10));
+
 		context.assertIsSatisfied();
 
 	}
 
-	@Test(expected=ArrayIndexOutOfBoundsException.class)
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testLookupTableConsumptionRateCalculator2() {
 		final IConsumptionRateCalculator calc = context
 				.mock(IConsumptionRateCalculator.class);
@@ -71,10 +70,10 @@ public class LookupTableConsumptionRateCalculatorTest {
 
 		context.assertIsSatisfied();
 		lookupCalc.getRate(4);
-		
+
 	}
-	
-	@Test(expected=ArrayIndexOutOfBoundsException.class)
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testLookupTableConsumptionRateCalculator3() {
 		final IConsumptionRateCalculator calc = context
 				.mock(IConsumptionRateCalculator.class);
@@ -97,6 +96,6 @@ public class LookupTableConsumptionRateCalculatorTest {
 
 		context.assertIsSatisfied();
 		lookupCalc.getRate(11);
-		
+
 	}
 }
