@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import static org.junit.Assert.fail;
+
 import java.util.TreeMap;
 
 import org.jmock.Expectations;
@@ -11,14 +13,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 @RunWith(JMock.class)
 public class LNGVoyageCalculatorTest {
@@ -463,5 +471,199 @@ public class LNGVoyageCalculatorTest {
 
 		return options;
 	}
+
+	@Test
+	public void testCalculateVoyagePlan1() {
+
+		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
+
+		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
+		final IVessel vessel = context.mock(IVessel.class);
+
+		final ILoadSlot loadSlot = new LoadSlot();
+		final IDischargeSlot dischargeSlot = new DischargeSlot();
+
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final IVoyageOptions options = context.mock(IVoyageOptions.class);
+		details.setOptions(options);
+
+		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
+
+		final Object[] sequence = new Object[] { loadSlot, details,
+				dischargeSlot };
+
+		context.checking(new Expectations() {
+			{
+				allowing(options).getVesselState();
+				one(vessel).getVesselClass();
+
+				one(plan).setSequence(sequence);
+
+				one(plan).setFuelConsumption(FuelComponent.Base, 0);
+				one(plan)
+						.setFuelConsumption(FuelComponent.Base_Supplemental, 0);
+				one(plan).setFuelConsumption(FuelComponent.NBO, 0);
+				one(plan).setFuelConsumption(FuelComponent.FBO, 0);
+				one(plan).setFuelConsumption(FuelComponent.IdleNBO, 0);
+				one(plan).setFuelConsumption(FuelComponent.IdleBase, 0);
+
+				one(plan).setFuelCost(FuelComponent.Base, 0);
+				one(plan).setFuelCost(FuelComponent.Base_Supplemental, 0);
+				one(plan).setFuelCost(FuelComponent.NBO, 0);
+				one(plan).setFuelCost(FuelComponent.FBO, 0);
+				one(plan).setFuelCost(FuelComponent.IdleNBO, 0);
+				one(plan).setFuelCost(FuelComponent.IdleBase, 0);
+
+				one(plan).setLoadVolume(0);
+				one(plan).setDischargeVolume(0);
+				one(plan).setPurchaseCost(0);
+				one(plan).setSalesRevenue(0);
+			}
+		});
+
+		calc.calculateVoyagePlan(plan, vessel, sequence);
+
+		context.assertIsSatisfied();
+	}
+
+	@Test
+	public void testCalculateVoyagePlan2() {
+
+		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
+		final IVessel vessel = context.mock(IVessel.class);
+		final VesselClass vesselClass = new VesselClass();
+		context.setDefaultResultForType(IVesselClass.class, vesselClass);
+		vesselClass.setCargoCapacity(Long.MAX_VALUE);
+		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
+
+		final LoadSlot loadSlot = new LoadSlot();
+		loadSlot.setMaxLoadVolume(150l);
+		final DischargeSlot dischargeSlot = new DischargeSlot();
+		dischargeSlot.setMaxDischargeVolume(30l);
+
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final IVoyageOptions options = context.mock(IVoyageOptions.class);
+		details.setOptions(options);
+
+		details.setFuelConsumption(FuelComponent.Base, 10);
+		details.setFuelConsumption(FuelComponent.Base_Supplemental, 20);
+		details.setFuelConsumption(FuelComponent.NBO, 30);
+		details.setFuelConsumption(FuelComponent.FBO, 40);
+		details.setFuelConsumption(FuelComponent.IdleNBO, 50);
+		details.setFuelConsumption(FuelComponent.IdleBase, 60);
+
+		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
+
+		final Object[] sequence = new Object[] { loadSlot, details,
+				dischargeSlot };
+
+		context.checking(new Expectations() {
+			{
+
+				allowing(options).getVesselState();
+				one(vessel).getVesselClass();
+
+				one(plan).setSequence(sequence);
+
+				one(plan).setFuelConsumption(FuelComponent.Base, 10);
+				one(plan).setFuelConsumption(FuelComponent.Base_Supplemental,
+						20);
+				one(plan).setFuelConsumption(FuelComponent.NBO, 30);
+				one(plan).setFuelConsumption(FuelComponent.FBO, 40);
+				one(plan).setFuelConsumption(FuelComponent.IdleNBO, 50);
+				one(plan).setFuelConsumption(FuelComponent.IdleBase, 60);
+
+				one(plan).setFuelCost(FuelComponent.Base, 10);
+				one(plan).setFuelCost(FuelComponent.Base_Supplemental, 20);
+				one(plan).setFuelCost(FuelComponent.NBO, 30);
+				one(plan).setFuelCost(FuelComponent.FBO, 40);
+				one(plan).setFuelCost(FuelComponent.IdleNBO, 50);
+				one(plan).setFuelCost(FuelComponent.IdleBase, 60);
+
+				one(plan).setLoadVolume(150);
+				one(plan).setDischargeVolume(30);
+				one(plan).setPurchaseCost(150);
+				one(plan).setSalesRevenue(30);
+			}
+		});
+
+		calc.calculateVoyagePlan(plan, vessel, sequence);
+
+		context.assertIsSatisfied();
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testCalculateVoyagePlan3() {
+
+		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
+		final IVessel vessel = context.mock(IVessel.class);
+		final VesselClass vesselClass = new VesselClass();
+		context.setDefaultResultForType(IVesselClass.class, vesselClass);
+		vesselClass.setCargoCapacity(Long.MAX_VALUE);
+		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
+
+		final LoadSlot loadSlot = new LoadSlot();
+		loadSlot.setMaxLoadVolume(119l);
+		final DischargeSlot dischargeSlot = new DischargeSlot();
+		dischargeSlot.setMaxDischargeVolume(30l);
+
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final IVoyageOptions options = context.mock(IVoyageOptions.class);
+		details.setOptions(options);
+
+		details.setFuelConsumption(FuelComponent.Base, 10);
+		details.setFuelConsumption(FuelComponent.Base_Supplemental, 20);
+		details.setFuelConsumption(FuelComponent.NBO, 30);
+		details.setFuelConsumption(FuelComponent.FBO, 40);
+		details.setFuelConsumption(FuelComponent.IdleNBO, 50);
+		details.setFuelConsumption(FuelComponent.IdleBase, 60);
+
+		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
+
+		final Object[] sequence = new Object[] { loadSlot, details,
+				dischargeSlot };
+
+		context.checking(new Expectations() {
+			{
+
+				allowing(options).getVesselState();
+				one(vessel).getVesselClass();
+
+				// one(plan).setSequence(sequence);
+				//
+				// one(plan).setFuelConsumption(FuelComponent.Base, 10);
+				// one(plan).setFuelConsumption(FuelComponent.Base_Supplemental,
+				// 20);
+				// one(plan).setFuelConsumption(FuelComponent.NBO, 30);
+				// one(plan).setFuelConsumption(FuelComponent.FBO, 40);
+				// one(plan).setFuelConsumption(FuelComponent.IdleNBO, 50);
+				// one(plan).setFuelConsumption(FuelComponent.IdleBase, 60);
+				//
+				// one(plan).setFuelCost(FuelComponent.Base, 10);
+				// one(plan).setFuelCost(FuelComponent.Base_Supplemental, 20);
+				// one(plan).setFuelCost(FuelComponent.NBO, 30);
+				// one(plan).setFuelCost(FuelComponent.FBO, 40);
+				// one(plan).setFuelCost(FuelComponent.IdleNBO, 50);
+				// one(plan).setFuelCost(FuelComponent.IdleBase, 60);
+				//
+				// one(plan).setLoadVolume(150);
+				// one(plan).setDischargeVolume(30);
+				// one(plan).setPurchaseCost(150);
+				// one(plan).setSalesRevenue(30);
+			}
+		});
+
+		calc.calculateVoyagePlan(plan, vessel, sequence);
+
+		context.assertIsSatisfied();
+
+		fail("Better to return object, recording the error");
+
+	}
+
+	//	
+	// TODO: Test load/discharge limits
+	//	 
+	// TODO: Test none cargos
 
 }
