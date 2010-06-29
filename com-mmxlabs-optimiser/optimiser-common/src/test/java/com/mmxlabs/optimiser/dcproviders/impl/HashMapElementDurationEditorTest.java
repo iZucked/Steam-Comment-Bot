@@ -1,10 +1,11 @@
 package com.mmxlabs.optimiser.dcproviders.impl;
 
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.optimiser.impl.Resource;
+
 
 public class HashMapElementDurationEditorTest {
 

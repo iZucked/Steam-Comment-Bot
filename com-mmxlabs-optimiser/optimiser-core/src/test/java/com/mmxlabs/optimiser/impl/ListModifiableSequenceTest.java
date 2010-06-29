@@ -7,10 +7,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,14 +28,6 @@ import com.mmxlabs.optimiser.ISegment;
 public class ListModifiableSequenceTest {
 
 	private ListModifiableSequence<Object> sequence;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
 
 	@Before
 	public void setUp() throws Exception {

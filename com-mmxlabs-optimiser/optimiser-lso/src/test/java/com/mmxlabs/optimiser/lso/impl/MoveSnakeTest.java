@@ -5,12 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

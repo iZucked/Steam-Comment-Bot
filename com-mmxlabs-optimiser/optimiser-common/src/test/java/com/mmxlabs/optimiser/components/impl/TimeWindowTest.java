@@ -1,7 +1,6 @@
 package com.mmxlabs.optimiser.components.impl;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TimeWindowTest {

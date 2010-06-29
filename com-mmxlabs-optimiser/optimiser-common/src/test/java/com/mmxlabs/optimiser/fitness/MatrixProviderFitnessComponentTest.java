@@ -1,8 +1,9 @@
 package com.mmxlabs.optimiser.fitness;
 
-import static org.junit.Assert.fail;
-import junit.framework.Assert;
 
+import static org.junit.Assert.fail;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 class MatrixProviderFitnessComponentTest {
