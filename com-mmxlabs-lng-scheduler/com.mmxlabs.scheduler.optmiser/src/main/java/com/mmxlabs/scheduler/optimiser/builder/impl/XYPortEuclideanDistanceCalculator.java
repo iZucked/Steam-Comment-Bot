@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 public final class XYPortEuclideanDistanceCalculator implements
 		IXYPortDistanceCalculator {
 
+	@Override
 	public double getDistance(final IXYPort from, final IXYPort to) {
 
 		final float diffX = from.getX() - to.getX();

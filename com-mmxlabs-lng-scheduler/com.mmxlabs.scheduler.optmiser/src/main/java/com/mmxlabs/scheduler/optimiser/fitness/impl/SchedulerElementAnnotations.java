@@ -18,6 +18,7 @@ public final class SchedulerElementAnnotations implements ISchedulerElementAnnot
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.scheduler.optmiser.fitness.ISequenceSchedulerAdditionalInfo#get(java.lang.String, java.lang.Class)
 	 */
+	@Override
 	public <U> U get(final String key, final Class<U> clz) {
 
 		if (additionalInfo.containsKey(key)) {
@@ -29,6 +30,7 @@ public final class SchedulerElementAnnotations implements ISchedulerElementAnnot
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.scheduler.optmiser.fitness.ISequenceSchedulerAdditionalInfo#put(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void put(final String key, final Object value) {
 		additionalInfo.put(key, value);
 	}

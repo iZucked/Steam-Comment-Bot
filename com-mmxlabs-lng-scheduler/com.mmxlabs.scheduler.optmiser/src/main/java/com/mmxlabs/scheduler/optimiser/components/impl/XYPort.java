@@ -16,6 +16,7 @@ public final class XYPort implements IXYPort {
 
 	private float y;
 
+	@Override
 	public String getName() {
 		return name;
 	}
