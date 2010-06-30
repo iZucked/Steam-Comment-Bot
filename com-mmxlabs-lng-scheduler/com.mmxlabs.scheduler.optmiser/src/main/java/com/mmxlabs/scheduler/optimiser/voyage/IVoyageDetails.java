@@ -85,4 +85,19 @@ public interface IVoyageDetails<T> {
 	 */
 	long getFuelConsumption(FuelComponent fuel);
 
+	/**
+	 * Returns the start time of this voyage. The end time is the start time
+	 * plus the result of {@link #getTravelTime()} and {@link #getIdleTime()}
+	 * 
+	 * @return
+	 */
+	int getStartTime();
+
+	/**
+	 * Sets the start time of this voyage.
+	 * 
+	 * @param startTime
+	 */
+	void setStartTime(int startTime);
+
 }

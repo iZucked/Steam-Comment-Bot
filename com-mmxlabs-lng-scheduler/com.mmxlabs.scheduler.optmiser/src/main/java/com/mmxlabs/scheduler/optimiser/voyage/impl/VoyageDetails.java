@@ -27,6 +27,8 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 
 	private int speed;
 
+	private int startTime;
+
 	@Override
 	public long getFuelConsumption(final FuelComponent fuel) {
 
@@ -58,7 +60,8 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	}
 
 	@Override
-	public void setFuelConsumption(final FuelComponent fuel, final long consumption) {
+	public void setFuelConsumption(final FuelComponent fuel,
+			final long consumption) {
 		fuelConsumption.put(fuel, consumption);
 	}
 
@@ -80,5 +83,15 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	@Override
 	public void setTravelTime(final int travelTime) {
 		this.travelTime = travelTime;
+	}
+
+	@Override
+	public int getStartTime() {
+		return startTime;
+	}
+
+	@Override
+	public void setStartTime(final int startTime) {
+		this.startTime = startTime;
 	}
 }

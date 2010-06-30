@@ -64,4 +64,13 @@ public class VoyageDetailsTest {
 		details.setTravelTime(value);
 		Assert.assertEquals(value, details.getTravelTime());
 	}
+	
+	@Test
+	public void testGetSetStartTime() {
+		final int value = 100;
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		Assert.assertEquals(0, details.getStartTime());
+		details.setStartTime(value);
+		Assert.assertEquals(value, details.getStartTime());
+	}
 }
