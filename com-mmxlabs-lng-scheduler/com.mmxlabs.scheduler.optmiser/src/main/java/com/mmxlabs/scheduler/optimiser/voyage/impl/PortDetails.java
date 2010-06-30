@@ -21,6 +21,8 @@ public final class PortDetails implements IPortDetails {
 
 	private IPortSlot portSlot;
 
+	private int startTime;
+
 	@Override
 	public long getFuelConsumption(final FuelComponent fuel) {
 
@@ -60,5 +62,15 @@ public final class PortDetails implements IPortDetails {
 	@Override
 	public void setPortSlot(final IPortSlot portSlot) {
 		this.portSlot = portSlot;
+	}
+
+	@Override
+	public int getStartTime() {
+		return startTime;
+	}
+
+	@Override
+	public void setStartTime(final int startTime) {
+		this.startTime = startTime;
 	}
 }

@@ -43,7 +43,27 @@ public interface IPortDetails {
 	 */
 	long getFuelConsumption(FuelComponent fuel);
 
+	/**
+	 * Set the fuel consumption at the port.
+	 * 
+	 * @param fuel
+	 * @param consumption
+	 */
 	void setFuelConsumption(FuelComponent fuel, long consumption);
 
+	/**
+	 * Return the start time of this port event. The end time is the start time
+	 * plus {@link #getVisitDuration()}.
+	 * 
+	 * @return
+	 */
+	int getStartTime();
+
+	/**
+	 * Set the start time of this port event.
+	 * 
+	 * @param startTime
+	 */
+	void setStartTime(int startTime);
 
 }

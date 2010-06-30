@@ -34,7 +34,6 @@ public class PortDetailsTest {
 		Assert.assertEquals(0, details.getVisitDuration());
 		details.setVisitDuration(value);
 		Assert.assertEquals(value, details.getVisitDuration());
-
 	}
 
 	@Test(expected=UnsupportedOperationException.class)
@@ -51,6 +50,16 @@ public class PortDetailsTest {
 		Assert.assertNull(details.getPortSlot());
 		details.setPortSlot(slot);
 		Assert.assertSame(slot, details.getPortSlot());
-
 	}
+	
+	@Test
+	public void testGetSetStartTime() {
+
+		final int value = 100;
+		PortDetails details = new PortDetails();
+		Assert.assertEquals(0, details.getStartTime());
+		details.setStartTime(value);
+		Assert.assertEquals(value, details.getStartTime());
+	}
+
 }
