@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.EnumMap;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
@@ -99,5 +100,39 @@ public final class VoyagePlan implements IVoyagePlan {
 	@Override
 	public void setSequence(final Object[] sequence) {
 		this.sequence = sequence;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj instanceof VoyagePlan) {
+			final VoyagePlan p = (VoyagePlan) obj;
+
+			if (dischargeVolume != p.dischargeVolume) {
+				return false;
+			}
+			if (loadVolume != p.loadVolume) {
+				return false;
+			}
+			if (purchaseCost != p.purchaseCost) {
+				return false;
+			}
+			if (salesRevenue != p.salesRevenue) {
+				return false;
+			}
+
+			if (!Equality.isEqual(sequence, p.sequence)) {
+				return false;
+			}
+			if (!Equality.isEqual(fuelConsumptions, p.fuelConsumptions)) {
+				return false;
+			}
+			if (!Equality.isEqual(fuelCosts, p.fuelCosts)) {
+				return false;
+			}
+			return true;
+		}
+
+		return false;
 	}
 }
