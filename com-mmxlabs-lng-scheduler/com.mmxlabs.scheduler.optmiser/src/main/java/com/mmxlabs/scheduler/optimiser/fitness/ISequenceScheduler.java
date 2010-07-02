@@ -1,7 +1,10 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+import java.util.List;
+
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
  * This class contains the logic required to schedule a {@link ISequence}. This
@@ -15,14 +18,14 @@ import com.mmxlabs.optimiser.ISequence;
 public interface ISequenceScheduler<T> {
 
 	/**
-	 * Attempt to schedule the given {@link ISequence}. Returns false if for
-	 * some reason a valid schedule is unable to be found.
+	 * Attempt to schedule the given {@link ISequence}. Returns a {@link List}
+	 * of {@link IVoyagePlan}s or null if there was a problem.
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @return
 	 */
-	boolean schedule(IResource resource, ISequence<T> sequence, IAnnotatedSequence<T> annotatedSequence);
+	List<IVoyagePlan> schedule(IResource resource, ISequence<T> sequence);
 
 	/**
 	 * Release resources.
