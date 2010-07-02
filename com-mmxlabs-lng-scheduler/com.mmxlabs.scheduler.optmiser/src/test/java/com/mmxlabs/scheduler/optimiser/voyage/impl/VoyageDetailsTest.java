@@ -64,7 +64,7 @@ public class VoyageDetailsTest {
 		details.setTravelTime(value);
 		Assert.assertEquals(value, details.getTravelTime());
 	}
-	
+
 	@Test
 	public void testGetSetStartTime() {
 		final int value = 100;
@@ -72,5 +72,67 @@ public class VoyageDetailsTest {
 		Assert.assertEquals(0, details.getStartTime());
 		details.setStartTime(value);
 		Assert.assertEquals(value, details.getStartTime());
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void testEquals() {
+
+		final IVoyageOptions options1 = context
+				.mock(IVoyageOptions.class, "o1");
+		final IVoyageOptions options2 = context
+				.mock(IVoyageOptions.class, "o2");
+
+		final FuelComponent fuel1 = FuelComponent.Base;
+		final FuelComponent fuel2 = FuelComponent.NBO;
+
+		final VoyageDetails details1 = make(1, 2, 3, 4, options1, fuel1, 5);
+		final VoyageDetails details2 = make(1, 2, 3, 4, options1, fuel1, 5);
+		final VoyageDetails details3 = make(21, 2, 3, 4, options1, fuel1, 5);
+		final VoyageDetails details4 = make(1, 22, 3, 4, options1, fuel1, 5);
+		final VoyageDetails details5 = make(1, 2, 23, 4, options1, fuel1, 5);
+		final VoyageDetails details6 = make(1, 2, 3, 24, options1, fuel1, 5);
+		final VoyageDetails details7 = make(1, 2, 3, 4, options2, fuel1, 5);
+		final VoyageDetails details8 = make(1, 2, 3, 4, options1, fuel2, 5);
+		final VoyageDetails details9 = make(1, 2, 3, 4, options1, fuel1, 25);
+
+		Assert.assertTrue(details1.equals(details1));
+		Assert.assertTrue(details1.equals(details2));
+		Assert.assertTrue(details2.equals(details1));
+
+		Assert.assertFalse(details1.equals(details3));
+		Assert.assertFalse(details1.equals(details4));
+		Assert.assertFalse(details1.equals(details5));
+		Assert.assertFalse(details1.equals(details6));
+		Assert.assertFalse(details1.equals(details7));
+		Assert.assertFalse(details1.equals(details8));
+		Assert.assertFalse(details1.equals(details9));
+
+		Assert.assertFalse(details3.equals(details1));
+		Assert.assertFalse(details4.equals(details1));
+		Assert.assertFalse(details5.equals(details1));
+		Assert.assertFalse(details6.equals(details1));
+		Assert.assertFalse(details7.equals(details1));
+		Assert.assertFalse(details8.equals(details1));
+		Assert.assertFalse(details9.equals(details1));
+
+		Assert.assertFalse(details1.equals(new Object()));
+	}
+
+	<T> VoyageDetails<T> make(final int idleTime, final int travelTime,
+			final int speed, final int startTime, final IVoyageOptions options,
+			final FuelComponent fuel, final long consumption) {
+
+		final VoyageDetails<T> d = new VoyageDetails<T>();
+
+		d.setIdleTime(idleTime);
+		d.setTravelTime(travelTime);
+		d.setSpeed(speed);
+		d.setStartTime(startTime);
+		d.setOptions(options);
+
+		d.setFuelConsumption(fuel, consumption);
+
+		return d;
 	}
 }

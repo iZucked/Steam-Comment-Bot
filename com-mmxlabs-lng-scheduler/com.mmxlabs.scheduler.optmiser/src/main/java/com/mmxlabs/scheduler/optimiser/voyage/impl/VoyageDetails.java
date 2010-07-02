@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.EnumMap;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
@@ -93,5 +94,39 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	@Override
 	public void setStartTime(final int startTime) {
 		this.startTime = startTime;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj instanceof VoyageDetails) {
+			@SuppressWarnings("rawtypes")
+			final VoyageDetails d = (VoyageDetails) obj;
+
+			// Ensure all fields are present here
+
+			if (speed != d.speed) {
+				return false;
+			}
+			if (idleTime != d.idleTime) {
+				return false;
+			}
+			if (travelTime != d.travelTime) {
+				return false;
+			}
+			if (startTime != d.startTime) {
+				return false;
+			}
+			if (!Equality.isEqual(options, d.options)) {
+				return false;
+			}
+
+			if (!Equality.isEqual(fuelConsumption, d.fuelConsumption)) {
+				return false;
+			}
+			
+			return true;
+		}
+		return false;
 	}
 }
