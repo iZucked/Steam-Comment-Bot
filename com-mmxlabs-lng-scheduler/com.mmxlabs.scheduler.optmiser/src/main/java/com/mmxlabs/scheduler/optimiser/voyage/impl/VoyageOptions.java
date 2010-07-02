@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -125,5 +126,51 @@ public class VoyageOptions implements IVoyageOptions {
 
 	public void setVesselState(final VesselState vesselState) {
 		this.vesselState = vesselState;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj instanceof VoyageOptions) {
+			final VoyageOptions vo = (VoyageOptions) obj;
+
+			if (useNBOForIdle != vo.useNBOForIdle)
+				return false;
+			if (useNBOForTravel != vo.useNBOForTravel)
+				return false;
+			if (useFBOForSupplement != vo.useFBOForSupplement) {
+				return false;
+			}
+
+			if (availableTime != vo.availableTime) {
+				return false;
+			}
+			if (distance != vo.distance) {
+				return false;
+			}
+			if (nboSpeed != vo.nboSpeed) {
+				return false;
+			}
+
+			if (!Equality.isEqual(vesselState, vo.vesselState)) {
+				return false;
+			}
+
+			if (!Equality.isEqual(route, vo.route)) {
+				return false;
+			}
+			if (!Equality.isEqual(vessel, vo.vessel)) {
+				return false;
+			}
+			if (!Equality.isEqual(fromPortSlot, vo.fromPortSlot)) {
+				return false;
+			}
+			if (!Equality.isEqual(toPortSlot, vo.toPortSlot)) {
+				return false;
+			}
+
+			return true;
+		}
+		return false;
 	}
 }
