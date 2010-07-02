@@ -32,6 +32,8 @@ public class TimeWindowTest {
 		Assert.assertFalse(tw1.equals(tw3));
 		Assert.assertFalse(tw1.equals(tw4));
 		
+		Assert.assertFalse(tw1.equals(new Object()));
+		
 		Assert.assertFalse(tw3.equals(tw1));
 		Assert.assertFalse(tw4.equals(tw1));
 		
