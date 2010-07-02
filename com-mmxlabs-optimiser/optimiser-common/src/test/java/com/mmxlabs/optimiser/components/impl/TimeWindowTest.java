@@ -23,6 +23,7 @@ public class TimeWindowTest {
 		final TimeWindow tw2 = new TimeWindow(10, 20);
 		final TimeWindow tw3 = new TimeWindow(20, 20);
 		final TimeWindow tw4 = new TimeWindow(20, 10);
+		final TimeWindow tw5 = new TimeWindow(10, 10);
 
 		Assert.assertTrue(tw1.equals(tw1));
 		
@@ -31,12 +32,14 @@ public class TimeWindowTest {
 		
 		Assert.assertFalse(tw1.equals(tw3));
 		Assert.assertFalse(tw1.equals(tw4));
+		Assert.assertFalse(tw1.equals(tw5));
 		
-		Assert.assertFalse(tw1.equals(new Object()));
 		
 		Assert.assertFalse(tw3.equals(tw1));
 		Assert.assertFalse(tw4.equals(tw1));
+		Assert.assertFalse(tw5.equals(tw1));
 		
+		Assert.assertFalse(tw1.equals(new Object()));
 	}
 	
 }
