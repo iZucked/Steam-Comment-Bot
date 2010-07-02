@@ -16,6 +16,7 @@ public final class SchedulerConstants {
 	public static final String DCP_timeWindowProvider = "provider-time-windows";
 	public static final String DCP_orderedElementsProvider = "provider-ordered-elements";
 	public static final String DCP_elementDurationsProvider = "provider-element-durations";
+	public static final String DCP_portTypeProvider = "provider-port-type";
 
 	// Additional Info keyss
 	public static final String AI_idleInfo = "info-idle";
