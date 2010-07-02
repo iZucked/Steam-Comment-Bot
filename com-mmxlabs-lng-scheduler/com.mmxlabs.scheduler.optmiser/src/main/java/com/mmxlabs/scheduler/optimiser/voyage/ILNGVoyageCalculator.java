@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage;
 
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+
 /**
  * Calculate voyage details for LNG vessels. Typically LNG vessels are dual fuel
  * vessels, burning their own base fuel (such as heavy-fuel oil (HFO) or marine
@@ -28,5 +30,17 @@ public interface ILNGVoyageCalculator<T> {
 	 */
 	void calculateVoyageFuelRequirements(IVoyageOptions options,
 			IVoyageDetails<T> output);
+
+	/**
+	 * Given an alternating sequence of {@link IPortDetails} and
+	 * {@link IVoyageDetails}, populate a {@link IVoyagePlan} object with the
+	 * group voyage details. E.g. calculate load and discharge quantities.
+	 * 
+	 * @param voyagePlan
+	 * @param vessel
+	 * @param sequence
+	 */
+	void calculateVoyagePlan(IVoyagePlan voyagePlan, IVessel vessel,
+			Object... sequence);
 
 }

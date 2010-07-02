@@ -177,7 +177,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 	 * 
 	 * @param sequence
 	 */
-	void calculateVoyagePlan(final IVoyagePlan voyagePlan,
+	@Override
+	public void calculateVoyagePlan(final IVoyagePlan voyagePlan,
 			final IVessel vessel, final Object... sequence) {
 
 		// Ensure odd number of elements
