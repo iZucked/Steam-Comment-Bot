@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.EnumMap;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
@@ -72,5 +73,30 @@ public final class PortDetails implements IPortDetails {
 	@Override
 	public void setStartTime(final int startTime) {
 		this.startTime = startTime;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj instanceof PortDetails) {
+			final PortDetails d = (PortDetails) obj;
+			if (startTime != d.startTime) {
+				return false;
+			}
+			if (visitDuration != d.visitDuration) {
+				return false;
+			}
+			
+			if (!Equality.isEqual(fuelConsumption, d.fuelConsumption)) {
+				return false;
+			}
+			if (!Equality.isEqual(portSlot, d.portSlot)) {
+				return false;
+			}
+			
+			return true;
+		}
+
+		return false;
 	}
 }
