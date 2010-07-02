@@ -53,7 +53,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		// Calculate speed
 		// cast to int as if long is required, then what are we doing?
-		int speed = Calculator.speedFromDistanceTime(distance,
+		int speed = availableTime == 0 ? 0 : Calculator.speedFromDistanceTime(distance,
 				availableTime);
 
 		// Check NBO speed
@@ -77,6 +77,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		}
 		output.setSpeed(speed);
 
+		assert minSpeed <= maxSpeed;
+		assert speed != 0;
+		
 		// Calculate total, travel and idle time
 
 		// May be longer than available time
