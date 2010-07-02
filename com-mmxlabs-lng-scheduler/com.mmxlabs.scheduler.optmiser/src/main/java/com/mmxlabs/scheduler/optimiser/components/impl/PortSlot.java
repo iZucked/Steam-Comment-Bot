@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -11,6 +12,17 @@ public class PortSlot implements IPortSlot {
 	private IPort port;
 
 	private ITimeWindow timeWindow;
+
+	public PortSlot() {
+
+	}
+
+	public PortSlot(final String id, final IPort port,
+			final ITimeWindow timeWindow) {
+		this.id = id;
+		this.port = port;
+		this.timeWindow = timeWindow;
+	}
 
 	@Override
 	public String getId() {
@@ -39,4 +51,25 @@ public class PortSlot implements IPortSlot {
 		this.timeWindow = timeWindow;
 	}
 
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj instanceof PortSlot) {
+			final PortSlot slot = (PortSlot) obj;
+
+			if (!Equality.isEqual(id, slot.id)) {
+				return false;
+			}
+			if (!Equality.isEqual(port, slot.port)) {
+				return false;
+			}
+			if (!Equality.isEqual(timeWindow, slot.timeWindow)) {
+				return false;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 }
