@@ -13,4 +13,23 @@ public class PortTest {
 		port.setName(name);
 		Assert.assertSame(name, port.getName());
 	}
+	
+
+	@Test
+	public void testEquals() {
+		
+		Port port1 = new Port("name");
+		Port port2 = new Port("name");
+		
+		Port port3 = new Port("name2");
+		
+		Assert.assertTrue(port1.equals(port1));
+		Assert.assertTrue(port1.equals(port2));
+		Assert.assertTrue(port2.equals(port1));
+		
+		Assert.assertFalse(port1.equals(port3));
+		
+		Assert.assertFalse(port1.equals(new Object()));
+	}
+
 }

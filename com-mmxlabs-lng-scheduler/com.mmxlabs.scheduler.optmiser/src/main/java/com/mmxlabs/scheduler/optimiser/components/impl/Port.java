@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
@@ -29,4 +30,17 @@ public final class Port implements IPort {
 		this.name = name;
 	}
 
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj instanceof Port) {
+			final Port p = (Port) obj;
+			if (!Equality.isEqual(name, p.getName())) {
+				return false;
+			}
+			return true;
+		}
+
+		return false;
+	}
 }
