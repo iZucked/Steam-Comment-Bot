@@ -164,6 +164,8 @@ public class Move4over1Test {
 		
 		Assert.assertFalse(move.validate(new Sequences<Integer>(r1, sequenceMap_r1)));
 
+
+		// NOTE: This test does not trigger the desired code path. Check cobertura reports
 		move.setSegment1End(100);
 		Assert.assertFalse(move.validate(sequences));
 		move.setSegment1End(resource1End);
