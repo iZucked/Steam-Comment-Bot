@@ -33,6 +33,9 @@ public final class VesselClass implements IVesselClass {
 	private final EnumMap<VesselState, IConsumptionRateCalculator> consumptionRate = new EnumMap<VesselState, IConsumptionRateCalculator>(
 			VesselState.class);
 
+	private final EnumMap<VesselState, Integer> nboSpeeds = new EnumMap<VesselState, Integer>(
+			VesselState.class);
+
 	@Override
 	public String getName() {
 		return name;
@@ -71,12 +74,12 @@ public final class VesselClass implements IVesselClass {
 
 	@Override
 	public long getIdleConsumptionRate(final VesselState vesselState) {
-		return idleConsumptionRate.get(vesselState);
+		return getValue(idleConsumptionRate, vesselState, 0l);
 	}
 
 	@Override
 	public long getIdleNBORate(final VesselState vesselState) {
-		return idleNBORate.get(vesselState);
+		return getValue(idleNBORate, vesselState, 0l);
 	}
 
 	@Override
@@ -85,15 +88,16 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	@Override
-	public int getMinNBOSpeed(VesselState vesselState) {
-		return minNBOSpeed.get(vesselState);
+	public int getMinNBOSpeed(final VesselState vesselState) {
+		return getValue(minNBOSpeed, vesselState, 0);
 	}
 
-	public void setMinNBOSpeed(VesselState vesselState, int minNBOSpeed) {
+	public void setMinNBOSpeed(final VesselState vesselState,
+			final int minNBOSpeed) {
 		this.minNBOSpeed.put(vesselState, minNBOSpeed);
 	}
 
-	public void setMinHeel(long minHeel) {
+	public void setMinHeel(final long minHeel) {
 		this.minHeel = minHeel;
 	}
 
@@ -103,7 +107,7 @@ public final class VesselClass implements IVesselClass {
 
 	@Override
 	public long getNBORate(final VesselState state) {
-		return nboRate.get(state);
+		return getValue(nboRate, state, 0l);
 	}
 
 	public void setIdleNBORate(final VesselState state, final long nboRate) {
@@ -117,12 +121,42 @@ public final class VesselClass implements IVesselClass {
 	@Override
 	public IConsumptionRateCalculator getConsumptionRate(
 			final VesselState vesselState) {
-		return consumptionRate.get(vesselState);
+
+		return getValue(consumptionRate, vesselState, null);
 	}
 
 	public void setConsumptionRate(final VesselState vesselState,
-			IConsumptionRateCalculator calc) {
+			final IConsumptionRateCalculator calc) {
 		consumptionRate.put(vesselState, calc);
 	}
 
+	@Override
+	public int getNBOSpeed(final VesselState state) {
+
+		return getValue(nboSpeeds, state, 0);
+	}
+
+	@Override
+	public void setNBOSpeed(final VesselState vesselState, final int nboSpeed) {
+		nboSpeeds.put(vesselState, nboSpeed);
+	}
+
+	/**
+	 * Helper method to return a default value if the map entry has not been
+	 * populated.
+	 * 
+	 * @param <K>
+	 * @param <T>
+	 * @param map
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	private <K extends Enum<K>, T> T getValue(final EnumMap<K, T> map,
+			final K key, final T defaultValue) {
+		if (map.containsKey(key)) {
+			return map.get(key);
+		}
+		return defaultValue;
+	}
 }
