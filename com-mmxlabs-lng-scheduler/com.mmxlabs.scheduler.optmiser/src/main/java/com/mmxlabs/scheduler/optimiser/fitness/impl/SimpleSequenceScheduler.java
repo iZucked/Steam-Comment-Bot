@@ -79,6 +79,8 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 					.getTimeWindows(element);
 
 			// Find earliest start time.
+			// TODO: No time windows means time window is Integer.MAX_VALUE -
+			// not really sure if this is a sane thing to use.
 			int timeWindowStart = Integer.MAX_VALUE;
 			for (final ITimeWindow window : timeWindows) {
 				timeWindowStart = Math.min(timeWindowStart, window.getStart());
