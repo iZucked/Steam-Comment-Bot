@@ -19,6 +19,13 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
  * {@link IFitnessCore} which schedules {@link ISequences} objects using an
@@ -38,6 +45,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	private IOptimisationData<T> data;
 
 	private ISequenceScheduler<T> scheduler;
+
+	private IVoyagePlanAnnotator<T> voyagePlanAnnotator;
 
 	public CargoSchedulerFitnessCore() {
 
@@ -76,7 +85,11 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
-			scheduler.schedule(resource, sequence, annotatedSequence);
+			final List<IVoyagePlan> plans = scheduler.schedule(resource,
+					sequence);
+			voyagePlanAnnotator.annonateFromVoyagePlan(resource, plans,
+					annotatedSequence);
+
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
 			evaluateSequence(resource, sequence, annotatedSequence, false);
@@ -96,7 +109,12 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		for (final IResource resource : affectedResources) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
-			scheduler.schedule(resource, sequence, annotatedSequence);
+			final List<IVoyagePlan> plans = scheduler.schedule(resource,
+					sequence);
+
+			voyagePlanAnnotator.annonateFromVoyagePlan(resource, plans,
+					annotatedSequence);
+
 			evaluateSequence(resource, sequence, annotatedSequence, true);
 		}
 	}
@@ -106,13 +124,20 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		return new ArrayList<IFitnessComponent<T>>(components);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(final IOptimisationData<T> data) {
 
 		this.data = data;
 
+		// TODO: getter/setters should provide these e.g. use factory to
+		// populate
 		scheduler = createSequenceScheduler();
+		VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
+		vpa.setPortSlotProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class));
 
+		voyagePlanAnnotator = vpa;
+		
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.init(data);
@@ -151,6 +176,19 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		scheduler.setTimeWindowProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider,
 				ITimeWindowDataComponentProvider.class));
+		scheduler.setPortSlotProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_portSlotsProvider,
+				IPortSlotProvider.class));
+		scheduler.setPortTypeProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_portTypeProvider,
+				IPortTypeProvider.class));
+
+		scheduler.setVesselProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
+
+		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
+
+		scheduler.setVoyageCalculator(voyageCalculator);
 
 		scheduler.init();
 

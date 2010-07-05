@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 
 import org.junit.Test;
 
@@ -31,6 +32,9 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
 /**
@@ -56,9 +60,31 @@ public class SimpleSchedulerTest {
 		final IPort port5 = builder.createPort("port-5", 0, 10);
 		final IPort port6 = builder.createPort("port-6", 5, 10);
 
-		builder.createVessel("vessel-1");
-		builder.createVessel("vessel-2");
-		builder.createVessel("vessel-3");
+		TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
+		keypoints.put(12000, 12000l);
+		keypoints.put(13000, 13000l);
+		keypoints.put(14000, 14000l);
+		keypoints.put(15000, 15000l);
+		keypoints.put(16000, 16000l);
+		keypoints.put(17000, 17000l);
+		keypoints.put(18000, 18000l);
+		keypoints.put(19000, 19000l);
+		keypoints.put(20000, 20000l);
+		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
+				keypoints);
+
+		IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1",
+				12000, 20000, 150000000, 0);
+
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
+				15000, 10000, 10000, consumptionCalculator, 15000);
+		builder.setVesselClassStateParamaters(vesselClass1,
+				VesselState.Ballast, 15000, 10000, 10000,
+				consumptionCalculator, 15000);
+
+		builder.createVessel("vessel-1", vesselClass1);
+		builder.createVessel("vessel-2", vesselClass1);
+		builder.createVessel("vessel-3", vesselClass1);
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);
@@ -71,35 +97,35 @@ public class SimpleSchedulerTest {
 
 		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
 
-		ILoadSlot load1 = builder
-				.createLoadSlot("load1", port1, tw1, 0, 100, 5);
-		ILoadSlot load2 = builder
-				.createLoadSlot("load2", port1, tw3, 0, 100, 5);
-		ILoadSlot load3 = builder
-				.createLoadSlot("load3", port1, tw5, 0, 100, 5);
-		ILoadSlot load4 = builder
-				.createLoadSlot("load4", port1, tw4, 0, 100, 5);
-		ILoadSlot load5 = builder
-				.createLoadSlot("load5", port3, tw2, 0, 100, 5);
-		ILoadSlot load6 = builder
-				.createLoadSlot("load6", port3, tw4, 0, 100, 5);
-		ILoadSlot load7 = builder
-				.createLoadSlot("load7", port5, tw6, 0, 100, 5);
+		ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0,
+				1000000, 5);
+		ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0,
+				1000000, 5);
+		ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0,
+				1000000, 5);
+		ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0,
+				1000000, 5);
+		ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0,
+				1000000, 5);
+		ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0,
+				1000000, 5);
+		ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0,
+				1000000, 5);
 
 		IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1",
-				port2, tw2, 0, 100, 6);
+				port2, tw2, 0, 1000000, 6);
 		IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2",
-				port2, tw4, 0, 100, 6);
+				port2, tw4, 0, 1000000, 6);
 		IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3",
-				port2, tw6, 0, 100, 6);
+				port2, tw6, 0, 1000000, 6);
 		IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4",
-				port6, tw6, 0, 100, 6);
+				port6, tw6, 0, 1000000, 6);
 		IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5",
-				port4, tw3, 0, 100, 6);
+				port4, tw3, 0, 1000000, 6);
 		IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6",
-				port4, tw5, 0, 100, 6);
+				port4, tw5, 0, 1000000, 6);
 		IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7",
-				port6, tw7, 0, 100, 6);
+				port6, tw7, 0, 1000000, 6);
 
 		builder.createCargo("cargo1", load1, discharge1);
 		builder.createCargo("cargo2", load2, discharge2);
@@ -163,10 +189,11 @@ public class SimpleSchedulerTest {
 		final IConstraintCheckerRegistry constraintRegistry = createConstraintRegistry();
 
 		final OptimisationContext<ISequenceElement> context = new OptimisationContext<ISequenceElement>(
-				data, initialSequences, new ArrayList<String>(fitnessRegistry
-						.getFitnessComponentNames()), fitnessRegistry,
-				new ArrayList<String>(constraintRegistry
-						.getConstraintCheckerNames()), constraintRegistry);
+				data, initialSequences, new ArrayList<String>(
+						fitnessRegistry.getFitnessComponentNames()),
+				fitnessRegistry, new ArrayList<String>(
+						constraintRegistry.getConstraintCheckerNames()),
+				constraintRegistry);
 
 		final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils
 				.buildOptimiser(context, new Random(seed), 1000, 5);
