@@ -27,6 +27,7 @@ public class InterfaceRecorderTest {
 			 * com.mmxlabs.optimiser.builder.impl.internal.ITestClass#setMessage
 			 * (java.lang.String)
 			 */
+			@Override
 			public void setMessage(String message) {
 				this.message = message;
 			}
@@ -38,6 +39,7 @@ public class InterfaceRecorderTest {
 			 * com.mmxlabs.optimiser.builder.impl.internal.ITestClass#getMessage
 			 * ()
 			 */
+			@Override
 			public String getMessage() {
 				return message;
 			}
