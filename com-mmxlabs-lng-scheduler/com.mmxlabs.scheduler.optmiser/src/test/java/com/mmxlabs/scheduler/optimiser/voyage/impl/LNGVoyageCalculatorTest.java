@@ -473,6 +473,60 @@ public class LNGVoyageCalculatorTest {
 		return options;
 	}
 
+	
+	
+
+	@Test
+	public void testCalculateVoyageFuelRequirements9() {
+
+		// In this test, we check zero distance is handled correctly
+
+		final VoyageOptions options = createSampleOptions();
+
+		// Populate options
+		options.setUseNBOForTravel(true);
+		options.setUseNBOForIdle(true);
+		options.setUseFBOForSupplement(true);
+
+		options.setAvailableTime(48);
+		options.setDistance(0);
+
+		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+
+		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+			}
+		});
+
+		calc.calculateVoyageFuelRequirements(options, details);
+
+		// Check results
+		Assert.assertSame(options, details.getOptions());
+		Assert.assertEquals(0, details.getSpeed());
+		Assert.assertEquals(48, details.getIdleTime());
+		Assert.assertEquals(0, details.getTravelTime());
+
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base));
+		Assert.assertEquals(0, details
+				.getFuelConsumption(FuelComponent.Base_Supplemental));
+		Assert.assertEquals(0, details
+				.getFuelConsumption(FuelComponent.NBO));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO));
+		Assert.assertEquals(0, details
+				.getFuelConsumption(FuelComponent.IdleBase));
+		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.IdleNBO));
+
+		context.assertIsSatisfied();
+	}
+
+
+	
+	
+	
 	@Test
 	public void testCalculateVoyagePlan1() {
 

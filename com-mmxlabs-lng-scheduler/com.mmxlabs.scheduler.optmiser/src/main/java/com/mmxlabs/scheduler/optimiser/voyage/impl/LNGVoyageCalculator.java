@@ -56,41 +56,42 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		int speed = availableTime == 0 ? 0 : Calculator.speedFromDistanceTime(distance,
 				availableTime);
 
-		// Check NBO speed
-		if (options.useNBOForTravel()) {
-			final int nboSpeed = options.getNBOSpeed();
-			if (speed < nboSpeed) {
-				speed = nboSpeed;
+		if (distance != 0) {
+			// Check NBO speed
+			if (options.useNBOForTravel()) {
+				final int nboSpeed = options.getNBOSpeed();
+				if (speed < nboSpeed) {
+					speed = nboSpeed;
+				}
 			}
-		}
 
-		// Clamp speed to min bound
-		final int minSpeed = vesselClass.getMinSpeed();
-		if (speed < minSpeed) {
-			speed = minSpeed;
-		}
+			// Clamp speed to min bound
+			final int minSpeed = vesselClass.getMinSpeed();
+			if (speed < minSpeed) {
+				speed = minSpeed;
+			}
 
-		// Clamp speed to max bound
-		final int maxSpeed = vesselClass.getMaxSpeed();
-		if (speed > maxSpeed) {
-			speed = maxSpeed;
-		}
-		output.setSpeed(speed);
+			// Clamp speed to max bound
+			final int maxSpeed = vesselClass.getMaxSpeed();
+			if (speed > maxSpeed) {
+				speed = maxSpeed;
+			}
+			output.setSpeed(speed);
 
-		assert minSpeed <= maxSpeed;
-		assert speed != 0;
-		
+			assert minSpeed <= maxSpeed;
+			assert speed != 0;
+		}
 		// Calculate total, travel and idle time
 
 		// May be longer than available time
-		final int travelTime = Calculator.getTimeFromSpeedDistance(speed,
+		final int travelTime = speed == 0 ? 0 : Calculator.getTimeFromSpeedDistance(speed,
 				distance);
 		final int idleTime = Math.max(0, availableTime - travelTime);
 
 		output.setTravelTime(travelTime);
 		output.setIdleTime(idleTime);
 
-		final long consuptionRate = vesselClass.getConsumptionRate(vesselState)
+		final long consuptionRate = speed == 0 ? 0 : vesselClass.getConsumptionRate(vesselState)
 				.getRate(speed);
 		final long requiredConsumption = Calculator.quantityFromRateTime(
 				consuptionRate, travelTime);
