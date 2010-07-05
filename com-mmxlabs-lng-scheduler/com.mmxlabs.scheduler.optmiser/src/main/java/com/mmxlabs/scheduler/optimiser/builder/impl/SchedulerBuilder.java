@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.builder.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,24 +23,30 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
+import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
 /**
@@ -48,13 +55,15 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
  * @author Simon Goodall
  * 
  */
-public class SchedulerBuilder implements ISchedulerBuilder {
+public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
 
 	private final List<IResource> resources = new ArrayList<IResource>();
 
 	private final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>();
+
+	private final List<IVesselClass> vesselClasses = new LinkedList<IVesselClass>();
 
 	private final List<IVessel> vessels = new LinkedList<IVessel>();
 
@@ -74,11 +83,15 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IMatrixEditor<IPort, Integer> portDistanceProvider;
 
+	private final IPortTypeProviderEditor<ISequenceElement> portTypeProvider;
+
 	private final IElementDurationProviderEditor<ISequenceElement> elementDurationsProvider;
 
 	private final List<ILoadSlot> loadSlots = new LinkedList<ILoadSlot>();
 
 	private final List<IDischargeSlot> dischargeSlots = new LinkedList<IDischargeSlot>();
+
+	private final List<ITimeWindow> timeWindows = new LinkedList<ITimeWindow>();
 
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
@@ -95,11 +108,24 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_portSlotsProvider);
 		elementDurationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
 				SchedulerConstants.DCP_elementDurationsProvider);
+		portTypeProvider = new HashMapPortTypeEditor<ISequenceElement>(
+				SchedulerConstants.DCP_portTypeProvider);
 	}
 
 	@Override
-	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window,
-			final long minVolume, final long maxVolume, final long price) {
+	public ILoadSlot createLoadSlot(final String id, final IPort port,
+			final ITimeWindow window, final long minVolume,
+			final long maxVolume, final long price) {
+
+		if (!ports.contains(port)) {
+			throw new IllegalArgumentException(
+					"IPort was not created by this builder");
+		}
+		if (!timeWindows.contains(window)) {
+			throw new IllegalArgumentException(
+					"ITimeWindow was not created by this builder");
+		}
+
 		final LoadSlot slot = new LoadSlot();
 		slot.setId(id);
 		slot.setPort(port);
@@ -110,6 +136,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 		loadSlots.add(slot);
 
+		// Create a sequence element against this load slot
 		final SequenceElement element = new SequenceElement();
 		element.setName(id + "-" + port.getName());
 		element.setPortSlot(slot);
@@ -120,13 +147,27 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		portProvider.setPortForElement(port, element);
 
 		portSlotsProvider.setPortSlot(element, slot);
-		
+
+		timeWindowProvider.setTimeWindows(element,
+				Collections.singletonList(window));
+
 		return slot;
 	}
 
 	@Override
-	public IDischargeSlot createDischargeSlot(final String id, final IPort port,
-			final ITimeWindow window, final long minVolume, final long maxVolume, final long price) {
+	public IDischargeSlot createDischargeSlot(final String id,
+			final IPort port, final ITimeWindow window, final long minVolume,
+			final long maxVolume, final long price) {
+
+		if (!ports.contains(port)) {
+			throw new IllegalArgumentException(
+					"IPort was not created by this builder");
+		}
+		if (!timeWindows.contains(window)) {
+			throw new IllegalArgumentException(
+					"ITimeWindow was not created by this builder");
+		}
+
 		final DischargeSlot slot = new DischargeSlot();
 		slot.setId(id);
 		slot.setPort(port);
@@ -137,6 +178,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 		dischargeSlots.add(slot);
 
+		// Create a sequence element against this discharge slot
 		final SequenceElement element = new SequenceElement();
 		element.setPortSlot(slot);
 		element.setName(id + "-" + port.getName());
@@ -147,7 +189,10 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		portProvider.setPortForElement(port, element);
 
 		portSlotsProvider.setPortSlot(element, slot);
-		
+
+		timeWindowProvider.setTimeWindows(element,
+				Collections.singletonList(window));
+
 		return slot;
 	}
 
@@ -155,15 +200,26 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	public ICargo createCargo(final String id, final ILoadSlot loadSlot,
 			final IDischargeSlot dischargeSlot) {
 
+		if (!loadSlots.contains(loadSlot)) {
+			throw new IllegalArgumentException(
+					"ILoadSlot was not created by this builder");
+		}
+		if (!dischargeSlots.contains(dischargeSlot)) {
+			throw new IllegalArgumentException(
+					"IDischargeSlot was not created by this builder");
+		}
+
 		final Cargo cargo = new Cargo();
 		cargo.setLoadSlot(loadSlot);
 		cargo.setDischargeSlot(dischargeSlot);
 
 		cargoes.add(cargo);
 
-		final ISequenceElement loadElement = portSlotsProvider.getElement(loadSlot);
-		final ISequenceElement dischargeElement = portSlotsProvider.getElement(dischargeSlot);
-		
+		final ISequenceElement loadElement = portSlotsProvider
+				.getElement(loadSlot);
+		final ISequenceElement dischargeElement = portSlotsProvider
+				.getElement(dischargeSlot);
+
 		// Set fixed visit order
 		orderedSequenceElementsEditor.setElementOrder(loadElement,
 				dischargeElement);
@@ -197,14 +253,24 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public ITimeWindow createTimeWindow(final int start, final int end) {
-		return new TimeWindow(start, end);
+
+		final TimeWindow window = new TimeWindow(start, end);
+		timeWindows.add(window);
+		return window;
 	}
 
 	@Override
-	public IVessel createVessel(final String name) {
+	public IVessel createVessel(final String name,
+			final IVesselClass vesselClass) {
+
+		if (!vesselClasses.contains(vesselClass)) {
+			throw new IllegalArgumentException(
+					"IVesselClass was not created using this builder");
+		}
 
 		final Vessel vessel = new Vessel();
 		vessel.setName(name);
+		vessel.setVesselClass(vesselClass);
 
 		vessels.add(vessel);
 
@@ -220,6 +286,15 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setPortToPortDistance(final IPort from, final IPort to,
 			final int distance) {
+
+		if (!ports.contains(from)) {
+			throw new IllegalArgumentException(
+					"From IPort was not created using this builder");
+		}
+		if (!ports.contains(to)) {
+			throw new IllegalArgumentException(
+					"To IPort was not created using this builder");
+		}
 
 		portDistanceProvider.set(from, to, distance);
 	}
@@ -257,6 +332,9 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_elementDurationsProvider,
 				elementDurationsProvider);
 
+		data.addDataComponentProvider(SchedulerConstants.DCP_portTypeProvider,
+				portTypeProvider);
+
 		if (true) {
 			for (final IPort from : ports) {
 				if (!(from instanceof IXYPort)) {
@@ -288,5 +366,51 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		ports.clear();
 
 		// TODO: Null provider refs
+	}
+
+	@Override
+	public IVesselClass createVesselClass(final String name,
+			final int minSpeed, final int maxSpeed, final long capacity,
+			final int minHeel) {
+
+		final VesselClass vesselClass = new VesselClass();
+		vesselClass.setName(name);
+
+		vesselClass.setMinSpeed(minSpeed);
+		vesselClass.setMaxSpeed(maxSpeed);
+
+		vesselClass.setCargoCapacity(capacity);
+		vesselClass.setMinHeel(minHeel);
+
+		vesselClasses.add(vesselClass);
+
+		return vesselClass;
+	}
+
+	@Override
+	public void setVesselClassStateParamaters(final IVesselClass vesselClass,
+			final VesselState state, final int nboRate, final int idleNBORate,
+			final int idleConsumptionRate,
+			final IConsumptionRateCalculator consumptionRateCalculator,
+			final int nboSpeed) {
+
+		if (!vesselClasses.contains(vesselClass)) {
+			throw new IllegalArgumentException(
+					"IVesselClass was not created using this builder");
+		}
+
+		// Check instance is the same as that used in createVesselClass(..)
+		if (!(vesselClass instanceof VesselClass)) {
+			throw new IllegalArgumentException("Expected instance of "
+					+ VesselClass.class.getCanonicalName());
+		}
+
+		final VesselClass vc = (VesselClass) vesselClass;
+
+		vc.setNBORate(state, nboRate);
+		vc.setIdleNBORate(state, idleNBORate);
+		vc.setIdleConsumptionRate(state, idleConsumptionRate);
+		vc.setConsumptionRate(state, consumptionRateCalculator);
+		vc.setNBOSpeed(state, nboSpeed);
 	}
 }

@@ -4,12 +4,15 @@ import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
+import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
  * A builder to create {@link IOptimisationData} instances for Scheduler
@@ -29,12 +32,42 @@ public interface ISchedulerBuilder {
 	IOptimisationData<ISequenceElement> getOptimisationData();
 
 	/**
-	 * Create a vessel with the given name.
+	 * Create a {@link IVesselClass} with the given parameters. Additional
+	 * parameters should be set via
+	 * {@link #setVesselClassStateParamaters(IVesselClass, VesselState, int, int, int, IConsumptionRateCalculator, int)}
+	 * for each {@link VesselState}.
 	 * 
 	 * @param name
 	 * @return
 	 */
-	IVessel createVessel(String name);
+	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
+			long capacity, int minHeel);
+
+	/**
+	 * Set {@link IVesselClass} parameters that depend upon the
+	 * {@link VesselState}.
+	 * 
+	 * @param vesselClass
+	 * @param state
+	 * @param nboRate
+	 * @param idleNBORate
+	 * @param idleConsumptionRate
+	 * @param consumptionRateCalculator
+	 * @param nboSpeed
+	 */
+	void setVesselClassStateParamaters(IVesselClass vesselClass,
+			VesselState state, int nboRate, int idleNBORate,
+			int idleConsumptionRate,
+			IConsumptionRateCalculator consumptionRateCalculator, int nboSpeed);
+
+	/**
+	 * Create a vessel with the given name and class.
+	 * 
+	 * @param name
+	 * @param vesselClass
+	 * @return
+	 */
+	IVessel createVessel(String name, IVesselClass vesselClass);
 
 	/**
 	 * Create a port with the given name.
@@ -98,13 +131,6 @@ public interface ISchedulerBuilder {
 			int duration);
 
 	/**
-	 * Clean up builder resources. TODO: We assume the opt-data object owns the
-	 * data providers. However, the builder will own them until then. Dispose
-	 * should selectively clean these up.
-	 */
-	void dispose();
-
-	/**
 	 * Create a new {@link ILoadSlot} instance. This is currently expected to be
 	 * assigned to a cargo.
 	 * 
@@ -133,5 +159,12 @@ public interface ISchedulerBuilder {
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port,
 			ITimeWindow window, long minVolume, long maxVolume, long price);
+
+	/**
+	 * Clean up builder resources. TODO: We assume the opt-data object owns the
+	 * data providers. However, the builder will own them until then. Dispose
+	 * should selectively clean these up.
+	 */
+	void dispose();
 
 }
