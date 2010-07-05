@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import java.util.EnumMap;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -74,12 +75,12 @@ public final class VesselClass implements IVesselClass {
 
 	@Override
 	public long getIdleConsumptionRate(final VesselState vesselState) {
-		return getValue(idleConsumptionRate, vesselState, 0l);
+		return CollectionsUtil.getValue(idleConsumptionRate, vesselState, 0l);
 	}
 
 	@Override
 	public long getIdleNBORate(final VesselState vesselState) {
-		return getValue(idleNBORate, vesselState, 0l);
+		return CollectionsUtil.getValue(idleNBORate, vesselState, 0l);
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public final class VesselClass implements IVesselClass {
 
 	@Override
 	public int getMinNBOSpeed(final VesselState vesselState) {
-		return getValue(minNBOSpeed, vesselState, 0);
+		return CollectionsUtil.getValue(minNBOSpeed, vesselState, 0);
 	}
 
 	public void setMinNBOSpeed(final VesselState vesselState,
@@ -107,7 +108,7 @@ public final class VesselClass implements IVesselClass {
 
 	@Override
 	public long getNBORate(final VesselState state) {
-		return getValue(nboRate, state, 0l);
+		return CollectionsUtil.getValue(nboRate, state, 0l);
 	}
 
 	public void setIdleNBORate(final VesselState state, final long nboRate) {
@@ -122,7 +123,7 @@ public final class VesselClass implements IVesselClass {
 	public IConsumptionRateCalculator getConsumptionRate(
 			final VesselState vesselState) {
 
-		return getValue(consumptionRate, vesselState, null);
+		return CollectionsUtil.getValue(consumptionRate, vesselState, null);
 	}
 
 	public void setConsumptionRate(final VesselState vesselState,
@@ -133,30 +134,11 @@ public final class VesselClass implements IVesselClass {
 	@Override
 	public int getNBOSpeed(final VesselState state) {
 
-		return getValue(nboSpeeds, state, 0);
+		return CollectionsUtil.getValue(nboSpeeds, state, 0);
 	}
 
 	@Override
 	public void setNBOSpeed(final VesselState vesselState, final int nboSpeed) {
 		nboSpeeds.put(vesselState, nboSpeed);
-	}
-
-	/**
-	 * Helper method to return a default value if the map entry has not been
-	 * populated.
-	 * 
-	 * @param <K>
-	 * @param <T>
-	 * @param map
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	private <K extends Enum<K>, T> T getValue(final EnumMap<K, T> map,
-			final K key, final T defaultValue) {
-		if (map.containsKey(key)) {
-			return map.get(key);
-		}
-		return defaultValue;
 	}
 }
