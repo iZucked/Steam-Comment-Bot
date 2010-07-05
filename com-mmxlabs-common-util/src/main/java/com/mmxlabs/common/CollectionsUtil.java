@@ -53,4 +53,23 @@ public final class CollectionsUtil {
 		}
 		return map;
 	}
+
+	/**
+	 * Returns a value from a {@link Map} if the key exists, otherwise return
+	 * the specified default value.
+	 * 
+	 * @param <K>
+	 * @param <T>
+	 * @param map
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public static <K, T> T getValue(final Map<K, T> map, final K key,
+			final T defaultValue) {
+		if (map.containsKey(key)) {
+			return map.get(key);
+		}
+		return defaultValue;
+	}
 }
