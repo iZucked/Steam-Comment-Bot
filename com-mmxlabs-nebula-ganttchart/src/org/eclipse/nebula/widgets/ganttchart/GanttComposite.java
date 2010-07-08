@@ -1686,7 +1686,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         int yStart = lineLoc;
 
         for (int i = 0; i < mGanttSections.size(); i++) {
-            GanttSection gs = (GanttSection) mGanttSections.get(i);
+            GanttSection gs = mGanttSections.get(i);
 
             Point extent = null;
             if (gs.needsNameUpdate() || gs.getNameExtent() == null) {
@@ -1697,7 +1697,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                 extent = gs.getNameExtent();
             }
 
-            int strLen = extent.x;
+            
+            // SG: Horizontal text uses y extent.
+            int strLen = gs.getTextOrientation() == SWT.VERTICAL ? extent.x : extent.y;
+            
             int gsHeight = gs.getEventsHeight(mSettings);
             int height = Math.max(gsHeight, strLen);
 
