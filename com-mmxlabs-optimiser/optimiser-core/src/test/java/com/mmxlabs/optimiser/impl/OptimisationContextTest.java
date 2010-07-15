@@ -22,7 +22,7 @@ public class OptimisationContextTest {
 
 	Mockery context = new JUnit4Mockery();
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testOptimisationContext() {
 
