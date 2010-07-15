@@ -18,7 +18,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
-abstract class AbstractSettings implements ISettings {
+public abstract class AbstractSettings implements ISettings {
 
 	@Override
 	public String getDateFormat() {
