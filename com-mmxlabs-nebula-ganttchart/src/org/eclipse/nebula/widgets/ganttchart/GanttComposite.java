@@ -362,7 +362,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     }
 
     public GanttComposite(GanttChart parent, int style, ISettings settings, IColorManager colorManager, IPaintManager paintManager, ILanguageManager languageManager) {
-        super(parent, SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED | SWT.V_SCROLL | SWT.H_SCROLL);
+		// Background is required as we do not always draw over leading to
+		// artifacts
+		// super(parent, SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED | SWT.V_SCROLL
+		// | SWT.H_SCROLL);
+        super(parent, SWT.DOUBLE_BUFFERED | SWT.V_SCROLL | SWT.H_SCROLL);
 
         // d-day calendar can be anything, but it needs to be something, and for convenience, lets use 2000 as base year
         if (settings.getInitialView() == ISettings.VIEW_D_DAY) {
@@ -5097,7 +5101,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         if (mCurrentView == ISettings.VIEW_DAY) { return getXLengthForEventHours(event); }
 
         // +1 as it's the end date and we include the last day
-        return (event.getDaysBetweenStartAndEnd() + 1) * getDayWidth();
+        
+        // SG: I don't think we need +1 as it shows up as an extra day
+        
+        return (event.getDaysBetweenStartAndEnd() + 0) * getDayWidth();
     }
 
     /**
