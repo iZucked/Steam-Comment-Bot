@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 @RunWith(JMock.class)
 public class JourneyEventImplTest {
@@ -41,4 +42,35 @@ public class JourneyEventImplTest {
 		event.setDistance(10);
 		Assert.assertEquals(10, event.getDistance());
 	}
+	
+	@Test
+	public void testGetSetSpeed() {
+		final JourneyEventImpl<Object> event = new JourneyEventImpl<Object>();
+		Assert.assertEquals(0, event.getSpeed());
+		event.setSpeed(10);
+		Assert.assertEquals(10, event.getSpeed());
+	}
+	
+	@Test
+	public void testGetSetFuelConsumption() {
+
+		final FuelComponent c = FuelComponent.Base;
+		final long value = 100l;
+		final JourneyEventImpl<Object> details = new JourneyEventImpl<Object>();
+		Assert.assertEquals(0, details.getFuelConsumption(c));
+		details.setFuelConsumption(c, value);
+		Assert.assertEquals(value, details.getFuelConsumption(c));
+	}
+
+	@Test
+	public void testGetSetFuelCost() {
+
+		final FuelComponent c = FuelComponent.Base;
+		final long value = 100l;
+		final JourneyEventImpl<Object> details = new JourneyEventImpl<Object>();
+		Assert.assertEquals(0, details.getFuelCost(c));
+		details.setFuelCost(c, value);
+		Assert.assertEquals(value, details.getFuelCost(c));
+	}
+	
 }
