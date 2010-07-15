@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 @SuppressWarnings("rawtypes")
 public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
@@ -96,6 +97,13 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 			sb.append("Duration: " + journey.getDuration() + "\n");
 			sb.append("Distance: " + journey.getDistance() + "\n");
 			sb.append("Vessel State: " + journey.getVesselState() + "\n");
+			sb.append("Speed: " + journey.getSpeed() + "\n");
+			for (FuelComponent fuel : FuelComponent.values()) {
+				long cost = journey.getFuelCost(fuel);
+				if (cost != 0) {
+					sb.append(fuel + " Cost: " + cost + "\n");
+				}
+			}
 			return sb.toString();
 		} else if (element instanceof IJourneyEvent) {
 			final IIdleEvent idle = (IIdleEvent) element;
@@ -105,6 +113,12 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 			sb.append("End Time: " + idle.getEndTime() + "\n");
 			sb.append("Duration: " + idle.getDuration() + "\n");
 			sb.append("Vessel State: " + idle.getVesselState() + "\n");
+			for (FuelComponent fuel : FuelComponent.values()) {
+				long cost = idle.getFuelCost(fuel);
+				if (cost != 0) {
+					sb.append(fuel + " Cost: " + cost + "\n");
+				}
+			}
 			return sb.toString();
 		}
 		return null;
