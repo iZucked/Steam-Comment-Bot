@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Scheduleview
+Bundle-SymbolicName: com.mmxlabs.scheduleview; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.mmxlabs.scheduleview.Activator
+Bundle-Vendor: MMXLABS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.mmxlabs.ganttviewer;bundle-version="1.0.0",
+ com.mmxlabs.app.app-bundle;bundle-version="1.0.0",
+ com.mmxlabs.jobmanager;bundle-version="1.0.0",
+ com.mmxlabs.jobmanager.ui;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.scheduleview,
+ com.mmxlabs.scheduleview.views

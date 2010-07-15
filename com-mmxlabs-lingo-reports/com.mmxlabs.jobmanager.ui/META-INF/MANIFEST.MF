@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ui
+Bundle-SymbolicName: com.mmxlabs.jobmanager.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.mmxlabs.jobmanager.ui.Activator
+Bundle-Vendor: MMXLABS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.mmxlabs.jobmanager;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.jobcontroller.actions,
+ com.mmxlabs.jobcontroller.views,
+ com.mmxlabs.jobmanager.ui

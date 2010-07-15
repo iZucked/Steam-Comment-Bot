@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.mmxlabs.demo.app.intro.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RCP Perspective"
+            class="com.mmxlabs.demo.app.intro.Perspective"
+            id="com.mmxlabs.demo.app.perspective">
+      </perspective>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.mmxlabs.demo.app.application"
+            name="Scheduler Demo">
+         <property
+               name="windowImages"
+               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="com.mmxlabs.demo.app.intro">
+      </intro>
+      <introProductBinding
+            introId="com.mmxlabs.demo.app.intro"
+            productId="com.mmxlabs.demo.app.product">
+      </introProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            introId="com.mmxlabs.demo.app.intro"
+            content="introContent.xml"
+            id="com.mmxlabs.demo.app.configId">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+            content="ext.xml"
+            configId="com.mmxlabs.demo.app.configId">
+      </configExtension>
+   </extension>
+
+</plugin>
