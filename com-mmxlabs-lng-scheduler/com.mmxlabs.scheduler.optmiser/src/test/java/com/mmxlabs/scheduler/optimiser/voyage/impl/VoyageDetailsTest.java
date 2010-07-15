@@ -44,7 +44,6 @@ public class VoyageDetailsTest {
 		Assert.assertNull(details.getOptions());
 		details.setOptions(options);
 		Assert.assertSame(options, details.getOptions());
-
 	}
 
 	@Test
