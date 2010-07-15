@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.scenario.IOptimisationData;
  *            Sequence element type
  */
 public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
+
 	@Override
 	public void optimise(final IOptimisationContext<T> optimiserContext) {
 
@@ -66,6 +67,9 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
+		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
+				fitnessEvaluator.getBestSequences());
+
 		// Perform the optimisation
 		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
 
@@ -104,8 +108,8 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			}
 
 			// Test move and update state if accepted
-			if (fitnessEvaluator.evaluateSequences(potentialFullSequences, move
-					.getAffectedResources())) {
+			if (fitnessEvaluator.evaluateSequences(potentialFullSequences,
+					move.getAffectedResources())) {
 
 				// Success update state for new sequences
 				updateSequences(potentialRawSequences, currentRawSequences,
@@ -120,6 +124,19 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				updateSequences(currentRawSequences, potentialRawSequences,
 						move.getAffectedResources());
 			}
+
+			if (iter % getReportInterval() == 0) {
+				getProgressMonitor().report(this, iter,
+						fitnessEvaluator.getCurrentFitness(),
+						fitnessEvaluator.getBestFitness(),
+						fitnessEvaluator.getCurrentSequences(),
+						fitnessEvaluator.getBestSequences());
+			}
 		}
+
+		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
+				fitnessEvaluator.getBestSequences());
+
 	}
+
 }

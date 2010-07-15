@@ -1,12 +1,9 @@
 package com.mmxlabs.optimiser.lso.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import javax.jws.Oneway;
 
 import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.constraints.IConstraintChecker;
@@ -20,6 +17,7 @@ import com.mmxlabs.optimiser.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.fitness.impl.SortingFitnessFactory;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
@@ -101,7 +99,7 @@ public final class TestUtils {
 
 	public static <T> LocalSearchOptimiser<T> buildOptimiser(
 			final IOptimisationContext<T> context, final Random random,
-			final int numberOfIterations, final int stepSize) {
+			final int numberOfIterations, final int stepSize, IOptimiserProgressMonitor<T> monitor) {
 		
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker<T>> constraintCheckers = constraintCheckerInstantiator
@@ -131,6 +129,10 @@ public final class TestUtils {
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
 
+		lso.setProgressMonitor(monitor);
+		
+		lso.setReportInterval(Math.max(10, numberOfIterations / 100));
+		
 		lso.init();
 		
 		return lso;

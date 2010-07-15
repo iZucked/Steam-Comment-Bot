@@ -14,6 +14,7 @@ import com.mmxlabs.optimiser.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 
 /**
  * Main class implementing a Local Search Optimiser. While the actual
@@ -38,6 +39,10 @@ public abstract class LocalSearchOptimiser<T> implements
 
 	private ISequencesManipulator<T> sequenceManipulator;
 
+	private IOptimiserProgressMonitor<T> progressMonitor;
+
+	private int reportInterval = -1;
+	
 	/**
 	 * Initialise method checking the object has all the correct pieces of data
 	 * to be able to perform the
@@ -65,6 +70,14 @@ public abstract class LocalSearchOptimiser<T> implements
 
 		if (sequenceManipulator == null) {
 			throw new IllegalStateException("Sequence Manipulator is not set");
+		}
+		
+		if (progressMonitor == null) {
+			throw new IllegalStateException("Progress Monitor is not set");
+		}
+		
+		if (reportInterval < 1) {
+			throw new IllegalStateException("Report interval is not set");
 		}
 	}
 
@@ -162,5 +175,21 @@ public abstract class LocalSearchOptimiser<T> implements
 	@Override
 	public ISequencesManipulator<T> getSequenceManipulator() {
 		return sequenceManipulator;
+	}
+
+	public IOptimiserProgressMonitor<T> getProgressMonitor() {
+		return progressMonitor;
+	}
+
+	public void setProgressMonitor(IOptimiserProgressMonitor<T> progressMonitor) {
+		this.progressMonitor = progressMonitor;
+	}
+
+	public int getReportInterval() {
+		return reportInterval;
+	}
+
+	public void setReportInterval(int reportInterval) {
+		this.reportInterval = reportInterval;
 	}
 }

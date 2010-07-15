@@ -30,6 +30,7 @@ import com.mmxlabs.optimiser.impl.Resource;
 import com.mmxlabs.optimiser.impl.Sequences;
 import com.mmxlabs.optimiser.impl.UnmodifiableSequencesWrapper;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 
 @SuppressWarnings("unchecked")
 @RunWith(JMock.class)
@@ -37,8 +38,9 @@ public class LocalSearchOptimiserTest {
 
 	Mockery context = new JUnit4Mockery();
 
+	@Test
 	public void testInit() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 
 		final IMoveGenerator<Object> moveGenerator = context
 				.mock(IMoveGenerator.class);
@@ -58,12 +60,18 @@ public class LocalSearchOptimiserTest {
 				.mock(ISequencesManipulator.class);
 		lso.setSequenceManipulator(sequenceManipulator);
 
+		final IOptimiserProgressMonitor<Object> monitor = context
+				.mock(IOptimiserProgressMonitor.class);
+		lso.setProgressMonitor(monitor);
+
+		lso.setReportInterval(100);
+
 		lso.init();
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit2() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 
 		lso.setNumberOfIterations(1);
 
@@ -78,6 +86,12 @@ public class LocalSearchOptimiserTest {
 		final ISequencesManipulator<Object> sequenceManipulator = context
 				.mock(ISequencesManipulator.class);
 		lso.setSequenceManipulator(sequenceManipulator);
+
+		final IOptimiserProgressMonitor<Object> monitor = context
+				.mock(IOptimiserProgressMonitor.class);
+		lso.setProgressMonitor(monitor);
+
+		lso.setReportInterval(100);
 
 		lso.init();
 
@@ -85,7 +99,7 @@ public class LocalSearchOptimiserTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit3() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 
 		final IMoveGenerator<Object> moveGenerator = context
 				.mock(IMoveGenerator.class);
@@ -102,13 +116,19 @@ public class LocalSearchOptimiserTest {
 		final ISequencesManipulator<Object> sequenceManipulator = context
 				.mock(ISequencesManipulator.class);
 		lso.setSequenceManipulator(sequenceManipulator);
+
+		final IOptimiserProgressMonitor<Object> monitor = context
+				.mock(IOptimiserProgressMonitor.class);
+		lso.setProgressMonitor(monitor);
+
+		lso.setReportInterval(100);
 
 		lso.init();
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit4() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 
 		final IMoveGenerator<Object> moveGenerator = context
 				.mock(IMoveGenerator.class);
@@ -123,13 +143,19 @@ public class LocalSearchOptimiserTest {
 		final ISequencesManipulator<Object> sequenceManipulator = context
 				.mock(ISequencesManipulator.class);
 		lso.setSequenceManipulator(sequenceManipulator);
+
+		final IOptimiserProgressMonitor<Object> monitor = context
+				.mock(IOptimiserProgressMonitor.class);
+		lso.setProgressMonitor(monitor);
+
+		lso.setReportInterval(100);
 
 		lso.init();
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit5() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 
 		final IMoveGenerator<Object> moveGenerator = context
 				.mock(IMoveGenerator.class);
@@ -145,12 +171,18 @@ public class LocalSearchOptimiserTest {
 				.mock(ISequencesManipulator.class);
 		lso.setSequenceManipulator(sequenceManipulator);
 
+		final IOptimiserProgressMonitor<Object> monitor = context
+				.mock(IOptimiserProgressMonitor.class);
+		lso.setProgressMonitor(monitor);
+
+		lso.setReportInterval(100);
+
 		lso.init();
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit6() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 
 		final IMoveGenerator<Object> moveGenerator = context
 				.mock(IMoveGenerator.class);
@@ -165,6 +197,68 @@ public class LocalSearchOptimiserTest {
 		final IFitnessEvaluator<Object> fitnessEvaluator = context
 				.mock(IFitnessEvaluator.class);
 		lso.setFitnessEvaluator(fitnessEvaluator);
+
+		final IOptimiserProgressMonitor<Object> monitor = context
+				.mock(IOptimiserProgressMonitor.class);
+		lso.setProgressMonitor(monitor);
+
+		lso.setReportInterval(100);
+
+		lso.init();
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testInit7() {
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
+
+		final IMoveGenerator<Object> moveGenerator = context
+				.mock(IMoveGenerator.class);
+		lso.setMoveGenerator(moveGenerator);
+
+		lso.setNumberOfIterations(1);
+
+		final List<IConstraintChecker<Object>> constraintCheckers = Collections
+				.emptyList();
+		lso.setConstraintCheckers(constraintCheckers);
+
+		final IFitnessEvaluator<Object> fitnessEvaluator = context
+				.mock(IFitnessEvaluator.class);
+		lso.setFitnessEvaluator(fitnessEvaluator);
+
+		final ISequencesManipulator<Object> sequenceManipulator = context
+				.mock(ISequencesManipulator.class);
+		lso.setSequenceManipulator(sequenceManipulator);
+
+		lso.setReportInterval(100);
+
+		lso.init();
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testInit8() {
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
+
+		final IMoveGenerator<Object> moveGenerator = context
+				.mock(IMoveGenerator.class);
+		lso.setMoveGenerator(moveGenerator);
+
+		lso.setNumberOfIterations(1);
+
+		final List<IConstraintChecker<Object>> constraintCheckers = Collections
+				.emptyList();
+		lso.setConstraintCheckers(constraintCheckers);
+
+		final IFitnessEvaluator<Object> fitnessEvaluator = context
+				.mock(IFitnessEvaluator.class);
+		lso.setFitnessEvaluator(fitnessEvaluator);
+
+		final ISequencesManipulator<Object> sequenceManipulator = context
+				.mock(ISequencesManipulator.class);
+		lso.setSequenceManipulator(sequenceManipulator);
+
+		final IOptimiserProgressMonitor<Object> monitor = context
+				.mock(IOptimiserProgressMonitor.class);
+		lso.setProgressMonitor(monitor);
 
 		lso.init();
 	}
@@ -198,10 +292,10 @@ public class LocalSearchOptimiserTest {
 		final List<IResource> affectedResources = CollectionsUtil
 				.makeArrayList(r2);
 
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Integer> lso = new TestLocalSearchOptimiser<Integer>();
 
 		// Wrap source in unmodifiable wrapper to make sure we do not change it!
-		lso.updateSequences(new UnmodifiableSequencesWrapper(source),
+		lso.updateSequences(new UnmodifiableSequencesWrapper<Integer>(source),
 				destination, affectedResources);
 
 		// Check source and dest sequences contain the same values
@@ -245,7 +339,7 @@ public class LocalSearchOptimiserTest {
 		final List<IResource> affectedResources = CollectionsUtil
 				.makeArrayList(r2);
 
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Integer> lso = new TestLocalSearchOptimiser<Integer>();
 
 		context.checking(new Expectations() {
 			{
@@ -261,7 +355,7 @@ public class LocalSearchOptimiserTest {
 
 	@Test
 	public void testGetSetMoveGenerator() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 		Assert.assertNull(lso.getMoveGenerator());
 		final IMoveGenerator<Object> moveGenerator = context
 				.mock(IMoveGenerator.class);
@@ -271,7 +365,7 @@ public class LocalSearchOptimiserTest {
 
 	@Test
 	public void testGetSetNumberOfIterations() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 		Assert.assertEquals(0, lso.getNumberOfIterations());
 		lso.setNumberOfIterations(100);
 		Assert.assertEquals(100, lso.getNumberOfIterations());
@@ -279,7 +373,7 @@ public class LocalSearchOptimiserTest {
 
 	@Test
 	public void testGetSetConstraintCheckers() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 		final List<IConstraintChecker<Object>> checkers = Collections
 				.emptyList();
 		Assert.assertNull(lso.getConstraintCheckers());
@@ -290,7 +384,7 @@ public class LocalSearchOptimiserTest {
 
 	@Test
 	public void testGetSetFitnessEvaluator() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 		Assert.assertNull(lso.getFitnessEvaluator());
 		final IFitnessEvaluator<Object> fitnessEvaluator = context
 				.mock(IFitnessEvaluator.class);
@@ -300,7 +394,7 @@ public class LocalSearchOptimiserTest {
 
 	@Test
 	public void testSetSequenceManipulator() {
-		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
+		final TestLocalSearchOptimiser<Object> lso = new TestLocalSearchOptimiser<Object>();
 		Assert.assertNull(lso.getSequenceManipulator());
 		final ISequencesManipulator<Object> sequencesManipulator = context
 				.mock(ISequencesManipulator.class);

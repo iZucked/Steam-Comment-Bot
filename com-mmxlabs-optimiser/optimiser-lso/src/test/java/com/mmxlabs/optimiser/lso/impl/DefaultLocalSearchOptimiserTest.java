@@ -5,17 +5,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.IModifiableSequence;
 import com.mmxlabs.optimiser.IModifiableSequences;
+import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.impl.OptimisationContext;
+import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.scenario.impl.OptimisationData;
 
 public class DefaultLocalSearchOptimiserTest {
@@ -36,30 +38,36 @@ public class DefaultLocalSearchOptimiserTest {
 
 		final List<String> constraintCheckerNames = new ArrayList<String>(
 				checkerRegistry.getConstraintCheckerNames());
-//		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
-//		final List<IConstraintChecker<Integer>> constraintCheckers = constraintCheckerInstantiator
-//				.instantiateConstraintCheckers(checkerRegistry,
-//						constraintCheckerNames);
-//
+		// final ConstraintCheckerInstantiator constraintCheckerInstantiator =
+		// new ConstraintCheckerInstantiator();
+		// final List<IConstraintChecker<Integer>> constraintCheckers =
+		// constraintCheckerInstantiator
+		// .instantiateConstraintCheckers(checkerRegistry,
+		// constraintCheckerNames);
+		//
 		final List<String> fitnessComponentNames = new ArrayList<String>(
 				fitnessRegistry.getFitnessComponentNames());
-//		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
-//		final List<IFitnessComponent<Integer>> fitnessComponents = fitnessComponentInstantiator
-//				.instantiateFitnesses(fitnessRegistry, fitnessComponentNames);
-//
-//		final LinearSimulatedAnnealingFitnessEvaluator<Integer> fitnessEvaluator = TestUtils
-//				.createLinearSAFitnessEvaluator(1, numberOfIterations,
-//						fitnessComponents);
-//		final IMoveGenerator<Integer> moveGenerator = TestUtils
-//				.createRandomMoveGenerator(random);
-//
-//		final DefaultLocalSearchOptimiser<Integer> lso = new DefaultLocalSearchOptimiser<Integer>();
+		// final FitnessComponentInstantiator fitnessComponentInstantiator = new
+		// FitnessComponentInstantiator();
+		// final List<IFitnessComponent<Integer>> fitnessComponents =
+		// fitnessComponentInstantiator
+		// .instantiateFitnesses(fitnessRegistry, fitnessComponentNames);
+		//
+		// final LinearSimulatedAnnealingFitnessEvaluator<Integer>
+		// fitnessEvaluator = TestUtils
+		// .createLinearSAFitnessEvaluator(1, numberOfIterations,
+		// fitnessComponents);
+		// final IMoveGenerator<Integer> moveGenerator = TestUtils
+		// .createRandomMoveGenerator(random);
+		//
+		// final DefaultLocalSearchOptimiser<Integer> lso = new
+		// DefaultLocalSearchOptimiser<Integer>();
 
-//		lso.setNumberOfIterations(numberOfIterations);
-//		lso.setSequenceManipulator(new NullSequencesManipulator<Integer>());
-//		lso.setMoveGenerator(moveGenerator);
-//		lso.setFitnessEvaluator(fitnessEvaluator);
-//		lso.setConstraintCheckers(constraintCheckers);
+		// lso.setNumberOfIterations(numberOfIterations);
+		// lso.setSequenceManipulator(new NullSequencesManipulator<Integer>());
+		// lso.setMoveGenerator(moveGenerator);
+		// lso.setFitnessEvaluator(fitnessEvaluator);
+		// lso.setConstraintCheckers(constraintCheckers);
 
 		// Create an initial set of sequences.
 
@@ -79,28 +87,39 @@ public class DefaultLocalSearchOptimiserTest {
 				data, sequences, fitnessComponentNames, fitnessRegistry,
 				constraintCheckerNames, checkerRegistry);
 
-		
-		final LocalSearchOptimiser<Integer> lso = TestUtils.buildOptimiser(context, random, numberOfIterations, 1);
-		
-		
-		LinearSimulatedAnnealingFitnessEvaluator<Integer> fitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<Integer>)lso.getFitnessEvaluator();
-		
+		final IOptimiserProgressMonitor<Integer> monitor = new IOptimiserProgressMonitor<Integer>() {
 
-		fitnessEvaluator.setOptimisationData(context.getOptimisationData());
-		fitnessEvaluator.setInitialSequences(context.getInitialSequences());
-	
-		long initialFitness = fitnessEvaluator.getBestFitness();
-		System.out.println("Initial fitness "
-				+ initialFitness);
+			@Override
+			public void begin(final IOptimiser<Integer> optimiser,
+					final long initialFitness,
+					final ISequences<Integer> initialState) {
+				System.out.println("Initial Fitness: " + initialFitness);
+			}
+
+			@Override
+			public void report(final IOptimiser<Integer> optimiser,
+					final int iteration, final long currentFitness,
+					final long bestFitness,
+					final ISequences<Integer> currentState,
+					final ISequences<Integer> bestState) {
+				System.out.println("Iter: " + iteration + " Fitness: "
+						+ bestFitness);
+			}
+
+			@Override
+			public void done(final IOptimiser<Integer> optimiser,
+					final long bestFitness, final ISequences<Integer> bestState) {
+				System.out.println("Final Fitness: " + bestFitness);
+			}
+		};
+
+		final LocalSearchOptimiser<Integer> lso = TestUtils.buildOptimiser(
+				context, random, numberOfIterations, 1, monitor);
 
 		// Perform the optimisation
 		lso.optimise(context);
 
-		long finalFitness = fitnessEvaluator.getBestFitness();
-		System.out
-				.println("Final fitness " + finalFitness);
-		
-		Assert.assertTrue(finalFitness < initialFitness);
+		// TODO: Validate run -- use progress monitor output?
 	}
 
 }
