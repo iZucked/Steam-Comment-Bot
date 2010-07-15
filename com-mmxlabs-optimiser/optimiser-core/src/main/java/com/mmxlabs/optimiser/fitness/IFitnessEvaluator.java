@@ -96,12 +96,35 @@ public interface IFitnessEvaluator<T> {
 			Collection<IResource> affectedResources);
 
 	/**
-	 * Returns the "best" {@link ISequences} instances seen by this
+	 * Returns the best {@link ISequences} instance seen by this
 	 * {@link IFitnessEvaluator}. The value of best is determined by the
-	 * implementation. However it is reasonable to assume the first item in the
-	 * {@link Collection} has the best fitness value.
+	 * implementation.
 	 * 
 	 * @return
 	 */
-	Collection<ISequences<T>> getBestSequences();
+	ISequences<T> getBestSequences();
+
+	/**
+	 * Returns the fitness value of the best {@link ISequences} instance
+	 * returned by {@link #getBestSequences()};
+	 * 
+	 * @return
+	 */
+	long getBestFitness();
+
+	/**
+	 * Returns the current {@link ISequences} instance in use by this
+	 * {@link IFitnessEvaluator}.
+	 * 
+	 * @return
+	 */
+	ISequences<T> getCurrentSequences();
+
+	/**
+	 * Returns the fitness value of the current {@link ISequences} instance
+	 * returned by {@link #getCurrentSequences()};
+	 * 
+	 * @return
+	 */
+	long getCurrentFitness();
 }

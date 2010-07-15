@@ -209,10 +209,9 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(1000, evaluator.getBestFitness());
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());
 
-		Assert.assertFalse(evaluator.getBestSequences().isEmpty());
+		Assert.assertNotNull(evaluator.getBestSequences());
 		ISequences<Object> current = evaluator.getCurrentSequences();
-		ISequences<Object> best = evaluator.getBestSequences().iterator()
-				.next();
+		ISequences<Object> best = evaluator.getBestSequences();
 
 		Assert.assertNotNull(current);
 		Assert.assertNotNull(best);
@@ -242,12 +241,12 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(500, evaluator.getCurrentFitness());
 
-		Assert.assertFalse(evaluator.getBestSequences().isEmpty());
+		Assert.assertNotNull(evaluator.getBestSequences());
 
 		Assert.assertNotSame(current, evaluator.getCurrentSequences());
 		Assert.assertNotSame(best, evaluator.getBestSequences());
 		current = evaluator.getCurrentSequences();
-		best = evaluator.getBestSequences().iterator().next();
+		best = evaluator.getBestSequences();
 
 		context.setDefaultResultForType(long.class, 700l);
 
@@ -271,10 +270,10 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(700, evaluator.getCurrentFitness());
 
-		Assert.assertFalse(evaluator.getBestSequences().isEmpty());
+		Assert.assertNotNull(evaluator.getBestSequences());
 
 		Assert.assertNotSame(current, evaluator.getCurrentSequences());
-		Assert.assertSame(best, evaluator.getBestSequences().iterator().next());
+		Assert.assertSame(best, evaluator.getBestSequences());
 		current = evaluator.getCurrentSequences();
 
 		context.setDefaultResultForType(boolean.class, false);
@@ -297,10 +296,10 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(700, evaluator.getCurrentFitness());
 
-		Assert.assertFalse(evaluator.getBestSequences().isEmpty());
+		Assert.assertNotNull(evaluator.getBestSequences());
 
 		Assert.assertSame(current, evaluator.getCurrentSequences());
-		Assert.assertSame(best, evaluator.getBestSequences().iterator().next());
+		Assert.assertSame(best, evaluator.getBestSequences());
 
 		context.assertIsSatisfied();
 	}
@@ -350,6 +349,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());
 
 		// These should be copies of the input, but hard to test...
+		// TODO: Use/Implement .equals?
 		// Assert.assertSame(source, evaluator.getCurrentSequences());
 		// Assert.assertSame(source, evaluator.getBestSequences());
 

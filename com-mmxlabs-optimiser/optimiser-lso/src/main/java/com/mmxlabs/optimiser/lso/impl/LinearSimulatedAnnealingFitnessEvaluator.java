@@ -1,7 +1,6 @@
 package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import com.mmxlabs.optimiser.IResource;
@@ -193,8 +192,8 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	}
 
 	@Override
-	public Collection<ISequences<T>> getBestSequences() {
-		return Collections.singletonList(bestSequences);
+	public ISequences<T> getBestSequences() {
+		return bestSequences;
 	}
 
 	public IThresholder getThresholder() {
@@ -210,6 +209,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	 * 
 	 * @return
 	 */
+	@Override
 	public long getBestFitness() {
 		return bestFitness;
 	}
@@ -219,6 +219,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	 * 
 	 * @return
 	 */
+	@Override
 	public ISequences<T> getCurrentSequences() {
 		return currentSequences;
 	}
@@ -228,6 +229,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	 * 
 	 * @return
 	 */
+	@Override
 	public long getCurrentFitness() {
 		return currentFitness;
 	}
