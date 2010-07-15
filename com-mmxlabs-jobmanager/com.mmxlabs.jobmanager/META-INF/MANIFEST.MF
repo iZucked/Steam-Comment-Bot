@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jobmanager
+Bundle-SymbolicName: com.mmxlabs.jobmanager
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.mmxlabs.jobcontoller.Activator
+Bundle-Vendor: MMXLABS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.mmxlabs.app.app-bundle;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.mmxlabs.jobcontoller,
+ com.mmxlabs.jobcontroller.core,
+ com.mmxlabs.jobcontroller.core.impl
+Service-Component: OSGI-INF/*.xml
+Bundle-ActivationPolicy: lazy
