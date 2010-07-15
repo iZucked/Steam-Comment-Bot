@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.scenario.IDataComponentProvider;
  */
 public interface IPortTypeProvider<T> extends IDataComponentProvider {
 
-	enum PortType {
+	public enum PortType {
 		Unknown, Load, Discharge, DryDock, Waypoint, Other;
 	}
 
