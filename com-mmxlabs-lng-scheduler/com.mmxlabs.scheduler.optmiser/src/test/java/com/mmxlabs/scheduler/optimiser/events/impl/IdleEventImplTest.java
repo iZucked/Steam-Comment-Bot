@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 @RunWith(JMock.class)
 public class IdleEventImplTest {
@@ -23,4 +24,27 @@ public class IdleEventImplTest {
 		event.setPort(port);
 		Assert.assertSame(port, event.getPort());
 	}
+
+	@Test
+	public void testGetSetFuelConsumption() {
+
+		final FuelComponent c = FuelComponent.Base;
+		final long value = 100l;
+		final IdleEventImpl<Object> details = new IdleEventImpl<Object>();
+		Assert.assertEquals(0, details.getFuelConsumption(c));
+		details.setFuelConsumption(c, value);
+		Assert.assertEquals(value, details.getFuelConsumption(c));
+	}
+
+	@Test
+	public void testGetSetFuelCost() {
+
+		final FuelComponent c = FuelComponent.Base;
+		final long value = 100l;
+		final IdleEventImpl<Object> details = new IdleEventImpl<Object>();
+		Assert.assertEquals(0, details.getFuelCost(c));
+		details.setFuelCost(c, value);
+		Assert.assertEquals(value, details.getFuelCost(c));
+	}
+
 }
