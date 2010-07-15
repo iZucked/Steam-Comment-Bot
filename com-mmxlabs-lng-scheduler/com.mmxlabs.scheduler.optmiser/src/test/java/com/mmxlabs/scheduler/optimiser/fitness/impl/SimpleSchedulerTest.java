@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import org.junit.Test;
 
 import com.mmxlabs.optimiser.IModifiableSequences;
+import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
@@ -23,6 +24,7 @@ import com.mmxlabs.optimiser.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.impl.OptimisationContext;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.TestUtils;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
@@ -195,8 +197,35 @@ public class SimpleSchedulerTest {
 						constraintRegistry.getConstraintCheckerNames()),
 				constraintRegistry);
 
+		final IOptimiserProgressMonitor<ISequenceElement> monitor = new IOptimiserProgressMonitor<ISequenceElement>() {
+
+			@Override
+			public void begin(final IOptimiser<ISequenceElement> optimiser,
+					final long initialFitness,
+					final ISequences<ISequenceElement> initialState) {
+				System.out.println("Initial Fitness: " + initialFitness);
+			}
+
+			@Override
+			public void report(final IOptimiser<ISequenceElement> optimiser,
+					final int iteration, final long currentFitness,
+					final long bestFitness,
+					final ISequences<ISequenceElement> currentState,
+					final ISequences<ISequenceElement> bestState) {
+				System.out.println("Iter: " + iteration + " Fitness: "
+						+ bestFitness);
+			}
+
+			@Override
+			public void done(final IOptimiser<ISequenceElement> optimiser,
+					final long bestFitness,
+					final ISequences<ISequenceElement> bestState) {
+				System.out.println("Final Fitness: " + bestFitness);
+			}
+		};
+
 		final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils
-				.buildOptimiser(context, new Random(seed), 1000, 5);
+				.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
 
 		final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
 				.getFitnessEvaluator();
@@ -240,17 +269,18 @@ public class SimpleSchedulerTest {
 		return fitnessRegistry;
 	}
 
-	<T> void printSequences(final Collection<ISequences<T>> sequences) {
-		for (ISequences<T> s : sequences) {
+	void printSequences(final Collection<ISequences<ISequenceElement>> sequences) {
+		for (ISequences<ISequenceElement> s : sequences) {
 			printSequences(s);
 		}
 	}
 
-	<T> void printSequences(final ISequences<T> sequences) {
-		for (ISequence<T> seq : sequences.getSequences().values()) {
+	void printSequences(final ISequences<ISequenceElement> sequences) {
+		for (ISequence<ISequenceElement> seq : sequences.getSequences()
+				.values()) {
 			System.out.print("[");
-			for (T t : seq) {
-				System.out.print(t);
+			for (ISequenceElement t : seq) {
+				System.out.print(t.getName());
 				System.out.print(",");
 			}
 			System.out.println("]");
