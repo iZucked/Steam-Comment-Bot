@@ -3,6 +3,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import java.util.List;
 
 import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
@@ -10,13 +11,14 @@ import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
 import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
 /**
- *The {@link VoyagePlanAnnotator} annotates a {@link IAnnotatedSequence} object
+ * The {@link VoyagePlanAnnotator} annotates a {@link IAnnotatedSequence} object
  * from a sequence of {@link IVoyagePlan}s.
  * 
  * @author Simon Goodall
@@ -27,6 +29,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 	private IPortSlotProvider<T> portSlotProvider;
+
+	private FuelComponent[] idleFuelComponents = new FuelComponent[] {
+			FuelComponent.IdleBase, FuelComponent.IdleNBO };
+	private FuelComponent[] travelFuelComponents = new FuelComponent[] {
+			FuelComponent.Base, FuelComponent.NBO,
+			FuelComponent.Base_Supplemental, FuelComponent.FBO };
 
 	@Override
 	public void annonateFromVoyagePlan(final IResource resource,
@@ -69,7 +77,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					currentTime += visitDuration;
 
 				} else if (e instanceof IVoyageDetails<?>) {
-					@SuppressWarnings("unchecked")
+					@SuppressWarnings({ "unchecked", "rawtypes" })
 					final IVoyageDetails<T> details = (IVoyageDetails) e;
 
 					final IPortSlot prevPortSlot = details.getOptions()
@@ -94,6 +102,21 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					journey.setDistance(details.getOptions().getDistance());
 
 					journey.setDuration(travelTime);
+
+					journey.setSpeed(details.getSpeed());
+
+					for (final FuelComponent fuel : travelFuelComponents) {
+						final long consumption = details
+								.getFuelConsumption(fuel);
+						final long cost = Calculator.costFromConsumption(
+								consumption, 1000);
+
+						journey.setFuelConsumption(fuel, consumption);
+						journey.setFuelCost(fuel, cost);
+					}
+
+					journey.setVesselState(details.getOptions().getVesselState());
+					
 					annotatedSequence.setAnnotation(element,
 							SchedulerConstants.AI_journeyInfo, journey);
 
@@ -108,6 +131,17 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					idle.setDuration(idleTime);
 					idle.setEndTime(currentTime + idleTime);
 					idle.setSequenceElement(element);
+
+					for (final FuelComponent fuel : idleFuelComponents) {
+						final long consumption = details
+								.getFuelConsumption(fuel);
+						final long cost = Calculator.costFromConsumption(
+								consumption, 1000);
+
+						idle.setFuelConsumption(fuel, consumption);
+						idle.setFuelCost(fuel, cost);
+					}
+					idle.setVesselState(details.getOptions().getVesselState());
 
 					annotatedSequence.setAnnotation(element,
 							SchedulerConstants.AI_idleInfo, idle);
