@@ -42,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
@@ -146,6 +147,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Register the port with the element
 		portProvider.setPortForElement(port, element);
 
+		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Load);
+		
 		portSlotsProvider.setPortSlot(element, slot);
 
 		timeWindowProvider.setTimeWindows(element,
@@ -190,6 +193,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		portSlotsProvider.setPortSlot(element, slot);
 
+		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Discharge);
+		
 		timeWindowProvider.setTimeWindows(element,
 				Collections.singletonList(window));
 
