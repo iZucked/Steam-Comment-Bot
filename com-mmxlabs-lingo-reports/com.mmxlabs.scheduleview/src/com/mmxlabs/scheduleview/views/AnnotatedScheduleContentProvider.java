@@ -152,7 +152,7 @@ public class AnnotatedScheduleContentProvider implements
 			int startTime = event.getStartTime();
 			// TODO: Get proper start time
 			Calendar c = Calendar.getInstance();
-			c.add(Calendar.HOUR_OF_DAY, startTime * 24);
+			c.add(Calendar.HOUR_OF_DAY, startTime);
 
 			return c;
 		}
@@ -168,7 +168,7 @@ public class AnnotatedScheduleContentProvider implements
 			int endTime = event.getEndTime();
 			// TODO: Get proper end time
 			Calendar c = Calendar.getInstance();
-			c.add(Calendar.HOUR_OF_DAY, endTime  * 24);
+			c.add(Calendar.HOUR_OF_DAY, endTime);
 
 			return c;
 		}
