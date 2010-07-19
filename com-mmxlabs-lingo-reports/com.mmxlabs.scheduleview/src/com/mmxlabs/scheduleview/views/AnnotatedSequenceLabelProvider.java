@@ -29,7 +29,6 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 
 	@Override
 	public String getText(final Object element) {
-
 		//
 		if (element instanceof IAnnotatedSequence) {
 			final IAnnotatedSequence sequence = (IAnnotatedSequence) element;
@@ -105,7 +104,7 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 				}
 			}
 			return sb.toString();
-		} else if (element instanceof IJourneyEvent) {
+		} else if (element instanceof IIdleEvent) {
 			final IIdleEvent idle = (IIdleEvent) element;
 			final StringBuilder sb = new StringBuilder();
 			sb.append("Port: " + idle.getPort().getName() + "\n");
