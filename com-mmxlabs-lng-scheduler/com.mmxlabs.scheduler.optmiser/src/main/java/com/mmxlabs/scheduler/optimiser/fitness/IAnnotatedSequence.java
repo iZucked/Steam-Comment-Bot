@@ -1,5 +1,19 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+import com.mmxlabs.optimiser.ISequence;
+import com.mmxlabs.optimiser.fitness.IFitnessCore;
+
+/**
+ * The {@link IAnnotatedSequence} provides additional information to the
+ * standard {@link ISequence} typically populated as a results of an
+ * {@link IFitnessCore} evaluation. This could include things such as time,
+ * distance and cost information.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Sequence element type
+ */
 public interface IAnnotatedSequence<T> {
 
 	/**
@@ -22,8 +36,16 @@ public interface IAnnotatedSequence<T> {
 	<U> U getAnnotation(T element, String key, Class<U> clz);
 
 	/**
+	 * Returns true if the given element has an annotation under the given key.
+	 * 
+	 * @param element
+	 * @param key
+	 * @return
+	 */
+	boolean hasAnnotation(T element, String key);
+
+	/**
 	 * Release any internal resources.
 	 */
 	void dispose();
-
 }

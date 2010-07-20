@@ -50,7 +50,15 @@ public final class AnnotatedSequence<T> implements IAnnotatedSequence<T> {
 	@Override
 	public void dispose() {
 
-		// TODO: Do we need to "dispose" of each element?
 		annotations.clear();
+	}
+
+	@Override
+	public boolean hasAnnotation(final T element, final String key) {
+		if (annotations.containsKey(element)) {
+			return annotations.get(element).containsKey(key);
+		}
+		return false;
+
 	}
 }
