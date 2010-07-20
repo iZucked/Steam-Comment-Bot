@@ -73,6 +73,15 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		// Perform the optimisation
 		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
 
+			// Periodically issue a status report to the progress monitor
+			if (iter % getReportInterval() == 0) {
+				getProgressMonitor().report(this, iter,
+						fitnessEvaluator.getCurrentFitness(),
+						fitnessEvaluator.getBestFitness(),
+						fitnessEvaluator.getCurrentSequences(),
+						fitnessEvaluator.getBestSequences());
+			}
+			
 			++numberOfMovesTried;
 
 			// Generate a new move
@@ -123,15 +132,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				// Failed, reset state for old sequences
 				updateSequences(currentRawSequences, potentialRawSequences,
 						move.getAffectedResources());
-			}
-
-			if (iter % getReportInterval() == 0) {
-				getProgressMonitor().report(this, iter,
-						fitnessEvaluator.getCurrentFitness(),
-						fitnessEvaluator.getBestFitness(),
-						fitnessEvaluator.getCurrentSequences(),
-						fitnessEvaluator.getBestSequences());
-			}
+			}			
 		}
 
 		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
