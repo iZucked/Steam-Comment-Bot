@@ -10,6 +10,7 @@ import com.mmxlabs.optimiser.IModifiableSequences;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.impl.Resource;
 
 public class OptimiserTestUtil {
 
@@ -28,8 +29,7 @@ public class OptimiserTestUtil {
 	}
 
 	public static IResource makeResource() {
-		return new IResource() {
-		};
+		return new Resource();
 	}
 
 	/**

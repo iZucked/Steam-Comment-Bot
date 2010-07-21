@@ -9,4 +9,10 @@ package com.mmxlabs.optimiser;
  */
 public interface IResource {
 
+	/**
+	 * Returns the name of the resource
+	 * @return
+	 */
+	String getName();
+
 }
