@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Reports"
+            id="com.mmxlabs.demo.reports">
+      </category>
+      <view
+            name="Cargo Report"
+            icon="icons/cview16/exec_statistic_view.gif"
+            category="com.mmxlabs.demo.reports"
+            class="com.mmxlabs.demo.reports.views.CargoReportView"
+            id="com.mmxlabs.demo.reports.views.CargoReportView">
+      </view>
+      <view
+            category="com.mmxlabs.demo.reports"
+            class="com.mmxlabs.demo.reports.views.FitnessReportView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.demo.reports.views.FitnessReportView"
+            name="Fitness Report">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+
+</plugin>
