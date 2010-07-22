@@ -5,9 +5,13 @@ import java.util.List;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.events.impl.DischargeEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
+import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
 import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -47,8 +51,8 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 		// current time will be incremented after each element
 		int currentTime = startTime;
 
+		Object lastElement = null;
 		for (final IVoyagePlan plan : plans) {
-
 			for (final Object e : plan.getSequence()) {
 
 				if (e instanceof IPortDetails) {
@@ -63,19 +67,57 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					final int visitDuration = details.getVisitDuration();
 
 					// Add port annotations
-					final PortVisitEventImpl<T> visit = new PortVisitEventImpl<T>();
+					final PortVisitEventImpl<T> visit;
+					if (currentPortSlot instanceof ILoadSlot) {
+						LoadEventImpl<T> load = new LoadEventImpl<T>();
+						load.setLoadVolume(plan.getLoadVolume());
+						// TODO: Check unit vs. actual
+						load.setPurchasePrice(plan.getPurchaseCost());
+
+						visit = load;
+					} else if (currentPortSlot instanceof IDischargeSlot) {
+						DischargeEventImpl<T> discharge = new DischargeEventImpl<T>();
+
+						discharge.setDischargeVolume(plan.getDischargeVolume());
+
+						// TODO: Check unit vs. actual
+						discharge.setSalesPrice(plan.getSalesRevenue());
+
+						visit = discharge;
+
+					} else {
+						visit = new PortVisitEventImpl<T>();
+					}
+
 					visit.setName("visit");
 					visit.setSequenceElement(element);
-					visit.setPort(currentPortSlot.getPort());
-					visit.setStartTime(currentTime);
-					visit.setEndTime(currentTime + visitDuration);
+					visit.setPortSlot(currentPortSlot);
+
 					visit.setDuration(visitDuration);
 
 					annotatedSequence.setAnnotation(element,
 							SchedulerConstants.AI_visitInfo, visit);
 
-					currentTime += visitDuration;
-
+					// Consecutive voyage plans will end and start with the same
+					// element. The above code will overwrite the previous
+					// entry, however here we need to be careful not to
+					// increment the current time, otherwise we will have a
+					// "hole" in the schedule equal to visitDuration. We can't
+					// skip generation of the end element as the final voyage
+					// plan will, by definition, not have a follow on plan. We
+					// also can't skip as the details of the visit will be
+					// different. If the last element is a LoadEvent, there will
+					// be no load volume set, as that is calculated are part of
+					// the next voyage plan.
+					if (e != lastElement) {
+						visit.setStartTime(currentTime);
+						visit.setEndTime(currentTime + visitDuration);
+						currentTime += visitDuration;
+					} else {
+						// Back-out visit duration set in the previous iteration.
+						visit.setStartTime(currentTime - visitDuration);
+						visit.setEndTime(currentTime);
+					}
 				} else if (e instanceof IVoyageDetails<?>) {
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					final IVoyageDetails<T> details = (IVoyageDetails) e;
@@ -115,8 +157,9 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 						journey.setFuelCost(fuel, cost);
 					}
 
-					journey.setVesselState(details.getOptions().getVesselState());
-					
+					journey.setVesselState(details.getOptions()
+							.getVesselState());
+
 					annotatedSequence.setAnnotation(element,
 							SchedulerConstants.AI_journeyInfo, journey);
 
@@ -151,6 +194,8 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 				} else {
 					throw new IllegalStateException("Unexpected element " + e);
 				}
+
+				lastElement = e;
 			}
 		}
 	}
