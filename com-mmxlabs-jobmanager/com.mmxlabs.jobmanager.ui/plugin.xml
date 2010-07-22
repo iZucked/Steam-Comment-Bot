@@ -10,7 +10,7 @@
       </category>
       <view
             name="Job Manager"
-            icon="icons/sample.gif"
+            icon="icons/eview16/exec_statistic_view.gif"
             category="com.mmxlabs.jobmanager"
             class="com.mmxlabs.jobcontroller.views.JobManagerView"
             id="com.mmxlabs.jobcontroller.views.JobManager">
