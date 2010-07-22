@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 @RunWith(JMock.class)
 public class PortVisitEventImplTest {
@@ -18,9 +18,9 @@ public class PortVisitEventImplTest {
 	public void testGetSetPort() {
 
 		final PortVisitEventImpl<Object> event = new PortVisitEventImpl<Object>();
-		Assert.assertNull(event.getPort());
-		final IPort port = context.mock(IPort.class);
-		event.setPort(port);
-		Assert.assertSame(port, event.getPort());
+		Assert.assertNull(event.getPortSlot());
+		final IPortSlot portSlot = context.mock(IPortSlot.class);
+		event.setPortSlot(portSlot);
+		Assert.assertSame(portSlot, event.getPortSlot());
 	}
 }

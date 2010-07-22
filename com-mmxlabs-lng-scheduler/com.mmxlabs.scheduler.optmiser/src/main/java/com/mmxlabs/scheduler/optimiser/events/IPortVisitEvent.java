@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.events;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 /**
  * {@link IScheduledEvent} defining a visit to a {@link IPort}.
@@ -13,9 +14,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 public interface IPortVisitEvent<T> extends IScheduledEvent<T> {
 
 	/**
-	 * Returns the {@link IPort} being visited.
+	 * Returns the {@link IPortSlot} being visited.
 	 * 
 	 * @return
 	 */
-	IPort getPort();
+	IPortSlot getPortSlot();
 }

@@ -1,6 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.events.impl;
 
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 
 /**
@@ -11,17 +11,17 @@ import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
  * @param <T>
  *            Sequence element type.
  */
-public final class PortVisitEventImpl<T> extends
-		AbstractScheduledEventImpl<T> implements IPortVisitEvent<T> {
+public class PortVisitEventImpl<T> extends AbstractScheduledEventImpl<T>
+		implements IPortVisitEvent<T> {
 
-	private IPort port;
+	private IPortSlot portSlot;
 
 	@Override
-	public IPort getPort() {
-		return port;
+	public IPortSlot getPortSlot() {
+		return portSlot;
 	}
 
-	public void setPort(final IPort port) {
-		this.port = port;
+	public void setPortSlot(final IPortSlot portSlot) {
+		this.portSlot = portSlot;
 	}
 }
