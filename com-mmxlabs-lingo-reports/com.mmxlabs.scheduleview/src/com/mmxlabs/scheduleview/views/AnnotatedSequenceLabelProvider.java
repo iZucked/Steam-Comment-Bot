@@ -9,13 +9,13 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 @SuppressWarnings("rawtypes")
@@ -29,14 +29,10 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 
 	@Override
 	public String getText(final Object element) {
-		//
-		if (element instanceof IAnnotatedSequence) {
-			final IAnnotatedSequence sequence = (IAnnotatedSequence) element;
-			return sequence.getVessel().getName();
-		}
 
-		if (element instanceof IVessel) {
-			return ((IVessel) element).getName();
+		if (element instanceof IResource) {
+			IResource r = (IResource) element;
+			return r.getName();
 		}
 
 		return null;
@@ -71,17 +67,13 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 	@Override
 	public String getToolTipText(final Object element) {
 
-		if (element instanceof IAnnotatedSequence) {
-			final IAnnotatedSequence sequence = (IAnnotatedSequence) element;
-			return sequence.getVessel().getName();
-		}
-
-		if (element instanceof IVessel) {
-			return ((IVessel) element).getName();
+		if (element instanceof IResource) {
+			return ((IResource) element).getName();
 		} else if (element instanceof IPortVisitEvent) {
 			final IPortVisitEvent portVisit = (IPortVisitEvent) element;
 			final StringBuilder sb = new StringBuilder();
-			sb.append("Port: " + portVisit.getPort().getName() + "\n");
+			sb.append("Port: " + portVisit.getPortSlot().getPort().getName()
+					+ "\n");
 			sb.append("Start Time: " + portVisit.getStartTime() + "\n");
 			sb.append("End Time: " + portVisit.getEndTime() + "\n");
 			sb.append("Duration: " + portVisit.getDuration() + "\n");
@@ -96,11 +88,14 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 			sb.append("Duration: " + journey.getDuration() + "\n");
 			sb.append("Distance: " + journey.getDistance() + "\n");
 			sb.append("Vessel State: " + journey.getVesselState() + "\n");
-			sb.append("Speed: " + journey.getSpeed() + "\n");
+			sb.append("Speed: "
+					+ String.format("%.2f", ((double) journey.getSpeed())
+							/ (double) Calculator.ScaleFactor) + "\n");
 			for (FuelComponent fuel : FuelComponent.values()) {
-				long cost = journey.getFuelCost(fuel);
+				long cost = journey.getFuelCost(fuel) / Calculator.ScaleFactor;
 				if (cost != 0) {
-					sb.append(fuel + " Cost: " + cost + "\n");
+					sb.append(fuel + " Cost: " + String.format("$%,d", cost)
+							+ "\n");
 				}
 			}
 			return sb.toString();
@@ -113,9 +108,10 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 			sb.append("Duration: " + idle.getDuration() + "\n");
 			sb.append("Vessel State: " + idle.getVesselState() + "\n");
 			for (FuelComponent fuel : FuelComponent.values()) {
-				long cost = idle.getFuelCost(fuel);
+				long cost = idle.getFuelCost(fuel) / Calculator.ScaleFactor;
 				if (cost != 0) {
-					sb.append(fuel + " Cost: " + cost + "\n");
+					sb.append(fuel + " Cost: " + String.format("$%,d", cost)
+							+ "\n");
 				}
 			}
 			return sb.toString();
@@ -125,14 +121,9 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 
 	@Override
 	public String getToolTipTitle(final Object element) {
-		if (element instanceof IAnnotatedSequence) {
-			final IAnnotatedSequence sequence = (IAnnotatedSequence) element;
-			return sequence.getVessel().getName();
-		}
 
-		if (element instanceof IVessel) {
-			return ((IVessel) element).getName();
-
+		if (element instanceof IResource) {
+			return ((IResource) element).getName();
 		} else if (element instanceof IPortVisitEvent) {
 			return "Port Visit";
 		} else if (element instanceof IJourneyEvent) {
@@ -150,4 +141,5 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 
 		return Display.getDefault().getSystemImage(SWT.ICON_INFORMATION);
 	}
+
 }

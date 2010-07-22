@@ -1,31 +1,29 @@
 package com.mmxlabs.scheduleview.views;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IViewSite;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
 
 public class AnnotatedScheduleContentProvider implements
 		IGanttChartContentProvider {
 
-	private Map<Object, IAnnotatedSequence> mapping = new HashMap<Object, IAnnotatedSequence>();
+	private IAnnotatedSolution<ISequenceElement> solution;
 
 	@Override
 	public Object[] getElements(Object inputElement) {
@@ -36,39 +34,23 @@ public class AnnotatedScheduleContentProvider implements
 	@Override
 	public Object[] getChildren(Object parentElement) {
 
-		if (parentElement instanceof IViewSite) {
-			IViewSite site = (IViewSite)parentElement;
-			ISelectionProvider selectionProvider = site.getSelectionProvider();
-			if (selectionProvider == null) {
-				return null;
-			}
-			IStructuredSelection ss = (IStructuredSelection)selectionProvider.getSelection();
-			return ss.toArray();
-		}
-		
-		if (parentElement instanceof IManagedJob) {
-			
-			IManagedJob job = (IManagedJob)parentElement;
-			return (Object[])job.getSchedule();
-		}
-		
-		if (parentElement instanceof Object[]) {
-			return (Object[]) parentElement;
-		}
-		if (parentElement instanceof IAnnotatedSequence[]) {
-			return (IAnnotatedSequence[]) parentElement;
-		} else if (parentElement instanceof IAnnotatedSequence) {
-			IAnnotatedSequence sequence = (IAnnotatedSequence) parentElement;
-			List sequenceElements = sequence.getSequenceElements();
+		if (parentElement instanceof IAnnotatedSolution) {
+			IAnnotatedSolution solution = (IAnnotatedSolution) parentElement;
+
+			return solution.getResources().toArray();
+		} else if (parentElement instanceof IResource) {
+			IResource resource = (IResource)parentElement;
+			ISequence sequence = solution.getSequences().getSequence(resource);
+			IAnnotatedSequence annotatedSequence = solution.getAnnotatedSequence(resource);
 
 			List<Object> children = new LinkedList<Object>();
-			for (Object o : sequenceElements) {
+			for (Object o : sequence) {
 
-				children.add(sequence.getAnnotation(o,
+				children.add(annotatedSequence.getAnnotation(o,
 						SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
-				children.add(sequence.getAnnotation(o,
+				children.add(annotatedSequence.getAnnotation(o,
 						SchedulerConstants.AI_idleInfo, IIdleEvent.class));
-				children.add(sequence.getAnnotation(o,
+				children.add(annotatedSequence.getAnnotation(o,
 						SchedulerConstants.AI_visitInfo, IPortVisitEvent.class));
 
 				// Remove all null entries
@@ -76,29 +58,8 @@ public class AnnotatedScheduleContentProvider implements
 				children.remove(null);
 				children.remove(null);
 			}
-			
-			System.out.println(Arrays.toString(children.toArray()));
-			
+
 			return children.toArray();
-
-			// return sequenceElements.toArray();
-//		} else if (mapping.containsKey(parentElement)) {
-//			IAnnotatedSequence sequence = mapping.get(parentElement);
-//			List<Object> children = new ArrayList<Object>(3);
-//			children.add(sequence.getAnnotation(parentElement,
-//					SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
-//			children.add(sequence.getAnnotation(parentElement,
-//					SchedulerConstants.AI_idleInfo, IIdleEvent.class));
-//			children.add(sequence.getAnnotation(parentElement,
-//					SchedulerConstants.AI_visitInfo, IPortVisitEvent.class));
-//
-//			// Remove all null entries
-//			children.remove(null);
-//			children.remove(null);
-//			children.remove(null);
-//
-//			return children.toArray();
-
 		}
 
 		return null;
@@ -106,7 +67,6 @@ public class AnnotatedScheduleContentProvider implements
 
 	@Override
 	public Object getParent(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -116,17 +76,20 @@ public class AnnotatedScheduleContentProvider implements
 		if (element instanceof IViewSite) {
 			return true;
 		}
-		
+
 		if (element instanceof IManagedJob) {
-			
+
 			return true;
 		}
-		
+
+		if (element instanceof IResource) {
+			return true;
+			}
 		
 		if (element instanceof IAnnotatedSequence) {
 			return true;
-//		} else if (mapping.containsKey(element)) {
-//			return true;
+			// } else if (mapping.containsKey(element)) {
+			// return true;
 		}
 
 		return false;
@@ -134,14 +97,20 @@ public class AnnotatedScheduleContentProvider implements
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		mapping.clear();
+		solution = null;
 	}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-		mapping.clear();
+
+		solution = null;
+
+		if (newInput instanceof IManagedJob) {
+			IManagedJob job = (IManagedJob) newInput;
+			solution = job.getSchedule();
+		} else if (newInput instanceof IAnnotatedSolution) {
+			solution = (IAnnotatedSolution<ISequenceElement>) newInput;
+		}
 	}
 
 	@Override

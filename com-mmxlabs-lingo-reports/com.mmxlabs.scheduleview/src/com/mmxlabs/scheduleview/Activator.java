@@ -53,8 +53,6 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 		context.addServiceListener(this,
 				"(objectclass=" + IJobManager.class.getName() + ")");
 
-		System.out.println("Bundle started");
-
 		jobManager = (IJobManager) jobManagerServiceTracker.getService();
 	}
 
@@ -76,8 +74,6 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 
 		plugin = null;
 		super.stop(context);
-
-		System.out.println("Bundle stopped");
 	}
 
 	/**
@@ -112,13 +108,11 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 		case ServiceEvent.REGISTERED: {
 			IJobManager jobManager = (IJobManager) fContext.getService(sr);
 			this.jobManager = jobManager;
-			System.out.println("Registered jobManager");
 		}
 			break;
 		case ServiceEvent.UNREGISTERING: {
 			// IJobManager manager = (IJobManager) fContext.getService(sr);
 			this.jobManager = null;
-			System.out.println("Unregistered jobManager");
 		}
 			break;
 		}

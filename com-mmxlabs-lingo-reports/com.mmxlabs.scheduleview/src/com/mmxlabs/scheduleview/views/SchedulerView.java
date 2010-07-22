@@ -132,7 +132,7 @@ public class SchedulerView extends ViewPart {
 			public void jobNotified(IManagedJob job) {
 
 				if (selectedJobs.contains(job)) {
-					// setInput(selectedJob.getSchedule());
+					setInput(job.getSchedule());
 					refresh();
 				}
 			}
@@ -217,14 +217,12 @@ public class SchedulerView extends ViewPart {
 	private void makeActions() {
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
-		zoomInAction.setImageDescriptor(PlatformUI.getWorkbench()
-				.getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		zoomInAction.setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomin_nav.gif"));
+		zoomInAction.setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomin_nav.gif"));
 
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
-		zoomOutAction.setImageDescriptor(PlatformUI.getWorkbench()
-				.getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		zoomOutAction.setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomout_nav.gif"));
+		zoomOutAction.setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomout_nav.gif"));
 	}
 
 	/**
@@ -241,6 +239,7 @@ public class SchedulerView extends ViewPart {
 			@Override
 			public void run() {
 				if (!viewer.getControl().isDisposed()) {
+					System.out.println("refresh");
 					viewer.refresh();
 				}
 			}

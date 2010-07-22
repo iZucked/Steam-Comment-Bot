@@ -1,5 +1,6 @@
 package com.mmxlabs.jobcontroller.views;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +13,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -39,8 +38,15 @@ import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.impl.ManagedJob;
+import com.mmxlabs.jobcontroller.core.impl.OptManagedJob;
+import com.mmxlabs.jobcontroller.core.impl.TestUtils;
 import com.mmxlabs.jobmanager.ui.Activator;
+import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
+import com.mmxlabs.optimiser.impl.OptimisationContext;
+import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -70,8 +76,7 @@ public class JobManagerView extends ViewPart {
 	private Action stopAction;
 	private Action removeAction;
 	private Action toggleDisplayAction;
-
-	private Action doubleClickAction;
+	private Action createDummyJobAction;
 
 	private final IJobManager jobManager = Activator.getDefault()
 			.getJobManager();
@@ -209,11 +214,14 @@ public class JobManagerView extends ViewPart {
 			} else {
 				desc = Activator.getImageDescriptor(key.toString());
 			}
+			
+			// Cache image
 			if (desc != null) {
 				final Image img = desc.createImage();
 				imageCache.put(key, img);
 				return img;
 			}
+			
 			return null;
 
 		}
@@ -253,7 +261,15 @@ public class JobManagerView extends ViewPart {
 		@Override
 		public void jobResumed(final IManagedJob job) {
 			refresh();
-			updateActionEnablement(viewer.getSelection());
+			getSite().getShell().getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					updateActionEnablement(viewer.getSelection());
+
+				}
+			});
 		}
 
 		@Override
@@ -270,7 +286,15 @@ public class JobManagerView extends ViewPart {
 		@Override
 		public void jobPaused(final IManagedJob job) {
 			refresh();
-			updateActionEnablement(viewer.getSelection());
+			getSite().getShell().getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					updateActionEnablement(viewer.getSelection());
+
+				}
+			});
 		}
 
 		@Override
@@ -331,7 +355,7 @@ public class JobManagerView extends ViewPart {
 
 		makeActions();
 		hookContextMenu();
-		hookDoubleClickAction();
+//		hookDoubleClickAction();
 		contributeToActionBars();
 
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -421,7 +445,7 @@ public class JobManagerView extends ViewPart {
 		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
-		manager.add(doubleClickAction);
+		manager.add(createDummyJobAction);
 		manager.add(toggleDisplayAction);
 
 		// Other plug-ins can contribute there actions here
@@ -544,7 +568,7 @@ public class JobManagerView extends ViewPart {
 		toggleDisplayAction.setImageDescriptor(Activator
 				.getImageDescriptor("/icons/console_view.gif"));
 
-		doubleClickAction = new Action() {
+		createDummyJobAction = new Action() {
 
 			int counter = 0;
 
@@ -555,7 +579,29 @@ public class JobManagerView extends ViewPart {
 				// .getFirstElement();
 				// showMessage("Double-click detected on " + obj.toString());
 				final String name = "Job " + counter++;
-				final ManagedJob job = new ManagedJob(name);
+				final long seed = 1;
+
+				// Build opt data
+				final IOptimisationData<ISequenceElement> data = TestUtils
+						.createProblem();
+				// Generate initial state
+				final ISequences<ISequenceElement> initialSequences = TestUtils
+						.createInitialSequences(data, seed);
+
+				final IFitnessFunctionRegistry fitnessRegistry = TestUtils
+						.createFitnessRegistry();
+				final IConstraintCheckerRegistry constraintRegistry = TestUtils
+						.createConstraintRegistry();
+
+				final OptimisationContext<ISequenceElement> context = new OptimisationContext<ISequenceElement>(
+						data, initialSequences, new ArrayList<String>(
+								fitnessRegistry.getFitnessComponentNames()),
+						fitnessRegistry,
+						new ArrayList<String>(constraintRegistry
+								.getConstraintCheckerNames()),
+						constraintRegistry);
+
+				final OptManagedJob job = new OptManagedJob(name, context);
 
 				job.init();
 
@@ -563,18 +609,19 @@ public class JobManagerView extends ViewPart {
 
 			}
 		};
-		doubleClickAction.setText("Create dummy job");
+		createDummyJobAction.setText("Create dummy job");
+		createDummyJobAction.setImageDescriptor(Activator.getImageDescriptor("icons/ctool16/launchtrace_wiz.gif"));
 
 	}
 
-	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(final DoubleClickEvent event) {
-				doubleClickAction.run();
-			}
-		});
-	}
+//	private void hookDoubleClickAction() {
+//		viewer.addDoubleClickListener(new IDoubleClickListener() {
+//			@Override
+//			public void doubleClick(final DoubleClickEvent event) {
+//				doubleClickAction.run();
+//			}
+//		});
+//	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
@@ -610,7 +657,7 @@ public class JobManagerView extends ViewPart {
 			boolean pauseEnabled = false;
 			boolean stopEnabled = false;
 			boolean toogleDisplayEnabled = false;
-			
+
 			if (selection instanceof IStructuredSelection) {
 				// Loop through jobs enabling buttons as valid. Operations
 				// will do nothing if not valid.
