@@ -1,5 +1,7 @@
 package com.mmxlabs.jobcontroller.core;
 
+import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
+
 
 
 public interface IManagedJob {
@@ -37,8 +39,7 @@ public interface IManagedJob {
 	int getTotalProgress();
 
 	
-	
-	Object getSchedule();
+	IAnnotatedSolution getSchedule();
 
 	void addManagedJobListener(IManagedJobListener managedJobListener);
 	void removeManagedJobListener(IManagedJobListener managedJobListener);

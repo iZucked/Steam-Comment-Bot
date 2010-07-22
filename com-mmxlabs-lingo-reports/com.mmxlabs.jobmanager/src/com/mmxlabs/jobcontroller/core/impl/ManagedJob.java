@@ -12,6 +12,7 @@ import org.eclipse.ui.progress.IProgressConstants2;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
 import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
 
 public class ManagedJob implements IManagedJob {
 
@@ -47,9 +48,10 @@ public class ManagedJob implements IManagedJob {
 	 * sub interface or adaptable object
 	 */
 	@Override
-	public Object getSchedule() {
-		IAnnotatedSequence<?> sequence = DummyDataCreator.createData2();
-		return new Object[] { sequence };
+	public IAnnotatedSolution getSchedule() {
+//		IAnnotatedSequence<?> sequence = DummyDataCreator.createData2();
+//		return new Object[] { sequence };
+		return null;
 	}
 
 	@Override

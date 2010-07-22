@@ -20,12 +20,12 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 
 	// The shared instance
 	private static Activator plugin;
-	
-	private IJobManager service;
+
 	private ServiceTracker jobManagerServiceTracker;
 	private BundleContext fContext;
 
 	private IJobManager jobManager;
+
 	/**
 	 * The constructor
 	 */
@@ -34,47 +34,51 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		
+
 		fContext = context;
-		
-		jobManagerServiceTracker = new ServiceTracker(context, IJobManager.class.getName(), null);
+
+		jobManagerServiceTracker = new ServiceTracker(context,
+				IJobManager.class.getName(), null);
 		jobManagerServiceTracker.open();
-		
-		context.addServiceListener(this,"(objectclass=" + IJobManager.class.getName() + ")");
-		
-		System.out.println("Bundle started");
-		
+
+		context.addServiceListener(this,
+				"(objectclass=" + IJobManager.class.getName() + ")");
+
 		jobManager = (IJobManager) jobManagerServiceTracker.getService();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		
+
 		// close the service tracker
 		jobManagerServiceTracker.close();
 		jobManagerServiceTracker = null;
 
 		fContext = null;
-		
+
 		plugin = null;
 		super.stop(context);
-		
-		System.out.println("Bundle stopped");
 	}
 
 	/**
 	 * Returns the shared instance
-	 *
+	 * 
 	 * @return the shared instance
 	 */
 	public static Activator getDefault() {
@@ -82,10 +86,11 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given
-	 * plug-in relative path
-	 *
-	 * @param path the path
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path
+	 * 
+	 * @param path
+	 *            the path
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
@@ -99,22 +104,18 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 	@Override
 	public void serviceChanged(ServiceEvent event) {
 		ServiceReference sr = event.getServiceReference();
-		switch(event.getType()) {
-			case ServiceEvent.REGISTERED:
-			{
-				IJobManager jobManager = (IJobManager) fContext.getService(sr);
-				this.jobManager = jobManager;
-				System.out.println("Registered jobManager");
-			}
+		switch (event.getType()) {
+		case ServiceEvent.REGISTERED: {
+			IJobManager jobManager = (IJobManager) fContext.getService(sr);
+			this.jobManager = jobManager;
+		}
 			break;
-			case ServiceEvent.UNREGISTERING:
-			{
-				IJobManager manager = (IJobManager) fContext.getService(sr);
-				this.jobManager = null;
-				System.out.println("Unregistered jobManager");
-			}
+		case ServiceEvent.UNREGISTERING: {
+			// IJobManager manager = (IJobManager) fContext.getService(sr);
+			this.jobManager = null;
+		}
 			break;
 		}
-		
+
 	}
 }
