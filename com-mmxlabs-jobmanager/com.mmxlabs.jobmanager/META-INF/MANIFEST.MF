@@ -7,7 +7,11 @@ Bundle-Activator: com.mmxlabs.jobcontoller.Activator
 Bundle-Vendor: MMXLABS
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- com.mmxlabs.app.app-bundle;bundle-version="1.0.0"
+ com.mmxlabs.common.util;bundle-version="1.0.0",
+ com.mmxlabs.optimiser.optimiser-common;bundle-version="1.0.0",
+ com.mmxlabs.optimiser.optimiser-core;bundle-version="1.0.0",
+ com.mmxlabs.optimiser.optimiser-lso;bundle-version="1.0.0",
+ com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.jobcontoller,
  com.mmxlabs.jobcontroller.core,

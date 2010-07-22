@@ -200,176 +200,176 @@ public class DummyDataCreator {
 //
 //	}
 //	
-	public static IAnnotatedSequence<ISequenceElement> createData2() {
-
-		SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
-
-		Port port1 = new Port("port1");
-		Port port2 = new Port("port2");
-		Port port3 = new Port("port3");
-		Port port4 = new Port("port4");
-
-		ITimeWindow timeWindow1 = new TimeWindow(5, 6);
-		ITimeWindow timeWindow2 = new TimeWindow(10, 11);
-		ITimeWindow timeWindow3 = new TimeWindow(15, 16);
-		ITimeWindow timeWindow4 = new TimeWindow(20, 21);
-
-		LoadSlot loadSlot1 = new LoadSlot();
-		loadSlot1.setPort(port1);
-		loadSlot1.setTimeWindow(timeWindow1);
-		DischargeSlot dischargeSlot1 = new DischargeSlot();
-		dischargeSlot1.setPort(port2);
-		dischargeSlot1.setTimeWindow(timeWindow2);
-
-		Cargo cargo1 = new Cargo();
-		cargo1.setId("cargo1");
-		cargo1.setLoadSlot(loadSlot1);
-		cargo1.setDischargeSlot(dischargeSlot1);
-
-		LoadSlot loadSlot2 = new LoadSlot();
-		loadSlot2.setPort(port3);
-		loadSlot2.setTimeWindow(timeWindow3);
-		DischargeSlot dischargeSlot2 = new DischargeSlot();
-		dischargeSlot2.setPort(port4);
-		dischargeSlot2.setTimeWindow(timeWindow4);
-
-		Cargo cargo2 = new Cargo();
-		cargo2.setId("cargo2");
-		cargo2.setLoadSlot(loadSlot2);
-		cargo2.setDischargeSlot(dischargeSlot2);
-
-		
-		loadSlot1.setMaxLoadVolume(Long.MAX_VALUE);
-		loadSlot2.setMaxLoadVolume(Long.MAX_VALUE);
-		dischargeSlot1.setMaxDischargeVolume(Long.MAX_VALUE);
-		dischargeSlot2.setMaxDischargeVolume(Long.MAX_VALUE);
-		
-		ISequenceElement element1 = new SequenceElement("element1", loadSlot1);
-		ISequenceElement element2 = new SequenceElement("element2",
-				dischargeSlot1);
-		ISequenceElement element3 = new SequenceElement("element3", loadSlot2);
-		ISequenceElement element4 = new SequenceElement("element4",
-				dischargeSlot2);
-
-		ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider);
-
-		timeWindowProvider.setTimeWindows(element1,
-				Collections.singletonList(timeWindow1));
-		timeWindowProvider.setTimeWindows(element2,
-				Collections.singletonList(timeWindow2));
-		timeWindowProvider.setTimeWindows(element3,
-				Collections.singletonList(timeWindow3));
-		timeWindowProvider.setTimeWindows(element4,
-				Collections.singletonList(timeWindow4));
-
-		HashMapMatrixProvider<IPort, Integer> distanceProvider = new HashMapMatrixProvider<IPort, Integer>(
-				SchedulerConstants.DCP_portDistanceProvider);
-
-		// Only need sparse matrix for testing
-		distanceProvider.set(port1, port2, 400);
-		distanceProvider.set(port2, port3, 400);
-		distanceProvider.set(port3, port4, 400);
-
-		final int duration = 1;
-		IElementDurationProviderEditor<ISequenceElement> durationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
-				SchedulerConstants.DCP_elementDurationsProvider);
-		durationsProvider.setDefaultValue(duration);
-
-		IPortProviderEditor portProvider = new HashMapPortEditor(
-				SchedulerConstants.DCP_portProvider);
-		portProvider.setPortForElement(port1, element1);
-		portProvider.setPortForElement(port2, element2);
-		portProvider.setPortForElement(port3, element3);
-		portProvider.setPortForElement(port4, element4);
-
-		IPortSlotProviderEditor<ISequenceElement> portSlotProvider = new HashMapPortSlotEditor<ISequenceElement>(
-				SchedulerConstants.DCP_portSlotsProvider);
-		portSlotProvider.setPortSlot(element1, loadSlot1);
-		portSlotProvider.setPortSlot(element2, dischargeSlot1);
-		portSlotProvider.setPortSlot(element3, loadSlot2);
-		portSlotProvider.setPortSlot(element4, dischargeSlot2);
-
-		IPortTypeProviderEditor<ISequenceElement> portTypeProvider = new HashMapPortTypeEditor<ISequenceElement>(
-				SchedulerConstants.DCP_portTypeProvider);
-		portTypeProvider.setPortType(element1, PortType.Load);
-		portTypeProvider.setPortType(element2, PortType.Discharge);
-		portTypeProvider.setPortType(element3, PortType.Load);
-		portTypeProvider.setPortType(element4, PortType.Discharge);
-
-		// Set data providers
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-
-		IResource resource = new Resource();
-		
-		
-		TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-		keypoints.put(12000, 12000l);
-		keypoints.put(13000, 13000l);
-		keypoints.put(14000, 14000l);
-		keypoints.put(15000, 15000l);
-		keypoints.put(16000, 16000l);
-		keypoints.put(17000, 17000l);
-		keypoints.put(18000, 18000l);
-		keypoints.put(19000, 19000l);
-		keypoints.put(20000, 20000l);
-		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
-				keypoints);
-
-		VesselClass vesselClass1 = new VesselClass();
-		vesselClass1.setName("vesselClass-1");
-		vesselClass1.setMinSpeed(12000);
-		vesselClass1.setMaxSpeed(20000);
-		vesselClass1.setMinHeel(0);
-		vesselClass1.setCargoCapacity(150000000);
-
-		
-		for (VesselState state : VesselState.values()) {
-			vesselClass1.setConsumptionRate(state, consumptionCalculator);
-			vesselClass1.setMinNBOSpeed(state, 150000);
-			vesselClass1.setNBORate(state, 10000);
-			vesselClass1.setIdleConsumptionRate(state, 10000);
-			vesselClass1.setIdleNBORate(state, 10000);
-		}
-		
-		final Vessel vessel = new Vessel();
-		vessel.setName("vessel-1");
-		vessel.setVesselClass(vesselClass1);
-
-		IVesselProviderEditor vesselProvider = new HashMapVesselEditor(
-				SchedulerConstants.DCP_vesselProvider);
-		vesselProvider.setVesselResource(resource, vessel);
-		scheduler.setVesselProvider(vesselProvider);
-
-		List<ISequenceElement> elements = CollectionsUtil.makeArrayList(
-				element1, element2, element3, element4);
-		ISequence<ISequenceElement> sequence = new ListSequence<ISequenceElement>(
-				elements);
-
-		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		scheduler.setVoyageCalculator(voyageCalculator);
-
-		// This may throw IllegalStateException if not all the elements are set.
-		// TODO: Expand this into it's own series of test cases
-		scheduler.init();
-		
-		// Schedule sequence
-		List<IVoyagePlan> plans = scheduler.schedule(resource, sequence);
-
-		VoyagePlanAnnotator<ISequenceElement> annotator = new VoyagePlanAnnotator<ISequenceElement>();
-		annotator.setPortSlotProvider(portSlotProvider);
-		
-		AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
-		annotator.annonateFromVoyagePlan(resource, plans, annotatedSequence);
-		annotatedSequence.setSequenceElements(elements);
-		annotatedSequence.setVessel(vessel);
-		
-
-		return annotatedSequence;
-	}
+//	public static IAnnotatedSequence<ISequenceElement> createData2() {
+//
+//		SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
+//
+//		Port port1 = new Port("port1");
+//		Port port2 = new Port("port2");
+//		Port port3 = new Port("port3");
+//		Port port4 = new Port("port4");
+//
+//		ITimeWindow timeWindow1 = new TimeWindow(5, 6);
+//		ITimeWindow timeWindow2 = new TimeWindow(10, 11);
+//		ITimeWindow timeWindow3 = new TimeWindow(15, 16);
+//		ITimeWindow timeWindow4 = new TimeWindow(20, 21);
+//
+//		LoadSlot loadSlot1 = new LoadSlot();
+//		loadSlot1.setPort(port1);
+//		loadSlot1.setTimeWindow(timeWindow1);
+//		DischargeSlot dischargeSlot1 = new DischargeSlot();
+//		dischargeSlot1.setPort(port2);
+//		dischargeSlot1.setTimeWindow(timeWindow2);
+//
+//		Cargo cargo1 = new Cargo();
+//		cargo1.setId("cargo1");
+//		cargo1.setLoadSlot(loadSlot1);
+//		cargo1.setDischargeSlot(dischargeSlot1);
+//
+//		LoadSlot loadSlot2 = new LoadSlot();
+//		loadSlot2.setPort(port3);
+//		loadSlot2.setTimeWindow(timeWindow3);
+//		DischargeSlot dischargeSlot2 = new DischargeSlot();
+//		dischargeSlot2.setPort(port4);
+//		dischargeSlot2.setTimeWindow(timeWindow4);
+//
+//		Cargo cargo2 = new Cargo();
+//		cargo2.setId("cargo2");
+//		cargo2.setLoadSlot(loadSlot2);
+//		cargo2.setDischargeSlot(dischargeSlot2);
+//
+//		
+//		loadSlot1.setMaxLoadVolume(Long.MAX_VALUE);
+//		loadSlot2.setMaxLoadVolume(Long.MAX_VALUE);
+//		dischargeSlot1.setMaxDischargeVolume(Long.MAX_VALUE);
+//		dischargeSlot2.setMaxDischargeVolume(Long.MAX_VALUE);
+//		
+//		ISequenceElement element1 = new SequenceElement("element1", loadSlot1);
+//		ISequenceElement element2 = new SequenceElement("element2",
+//				dischargeSlot1);
+//		ISequenceElement element3 = new SequenceElement("element3", loadSlot2);
+//		ISequenceElement element4 = new SequenceElement("element4",
+//				dischargeSlot2);
+//
+//		ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
+//				SchedulerConstants.DCP_timeWindowProvider);
+//
+//		timeWindowProvider.setTimeWindows(element1,
+//				Collections.singletonList(timeWindow1));
+//		timeWindowProvider.setTimeWindows(element2,
+//				Collections.singletonList(timeWindow2));
+//		timeWindowProvider.setTimeWindows(element3,
+//				Collections.singletonList(timeWindow3));
+//		timeWindowProvider.setTimeWindows(element4,
+//				Collections.singletonList(timeWindow4));
+//
+//		HashMapMatrixProvider<IPort, Integer> distanceProvider = new HashMapMatrixProvider<IPort, Integer>(
+//				SchedulerConstants.DCP_portDistanceProvider);
+//
+//		// Only need sparse matrix for testing
+//		distanceProvider.set(port1, port2, 400);
+//		distanceProvider.set(port2, port3, 400);
+//		distanceProvider.set(port3, port4, 400);
+//
+//		final int duration = 1;
+//		IElementDurationProviderEditor<ISequenceElement> durationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
+//				SchedulerConstants.DCP_elementDurationsProvider);
+//		durationsProvider.setDefaultValue(duration);
+//
+//		IPortProviderEditor portProvider = new HashMapPortEditor(
+//				SchedulerConstants.DCP_portProvider);
+//		portProvider.setPortForElement(port1, element1);
+//		portProvider.setPortForElement(port2, element2);
+//		portProvider.setPortForElement(port3, element3);
+//		portProvider.setPortForElement(port4, element4);
+//
+//		IPortSlotProviderEditor<ISequenceElement> portSlotProvider = new HashMapPortSlotEditor<ISequenceElement>(
+//				SchedulerConstants.DCP_portSlotsProvider);
+//		portSlotProvider.setPortSlot(element1, loadSlot1);
+//		portSlotProvider.setPortSlot(element2, dischargeSlot1);
+//		portSlotProvider.setPortSlot(element3, loadSlot2);
+//		portSlotProvider.setPortSlot(element4, dischargeSlot2);
+//
+//		IPortTypeProviderEditor<ISequenceElement> portTypeProvider = new HashMapPortTypeEditor<ISequenceElement>(
+//				SchedulerConstants.DCP_portTypeProvider);
+//		portTypeProvider.setPortType(element1, PortType.Load);
+//		portTypeProvider.setPortType(element2, PortType.Discharge);
+//		portTypeProvider.setPortType(element3, PortType.Load);
+//		portTypeProvider.setPortType(element4, PortType.Discharge);
+//
+//		// Set data providers
+//		scheduler.setDistanceProvider(distanceProvider);
+//		scheduler.setDurationsProvider(durationsProvider);
+//		scheduler.setPortProvider(portProvider);
+//		scheduler.setTimeWindowProvider(timeWindowProvider);
+//		scheduler.setPortSlotProvider(portSlotProvider);
+//		scheduler.setPortTypeProvider(portTypeProvider);
+//
+//		IResource resource = new Resource();
+//		
+//		
+//		TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
+//		keypoints.put(12000, 12000l);
+//		keypoints.put(13000, 13000l);
+//		keypoints.put(14000, 14000l);
+//		keypoints.put(15000, 15000l);
+//		keypoints.put(16000, 16000l);
+//		keypoints.put(17000, 17000l);
+//		keypoints.put(18000, 18000l);
+//		keypoints.put(19000, 19000l);
+//		keypoints.put(20000, 20000l);
+//		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
+//				keypoints);
+//
+//		VesselClass vesselClass1 = new VesselClass();
+//		vesselClass1.setName("vesselClass-1");
+//		vesselClass1.setMinSpeed(12000);
+//		vesselClass1.setMaxSpeed(20000);
+//		vesselClass1.setMinHeel(0);
+//		vesselClass1.setCargoCapacity(150000000);
+//
+//		
+//		for (VesselState state : VesselState.values()) {
+//			vesselClass1.setConsumptionRate(state, consumptionCalculator);
+//			vesselClass1.setMinNBOSpeed(state, 150000);
+//			vesselClass1.setNBORate(state, 10000);
+//			vesselClass1.setIdleConsumptionRate(state, 10000);
+//			vesselClass1.setIdleNBORate(state, 10000);
+//		}
+//		
+//		final Vessel vessel = new Vessel();
+//		vessel.setName("vessel-1");
+//		vessel.setVesselClass(vesselClass1);
+//
+//		IVesselProviderEditor vesselProvider = new HashMapVesselEditor(
+//				SchedulerConstants.DCP_vesselProvider);
+//		vesselProvider.setVesselResource(resource, vessel);
+//		scheduler.setVesselProvider(vesselProvider);
+//
+//		List<ISequenceElement> elements = CollectionsUtil.makeArrayList(
+//				element1, element2, element3, element4);
+//		ISequence<ISequenceElement> sequence = new ListSequence<ISequenceElement>(
+//				elements);
+//
+//		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
+//		scheduler.setVoyageCalculator(voyageCalculator);
+//
+//		// This may throw IllegalStateException if not all the elements are set.
+//		// TODO: Expand this into it's own series of test cases
+//		scheduler.init();
+//		
+//		// Schedule sequence
+//		List<IVoyagePlan> plans = scheduler.schedule(resource, sequence);
+//
+//		VoyagePlanAnnotator<ISequenceElement> annotator = new VoyagePlanAnnotator<ISequenceElement>();
+//		annotator.setPortSlotProvider(portSlotProvider);
+//		
+//		AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
+//		annotator.annonateFromVoyagePlan(resource, plans, annotatedSequence);
+////		annotatedSequence.setSequenceElements(elements);
+////		annotatedSequence.setVessel(vessel);
+//		
+//
+//		return annotatedSequence;
+//	}
 }
