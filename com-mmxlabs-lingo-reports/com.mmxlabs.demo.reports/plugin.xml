@@ -22,6 +22,20 @@
             id="com.mmxlabs.demo.reports.views.FitnessReportView"
             name="Fitness Report">
       </view>
+      <view
+            category="com.mmxlabs.demo.reports"
+            class="com.mmxlabs.demo.reports.views.TotalsReportView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.demo.reports.views.TotalsReportView"
+            name="Totals Report">
+      </view>
+      <view
+            category="com.mmxlabs.demo.reports"
+            class="com.mmxlabs.demo.reports.views.PortRorationReportView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.demo.reports.views.PortRorationReportView"
+            name="Port Rotation Report">
+      </view>
    </extension>
    <extension
          point="org.eclipse.help.contexts">
