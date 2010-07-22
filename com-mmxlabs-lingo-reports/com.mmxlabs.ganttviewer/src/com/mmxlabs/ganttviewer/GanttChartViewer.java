@@ -167,16 +167,21 @@ public class GanttChartViewer extends StructuredViewer {
 		// Use reverse map to get underlying objects
 		final List<Object> selectedObjects = new ArrayList<Object>(
 				allSelectedEvents.size());
+
 		for (final GanttEvent ge : allSelectedEvents) {
 
-			assert internalReverseMap.containsKey(ge);
+			// We might expect this to always be true, but if the viewer updates
+			// during this call, then the map will have changed.
+			// Note: this is also true between containsKey() and get() calls.
+			if (internalReverseMap.containsKey(ge)) {
 
-			final Object obj = internalReverseMap.get(ge);
+				final Object obj = internalReverseMap.get(ge);
 
-			selectedObjects.add(obj);
+				selectedObjects.add(obj);
 
-			// TODO Might not need reverse mapping?
-			assert obj == ge.getData();
+				// TODO Might not need reverse mapping?
+				assert obj == ge.getData();
+			}
 		}
 
 		return selectedObjects;
@@ -185,7 +190,7 @@ public class GanttChartViewer extends StructuredViewer {
 	@Override
 	protected void internalRefresh(final Object element) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -201,26 +206,31 @@ public class GanttChartViewer extends StructuredViewer {
 	protected void setSelectionToWidget(
 			@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
 
-		// Use the internalMap to obtain the list of events we are selecting
-		final ArrayList<GanttEvent> selectedEvents = new ArrayList<GanttEvent>(
-				l.size());
-		for (final Object obj : l) {
-			if (obj != null && internalMap.containsKey(obj)) {
-				selectedEvents.add(internalMap.get(obj));
+		final ArrayList<GanttEvent> selectedEvents;
+		if (l != null) {
+			// Use the internalMap to obtain the list of events we are selecting
+			selectedEvents = new ArrayList<GanttEvent>(l.size());
+			for (final Object obj : l) {
+				if (obj != null && internalMap.containsKey(obj)) {
+					selectedEvents.add(internalMap.get(obj));
+				}
 			}
+		} else {
+			// Clear selection
+			selectedEvents = new ArrayList<GanttEvent>(0);
 		}
 		ganttChart.getGanttComposite().setSelection(selectedEvents);
 	}
 
 	@Override
-	protected void inputChanged(final Object input, final Object oldInput) {
+	protected synchronized void inputChanged(final Object input,
+			final Object oldInput) {
 
 		// TODO: Extract into separate method
-		
+
 		// TODO: Include sorter
 		ViewerSorter sorter = getSorter();
-		
-		
+
 		// Clear existing data
 		ganttChart.getGanttComposite().clearChart();
 		internalMap.clear();
@@ -240,7 +250,7 @@ public class GanttChartViewer extends StructuredViewer {
 			if (resources == null) {
 				return;
 			}
-			
+
 			int layer = 0;
 			// Each resource to map to a GanntSection
 			for (final Object r : resources) {
