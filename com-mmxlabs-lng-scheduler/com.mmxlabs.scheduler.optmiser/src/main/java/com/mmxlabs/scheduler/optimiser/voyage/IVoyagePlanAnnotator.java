@@ -2,8 +2,8 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.IAnnotatedSequence;
 import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 
 /**
  * A {@link IVoyagePlanAnnotator} uses {@link IVoyagePlan}s to annotate
