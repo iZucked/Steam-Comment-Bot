@@ -140,6 +140,8 @@ public class SchedulerBuilderTest {
 
 		Assert.assertEquals(10, window.getStart());
 		Assert.assertEquals(20, window.getEnd());
+		
+		fail("Not yet implemented - Test internal state");
 	}
 
 	@Test
@@ -169,7 +171,23 @@ public class SchedulerBuilderTest {
 
 	@Test
 	public void testCreateVesselClass() {
-		fail("Not yet implemented");
+
+		SchedulerBuilder builder = new SchedulerBuilder();
+		
+		int minSpeed = 1;
+		int maxSpeed = 2;
+		long capacity = 3l;
+		int minHeel = 4;
+		
+		IVesselClass vesselClass = builder.createVesselClass("name", minSpeed,
+				maxSpeed, capacity, minHeel);
+		
+		Assert.assertEquals(minSpeed, vesselClass.getMinSpeed());
+		Assert.assertEquals(maxSpeed, vesselClass.getMaxSpeed());
+		Assert.assertEquals(capacity, vesselClass.getCargoCapacity());
+		Assert.assertEquals(minHeel, vesselClass.getMinHeel());
+
+		fail("Not yet implemented - Internal state checks");
 	}
 
 	@Test
