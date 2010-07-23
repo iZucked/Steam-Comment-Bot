@@ -73,6 +73,17 @@ public class VoyageDetailsTest {
 		Assert.assertEquals(value, details.getStartTime());
 	}
 
+	@Test
+	public void testGetSetFuelCost() {
+
+		final FuelComponent c = FuelComponent.Base;
+		final int value = 100;
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		Assert.assertEquals(0, details.getFuelUnitPrice(c));
+		details.setFuelUnitPrice(c, value);
+		Assert.assertEquals(value, details.getFuelUnitPrice(c));
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testEquals() {
@@ -85,15 +96,16 @@ public class VoyageDetailsTest {
 		final FuelComponent fuel1 = FuelComponent.Base;
 		final FuelComponent fuel2 = FuelComponent.NBO;
 
-		final VoyageDetails details1 = make(1, 2, 3, 4, options1, fuel1, 5);
-		final VoyageDetails details2 = make(1, 2, 3, 4, options1, fuel1, 5);
-		final VoyageDetails details3 = make(21, 2, 3, 4, options1, fuel1, 5);
-		final VoyageDetails details4 = make(1, 22, 3, 4, options1, fuel1, 5);
-		final VoyageDetails details5 = make(1, 2, 23, 4, options1, fuel1, 5);
-		final VoyageDetails details6 = make(1, 2, 3, 24, options1, fuel1, 5);
-		final VoyageDetails details7 = make(1, 2, 3, 4, options2, fuel1, 5);
-		final VoyageDetails details8 = make(1, 2, 3, 4, options1, fuel2, 5);
-		final VoyageDetails details9 = make(1, 2, 3, 4, options1, fuel1, 25);
+		final VoyageDetails details1 = make(1, 2, 3, 4, options1, fuel1, 5, 10);
+		final VoyageDetails details2 = make(1, 2, 3, 4, options1, fuel1, 5, 10);
+		final VoyageDetails details3 = make(21, 2, 3, 4, options1, fuel1, 5, 10);
+		final VoyageDetails details4 = make(1, 22, 3, 4, options1, fuel1, 5, 10);
+		final VoyageDetails details5 = make(1, 2, 23, 4, options1, fuel1, 5, 10);
+		final VoyageDetails details6 = make(1, 2, 3, 24, options1, fuel1, 5, 10);
+		final VoyageDetails details7 = make(1, 2, 3, 4, options2, fuel1, 5, 10);
+		final VoyageDetails details8 = make(1, 2, 3, 4, options1, fuel2, 5, 10);
+		final VoyageDetails details9 = make(1, 2, 3, 4, options1, fuel1, 25, 10);
+		final VoyageDetails details10 = make(1, 2, 3, 4, options1, fuel1, 5, 15);
 
 		Assert.assertTrue(details1.equals(details1));
 		Assert.assertTrue(details1.equals(details2));
@@ -106,6 +118,7 @@ public class VoyageDetailsTest {
 		Assert.assertFalse(details1.equals(details7));
 		Assert.assertFalse(details1.equals(details8));
 		Assert.assertFalse(details1.equals(details9));
+		Assert.assertFalse(details1.equals(details10));
 
 		Assert.assertFalse(details3.equals(details1));
 		Assert.assertFalse(details4.equals(details1));
@@ -114,13 +127,14 @@ public class VoyageDetailsTest {
 		Assert.assertFalse(details7.equals(details1));
 		Assert.assertFalse(details8.equals(details1));
 		Assert.assertFalse(details9.equals(details1));
+		Assert.assertFalse(details10.equals(details1));
 
 		Assert.assertFalse(details1.equals(new Object()));
 	}
 
 	<T> VoyageDetails<T> make(final int idleTime, final int travelTime,
 			final int speed, final int startTime, final IVoyageOptions options,
-			final FuelComponent fuel, final long consumption) {
+			final FuelComponent fuel, final long consumption, int unitPrice) {
 
 		final VoyageDetails<T> d = new VoyageDetails<T>();
 
@@ -131,7 +145,9 @@ public class VoyageDetailsTest {
 		d.setOptions(options);
 
 		d.setFuelConsumption(fuel, consumption);
+		d.setFuelUnitPrice(fuel, unitPrice);
 
+		
 		return d;
 	}
 }

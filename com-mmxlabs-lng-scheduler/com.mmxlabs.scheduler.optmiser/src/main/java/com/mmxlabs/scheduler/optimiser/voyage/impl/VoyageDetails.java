@@ -22,6 +22,10 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(
 			FuelComponent.class);
 
+	private final EnumMap<FuelComponent, Integer> fuelUnitPrices = new EnumMap<FuelComponent, Integer>(
+			FuelComponent.class);
+
+	
 	private int idleTime;
 
 	private int travelTime;
@@ -97,6 +101,21 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	}
 
 	@Override
+	public int getFuelUnitPrice(final FuelComponent fuel) {
+
+		if (fuelUnitPrices.containsKey(fuel)) {
+			return fuelUnitPrices.get(fuel);
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public void setFuelUnitPrice(final FuelComponent fuel, final int unitPrice) {
+		fuelUnitPrices.put(fuel, unitPrice);
+	}
+	
+	@Override
 	public boolean equals(final Object obj) {
 
 		if (obj instanceof VoyageDetails) {
@@ -122,6 +141,9 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 			}
 
 			if (!Equality.isEqual(fuelConsumption, d.fuelConsumption)) {
+				return false;
+			}
+			if (!Equality.isEqual(fuelUnitPrices, d.fuelUnitPrices)) {
 				return false;
 			}
 			

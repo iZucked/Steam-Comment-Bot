@@ -86,6 +86,22 @@ public interface IVoyageDetails<T> {
 	long getFuelConsumption(FuelComponent fuel);
 
 	/**
+	 * Returns the unit price for the specified {@link FuelComponent}
+	 * 
+	 * @param fuel
+	 * @return
+	 */
+	int getFuelUnitPrice(FuelComponent fuel);
+
+	/**
+	 * Sets the unit price for the specified {@link FuelComponent}.
+	 * 
+	 * @param fuel
+	 * @param unitPrice
+	 */
+	void setFuelUnitPrice(FuelComponent fuel, int unitPrice);
+
+	/**
 	 * Returns the start time of this voyage. The end time is the start time
 	 * plus the result of {@link #getTravelTime()} and {@link #getIdleTime()}
 	 * 
