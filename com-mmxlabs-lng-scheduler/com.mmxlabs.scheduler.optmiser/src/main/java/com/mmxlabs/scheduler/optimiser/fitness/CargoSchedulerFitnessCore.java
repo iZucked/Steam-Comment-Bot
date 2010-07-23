@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
@@ -14,6 +15,7 @@ import com.mmxlabs.optimiser.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AnnotatedSequence;
@@ -22,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
@@ -61,6 +64,18 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				.add(new LatenessComponent<T>(
 						CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME,
 						this));
+
+		components.add(new CostComponent<T>(
+				CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME,
+				CollectionsUtil.makeArrayList(FuelComponent.NBO,
+						FuelComponent.FBO, FuelComponent.IdleNBO), this));
+
+		components.add(new CostComponent<T>(
+				CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME,
+				CollectionsUtil
+						.makeArrayList(FuelComponent.Base,
+								FuelComponent.Base_Supplemental,
+								FuelComponent.IdleBase), this));
 	}
 
 	@Override
@@ -109,12 +124,14 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		for (final IResource resource : affectedResources) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
-			final List<IVoyagePlan> plans = scheduler.schedule(resource,
-					sequence);
+			if (sequence.size() > 0) {
 
-			voyagePlanAnnotator.annonateFromVoyagePlan(resource, plans,
-					annotatedSequence);
+				final List<IVoyagePlan> plans = scheduler.schedule(resource,
+						sequence);
 
+				voyagePlanAnnotator.annonateFromVoyagePlan(resource, plans,
+						annotatedSequence);
+			}
 			evaluateSequence(resource, sequence, annotatedSequence, true);
 		}
 	}
@@ -134,10 +151,12 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// populate
 		scheduler = createSequenceScheduler();
 		VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
-		vpa.setPortSlotProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class));
+		vpa.setPortSlotProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_portSlotsProvider,
+				IPortSlotProvider.class));
 
 		voyagePlanAnnotator = vpa;
-		
+
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.init(data);
