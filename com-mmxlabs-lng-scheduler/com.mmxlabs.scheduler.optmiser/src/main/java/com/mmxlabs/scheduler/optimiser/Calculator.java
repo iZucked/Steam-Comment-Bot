@@ -31,4 +31,8 @@ public class Calculator {
 		
 		return (int)(quantity / rate);
 	}
+
+	public static long costFromConsumption(long consumption, int unitPrice) {
+		return (consumption * unitPrice) / ScaleFactor;
+	}
 }
