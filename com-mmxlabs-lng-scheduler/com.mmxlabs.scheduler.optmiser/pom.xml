@@ -1,10 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.scheduler</groupId>
 	<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>Scheduler - Optimiser</name>
-	<description>	</description>
+
+	<description>LNG Scheduler </description>
+
 	<inceptionYear>2010</inceptionYear>
 	<organization>
 		<name>Minimax Labs</name>
@@ -18,15 +22,6 @@
 
 
 	<dependencies>
-
-<!--
-		<dependency>
-			<groupId>com.mmxlabs.optimiser</groupId>
-			<artifactId>optimiser-builder</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
--->
 
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
@@ -64,12 +59,13 @@
 			<scope>test</scope>
 		</dependency>
 
-                <dependency>
-                        <groupId>org.jmock</groupId>
-                        <artifactId>jmock-junit4</artifactId>
-                        <version>${jmock.version}</version>
-                        <scope>test</scope>
-                </dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+			<version>${jmock.version}</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
+
 </project>
