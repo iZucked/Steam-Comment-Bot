@@ -60,14 +60,15 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(CollectionsUtil
-				.makeArrayList(obj1, obj2, obj3, obj4, obj5, obj6));
+		final ListSequence<Object> seq1 = new ListSequence<Object>(
+				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5,
+						obj6));
 		final IResource r = new Resource();
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil.makeHashMap(r,
-				seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(Collections
-				.singletonList(r), map);
+		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+				.makeHashMap(r, seq1);
+		final Sequences<Object> sequences = new Sequences<Object>(
+				Collections.singletonList(r), map);
 
 		Assert.assertTrue(checker.checkConstraints(sequences));
 	}
@@ -94,14 +95,15 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(CollectionsUtil
-				.makeArrayList(obj1, obj6, obj2, obj3, obj4, obj5));
+		final ListSequence<Object> seq1 = new ListSequence<Object>(
+				CollectionsUtil.makeArrayList(obj1, obj6, obj2, obj3, obj4,
+						obj5));
 		final IResource r = new Resource();
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil.makeHashMap(r,
-				seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(Collections
-				.singletonList(r), map);
+		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+				.makeHashMap(r, seq1);
+		final Sequences<Object> sequences = new Sequences<Object>(
+				Collections.singletonList(r), map);
 
 		Assert.assertFalse(checker.checkConstraints(sequences));
 	}
@@ -128,14 +130,15 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(CollectionsUtil
-				.makeArrayList(obj1, obj2, obj3, obj4, obj6, obj5));
+		final ListSequence<Object> seq1 = new ListSequence<Object>(
+				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6,
+						obj5));
 		final IResource r = new Resource();
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil.makeHashMap(r,
-				seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(Collections
-				.singletonList(r), map);
+		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+				.makeHashMap(r, seq1);
+		final Sequences<Object> sequences = new Sequences<Object>(
+				Collections.singletonList(r), map);
 
 		Assert.assertFalse(checker.checkConstraints(sequences));
 	}
@@ -162,14 +165,15 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(CollectionsUtil
-				.makeArrayList(obj1, obj2, obj3, obj4, obj5, obj6));
+		final ListSequence<Object> seq1 = new ListSequence<Object>(
+				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5,
+						obj6));
 		final IResource r = new Resource();
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil.makeHashMap(r,
-				seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(Collections
-				.singletonList(r), map);
+		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+				.makeHashMap(r, seq1);
+		final Sequences<Object> sequences = new Sequences<Object>(
+				Collections.singletonList(r), map);
 
 		final List<String> messages = new LinkedList<String>();
 
@@ -200,14 +204,15 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(CollectionsUtil
-				.makeArrayList(obj1, obj2, obj3, obj4, obj6, obj5));
+		final ListSequence<Object> seq1 = new ListSequence<Object>(
+				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6,
+						obj5));
 		final IResource r = new Resource();
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil.makeHashMap(r,
-				seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(Collections
-				.singletonList(r), map);
+		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+				.makeHashMap(r, seq1);
+		final Sequences<Object> sequences = new Sequences<Object>(
+				Collections.singletonList(r), map);
 
 		final List<String> messages = new LinkedList<String>();
 
@@ -215,6 +220,73 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		Assert.assertEquals(1, messages.size());
 
+	}
+
+	/**
+	 * Test that the left half of a order sequence must have it's right half
+	 */
+	@Test
+	public void testCheckConstraintsISequencesOfTListOfString3() {
+
+		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
+				"key");
+
+		final Object obj1 = new Object();
+		final Object obj2 = new Object();
+
+		provider.setElementOrder(obj1, obj2);
+
+		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
+				"name", "key");
+
+		checker.setProvider(provider);
+
+		final ListSequence<Object> seq1 = new ListSequence<Object>(
+				CollectionsUtil.makeArrayList(obj1));
+		final IResource r = new Resource();
+
+		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+				.makeHashMap(r, seq1);
+		final Sequences<Object> sequences = new Sequences<Object>(
+				Collections.singletonList(r), map);
+
+		final List<String> messages = new LinkedList<String>();
+
+		Assert.assertFalse(checker.checkConstraints(sequences, messages));
+
+		Assert.assertEquals(1, messages.size());
+
+	}
+
+	/**
+	 * Test that the right half of a order sequence can exist on its own.
+	 */
+	@Test
+	public void testCheckConstraintsISequencesOfT4() {
+
+		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
+				"key");
+
+		final Object obj1 = new Object();
+		final Object obj2 = new Object();
+
+		provider.setElementOrder(obj1, obj2);
+
+		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
+				"name", "key");
+
+		checker.setProvider(provider);
+
+		final ListSequence<Object> seq1 = new ListSequence<Object>(
+				CollectionsUtil.makeArrayList(obj2));
+		final IResource r = new Resource();
+
+		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+				.makeHashMap(r, seq1);
+		final Sequences<Object> sequences = new Sequences<Object>(
+				Collections.singletonList(r), map);
+
+		Assert.assertTrue(checker.checkConstraints(sequences));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -232,7 +304,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		Assert.assertSame(provider, checker.getProvider());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testSetOptimisationData() {
 

@@ -82,6 +82,23 @@ public final class OrderedSequenceElementsConstraintChecker<T> implements
 			}
 			prevElement = element;
 		}
+
+		// Check that the last element in the sequence has a follow on item.
+		if (prevElement != null) {
+			final T expected = provider.getNextElement(prevElement);
+			// If null, any element is allowed to follow.
+			if (expected != null) {
+				if (messages != null) {
+					final String msg = String.format(
+							"Element (%s) is not followed by (%s)",
+							prevElement, expected);
+					messages.add(msg);
+				}
+
+				return false;
+			}
+		}
+
 		return true;
 	}
 
