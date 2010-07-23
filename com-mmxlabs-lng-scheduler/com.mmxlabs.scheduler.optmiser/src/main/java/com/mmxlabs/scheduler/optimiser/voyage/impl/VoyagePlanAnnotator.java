@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.IAnnotatedSequence;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -13,7 +14,6 @@ import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;

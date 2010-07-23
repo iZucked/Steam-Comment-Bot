@@ -1,10 +1,12 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.optimiser.IAnnotatedSequence;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.optimiser.ISequences;
@@ -12,13 +14,13 @@ import com.mmxlabs.optimiser.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
