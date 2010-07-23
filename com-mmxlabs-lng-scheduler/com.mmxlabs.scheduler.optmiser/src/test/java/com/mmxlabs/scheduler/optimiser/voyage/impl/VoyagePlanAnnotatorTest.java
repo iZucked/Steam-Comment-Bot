@@ -91,6 +91,13 @@ public class VoyagePlanAnnotatorTest {
 
 		options1.setVesselState(VesselState.Laden);
 
+		voyageDetails1.setFuelUnitPrice(FuelComponent.Base, 1000);
+		voyageDetails1.setFuelUnitPrice(FuelComponent.Base_Supplemental, 2000);
+		voyageDetails1.setFuelUnitPrice(FuelComponent.NBO, 3000);
+		voyageDetails1.setFuelUnitPrice(FuelComponent.FBO, 4000);
+		voyageDetails1.setFuelUnitPrice(FuelComponent.IdleBase, 5000);
+		voyageDetails1.setFuelUnitPrice(FuelComponent.IdleNBO, 6000);
+
 		voyageDetails1.setOptions(options1);
 
 		voyageDetails1.setIdleTime(100);
@@ -113,6 +120,13 @@ public class VoyagePlanAnnotatorTest {
 
 		options2.setVesselState(VesselState.Ballast);
 
+		voyageDetails2.setFuelUnitPrice(FuelComponent.Base, 1100);
+		voyageDetails2.setFuelUnitPrice(FuelComponent.Base_Supplemental, 2100);
+		voyageDetails2.setFuelUnitPrice(FuelComponent.NBO, 3100);
+		voyageDetails2.setFuelUnitPrice(FuelComponent.FBO, 4100);
+		voyageDetails2.setFuelUnitPrice(FuelComponent.IdleBase, 5100);
+		voyageDetails2.setFuelUnitPrice(FuelComponent.IdleNBO, 6100);
+
 		voyageDetails2.setOptions(options2);
 
 		voyageDetails2.setIdleTime(200);
@@ -134,6 +148,13 @@ public class VoyagePlanAnnotatorTest {
 		options3.setDistance(1500);
 
 		options3.setVesselState(VesselState.Laden);
+
+		voyageDetails3.setFuelUnitPrice(FuelComponent.Base, 1200);
+		voyageDetails3.setFuelUnitPrice(FuelComponent.Base_Supplemental, 2200);
+		voyageDetails3.setFuelUnitPrice(FuelComponent.NBO, 3200);
+		voyageDetails3.setFuelUnitPrice(FuelComponent.FBO, 4200);
+		voyageDetails3.setFuelUnitPrice(FuelComponent.IdleBase, 5200);
+		voyageDetails3.setFuelUnitPrice(FuelComponent.IdleNBO, 6200);
 
 		voyageDetails3.setOptions(options3);
 
@@ -227,10 +248,10 @@ public class VoyagePlanAnnotatorTest {
 					journey.getFuelConsumption(FuelComponent.IdleNBO));
 
 			Assert.assertEquals(1000l, journey.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(2000l,
+			Assert.assertEquals(4000l,
 					journey.getFuelCost(FuelComponent.Base_Supplemental));
-			Assert.assertEquals(3000l, journey.getFuelCost(FuelComponent.NBO));
-			Assert.assertEquals(4000l, journey.getFuelCost(FuelComponent.FBO));
+			Assert.assertEquals(9000l, journey.getFuelCost(FuelComponent.NBO));
+			Assert.assertEquals(16000l, journey.getFuelCost(FuelComponent.FBO));
 
 			Assert.assertEquals(0l, journey.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(0l, journey.getFuelCost(FuelComponent.IdleNBO));
@@ -266,8 +287,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.FBO));
 
-			Assert.assertEquals(5000l, idle.getFuelCost(FuelComponent.IdleBase));
-			Assert.assertEquals(6000l, idle.getFuelCost(FuelComponent.IdleNBO));
+			Assert.assertEquals(25000l, idle.getFuelCost(FuelComponent.IdleBase));
+			Assert.assertEquals(36000l, idle.getFuelCost(FuelComponent.IdleNBO));
 
 			final IPortVisitEvent<Object> portVisit = annotatedSequence
 					.getAnnotation(element2, SchedulerConstants.AI_visitInfo,
@@ -312,11 +333,11 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(0l,
 					journey.getFuelConsumption(FuelComponent.IdleNBO));
 
-			Assert.assertEquals(1100l, journey.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(2100l,
+			Assert.assertEquals(1210l, journey.getFuelCost(FuelComponent.Base));
+			Assert.assertEquals(4410l,
 					journey.getFuelCost(FuelComponent.Base_Supplemental));
-			Assert.assertEquals(3100l, journey.getFuelCost(FuelComponent.NBO));
-			Assert.assertEquals(4100l, journey.getFuelCost(FuelComponent.FBO));
+			Assert.assertEquals(9610l, journey.getFuelCost(FuelComponent.NBO));
+			Assert.assertEquals(16810l, journey.getFuelCost(FuelComponent.FBO));
 
 			Assert.assertEquals(0l, journey.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(0l, journey.getFuelCost(FuelComponent.IdleNBO));
@@ -352,8 +373,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.FBO));
 
-			Assert.assertEquals(5100l, idle.getFuelCost(FuelComponent.IdleBase));
-			Assert.assertEquals(6100l, idle.getFuelCost(FuelComponent.IdleNBO));
+			Assert.assertEquals(26010l, idle.getFuelCost(FuelComponent.IdleBase));
+			Assert.assertEquals(37210l, idle.getFuelCost(FuelComponent.IdleNBO));
 
 			final IPortVisitEvent<Object> portVisit = annotatedSequence
 					.getAnnotation(element3, SchedulerConstants.AI_visitInfo,
@@ -398,11 +419,11 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(0l,
 					journey.getFuelConsumption(FuelComponent.IdleNBO));
 
-			Assert.assertEquals(1200l, journey.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(2200l,
+			Assert.assertEquals(1440l, journey.getFuelCost(FuelComponent.Base));
+			Assert.assertEquals(4840l,
 					journey.getFuelCost(FuelComponent.Base_Supplemental));
-			Assert.assertEquals(3200l, journey.getFuelCost(FuelComponent.NBO));
-			Assert.assertEquals(4200l, journey.getFuelCost(FuelComponent.FBO));
+			Assert.assertEquals(10240l, journey.getFuelCost(FuelComponent.NBO));
+			Assert.assertEquals(17640l, journey.getFuelCost(FuelComponent.FBO));
 
 			Assert.assertEquals(0l, journey.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(0l, journey.getFuelCost(FuelComponent.IdleNBO));
@@ -438,8 +459,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.FBO));
 
-			Assert.assertEquals(5200l, idle.getFuelCost(FuelComponent.IdleBase));
-			Assert.assertEquals(6200l, idle.getFuelCost(FuelComponent.IdleNBO));
+			Assert.assertEquals(27040l, idle.getFuelCost(FuelComponent.IdleBase));
+			Assert.assertEquals(38440l, idle.getFuelCost(FuelComponent.IdleNBO));
 
 			final IPortVisitEvent<Object> portVisit = annotatedSequence
 					.getAnnotation(element4, SchedulerConstants.AI_visitInfo,

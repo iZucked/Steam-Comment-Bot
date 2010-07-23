@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
@@ -114,7 +115,8 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 						visit.setEndTime(currentTime + visitDuration);
 						currentTime += visitDuration;
 					} else {
-						// Back-out visit duration set in the previous iteration.
+						// Back-out visit duration set in the previous
+						// iteration.
 						visit.setStartTime(currentTime - visitDuration);
 						visit.setEndTime(currentTime);
 					}
@@ -122,10 +124,10 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					final IVoyageDetails<T> details = (IVoyageDetails) e;
 
-					final IPortSlot prevPortSlot = details.getOptions()
-							.getFromPortSlot();
-					final IPortSlot currentPortSlot = details.getOptions()
-							.getToPortSlot();
+					final IVoyageOptions options = details.getOptions();
+
+					final IPortSlot prevPortSlot = options.getFromPortSlot();
+					final IPortSlot currentPortSlot = options.getToPortSlot();
 
 					// Get element from port slot provider
 					final T element = getPortSlotProvider().getElement(
@@ -141,7 +143,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					journey.setSequenceElement(element);
 					journey.setStartTime(currentTime);
 					journey.setEndTime(currentTime + travelTime);
-					journey.setDistance(details.getOptions().getDistance());
+					journey.setDistance(options.getDistance());
 
 					journey.setDuration(travelTime);
 
@@ -151,7 +153,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 						final long consumption = details
 								.getFuelConsumption(fuel);
 						final long cost = Calculator.costFromConsumption(
-								consumption, 1000);
+								consumption, details.getFuelUnitPrice(fuel));
 
 						journey.setFuelConsumption(fuel, consumption);
 						journey.setFuelCost(fuel, cost);
@@ -179,7 +181,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 						final long consumption = details
 								.getFuelConsumption(fuel);
 						final long cost = Calculator.costFromConsumption(
-								consumption, 1000);
+								consumption, details.getFuelUnitPrice(fuel));
 
 						idle.setFuelConsumption(fuel, consumption);
 						idle.setFuelCost(fuel, cost);
