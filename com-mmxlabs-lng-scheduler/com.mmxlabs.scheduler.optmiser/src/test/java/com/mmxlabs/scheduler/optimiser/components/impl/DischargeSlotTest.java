@@ -23,7 +23,7 @@ public class DischargeSlotTest {
 		final ITimeWindow tw = context.mock(ITimeWindow.class);
 		final long minDischargeVolume = 10l;
 		final long maxDischargeVolume = 20l;
-		final long salesPrice = 30l;
+		final int salesPrice = 30;
 
 		final DischargeSlot slot = new DischargeSlot(id, port, tw, minDischargeVolume,
 				maxDischargeVolume, salesPrice);
@@ -58,7 +58,7 @@ public class DischargeSlotTest {
 
 	@Test
 	public void testGetSetSalesPrice() {
-		final long value = 10;
+		final int value = 10;
 		final DischargeSlot slot = new DischargeSlot();
 		Assert.assertEquals(0, slot.getSalesPrice());
 		slot.setSalesPrice(value);
@@ -77,15 +77,15 @@ public class DischargeSlotTest {
 		final ITimeWindow tw2 = context.mock(ITimeWindow.class, "tw2");
 		
 		
-		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10l, 20l, 30l);
-		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, 10l, 20l, 30l);
+		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10l, 20l, 30);
+		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, 10l, 20l, 30);
 		
-		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, 10l, 20l, 30l);
-		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, 10l, 20l, 30l);
-		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, 10l, 20l, 30l);
-		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, 210l, 20l, 30l);
-		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, 10l, 220l, 30l);
-		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, 10l, 20l, 230l);
+		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, 10l, 20l, 30);
+		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, 10l, 20l, 30);
+		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, 10l, 20l, 30);
+		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, 210l, 20l, 30);
+		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, 10l, 220l, 30);
+		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, 10l, 20l, 230);
 	
 		
 		Assert.assertTrue(slot1.equals(slot1));

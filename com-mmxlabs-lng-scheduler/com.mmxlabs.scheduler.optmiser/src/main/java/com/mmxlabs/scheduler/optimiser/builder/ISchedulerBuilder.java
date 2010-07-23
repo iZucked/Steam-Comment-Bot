@@ -143,7 +143,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
-			long minVolume, long maxVolume, long price);
+			long minVolume, long maxVolume, int unitPrice);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected
@@ -158,7 +158,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port,
-			ITimeWindow window, long minVolume, long maxVolume, long price);
+			ITimeWindow window, long minVolume, long maxVolume, int unitPrice);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the

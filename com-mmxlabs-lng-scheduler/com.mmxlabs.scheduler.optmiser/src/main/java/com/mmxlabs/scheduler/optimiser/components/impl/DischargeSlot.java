@@ -17,7 +17,7 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 
 	private long maxDischargeVolume;
 
-	private long salesPrice;
+	private int salesPrice;
 
 	public DischargeSlot() {
 
@@ -25,7 +25,7 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 
 	public DischargeSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minDischargeVolume,
-			final long maxDischargeVolume, final long salesPrice) {
+			final long maxDischargeVolume, final int salesPrice) {
 		super(id, port, timwWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
@@ -51,11 +51,11 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 	}
 
 	@Override
-	public long getSalesPrice() {
+	public int getSalesPrice() {
 		return salesPrice;
 	}
 
-	public void setSalesPrice(final long salesPrice) {
+	public void setSalesPrice(final int salesPrice) {
 		this.salesPrice = salesPrice;
 	}
 

@@ -30,5 +30,5 @@ public interface ILoadSlot extends IPortSlot {
 	 * 
 	 * @return
 	 */
-	long getPurchasePrice();
+	int getPurchasePrice();
 }

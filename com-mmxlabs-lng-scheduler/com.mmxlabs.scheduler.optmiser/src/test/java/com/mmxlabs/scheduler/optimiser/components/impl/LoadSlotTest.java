@@ -22,7 +22,7 @@ public class LoadSlotTest {
 		final ITimeWindow tw = context.mock(ITimeWindow.class);
 		final long minLoadVolume = 10l;
 		final long maxLoadVolume = 20l;
-		final long purchasePrice = 30l;
+		final int purchasePrice = 30;
 
 		final LoadSlot slot = new LoadSlot(id, port, tw, minLoadVolume,
 				maxLoadVolume, purchasePrice);
@@ -56,7 +56,7 @@ public class LoadSlotTest {
 
 	@Test
 	public void testGetSetPurchasePrice() {
-		final long value = 10;
+		final int value = 10;
 		final LoadSlot slot = new LoadSlot();
 		Assert.assertEquals(0, slot.getPurchasePrice());
 		slot.setPurchasePrice(value);
@@ -74,15 +74,15 @@ public class LoadSlotTest {
 		final ITimeWindow tw2 = context.mock(ITimeWindow.class, "tw2");
 		
 		
-		final LoadSlot slot1 = new LoadSlot(id1, port1, tw1, 10l, 20l, 30l);
-		final LoadSlot slot2 = new LoadSlot(id1, port1, tw1, 10l, 20l, 30l);
+		final LoadSlot slot1 = new LoadSlot(id1, port1, tw1, 10l, 20l, 30);
+		final LoadSlot slot2 = new LoadSlot(id1, port1, tw1, 10l, 20l, 30);
 		
-		final LoadSlot slot3 = new LoadSlot(id2, port1, tw1, 10l, 20l, 30l);
-		final LoadSlot slot4 = new LoadSlot(id1, port2, tw1, 10l, 20l, 30l);
-		final LoadSlot slot5 = new LoadSlot(id1, port1, tw2, 10l, 20l, 30l);
-		final LoadSlot slot6 = new LoadSlot(id1, port1, tw1, 210l, 20l, 30l);
-		final LoadSlot slot7 = new LoadSlot(id1, port1, tw1, 10l, 220l, 30l);
-		final LoadSlot slot8 = new LoadSlot(id1, port1, tw1, 10l, 20l, 230l);
+		final LoadSlot slot3 = new LoadSlot(id2, port1, tw1, 10l, 20l, 30);
+		final LoadSlot slot4 = new LoadSlot(id1, port2, tw1, 10l, 20l, 30);
+		final LoadSlot slot5 = new LoadSlot(id1, port1, tw2, 10l, 20l, 30);
+		final LoadSlot slot6 = new LoadSlot(id1, port1, tw1, 210l, 20l, 30);
+		final LoadSlot slot7 = new LoadSlot(id1, port1, tw1, 10l, 220l, 30);
+		final LoadSlot slot8 = new LoadSlot(id1, port1, tw1, 10l, 20l, 230);
 	
 		
 		Assert.assertTrue(slot1.equals(slot1));

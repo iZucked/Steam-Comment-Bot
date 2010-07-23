@@ -16,7 +16,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	private long maxLoadVolume;
 
-	private long purchasePrice;
+	private int purchasePrice;
 
 	public LoadSlot() {
 
@@ -24,7 +24,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	public LoadSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minLoadVolume,
-			final long maxLoadVolume, final long purchasePrice) {
+			final long maxLoadVolume, final int purchasePrice) {
 		super(id, port, timwWindow);
 		this.minLoadVolume = minLoadVolume;
 		this.maxLoadVolume = maxLoadVolume;
@@ -50,11 +50,11 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 	}
 
 	@Override
-	public long getPurchasePrice() {
+	public int getPurchasePrice() {
 		return purchasePrice;
 	}
 
-	public void setPurchasePrice(final long purchasePrice) {
+	public void setPurchasePrice(final int purchasePrice) {
 		this.purchasePrice = purchasePrice;
 	}
 

@@ -124,7 +124,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolume,
-			final long maxVolume, final long price) {
+			final long maxVolume, final int price) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
@@ -168,7 +168,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id,
 			final IPort port, final ITimeWindow window, final long minVolume,
-			final long maxVolume, final long price) {
+			final long maxVolume, final int price) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
