@@ -73,7 +73,6 @@ public class VesselClassTest {
 		Assert.assertEquals(0, vesselClass.getMinHeel());
 		vesselClass.setMinHeel(value);
 		Assert.assertEquals(value, vesselClass.getMinHeel());
-
 	}
 
 	@Test
@@ -151,4 +150,12 @@ public class VesselClassTest {
 		Assert.assertEquals(0, vesselClass.getNBOSpeed(state2));
 	}
 
+	@Test
+	public void testGetSetBaseFuelUnitPrice() {
+		final int value = 100;
+		final VesselClass vesselClass = new VesselClass();
+		Assert.assertEquals(0, vesselClass.getBaseFuelUnitPrice());
+		vesselClass.setBaseFuelUnitPrice(value);
+		Assert.assertEquals(value, vesselClass.getBaseFuelUnitPrice());
+	}
 }

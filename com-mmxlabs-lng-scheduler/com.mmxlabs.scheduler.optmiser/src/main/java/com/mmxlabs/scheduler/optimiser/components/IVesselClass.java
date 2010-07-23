@@ -104,4 +104,11 @@ public interface IVesselClass {
 	 * @param nboSpeed
 	 */
 	void setNBOSpeed(VesselState vesselState, int nboSpeed);
+
+	/**
+	 * Returns the unit price of base fuel for this vessel class.
+	 * 
+	 * @return
+	 */
+	int getBaseFuelUnitPrice();
 }

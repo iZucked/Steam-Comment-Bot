@@ -17,6 +17,8 @@ public final class VesselClass implements IVesselClass {
 
 	private int maxSpeed;
 
+	private int baseFuelUnitPrice;
+
 	private final EnumMap<VesselState, Integer> minNBOSpeed = new EnumMap<VesselState, Integer>(
 			VesselState.class);
 
@@ -140,5 +142,14 @@ public final class VesselClass implements IVesselClass {
 	@Override
 	public void setNBOSpeed(final VesselState vesselState, final int nboSpeed) {
 		nboSpeeds.put(vesselState, nboSpeed);
+	}
+
+	@Override
+	public int getBaseFuelUnitPrice() {
+		return baseFuelUnitPrice;
+	}
+
+	public void setBaseFuelUnitPrice(final int baseFuelUnitPrice) {
+		this.baseFuelUnitPrice = baseFuelUnitPrice;
 	}
 }
