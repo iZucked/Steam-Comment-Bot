@@ -1,24 +1,78 @@
 package com.mmxlabs.optimiser.impl;
 
-import static org.junit.Assert.fail;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ElementAnnotationsTest {
+	private class Class1 {
+
+	};
+
+	private class Class2 {
+
+	};
 
 	@Test
-	public void testGet() {
-		fail("Not yet implemented");
+	public void testGetPut1() {
+
+		final ElementAnnotations info = new ElementAnnotations();
+
+		final String key = "key";
+		final Class1 object1 = new Class1();
+
+		info.put(key, object1);
+
+		Assert.assertSame(object1, info.get(key, Class1.class));
+		Assert.assertNull(info.get("unknown", Class1.class));
 	}
 
-	@Test
-	public void testPut() {
-		fail("Not yet implemented");
+	@Test(expected = ClassCastException.class)
+	public void testGetPut2() {
+
+		final ElementAnnotations info = new ElementAnnotations();
+
+		final String key = "key";
+		final Class1 object1 = new Class1();
+
+		info.put(key, object1);
+		info.get(key, Class2.class);
 	}
 
 	@Test
 	public void testContainsKey() {
-		fail("Not yet implemented");
+
+		final ElementAnnotations info = new ElementAnnotations();
+
+		final String key = "key";
+		final Class1 object1 = new Class1();
+
+		Assert.assertFalse(info.containsKey(key));
+
+		info.put(key, object1);
+
+		Assert.assertTrue(info.containsKey(key));
+	}
+
+	@Test
+	public void testDispose() {
+
+		final ElementAnnotations info = new ElementAnnotations();
+
+		final String key = "key";
+		final Class1 object1 = new Class1();
+
+		Assert.assertFalse(info.containsKey(key));
+
+		info.put(key, object1);
+
+		Assert.assertTrue(info.containsKey(key));
+
+		Assert.assertSame(object1, info.get(key, Class1.class));
+		Assert.assertNull(info.get("unknown", Class1.class));
+
+		info.dispose();
+
+		Assert.assertFalse(info.containsKey(key));
 	}
 
 }
