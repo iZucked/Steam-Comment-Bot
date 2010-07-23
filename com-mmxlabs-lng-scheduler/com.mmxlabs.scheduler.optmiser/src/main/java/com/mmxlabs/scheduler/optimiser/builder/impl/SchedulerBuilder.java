@@ -10,9 +10,11 @@ import com.mmxlabs.optimiser.components.ITimeWindow;
 import com.mmxlabs.optimiser.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
+import com.mmxlabs.optimiser.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
+import com.mmxlabs.optimiser.dcproviders.impl.ResourceAllocationConstraintProvider;
 import com.mmxlabs.optimiser.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.impl.Resource;
 import com.mmxlabs.optimiser.scenario.IOptimisationData;
@@ -36,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
+import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
@@ -88,6 +91,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IElementDurationProviderEditor<ISequenceElement> elementDurationsProvider;
 
+	private final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider;
+
 	private final List<ILoadSlot> loadSlots = new LinkedList<ILoadSlot>();
 
 	private final List<IDischargeSlot> dischargeSlots = new LinkedList<IDischargeSlot>();
@@ -111,6 +116,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_elementDurationsProvider);
 		portTypeProvider = new HashMapPortTypeEditor<ISequenceElement>(
 				SchedulerConstants.DCP_portTypeProvider);
+
+		resourceAllocationProvider = new ResourceAllocationConstraintProvider(
+				SchedulerConstants.DCP_resourceAllocationProvider);
 	}
 
 	@Override
@@ -148,7 +156,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portProvider.setPortForElement(port, element);
 
 		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Load);
-		
+
 		portSlotsProvider.setPortSlot(element, slot);
 
 		timeWindowProvider.setTimeWindows(element,
@@ -193,8 +201,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		portSlotsProvider.setPortSlot(element, slot);
 
-		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Discharge);
-		
+		portTypeProvider.setPortType(element,
+				IPortTypeProvider.PortType.Discharge);
+
 		timeWindowProvider.setTimeWindows(element,
 				Collections.singletonList(window));
 
@@ -279,12 +288,42 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vessels.add(vessel);
 
-		final IResource resource = new Resource();
+		final IResource resource = new Resource(name);
 		resources.add(resource);
 
 		// Register with provider
 		vesselProvider.setVesselResource(resource, vessel);
 
+		// TODO: Temporary stick in a start loc at time zero.
+		ITimeWindow window = createTimeWindow(0, 0);
+		String id = "depot-" + name;
+		IXYPort port = createPort(id, 0.0f, 0.0f);
+		
+		
+		final PortSlot slot = new PortSlot();
+		slot.setId(id);
+		slot.setPort(port);
+		slot.setTimeWindow(window);
+
+		// Create a sequence element against this load slot
+		final SequenceElement element = new SequenceElement();
+		element.setName(id + "-" + port.getName());
+		element.setPortSlot(slot);
+
+		sequenceElements.add(element);
+
+		// Register the port with the element
+		portProvider.setPortForElement(port, element);
+
+		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Other);
+
+		portSlotsProvider.setPortSlot(element, slot);
+
+		timeWindowProvider.setTimeWindows(element,
+				Collections.singletonList(window));
+		
+		resourceAllocationProvider.setAllowedResources(element, Collections.singleton(resource));
+		
 		return vessel;
 	}
 
@@ -339,6 +378,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_portTypeProvider,
 				portTypeProvider);
+
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_resourceAllocationProvider,
+				resourceAllocationProvider);
 
 		if (true) {
 			for (final IPort from : ports) {
