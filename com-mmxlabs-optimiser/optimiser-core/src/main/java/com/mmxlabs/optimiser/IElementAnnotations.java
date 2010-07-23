@@ -35,4 +35,9 @@ public interface IElementAnnotations {
 	 */
 	boolean containsKey(String key);
 
+	/**
+	 * Clean up refs
+	 */
+	void dispose();
+
 }

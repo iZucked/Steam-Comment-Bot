@@ -11,8 +11,7 @@ import com.mmxlabs.optimiser.IElementAnnotations;
  * @author Simon Goodall
  * 
  */
-public final class ElementAnnotations implements
-		IElementAnnotations {
+public final class ElementAnnotations implements IElementAnnotations {
 
 	private final Map<String, Object> additionalInfo = new HashMap<String, Object>();
 
@@ -45,7 +44,12 @@ public final class ElementAnnotations implements
 	}
 
 	@Override
-	public boolean containsKey(String key) {
+	public boolean containsKey(final String key) {
 		return additionalInfo.containsKey(key);
+	}
+
+	@Override
+	public void dispose() {
+		additionalInfo.clear();
 	}
 }
