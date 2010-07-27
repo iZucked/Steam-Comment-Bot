@@ -47,7 +47,7 @@ import com.mmxlabs.jobcontroller.core.ManagedJobListenerNotifier;
  * <p>
  */
 
-public class PortRorationReportView extends ViewPart {
+public class PortRotationReportView extends ViewPart {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -108,7 +108,7 @@ public class PortRorationReportView extends ViewPart {
 	/**
 	 * The constructor.
 	 */
-	public PortRorationReportView() {
+	public PortRotationReportView() {
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class PortRorationReportView extends ViewPart {
 		menuMgr.addMenuListener(new IMenuListener() {
 			@Override
 			public void menuAboutToShow(IMenuManager manager) {
-				PortRorationReportView.this.fillContextMenu(manager);
+				PortRotationReportView.this.fillContextMenu(manager);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
