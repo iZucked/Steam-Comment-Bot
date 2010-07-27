@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author sg
+ *
+ */
 public final class JobManager implements IJobManager {
 
 	private final List<IManagedJob> jobs = new LinkedList<IManagedJob>();
@@ -45,6 +49,10 @@ public final class JobManager implements IJobManager {
 	 */
 	@Override
 	public void removeJob(final IManagedJob job) {
+		if (selectedJobs.contains(job)) {
+			deselectJob(job);
+		}
+
 		jobs.remove(job);
 
 		fireJobRemoved(job);
@@ -76,44 +84,80 @@ public final class JobManager implements IJobManager {
 		jobManagerListeners.remove(jobManagerListener);
 	}
 
+	/**
+	 * @param job
+	 */
 	private void fireJobAdded(final IManagedJob job) {
 		for (final IJobManagerListener l : jobManagerListeners) {
 			l.jobAdded(this, job);
 		}
 	}
 
+	/**
+	 * @param job
+	 */
 	private void fireJobRemoved(final IManagedJob job) {
 		for (final IJobManagerListener l : jobManagerListeners) {
 			l.jobRemoved(this, job);
 		}
 	}
 
+	/**
+	 * @param job
+	 */
 	private void fireJobSelected(final IManagedJob job) {
 		for (final IJobManagerListener l : jobManagerListeners) {
 			l.jobSelected(this, job);
 		}
 	}
 
+	/**
+	 * @param job
+	 */
 	private void fireJobDeselected(final IManagedJob job) {
 		for (final IJobManagerListener l : jobManagerListeners) {
 			l.jobDeselected(this, job);
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.jobcontroller.core.IJobManager#getSelectedJobs()
+	 */
 	@Override
 	public List<IManagedJob> getSelectedJobs() {
 		return selectedJobs;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.jobcontroller.core.IJobManager#toggleJobSelection(com.mmxlabs.jobcontroller.core.IManagedJob)
+	 */
 	@Override
 	public void toggleJobSelection(final IManagedJob job) {
 
 		if (selectedJobs.contains(job)) {
-			selectedJobs.remove(job);
-			fireJobDeselected(job);
+			deselectJob(job);
 		} else {
-			selectedJobs.add(job);
-			fireJobSelected(job);
+			selectJob(job);
 		}
+	}
+
+	/**
+	 * Add job to the list of selected jobs and fire an event.
+	 * 
+	 * @param job
+	 */
+	private void selectJob(final IManagedJob job) {
+		selectedJobs.add(job);
+		fireJobSelected(job);
+	}
+
+	/**
+	 * Remove job from the list of selected jobs and fire an event.
+	 * 
+	 * @param job
+	 */
+	private void deselectJob(final IManagedJob job) {
+		selectedJobs.remove(job);
+		fireJobDeselected(job);
 	}
 }
