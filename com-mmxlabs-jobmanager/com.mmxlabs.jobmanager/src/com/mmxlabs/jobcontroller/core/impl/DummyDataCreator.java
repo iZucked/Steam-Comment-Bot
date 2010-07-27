@@ -1,59 +1,5 @@
 package com.mmxlabs.jobcontroller.core.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.TreeMap;
-
-import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.components.ITimeWindow;
-import com.mmxlabs.optimiser.components.impl.TimeWindow;
-import com.mmxlabs.optimiser.dcproviders.IElementDurationProviderEditor;
-import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProviderEditor;
-import com.mmxlabs.optimiser.dcproviders.impl.HashMapElementDurationEditor;
-import com.mmxlabs.optimiser.dcproviders.impl.TimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.impl.ListSequence;
-import com.mmxlabs.optimiser.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.impl.Resource;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.scenario.common.impl.HashMapMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
-import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
-import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.Port;
-import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
-import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider.PortType;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 public class DummyDataCreator {
 
