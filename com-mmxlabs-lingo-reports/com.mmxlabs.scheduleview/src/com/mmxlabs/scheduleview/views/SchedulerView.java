@@ -15,7 +15,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -239,7 +238,6 @@ public class SchedulerView extends ViewPart {
 			@Override
 			public void run() {
 				if (!viewer.getControl().isDisposed()) {
-					System.out.println("refresh");
 					viewer.refresh();
 				}
 			}
