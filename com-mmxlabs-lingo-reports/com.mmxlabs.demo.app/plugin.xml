@@ -24,10 +24,14 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.mmxlabs.demo.app.application"
-            name="Scheduler Demo">
+            name="ShipLiNGO">
          <property
                name="windowImages"
                value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+         </property>
+         <property
+               name="appName"
+               value="ShipLiNGO">
          </property>
       </product>
    </extension>

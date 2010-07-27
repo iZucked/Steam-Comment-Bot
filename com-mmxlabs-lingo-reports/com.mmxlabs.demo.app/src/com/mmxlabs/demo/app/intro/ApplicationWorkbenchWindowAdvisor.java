@@ -24,6 +24,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setShowCoolBar(false);
         configurer.setShowStatusLine(true);
         configurer.setShowPerspectiveBar(true);
-        configurer.setTitle("Scheduler Demo");
+        configurer.setTitle("Ship LiNGO");
     }
 }
