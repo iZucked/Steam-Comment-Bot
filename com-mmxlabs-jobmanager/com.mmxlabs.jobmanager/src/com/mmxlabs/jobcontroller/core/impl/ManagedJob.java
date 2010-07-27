@@ -11,8 +11,7 @@ import org.eclipse.ui.progress.IProgressConstants2;
 
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
+import com.mmxlabs.optimiser.IAnnotatedSolution;
 
 public class ManagedJob implements IManagedJob {
 
