@@ -7,6 +7,8 @@ import java.util.Map;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.optimiser.IAnnotatedSequence;
+import com.mmxlabs.optimiser.IAnnotatedSolution;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -14,13 +16,10 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.events.IDischargeEvent;
 import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -68,7 +67,7 @@ public class CargoContentProvider implements IStructuredContentProvider {
 		// Mapping between cargo ID and rowData.
 		final Map<String, RowData> rowData = new HashMap<String, RowData>();
 
-		for (final IResource resource : solution.getResources()) {
+		for (final IResource resource : solution.getContext().getOptimisationData().getResources()) {
 
 			ISequence<ISequenceElement> sequence = solution.getSequences()
 					.getSequence(resource);

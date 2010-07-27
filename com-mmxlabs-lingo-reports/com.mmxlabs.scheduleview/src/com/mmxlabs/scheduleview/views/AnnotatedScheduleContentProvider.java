@@ -9,6 +9,8 @@ import org.eclipse.ui.IViewSite;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.optimiser.IAnnotatedSequence;
+import com.mmxlabs.optimiser.IAnnotatedSolution;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -17,8 +19,6 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
 
 public class AnnotatedScheduleContentProvider implements
 		IGanttChartContentProvider {
@@ -37,7 +37,7 @@ public class AnnotatedScheduleContentProvider implements
 		if (parentElement instanceof IAnnotatedSolution) {
 			IAnnotatedSolution solution = (IAnnotatedSolution) parentElement;
 
-			return solution.getResources().toArray();
+			return solution.getContext().getOptimisationData().getResources().toArray();
 		} else if (parentElement instanceof IResource) {
 			IResource resource = (IResource)parentElement;
 			ISequence sequence = solution.getSequences().getSequence(resource);

@@ -15,6 +15,7 @@ import org.eclipse.ui.progress.IProgressConstants2;
 
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
+import com.mmxlabs.optimiser.IAnnotatedSolution;
 import com.mmxlabs.optimiser.IOptimisationContext;
 import com.mmxlabs.optimiser.IOptimiser;
 import com.mmxlabs.optimiser.IResource;
@@ -23,6 +24,8 @@ import com.mmxlabs.optimiser.ISequences;
 import com.mmxlabs.optimiser.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.impl.AnnotatedSequence;
+import com.mmxlabs.optimiser.impl.AnnotationSolution;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
@@ -31,10 +34,6 @@ import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AnnotationSolution;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -446,8 +445,6 @@ public class OptManagedJob implements IManagedJob {
 			// TODO: Integrate this into the optimiser process rather than here
 			AnnotationSolution solution = new AnnotationSolution();
 			solution.setSequences(bestState);
-			solution.setResources(bestState.getResources());
-			solution.setSequenceElements(context.getOptimisationData().getSequenceElements());
 			solution.setContext(context);
 			
 			for (Map.Entry<IResource, ISequence<ISequenceElement>> entry : bestState

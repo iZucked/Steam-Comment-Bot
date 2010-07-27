@@ -1,6 +1,6 @@
 package com.mmxlabs.jobcontroller.core;
 
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
+import com.mmxlabs.optimiser.IAnnotatedSolution;
 
 
 

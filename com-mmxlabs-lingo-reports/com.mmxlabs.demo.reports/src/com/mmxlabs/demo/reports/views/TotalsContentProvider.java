@@ -6,14 +6,14 @@ import java.util.Map;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.optimiser.IAnnotatedSequence;
+import com.mmxlabs.optimiser.IAnnotatedSolution;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
@@ -65,7 +65,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		}
 		long distance = 0l;
 
-		for (final IResource resource : solution.getResources()) {
+		for (final IResource resource : solution.getContext().getOptimisationData().getResources()) {
 
 			ISequence<ISequenceElement> sequence = solution.getSequences()
 					.getSequence(resource);
