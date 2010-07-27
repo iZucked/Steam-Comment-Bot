@@ -7,6 +7,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.optimiser.IAnnotatedSequence;
+import com.mmxlabs.optimiser.IAnnotatedSolution;
 import com.mmxlabs.optimiser.IResource;
 import com.mmxlabs.optimiser.ISequence;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -14,8 +16,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider.PortType;
 
@@ -63,7 +63,7 @@ public class PortRotationContentProvider implements IStructuredContentProvider {
 		// Mapping between cargo ID and rowData.
 		final List<RowData> rowData = new ArrayList<RowData>();
 
-		for (final IResource resource : solution.getResources()) {
+		for (final IResource resource : solution.getContext().getOptimisationData().getResources()) {
 
 			ISequence<ISequenceElement> sequence = solution.getSequences()
 					.getSequence(resource);
