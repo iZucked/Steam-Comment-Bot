@@ -195,7 +195,7 @@ public class OptManagedJob implements IManagedJob {
 					monitor.subTask("Prepare optimisation");
 					final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils
 							.buildOptimiser(context, new Random(1),
-									totalProgress, 5, optMonitor);
+									totalProgress, 5000, optMonitor);
 
 					final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
 							.getFitnessEvaluator();
