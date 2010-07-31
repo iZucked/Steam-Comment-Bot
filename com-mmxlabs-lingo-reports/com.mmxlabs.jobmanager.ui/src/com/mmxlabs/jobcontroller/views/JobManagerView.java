@@ -13,6 +13,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -77,6 +79,8 @@ public class JobManagerView extends ViewPart {
 	private Action removeAction;
 	private Action toggleDisplayAction;
 	private Action createDummyJobAction;
+
+	private Action doubleClickAction;
 
 	private final IJobManager jobManager = Activator.getDefault()
 			.getJobManager();
@@ -214,14 +218,14 @@ public class JobManagerView extends ViewPart {
 			} else {
 				desc = Activator.getImageDescriptor(key.toString());
 			}
-			
+
 			// Cache image
 			if (desc != null) {
 				final Image img = desc.createImage();
 				imageCache.put(key, img);
 				return img;
 			}
-			
+
 			return null;
 
 		}
@@ -355,7 +359,7 @@ public class JobManagerView extends ViewPart {
 
 		makeActions();
 		hookContextMenu();
-//		hookDoubleClickAction();
+		hookDoubleClickAction();
 		contributeToActionBars();
 
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -610,18 +614,39 @@ public class JobManagerView extends ViewPart {
 			}
 		};
 		createDummyJobAction.setText("Create dummy job");
-		createDummyJobAction.setImageDescriptor(Activator.getImageDescriptor("icons/ctool16/launchtrace_wiz.gif"));
+		createDummyJobAction.setImageDescriptor(Activator
+				.getImageDescriptor("icons/ctool16/launchtrace_wiz.gif"));
+
+		doubleClickAction = new Action() {
+
+			int counter = 0;
+
+			@Override
+			public void run() {
+				ISelection selection = viewer.getSelection();
+				Iterator<Object> iter = ((IStructuredSelection) selection)
+						.iterator();
+				while (iter.hasNext()) {
+					Object obj = iter.next();
+					if (obj instanceof OptManagedJob) {
+						jobManager.toggleJobSelection((OptManagedJob) obj);
+					}
+				}
+
+			}
+		};
+		doubleClickAction.setText("Set visible job");
 
 	}
 
-//	private void hookDoubleClickAction() {
-//		viewer.addDoubleClickListener(new IDoubleClickListener() {
-//			@Override
-//			public void doubleClick(final DoubleClickEvent event) {
-//				doubleClickAction.run();
-//			}
-//		});
-//	}
+	private void hookDoubleClickAction() {
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(final DoubleClickEvent event) {
+				doubleClickAction.run();
+			}
+		});
+	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
