@@ -190,7 +190,6 @@ public class GanttChartViewer extends StructuredViewer {
 	@Override
 	protected void internalRefresh(final Object element) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -274,9 +273,22 @@ public class GanttChartViewer extends StructuredViewer {
 								treeContentProvider, c);
 						final Calendar endDate = getEventEndDate(
 								treeContentProvider, c);
+						
+						final Calendar plannedStartDate = getEventPlannedStartDate(
+								treeContentProvider, c);
+						final Calendar plannedEndDate = getEventPlannedEndDate(
+								treeContentProvider, c);
 
-						final GanttEvent event = new GanttEvent(ganttChart, c,
-								cName, startDate, endDate, 0);
+						final GanttEvent event;
+						if (plannedStartDate != null) {
+							event = new GanttEvent(ganttChart, c, cName,
+									plannedStartDate, plannedEndDate,
+									startDate, endDate, 0);
+						} else {
+							event = new GanttEvent(ganttChart, c, cName,
+									startDate, endDate, 0);
+						}
+						
 						if (image != null) {
 							event.setImage(true);
 							event.setPicture(image);
@@ -401,6 +413,25 @@ public class GanttChartViewer extends StructuredViewer {
 		return null;
 	}
 
+	private Calendar getEventPlannedStartDate(final IContentProvider contentProvider,
+			final Object element) {
+		if (contentProvider instanceof IGanttChartContentProvider) {
+			final IGanttChartContentProvider gcProvider = (IGanttChartContentProvider) contentProvider;
+			return gcProvider.getElementPlannedStartTime(element);
+		}
+		return null;
+	}
+
+	private Calendar getEventPlannedEndDate(final IContentProvider contentProvider,
+			final Object element) {
+		if (contentProvider instanceof IGanttChartContentProvider) {
+			final IGanttChartContentProvider gcProvider = (IGanttChartContentProvider) contentProvider;
+			return gcProvider.getElementPlannedEndTime(element);
+		}
+		return null;
+	}
+
+	
 	@SuppressWarnings("unused")
 	private void replaceGanttChart() {
 
