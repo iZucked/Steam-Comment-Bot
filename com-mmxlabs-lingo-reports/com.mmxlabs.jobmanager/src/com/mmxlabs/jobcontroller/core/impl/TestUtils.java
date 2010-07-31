@@ -71,7 +71,7 @@ public final class TestUtils {
 		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
+		// moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
 		// moveGenerator.addMoveGeneratorUnit(new MoveHydraGeneratorUnit<T>());
 
 		return moveGenerator;
@@ -114,7 +114,7 @@ public final class TestUtils {
 	public static <T> LocalSearchOptimiser<T> buildOptimiser(
 			final IOptimisationContext<T> context, final Random random,
 			final int numberOfIterations, final int stepSize,
-			IOptimiserProgressMonitor<T> monitor) {
+			final IOptimiserProgressMonitor<T> monitor) {
 
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker<T>> constraintCheckers = constraintCheckerInstantiator
@@ -133,7 +133,7 @@ public final class TestUtils {
 
 		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = TestUtils
 				.createLinearSAFitnessEvaluator(stepSize, numberOfIterations,
-						fitnessComponents);
+						fitnessComponents);		
 		final IMoveGenerator<T> moveGenerator = TestUtils
 				.createRandomMoveGenerator(random);
 
@@ -159,77 +159,27 @@ public final class TestUtils {
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
+		
+		// Load ports
 		final IPort port1 = builder.createPort("port-1", 0, 0);
 		final IPort port2 = builder.createPort("port-2", 0, 5000);
 		final IPort port3 = builder.createPort("port-3", 5000, 0);
+		
+		final List<IPort> loadPorts = CollectionsUtil.makeArrayList(port1,
+				port2, port3);
+		
+		// Discharge ports
 		final IPort port4 = builder.createPort("port-4", 5000, 5000);
 		final IPort port5 = builder.createPort("port-5", 0, 10000);
 		final IPort port6 = builder.createPort("port-6", 5000, 10000);
 
-		List<IPort> loadPorts = CollectionsUtil.makeArrayList(port1, port2, port3);
-		List<IPort> dischargePorts = CollectionsUtil.makeArrayList(port4, port5, port6);
-		
-		buildFleet(builder);
-		
+		final List<IPort> dischargePorts = CollectionsUtil.makeArrayList(port4,
+				port5, port6);
+
+		buildFleet(builder, new Random(1), loadPorts, loadPorts);
+
 		buildCargoes(builder, 100, loadPorts, dischargePorts, new Random(1));
-/*
-		final ITimeWindow tw1 = builder.createTimeWindow(5 * 24 * 24, 6 * 24);
-		final ITimeWindow tw2 = builder.createTimeWindow(10 * 24, 11 * 24);
 
-		final ITimeWindow tw3 = builder.createTimeWindow(15 * 24, 16 * 24);
-		final ITimeWindow tw4 = builder.createTimeWindow(20 * 24, 21 * 24);
-
-		final ITimeWindow tw5 = builder.createTimeWindow(25 * 24, 26 * 24);
-		final ITimeWindow tw6 = builder.createTimeWindow(30 * 24, 31 * 24);
-
-		final ITimeWindow tw7 = builder.createTimeWindow(35 * 24, 36 * 24);
-
-		// These need to be created in the load/discharge pairs for the initial
-		// solution to be correctly constructed.
-
-		ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0,
-				155000000, 5);
-		IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1",
-				port2, tw2, 0, 155000000, 6);
-
-		ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0,
-				155000000, 5);
-		IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2",
-				port2, tw4, 0, 155000000, 6);
-
-		ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0,
-				155000000, 5);
-		IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3",
-				port2, tw6, 0, 155000000, 6);
-
-		ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0,
-				155000000, 5);
-		IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4",
-				port6, tw6, 0, 155000000, 6);
-
-		ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0,
-				155000000, 5);
-		IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5",
-				port4, tw3, 0, 155000000, 6);
-
-		ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0,
-				155000000, 5);
-		IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6",
-				port4, tw5, 0, 155000000, 6);
-
-		ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0,
-				155000000, 5);
-		IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7",
-				port6, tw7, 0, 155000000, 6);
-
-		builder.createCargo("cargo1", load1, discharge1);
-		builder.createCargo("cargo2", load2, discharge2);
-		builder.createCargo("cargo3", load3, discharge3);
-		builder.createCargo("cargo4", load4, discharge4);
-		builder.createCargo("cargo5", load5, discharge5);
-		builder.createCargo("cargo6", load6, discharge6);
-		builder.createCargo("cargo7", load7, discharge7);
-*/
 		// TODO: Set port durations
 		// ....
 
@@ -237,12 +187,15 @@ public final class TestUtils {
 		final IOptimisationData<ISequenceElement> data = builder
 				.getOptimisationData();
 
-		IElementDurationProviderEditor editor = data.getDataComponentProvider(
-				SchedulerConstants.DCP_elementDurationsProvider,
-				IElementDurationProviderEditor.class);
+		// TODO: Make this part of the builder API -- no direct access to sequence elements
+		final IElementDurationProviderEditor editor = data
+				.getDataComponentProvider(
+						SchedulerConstants.DCP_elementDurationsProvider,
+						IElementDurationProviderEditor.class);
+		
 		if (editor != null) {
-			for (ISequenceElement e : data.getSequenceElements()) {
-				for (IResource r : data.getResources()) {
+			for (final ISequenceElement e : data.getSequenceElements()) {
+				for (final IResource r : data.getResources()) {
 					editor.setElementDuration(e, r, 24);
 				}
 			}
@@ -253,119 +206,138 @@ public final class TestUtils {
 		return data;
 	}
 
-	private static void buildCargoes(SchedulerBuilder builder, int numberOfCargoes, List<IPort> loadPorts, List<IPort> dischargePorts, Random random) {
-		
+	private static void buildCargoes(final SchedulerBuilder builder,
+			final int numberOfCargoes, final List<IPort> loadPorts,
+			final List<IPort> dischargePorts, final Random random) {
+
 		final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
-		
+
 		for (int i = 0; i < numberOfCargoes; ++i) {
 
-			IXYPort port1 = (IXYPort) loadPorts.get(random.nextInt(loadPorts.size()));
-			IXYPort port2 = (IXYPort) dischargePorts.get(random.nextInt(dischargePorts.size()));
+			final IXYPort port1 = (IXYPort) loadPorts.get(random
+					.nextInt(loadPorts.size()));
+			final IXYPort port2 = (IXYPort) dischargePorts.get(random
+					.nextInt(dischargePorts.size()));
 
 			// Link duration between windows to distance and speed
-			double distance = distanceProvider.getDistance(port1, port2);
-			int minTime  = (int)(distance / 20.0 / 24.0);
-			int maxTime  = (int)(distance / 12.0 / 24.0);
-			
-			int start = random.nextInt(365);
-			int end = start + random.nextInt(maxTime - minTime + 5);
-			
-			final ITimeWindow tw1 = builder.createTimeWindow(start * 24, (start+1) * 24);
-			final ITimeWindow tw2 = builder.createTimeWindow(end * 24, (end+1) * 24);
+			final double distance = distanceProvider.getDistance(port1, port2);
+			final int minTime = (int) Math.ceil(distance / 20.0 / 24.0);
+			final int maxTime = (int) Math.ceil(distance / 12.0 / 24.0);
 
-			
-			
+			final int start = random.nextInt(365);
+			final int end = 1 + start + minTime
+					+ random.nextInt(maxTime - minTime + 15);
 
-			ILoadSlot load = builder.createLoadSlot("load" + i, port1, tw1, 0,
-					200000000, 5);
-			IDischargeSlot discharge = builder.createDischargeSlot("discharge" + i,
-					port2, tw2, 0, 200000000, 6);
+			final ITimeWindow tw1 = builder.createTimeWindow(start * 24,
+					(start + 1) * 24);
+			final ITimeWindow tw2 = builder.createTimeWindow(end * 24,
+					(end + 1) * 24);
 
-			
-			
+			int extra = random.nextInt(100) * 1000;
+			int salesPrice = 170000 + extra;
+
+			int purchasePrice = salesPrice - 20000;
+
+			final ILoadSlot load = builder.createLoadSlot("load" + i, port1,
+					tw1, 0, 200000000, purchasePrice);
+			final IDischargeSlot discharge = builder.createDischargeSlot(
+					"discharge" + i, port2, tw2, 0, 200000000, salesPrice);
 			builder.createCargo("cargo" + i, load, discharge);
-			
 		}
-
-		
-		
 	}
 
-	private static void buildFleet(final SchedulerBuilder builder) {
+	private static void buildFleet(final SchedulerBuilder builder, Random random, List<IPort> startPorts, List<IPort> endPorts) {
 
 		// Consumption Curves
 		// DFDE is approx 40 MT less than steam at 20 knots. Steam is roughly
 		// 180MT at 20 knots
-		TreeMap<Integer, Long> dfdeKeypoints = new TreeMap<Integer, Long>();
+		final TreeMap<Integer, Long> dfdeKeypoints = new TreeMap<Integer, Long>();
 		dfdeKeypoints.put(12000, 8000l);
 		dfdeKeypoints.put(20000, 16000l);
-		InterpolatingConsumptionRateCalculator dfdeConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
+		final InterpolatingConsumptionRateCalculator dfdeConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				dfdeKeypoints);
 
-		TreeMap<Integer, Long> steamKeypoints = new TreeMap<Integer, Long>();
+		final TreeMap<Integer, Long> steamKeypoints = new TreeMap<Integer, Long>();
 		steamKeypoints.put(12000, 12000l);
 		steamKeypoints.put(20000, 20000l);
-		InterpolatingConsumptionRateCalculator steamConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
+		final InterpolatingConsumptionRateCalculator steamConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				steamKeypoints);
 
 		// TODO: Update boil-off speeds
 
-		IVesselClass vesselClass4 = builder.createVesselClass("STEAM-126",
-				12000, 19500, 126000000l, 0);
-		IVesselClass vesselClass1 = builder.createVesselClass("STEAM-138",
-				12000, 20000, 138000000l, 0);
-		IVesselClass vesselClass2 = builder.createVesselClass("STEAM-145",
-				12000, 20000, 145000000l, 0);
-		IVesselClass vesselClass3 = builder.createVesselClass("DFDE-177",
-				12000, 20000, 177000000l, 0);
+		// TODO: Test boil-off speeds are even working
+
+		// WHY DO WE ONLY GET MIN/MAX SPEEDS IN OUTPUT?
+
+		final IVesselClass vesselClass4 = builder.createVesselClass(
+				"STEAM-126", 12000, 19500, 126000000l, 0, 200000);
+		final IVesselClass vesselClass1 = builder.createVesselClass(
+				"STEAM-138", 12000, 20000, 138000000l, 0, 200000);
+		final IVesselClass vesselClass2 = builder.createVesselClass(
+				"STEAM-145", 12000, 20000, 145000000l, 0, 200000);
+		final IVesselClass vesselClass3 = builder.createVesselClass("DFDE-177",
+				12000, 20000, 177000000l, 0, 200000);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
-				138000/ 24, 118000/ 24, 10000/ 24, steamConsumptionCalculator, 15000);
+				138000 / 24, 118000 / 24, 10000 / 24,
+				steamConsumptionCalculator, 15000);
 		builder.setVesselClassStateParamaters(vesselClass1,
-				VesselState.Ballast, 138000 / 24, 118000/ 24, 10000/ 24,
+				VesselState.Ballast, 138000 / 24, 118000 / 24, 1000 / 24,
 				steamConsumptionCalculator, 15000);
 
+		// Nile Eagle is 0.15% boil off laden
 		builder.setVesselClassStateParamaters(vesselClass2, VesselState.Laden,
-				145000/ 24, 125000/ 24, 10000/ 24, steamConsumptionCalculator, 15000);
+				145000 / 24, 125000 / 24, 10000 / 24,
+				steamConsumptionCalculator, 15000);
 		builder.setVesselClassStateParamaters(vesselClass2,
-				VesselState.Ballast, 145000/ 24, 125000/ 24, 10000/ 24,
+				VesselState.Ballast, 145000 / 24, 125000 / 24, 1000 / 24,
 				steamConsumptionCalculator, 15000);
 
 		builder.setVesselClassStateParamaters(vesselClass3, VesselState.Laden,
-				177000/ 24, 157000/ 24, 10000/ 24, dfdeConsumptionCalculator, 15000);
+				177000 / 24, 157000 / 24, 10000 / 24,
+				dfdeConsumptionCalculator, 15000);
 		builder.setVesselClassStateParamaters(vesselClass3,
-				VesselState.Ballast, 177000/ 24, 157000/ 24, 10000/ 24,
+				VesselState.Ballast, 177000 / 24, 157000 / 24, 1000 / 24,
 				dfdeConsumptionCalculator, 15000);
 
 		builder.setVesselClassStateParamaters(vesselClass4, VesselState.Laden,
-				126000/ 24, 106000/ 24, 10000/ 24, steamConsumptionCalculator, 15000);
+				126000 / 24, 106000 / 24, 10000 / 24,
+				steamConsumptionCalculator, 15000);
 		builder.setVesselClassStateParamaters(vesselClass4,
-				VesselState.Ballast, 126000/ 24, 106000/ 24, 10000/ 24,
+				VesselState.Ballast, 126000 / 24, 106000 / 24, 1000 / 24,
 				steamConsumptionCalculator, 15000);
 
 		// Owned Vessels
-		builder.createVessel("Methane Rita Andrea", vesselClass1);
-		builder.createVessel("Methane Jane Elizabeth", vesselClass2);
-		builder.createVessel("Methane Lydon Volney", vesselClass2);
-		builder.createVessel("Methane Shirley Elizabeth", vesselClass2);
-		builder.createVessel("Methane Heather Sally", vesselClass2);
-		builder.createVessel("Methane Alison Victoria", vesselClass2);
-		builder.createVessel("Methane Nile Eagle", vesselClass2);
+		builder.createVessel("Methane Rita Andrea", vesselClass1, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Methane Jane Elizabeth", vesselClass2, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Methane Lydon Volney", vesselClass2, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Methane Shirley Elizabeth", vesselClass2, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Methane Heather Sally", vesselClass2, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Methane Alison Victoria", vesselClass2, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Methane Nile Eagle", vesselClass2, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
 
-		builder.createVessel("Methane Julia Louise", vesselClass3);
+		builder.createVessel("Methane Julia Louise", vesselClass3, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
 		// Vessel due to come online July 10
-		builder.createVessel("Methane Becki Anne", vesselClass3);
+		builder.createVessel("Methane Becki Anne", vesselClass3, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
 		// Vessel due to come online Sept 10
-		builder.createVessel("Methane Mickie Harper", vesselClass3);
+		builder.createVessel("Methane Mickie Harper", vesselClass3, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
 		// Vessel due to come online Oct 10
-		builder.createVessel("Methane Unknown", vesselClass3);
+		builder.createVessel("Methane Unknown", vesselClass3, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
 
 		// Charter Vessels
-		builder.createVessel("Hilli", vesselClass4);
-		builder.createVessel("Gimi", vesselClass4);
-		builder.createVessel("Khannur", vesselClass4);
-		builder.createVessel("Golar Freeze", vesselClass4);
-		builder.createVessel("Methane Princes", vesselClass1);
+		builder.createVessel("Hilli", vesselClass4, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Gimi", vesselClass4, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Khannur", vesselClass4, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Golar Freeze", vesselClass4, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Methane Princes", vesselClass1, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+
+		// Other vessels
+
+		builder.createVessel("Charter-1", vesselClass1, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Charter-2", vesselClass2, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Charter-3", vesselClass3, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Charter-4", vesselClass4, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
+		builder.createVessel("Charter-5", vesselClass1, startPorts.get(random.nextInt(startPorts.size())), endPorts.get(random.nextInt(endPorts.size())));
 	}
 
 	/**
@@ -391,19 +363,24 @@ public final class TestUtils {
 		final IModifiableSequences<T> sequences = new ModifiableSequences<T>(
 				resources);
 
-		// First elements are the vessel start ports
+		List<T> ends = new ArrayList<T>(resources.size()); 
+		// First elements pairs are the vessel start/end  ports
 		for (int i = 0; i < resources.size(); i++) {
-			sequences.getModifiableSequence(i).add(
-					shuffledElements.get(i));
+			sequences.getModifiableSequence(i).add(shuffledElements.get(2*i));
+			ends.add(shuffledElements.get(2*i+1));
 		}
 
 		// remaining set are in load/discharge pairs
-		for (int i = resources.size(); i < shuffledElements.size(); i += 2) {
+		for (int i = resources.size() * 2; i < shuffledElements.size() ; i += 2) {
 			final int nextInt = random.nextInt(resources.size());
 			sequences.getModifiableSequence(nextInt).add(
 					shuffledElements.get(i));
 			sequences.getModifiableSequence(nextInt).add(
 					shuffledElements.get(i + 1));
+		}
+		
+		for (int i = 0; i < resources.size(); i++) {
+			sequences.getModifiableSequence(i).add(ends.get(i));
 		}
 		return sequences;
 	}
