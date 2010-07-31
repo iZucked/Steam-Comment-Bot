@@ -24,6 +24,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.demo.reports.Activator;
 import com.mmxlabs.demo.reports.views.FitnessContentProvider.RowData;
+import com.mmxlabs.demo.reports.views.actions.PackTableColumnsAction;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
@@ -42,6 +43,8 @@ public class FitnessReportView extends ViewPart {
 	private List<IManagedJob> selectedJobs = new LinkedList<IManagedJob>();
 	private IManagedJobListener jobListener;
 	private IJobManagerListener jobManagerListener;
+
+	private PackTableColumnsAction packColumnsAction;
 
 	class ViewLabelProvider extends CellLabelProvider implements
 			ITableLabelProvider {
@@ -154,10 +157,16 @@ public class FitnessReportView extends ViewPart {
 
 			}
 		};
-
+		
+		selectedJobs.addAll(Activator.getDefault().getJobManager().getSelectedJobs());
+		if (selectedJobs.isEmpty()) {
+			setInput(null);
+		} else {
+			setInput(selectedJobs.get(0).getSchedule());
+		}
+		
 		Activator.getDefault().getJobManager()
 				.addJobManagerListener(jobManagerListener);
-
 	}
 
 	private void hookContextMenu() {
@@ -190,9 +199,11 @@ public class FitnessReportView extends ViewPart {
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
+		manager.add(packColumnsAction);
 	}
 
 	private void makeActions() {
+		packColumnsAction = new PackTableColumnsAction(viewer);
 	}
 
 	/**
