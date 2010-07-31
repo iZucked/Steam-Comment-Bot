@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author sg
+ * @author Simon Goodall
  *
  */
 public final class JobManager implements IJobManager {
@@ -137,6 +137,12 @@ public final class JobManager implements IJobManager {
 		if (selectedJobs.contains(job)) {
 			deselectJob(job);
 		} else {
+			// Ensure only one job is active.
+			// TODO: Fix up various views to handle multiple jobs
+			while (selectedJobs.isEmpty() == false) {
+				deselectJob(selectedJobs.get(0));
+			}
+			
 			selectJob(job);
 		}
 	}
