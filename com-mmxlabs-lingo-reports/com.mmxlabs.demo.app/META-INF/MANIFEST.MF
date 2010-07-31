@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.scheduleview;bundle-version="1.0.0",
  org.eclipse.ui.views.log;bundle-version="1.0.100",
  com.mmxlabs.jobmanager;bundle-version="1.0.0",
- com.mmxlabs.jobmanager.ui;bundle-version="1.0.0"
+ com.mmxlabs.jobmanager.ui;bundle-version="1.0.0",
+ com.mmxlabs.demo.reports;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
