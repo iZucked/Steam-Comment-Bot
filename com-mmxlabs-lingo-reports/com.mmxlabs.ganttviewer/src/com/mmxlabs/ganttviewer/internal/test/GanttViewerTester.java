@@ -126,6 +126,18 @@ public class GanttViewerTester {
 
 			}
 		}
+
+		@Override
+		public Calendar getElementPlannedStartTime(Object element) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Calendar getElementPlannedEndTime(Object element) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	public static void main(String[] args) {
