@@ -145,4 +145,36 @@ public class AnnotatedScheduleContentProvider implements
 		return null;
 	}
 
+	@Override
+	public Calendar getElementPlannedStartTime(Object element) {
+
+		if (element instanceof IPortVisitEvent) {
+			IPortVisitEvent event = (IPortVisitEvent) element;
+			int startTime = event.getPortSlot().getTimeWindow().getStart();
+			// TODO: Get proper start time
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.HOUR_OF_DAY, startTime);
+
+			return c;
+		}
+
+		return null;
+	}
+
+	@Override
+	public Calendar getElementPlannedEndTime(Object element) {
+
+
+		if (element instanceof IPortVisitEvent) {
+			IPortVisitEvent event = (IPortVisitEvent) element;
+			int endTime = event.getPortSlot().getTimeWindow().getEnd();
+			// TODO: Get proper end time
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.HOUR_OF_DAY, endTime);
+
+			return c;
+		}
+
+		return null;
+	}
 }

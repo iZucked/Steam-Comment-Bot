@@ -19,4 +19,8 @@ public interface IGanttChartContentProvider extends ITreeContentProvider {
 	Calendar getElementStartTime(Object element);
 	
 	Calendar getElementEndTime(Object element);
+
+	Calendar getElementPlannedStartTime(Object element);
+
+	Calendar getElementPlannedEndTime(Object element);
 }
