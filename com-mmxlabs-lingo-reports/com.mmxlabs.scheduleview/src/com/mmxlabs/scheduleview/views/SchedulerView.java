@@ -28,6 +28,7 @@ import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
 import com.mmxlabs.jobcontroller.core.ManagedJobListenerNotifier;
 import com.mmxlabs.scheduleview.Activator;
+import com.mmxlabs.scheduleview.views.AnnotatedSequenceLabelProvider.Mode;
 
 public class SchedulerView extends ViewPart {
 
@@ -45,6 +46,8 @@ public class SchedulerView extends ViewPart {
 	private IManagedJobListener jobListener;
 
 	private IJobManagerListener jobManagerListener;
+
+	private Action toggleColourSchemeAction;
 
 	/**
 	 * The constructor.
@@ -211,6 +214,7 @@ public class SchedulerView extends ViewPart {
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
+		manager.add(toggleColourSchemeAction);
 	}
 
 	private void makeActions() {
@@ -222,6 +226,25 @@ public class SchedulerView extends ViewPart {
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
 		zoomOutAction.setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomout_nav.gif"));
 		zoomOutAction.setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomout_nav.gif"));
+		
+		
+		toggleColourSchemeAction = new Action() {
+			Mode mode = Mode.VesselState;
+			
+			public void run() {
+				
+				AnnotatedSequenceLabelProvider lp =(AnnotatedSequenceLabelProvider)(viewer.getLabelProvider());
+				
+				int nextMode = (mode.ordinal() + 1) % Mode.values().length;
+				mode = Mode.values()[nextMode];
+				lp.setMode(mode);
+				
+				viewer.setInput(viewer.getInput());
+				
+redraw();
+			};
+		};
+		toggleColourSchemeAction.setText("Toggle Colour Scheme");
 	}
 
 	/**
@@ -232,12 +255,27 @@ public class SchedulerView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
+	public void 	redraw() {
+		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				if (!viewer.getControl().isDisposed()) {
+					
+					viewer.setInput(viewer.getInput());
+				}
+			}
+		});
+
+	}
+	
 	public void refresh() {
 		getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
 				if (!viewer.getControl().isDisposed()) {
+					
 					viewer.refresh();
 				}
 			}
