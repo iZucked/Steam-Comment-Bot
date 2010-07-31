@@ -98,7 +98,8 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		// If this is the best state seen so far, then record it.
 		if (currentFitness < bestFitness) {
 			// Store this as the new best
-			bestSequences = new Sequences<T>(sequences);
+			// Do we need to copy here too? 
+			bestSequences = currentSequences;
 			bestFitness = currentFitness;
 		}
 	}
