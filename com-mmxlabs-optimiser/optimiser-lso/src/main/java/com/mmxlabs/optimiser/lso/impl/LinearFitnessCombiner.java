@@ -37,6 +37,7 @@ public final class LinearFitnessCombiner implements IFitnessCombiner {
 		return fitnessComponentWeights;
 	}
 
+	@Override
 	public <T> long calculateFitness(
 			final Collection<IFitnessComponent<T>> fitnessComponents) {
 		// Sum up total fitness, combining raw values with weights
