@@ -41,14 +41,17 @@ public final class ListSequence<T> implements ISequence<T> {
 		return new Iterator<T>() {
 			Iterator<? extends T> i = list.iterator();
 
+			@Override
 			public boolean hasNext() {
 				return i.hasNext();
 			}
 
+			@Override
 			public T next() {
 				return i.next();
 			}
 
+			@Override
 			public void remove() {
 				throw new UnsupportedOperationException();
 			}
@@ -76,5 +79,26 @@ public final class ListSequence<T> implements ISequence<T> {
 	@Override
 	public String toString() {
 		return list.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof ListSequence) {
+			return list.equals(((ListSequence)obj).list);
+		} else if (obj instanceof ISequence) {
+			ISequence seq = (ISequence)obj;
+			if (seq.size() != size()) {
+				return false;
+			}
+			for (int i = 0; i < size(); ++i) {
+				if (get(i).equals(seq.get(i)) == false) {
+					return false;
+				}
+			}
+			return true;
+		
+		}
+		return false;
 	}
 }

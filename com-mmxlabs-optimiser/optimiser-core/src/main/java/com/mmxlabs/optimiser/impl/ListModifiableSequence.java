@@ -101,4 +101,25 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 			list.add(t);
 		}
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof ListModifiableSequence) {
+			return list.equals(((ListModifiableSequence)obj).list);
+		} else if (obj instanceof ISequence) {
+			ISequence seq = (ISequence)obj;
+			if (seq.size() != size()) {
+				return false;
+			}
+			for (int i = 0; i < size(); ++i) {
+				if (get(i).equals(seq.get(i)) == false) {
+					return false;
+				}
+			}
+			return true;
+		
+		}
+		return false;
+	}
 }
