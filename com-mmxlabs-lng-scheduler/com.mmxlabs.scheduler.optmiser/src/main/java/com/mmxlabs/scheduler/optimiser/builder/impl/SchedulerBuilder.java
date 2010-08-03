@@ -275,13 +275,25 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVessel createVessel(final String name,
-			final IVesselClass vesselClass) {
+			final IVesselClass vesselClass, IPort startPort, IPort endPort) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException(
 					"IVesselClass was not created using this builder");
 		}
 
+		if (!ports.contains(startPort)) {
+			throw new IllegalArgumentException(
+					"Start IPort was not created using this builder");
+		}
+		
+
+		if (!ports.contains(endPort)) {
+			throw new IllegalArgumentException(
+					"End IPort was not created using this builder");
+		}
+
+		
 		final Vessel vessel = new Vessel();
 		vessel.setName(name);
 		vessel.setVesselClass(vesselClass);
@@ -295,25 +307,25 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselProvider.setVesselResource(resource, vessel);
 
 		// TODO: Temporary stick in a start loc at time zero.
+		{
 		ITimeWindow window = createTimeWindow(0, 0);
 		String id = "depot-" + name;
-		IXYPort port = createPort(id, 0.0f, 0.0f);
 		
 		
 		final PortSlot slot = new PortSlot();
 		slot.setId(id);
-		slot.setPort(port);
+		slot.setPort(startPort);
 		slot.setTimeWindow(window);
 
 		// Create a sequence element against this load slot
 		final SequenceElement element = new SequenceElement();
-		element.setName(id + "-" + port.getName());
+		element.setName(id + "-" + startPort.getName());
 		element.setPortSlot(slot);
 
 		sequenceElements.add(element);
 
 		// Register the port with the element
-		portProvider.setPortForElement(port, element);
+		portProvider.setPortForElement(startPort, element);
 
 		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Other);
 
@@ -323,6 +335,39 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				Collections.singletonList(window));
 		
 		resourceAllocationProvider.setAllowedResources(element, Collections.singleton(resource));
+		}
+
+		// TODO: Temporary stick in a end loc at time 400.
+		{
+		ITimeWindow window = createTimeWindow(500 * 24, 501 * 24);
+		String id = "depot-" + name;
+		
+		
+		final PortSlot slot = new PortSlot();
+		slot.setId(id);
+		slot.setPort(endPort);
+		slot.setTimeWindow(window);
+
+		// Create a sequence element against this load slot
+		final SequenceElement element = new SequenceElement();
+		element.setName(id + "-" + endPort.getName());
+		element.setPortSlot(slot);
+
+		sequenceElements.add(element);
+
+		// Register the port with the element
+		portProvider.setPortForElement(endPort, element);
+
+		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Other);
+
+		portSlotsProvider.setPortSlot(element, slot);
+
+		timeWindowProvider.setTimeWindows(element,
+				Collections.singletonList(window));
+		
+		resourceAllocationProvider.setAllowedResources(element, Collections.singleton(resource));
+		}
+		
 		
 		return vessel;
 	}

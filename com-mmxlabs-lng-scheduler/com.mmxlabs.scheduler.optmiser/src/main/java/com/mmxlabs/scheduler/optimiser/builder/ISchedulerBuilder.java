@@ -67,7 +67,7 @@ public interface ISchedulerBuilder {
 	 * @param vesselClass
 	 * @return
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass);
+	IVessel createVessel(String name, IVesselClass vesselClass, IPort startPort, IPort endPort);
 
 	/**
 	 * Create a port with the given name.
