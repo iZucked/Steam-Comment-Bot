@@ -62,6 +62,9 @@ public final class LatenessComponent<T> extends
 				}
 			}
 		}
+		// Hack in a weighting
+		lateness *= 1000000;
+		
 		updateFitness(resource, lateness, newSequence);
 	}
 
