@@ -8,7 +8,7 @@ import javax.xml.stream.XMLStreamException;
 
 /**
  * TODO: Read/write XMl TODO: Created objects should be assigned a name and
- * stored in a map TODO: Read/Write should be based on the object ref name
+ * stored in a map TODO: Read/Write should be based on the object ref name
  * (ref="name" value="34") TODO: Store type + processor (e.g. spring property
  * editor)
  * 
