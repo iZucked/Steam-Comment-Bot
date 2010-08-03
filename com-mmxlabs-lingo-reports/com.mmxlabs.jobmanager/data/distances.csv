@@ -1,0 +1,18 @@
+,Punta Europa Marine Terminal,Quintero,Zeebrugge,Guangdong LNG Terminal,Shanghai,Idku,Sakai LNG,Sines LNG Terminal,Bonny Island LNG Terminal,Singapore,Bilboa - LNG Terminal,Taichung,Yung-an,Milford Haven,Elba Island - Savanah,Lake Charles - LNG Berths,Point Fortin
+Punta Europa Marine Terminal,0,6725,4415,,10048,5317,10502,3421,126,7988,3981,,9435,4229,5417,6198,4241
+Quintero,6725,0,,,,8785,,,6673,,,,9961,,,,5861
+Zeebrugge,4415,,0,,,3117,,,4320,,,,9837,,,,3985
+Guangdong LNG Terminal,,,,0,,,,,,,,,,,,,
+Shanghai,10048,,,,0,7457,,,10088,,,,600,,,,11829
+Idku,5317,8785,3117,,7457,0,7705,2212,5222,5269,2774,,6631,2913,5597,6618,5324
+Sakai LNG,10502,,,,,7705,0,,10542,,10542,,1134,,,,11229
+Sines LNG Terminal,3421,,,,,2212,,0,3326,,,,8841,,,,3299
+Bonny Island LNG Terminal,126,6673,4320,,10088,5222,10542,3326,0,8028,3886,,9475,4134,5322,6103,4146
+Singapore,7988,,,,,5269,,,8028,0,,,1621,,,,10338
+Bilboa - LNG Terminal,3981,,,,,2774,,,3886,,0,,9403,,,,3645
+Taichung,,,,,,,,,,,,0,,,,,
+Yung-an,9435,9961,9837,,600,6631,1134,8841,9475,1621,9403,,0,9651,11292,10772,11953
+Milford Haven,4229,,,,,2913,,,4134,,,,9651,0,,,3733
+Elba Island - Savanah,5417,,,,,5597,,,5322,,,,11292,,0,,1690
+Lake Charles - LNG Berths,6198,,,,,6618,,,6103,,,,10772,,,0,2200
+Point Fortin,4241,5861,3985,,11829,5324,11229,3299,4146,10338,3645,,11953,3733,1690,2200,0
