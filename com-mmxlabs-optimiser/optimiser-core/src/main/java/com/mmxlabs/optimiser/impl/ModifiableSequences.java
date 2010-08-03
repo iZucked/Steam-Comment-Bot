@@ -130,7 +130,28 @@ public final class ModifiableSequences<T> implements IModifiableSequences<T> {
 
 	@Override
 	public int size() {
-		
+
 		return sequenceMap.size();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj instanceof ModifiableSequences) {
+			return sequenceMap.equals(((ModifiableSequences) obj).sequenceMap);
+		} else if (obj instanceof ISequences) {
+			ISequences seq = (ISequences) obj;
+			if (size() != seq.size()) {
+				return false;
+			}
+
+			if (!seq.getSequences().equals(seq.getSequences())) {
+				return false;
+			}
+			return true;
+
+		}
+
+		return false;
 	}
 }

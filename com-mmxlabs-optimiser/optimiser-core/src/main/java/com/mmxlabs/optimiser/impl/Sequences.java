@@ -112,4 +112,25 @@ public final class Sequences<T> implements ISequences<T> {
 
 		return sequenceMap.size();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj instanceof Sequences) {
+			return sequenceMap.equals(((Sequences) obj).sequenceMap);
+		} else if (obj instanceof ISequences) {
+			ISequences seq = (ISequences) obj;
+			if (size() != seq.size()) {
+				return false;
+			}
+
+			if (!seq.getSequences().equals(seq.getSequences())) {
+				return false;
+			}
+			return true;
+
+		}
+
+		return false;
+	}
 }
