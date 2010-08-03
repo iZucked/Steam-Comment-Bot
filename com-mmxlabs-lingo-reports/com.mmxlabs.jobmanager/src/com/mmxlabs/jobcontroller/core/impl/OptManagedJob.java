@@ -74,7 +74,7 @@ public class OptManagedJob implements IManagedJob {
 		progress = NO_PROGRESS;
 		totalProgress = IProgressMonitor.UNKNOWN;
 
-		totalProgress = 1000000;
+		totalProgress = 2000000;
 
 		state = JobState.INITIALISED;
 		
