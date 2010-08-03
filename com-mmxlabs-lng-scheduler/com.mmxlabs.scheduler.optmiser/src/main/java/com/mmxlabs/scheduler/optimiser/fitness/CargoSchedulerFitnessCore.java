@@ -121,7 +121,21 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
-
+// TODO!!
+//		TODO!!
+		//TODO!!
+//		Add test case to catch missing prepareDelta calls
+//		
+//		Add a rejectMove() to completement accept();
+//		
+//		
+//		TODO: Rethink how this ICargoSchedulerFitnessComponent should work as we now have far too many method calls
+		
+//		Notify fitness components a new delta evaluation is about to begin
+		for (final ICargoSchedulerFitnessComponent<T> c : components) {
+			c.prepareDelta();
+		}
+		
 		// Re-schedule changed sequences
 		for (final IResource resource : affectedResources) {
 			final ISequence<T> sequence = sequences.getSequence(resource);

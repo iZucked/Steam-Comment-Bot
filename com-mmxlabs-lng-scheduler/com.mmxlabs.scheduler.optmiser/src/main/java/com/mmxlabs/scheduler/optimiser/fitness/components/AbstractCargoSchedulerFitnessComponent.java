@@ -118,6 +118,11 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 	}
 
 	@Override
+	public void prepareDelta() {
+		complete();
+	}
+	
+	@Override
 	public void complete() {
 
 		// Copy across proposed values into accepted values

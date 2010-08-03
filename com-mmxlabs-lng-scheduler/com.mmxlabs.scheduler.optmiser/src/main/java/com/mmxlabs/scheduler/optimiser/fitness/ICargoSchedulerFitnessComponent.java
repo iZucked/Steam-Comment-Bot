@@ -75,4 +75,6 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * Clean up references as this component is no longer required.
 	 */
 	void dispose();
+
+	void prepareDelta();
 }
