@@ -4,6 +4,7 @@ import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.ide.IDE;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -18,6 +19,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	public void initialize(IWorkbenchConfigurer configurer) {
         super.initialize(configurer);
         configurer.setSaveAndRestore(true);
+        
+        // Need to call this to make resource navigator work correctly.
+        IDE.registerAdapters();
     }
 
 	@Override
