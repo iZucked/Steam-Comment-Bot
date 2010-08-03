@@ -419,7 +419,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IVesselClass createVesselClass(final String name,
 			final int minSpeed, final int maxSpeed, final long capacity,
-			final int minHeel) {
+			final int minHeel, int baseFuelUnitPrice) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -430,6 +430,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setCargoCapacity(capacity);
 		vesselClass.setMinHeel(minHeel);
 
+		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPrice);
+		
 		vesselClasses.add(vesselClass);
 
 		return vesselClass;

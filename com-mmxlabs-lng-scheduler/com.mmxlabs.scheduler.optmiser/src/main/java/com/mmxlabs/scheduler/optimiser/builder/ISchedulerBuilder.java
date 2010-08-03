@@ -41,7 +41,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
-			long capacity, int minHeel);
+			long capacity, int minHeel, int baseFuelUnitPrice);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the
