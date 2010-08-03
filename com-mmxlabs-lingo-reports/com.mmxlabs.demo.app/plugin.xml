@@ -14,7 +14,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RCP Perspective"
+            name="Scheduling"
             class="com.mmxlabs.demo.app.intro.Perspective"
             id="com.mmxlabs.demo.app.perspective">
       </perspective>
