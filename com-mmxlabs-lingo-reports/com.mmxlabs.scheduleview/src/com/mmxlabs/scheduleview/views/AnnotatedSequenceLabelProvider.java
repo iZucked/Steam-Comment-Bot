@@ -23,7 +23,7 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 		IGanttChartToolTipProvider, IColorProvider {
 
 	public enum Mode {
-		VesselState, FuelChoice, Lateness
+		VesselState, FuelChoice /*, Lateness*/
 	}
 
 	private Mode mode = Mode.VesselState;
@@ -91,7 +91,8 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 				}
 				return ColorCache.getColor(r,g,b);
 			}
-		} else if (mode == Mode.Lateness) {
+		}
+//		else if (mode == Mode.Lateness) {
 			if (element instanceof IPortVisitEvent) {
 				final IPortVisitEvent event = (IPortVisitEvent) element;
 				
@@ -100,7 +101,7 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 					return ColorCache.getColor(255, 0, 0);
 				}
 			}
-		}
+//		}
 		return null;
 	}
 
