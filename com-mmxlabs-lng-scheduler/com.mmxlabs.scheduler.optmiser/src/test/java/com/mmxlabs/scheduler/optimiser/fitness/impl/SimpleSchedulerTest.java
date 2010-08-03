@@ -76,7 +76,7 @@ public class SimpleSchedulerTest {
 				keypoints);
 
 		IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1",
-				12000, 20000, 150000000, 0);
+				12000, 20000, 150000000, 0, 7000);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
 				15000, 10000, 10000, consumptionCalculator, 15000);
@@ -84,9 +84,10 @@ public class SimpleSchedulerTest {
 				VesselState.Ballast, 15000, 10000, 10000,
 				consumptionCalculator, 15000);
 
-		builder.createVessel("vessel-1", vesselClass1);
-		builder.createVessel("vessel-2", vesselClass1);
-		builder.createVessel("vessel-3", vesselClass1);
+		// TODO: Setup start/end ports correctly
+		builder.createVessel("vessel-1", vesselClass1, port1, port2);
+		builder.createVessel("vessel-2", vesselClass1, port1, port2);
+		builder.createVessel("vessel-3", vesselClass1, port1, port6);
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);
@@ -115,19 +116,19 @@ public class SimpleSchedulerTest {
 				1000000, 5);
 
 		IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1",
-				port2, tw2, 0, 1000000, 6);
+				port2, tw2, 0, 1000000, 200000);
 		IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2",
-				port2, tw4, 0, 1000000, 6);
+				port2, tw4, 0, 1000000, 200000);
 		IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3",
-				port2, tw6, 0, 1000000, 6);
+				port2, tw6, 0, 1000000, 200000);
 		IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4",
-				port6, tw6, 0, 1000000, 6);
+				port6, tw6, 0, 1000000, 200000);
 		IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5",
-				port4, tw3, 0, 1000000, 6);
+				port4, tw3, 0, 1000000, 200000);
 		IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6",
-				port4, tw5, 0, 1000000, 6);
+				port4, tw5, 0, 1000000, 200000);
 		IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7",
-				port6, tw7, 0, 1000000, 6);
+				port6, tw7, 0, 1000000, 200000);
 
 		builder.createCargo("cargo1", load1, discharge1);
 		builder.createCargo("cargo2", load2, discharge2);
@@ -161,6 +162,9 @@ public class SimpleSchedulerTest {
 	 */
 	<T> ISequences<T> createInitialSequences(final IOptimisationData<T> data,
 			final long seed) {
+		
+//		TODO: Fix this to take into account load/discharge pairs
+		
 		final Random random = new Random(seed);
 		final Collection<T> sequenceElements = data.getSequenceElements();
 		final List<T> shuffledElements = new ArrayList<T>(sequenceElements);
