@@ -8,11 +8,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
 
 /**
  * Default implementation of {@link IVoyageOptions}.
- * 
+ * This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
  * @author Simon Goodall
  * 
  */
-public class VoyageOptions implements IVoyageOptions {
+public class VoyageOptions implements IVoyageOptions, Cloneable {
 
 	private int availableTime;
 	private int distance;
@@ -172,5 +172,11 @@ public class VoyageOptions implements IVoyageOptions {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+
+		return super.clone();
 	}
 }
