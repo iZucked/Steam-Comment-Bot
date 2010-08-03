@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://com.mmxlabs.lng.emf"
+            class="scenario.ScenarioPackage"
+            genModel="model/lng.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://com.mmxlabs.lng.emf/fleet"
+            class="scenario.fleet.FleetPackage"
+            genModel="model/lng.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://com.mmxlabs.lng.emf/schedule"
+            class="scenario.schedule.SchedulePackage"
+            genModel="model/lng.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://com.mmxlabs.lng.emf/port"
+            class="scenario.port.PortPackage"
+            genModel="model/lng.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://com.mmxlabs.lng.emf/cargo"
+            class="scenario.cargo.CargoPackage"
+            genModel="model/lng.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://com.mmxlabs.lng.emf/contract"
+            class="scenario.contract.ContractPackage"
+            genModel="model/lng.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://com.mmxlabs.lng.emf/market"
+            class="scenario.market.MarketPackage"
+            genModel="model/lng.genmodel"/>
+   </extension>
+
+</plugin>
