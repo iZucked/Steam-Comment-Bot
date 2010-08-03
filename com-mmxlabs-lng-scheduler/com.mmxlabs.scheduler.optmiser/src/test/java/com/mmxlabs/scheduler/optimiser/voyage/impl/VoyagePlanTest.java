@@ -18,13 +18,13 @@ public class VoyagePlanTest {
 	}
 
 	@Test
-	public void testGetSetFuelCost() {
+	public void testGetSetTotalFuelCost() {
 		final FuelComponent c = FuelComponent.Base;
 		final long value = 100l;
 		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertEquals(0, plan.getFuelCost(c));
-		plan.setFuelCost(c, value);
-		Assert.assertEquals(value, plan.getFuelCost(c));
+		Assert.assertEquals(0, plan.getTotalFuelCost(c));
+		plan.setTotalFuelCost(c, value);
+		Assert.assertEquals(value, plan.getTotalFuelCost(c));
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class VoyagePlanTest {
 		p.setSalesRevenue(salesRevenue);
 		p.setPurchaseCost(purchaseCost);
 		p.setFuelConsumption(fuel1, consumption);
-		p.setFuelCost(fuel2, cost);
+		p.setTotalFuelCost(fuel2, cost);
 
 		return p;
 	}

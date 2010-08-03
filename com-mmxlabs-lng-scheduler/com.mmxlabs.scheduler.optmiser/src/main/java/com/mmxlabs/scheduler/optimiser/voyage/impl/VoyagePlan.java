@@ -40,7 +40,7 @@ public final class VoyagePlan implements IVoyagePlan {
 	}
 
 	@Override
-	public long getFuelCost(final FuelComponent fuel) {
+	public long getTotalFuelCost(final FuelComponent fuel) {
 		if (fuelCosts.containsKey(fuel)) {
 			return fuelCosts.get(fuel);
 		}
@@ -48,7 +48,7 @@ public final class VoyagePlan implements IVoyagePlan {
 	}
 
 	@Override
-	public void setFuelCost(final FuelComponent fuel, final long cost) {
+	public void setTotalFuelCost(final FuelComponent fuel, final long cost) {
 		fuelCosts.put(fuel, cost);
 	}
 
