@@ -65,6 +65,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		}
 		long distance = 0l;
 
+		long totalCost = 0l;
+		
 		for (final IResource resource : solution.getContext().getOptimisationData().getResources()) {
 
 			ISequence<ISequenceElement> sequence = solution.getSequences()
@@ -83,6 +85,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 						long l = fuelTotals.get(f);
 						l += journey.getFuelCost(f);
 						fuelTotals.put(f, l);
+						totalCost += journey.getFuelCost(f);
 					}
 					distance += journey.getDistance();
 				}
@@ -94,19 +97,21 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 						long l = fuelTotals.get(f);
 						l += idle.getFuelCost(f);
 						fuelTotals.put(f, l);
+						totalCost += idle.getFuelCost(f);
 					}
 				}
 			}
 		}
-		rowData = new RowData[fuelTotals.size() + 1];
+		rowData = new RowData[fuelTotals.size() + 2];
 
 		int idx = 0;
 		for (final Map.Entry<FuelComponent, Long> entry : fuelTotals.entrySet()) {
 
 			rowData[idx++] = new RowData(entry.getKey().toString(),
-					entry.getValue());
+					entry.getValue() / 1000);
 		}
-		rowData[idx] = new RowData("Distance", distance);
+		rowData[idx++] = new RowData("Distance", distance);
+		rowData[idx++] = new RowData("Total Cost", totalCost / 1000);
 	}
 
 	@Override

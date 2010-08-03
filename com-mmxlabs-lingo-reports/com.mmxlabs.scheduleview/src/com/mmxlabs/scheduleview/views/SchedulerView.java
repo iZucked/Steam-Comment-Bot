@@ -244,7 +244,7 @@ public class SchedulerView extends ViewPart {
 redraw();
 			};
 		};
-		toggleColourSchemeAction.setText("Toggle Colour Scheme");
+		toggleColourSchemeAction.setText("Switch Colour Scheme");
 	}
 
 	/**

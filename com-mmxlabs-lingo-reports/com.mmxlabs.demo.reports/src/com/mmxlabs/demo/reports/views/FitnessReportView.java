@@ -56,7 +56,7 @@ public class FitnessReportView extends ViewPart {
 				if (index == 0) {
 					return d.component;
 				} else {
-					return Long.toString(d.fitness);
+					return String.format("%,d", d.fitness);
 				}
 			}
 			return null;
@@ -163,6 +163,7 @@ public class FitnessReportView extends ViewPart {
 			setInput(null);
 		} else {
 			setInput(selectedJobs.get(0).getSchedule());
+			selectedJobs.get(0).addManagedJobListener(jobListener);
 		}
 		
 		Activator.getDefault().getJobManager()

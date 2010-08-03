@@ -204,6 +204,7 @@ public class CargoReportView extends ViewPart {
 			setInput(null);
 		} else {
 			setInput(selectedJobs.get(0).getSchedule());
+			selectedJobs.get(0).addManagedJobListener(jobListener);
 		}
 		
 		Activator.getDefault().getJobManager()
