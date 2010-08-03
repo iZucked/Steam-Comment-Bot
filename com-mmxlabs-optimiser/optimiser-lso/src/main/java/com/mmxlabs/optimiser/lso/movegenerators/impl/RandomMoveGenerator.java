@@ -82,10 +82,20 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	 * @return
 	 */
 	public int generateBreakPoint(final ISequence<T> sequence) {
-		final int breakPoint = random.nextInt(1 + sequence.size());
+		final int breakPoint;
+		
+		if (true) {
+			// Skip start/end as breakpoint options
+			breakPoint = random.nextInt(sequence.size() - 1) + 1 ;
+		} else {
+			breakPoint = random.nextInt(1 + sequence.size());
+		}
 
 		// Validate break point -- should it include start/end elements?
 
+		assert breakPoint > 0;
+		assert breakPoint < sequence.size() ;
+		
 		return breakPoint;
 	}
 
