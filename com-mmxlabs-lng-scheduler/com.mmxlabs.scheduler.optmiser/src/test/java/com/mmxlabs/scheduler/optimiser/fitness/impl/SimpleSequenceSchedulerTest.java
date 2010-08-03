@@ -36,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -128,9 +129,9 @@ public final class SimpleSequenceSchedulerTest {
 				SchedulerConstants.DCP_portDistanceProvider);
 
 		// Only need sparse matrix for testing
-		distanceProvider.set(port1, port2, 4);
-		distanceProvider.set(port2, port3, 4);
-		distanceProvider.set(port3, port4, 4);
+		distanceProvider.set(port1, port2, 400);
+		distanceProvider.set(port2, port3, 400);
+		distanceProvider.set(port3, port4, 400);
 
 		final int duration = 1;
 		IElementDurationProviderEditor<ISequenceElement> durationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
@@ -168,6 +169,10 @@ public final class SimpleSequenceSchedulerTest {
 
 		IResource resource = new Resource();
 		final Vessel vessel = new Vessel();
+		final VesselClass vesselClass = new VesselClass();
+		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
+		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);
+		vessel.setVesselClass(vesselClass);
 
 		IVesselProviderEditor vesselProvider = new HashMapVesselEditor(
 				SchedulerConstants.DCP_vesselProvider);
@@ -193,7 +198,7 @@ public final class SimpleSequenceSchedulerTest {
 		final VoyageOptions expectedOptions1 = new VoyageOptions();
 		expectedOptions1.setRoute("default");
 		expectedOptions1.setAvailableTime(9);
-		expectedOptions1.setDistance(4);
+		expectedOptions1.setDistance(400);
 		expectedOptions1.setFromPortSlot(loadSlot1);
 		expectedOptions1.setToPortSlot(dischargeSlot1);
 		expectedOptions1.setUseFBOForSupplement(true);
@@ -206,7 +211,7 @@ public final class SimpleSequenceSchedulerTest {
 		final VoyageOptions expectedOptions2 = new VoyageOptions();
 		expectedOptions2.setRoute("default");
 		expectedOptions2.setAvailableTime(4);
-		expectedOptions2.setDistance(4);
+		expectedOptions2.setDistance(400);
 		expectedOptions2.setFromPortSlot(dischargeSlot1);
 		expectedOptions2.setToPortSlot(loadSlot2);
 		expectedOptions2.setUseFBOForSupplement(true);
@@ -219,7 +224,7 @@ public final class SimpleSequenceSchedulerTest {
 		final VoyageOptions expectedOptions3 = new VoyageOptions();
 		expectedOptions3.setRoute("default");
 		expectedOptions3.setAvailableTime(4);
-		expectedOptions3.setDistance(4);
+		expectedOptions3.setDistance(400);
 		expectedOptions3.setFromPortSlot(loadSlot2);
 		expectedOptions3.setToPortSlot(dischargeSlot2);
 		expectedOptions3.setUseFBOForSupplement(true);
