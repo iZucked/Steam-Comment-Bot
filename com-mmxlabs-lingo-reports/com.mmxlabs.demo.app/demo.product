@@ -3,6 +3,7 @@
 
 <product name="ShipLiNGO" uid="com.mmxlabs.demo.product" id="com.mmxlabs.demo.app.product" application="com.mmxlabs.demo.app.application" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
@@ -14,8 +15,8 @@
    <windowImages i16="icons/alt_window_16.gif" i32="icons/alt_window_32.gif"/>
 
    <splash
-      startupProgressRect="0,20,445,15"
-      startupMessageRect="0,0,445,20"
+      startupProgressRect="20,210,440,15"
+      startupMessageRect="20,220,440,20"
       startupForegroundColor="000000" />
    <launcher name="ShipLiNGO">
       <solaris/>
@@ -23,6 +24,7 @@
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
