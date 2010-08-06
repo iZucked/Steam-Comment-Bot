@@ -52,6 +52,8 @@ public final class DistanceComponent<T> extends
 			}
 		}
 
+		//TODO: Temp remove distance from fitness - should really alter weight or remove component from evaluations instead
+		distance = 0;
 		updateFitness(resource, distance, newSequence);
 	}
 }
