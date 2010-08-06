@@ -180,12 +180,13 @@ public class SchedulerBuilderTest {
 		int minHeel = 4;
 		
 		IVesselClass vesselClass = builder.createVesselClass("name", minSpeed,
-				maxSpeed, capacity, minHeel);
+				maxSpeed, capacity, minHeel, 7000);
 		
 		Assert.assertEquals(minSpeed, vesselClass.getMinSpeed());
 		Assert.assertEquals(maxSpeed, vesselClass.getMaxSpeed());
 		Assert.assertEquals(capacity, vesselClass.getCargoCapacity());
 		Assert.assertEquals(minHeel, vesselClass.getMinHeel());
+		Assert.assertEquals(7000, vesselClass.getBaseFuelUnitPrice());
 
 		fail("Not yet implemented - Internal state checks");
 	}
