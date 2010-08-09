@@ -35,4 +35,35 @@
 		</dependency>
 
 	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Hook bundle manifest generation into build process -->
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>bundle-manifests</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<!-- Generate manifest in top level so Eclipse/PDE can pick it up in 
+						source tree -->
+					<manifestLocation>META-INF</manifestLocation>
+					<instructions>
+						<!-- Export all packages with this prefix. Default is all local excluding 
+							.impl packages -->
+						<Export-Package>com.mmxlabs.optimiser.common.*;version="${pom.version}"</Export-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
