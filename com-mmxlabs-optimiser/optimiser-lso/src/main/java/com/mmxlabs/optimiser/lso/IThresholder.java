@@ -1,6 +1,6 @@
 package com.mmxlabs.optimiser.lso;
 
-import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
 /**
  * {@link IThresholder} implementations are used by {@link IFitnessEvaluator}s

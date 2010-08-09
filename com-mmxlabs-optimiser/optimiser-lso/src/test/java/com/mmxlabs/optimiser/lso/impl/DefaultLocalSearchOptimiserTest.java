@@ -8,17 +8,17 @@ import java.util.Random;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.IModifiableSequence;
-import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IOptimiser;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.impl.OptimisationContext;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IOptimiser;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.OptimisationContext;
+import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
-import com.mmxlabs.optimiser.scenario.impl.OptimisationData;
 
 public class DefaultLocalSearchOptimiserTest {
 

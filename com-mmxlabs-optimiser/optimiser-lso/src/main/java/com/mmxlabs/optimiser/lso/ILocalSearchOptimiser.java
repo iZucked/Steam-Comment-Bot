@@ -2,9 +2,9 @@ package com.mmxlabs.optimiser.lso;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.IOptimiser;
-import com.mmxlabs.optimiser.ISequencesManipulator;
-import com.mmxlabs.optimiser.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.IOptimiser;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 
 /**
  * Extended {@link IOptimiser} interface for a Local Search Optimiser

@@ -2,15 +2,15 @@ package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IOptimisationContext;
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.ISequencesManipulator;
-import com.mmxlabs.optimiser.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * A sub-class of {@link LocalSearchOptimiser} implementing a default main loop.

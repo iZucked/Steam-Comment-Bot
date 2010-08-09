@@ -2,7 +2,7 @@ package com.mmxlabs.optimiser.lso;
 
 import java.util.Collection;
 
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 
 /**
  * {@link IFitnessCombiner} implementations are used to combine the raw fitness

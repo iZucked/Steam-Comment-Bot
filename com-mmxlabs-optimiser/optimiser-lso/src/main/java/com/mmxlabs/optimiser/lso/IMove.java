@@ -2,9 +2,9 @@ package com.mmxlabs.optimiser.lso;
 
 import java.util.Collection;
 
-import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequences;
 
 /**
  * Interface defining a Move as used in the Local Search Optimiser.

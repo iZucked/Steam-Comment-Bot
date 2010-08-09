@@ -3,7 +3,7 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.Collection;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 
 /**

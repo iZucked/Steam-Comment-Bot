@@ -1,6 +1,6 @@
 package com.mmxlabs.optimiser.lso.movegenerators.impl;
 
-import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
 /**

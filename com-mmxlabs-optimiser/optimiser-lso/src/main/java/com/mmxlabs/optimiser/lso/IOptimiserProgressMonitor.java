@@ -1,7 +1,7 @@
 package com.mmxlabs.optimiser.lso;
 
-import com.mmxlabs.optimiser.IOptimiser;
-import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.core.IOptimiser;
+import com.mmxlabs.optimiser.core.ISequences;
 
 /**
  * A callback interface to monitor progress of an optimisation. An

@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.IModifiableSequence;
-import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISegment;
-import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISegment;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
 /**

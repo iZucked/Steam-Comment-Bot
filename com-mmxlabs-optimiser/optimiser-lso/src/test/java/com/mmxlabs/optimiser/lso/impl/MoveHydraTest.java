@@ -1,6 +1,6 @@
 package com.mmxlabs.optimiser.lso.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 

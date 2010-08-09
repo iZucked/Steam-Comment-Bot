@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.IModifiableSequence;
-import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.impl.ListModifiableSequence;
-import com.mmxlabs.optimiser.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.impl.Resource;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.Resource;
 
 public class OptimiserTestUtil {
 

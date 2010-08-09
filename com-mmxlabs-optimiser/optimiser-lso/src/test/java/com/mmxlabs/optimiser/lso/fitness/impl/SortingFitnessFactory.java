@@ -3,8 +3,8 @@ package com.mmxlabs.optimiser.lso.fitness.impl;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 
 /**
  * {@link IFitnessCoreFactory} for the {@link SortingFitnessCore}

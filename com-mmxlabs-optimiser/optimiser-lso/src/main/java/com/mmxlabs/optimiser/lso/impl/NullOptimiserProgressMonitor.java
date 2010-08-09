@@ -1,7 +1,7 @@
 package com.mmxlabs.optimiser.lso.impl;
 
-import com.mmxlabs.optimiser.IOptimiser;
-import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.core.IOptimiser;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 
 /**

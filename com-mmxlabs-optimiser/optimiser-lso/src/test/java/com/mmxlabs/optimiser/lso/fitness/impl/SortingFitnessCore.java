@@ -3,12 +3,12 @@ package com.mmxlabs.optimiser.lso.fitness.impl;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public final class SortingFitnessCore<T> implements IFitnessCore<T> {
 	public static final String CORE_NAME = "Sorting Fitness Core";

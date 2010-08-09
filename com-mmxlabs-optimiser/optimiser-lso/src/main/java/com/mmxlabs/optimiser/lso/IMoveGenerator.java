@@ -1,6 +1,6 @@
 package com.mmxlabs.optimiser.lso;
 
-import com.mmxlabs.optimiser.ISequences;
+import com.mmxlabs.optimiser.core.ISequences;
 
 /**
  * Interface defining an object which can generate {@link IMove} instances to be

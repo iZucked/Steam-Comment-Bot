@@ -8,13 +8,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.IModifiableSequence;
-import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 
 public class SortingFitnessCoreTest {

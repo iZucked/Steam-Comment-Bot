@@ -13,13 +13,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.IModifiableSequence;
-import com.mmxlabs.optimiser.IModifiableSequences;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.impl.ListModifiableSequence;
-import com.mmxlabs.optimiser.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.impl.Sequences;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.Sequences;
 
 @RunWith(JMock.class)
 public class Move4over1Test {

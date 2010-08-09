@@ -1,7 +1,7 @@
 package com.mmxlabs.optimiser.lso.fitness.impl;
 
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 
 /**
  * {@link IFitnessComponent} for the {@link SortingFitnessCore}
