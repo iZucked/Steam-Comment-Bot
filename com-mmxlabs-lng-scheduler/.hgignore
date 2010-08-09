@@ -2,10 +2,10 @@ target/
 
 
 syntax: regexp
-^com\.mmxlabs\.scheduler\.optmiser/\.settings$
+^com\.mmxlabs\.scheduler\.optimiser/\.settings$
 syntax: regexp
-^com\.mmxlabs\.scheduler\.optmiser/\.classpath$
+^com\.mmxlabs\.scheduler\.optimiser/\.classpath$
 syntax: regexp
-^com\.mmxlabs\.scheduler\.optmiser/\.project$
+^com\.mmxlabs\.scheduler\.optimiser/\.project$
 syntax: regexp
-^com\.mmxlabs\.scheduler\.optmiser/META-INF$
+^com\.mmxlabs\.scheduler\.optimiser/META-INF$
