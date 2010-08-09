@@ -7,12 +7,12 @@ import java.util.Map;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.optimiser.IAnnotatedSolution;
-import com.mmxlabs.optimiser.IOptimisationContext;
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.fitness.impl.FitnessComponentInstantiator;
-import com.mmxlabs.optimiser.fitness.impl.FitnessHelper;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
+import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**

@@ -9,35 +9,22 @@ package scenario.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.ScenarioPackage;
-
 import scenario.cargo.CargoPackage;
-
 import scenario.cargo.impl.CargoPackageImpl;
-
 import scenario.contract.ContractPackage;
-
 import scenario.contract.impl.ContractPackageImpl;
-
 import scenario.fleet.FleetPackage;
-
 import scenario.fleet.impl.FleetPackageImpl;
-
 import scenario.market.MarketPackage;
-
 import scenario.market.impl.MarketPackageImpl;
-
 import scenario.port.PortPackage;
-
 import scenario.port.impl.PortPackageImpl;
-
 import scenario.schedule.SchedulePackage;
-
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**

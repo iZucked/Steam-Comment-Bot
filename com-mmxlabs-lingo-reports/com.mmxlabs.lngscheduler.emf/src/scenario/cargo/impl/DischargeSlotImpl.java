@@ -9,16 +9,13 @@ package scenario.cargo.impl;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.cargo.CargoPackage;
 import scenario.cargo.DischargeSlot;
-
 import scenario.port.Port;
 
 /**

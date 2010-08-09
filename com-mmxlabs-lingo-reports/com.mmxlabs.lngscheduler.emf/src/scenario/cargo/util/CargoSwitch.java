@@ -11,7 +11,11 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.cargo.*;
+import scenario.cargo.Cargo;
+import scenario.cargo.CargoModel;
+import scenario.cargo.CargoPackage;
+import scenario.cargo.DischargeSlot;
+import scenario.cargo.LoadSlot;
 
 /**
  * <!-- begin-user-doc -->

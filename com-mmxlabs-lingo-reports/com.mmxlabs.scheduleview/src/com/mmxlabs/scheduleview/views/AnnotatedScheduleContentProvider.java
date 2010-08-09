@@ -9,10 +9,10 @@ import org.eclipse.ui.IViewSite;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.optimiser.IAnnotatedSequence;
-import com.mmxlabs.optimiser.IAnnotatedSolution;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
+import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;

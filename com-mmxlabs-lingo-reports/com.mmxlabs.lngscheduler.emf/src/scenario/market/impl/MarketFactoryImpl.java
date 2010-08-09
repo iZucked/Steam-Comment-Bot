@@ -9,12 +9,14 @@ package scenario.market.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.market.*;
+import scenario.market.ForwardPrice;
+import scenario.market.Market;
+import scenario.market.MarketFactory;
+import scenario.market.MarketModel;
+import scenario.market.MarketPackage;
 
 /**
  * <!-- begin-user-doc -->

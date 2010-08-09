@@ -9,13 +9,9 @@ package scenario;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.cargo.CargoModel;
-
 import scenario.contract.ContractModel;
-
 import scenario.fleet.FleetModel;
-
 import scenario.market.MarketModel;
-
 import scenario.port.DistanceModel;
 import scenario.port.PortModel;
 import scenario.schedule.ScheduleModel;

@@ -9,12 +9,15 @@ package scenario.cargo.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.cargo.*;
+import scenario.cargo.Cargo;
+import scenario.cargo.CargoFactory;
+import scenario.cargo.CargoModel;
+import scenario.cargo.CargoPackage;
+import scenario.cargo.DischargeSlot;
+import scenario.cargo.LoadSlot;
 
 /**
  * <!-- begin-user-doc -->

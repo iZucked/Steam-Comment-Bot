@@ -12,11 +12,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -29,7 +26,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import scenario.contract.ContractFactory;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
-
 import scenario.provider.LngEditPlugin;
 
 /**

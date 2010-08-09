@@ -9,7 +9,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
-import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;

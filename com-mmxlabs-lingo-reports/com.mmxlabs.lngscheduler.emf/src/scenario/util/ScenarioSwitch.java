@@ -11,7 +11,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.*;
+import scenario.Scenario;
+import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->

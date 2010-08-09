@@ -8,12 +8,15 @@ package scenario.fleet.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.fleet.*;
+import scenario.fleet.FleetModel;
+import scenario.fleet.FleetPackage;
+import scenario.fleet.FuelConsumptionLine;
+import scenario.fleet.Vessel;
+import scenario.fleet.VesselClass;
+import scenario.fleet.VesselStateAttributes;
 
 /**
  * <!-- begin-user-doc -->

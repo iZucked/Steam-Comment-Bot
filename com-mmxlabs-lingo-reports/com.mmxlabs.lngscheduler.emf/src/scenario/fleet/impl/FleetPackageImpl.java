@@ -11,40 +11,27 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.ScenarioPackage;
-
 import scenario.cargo.CargoPackage;
-
 import scenario.cargo.impl.CargoPackageImpl;
-
 import scenario.contract.ContractPackage;
-
 import scenario.contract.impl.ContractPackageImpl;
-
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
-
 import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
 import scenario.impl.ScenarioPackageImpl;
-
 import scenario.market.MarketPackage;
-
 import scenario.market.impl.MarketPackageImpl;
-
 import scenario.port.PortPackage;
-
 import scenario.port.impl.PortPackageImpl;
-
 import scenario.schedule.SchedulePackage;
-
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**

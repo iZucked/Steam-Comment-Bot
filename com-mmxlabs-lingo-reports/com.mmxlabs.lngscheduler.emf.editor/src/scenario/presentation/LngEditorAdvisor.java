@@ -10,9 +10,14 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.emf.common.ui.URIEditorInput;
+import org.eclipse.emf.common.ui.action.WorkbenchWindowActionDelegate;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
+import org.eclipse.emf.edit.ui.action.LoadResourceAction;
+import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
-
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -44,24 +49,11 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import org.eclipse.emf.common.ui.URIEditorInput;
-import org.eclipse.emf.common.ui.action.WorkbenchWindowActionDelegate;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.common.util.UniqueEList;
-import org.eclipse.emf.edit.ui.action.LoadResourceAction;
-import org.eclipse.emf.edit.ui.util.EditUIUtil;
-
-import scenario.presentation.LngEditorPlugin;
 import scenario.cargo.presentation.CargoEditor;
-
 import scenario.contract.presentation.ContractEditor;
-
 import scenario.fleet.presentation.FleetEditor;
-
 import scenario.market.presentation.MarketEditor;
-
 import scenario.port.presentation.PortEditor;
-
 import scenario.schedule.presentation.ScheduleEditor;
 
 

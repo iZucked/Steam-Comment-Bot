@@ -9,12 +9,12 @@ package scenario.schedule.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.schedule.*;
+import scenario.schedule.ScheduleFactory;
+import scenario.schedule.ScheduleModel;
+import scenario.schedule.SchedulePackage;
 
 /**
  * <!-- begin-user-doc -->

@@ -9,12 +9,14 @@ package scenario.contract.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.contract.*;
+import scenario.contract.ContractFactory;
+import scenario.contract.ContractModel;
+import scenario.contract.ContractPackage;
+import scenario.contract.PurchaseContract;
+import scenario.contract.SalesContract;
 
 /**
  * <!-- begin-user-doc -->

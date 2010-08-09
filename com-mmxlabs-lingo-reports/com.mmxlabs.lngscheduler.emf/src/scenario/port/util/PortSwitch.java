@@ -11,7 +11,11 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.port.*;
+import scenario.port.DistanceLine;
+import scenario.port.DistanceModel;
+import scenario.port.Port;
+import scenario.port.PortModel;
+import scenario.port.PortPackage;
 
 /**
  * <!-- begin-user-doc -->

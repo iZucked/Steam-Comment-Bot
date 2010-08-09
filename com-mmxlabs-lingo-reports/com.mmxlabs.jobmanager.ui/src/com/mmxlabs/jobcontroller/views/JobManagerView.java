@@ -43,11 +43,11 @@ import com.mmxlabs.jobcontroller.core.IManagedJobListener;
 import com.mmxlabs.jobcontroller.core.impl.OptManagedJob;
 import com.mmxlabs.jobcontroller.core.impl.TestUtils;
 import com.mmxlabs.jobmanager.ui.Activator;
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.impl.OptimisationContext;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
+import com.mmxlabs.optimiser.core.impl.OptimisationContext;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**

@@ -7,6 +7,7 @@
 package scenario.fleet;
 
 import org.eclipse.emf.ecore.EObject;
+
 import scenario.port.Port;
 
 /**

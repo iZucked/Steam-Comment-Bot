@@ -9,12 +9,15 @@ package scenario.port.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.port.*;
+import scenario.port.DistanceLine;
+import scenario.port.DistanceModel;
+import scenario.port.Port;
+import scenario.port.PortFactory;
+import scenario.port.PortModel;
+import scenario.port.PortPackage;
 
 /**
  * <!-- begin-user-doc -->
