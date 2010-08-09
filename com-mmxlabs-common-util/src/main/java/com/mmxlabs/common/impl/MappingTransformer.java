@@ -20,7 +20,7 @@ public final class MappingTransformer<T, U> implements ITransformer<T, U> {
 	}
 
 	@Override
-	public U transform(T t) {
+	public U transform(final T t) {
 		if (mapping.containsKey(t)) {
 			return mapping.get(t);
 		}
