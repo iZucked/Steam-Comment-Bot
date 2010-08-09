@@ -1,6 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import com.mmxlabs.optimiser.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 

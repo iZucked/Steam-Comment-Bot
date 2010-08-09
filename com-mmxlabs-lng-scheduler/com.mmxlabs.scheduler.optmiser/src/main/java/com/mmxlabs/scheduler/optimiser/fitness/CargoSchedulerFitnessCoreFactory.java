@@ -3,8 +3,8 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 import java.util.Collection;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.fitness.IFitnessCoreFactory;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 
 /**
  * {@link IFitnessCoreFactory} to create the cargo scheduler fitness function

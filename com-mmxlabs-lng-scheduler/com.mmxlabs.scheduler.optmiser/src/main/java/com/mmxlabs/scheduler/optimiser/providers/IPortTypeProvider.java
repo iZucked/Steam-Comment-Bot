@@ -1,8 +1,9 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
-import com.mmxlabs.optimiser.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.scenario.IDataComponentProvider;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider.PortType;
 
 /**
  * {@link IDataComponentProvider} definition providing a {@link PortType} for

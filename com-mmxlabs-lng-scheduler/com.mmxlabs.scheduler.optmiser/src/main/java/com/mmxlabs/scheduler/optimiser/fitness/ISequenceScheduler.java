@@ -2,8 +2,8 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**

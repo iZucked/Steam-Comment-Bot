@@ -3,7 +3,7 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 

@@ -1,7 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.optimiser.components.ITimeWindow;
-import com.mmxlabs.optimiser.scenario.IDataComponentProvider;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
  * The {@link ISequenceElement} is the object manipulated in the sequences

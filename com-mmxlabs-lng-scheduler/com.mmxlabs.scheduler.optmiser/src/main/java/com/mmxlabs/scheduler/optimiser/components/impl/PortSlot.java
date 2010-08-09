@@ -1,7 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.optimiser.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 

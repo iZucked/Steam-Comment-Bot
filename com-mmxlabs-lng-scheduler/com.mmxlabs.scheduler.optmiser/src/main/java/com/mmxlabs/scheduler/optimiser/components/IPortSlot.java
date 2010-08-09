@@ -1,6 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.optimiser.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 /**
  * Represents a single time slot at a given port.

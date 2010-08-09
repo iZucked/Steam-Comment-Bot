@@ -1,16 +1,15 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.components.ITimeWindow;
-import com.mmxlabs.optimiser.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.scenario.common.IMatrixProvider;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
+import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;

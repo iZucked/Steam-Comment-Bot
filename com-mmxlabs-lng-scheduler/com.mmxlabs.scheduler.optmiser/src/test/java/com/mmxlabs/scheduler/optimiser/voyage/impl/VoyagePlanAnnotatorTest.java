@@ -10,8 +10,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.impl.AnnotatedSequence;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;

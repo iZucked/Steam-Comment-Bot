@@ -2,8 +2,8 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.IAnnotatedSequence;
-import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;

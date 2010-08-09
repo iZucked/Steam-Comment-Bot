@@ -1,8 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.builder;
 
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.components.ITimeWindow;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;

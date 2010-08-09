@@ -2,13 +2,13 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.IAnnotatedSequence;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.components.ITimeWindow;
-import com.mmxlabs.optimiser.dcproviders.ITimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;

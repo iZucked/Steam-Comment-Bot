@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+
 /**
  * 
  * Implementations of {@link IVoyagePlanChoice} represent the range of choices

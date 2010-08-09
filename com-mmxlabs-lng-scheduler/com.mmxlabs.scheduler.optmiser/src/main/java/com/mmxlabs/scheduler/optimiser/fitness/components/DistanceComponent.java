@@ -1,10 +1,10 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import com.mmxlabs.optimiser.IAnnotatedSequence;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;

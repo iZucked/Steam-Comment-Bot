@@ -1,6 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.optimiser.IResource;
+import com.mmxlabs.optimiser.core.IResource;
 
 /**
  * A {@link IVessel} is an extended version of the {@link IResource} interface

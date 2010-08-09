@@ -2,13 +2,13 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.Collection;
 
-import com.mmxlabs.optimiser.IAnnotatedSequence;
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.ISequence;
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
 
 /**
  * Extension of the {@link IFitnessComponent} interface for use with the

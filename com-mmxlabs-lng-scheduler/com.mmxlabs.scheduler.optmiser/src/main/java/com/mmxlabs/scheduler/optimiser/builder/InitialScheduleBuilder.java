@@ -1,7 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.builder;
 
-import com.mmxlabs.optimiser.ISequences;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public class InitialScheduleBuilder {
 

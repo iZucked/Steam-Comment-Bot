@@ -9,7 +9,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.optimiser.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
