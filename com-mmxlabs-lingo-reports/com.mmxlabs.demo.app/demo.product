@@ -3,7 +3,6 @@
 
 <product name="ShipLiNGO" uid="com.mmxlabs.demo.product" id="com.mmxlabs.demo.app.product" application="com.mmxlabs.demo.app.application" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -25,7 +24,6 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
 
@@ -40,9 +38,9 @@
       <plugin id="com.mmxlabs.lngscheduler.emf"/>
       <plugin id="com.mmxlabs.lngscheduler.emf.edit"/>
       <plugin id="com.mmxlabs.lngscheduler.emf.editor"/>
-      <plugin id="com.mmxlabs.optimiser.optimiser-common"/>
-      <plugin id="com.mmxlabs.optimiser.optimiser-core"/>
-      <plugin id="com.mmxlabs.optimiser.optimiser-lso"/>
+      <plugin id="com.mmxlabs.optimiser.common"/>
+      <plugin id="com.mmxlabs.optimiser.core"/>
+      <plugin id="com.mmxlabs.optimiser.lso"/>
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser"/>
       <plugin id="com.mmxlabs.scheduleview"/>
       <plugin id="org.eclipse.compare"/>
@@ -160,6 +158,8 @@
       <plugin id="org.eclipse.ui.win32" fragment="true"/>
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
+      <plugin id="org.hamcrest.core"/>
+      <plugin id="org.junit"/>
    </plugins>
 
 
