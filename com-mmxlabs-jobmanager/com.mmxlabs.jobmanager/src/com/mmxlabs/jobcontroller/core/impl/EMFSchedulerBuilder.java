@@ -19,9 +19,9 @@ import scenario.market.MarketFactory;
 import scenario.port.PortFactory;
 import scenario.schedule.ScheduleFactory;
 
-import com.mmxlabs.optimiser.IResource;
-import com.mmxlabs.optimiser.components.ITimeWindow;
-import com.mmxlabs.optimiser.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
