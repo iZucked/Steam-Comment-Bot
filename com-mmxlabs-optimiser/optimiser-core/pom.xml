@@ -61,7 +61,7 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.optimiser.core.*;version="${pom.version}"</Export-Package>
+						<Export-Package>com.mmxlabs.optimiser.core.*;version="${project.version}"</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
