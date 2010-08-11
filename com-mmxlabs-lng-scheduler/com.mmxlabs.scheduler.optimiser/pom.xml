@@ -91,7 +91,7 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.scheduler.optimiser.*;version="${pom.version}"</Export-Package>
+						<Export-Package>com.mmxlabs.scheduler.optimiser.*;version="${project.version}"</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
