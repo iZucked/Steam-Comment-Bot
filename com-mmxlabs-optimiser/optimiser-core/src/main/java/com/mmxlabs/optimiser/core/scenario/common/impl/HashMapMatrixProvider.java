@@ -48,6 +48,7 @@ public final class HashMapMatrixProvider<T, U> implements
 		return defaultValue;
 	}
 
+	@Override
 	public void set(final T x, final T y, final U v) {
 		final HashMap<T, U> row;
 		if (matrix.containsKey(x)) {
