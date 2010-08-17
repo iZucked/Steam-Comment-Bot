@@ -65,4 +65,11 @@ public interface IJourneyEvent<T> extends IScheduledEvent<T> {
 	 * @return
 	 */
 	long getFuelCost(FuelComponent fuel);
+
+	/**
+	 * Returns the route undertaken in this journey.
+	 * 
+	 * @return
+	 */
+	String getRoute();
 }

@@ -34,6 +34,8 @@ public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
 	private final EnumMap<FuelComponent, Long> fuelCost = new EnumMap<FuelComponent, Long>(
 			FuelComponent.class);
 
+	private String route;
+	
 	@Override
 	public int getDistance() {
 		return distance;
@@ -104,7 +106,16 @@ public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
 		return speed;
 	}
 
-	public void setSpeed(int speed) {
+	public void setSpeed(final int speed) {
 		this.speed = speed;
+	}
+
+	@Override
+	public String getRoute() {
+		return route;
+	}
+
+	public void setRoute(final String route) {
+		this.route = route;
 	}
 }

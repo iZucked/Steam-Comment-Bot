@@ -42,7 +42,7 @@ public class JourneyEventImplTest {
 		event.setDistance(10);
 		Assert.assertEquals(10, event.getDistance());
 	}
-	
+
 	@Test
 	public void testGetSetSpeed() {
 		final JourneyEventImpl<Object> event = new JourneyEventImpl<Object>();
@@ -50,7 +50,7 @@ public class JourneyEventImplTest {
 		event.setSpeed(10);
 		Assert.assertEquals(10, event.getSpeed());
 	}
-	
+
 	@Test
 	public void testGetSetFuelConsumption() {
 
@@ -72,5 +72,15 @@ public class JourneyEventImplTest {
 		details.setFuelCost(c, value);
 		Assert.assertEquals(value, details.getFuelCost(c));
 	}
-	
+
+	@Test
+	public void testGetSetRoute() {
+
+		final JourneyEventImpl<Object> event = new JourneyEventImpl<Object>();
+		Assert.assertNull(event.getRoute());
+		final String route = "route";
+		event.setRoute(route);
+		Assert.assertSame(route, event.getRoute());
+	}
+
 }
