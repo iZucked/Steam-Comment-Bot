@@ -2,7 +2,14 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
-public class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
+/**
+ * Implementation of {@link IVoyagePlanChoice} to alter NBO choice during
+ * journey events.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final VoyageOptions options;
 

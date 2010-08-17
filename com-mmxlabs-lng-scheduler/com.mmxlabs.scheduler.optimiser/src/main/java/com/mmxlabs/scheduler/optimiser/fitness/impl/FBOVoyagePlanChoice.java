@@ -2,7 +2,15 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
-public class FBOVoyagePlanChoice implements IVoyagePlanChoice {
+/**
+ * Implementation of {@link IVoyagePlanChoice} to alter FBO choice during
+ * journey events. If FBO is true, then this implies that the NBO choice is
+ * true, otherwise {@link #apply(int)} will fail.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class FBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final VoyageOptions options;
 

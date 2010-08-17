@@ -2,7 +2,15 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
-public class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
+/**
+ * Implementation of {@link IVoyagePlanChoice} to alter NBO choice during idle
+ * events. If Idle NBO is true, then this implies that the NBO choice during the
+ * journey is true, otherwise {@link #apply(int)} will fail.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final VoyageOptions options;
 
