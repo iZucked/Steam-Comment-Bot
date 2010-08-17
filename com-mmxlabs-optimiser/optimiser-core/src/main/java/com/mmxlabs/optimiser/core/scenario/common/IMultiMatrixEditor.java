@@ -13,11 +13,10 @@ package com.mmxlabs.optimiser.core.scenario.common;
 public interface IMultiMatrixEditor<T, U> extends IMultiMatrixProvider<T, U> {
 
 	/**
-	 * Set the value v at position x, y. TODO: What if we cannot set the value? E.g. out of bounds?
+	 * Set the matrix provider for the given key.
 	 * 
 	 * @param x
-	 * @param y
-	 * @param v
+	 * @param matrix
 	 */
-	void set(Object key, T x, T y, U v);
+	void set(String key, IMatrixProvider<T, U> matrix);
 }

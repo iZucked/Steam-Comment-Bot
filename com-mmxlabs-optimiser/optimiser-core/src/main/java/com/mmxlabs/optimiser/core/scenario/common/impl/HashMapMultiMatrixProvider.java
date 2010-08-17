@@ -1,7 +1,9 @@
 package com.mmxlabs.optimiser.core.scenario.common.impl;
 
 import java.util.HashMap;
+import java.util.Set;
 
+import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 
@@ -20,43 +22,42 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 public final class HashMapMultiMatrixProvider<T, U> implements
 		IMultiMatrixProvider<T, U>, IMultiMatrixEditor<T, U> {
 
-	private final HashMap<Object, HashMapMatrixProvider<T, U>> matrix;
+	private final HashMap<String, IMatrixProvider<T, U>> matricies;
 
 	private final String name;
 
-	private U defaultValue;
+	/**
+	 * Cached array of keys. This will be reset whenever a new matrix is set and
+	 * recalculated when {@link #getKeys()} is called.
+	 */
+	private transient String[] keys;
 
 	public HashMapMultiMatrixProvider(final String name) {
-		this(name, null);
-	}
-
-	public HashMapMultiMatrixProvider(final String name, final U defaultValue) {
 		this.name = name;
-		this.matrix = new HashMap<Object, HashMapMatrixProvider<T, U>>();
-		this.defaultValue = defaultValue;
+		this.matricies = new HashMap<String, IMatrixProvider<T, U>>();
 	}
 
 	@Override
-	public U get(Object key, final T x, final T y) {
+	public IMatrixProvider<T, U> get(final String key) {
 
-		if (matrix.containsKey(key)) {
-			final HashMapMatrixProvider<T, U> row = matrix.get(key);
-			return row.get(x, y);
+		if (matricies.containsKey(key)) {
+			return matricies.get(key);
 		}
 
-		return defaultValue;
+		return null;
 	}
 
 	@Override
-	public void set(Object key, final T x, final T y, final U v) {
-		final HashMapMatrixProvider<T, U> row;
-		if (matrix.containsKey(key)) {
-			row = matrix.get(key);
-		} else {
-			row = new HashMapMatrixProvider<T, U>(key.toString(), defaultValue);
-			matrix.put(key, row);
-		}
-		row.set(x, y, v);
+	public boolean containsKey(final String key) {
+
+		return matricies.containsKey(key);
+	}
+
+	@Override
+	public void set(final String key, final IMatrixProvider<T, U> row) {
+		// Reset keys list
+		keys = null;
+		matricies.put(key, row);
 	}
 
 	@Override
@@ -66,14 +67,20 @@ public final class HashMapMultiMatrixProvider<T, U> implements
 
 	@Override
 	public void dispose() {
-		matrix.clear();
+		matricies.clear();
+		keys = null;
 	}
 
-	public void setDefaultValue(U defaultValue) {
-		this.defaultValue = defaultValue;
+	@Override
+	public Set<String> getKeySet() {
+		return matricies.keySet();
 	}
 
-	public U getDefaultValue() {
-		return defaultValue;
+	@Override
+	public String[] getKeys() {
+		if (keys == null) {
+			keys = matricies.keySet().toArray(new String[matricies.size()]);
+		}
+		return keys;
 	}
 }
