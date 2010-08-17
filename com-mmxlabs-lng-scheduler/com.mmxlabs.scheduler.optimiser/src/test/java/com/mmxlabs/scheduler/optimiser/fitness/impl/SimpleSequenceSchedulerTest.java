@@ -25,7 +25,9 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -125,13 +127,17 @@ public final class SimpleSequenceSchedulerTest {
 		timeWindowProvider.setTimeWindows(element4,
 				Collections.singletonList(timeWindow4));
 
-		HashMapMatrixProvider<IPort, Integer> distanceProvider = new HashMapMatrixProvider<IPort, Integer>(
+		HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
 				SchedulerConstants.DCP_portDistanceProvider);
+		
+		HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
+				SchedulerConstants.DCP_portDistanceProvider);
+		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
-		distanceProvider.set(port1, port2, 400);
-		distanceProvider.set(port2, port3, 400);
-		distanceProvider.set(port3, port4, 400);
+		defaultDistanceProvider.set(port1, port2, 400);
+		defaultDistanceProvider.set(port2, port3, 400);
+		defaultDistanceProvider.set(port3, port4, 400);
 
 		final int duration = 1;
 		IElementDurationProviderEditor<ISequenceElement> durationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
@@ -317,7 +323,7 @@ public final class SimpleSequenceSchedulerTest {
 		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		
@@ -360,7 +366,7 @@ public final class SimpleSequenceSchedulerTest {
 		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		
@@ -419,7 +425,7 @@ public final class SimpleSequenceSchedulerTest {
 		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 //		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		
@@ -448,7 +454,7 @@ public final class SimpleSequenceSchedulerTest {
 		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		
@@ -477,7 +483,7 @@ public final class SimpleSequenceSchedulerTest {
 //		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		
@@ -506,7 +512,7 @@ public final class SimpleSequenceSchedulerTest {
 		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 //		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		
@@ -535,7 +541,7 @@ public final class SimpleSequenceSchedulerTest {
 		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 //		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		
@@ -564,7 +570,7 @@ public final class SimpleSequenceSchedulerTest {
 		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		
@@ -593,7 +599,7 @@ public final class SimpleSequenceSchedulerTest {
 		IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
-		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
+		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 //		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
 		

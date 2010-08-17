@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
@@ -202,7 +202,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		scheduler.setDistanceProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portDistanceProvider,
-				IMatrixProvider.class));
+				IMultiMatrixProvider.class));
 		scheduler.setDurationsProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_elementDurationsProvider,
 				IElementDurationProvider.class));

@@ -117,7 +117,7 @@ public interface ISchedulerBuilder {
 	 * @param to
 	 * @param distance
 	 */
-	void setPortToPortDistance(IPort from, IPort to, int distance);
+	void setPortToPortDistance(IPort from, IPort to, String route, int distance);
 
 	/**
 	 * Specify an amount of time a given {@link IResource} must incur if

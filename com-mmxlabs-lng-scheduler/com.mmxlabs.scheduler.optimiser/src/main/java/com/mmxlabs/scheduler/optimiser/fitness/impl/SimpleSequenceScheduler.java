@@ -9,7 +9,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -48,7 +48,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
 	private IVesselProvider vesselProvider;
 
-	private IMatrixProvider<IPort, Integer> distanceProvider;
+	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
 	ILNGVoyageCalculator<T> voyageCalculator;
 
@@ -96,7 +96,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 					.getPortSlot(element);
 
 			final int distance = (prevPort == null) ? 0 : distanceProvider.get(
-					prevPort, thisPort);
+					IMultiMatrixProvider.Default_Key).get(prevPort, thisPort);
 
 			if (prevPort != null) {
 				final int availableTime = Math.max(0, timeWindowStart
@@ -114,7 +114,6 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				options.setFromPortSlot(prevPortSlot);
 				options.setToPortSlot(thisPortSlot);
 				options.setNBOSpeed(nboSpeed);
-				options.setRoute("default");
 				options.setVesselState(vesselState);
 				options.setAvailableTime(availableTime);
 
@@ -122,6 +121,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				options.setUseNBOForTravel(useNBO);
 				options.setUseFBOForSupplement(false);
 				options.setUseNBOForIdle(false);
+				options.setRoute(IMultiMatrixProvider.Default_Key);
 
 				if (useNBO) {
 					// Note ordering of choices is important = NBO must be set
@@ -138,6 +138,9 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
 					optimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
 				}
+
+				optimiser.addChoice(new RouteVoyagePlanChoice(options,
+						distanceProvider.getKeys(), distanceProvider));
 
 				// final VoyageDetails<T> voyageDetails = new
 				// VoyageDetails<T>();
@@ -326,12 +329,12 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 		this.portProvider = portProvider;
 	}
 
-	public final IMatrixProvider<IPort, Integer> getDistanceProvider() {
+	public final IMultiMatrixProvider<IPort, Integer> getDistanceProvider() {
 		return distanceProvider;
 	}
 
 	public final void setDistanceProvider(
-			final IMatrixProvider<IPort, Integer> distanceProvider) {
+			final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
 		this.distanceProvider = distanceProvider;
 	}
 

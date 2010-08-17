@@ -19,7 +19,10 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -85,7 +88,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final ITimeWindowDataComponentProviderEditor timeWindowProvider;
 
-	private final IMatrixEditor<IPort, Integer> portDistanceProvider;
+	private final IMultiMatrixEditor<IPort, Integer> portDistanceProvider;
 
 	private final IPortTypeProviderEditor<ISequenceElement> portTypeProvider;
 
@@ -108,8 +111,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_orderedElementsProvider);
 		timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);
-		portDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
-				SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE);
+		portDistanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
+				SchedulerConstants.DCP_portDistanceProvider);
 		portSlotsProvider = new HashMapPortSlotEditor<ISequenceElement>(
 				SchedulerConstants.DCP_portSlotsProvider);
 		elementDurationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
@@ -119,6 +122,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		resourceAllocationProvider = new ResourceAllocationConstraintProvider(
 				SchedulerConstants.DCP_resourceAllocationProvider);
+
+		// Create a default matrix entry
+		portDistanceProvider.set(IMultiMatrixProvider.Default_Key,
+				new HashMapMatrixProvider<IPort, Integer>(
+						SchedulerConstants.DCP_portDistanceProvider,
+						Integer.MAX_VALUE));
 	}
 
 	@Override
@@ -286,14 +295,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			throw new IllegalArgumentException(
 					"Start IPort was not created using this builder");
 		}
-		
 
 		if (!ports.contains(endPort)) {
 			throw new IllegalArgumentException(
 					"End IPort was not created using this builder");
 		}
 
-		
 		final Vessel vessel = new Vessel();
 		vessel.setName(name);
 		vessel.setVesselClass(vesselClass);
@@ -308,73 +315,74 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// TODO: Temporary stick in a start loc at time zero.
 		{
-		ITimeWindow window = createTimeWindow(0, 0);
-		String id = "depot-" + name;
-		
-		
-		final PortSlot slot = new PortSlot();
-		slot.setId(id);
-		slot.setPort(startPort);
-		slot.setTimeWindow(window);
+			ITimeWindow window = createTimeWindow(0, 0);
+			String id = "depot-" + name;
 
-		// Create a sequence element against this load slot
-		final SequenceElement element = new SequenceElement();
-		element.setName(id + "-" + startPort.getName());
-		element.setPortSlot(slot);
+			final PortSlot slot = new PortSlot();
+			slot.setId(id);
+			slot.setPort(startPort);
+			slot.setTimeWindow(window);
 
-		sequenceElements.add(element);
+			// Create a sequence element against this load slot
+			final SequenceElement element = new SequenceElement();
+			element.setName(id + "-" + startPort.getName());
+			element.setPortSlot(slot);
 
-		// Register the port with the element
-		portProvider.setPortForElement(startPort, element);
+			sequenceElements.add(element);
 
-		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Other);
+			// Register the port with the element
+			portProvider.setPortForElement(startPort, element);
 
-		portSlotsProvider.setPortSlot(element, slot);
+			portTypeProvider.setPortType(element,
+					IPortTypeProvider.PortType.Other);
 
-		timeWindowProvider.setTimeWindows(element,
-				Collections.singletonList(window));
-		
-		resourceAllocationProvider.setAllowedResources(element, Collections.singleton(resource));
+			portSlotsProvider.setPortSlot(element, slot);
+
+			timeWindowProvider.setTimeWindows(element,
+					Collections.singletonList(window));
+
+			resourceAllocationProvider.setAllowedResources(element,
+					Collections.singleton(resource));
 		}
 
 		// TODO: Temporary stick in a end loc at time 400.
 		{
-		ITimeWindow window = createTimeWindow(500 * 24, 501 * 24);
-		String id = "depot-" + name;
-		
-		
-		final PortSlot slot = new PortSlot();
-		slot.setId(id);
-		slot.setPort(endPort);
-		slot.setTimeWindow(window);
+			ITimeWindow window = createTimeWindow(500 * 24, 501 * 24);
+			String id = "depot-" + name;
 
-		// Create a sequence element against this load slot
-		final SequenceElement element = new SequenceElement();
-		element.setName(id + "-" + endPort.getName());
-		element.setPortSlot(slot);
+			final PortSlot slot = new PortSlot();
+			slot.setId(id);
+			slot.setPort(endPort);
+			slot.setTimeWindow(window);
 
-		sequenceElements.add(element);
+			// Create a sequence element against this load slot
+			final SequenceElement element = new SequenceElement();
+			element.setName(id + "-" + endPort.getName());
+			element.setPortSlot(slot);
 
-		// Register the port with the element
-		portProvider.setPortForElement(endPort, element);
+			sequenceElements.add(element);
 
-		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Other);
+			// Register the port with the element
+			portProvider.setPortForElement(endPort, element);
 
-		portSlotsProvider.setPortSlot(element, slot);
+			portTypeProvider.setPortType(element,
+					IPortTypeProvider.PortType.Other);
 
-		timeWindowProvider.setTimeWindows(element,
-				Collections.singletonList(window));
-		
-		resourceAllocationProvider.setAllowedResources(element, Collections.singleton(resource));
+			portSlotsProvider.setPortSlot(element, slot);
+
+			timeWindowProvider.setTimeWindows(element,
+					Collections.singletonList(window));
+
+			resourceAllocationProvider.setAllowedResources(element,
+					Collections.singleton(resource));
 		}
-		
-		
+
 		return vessel;
 	}
 
 	@Override
 	public void setPortToPortDistance(final IPort from, final IPort to,
-			final int distance) {
+			final String route, final int distance) {
 
 		if (!ports.contains(from)) {
 			throw new IllegalArgumentException(
@@ -385,7 +393,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					"To IPort was not created using this builder");
 		}
 
-		portDistanceProvider.set(from, to, distance);
+		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider
+				.get(route);
+
+		matrix.set(from, to, distance);
 	}
 
 	@Override
@@ -438,7 +449,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						final double dist = distanceProvider.getDistance(
 								(IXYPort) from, (IXYPort) to);
 						final int iDist = (int) dist;
-						portDistanceProvider.set(from, to, iDist);
+
+						final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider
+								.get(IMultiMatrixProvider.Default_Key);
+
+						matrix.set(from, to, iDist);
 					}
 				}
 			}
@@ -476,7 +491,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setMinHeel(minHeel);
 
 		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPrice);
-		
+
 		vesselClasses.add(vesselClass);
 
 		return vesselClass;
