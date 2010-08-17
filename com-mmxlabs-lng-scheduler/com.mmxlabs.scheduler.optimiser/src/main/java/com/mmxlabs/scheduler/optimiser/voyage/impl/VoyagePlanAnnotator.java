@@ -144,6 +144,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					journey.setStartTime(currentTime);
 					journey.setEndTime(currentTime + travelTime);
 					journey.setDistance(options.getDistance());
+					journey.setRoute(options.getRoute());
 
 					journey.setDuration(travelTime);
 
