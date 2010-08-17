@@ -1,34 +1,92 @@
 package com.mmxlabs.optimiser.core.impl;
 
-import static org.junit.Assert.fail;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class AnnotatedSequenceTest {
 
-	@Test
-	public void testAnnotatedSequence() {
-		fail("Not yet implemented");
+	private static final class TestClass {
+
+	}
+
+	private static final class TestClass2 {
+
 	}
 
 	@Test
-	public void testGetAnnotation() {
-		fail("Not yet implemented");
+	public void testGetSetAnnotation() {
+
+		final Object element = new Object();
+		final String key = "key";
+		final TestClass annotation = new TestClass();
+
+		final AnnotatedSequence<Object> sequence = new AnnotatedSequence<Object>();
+		TestClass obj = sequence.getAnnotation(element, key, TestClass.class);
+
+		Assert.assertNull(obj);
+
+		sequence.setAnnotation(element, key, annotation);
+
+		obj = sequence.getAnnotation(element, key, TestClass.class);
+
+		Assert.assertSame(annotation, obj);
 	}
 
-	@Test
-	public void testSetAnnotation() {
-		fail("Not yet implemented");
+	@Test(expected = ClassCastException.class)
+	public void testGetSetAnnotation2() {
+
+		final Object element = new Object();
+		final String key = "key";
+		final TestClass annotation = new TestClass();
+
+		final AnnotatedSequence<Object> sequence = new AnnotatedSequence<Object>();
+		final TestClass obj = sequence.getAnnotation(element, key, TestClass.class);
+
+		Assert.assertNull(obj);
+
+		sequence.setAnnotation(element, key, annotation);
+
+		sequence.getAnnotation(element, key, TestClass2.class);
 	}
 
 	@Test
 	public void testDispose() {
-		fail("Not yet implemented");
+		final Object element = new Object();
+		final String key = "key";
+		final TestClass annotation = new TestClass();
+
+		final AnnotatedSequence<Object> sequence = new AnnotatedSequence<Object>();
+		TestClass obj = sequence.getAnnotation(element, key, TestClass.class);
+
+		Assert.assertNull(obj);
+
+		sequence.setAnnotation(element, key, annotation);
+
+		obj = sequence.getAnnotation(element, key, TestClass.class);
+
+		Assert.assertSame(annotation, obj);
+
+		sequence.dispose();
+
+		obj = sequence.getAnnotation(element, key, TestClass.class);
+
+		Assert.assertNull(obj);
 	}
 
 	@Test
 	public void testHasAnnotation() {
-		fail("Not yet implemented");
+
+		final Object element = new Object();
+		final String key = "key";
+		final TestClass annotation = new TestClass();
+
+		final AnnotatedSequence<Object> sequence = new AnnotatedSequence<Object>();
+
+		Assert.assertFalse(sequence.hasAnnotation(element, key));
+
+		sequence.setAnnotation(element, key, annotation);
+
+		Assert.assertTrue(sequence.hasAnnotation(element, key));
 	}
 
 }
