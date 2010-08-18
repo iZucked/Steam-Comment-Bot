@@ -44,19 +44,19 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testIterator() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		Iterator<Object> iterator = sequence.iterator();
+		final Iterator<Object> iterator = sequence.iterator();
 		Assert.assertTrue(iterator.hasNext());
-		Object iterObject1 = iterator.next();
+		final Object iterObject1 = iterator.next();
 		Assert.assertSame(object1, iterObject1);
 
 		Assert.assertTrue(iterator.hasNext());
-		Object iterObject2 = iterator.next();
+		final Object iterObject2 = iterator.next();
 		Assert.assertSame(object2, iterObject2);
 
 		iterator.remove();
@@ -70,7 +70,7 @@ public class ListModifiableSequenceTest {
 	public void testAdd() {
 
 		Assert.assertEquals(0, sequence.size());
-		Object element = new Object();
+		final Object element = new Object();
 		sequence.add(element);
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertEquals(element, sequence.get(0));
@@ -79,10 +79,10 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testInsertIntT() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		Object object3 = new Object();
+		final Object object3 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -99,10 +99,10 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInsertIntT_2() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		Object object3 = new Object();
+		final Object object3 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -113,10 +113,10 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInsertIntT_3() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		Object object3 = new Object();
+		final Object object3 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -126,19 +126,19 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testInsertIntISegmentOfT() {
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		Object object3 = new Object();
-		Object object4 = new Object();
+		final Object object3 = new Object();
+		final Object object4 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		List<Object> segmentList = new LinkedList<Object>();
+		final List<Object> segmentList = new LinkedList<Object>();
 		segmentList.add(object3);
 		segmentList.add(object4);
-		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
 				sequence, 0, 1);
 
 		sequence.insert(1, segment);
@@ -154,19 +154,19 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInsertIntISegmentOfT_2() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		Object object3 = new Object();
-		Object object4 = new Object();
+		final Object object3 = new Object();
+		final Object object4 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		List<Object> segmentList = new LinkedList<Object>();
+		final List<Object> segmentList = new LinkedList<Object>();
 		segmentList.add(object3);
 		segmentList.add(object4);
-		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
 				sequence, 0, 1);
 
 		sequence.insert(-1, segment);
@@ -175,19 +175,19 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInsertIntISegmentOfT_3() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		Object object3 = new Object();
-		Object object4 = new Object();
+		final Object object3 = new Object();
+		final Object object4 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		List<Object> segmentList = new LinkedList<Object>();
+		final List<Object> segmentList = new LinkedList<Object>();
 		segmentList.add(object3);
 		segmentList.add(object4);
-		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
 				sequence, 0, 1);
 
 		sequence.insert(3, segment);
@@ -196,8 +196,8 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testRemoveInt() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -210,8 +210,8 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testRemoveT() {
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -225,8 +225,8 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testRemoveT_2() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 
@@ -239,21 +239,21 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testRemoveISegmentOfT() {
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		Object object3 = new Object();
-		Object object4 = new Object();
+		final Object object3 = new Object();
+		final Object object4 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
 		sequence.add(object3);
 		sequence.add(object4);
 
-		List<Object> segmentList = new LinkedList<Object>();
+		final List<Object> segmentList = new LinkedList<Object>();
 		segmentList.add(object2);
 		segmentList.add(object3);
-		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
 				sequence, 1, 3);
 
 		sequence.remove(segment);
@@ -267,19 +267,19 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testRemoveISegmentOfT_2() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
-		Object object3 = new Object();
-		Object object4 = new Object();
+		final Object object3 = new Object();
+		final Object object4 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object4);
 
-		List<Object> segmentList = new LinkedList<Object>();
+		final List<Object> segmentList = new LinkedList<Object>();
 		segmentList.add(object2);
 		segmentList.add(object3);
-		ISegment<Object> segment = new ListSegment<Object>(segmentList,
+		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
 				sequence, 1, 3);
 
 		// TODO: Backing list implementation returns a boolean to indicate
@@ -293,8 +293,8 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testRemoveIntInt() {
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -308,8 +308,8 @@ public class ListModifiableSequenceTest {
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRemoveIntInt_2() {
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -319,8 +319,8 @@ public class ListModifiableSequenceTest {
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRemoveIntInt_3() {
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -331,12 +331,12 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testSet() {
 		Assert.assertEquals(0, sequence.size());
-		Object element = new Object();
+		final Object element = new Object();
 		sequence.add(element);
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertEquals(element, sequence.get(0));
 
-		Object element2 = new Object();
+		final Object element2 = new Object();
 		sequence.set(0, element2);
 
 		Assert.assertEquals(element2, sequence.get(0));
@@ -358,7 +358,7 @@ public class ListModifiableSequenceTest {
 	public void testGet() {
 
 		Assert.assertEquals(0, sequence.size());
-		Object element = new Object();
+		final Object element = new Object();
 		sequence.add(element);
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertEquals(element, sequence.get(0));
@@ -378,13 +378,13 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testGetSegment() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		ISegment<Object> segment = sequence.getSegment(0, 2);
+		final ISegment<Object> segment = sequence.getSegment(0, 2);
 
 		Assert.assertEquals(2, segment.size());
 
@@ -396,14 +396,14 @@ public class ListModifiableSequenceTest {
 		Assert.assertSame(object1, segment.get(0));
 		Assert.assertSame(object2, segment.get(1));
 
-		Iterator<Object> iterator = segment.iterator();
+		final Iterator<Object> iterator = segment.iterator();
 
 		Assert.assertTrue(iterator.hasNext());
-		Object iterObject1 = iterator.next();
+		final Object iterObject1 = iterator.next();
 		Assert.assertSame(object1, iterObject1);
 
 		Assert.assertTrue(iterator.hasNext());
-		Object iterObject2 = iterator.next();
+		final Object iterObject2 = iterator.next();
 		Assert.assertSame(object2, iterObject2);
 
 		iterator.remove();
@@ -420,8 +420,8 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGetSegment_2() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -432,8 +432,8 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGetSegment_3() {
 
-		Object object1 = new Object();
-		Object object2 = new Object();
+		final Object object1 = new Object();
+		final Object object2 = new Object();
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -453,12 +453,12 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testReplaceAll() {
 
-		Object o1 = new Object();
-		Object o2 = new Object();
-		Object o3 = new Object();
-		Object o4 = new Object();
-		Object o5 = new Object();
-		Object o6 = new Object();
+		final Object o1 = new Object();
+		final Object o2 = new Object();
+		final Object o3 = new Object();
+		final Object o4 = new Object();
+		final Object o5 = new Object();
+		final Object o6 = new Object();
 
 		sequence.add(o1);
 		sequence.add(o2);
@@ -470,7 +470,7 @@ public class ListModifiableSequenceTest {
 		Assert.assertSame(o2, sequence.get(1));
 		Assert.assertSame(o3, sequence.get(2));
 
-		ListModifiableSequence<Object> sequence2 = new ListModifiableSequence<Object>(
+		final ListModifiableSequence<Object> sequence2 = new ListModifiableSequence<Object>(
 				new ArrayList<Object>(10));
 
 		sequence2.add(o4);
