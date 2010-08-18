@@ -31,9 +31,9 @@ public class DefaultLocalSearchOptimiserTest {
 		// Optimisation params
 		final int numberOfIterations = 100;
 
-		final IConstraintCheckerRegistry checkerRegistry = TestUtils
+		final IConstraintCheckerRegistry checkerRegistry = GeneralTestUtils
 				.createConstraintCheckerRegistry();
-		final IFitnessFunctionRegistry fitnessRegistry = TestUtils
+		final IFitnessFunctionRegistry fitnessRegistry = GeneralTestUtils
 				.createFitnessRegistry();
 
 		final List<String> constraintCheckerNames = new ArrayList<String>(
@@ -113,7 +113,7 @@ public class DefaultLocalSearchOptimiserTest {
 			}
 		};
 
-		final LocalSearchOptimiser<Integer> lso = TestUtils.buildOptimiser(
+		final LocalSearchOptimiser<Integer> lso = GeneralTestUtils.buildOptimiser(
 				context, random, numberOfIterations, 1, monitor);
 
 		// Perform the optimisation

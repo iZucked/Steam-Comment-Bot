@@ -31,7 +31,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
  * @author Simon Goodall
  * 
  */
-public final class TestUtils {
+public final class GeneralTestUtils {
 
 	public static <T> IMoveGenerator<T> createRandomMoveGenerator(
 			final Random random) {
@@ -115,10 +115,10 @@ public final class TestUtils {
 		final List<IFitnessComponent<T>> fitnessComponents = fitnessComponentInstantiator
 				.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
-		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = TestUtils
+		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = GeneralTestUtils
 				.createLinearSAFitnessEvaluator(stepSize, numberOfIterations,
 						fitnessComponents);
-		final IMoveGenerator<T> moveGenerator = TestUtils
+		final IMoveGenerator<T> moveGenerator = GeneralTestUtils
 				.createRandomMoveGenerator(random);
 
 		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
