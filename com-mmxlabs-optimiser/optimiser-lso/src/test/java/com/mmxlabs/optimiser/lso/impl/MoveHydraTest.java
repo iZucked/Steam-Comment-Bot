@@ -6,19 +6,19 @@ import org.junit.Test;
 
 public class MoveHydraTest {
 
-//	@Test
-//	public void testApply() {
+	@Test
+	public void testApply() {
 //		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void testGetAffectedResources() {
+	}
+
+	@Test
+	public void testGetAffectedResources() {
 //		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void testValidate() {
+	}
+
+	@Test
+	public void testValidate() {
 //		fail("Not yet implemented");
-//	}
+	}
 
 }
