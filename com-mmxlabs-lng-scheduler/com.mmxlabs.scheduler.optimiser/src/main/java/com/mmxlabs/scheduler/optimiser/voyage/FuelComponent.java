@@ -5,37 +5,51 @@ package com.mmxlabs.scheduler.optimiser.voyage;
  * represents a specific calculation required in a voyage calculation.
  * 
  * @author Simon Goodall
- * 
+ * TODO: Unit for NBO etc could also be MMBTu - especially for discharge pricing!
  */
 public enum FuelComponent {
 
 	/**
 	 * Voyage used base fuel as main fuel source.
 	 */
-	Base, 
-	
+	Base(FuelUnit.MT),
+
 	/**
 	 * Voyage used NBO as main fuel source
 	 */
-	NBO, 
-	
+	NBO(FuelUnit.M3),
+
 	/**
 	 * NBO Voyage is supplemented by FBO.
 	 */
-	FBO,
-	
+	FBO(FuelUnit.M3),
+
 	/**
 	 * NBO Voyage is supplemented by base fuel.
 	 */
-	Base_Supplemental, 
-	
+	Base_Supplemental(FuelUnit.MT),
+
 	/**
 	 * Idle time NBO use
 	 */
-	IdleNBO, 
-	
+	IdleNBO(FuelUnit.M3),
+
 	/**
 	 * Idle time base fuel use
 	 */
-	IdleBase
+	IdleBase(FuelUnit.MT);
+
+	private final FuelUnit fuelUnit;
+
+	private FuelComponent(final FuelUnit fuelUnit) {
+		this.fuelUnit = fuelUnit;
+	}
+
+	/**
+	 * Returns the default unit of measure for this {@link FuelComponent}.
+	 * @return
+	 */
+	public final FuelUnit getDefaultFuelUnit() {
+		return fuelUnit;
+	}
 }
