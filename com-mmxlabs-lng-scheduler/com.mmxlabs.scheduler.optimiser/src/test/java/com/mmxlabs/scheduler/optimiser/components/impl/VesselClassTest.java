@@ -158,4 +158,13 @@ public class VesselClassTest {
 		vesselClass.setBaseFuelUnitPrice(value);
 		Assert.assertEquals(value, vesselClass.getBaseFuelUnitPrice());
 	}
+	
+	@Test
+	public void testGetSetBaseFuelConversionFactor() {
+		final int value = 100;
+		final VesselClass vesselClass = new VesselClass();
+		Assert.assertEquals(0, vesselClass.getBaseFuelConversionFactor());
+		vesselClass.setBaseFuelConversionFactor(value);
+		Assert.assertEquals(value, vesselClass.getBaseFuelConversionFactor());
+	}
 }

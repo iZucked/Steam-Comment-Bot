@@ -70,23 +70,27 @@ public interface IVoyageDetails<T> {
 	int getSpeed();
 
 	/**
-	 * Set the amount of fuel consumed for the given {@link FuelComponent}
+	 * Set the amount of fuel consumed for the given {@link FuelComponent} in
+	 * the given {@link FuelUnit}. All required units must be set.
 	 * 
 	 * @param fuel
 	 * @param consumption
 	 */
-	void setFuelConsumption(FuelComponent fuel, long consumption);
+	void setFuelConsumption(FuelComponent fuel, FuelUnit unit, long consumption);
 
 	/**
 	 * Returns the amount of fuel consumed for the given {@link FuelComponent}
+	 * in the given {@link FuelUnit}
 	 * 
 	 * @param fuel
 	 * @return
 	 */
-	long getFuelConsumption(FuelComponent fuel);
+	long getFuelConsumption(FuelComponent fuel, FuelUnit unit);
 
 	/**
-	 * Returns the unit price for the specified {@link FuelComponent}
+	 * Returns the unit price for the specified {@link FuelComponent}. This is
+	 * expected to be per unit as returned by
+	 * {@link FuelComponent#getDefaultFuelUnit()}.
 	 * 
 	 * @param fuel
 	 * @return
@@ -94,7 +98,9 @@ public interface IVoyageDetails<T> {
 	int getFuelUnitPrice(FuelComponent fuel);
 
 	/**
-	 * Sets the unit price for the specified {@link FuelComponent}.
+	 * Sets the unit price for the specified {@link FuelComponent}. This is
+	 * expected to be per unit as returned by
+	 * {@link FuelComponent#getDefaultFuelUnit()}.
 	 * 
 	 * @param fuel
 	 * @param unitPrice

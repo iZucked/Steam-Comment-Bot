@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+
 /**
  * Interface generic vessel parameters shared between multiple {@link IVessel}
  * of the same underlying type.
@@ -111,4 +113,12 @@ public interface IVesselClass {
 	 * @return
 	 */
 	int getBaseFuelUnitPrice();
+
+	/**
+	 * Returns the conversion factor to use to convert 1 {@link FuelUnit#M3} of
+	 * LNG to {@link FuelUnit#MT} equivalence.
+	 * 
+	 * @return
+	 */
+	int getBaseFuelConversionFactor();
 }

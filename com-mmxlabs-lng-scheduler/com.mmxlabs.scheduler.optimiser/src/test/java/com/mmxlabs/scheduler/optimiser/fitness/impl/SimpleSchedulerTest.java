@@ -27,7 +27,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
-import com.mmxlabs.optimiser.lso.impl.TestUtils;
+import com.mmxlabs.optimiser.lso.impl.GeneralTestUtils;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -228,7 +228,7 @@ public class SimpleSchedulerTest {
 			}
 		};
 
-		final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils
+		final ILocalSearchOptimiser<ISequenceElement> optimiser = GeneralTestUtils
 				.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
 
 		final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser

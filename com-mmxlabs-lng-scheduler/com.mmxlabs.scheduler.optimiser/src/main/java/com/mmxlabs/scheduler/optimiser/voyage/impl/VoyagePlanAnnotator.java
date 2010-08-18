@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
@@ -151,13 +152,18 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					journey.setSpeed(details.getSpeed());
 
 					for (final FuelComponent fuel : travelFuelComponents) {
-						final long consumption = details
-								.getFuelConsumption(fuel);
-						final long cost = Calculator.costFromConsumption(
-								consumption, details.getFuelUnitPrice(fuel));
+						for (final FuelUnit unit : FuelUnit.values()) {
+							final long consumption = details
+									.getFuelConsumption(fuel, unit);
+							journey.setFuelConsumption(fuel, unit, consumption);
+							if (unit == fuel.getDefaultFuelUnit()) {
+								final long cost = Calculator
+										.costFromConsumption(consumption,
+												details.getFuelUnitPrice(fuel));
 
-						journey.setFuelConsumption(fuel, consumption);
-						journey.setFuelCost(fuel, cost);
+								journey.setFuelCost(fuel, cost);
+							}
+						}
 					}
 
 					journey.setVesselState(details.getOptions()
@@ -179,13 +185,19 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					idle.setSequenceElement(element);
 
 					for (final FuelComponent fuel : idleFuelComponents) {
-						final long consumption = details
-								.getFuelConsumption(fuel);
-						final long cost = Calculator.costFromConsumption(
-								consumption, details.getFuelUnitPrice(fuel));
+						for (final FuelUnit unit : FuelUnit.values()) {
+							final long consumption = details
+									.getFuelConsumption(fuel, unit);
 
-						idle.setFuelConsumption(fuel, consumption);
-						idle.setFuelCost(fuel, cost);
+							idle.setFuelConsumption(fuel, unit, consumption);
+							// Calculate cost on default unit
+							if (unit == fuel.getDefaultFuelUnit()) {
+								final long cost = Calculator
+										.costFromConsumption(consumption,
+												details.getFuelUnitPrice(fuel));
+								idle.setFuelCost(fuel, cost);
+							}
+						}
 					}
 					idle.setVesselState(details.getOptions().getVesselState());
 

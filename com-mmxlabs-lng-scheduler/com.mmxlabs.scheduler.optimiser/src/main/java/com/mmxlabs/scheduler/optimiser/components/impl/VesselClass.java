@@ -19,6 +19,8 @@ public final class VesselClass implements IVesselClass {
 
 	private int baseFuelUnitPrice;
 
+	private int baseFuelConversionFactor;
+
 	private final EnumMap<VesselState, Integer> minNBOSpeed = new EnumMap<VesselState, Integer>(
 			VesselState.class);
 
@@ -151,5 +153,14 @@ public final class VesselClass implements IVesselClass {
 
 	public void setBaseFuelUnitPrice(final int baseFuelUnitPrice) {
 		this.baseFuelUnitPrice = baseFuelUnitPrice;
+	}
+
+	@Override
+	public int getBaseFuelConversionFactor() {
+		return baseFuelConversionFactor;
+	}
+
+	public void setBaseFuelConversionFactor(int baseFuelConversionFactor) {
+		this.baseFuelConversionFactor = baseFuelConversionFactor;
 	}
 }

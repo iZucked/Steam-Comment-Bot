@@ -3,6 +3,7 @@ package com.mmxlabs.scheduler.optimiser.events;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
  * {@link IScheduledEvent} defining a period of idle time at a {@link IPort}
@@ -34,7 +35,7 @@ public interface IIdleEvent<T> extends IScheduledEvent<T> {
 	 * @param fuel
 	 * @return
 	 */
-	long getFuelConsumption(FuelComponent fuel);
+	long getFuelConsumption(FuelComponent fuel, FuelUnit unit);
 
 	/**
 	 * Returns the total cost of the fuel consumed per {@link FuelComponent}

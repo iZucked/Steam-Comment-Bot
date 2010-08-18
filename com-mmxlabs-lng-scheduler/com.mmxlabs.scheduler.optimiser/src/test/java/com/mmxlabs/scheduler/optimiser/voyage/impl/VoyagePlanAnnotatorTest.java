@@ -104,13 +104,13 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails1.setSpeed(15000);
 		voyageDetails1.setTravelTime(200);
 
-		voyageDetails1.setFuelConsumption(FuelComponent.Base, 1000l);
-		voyageDetails1.setFuelConsumption(FuelComponent.Base_Supplemental,
+		voyageDetails1.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 1000l);
+		voyageDetails1.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 
 				2000l);
-		voyageDetails1.setFuelConsumption(FuelComponent.NBO, 3000l);
-		voyageDetails1.setFuelConsumption(FuelComponent.FBO, 4000l);
-		voyageDetails1.setFuelConsumption(FuelComponent.IdleBase, 5000l);
-		voyageDetails1.setFuelConsumption(FuelComponent.IdleNBO, 6000l);
+		voyageDetails1.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 3000l);
+		voyageDetails1.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 4000l);
+		voyageDetails1.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 5000l);
+		voyageDetails1.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 6000l);
 
 		final VoyageDetails<Object> voyageDetails2 = new VoyageDetails<Object>();
 		final VoyageOptions options2 = new VoyageOptions();
@@ -133,13 +133,13 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails2.setSpeed(16000);
 		voyageDetails2.setTravelTime(300);
 
-		voyageDetails2.setFuelConsumption(FuelComponent.Base, 1100l);
-		voyageDetails2.setFuelConsumption(FuelComponent.Base_Supplemental,
+		voyageDetails2.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 1100l);
+		voyageDetails2.setFuelConsumption(FuelComponent.Base_Supplemental,FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 
 				2100l);
-		voyageDetails2.setFuelConsumption(FuelComponent.NBO, 3100l);
-		voyageDetails2.setFuelConsumption(FuelComponent.FBO, 4100l);
-		voyageDetails2.setFuelConsumption(FuelComponent.IdleBase, 5100l);
-		voyageDetails2.setFuelConsumption(FuelComponent.IdleNBO, 6100l);
+		voyageDetails2.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 3100l);
+		voyageDetails2.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 4100l);
+		voyageDetails2.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 5100l);
+		voyageDetails2.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 6100l);
 
 		final VoyageDetails<Object> voyageDetails3 = new VoyageDetails<Object>();
 		final VoyageOptions options3 = new VoyageOptions();
@@ -162,13 +162,13 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails3.setSpeed(17000);
 		voyageDetails3.setTravelTime(400);
 
-		voyageDetails3.setFuelConsumption(FuelComponent.Base, 1200l);
-		voyageDetails3.setFuelConsumption(FuelComponent.Base_Supplemental,
+		voyageDetails3.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 1200l);
+		voyageDetails3.setFuelConsumption(FuelComponent.Base_Supplemental,FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 
 				2200l);
-		voyageDetails3.setFuelConsumption(FuelComponent.NBO, 3200l);
-		voyageDetails3.setFuelConsumption(FuelComponent.FBO, 4200l);
-		voyageDetails3.setFuelConsumption(FuelComponent.IdleBase, 5200l);
-		voyageDetails3.setFuelConsumption(FuelComponent.IdleNBO, 6200l);
+		voyageDetails3.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 3200l);
+		voyageDetails3.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 4200l);
+		voyageDetails3.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 5200l);
+		voyageDetails3.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 6200l);
 
 		final VoyagePlanAnnotator<Object> annotator = new VoyagePlanAnnotator<Object>();
 		annotator.setPortSlotProvider(portSlotEditor);
@@ -234,18 +234,18 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(500, journey.getDistance());
 
 			Assert.assertEquals(1000l,
-					journey.getFuelConsumption(FuelComponent.Base));
+					journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 			Assert.assertEquals(2000l,
-					journey.getFuelConsumption(FuelComponent.Base_Supplemental));
+					journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 			Assert.assertEquals(3000l,
-					journey.getFuelConsumption(FuelComponent.NBO));
+					journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 			Assert.assertEquals(4000l,
-					journey.getFuelConsumption(FuelComponent.FBO));
+					journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleBase));
+					journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleNBO));
+					journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(1000l, journey.getFuelCost(FuelComponent.Base));
 			Assert.assertEquals(4000l,
@@ -270,16 +270,16 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Laden, idle.getVesselState());
 
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 			Assert.assertEquals(0,
-					idle.getFuelConsumption(FuelComponent.Base_Supplemental));
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO));
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO));
+					idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(5000l,
-					idle.getFuelConsumption(FuelComponent.IdleBase));
+					idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 			Assert.assertEquals(6000l,
-					idle.getFuelConsumption(FuelComponent.IdleNBO));
+					idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base));
 			Assert.assertEquals(0,
@@ -320,18 +320,18 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(1000, journey.getDistance());
 
 			Assert.assertEquals(1100l,
-					journey.getFuelConsumption(FuelComponent.Base));
+					journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 			Assert.assertEquals(2100l,
-					journey.getFuelConsumption(FuelComponent.Base_Supplemental));
+					journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 			Assert.assertEquals(3100l,
-					journey.getFuelConsumption(FuelComponent.NBO));
+					journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 			Assert.assertEquals(4100l,
-					journey.getFuelConsumption(FuelComponent.FBO));
+					journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleBase));
+					journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleNBO));
+					journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(1210l, journey.getFuelCost(FuelComponent.Base));
 			Assert.assertEquals(4410l,
@@ -356,16 +356,16 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Ballast, idle.getVesselState());
 
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 			Assert.assertEquals(0,
-					idle.getFuelConsumption(FuelComponent.Base_Supplemental));
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO));
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO));
+					idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(5100l,
-					idle.getFuelConsumption(FuelComponent.IdleBase));
+					idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 			Assert.assertEquals(6100l,
-					idle.getFuelConsumption(FuelComponent.IdleNBO));
+					idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base));
 			Assert.assertEquals(0,
@@ -406,18 +406,18 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(1500, journey.getDistance());
 
 			Assert.assertEquals(1200l,
-					journey.getFuelConsumption(FuelComponent.Base));
+					journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 			Assert.assertEquals(2200l,
-					journey.getFuelConsumption(FuelComponent.Base_Supplemental));
+					journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 			Assert.assertEquals(3200l,
-					journey.getFuelConsumption(FuelComponent.NBO));
+					journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 			Assert.assertEquals(4200l,
-					journey.getFuelConsumption(FuelComponent.FBO));
+					journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleBase));
+					journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleNBO));
+					journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(1440l, journey.getFuelCost(FuelComponent.Base));
 			Assert.assertEquals(4840l,
@@ -442,16 +442,16 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Laden, idle.getVesselState());
 
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 			Assert.assertEquals(0,
-					idle.getFuelConsumption(FuelComponent.Base_Supplemental));
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO));
-			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO));
+					idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(5200l,
-					idle.getFuelConsumption(FuelComponent.IdleBase));
+					idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 			Assert.assertEquals(6200l,
-					idle.getFuelConsumption(FuelComponent.IdleNBO));
+					idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base));
 			Assert.assertEquals(0,

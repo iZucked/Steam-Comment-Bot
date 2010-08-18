@@ -20,22 +20,36 @@ public interface IVoyagePlan {
 
 	/**
 	 * Returns an array of {@link IPortSlot}s interleaved with
-	 * {@link IVoyageDetails}.
+	 * {@link IVoyageDetails} that represents this voyage plan.
 	 * 
 	 * @return
 	 */
 	Object[] getSequence();
 
+	/**
+	 * Set the array of {@link IPortSlot}s interleaved with
+	 * {@link IVoyageDetails} that represents this voyage plan.
+	 * 
+	 * @return
+	 */
 	void setSequence(Object[] sequence);
 
 	/**
-	 * Returns the total fuel consumption for the voyage plan.
+	 * Returns the total fuel consumption for the voyage plan in the
+	 * {@link FuelComponent#getDefaultFuelUnit()}
 	 * 
 	 * @param fuel
 	 * @return
 	 */
 	long getFuelConsumption(FuelComponent fuel);
 
+	/**
+	 * Set the total fuel consumption for the voyage plan in the
+	 * {@link FuelComponent#getDefaultFuelUnit()}
+	 * 
+	 * @param fuel
+	 * @return
+	 */
 	void setFuelConsumption(FuelComponent fuel, long consumption);
 
 	/**
@@ -61,12 +75,14 @@ public interface IVoyagePlan {
 	// one more generic?
 
 	/**
-	 * Return the total volume loaded at the load port in this voyage plan
+	 * Return the total volume loaded at the load port in this voyage plan in
+	 * {@link FuelUnit#M3}
 	 */
 	long getLoadVolume();
 
 	/**
-	 * Set the total volume loaded at the load port in this voyage plan
+	 * Set the total volume loaded at the load port in this voyage plan in
+	 * {@link FuelUnit#M3}
 	 */
 	void setLoadVolume(long loadVolume);
 
@@ -82,12 +98,13 @@ public interface IVoyagePlan {
 
 	/**
 	 * Return the total volume discharged at the discharge port in this voyage
-	 * plan
+	 * plan in {@link FuelUnit#M3}
 	 */
 	long getDischargeVolume();
 
 	/**
 	 * Set the total volume discharged at the discharge port in this voyage plan
+	 * in {@link FuelUnit#M3}
 	 */
 	void setDischargeVolume(long dischargeVolume);
 

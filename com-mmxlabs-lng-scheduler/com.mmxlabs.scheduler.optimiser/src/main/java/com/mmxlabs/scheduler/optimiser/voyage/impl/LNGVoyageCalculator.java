@@ -8,6 +8,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
@@ -44,6 +45,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		final IVessel vessel = options.getVessel();
 		final IVesselClass vesselClass = vessel.getVesselClass();
 		final VesselState vesselState = options.getVesselState();
+
+		final int equivalenceFactor = vesselClass.getBaseFuelConversionFactor();
 
 		// Get distance
 		final long distance = options.getDistance();
@@ -91,51 +94,74 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		output.setTravelTime(travelTime);
 		output.setIdleTime(idleTime);
 
-		final long consuptionRate = speed == 0 ? 0 : vesselClass
+		final long consuptionRateInMT = speed == 0 ? 0 : vesselClass
 				.getConsumptionRate(vesselState).getRate(speed);
-		final long requiredConsumption = Calculator.quantityFromRateTime(
-				consuptionRate, travelTime);
+		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(
+				consuptionRateInMT, travelTime);
 
 		// Calculate fuel requirements
 		if (options.useNBOForTravel()) {
 
-			final long nboProvided = Calculator.quantityFromRateTime(
-					vesselClass.getNBORate(vesselState), travelTime);
+			long nboRateInM3PerHour = vesselClass.getNBORate(vesselState);
+			final long nboProvidedInM3 = Calculator.quantityFromRateTime(
+					nboRateInM3PerHour, travelTime);
 
-			output.setFuelConsumption(FuelComponent.NBO, nboProvided);
+			final long nboProvidedInMT = Calculator.convertM3ToMT(
+					nboProvidedInM3, equivalenceFactor);
 
-			if (nboProvided < requiredConsumption) {
-				final long diff = requiredConsumption - nboProvided;
+			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3,
+					nboProvidedInM3);
+			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT,
+					nboProvidedInMT);
+
+			if (nboProvidedInMT < requiredConsumptionInMT) {
+				final long diffInMT = requiredConsumptionInMT - nboProvidedInMT;
+				final long diffInM3 = Calculator.convertMTToM3(diffInMT,
+						equivalenceFactor);
 				if (options.useFBOForSupplement()) {
 					// Use FBO for remaining quantity
-					output.setFuelConsumption(FuelComponent.FBO, diff);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3,
+							diffInM3);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT,
+							diffInMT);
 					output.setFuelConsumption(FuelComponent.Base_Supplemental,
-							0);
+							FuelUnit.MT, 0);
 				} else {
 					// Use base for remaining quantity
-					output.setFuelConsumption(FuelComponent.FBO, 0);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, 0);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
 					output.setFuelConsumption(FuelComponent.Base_Supplemental,
-							diff);
+							FuelUnit.MT, diffInMT);
 				}
 			}
 		} else {
-			output.setFuelConsumption(FuelComponent.NBO, 0);
-			output.setFuelConsumption(FuelComponent.FBO, 0);
-			output.setFuelConsumption(FuelComponent.Base, requiredConsumption);
+			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 0);
+			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT, 0);
+			output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, 0);
+			output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
+			output.setFuelConsumption(FuelComponent.Base, FuelUnit.MT,
+					requiredConsumptionInMT);
 		}
 
-		final long idleNBORate = vesselClass.getIdleNBORate(vesselState);
+		final long idleNBORateInM3PerHour = vesselClass
+				.getIdleNBORate(vesselState);
 		if (options.useNBOForIdle()) {
-			final long nboProvided = Calculator.quantityFromRateTime(
-					idleNBORate, idleTime);
+			final long nboProvidedInM3 = Calculator.quantityFromRateTime(
+					idleNBORateInM3PerHour, idleTime);
+			final long nboProvidedInMT = Calculator.convertM3ToMT(
+					nboProvidedInM3, equivalenceFactor);
 
-			output.setFuelConsumption(FuelComponent.IdleNBO, nboProvided);
-			output.setFuelConsumption(FuelComponent.IdleBase, 0);
+			output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3,
+					nboProvidedInM3);
+			output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT,
+					nboProvidedInMT);
+			output.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, 0);
 		} else {
-			final long idleRate = vesselClass
+			final long idleRateInMTPerHour = vesselClass
 					.getIdleConsumptionRate(vesselState);
-			long idleConsumption = Calculator.quantityFromRateTime(idleRate,
-					idleTime);
+
+			long idleConsumptionInMT = Calculator.quantityFromRateTime(
+					idleRateInMTPerHour, idleTime);
 			if (options.useNBOForTravel()) {
 
 				// Run down boil off after travel. On ballast voyages running on
@@ -147,19 +173,30 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				// There is more boil-off than required consumption. We need to
 				// work out how long we could provide energy for based on
 				// boil-off time rather than use the raw quantity directly.
-				final long minHeel = vesselClass.getMinHeel();
-				final int deltaTime = Calculator.getTimeFromRateQuantity(
-						idleNBORate, minHeel);
-				final long equivalentConsumption = Calculator
-						.quantityFromRateTime(idleRate, deltaTime);
+				final long minHeelInM3 = vesselClass.getMinHeel();
+				final long minHeelInMT = Calculator.convertM3ToMT(minHeelInM3,
+						equivalenceFactor);
 
-				idleConsumption -= equivalentConsumption;
-				output.setFuelConsumption(FuelComponent.IdleNBO, minHeel);
+				// How long will the boil-off last
+				final int deltaTime = Calculator.getTimeFromRateQuantity(
+						idleNBORateInM3PerHour, minHeelInM3);
+
+				// Get fuel equivalence factor
+				final long equivalentConsumptionInMT = Calculator
+						.quantityFromRateTime(idleRateInMTPerHour, deltaTime);
+
+				idleConsumptionInMT -= equivalentConsumptionInMT;
+
+				output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3,
+						minHeelInM3);
+				output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT,
+						minHeelInMT);
 			}
-			if (idleConsumption > 0) {
+
+			if (idleConsumptionInMT > 0) {
 				// Use base for remaining quantity
-				output.setFuelConsumption(FuelComponent.IdleBase,
-						idleConsumption);
+				output.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT,
+						idleConsumptionInMT);
 			}
 		}
 
@@ -233,7 +270,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				final IVoyageDetails<?> details = (IVoyageDetails<?>) sequence[i];
 				for (final FuelComponent fc : FuelComponent.values()) {
 					fuelConsumptions[fc.ordinal()] += details
-							.getFuelConsumption(fc);
+							.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 				}
 
 				// TODO: Assert that if discharge.heelOut set, then future
@@ -253,11 +290,15 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 								.getOptions().getVesselState() == VesselState.Laden)
 						|| (loadIdx > -1 && dischargeIdx > -1 && details
 								.getOptions().getVesselState() == VesselState.Ballast);
-				
+
 				// TODO: Add test case for this information
-				details.setFuelUnitPrice(FuelComponent.Base, fuelUnitPrices[FuelComponent.Base.ordinal()]);
-				details.setFuelUnitPrice(FuelComponent.Base_Supplemental, fuelUnitPrices[FuelComponent.Base_Supplemental.ordinal()]);
-				details.setFuelUnitPrice(FuelComponent.IdleBase, fuelUnitPrices[FuelComponent.IdleBase.ordinal()]);
+				details.setFuelUnitPrice(FuelComponent.Base,
+						fuelUnitPrices[FuelComponent.Base.ordinal()]);
+				details.setFuelUnitPrice(FuelComponent.Base_Supplemental,
+						fuelUnitPrices[FuelComponent.Base_Supplemental
+								.ordinal()]);
+				details.setFuelUnitPrice(FuelComponent.IdleBase,
+						fuelUnitPrices[FuelComponent.IdleBase.ordinal()]);
 			}
 		}
 
@@ -377,10 +418,10 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			voyagePlan.setFuelConsumption(fc, consumption);
 
 			int unitPrice = fuelUnitPrices[fc.ordinal()];
-			assert consumption == 0 || unitPrice != 0; 
-			
-			voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(
-					consumption, unitPrice));
+			assert consumption == 0 || unitPrice != 0;
+
+			voyagePlan.setTotalFuelCost(fc,
+					Calculator.costFromConsumption(consumption, unitPrice));
 		}
 
 		voyagePlan.setLoadVolume(loadVolume);
