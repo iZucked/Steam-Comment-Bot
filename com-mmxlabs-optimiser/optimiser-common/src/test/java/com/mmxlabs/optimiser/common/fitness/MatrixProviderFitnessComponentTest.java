@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.mmxlabs.optimiser.common.fitness.MatrixProviderFitnessComponent;
 import com.mmxlabs.optimiser.common.fitness.MatrixProviderFitnessCore;
 
-class MatrixProviderFitnessComponentTest {
+public class MatrixProviderFitnessComponentTest {
 
 	@Test
 	public void testMatrixProviderFitnessComponent() {
