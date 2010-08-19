@@ -3,7 +3,7 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class HashMapPortTypeEditorTest {
 

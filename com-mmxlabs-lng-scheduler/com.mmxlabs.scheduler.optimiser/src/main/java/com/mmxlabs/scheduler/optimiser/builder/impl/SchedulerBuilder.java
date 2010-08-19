@@ -48,9 +48,9 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
@@ -164,7 +164,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Register the port with the element
 		portProvider.setPortForElement(port, element);
 
-		portTypeProvider.setPortType(element, IPortTypeProvider.PortType.Load);
+		portTypeProvider.setPortType(element, PortType.Load);
 
 		portSlotsProvider.setPortSlot(element, slot);
 
@@ -211,7 +211,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portSlotsProvider.setPortSlot(element, slot);
 
 		portTypeProvider.setPortType(element,
-				IPortTypeProvider.PortType.Discharge);
+				PortType.Discharge);
 
 		timeWindowProvider.setTimeWindows(element,
 				Collections.singletonList(window));
@@ -334,7 +334,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			portProvider.setPortForElement(startPort, element);
 
 			portTypeProvider.setPortType(element,
-					IPortTypeProvider.PortType.Other);
+					PortType.Other);
 
 			portSlotsProvider.setPortSlot(element, slot);
 
@@ -366,7 +366,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			portProvider.setPortForElement(endPort, element);
 
 			portTypeProvider.setPortType(element,
-					IPortTypeProvider.PortType.Other);
+					PortType.Other);
 
 			portSlotsProvider.setPortSlot(element, slot);
 
