@@ -334,7 +334,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			portProvider.setPortForElement(startPort, element);
 
 			portTypeProvider.setPortType(element,
-					PortType.Other);
+					PortType.Start);
 
 			portSlotsProvider.setPortSlot(element, slot);
 
@@ -366,7 +366,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			portProvider.setPortForElement(endPort, element);
 
 			portTypeProvider.setPortType(element,
-					PortType.Other);
+					PortType.End);
 
 			portSlotsProvider.setPortSlot(element, slot);
 
