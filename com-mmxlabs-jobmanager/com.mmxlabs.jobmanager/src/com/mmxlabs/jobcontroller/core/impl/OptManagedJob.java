@@ -33,7 +33,6 @@ import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -43,7 +42,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
-//TODO Geneate a base class and provide some methods for job creation etc.
+//TODO Generate a base class and provide some methods for job creation etc.
 
 public class OptManagedJob implements IManagedJob {
 
@@ -60,11 +59,11 @@ public class OptManagedJob implements IManagedJob {
 	private boolean paused;
 	private final Object pauseLock = new Object();
 
-	private IOptimisationContext context;
+	private final IOptimisationContext<ISequenceElement> context;
 
-	private IAnnotatedSolution schedule = null;
+	private IAnnotatedSolution<ISequenceElement> schedule = null;
 
-	public OptManagedJob(final String name, IOptimisationContext context) {
+	public OptManagedJob(final String name, final IOptimisationContext<ISequenceElement> context) {
 		this.name = name;
 		this.context = context;
 	}
@@ -86,7 +85,7 @@ public class OptManagedJob implements IManagedJob {
 	 * sub interface or adaptable object
 	 */
 	@Override
-	public IAnnotatedSolution getSchedule() {
+	public IAnnotatedSolution<ISequenceElement> getSchedule() {
 		return schedule;
 	}
 
@@ -109,18 +108,18 @@ public class OptManagedJob implements IManagedJob {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 
-				IOptimiserProgressMonitor<ISequenceElement> optMonitor = new IOptimiserProgressMonitor<ISequenceElement>() {
+				final IOptimiserProgressMonitor<ISequenceElement> optMonitor = new IOptimiserProgressMonitor<ISequenceElement>() {
 
 					int lastReport = 0;
 
 					@Override
-					public void report(IOptimiser<ISequenceElement> arg0,
-							int iteration, long currentFitness,
-							long bestFitness,
-							ISequences<ISequenceElement> currentState,
-							ISequences<ISequenceElement> bestState) {
+					public void report(final IOptimiser<ISequenceElement> arg0,
+							final int iteration, final long currentFitness,
+							final long bestFitness,
+							final ISequences<ISequenceElement> currentState,
+							final ISequences<ISequenceElement> bestState) {
 
-						int work = iteration - lastReport;
+						final int work = iteration - lastReport;
 						monitor.worked(work);
 						lastReport = iteration;
 						progress += work;
@@ -173,16 +172,16 @@ public class OptManagedJob implements IManagedJob {
 					}
 
 					@Override
-					public void done(IOptimiser<ISequenceElement> arg0,
-							long arg1, ISequences<ISequenceElement> arg2) {
+					public void done(final IOptimiser<ISequenceElement> arg0,
+							final long arg1, final ISequences<ISequenceElement> arg2) {
 
 						updateSchedule(arg2);
 
 					}
 
 					@Override
-					public void begin(IOptimiser<ISequenceElement> arg0,
-							long arg1, ISequences<ISequenceElement> arg2) {
+					public void begin(final IOptimiser<ISequenceElement> arg0,
+							final long arg1, final ISequences<ISequenceElement> arg2) {
 
 						updateSchedule(arg2);
 
@@ -298,7 +297,7 @@ public class OptManagedJob implements IManagedJob {
 			// Block return until the job has terminated
 			try {
 				job.join();
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -397,19 +396,20 @@ public class OptManagedJob implements IManagedJob {
 		return state;
 	}
 
-	private void setSchedule(IAnnotatedSolution annotatedSequences) {
+	private void setSchedule(final IAnnotatedSolution<ISequenceElement> annotatedSequences) {
 
 		this.schedule = annotatedSequences;
 
 	}
 
-	private void updateSchedule(ISequences<ISequenceElement> bestState) {
+	@SuppressWarnings("unchecked")
+	private void updateSchedule(final ISequences<ISequenceElement> bestState) {
 		{
 
-			IOptimisationData<ISequenceElement> data = context
+			final IOptimisationData<ISequenceElement> data = context
 					.getOptimisationData();
 
-			SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
+			final SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
 			scheduler.setDistanceProvider(data.getDataComponentProvider(
 					SchedulerConstants.DCP_portDistanceProvider,
 					IMultiMatrixProvider.class));
@@ -421,14 +421,14 @@ public class OptManagedJob implements IManagedJob {
 			scheduler.setTimeWindowProvider(data.getDataComponentProvider(
 					SchedulerConstants.DCP_timeWindowProvider,
 					ITimeWindowDataComponentProvider.class));
-			IPortSlotProvider portSlotProvider = data.getDataComponentProvider(
+			final IPortSlotProvider<ISequenceElement> portSlotProvider = data.getDataComponentProvider(
 					SchedulerConstants.DCP_portSlotsProvider,
 					IPortSlotProvider.class);
 			scheduler.setPortSlotProvider(portSlotProvider);
 			scheduler.setPortTypeProvider(data.getDataComponentProvider(
 					SchedulerConstants.DCP_portTypeProvider,
 					IPortTypeProvider.class));
-			IVesselProvider vesselProvider = data.getDataComponentProvider(
+			final IVesselProvider vesselProvider = data.getDataComponentProvider(
 					SchedulerConstants.DCP_vesselProvider,
 					IVesselProvider.class);
 			scheduler.setVesselProvider(vesselProvider);
@@ -438,35 +438,31 @@ public class OptManagedJob implements IManagedJob {
 
 			// This may throw IllegalStateException if not all
 			// the elements are set.
-			// TODO: Expand this into it's own series of test
-			// cases
 			scheduler.init();
 
 			// TODO: Integrate this into the optimiser process rather than here
-			AnnotationSolution solution = new AnnotationSolution();
+			final AnnotationSolution<ISequenceElement> solution = new AnnotationSolution<ISequenceElement>();
 			solution.setSequences(bestState);
 			solution.setContext(context);
 			
-			for (Map.Entry<IResource, ISequence<ISequenceElement>> entry : bestState
+			for (final Map.Entry<IResource, ISequence<ISequenceElement>> entry : bestState
 					.getSequences().entrySet()) {
 
-				VoyagePlanAnnotator<ISequenceElement> annotator = new VoyagePlanAnnotator<ISequenceElement>();
+				final VoyagePlanAnnotator<ISequenceElement> annotator = new VoyagePlanAnnotator<ISequenceElement>();
 				annotator.setPortSlotProvider(portSlotProvider);
 
-				IResource resource = entry.getKey();
-				ISequence<ISequenceElement> sequence = entry.getValue();
-
-				IVessel vessel = vesselProvider.getVessel(resource);
+				final IResource resource = entry.getKey();
+				final ISequence<ISequenceElement> sequence = entry.getValue();
 
 				// Schedule sequence
-				List<IVoyagePlan> plans = scheduler
+				final List<IVoyagePlan> plans = scheduler
 						.schedule(resource, sequence);
 
-				AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
+				final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 
-				ArrayList<ISequenceElement> elements = new ArrayList<ISequenceElement>(
+				final ArrayList<ISequenceElement> elements = new ArrayList<ISequenceElement>(
 						sequence.size());
-				for (ISequenceElement e : sequence) {
+				for (final ISequenceElement e : sequence) {
 					elements.add(e);
 				}
 
