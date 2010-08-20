@@ -34,6 +34,7 @@ import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
@@ -233,8 +234,10 @@ public final class TestUtils {
 		for (IPort a : ports) {
 			for (IPort b : ports) {
 				Integer d = di.getDistance(a.getName(), b.getName());
-				builder.setPortToPortDistance(a, b, d);
-				builder.setPortToPortDistance(b, a, d);
+				builder.setPortToPortDistance(a, b,
+						IMultiMatrixProvider.Default_Key, d);
+				builder.setPortToPortDistance(b, a,
+						IMultiMatrixProvider.Default_Key, d);
 			}
 		}
 
