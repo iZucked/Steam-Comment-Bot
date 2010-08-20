@@ -159,8 +159,9 @@ public final class TestUtils {
 
 	public static IOptimisationData<ISequenceElement> createProblem() {
 
-		InputStream stream = TestUtils.class.getResourceAsStream("/data/distances.csv");
-		
+		InputStream stream = TestUtils.class
+				.getResourceAsStream("/data/distances.csv");
+
 		DistanceImporter di = new DistanceImporter();
 		// TODO: Import CSV File
 		try {
@@ -172,7 +173,8 @@ public final class TestUtils {
 
 		// TODO: Match port names
 
-		final EMFSchedulerBuilder builder = new EMFSchedulerBuilder(new SchedulerBuilder());
+		final EMFSchedulerBuilder builder = new EMFSchedulerBuilder(
+				new SchedulerBuilder());
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
@@ -182,51 +184,52 @@ public final class TestUtils {
 		final IPort port2 = builder.createPort("Idku");
 		final IPort port3 = builder.createPort("Point Fortin");
 		final IPort port4 = builder.createPort("Bonny Island LNG Terminal");
-		
+
 		final List<IPort> loadPorts = CollectionsUtil.makeArrayList(port1,
 				port2, port3, port4);
-		
+
 		Map<IPort, Integer> loadSlotCount = new HashMap<IPort, Integer>();
 		loadSlotCount.put(port1, 59);
 		loadSlotCount.put(port2, 63);
 		loadSlotCount.put(port3, 74);
 		loadSlotCount.put(port4, 41);
-		
+
 		// Discharge ports
 		final IPort port5 = builder.createPort("Quintero");
 		final IPort port6 = builder.createPort("Zeebrugge");
-//		final IPort port7 = builder.createPort("Guangdong LNG Terminal");
+		// final IPort port7 = builder.createPort("Guangdong LNG Terminal");
 		final IPort port8 = builder.createPort("Shanghai");
 		final IPort port9 = builder.createPort("Sakai LNG");
 		final IPort port10 = builder.createPort("Sines LNG Terminal");
 		final IPort port11 = builder.createPort("Singapore");
 		final IPort port12 = builder.createPort("Bilboa - LNG Terminal");
-//		final IPort port13 = builder.createPort("Taichung");
+		// final IPort port13 = builder.createPort("Taichung");
 		final IPort port14 = builder.createPort("Yung-an");
 		final IPort port15 = builder.createPort("Milford Haven");
 		final IPort port16 = builder.createPort("Elba Island - Savanah");
 		final IPort port17 = builder.createPort("Lake Charles - LNG Berths");
 
 		final List<IPort> dischargePorts = CollectionsUtil.makeArrayList(port5,
-				port6, /*port7,*/ port8, port9, port10, port11, port12, /*nport13,*/
+				port6, /* port7, */port8, port9, port10, port11, port12, /*
+																		 * nport13,
+																		 */
 				port14, port15, port16, port17);
 
 		Map<IPort, Integer> dischargeSlotCount = new HashMap<IPort, Integer>();
 		dischargeSlotCount.put(port5, 43);
 		dischargeSlotCount.put(port6, 7);
-//		dischargeSlotCount.put(port7, 1);
+		// dischargeSlotCount.put(port7, 1);
 		dischargeSlotCount.put(port8, 7);
 		dischargeSlotCount.put(port9, 7);
 		dischargeSlotCount.put(port10, 5);
 		dischargeSlotCount.put(port11, 57);
 		dischargeSlotCount.put(port12, 7);
-//		dischargeSlotCount.put(port13, 1);
+		// dischargeSlotCount.put(port13, 1);
 		dischargeSlotCount.put(port14, 7);
 		dischargeSlotCount.put(port15, 41);
 		dischargeSlotCount.put(port16, 51);
 		dischargeSlotCount.put(port17, 5);
-		
-		
+
 		List<IPort> ports = new ArrayList<IPort>();
 		ports.addAll(loadPorts);
 		ports.addAll(dischargePorts);
@@ -243,7 +246,8 @@ public final class TestUtils {
 
 		buildFleet(builder, new Random(1), loadPorts, loadPorts);
 
-		// Convert the map of port slot counts into a list with the port occuring the relevant number of times.
+		// Convert the map of port slot counts into a list with the port
+		// occuring the relevant number of times.
 		// These will be converted into port slots
 		List<IPort> loadPortNumbers = new ArrayList<IPort>();
 		for (Map.Entry<IPort, Integer> entry : loadSlotCount.entrySet()) {
@@ -251,17 +255,19 @@ public final class TestUtils {
 				loadPortNumbers.add(entry.getKey());
 			}
 		}
-		
+
 		List<IPort> dischargePortNumbers = new ArrayList<IPort>();
 		for (Map.Entry<IPort, Integer> entry : dischargeSlotCount.entrySet()) {
 			for (int i = 0; i < entry.getValue(); ++i) {
 				dischargePortNumbers.add(entry.getKey());
 			}
 		}
-		System.out.printf("Load count %d, Discharge count %d\n", loadPortNumbers.size(), dischargePortNumbers.size());
-		assert(dischargePortNumbers.size() == loadPortNumbers.size());
-		
-		buildCargoes(builder, loadPortNumbers, dischargePortNumbers, new Random(1), di);
+		System.out.printf("Load count %d, Discharge count %d\n",
+				loadPortNumbers.size(), dischargePortNumbers.size());
+		assert (dischargePortNumbers.size() == loadPortNumbers.size());
+
+		buildCargoes(builder, loadPortNumbers, dischargePortNumbers,
+				new Random(1), di);
 
 		// TODO: Set port durations
 		// ....
@@ -285,38 +291,42 @@ public final class TestUtils {
 			}
 		}
 
-		String pathName = "/SavedScenarios/scenario-" + Calendar.getInstance().getTime().getTime() + ".scenario";
+		String pathName = "/SavedScenarios/scenario-"
+				+ Calendar.getInstance().getTime().getTime() + ".scenario";
 		builder.saveEMFModel(URI.createPlatformResourceURI(pathName));
-		
+
 		builder.dispose();
 
 		return data;
 	}
 
 	private static void buildCargoes(final ISchedulerBuilder builder,
-			final List<IPort> loadPorts,
-			final List<IPort> dischargePorts, final Random random, DistanceImporter di) {
+			final List<IPort> loadPorts, final List<IPort> dischargePorts,
+			final Random random, DistanceImporter di) {
 
-//		final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
+		// final IXYPortDistanceCalculator distanceProvider = new
+		// XYPortEuclideanDistanceCalculator();
 
 		// Randomly sort load and discharge ports
 		Collections.shuffle(loadPorts);
 		Collections.shuffle(dischargePorts);
-		
-		// Generate the random load windows, then sort chronologically to help build the initial solution correctly.
+
+		// Generate the random load windows, then sort chronologically to help
+		// build the initial solution correctly.
 		List<Integer> startWindows = new ArrayList(loadPorts.size());
 		for (int i = 0; i < loadPorts.size(); ++i) {
 			final int start = random.nextInt(365);
 			startWindows.add(start);
 		}
 		Collections.sort(startWindows);
-		
+
 		for (int i = 0; i < loadPorts.size(); ++i) {
 			final IPort port1 = (IPort) loadPorts.get(i);
 			final IPort port2 = (IPort) dischargePorts.get(i);
 
 			// Link duration between windows to distance and speed
-			final int distance = di.getDistance(port1.getName(), port2.getName());
+			final int distance = di.getDistance(port1.getName(),
+					port2.getName());
 			final int minTime = (int) Math.ceil(distance / 20.0 / 24.0);
 			final int maxTime = (int) Math.ceil(distance / 12.0 / 24.0);
 
@@ -339,7 +349,7 @@ public final class TestUtils {
 			final IDischargeSlot discharge = builder.createDischargeSlot(
 					"discharge" + i, port2, tw2, 0, 200000000, salesPrice);
 			builder.createCargo("cargo" + i, load, discharge);
-			
+
 			// Only build 200 cargoes
 			if (i == 199) {
 				break;
