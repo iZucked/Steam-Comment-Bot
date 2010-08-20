@@ -27,7 +27,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.impl.AnnotationSolution;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
@@ -412,7 +412,7 @@ public class OptManagedJob implements IManagedJob {
 			SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
 			scheduler.setDistanceProvider(data.getDataComponentProvider(
 					SchedulerConstants.DCP_portDistanceProvider,
-					IMatrixProvider.class));
+					IMultiMatrixProvider.class));
 			scheduler.setDurationsProvider(data.getDataComponentProvider(
 					SchedulerConstants.DCP_elementDurationsProvider,
 					IElementDurationProvider.class));
