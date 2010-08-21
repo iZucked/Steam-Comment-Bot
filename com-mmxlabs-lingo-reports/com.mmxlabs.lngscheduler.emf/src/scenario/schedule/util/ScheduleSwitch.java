@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.schedule.*;
 import scenario.schedule.ScheduleModel;
 import scenario.schedule.SchedulePackage;
 

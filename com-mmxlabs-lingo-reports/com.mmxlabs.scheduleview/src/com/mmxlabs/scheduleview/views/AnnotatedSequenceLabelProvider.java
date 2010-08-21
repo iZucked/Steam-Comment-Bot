@@ -17,13 +17,15 @@ import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 @SuppressWarnings("rawtypes")
 public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 		IGanttChartToolTipProvider, IColorProvider {
 
 	public enum Mode {
-		VesselState, FuelChoice /*, Lateness*/
+		VesselState, FuelChoice
+		/* , Lateness */
 	}
 
 	private Mode mode = Mode.VesselState;
@@ -75,33 +77,34 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 		} else if (mode == Mode.FuelChoice) {
 			if (element instanceof IJourneyEvent) {
 				final IJourneyEvent event = (IJourneyEvent) element;
-				
+
 				int r = 0;
 				int g = 0;
 				int b = 0;
-				
-				if (event.getFuelConsumption(FuelComponent.Base) >0 || event.getFuelConsumption(FuelComponent.Base_Supplemental) > 0) {
+
+				if (event.getFuelConsumption(FuelComponent.Base, FuelUnit.MT) > 0
+						|| event.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT) > 0) {
 					r = 255;
 				}
-				if (event.getFuelConsumption(FuelComponent.NBO) > 0) {
+				if (event.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3) > 0) {
 					g = 255;
 				}
-				if (event.getFuelConsumption(FuelComponent.FBO) > 0) {
+				if (event.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3) > 0) {
 					b = 255;
 				}
-				return ColorCache.getColor(r,g,b);
+				return ColorCache.getColor(r, g, b);
 			}
 		}
-//		else if (mode == Mode.Lateness) {
-			if (element instanceof IPortVisitEvent) {
-				final IPortVisitEvent event = (IPortVisitEvent) element;
-				
-				int end = event.getPortSlot().getTimeWindow().getEnd();
-				if (event.getStartTime() > end) {
-					return ColorCache.getColor(255, 0, 0);
-				}
+		// else if (mode == Mode.Lateness) {
+		if (element instanceof IPortVisitEvent) {
+			final IPortVisitEvent event = (IPortVisitEvent) element;
+
+			int end = event.getPortSlot().getTimeWindow().getEnd();
+			if (event.getStartTime() > end) {
+				return ColorCache.getColor(255, 0, 0);
 			}
-//		}
+		}
+		// }
 		return null;
 	}
 
@@ -117,8 +120,10 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 					+ "\n");
 			sb.append("Start Time: " + portVisit.getStartTime() + "\n");
 			sb.append("End Time: " + portVisit.getEndTime() + "\n");
-			sb.append("Window Start Time: " + portVisit.getPortSlot().getTimeWindow().getStart() + "\n");
-			sb.append("Window End Time: " + portVisit.getPortSlot().getTimeWindow().getEnd() + "\n");
+			sb.append("Window Start Time: "
+					+ portVisit.getPortSlot().getTimeWindow().getStart() + "\n");
+			sb.append("Window End Time: "
+					+ portVisit.getPortSlot().getTimeWindow().getEnd() + "\n");
 
 			sb.append("Duration: " + portVisit.getDuration() + "\n");
 			return sb.toString();
@@ -132,6 +137,7 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 			sb.append("Duration: " + journey.getDuration() + "\n");
 			sb.append("Distance: " + journey.getDistance() + "\n");
 			sb.append("Vessel State: " + journey.getVesselState() + "\n");
+			sb.append("Route: " + journey.getRoute() + "\n");
 			sb.append("Speed: "
 					+ String.format("%.2f", ((double) journey.getSpeed())
 							/ (double) Calculator.ScaleFactor) + "\n");

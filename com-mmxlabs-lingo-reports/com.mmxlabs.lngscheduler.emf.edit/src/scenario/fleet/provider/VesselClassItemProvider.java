@@ -70,6 +70,7 @@ public class VesselClassItemProvider
 			addMinSpeedPropertyDescriptor(object);
 			addMaxSpeedPropertyDescriptor(object);
 			addBaseFuelUnitPricePropertyDescriptor(object);
+			addMinHeelVolumePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -185,6 +186,28 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min Heel Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinHeelVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_minHeelVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_minHeelVolume_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__MIN_HEEL_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -257,6 +280,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE:
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:

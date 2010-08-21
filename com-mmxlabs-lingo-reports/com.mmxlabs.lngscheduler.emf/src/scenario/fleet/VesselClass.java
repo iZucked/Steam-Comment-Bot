@@ -6,6 +6,7 @@
  */
 package scenario.fleet;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -23,6 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link scenario.fleet.VesselClass#getBaseFuelUnitPrice <em>Base Fuel Unit Price</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}</li>
  * </ul>
  * </p>
  *
@@ -212,5 +214,31 @@ public interface VesselClass extends EObject {
 	 * @generated
 	 */
 	void setBallastAttributes(VesselStateAttributes value);
+
+	/**
+	 * Returns the value of the '<em><b>Min Heel Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Min Heel Volume</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Heel Volume</em>' attribute.
+	 * @see #setMinHeelVolume(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_MinHeelVolume()
+	 * @model
+	 * @generated
+	 */
+	int getMinHeelVolume();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Heel Volume</em>' attribute.
+	 * @see #getMinHeelVolume()
+	 * @generated
+	 */
+	void setMinHeelVolume(int value);
 
 } // VesselClass

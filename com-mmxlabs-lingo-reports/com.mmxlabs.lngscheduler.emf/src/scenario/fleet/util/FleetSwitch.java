@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.fleet.*;
 import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;

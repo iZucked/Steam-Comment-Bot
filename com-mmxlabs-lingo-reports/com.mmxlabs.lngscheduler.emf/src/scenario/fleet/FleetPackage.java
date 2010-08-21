@@ -226,13 +226,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__BALLAST_ATTRIBUTES = 6;
 
 	/**
+	 * The feature id for the '<em><b>Min Heel Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__MIN_HEEL_VOLUME = 7;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = 7;
+	int VESSEL_CLASS_FEATURE_COUNT = 8;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
@@ -521,6 +530,17 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselClass_BallastAttributes();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Heel Volume</em>'.
+	 * @see scenario.fleet.VesselClass#getMinHeelVolume()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_MinHeelVolume();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.fleet.FuelConsumptionLine <em>Fuel Consumption Line</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -782,6 +802,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_CLASS__BALLAST_ATTRIBUTES = eINSTANCE.getVesselClass_BallastAttributes();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Heel Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__MIN_HEEL_VOLUME = eINSTANCE.getVesselClass_MinHeelVolume();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.

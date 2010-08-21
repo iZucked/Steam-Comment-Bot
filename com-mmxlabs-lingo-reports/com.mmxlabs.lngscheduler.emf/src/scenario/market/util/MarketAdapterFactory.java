@@ -11,6 +11,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.market.*;
 import scenario.market.ForwardPrice;
 import scenario.market.Market;
 import scenario.market.MarketModel;

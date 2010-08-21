@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.contract.*;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
 import scenario.contract.PurchaseContract;

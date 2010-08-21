@@ -6,13 +6,16 @@
  */
 package scenario.fleet.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselStateAttributes;
@@ -31,6 +34,7 @@ import scenario.fleet.VesselStateAttributes;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuelUnitPrice <em>Base Fuel Unit Price</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinHeelVolume <em>Min Heel Volume</em>}</li>
  * </ul>
  * </p>
  *
@@ -156,6 +160,26 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected VesselStateAttributes ballastAttributes;
+
+	/**
+	 * The default value of the '{@link #getMinHeelVolume() <em>Min Heel Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinHeelVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_HEEL_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinHeelVolume() <em>Min Heel Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinHeelVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minHeelVolume = MIN_HEEL_VOLUME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -375,6 +399,27 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getMinHeelVolume() {
+		return minHeelVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinHeelVolume(int newMinHeelVolume) {
+		int oldMinHeelVolume = minHeelVolume;
+		minHeelVolume = newMinHeelVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME, oldMinHeelVolume, minHeelVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -408,6 +453,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return getLadenAttributes();
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				return getBallastAttributes();
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+				return getMinHeelVolume();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -442,6 +489,9 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				setBallastAttributes((VesselStateAttributes)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+				setMinHeelVolume((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -475,6 +525,9 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				setBallastAttributes((VesselStateAttributes)null);
 				return;
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+				setMinHeelVolume(MIN_HEEL_VOLUME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -501,6 +554,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return ladenAttributes != null;
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				return ballastAttributes != null;
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+				return minHeelVolume != MIN_HEEL_VOLUME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -525,6 +580,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 		result.append(maxSpeed);
 		result.append(", baseFuelUnitPrice: ");
 		result.append(baseFuelUnitPrice);
+		result.append(", minHeelVolume: ");
+		result.append(minHeelVolume);
 		result.append(')');
 		return result.toString();
 	}

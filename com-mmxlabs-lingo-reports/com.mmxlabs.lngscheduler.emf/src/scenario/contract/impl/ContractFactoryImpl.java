@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.contract.*;
 import scenario.contract.ContractFactory;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;

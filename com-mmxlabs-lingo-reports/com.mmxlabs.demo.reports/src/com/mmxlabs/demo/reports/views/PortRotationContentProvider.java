@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Content provider for the {@link CargoReportView}.

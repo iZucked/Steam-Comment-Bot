@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.market.*;
 import scenario.market.ForwardPrice;
 import scenario.market.Market;
 import scenario.market.MarketModel;
