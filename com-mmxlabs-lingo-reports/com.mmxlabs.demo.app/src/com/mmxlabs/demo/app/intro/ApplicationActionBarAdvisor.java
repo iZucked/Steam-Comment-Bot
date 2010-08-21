@@ -33,9 +33,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	@Override
 	protected void makeActions(IWorkbenchWindow window) {
-		introAction = ActionFactory.INTRO.create(window);
-		register(introAction);
-
+		if (window.getWorkbench().getIntroManager().hasIntro()){
+			introAction = ActionFactory.INTRO.create(window);
+			register(introAction);
+		}
 		quitAction = ActionFactory.QUIT.create(window);
 		register(quitAction);
 
@@ -105,6 +106,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menuBar.add(helpMenu);
 
 		// Help
-		helpMenu.add(introAction);
+		if (introAction != null) 
+			helpMenu.add(introAction);
 	}
 }
