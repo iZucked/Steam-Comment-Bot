@@ -20,6 +20,7 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.optimiser.common;bundle-version="1.0.0",
  com.mmxlabs.optimiser.core;bundle-version="1.0.0",
  com.mmxlabs.optimiser.lso;bundle-version="1.0.0",
- com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="1.0.0"
+ com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="1.0.0",
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
