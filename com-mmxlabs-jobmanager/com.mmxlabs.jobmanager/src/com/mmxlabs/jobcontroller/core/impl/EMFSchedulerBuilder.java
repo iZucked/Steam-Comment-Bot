@@ -196,9 +196,9 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void setPortToPortDistance(final IPort from, final IPort to,
-			final int distance) {
+			final String route, final int distance) {
 
-		delegate.setPortToPortDistance(from, to, distance);
+		delegate.setPortToPortDistance(from, to, route, distance);
 
 
 		scenario.port.DistanceLine eLine = PortFactory.eINSTANCE.createDistanceLine();
