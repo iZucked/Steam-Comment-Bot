@@ -39,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
@@ -522,5 +523,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vc.setIdleConsumptionRate(state, idleConsumptionRate);
 		vc.setConsumptionRate(state, consumptionRateCalculator);
 		vc.setNBOSpeed(state, nboSpeed);
+	}
+
+	/**
+	 * Like the other setVesselClassStateParameters, but the NBO speed is calculated automatically.
+	 * 
+	 * @param vc
+	 * @param state
+	 * @param nboRate
+	 * @param idleNBORate
+	 * @param idleConsumptionRate
+	 * @param consumptionCalculator
+	 */
+	public void setVesselClassStateParamaters(IVesselClass vc,
+			VesselState state, int nboRate, int idleNBORate,
+			int idleConsumptionRate,
+			InterpolatingConsumptionRateCalculator consumptionCalculator) {
+		//TODO there is something stupid going on with units here.
+		final int nboSpeed = consumptionCalculator.getSpeed(nboRate);
+		this.setVesselClassStateParamaters(vc, state, nboRate, idleNBORate, idleConsumptionRate, consumptionCalculator, nboSpeed);
 	}
 }
