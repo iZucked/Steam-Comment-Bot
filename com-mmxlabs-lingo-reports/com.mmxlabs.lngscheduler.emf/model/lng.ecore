@@ -42,8 +42,12 @@
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="ballastAttributes" eType="#//fleet/VesselStateAttributes"
           containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minHeelVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FuelConsumptionLine">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Represents a point on the fuel consumption curve, so a containing VesselStateAttributes will consume the associated amount of fuel at the given speed."/>
+      </eAnnotations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
