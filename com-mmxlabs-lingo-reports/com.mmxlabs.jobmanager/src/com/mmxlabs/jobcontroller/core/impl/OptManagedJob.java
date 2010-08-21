@@ -43,7 +43,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
-//TODO Geneate a base class and provide some methods for job creation etc.
+//TODO Generate a base class and provide some methods for job creation etc.
 
 public class OptManagedJob implements IManagedJob {
 
