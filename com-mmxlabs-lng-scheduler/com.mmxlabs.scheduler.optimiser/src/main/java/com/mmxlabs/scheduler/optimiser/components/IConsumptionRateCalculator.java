@@ -16,4 +16,11 @@ public interface IConsumptionRateCalculator {
 	 * @return
 	 */
 	long getRate(int speed);
+	
+	/**
+	 * Return the speed for this consumption rate
+	 * @param rate the consumption rate
+	 * @return a speed so that getRate(speed) == rate
+	 */
+	int getSpeed(long rate);
 }
