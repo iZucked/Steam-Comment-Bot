@@ -247,6 +247,9 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		eVesselClass.setMinSpeed(minSpeed);
 		eVesselClass.setMaxSpeed(maxSpeed);
 
+		//TODO this may be rubbish.
+		eVesselClass.setMinHeelVolume(minHeel);
+		
 		FleetModel fleetModel = eScenario.getFleetModel();
 		fleetModel.getVesselClasses().add(eVesselClass);
 
