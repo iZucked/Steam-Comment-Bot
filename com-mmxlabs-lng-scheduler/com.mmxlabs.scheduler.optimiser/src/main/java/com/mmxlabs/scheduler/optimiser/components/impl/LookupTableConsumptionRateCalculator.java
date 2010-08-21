@@ -42,6 +42,14 @@ public final class LookupTableConsumptionRateCalculator implements
 		return table[speed - minSpeed];
 	}
 
+	@Override
+	public int getSpeed(long rate) {
+		for (int i = 0; i<table.length; i++) {
+			if (table[i] == rate) return i + minSpeed;
+		}
+		return 0;
+	}
+	
 	private void init(final IConsumptionRateCalculator calc) {
 		final int s = maxSpeed - minSpeed + 1;
 

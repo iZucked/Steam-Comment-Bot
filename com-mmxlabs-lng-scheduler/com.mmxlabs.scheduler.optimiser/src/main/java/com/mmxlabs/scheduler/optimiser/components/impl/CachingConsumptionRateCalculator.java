@@ -43,4 +43,9 @@ public final class CachingConsumptionRateCalculator implements
 
 		return rate;
 	}
+
+	@Override
+	public int getSpeed(long rate) {
+		return calc.getSpeed(rate);
+	}
 }
