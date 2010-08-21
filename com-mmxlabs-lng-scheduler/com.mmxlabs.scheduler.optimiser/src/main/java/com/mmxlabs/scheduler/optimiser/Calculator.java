@@ -52,4 +52,8 @@ public class Calculator {
 	public static long convertMTToM3(long mt, int factor) {
 		return (mt * ScaleFactor) / factor;
 	}
+	
+	public static int scale(int value) {
+		return ScaleFactor * value;	
+	}
 }
