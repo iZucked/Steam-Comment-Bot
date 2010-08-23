@@ -338,4 +338,9 @@ public class ModifiableSequencesTest {
 		Assert.assertSame(sequence1, sequences.getModifiableSequence(0));
 		Assert.assertSame(sequence2, sequences.getModifiableSequence(1));
 	}
+	
+	@Test
+	public void testEquals() {
+		Assert.fail("Not yet implemented");
+	}
 }
