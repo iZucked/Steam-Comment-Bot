@@ -53,6 +53,12 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 		final int distance = m.get(options.getFromPortSlot().getPort(), options
 				.getToPortSlot().getPort());
+		
+		// Invalid distance
+		if (distance == Integer.MAX_VALUE) {
+			return false;
+		}
+		
 		options.setDistance(distance);
 
 		return true;
