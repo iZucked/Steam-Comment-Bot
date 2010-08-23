@@ -2,9 +2,10 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 
 /**
- * Default implementation of {@link IVessel}
+ * Default implementation of {@link IVessel}.
  * 
  * @author Simon Goodall
  * 
@@ -14,6 +15,8 @@ public final class Vessel implements IVessel {
 	private String name;
 
 	private IVesselClass vesselClass;
+
+	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
 
 	@Override
 	public String getName() {
@@ -31,6 +34,16 @@ public final class Vessel implements IVessel {
 
 	public void setVesselClass(final IVesselClass vesselClass) {
 		this.vesselClass = vesselClass;
+	}
+
+	@Override
+	public VesselInstanceType getVesselInstanceType() {
+		return vesselInstanceType;
+	}
+
+	public void setVesselInstanceType(
+			final VesselInstanceType vesselInstanceType) {
+		this.vesselInstanceType = vesselInstanceType;
 	}
 
 }

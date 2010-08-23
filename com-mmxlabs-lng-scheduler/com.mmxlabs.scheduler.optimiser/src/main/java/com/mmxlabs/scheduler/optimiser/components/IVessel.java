@@ -18,6 +18,7 @@ public interface IVessel extends IResource {
 	 * 
 	 * @return
 	 */
+	@Override
 	String getName();
 
 	/**
@@ -26,4 +27,11 @@ public interface IVessel extends IResource {
 	 * @return
 	 */
 	IVesselClass getVesselClass();
+
+	/**
+	 * Returns the {@link VesselInstanceType} of this {@link IVessel} instance.
+	 * 
+	 * @return
+	 */
+	VesselInstanceType getVesselInstanceType();
 }

@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 
 @RunWith(JMock.class)
 public class VesselTest {
@@ -32,4 +33,12 @@ public class VesselTest {
 		Assert.assertSame(vesselClass, vessel.getVesselClass());
 	}
 
+	@Test
+	public void testGetSetVesselInstanceType() {
+		final Vessel vessel = new Vessel();
+		Assert.assertSame(VesselInstanceType.UNKNOWN, vessel.getVesselInstanceType());
+		VesselInstanceType value = VesselInstanceType.FLEET;
+		vessel.setVesselInstanceType(value);
+		Assert.assertSame(value, vessel.getVesselInstanceType());
+	}
 }
