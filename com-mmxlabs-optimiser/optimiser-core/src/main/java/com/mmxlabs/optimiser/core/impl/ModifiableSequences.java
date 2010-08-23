@@ -129,11 +129,25 @@ public final class ModifiableSequences<T> implements IModifiableSequences<T> {
 	}
 
 	@Override
+	public Map<IResource, IModifiableSequence<T>> getModifiableSequences() {
+
+		// Create a copy so external modification does not affect internal
+		// state. We could call (@link {@link Collections#unmodifiableMap(Map)}
+		// however the generics mismatch between ISequence and
+		// IModifiableSequence still needs to be addressed.
+		final Map<IResource, IModifiableSequence<T>> map = new HashMap<IResource, IModifiableSequence<T>>(
+				sequenceMap);
+
+		return map;
+	}
+	
+	@Override
 	public int size() {
 
 		return sequenceMap.size();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 

@@ -256,6 +256,40 @@ public class ModifiableSequencesTest {
 	}
 
 	@Test
+	public void testGetModifiableSequences() {
+
+		// Create two resources and test Sequences object is correctly
+		// initialised
+
+		final IResource resource1 = context.mock(IResource.class, "resource-1");
+		final IResource resource2 = context.mock(IResource.class, "resource-2");
+
+		final IModifiableSequence<Object> sequence1 = context.mock(
+				IModifiableSequence.class, "sequence1");
+		final IModifiableSequence<Object> sequence2 = context.mock(
+				IModifiableSequence.class, "sequence2");
+
+		final List<IResource> resources = CollectionsUtil.makeArrayList(
+				resource1, resource2);
+
+		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
+				.makeHashMap(resource1, sequence1, resource2, sequence2);
+
+		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
+				resources, map);
+
+		Assert.assertEquals(2, sequences.size());
+
+		Map<IResource, IModifiableSequence<Object>> sequencesMap = sequences
+				.getModifiableSequences();
+
+		Assert.assertTrue(sequencesMap.containsKey(resource1));
+		Assert.assertTrue(sequencesMap.containsKey(resource2));
+		Assert.assertSame(sequence1, sequencesMap.get(resource1));
+		Assert.assertSame(sequence2, sequencesMap.get(resource2));
+	}
+	
+	@Test
 	public void testSize() {
 
 		// Create two resources and test Sequences object is correctly

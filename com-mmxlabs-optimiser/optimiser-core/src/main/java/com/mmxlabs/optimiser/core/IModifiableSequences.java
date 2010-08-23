@@ -1,5 +1,7 @@
 package com.mmxlabs.optimiser.core;
 
+import java.util.Map;
+
 /**
  * Extended version of the {@link ISequences} interface allowing access to
  * {@link IModifiableSequence} instances rather than the read-only
@@ -26,4 +28,9 @@ public interface IModifiableSequences<T> extends ISequences<T> {
 	 * @return
 	 */
 	IModifiableSequence<T> getModifiableSequence(int index);
+	
+	/**
+	 * @return
+	 */
+	Map<IResource, IModifiableSequence<T>> getModifiableSequences();
 }
