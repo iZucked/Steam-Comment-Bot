@@ -19,4 +19,9 @@ public final class NullSequencesManipulator<T> implements
 	public void manipulate(final IModifiableSequences<T> sequence) {
 		// Do nothing
 	}
+
+	@Override
+	public void dispose() {
+		// Do nothing
+	}
 }

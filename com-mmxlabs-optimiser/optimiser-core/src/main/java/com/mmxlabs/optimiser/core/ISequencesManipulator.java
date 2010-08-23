@@ -21,4 +21,6 @@ public interface ISequencesManipulator<T> {
 	 * @param sequences
 	 */
 	void manipulate(IModifiableSequences<T> sequences);
+
+	void dispose();
 }
