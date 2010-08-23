@@ -36,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -305,7 +306,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final Vessel vessel = new Vessel();
 		vessel.setName(name);
 		vessel.setVesselClass(vesselClass);
-
+		vessel.setVesselInstanceType(VesselInstanceType.FLEET);
+		
 		vessels.add(vessel);
 
 		final IResource resource = new Resource(name);
@@ -377,7 +379,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			resourceAllocationProvider.setAllowedResources(element,
 					Collections.singleton(resource));
 		}
-
+		
 		return vessel;
 	}
 

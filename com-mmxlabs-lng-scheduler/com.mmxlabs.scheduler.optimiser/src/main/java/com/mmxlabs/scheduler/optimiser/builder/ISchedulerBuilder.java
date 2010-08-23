@@ -61,7 +61,7 @@ public interface ISchedulerBuilder {
 			IConsumptionRateCalculator consumptionRateCalculator, int nboSpeed);
 
 	/**
-	 * Create a vessel with the given name and class.
+	 * Create a core fleet vessel with the given name and class.
 	 * 
 	 * @param name
 	 * @param vesselClass
