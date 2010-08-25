@@ -20,7 +20,7 @@ public class CharterCostFitnessComponent<T> extends
 	private IVesselProvider vesselProvider;
 	private IPortTypeProvider portTypeProvider;
 
-	protected CharterCostFitnessComponent(String name,
+	public CharterCostFitnessComponent(String name,
 			CargoSchedulerFitnessCore<T> core) {
 		super(name, core);
 	}

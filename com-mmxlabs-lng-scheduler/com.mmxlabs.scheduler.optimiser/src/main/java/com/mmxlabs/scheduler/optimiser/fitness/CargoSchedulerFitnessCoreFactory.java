@@ -25,6 +25,8 @@ public final class CargoSchedulerFitnessCoreFactory implements
 	
 	public static final String COST_LNG_COMPONENT_NAME = "cargo-scheduler-cost-lng";
 
+	public static final String CHARTER_COST_COMPONENT_NAME = "cargo-scheduler-charter-cost";
+
 	@Override
 	public Collection<String> getFitnessComponentNames() {
 		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME,

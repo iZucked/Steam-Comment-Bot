@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
@@ -78,6 +79,11 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 						.makeArrayList(FuelComponent.Base,
 								FuelComponent.Base_Supplemental,
 								FuelComponent.IdleBase), this));
+		
+		components.add(new CharterCostFitnessComponent<T>(
+				CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME,
+				this));
+				
 	}
 
 	@Override
