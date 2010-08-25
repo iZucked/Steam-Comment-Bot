@@ -94,13 +94,13 @@
           unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="VesselInstanceType">
-      <eLiterals name="Fleet" literal="">
+      <eLiterals name="Fleet" literal="Fleet">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation" value="Fleet vehicles are always available at no cost"/>
         </eAnnotations>
       </eLiterals>
       <eLiterals name="SpotCharter" value="1"/>
-      <eLiterals name="TimeCharter" value="2" literal=""/>
+      <eLiterals name="TimeCharter" value="2" literal="TimeCharter"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
