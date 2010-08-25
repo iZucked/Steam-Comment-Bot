@@ -37,18 +37,20 @@
           eType="#//fleet/PortAndTime" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="endRequirement" lowerBound="1"
           eType="#//fleet/PortAndTime" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceType" eType="#//fleet/VesselInstanceType"
+          defaultValueLiteral=""/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="VesselClass">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelUnitPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="ladenAttributes" eType="#//fleet/VesselStateAttributes"
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="ballastAttributes" eType="#//fleet/VesselStateAttributes"
           containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minHeelVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minHeelVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation" value="The volume of cargo below which boil-off cannot be used for fuel. Some vessels cannot access LNG below a certain level in their tanks for fuel."/>
         </eAnnotations>
@@ -69,27 +71,36 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Represents a point on the fuel consumption curve, so a containing VesselStateAttributes will consume the associated amount of fuel at the given speed."/>
       </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="VesselStateAttributes">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselState" eType="#//fleet/VesselState"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="nboRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="idleNBORate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="nboRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="idleNBORate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="idleConsumptionRate"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="fuelConsumptionCurve"
           upperBound="-1" eType="#//fleet/FuelConsumptionLine" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="VesselState">
       <eLiterals name="Laden"/>
-      <eLiterals name="Ballast"/>
+      <eLiterals name="Ballast" value="1"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="PortAndTime">
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"
           unsettable="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
           unsettable="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="VesselInstanceType">
+      <eLiterals name="Fleet" literal="">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Fleet vehicles are always available at no cost"/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="SpotCharter" value="1"/>
+      <eLiterals name="TimeCharter" value="2" literal=""/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
@@ -137,21 +148,12 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Cargo">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="#//cargo/LoadSlot"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="#//cargo/Slot"
           containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="#//cargo/DischargeSlot"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="#//cargo/Slot"
           containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="LoadSlot">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot">
+    <eClassifiers xsi:type="ecore:EClass" name="Slot">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
