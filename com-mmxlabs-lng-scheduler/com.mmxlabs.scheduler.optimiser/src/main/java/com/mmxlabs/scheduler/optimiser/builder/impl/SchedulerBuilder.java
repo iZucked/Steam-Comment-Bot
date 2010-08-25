@@ -33,10 +33,10 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -45,17 +45,20 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
 /**
@@ -104,6 +107,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final List<ITimeWindow> timeWindows = new LinkedList<ITimeWindow>();
 
+	/**
+	 * A "virtual" port which is zero distance from all other ports, to be used in cases where a vessel can be in any location.
+	 * This can be replaced with a real location at a later date, after running an optimisation.
+	 */
+	private final IPort ANYWHERE;
+
+	private final IStartEndRequirementProviderEditor startEndRequirementProvider;
+	
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
 				SchedulerConstants.DCP_vesselProvider);
@@ -125,11 +136,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		resourceAllocationProvider = new ResourceAllocationConstraintProvider(
 				SchedulerConstants.DCP_resourceAllocationProvider);
 
+		startEndRequirementProvider = new HashMapStartEndRequirementEditor(
+				SchedulerConstants.DCP_startEndRequirementProvider);
+		
 		// Create a default matrix entry
 		portDistanceProvider.set(IMultiMatrixProvider.Default_Key,
 				new HashMapMatrixProvider<IPort, Integer>(
 						SchedulerConstants.DCP_portDistanceProvider,
 						Integer.MAX_VALUE));
+		
+		// Create the anywhere port
+		ANYWHERE = createPort("ANYWHERE");
 	}
 
 	@Override
@@ -260,6 +277,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		ports.add(port);
 
+		/*
+		 * ANYWHERE is not present in the /real/ distance matrix, so we must set its distances here.
+		 */
+		if (ANYWHERE != null) {
+			setPortToPortDistance(port, ANYWHERE, IMultiMatrixProvider.Default_Key, 0);
+			setPortToPortDistance(ANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
+		}
+		
 		return port;
 	}
 
@@ -273,6 +298,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		ports.add(port);
 
+		if (ANYWHERE != null) {
+			setPortToPortDistance(port, ANYWHERE, IMultiMatrixProvider.Default_Key, 0);
+			setPortToPortDistance(ANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
+		}
+		
 		return port;
 	}
 
@@ -286,28 +316,27 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVessel createVessel(final String name,
-			final IVesselClass vesselClass, IPort startPort, IPort endPort) {
+			final IVesselClass vesselClass, IStartEndRequirement start, IStartEndRequirement end){
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException(
 					"IVesselClass was not created using this builder");
 		}
 
-		if (!ports.contains(startPort)) {
-			throw new IllegalArgumentException(
-					"Start IPort was not created using this builder");
-		}
+//		if (!ports.contains(startPort)) {
+//			throw new IllegalArgumentException(
+//					"Start IPort was not created using this builder");
+//		}
 
-		if (!ports.contains(endPort)) {
-			throw new IllegalArgumentException(
-					"End IPort was not created using this builder");
-		}
+//		if (!ports.contains(endPort)) {
+//			throw new IllegalArgumentException(
+//					"End IPort was not created using this builder");
+//		}
 
 		final Vessel vessel = new Vessel();
 		vessel.setName(name);
 		vessel.setVesselClass(vesselClass);
-		vessel.setVesselInstanceType(VesselInstanceType.FLEET);
-		
+
 		vessels.add(vessel);
 
 		final IResource resource = new Resource(name);
@@ -315,72 +344,82 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// Register with provider
 		vesselProvider.setVesselResource(resource, vessel);
+		
+		// If no time requirement is specified then the time window is at the very start of the job
+		ITimeWindow startWindow = 
+			start.hasTimeRequirement() ? 
+					createTimeWindow(start.getTime(), start.getTime()) :
+						createTimeWindow(0, 0);
+		
+		PortSlot startSlot = new PortSlot();
+		startSlot.setId("start-" + name);
+		startSlot.setPort(start.hasPortRequirement() ? start.getLocation() : ANYWHERE);
+		
+		startSlot.setTimeWindow(startWindow);
 
-		// TODO: Temporary stick in a start loc at time zero.
-		{
-			ITimeWindow window = createTimeWindow(0, 0);
-			String id = "depot-" + name;
+		// end window works the same
+		//TODO should I use a max width time window for no end time specification?
+		ITimeWindow endWindow = 
+			end.hasTimeRequirement() ?
+					createTimeWindow(end.getTime(), end.getTime() + 1) :
+						createTimeWindow(0, Integer.MAX_VALUE);
 
-			final PortSlot slot = new PortSlot();
-			slot.setId(id);
-			slot.setPort(startPort);
-			slot.setTimeWindow(window);
+		PortSlot endSlot = new PortSlot();
+		endSlot.setId("end-" + name);
+		endSlot.setPort(end.hasPortRequirement() ? end.getLocation() : ANYWHERE);
+		endSlot.setTimeWindow(endWindow);
 
-			// Create a sequence element against this load slot
-			final SequenceElement element = new SequenceElement();
-			element.setName(id + "-" + startPort.getName());
-			element.setPortSlot(slot);
+		// Create start/end sequence elements for this route
+		SequenceElement startElement = new SequenceElement();
+		SequenceElement endElement = new SequenceElement();
+		
+		startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
+		endElement.setName(endSlot.getId() + "-" + endSlot.getPort().getName());
+		
+		startElement.setPortSlot(startSlot);
+		endElement.setPortSlot(endSlot);
+		
+		portProvider.setPortForElement(startSlot.getPort(), startElement);
+		portProvider.setPortForElement(endSlot.getPort(), endElement);
+		
+		portTypeProvider.setPortType(startElement, PortType.Start);
+		portTypeProvider.setPortType(endElement, PortType.End);
+		
+		portSlotsProvider.setPortSlot(startElement, startSlot);
+		portSlotsProvider.setPortSlot(endElement, endSlot);
+		
+		timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startSlot.getTimeWindow()));
+		timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endSlot.getTimeWindow()));
+		
+		resourceAllocationProvider.setAllowedResources(startElement, Collections.singleton(resource));
+		resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
+		
+		startEndRequirementProvider.setStartEndRequirements(resource, start, end);
 
-			sequenceElements.add(element);
-
-			// Register the port with the element
-			portProvider.setPortForElement(startPort, element);
-
-			portTypeProvider.setPortType(element,
-					PortType.Start);
-
-			portSlotsProvider.setPortSlot(element, slot);
-
-			timeWindowProvider.setTimeWindows(element,
-					Collections.singletonList(window));
-
-			resourceAllocationProvider.setAllowedResources(element,
-					Collections.singleton(resource));
-		}
-
-		// TODO: Temporary stick in a end loc at time 400.
-		{
-			ITimeWindow window = createTimeWindow(500 * 24, 501 * 24);
-			String id = "depot-" + name;
-
-			final PortSlot slot = new PortSlot();
-			slot.setId(id);
-			slot.setPort(endPort);
-			slot.setTimeWindow(window);
-
-			// Create a sequence element against this load slot
-			final SequenceElement element = new SequenceElement();
-			element.setName(id + "-" + endPort.getName());
-			element.setPortSlot(slot);
-
-			sequenceElements.add(element);
-
-			// Register the port with the element
-			portProvider.setPortForElement(endPort, element);
-
-			portTypeProvider.setPortType(element,
-					PortType.End);
-
-			portSlotsProvider.setPortSlot(element, slot);
-
-			timeWindowProvider.setTimeWindows(element,
-					Collections.singletonList(window));
-
-			resourceAllocationProvider.setAllowedResources(element,
-					Collections.singleton(resource));
-		}
+//		TODO specify initial vessel state?
 		
 		return vessel;
+	}
+	
+	@Override
+	public IStartEndRequirement createStartEndRequirement(IPort fixedPort) {
+		return new StartEndRequirement(fixedPort, true, 0, false);
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement(int fixedTime) {
+		return new StartEndRequirement(ANYWHERE, false, fixedTime, true);
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement(IPort fixedPort,
+			int fixedTime) {
+		return new StartEndRequirement(fixedPort, true, fixedTime, true);
+	}
+	
+	@Override
+	public IStartEndRequirement createStartEndRequirement() {
+		return new StartEndRequirement(ANYWHERE, false, 0, false);
 	}
 
 	@Override
@@ -413,7 +452,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IOptimisationData<ISequenceElement> getOptimisationData() {
 
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
-
+		
 		data.setResources(resources);
 		data.setSequenceElements(sequenceElements);
 
@@ -441,6 +480,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.addDataComponentProvider(
 				SchedulerConstants.DCP_resourceAllocationProvider,
 				resourceAllocationProvider);
+		
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_startEndRequirementProvider, 
+				startEndRequirementProvider);
 
 		if (true) {
 			for (final IPort from : ports) {

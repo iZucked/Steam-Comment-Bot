@@ -9,6 +9,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
@@ -67,8 +68,33 @@ public interface ISchedulerBuilder {
 	 * @param vesselClass
 	 * @return
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass, IPort startPort, IPort endPort);
-
+	IVessel createVessel(String name, IVesselClass vesselClass, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint);
+	
+	/**
+	 * Create a start/end requirement which constrains nothing
+	 * @return
+	 */
+	IStartEndRequirement createStartEndRequirement();
+	/**
+	 * Create a requirement that the vessel start/end at the given port, but at an arbitrary time
+	 * @param fixedPort
+	 * @return
+	 */
+	IStartEndRequirement createStartEndRequirement(IPort fixedPort);
+	/**
+	 * Create a requirement that the vessel start/end at any port at the given time
+	 * @param fixedTime
+	 * @return
+	 */
+	IStartEndRequirement createStartEndRequirement(int fixedTime);
+	/**
+	 * Create a requirement that the vessel start/end at the given port and time
+	 * @param fixedPort
+	 * @param fixedTime
+	 * @return
+	 */
+	IStartEndRequirement createStartEndRequirement(IPort fixedPort, int fixedTime);
+	
 	/**
 	 * Create a port with the given name.
 	 * 
