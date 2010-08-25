@@ -41,6 +41,11 @@ public final class VesselClass implements IVesselClass {
 	private final EnumMap<VesselState, Integer> nboSpeeds = new EnumMap<VesselState, Integer>(
 			VesselState.class);
 
+	/**
+	 * Stores the price per hour to charter vessels of this class.
+	 */
+	private int hourlyCharterPrice;
+
 	@Override
 	public String getName() {
 		return name;
@@ -162,5 +167,14 @@ public final class VesselClass implements IVesselClass {
 
 	public void setBaseFuelConversionFactor(int baseFuelConversionFactor) {
 		this.baseFuelConversionFactor = baseFuelConversionFactor;
+	}
+
+	public void setHourlyCharterPrice(int hourlyCharterPrice) {
+		this.hourlyCharterPrice = hourlyCharterPrice;
+	}
+	
+	@Override
+	public int getHourlyCharterPrice() {
+		return hourlyCharterPrice;
 	}
 }
