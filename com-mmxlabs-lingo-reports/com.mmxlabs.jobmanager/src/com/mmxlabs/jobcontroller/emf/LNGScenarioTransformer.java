@@ -16,21 +16,27 @@ import scenario.cargo.Cargo;
 import scenario.cargo.DischargeSlot;
 import scenario.cargo.LoadSlot;
 import scenario.fleet.FuelConsumptionLine;
+import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
+import scenario.fleet.VesselAvailability;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselStateAttributes;
+import scenario.port.Canal;
 import scenario.port.DistanceLine;
+import scenario.port.PartialDistance;
 import scenario.port.Port;
 
 import com.mmxlabs.common.Association;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
@@ -46,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 public class LNGScenarioTransformer {
 	private Scenario scenario;
 	private TimeZone timezone;
+	private Date earliestTime;
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes
@@ -101,19 +108,20 @@ public class LNGScenarioTransformer {
 		/*
 		 * Find the earliest date, to convert from absolute date and time to offset hours 
 		 */
-		Date earliest = null;
+		earliestTime = null;
 		for (Cargo eCargo: scenario.getCargoModel().getCargoes()) {
 			final Date loadDate = eCargo.getLoadSlot().getWindowStart();
-			if (earliest == null || earliest.after(loadDate)) {
-				earliest = loadDate;
+			if (earliestTime == null || earliestTime.after(loadDate)) {
+				earliestTime = loadDate;
 			}
 		}
+		
 		for (Cargo eCargo: scenario.getCargoModel().getCargoes()) {
 			//not escargot.
 			LoadSlot loadSlot = eCargo.getLoadSlot();
 			DischargeSlot dischargeSlot = eCargo.getDischargeSlot();
-			int loadStart = convertTime(earliest, loadSlot.getWindowStart());
-			int dischargeStart = convertTime(earliest, dischargeSlot.getWindowStart());
+			int loadStart = convertTime(earliestTime, loadSlot.getWindowStart());
+			int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart());
 			
 			//TODO check units again
 			ITimeWindow loadWindow = builder.createTimeWindow(loadStart, loadStart + loadSlot.getWindowDuration());
@@ -167,9 +175,10 @@ public class LNGScenarioTransformer {
 			Association<Port, IPort> portAssociation, List<IPort> allPorts,
 			Map<IPort, Integer> portIndices) throws IncompleteScenarioException {
 		boolean[][] modeledEdges = new boolean[allPorts.size()][allPorts.size()];
-
+		int[][] defaultDistances = new int[allPorts.size()][allPorts.size()];
 		/*
 		 * Now fill out the distances from the distance model.
+		 * Firstly we need to create the default distance matrix.
 		 */
 		for (DistanceLine dl : scenario.getDistanceModel().getDistances()) {
 			IPort from, to;
@@ -178,7 +187,12 @@ public class LNGScenarioTransformer {
 
 			modeledEdges[portIndices.get(from)][portIndices.get(to)] = true;
 
-			builder.setPortToPortDistance(from, to, Calculator.scale(dl.getDistance()));
+			final int distance = Calculator.scale(dl.getDistance());
+			defaultDistances[portIndices.get(from)][portIndices.get(to)] = 
+				distance;
+			builder.setPortToPortDistance(from, to, IMultiMatrixProvider.Default_Key, 
+					distance);
+			
 		}
 		StringBuilder missingEdges = new StringBuilder();
 		/*
@@ -196,6 +210,45 @@ public class LNGScenarioTransformer {
 		if (missingEdges.length() > 0) {
 			throw new IncompleteScenarioException("Missing edges in distance model : " + missingEdges.toString());
 		}
+		
+		/*
+		 * Next we need to handle the secondary distance matrices for each canal.
+		 */
+		
+		for (Canal canal : scenario.getCanalModel().getCanals()) {
+			/*
+			 * Each canal contains a list of partial distances to enter/leave the canal from/to a particular port,
+ 			 * so the entryDistances are distances from port to whichever end of the canal is closest,
+ 			 * and the exitDistances from whichever end of the canal is closest to the port. 
+ 			 * 
+ 			 * There is a small gotcha here about the possibility of entering and leaving the port from the same end;
+ 			 * because the entry/exit distances don't know which end they are, a peculiar distance matrix might cause
+ 			 * canal edges which don't actually involve going through the canal. This can only happen when the distance
+ 			 * matrix doesn't contain the shortest free path between two points.
+			 */
+			final String name = canal.getName();
+			final int distance = Calculator.scale(canal.getDistance());
+			
+			for (PartialDistance enter : canal.getEntryDistances()) {
+				for (PartialDistance exit : canal.getExitDistances()) {
+					final IPort from = portAssociation.lookup(enter.getPort());
+					final IPort to = portAssociation.lookup(exit.getPort());
+					
+					final int defaultDistance = defaultDistances[portIndices.get(from)]
+					                                             [portIndices.get(to)];
+					
+					final int distanceViaCanal = distance + 
+						Calculator.scale(enter.getDistance()) +
+						Calculator.scale(exit.getDistance());	
+					
+					if (distanceViaCanal < defaultDistance) {
+						//TODO this currently triggers an NPE, because I don't know how to specify
+						//that an extra distance matrix should be created.
+						builder.setPortToPortDistance(from, to, name, distanceViaCanal);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -212,13 +265,13 @@ public class LNGScenarioTransformer {
 		Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<VesselClass, IVesselClass>();
 
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
-			//TODO missing min heel capacity (penultimate parameter)
-			//TODO check whether these values need converting
+			//TODO check whether price units need converting up from dollars
 			IVesselClass vc = builder.createVesselClass(eVc.getName(), 
-					eVc.getMinSpeed(), eVc.getMaxSpeed(), 
-					eVc.getCapacity(), 
-					eVc.getMinHeelVolume(), //TODO figure out what this ought to be, really
-					eVc.getBaseFuelUnitPrice());
+					Calculator.scale(eVc.getMinSpeed()), Calculator.scale(eVc.getMaxSpeed()), 
+					Calculator.scale(eVc.getCapacity() * eVc.getFillCapacity()),
+					Calculator.scale(eVc.getMinHeelVolume()),
+					eVc.getBaseFuelUnitPrice(),
+					eVc.getDailyCharterPrice() * 24);
 			vesselClassAssociation.add(eVc, vc);
 
 			/*
@@ -232,12 +285,38 @@ public class LNGScenarioTransformer {
 		 * Now create each vessel
 		 */
 		for (Vessel eV : scenario.getFleetModel().getFleet()) {
+			IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, eV.getStartRequirement());
+			IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, eV.getEndRequirement());
+			
 			IVessel v = builder.createVessel(eV.getName(), 
-					vesselClassAssociation.lookup(eV.getClass_()), 
-					portAssociation.lookup(eV.getStartPort()),
-					portAssociation.lookup(eV.getEndPort()));
+					vesselClassAssociation.lookup(eV.getClass_()),
+					startRequirement, endRequirement);
 		}
+	}
 
+	/**
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
+	 * @param builder
+	 * @param portAssociation
+	 * @param pat
+	 * @return
+	 */
+	private IStartEndRequirement createRequirement(SchedulerBuilder builder, Association<Port, IPort> portAssociation, PortAndTime pat) {
+		if (pat.isSetPort() && pat.isSetTime()) {
+			return builder.createStartEndRequirement(
+					portAssociation.lookup(pat.getPort()),
+					convertTime(pat.getTime()));
+		} else if (pat.isSetPort()) {
+			return builder.createStartEndRequirement(portAssociation.lookup(pat.getPort()));
+		} else if (pat.isSetTime()) {
+			return builder.createStartEndRequirement(convertTime(pat.getTime()));
+		} else {
+			return builder.createStartEndRequirement();
+		}
+	}
+	
+	private int convertTime(Date startTime) {
+		return convertTime(earliestTime, startTime);
 	}
 
 	/**
@@ -255,18 +334,18 @@ public class LNGScenarioTransformer {
 		//create consumption rate calculator for the curve
 		TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 
-		//TODO these units may need converting.
 		for (FuelConsumptionLine line : attrs.getFuelConsumptionCurve()) {
-			keypoints.put(line.getSpeed(), (long) line.getConsumption());
+			keypoints.put(Calculator.scale(line.getSpeed()), (long) Calculator.scale(line.getConsumption()));
 		}
 
 		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
-		//TODO the NBO speed is fixed but needs checking inside this call.
 		builder.setVesselClassStateParamaters(vc, state, 
-				attrs.getNboRate(), 
-				attrs.getIdleNBORate(), 
-				attrs.getIdleConsumptionRate(), 
+				Calculator.scale(attrs.getNboRate()), 
+				Calculator.scale(attrs.getIdleNBORate()), 
+				Calculator.scale(attrs.getIdleConsumptionRate()), 
 				consumptionCalculator);
 	}
+	
+	
 }
