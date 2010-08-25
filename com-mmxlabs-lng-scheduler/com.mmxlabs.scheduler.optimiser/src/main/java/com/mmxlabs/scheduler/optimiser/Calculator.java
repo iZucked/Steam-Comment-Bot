@@ -53,7 +53,21 @@ public class Calculator {
 		return (mt * ScaleFactor) / factor;
 	}
 	
+	/**
+	 * Scale an integer value by the scaling factor
+	 * @param value
+	 * @return scaled version of value
+	 */
 	public static int scale(int value) {
 		return ScaleFactor * value;	
+	}
+
+	/**
+	 * Scale a float
+	 * @param f
+	 * @return scaled float
+	 */
+	public static long scale(float f) {
+		return (long) (ScaleFactor * f);
 	}
 }
