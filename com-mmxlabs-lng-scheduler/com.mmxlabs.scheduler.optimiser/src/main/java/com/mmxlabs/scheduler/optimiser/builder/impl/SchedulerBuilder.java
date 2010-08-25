@@ -522,10 +522,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// TODO: Null provider refs
 	}
 
+	
+	
+	@Override
+	public IVesselClass createVesselClass(String name, int minSpeed,
+			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice) {
+		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice, 0);
+	}
+
 	@Override
 	public IVesselClass createVesselClass(final String name,
 			final int minSpeed, final int maxSpeed, final long capacity,
-			final int minHeel, int baseFuelUnitPrice) {
+			final int minHeel, int baseFuelUnitPrice, int hourlyCharterPrice) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -538,6 +546,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPrice);
 
+		vesselClass.setHourlyCharterPrice(hourlyCharterPrice);
+		
 		vesselClasses.add(vesselClass);
 
 		return vesselClass;

@@ -45,6 +45,20 @@ public interface ISchedulerBuilder {
 			long capacity, int minHeel, int baseFuelUnitPrice);
 
 	/**
+	 * Like the other {@link createVesselClass}, but with an hourly charter price specified (defaults to zero otherwise); 
+	 * @param name
+	 * @param minSpeed
+	 * @param maxSpeed
+	 * @param capacity
+	 * @param minHeel
+	 * @param baseFuelUnitPrice
+	 * @param dailyCharterPrice
+	 * @return
+	 */
+	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
+			long capacity, int minHeel, int baseFuelUnitPrice, int hourlyCharterPrice);
+	
+	/**
 	 * Set {@link IVesselClass} parameters that depend upon the
 	 * {@link VesselState}.
 	 * 
