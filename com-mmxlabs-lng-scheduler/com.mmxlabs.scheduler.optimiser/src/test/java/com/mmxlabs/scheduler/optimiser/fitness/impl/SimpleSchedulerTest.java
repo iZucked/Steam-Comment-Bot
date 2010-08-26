@@ -85,9 +85,9 @@ public class SimpleSchedulerTest {
 				consumptionCalculator, 15000);
 
 		// TODO: Setup start/end ports correctly
-		builder.createVessel("vessel-1", vesselClass1, port1, port2);
-		builder.createVessel("vessel-2", vesselClass1, port1, port2);
-		builder.createVessel("vessel-3", vesselClass1, port1, port6);
+		builder.createVessel("vessel-1", vesselClass1, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2));
+		builder.createVessel("vessel-2", vesselClass1, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2));
+		builder.createVessel("vessel-3", vesselClass1, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6));
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);
