@@ -70,4 +70,8 @@ public class Calculator {
 	public static long scale(float f) {
 		return (long) (ScaleFactor * f);
 	}
+	
+	public static int scaleToInt(float f) {
+		return (int) (ScaleFactor * f);
+	}
 }

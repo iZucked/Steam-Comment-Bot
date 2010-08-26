@@ -29,6 +29,9 @@ public class RandomInitialScheduleBuilder<T> implements IInitialScheduleBuilder<
 	public RandomInitialScheduleBuilder(Random random) {
 		this.random = random;
 	}
+	public RandomInitialScheduleBuilder() {
+		this(new Random(1));
+	}
 	@Override
 	public ISequences<T> createInitialSequences(IOptimisationData<T> data) {
 		
