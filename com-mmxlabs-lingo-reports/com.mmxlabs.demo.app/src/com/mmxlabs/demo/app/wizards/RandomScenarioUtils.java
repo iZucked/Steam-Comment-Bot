@@ -18,12 +18,16 @@ import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
-import scenario.fleet.VesselInstanceType;
 import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
 import scenario.port.DistanceLine;
 import scenario.port.Port;
 
+/**
+ * A class for constructing the EMF representations of random test scenarios
+ * @author hinton
+ *
+ */
 public class RandomScenarioUtils {
 	FleetFactory ff = FleetPackage.eINSTANCE.getFleetFactory();
 	private Random random;
@@ -39,7 +43,7 @@ public class RandomScenarioUtils {
 		VesselClass class1 = addVesselClass(scenario, "STEAM-138", 12, 20, 138000, 200);
 		VesselClass class2 = addVesselClass(scenario, "STEAM-145", 12, 20, 145000, 200);
 		VesselClass class3 = addVesselClass(scenario, "DFDE-177", 12, 20, 177000, 200);
-		VesselClass class4 = addVesselClass(scenario, "STEAM-126", 12, 19, 138000, 200); //TODO units in the model; should it be a float?
+		VesselClass class4 = addVesselClass(scenario, "STEAM-126", 12, 19.5f, 138000, 200); //TODO units in the model; should it be a float?
 		
 		float[][] steam = new float[][] {{12, 12}, {20, 20}};
 		float[][] dfde = new float[][] {{12, 8}, {20, 16}};
@@ -47,6 +51,8 @@ public class RandomScenarioUtils {
 		//create class parameters; currently model uses containment for curves, so we need to do duplicates
 		class1.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 138/24.0f, 118/24.0f, 10/24.0f, steam));
 		class1.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 138/24.0f, 118/24.0f, 10/24.0f, steam));
+		
+		
 		
 		class2.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 145/24.0f, 125/24.0f, 10/24.0f, steam));
 		class2.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 145/24.0f, 125/24.0f, 10/24.0f, steam));
@@ -56,6 +62,11 @@ public class RandomScenarioUtils {
 		
 		class4.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 126/24.0f, 106/24.0f, 10/24.0f, steam));
 		class4.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 125/24.0f, 106/24.0f, 10/24.0f, steam));
+		
+		class1.setSpotCharterCount(3);
+		class2.setSpotCharterCount(3);
+		class3.setSpotCharterCount(3);
+		class4.setSpotCharterCount(3);
 		
 		//create vessels in each class
 		
@@ -78,18 +89,18 @@ public class RandomScenarioUtils {
 		addVessel(scenario, "Golar Freeze", class4);
 		addVessel(scenario, "Methane Princes", class1);
 		
-		addVessel(scenario, "Extra-Charter-1", class1).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-2", class2).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-3", class3).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-4", class4).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-5", class1).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-6", class2).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-7", class3).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-8", class4).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-9", class1).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-10", class2).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-11", class3).setInstanceType(VesselInstanceType.SPOT_CHARTER);
-		addVessel(scenario, "Extra-Charter-12", class4).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-1", class1).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-2", class2).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-3", class3).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-4", class4).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-5", class1).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-6", class2).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-7", class3).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-8", class4).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-9", class1).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-10", class2).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-11", class3).setInstanceType(VesselInstanceType.SPOT_CHARTER);
+//		addVessel(scenario, "Extra-Charter-12", class4).setInstanceType(VesselInstanceType.SPOT_CHARTER);
 	}
 	
 	private void randomiseAvailability(Scenario scenario, Vessel addVessel) {
@@ -105,12 +116,11 @@ public class RandomScenarioUtils {
 		v.setName(string);
 		v.setClass(class1);
 		
-		//TODO start and end constraints?
-		
 		scenario.getFleetModel().getFleet().add(v);
 		
 		return v;
 	}
+	
 	private VesselStateAttributes createVesselStateAttributes(VesselState state,
 			float nbo, float idlenbo, float idleconsumption, float[][] curve) {
 		VesselStateAttributes vsa = ff.createVesselStateAttributes();
@@ -129,12 +139,12 @@ public class RandomScenarioUtils {
 		
 		return vsa;
 	}
-	VesselClass addVesselClass(Scenario scenario, String name, int minSpeed, int maxSpeed, long capacity, int baseFuelUnitPrice) {
+	VesselClass addVesselClass(Scenario scenario, String name, int minSpeed, float f, long capacity, int baseFuelUnitPrice) {
 		VesselClass vc = ff.createVesselClass();
 		
 		vc.setName(name);
 		vc.setMinSpeed(minSpeed);
-		vc.setMaxSpeed(maxSpeed);
+		vc.setMaxSpeed(f);
 		vc.setCapacity(capacity);
 		vc.setBaseFuelUnitPrice(baseFuelUnitPrice);
 		vc.setDailyCharterPrice(40000);
