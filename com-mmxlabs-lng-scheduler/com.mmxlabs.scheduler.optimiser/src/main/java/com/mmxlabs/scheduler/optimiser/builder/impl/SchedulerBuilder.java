@@ -113,7 +113,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	private final IPort ANYWHERE;
 
-	private final IStartEndRequirementProviderEditor startEndRequirementProvider;
+	private final IStartEndRequirementProviderEditor<ISequenceElement> startEndRequirementProvider;
 	
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
@@ -136,7 +136,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		resourceAllocationProvider = new ResourceAllocationConstraintProvider(
 				SchedulerConstants.DCP_resourceAllocationProvider);
 
-		startEndRequirementProvider = new HashMapStartEndRequirementEditor(
+		startEndRequirementProvider = new HashMapStartEndRequirementEditor<ISequenceElement>(
 				SchedulerConstants.DCP_startEndRequirementProvider);
 		
 		// Create a default matrix entry
@@ -395,7 +395,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
 		
 		startEndRequirementProvider.setStartEndRequirements(resource, start, end);
-
+		startEndRequirementProvider.setStartEndElements(resource, startElement, endElement);
+		
 //		TODO specify initial vessel state?
 		
 		return vessel;
