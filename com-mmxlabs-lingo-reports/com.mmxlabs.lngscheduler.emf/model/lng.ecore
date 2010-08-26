@@ -37,8 +37,6 @@
           eType="#//fleet/PortAndTime" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="endRequirement" lowerBound="1"
           eType="#//fleet/PortAndTime" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceType" eType="#//fleet/VesselInstanceType"
-          defaultValueLiteral=""/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="VesselClass">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -66,6 +64,7 @@
           <details key="documentation" value="The cost per day of spot chartering vessels of this class, expressed in dollars"/>
         </eAnnotations>
       </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotCharterCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FuelConsumptionLine">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -92,15 +91,6 @@
           unsettable="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
           unsettable="true"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EEnum" name="VesselInstanceType">
-      <eLiterals name="Fleet" literal="Fleet">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Fleet vehicles are always available at no cost"/>
-        </eAnnotations>
-      </eLiterals>
-      <eLiterals name="SpotCharter" value="1"/>
-      <eLiterals name="TimeCharter" value="2" literal="TimeCharter"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
@@ -191,11 +181,17 @@
   <eSubpackages name="optimiser" nsURI="http://com.mmxlabs.lng.emf/optimiser" nsPrefix="com.mmxlabs.lng.emf.optimiser">
     <eClassifiers xsi:type="ecore:EClass" name="OptimisationSettings">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="randomSeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Optimisation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="allSettings" eType="#//optimiser/OptimisationSettings"
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="currentSettings" eType="#//optimiser/OptimisationSettings"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LSOSettings" eSuperTypes="#//optimiser/OptimisationSettings">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfSteps" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="stepSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialThreshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

@@ -13,14 +13,13 @@ import javax.management.timer.Timer;
 
 import scenario.Scenario;
 import scenario.cargo.Cargo;
-import scenario.cargo.DischargeSlot;
-import scenario.cargo.LoadSlot;
+import scenario.cargo.Slot;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
-import scenario.fleet.VesselAvailability;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselStateAttributes;
+import scenario.optimiser.OptimisationSettings;
 import scenario.port.Canal;
 import scenario.port.DistanceLine;
 import scenario.port.PartialDistance;
@@ -39,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 
 /**
@@ -118,8 +118,8 @@ public class LNGScenarioTransformer {
 		
 		for (Cargo eCargo: scenario.getCargoModel().getCargoes()) {
 			//not escargot.
-			LoadSlot loadSlot = eCargo.getLoadSlot();
-			DischargeSlot dischargeSlot = eCargo.getDischargeSlot();
+			Slot loadSlot = eCargo.getLoadSlot();
+			Slot dischargeSlot = eCargo.getDischargeSlot();
 			int loadStart = convertTime(earliestTime, loadSlot.getWindowStart());
 			int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart());
 			
@@ -214,37 +214,38 @@ public class LNGScenarioTransformer {
 		/*
 		 * Next we need to handle the secondary distance matrices for each canal.
 		 */
-		
-		for (Canal canal : scenario.getCanalModel().getCanals()) {
-			/*
-			 * Each canal contains a list of partial distances to enter/leave the canal from/to a particular port,
- 			 * so the entryDistances are distances from port to whichever end of the canal is closest,
- 			 * and the exitDistances from whichever end of the canal is closest to the port. 
- 			 * 
- 			 * There is a small gotcha here about the possibility of entering and leaving the port from the same end;
- 			 * because the entry/exit distances don't know which end they are, a peculiar distance matrix might cause
- 			 * canal edges which don't actually involve going through the canal. This can only happen when the distance
- 			 * matrix doesn't contain the shortest free path between two points.
-			 */
-			final String name = canal.getName();
-			final int distance = Calculator.scale(canal.getDistance());
-			
-			for (PartialDistance enter : canal.getEntryDistances()) {
-				for (PartialDistance exit : canal.getExitDistances()) {
-					final IPort from = portAssociation.lookup(enter.getPort());
-					final IPort to = portAssociation.lookup(exit.getPort());
-					
-					final int defaultDistance = defaultDistances[portIndices.get(from)]
-					                                             [portIndices.get(to)];
-					
-					final int distanceViaCanal = distance + 
+		if (scenario.getCanalModel() != null) {
+			for (Canal canal : scenario.getCanalModel().getCanals()) {
+				/*
+				 * Each canal contains a list of partial distances to enter/leave the canal from/to a particular port,
+				 * so the entryDistances are distances from port to whichever end of the canal is closest,
+				 * and the exitDistances from whichever end of the canal is closest to the port. 
+				 * 
+				 * There is a small gotcha here about the possibility of entering and leaving the port from the same end;
+				 * because the entry/exit distances don't know which end they are, a peculiar distance matrix might cause
+				 * canal edges which don't actually involve going through the canal. This can only happen when the distance
+				 * matrix doesn't contain the shortest free path between two points.
+				 */
+				final String name = canal.getName();
+				final int distance = Calculator.scale(canal.getDistance());
+
+				for (PartialDistance enter : canal.getEntryDistances()) {
+					for (PartialDistance exit : canal.getExitDistances()) {
+						final IPort from = portAssociation.lookup(enter.getPort());
+						final IPort to = portAssociation.lookup(exit.getPort());
+
+						final int defaultDistance = defaultDistances[portIndices.get(from)]
+						                                             [portIndices.get(to)];
+
+						final int distanceViaCanal = distance + 
 						Calculator.scale(enter.getDistance()) +
 						Calculator.scale(exit.getDistance());	
-					
-					if (distanceViaCanal < defaultDistance) {
-						//TODO this currently triggers an NPE, because I don't know how to specify
-						//that an extra distance matrix should be created.
-						builder.setPortToPortDistance(from, to, name, distanceViaCanal);
+
+						if (distanceViaCanal < defaultDistance) {
+							//TODO this currently triggers an NPE, because I don't know how to specify
+							//that an extra distance matrix should be created.
+							builder.setPortToPortDistance(from, to, name, distanceViaCanal);
+						}
 					}
 				}
 			}
@@ -267,9 +268,9 @@ public class LNGScenarioTransformer {
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
 			//TODO check whether price units need converting up from dollars
 			IVesselClass vc = builder.createVesselClass(eVc.getName(), 
-					Calculator.scale(eVc.getMinSpeed()), Calculator.scale(eVc.getMaxSpeed()), 
-					Calculator.scale(eVc.getCapacity() * eVc.getFillCapacity()),
-					Calculator.scale(eVc.getMinHeelVolume()),
+					Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()), 
+					Calculator.scale(eVc.getCapacity() * eVc.getFillCapacity()), // TODO is capacity mean to be scaled?
+					Calculator.scaleToInt(eVc.getMinHeelVolume()),
 					eVc.getBaseFuelUnitPrice(),
 					eVc.getDailyCharterPrice() * 24);
 			vesselClassAssociation.add(eVc, vc);
@@ -292,6 +293,19 @@ public class LNGScenarioTransformer {
 					vesselClassAssociation.lookup(eV.getClass_()),
 					startRequirement, endRequirement);
 		}
+		
+		/*
+		 * Create spot charter vessels with no start/end requirements
+		 */
+		IStartEndRequirement blankRequirement = builder.createStartEndRequirement();
+		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
+			for (int i = 0; i<eVc.getSpotCharterCount(); i++) {
+				IVessel v = builder.createVessel("SPOT-" + eVc.getName() + "-" + i, vesselClassAssociation.lookup(eVc),
+						VesselInstanceType.SPOT_CHARTER,
+						blankRequirement, blankRequirement);
+				
+			}
+		}
 	}
 
 	/**
@@ -302,6 +316,9 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	private IStartEndRequirement createRequirement(SchedulerBuilder builder, Association<Port, IPort> portAssociation, PortAndTime pat) {
+		if (pat == null) {
+			return builder.createStartEndRequirement();
+		}
 		if (pat.isSetPort() && pat.isSetTime()) {
 			return builder.createStartEndRequirement(
 					portAssociation.lookup(pat.getPort()),
@@ -335,17 +352,28 @@ public class LNGScenarioTransformer {
 		TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 
 		for (FuelConsumptionLine line : attrs.getFuelConsumptionCurve()) {
-			keypoints.put(Calculator.scale(line.getSpeed()), (long) Calculator.scale(line.getConsumption()));
+			keypoints.put(Calculator.scaleToInt(line.getSpeed()), Calculator.scale(line.getConsumption()));
 		}
 
 		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		builder.setVesselClassStateParamaters(vc, state, 
-				Calculator.scale(attrs.getNboRate()), 
-				Calculator.scale(attrs.getIdleNBORate()), 
-				Calculator.scale(attrs.getIdleConsumptionRate()), 
+				Calculator.scaleToInt(attrs.getNboRate()), 
+				Calculator.scaleToInt(attrs.getIdleNBORate()), 
+				Calculator.scaleToInt(attrs.getIdleConsumptionRate()), 
 				consumptionCalculator);
 	}
-	
-	
+
+	/**
+	 * Utility method for getting the current optimisation settings from this scenario.
+	 * TODO maybe put this in another file/model somewhere else.
+	 * @return
+	 */
+	public OptimisationSettings getOptimisationSettings() {
+		if (scenario.getOptimisation() != null) {
+			return scenario.getOptimisation().getCurrentSettings();
+		} else {
+			return null;
+		}
+	}
 }
