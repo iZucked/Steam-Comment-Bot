@@ -37,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -314,9 +315,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return window;
 	}
 
+	public IVessel createVessel(final String name, final IVesselClass vesselClass, final IStartEndRequirement start,
+			final IStartEndRequirement end) {
+		return this.createVessel(name, vesselClass, VesselInstanceType.FLEET, start, end);
+	}
+	
 	@Override
 	public IVessel createVessel(final String name,
-			final IVesselClass vesselClass, IStartEndRequirement start, IStartEndRequirement end){
+			final IVesselClass vesselClass, final VesselInstanceType vesselInstanceType, 
+			IStartEndRequirement start, IStartEndRequirement end){
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException(
@@ -337,6 +344,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vessel.setName(name);
 		vessel.setVesselClass(vesselClass);
 
+		vessel.setVesselInstanceType(vesselInstanceType);
+		
 		vessels.add(vessel);
 
 		final IResource resource = new Resource(name);

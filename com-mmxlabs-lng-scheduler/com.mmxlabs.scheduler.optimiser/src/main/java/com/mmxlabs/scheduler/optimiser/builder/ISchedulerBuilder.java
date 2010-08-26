@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
@@ -83,6 +84,19 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint);
+	
+	/**
+	 * Create a fleet vessel with the given name, class and instance type.
+	 * @param name
+	 * @param vesselClass
+	 * @param vesselInstanceType
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	IVessel createVessel(String name, IVesselClass vesselClass,
+			VesselInstanceType vesselInstanceType, IStartEndRequirement start,
+			IStartEndRequirement end);
 	
 	/**
 	 * Create a start/end requirement which constrains nothing
@@ -206,5 +220,7 @@ public interface ISchedulerBuilder {
 	 * should selectively clean these up.
 	 */
 	void dispose();
+
+
 
 }
