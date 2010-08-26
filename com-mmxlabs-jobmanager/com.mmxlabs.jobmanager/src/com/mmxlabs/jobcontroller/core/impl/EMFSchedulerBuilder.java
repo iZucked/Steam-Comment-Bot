@@ -29,9 +29,11 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
@@ -47,8 +49,8 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	private final Scenario eScenario;
 
 	private final Map<IPort, scenario.port.Port> ePorts = new HashMap<IPort, scenario.port.Port>();
-	private final Map<ILoadSlot, scenario.cargo.LoadSlot> eLoadSlots = new HashMap<ILoadSlot, scenario.cargo.LoadSlot>();
-	private final Map<IDischargeSlot, scenario.cargo.DischargeSlot> eDischargeSlots = new HashMap<IDischargeSlot, scenario.cargo.DischargeSlot>();
+	private final Map<ILoadSlot, scenario.cargo.Slot> eLoadSlots = new HashMap<ILoadSlot, scenario.cargo.Slot>();
+	private final Map<IDischargeSlot, scenario.cargo.Slot> eDischargeSlots = new HashMap<IDischargeSlot, scenario.cargo.Slot>();
 	private final Map<ICargo, scenario.cargo.Cargo> eCargoes = new HashMap<ICargo, scenario.cargo.Cargo>();
 	private final Map<IVessel, scenario.fleet.Vessel> eVessels = new HashMap<IVessel, scenario.fleet.Vessel>();
 	private final Map<IVesselClass, scenario.fleet.VesselClass> eVesselClasses = new HashMap<IVesselClass, scenario.fleet.VesselClass>();
@@ -78,8 +80,8 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		ILoadSlot slot = delegate.createLoadSlot(id, port, window, minVolume,
 				maxVolume, unitPrice);
 
-		scenario.cargo.LoadSlot eLoadSlot = CargoFactory.eINSTANCE
-				.createLoadSlot();
+		scenario.cargo.Slot eLoadSlot = CargoFactory.eINSTANCE
+				.createSlot();
 		eLoadSlot.setId(id);
 		eLoadSlot.setMaxQuantity(maxVolume);
 		eLoadSlot.setMinQuantity(minVolume);
@@ -103,8 +105,8 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		IDischargeSlot slot = delegate.createDischargeSlot(id, port, window,
 				minVolume, maxVolume, unitPrice);
 
-		scenario.cargo.DischargeSlot eDischargeSlot = CargoFactory.eINSTANCE
-				.createDischargeSlot();
+		scenario.cargo.Slot eDischargeSlot = CargoFactory.eINSTANCE
+				.createSlot();
 		eDischargeSlot.setId(id);
 		eDischargeSlot.setMaxQuantity(maxVolume);
 		eDischargeSlot.setMinQuantity(minVolume);
@@ -173,26 +175,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		return window;
 	}
 
-	@Override
-	public IVessel createVessel(final String name,
-			final IVesselClass vesselClass, IPort startPort, IPort endPort) {
-
-		IVessel vessel = delegate.createVessel(name, vesselClass, startPort,
-				endPort);
-
-		scenario.fleet.Vessel eVessel = FleetFactory.eINSTANCE.createVessel();
-		eVessel.setName(name);
-		eVessel.setStartPort(ePorts.get(startPort));
-		eVessel.setEndPort(ePorts.get(endPort));
-		eVessel.setClass(eVesselClasses.get(vesselClass));
-
-		FleetModel fleetModel = eScenario.getFleetModel();
-		fleetModel.getFleet().add(eVessel);
-
-		eVessels.put(vessel, eVessel);
-
-		return vessel;
-	}
+	
 
 	@Override
 	public void setPortToPortDistance(final IPort from, final IPort to,
@@ -311,5 +294,74 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		
+	}
+
+	@Override
+	public IVesselClass createVesselClass(String name, int minSpeed,
+			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice,
+			int hourlyCharterPrice) {
+		//TODO fix charter price
+		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice);
+	}
+
+	@Override
+	public IVessel createVessel(String name, IVesselClass vesselClass,
+			IStartEndRequirement startConstraint,
+			IStartEndRequirement endConstraint) {
+		
+		
+		IVessel vessel = delegate.createVessel(name, vesselClass, startConstraint, endConstraint);
+
+		scenario.fleet.Vessel eVessel = FleetFactory.eINSTANCE.createVessel();
+		eVessel.setName(name);
+		eVessel.setClass(eVesselClasses.get(vesselClass));
+
+		eVessel.setStartRequirement(FleetFactory.eINSTANCE.createPortAndTime());
+		eVessel.setEndRequirement(FleetFactory.eINSTANCE.createPortAndTime());
+		
+		//TODO fix time constraints
+		if (startConstraint.hasPortRequirement()) {
+			eVessel.getStartRequirement().setPort(ePorts.get(startConstraint.getLocation()));
+		}
+		
+		if (endConstraint.hasPortRequirement()) {
+			eVessel.getEndRequirement().setPort(ePorts.get(endConstraint.getLocation()));
+		}
+		
+		FleetModel fleetModel = eScenario.getFleetModel();
+		fleetModel.getFleet().add(eVessel);
+
+		eVessels.put(vessel, eVessel);
+
+		return vessel;
+	}
+
+	@Override
+	public IVessel createVessel(String name, IVesselClass vesselClass,
+			VesselInstanceType vesselInstanceType, IStartEndRequirement start,
+			IStartEndRequirement end) {
+		return null;
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement() {
+		return delegate.createStartEndRequirement();
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement(IPort fixedPort) {
+		return delegate.createStartEndRequirement(fixedPort);
+		
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement(int fixedTime) {
+		return delegate.createStartEndRequirement(fixedTime);
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement(IPort fixedPort,
+			int fixedTime) {
+		return delegate.createStartEndRequirement(fixedPort, fixedTime);
 	}
 }

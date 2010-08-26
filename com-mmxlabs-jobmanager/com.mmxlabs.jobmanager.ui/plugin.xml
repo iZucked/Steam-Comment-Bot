@@ -22,5 +22,61 @@
             file="contexts.xml">
       </contexts>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="com.mmxlabs.jobmanager.ui.commands.category"
+            name="Optimisation Commands">
+      </category>
+      <command
+            categoryId="com.mmxlabs.jobmanager.ui.commands.category"
+            id="com.mmxlabs.jobmanager.ui.commands.optimiseScenarios"
+            name="Optimise Selected Scenarios">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.mmxlabs.jobmanager.ui.handlers.ScenarioOptimisationHandler"
+            commandId="com.mmxlabs.jobmanager.ui.commands.optimiseScenarios">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.mmxlabs.jobmanager.ui.commands.optimiseScenarios"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+6">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="com.mmxlabs.jobmanager.ui.menus.sampleMenu"
+               label="Optimisation"
+               mnemonic="M">
+            <command
+                  commandId="com.mmxlabs.jobmanager.ui.commands.optimiseScenarios"
+                  id="com.mmxlabs.jobmanager.ui.menus.optimiseScenario"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="com.mmxlabs.jobmanager.ui.toolbars.optimisationToolbar">
+            <command
+                  commandId="com.mmxlabs.jobmanager.ui.commands.optimiseScenarios"
+                  icon="icons/sample.gif"
+                  id="com.mmxlabs.jobmanager.ui.toolbars.optimiseScenario"
+                  tooltip="Optimise Selected Job">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
 
 </plugin>
