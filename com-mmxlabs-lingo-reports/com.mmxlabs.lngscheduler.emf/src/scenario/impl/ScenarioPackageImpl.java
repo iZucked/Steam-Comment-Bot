@@ -22,6 +22,8 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.impl.FleetPackageImpl;
 import scenario.market.MarketPackage;
 import scenario.market.impl.MarketPackageImpl;
+import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.impl.OptimiserPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.SchedulePackage;
@@ -94,6 +96,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
 		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
+		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theScenarioPackage.createPackageContents();
@@ -103,6 +106,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
 		theMarketPackage.createPackageContents();
+		theOptimiserPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theScenarioPackage.initializePackageContents();
@@ -112,6 +116,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
 		theMarketPackage.initializePackageContents();
+		theOptimiserPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theScenarioPackage.freeze();
@@ -206,6 +211,24 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getScenario_CanalModel() {
+		return (EReference)scenarioEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenario_Optimisation() {
+		return (EReference)scenarioEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
@@ -238,6 +261,8 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		createEReference(scenarioEClass, SCENARIO__SCHEDULE_MODEL);
 		createEReference(scenarioEClass, SCENARIO__MARKET_MODEL);
 		createEReference(scenarioEClass, SCENARIO__DISTANCE_MODEL);
+		createEReference(scenarioEClass, SCENARIO__CANAL_MODEL);
+		createEReference(scenarioEClass, SCENARIO__OPTIMISATION);
 	}
 
 	/**
@@ -270,6 +295,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		ContractPackage theContractPackage = (ContractPackage)EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI);
 		MarketPackage theMarketPackage = (MarketPackage)EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI);
+		OptimiserPackage theOptimiserPackage = (OptimiserPackage)EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theFleetPackage);
@@ -278,6 +304,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		getESubpackages().add(theCargoPackage);
 		getESubpackages().add(theContractPackage);
 		getESubpackages().add(theMarketPackage);
+		getESubpackages().add(theOptimiserPackage);
 
 		// Create type parameters
 
@@ -294,6 +321,8 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		initEReference(getScenario_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenario_MarketModel(), theMarketPackage.getMarketModel(), null, "marketModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenario_DistanceModel(), thePortPackage.getDistanceModel(), null, "distanceModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_CanalModel(), thePortPackage.getCanalModel(), null, "canalModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_Optimisation(), theOptimiserPackage.getOptimisation(), null, "optimisation", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

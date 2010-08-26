@@ -37,7 +37,7 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int SPEED_EDEFAULT = 0;
+	protected static final float SPEED_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getSpeed() <em>Speed</em>}' attribute.
@@ -47,7 +47,7 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * @generated
 	 * @ordered
 	 */
-	protected int speed = SPEED_EDEFAULT;
+	protected float speed = SPEED_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getConsumption() <em>Consumption</em>}' attribute.
@@ -57,7 +57,7 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int CONSUMPTION_EDEFAULT = 0;
+	protected static final float CONSUMPTION_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getConsumption() <em>Consumption</em>}' attribute.
@@ -67,7 +67,7 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * @generated
 	 * @ordered
 	 */
-	protected int consumption = CONSUMPTION_EDEFAULT;
+	protected float consumption = CONSUMPTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -94,7 +94,7 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * @generated
 	 */
 	@Override
-	public int getSpeed() {
+	public float getSpeed() {
 		return speed;
 	}
 
@@ -103,9 +103,8 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setSpeed(int newSpeed) {
-		int oldSpeed = speed;
+	public void setSpeed(float newSpeed) {
+		float oldSpeed = speed;
 		speed = newSpeed;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FUEL_CONSUMPTION_LINE__SPEED, oldSpeed, speed));
@@ -117,7 +116,7 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * @generated
 	 */
 	@Override
-	public int getConsumption() {
+	public float getConsumption() {
 		return consumption;
 	}
 
@@ -126,9 +125,8 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setConsumption(int newConsumption) {
-		int oldConsumption = consumption;
+	public void setConsumption(float newConsumption) {
+		float oldConsumption = consumption;
 		consumption = newConsumption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION, oldConsumption, consumption));
@@ -159,10 +157,10 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
-				setSpeed((Integer)newValue);
+				setSpeed((Float)newValue);
 				return;
 			case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
-				setConsumption((Integer)newValue);
+				setConsumption((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

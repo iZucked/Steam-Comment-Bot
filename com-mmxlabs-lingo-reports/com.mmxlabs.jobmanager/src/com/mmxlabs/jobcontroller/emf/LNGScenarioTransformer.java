@@ -194,22 +194,22 @@ public class LNGScenarioTransformer {
 					distance);
 			
 		}
-		StringBuilder missingEdges = new StringBuilder();
-		/*
-		 * Check whether any entries were missing from the distance matrix
-		 */
-		for (int i = 0; i<modeledEdges.length; i++) {
-			for (int j = 0; j<modeledEdges.length; j++) {
-				if (modeledEdges[i][j] == false) {
-					if (missingEdges.length() > 0) missingEdges.append(", ");
-					missingEdges.append("from " + allPorts.get(i).getName() + " to " + allPorts.get(j).getName());
-				}
-			}
-		}
-
-		if (missingEdges.length() > 0) {
-			throw new IncompleteScenarioException("Missing edges in distance model : " + missingEdges.toString());
-		}
+//		StringBuilder missingEdges = new StringBuilder();
+//		/*
+//		 * Check whether any entries were missing from the distance matrix
+//		 */
+//		for (int i = 0; i<modeledEdges.length; i++) {
+//			for (int j = 0; j<modeledEdges.length; j++) {
+//				if (modeledEdges[i][j] == false) {
+//					if (missingEdges.length() > 0) missingEdges.append(", ");
+//					missingEdges.append("from " + allPorts.get(i).getName() + " to " + allPorts.get(j).getName());
+//				}
+//			}
+//		}
+//
+//		if (missingEdges.length() > 0) {
+//			throw new IncompleteScenarioException("Missing edges in distance model : " + missingEdges.toString());
+//		}
 		
 		/*
 		 * Next we need to handle the secondary distance matrices for each canal.

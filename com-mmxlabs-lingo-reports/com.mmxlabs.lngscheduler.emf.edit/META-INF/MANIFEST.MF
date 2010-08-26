@@ -12,6 +12,7 @@ Export-Package: scenario.cargo.provider,
  scenario.contract.provider,
  scenario.fleet.provider,
  scenario.market.provider,
+ scenario.optimiser.provider,
  scenario.port.provider,
  scenario.provider,
  scenario.schedule.provider

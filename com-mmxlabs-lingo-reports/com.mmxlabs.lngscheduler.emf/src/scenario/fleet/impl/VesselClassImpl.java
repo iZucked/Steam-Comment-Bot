@@ -35,6 +35,9 @@ import scenario.fleet.VesselStateAttributes;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinHeelVolume <em>Min Heel Volume</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  * </ul>
  * </p>
  *
@@ -89,7 +92,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MIN_SPEED_EDEFAULT = 0;
+	protected static final float MIN_SPEED_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getMinSpeed() <em>Min Speed</em>}' attribute.
@@ -99,7 +102,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected int minSpeed = MIN_SPEED_EDEFAULT;
+	protected float minSpeed = MIN_SPEED_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getMaxSpeed() <em>Max Speed</em>}' attribute.
@@ -109,7 +112,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MAX_SPEED_EDEFAULT = 0;
+	protected static final float MAX_SPEED_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getMaxSpeed() <em>Max Speed</em>}' attribute.
@@ -119,7 +122,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected int maxSpeed = MAX_SPEED_EDEFAULT;
+	protected float maxSpeed = MAX_SPEED_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getBaseFuelUnitPrice() <em>Base Fuel Unit Price</em>}' attribute.
@@ -169,7 +172,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MIN_HEEL_VOLUME_EDEFAULT = 0;
+	protected static final long MIN_HEEL_VOLUME_EDEFAULT = 0L;
 
 	/**
 	 * The cached value of the '{@link #getMinHeelVolume() <em>Min Heel Volume</em>}' attribute.
@@ -179,7 +182,67 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected int minHeelVolume = MIN_HEEL_VOLUME_EDEFAULT;
+	protected long minHeelVolume = MIN_HEEL_VOLUME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFillCapacity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final float FILL_CAPACITY_EDEFAULT = 0.958F;
+
+	/**
+	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFillCapacity()
+	 * @generated
+	 * @ordered
+	 */
+	protected float fillCapacity = FILL_CAPACITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDailyCharterPrice() <em>Daily Charter Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyCharterPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DAILY_CHARTER_PRICE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDailyCharterPrice() <em>Daily Charter Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyCharterPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected int dailyCharterPrice = DAILY_CHARTER_PRICE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpotCharterCount()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SPOT_CHARTER_COUNT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpotCharterCount()
+	 * @generated
+	 * @ordered
+	 */
+	protected int spotCharterCount = SPOT_CHARTER_COUNT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -250,7 +313,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getMinSpeed() {
+	public float getMinSpeed() {
 		return minSpeed;
 	}
 
@@ -259,8 +322,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMinSpeed(int newMinSpeed) {
-		int oldMinSpeed = minSpeed;
+	public void setMinSpeed(float newMinSpeed) {
+		float oldMinSpeed = minSpeed;
 		minSpeed = newMinSpeed;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MIN_SPEED, oldMinSpeed, minSpeed));
@@ -271,7 +334,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getMaxSpeed() {
+	public float getMaxSpeed() {
 		return maxSpeed;
 	}
 
@@ -280,8 +343,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMaxSpeed(int newMaxSpeed) {
-		int oldMaxSpeed = maxSpeed;
+	public void setMaxSpeed(float newMaxSpeed) {
+		float oldMaxSpeed = maxSpeed;
 		maxSpeed = newMaxSpeed;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MAX_SPEED, oldMaxSpeed, maxSpeed));
@@ -399,7 +462,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getMinHeelVolume() {
+	public long getMinHeelVolume() {
 		return minHeelVolume;
 	}
 
@@ -408,11 +471,74 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMinHeelVolume(int newMinHeelVolume) {
-		int oldMinHeelVolume = minHeelVolume;
+	public void setMinHeelVolume(long newMinHeelVolume) {
+		long oldMinHeelVolume = minHeelVolume;
 		minHeelVolume = newMinHeelVolume;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME, oldMinHeelVolume, minHeelVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public float getFillCapacity() {
+		return fillCapacity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFillCapacity(float newFillCapacity) {
+		float oldFillCapacity = fillCapacity;
+		fillCapacity = newFillCapacity;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__FILL_CAPACITY, oldFillCapacity, fillCapacity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getDailyCharterPrice() {
+		return dailyCharterPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDailyCharterPrice(int newDailyCharterPrice) {
+		int oldDailyCharterPrice = dailyCharterPrice;
+		dailyCharterPrice = newDailyCharterPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE, oldDailyCharterPrice, dailyCharterPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getSpotCharterCount() {
+		return spotCharterCount;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSpotCharterCount(int newSpotCharterCount) {
+		int oldSpotCharterCount = spotCharterCount;
+		spotCharterCount = newSpotCharterCount;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT, oldSpotCharterCount, spotCharterCount));
 	}
 
 	/**
@@ -455,6 +581,12 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return getBallastAttributes();
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
 				return getMinHeelVolume();
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+				return getFillCapacity();
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
+				return getDailyCharterPrice();
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+				return getSpotCharterCount();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -475,10 +607,10 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				setCapacity((Long)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
-				setMinSpeed((Integer)newValue);
+				setMinSpeed((Float)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
-				setMaxSpeed((Integer)newValue);
+				setMaxSpeed((Float)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE:
 				setBaseFuelUnitPrice((Integer)newValue);
@@ -490,7 +622,16 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				setBallastAttributes((VesselStateAttributes)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
-				setMinHeelVolume((Integer)newValue);
+				setMinHeelVolume((Long)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+				setFillCapacity((Float)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
+				setDailyCharterPrice((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+				setSpotCharterCount((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -528,6 +669,15 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
 				setMinHeelVolume(MIN_HEEL_VOLUME_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+				setFillCapacity(FILL_CAPACITY_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
+				setDailyCharterPrice(DAILY_CHARTER_PRICE_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -556,6 +706,12 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return ballastAttributes != null;
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
 				return minHeelVolume != MIN_HEEL_VOLUME_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+				return fillCapacity != FILL_CAPACITY_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
+				return dailyCharterPrice != DAILY_CHARTER_PRICE_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -582,6 +738,12 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 		result.append(baseFuelUnitPrice);
 		result.append(", minHeelVolume: ");
 		result.append(minHeelVolume);
+		result.append(", fillCapacity: ");
+		result.append(fillCapacity);
+		result.append(", dailyCharterPrice: ");
+		result.append(dailyCharterPrice);
+		result.append(", spotCharterCount: ");
+		result.append(spotCharterCount);
 		result.append(')');
 		return result.toString();
 	}

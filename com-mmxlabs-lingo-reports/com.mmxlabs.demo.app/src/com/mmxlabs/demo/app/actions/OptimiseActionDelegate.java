@@ -16,9 +16,13 @@ import org.eclipse.ui.IViewPart;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobcontroller.emf.IncompleteScenarioException;
 import com.mmxlabs.jobcontroller.emf.LNGScenarioTransformer;
+import com.mmxlabs.jobcontroller.emf.optimisationsettings.OptimisationTransformer;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 public class OptimiseActionDelegate implements IViewActionDelegate {
@@ -45,7 +49,14 @@ public class OptimiseActionDelegate implements IViewActionDelegate {
 							//this resource contains a scenario, which we must now transform
 							LNGScenarioTransformer transformer = new LNGScenarioTransformer((Scenario) e);
 							try {
-								final IOptimisationData<ISequenceElement> optimisationData = transformer.createOptimisationData();
+								IOptimisationData<ISequenceElement> data = transformer.createOptimisationData();
+								
+								OptimisationTransformer optTransformer = new OptimisationTransformer(transformer.getOptimisationSettings());
+								
+								Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> 
+									optimiserAndContext = optTransformer.createOptimiserAndContext(data);
+								
+								//create and invoke a job.
 								
 							} catch (IncompleteScenarioException e1) {
 								// TODO Auto-generated catch block

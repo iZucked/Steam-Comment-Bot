@@ -15,8 +15,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
-import scenario.cargo.DischargeSlot;
-import scenario.cargo.LoadSlot;
+import scenario.cargo.Slot;
 
 /**
  * <!-- begin-user-doc -->
@@ -62,7 +61,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * @generated
 	 * @ordered
 	 */
-	protected LoadSlot loadSlot;
+	protected Slot loadSlot;
 
 	/**
 	 * The cached value of the '{@link #getDischargeSlot() <em>Discharge Slot</em>}' containment reference.
@@ -72,7 +71,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * @generated
 	 * @ordered
 	 */
-	protected DischargeSlot dischargeSlot;
+	protected Slot dischargeSlot;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -121,7 +120,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getLoadSlot() {
+	public Slot getLoadSlot() {
 		return loadSlot;
 	}
 
@@ -130,8 +129,8 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetLoadSlot(LoadSlot newLoadSlot, NotificationChain msgs) {
-		LoadSlot oldLoadSlot = loadSlot;
+	public NotificationChain basicSetLoadSlot(Slot newLoadSlot, NotificationChain msgs) {
+		Slot oldLoadSlot = loadSlot;
 		loadSlot = newLoadSlot;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, newLoadSlot);
@@ -145,7 +144,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot(LoadSlot newLoadSlot) {
+	public void setLoadSlot(Slot newLoadSlot) {
 		if (newLoadSlot != loadSlot) {
 			NotificationChain msgs = null;
 			if (loadSlot != null)
@@ -164,7 +163,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DischargeSlot getDischargeSlot() {
+	public Slot getDischargeSlot() {
 		return dischargeSlot;
 	}
 
@@ -173,8 +172,8 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetDischargeSlot(DischargeSlot newDischargeSlot, NotificationChain msgs) {
-		DischargeSlot oldDischargeSlot = dischargeSlot;
+	public NotificationChain basicSetDischargeSlot(Slot newDischargeSlot, NotificationChain msgs) {
+		Slot oldDischargeSlot = dischargeSlot;
 		dischargeSlot = newDischargeSlot;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, newDischargeSlot);
@@ -188,7 +187,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDischargeSlot(DischargeSlot newDischargeSlot) {
+	public void setDischargeSlot(Slot newDischargeSlot) {
 		if (newDischargeSlot != dischargeSlot) {
 			NotificationChain msgs = null;
 			if (dischargeSlot != null)
@@ -248,10 +247,10 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				setId((String)newValue);
 				return;
 			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((LoadSlot)newValue);
+				setLoadSlot((Slot)newValue);
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				setDischargeSlot((DischargeSlot)newValue);
+				setDischargeSlot((Slot)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -269,10 +268,10 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				setId(ID_EDEFAULT);
 				return;
 			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((LoadSlot)null);
+				setLoadSlot((Slot)null);
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				setDischargeSlot((DischargeSlot)null);
+				setDischargeSlot((Slot)null);
 				return;
 		}
 		super.eUnset(featureID);

@@ -29,6 +29,7 @@ import scenario.cargo.CargoFactory;
 import scenario.contract.ContractFactory;
 import scenario.fleet.FleetFactory;
 import scenario.market.MarketFactory;
+import scenario.optimiser.OptimiserFactory;
 import scenario.port.PortFactory;
 import scenario.schedule.ScheduleFactory;
 
@@ -90,6 +91,8 @@ public class ScenarioItemProvider
 			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__SCHEDULE_MODEL);
 			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__MARKET_MODEL);
 			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__DISTANCE_MODEL);
+			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__CANAL_MODEL);
+			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__OPTIMISATION);
 		}
 		return childrenFeatures;
 	}
@@ -148,6 +151,8 @@ public class ScenarioItemProvider
 			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
 			case ScenarioPackage.SCENARIO__MARKET_MODEL:
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
+			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+			case ScenarioPackage.SCENARIO__OPTIMISATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -199,6 +204,16 @@ public class ScenarioItemProvider
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__DISTANCE_MODEL,
 				 PortFactory.eINSTANCE.createDistanceModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CANAL_MODEL,
+				 PortFactory.eINSTANCE.createCanalModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__OPTIMISATION,
+				 OptimiserFactory.eINSTANCE.createOptimisation()));
 	}
 
 	/**

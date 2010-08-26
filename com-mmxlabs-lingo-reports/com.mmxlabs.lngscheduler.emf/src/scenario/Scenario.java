@@ -12,6 +12,8 @@ import scenario.cargo.CargoModel;
 import scenario.contract.ContractModel;
 import scenario.fleet.FleetModel;
 import scenario.market.MarketModel;
+import scenario.optimiser.Optimisation;
+import scenario.port.CanalModel;
 import scenario.port.DistanceModel;
 import scenario.port.PortModel;
 import scenario.schedule.ScheduleModel;
@@ -31,6 +33,8 @@ import scenario.schedule.ScheduleModel;
  *   <li>{@link scenario.Scenario#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link scenario.Scenario#getMarketModel <em>Market Model</em>}</li>
  *   <li>{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getOptimisation <em>Optimisation</em>}</li>
  * </ul>
  * </p>
  *
@@ -220,5 +224,57 @@ public interface Scenario extends EObject {
 	 * @generated
 	 */
 	void setDistanceModel(DistanceModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Canal Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Model</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Model</em>' containment reference.
+	 * @see #setCanalModel(CanalModel)
+	 * @see scenario.ScenarioPackage#getScenario_CanalModel()
+	 * @model containment="true"
+	 * @generated
+	 */
+	CanalModel getCanalModel();
+
+	/**
+	 * Sets the value of the '{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Model</em>' containment reference.
+	 * @see #getCanalModel()
+	 * @generated
+	 */
+	void setCanalModel(CanalModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Optimisation</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Optimisation</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Optimisation</em>' containment reference.
+	 * @see #setOptimisation(Optimisation)
+	 * @see scenario.ScenarioPackage#getScenario_Optimisation()
+	 * @model containment="true"
+	 * @generated
+	 */
+	Optimisation getOptimisation();
+
+	/**
+	 * Sets the value of the '{@link scenario.Scenario#getOptimisation <em>Optimisation</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Optimisation</em>' containment reference.
+	 * @see #getOptimisation()
+	 * @generated
+	 */
+	void setOptimisation(Optimisation value);
 
 } // Scenario

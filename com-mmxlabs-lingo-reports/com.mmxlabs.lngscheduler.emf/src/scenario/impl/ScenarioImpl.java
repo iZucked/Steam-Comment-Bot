@@ -19,6 +19,8 @@ import scenario.cargo.CargoModel;
 import scenario.contract.ContractModel;
 import scenario.fleet.FleetModel;
 import scenario.market.MarketModel;
+import scenario.optimiser.Optimisation;
+import scenario.port.CanalModel;
 import scenario.port.DistanceModel;
 import scenario.port.PortModel;
 import scenario.schedule.ScheduleModel;
@@ -37,6 +39,8 @@ import scenario.schedule.ScheduleModel;
  *   <li>{@link scenario.impl.ScenarioImpl#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link scenario.impl.ScenarioImpl#getMarketModel <em>Market Model</em>}</li>
  *   <li>{@link scenario.impl.ScenarioImpl#getDistanceModel <em>Distance Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getCanalModel <em>Canal Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getOptimisation <em>Optimisation</em>}</li>
  * </ul>
  * </p>
  *
@@ -112,6 +116,26 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @ordered
 	 */
 	protected DistanceModel distanceModel;
+
+	/**
+	 * The cached value of the '{@link #getCanalModel() <em>Canal Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected CanalModel canalModel;
+
+	/**
+	 * The cached value of the '{@link #getOptimisation() <em>Optimisation</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOptimisation()
+	 * @generated
+	 * @ordered
+	 */
+	protected Optimisation optimisation;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -449,6 +473,92 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CanalModel getCanalModel() {
+		return canalModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCanalModel(CanalModel newCanalModel, NotificationChain msgs) {
+		CanalModel oldCanalModel = canalModel;
+		canalModel = newCanalModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__CANAL_MODEL, oldCanalModel, newCanalModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalModel(CanalModel newCanalModel) {
+		if (newCanalModel != canalModel) {
+			NotificationChain msgs = null;
+			if (canalModel != null)
+				msgs = ((InternalEObject)canalModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__CANAL_MODEL, null, msgs);
+			if (newCanalModel != null)
+				msgs = ((InternalEObject)newCanalModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__CANAL_MODEL, null, msgs);
+			msgs = basicSetCanalModel(newCanalModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__CANAL_MODEL, newCanalModel, newCanalModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Optimisation getOptimisation() {
+		return optimisation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetOptimisation(Optimisation newOptimisation, NotificationChain msgs) {
+		Optimisation oldOptimisation = optimisation;
+		optimisation = newOptimisation;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__OPTIMISATION, oldOptimisation, newOptimisation);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOptimisation(Optimisation newOptimisation) {
+		if (newOptimisation != optimisation) {
+			NotificationChain msgs = null;
+			if (optimisation != null)
+				msgs = ((InternalEObject)optimisation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__OPTIMISATION, null, msgs);
+			if (newOptimisation != null)
+				msgs = ((InternalEObject)newOptimisation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__OPTIMISATION, null, msgs);
+			msgs = basicSetOptimisation(newOptimisation, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__OPTIMISATION, newOptimisation, newOptimisation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -466,6 +576,10 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return basicSetMarketModel(null, msgs);
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
 				return basicSetDistanceModel(null, msgs);
+			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+				return basicSetCanalModel(null, msgs);
+			case ScenarioPackage.SCENARIO__OPTIMISATION:
+				return basicSetOptimisation(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -492,6 +606,10 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return getMarketModel();
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
 				return getDistanceModel();
+			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+				return getCanalModel();
+			case ScenarioPackage.SCENARIO__OPTIMISATION:
+				return getOptimisation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -524,6 +642,12 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return;
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
 				setDistanceModel((DistanceModel)newValue);
+				return;
+			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+				setCanalModel((CanalModel)newValue);
+				return;
+			case ScenarioPackage.SCENARIO__OPTIMISATION:
+				setOptimisation((Optimisation)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -558,6 +682,12 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
 				setDistanceModel((DistanceModel)null);
 				return;
+			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+				setCanalModel((CanalModel)null);
+				return;
+			case ScenarioPackage.SCENARIO__OPTIMISATION:
+				setOptimisation((Optimisation)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -584,6 +714,10 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return marketModel != null;
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
 				return distanceModel != null;
+			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+				return canalModel != null;
+			case ScenarioPackage.SCENARIO__OPTIMISATION:
+				return optimisation != null;
 		}
 		return super.eIsSet(featureID);
 	}

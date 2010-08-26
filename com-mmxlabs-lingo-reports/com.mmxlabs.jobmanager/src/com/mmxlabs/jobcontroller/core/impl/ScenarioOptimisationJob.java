@@ -235,7 +235,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 						System.out.println("Final fitness "
 								+ linearFitnessEvaluator.getBestFitness());
-					} catch (IncompleteScenarioException ex) {
+					} catch (Exception ex) {
 						return Status.CANCEL_STATUS; //die
 					}
 				} finally {

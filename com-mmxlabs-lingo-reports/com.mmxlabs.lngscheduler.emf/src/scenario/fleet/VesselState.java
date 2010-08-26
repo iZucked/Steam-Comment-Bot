@@ -40,7 +40,7 @@ public enum VesselState implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	BALLAST(0, "Ballast", "Ballast");
+	BALLAST(1, "Ballast", "Ballast");
 
 	/**
 	 * The '<em><b>Laden</b></em>' literal value.
@@ -70,7 +70,7 @@ public enum VesselState implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int BALLAST_VALUE = 0;
+	public static final int BALLAST_VALUE = 1;
 
 	/**
 	 * An array of all the '<em><b>Vessel State</b></em>' enumerators.
@@ -133,6 +133,7 @@ public enum VesselState implements Enumerator {
 	public static VesselState get(int value) {
 		switch (value) {
 			case LADEN_VALUE: return LADEN;
+			case BALLAST_VALUE: return BALLAST;
 		}
 		return null;
 	}

@@ -15,8 +15,6 @@ import scenario.cargo.*;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoModel;
 import scenario.cargo.CargoPackage;
-import scenario.cargo.DischargeSlot;
-import scenario.cargo.LoadSlot;
 
 /**
  * <!-- begin-user-doc -->
@@ -104,15 +102,9 @@ public class CargoSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CargoPackage.LOAD_SLOT: {
-				LoadSlot loadSlot = (LoadSlot)theEObject;
-				T result = caseLoadSlot(loadSlot);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CargoPackage.DISCHARGE_SLOT: {
-				DischargeSlot dischargeSlot = (DischargeSlot)theEObject;
-				T result = caseDischargeSlot(dischargeSlot);
+			case CargoPackage.SLOT: {
+				Slot slot = (Slot)theEObject;
+				T result = caseSlot(slot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -151,32 +143,17 @@ public class CargoSwitch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Load Slot</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Slot</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Load Slot</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Slot</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseLoadSlot(LoadSlot object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Discharge Slot</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Discharge Slot</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseDischargeSlot(DischargeSlot object) {
+	public T caseSlot(Slot object) {
 		return null;
 	}
 

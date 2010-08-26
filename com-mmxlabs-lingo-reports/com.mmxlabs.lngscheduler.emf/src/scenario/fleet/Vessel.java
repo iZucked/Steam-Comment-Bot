@@ -6,6 +6,7 @@
  */
 package scenario.fleet;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.port.Port;
@@ -20,8 +21,8 @@ import scenario.port.Port;
  * <ul>
  *   <li>{@link scenario.fleet.Vessel#getName <em>Name</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getClass_ <em>Class</em>}</li>
- *   <li>{@link scenario.fleet.Vessel#getStartPort <em>Start Port</em>}</li>
- *   <li>{@link scenario.fleet.Vessel#getEndPort <em>End Port</em>}</li>
+ *   <li>{@link scenario.fleet.Vessel#getStartRequirement <em>Start Requirement</em>}</li>
+ *   <li>{@link scenario.fleet.Vessel#getEndRequirement <em>End Requirement</em>}</li>
  * </ul>
  * </p>
  *
@@ -83,55 +84,55 @@ public interface Vessel extends EObject {
 	void setClass(VesselClass value);
 
 	/**
-	 * Returns the value of the '<em><b>Start Port</b></em>' reference.
+	 * Returns the value of the '<em><b>Start Requirement</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Start Port</em>' reference isn't clear,
+	 * If the meaning of the '<em>Start Requirement</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Start Port</em>' reference.
-	 * @see #setStartPort(Port)
-	 * @see scenario.fleet.FleetPackage#getVessel_StartPort()
-	 * @model
+	 * @return the value of the '<em>Start Requirement</em>' containment reference.
+	 * @see #setStartRequirement(PortAndTime)
+	 * @see scenario.fleet.FleetPackage#getVessel_StartRequirement()
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	Port getStartPort();
+	PortAndTime getStartRequirement();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.Vessel#getStartPort <em>Start Port</em>}' reference.
+	 * Sets the value of the '{@link scenario.fleet.Vessel#getStartRequirement <em>Start Requirement</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Start Port</em>' reference.
-	 * @see #getStartPort()
+	 * @param value the new value of the '<em>Start Requirement</em>' containment reference.
+	 * @see #getStartRequirement()
 	 * @generated
 	 */
-	void setStartPort(Port value);
+	void setStartRequirement(PortAndTime value);
 
 	/**
-	 * Returns the value of the '<em><b>End Port</b></em>' reference.
+	 * Returns the value of the '<em><b>End Requirement</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>End Port</em>' reference isn't clear,
+	 * If the meaning of the '<em>End Requirement</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>End Port</em>' reference.
-	 * @see #setEndPort(Port)
-	 * @see scenario.fleet.FleetPackage#getVessel_EndPort()
-	 * @model
+	 * @return the value of the '<em>End Requirement</em>' containment reference.
+	 * @see #setEndRequirement(PortAndTime)
+	 * @see scenario.fleet.FleetPackage#getVessel_EndRequirement()
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	Port getEndPort();
+	PortAndTime getEndRequirement();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.Vessel#getEndPort <em>End Port</em>}' reference.
+	 * Sets the value of the '{@link scenario.fleet.Vessel#getEndRequirement <em>End Requirement</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>End Port</em>' reference.
-	 * @see #getEndPort()
+	 * @param value the new value of the '<em>End Requirement</em>' containment reference.
+	 * @see #getEndRequirement()
 	 * @generated
 	 */
-	void setEndPort(Port value);
+	void setEndRequirement(PortAndTime value);
 
 } // Vessel

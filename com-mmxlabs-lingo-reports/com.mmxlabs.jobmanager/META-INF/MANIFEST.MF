@@ -18,6 +18,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.jobcontoller,
  com.mmxlabs.jobcontroller.core,
  com.mmxlabs.jobcontroller.core.impl,
- com.mmxlabs.jobcontroller.emf
+ com.mmxlabs.jobcontroller.emf,
+ com.mmxlabs.jobcontroller.emf.optimisationsettings
 Service-Component: OSGI-INF/*.xml
 Bundle-ActivationPolicy: lazy

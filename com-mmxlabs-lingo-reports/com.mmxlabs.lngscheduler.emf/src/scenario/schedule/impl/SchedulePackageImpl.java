@@ -20,6 +20,8 @@ import scenario.fleet.impl.FleetPackageImpl;
 import scenario.impl.ScenarioPackageImpl;
 import scenario.market.MarketPackage;
 import scenario.market.impl.MarketPackageImpl;
+import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.impl.OptimiserPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.ScheduleFactory;
@@ -93,6 +95,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
 		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
+		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theSchedulePackage.createPackageContents();
@@ -102,6 +105,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
 		theMarketPackage.createPackageContents();
+		theOptimiserPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theSchedulePackage.initializePackageContents();
@@ -111,6 +115,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
 		theMarketPackage.initializePackageContents();
+		theOptimiserPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theSchedulePackage.freeze();

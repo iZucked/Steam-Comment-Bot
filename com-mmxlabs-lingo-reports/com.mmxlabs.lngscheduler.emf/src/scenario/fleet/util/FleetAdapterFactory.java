@@ -96,6 +96,10 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createVesselStateAttributesAdapter();
 			}
 			@Override
+			public Adapter casePortAndTime(PortAndTime object) {
+				return createPortAndTimeAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -182,6 +186,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselStateAttributesAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.PortAndTime <em>Port And Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.PortAndTime
+	 * @generated
+	 */
+	public Adapter createPortAndTimeAdapter() {
 		return null;
 	}
 

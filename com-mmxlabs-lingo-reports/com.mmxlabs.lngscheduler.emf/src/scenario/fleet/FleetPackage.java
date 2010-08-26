@@ -126,22 +126,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__CLASS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Start Port</b></em>' reference.
+	 * The feature id for the '<em><b>Start Requirement</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__START_PORT = 2;
+	int VESSEL__START_REQUIREMENT = 2;
 
 	/**
-	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * The feature id for the '<em><b>End Requirement</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__END_PORT = 3;
+	int VESSEL__END_REQUIREMENT = 3;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -235,13 +235,40 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__MIN_HEEL_VOLUME = 7;
 
 	/**
+	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__FILL_CAPACITY = 8;
+
+	/**
+	 * The feature id for the '<em><b>Daily Charter Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__DAILY_CHARTER_PRICE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__SPOT_CHARTER_COUNT = 10;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = 8;
+	int VESSEL_CLASS_FEATURE_COUNT = 11;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
@@ -346,6 +373,43 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = 5;
 
 	/**
+	 * The meta object id for the '{@link scenario.fleet.impl.PortAndTimeImpl <em>Port And Time</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.fleet.impl.PortAndTimeImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getPortAndTime()
+	 * @generated
+	 */
+	int PORT_AND_TIME = 5;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_AND_TIME__PORT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_AND_TIME__TIME = 1;
+
+	/**
+	 * The number of structural features of the '<em>Port And Time</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_AND_TIME_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -353,7 +417,7 @@ public interface FleetPackage extends EPackage {
 	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselState()
 	 * @generated
 	 */
-	int VESSEL_STATE = 5;
+	int VESSEL_STATE = 6;
 
 
 	/**
@@ -421,26 +485,26 @@ public interface FleetPackage extends EPackage {
 	EReference getVessel_Class();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.fleet.Vessel#getStartPort <em>Start Port</em>}'.
+	 * Returns the meta object for the containment reference '{@link scenario.fleet.Vessel#getStartRequirement <em>Start Requirement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Start Port</em>'.
-	 * @see scenario.fleet.Vessel#getStartPort()
+	 * @return the meta object for the containment reference '<em>Start Requirement</em>'.
+	 * @see scenario.fleet.Vessel#getStartRequirement()
 	 * @see #getVessel()
 	 * @generated
 	 */
-	EReference getVessel_StartPort();
+	EReference getVessel_StartRequirement();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.fleet.Vessel#getEndPort <em>End Port</em>}'.
+	 * Returns the meta object for the containment reference '{@link scenario.fleet.Vessel#getEndRequirement <em>End Requirement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>End Port</em>'.
-	 * @see scenario.fleet.Vessel#getEndPort()
+	 * @return the meta object for the containment reference '<em>End Requirement</em>'.
+	 * @see scenario.fleet.Vessel#getEndRequirement()
 	 * @see #getVessel()
 	 * @generated
 	 */
-	EReference getVessel_EndPort();
+	EReference getVessel_EndRequirement();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.VesselClass <em>Vessel Class</em>}'.
@@ -541,6 +605,39 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_MinHeelVolume();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fill Capacity</em>'.
+	 * @see scenario.fleet.VesselClass#getFillCapacity()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_FillCapacity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Daily Charter Price</em>'.
+	 * @see scenario.fleet.VesselClass#getDailyCharterPrice()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_DailyCharterPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Charter Count</em>'.
+	 * @see scenario.fleet.VesselClass#getSpotCharterCount()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_SpotCharterCount();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.fleet.FuelConsumptionLine <em>Fuel Consumption Line</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -638,6 +735,38 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselStateAttributes_FuelConsumptionCurve();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.fleet.PortAndTime <em>Port And Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Port And Time</em>'.
+	 * @see scenario.fleet.PortAndTime
+	 * @generated
+	 */
+	EClass getPortAndTime();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.fleet.PortAndTime#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see scenario.fleet.PortAndTime#getPort()
+	 * @see #getPortAndTime()
+	 * @generated
+	 */
+	EReference getPortAndTime_Port();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.PortAndTime#getTime <em>Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time</em>'.
+	 * @see scenario.fleet.PortAndTime#getTime()
+	 * @see #getPortAndTime()
+	 * @generated
+	 */
+	EAttribute getPortAndTime_Time();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.fleet.VesselState <em>Vessel State</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -722,20 +851,20 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL__CLASS = eINSTANCE.getVessel_Class();
 
 		/**
-		 * The meta object literal for the '<em><b>Start Port</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Start Requirement</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL__START_PORT = eINSTANCE.getVessel_StartPort();
+		EReference VESSEL__START_REQUIREMENT = eINSTANCE.getVessel_StartRequirement();
 
 		/**
-		 * The meta object literal for the '<em><b>End Port</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>End Requirement</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL__END_PORT = eINSTANCE.getVessel_EndPort();
+		EReference VESSEL__END_REQUIREMENT = eINSTANCE.getVessel_EndRequirement();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
@@ -812,6 +941,30 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_CLASS__MIN_HEEL_VOLUME = eINSTANCE.getVesselClass_MinHeelVolume();
 
 		/**
+		 * The meta object literal for the '<em><b>Fill Capacity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__FILL_CAPACITY = eINSTANCE.getVesselClass_FillCapacity();
+
+		/**
+		 * The meta object literal for the '<em><b>Daily Charter Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__DAILY_CHARTER_PRICE = eINSTANCE.getVesselClass_DailyCharterPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__SPOT_CHARTER_COUNT = eINSTANCE.getVesselClass_SpotCharterCount();
+
+		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -886,6 +1039,32 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE = eINSTANCE.getVesselStateAttributes_FuelConsumptionCurve();
+
+		/**
+		 * The meta object literal for the '{@link scenario.fleet.impl.PortAndTimeImpl <em>Port And Time</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.fleet.impl.PortAndTimeImpl
+		 * @see scenario.fleet.impl.FleetPackageImpl#getPortAndTime()
+		 * @generated
+		 */
+		EClass PORT_AND_TIME = eINSTANCE.getPortAndTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_AND_TIME__PORT = eINSTANCE.getPortAndTime_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_AND_TIME__TIME = eINSTANCE.getPortAndTime_Time();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.

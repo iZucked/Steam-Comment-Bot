@@ -12,7 +12,9 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -25,16 +27,17 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.cargo.CargoPackage;
-import scenario.cargo.LoadSlot;
+import scenario.cargo.Slot;
+
 import scenario.provider.LngEditPlugin;
 
 /**
- * This is the item provider adapter for a {@link scenario.cargo.LoadSlot} object.
+ * This is the item provider adapter for a {@link scenario.cargo.Slot} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class LoadSlotItemProvider
+public class SlotItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -48,7 +51,7 @@ public class LoadSlotItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlotItemProvider(AdapterFactory adapterFactory) {
+	public SlotItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -85,9 +88,9 @@ public class LoadSlotItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LoadSlot_id_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_id_feature", "_UI_LoadSlot_type"),
-				 CargoPackage.Literals.LOAD_SLOT__ID,
+				 getString("_UI_Slot_id_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_id_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__ID,
 				 true,
 				 false,
 				 false,
@@ -107,9 +110,9 @@ public class LoadSlotItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LoadSlot_minQuantity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_minQuantity_feature", "_UI_LoadSlot_type"),
-				 CargoPackage.Literals.LOAD_SLOT__MIN_QUANTITY,
+				 getString("_UI_Slot_minQuantity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_minQuantity_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__MIN_QUANTITY,
 				 true,
 				 false,
 				 false,
@@ -129,9 +132,9 @@ public class LoadSlotItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LoadSlot_maxQuantity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_maxQuantity_feature", "_UI_LoadSlot_type"),
-				 CargoPackage.Literals.LOAD_SLOT__MAX_QUANTITY,
+				 getString("_UI_Slot_maxQuantity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_maxQuantity_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__MAX_QUANTITY,
 				 true,
 				 false,
 				 false,
@@ -151,9 +154,9 @@ public class LoadSlotItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LoadSlot_unitPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_unitPrice_feature", "_UI_LoadSlot_type"),
-				 CargoPackage.Literals.LOAD_SLOT__UNIT_PRICE,
+				 getString("_UI_Slot_unitPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_unitPrice_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__UNIT_PRICE,
 				 true,
 				 false,
 				 false,
@@ -173,9 +176,9 @@ public class LoadSlotItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LoadSlot_port_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_port_feature", "_UI_LoadSlot_type"),
-				 CargoPackage.Literals.LOAD_SLOT__PORT,
+				 getString("_UI_Slot_port_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_port_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PORT,
 				 true,
 				 false,
 				 true,
@@ -195,9 +198,9 @@ public class LoadSlotItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LoadSlot_windowStart_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_windowStart_feature", "_UI_LoadSlot_type"),
-				 CargoPackage.Literals.LOAD_SLOT__WINDOW_START,
+				 getString("_UI_Slot_windowStart_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_windowStart_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__WINDOW_START,
 				 true,
 				 false,
 				 false,
@@ -217,9 +220,9 @@ public class LoadSlotItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LoadSlot_windowDuration_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_windowDuration_feature", "_UI_LoadSlot_type"),
-				 CargoPackage.Literals.LOAD_SLOT__WINDOW_DURATION,
+				 getString("_UI_Slot_windowDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_windowDuration_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__WINDOW_DURATION,
 				 true,
 				 false,
 				 false,
@@ -229,14 +232,14 @@ public class LoadSlotItemProvider
 	}
 
 	/**
-	 * This returns LoadSlot.gif.
+	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LoadSlot"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Slot"));
 	}
 
 	/**
@@ -247,10 +250,10 @@ public class LoadSlotItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LoadSlot)object).getId();
+		String label = ((Slot)object).getId();
 		return label == null || label.length() == 0 ?
-			getString("_UI_LoadSlot_type") :
-			getString("_UI_LoadSlot_type") + " " + label;
+			getString("_UI_Slot_type") :
+			getString("_UI_Slot_type") + " " + label;
 	}
 
 	/**
@@ -264,13 +267,13 @@ public class LoadSlotItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(LoadSlot.class)) {
-			case CargoPackage.LOAD_SLOT__ID:
-			case CargoPackage.LOAD_SLOT__MIN_QUANTITY:
-			case CargoPackage.LOAD_SLOT__MAX_QUANTITY:
-			case CargoPackage.LOAD_SLOT__UNIT_PRICE:
-			case CargoPackage.LOAD_SLOT__WINDOW_START:
-			case CargoPackage.LOAD_SLOT__WINDOW_DURATION:
+		switch (notification.getFeatureID(Slot.class)) {
+			case CargoPackage.SLOT__ID:
+			case CargoPackage.SLOT__MIN_QUANTITY:
+			case CargoPackage.SLOT__MAX_QUANTITY:
+			case CargoPackage.SLOT__UNIT_PRICE:
+			case CargoPackage.SLOT__WINDOW_START:
+			case CargoPackage.SLOT__WINDOW_DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

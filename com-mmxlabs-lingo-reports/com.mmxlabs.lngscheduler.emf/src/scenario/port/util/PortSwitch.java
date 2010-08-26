@@ -116,6 +116,24 @@ public class PortSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PortPackage.CANAL: {
+				Canal canal = (Canal)theEObject;
+				T result = caseCanal(canal);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PortPackage.CANAL_MODEL: {
+				CanalModel canalModel = (CanalModel)theEObject;
+				T result = caseCanalModel(canalModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PortPackage.PARTIAL_DISTANCE: {
+				PartialDistance partialDistance = (PartialDistance)theEObject;
+				T result = casePartialDistance(partialDistance);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -177,6 +195,51 @@ public class PortSwitch<T> {
 	 * @generated
 	 */
 	public T caseDistanceLine(DistanceLine object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Canal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Canal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCanal(Canal object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Canal Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Canal Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCanalModel(CanalModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Partial Distance</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Partial Distance</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePartialDistance(PartialDistance object) {
 		return null;
 	}
 

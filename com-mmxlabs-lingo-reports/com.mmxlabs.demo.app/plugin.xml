@@ -104,6 +104,14 @@
          </action>
       </viewContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            class="com.mmxlabs.demo.app.wizards.RandomScenarioWizard"
+            id="com.mmxlabs.demo.app.randomscenariowizard"
+            name="New Random Scenario">
+      </wizard>
+   </extension>
 
 
 </plugin>

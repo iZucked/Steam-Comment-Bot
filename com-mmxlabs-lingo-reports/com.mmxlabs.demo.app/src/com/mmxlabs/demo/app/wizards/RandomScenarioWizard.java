@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import com.mmxlabs.common.csv.DistanceImporter;
+
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
@@ -36,7 +38,7 @@ import scenario.port.PortFactory;
 import scenario.port.PortPackage;
 import scenario.presentation.LngEditorAdvisor;
 
-import com.mmxlabs.demo.app.util.DistanceImporter;
+
 
 public class RandomScenarioWizard extends Wizard implements INewWizard {
 

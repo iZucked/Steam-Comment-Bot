@@ -15,8 +15,6 @@ import scenario.cargo.*;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoModel;
 import scenario.cargo.CargoPackage;
-import scenario.cargo.DischargeSlot;
-import scenario.cargo.LoadSlot;
 
 /**
  * <!-- begin-user-doc -->
@@ -83,12 +81,8 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createCargoAdapter();
 			}
 			@Override
-			public Adapter caseLoadSlot(LoadSlot object) {
-				return createLoadSlotAdapter();
-			}
-			@Override
-			public Adapter caseDischargeSlot(DischargeSlot object) {
-				return createDischargeSlotAdapter();
+			public Adapter caseSlot(Slot object) {
+				return createSlotAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -139,30 +133,16 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.cargo.Slot <em>Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.cargo.LoadSlot
+	 * @see scenario.cargo.Slot
 	 * @generated
 	 */
-	public Adapter createLoadSlotAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link scenario.cargo.DischargeSlot <em>Discharge Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see scenario.cargo.DischargeSlot
-	 * @generated
-	 */
-	public Adapter createDischargeSlotAdapter() {
+	public Adapter createSlotAdapter() {
 		return null;
 	}
 

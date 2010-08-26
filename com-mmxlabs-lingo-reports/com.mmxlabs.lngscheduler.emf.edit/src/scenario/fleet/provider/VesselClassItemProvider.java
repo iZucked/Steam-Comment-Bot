@@ -71,6 +71,9 @@ public class VesselClassItemProvider
 			addMaxSpeedPropertyDescriptor(object);
 			addBaseFuelUnitPricePropertyDescriptor(object);
 			addMinHeelVolumePropertyDescriptor(object);
+			addFillCapacityPropertyDescriptor(object);
+			addDailyCharterPricePropertyDescriptor(object);
+			addSpotCharterCountPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -136,7 +139,7 @@ public class VesselClassItemProvider
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -158,7 +161,7 @@ public class VesselClassItemProvider
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -199,6 +202,72 @@ public class VesselClassItemProvider
 				 getString("_UI_VesselClass_minHeelVolume_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_minHeelVolume_feature", "_UI_VesselClass_type"),
 				 FleetPackage.Literals.VESSEL_CLASS__MIN_HEEL_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Fill Capacity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFillCapacityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_fillCapacity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_fillCapacity_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__FILL_CAPACITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Daily Charter Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDailyCharterPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_dailyCharterPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_dailyCharterPrice_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__DAILY_CHARTER_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Spot Charter Count feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSpotCharterCountPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_spotCharterCount_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_spotCharterCount_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__SPOT_CHARTER_COUNT,
 				 true,
 				 false,
 				 false,
@@ -281,6 +350,9 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE:
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:

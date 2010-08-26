@@ -22,8 +22,13 @@ import scenario.fleet.impl.FleetPackageImpl;
 import scenario.impl.ScenarioPackageImpl;
 import scenario.market.MarketPackage;
 import scenario.market.impl.MarketPackageImpl;
+import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.impl.OptimiserPackageImpl;
+import scenario.port.Canal;
+import scenario.port.CanalModel;
 import scenario.port.DistanceLine;
 import scenario.port.DistanceModel;
+import scenario.port.PartialDistance;
 import scenario.port.Port;
 import scenario.port.PortFactory;
 import scenario.port.PortModel;
@@ -65,6 +70,27 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	private EClass distanceLineEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass canalEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass canalModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass partialDistanceEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -119,6 +145,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
 		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
+		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		thePortPackage.createPackageContents();
@@ -128,6 +155,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
 		theMarketPackage.createPackageContents();
+		theOptimiserPackage.createPackageContents();
 
 		// Initialize created meta-data
 		thePortPackage.initializePackageContents();
@@ -137,6 +165,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
 		theMarketPackage.initializePackageContents();
+		theOptimiserPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		thePortPackage.freeze();
@@ -256,6 +285,96 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getCanal() {
+		return canalEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCanal_Name() {
+		return (EAttribute)canalEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCanal_Distance() {
+		return (EAttribute)canalEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanal_EntryDistances() {
+		return (EReference)canalEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanal_ExitDistances() {
+		return (EReference)canalEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCanalModel() {
+		return canalModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalModel_Canals() {
+		return (EReference)canalModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPartialDistance() {
+		return partialDistanceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPartialDistance_Distance() {
+		return (EAttribute)partialDistanceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPartialDistance_Port() {
+		return (EReference)partialDistanceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
@@ -294,6 +413,19 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(distanceLineEClass, DISTANCE_LINE__FROM_PORT);
 		createEReference(distanceLineEClass, DISTANCE_LINE__TO_PORT);
 		createEAttribute(distanceLineEClass, DISTANCE_LINE__DISTANCE);
+
+		canalEClass = createEClass(CANAL);
+		createEAttribute(canalEClass, CANAL__NAME);
+		createEAttribute(canalEClass, CANAL__DISTANCE);
+		createEReference(canalEClass, CANAL__ENTRY_DISTANCES);
+		createEReference(canalEClass, CANAL__EXIT_DISTANCES);
+
+		canalModelEClass = createEClass(CANAL_MODEL);
+		createEReference(canalModelEClass, CANAL_MODEL__CANALS);
+
+		partialDistanceEClass = createEClass(PARTIAL_DISTANCE);
+		createEAttribute(partialDistanceEClass, PARTIAL_DISTANCE__DISTANCE);
+		createEReference(partialDistanceEClass, PARTIAL_DISTANCE__PORT);
 	}
 
 	/**
@@ -343,6 +475,19 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getDistanceLine_FromPort(), this.getPort(), null, "fromPort", null, 0, 1, DistanceLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDistanceLine_ToPort(), this.getPort(), null, "toPort", null, 0, 1, DistanceLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDistanceLine_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, DistanceLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(canalEClass, Canal.class, "Canal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCanal_Name(), ecorePackage.getEString(), "name", null, 0, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanal_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanal_EntryDistances(), this.getPartialDistance(), null, "entryDistances", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanal_ExitDistances(), this.getPartialDistance(), null, "exitDistances", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(canalModelEClass, CanalModel.class, "CanalModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCanalModel_Canals(), this.getCanal(), null, "canals", null, 0, -1, CanalModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(partialDistanceEClass, PartialDistance.class, "PartialDistance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPartialDistance_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, PartialDistance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialDistance_Port(), this.getPort(), null, "port", null, 0, 1, PartialDistance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //PortPackageImpl

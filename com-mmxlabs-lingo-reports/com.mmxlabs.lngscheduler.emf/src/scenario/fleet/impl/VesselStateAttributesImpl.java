@@ -69,7 +69,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int NBO_RATE_EDEFAULT = 0;
+	protected static final float NBO_RATE_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getNboRate() <em>Nbo Rate</em>}' attribute.
@@ -79,7 +79,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * @generated
 	 * @ordered
 	 */
-	protected int nboRate = NBO_RATE_EDEFAULT;
+	protected float nboRate = NBO_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getIdleNBORate() <em>Idle NBO Rate</em>}' attribute.
@@ -89,7 +89,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int IDLE_NBO_RATE_EDEFAULT = 0;
+	protected static final float IDLE_NBO_RATE_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getIdleNBORate() <em>Idle NBO Rate</em>}' attribute.
@@ -99,7 +99,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * @generated
 	 * @ordered
 	 */
-	protected int idleNBORate = IDLE_NBO_RATE_EDEFAULT;
+	protected float idleNBORate = IDLE_NBO_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getIdleConsumptionRate() <em>Idle Consumption Rate</em>}' attribute.
@@ -109,7 +109,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int IDLE_CONSUMPTION_RATE_EDEFAULT = 0;
+	protected static final float IDLE_CONSUMPTION_RATE_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getIdleConsumptionRate() <em>Idle Consumption Rate</em>}' attribute.
@@ -119,7 +119,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * @generated
 	 * @ordered
 	 */
-	protected int idleConsumptionRate = IDLE_CONSUMPTION_RATE_EDEFAULT;
+	protected float idleConsumptionRate = IDLE_CONSUMPTION_RATE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getFuelConsumptionCurve() <em>Fuel Consumption Curve</em>}' containment reference list.
@@ -176,7 +176,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getNboRate() {
+	public float getNboRate() {
 		return nboRate;
 	}
 
@@ -185,8 +185,8 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setNboRate(int newNboRate) {
-		int oldNboRate = nboRate;
+	public void setNboRate(float newNboRate) {
+		float oldNboRate = nboRate;
 		nboRate = newNboRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE, oldNboRate, nboRate));
@@ -197,7 +197,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getIdleNBORate() {
+	public float getIdleNBORate() {
 		return idleNBORate;
 	}
 
@@ -206,8 +206,8 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIdleNBORate(int newIdleNBORate) {
-		int oldIdleNBORate = idleNBORate;
+	public void setIdleNBORate(float newIdleNBORate) {
+		float oldIdleNBORate = idleNBORate;
 		idleNBORate = newIdleNBORate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE, oldIdleNBORate, idleNBORate));
@@ -218,7 +218,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getIdleConsumptionRate() {
+	public float getIdleConsumptionRate() {
 		return idleConsumptionRate;
 	}
 
@@ -227,8 +227,8 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIdleConsumptionRate(int newIdleConsumptionRate) {
-		int oldIdleConsumptionRate = idleConsumptionRate;
+	public void setIdleConsumptionRate(float newIdleConsumptionRate) {
+		float oldIdleConsumptionRate = idleConsumptionRate;
 		idleConsumptionRate = newIdleConsumptionRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_CONSUMPTION_RATE, oldIdleConsumptionRate, idleConsumptionRate));
@@ -295,13 +295,13 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 				setVesselState((VesselState)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE:
-				setNboRate((Integer)newValue);
+				setNboRate((Float)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE:
-				setIdleNBORate((Integer)newValue);
+				setIdleNBORate((Float)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_CONSUMPTION_RATE:
-				setIdleConsumptionRate((Integer)newValue);
+				setIdleConsumptionRate((Float)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE:
 				getFuelConsumptionCurve().clear();

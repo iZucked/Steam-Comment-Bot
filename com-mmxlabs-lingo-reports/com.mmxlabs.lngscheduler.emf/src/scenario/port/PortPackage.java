@@ -201,6 +201,128 @@ public interface PortPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.port.impl.CanalImpl <em>Canal</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.port.impl.CanalImpl
+	 * @see scenario.port.impl.PortPackageImpl#getCanal()
+	 * @generated
+	 */
+	int CANAL = 4;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL__DISTANCE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Entry Distances</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL__ENTRY_DISTANCES = 2;
+
+	/**
+	 * The feature id for the '<em><b>Exit Distances</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL__EXIT_DISTANCES = 3;
+
+	/**
+	 * The number of structural features of the '<em>Canal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_FEATURE_COUNT = 4;
+
+	/**
+	 * The meta object id for the '{@link scenario.port.impl.CanalModelImpl <em>Canal Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.port.impl.CanalModelImpl
+	 * @see scenario.port.impl.PortPackageImpl#getCanalModel()
+	 * @generated
+	 */
+	int CANAL_MODEL = 5;
+
+	/**
+	 * The feature id for the '<em><b>Canals</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_MODEL__CANALS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Canal Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_MODEL_FEATURE_COUNT = 1;
+
+
+	/**
+	 * The meta object id for the '{@link scenario.port.impl.PartialDistanceImpl <em>Partial Distance</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.port.impl.PartialDistanceImpl
+	 * @see scenario.port.impl.PortPackageImpl#getPartialDistance()
+	 * @generated
+	 */
+	int PARTIAL_DISTANCE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_DISTANCE__DISTANCE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_DISTANCE__PORT = 1;
+
+	/**
+	 * The number of structural features of the '<em>Partial Distance</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_DISTANCE_FEATURE_COUNT = 2;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.PortModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -316,6 +438,113 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDistanceLine_Distance();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.port.Canal <em>Canal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Canal</em>'.
+	 * @see scenario.port.Canal
+	 * @generated
+	 */
+	EClass getCanal();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Canal#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see scenario.port.Canal#getName()
+	 * @see #getCanal()
+	 * @generated
+	 */
+	EAttribute getCanal_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Canal#getDistance <em>Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Distance</em>'.
+	 * @see scenario.port.Canal#getDistance()
+	 * @see #getCanal()
+	 * @generated
+	 */
+	EAttribute getCanal_Distance();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.port.Canal#getEntryDistances <em>Entry Distances</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entry Distances</em>'.
+	 * @see scenario.port.Canal#getEntryDistances()
+	 * @see #getCanal()
+	 * @generated
+	 */
+	EReference getCanal_EntryDistances();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.port.Canal#getExitDistances <em>Exit Distances</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Exit Distances</em>'.
+	 * @see scenario.port.Canal#getExitDistances()
+	 * @see #getCanal()
+	 * @generated
+	 */
+	EReference getCanal_ExitDistances();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.port.CanalModel <em>Canal Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Canal Model</em>'.
+	 * @see scenario.port.CanalModel
+	 * @generated
+	 */
+	EClass getCanalModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.port.CanalModel#getCanals <em>Canals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Canals</em>'.
+	 * @see scenario.port.CanalModel#getCanals()
+	 * @see #getCanalModel()
+	 * @generated
+	 */
+	EReference getCanalModel_Canals();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.port.PartialDistance <em>Partial Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Partial Distance</em>'.
+	 * @see scenario.port.PartialDistance
+	 * @generated
+	 */
+	EClass getPartialDistance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.PartialDistance#getDistance <em>Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Distance</em>'.
+	 * @see scenario.port.PartialDistance#getDistance()
+	 * @see #getPartialDistance()
+	 * @generated
+	 */
+	EAttribute getPartialDistance_Distance();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.port.PartialDistance#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see scenario.port.PartialDistance#getPort()
+	 * @see #getPartialDistance()
+	 * @generated
+	 */
+	EReference getPartialDistance_Port();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -434,6 +663,92 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISTANCE_LINE__DISTANCE = eINSTANCE.getDistanceLine_Distance();
+
+		/**
+		 * The meta object literal for the '{@link scenario.port.impl.CanalImpl <em>Canal</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.port.impl.CanalImpl
+		 * @see scenario.port.impl.PortPackageImpl#getCanal()
+		 * @generated
+		 */
+		EClass CANAL = eINSTANCE.getCanal();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL__NAME = eINSTANCE.getCanal_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL__DISTANCE = eINSTANCE.getCanal_Distance();
+
+		/**
+		 * The meta object literal for the '<em><b>Entry Distances</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL__ENTRY_DISTANCES = eINSTANCE.getCanal_EntryDistances();
+
+		/**
+		 * The meta object literal for the '<em><b>Exit Distances</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL__EXIT_DISTANCES = eINSTANCE.getCanal_ExitDistances();
+
+		/**
+		 * The meta object literal for the '{@link scenario.port.impl.CanalModelImpl <em>Canal Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.port.impl.CanalModelImpl
+		 * @see scenario.port.impl.PortPackageImpl#getCanalModel()
+		 * @generated
+		 */
+		EClass CANAL_MODEL = eINSTANCE.getCanalModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Canals</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_MODEL__CANALS = eINSTANCE.getCanalModel_Canals();
+
+		/**
+		 * The meta object literal for the '{@link scenario.port.impl.PartialDistanceImpl <em>Partial Distance</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.port.impl.PartialDistanceImpl
+		 * @see scenario.port.impl.PortPackageImpl#getPartialDistance()
+		 * @generated
+		 */
+		EClass PARTIAL_DISTANCE = eINSTANCE.getPartialDistance();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTIAL_DISTANCE__DISTANCE = eINSTANCE.getPartialDistance_Distance();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_DISTANCE__PORT = eINSTANCE.getPartialDistance_Port();
 
 	}
 

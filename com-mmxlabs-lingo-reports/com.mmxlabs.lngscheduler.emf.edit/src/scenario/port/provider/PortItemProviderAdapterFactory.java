@@ -167,6 +167,75 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.port.Canal} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CanalItemProvider canalItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.port.Canal}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCanalAdapter() {
+		if (canalItemProvider == null) {
+			canalItemProvider = new CanalItemProvider(this);
+		}
+
+		return canalItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.port.CanalModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CanalModelItemProvider canalModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.port.CanalModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCanalModelAdapter() {
+		if (canalModelItemProvider == null) {
+			canalModelItemProvider = new CanalModelItemProvider(this);
+		}
+
+		return canalModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.port.PartialDistance} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PartialDistanceItemProvider partialDistanceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.port.PartialDistance}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPartialDistanceAdapter() {
+		if (partialDistanceItemProvider == null) {
+			partialDistanceItemProvider = new PartialDistanceItemProvider(this);
+		}
+
+		return partialDistanceItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -269,6 +338,9 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (portItemProvider != null) portItemProvider.dispose();
 		if (distanceModelItemProvider != null) distanceModelItemProvider.dispose();
 		if (distanceLineItemProvider != null) distanceLineItemProvider.dispose();
+		if (canalItemProvider != null) canalItemProvider.dispose();
+		if (canalModelItemProvider != null) canalModelItemProvider.dispose();
+		if (partialDistanceItemProvider != null) partialDistanceItemProvider.dispose();
 	}
 
 }

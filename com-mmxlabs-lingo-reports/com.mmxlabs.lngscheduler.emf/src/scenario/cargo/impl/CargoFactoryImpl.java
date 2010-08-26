@@ -17,8 +17,6 @@ import scenario.cargo.Cargo;
 import scenario.cargo.CargoFactory;
 import scenario.cargo.CargoModel;
 import scenario.cargo.CargoPackage;
-import scenario.cargo.DischargeSlot;
-import scenario.cargo.LoadSlot;
 
 /**
  * <!-- begin-user-doc -->
@@ -66,8 +64,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 		switch (eClass.getClassifierID()) {
 			case CargoPackage.CARGO_MODEL: return createCargoModel();
 			case CargoPackage.CARGO: return createCargo();
-			case CargoPackage.LOAD_SLOT: return createLoadSlot();
-			case CargoPackage.DISCHARGE_SLOT: return createDischargeSlot();
+			case CargoPackage.SLOT: return createSlot();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -100,19 +97,9 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot createLoadSlot() {
-		LoadSlotImpl loadSlot = new LoadSlotImpl();
-		return loadSlot;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DischargeSlot createDischargeSlot() {
-		DischargeSlotImpl dischargeSlot = new DischargeSlotImpl();
-		return dischargeSlot;
+	public Slot createSlot() {
+		SlotImpl slot = new SlotImpl();
+		return slot;
 	}
 
 	/**

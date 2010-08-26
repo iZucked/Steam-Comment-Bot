@@ -25,6 +25,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  * </ul>
  * </p>
  *
@@ -94,12 +97,12 @@ public interface VesselClass extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Min Speed</em>' attribute.
-	 * @see #setMinSpeed(int)
+	 * @see #setMinSpeed(float)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_MinSpeed()
 	 * @model
 	 * @generated
 	 */
-	int getMinSpeed();
+	float getMinSpeed();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}' attribute.
@@ -109,7 +112,7 @@ public interface VesselClass extends EObject {
 	 * @see #getMinSpeed()
 	 * @generated
 	 */
-	void setMinSpeed(int value);
+	void setMinSpeed(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Max Speed</b></em>' attribute.
@@ -120,12 +123,12 @@ public interface VesselClass extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Max Speed</em>' attribute.
-	 * @see #setMaxSpeed(int)
+	 * @see #setMaxSpeed(float)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_MaxSpeed()
 	 * @model
 	 * @generated
 	 */
-	int getMaxSpeed();
+	float getMaxSpeed();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}' attribute.
@@ -135,7 +138,7 @@ public interface VesselClass extends EObject {
 	 * @see #getMaxSpeed()
 	 * @generated
 	 */
-	void setMaxSpeed(int value);
+	void setMaxSpeed(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel Unit Price</b></em>' attribute.
@@ -223,13 +226,16 @@ public interface VesselClass extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The volume of cargo below which boil-off cannot be used for fuel. Some vessels cannot access LNG below a certain level in their tanks for fuel.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Min Heel Volume</em>' attribute.
-	 * @see #setMinHeelVolume(int)
+	 * @see #setMinHeelVolume(long)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_MinHeelVolume()
 	 * @model
 	 * @generated
 	 */
-	int getMinHeelVolume();
+	long getMinHeelVolume();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}' attribute.
@@ -239,6 +245,83 @@ public interface VesselClass extends EObject {
 	 * @see #getMinHeelVolume()
 	 * @generated
 	 */
-	void setMinHeelVolume(int value);
+	void setMinHeelVolume(long value);
+
+	/**
+	 * Returns the value of the '<em><b>Fill Capacity</b></em>' attribute.
+	 * The default value is <code>"0.958"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The ship fill capacity, as a proportion (from 0 to 1). Ship fill capacity is the percentage of vessel cargo capacity that can actually be used. Typically this is 98.5%.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Fill Capacity</em>' attribute.
+	 * @see #setFillCapacity(float)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_FillCapacity()
+	 * @model default="0.958"
+	 * @generated
+	 */
+	float getFillCapacity();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fill Capacity</em>' attribute.
+	 * @see #getFillCapacity()
+	 * @generated
+	 */
+	void setFillCapacity(float value);
+
+	/**
+	 * Returns the value of the '<em><b>Daily Charter Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The cost per day of spot chartering vessels of this class, expressed in dollars
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Daily Charter Price</em>' attribute.
+	 * @see #setDailyCharterPrice(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_DailyCharterPrice()
+	 * @model
+	 * @generated
+	 */
+	int getDailyCharterPrice();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Daily Charter Price</em>' attribute.
+	 * @see #getDailyCharterPrice()
+	 * @generated
+	 */
+	void setDailyCharterPrice(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Spot Charter Count</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Spot Charter Count</em>' attribute.
+	 * @see #setSpotCharterCount(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_SpotCharterCount()
+	 * @model
+	 * @generated
+	 */
+	int getSpotCharterCount();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Spot Charter Count</em>' attribute.
+	 * @see #getSpotCharterCount()
+	 * @generated
+	 */
+	void setSpotCharterCount(int value);
 
 } // VesselClass

@@ -135,14 +135,14 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
+	 * The meta object id for the '{@link scenario.cargo.impl.SlotImpl <em>Slot</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see scenario.cargo.impl.LoadSlotImpl
-	 * @see scenario.cargo.impl.CargoPackageImpl#getLoadSlot()
+	 * @see scenario.cargo.impl.SlotImpl
+	 * @see scenario.cargo.impl.CargoPackageImpl#getSlot()
 	 * @generated
 	 */
-	int LOAD_SLOT = 2;
+	int SLOT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -151,7 +151,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__ID = 0;
+	int SLOT__ID = 0;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -160,7 +160,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__MIN_QUANTITY = 1;
+	int SLOT__MIN_QUANTITY = 1;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -169,7 +169,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__MAX_QUANTITY = 2;
+	int SLOT__MAX_QUANTITY = 2;
 
 	/**
 	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
@@ -178,7 +178,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__UNIT_PRICE = 3;
+	int SLOT__UNIT_PRICE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -187,7 +187,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__PORT = 4;
+	int SLOT__PORT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
@@ -196,7 +196,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__WINDOW_START = 5;
+	int SLOT__WINDOW_START = 5;
 
 	/**
 	 * The feature id for the '<em><b>Window Duration</b></em>' attribute.
@@ -205,99 +205,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__WINDOW_DURATION = 6;
+	int SLOT__WINDOW_DURATION = 6;
 
 	/**
-	 * The number of structural features of the '<em>Load Slot</em>' class.
+	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = 7;
-
-	/**
-	 * The meta object id for the '{@link scenario.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see scenario.cargo.impl.DischargeSlotImpl
-	 * @see scenario.cargo.impl.CargoPackageImpl#getDischargeSlot()
-	 * @generated
-	 */
-	int DISCHARGE_SLOT = 3;
-
-	/**
-	 * The feature id for the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__ID = 0;
-
-	/**
-	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__MIN_QUANTITY = 1;
-
-	/**
-	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__MAX_QUANTITY = 2;
-
-	/**
-	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__UNIT_PRICE = 3;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__PORT = 4;
-
-	/**
-	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__WINDOW_START = 5;
-
-	/**
-	 * The feature id for the '<em><b>Window Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__WINDOW_DURATION = 6;
-
-	/**
-	 * The number of structural features of the '<em>Discharge Slot</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = 7;
-
+	int SLOT_FEATURE_COUNT = 7;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.CargoModel <em>Model</em>}'.
@@ -364,178 +281,91 @@ public interface CargoPackage extends EPackage {
 	EReference getCargo_DischargeSlot();
 
 	/**
-	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
+	 * Returns the meta object for class '{@link scenario.cargo.Slot <em>Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Load Slot</em>'.
-	 * @see scenario.cargo.LoadSlot
+	 * @return the meta object for class '<em>Slot</em>'.
+	 * @see scenario.cargo.Slot
 	 * @generated
 	 */
-	EClass getLoadSlot();
+	EClass getSlot();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#getId <em>Id</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getId <em>Id</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Id</em>'.
-	 * @see scenario.cargo.LoadSlot#getId()
-	 * @see #getLoadSlot()
+	 * @see scenario.cargo.Slot#getId()
+	 * @see #getSlot()
 	 * @generated
 	 */
-	EAttribute getLoadSlot_Id();
+	EAttribute getSlot_Id();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#getMinQuantity <em>Min Quantity</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getMinQuantity <em>Min Quantity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Min Quantity</em>'.
-	 * @see scenario.cargo.LoadSlot#getMinQuantity()
-	 * @see #getLoadSlot()
+	 * @see scenario.cargo.Slot#getMinQuantity()
+	 * @see #getSlot()
 	 * @generated
 	 */
-	EAttribute getLoadSlot_MinQuantity();
+	EAttribute getSlot_MinQuantity();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#getMaxQuantity <em>Max Quantity</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Max Quantity</em>'.
-	 * @see scenario.cargo.LoadSlot#getMaxQuantity()
-	 * @see #getLoadSlot()
+	 * @see scenario.cargo.Slot#getMaxQuantity()
+	 * @see #getSlot()
 	 * @generated
 	 */
-	EAttribute getLoadSlot_MaxQuantity();
+	EAttribute getSlot_MaxQuantity();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#getUnitPrice <em>Unit Price</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getUnitPrice <em>Unit Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Unit Price</em>'.
-	 * @see scenario.cargo.LoadSlot#getUnitPrice()
-	 * @see #getLoadSlot()
+	 * @see scenario.cargo.Slot#getUnitPrice()
+	 * @see #getSlot()
 	 * @generated
 	 */
-	EAttribute getLoadSlot_UnitPrice();
+	EAttribute getSlot_UnitPrice();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.cargo.LoadSlot#getPort <em>Port</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.cargo.Slot#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see scenario.cargo.LoadSlot#getPort()
-	 * @see #getLoadSlot()
+	 * @see scenario.cargo.Slot#getPort()
+	 * @see #getSlot()
 	 * @generated
 	 */
-	EReference getLoadSlot_Port();
+	EReference getSlot_Port();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#getWindowStart <em>Window Start</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getWindowStart <em>Window Start</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Window Start</em>'.
-	 * @see scenario.cargo.LoadSlot#getWindowStart()
-	 * @see #getLoadSlot()
+	 * @see scenario.cargo.Slot#getWindowStart()
+	 * @see #getSlot()
 	 * @generated
 	 */
-	EAttribute getLoadSlot_WindowStart();
+	EAttribute getSlot_WindowStart();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#getWindowDuration <em>Window Duration</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getWindowDuration <em>Window Duration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Window Duration</em>'.
-	 * @see scenario.cargo.LoadSlot#getWindowDuration()
-	 * @see #getLoadSlot()
+	 * @see scenario.cargo.Slot#getWindowDuration()
+	 * @see #getSlot()
 	 * @generated
 	 */
-	EAttribute getLoadSlot_WindowDuration();
-
-	/**
-	 * Returns the meta object for class '{@link scenario.cargo.DischargeSlot <em>Discharge Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Discharge Slot</em>'.
-	 * @see scenario.cargo.DischargeSlot
-	 * @generated
-	 */
-	EClass getDischargeSlot();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.DischargeSlot#getId <em>Id</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Id</em>'.
-	 * @see scenario.cargo.DischargeSlot#getId()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EAttribute getDischargeSlot_Id();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.DischargeSlot#getMinQuantity <em>Min Quantity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Min Quantity</em>'.
-	 * @see scenario.cargo.DischargeSlot#getMinQuantity()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EAttribute getDischargeSlot_MinQuantity();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.DischargeSlot#getMaxQuantity <em>Max Quantity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Max Quantity</em>'.
-	 * @see scenario.cargo.DischargeSlot#getMaxQuantity()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EAttribute getDischargeSlot_MaxQuantity();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.DischargeSlot#getUnitPrice <em>Unit Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Unit Price</em>'.
-	 * @see scenario.cargo.DischargeSlot#getUnitPrice()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EAttribute getDischargeSlot_UnitPrice();
-
-	/**
-	 * Returns the meta object for the reference '{@link scenario.cargo.DischargeSlot#getPort <em>Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see scenario.cargo.DischargeSlot#getPort()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EReference getDischargeSlot_Port();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.DischargeSlot#getWindowStart <em>Window Start</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Window Start</em>'.
-	 * @see scenario.cargo.DischargeSlot#getWindowStart()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EAttribute getDischargeSlot_WindowStart();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.DischargeSlot#getWindowDuration <em>Window Duration</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Window Duration</em>'.
-	 * @see scenario.cargo.DischargeSlot#getWindowDuration()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EAttribute getDischargeSlot_WindowDuration();
+	EAttribute getSlot_WindowDuration();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -612,14 +442,14 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO__DISCHARGE_SLOT = eINSTANCE.getCargo_DischargeSlot();
 
 		/**
-		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
+		 * The meta object literal for the '{@link scenario.cargo.impl.SlotImpl <em>Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see scenario.cargo.impl.LoadSlotImpl
-		 * @see scenario.cargo.impl.CargoPackageImpl#getLoadSlot()
+		 * @see scenario.cargo.impl.SlotImpl
+		 * @see scenario.cargo.impl.CargoPackageImpl#getSlot()
 		 * @generated
 		 */
-		EClass LOAD_SLOT = eINSTANCE.getLoadSlot();
+		EClass SLOT = eINSTANCE.getSlot();
 
 		/**
 		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
@@ -627,7 +457,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LOAD_SLOT__ID = eINSTANCE.getLoadSlot_Id();
+		EAttribute SLOT__ID = eINSTANCE.getSlot_Id();
 
 		/**
 		 * The meta object literal for the '<em><b>Min Quantity</b></em>' attribute feature.
@@ -635,7 +465,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LOAD_SLOT__MIN_QUANTITY = eINSTANCE.getLoadSlot_MinQuantity();
+		EAttribute SLOT__MIN_QUANTITY = eINSTANCE.getSlot_MinQuantity();
 
 		/**
 		 * The meta object literal for the '<em><b>Max Quantity</b></em>' attribute feature.
@@ -643,7 +473,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LOAD_SLOT__MAX_QUANTITY = eINSTANCE.getLoadSlot_MaxQuantity();
+		EAttribute SLOT__MAX_QUANTITY = eINSTANCE.getSlot_MaxQuantity();
 
 		/**
 		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
@@ -651,7 +481,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LOAD_SLOT__UNIT_PRICE = eINSTANCE.getLoadSlot_UnitPrice();
+		EAttribute SLOT__UNIT_PRICE = eINSTANCE.getSlot_UnitPrice();
 
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
@@ -659,7 +489,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference LOAD_SLOT__PORT = eINSTANCE.getLoadSlot_Port();
+		EReference SLOT__PORT = eINSTANCE.getSlot_Port();
 
 		/**
 		 * The meta object literal for the '<em><b>Window Start</b></em>' attribute feature.
@@ -667,7 +497,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LOAD_SLOT__WINDOW_START = eINSTANCE.getLoadSlot_WindowStart();
+		EAttribute SLOT__WINDOW_START = eINSTANCE.getSlot_WindowStart();
 
 		/**
 		 * The meta object literal for the '<em><b>Window Duration</b></em>' attribute feature.
@@ -675,73 +505,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LOAD_SLOT__WINDOW_DURATION = eINSTANCE.getLoadSlot_WindowDuration();
-
-		/**
-		 * The meta object literal for the '{@link scenario.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see scenario.cargo.impl.DischargeSlotImpl
-		 * @see scenario.cargo.impl.CargoPackageImpl#getDischargeSlot()
-		 * @generated
-		 */
-		EClass DISCHARGE_SLOT = eINSTANCE.getDischargeSlot();
-
-		/**
-		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DISCHARGE_SLOT__ID = eINSTANCE.getDischargeSlot_Id();
-
-		/**
-		 * The meta object literal for the '<em><b>Min Quantity</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DISCHARGE_SLOT__MIN_QUANTITY = eINSTANCE.getDischargeSlot_MinQuantity();
-
-		/**
-		 * The meta object literal for the '<em><b>Max Quantity</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DISCHARGE_SLOT__MAX_QUANTITY = eINSTANCE.getDischargeSlot_MaxQuantity();
-
-		/**
-		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DISCHARGE_SLOT__UNIT_PRICE = eINSTANCE.getDischargeSlot_UnitPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DISCHARGE_SLOT__PORT = eINSTANCE.getDischargeSlot_Port();
-
-		/**
-		 * The meta object literal for the '<em><b>Window Start</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DISCHARGE_SLOT__WINDOW_START = eINSTANCE.getDischargeSlot_WindowStart();
-
-		/**
-		 * The meta object literal for the '<em><b>Window Duration</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DISCHARGE_SLOT__WINDOW_DURATION = eINSTANCE.getDischargeSlot_WindowDuration();
+		EAttribute SLOT__WINDOW_DURATION = eINSTANCE.getSlot_WindowDuration();
 
 	}
 

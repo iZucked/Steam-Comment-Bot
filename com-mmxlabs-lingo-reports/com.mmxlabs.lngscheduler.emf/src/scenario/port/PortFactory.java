@@ -62,6 +62,33 @@ public interface PortFactory extends EFactory {
 	DistanceLine createDistanceLine();
 
 	/**
+	 * Returns a new object of class '<em>Canal</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Canal</em>'.
+	 * @generated
+	 */
+	Canal createCanal();
+
+	/**
+	 * Returns a new object of class '<em>Canal Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Canal Model</em>'.
+	 * @generated
+	 */
+	CanalModel createCanalModel();
+
+	/**
+	 * Returns a new object of class '<em>Partial Distance</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Partial Distance</em>'.
+	 * @generated
+	 */
+	PartialDistance createPartialDistance();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

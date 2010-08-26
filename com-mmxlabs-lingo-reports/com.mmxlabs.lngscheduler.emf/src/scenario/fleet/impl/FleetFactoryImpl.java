@@ -72,6 +72,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.VESSEL_CLASS: return createVesselClass();
 			case FleetPackage.FUEL_CONSUMPTION_LINE: return createFuelConsumptionLine();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
+			case FleetPackage.PORT_AND_TIME: return createPortAndTime();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -159,6 +160,16 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public VesselStateAttributes createVesselStateAttributes() {
 		VesselStateAttributesImpl vesselStateAttributes = new VesselStateAttributesImpl();
 		return vesselStateAttributes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortAndTime createPortAndTime() {
+		PortAndTimeImpl portAndTime = new PortAndTimeImpl();
+		return portAndTime;
 	}
 
 	/**

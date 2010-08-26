@@ -121,49 +121,26 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.cargo.LoadSlot} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.cargo.Slot} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LoadSlotItemProvider loadSlotItemProvider;
+	protected SlotItemProvider slotItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.cargo.LoadSlot}.
+	 * This creates an adapter for a {@link scenario.cargo.Slot}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createLoadSlotAdapter() {
-		if (loadSlotItemProvider == null) {
-			loadSlotItemProvider = new LoadSlotItemProvider(this);
+	public Adapter createSlotAdapter() {
+		if (slotItemProvider == null) {
+			slotItemProvider = new SlotItemProvider(this);
 		}
 
-		return loadSlotItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link scenario.cargo.DischargeSlot} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected DischargeSlotItemProvider dischargeSlotItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.cargo.DischargeSlot}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createDischargeSlotAdapter() {
-		if (dischargeSlotItemProvider == null) {
-			dischargeSlotItemProvider = new DischargeSlotItemProvider(this);
-		}
-
-		return dischargeSlotItemProvider;
+		return slotItemProvider;
 	}
 
 	/**
@@ -267,8 +244,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	public void dispose() {
 		if (cargoModelItemProvider != null) cargoModelItemProvider.dispose();
 		if (cargoItemProvider != null) cargoItemProvider.dispose();
-		if (loadSlotItemProvider != null) loadSlotItemProvider.dispose();
-		if (dischargeSlotItemProvider != null) dischargeSlotItemProvider.dispose();
+		if (slotItemProvider != null) slotItemProvider.dispose();
 	}
 
 }

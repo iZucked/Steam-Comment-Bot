@@ -71,6 +71,15 @@ public interface FleetFactory extends EFactory {
 	VesselStateAttributes createVesselStateAttributes();
 
 	/**
+	 * Returns a new object of class '<em>Port And Time</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port And Time</em>'.
+	 * @generated
+	 */
+	PortAndTime createPortAndTime();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

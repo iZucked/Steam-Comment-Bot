@@ -132,13 +132,31 @@ public interface ScenarioPackage extends EPackage {
 	int SCENARIO__DISTANCE_MODEL = 6;
 
 	/**
+	 * The feature id for the '<em><b>Canal Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__CANAL_MODEL = 7;
+
+	/**
+	 * The feature id for the '<em><b>Optimisation</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__OPTIMISATION = 8;
+
+	/**
 	 * The number of structural features of the '<em>Scenario</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_FEATURE_COUNT = 7;
+	int SCENARIO_FEATURE_COUNT = 9;
 
 
 	/**
@@ -229,6 +247,28 @@ public interface ScenarioPackage extends EPackage {
 	EReference getScenario_DistanceModel();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Canal Model</em>'.
+	 * @see scenario.Scenario#getCanalModel()
+	 * @see #getScenario()
+	 * @generated
+	 */
+	EReference getScenario_CanalModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link scenario.Scenario#getOptimisation <em>Optimisation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Optimisation</em>'.
+	 * @see scenario.Scenario#getOptimisation()
+	 * @see #getScenario()
+	 * @generated
+	 */
+	EReference getScenario_Optimisation();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -315,6 +355,22 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCENARIO__DISTANCE_MODEL = eINSTANCE.getScenario_DistanceModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO__CANAL_MODEL = eINSTANCE.getScenario_CanalModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Optimisation</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO__OPTIMISATION = eINSTANCE.getScenario_Optimisation();
 
 	}
 

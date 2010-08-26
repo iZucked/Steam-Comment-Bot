@@ -39,12 +39,12 @@ public interface FuelConsumptionLine extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Speed</em>' attribute.
-	 * @see #setSpeed(int)
+	 * @see #setSpeed(float)
 	 * @see scenario.fleet.FleetPackage#getFuelConsumptionLine_Speed()
 	 * @model
 	 * @generated
 	 */
-	int getSpeed();
+	float getSpeed();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.FuelConsumptionLine#getSpeed <em>Speed</em>}' attribute.
@@ -54,7 +54,7 @@ public interface FuelConsumptionLine extends EObject {
 	 * @see #getSpeed()
 	 * @generated
 	 */
-	void setSpeed(int value);
+	void setSpeed(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Consumption</b></em>' attribute.
@@ -65,12 +65,12 @@ public interface FuelConsumptionLine extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Consumption</em>' attribute.
-	 * @see #setConsumption(int)
+	 * @see #setConsumption(float)
 	 * @see scenario.fleet.FleetPackage#getFuelConsumptionLine_Consumption()
 	 * @model
 	 * @generated
 	 */
-	int getConsumption();
+	float getConsumption();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.FuelConsumptionLine#getConsumption <em>Consumption</em>}' attribute.
@@ -80,6 +80,6 @@ public interface FuelConsumptionLine extends EObject {
 	 * @see #getConsumption()
 	 * @generated
 	 */
-	void setConsumption(int value);
+	void setConsumption(float value);
 
 } // FuelConsumptionLine

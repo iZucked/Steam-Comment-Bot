@@ -127,7 +127,7 @@ public class RandomScenarioUtils {
 		
 		vsa.setVesselState(state);
 		vsa.setIdleConsumptionRate(idleconsumption);
-		vsa.setIdleNBORate(nbo);
+		vsa.setNboRate(nbo);
 		vsa.setIdleNBORate(idlenbo);
 		
 		for (float[] point : curve) {

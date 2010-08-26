@@ -68,6 +68,9 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 			case PortPackage.PORT: return createPort();
 			case PortPackage.DISTANCE_MODEL: return createDistanceModel();
 			case PortPackage.DISTANCE_LINE: return createDistanceLine();
+			case PortPackage.CANAL: return createCanal();
+			case PortPackage.CANAL_MODEL: return createCanalModel();
+			case PortPackage.PARTIAL_DISTANCE: return createPartialDistance();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -113,6 +116,36 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	public DistanceLine createDistanceLine() {
 		DistanceLineImpl distanceLine = new DistanceLineImpl();
 		return distanceLine;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Canal createCanal() {
+		CanalImpl canal = new CanalImpl();
+		return canal;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalModel createCanalModel() {
+		CanalModelImpl canalModel = new CanalModelImpl();
+		return canalModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PartialDistance createPartialDistance() {
+		PartialDistanceImpl partialDistance = new PartialDistanceImpl();
+		return partialDistance;
 	}
 
 	/**

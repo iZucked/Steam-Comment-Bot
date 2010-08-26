@@ -68,12 +68,12 @@ public interface VesselStateAttributes extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Nbo Rate</em>' attribute.
-	 * @see #setNboRate(int)
+	 * @see #setNboRate(float)
 	 * @see scenario.fleet.FleetPackage#getVesselStateAttributes_NboRate()
 	 * @model
 	 * @generated
 	 */
-	int getNboRate();
+	float getNboRate();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.VesselStateAttributes#getNboRate <em>Nbo Rate</em>}' attribute.
@@ -83,7 +83,7 @@ public interface VesselStateAttributes extends EObject {
 	 * @see #getNboRate()
 	 * @generated
 	 */
-	void setNboRate(int value);
+	void setNboRate(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Idle NBO Rate</b></em>' attribute.
@@ -94,12 +94,12 @@ public interface VesselStateAttributes extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Idle NBO Rate</em>' attribute.
-	 * @see #setIdleNBORate(int)
+	 * @see #setIdleNBORate(float)
 	 * @see scenario.fleet.FleetPackage#getVesselStateAttributes_IdleNBORate()
 	 * @model
 	 * @generated
 	 */
-	int getIdleNBORate();
+	float getIdleNBORate();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.VesselStateAttributes#getIdleNBORate <em>Idle NBO Rate</em>}' attribute.
@@ -109,7 +109,7 @@ public interface VesselStateAttributes extends EObject {
 	 * @see #getIdleNBORate()
 	 * @generated
 	 */
-	void setIdleNBORate(int value);
+	void setIdleNBORate(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Idle Consumption Rate</b></em>' attribute.
@@ -120,12 +120,12 @@ public interface VesselStateAttributes extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Idle Consumption Rate</em>' attribute.
-	 * @see #setIdleConsumptionRate(int)
+	 * @see #setIdleConsumptionRate(float)
 	 * @see scenario.fleet.FleetPackage#getVesselStateAttributes_IdleConsumptionRate()
 	 * @model
 	 * @generated
 	 */
-	int getIdleConsumptionRate();
+	float getIdleConsumptionRate();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.VesselStateAttributes#getIdleConsumptionRate <em>Idle Consumption Rate</em>}' attribute.
@@ -135,7 +135,7 @@ public interface VesselStateAttributes extends EObject {
 	 * @see #getIdleConsumptionRate()
 	 * @generated
 	 */
-	void setIdleConsumptionRate(int value);
+	void setIdleConsumptionRate(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Fuel Consumption Curve</b></em>' containment reference list.

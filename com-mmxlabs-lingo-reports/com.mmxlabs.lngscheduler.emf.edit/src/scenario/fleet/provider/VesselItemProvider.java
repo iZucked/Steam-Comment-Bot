@@ -13,6 +13,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -24,6 +25,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.provider.LngEditPlugin;
@@ -65,8 +67,6 @@ public class VesselItemProvider
 
 			addNamePropertyDescriptor(object);
 			addClassPropertyDescriptor(object);
-			addStartPortPropertyDescriptor(object);
-			addEndPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -116,47 +116,34 @@ public class VesselItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Start Port feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addStartPortPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_startPort_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_startPort_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__START_PORT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(FleetPackage.Literals.VESSEL__START_REQUIREMENT);
+			childrenFeatures.add(FleetPackage.Literals.VESSEL__END_REQUIREMENT);
+		}
+		return childrenFeatures;
 	}
 
 	/**
-	 * This adds a property descriptor for the End Port feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEndPortPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_endPort_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_endPort_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__END_PORT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -199,6 +186,10 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case FleetPackage.VESSEL__START_REQUIREMENT:
+			case FleetPackage.VESSEL__END_REQUIREMENT:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
@@ -213,6 +204,39 @@ public class VesselItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL__START_REQUIREMENT,
+				 FleetFactory.eINSTANCE.createPortAndTime()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL__END_REQUIREMENT,
+				 FleetFactory.eINSTANCE.createPortAndTime()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == FleetPackage.Literals.VESSEL__START_REQUIREMENT ||
+			childFeature == FleetPackage.Literals.VESSEL__END_REQUIREMENT;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

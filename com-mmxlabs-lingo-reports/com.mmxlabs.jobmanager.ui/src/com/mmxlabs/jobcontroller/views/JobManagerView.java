@@ -85,6 +85,11 @@ public class JobManagerView extends ViewPart {
 	private final IJobManager jobManager = Activator.getDefault()
 			.getJobManager();
 
+	public void addJob(IManagedJob theJob) {
+		theJob.init();
+		jobManager.addJob(theJob);
+	}
+	
 	/*
 	 * The content provider class is responsible for providing objects to the
 	 * view. It can wrap existing objects in adapters or simply return objects

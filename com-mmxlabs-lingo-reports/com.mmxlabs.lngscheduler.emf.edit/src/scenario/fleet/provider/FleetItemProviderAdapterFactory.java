@@ -190,6 +190,29 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.fleet.PortAndTime} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortAndTimeItemProvider portAndTimeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.fleet.PortAndTime}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortAndTimeAdapter() {
+		if (portAndTimeItemProvider == null) {
+			portAndTimeItemProvider = new PortAndTimeItemProvider(this);
+		}
+
+		return portAndTimeItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -293,6 +316,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselClassItemProvider != null) vesselClassItemProvider.dispose();
 		if (fuelConsumptionLineItemProvider != null) fuelConsumptionLineItemProvider.dispose();
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
+		if (portAndTimeItemProvider != null) portAndTimeItemProvider.dispose();
 	}
 
 }

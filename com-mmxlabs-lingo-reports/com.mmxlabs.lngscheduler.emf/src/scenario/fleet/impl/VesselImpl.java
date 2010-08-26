@@ -7,15 +7,16 @@
 package scenario.fleet.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.fleet.FleetPackage;
+import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
-import scenario.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,8 +27,8 @@ import scenario.port.Port;
  * <ul>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getClass_ <em>Class</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselImpl#getStartPort <em>Start Port</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselImpl#getEndPort <em>End Port</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselImpl#getStartRequirement <em>Start Requirement</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselImpl#getEndRequirement <em>End Requirement</em>}</li>
  * </ul>
  * </p>
  *
@@ -65,24 +66,24 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	protected VesselClass class_;
 
 	/**
-	 * The cached value of the '{@link #getStartPort() <em>Start Port</em>}' reference.
+	 * The cached value of the '{@link #getStartRequirement() <em>Start Requirement</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStartPort()
+	 * @see #getStartRequirement()
 	 * @generated
 	 * @ordered
 	 */
-	protected Port startPort;
+	protected PortAndTime startRequirement;
 
 	/**
-	 * The cached value of the '{@link #getEndPort() <em>End Port</em>}' reference.
+	 * The cached value of the '{@link #getEndRequirement() <em>End Requirement</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEndPort()
+	 * @see #getEndRequirement()
 	 * @generated
 	 * @ordered
 	 */
-	protected Port endPort;
+	protected PortAndTime endRequirement;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -171,16 +172,23 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port getStartPort() {
-		if (startPort != null && startPort.eIsProxy()) {
-			InternalEObject oldStartPort = (InternalEObject)startPort;
-			startPort = (Port)eResolveProxy(oldStartPort);
-			if (startPort != oldStartPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL__START_PORT, oldStartPort, startPort));
-			}
+	public PortAndTime getStartRequirement() {
+		return startRequirement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetStartRequirement(PortAndTime newStartRequirement, NotificationChain msgs) {
+		PortAndTime oldStartRequirement = startRequirement;
+		startRequirement = newStartRequirement;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_REQUIREMENT, oldStartRequirement, newStartRequirement);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return startPort;
+		return msgs;
 	}
 
 	/**
@@ -188,37 +196,18 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port basicGetStartPort() {
-		return startPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setStartPort(Port newStartPort) {
-		Port oldStartPort = startPort;
-		startPort = newStartPort;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_PORT, oldStartPort, startPort));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port getEndPort() {
-		if (endPort != null && endPort.eIsProxy()) {
-			InternalEObject oldEndPort = (InternalEObject)endPort;
-			endPort = (Port)eResolveProxy(oldEndPort);
-			if (endPort != oldEndPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL__END_PORT, oldEndPort, endPort));
-			}
+	public void setStartRequirement(PortAndTime newStartRequirement) {
+		if (newStartRequirement != startRequirement) {
+			NotificationChain msgs = null;
+			if (startRequirement != null)
+				msgs = ((InternalEObject)startRequirement).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__START_REQUIREMENT, null, msgs);
+			if (newStartRequirement != null)
+				msgs = ((InternalEObject)newStartRequirement).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__START_REQUIREMENT, null, msgs);
+			msgs = basicSetStartRequirement(newStartRequirement, msgs);
+			if (msgs != null) msgs.dispatch();
 		}
-		return endPort;
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_REQUIREMENT, newStartRequirement, newStartRequirement));
 	}
 
 	/**
@@ -226,8 +215,8 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port basicGetEndPort() {
-		return endPort;
+	public PortAndTime getEndRequirement() {
+		return endRequirement;
 	}
 
 	/**
@@ -235,11 +224,49 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEndPort(Port newEndPort) {
-		Port oldEndPort = endPort;
-		endPort = newEndPort;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__END_PORT, oldEndPort, endPort));
+	public NotificationChain basicSetEndRequirement(PortAndTime newEndRequirement, NotificationChain msgs) {
+		PortAndTime oldEndRequirement = endRequirement;
+		endRequirement = newEndRequirement;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__END_REQUIREMENT, oldEndRequirement, newEndRequirement);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEndRequirement(PortAndTime newEndRequirement) {
+		if (newEndRequirement != endRequirement) {
+			NotificationChain msgs = null;
+			if (endRequirement != null)
+				msgs = ((InternalEObject)endRequirement).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__END_REQUIREMENT, null, msgs);
+			if (newEndRequirement != null)
+				msgs = ((InternalEObject)newEndRequirement).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__END_REQUIREMENT, null, msgs);
+			msgs = basicSetEndRequirement(newEndRequirement, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__END_REQUIREMENT, newEndRequirement, newEndRequirement));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FleetPackage.VESSEL__START_REQUIREMENT:
+				return basicSetStartRequirement(null, msgs);
+			case FleetPackage.VESSEL__END_REQUIREMENT:
+				return basicSetEndRequirement(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -255,12 +282,10 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__CLASS:
 				if (resolve) return getClass_();
 				return basicGetClass();
-			case FleetPackage.VESSEL__START_PORT:
-				if (resolve) return getStartPort();
-				return basicGetStartPort();
-			case FleetPackage.VESSEL__END_PORT:
-				if (resolve) return getEndPort();
-				return basicGetEndPort();
+			case FleetPackage.VESSEL__START_REQUIREMENT:
+				return getStartRequirement();
+			case FleetPackage.VESSEL__END_REQUIREMENT:
+				return getEndRequirement();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -270,6 +295,7 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -279,11 +305,11 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__CLASS:
 				setClass((VesselClass)newValue);
 				return;
-			case FleetPackage.VESSEL__START_PORT:
-				setStartPort((Port)newValue);
+			case FleetPackage.VESSEL__START_REQUIREMENT:
+				setStartRequirement((PortAndTime)newValue);
 				return;
-			case FleetPackage.VESSEL__END_PORT:
-				setEndPort((Port)newValue);
+			case FleetPackage.VESSEL__END_REQUIREMENT:
+				setEndRequirement((PortAndTime)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -303,11 +329,11 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__CLASS:
 				setClass((VesselClass)null);
 				return;
-			case FleetPackage.VESSEL__START_PORT:
-				setStartPort((Port)null);
+			case FleetPackage.VESSEL__START_REQUIREMENT:
+				setStartRequirement((PortAndTime)null);
 				return;
-			case FleetPackage.VESSEL__END_PORT:
-				setEndPort((Port)null);
+			case FleetPackage.VESSEL__END_REQUIREMENT:
+				setEndRequirement((PortAndTime)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -325,10 +351,10 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case FleetPackage.VESSEL__CLASS:
 				return class_ != null;
-			case FleetPackage.VESSEL__START_PORT:
-				return startPort != null;
-			case FleetPackage.VESSEL__END_PORT:
-				return endPort != null;
+			case FleetPackage.VESSEL__START_REQUIREMENT:
+				return startRequirement != null;
+			case FleetPackage.VESSEL__END_REQUIREMENT:
+				return endRequirement != null;
 		}
 		return super.eIsSet(featureID);
 	}

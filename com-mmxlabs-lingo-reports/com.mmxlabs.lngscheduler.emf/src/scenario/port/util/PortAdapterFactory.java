@@ -91,6 +91,18 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 				return createDistanceLineAdapter();
 			}
 			@Override
+			public Adapter caseCanal(Canal object) {
+				return createCanalAdapter();
+			}
+			@Override
+			public Adapter caseCanalModel(CanalModel object) {
+				return createCanalModelAdapter();
+			}
+			@Override
+			public Adapter casePartialDistance(PartialDistance object) {
+				return createPartialDistanceAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -163,6 +175,48 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDistanceLineAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.port.Canal <em>Canal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.port.Canal
+	 * @generated
+	 */
+	public Adapter createCanalAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.port.CanalModel <em>Canal Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.port.CanalModel
+	 * @generated
+	 */
+	public Adapter createCanalModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.port.PartialDistance <em>Partial Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.port.PartialDistance
+	 * @generated
+	 */
+	public Adapter createPartialDistanceAdapter() {
 		return null;
 	}
 
