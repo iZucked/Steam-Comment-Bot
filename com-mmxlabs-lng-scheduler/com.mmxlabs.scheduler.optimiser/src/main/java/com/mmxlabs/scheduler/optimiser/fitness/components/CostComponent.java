@@ -39,10 +39,9 @@ public final class CostComponent<T> extends
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void evaluateSequence(final IResource resource,
+	public long rawEvaluateSequence(final IResource resource,
 			final ISequence<T> sequence,
-			final IAnnotatedSequence<T> annotatedSequence,
-			final boolean newSequence) {
+			final IAnnotatedSequence<T> annotatedSequence) {
 
 		long cost = 0;
 
@@ -73,8 +72,8 @@ public final class CostComponent<T> extends
 		// Remove scale factor from result (back into external units)
 		// TODO: Use Calculator to convert back
 		cost /= Calculator.ScaleFactor;
-
-		updateFitness(resource, cost, newSequence);
+		
+		return cost;
 	}
 
 	@Override

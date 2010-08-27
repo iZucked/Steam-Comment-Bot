@@ -35,9 +35,8 @@ public final class DistanceComponent<T> extends
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final IAnnotatedSequence<T> annotatedSequence,
-			final boolean newSequence) {
+	public long rawEvaluateSequence(final IResource resource,
+			final ISequence<T> sequence, final IAnnotatedSequence<T> annotatedSequence) {
 		// Calculate sum distance travelled.
 		long distance = 0;
 
@@ -54,6 +53,6 @@ public final class DistanceComponent<T> extends
 
 		//TODO: Temp remove distance from fitness - should really alter weight or remove component from evaluations instead
 		distance = 0;
-		updateFitness(resource, distance, newSequence);
+		return distance;
 	}
 }

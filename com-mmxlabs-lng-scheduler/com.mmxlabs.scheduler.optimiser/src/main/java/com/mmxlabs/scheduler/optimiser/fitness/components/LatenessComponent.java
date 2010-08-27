@@ -37,9 +37,8 @@ public final class LatenessComponent<T> extends
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final IAnnotatedSequence<T> annotatedSequence,
-			final boolean newSequence) {
+	public long rawEvaluateSequence(final IResource resource,
+			final ISequence<T> sequence, final IAnnotatedSequence<T> annotatedSequence) {
 
 		long lateness = 0;
 
@@ -62,10 +61,10 @@ public final class LatenessComponent<T> extends
 				}
 			}
 		}
-		// Hack in a weighting
+		// TODO: Hack in a weighting
 		lateness *= 1000000;
 		
-		updateFitness(resource, lateness, newSequence);
+		return lateness;
 	}
 
 	@Override
