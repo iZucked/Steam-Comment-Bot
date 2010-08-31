@@ -4,7 +4,11 @@ import com.mmxlabs.optimiser.core.ISequences;
 
 /**
  * Interface defining an object which can generate {@link IMove} instances to be
- * used within a Local Search Optimisation.
+ * used within a Local Search Optimisation. In typical use, the caller will use
+ * {@code setSequences(...)} to specify the sequences associated with the current state,
+ * and then {@code generateMove()} some number of times to get some moves to alter
+ * the state; once a move has been applied, the caller will probably call {@code setSequences(...)}
+ * again, and so on.
  * 
  * @author Simon Goodall
  * 
