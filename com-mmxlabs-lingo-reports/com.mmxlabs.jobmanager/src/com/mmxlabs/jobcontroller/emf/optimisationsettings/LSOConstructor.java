@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.StepThresholder;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
@@ -96,6 +97,7 @@ public class LSOConstructor {
 		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
+		moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit<T>());
 		
 		return moveGenerator;
 	}
