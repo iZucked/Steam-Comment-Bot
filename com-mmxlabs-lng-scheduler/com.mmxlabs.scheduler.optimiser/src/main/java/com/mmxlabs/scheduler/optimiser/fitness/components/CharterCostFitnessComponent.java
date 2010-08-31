@@ -35,7 +35,7 @@ public class CharterCostFitnessComponent<T> extends
 	public void evaluateSequence(IResource resource, ISequence<T> sequence,
 			IAnnotatedSequence<T> annotatedSequence, boolean newSequence) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		int hireCost = 0;
+		long hireCost = 0;
 		switch (vessel.getVesselInstanceType()) {
 			case SPOT_CHARTER:
 				// Check whether there are any load ports in the sequence
