@@ -22,8 +22,8 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
-import com.mmxlabs.scheduler.optimiser.initialschedulebuilder.IInitialScheduleBuilder;
-import com.mmxlabs.scheduler.optimiser.initialschedulebuilder.RandomInitialScheduleBuilder;
+import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
+import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.RandomInitialSequenceBuilder;
 
 /**
  * Utility for taking an OptimisationSettings from the EMF and starting an optimiser accordingly. At the moment, it's pretty much 
@@ -108,7 +108,7 @@ public class OptimisationTransformer {
 	 */
 	public ISequences<ISequenceElement> createInitialSequences(
 			IOptimisationData<ISequenceElement> data) {
-		IInitialScheduleBuilder<ISequenceElement> builder = new RandomInitialScheduleBuilder<ISequenceElement>();
+		IInitialSequenceBuilder<ISequenceElement> builder = new RandomInitialSequenceBuilder<ISequenceElement>();
 		//TODO add a parameter for this to the model, if we create some better initial schedule builders
 		return builder.createInitialSequences(data);
 	}
