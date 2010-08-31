@@ -1,10 +1,14 @@
 package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
+import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
+import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -16,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -42,13 +47,16 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @param <T>
  */
 public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
-	Map<T, List<T>> validFollowers = new HashMap<T, List<T>>();
+	Map<T, Set<T>> validFollowers = new HashMap<T, Set<T>>();
 	private IOptimisationContext<T> context;
 	private IPortTypeProvider<T> portTypeProvider;
 	private IPortSlotProvider<T> portSlotProvider;
 	private IElementDurationProvider<T> elementDurationProvider;
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 	private IVesselProvider vesselProvider;
+	private IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider;
+	private IOrderedSequenceElementsDataComponentProvider<T> orderedSequenceProvider;
+	
 	public ConstrainedMoveGenerator(IOptimisationContext<T> context) {
 		this.context = context;
 		final IOptimisationData<T> data = context.getOptimisationData();
@@ -57,6 +65,19 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		this.elementDurationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class);
 		this.distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
 		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		this.resourceAllocationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, IResourceAllocationConstraintDataComponentProvider.class);
+		this.orderedSequenceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, IOrderedSequenceElementsDataComponentProvider.class);
+	
+		//create a massive lookup table -- this may be a really bad solution
+		for (T e1 : data.getSequenceElements()) {
+			Set<T> followers = new HashSet<T>();
+			validFollowers.put(e1, followers);
+			for (T e2 : data.getSequenceElements()) {
+				if (e1 == e2) continue;
+				if (allowSequence(e1, e2))
+					followers.add(e2);
+			}
+		}
 	}
 	
 	/**
@@ -72,24 +93,47 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		if (!allowPortTypes(portType1, portType2)) return false;
 		
 		//so port types are valid, now check feasibility of travel times
+		//and incidentally resource-element binding constraints.
 		if (!reachableFrom(e1, e2)) return false; 
 		
-		//travel time constraints can be met by some vessel, now consider fixed pairs, which must not be separated.
-		
-		
+		//travel time constraints can be met by some vessel, 
+		//now consider fixed load/discharge pairs, which must not be separated.
+		if (!canFollow(e1, e2)) return false;
 		
 		return true;
 	}
 
 	/**
-	 * Can element 2 be reached from element 1 in time, using any vessel in the fleet?
-	 * TODO: this may say yes when it should say no, because it does not respect resource allocation constraints. fix this.
+	 * Check whether e2 can follow e1 according to the ordered sequence constraints.
+	 * @param e1
+	 * @param e2
+	 * @return
+	 */
+	private boolean canFollow(T e1, T e2) {
+		final T after1 = orderedSequenceProvider.getNextElement(e1);
+		if (after1 == null) {
+			final T before2 = orderedSequenceProvider.getPreviousElement(e2);
+			return before2 == null || before2.equals(e1); //second test may not be necessary, if the orderedSequenceConstraint is reflexive
+		} else {
+			return after1.equals(e2);
+		}
+	}
+
+	/**
+	 * Can element 2 be reached from element 1 in time, using any vessel in the fleet legal for both elements.
+	 * 
 	 * @param e1
 	 * @param e2
 	 * @return
 	 */
 	private boolean reachableFrom(T e1, T e2) {
-		for (IResource resource : context.getOptimisationData().getResources()) {
+		//get resources which can service both elements
+		Set<IResource> sharedResources = new HashSet<IResource>(
+				resourceAllocationProvider.getAllowedResources(e1));
+		
+		sharedResources.retainAll(resourceAllocationProvider.getAllowedResources(e2));
+		
+		for (IResource resource : sharedResources) {
 			if (reachableFrom(e1, e2, resource)) return true;
 		}
 		return false;
@@ -122,6 +166,8 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 
 	/**
 	 * Should ports visits of these types follow one another?
+	 * 
+	 * TODO this is code effectively shared with the {@link PortTypeConstraintChecker} and it is not identical. Factor this out.
 	 * @param pt1
 	 * @param pt2
 	 * @return
