@@ -72,9 +72,25 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	void complete();
 
 	/**
+	 * Prepare for a new partial evaluation.
+	 */
+	void prepareDelta();
+
+	/**
+	 * Evaluate the given {@link ISequence}. The {@link IAnnotatedSequence} will
+	 * have already been scheduled and can be queried. This method does not
+	 * update internal state.
+	 * 
+	 * @param resource
+	 * @param sequence
+	 * @param annotatedSequence
+	 * @return
+	 */
+	long rawEvaluateSequence(IResource resource, ISequence<T> sequence,
+			IAnnotatedSequence<T> annotatedSequence);
+
+	/**
 	 * Clean up references as this component is no longer required.
 	 */
 	void dispose();
-
-	void prepareDelta();
 }

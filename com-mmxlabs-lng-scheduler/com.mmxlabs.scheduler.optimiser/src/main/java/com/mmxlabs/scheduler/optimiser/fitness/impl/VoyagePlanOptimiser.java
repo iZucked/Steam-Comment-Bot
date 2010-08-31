@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * The {@link VoyagePlanOptimiser} performs an exhaustive search through the
  * choices in a {@link IVoyagePlan}. {@link IVoyagePlanChoice} implementations
  * are provided in a set order which edit the voyage plan objects.
- * 
+ * TODO: Extract interface. Develop unit tests. 
  * @author Simon Goodall
  * 
  * @param <T>
@@ -100,59 +100,7 @@ public final class VoyagePlanOptimiser<T> {
 		// Recursive termination point.
 		if (i == choices.size()) {
 			// Perform voyage calculations and populate plan.
-
-			// For each voyage options, calculate new Details.
-
-			final List<Object> currentSequence = new ArrayList<Object>(
-					basicSequence.size());
-
-			for (final Object element : basicSequence) {
-
-				// Loop through basic elements, calculating voyage requirements
-				// to build up basic voyage plan details.
-				if (element instanceof VoyageOptions) {
-					final VoyageOptions options = (VoyageOptions) element;
-
-					final VoyageDetails<T> voyageDetails = new VoyageDetails<T>();
-					// Clone options so further iterations through choices do
-					// not change the options stored in these voyage details.
-					// This could be made more efficient by only cloning when
-					// the plan is the cheapest found so far.
-					try {
-						voyageDetails.setOptions((IVoyageOptions) options
-								.clone());
-					} catch (CloneNotSupportedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					// Calculate voyage cost
-					voyageCalculator.calculateVoyageFuelRequirements(options,
-							voyageDetails);
-					currentSequence.add(voyageDetails);
-				} else {
-					currentSequence.add(element);
-				}
-			}
-
-			final VoyagePlan currentPlan = new VoyagePlan();
-
-			// Calculate voyage plan
-			voyageCalculator.calculateVoyagePlan(currentPlan, vessel,
-					currentSequence.toArray());
-
-			// long revenue = currentPlan.getSalesRevenue() -
-			// currentPlan.getSalesRevenue();
-			long cost = 0;
-			for (final FuelComponent fuel : FuelComponent.values()) {
-				cost += currentPlan.getTotalFuelCost(fuel);
-			}
-
-			// Store cheapest cost
-			if (cost < bestCost) {
-				bestCost = cost;
-				bestPlan = currentPlan;
-			}
+			evaluateVoyagePlan();
 		} else {
 			// Perform recursive application of choice objects.
 			final IVoyagePlanChoice c = choices.get(i);
@@ -161,6 +109,61 @@ public final class VoyagePlanOptimiser<T> {
 					runLoop(i + 1);
 				}
 			}
+		}
+	}
+
+	private void evaluateVoyagePlan() {
+		// For each voyage options, calculate new Details.
+
+		final List<Object> currentSequence = new ArrayList<Object>(
+				basicSequence.size());
+
+		for (final Object element : basicSequence) {
+
+			// Loop through basic elements, calculating voyage requirements
+			// to build up basic voyage plan details.
+			if (element instanceof VoyageOptions) {
+				final VoyageOptions options = (VoyageOptions) element;
+
+				final VoyageDetails<T> voyageDetails = new VoyageDetails<T>();
+				// Clone options so further iterations through choices do
+				// not change the options stored in these voyage details.
+				// This could be made more efficient by only cloning when
+				// the plan is the cheapest found so far.
+				try {
+					voyageDetails.setOptions((IVoyageOptions) options
+							.clone());
+				} catch (CloneNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				// Calculate voyage cost
+				voyageCalculator.calculateVoyageFuelRequirements(options,
+						voyageDetails);
+				currentSequence.add(voyageDetails);
+			} else {
+				currentSequence.add(element);
+			}
+		}
+
+		final VoyagePlan currentPlan = new VoyagePlan();
+
+		// Calculate voyage plan
+		voyageCalculator.calculateVoyagePlan(currentPlan, vessel,
+				currentSequence.toArray());
+
+		// long revenue = currentPlan.getSalesRevenue() -
+		// currentPlan.getSalesRevenue();
+		long cost = 0;
+		for (final FuelComponent fuel : FuelComponent.values()) {
+			cost += currentPlan.getTotalFuelCost(fuel);
+		}
+
+		// Store cheapest cost
+		if (cost < bestCost) {
+			bestCost = cost;
+			bestPlan = currentPlan;
 		}
 	}
 
