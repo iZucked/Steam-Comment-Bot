@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.fitness.impl.SortingFitnessFactory;
 import com.mmxlabs.optimiser.lso.impl.thresholders.StepThresholder;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
@@ -43,6 +44,7 @@ public final class GeneralTestUtils {
 		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
+		moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit<T>());
 		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
 		// moveGenerator.addMoveGeneratorUnit(new MoveHydraGeneratorUnit<T>());
 
