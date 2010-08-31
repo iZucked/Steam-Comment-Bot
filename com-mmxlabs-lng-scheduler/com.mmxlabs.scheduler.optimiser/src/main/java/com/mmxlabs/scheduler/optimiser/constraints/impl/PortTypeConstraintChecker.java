@@ -80,7 +80,7 @@ public final class PortTypeConstraintChecker<T> implements
 		setPortTypeProvider(optimisationData.getDataComponentProvider(key,
 				IPortTypeProvider.class));
 	}
-
+	
 	/**
 	 * Check ISequence for {@link PortType} ordering violations.
 	 * 
@@ -102,7 +102,7 @@ public final class PortTypeConstraintChecker<T> implements
 				if (type != PortType.Start) {
 					// Must start with a Start type.
 					if (messages != null)
-						messages.add("Sequence must being with PortType.Start");
+						messages.add("Sequence must begin with PortType.Start");
 					return false;
 				}
 			} else {
