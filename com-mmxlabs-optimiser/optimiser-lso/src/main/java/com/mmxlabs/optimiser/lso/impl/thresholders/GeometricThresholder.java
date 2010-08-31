@@ -1,0 +1,66 @@
+package com.mmxlabs.optimiser.lso.impl.thresholders;
+
+import java.util.Random;
+
+import com.mmxlabs.optimiser.lso.IThresholder;
+
+/**
+ * An implementation of the classic SA thresholder. This has a "temperature", which is used to probabilistically accept/reject
+ * moves. A move which causes change delta is accepted with probability exp(-delta/temperature). The temperature is reduced
+ * periodically, with the period being known as the "epoch length", by multiplying the current temperature by a cooling value
+ * which is less than 1. Longer epochs and larger cooling values cause slower convergence, but increase the quality of the result
+ * (given enough steps).
+ * 
+ * @author hinton
+ */
+public class GeometricThresholder implements IThresholder {
+	private double fractionPerEpoch;
+	private int epochLength;
+	private int ticks;
+	private double temperature;
+	private double T0;
+	private Random random;
+
+	/**
+	 * Create a new geometric thresholder
+	 * @param random the random number generator
+	 * @param epochLength the length of one epoch
+	 * @param T0 the initial temperature
+	 * @param alpha the cooling parameter (<1)
+	 */
+	public GeometricThresholder(Random random, int epochLength, double T0, double alpha) {
+		this.random = random;
+		this.epochLength = epochLength;
+		this.T0 = T0;
+		this.fractionPerEpoch = alpha;
+		if (alpha >= 1 || alpha <= 0) {
+			throw new IllegalArgumentException("Alpha must be strictly between 1 and 0. You provided " + alpha);
+		}
+	}
+	
+	@Override
+	public void init() {
+		ticks = 0;
+		temperature = T0;
+	}
+
+	@Override
+	public boolean accept(long delta) {
+		if (delta < 0) return true;
+		else return random.nextDouble() < acceptanceProbability(delta, temperature); 
+	}
+
+	private final double acceptanceProbability(long delta, double T) {
+		return Math.exp(-delta / T);
+	}
+
+	@Override
+	public void step() {
+		ticks++;
+		if (ticks >= epochLength) {
+			ticks = 0;
+			temperature *= fractionPerEpoch;
+		}
+	}
+
+}

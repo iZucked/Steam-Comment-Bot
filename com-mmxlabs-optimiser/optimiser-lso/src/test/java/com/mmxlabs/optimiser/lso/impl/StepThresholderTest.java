@@ -3,6 +3,8 @@ package com.mmxlabs.optimiser.lso.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.optimiser.lso.impl.thresholders.StepThresholder;
+
 public class StepThresholderTest {
 
 	@Test

@@ -1,4 +1,4 @@
-package com.mmxlabs.optimiser.lso.impl;
+package com.mmxlabs.optimiser.lso.impl.thresholders;
 
 import com.mmxlabs.optimiser.lso.IThresholder;
 
