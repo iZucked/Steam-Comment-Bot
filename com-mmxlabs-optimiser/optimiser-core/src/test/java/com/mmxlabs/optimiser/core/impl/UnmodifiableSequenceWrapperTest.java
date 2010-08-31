@@ -94,6 +94,16 @@ public class UnmodifiableSequenceWrapperTest {
 			public Iterator iterator() {
 				return target;
 			}
+			
+			@Override
+			public final Object last() {
+				return get(size()-1);
+			}
+
+			@Override
+			public Object first() {
+				return get(0);
+			}
 		};
 
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
@@ -142,6 +152,16 @@ public class UnmodifiableSequenceWrapperTest {
 			public Iterator iterator() {
 				return target;
 			}
+			
+			@Override
+			public final Object last() {
+				return get(size()-1);
+			}
+
+			@Override
+			public Object first() {
+				return get(0);
+			}
 		};
 
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
@@ -189,6 +209,16 @@ public class UnmodifiableSequenceWrapperTest {
 			@Override
 			public Iterator iterator() {
 				return target;
+			}
+			
+			@Override
+			public final Object last() {
+				return get(size()-1);
+			}
+
+			@Override
+			public Object first() {
+				return get(0);
 			}
 		};
 
