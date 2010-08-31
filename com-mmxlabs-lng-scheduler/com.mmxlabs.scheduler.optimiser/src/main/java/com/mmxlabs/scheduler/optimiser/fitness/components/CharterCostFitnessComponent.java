@@ -18,22 +18,24 @@ public class CharterCostFitnessComponent<T> extends
 		IFitnessComponent<T> {
 
 	private IVesselProvider vesselProvider;
-	private IPortTypeProvider portTypeProvider;
+	private IPortTypeProvider<T> portTypeProvider;
 
 	public CharterCostFitnessComponent(String name,
 			CargoSchedulerFitnessCore<T> core) {
 		super(name, core);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(IOptimisationData<T> data) {
 		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		this.portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
+		this.portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, 
+				IPortTypeProvider.class);
 	}
 
 	@Override
-	public void evaluateSequence(IResource resource, ISequence<T> sequence,
-			IAnnotatedSequence<T> annotatedSequence, boolean newSequence) {
+	public long rawEvaluateSequence(IResource resource, ISequence<T> sequence,
+			IAnnotatedSequence<T> annotatedSequence) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		long hireCost = 0;
 		switch (vessel.getVesselInstanceType()) {
@@ -55,9 +57,7 @@ public class CharterCostFitnessComponent<T> extends
 				
 				if (foundLoadPort) {
 					// check time of arrival at end port.
-					// TODO change startendrequirementprovider to have hooks into the sequence elements
-					// instead of doing this (but then this is probably quicker than a hashmap lookup)
-					final T lastElement = sequence.get(sequence.size() - 1);
+					final T lastElement = sequence.last();
 					final int arrivalTime = annotatedSequence.getAnnotation(lastElement, 
 							SchedulerConstants.AI_visitInfo, IPortVisitEvent.class).getStartTime(); //TODO check this is arrival time at last port
 					final int delta = arrivalTime - loadTime;
@@ -69,8 +69,13 @@ public class CharterCostFitnessComponent<T> extends
 				//TODO not implemented
 				break;
 		}
-		
-		updateFitness(resource, hireCost, newSequence);
+		return hireCost;
 	}
+
+//	@Override
+//	public void evaluateSequence(IResource resource, ISequence<T> sequence,
+//			IAnnotatedSequence<T> annotatedSequence, boolean newSequence) {
+//		updateFitness(resource, rawEvaluateSequence(resource, sequence, annotatedSequence), newSequence);
+//	}
 
 }
