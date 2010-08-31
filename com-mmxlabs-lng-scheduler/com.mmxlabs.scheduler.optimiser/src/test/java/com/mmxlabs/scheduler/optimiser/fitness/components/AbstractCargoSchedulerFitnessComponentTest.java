@@ -351,5 +351,12 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 			this.newFitnessByResource = newFitnessByResource;
 		}
 
+		@Override
+		public long rawEvaluateSequence(IResource resource,
+				ISequence<T> sequence, IAnnotatedSequence<T> annotatedSequence) {
+			fail("This method is not part of the test");
+			return 0;
+		}
+
 	}
 }
