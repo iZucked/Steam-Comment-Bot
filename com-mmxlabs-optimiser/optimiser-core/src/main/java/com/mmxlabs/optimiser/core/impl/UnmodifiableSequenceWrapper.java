@@ -60,4 +60,14 @@ final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 	public int size() {
 		return wrapped.size();
 	}
+	
+	@Override
+	public final T last() {
+		return wrapped.last();
+	}
+
+	@Override
+	public T first() {
+		return wrapped.first();
+	}
 }

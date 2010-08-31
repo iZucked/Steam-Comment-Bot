@@ -122,4 +122,14 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 		}
 		return false;
 	}
+
+	@Override
+	public final T last() {
+		return get(size()-1);
+	}
+
+	@Override
+	public T first() {
+		return get(0);
+	}
 }

@@ -40,4 +40,16 @@ public interface ISequence<T> extends Iterable<T> {
 	 * @return
 	 */
 	ISegment<T> getSegment(int start, int end);
+
+	/**
+	 * Get the element at the end of this sequence
+	 * @return last element
+	 */
+	T last();
+	
+	/**
+	 * Get the element at the start of this sequence
+	 * @return first element
+	 */
+	T first();
 }
