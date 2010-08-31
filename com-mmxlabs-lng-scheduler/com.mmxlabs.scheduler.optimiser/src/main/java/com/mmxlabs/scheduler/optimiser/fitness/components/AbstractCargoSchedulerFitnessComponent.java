@@ -77,9 +77,11 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 	public abstract void init(IOptimisationData<T> data);
 
 	@Override
-	public abstract void evaluateSequence(IResource resource,
+	public void evaluateSequence(IResource resource,
 			ISequence<T> sequence, IAnnotatedSequence<T> annotatedSequence,
-			boolean newSequence);
+			boolean newSequence) {
+		updateFitness(resource, rawEvaluateSequence(resource, sequence, annotatedSequence), newSequence);
+	}
 
 	@Override
 	public void accepted(final ISequences<T> sequences,
@@ -140,4 +142,6 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 		oldFitnessByResource.clear();
 		newFitnessByResource.clear();
 	}
+	
+	
 }
