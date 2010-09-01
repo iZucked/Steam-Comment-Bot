@@ -152,6 +152,8 @@ public class LegalSequencingChecker<T> {
 		//End can't come before anything and Start can't come after anything
 		if (pt1.equals(PortType.End) || pt2.equals(PortType.Start)) return false;
 		
+		if (pt1.equals(PortType.Start) && pt2.equals(PortType.Discharge)) return false; //first port should be a load slot (TODO is this true?)
+		
 		//load must precede discharge or waypoint, but nothing else
 		if (pt1.equals(PortType.Load)) return (pt2.equals(PortType.Discharge) || pt2.equals(PortType.Waypoint));
 		
