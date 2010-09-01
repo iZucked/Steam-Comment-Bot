@@ -45,8 +45,9 @@ public class RandomScenarioUtils {
 		VesselClass class3 = addVesselClass(scenario, "DFDE-177", 12, 20, 177000, 200);
 		VesselClass class4 = addVesselClass(scenario, "STEAM-126", 12, 19.5f, 138000, 200); //TODO units in the model; should it be a float?
 		
-		float[][] steam = new float[][] {{12, 12}, {20, 20}};
-		float[][] dfde = new float[][] {{12, 8}, {20, 16}};
+		//TODO 0,0 points are fake
+		float[][] steam = new float[][] {{0, 0}, {12, 12}, {20, 20}};
+		float[][] dfde = new float[][] {{0, 0}, {12, 8}, {20, 16}};
 		
 		//create class parameters; currently model uses containment for curves, so we need to do duplicates
 		class1.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 138/24.0f, 118/24.0f, 10/24.0f, steam));
