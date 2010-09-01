@@ -70,7 +70,9 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 
 	/**
 	 * Insert a range of elements defined be the given {@link ISegment} at the
-	 * specified index.
+	 * specified index. The new element at index is the first element of the segment,
+	 * the new element at index+1 the second of the segment, and so on, with the previous elements
+	 * being shifted right.
 	 * 
 	 * @param index
 	 * @param segment
