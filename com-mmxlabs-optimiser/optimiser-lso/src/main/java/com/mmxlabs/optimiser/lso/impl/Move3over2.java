@@ -144,6 +144,11 @@ public class Move3over2<T> implements IMove<T> {
 		return resource2Position;
 	}
 
+	/**
+	 * Set the position at which the segment from resource 1's sequence will be inserted into resource 2's sequence.
+	 * The insert is inclusive, so to insert a segment between elements A and B, pass the position of B into this method.
+	 * @param resource2Position
+	 */
 	public void setResource2Position(final int resource2Position) {
 		this.resource2Position = resource2Position;
 	}
