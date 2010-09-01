@@ -36,19 +36,21 @@ public class LegalSequencingChecker<T> {
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider;
 	private IOrderedSequenceElementsDataComponentProvider<T> orderedSequenceProvider;
 	
-	@SuppressWarnings("unchecked")
 	public LegalSequencingChecker(IOptimisationContext<T> context) {
-//		this.context = context;
-		final IOptimisationData<T> data = context.getOptimisationData();
+		this(context.getOptimisationData());			
+	}
+	
+	@SuppressWarnings("unchecked")
+	public LegalSequencingChecker(IOptimisationData<T> data) {
 		this.portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 		this.portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 		this.elementDurationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class);
 		this.distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
 		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		this.resourceAllocationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, IResourceAllocationConstraintDataComponentProvider.class);
-		this.orderedSequenceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, IOrderedSequenceElementsDataComponentProvider.class);	
+		this.orderedSequenceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, IOrderedSequenceElementsDataComponentProvider.class);
 	}
-	
+
 	/**
 	 * Compute whether element1 should ever be sequenced preceding element2
 	 * @param e1
