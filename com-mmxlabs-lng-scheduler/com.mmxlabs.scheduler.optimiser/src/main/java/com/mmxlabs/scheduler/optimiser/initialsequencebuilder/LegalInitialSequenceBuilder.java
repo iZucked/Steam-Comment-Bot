@@ -72,7 +72,7 @@ public class LegalInitialSequenceBuilder<T> implements
 			Iterator<T> iter = elementsToProcess.iterator();
 			while (iter.hasNext()) {
 				final T here = iter.next();
-				
+				top:
 				for (int i = 0; i<result.size(); i++) {
 					final IModifiableSequence<T> seq = result.getModifiableSequence(i);
 					for (int j = 0; j<seq.size(); j++) {
@@ -80,9 +80,10 @@ public class LegalInitialSequenceBuilder<T> implements
 							//sequence this
 							seq.insert(j+1, here);
 							iter.remove();
-							break;
+							break top;
 						}
 					}
+					
 				}
 			}
 			
