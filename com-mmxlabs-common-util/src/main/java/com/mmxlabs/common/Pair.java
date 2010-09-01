@@ -32,4 +32,9 @@ public class Pair<A, B> {
 	public void setSecond(B second) {
 		this.second = second;
 	}
+
+	public void setBoth(A i, B j) {
+		setFirst(i);
+		setSecond(j);
+	}
 }
