@@ -83,7 +83,7 @@ public class LSOConstructor {
 //		lso.setProgressMonitor(monitor);
 		lso.setReportInterval(Math.max(10, getNumberOfIterations() / 100));
 
-		lso.init();
+//		lso.init();
 
 		return lso;
 	}
