@@ -1,5 +1,6 @@
 package com.mmxlabs.common;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -26,6 +27,16 @@ public class RandomHelper extends Random {
 		} else {
 			return k;
 		}
+	}
+	
+	/**
+	 * Uniformly randomly pick an element from a list
+	 * @param <T>
+	 * @param collection
+	 * @return
+	 */
+	public <T> T chooseElementFrom(List<T> collection) {
+		return collection.get(nextInt(collection.size()-1));
 	}
 	
 	public void setSeed(long seed) {
