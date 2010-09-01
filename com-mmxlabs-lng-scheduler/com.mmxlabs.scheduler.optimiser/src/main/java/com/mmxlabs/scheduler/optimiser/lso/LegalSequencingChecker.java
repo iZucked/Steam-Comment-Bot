@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.lso;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public class LegalSequencingChecker<T> {
 	private IVesselProvider vesselProvider;
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider;
 	private IOrderedSequenceElementsDataComponentProvider<T> orderedSequenceProvider;
+	private Collection<IResource> allResources;
 	
 	public LegalSequencingChecker(IOptimisationContext<T> context) {
 		this(context.getOptimisationData());			
@@ -49,6 +51,7 @@ public class LegalSequencingChecker<T> {
 		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		this.resourceAllocationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, IResourceAllocationConstraintDataComponentProvider.class);
 		this.orderedSequenceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, IOrderedSequenceElementsDataComponentProvider.class);
+		this.allResources = data.getResources();
 	}
 
 	/**
@@ -99,10 +102,12 @@ public class LegalSequencingChecker<T> {
 	 */
 	public boolean reachableFrom(T e1, T e2) {
 		//get resources which can service both elements
-		Set<IResource> sharedResources = new HashSet<IResource>(
-				resourceAllocationProvider.getAllowedResources(e1));
+		Collection<IResource> allowed = resourceAllocationProvider.getAllowedResources(e1);
+		Set<IResource> sharedResources = new HashSet<IResource>(allowed == null ? allResources : allowed);
 		
-		sharedResources.retainAll(resourceAllocationProvider.getAllowedResources(e2));
+		allowed = resourceAllocationProvider.getAllowedResources(e2);
+		if (allowed != null)
+			sharedResources.retainAll(resourceAllocationProvider.getAllowedResources(e2));
 		
 		for (IResource resource : sharedResources) {
 			if (reachableFrom(e1, e2, resource)) return true;
