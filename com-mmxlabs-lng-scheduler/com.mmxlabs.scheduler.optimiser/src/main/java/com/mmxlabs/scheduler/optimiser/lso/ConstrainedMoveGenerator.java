@@ -1,29 +1,28 @@
 package com.mmxlabs.scheduler.optimiser.lso;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
-import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.optimiser.lso.impl.Move2over2;
+import com.mmxlabs.optimiser.lso.impl.Move3over2;
+import com.mmxlabs.optimiser.lso.impl.Move4over2;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -47,164 +46,318 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @param <T>
  */
 public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
-	Map<T, Set<T>> validFollowers = new HashMap<T, Set<T>>();
-	private IOptimisationContext<T> context;
-	private IPortTypeProvider<T> portTypeProvider;
-	private IPortSlotProvider<T> portSlotProvider;
-	private IElementDurationProvider<T> elementDurationProvider;
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
-	private IVesselProvider vesselProvider;
-	private IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider;
-	private IOrderedSequenceElementsDataComponentProvider<T> orderedSequenceProvider;
+	/**
+	 * A quick hack to enable random selection from a set by having a backing list as well.
+	 * @author hinton
+	 *
+	 * @param <T>
+	 */
+	class IndexedSet<T> implements Set<T> {
+		List<T> listDelegate = new ArrayList<T>();
+		Set<T> setDelegate = new HashSet<T>();
+		public IndexedSet() {
+			
+		}
+		public int size() {
+			return setDelegate.size();
+		}
+		public boolean isEmpty() {
+			return setDelegate.isEmpty();
+		}
+		public boolean contains(Object o) {
+			return setDelegate.contains(o);
+		}
+		public Iterator<T> iterator() {
+			return setDelegate.iterator();
+		}
+		public Object[] toArray() {
+			return setDelegate.toArray();
+		}
+		public <T> T[] toArray(T[] a) {
+			return setDelegate.toArray(a);
+		}
+		public boolean add(T e) {
+			listDelegate.add(e);
+			return setDelegate.add(e);
+		}
+		public boolean remove(Object o) {
+			listDelegate.remove(o);
+			return setDelegate.remove(o);
+		}
+		public boolean containsAll(Collection<?> c) {
+			return setDelegate.containsAll(c);
+		}
+		public boolean addAll(Collection<? extends T> c) {
+			listDelegate.addAll(c);
+			return setDelegate.addAll(c);
+		}
+		public boolean retainAll(Collection<?> c) {
+			listDelegate.retainAll(c);
+			return setDelegate.retainAll(c);
+		}
+		public boolean removeAll(Collection<?> c) {
+			listDelegate.removeAll(c);
+			return setDelegate.removeAll(c);
+		}
+		public void clear() {
+			listDelegate.clear();
+			setDelegate.clear();
+		}
+		public boolean equals(Object o) {
+			return setDelegate.equals(o);
+		}
+		public int hashCode() {
+			return setDelegate.hashCode();
+		}
+		public T get(int index) {
+			return listDelegate.get(index);
+		}
+	}
+	
+	/**
+	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element
+	 * x is in the set mapped to by key y, x can legally follow y under some circumstance
+	 */
+	private Map<T, IndexedSet<T>> validFollowers = new HashMap<T, IndexedSet<T>>();
+	
+	/**
+	 * A reverse lookup table from elements to positions
+	 */
+	private Map<T, Pair<Integer, Integer>> reverseLookup = new HashMap<T, Pair<Integer, Integer>>();
+	
+	/**
+	 * A reference to the current set of sequences, which will be used in generating moves 
+	 */
+	private ISequences<T> sequences = null;
+	
+	private RandomHelper random;
+	
+	int breakableVertexCount = 0;
+	
+	int breakpointCount = 0;
+//	private IOptimisationContext<T> context;
 	
 	public ConstrainedMoveGenerator(IOptimisationContext<T> context) {
-		this.context = context;
+//		this.context = context;
+		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(context);
 		final IOptimisationData<T> data = context.getOptimisationData();
-		this.portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
-		this.portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		this.elementDurationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class);
-		this.distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
-		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		this.resourceAllocationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, IResourceAllocationConstraintDataComponentProvider.class);
-		this.orderedSequenceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, IOrderedSequenceElementsDataComponentProvider.class);
-	
-		//create a massive lookup table -- this may be a really bad solution
+		
+		@SuppressWarnings("unchecked")
+		IPortTypeProvider<T> portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
+		
+		//create a massive lookup table, caching all legal sequencing decisions
+		//this might be a terrible idea, we could just keep the checker instead
 		for (T e1 : data.getSequenceElements()) {
-			Set<T> followers = new HashSet<T>();
+			if (!portTypeProvider.getPortType(e1).equals(PortType.End)) {
+				breakableVertexCount++;
+			}
+			
+			reverseLookup.put(e1, new Pair<Integer, Integer>(0,0));
+			
+			IndexedSet<T> followers = new IndexedSet<T>();
+			
 			validFollowers.put(e1, followers);
+			
 			for (T e2 : data.getSequenceElements()) {
 				if (e1 == e2) continue;
-				if (allowSequence(e1, e2))
+				if (checker.allowSequence(e1, e2)) {
 					followers.add(e2);
+					breakpointCount++;
+				}
 			}
 		}
 	}
 	
 	/**
-	 * Compute whether element1 should ever be sequenced preceding element2
-	 * @param e1
-	 * @param e2
+	 * Pick a pair of elements which can follow one another randomly from all such pairs
 	 * @return
 	 */
-	private final boolean allowSequence(T e1, T e2) {
-		// Check port types, as this is probably most common possible kind of error
-		final PortType portType1 = portTypeProvider.getPortType(e1);
-		final PortType portType2 = portTypeProvider.getPortType(e2);
-		if (!allowPortTypes(portType1, portType2)) return false;
-		
-		//so port types are valid, now check feasibility of travel times
-		//and incidentally resource-element binding constraints.
-		if (!reachableFrom(e1, e2)) return false; 
-		
-		//travel time constraints can be met by some vessel, 
-		//now consider fixed load/discharge pairs, which must not be separated.
-		if (!canFollow(e1, e2)) return false;
-		
-		return true;
-	}
-
-	/**
-	 * Check whether e2 can follow e1 according to the ordered sequence constraints.
-	 * @param e1
-	 * @param e2
-	 * @return
-	 */
-	private boolean canFollow(T e1, T e2) {
-		final T after1 = orderedSequenceProvider.getNextElement(e1);
-		if (after1 == null) {
-			final T before2 = orderedSequenceProvider.getPreviousElement(e2);
-			return before2 == null || before2.equals(e1); //second test may not be necessary, if the orderedSequenceConstraint is reflexive
-		} else {
-			return after1.equals(e2);
+	private Pair<T, T> pickLegalPair() {
+		int k = random.nextInt(breakpointCount);
+		for (Map.Entry<T, IndexedSet<T>> entry : validFollowers.entrySet()) {
+			if (k < entry.getValue().size()) {
+				return new Pair<T, T>(entry.getKey(), entry.getValue().get(k));
+			} else {
+				k -= (entry.getValue().size()-1);
+			}
 		}
+		return null;
 	}
-
-	/**
-	 * Can element 2 be reached from element 1 in time, using any vessel in the fleet legal for both elements.
-	 * 
-	 * @param e1
-	 * @param e2
-	 * @return
-	 */
-	private boolean reachableFrom(T e1, T e2) {
-		//get resources which can service both elements
-		Set<IResource> sharedResources = new HashSet<IResource>(
-				resourceAllocationProvider.getAllowedResources(e1));
-		
-		sharedResources.retainAll(resourceAllocationProvider.getAllowedResources(e2));
-		
-		for (IResource resource : sharedResources) {
-			if (reachableFrom(e1, e2, resource)) return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances,
-	 * if using the given resource to service them
-	 * 
-	 * @param e1
-	 * @param e2
-	 * @param resource the vessel in question
-	 * @return
-	 */
-	private final boolean reachableFrom(final T e1, final T e2, final IResource resource) {
-		final IPortSlot slot1 = portSlotProvider.getPortSlot(e1);
-		final IPortSlot slot2 = portSlotProvider.getPortSlot(e2);
-		
-		final IVessel vessel = vesselProvider.getVessel(resource);
-		
-		final int travelTime = distanceProvider.get(IMultiMatrixProvider.Default_Key)
-			.get(slot1.getPort(), slot2.getPort()) / vessel.getVesselClass().getMaxSpeed();
-		
-		final int earliestArrivalTime = slot1.getTimeWindow().getStart() + 
-			elementDurationProvider.getElementDuration(e1, resource) +
-			travelTime;
-		
-		return earliestArrivalTime < slot2.getTimeWindow().getEnd();
-	}
-
-	/**
-	 * Should ports visits of these types follow one another?
-	 * 
-	 * TODO this is code effectively shared with the {@link PortTypeConstraintChecker} and it is not identical. Factor this out.
-	 * @param pt1
-	 * @param pt2
-	 * @return
-	 */
-	private boolean allowPortTypes(final PortType pt1, final PortType pt2) {
-		//Start can never be scheduled before end
-		if (pt1.equals(PortType.End) || pt2.equals(PortType.Start)) return false;
-		
-		//load must precede discharge
-		if (pt1.equals(PortType.Load)) return pt2.equals(PortType.Discharge);
-		
-		//discharge may precede anything but Discharge (and start, but we already did that)
-		if (pt1.equals(PortType.Discharge) &&
-				pt2.equals(PortType.Discharge)) return false; 
-		
-		return true;
-	}
-
+	
 	@Override
 	public IMove<T> generateMove() {
-		return null;
+		final Pair<T, T> newPair = pickLegalPair();
+		final Pair<Integer, Integer> pos1 = reverseLookup.get(newPair.getFirst());
+		final Pair<Integer, Integer> pos2 = reverseLookup.get(newPair.getSecond());
+		final List<IResource> resources = sequences.getResources();
+
+		final int sequence1 = pos1.getFirst();
+		final int sequence2 = pos2.getFirst();
+		final int position1 = pos1.getSecond();
+		final int position2 = pos2.getSecond();
+		
+		// are both these elements currently in the same route
+		if (sequence1 == sequence2) {
+			//we have found a segment which we can legally excise from a route; now we must
+			// choose somewhere to insert it.
+			//the only two (currently implemented) options here are 3opt2 and 4opt1
+			//I think 3opt2 is worth looking for first, as more requirements => less feasible.
+			
+			final ISequence<T> sequence = sequences.getSequence(sequence1);
+			final int beforeFirstCut = Math.min(position1, position2);
+			final int beforeSecondCut = Math.max(position1, position2);
+			final T firstElementInSegment = sequence.get(beforeFirstCut + 1);
+			final T lastElementInSegment = sequence.get(beforeSecondCut);
+			
+			final IndexedSet<T> followers = validFollowers.get(lastElementInSegment);
+			
+			//pick a follower and do a reverse-lookup
+			final T precursor = followers.get(random.nextInt(followers.size()));
+			final Pair<Integer, Integer> posPrecursor = reverseLookup.get(precursor);
+			
+			//now check whether the element before the precursor can precede the first element in the segment
+			final T beforeInsert = sequences.getSequence(posPrecursor.getFirst()).get(posPrecursor.getSecond());
+			if (validFollowers.get(beforeInsert).contains(firstElementInSegment)) {
+				//we have a legal 3opt2, so do that
+				Move3over2<T> result = new Move3over2<T>();
+				result.setResource1(resources.get(sequence1));
+				result.setResource1Start(beforeFirstCut+1);
+				result.setResource1End(beforeSecondCut);
+				
+				result.setResource2(resources.get(posPrecursor.getFirst()));
+				result.setResource2Position(posPrecursor.getSecond()+1);
+				return result;
+			} else {
+				//we chose a bad place to insert ; the segment will not fit
+				//TODO could stick this in a loop and try a few times before bailing out
+				//maybe search for a 4opt1 in here? but will a 4opt1 work if a 3opt1 won't? probably not!
+				return null;
+			}
+		} else {
+			//we have found a potentially valid situation for an opt2 move of some sort
+			//what we can do here is move forward from pos1 and pos2 until we find another legal
+			//conjunction and then construct a suitable move
+			
+			//check if it'd be a legal 2opt2
+			final boolean valid2opt2 = 
+				validFollowers.get(sequences.getSequence(sequence2).get(position2-1)).contains(
+					sequences.getSequence(sequence1).get(position1+1));
+			//if it would be, maybe do it
+			if (valid2opt2 && random.nextBoolean()) {
+				//make 2opt2
+				Move2over2<T> result = new Move2over2<T>();
+				result.setResource1(resources.get(sequence1));
+				result.setResource2(resources.get(sequence2));
+				//add 1 because the positions are inclusive, and we need to cut after the first element
+				result.setResource1Position(position1+1);
+				result.setResource2Position(position2);
+				return result;
+			} else {
+				/*
+				 * We have this situation
+				 * 
+				 * 0----------A--------------0      S1
+				 *             \ <- the possible break we have found
+				 * 0------------B---------------0   S2
+				 * 
+				 * we want to iterate over the elements following B and see if any of them
+				 * can precede anything in S1 after or including A. 
+				 */
+				final ISequence<T> seq1 = sequences.getSequence(sequence1);
+				final ISequence<T> seq2 = sequences.getSequence(sequence2);
+				
+				final Set<T> followersOfSecondElementsPredecessor = 
+					validFollowers.get(seq2.get(position2-1));
+				
+				List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
+				for (int i = position2+1; i<seq2.size()-1; i++) { //ignore last element
+					final T here = seq2.get(i);
+					for (T elt : validFollowers.get(here)) {
+						final Pair<Integer, Integer> loc = reverseLookup.get(elt);
+						if (loc.getFirst().intValue() == sequence1) {
+							//it can be adjacent to something in sequence 1, that's good
+							if (loc.getSecond() > position1) {
+								//it's something after A, that's even better!
+								//now we need to check that we can put the chunk cut out of S1 into S2 here
+								
+								if (loc.getSecond() == position1 + 1) {
+									//3opt1 check
+									if (followersOfSecondElementsPredecessor.contains(seq2.get(i+1)))
+										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
+								} else {
+									//4opt2 check
+									if (valid2opt2 && 
+											validFollowers.get(
+													sequences.getSequence(loc.getFirst()).get(loc.getSecond() - 1))
+													.contains(seq2.get(i+1)))
+										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));									
+								}
+								
+							}
+						}
+					}
+				}
+				//So, we have collected some possible breaks, pick one
+				//TODO it might be worth caching this as a source of possible moves to allow 
+				//quick generation on subsequent calls, if this move is rejected
+				
+				final Pair<Integer, Integer> selectedSecondBreak = random.chooseElementFrom(viableSecondBreaks);
+				//so now we have two breaks, which either means a 4opt2 or a 3opt2, so we just have to decode these and see.
+				//second element of the pair is in sequence1, first is in sequence2.
+				
+				final int secondPosition1 = selectedSecondBreak.getSecond();
+				final int secondPosition2 = selectedSecondBreak.getFirst();
+				
+				if (secondPosition1 == position1+1) {
+					//3opt2
+					final Move3over2<T> result = new Move3over2<T>();
+					
+					result.setResource2(resources.get(sequence1));
+					result.setResource2Position(position1+1);
+					
+					result.setResource1(resources.get(sequence2));
+					result.setResource1Start(position2); //inclusive
+					result.setResource1End(secondPosition2+1); //exclusive
+				
+					return result;
+				} else {
+					//4opt2
+					final Move4over2<T> result = new Move4over2<T>();
+					
+					result.setResource1(resources.get(sequence1));
+					result.setResource2(resources.get(sequence2));
+					
+					result.setResource1Start(position1+1);
+					result.setResource2End(secondPosition1);
+					
+					result.setResource2Start(position2);
+					result.setResource2End(secondPosition2+1);
+					
+					return result;
+				}
+			}
+		}
 	}
 
 	@Override
 	public ISequences<T> getSequences() {
-		return null;
+		return sequences;
 	}
 
 	@Override
 	public void setSequences(ISequences<T> sequences) {
+		this.sequences = sequences;
 		
+		/*
+		 * TODO profile this horrible thing
+		 */
+		for (int i = 0; i<sequences.size(); i++) {
+			final ISequence<T> sequence = sequences.getSequence(i);
+			for (int j = 0; j<sequence.size(); j++) {
+				reverseLookup.get(sequence.get(j)).setBoth(i, j);
+			}
+		}
 	}
-}
+	
 
-/*
- * NOTES: The question of the relative frequencies of calls to setSequences and generateMove
- * is germane to an efficient implementation, if there is any sorting to be done. Here's one possible idea:
- * the total set of elements is fixed, so we could create some structure recording all the valid sequential pairs,
- * which we can use to select breakpoints (in order to induce a valid sequential pair in the solution)
- */
+}
