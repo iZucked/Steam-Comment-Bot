@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
+import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.LegalInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.RandomInitialSequenceBuilder;
 
 /**
@@ -108,7 +109,7 @@ public class OptimisationTransformer {
 	 */
 	public ISequences<ISequenceElement> createInitialSequences(
 			IOptimisationData<ISequenceElement> data) {
-		IInitialSequenceBuilder<ISequenceElement> builder = new RandomInitialSequenceBuilder<ISequenceElement>();
+		IInitialSequenceBuilder<ISequenceElement> builder = new LegalInitialSequenceBuilder<ISequenceElement>();
 		//TODO add a parameter for this to the model, if we create some better initial schedule builders
 		return builder.createInitialSequences(data);
 	}

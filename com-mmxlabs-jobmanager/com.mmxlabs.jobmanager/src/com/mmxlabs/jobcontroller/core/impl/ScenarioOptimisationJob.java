@@ -210,10 +210,15 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext 
 						= ot.createOptimiserAndContext(data);
 
+						
+						
 						monitor.subTask("Prepare optimisation");
 
 						context = optAndContext.getFirst();
 						final LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext.getSecond();
+						
+						optimiser.setProgressMonitor(optMonitor);
+						optimiser.init();
 						
 						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = 
 							optimiser.getFitnessEvaluator();
@@ -235,7 +240,8 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 						System.out.println("Final fitness "
 								+ linearFitnessEvaluator.getBestFitness());
-					} catch (Exception ex) {
+					} catch (IncompleteScenarioException ex) {
+						fireJobCancelled();
 						return Status.CANCEL_STATUS; //die
 					}
 				} finally {
