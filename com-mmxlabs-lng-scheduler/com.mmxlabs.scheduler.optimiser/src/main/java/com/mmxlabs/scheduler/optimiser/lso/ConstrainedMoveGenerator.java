@@ -218,7 +218,16 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			//now check whether the element before the precursor can precede the first element in the segment
 			final T beforeInsert = sequences.getSequence(posPrecursor.getFirst()).get(posPrecursor.getSecond());
 			if (validFollowers.get(beforeInsert).contains(firstElementInSegment)) {
-				//we have a legal 3opt2, so do that
+				//we have a legal 3opt2, so do that. It might be a 3opt1 really, but that's OK
+				//so long as we don't insert a segment into itself.
+				if (posPrecursor.getFirst().equals(sequence1)) {
+					//check for stupidity
+					final int position3 = posPrecursor.getSecond();
+					if (position3 >= beforeFirstCut && position3 <= beforeSecondCut) {
+						return null; //stupidity has happened.
+					}
+				}
+				
 				Move3over2<T> result = new Move3over2<T>();
 				result.setResource1(resources.get(sequence1));
 				result.setResource1Start(beforeFirstCut+1);
