@@ -25,7 +25,6 @@ public class CalibratingGeometricThresholder implements IThresholder {
 		this.random = random;
 		this.epochLength = epochLength;
 		this.initialAcceptanceRate = initialAcceptanceRate;
-		
 	}
 	
 	@Override
@@ -52,6 +51,10 @@ public class CalibratingGeometricThresholder implements IThresholder {
 		}
 	}
 
+	/**
+	 * Calculate an initial acceptance rate using a rubbish iterative procedure and then instantiate
+	 * the delegate accordingly.
+	 */
 	private void calibrate() {
 		// we have some samples, compute an initial temperature to achieve the given IAR
 		double T0 = 1;
