@@ -109,12 +109,22 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<ITimeWindow> timeWindows = new LinkedList<ITimeWindow>();
 
 	/**
+	 * List of end slots, which need to be corrected in getOptimisationData to have the latest time in them
+	 */
+	private final List<PortSlot> endSlots = new LinkedList<PortSlot>();
+	
+	/**
 	 * A "virtual" port which is zero distance from all other ports, to be used in cases where a vessel can be in any location.
 	 * This can be replaced with a real location at a later date, after running an optimisation.
 	 */
 	private final IPort ANYWHERE;
 
 	private final IStartEndRequirementProviderEditor<ISequenceElement> startEndRequirementProvider;
+
+	/**
+	 * A field for tracking the time at which the last time window closes
+	 */
+	private int endOfLatestWindow = 0;
 	
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
@@ -311,6 +321,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public ITimeWindow createTimeWindow(final int start, final int end) {
 
 		final TimeWindow window = new TimeWindow(start, end);
+		
+		if (end > endOfLatestWindow) {
+			endOfLatestWindow  = end;
+		}
+		
 		timeWindows.add(window);
 		return window;
 	}
@@ -366,17 +381,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		
 		startSlot.setTimeWindow(startWindow);
 
-		// end window works the same
-		//TODO should I use a max width time window for no end time specification?
-		ITimeWindow endWindow = 
-			end.hasTimeRequirement() ?
-					createTimeWindow(end.getTime(), end.getTime() + 1) :
-						createTimeWindow(0, Integer.MAX_VALUE);
-
 		PortSlot endSlot = new PortSlot();
 		endSlot.setId("end-" + name);
 		endSlot.setPort(end.hasPortRequirement() ? end.getLocation() : ANYWHERE);
-		endSlot.setTimeWindow(endWindow);
+		
+		if (end.hasTimeRequirement() == false) {
+			//put end slot into list of slots to patch up later.
+			endSlots.add(endSlot);
+		} else {			
+			endSlot.setTimeWindow(
+					createTimeWindow(end.getTime(), end.getTime() + 1)
+			);
+		}
+
+		
 
 		// Create start/end sequence elements for this route
 		SequenceElement startElement = new SequenceElement();
@@ -460,7 +478,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IOptimisationData<ISequenceElement> getOptimisationData() {
-
+		// Patch up end time windows
+		final int latestTime = endOfLatestWindow + 24 * 7;
+		for (PortSlot slot : endSlots) {
+			ITimeWindow endWindow = createTimeWindow(latestTime, latestTime+1);
+			slot.setTimeWindow(endWindow);
+			timeWindowProvider.setTimeWindows(slot, Collections.singletonList(endWindow));
+		}
+		
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
 		
 		data.setResources(resources);
