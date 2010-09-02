@@ -1,10 +1,10 @@
 package com.mmxlabs.jobcontroller.core.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,6 +21,7 @@ import com.mmxlabs.jobcontroller.core.IManagedJobListener;
 import com.mmxlabs.jobcontroller.emf.IncompleteScenarioException;
 import com.mmxlabs.jobcontroller.emf.LNGScenarioTransformer;
 import com.mmxlabs.jobcontroller.emf.optimisationsettings.OptimisationTransformer;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -29,12 +30,14 @@ import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.impl.AnnotationSolution;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
@@ -210,8 +213,6 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext 
 						= ot.createOptimiserAndContext(data);
 
-						
-						
 						monitor.subTask("Prepare optimisation");
 
 						context = optAndContext.getFirst();
@@ -223,6 +224,43 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = 
 							optimiser.getFitnessEvaluator();
 
+						//check feasibility of initial sequences
+						{
+							IConstraintCheckerRegistry registry = context.getConstraintCheckerRegistry();
+							Collection<IConstraintCheckerFactory> factories = 
+								registry.getConstraintCheckerFactories(context.getConstraintCheckers());
+							monitor.subTask("Check initial solution is feasible");
+							for (IConstraintCheckerFactory factory : factories) {
+								List<String> errors = new ArrayList<String>();
+								IConstraintChecker<ISequenceElement> checker = factory.instantiate();
+								checker.setOptimisationData(data);
+								if (checker.checkConstraints(context.getInitialSequences(), errors) == false) {
+									System.err.println("Constraint violations for " + checker + ":");
+									System.err.println("\t" + errors);
+								}
+							}
+						}
+						
+						System.err.println("Initial solution feasibility test completed");
+						{
+							final ISequences<ISequenceElement> sequences = context.getInitialSequences();
+							ITimeWindowDataComponentProvider twp = data.getDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, 
+									ITimeWindowDataComponentProvider.class);
+							IPortSlotProvider<ISequenceElement> psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+							
+							for (int i = 0; i<sequences.size(); i++) {
+								ISequence<ISequenceElement> sequence = sequences.getSequence(i);
+								System.err.print("Sequence " + i + ": ");
+								for (int j = 0; j<sequence.size(); j++) {
+									final ITimeWindow tw = twp.getTimeWindows(sequence.get(j)).get(0);
+									System.err.print(psp.getPortSlot(sequence.get(j)) + " -> ");
+								}
+								System.err.println();
+							}
+							
+						}
+						monitor.subTask("Evaluate fitness of initial solution");
+						
 						final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
 
 						linearFitnessEvaluator.setOptimisationData(context

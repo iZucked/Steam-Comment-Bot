@@ -1,7 +1,6 @@
 package com.mmxlabs.jobcontroller.emf.optimisationsettings;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import scenario.optimiser.LSOSettings;
@@ -22,9 +21,8 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.LegalInitialSequenceBuilder;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.RandomInitialSequenceBuilder;
 
 /**
  * Utility for taking an OptimisationSettings from the EMF and starting an optimiser accordingly. At the moment, it's pretty much 
@@ -109,7 +107,7 @@ public class OptimisationTransformer {
 	 */
 	public ISequences<ISequenceElement> createInitialSequences(
 			IOptimisationData<ISequenceElement> data) {
-		IInitialSequenceBuilder<ISequenceElement> builder = new LegalInitialSequenceBuilder<ISequenceElement>();
+		IInitialSequenceBuilder<ISequenceElement> builder = new ConstrainedInitialSequenceBuilder<ISequenceElement>();
 		//TODO add a parameter for this to the model, if we create some better initial schedule builders
 		return builder.createInitialSequences(data);
 	}
