@@ -1,14 +1,15 @@
 package com.mmxlabs.scheduler.optimiser.initialsequencebuilder;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -61,6 +62,12 @@ public class LegalInitialSequenceBuilder<T> implements
 			elementsToProcess.add(element);
 		}
 		
+		final IResourceAllocationConstraintDataComponentProvider allocationProvider = 
+			data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider,
+					IResourceAllocationConstraintDataComponentProvider.class);
+		
+		final List<IResource> allResources = data.getResources();
+		
 		int currentSize = Integer.MAX_VALUE;
 		while (elementsToProcess.isEmpty() == false) {
 			if (currentSize == elementsToProcess.size()) {
@@ -72,9 +79,16 @@ public class LegalInitialSequenceBuilder<T> implements
 			Iterator<T> iter = elementsToProcess.iterator();
 			while (iter.hasNext()) {
 				final T here = iter.next();
+				Collection<IResource> validResources = 
+					allocationProvider.getAllowedResources(here);
+				
+				if (validResources == null) {
+					validResources = allResources;
+				}
+				
 				top:
-				for (int i = 0; i<result.size(); i++) {
-					final IModifiableSequence<T> seq = result.getModifiableSequence(i);
+				for (IResource resource : validResources) {
+					final IModifiableSequence<T> seq = result.getModifiableSequence(resource);
 					for (int j = 0; j<seq.size(); j++) {
 						if (checker.allowSequence(seq.get(j), here)) {
 							//sequence this
