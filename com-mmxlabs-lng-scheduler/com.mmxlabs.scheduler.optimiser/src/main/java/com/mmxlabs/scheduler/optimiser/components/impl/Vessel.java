@@ -46,4 +46,8 @@ public final class Vessel implements IVessel {
 		this.vesselInstanceType = vesselInstanceType;
 	}
 
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

@@ -64,15 +64,21 @@ public class LegalSequencingChecker<T> {
 		// Check port types, as this is probably most common possible kind of error
 		final PortType portType1 = portTypeProvider.getPortType(e1);
 		final PortType portType2 = portTypeProvider.getPortType(e2);
-		if (!allowPortTypes(portType1, portType2)) return false;
+		if (!allowPortTypes(portType1, portType2)) {
+			return false;
+		}
 		
 		//so port types are valid, now check feasibility of travel times
 		//and incidentally resource-element binding constraints.
-		if (!reachableFrom(e1, e2)) return false; 
+		if (!reachableFrom(e1, e2)) {
+			return false; 
+		}
 		
 		//travel time constraints can be met by some vessel, 
 		//now consider fixed load/discharge pairs, which must not be separated.
-		if (!canFollow(e1, e2)) return false;
+		if (!canFollow(e1, e2)) {
+			return false;
+		}
 		
 		return true;
 	}
@@ -83,7 +89,7 @@ public class LegalSequencingChecker<T> {
 	 * @param e2
 	 * @return
 	 */
-	private boolean canFollow(T e1, T e2) {
+	public boolean canFollow(T e1, T e2) {
 		final T after1 = orderedSequenceProvider.getNextElement(e1);
 		if (after1 == null) {
 			final T before2 = orderedSequenceProvider.getPreviousElement(e2);
@@ -137,7 +143,9 @@ public class LegalSequencingChecker<T> {
 			elementDurationProvider.getElementDuration(e1, resource) +
 			travelTime;
 		
-		return earliestArrivalTime < slot2.getTimeWindow().getEnd();
+		final int latestAllowableTime = slot2.getTimeWindow().getEnd();
+		
+		return earliestArrivalTime < latestAllowableTime;
 	}
 
 	/**

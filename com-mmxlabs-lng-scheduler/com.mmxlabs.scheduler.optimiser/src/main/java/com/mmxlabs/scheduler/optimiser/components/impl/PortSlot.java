@@ -72,4 +72,8 @@ public class PortSlot implements IPortSlot {
 
 		return false;
 	}
+	
+	public String toString() {
+		return id + " <" + timeWindow.getStart() + ", " + timeWindow.getEnd() + ">";
+	}
 }

@@ -41,4 +41,9 @@ public final class SequenceElement implements ISequenceElement {
 	public void setPortSlot(final IPortSlot portSlot) {
 		this.portSlot = portSlot;
 	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

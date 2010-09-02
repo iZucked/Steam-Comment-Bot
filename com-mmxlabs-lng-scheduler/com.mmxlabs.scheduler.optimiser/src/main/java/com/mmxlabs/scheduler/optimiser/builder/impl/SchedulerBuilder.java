@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
@@ -111,7 +112,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * List of end slots, which need to be corrected in getOptimisationData to have the latest time in them
 	 */
-	private final List<PortSlot> endSlots = new LinkedList<PortSlot>();
+	private final List<Pair<ISequenceElement,PortSlot>> endSlots = new LinkedList<Pair<ISequenceElement,PortSlot>>();
 	
 	/**
 	 * A "virtual" port which is zero distance from all other ports, to be used in cases where a vessel can be in any location.
@@ -158,6 +159,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE");
+		
 	}
 
 	@Override
@@ -296,6 +298,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			setPortToPortDistance(ANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
 		}
 		
+		// travel time from A to A should be zero, right?
+		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
+		
 		return port;
 	}
 
@@ -381,24 +386,35 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		
 		startSlot.setTimeWindow(startWindow);
 
+		
+		
 		PortSlot endSlot = new PortSlot();
 		endSlot.setId("end-" + name);
 		endSlot.setPort(end.hasPortRequirement() ? end.getLocation() : ANYWHERE);
-		
-		if (end.hasTimeRequirement() == false) {
-			//put end slot into list of slots to patch up later.
-			endSlots.add(endSlot);
-		} else {			
-			endSlot.setTimeWindow(
-					createTimeWindow(end.getTime(), end.getTime() + 1)
-			);
-		}
-
 		
 
 		// Create start/end sequence elements for this route
 		SequenceElement startElement = new SequenceElement();
 		SequenceElement endElement = new SequenceElement();
+		
+		sequenceElements.add(startElement);
+		sequenceElements.add(endElement);
+		
+		if (end.hasTimeRequirement() == false) {
+			//put end slot into list of slots to patch up later.
+			endSlots.add(new Pair<ISequenceElement,PortSlot>(endElement, endSlot));
+		} else {			
+			endSlot.setTimeWindow(
+					createTimeWindow(end.getTime(), end.getTime() + 1)
+			);
+		}
+		
+		timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startSlot.getTimeWindow()));
+		
+		if (end.hasTimeRequirement()) {
+			timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endSlot.getTimeWindow()));
+		} //otherwise this will be set in getOptimisationData().
+		
 		
 		startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
 		endElement.setName(endSlot.getId() + "-" + endSlot.getPort().getName());
@@ -414,9 +430,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		
 		portSlotsProvider.setPortSlot(startElement, startSlot);
 		portSlotsProvider.setPortSlot(endElement, endSlot);
-		
-		timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startSlot.getTimeWindow()));
-		timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endSlot.getTimeWindow()));
 		
 		resourceAllocationProvider.setAllowedResources(startElement, Collections.singleton(resource));
 		resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
@@ -480,10 +493,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IOptimisationData<ISequenceElement> getOptimisationData() {
 		// Patch up end time windows
 		final int latestTime = endOfLatestWindow + 24 * 7;
-		for (PortSlot slot : endSlots) {
+		for (Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			ITimeWindow endWindow = createTimeWindow(latestTime, latestTime+1);
-			slot.setTimeWindow(endWindow);
-			timeWindowProvider.setTimeWindows(slot, Collections.singletonList(endWindow));
+			elementAndSlot.getSecond().setTimeWindow(endWindow);
+			timeWindowProvider.setTimeWindows(elementAndSlot.getFirst(), Collections.singletonList(endWindow));
 		}
 		
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
