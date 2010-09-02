@@ -11,7 +11,15 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+
 import scenario.Scenario;
+import scenario.ScenarioPackage;
 import scenario.cargo.Cargo;
 import scenario.cargo.Slot;
 import scenario.fleet.FuelConsumptionLine;
@@ -53,6 +61,7 @@ public class LNGScenarioTransformer {
 	private Scenario scenario;
 	private TimeZone timezone;
 	private Date earliestTime;
+	private Date latestTime;
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes
@@ -61,6 +70,28 @@ public class LNGScenarioTransformer {
 	 * @param scenario
 	 */
 	public LNGScenarioTransformer(Scenario scenario) {
+		init(scenario);
+	}
+	
+	/*
+	 * Create a transformer by loading a scenario from a URI
+	 */
+	public LNGScenarioTransformer(URI uri) {
+		ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put
+		(Resource.Factory.Registry.DEFAULT_EXTENSION, 
+				new XMIResourceFactoryImpl());
+		resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI, ScenarioPackage.eINSTANCE);
+		
+		Resource resource = resourceSet.getResource(uri, true);
+		for (EObject e : resource.getContents()) {
+			if (e instanceof Scenario) {
+				init((Scenario) e);
+			}
+		}
+	}
+	
+	protected void init(Scenario scenario) {
 		this.scenario = scenario;
 		this.timezone = TimeZone.getTimeZone("UTC");
 	}
@@ -109,10 +140,14 @@ public class LNGScenarioTransformer {
 		 * Find the earliest date, to convert from absolute date and time to offset hours 
 		 */
 		earliestTime = null;
+		latestTime = null;
 		for (Cargo eCargo: scenario.getCargoModel().getCargoes()) {
 			final Date loadDate = eCargo.getLoadSlot().getWindowStart();
 			if (earliestTime == null || earliestTime.after(loadDate)) {
 				earliestTime = loadDate;
+			}
+			if (latestTime == null || latestTime.before(loadDate)) {
+				latestTime = loadDate;
 			}
 		}
 		
