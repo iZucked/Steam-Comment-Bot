@@ -50,7 +50,7 @@ public class GeometricThresholder implements IThresholder {
 		else return random.nextDouble() < acceptanceProbability(delta, temperature); 
 	}
 
-	private final double acceptanceProbability(long delta, double T) {
+	protected final static double acceptanceProbability(long delta, double T) {
 		return Math.exp(-delta / T);
 	}
 
