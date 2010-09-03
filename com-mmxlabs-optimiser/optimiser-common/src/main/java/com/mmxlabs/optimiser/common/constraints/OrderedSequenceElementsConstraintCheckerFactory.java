@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class OrderedSequenceElementsConstraintCheckerFactory implements
 		IConstraintCheckerFactory {
 
-	public static final String NAME = "OrderdSequenceElementsConstraintChecker";
+	public static final String NAME = "OrderedSequenceElementsConstraintChecker";
 
 	private final String key;
 
