@@ -23,7 +23,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public interface IConstraintChecker<T> {
 
 	/**
-	 * Returns the name uniquely identifing this constraint checker.
+	 * Returns the name uniquely identifying this constraint checker.
 	 * 
 	 * @return
 	 */
