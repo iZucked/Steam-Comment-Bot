@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
@@ -606,14 +607,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	
 	@Override
 	public IVesselClass createVesselClass(String name, int minSpeed,
-			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice) {
-		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice, 0);
+			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelConversionFactor) {
+		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice, baseFuelConversionFactor, 0);
 	}
 
 	@Override
 	public IVesselClass createVesselClass(final String name,
 			final int minSpeed, final int maxSpeed, final long capacity,
-			final int minHeel, int baseFuelUnitPrice, int hourlyCharterPrice) {
+			final int minHeel, int baseFuelUnitPrice, int baseFuelConversionFactor, 
+			int hourlyCharterPrice) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -627,6 +629,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPrice);
 
 		vesselClass.setHourlyCharterPrice(hourlyCharterPrice);
+		
+		vesselClass.setBaseFuelConversionFactor(baseFuelConversionFactor);
 		
 		vesselClasses.add(vesselClass);
 

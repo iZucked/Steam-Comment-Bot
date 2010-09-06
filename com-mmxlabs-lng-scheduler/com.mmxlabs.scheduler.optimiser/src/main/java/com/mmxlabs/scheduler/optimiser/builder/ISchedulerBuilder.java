@@ -45,7 +45,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
-			long capacity, int minHeel, int baseFuelUnitPrice);
+			long capacity, int minHeel, int baseFuelUnitPrice,
+			int baseFuelConversionFactor);
 
 	/**
 	 * Like the other {@link createVesselClass}, but with an hourly charter price specified (defaults to zero otherwise); 
@@ -59,7 +60,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
-			long capacity, int minHeel, int baseFuelUnitPrice, int hourlyCharterPrice);
+			long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelConversionFactor, int hourlyCharterPrice);
 	
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the
@@ -242,4 +243,6 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVessel createSpotVessel(String name, IVesselClass vesselClass);
+
+
 }

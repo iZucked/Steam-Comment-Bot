@@ -71,7 +71,7 @@ public class Calculator {
 		return (long) (ScaleFactor * f);
 	}
 	
-	public static int scaleToInt(float f) {
-		return (int) (ScaleFactor * f);
+	public static int scaleToInt(double d) {
+		return (int) (ScaleFactor * d);
 	}
 }
