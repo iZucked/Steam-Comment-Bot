@@ -15,7 +15,6 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -27,19 +26,18 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.optimiser.OptimisationSettings;
-import scenario.optimiser.OptimiserFactory;
+import scenario.optimiser.Objective;
 import scenario.optimiser.OptimiserPackage;
 
 import scenario.provider.LngEditPlugin;
 
 /**
- * This is the item provider adapter for a {@link scenario.optimiser.OptimisationSettings} object.
+ * This is the item provider adapter for a {@link scenario.optimiser.Objective} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class OptimisationSettingsItemProvider
+public class ObjectiveItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -53,7 +51,7 @@ public class OptimisationSettingsItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public OptimisationSettingsItemProvider(AdapterFactory adapterFactory) {
+	public ObjectiveItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -69,7 +67,7 @@ public class OptimisationSettingsItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addRandomSeedPropertyDescriptor(object);
+			addWeightPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -85,9 +83,9 @@ public class OptimisationSettingsItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_OptimisationSettings_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_name_feature", "_UI_OptimisationSettings_type"),
-				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__NAME,
+				 getString("_UI_Objective_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Objective_name_feature", "_UI_Objective_type"),
+				 OptimiserPackage.Literals.OBJECTIVE__NAME,
 				 true,
 				 false,
 				 false,
@@ -97,67 +95,36 @@ public class OptimisationSettingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Random Seed feature.
+	 * This adds a property descriptor for the Weight feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRandomSeedPropertyDescriptor(Object object) {
+	protected void addWeightPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_OptimisationSettings_randomSeed_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_randomSeed_feature", "_UI_OptimisationSettings_type"),
-				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__RANDOM_SEED,
+				 getString("_UI_Objective_weight_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Objective_weight_feature", "_UI_Objective_type"),
+				 OptimiserPackage.Literals.OBJECTIVE__WEIGHT,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(OptimiserPackage.Literals.OPTIMISATION_SETTINGS__CONSTRAINTS);
-			childrenFeatures.add(OptimiserPackage.Literals.OPTIMISATION_SETTINGS__OBJECTIVES);
-		}
-		return childrenFeatures;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns OptimisationSettings.gif.
+	 * This returns Objective.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/OptimisationSettings"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Objective"));
 	}
 
 	/**
@@ -168,10 +135,10 @@ public class OptimisationSettingsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((OptimisationSettings)object).getName();
+		String label = ((Objective)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_OptimisationSettings_type") :
-			getString("_UI_OptimisationSettings_type") + " " + label;
+			getString("_UI_Objective_type") :
+			getString("_UI_Objective_type") + " " + label;
 	}
 
 	/**
@@ -185,14 +152,10 @@ public class OptimisationSettingsItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(OptimisationSettings.class)) {
-			case OptimiserPackage.OPTIMISATION_SETTINGS__NAME:
-			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
+		switch (notification.getFeatureID(Objective.class)) {
+			case OptimiserPackage.OBJECTIVE__NAME:
+			case OptimiserPackage.OBJECTIVE__WEIGHT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
-			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -208,16 +171,6 @@ public class OptimisationSettingsItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(OptimiserPackage.Literals.OPTIMISATION_SETTINGS__CONSTRAINTS,
-				 OptimiserFactory.eINSTANCE.createConstraint()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(OptimiserPackage.Literals.OPTIMISATION_SETTINGS__OBJECTIVES,
-				 OptimiserFactory.eINSTANCE.createObjective()));
 	}
 
 	/**

@@ -12,11 +12,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -30,7 +27,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import scenario.optimiser.Optimisation;
 import scenario.optimiser.OptimiserFactory;
 import scenario.optimiser.OptimiserPackage;
-
+import scenario.optimiser.lso.LsoFactory;
 import scenario.provider.LngEditPlugin;
 
 /**
@@ -185,7 +182,7 @@ public class OptimisationItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(OptimiserPackage.Literals.OPTIMISATION__ALL_SETTINGS,
-				 OptimiserFactory.eINSTANCE.createLSOSettings()));
+				 LsoFactory.eINSTANCE.createLSOSettings()));
 	}
 
 	/**

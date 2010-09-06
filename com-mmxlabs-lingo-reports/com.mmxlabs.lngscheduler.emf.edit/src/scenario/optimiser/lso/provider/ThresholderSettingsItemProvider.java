@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.optimiser.provider;
+package scenario.optimiser.lso.provider;
 
 
 import java.util.Collection;
@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -21,19 +23,22 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.optimiser.LSOSettings;
-import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.ThresholderSettings;
+
+import scenario.provider.LngEditPlugin;
 
 /**
- * This is the item provider adapter for a {@link scenario.optimiser.LSOSettings} object.
+ * This is the item provider adapter for a {@link scenario.optimiser.lso.ThresholderSettings} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class LSOSettingsItemProvider
-	extends OptimisationSettingsItemProvider
+public class ThresholderSettingsItemProvider
+	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -46,7 +51,7 @@ public class LSOSettingsItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LSOSettingsItemProvider(AdapterFactory adapterFactory) {
+	public ThresholderSettingsItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,27 +66,71 @@ public class LSOSettingsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNumberOfStepsPropertyDescriptor(object);
-			addStepSizePropertyDescriptor(object);
-			addInitialThresholdPropertyDescriptor(object);
+			addAlphaPropertyDescriptor(object);
+			addInitialAcceptanceRatePropertyDescriptor(object);
+			addEpochLengthPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Number Of Steps feature.
+	 * This adds a property descriptor for the Alpha feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addNumberOfStepsPropertyDescriptor(Object object) {
+	protected void addAlphaPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LSOSettings_numberOfSteps_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LSOSettings_numberOfSteps_feature", "_UI_LSOSettings_type"),
-				 OptimiserPackage.Literals.LSO_SETTINGS__NUMBER_OF_STEPS,
+				 getString("_UI_ThresholderSettings_alpha_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ThresholderSettings_alpha_feature", "_UI_ThresholderSettings_type"),
+				 LsoPackage.Literals.THRESHOLDER_SETTINGS__ALPHA,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Initial Acceptance Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInitialAcceptanceRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ThresholderSettings_initialAcceptanceRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ThresholderSettings_initialAcceptanceRate_feature", "_UI_ThresholderSettings_type"),
+				 LsoPackage.Literals.THRESHOLDER_SETTINGS__INITIAL_ACCEPTANCE_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Epoch Length feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEpochLengthPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ThresholderSettings_epochLength_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ThresholderSettings_epochLength_feature", "_UI_ThresholderSettings_type"),
+				 LsoPackage.Literals.THRESHOLDER_SETTINGS__EPOCH_LENGTH,
 				 true,
 				 false,
 				 false,
@@ -91,58 +140,14 @@ public class LSOSettingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Step Size feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addStepSizePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_LSOSettings_stepSize_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LSOSettings_stepSize_feature", "_UI_LSOSettings_type"),
-				 OptimiserPackage.Literals.LSO_SETTINGS__STEP_SIZE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Initial Threshold feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addInitialThresholdPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_LSOSettings_initialThreshold_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LSOSettings_initialThreshold_feature", "_UI_LSOSettings_type"),
-				 OptimiserPackage.Literals.LSO_SETTINGS__INITIAL_THRESHOLD,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns LSOSettings.gif.
+	 * This returns ThresholderSettings.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LSOSettings"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ThresholderSettings"));
 	}
 
 	/**
@@ -153,10 +158,8 @@ public class LSOSettingsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LSOSettings)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_LSOSettings_type") :
-			getString("_UI_LSOSettings_type") + " " + label;
+		ThresholderSettings thresholderSettings = (ThresholderSettings)object;
+		return getString("_UI_ThresholderSettings_type") + " " + thresholderSettings.getAlpha();
 	}
 
 	/**
@@ -170,10 +173,10 @@ public class LSOSettingsItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(LSOSettings.class)) {
-			case OptimiserPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
-			case OptimiserPackage.LSO_SETTINGS__STEP_SIZE:
-			case OptimiserPackage.LSO_SETTINGS__INITIAL_THRESHOLD:
+		switch (notification.getFeatureID(ThresholderSettings.class)) {
+			case LsoPackage.THRESHOLDER_SETTINGS__ALPHA:
+			case LsoPackage.THRESHOLDER_SETTINGS__INITIAL_ACCEPTANCE_RATE:
+			case LsoPackage.THRESHOLDER_SETTINGS__EPOCH_LENGTH:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -190,6 +193,17 @@ public class LSOSettingsItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return LngEditPlugin.INSTANCE;
 	}
 
 }

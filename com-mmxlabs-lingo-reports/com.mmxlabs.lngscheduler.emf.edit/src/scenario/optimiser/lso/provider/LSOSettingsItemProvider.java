@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.optimiser.provider;
+package scenario.optimiser.lso.provider;
 
 
 import java.util.Collection;
@@ -16,6 +16,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -24,23 +25,24 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.optimiser.OptimisationSettings;
-import scenario.optimiser.OptimiserFactory;
-import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.LsoFactory;
+import scenario.optimiser.lso.LsoPackage;
+
+import scenario.optimiser.provider.OptimisationSettingsItemProvider;
 
 import scenario.provider.LngEditPlugin;
 
 /**
- * This is the item provider adapter for a {@link scenario.optimiser.OptimisationSettings} object.
+ * This is the item provider adapter for a {@link scenario.optimiser.lso.LSOSettings} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class OptimisationSettingsItemProvider
-	extends ItemProviderAdapter
+public class LSOSettingsItemProvider
+	extends OptimisationSettingsItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -53,7 +55,7 @@ public class OptimisationSettingsItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public OptimisationSettingsItemProvider(AdapterFactory adapterFactory) {
+	public LSOSettingsItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -68,48 +70,25 @@ public class OptimisationSettingsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
-			addRandomSeedPropertyDescriptor(object);
+			addNumberOfStepsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Name feature.
+	 * This adds a property descriptor for the Number Of Steps feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addNamePropertyDescriptor(Object object) {
+	protected void addNumberOfStepsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_OptimisationSettings_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_name_feature", "_UI_OptimisationSettings_type"),
-				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Random Seed feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRandomSeedPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_OptimisationSettings_randomSeed_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_randomSeed_feature", "_UI_OptimisationSettings_type"),
-				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__RANDOM_SEED,
+				 getString("_UI_LSOSettings_numberOfSteps_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LSOSettings_numberOfSteps_feature", "_UI_LSOSettings_type"),
+				 LsoPackage.Literals.LSO_SETTINGS__NUMBER_OF_STEPS,
 				 true,
 				 false,
 				 false,
@@ -130,8 +109,7 @@ public class OptimisationSettingsItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(OptimiserPackage.Literals.OPTIMISATION_SETTINGS__CONSTRAINTS);
-			childrenFeatures.add(OptimiserPackage.Literals.OPTIMISATION_SETTINGS__OBJECTIVES);
+			childrenFeatures.add(LsoPackage.Literals.LSO_SETTINGS__THRESHOLDER_SETTINGS);
 		}
 		return childrenFeatures;
 	}
@@ -150,14 +128,14 @@ public class OptimisationSettingsItemProvider
 	}
 
 	/**
-	 * This returns OptimisationSettings.gif.
+	 * This returns LSOSettings.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/OptimisationSettings"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/LSOSettings"));
 	}
 
 	/**
@@ -168,10 +146,10 @@ public class OptimisationSettingsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((OptimisationSettings)object).getName();
+		String label = ((LSOSettings)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_OptimisationSettings_type") :
-			getString("_UI_OptimisationSettings_type") + " " + label;
+			getString("_UI_LSOSettings_type") :
+			getString("_UI_LSOSettings_type") + " " + label;
 	}
 
 	/**
@@ -185,13 +163,11 @@ public class OptimisationSettingsItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(OptimisationSettings.class)) {
-			case OptimiserPackage.OPTIMISATION_SETTINGS__NAME:
-			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
+		switch (notification.getFeatureID(LSOSettings.class)) {
+			case LsoPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
-			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
+			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -211,13 +187,8 @@ public class OptimisationSettingsItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(OptimiserPackage.Literals.OPTIMISATION_SETTINGS__CONSTRAINTS,
-				 OptimiserFactory.eINSTANCE.createConstraint()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(OptimiserPackage.Literals.OPTIMISATION_SETTINGS__OBJECTIVES,
-				 OptimiserFactory.eINSTANCE.createObjective()));
+				(LsoPackage.Literals.LSO_SETTINGS__THRESHOLDER_SETTINGS,
+				 LsoFactory.eINSTANCE.createThresholderSettings()));
 	}
 
 	/**

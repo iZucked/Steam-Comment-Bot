@@ -108,6 +108,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
+import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.port.provider.PortItemProviderAdapterFactory;
@@ -580,6 +581,7 @@ public class MarketEditor
 		adapterFactory.addAdapterFactory(new ContractItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new MarketItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new OptimiserItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new LsoItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the command stack that will notify this editor as commands are executed.

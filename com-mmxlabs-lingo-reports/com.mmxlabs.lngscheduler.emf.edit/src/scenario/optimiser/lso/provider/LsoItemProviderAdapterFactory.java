@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.optimiser.provider;
+package scenario.optimiser.lso.provider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +25,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import scenario.optimiser.util.OptimiserAdapterFactory;
+import scenario.optimiser.lso.util.LsoAdapterFactory;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -36,7 +36,7 @@ import scenario.optimiser.util.OptimiserAdapterFactory;
  * <!-- end-user-doc -->
  * @generated
  */
-public class OptimiserItemProviderAdapterFactory extends OptimiserAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class LsoItemProviderAdapterFactory extends LsoAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -67,7 +67,7 @@ public class OptimiserItemProviderAdapterFactory extends OptimiserAdapterFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public OptimiserItemProviderAdapterFactory() {
+	public LsoItemProviderAdapterFactory() {
 		supportedTypes.add(IEditingDomainItemProvider.class);
 		supportedTypes.add(IStructuredItemContentProvider.class);
 		supportedTypes.add(ITreeItemContentProvider.class);
@@ -76,95 +76,49 @@ public class OptimiserItemProviderAdapterFactory extends OptimiserAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.optimiser.OptimisationSettings} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.optimiser.lso.LSOSettings} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected OptimisationSettingsItemProvider optimisationSettingsItemProvider;
+	protected LSOSettingsItemProvider lsoSettingsItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.optimiser.OptimisationSettings}.
+	 * This creates an adapter for a {@link scenario.optimiser.lso.LSOSettings}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createOptimisationSettingsAdapter() {
-		if (optimisationSettingsItemProvider == null) {
-			optimisationSettingsItemProvider = new OptimisationSettingsItemProvider(this);
+	public Adapter createLSOSettingsAdapter() {
+		if (lsoSettingsItemProvider == null) {
+			lsoSettingsItemProvider = new LSOSettingsItemProvider(this);
 		}
 
-		return optimisationSettingsItemProvider;
+		return lsoSettingsItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.optimiser.Optimisation} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.optimiser.lso.ThresholderSettings} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected OptimisationItemProvider optimisationItemProvider;
+	protected ThresholderSettingsItemProvider thresholderSettingsItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.optimiser.Optimisation}.
+	 * This creates an adapter for a {@link scenario.optimiser.lso.ThresholderSettings}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createOptimisationAdapter() {
-		if (optimisationItemProvider == null) {
-			optimisationItemProvider = new OptimisationItemProvider(this);
+	public Adapter createThresholderSettingsAdapter() {
+		if (thresholderSettingsItemProvider == null) {
+			thresholderSettingsItemProvider = new ThresholderSettingsItemProvider(this);
 		}
 
-		return optimisationItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link scenario.optimiser.Constraint} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ConstraintItemProvider constraintItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.optimiser.Constraint}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createConstraintAdapter() {
-		if (constraintItemProvider == null) {
-			constraintItemProvider = new ConstraintItemProvider(this);
-		}
-
-		return constraintItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link scenario.optimiser.Objective} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ObjectiveItemProvider objectiveItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.optimiser.Objective}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createObjectiveAdapter() {
-		if (objectiveItemProvider == null) {
-			objectiveItemProvider = new ObjectiveItemProvider(this);
-		}
-
-		return objectiveItemProvider;
+		return thresholderSettingsItemProvider;
 	}
 
 	/**
@@ -266,10 +220,8 @@ public class OptimiserItemProviderAdapterFactory extends OptimiserAdapterFactory
 	 * @generated
 	 */
 	public void dispose() {
-		if (optimisationSettingsItemProvider != null) optimisationSettingsItemProvider.dispose();
-		if (optimisationItemProvider != null) optimisationItemProvider.dispose();
-		if (constraintItemProvider != null) constraintItemProvider.dispose();
-		if (objectiveItemProvider != null) objectiveItemProvider.dispose();
+		if (lsoSettingsItemProvider != null) lsoSettingsItemProvider.dispose();
+		if (thresholderSettingsItemProvider != null) thresholderSettingsItemProvider.dispose();
 	}
 
 }

@@ -74,6 +74,7 @@ public class VesselClassItemProvider
 			addFillCapacityPropertyDescriptor(object);
 			addDailyCharterPricePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
+			addBaseFuelEquivalenceFactorPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -277,6 +278,28 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Base Fuel Equivalence Factor feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBaseFuelEquivalenceFactorPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_baseFuelEquivalenceFactor_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_baseFuelEquivalenceFactor_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -353,6 +376,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
