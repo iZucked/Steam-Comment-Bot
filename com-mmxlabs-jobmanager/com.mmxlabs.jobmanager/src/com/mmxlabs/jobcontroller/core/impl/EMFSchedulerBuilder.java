@@ -1,8 +1,10 @@
 package com.mmxlabs.jobcontroller.core.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -363,5 +365,23 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	public IStartEndRequirement createStartEndRequirement(IPort fixedPort,
 			int fixedTime) {
 		return delegate.createStartEndRequirement(fixedPort, fixedTime);
+	}
+
+	@Override
+	public List<IVessel> createSpotVessels(String namePrefix,
+			IVesselClass vesselClass, int count) {
+		List<IVessel> answer = new ArrayList<IVessel>(count);
+		for (int i = 0; i<count; i++) {
+			answer.add(createSpotVessel(namePrefix + "-" + (i+1), vesselClass));
+		}
+		return answer;
+	}
+
+	@Override
+	public IVessel createSpotVessel(String name, IVesselClass vesselClass) {
+		IStartEndRequirement start = createStartEndRequirement();
+		IStartEndRequirement end = createStartEndRequirement();
+		
+		return createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, start, end);
 	}
 }
