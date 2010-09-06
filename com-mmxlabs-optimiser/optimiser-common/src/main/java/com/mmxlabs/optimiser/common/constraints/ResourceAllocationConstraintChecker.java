@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -21,7 +22,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  *            Sequence element type
  */
 public final class ResourceAllocationConstraintChecker<T> implements
-		IConstraintChecker<T> {
+		IPairwiseConstraintChecker<T> {
 
 	private final String name;
 
@@ -69,21 +70,15 @@ public final class ResourceAllocationConstraintChecker<T> implements
 			final ISequence<T> sequence, final List<String> messages) {
 
 		for (final T t : sequence) {
-			final Collection<IResource> allowedResources = resourceAllocationConstraintDataComponentProvider
-					.getAllowedResources(t);
-			if (allowedResources != null) {
-				if (!allowedResources.contains(resource)) {
-
-					if (messages != null) {
-						final String msg = String
-								.format(
-										"Element (%s) is not permitted to be allocated to resource (%s)",
-										t, resource);
-						messages.add(msg);
-					}
-
-					return false;
+			if (!checkElement(t, resource)) {
+				if (messages != null) {
+					final String msg = String
+							.format(
+									"Element (%s) is not permitted to be allocated to resource (%s)",
+									t, resource);
+					messages.add(msg);
 				}
+				return false;
 			}
 		}
 
@@ -111,5 +106,15 @@ public final class ResourceAllocationConstraintChecker<T> implements
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+		return checkElement(first, resource) && checkElement(second, resource);
+	}
+	
+	private final boolean checkElement(T element, IResource resource) {
+		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
+		return (resources == null || resources.contains(resource));
 	}
 }

@@ -7,6 +7,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -21,7 +22,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  *            Sequence element type
  */
 public final class OrderedSequenceElementsConstraintChecker<T> implements
-		IConstraintChecker<T> {
+		IPairwiseConstraintChecker<T> {
 
 	private final String name;
 
@@ -124,5 +125,21 @@ public final class OrderedSequenceElementsConstraintChecker<T> implements
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+		final T afterFirst = provider.getNextElement(first);
+		if (afterFirst == null) {
+			final T beforeSecond = provider.getPreviousElement(second);
+			if (beforeSecond == null) {
+				return true;
+			} else {
+				//This should be reflexive anyway.
+				return first.equals(beforeSecond);
+			}
+		} else {
+			return afterFirst.equals(second);
+		}
 	}
 }
