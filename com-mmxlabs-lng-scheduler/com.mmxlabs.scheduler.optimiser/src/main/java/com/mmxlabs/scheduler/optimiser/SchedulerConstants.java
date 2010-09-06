@@ -19,8 +19,9 @@ public final class SchedulerConstants {
 	public static final String DCP_portTypeProvider = "provider-port-type";
 	public static final String DCP_resourceAllocationProvider = "provider-resource-allocation";
 	public static final String DCP_startEndRequirementProvider = "provider-start-end-requirement";
+	public static final String DCP_portExclusionProvider = "provider-port-exclusions";
 	
-	// Additional Info keyss
+	// Additional Info keys
 	public static final String AI_idleInfo = "info-idle";
 	public static final String AI_journeyInfo = "info-journey";
 	public static final String AI_visitInfo = "info-visit";
