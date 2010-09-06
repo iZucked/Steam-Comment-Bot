@@ -334,12 +334,8 @@ public class LNGScenarioTransformer {
 		 */
 		IStartEndRequirement blankRequirement = builder.createStartEndRequirement();
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
-			for (int i = 0; i<eVc.getSpotCharterCount(); i++) {
-				IVessel v = builder.createVessel("SPOT-" + eVc.getName() + "-" + i, vesselClassAssociation.lookup(eVc),
-						VesselInstanceType.SPOT_CHARTER,
-						blankRequirement, blankRequirement);
-				
-			}
+			if (eVc.getSpotCharterCount() > 0)
+				builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), eVc.getSpotCharterCount());
 		}
 	}
 
