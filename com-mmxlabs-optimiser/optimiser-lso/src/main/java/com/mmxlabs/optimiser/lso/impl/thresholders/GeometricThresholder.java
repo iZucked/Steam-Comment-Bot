@@ -38,6 +38,10 @@ public class GeometricThresholder implements IThresholder {
 		}
 	}
 	
+	public double getTemperature() {
+		return temperature;
+	}
+	
 	@Override
 	public void init() {
 		ticks = 0;
