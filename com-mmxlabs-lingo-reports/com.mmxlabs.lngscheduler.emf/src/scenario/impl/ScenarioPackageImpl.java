@@ -6,6 +6,7 @@
  */
 package scenario.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -24,6 +25,8 @@ import scenario.market.MarketPackage;
 import scenario.market.impl.MarketPackageImpl;
 import scenario.optimiser.OptimiserPackage;
 import scenario.optimiser.impl.OptimiserPackageImpl;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.impl.LsoPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.SchedulePackage;
@@ -97,6 +100,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
 		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
 		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
+		LsoPackageImpl theLsoPackage = (LsoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI) instanceof LsoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI) : LsoPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theScenarioPackage.createPackageContents();
@@ -107,6 +111,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		theContractPackage.createPackageContents();
 		theMarketPackage.createPackageContents();
 		theOptimiserPackage.createPackageContents();
+		theLsoPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theScenarioPackage.initializePackageContents();
@@ -117,6 +122,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		theContractPackage.initializePackageContents();
 		theMarketPackage.initializePackageContents();
 		theOptimiserPackage.initializePackageContents();
+		theLsoPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theScenarioPackage.freeze();
@@ -229,6 +235,15 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getScenario_Version() {
+		return (EAttribute)scenarioEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
@@ -263,6 +278,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		createEReference(scenarioEClass, SCENARIO__DISTANCE_MODEL);
 		createEReference(scenarioEClass, SCENARIO__CANAL_MODEL);
 		createEReference(scenarioEClass, SCENARIO__OPTIMISATION);
+		createEAttribute(scenarioEClass, SCENARIO__VERSION);
 	}
 
 	/**
@@ -323,6 +339,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		initEReference(getScenario_DistanceModel(), thePortPackage.getDistanceModel(), null, "distanceModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenario_CanalModel(), thePortPackage.getCanalModel(), null, "canalModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenario_Optimisation(), theOptimiserPackage.getOptimisation(), null, "optimisation", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenario_Version(), ecorePackage.getEInt(), "version", "1", 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

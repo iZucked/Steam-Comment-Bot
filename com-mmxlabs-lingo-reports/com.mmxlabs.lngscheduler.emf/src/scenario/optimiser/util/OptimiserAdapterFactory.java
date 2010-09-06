@@ -80,8 +80,12 @@ public class OptimiserAdapterFactory extends AdapterFactoryImpl {
 				return createOptimisationAdapter();
 			}
 			@Override
-			public Adapter caseLSOSettings(LSOSettings object) {
-				return createLSOSettingsAdapter();
+			public Adapter caseConstraint(Constraint object) {
+				return createConstraintAdapter();
+			}
+			@Override
+			public Adapter caseObjective(Objective object) {
+				return createObjectiveAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -132,16 +136,30 @@ public class OptimiserAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.optimiser.LSOSettings <em>LSO Settings</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.optimiser.Constraint <em>Constraint</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.optimiser.LSOSettings
+	 * @see scenario.optimiser.Constraint
 	 * @generated
 	 */
-	public Adapter createLSOSettingsAdapter() {
+	public Adapter createConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.optimiser.Objective <em>Objective</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.optimiser.Objective
+	 * @generated
+	 */
+	public Adapter createObjectiveAdapter() {
 		return null;
 	}
 

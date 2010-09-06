@@ -1,0 +1,343 @@
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
+package scenario.optimiser.lso;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+import scenario.optimiser.OptimiserPackage;
+
+/**
+ * <!-- begin-user-doc -->
+ * The <b>Package</b> for the model.
+ * It contains accessors for the meta objects to represent
+ * <ul>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
+ * </ul>
+ * <!-- end-user-doc -->
+ * @see scenario.optimiser.lso.LsoFactory
+ * @model kind="package"
+ * @generated
+ */
+public interface LsoPackage extends EPackage {
+	/**
+	 * The package name.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNAME = "lso";
+
+	/**
+	 * The package namespace URI.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNS_URI = "http://com.mmxlabs.lng.emf/optimiser/lso";
+
+	/**
+	 * The package namespace name.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNS_PREFIX = "com.mmxlabs.lng.emf.optimiser.lso";
+
+	/**
+	 * The singleton instance of the package.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	LsoPackage eINSTANCE = scenario.optimiser.lso.impl.LsoPackageImpl.init();
+
+	/**
+	 * The meta object id for the '{@link scenario.optimiser.lso.impl.LSOSettingsImpl <em>LSO Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.optimiser.lso.impl.LSOSettingsImpl
+	 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getLSOSettings()
+	 * @generated
+	 */
+	int LSO_SETTINGS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__NAME = OptimiserPackage.OPTIMISATION_SETTINGS__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Random Seed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__RANDOM_SEED = OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED;
+
+	/**
+	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__CONSTRAINTS = OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS;
+
+	/**
+	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__OBJECTIVES = OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES;
+
+	/**
+	 * The feature id for the '<em><b>Number Of Steps</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__NUMBER_OF_STEPS = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Thresholder Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__THRESHOLDER_SETTINGS = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>LSO Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS_FEATURE_COUNT = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link scenario.optimiser.lso.impl.ThresholderSettingsImpl <em>Thresholder Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.optimiser.lso.impl.ThresholderSettingsImpl
+	 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getThresholderSettings()
+	 * @generated
+	 */
+	int THRESHOLDER_SETTINGS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Alpha</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THRESHOLDER_SETTINGS__ALPHA = 0;
+
+	/**
+	 * The feature id for the '<em><b>Initial Acceptance Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THRESHOLDER_SETTINGS__INITIAL_ACCEPTANCE_RATE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Epoch Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THRESHOLDER_SETTINGS__EPOCH_LENGTH = 2;
+
+	/**
+	 * The number of structural features of the '<em>Thresholder Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THRESHOLDER_SETTINGS_FEATURE_COUNT = 3;
+
+
+	/**
+	 * Returns the meta object for class '{@link scenario.optimiser.lso.LSOSettings <em>LSO Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>LSO Settings</em>'.
+	 * @see scenario.optimiser.lso.LSOSettings
+	 * @generated
+	 */
+	EClass getLSOSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.LSOSettings#getNumberOfSteps <em>Number Of Steps</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Number Of Steps</em>'.
+	 * @see scenario.optimiser.lso.LSOSettings#getNumberOfSteps()
+	 * @see #getLSOSettings()
+	 * @generated
+	 */
+	EAttribute getLSOSettings_NumberOfSteps();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link scenario.optimiser.lso.LSOSettings#getThresholderSettings <em>Thresholder Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Thresholder Settings</em>'.
+	 * @see scenario.optimiser.lso.LSOSettings#getThresholderSettings()
+	 * @see #getLSOSettings()
+	 * @generated
+	 */
+	EReference getLSOSettings_ThresholderSettings();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.optimiser.lso.ThresholderSettings <em>Thresholder Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Thresholder Settings</em>'.
+	 * @see scenario.optimiser.lso.ThresholderSettings
+	 * @generated
+	 */
+	EClass getThresholderSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.ThresholderSettings#getAlpha <em>Alpha</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Alpha</em>'.
+	 * @see scenario.optimiser.lso.ThresholderSettings#getAlpha()
+	 * @see #getThresholderSettings()
+	 * @generated
+	 */
+	EAttribute getThresholderSettings_Alpha();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.ThresholderSettings#getInitialAcceptanceRate <em>Initial Acceptance Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Initial Acceptance Rate</em>'.
+	 * @see scenario.optimiser.lso.ThresholderSettings#getInitialAcceptanceRate()
+	 * @see #getThresholderSettings()
+	 * @generated
+	 */
+	EAttribute getThresholderSettings_InitialAcceptanceRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.ThresholderSettings#getEpochLength <em>Epoch Length</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Epoch Length</em>'.
+	 * @see scenario.optimiser.lso.ThresholderSettings#getEpochLength()
+	 * @see #getThresholderSettings()
+	 * @generated
+	 */
+	EAttribute getThresholderSettings_EpochLength();
+
+	/**
+	 * Returns the factory that creates the instances of the model.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the factory that creates the instances of the model.
+	 * @generated
+	 */
+	LsoFactory getLsoFactory();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Defines literals for the meta objects that represent
+	 * <ul>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
+	 * </ul>
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	interface Literals {
+		/**
+		 * The meta object literal for the '{@link scenario.optimiser.lso.impl.LSOSettingsImpl <em>LSO Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.optimiser.lso.impl.LSOSettingsImpl
+		 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getLSOSettings()
+		 * @generated
+		 */
+		EClass LSO_SETTINGS = eINSTANCE.getLSOSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Number Of Steps</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LSO_SETTINGS__NUMBER_OF_STEPS = eINSTANCE.getLSOSettings_NumberOfSteps();
+
+		/**
+		 * The meta object literal for the '<em><b>Thresholder Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LSO_SETTINGS__THRESHOLDER_SETTINGS = eINSTANCE.getLSOSettings_ThresholderSettings();
+
+		/**
+		 * The meta object literal for the '{@link scenario.optimiser.lso.impl.ThresholderSettingsImpl <em>Thresholder Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.optimiser.lso.impl.ThresholderSettingsImpl
+		 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getThresholderSettings()
+		 * @generated
+		 */
+		EClass THRESHOLDER_SETTINGS = eINSTANCE.getThresholderSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Alpha</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute THRESHOLDER_SETTINGS__ALPHA = eINSTANCE.getThresholderSettings_Alpha();
+
+		/**
+		 * The meta object literal for the '<em><b>Initial Acceptance Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute THRESHOLDER_SETTINGS__INITIAL_ACCEPTANCE_RATE = eINSTANCE.getThresholderSettings_InitialAcceptanceRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Epoch Length</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute THRESHOLDER_SETTINGS__EPOCH_LENGTH = eINSTANCE.getThresholderSettings_EpochLength();
+
+	}
+
+} //LsoPackage

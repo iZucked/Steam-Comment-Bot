@@ -27,6 +27,8 @@ import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
 import scenario.optimiser.OptimiserPackage;
 import scenario.optimiser.impl.OptimiserPackageImpl;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.impl.LsoPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.SchedulePackage;
@@ -114,6 +116,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
 		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
+		LsoPackageImpl theLsoPackage = (LsoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI) instanceof LsoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI) : LsoPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theMarketPackage.createPackageContents();
@@ -124,6 +127,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
 		theOptimiserPackage.createPackageContents();
+		theLsoPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theMarketPackage.initializePackageContents();
@@ -134,6 +138,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
 		theOptimiserPackage.initializePackageContents();
+		theLsoPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theMarketPackage.freeze();

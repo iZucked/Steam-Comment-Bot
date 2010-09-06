@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getBaseFuelEquivalenceFactor <em>Base Fuel Equivalence Factor</em>}</li>
  * </ul>
  * </p>
  *
@@ -323,5 +324,30 @@ public interface VesselClass extends EObject {
 	 * @generated
 	 */
 	void setSpotCharterCount(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Base Fuel Equivalence Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The factor relating boiloff to base fuel; one unit of boiloff is equivalent to this many units of base fuel.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Base Fuel Equivalence Factor</em>' attribute.
+	 * @see #setBaseFuelEquivalenceFactor(double)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_BaseFuelEquivalenceFactor()
+	 * @model
+	 * @generated
+	 */
+	double getBaseFuelEquivalenceFactor();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getBaseFuelEquivalenceFactor <em>Base Fuel Equivalence Factor</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Base Fuel Equivalence Factor</em>' attribute.
+	 * @see #getBaseFuelEquivalenceFactor()
+	 * @generated
+	 */
+	void setBaseFuelEquivalenceFactor(double value);
 
 } // VesselClass

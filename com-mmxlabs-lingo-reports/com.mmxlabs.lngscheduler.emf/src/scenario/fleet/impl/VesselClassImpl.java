@@ -38,6 +38,7 @@ import scenario.fleet.VesselStateAttributes;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getFillCapacity <em>Fill Capacity</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuelEquivalenceFactor <em>Base Fuel Equivalence Factor</em>}</li>
  * </ul>
  * </p>
  *
@@ -243,6 +244,26 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected int spotCharterCount = SPOT_CHARTER_COUNT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBaseFuelEquivalenceFactor() <em>Base Fuel Equivalence Factor</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseFuelEquivalenceFactor()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getBaseFuelEquivalenceFactor() <em>Base Fuel Equivalence Factor</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseFuelEquivalenceFactor()
+	 * @generated
+	 * @ordered
+	 */
+	protected double baseFuelEquivalenceFactor = BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -546,6 +567,27 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getBaseFuelEquivalenceFactor() {
+		return baseFuelEquivalenceFactor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBaseFuelEquivalenceFactor(double newBaseFuelEquivalenceFactor) {
+		double oldBaseFuelEquivalenceFactor = baseFuelEquivalenceFactor;
+		baseFuelEquivalenceFactor = newBaseFuelEquivalenceFactor;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR, oldBaseFuelEquivalenceFactor, baseFuelEquivalenceFactor));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -587,6 +629,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return getDailyCharterPrice();
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				return getSpotCharterCount();
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
+				return getBaseFuelEquivalenceFactor();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -633,6 +677,9 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				setSpotCharterCount((Integer)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
+				setBaseFuelEquivalenceFactor((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -678,6 +725,9 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
+				setBaseFuelEquivalenceFactor(BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -712,6 +762,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return dailyCharterPrice != DAILY_CHARTER_PRICE_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
+				return baseFuelEquivalenceFactor != BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -744,6 +796,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 		result.append(dailyCharterPrice);
 		result.append(", spotCharterCount: ");
 		result.append(spotCharterCount);
+		result.append(", baseFuelEquivalenceFactor: ");
+		result.append(baseFuelEquivalenceFactor);
 		result.append(')');
 		return result.toString();
 	}

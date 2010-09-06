@@ -22,6 +22,8 @@ Export-Package: scenario,
  scenario.market.impl,
  scenario.market.util,
  scenario.optimiser,
+ scenario.optimiser.lso,
+ scenario.optimiser.lso.util,
  scenario.optimiser.util,
  scenario.port,
  scenario.port.impl,
@@ -33,3 +35,4 @@ Export-Package: scenario,
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy
+Import-Package: scenario.optimiser

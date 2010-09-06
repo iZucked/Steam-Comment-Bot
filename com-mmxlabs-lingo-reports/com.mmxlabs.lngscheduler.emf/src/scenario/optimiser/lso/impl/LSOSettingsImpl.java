@@ -4,16 +4,21 @@
  *
  * $Id$
  */
-package scenario.optimiser.impl;
+package scenario.optimiser.lso.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import scenario.optimiser.LSOSettings;
-import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.impl.OptimisationSettingsImpl;
+
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.ThresholderSettings;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,9 +27,8 @@ import scenario.optimiser.OptimiserPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.optimiser.impl.LSOSettingsImpl#getNumberOfSteps <em>Number Of Steps</em>}</li>
- *   <li>{@link scenario.optimiser.impl.LSOSettingsImpl#getStepSize <em>Step Size</em>}</li>
- *   <li>{@link scenario.optimiser.impl.LSOSettingsImpl#getInitialThreshold <em>Initial Threshold</em>}</li>
+ *   <li>{@link scenario.optimiser.lso.impl.LSOSettingsImpl#getNumberOfSteps <em>Number Of Steps</em>}</li>
+ *   <li>{@link scenario.optimiser.lso.impl.LSOSettingsImpl#getThresholderSettings <em>Thresholder Settings</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,44 +56,14 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	protected int numberOfSteps = NUMBER_OF_STEPS_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getStepSize() <em>Step Size</em>}' attribute.
+	 * The cached value of the '{@link #getThresholderSettings() <em>Thresholder Settings</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStepSize()
+	 * @see #getThresholderSettings()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int STEP_SIZE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getStepSize() <em>Step Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStepSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected int stepSize = STEP_SIZE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getInitialThreshold() <em>Initial Threshold</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInitialThreshold()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int INITIAL_THRESHOLD_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getInitialThreshold() <em>Initial Threshold</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInitialThreshold()
-	 * @generated
-	 * @ordered
-	 */
-	protected int initialThreshold = INITIAL_THRESHOLD_EDEFAULT;
+	protected ThresholderSettings thresholderSettings;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -107,7 +81,7 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return OptimiserPackage.Literals.LSO_SETTINGS;
+		return LsoPackage.Literals.LSO_SETTINGS;
 	}
 
 	/**
@@ -128,7 +102,7 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 		int oldNumberOfSteps = numberOfSteps;
 		numberOfSteps = newNumberOfSteps;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.LSO_SETTINGS__NUMBER_OF_STEPS, oldNumberOfSteps, numberOfSteps));
+			eNotify(new ENotificationImpl(this, Notification.SET, LsoPackage.LSO_SETTINGS__NUMBER_OF_STEPS, oldNumberOfSteps, numberOfSteps));
 	}
 
 	/**
@@ -136,8 +110,8 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getStepSize() {
-		return stepSize;
+	public ThresholderSettings getThresholderSettings() {
+		return thresholderSettings;
 	}
 
 	/**
@@ -145,11 +119,14 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setStepSize(int newStepSize) {
-		int oldStepSize = stepSize;
-		stepSize = newStepSize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.LSO_SETTINGS__STEP_SIZE, oldStepSize, stepSize));
+	public NotificationChain basicSetThresholderSettings(ThresholderSettings newThresholderSettings, NotificationChain msgs) {
+		ThresholderSettings oldThresholderSettings = thresholderSettings;
+		thresholderSettings = newThresholderSettings;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS, oldThresholderSettings, newThresholderSettings);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -157,8 +134,18 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getInitialThreshold() {
-		return initialThreshold;
+	public void setThresholderSettings(ThresholderSettings newThresholderSettings) {
+		if (newThresholderSettings != thresholderSettings) {
+			NotificationChain msgs = null;
+			if (thresholderSettings != null)
+				msgs = ((InternalEObject)thresholderSettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS, null, msgs);
+			if (newThresholderSettings != null)
+				msgs = ((InternalEObject)newThresholderSettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS, null, msgs);
+			msgs = basicSetThresholderSettings(newThresholderSettings, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS, newThresholderSettings, newThresholderSettings));
 	}
 
 	/**
@@ -166,11 +153,13 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setInitialThreshold(int newInitialThreshold) {
-		int oldInitialThreshold = initialThreshold;
-		initialThreshold = newInitialThreshold;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.LSO_SETTINGS__INITIAL_THRESHOLD, oldInitialThreshold, initialThreshold));
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
+				return basicSetThresholderSettings(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -181,12 +170,10 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case OptimiserPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
+			case LsoPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
 				return getNumberOfSteps();
-			case OptimiserPackage.LSO_SETTINGS__STEP_SIZE:
-				return getStepSize();
-			case OptimiserPackage.LSO_SETTINGS__INITIAL_THRESHOLD:
-				return getInitialThreshold();
+			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
+				return getThresholderSettings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -199,14 +186,11 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case OptimiserPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
+			case LsoPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
 				setNumberOfSteps((Integer)newValue);
 				return;
-			case OptimiserPackage.LSO_SETTINGS__STEP_SIZE:
-				setStepSize((Integer)newValue);
-				return;
-			case OptimiserPackage.LSO_SETTINGS__INITIAL_THRESHOLD:
-				setInitialThreshold((Integer)newValue);
+			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
+				setThresholderSettings((ThresholderSettings)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -220,14 +204,11 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
+			case LsoPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
 				setNumberOfSteps(NUMBER_OF_STEPS_EDEFAULT);
 				return;
-			case OptimiserPackage.LSO_SETTINGS__STEP_SIZE:
-				setStepSize(STEP_SIZE_EDEFAULT);
-				return;
-			case OptimiserPackage.LSO_SETTINGS__INITIAL_THRESHOLD:
-				setInitialThreshold(INITIAL_THRESHOLD_EDEFAULT);
+			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
+				setThresholderSettings((ThresholderSettings)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -241,12 +222,10 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
+			case LsoPackage.LSO_SETTINGS__NUMBER_OF_STEPS:
 				return numberOfSteps != NUMBER_OF_STEPS_EDEFAULT;
-			case OptimiserPackage.LSO_SETTINGS__STEP_SIZE:
-				return stepSize != STEP_SIZE_EDEFAULT;
-			case OptimiserPackage.LSO_SETTINGS__INITIAL_THRESHOLD:
-				return initialThreshold != INITIAL_THRESHOLD_EDEFAULT;
+			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
+				return thresholderSettings != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -263,10 +242,6 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (numberOfSteps: ");
 		result.append(numberOfSteps);
-		result.append(", stepSize: ");
-		result.append(stepSize);
-		result.append(", initialThreshold: ");
-		result.append(initialThreshold);
 		result.append(')');
 		return result.toString();
 	}

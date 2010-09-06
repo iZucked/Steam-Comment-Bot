@@ -262,13 +262,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__SPOT_CHARTER_COUNT = 10;
 
 	/**
+	 * The feature id for the '<em><b>Base Fuel Equivalence Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR = 11;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = 11;
+	int VESSEL_CLASS_FEATURE_COUNT = 12;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
@@ -638,6 +647,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_SpotCharterCount();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getBaseFuelEquivalenceFactor <em>Base Fuel Equivalence Factor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Fuel Equivalence Factor</em>'.
+	 * @see scenario.fleet.VesselClass#getBaseFuelEquivalenceFactor()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_BaseFuelEquivalenceFactor();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.fleet.FuelConsumptionLine <em>Fuel Consumption Line</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -963,6 +983,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__SPOT_CHARTER_COUNT = eINSTANCE.getVesselClass_SpotCharterCount();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Fuel Equivalence Factor</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR = eINSTANCE.getVesselClass_BaseFuelEquivalenceFactor();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.

@@ -99,10 +99,15 @@ public class OptimiserSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case OptimiserPackage.LSO_SETTINGS: {
-				LSOSettings lsoSettings = (LSOSettings)theEObject;
-				T result = caseLSOSettings(lsoSettings);
-				if (result == null) result = caseOptimisationSettings(lsoSettings);
+			case OptimiserPackage.CONSTRAINT: {
+				Constraint constraint = (Constraint)theEObject;
+				T result = caseConstraint(constraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case OptimiserPackage.OBJECTIVE: {
+				Objective objective = (Objective)theEObject;
+				T result = caseObjective(objective);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -141,17 +146,32 @@ public class OptimiserSwitch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>LSO Settings</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Constraint</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>LSO Settings</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Constraint</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseLSOSettings(LSOSettings object) {
+	public T caseConstraint(Constraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Objective</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Objective</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseObjective(Objective object) {
 		return null;
 	}
 

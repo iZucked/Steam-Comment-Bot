@@ -41,6 +41,7 @@ import scenario.schedule.ScheduleModel;
  *   <li>{@link scenario.impl.ScenarioImpl#getDistanceModel <em>Distance Model</em>}</li>
  *   <li>{@link scenario.impl.ScenarioImpl#getCanalModel <em>Canal Model</em>}</li>
  *   <li>{@link scenario.impl.ScenarioImpl#getOptimisation <em>Optimisation</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getVersion <em>Version</em>}</li>
  * </ul>
  * </p>
  *
@@ -136,6 +137,26 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @ordered
 	 */
 	protected Optimisation optimisation;
+
+	/**
+	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VERSION_EDEFAULT = 1;
+
+	/**
+	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected int version = VERSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -559,6 +580,27 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getVersion() {
+		return version;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVersion(int newVersion) {
+		int oldVersion = version;
+		version = newVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__VERSION, oldVersion, version));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -610,6 +652,8 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return getCanalModel();
 			case ScenarioPackage.SCENARIO__OPTIMISATION:
 				return getOptimisation();
+			case ScenarioPackage.SCENARIO__VERSION:
+				return getVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -648,6 +692,9 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return;
 			case ScenarioPackage.SCENARIO__OPTIMISATION:
 				setOptimisation((Optimisation)newValue);
+				return;
+			case ScenarioPackage.SCENARIO__VERSION:
+				setVersion((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -688,6 +735,9 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 			case ScenarioPackage.SCENARIO__OPTIMISATION:
 				setOptimisation((Optimisation)null);
 				return;
+			case ScenarioPackage.SCENARIO__VERSION:
+				setVersion(VERSION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -718,8 +768,26 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return canalModel != null;
 			case ScenarioPackage.SCENARIO__OPTIMISATION:
 				return optimisation != null;
+			case ScenarioPackage.SCENARIO__VERSION:
+				return version != VERSION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (version: ");
+		result.append(version);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ScenarioImpl

@@ -62,7 +62,8 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 		switch (eClass.getClassifierID()) {
 			case OptimiserPackage.OPTIMISATION_SETTINGS: return createOptimisationSettings();
 			case OptimiserPackage.OPTIMISATION: return createOptimisation();
-			case OptimiserPackage.LSO_SETTINGS: return createLSOSettings();
+			case OptimiserPackage.CONSTRAINT: return createConstraint();
+			case OptimiserPackage.OBJECTIVE: return createObjective();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -93,9 +94,19 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LSOSettings createLSOSettings() {
-		LSOSettingsImpl lsoSettings = new LSOSettingsImpl();
-		return lsoSettings;
+	public Constraint createConstraint() {
+		ConstraintImpl constraint = new ConstraintImpl();
+		return constraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Objective createObjective() {
+		ObjectiveImpl objective = new ObjectiveImpl();
+		return objective;
 	}
 
 	/**

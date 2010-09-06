@@ -6,6 +6,7 @@
  */
 package scenario;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -150,13 +151,22 @@ public interface ScenarioPackage extends EPackage {
 	int SCENARIO__OPTIMISATION = 8;
 
 	/**
+	 * The feature id for the '<em><b>Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__VERSION = 9;
+
+	/**
 	 * The number of structural features of the '<em>Scenario</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_FEATURE_COUNT = 9;
+	int SCENARIO_FEATURE_COUNT = 10;
 
 
 	/**
@@ -269,6 +279,17 @@ public interface ScenarioPackage extends EPackage {
 	EReference getScenario_Optimisation();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.Scenario#getVersion <em>Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Version</em>'.
+	 * @see scenario.Scenario#getVersion()
+	 * @see #getScenario()
+	 * @generated
+	 */
+	EAttribute getScenario_Version();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -371,6 +392,14 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCENARIO__OPTIMISATION = eINSTANCE.getScenario_Optimisation();
+
+		/**
+		 * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO__VERSION = eINSTANCE.getScenario_Version();
 
 	}
 

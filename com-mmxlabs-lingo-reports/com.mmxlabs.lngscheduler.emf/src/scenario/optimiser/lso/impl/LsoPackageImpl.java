@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.optimiser.impl;
+package scenario.optimiser.lso.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -33,11 +33,14 @@ import scenario.market.MarketPackage;
 
 import scenario.market.impl.MarketPackageImpl;
 
-import scenario.optimiser.LSOSettings;
-import scenario.optimiser.Optimisation;
-import scenario.optimiser.OptimisationSettings;
-import scenario.optimiser.OptimiserFactory;
 import scenario.optimiser.OptimiserPackage;
+
+import scenario.optimiser.impl.OptimiserPackageImpl;
+
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.LsoFactory;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.ThresholderSettings;
 
 import scenario.port.PortPackage;
 
@@ -53,27 +56,20 @@ import scenario.schedule.impl.SchedulePackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPackage {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass optimisationSettingsEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass optimisationEClass = null;
-
+public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass lsoSettingsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass thresholderSettingsEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -86,12 +82,12 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see scenario.optimiser.OptimiserPackage#eNS_URI
+	 * @see scenario.optimiser.lso.LsoPackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
-	private OptimiserPackageImpl() {
-		super(eNS_URI, OptimiserFactory.eINSTANCE);
+	private LsoPackageImpl() {
+		super(eNS_URI, LsoFactory.eINSTANCE);
 	}
 
 	/**
@@ -104,7 +100,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 * 
-	 * <p>This method is used to initialize {@link OptimiserPackage#eINSTANCE} when that field is accessed.
+	 * <p>This method is used to initialize {@link LsoPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -113,11 +109,11 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
-	public static OptimiserPackage init() {
-		if (isInited) return (OptimiserPackage)EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI);
+	public static LsoPackage init() {
+		if (isInited) return (LsoPackage)EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI);
 
 		// Obtain or create and register package
-		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new OptimiserPackageImpl());
+		LsoPackageImpl theLsoPackage = (LsoPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof LsoPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new LsoPackageImpl());
 
 		isInited = true;
 
@@ -129,9 +125,10 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
 		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
+		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
 
 		// Create package meta-data objects
-		theOptimiserPackage.createPackageContents();
+		theLsoPackage.createPackageContents();
 		theScenarioPackage.createPackageContents();
 		theFleetPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
@@ -139,9 +136,10 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
 		theMarketPackage.createPackageContents();
+		theOptimiserPackage.createPackageContents();
 
 		// Initialize created meta-data
-		theOptimiserPackage.initializePackageContents();
+		theLsoPackage.initializePackageContents();
 		theScenarioPackage.initializePackageContents();
 		theFleetPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
@@ -149,68 +147,15 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
 		theMarketPackage.initializePackageContents();
+		theOptimiserPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
-		theOptimiserPackage.freeze();
+		theLsoPackage.freeze();
 
   
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(OptimiserPackage.eNS_URI, theOptimiserPackage);
-		return theOptimiserPackage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getOptimisationSettings() {
-		return optimisationSettingsEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getOptimisationSettings_Name() {
-		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getOptimisationSettings_RandomSeed() {
-		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getOptimisation() {
-		return optimisationEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptimisation_AllSettings() {
-		return (EReference)optimisationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptimisation_CurrentSettings() {
-		return (EReference)optimisationEClass.getEStructuralFeatures().get(1);
+		EPackage.Registry.INSTANCE.put(LsoPackage.eNS_URI, theLsoPackage);
+		return theLsoPackage;
 	}
 
 	/**
@@ -236,8 +181,8 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getLSOSettings_StepSize() {
-		return (EAttribute)lsoSettingsEClass.getEStructuralFeatures().get(1);
+	public EReference getLSOSettings_ThresholderSettings() {
+		return (EReference)lsoSettingsEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -245,8 +190,8 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getLSOSettings_InitialThreshold() {
-		return (EAttribute)lsoSettingsEClass.getEStructuralFeatures().get(2);
+	public EClass getThresholderSettings() {
+		return thresholderSettingsEClass;
 	}
 
 	/**
@@ -254,8 +199,35 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public OptimiserFactory getOptimiserFactory() {
-		return (OptimiserFactory)getEFactoryInstance();
+	public EAttribute getThresholderSettings_Alpha() {
+		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getThresholderSettings_InitialAcceptanceRate() {
+		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getThresholderSettings_EpochLength() {
+		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LsoFactory getLsoFactory() {
+		return (LsoFactory)getEFactoryInstance();
 	}
 
 	/**
@@ -277,18 +249,14 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		isCreated = true;
 
 		// Create classes and their features
-		optimisationSettingsEClass = createEClass(OPTIMISATION_SETTINGS);
-		createEAttribute(optimisationSettingsEClass, OPTIMISATION_SETTINGS__NAME);
-		createEAttribute(optimisationSettingsEClass, OPTIMISATION_SETTINGS__RANDOM_SEED);
-
-		optimisationEClass = createEClass(OPTIMISATION);
-		createEReference(optimisationEClass, OPTIMISATION__ALL_SETTINGS);
-		createEReference(optimisationEClass, OPTIMISATION__CURRENT_SETTINGS);
-
 		lsoSettingsEClass = createEClass(LSO_SETTINGS);
 		createEAttribute(lsoSettingsEClass, LSO_SETTINGS__NUMBER_OF_STEPS);
-		createEAttribute(lsoSettingsEClass, LSO_SETTINGS__STEP_SIZE);
-		createEAttribute(lsoSettingsEClass, LSO_SETTINGS__INITIAL_THRESHOLD);
+		createEReference(lsoSettingsEClass, LSO_SETTINGS__THRESHOLDER_SETTINGS);
+
+		thresholderSettingsEClass = createEClass(THRESHOLDER_SETTINGS);
+		createEAttribute(thresholderSettingsEClass, THRESHOLDER_SETTINGS__ALPHA);
+		createEAttribute(thresholderSettingsEClass, THRESHOLDER_SETTINGS__INITIAL_ACCEPTANCE_RATE);
+		createEAttribute(thresholderSettingsEClass, THRESHOLDER_SETTINGS__EPOCH_LENGTH);
 	}
 
 	/**
@@ -314,26 +282,25 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		OptimiserPackage theOptimiserPackage = (OptimiserPackage)EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		lsoSettingsEClass.getESuperTypes().add(this.getOptimisationSettings());
+		lsoSettingsEClass.getESuperTypes().add(theOptimiserPackage.getOptimisationSettings());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(optimisationSettingsEClass, OptimisationSettings.class, "OptimisationSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getOptimisationSettings_Name(), ecorePackage.getEString(), "name", null, 0, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getOptimisationSettings_RandomSeed(), ecorePackage.getELong(), "randomSeed", null, 0, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(optimisationEClass, Optimisation.class, "Optimisation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getOptimisation_AllSettings(), this.getOptimisationSettings(), null, "allSettings", null, 0, 1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptimisation_CurrentSettings(), this.getOptimisationSettings(), null, "currentSettings", null, 0, 1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(lsoSettingsEClass, LSOSettings.class, "LSOSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLSOSettings_NumberOfSteps(), ecorePackage.getEInt(), "numberOfSteps", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getLSOSettings_StepSize(), ecorePackage.getEInt(), "stepSize", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getLSOSettings_InitialThreshold(), ecorePackage.getEInt(), "initialThreshold", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLSOSettings_ThresholderSettings(), this.getThresholderSettings(), null, "thresholderSettings", null, 1, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(thresholderSettingsEClass, ThresholderSettings.class, "ThresholderSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getThresholderSettings_Alpha(), ecorePackage.getEDouble(), "alpha", "0.95", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getThresholderSettings_InitialAcceptanceRate(), ecorePackage.getEDouble(), "initialAcceptanceRate", "0.75", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getThresholderSettings_EpochLength(), ecorePackage.getEInt(), "epochLength", "1000", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
-} //OptimiserPackageImpl
+} //LsoPackageImpl

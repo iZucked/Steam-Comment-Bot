@@ -4,18 +4,16 @@
  *
  * $Id$
  */
-package scenario.market.util;
+package scenario.optimiser.lso.util;
 
 import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.market.*;
-import scenario.market.ForwardPrice;
-import scenario.market.Market;
-import scenario.market.MarketModel;
-import scenario.market.MarketPackage;
+import scenario.optimiser.OptimisationSettings;
+
+import scenario.optimiser.lso.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,17 +25,17 @@ import scenario.market.MarketPackage;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see scenario.market.MarketPackage
+ * @see scenario.optimiser.lso.LsoPackage
  * @generated
  */
-public class MarketSwitch<T> {
+public class LsoSwitch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static MarketPackage modelPackage;
+	protected static LsoPackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -45,9 +43,9 @@ public class MarketSwitch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MarketSwitch() {
+	public LsoSwitch() {
 		if (modelPackage == null) {
-			modelPackage = MarketPackage.eINSTANCE;
+			modelPackage = LsoPackage.eINSTANCE;
 		}
 	}
 
@@ -91,21 +89,16 @@ public class MarketSwitch<T> {
 	 */
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case MarketPackage.MARKET_MODEL: {
-				MarketModel marketModel = (MarketModel)theEObject;
-				T result = caseMarketModel(marketModel);
+			case LsoPackage.LSO_SETTINGS: {
+				LSOSettings lsoSettings = (LSOSettings)theEObject;
+				T result = caseLSOSettings(lsoSettings);
+				if (result == null) result = caseOptimisationSettings(lsoSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MarketPackage.MARKET: {
-				Market market = (Market)theEObject;
-				T result = caseMarket(market);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MarketPackage.FORWARD_PRICE: {
-				ForwardPrice forwardPrice = (ForwardPrice)theEObject;
-				T result = caseForwardPrice(forwardPrice);
+			case LsoPackage.THRESHOLDER_SETTINGS: {
+				ThresholderSettings thresholderSettings = (ThresholderSettings)theEObject;
+				T result = caseThresholderSettings(thresholderSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -114,47 +107,47 @@ public class MarketSwitch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Model</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>LSO Settings</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>LSO Settings</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMarketModel(MarketModel object) {
+	public T caseLSOSettings(LSOSettings object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Market</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Thresholder Settings</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Market</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Thresholder Settings</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMarket(Market object) {
+	public T caseThresholderSettings(ThresholderSettings object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Forward Price</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Optimisation Settings</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Forward Price</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Optimisation Settings</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseForwardPrice(ForwardPrice object) {
+	public T caseOptimisationSettings(OptimisationSettings object) {
 		return null;
 	}
 
@@ -173,4 +166,4 @@ public class MarketSwitch<T> {
 		return null;
 	}
 
-} //MarketSwitch
+} //LsoSwitch

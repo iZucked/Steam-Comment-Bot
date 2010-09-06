@@ -4,35 +4,35 @@
  *
  * $Id$
  */
-package scenario.market.util;
+package scenario.optimiser.lso.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.market.*;
-import scenario.market.ForwardPrice;
-import scenario.market.Market;
-import scenario.market.MarketModel;
-import scenario.market.MarketPackage;
+import scenario.optimiser.OptimisationSettings;
+
+import scenario.optimiser.lso.*;
 
 /**
  * <!-- begin-user-doc -->
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see scenario.market.MarketPackage
+ * @see scenario.optimiser.lso.LsoPackage
  * @generated
  */
-public class MarketAdapterFactory extends AdapterFactoryImpl {
+public class LsoAdapterFactory extends AdapterFactoryImpl {
 	/**
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static MarketPackage modelPackage;
+	protected static LsoPackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -40,9 +40,9 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MarketAdapterFactory() {
+	public LsoAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = MarketPackage.eINSTANCE;
+			modelPackage = LsoPackage.eINSTANCE;
 		}
 	}
 
@@ -71,19 +71,19 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MarketSwitch<Adapter> modelSwitch =
-		new MarketSwitch<Adapter>() {
+	protected LsoSwitch<Adapter> modelSwitch =
+		new LsoSwitch<Adapter>() {
 			@Override
-			public Adapter caseMarketModel(MarketModel object) {
-				return createMarketModelAdapter();
+			public Adapter caseLSOSettings(LSOSettings object) {
+				return createLSOSettingsAdapter();
 			}
 			@Override
-			public Adapter caseMarket(Market object) {
-				return createMarketAdapter();
+			public Adapter caseThresholderSettings(ThresholderSettings object) {
+				return createThresholderSettingsAdapter();
 			}
 			@Override
-			public Adapter caseForwardPrice(ForwardPrice object) {
-				return createForwardPriceAdapter();
+			public Adapter caseOptimisationSettings(OptimisationSettings object) {
+				return createOptimisationSettingsAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -106,44 +106,44 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.market.MarketModel <em>Model</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.optimiser.lso.LSOSettings <em>LSO Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.market.MarketModel
+	 * @see scenario.optimiser.lso.LSOSettings
 	 * @generated
 	 */
-	public Adapter createMarketModelAdapter() {
+	public Adapter createLSOSettingsAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.market.Market <em>Market</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.optimiser.lso.ThresholderSettings <em>Thresholder Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.market.Market
+	 * @see scenario.optimiser.lso.ThresholderSettings
 	 * @generated
 	 */
-	public Adapter createMarketAdapter() {
+	public Adapter createThresholderSettingsAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.market.ForwardPrice <em>Forward Price</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.optimiser.OptimisationSettings <em>Optimisation Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.market.ForwardPrice
+	 * @see scenario.optimiser.OptimisationSettings
 	 * @generated
 	 */
-	public Adapter createForwardPriceAdapter() {
+	public Adapter createOptimisationSettingsAdapter() {
 		return null;
 	}
 
@@ -159,4 +159,4 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} //MarketAdapterFactory
+} //LsoAdapterFactory

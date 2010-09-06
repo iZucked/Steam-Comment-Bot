@@ -6,15 +6,19 @@
  */
 package scenario.optimiser.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import scenario.optimiser.Optimisation;
 import scenario.optimiser.OptimisationSettings;
 import scenario.optimiser.OptimiserPackage;
@@ -35,14 +39,14 @@ import scenario.optimiser.OptimiserPackage;
  */
 public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	/**
-	 * The cached value of the '{@link #getAllSettings() <em>All Settings</em>}' containment reference.
+	 * The cached value of the '{@link #getAllSettings() <em>All Settings</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAllSettings()
 	 * @generated
 	 * @ordered
 	 */
-	protected OptimisationSettings allSettings;
+	protected EList<OptimisationSettings> allSettings;
 
 	/**
 	 * The cached value of the '{@link #getCurrentSettings() <em>Current Settings</em>}' reference.
@@ -78,42 +82,11 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public OptimisationSettings getAllSettings() {
+	public EList<OptimisationSettings> getAllSettings() {
+		if (allSettings == null) {
+			allSettings = new EObjectContainmentEList<OptimisationSettings>(OptimisationSettings.class, this, OptimiserPackage.OPTIMISATION__ALL_SETTINGS);
+		}
 		return allSettings;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetAllSettings(OptimisationSettings newAllSettings, NotificationChain msgs) {
-		OptimisationSettings oldAllSettings = allSettings;
-		allSettings = newAllSettings;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION__ALL_SETTINGS, oldAllSettings, newAllSettings);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAllSettings(OptimisationSettings newAllSettings) {
-		if (newAllSettings != allSettings) {
-			NotificationChain msgs = null;
-			if (allSettings != null)
-				msgs = ((InternalEObject)allSettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OPTIMISATION__ALL_SETTINGS, null, msgs);
-			if (newAllSettings != null)
-				msgs = ((InternalEObject)newAllSettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OPTIMISATION__ALL_SETTINGS, null, msgs);
-			msgs = basicSetAllSettings(newAllSettings, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION__ALL_SETTINGS, newAllSettings, newAllSettings));
 	}
 
 	/**
@@ -163,7 +136,7 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				return basicSetAllSettings(null, msgs);
+				return ((InternalEList<?>)getAllSettings()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -190,11 +163,13 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				setAllSettings((OptimisationSettings)newValue);
+				getAllSettings().clear();
+				getAllSettings().addAll((Collection<? extends OptimisationSettings>)newValue);
 				return;
 			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
 				setCurrentSettings((OptimisationSettings)newValue);
@@ -212,7 +187,7 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				setAllSettings((OptimisationSettings)null);
+				getAllSettings().clear();
 				return;
 			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
 				setCurrentSettings((OptimisationSettings)null);
@@ -230,7 +205,7 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				return allSettings != null;
+				return allSettings != null && !allSettings.isEmpty();
 			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
 				return currentSettings != null;
 		}
