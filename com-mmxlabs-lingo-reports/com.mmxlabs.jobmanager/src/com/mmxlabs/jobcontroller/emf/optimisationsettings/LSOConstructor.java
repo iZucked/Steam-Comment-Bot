@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import scenario.optimiser.LSOSettings;
+import scenario.optimiser.lso.LSOSettings;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -16,10 +16,12 @@ import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.thresholders.CalibratingGeometricThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.StepThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
@@ -122,13 +124,8 @@ public class LSOConstructor {
 
 		fitnessEvaluator.setFitnessCombiner(combiner);
 
-		// Thresholder params
-		final int initialThreshold = getStepSize() * getNumberOfIterations();
-
-		final StepThresholder thresholder = new StepThresholder();
-		thresholder.setStepSize(getStepSize());
-		thresholder.setInitialThreshold(initialThreshold);
-
+		final IThresholder thresholder = getThresholder();
+		
 		fitnessEvaluator.setThresholder(thresholder);
 
 		fitnessEvaluator.init();
@@ -136,13 +133,16 @@ public class LSOConstructor {
 		return fitnessEvaluator;
 	}
 
-	private Random getRandom() {
-		//TODO is this safe? Should we have a shared random for each part?
-		return new Random(settings.getRandomSeed());
+	private IThresholder getThresholder() {
+		//For now we are just going to generate a self-calibrating thresholder
+		return new CalibratingGeometricThresholder(getRandom(), 
+				settings.getThresholderSettings().getEpochLength(),
+				settings.getThresholderSettings().getInitialAcceptanceRate(), 
+				settings.getThresholderSettings().getAlpha());
 	}
 
-	private int getStepSize() {
-		return settings.getStepSize();
+	private Random getRandom() {
+		return new Random(settings.getRandomSeed());
 	}
 
 	private int getNumberOfIterations() {

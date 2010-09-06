@@ -108,11 +108,14 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 			//hack
 			RandomScenarioUtils utils = new RandomScenarioUtils();
+			//add standard optimiser settings
+			utils.addStandardSettings(scenario);
 
 			if (details.shouldCreateVesselClasses()) {
 				utils.addStandardFleet(scenario);
 				utils.createRandomCargoes(scenario, details.getCargoCount());
 			}
+			
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 			return false;

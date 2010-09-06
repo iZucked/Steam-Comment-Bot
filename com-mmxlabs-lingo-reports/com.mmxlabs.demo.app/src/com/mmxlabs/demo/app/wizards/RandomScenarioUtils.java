@@ -20,8 +20,23 @@ import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
+import scenario.optimiser.Constraint;
+import scenario.optimiser.Objective;
+import scenario.optimiser.Optimisation;
+import scenario.optimiser.OptimiserFactory;
+import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.LsoFactory;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.ThresholderSettings;
 import scenario.port.DistanceLine;
 import scenario.port.Port;
+
+import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
+import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
 /**
  * A class for constructing the EMF representations of random test scenarios
@@ -36,6 +51,66 @@ public class RandomScenarioUtils {
 	}
 	public RandomScenarioUtils() {
 		this(new Random(1));
+	}
+	
+	/**
+	 * Add some stanard optimiser settings to the given scenario
+	 * @param scenario
+	 */
+	void addStandardSettings(Scenario scenario) {
+		final OptimiserFactory of = OptimiserPackage.eINSTANCE.getOptimiserFactory();
+		final LsoFactory lsof = LsoPackage.eINSTANCE.getLsoFactory();
+		
+		Optimisation optimisation = of.createOptimisation();
+		
+		LSOSettings settings = lsof.createLSOSettings();
+		
+		settings.setName("Default LSO Settings");
+		
+		//create constraints
+		{
+			final EList<Constraint> constraints = settings.getConstraints();
+			constraints.add(createConstraint(of, ResourceAllocationConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of, OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of, PortTypeConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of, TravelTimeConstraintCheckerFactory.NAME, true));
+		}
+		
+		//create objectives
+		{
+			final EList<Objective> objectives = settings.getObjectives();
+			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME, 1));
+			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME, 1));
+			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, 1));
+			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
+			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME, 0));
+		}
+		
+		
+		settings.setNumberOfSteps(1000000);
+		ThresholderSettings thresholderSettings = lsof.createThresholderSettings();
+		thresholderSettings.setAlpha(0.95);
+		thresholderSettings.setEpochLength(1000);
+		thresholderSettings.setInitialAcceptanceRate(0.75);
+		settings.setThresholderSettings(thresholderSettings);
+		
+		optimisation.getAllSettings().add(settings);
+		optimisation.setCurrentSettings(settings);
+		scenario.setOptimisation(optimisation);
+	}
+	
+	Constraint createConstraint(OptimiserFactory of, String name, boolean enabled) {
+		Constraint c = of.createConstraint();
+		c.setName(name);
+		c.setEnabled(enabled);
+		return c;
+	}
+	
+	Objective createObjective(OptimiserFactory of, String name, double weight) {
+		Objective o = of.createObjective();
+		o.setName(name);
+		o.setWeight(weight);
+		return o;
 	}
 	
 	void addStandardFleet(Scenario scenario) {
