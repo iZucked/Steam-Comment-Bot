@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.initialsequencebuilder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,10 +8,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -34,10 +37,24 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class ConstrainedInitialSequenceBuilder<T> implements
 		IInitialSequenceBuilder<T> {
+	private List<IPairwiseConstraintChecker<T>> pairwiseCheckers;
 
+	public ConstrainedInitialSequenceBuilder(Collection<IConstraintCheckerFactory> factories) {
+		this.pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker<T>>();
+		for (IConstraintCheckerFactory factory : factories) {
+			IConstraintChecker<T> checker = factory.instantiate();
+			if (checker instanceof IPairwiseConstraintChecker) {
+				pairwiseCheckers.add((IPairwiseConstraintChecker<T>) checker);
+			}
+		}
+	}
+	
+	public ConstrainedInitialSequenceBuilder(List<IPairwiseConstraintChecker<T>> pairwiseCheckers) {
+		this.pairwiseCheckers = pairwiseCheckers;
+	}
+	
 	@Override
-	public ISequences<T> createInitialSequences(IOptimisationData<T> data) {
-		
+	public ISequences<T> createInitialSequences(IOptimisationData<T> data) {	
 		@SuppressWarnings("unchecked")
 		final IPortTypeProvider<T> portTypeProvider = data.getDataComponentProvider(
 				SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
@@ -50,11 +67,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		final IStartEndRequirementProvider<T> startEndRequirementProvider = data.getDataComponentProvider(
 				SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 		
-		@SuppressWarnings("unchecked")
-		final IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_resourceAllocationProvider, IResourceAllocationConstraintDataComponentProvider.class);
-		
-		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(data);
+		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(data, pairwiseCheckers);
 		final Comparator<T> comparator = new Comparator<T>() {
 			@Override
 			public int compare(T o1, T o2) {
@@ -78,10 +91,8 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		for (T element : data.getSequenceElements()) {
 			if (portTypeProvider.getPortType(element).equals(PortType.Start)) continue;
 			orderedElements.add(element);
-			System.err.println("Scheduling " + portSlotProvider.getPortSlot(element));
 		}
 		
-		System.err.println("Sorting...");
 		Collections.sort(orderedElements, comparator);
 		
 		//now construct routes
@@ -100,44 +111,15 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 			while (iterator.hasNext()) {
 				T here = iterator.next();
 				//check whether here can go on this resource
-				Collection<IResource> allocation = resourceAllocationProvider.getAllowedResources(here);
-				if (allocation == null || allocation.contains(resource)) {
-					if (checker.allowSequence(currentElement, here)) {
+//				Collection<IResource> allocation = resourceAllocationProvider.getAllowedResources(here);
+//				if (allocation == null || allocation.contains(resource)) {
+					if (checker.allowSequence(currentElement, here, resource)) {
 						//sequence this element
 						sequence.add(here);
 						currentElement = here;
-						System.err.println("Scheduled " + portSlotProvider.getPortSlot(here));
 						iterator.remove(); //remove from queue
 					}
-				}
-			}
-			
-			if (sequence.size() == 1) {
-				System.err.println("That's weird, I couldn't schedule anything on " + resource.getName() + ". Let's have a look:");
-				iterator = orderedElements.iterator();
-				while (iterator.hasNext()) {
-					T here = iterator.next();
-					//check whether here can go on this resource
-					Collection<IResource> allocation = resourceAllocationProvider.getAllowedResources(here);
-					System.err.println("Allocation = " + allocation);
-					if (allocation != null) {
-						System.err.println("Contains resource: " + allocation.contains(resource));
-					}
-					if (allocation == null || allocation.contains(resource)) {
-						if (checker.allowSequence(currentElement, here)) {
-							//sequence this element
-							sequence.add(here);
-							currentElement = here;
-							System.err.println("Scheduled " + portSlotProvider.getPortSlot(here));
-							iterator.remove(); //remove from queue
-						} else {
-							System.err.println("Cannot schedule " + portSlotProvider.getPortSlot(here) + " after " + portSlotProvider.getPortSlot(currentElement));
-							System.err.println(checker.allowPortTypes(portTypeProvider.getPortType(currentElement), portTypeProvider.getPortType(here)));
-							System.err.println(checker.reachableFrom(currentElement, here, resource));
-							System.err.println(checker.canFollow(currentElement, here));
-						}
-					}
-				}
+//				}
 			}
 		}
 		
@@ -146,7 +128,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 			
 			
 			for (T t : orderedElements) {
-				System.err.println("Unscheduled: " + portSlotProvider.getPortSlot(t));
+				System.err.println("Did not schedule: " + portSlotProvider.getPortSlot(t));
 			}
 			
 			return result;
