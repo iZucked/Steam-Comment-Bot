@@ -63,6 +63,7 @@ public class PortExclusionConstraintChecker<T> implements IConstraintChecker<T> 
 				portExclusionProvider.getExcludedPorts(
 					vesselProvider.getVessel(resources.get(i)).getVesselClass()
 				);
+			if (excludedPorts.isEmpty()) continue;
 			final ISequence<T> sequence = sequences.getSequence(i);
 			for (int j = 0; j<sequence.size(); j++) {
 				if (excludedPorts.contains(portProvider.getPortForElement(sequence.get(j)))) {
@@ -86,6 +87,7 @@ public class PortExclusionConstraintChecker<T> implements IConstraintChecker<T> 
 				portExclusionProvider.getExcludedPorts(
 					vesselProvider.getVessel(resources.get(i)).getVesselClass()
 				);
+			if (excludedPorts.isEmpty()) continue;
 			final ISequence<T> sequence = sequences.getSequence(i);
 			for (int j = 0; j<sequence.size(); j++) {
 				if (excludedPorts.contains(portProvider.getPortForElement(sequence.get(j)))) {
