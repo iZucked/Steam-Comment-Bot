@@ -1,5 +1,6 @@
 package com.mmxlabs.common;
 
+
 /**
  * Utility class to help with equality checks.
  * 
@@ -19,15 +20,11 @@ public final class Equality {
 	 */
 	public static boolean isEqual(final Object a, final Object b) {
 
-		if (a == null && b == null) {
+		if (a == b) {
 			return true;
 		}
 
-		if (a == null && b != null) {
-			return false;
-		}
-
-		if (a != null && b == null) {
+		if (a == null || b == null) {
 			return false;
 		}
 
