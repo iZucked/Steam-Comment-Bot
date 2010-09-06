@@ -147,6 +147,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		
 		//create a massive lookup table, caching all legal sequencing decisions
 		//this might be a terrible idea, we could just keep the checker instead
+		//also need to fix the resource binding now
 		for (T e1 : data.getSequenceElements()) {
 			if (!portTypeProvider.getPortType(e1).equals(PortType.End)) {
 				breakableVertexCount++;

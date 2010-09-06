@@ -3,9 +3,11 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import java.util.Collection;
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -29,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @param <T> Sequence element type
  */
 public final class PortTypeConstraintChecker<T> implements
-		IConstraintChecker<T> {
+		IPairwiseConstraintChecker<T> {
 
 	private final String name;
 
@@ -194,5 +196,26 @@ public final class PortTypeConstraintChecker<T> implements
 
 	public void setPortTypeProvider(IPortTypeProvider<T> portTypeProvider) {
 		this.portTypeProvider = portTypeProvider;
+	}
+
+	@Override
+	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+		final PortType firstType = portTypeProvider.getPortType(first);
+		final PortType secondType = portTypeProvider.getPortType(second);
+		
+		//check the legality of this sequencing decision
+		//End can't come before anything and Start can't come after anything
+		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start)) return false;
+		
+		if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) return false; //first port should be a load slot (TODO is this true?)
+		
+		//load must precede discharge or waypoint, but nothing else
+		if (firstType.equals(PortType.Load)) return (secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint));
+		
+		//discharge may precede anything but Discharge (and start, but we already did that)
+		if (firstType.equals(PortType.Discharge) &&
+				secondType.equals(PortType.Discharge)) return false; 
+		
+		return true;
 	}
 }

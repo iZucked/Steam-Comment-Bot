@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 public final class PortTypeConstraintCheckerFactory implements
 		IConstraintCheckerFactory {
 
-	private static final String name = "PortTypeConstraintChecker";
+	public static final String NAME = "PortTypeConstraintChecker";
 
 	private final String key;
 
@@ -31,11 +31,11 @@ public final class PortTypeConstraintCheckerFactory implements
 
 	@Override
 	public String getName() {
-		return name;
+		return NAME;
 	}
 
 	@Override
 	public <T> IConstraintChecker<T> instantiate() {
-		return new PortTypeConstraintChecker<T>(name, key);
+		return new PortTypeConstraintChecker<T>(NAME, key);
 	}
 }
