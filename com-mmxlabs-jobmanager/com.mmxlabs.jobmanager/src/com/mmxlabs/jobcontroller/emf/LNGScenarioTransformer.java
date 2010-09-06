@@ -301,12 +301,12 @@ public class LNGScenarioTransformer {
 		Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<VesselClass, IVesselClass>();
 
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
-			//TODO check whether price units need converting up from dollars
 			IVesselClass vc = builder.createVesselClass(eVc.getName(), 
 					Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()), 
 					Calculator.scale(eVc.getCapacity() * eVc.getFillCapacity()), // TODO is capacity mean to be scaled?
 					Calculator.scaleToInt(eVc.getMinHeelVolume()),
 					eVc.getBaseFuelUnitPrice(),
+					Calculator.scaleToInt(eVc.getBaseFuelEquivalenceFactor()),
 					eVc.getDailyCharterPrice() * 24);
 			vesselClassAssociation.add(eVc, vc);
 

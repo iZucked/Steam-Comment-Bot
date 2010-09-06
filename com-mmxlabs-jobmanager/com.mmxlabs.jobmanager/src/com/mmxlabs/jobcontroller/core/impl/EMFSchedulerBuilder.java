@@ -219,15 +219,16 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IVesselClass createVesselClass(final String name,
 			final int minSpeed, final int maxSpeed, final long capacity,
-			final int minHeel, int baseFuelUnitPrice) {
+			final int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceFactor) {
 
 		final IVesselClass vesselClass = delegate.createVesselClass(name,
-				minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice);
+				minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice, baseFuelEquivalenceFactor);
 
 		scenario.fleet.VesselClass eVesselClass = FleetFactory.eINSTANCE
 				.createVesselClass();
 		eVesselClass.setName(name);
 		eVesselClass.setBaseFuelUnitPrice(baseFuelUnitPrice);
+		eVesselClass.setBaseFuelEquivalenceFactor(baseFuelEquivalenceFactor);
 		eVesselClass.setCapacity(capacity);
 		eVesselClass.setMinSpeed(minSpeed);
 		eVesselClass.setMaxSpeed(maxSpeed);
@@ -300,10 +301,9 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVesselClass createVesselClass(String name, int minSpeed,
-			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice,
+			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceFactor,
 			int hourlyCharterPrice) {
-		//TODO fix charter price
-		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice);
+		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice, baseFuelEquivalenceFactor);
 	}
 
 	@Override
