@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.builder;
 
+import java.util.List;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -221,6 +223,23 @@ public interface ISchedulerBuilder {
 	 */
 	void dispose();
 
+	/**
+	 * Create {@code count} spot charter vessels of the given type. The ith vessel will be named namePrefix-i. 
+	 * The vessels are created by the {@code createVessel()} method.
+	 * @param namePrefix the common prefix for all these vessels' names
+	 * @param vesselClass the class of spot charter to create
+	 * @param count the number of spot charters to create
+	 * @return
+	 */
+	List<IVessel> createSpotVessels(String namePrefix,
+			IVesselClass vesselClass, int count);
 
-
+	/**
+	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
+	 * {@code createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, createStartEndRequirement(), createStartEndRequirement())}.
+	 * @param name
+	 * @param vesselClass
+	 * @return
+	 */
+	IVessel createSpotVessel(String name, IVesselClass vesselClass);
 }

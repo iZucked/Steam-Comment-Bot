@@ -335,9 +335,41 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return window;
 	}
 
+	@Override
 	public IVessel createVessel(final String name, final IVesselClass vesselClass, final IStartEndRequirement start,
 			final IStartEndRequirement end) {
 		return this.createVessel(name, vesselClass, VesselInstanceType.FLEET, start, end);
+	}
+	
+	/**
+	 * Create several spot vessels (see also {@code createSpotVessel}), named like namePrefix-1, namePrefix-2, etc
+	 * @param namePrefix
+	 * @param vesselClass
+	 * @param count
+	 * @return
+	 */
+	@Override
+	public List<IVessel> createSpotVessels(final String namePrefix, final IVesselClass vesselClass, int count) {
+		List<IVessel> answer = new ArrayList<IVessel>(count);
+		for (int i = 0; i<count; i++) {
+			answer.add(createSpotVessel(namePrefix + "-" + (i+1), vesselClass));
+		}
+		return answer;
+	}
+	
+	
+	/**
+	 * Create a spot charter vessel with no fixed start/end requirements and vessel instance type SPOT_CHARTER
+	 * @param name
+	 * @param vesselClass
+	 * @return the spot vessel
+	 */
+	@Override
+	public IVessel createSpotVessel(final String name, final IVesselClass vesselClass) {
+		IStartEndRequirement start = createStartEndRequirement();
+		IStartEndRequirement end = createStartEndRequirement();
+		
+		return createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, start, end);
 	}
 	
 	@Override
