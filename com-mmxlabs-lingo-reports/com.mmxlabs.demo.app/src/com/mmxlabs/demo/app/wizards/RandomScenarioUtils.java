@@ -120,24 +120,27 @@ public class RandomScenarioUtils {
 		VesselClass class3 = addVesselClass(scenario, "DFDE-177", 12, 20, 177000, 200);
 		VesselClass class4 = addVesselClass(scenario, "STEAM-126", 12, 19.5f, 138000, 200); //TODO units in the model; should it be a float?
 		
-		//TODO 0,0 points are fake
+		//TODO 0,0 points are fake, to make boiloff numbers fit in the curve.
 		float[][] steam = new float[][] {{0, 0}, {12, 12}, {20, 20}};
 		float[][] dfde = new float[][] {{0, 0}, {12, 8}, {20, 16}};
 		
 		//create class parameters; currently model uses containment for curves, so we need to do duplicates
 		class1.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 138/24.0f, 118/24.0f, 10/24.0f, steam));
 		class1.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 138/24.0f, 118/24.0f, 10/24.0f, steam));
-		
+		class1.setBaseFuelEquivalenceFactor(0.5);
 		
 		
 		class2.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 145/24.0f, 125/24.0f, 10/24.0f, steam));
 		class2.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 145/24.0f, 125/24.0f, 10/24.0f, steam));
+		class2.setBaseFuelEquivalenceFactor(0.5);
 		
 		class3.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 177/24.0f, 157/24.0f, 10/24.0f, dfde));
 		class3.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 177/24.0f, 157/24.0f, 10/24.0f, dfde));
+		class3.setBaseFuelEquivalenceFactor(0.5);
 		
 		class4.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 126/24.0f, 106/24.0f, 10/24.0f, steam));
 		class4.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 125/24.0f, 106/24.0f, 10/24.0f, steam));
+		class4.setBaseFuelEquivalenceFactor(0.5);
 		
 		class1.setSpotCharterCount(3);
 		class2.setSpotCharterCount(3);
