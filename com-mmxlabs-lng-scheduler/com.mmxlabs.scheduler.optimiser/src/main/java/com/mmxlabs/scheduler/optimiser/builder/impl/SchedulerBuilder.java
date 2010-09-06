@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -52,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.StartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
+import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
@@ -59,6 +61,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEdi
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
@@ -127,6 +130,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * A field for tracking the time at which the last time window closes
 	 */
 	private int endOfLatestWindow = 0;
+
+	private IPortExclusionProviderEditor portExclusionProvider;
 	
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
@@ -151,6 +156,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		startEndRequirementProvider = new HashMapStartEndRequirementEditor<ISequenceElement>(
 				SchedulerConstants.DCP_startEndRequirementProvider);
+		
+		portExclusionProvider = new HashMapPortExclusionProvider(
+				SchedulerConstants.DCP_portExclusionProvider);
 		
 		// Create a default matrix entry
 		portDistanceProvider.set(IMultiMatrixProvider.Default_Key,
@@ -681,5 +689,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		//TODO there is something stupid going on with units here.
 		final int nboSpeed = consumptionCalculator.getSpeed(nboRate);
 		this.setVesselClassStateParamaters(vc, state, nboRate, idleNBORate, idleConsumptionRate, consumptionCalculator, nboSpeed);
+	}
+
+	@Override
+	public void setVesselClassInaccessiblePorts(IVesselClass vc,
+			Set<IPort> inaccessiblePorts) {
+		this.portExclusionProvider.setExcludedPorts(vc, inaccessiblePorts);
 	}
 }

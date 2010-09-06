@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.builder;
 
 import java.util.List;
+import java.util.Set;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
@@ -243,6 +244,9 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVessel createSpotVessel(String name, IVesselClass vesselClass);
+
+	void setVesselClassInaccessiblePorts(IVesselClass vc,
+			Set<IPort> inaccessiblePorts);
 
 
 }
