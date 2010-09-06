@@ -3,7 +3,9 @@ package com.mmxlabs.jobcontroller.emf.optimisationsettings;
 import java.util.ArrayList;
 import java.util.List;
 
-import scenario.optimiser.LSOSettings;
+import scenario.optimiser.Constraint;
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.Objective;
 import scenario.optimiser.OptimisationSettings;
 
 import com.mmxlabs.common.Pair;
@@ -20,6 +22,8 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
@@ -41,8 +45,8 @@ public class OptimisationTransformer {
 		ISequences<ISequenceElement> sequences = createInitialSequences(data);
 		IConstraintCheckerRegistry checkerRegistry = createConstraintCheckerRegistry();
 		IFitnessFunctionRegistry componentRegistry = createFitnessFunctionRegistry();
-		List<String> checkers = createConstraintCheckerList(checkerRegistry);
-		List<String> components = createFitnessComponentList(componentRegistry);
+		List<String> checkers = getEnabledConstraintNames();
+		List<String> components = getEnabledFitnessFunctionNames();
 		return new OptimisationContext<ISequenceElement>(data, sequences, components, componentRegistry, checkers, checkerRegistry);
 	}
 
@@ -55,16 +59,32 @@ public class OptimisationTransformer {
 			(context, lsoConstructor.buildOptimiser(context));
 	}
 	
-	public List<String> createFitnessComponentList(IFitnessFunctionRegistry registry) {
-		return new ArrayList<String>(registry.getFitnessComponentNames());
+	private List<String> getEnabledConstraintNames() {
+		List<String> result = new ArrayList<String>();
+		
+		for (Constraint c : settings.getConstraints()) {
+			if (c.isEnabled()) {
+				result.add(c.getName());
+			}
+		}
+		
+		return result;
 	}
-
-	public List<String> createConstraintCheckerList(IConstraintCheckerRegistry registry) {
-		return new ArrayList<String>(registry.getConstraintCheckerNames());
+	
+	private List<String> getEnabledFitnessFunctionNames() {
+		List<String> result = new ArrayList<String>();
+		
+		for (Objective o : settings.getObjectives()) {
+			if (o.getWeight() > 0) {
+				result.add(o.getName());
+			}
+		}
+		
+		return result;	
 	}
 
 	/**
-	 * Creates a fitness function registry; currently doesn't use the settings
+	 * Creates a fitness function registry
 	 * @param data
 	 * @return
 	 */
@@ -78,7 +98,7 @@ public class OptimisationTransformer {
 	}
 
 	/**
-	 * Creates a constraint checker registry; ideally will use the EMF to decide which constraints are enabled, but currently just turns on the standard ones.
+	 * Creates a constraint checker registry
 	 * @param data
 	 * @return
 	 */
@@ -97,6 +117,12 @@ public class OptimisationTransformer {
 					.registerConstraintCheckerFactory(constraintFactory);
 		}
 
+		constraintRegistry.registerConstraintCheckerFactory(
+				new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider));
+		
+		constraintRegistry.registerConstraintCheckerFactory(
+				new TravelTimeConstraintCheckerFactory());
+		
 		return constraintRegistry;
 	}
 
@@ -107,8 +133,14 @@ public class OptimisationTransformer {
 	 */
 	public ISequences<ISequenceElement> createInitialSequences(
 			IOptimisationData<ISequenceElement> data) {
-		IInitialSequenceBuilder<ISequenceElement> builder = new ConstrainedInitialSequenceBuilder<ISequenceElement>();
-		//TODO add a parameter for this to the model, if we create some better initial schedule builders
+		//Create the sequenced constraint checkers here
+		IConstraintCheckerRegistry registry = createConstraintCheckerRegistry();
+		
+		IInitialSequenceBuilder<ISequenceElement> builder = 
+			new ConstrainedInitialSequenceBuilder<ISequenceElement>(
+				registry.getConstraintCheckerFactories(getEnabledConstraintNames())		
+			);
+
 		return builder.createInitialSequences(data);
 	}
 	
