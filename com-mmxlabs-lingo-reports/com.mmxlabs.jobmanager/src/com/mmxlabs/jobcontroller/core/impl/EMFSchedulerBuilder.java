@@ -6,7 +6,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
@@ -18,6 +20,7 @@ import scenario.contract.ContractFactory;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetModel;
 import scenario.market.MarketFactory;
+import scenario.port.Port;
 import scenario.port.PortFactory;
 import scenario.schedule.ScheduleFactory;
 
@@ -383,5 +386,15 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		IStartEndRequirement end = createStartEndRequirement();
 		
 		return createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, start, end);
+	}
+
+	@Override
+	public void setVesselClassInaccessiblePorts(IVesselClass vc,
+			Set<IPort> inaccessiblePorts) {
+		delegate.setVesselClassInaccessiblePorts(vc, inaccessiblePorts);
+		EList<Port> ports = eVesselClasses.get(vc).getInaccessiblePorts();
+		for (IPort port : inaccessiblePorts) {
+			ports.add(ePorts.get(port));
+		}
 	}
 }
