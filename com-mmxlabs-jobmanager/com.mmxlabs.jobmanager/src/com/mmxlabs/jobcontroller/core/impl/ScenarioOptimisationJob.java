@@ -531,7 +531,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					elements.add(e);
 				}
 
-				annotator.annonateFromVoyagePlan(resource, plans,
+				annotator.annotateFromVoyagePlan(resource, plans,
 						annotatedSequence);
 
 				solution.setAnnotatedSequence(resource, annotatedSequence);
