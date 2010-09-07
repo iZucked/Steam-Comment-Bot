@@ -49,57 +49,59 @@ public class PortExclusionConstraintChecker<T> implements IPairwiseConstraintChe
 		return name;
 	}
 
+	public boolean checkSequence(ISequence<T> sequence, IResource resource) {
+		return checkSequence(sequence, resource, null);
+	}
+	
+	public boolean checkSequence(ISequence<T> sequence, IResource resource, List<String> messages) {
+		if (portExclusionProvider.hasNoExclusions()) return true;
+		
+		final Set<IPort> excludedPorts = 
+			portExclusionProvider.getExcludedPorts(
+				vesselProvider.getVessel(resource).getVesselClass()
+			);
+		
+		if (excludedPorts.isEmpty()) return true;
+		boolean valid = true;
+		for (int j = 0; j<sequence.size(); j++) {
+			if (excludedPorts.contains(portProvider.getPortForElement(sequence.get(j)))) {
+				if (messages == null) {
+					return false; //fail fast.
+				} else {
+					messages.add("Vessel " + vesselProvider.getVessel(resource).getName() + " is excluded from port " + 
+							portProvider.getPortForElement(sequence.get(j)).getName());
+					valid = false;
+				}
+			}
+		}
+		return valid || messages.isEmpty();
+	}
+	
 	/*
 	 * This is a fail-fast version of the method below
 	 */
 	@Override
 	public boolean checkConstraints(ISequences<T> sequences) {
-		if (portExclusionProvider.hasNoExclusions()) return true;
-		final List<IResource> resources = sequences.getResources();
-		
-		for (int i = 0; i<sequences.size(); i++) {
-			final Set<IPort> excludedPorts = 
-				portExclusionProvider.getExcludedPorts(
-					vesselProvider.getVessel(resources.get(i)).getVesselClass()
-				);
-			if (excludedPorts.isEmpty()) continue;
-			final ISequence<T> sequence = sequences.getSequence(i);
-			for (int j = 0; j<sequence.size(); j++) {
-				if (excludedPorts.contains(portProvider.getPortForElement(sequence.get(j)))) {
-					return false;
-				}
-			}
-		}
-		
-		return true;
+		return checkConstraints(sequences, null);
 	}
 
 	@Override
 	public boolean checkConstraints(ISequences<T> sequences,
 			List<String> messages) {
-		if (messages == null)
-			return checkConstraints(sequences);
-		
 		if (portExclusionProvider.hasNoExclusions()) return true;
-		
 		final List<IResource> resources = sequences.getResources();
+	
 		boolean valid = true;
+		
 		for (int i = 0; i<sequences.size(); i++) {
-			final Set<IPort> excludedPorts = 
-				portExclusionProvider.getExcludedPorts(
-					vesselProvider.getVessel(resources.get(i)).getVesselClass()
-				);
-			if (excludedPorts.isEmpty()) continue;
-			final ISequence<T> sequence = sequences.getSequence(i);
-			for (int j = 0; j<sequence.size(); j++) {
-				if (excludedPorts.contains(portProvider.getPortForElement(sequence.get(j)))) {
-					messages.add("Vessel " + resources.get(i).getName() + " cannot visit port " +
-							portProvider.getPortForElement(sequence.get(j)).getName());
+			if (!checkSequence(sequences.getSequence(i), resources.get(i), messages)) {
+				if (messages == null)
+					return false;
+				else
 					valid = false;
-				}
-				
 			}
 		}
+		
 		return valid;
 	}
 
@@ -137,13 +139,14 @@ public class PortExclusionConstraintChecker<T> implements IPairwiseConstraintChe
 
 	@Override
 	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+		if (portExclusionProvider.hasNoExclusions()) return true;
+		
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final Set<IPort> exclusions = portExclusionProvider.getExcludedPorts(vessel.getVesselClass());
 		
-		if (exclusions.isEmpty()) return false;
+		if (exclusions.isEmpty()) return true;
 		
-		return exclusions.contains(portProvider.getPortForElement(first)) ||
-			exclusions.contains(portProvider.getPortForElement(second));
+		return !(exclusions.contains(portProvider.getPortForElement(first)) ||
+			exclusions.contains(portProvider.getPortForElement(second)));
 	}
-
 }
