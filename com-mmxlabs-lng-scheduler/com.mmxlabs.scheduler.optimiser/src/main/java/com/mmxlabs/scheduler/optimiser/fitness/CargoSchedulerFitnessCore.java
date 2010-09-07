@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -174,15 +175,18 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		this.data = data;
 
-		// TODO: getter/setters should provide these e.g. use factory to
-		// populate
-		scheduler = createSequenceScheduler();
-		VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
+
+		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
 		vpa.setPortSlotProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portSlotsProvider,
 				IPortSlotProvider.class));
 
 		voyagePlanAnnotator = vpa;
+
+
+		// TODO: getter/setters should provide these e.g. use factory to
+		// populate
+		scheduler = createSimpleSequenceScheduler();
 
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
@@ -209,7 +213,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private ISequenceScheduler<T> createSequenceScheduler() {
+	private ISequenceScheduler<T> createSimpleSequenceScheduler() {
 		final SimpleSequenceScheduler<T> scheduler = new SimpleSequenceScheduler<T>();
 
 		scheduler.setDistanceProvider(data.getDataComponentProvider(
@@ -234,8 +238,11 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
 
 		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
-
-		scheduler.setVoyageCalculator(voyageCalculator);
+		
+		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
+		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+		
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
 		scheduler.init();
 

@@ -20,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
@@ -50,11 +49,13 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
-	ILNGVoyageCalculator<T> voyageCalculator;
+	private IVoyagePlanOptimiser<T> voyagePlanOptimiser;
 
 	@Override
 	public List<IVoyagePlan> schedule(final IResource resource,
 			final ISequence<T> sequence) {
+
+		// int[] arrivalTimes = new int[sequence.size()];
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
@@ -75,10 +76,10 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 		PortType prevPortType = null;
 		VesselState vesselState = VesselState.Ballast;
 
-		VoyagePlanOptimiser<T> optimiser = new VoyagePlanOptimiser<T>();
-		optimiser.setVessel(vessel);
-		optimiser.setVoyageCalculator(voyageCalculator);
+		voyagePlanOptimiser.setVessel(vessel);
 
+		
+		boolean useNBO = false;
 		for (final T element : sequence) {
 			final List<ITimeWindow> timeWindows = timeWindowProvider
 					.getTimeWindows(element);
@@ -99,14 +100,17 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 					IMultiMatrixProvider.Default_Key).get(prevPort, thisPort);
 
 			if (prevPort != null) {
+				
+				if (prevPortType == PortType.Load) {
+					useNBO = true;
+				}
+				
 				final int availableTime = Math.max(0, timeWindowStart
 						- estimatedTime);
 
 				// TODO: Populate this value from somewhere
 				final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(
 						vesselState);
-
-				boolean useNBO = prevPortType != PortType.Other;
 
 				final VoyageOptions options = new VoyageOptions();
 				options.setDistance(distance);
@@ -123,6 +127,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				options.setUseNBOForIdle(false);
 				options.setRoute(IMultiMatrixProvider.Default_Key);
 
+				// Enable choices only if NBO could be available.
 				if (useNBO) {
 					// Note ordering of choices is important = NBO must be set
 					// before FBO and Idle choices, otherwise if NBO choice is
@@ -130,42 +135,24 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 					// NBO
 
 					if (vesselState == VesselState.Ballast) {
-						optimiser.addChoice(new NBOTravelVoyagePlanChoice(
-								options));
+						voyagePlanOptimiser
+								.addChoice(new NBOTravelVoyagePlanChoice(
+										options));
 					}
 
-					optimiser.addChoice(new FBOVoyagePlanChoice(options));
+					voyagePlanOptimiser.addChoice(new FBOVoyagePlanChoice(
+							options));
 
-					optimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
+					voyagePlanOptimiser.addChoice(new IdleNBOVoyagePlanChoice(
+							options));
 				}
 
-				optimiser.addChoice(new RouteVoyagePlanChoice(options,
-						distanceProvider.getKeys(), distanceProvider));
-
-				// final VoyageDetails<T> voyageDetails = new
-				// VoyageDetails<T>();
-				// voyageDetails.setStartTime(currentTime);
-				// voyageDetails.setOptions(options);
-				//
-				// voyageCalculator.calculateVoyageFuelRequirements(options,
-				// voyageDetails);
+				// TODO: Check number of keys before adding choice
+				voyagePlanOptimiser.addChoice(new RouteVoyagePlanChoice(
+						options, distanceProvider.getKeys(), distanceProvider));
 
 				currentSequence.add(options);
 
-				// // Take voyage details time as this can be larger than
-				// available
-				// // time e.g. due to reaching max speed.
-				// int duration = voyageDetails.getTravelTime()
-				// + voyageDetails.getIdleTime();
-				//
-				// assert duration >= availableTime;
-				//
-				// // TODO: For JMock tests, the voyage calculator is mocked and
-				// so
-				// // does not set any values in voyage details. So we use max
-				// to
-				// // cover up this problem.
-				// currentTime += Math.max(availableTime, duration);
 				estimatedTime += availableTime;
 			}
 
@@ -182,31 +169,42 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			final PortType portType = portTypeProvider.getPortType(element);
 			if (currentSequence.size() > 1 && portType == PortType.Load) {
 
-				optimiser.setBasicSequence(currentSequence);
-				optimiser.init();
-				IVoyagePlan currentPlan = optimiser.optimise();
+				voyagePlanOptimiser.setBasicSequence(currentSequence);
+				voyagePlanOptimiser.init();
+				IVoyagePlan currentPlan = voyagePlanOptimiser.optimise();
+				
+				// Reset useNBO flag
+				useNBO = false;
+				
+				if (currentPlan == null) {
+					// Unable to schedule.
+
+					// TODO: Throw exception? Log error?
+					return null;
+				}
+
+				assert currentPlan.getSequence() != null;
 
 				// TODO: set arrival times
-
-				for (Object obj : currentPlan.getSequence()) {
+				for (final Object obj : currentPlan.getSequence()) {
 					if (obj instanceof IPortDetails) {
-						IPortDetails details = (IPortDetails) obj;
+						final IPortDetails details = (IPortDetails) obj;
 						details.setStartTime(currentTime);
 
 						// Set current time to after this element has finished
 						currentTime += details.getVisitDuration();
-						;
 
 					} else if (obj instanceof IVoyageDetails) {
-						IVoyageDetails details = (IVoyageDetails) obj;
+						@SuppressWarnings({ "rawtypes", "unchecked" })
+						final IVoyageDetails<T> details = (IVoyageDetails) obj;
 
 						details.setStartTime(currentTime);
 
-						int availableTime = details.getOptions()
+						final int availableTime = details.getOptions()
 								.getAvailableTime();
 						// Take voyage details time as this can be larger than
 						// available time e.g. due to reaching max speed.
-						int duration = details.getTravelTime()
+						final int duration = details.getTravelTime()
 								+ details.getIdleTime();
 
 						assert duration >= availableTime;
@@ -230,8 +228,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				currentPlan = new VoyagePlan();
 				currentSequence.add(portDetails);
 
-				// TODO: Add a reset method?
-				optimiser.reset();
+				voyagePlanOptimiser.reset();
 			}
 
 			estimatedTime += visitDuration;
@@ -253,41 +250,38 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
 		// Populate final plan details
 		if (!currentSequence.isEmpty()) {
-			optimiser.setBasicSequence(currentSequence);
-			optimiser.init();
-			IVoyagePlan currentPlan = optimiser.optimise();
+			voyagePlanOptimiser.setBasicSequence(currentSequence);
+			voyagePlanOptimiser.init();
+			final IVoyagePlan currentPlan = voyagePlanOptimiser.optimise();
 
 			// TODO: set arrival times
 
-			for (Object obj : currentPlan.getSequence()) {
+			for (final Object obj : currentPlan.getSequence()) {
 				if (obj instanceof IPortDetails) {
-					IPortDetails details = (IPortDetails) obj;
+					final IPortDetails details = (IPortDetails) obj;
 					details.setStartTime(currentTime);
 
 					// Set current time to after this element has finished
 					currentTime += details.getVisitDuration();
-					;
 
 				} else if (obj instanceof IVoyageDetails) {
-					IVoyageDetails details = (IVoyageDetails) obj;
+					@SuppressWarnings({ "unchecked", "rawtypes" })
+					final IVoyageDetails<T> details = (IVoyageDetails) obj;
 
 					details.setStartTime(currentTime);
 
-					int availableTime = details.getOptions().getAvailableTime();
+					final int availableTime = details.getOptions()
+							.getAvailableTime();
 					// Take voyage details time as this can be larger than
-					// available
-					// time e.g. due to reaching max speed.
-					int duration = details.getTravelTime()
+					// available time e.g. due to reaching max speed.
+					final int duration = details.getTravelTime()
 							+ details.getIdleTime();
 
 					assert duration >= availableTime;
 
 					// TODO: For JMock tests, the voyage calculator is mocked
-					// and
-					// so
-					// does not set any values in voyage details. So we use max
-					// to
-					// cover up this problem.
+					// and so does not set any values in voyage details. So we
+					// use max to cover up this problem.
 					currentTime += Math.max(availableTime, duration);
 
 				} else {
@@ -297,8 +291,8 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				}
 			}
 			voyagePlans.add(currentPlan);
+			voyagePlanOptimiser.reset();
 		}
-		optimiser.dispose();
 
 		return voyagePlans;
 	}
@@ -338,35 +332,6 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 		this.distanceProvider = distanceProvider;
 	}
 
-	public void init() {
-
-		// Verify that everything is in place
-		if (portProvider == null) {
-			throw new IllegalStateException("No port provider set");
-		}
-		if (portSlotProvider == null) {
-			throw new IllegalStateException("No port slot provider set");
-		}
-		if (portTypeProvider == null) {
-			throw new IllegalStateException("No port type provider set");
-		}
-		if (distanceProvider == null) {
-			throw new IllegalStateException("No port distance provider set");
-		}
-		if (timeWindowProvider == null) {
-			throw new IllegalStateException("No time window provider set");
-		}
-		if (durationsProvider == null) {
-			throw new IllegalStateException("No port durations provider set");
-		}
-		if (vesselProvider == null) {
-			throw new IllegalStateException("No vessel provider set");
-		}
-		if (voyageCalculator == null) {
-			throw new IllegalStateException("No voyage calculator set");
-		}
-	}
-
 	public IPortSlotProvider<T> getPortSlotProvider() {
 		return portSlotProvider;
 	}
@@ -391,15 +356,45 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 		this.vesselProvider = vesselProvider;
 	}
 
-	public ILNGVoyageCalculator<T> getVoyageCalculator() {
-		return voyageCalculator;
+	public IVoyagePlanOptimiser<T> getVoyagePlanOptimiser() {
+		return voyagePlanOptimiser;
 	}
 
-	public void setVoyageCalculator(
-			final ILNGVoyageCalculator<T> voyageCalculator) {
-		this.voyageCalculator = voyageCalculator;
+	public void setVoyagePlanOptimiser(
+			final IVoyagePlanOptimiser<T> voyagePlanOptimiser) {
+		this.voyagePlanOptimiser = voyagePlanOptimiser;
 	}
 
+	public void init() {
+
+		// Verify that everything is in place
+		
+		if (portProvider == null) {
+			throw new IllegalStateException("No port provider set");
+		}
+		if (portSlotProvider == null) {
+			throw new IllegalStateException("No port slot provider set");
+		}
+		if (portTypeProvider == null) {
+			throw new IllegalStateException("No port type provider set");
+		}
+		if (distanceProvider == null) {
+			throw new IllegalStateException("No port distance provider set");
+		}
+		if (timeWindowProvider == null) {
+			throw new IllegalStateException("No time window provider set");
+		}
+		if (durationsProvider == null) {
+			throw new IllegalStateException("No port durations provider set");
+		}
+		if (vesselProvider == null) {
+			throw new IllegalStateException("No vessel provider set");
+		}
+		if (voyagePlanOptimiser == null) {
+			throw new IllegalStateException("No voyage plan optimiser set");
+		}
+	}
+	
 	@Override
 	public void dispose() {
 
@@ -410,6 +405,6 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 		portTypeProvider = null;
 		vesselProvider = null;
 		distanceProvider = null;
-		voyageCalculator = null;
+		voyagePlanOptimiser = null;
 	}
 }
