@@ -34,8 +34,6 @@ public class PortExclusionConstraintChecker<T> implements IPairwiseConstraintChe
 	private final String vesselProviderKey;
 	private final String portProviderKey;
 	
-	
-	
 	public PortExclusionConstraintChecker(String name,
 			String exclusionProviderKey, String vesselProviderKey,
 			String portProviderKey) {
@@ -56,6 +54,7 @@ public class PortExclusionConstraintChecker<T> implements IPairwiseConstraintChe
 	 */
 	@Override
 	public boolean checkConstraints(ISequences<T> sequences) {
+		if (portExclusionProvider.hasNoExclusions()) return true;
 		final List<IResource> resources = sequences.getResources();
 		
 		for (int i = 0; i<sequences.size(); i++) {
@@ -80,6 +79,9 @@ public class PortExclusionConstraintChecker<T> implements IPairwiseConstraintChe
 			List<String> messages) {
 		if (messages == null)
 			return checkConstraints(sequences);
+		
+		if (portExclusionProvider.hasNoExclusions()) return true;
+		
 		final List<IResource> resources = sequences.getResources();
 		boolean valid = true;
 		for (int i = 0; i<sequences.size(); i++) {
@@ -103,9 +105,34 @@ public class PortExclusionConstraintChecker<T> implements IPairwiseConstraintChe
 
 	@Override
 	public void setOptimisationData(IOptimisationData<T> data) {
-		this.portExclusionProvider = data.getDataComponentProvider(exclusionProviderKey, IPortExclusionProvider.class);
-		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
-		this.portProvider = data.getDataComponentProvider(portProviderKey, IPortProvider.class);
+		setPortExclusionProvider(data.getDataComponentProvider(exclusionProviderKey, IPortExclusionProvider.class));
+		setVesselProvider(data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class));
+		setPortProvider(data.getDataComponentProvider(portProviderKey, IPortProvider.class));
+	}
+
+	public IPortExclusionProvider getPortExclusionProvider() {
+		return portExclusionProvider;
+	}
+
+	public void setPortExclusionProvider(
+			IPortExclusionProvider portExclusionProvider) {
+		this.portExclusionProvider = portExclusionProvider;
+	}
+
+	public IVesselProvider getVesselProvider() {
+		return vesselProvider;
+	}
+
+	public void setVesselProvider(IVesselProvider vesselProvider) {
+		this.vesselProvider = vesselProvider;
+	}
+
+	public IPortProvider getPortProvider() {
+		return portProvider;
+	}
+
+	public void setPortProvider(IPortProvider portProvider) {
+		this.portProvider = portProvider;
 	}
 
 	@Override
