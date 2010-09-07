@@ -83,7 +83,7 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public void evaluate(final ISequences<T> sequences) {
+	public boolean evaluate(final ISequences<T> sequences) {
 
 		// Perform a full evaluation
 		oldFitness = 0;
@@ -97,10 +97,11 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 
 		// Update the newFitness value as this is used in getFitness()
 		newFitness = oldFitness;
+		return true;
 	}
 
 	@Override
-	public void evaluate(final ISequences<T> sequences,
+	public boolean evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
 
 		// Reset this value
@@ -121,6 +122,7 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 			// Update total fitness
 			newFitness += value;
 		}
+		return true;
 	}
 
 	@Override

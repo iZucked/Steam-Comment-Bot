@@ -42,9 +42,10 @@ public interface IFitnessHelper<T> {
 	 * 
 	 * @param sequences
 	 * @param fitnessFunctions
+	 * @return 
 	 */
 
-	void evaluateSequencesFromCores(ISequences<T> sequences,
+	boolean evaluateSequencesFromCores(ISequences<T> sequences,
 			Collection<IFitnessCore<T>> fitnessCores);
 
 	/**
@@ -54,9 +55,10 @@ public interface IFitnessHelper<T> {
 	 * @param sequences
 	 * @param fitnessFunctions
 	 * @param affectedResources
+	 * @return 
 	 */
 
-	void evaluateSequencesFromCores(ISequences<T> sequences,
+	boolean evaluateSequencesFromCores(ISequences<T> sequences,
 			Collection<IFitnessCore<T>> fitnessCores,
 			Collection<IResource> affectedResources);
 
@@ -66,9 +68,10 @@ public interface IFitnessHelper<T> {
 	 * 
 	 * @param sequences
 	 * @param fitnessFunctions
+	 * @return 
 	 */
 
-	void evaluateSequencesFromComponents(ISequences<T> sequences,
+	boolean evaluateSequencesFromComponents(ISequences<T> sequences,
 			Collection<IFitnessComponent<T>> fitnessComponents);
 
 	/**
@@ -77,9 +80,10 @@ public interface IFitnessHelper<T> {
 	 * 
 	 * @param sequences
 	 * @param fitnessFunctions
+	 * @return 
 	 */
 
-	void evaluateSequencesFromComponents(ISequences<T> sequences,
+	boolean evaluateSequencesFromComponents(ISequences<T> sequences,
 			Collection<IFitnessComponent<T>> fitnessComponents,
 			Collection<IResource> affectedResources);
 

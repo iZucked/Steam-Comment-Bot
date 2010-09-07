@@ -59,22 +59,23 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 		final long totalFitness = evaluateSequencesIntern(sequences,
 				affectedResources);
+		boolean accept = false;
+		if (totalFitness != Long.MAX_VALUE) {
+			// Calculate fitness delta
+			final long delta = totalFitness - currentFitness;
 
-		// Calculate fitness delta
-		final long delta = totalFitness - currentFitness;
+			// If fitness change is within the threshold, then accept the change
+			accept = thresholder.accept(delta);
 
-		// If fitness change is within the threshold, then accept the change
-		final boolean accept = thresholder.accept(delta);
+			if (accept) {
+				// Update internal state
+				updateBest(sequences, totalFitness);
 
-		if (accept) {
-			// Update internal state
-			updateBest(sequences, totalFitness);
-
-			// Update fitness functions state
-			fitnessHelper.acceptFromComponents(fitnessComponents, sequences,
-					affectedResources);
+				// Update fitness functions state
+				fitnessHelper.acceptFromComponents(fitnessComponents, sequences,
+						affectedResources);
+			}
 		}
-
 		// Step to the next threshold levels
 		thresholder.step();
 
@@ -116,11 +117,11 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 		// Evaluates the current sequences
 		if (affectedResources == null) {
-			fitnessHelper.evaluateSequencesFromComponents(sequences,
-					fitnessComponents);
+			if (!fitnessHelper.evaluateSequencesFromComponents(sequences,
+					fitnessComponents)) return Long.MAX_VALUE;
 		} else {
-			fitnessHelper.evaluateSequencesFromComponents(sequences,
-					fitnessComponents, affectedResources);
+			if (!fitnessHelper.evaluateSequencesFromComponents(sequences,
+					fitnessComponents, affectedResources)) return Long.MAX_VALUE;
 		}
 
 		return fitnessCombiner.calculateFitness(fitnessComponents);
@@ -160,6 +161,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 					"Initial sequences cannot be null");
 		}
 
+		//TODO check for MAX_VALUE here and throw some kind of death condition.
 		final long totalFitness = evaluateSequencesIntern(initialSequences,
 				null);
 		bestFitness = totalFitness;

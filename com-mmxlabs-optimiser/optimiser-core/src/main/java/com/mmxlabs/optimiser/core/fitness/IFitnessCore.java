@@ -35,11 +35,12 @@ public interface IFitnessCore<T> {
 	Collection<IFitnessComponent<T>> getFitnessComponents();
 
 	/**
-	 * Evaluates the full fitness of the given sequence.
+	 * Evaluates the full fitness of the given sequences. If this returns false,
+	 * the sequences are unacceptably bad, and the caller should back out of any more evaluation immediately
 	 * 
 	 * @param sequences
 	 */
-	void evaluate(ISequences<T> sequences);
+	boolean evaluate(ISequences<T> sequences);
 
 	/**
 	 * Evaluates the fitness of the given sequence. This method takes a list of
@@ -52,7 +53,7 @@ public interface IFitnessCore<T> {
 	 * 
 	 * @param sequences
 	 */
-	void evaluate(ISequences<T> sequences,
+	boolean evaluate(ISequences<T> sequences,
 			Collection<IResource> affectedResources);
 
 	/**

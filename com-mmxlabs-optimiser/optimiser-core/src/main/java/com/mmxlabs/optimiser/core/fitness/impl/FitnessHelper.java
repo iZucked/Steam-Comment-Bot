@@ -22,39 +22,41 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class FitnessHelper<T> implements IFitnessHelper<T> {
 
 	@Override
-	public void evaluateSequencesFromComponents(final ISequences<T> sequences,
+	public boolean evaluateSequencesFromComponents(final ISequences<T> sequences,
 			final Collection<IFitnessComponent<T>> fitnessComponents) {
 		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
 
-		evaluateSequencesFromCores(sequences, fitnessCores);
+		return evaluateSequencesFromCores(sequences, fitnessCores);
 	}
 
 	@Override
-	public void evaluateSequencesFromCores(final ISequences<T> sequences,
+	public boolean evaluateSequencesFromCores(final ISequences<T> sequences,
 			final Collection<IFitnessCore<T>> fitnessCores) {
 
 		for (final IFitnessCore<T> core : fitnessCores) {
-			core.evaluate(sequences);
+			if (!core.evaluate(sequences)) return false;
 		}
+		return true;
 	}
 
 	@Override
-	public void evaluateSequencesFromComponents(final ISequences<T> sequences,
+	public boolean evaluateSequencesFromComponents(final ISequences<T> sequences,
 			final Collection<IFitnessComponent<T>> fitnessComponents,
 			final Collection<IResource> affectedResources) {
 		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
 
-		evaluateSequencesFromCores(sequences, fitnessCores, affectedResources);
+		return evaluateSequencesFromCores(sequences, fitnessCores, affectedResources);
 
 	}
 
 	@Override
-	public void evaluateSequencesFromCores(final ISequences<T> sequences,
+	public boolean evaluateSequencesFromCores(final ISequences<T> sequences,
 			final Collection<IFitnessCore<T>> fitnessCores,
 			final Collection<IResource> affectedResources) {
 		for (final IFitnessCore<T> core : fitnessCores) {
-			core.evaluate(sequences, affectedResources);
+			if (!core.evaluate(sequences, affectedResources)) return false;
 		}
+		return true;
 	}
 
 	@Override

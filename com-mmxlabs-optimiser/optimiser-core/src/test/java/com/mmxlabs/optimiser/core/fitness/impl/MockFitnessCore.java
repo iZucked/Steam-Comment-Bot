@@ -29,14 +29,14 @@ public final class MockFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public void evaluate(final ISequences<T> sequences) {
-
+	public boolean evaluate(final ISequences<T> sequences) {
+		return true;
 	}
 
 	@Override
-	public void evaluate(final ISequences<T> sequences,
+	public boolean evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
-
+		return true;
 	}
 
 	@Override

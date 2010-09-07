@@ -29,16 +29,18 @@ public final class SortingFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public void evaluate(final ISequences<T> sequences) {
+	public boolean evaluate(final ISequences<T> sequences) {
 
 		fitness = evaluateSequences(sequences);
+		return true;
 	}
 
 	@Override
-	public void evaluate(final ISequences<T> sequences,
+	public boolean evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
 
 		fitness = evaluateSequences(sequences);
+		return true;
 	}
 
 	@Override
