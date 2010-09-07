@@ -6,10 +6,10 @@ import java.util.Set;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -23,7 +23,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  *
  * @param <T>
  */
-public class PortExclusionConstraintChecker<T> implements IConstraintChecker<T> {
+public class PortExclusionConstraintChecker<T> implements IPairwiseConstraintChecker<T> {
 
 	private IPortExclusionProvider portExclusionProvider;
 	private IVesselProvider vesselProvider;
@@ -106,6 +106,17 @@ public class PortExclusionConstraintChecker<T> implements IConstraintChecker<T> 
 		this.portExclusionProvider = data.getDataComponentProvider(exclusionProviderKey, IPortExclusionProvider.class);
 		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 		this.portProvider = data.getDataComponentProvider(portProviderKey, IPortProvider.class);
+	}
+
+	@Override
+	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+		final IVessel vessel = vesselProvider.getVessel(resource);
+		final Set<IPort> exclusions = portExclusionProvider.getExcludedPorts(vessel.getVesselClass());
+		
+		if (exclusions.isEmpty()) return false;
+		
+		return exclusions.contains(portProvider.getPortForElement(first)) ||
+			exclusions.contains(portProvider.getPortForElement(second));
 	}
 
 }
