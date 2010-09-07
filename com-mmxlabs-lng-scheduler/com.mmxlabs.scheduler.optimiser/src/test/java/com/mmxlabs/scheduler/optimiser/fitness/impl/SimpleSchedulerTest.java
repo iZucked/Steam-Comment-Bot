@@ -76,7 +76,7 @@ public class SimpleSchedulerTest {
 				keypoints);
 
 		IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1",
-				12000, 20000, 150000000, 0, 7000);
+				12000, 20000, 150000000, 0, 7000, 10000);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
 				15000, 10000, 10000, consumptionCalculator, 15000);
