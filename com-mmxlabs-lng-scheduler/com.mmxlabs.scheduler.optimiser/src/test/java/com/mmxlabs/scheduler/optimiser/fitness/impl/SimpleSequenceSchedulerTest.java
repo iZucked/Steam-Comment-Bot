@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.jmock.Expectations;
@@ -24,7 +25,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
@@ -52,12 +52,12 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
-import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @RunWith(JMock.class)
 public final class SimpleSequenceSchedulerTest {
@@ -67,10 +67,11 @@ public final class SimpleSequenceSchedulerTest {
 	/**
 	 * Simple case, everything runs exactly on time. Only one idle time required
 	 * at start.
+	 * @throws CloneNotSupportedException 
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testSchedule_1() {
+	public void testSchedule_1() throws CloneNotSupportedException {
 
 		SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
 
@@ -130,7 +131,7 @@ public final class SimpleSequenceSchedulerTest {
 		HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
 				SchedulerConstants.DCP_portDistanceProvider);
 		
-		HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
 				SchedulerConstants.DCP_portDistanceProvider);
 		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
@@ -190,117 +191,156 @@ public final class SimpleSequenceSchedulerTest {
 		ISequence<ISequenceElement> sequence = new ListSequence<ISequenceElement>(
 				elements);
 
-		final ILNGVoyageCalculator<ISequenceElement> voyageCalculator = context
-				.mock(ILNGVoyageCalculator.class);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		final IVoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
+		
+//		
+//		final ILNGVoyageCalculator<ISequenceElement> voyageCalculator = context
+//				.mock(ILNGVoyageCalculator.class);
+//		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
 
 		// This may throw IllegalStateException if not all the elements are set.
 		// TODO: Expand this into it's own series of test cases
 		scheduler.init();
-		
+
+//		VPO now plays into this, we can expect a range of choices to be evaluated during VPO calcualtions - and therefore potentially multiple invocations of each evaluation
+//		
+//		 -- Only one distance so ignore that
+//		 -- NBO + FBO + IDLE
+//		
+//		
 		// First element has longer than expected avail time as the first
 		// timewindow is ignored as there is no voyage to start port.
 		// TODO: Fix the vessel start conditions
-		final VoyageOptions expectedOptions1 = new VoyageOptions();
-		expectedOptions1.setRoute("default");
-		expectedOptions1.setAvailableTime(9);
-		expectedOptions1.setDistance(400);
-		expectedOptions1.setFromPortSlot(loadSlot1);
-		expectedOptions1.setToPortSlot(dischargeSlot1);
-		expectedOptions1.setUseFBOForSupplement(true);
-		expectedOptions1.setUseNBOForIdle(true);
-		expectedOptions1.setUseNBOForTravel(true);
-		expectedOptions1.setVessel(vessel);
-		expectedOptions1.setVesselState(VesselState.Laden);
-		expectedOptions1.setNBOSpeed(15000);
+		final VoyageOptions expectedOptions1_a = new VoyageOptions();
+		expectedOptions1_a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedOptions1_a.setAvailableTime(9);
+		expectedOptions1_a.setDistance(400);
+		expectedOptions1_a.setFromPortSlot(loadSlot1);
+		expectedOptions1_a.setToPortSlot(dischargeSlot1);
+		expectedOptions1_a.setUseNBOForTravel(true);
+		expectedOptions1_a.setUseNBOForIdle(false);
+		expectedOptions1_a.setUseFBOForSupplement(false);
+		expectedOptions1_a.setVessel(vessel);
+		expectedOptions1_a.setVesselState(VesselState.Laden);
+		expectedOptions1_a.setNBOSpeed(15000);
 
-		final VoyageOptions expectedOptions2 = new VoyageOptions();
-		expectedOptions2.setRoute("default");
-		expectedOptions2.setAvailableTime(4);
-		expectedOptions2.setDistance(400);
-		expectedOptions2.setFromPortSlot(dischargeSlot1);
-		expectedOptions2.setToPortSlot(loadSlot2);
-		expectedOptions2.setUseFBOForSupplement(true);
-		expectedOptions2.setUseNBOForIdle(true);
-		expectedOptions2.setUseNBOForTravel(true);
-		expectedOptions2.setVessel(vessel);
-		expectedOptions2.setVesselState(VesselState.Ballast);
-		expectedOptions2.setNBOSpeed(15000);
-
-		final VoyageOptions expectedOptions3 = new VoyageOptions();
-		expectedOptions3.setRoute("default");
-		expectedOptions3.setAvailableTime(4);
-		expectedOptions3.setDistance(400);
-		expectedOptions3.setFromPortSlot(loadSlot2);
-		expectedOptions3.setToPortSlot(dischargeSlot2);
-		expectedOptions3.setUseFBOForSupplement(true);
-		expectedOptions3.setUseNBOForIdle(true);
-		expectedOptions3.setUseNBOForTravel(true);
-		expectedOptions3.setVessel(vessel);
-		expectedOptions3.setVesselState(VesselState.Laden);
-		expectedOptions3.setNBOSpeed(15000);
-
+		final VoyageOptions expectedOptions2_a = new VoyageOptions();
+		expectedOptions2_a.setRoute("default");
+		expectedOptions2_a.setAvailableTime(4);
+		expectedOptions2_a.setDistance(400);
+		expectedOptions2_a.setFromPortSlot(dischargeSlot1);
+		expectedOptions2_a.setToPortSlot(loadSlot2);
+		expectedOptions2_a.setUseFBOForSupplement(false);
+		expectedOptions2_a.setUseNBOForIdle(false);
+		expectedOptions2_a.setUseNBOForTravel(true);
+		expectedOptions2_a.setVessel(vessel);
+		expectedOptions2_a.setVesselState(VesselState.Ballast);
+		expectedOptions2_a.setNBOSpeed(15000);
+		
+		final VoyageOptions expectedOptions3_a = new VoyageOptions();
+		expectedOptions3_a.setRoute("default");
+		expectedOptions3_a.setAvailableTime(4);
+		expectedOptions3_a.setDistance(400);
+		expectedOptions3_a.setFromPortSlot(loadSlot2);
+		expectedOptions3_a.setToPortSlot(dischargeSlot2);
+		expectedOptions3_a.setUseFBOForSupplement(false);
+		expectedOptions3_a.setUseNBOForIdle(false);
+		expectedOptions3_a.setUseNBOForTravel(true);
+		expectedOptions3_a.setVessel(vessel);
+		expectedOptions3_a.setVesselState(VesselState.Laden);
+		expectedOptions3_a.setNBOSpeed(15000);
+		
+		
 		final PortDetails expectedPortDetails1 = new PortDetails();
 		expectedPortDetails1.setPortSlot(loadSlot1);
 		expectedPortDetails1.setVisitDuration(1);
-		expectedPortDetails1.setStartTime(0);
 
 		final PortDetails expectedPortDetails2 = new PortDetails();
 		expectedPortDetails2.setPortSlot(dischargeSlot1);
 		expectedPortDetails2.setVisitDuration(1);
-		expectedPortDetails2.setStartTime(10);
 
 		final PortDetails expectedPortDetails3 = new PortDetails();
 		expectedPortDetails3.setPortSlot(loadSlot2);
 		expectedPortDetails3.setVisitDuration(1);
-		expectedPortDetails3.setStartTime(15);
 
 		final PortDetails expectedPortDetails4 = new PortDetails();
 		expectedPortDetails4.setPortSlot(dischargeSlot2);
 		expectedPortDetails4.setVisitDuration(1);
-		expectedPortDetails4.setStartTime(20);
 
 		final VoyageDetails<ISequenceElement> expectedVoyageDetails1 = new VoyageDetails<ISequenceElement>();
-		expectedVoyageDetails1.setOptions(expectedOptions1);
+		expectedVoyageDetails1.setOptions(expectedOptions1_a);
 		expectedVoyageDetails1.setStartTime(1);
 
 		final VoyageDetails<ISequenceElement> expectedVoyageDetails2 = new VoyageDetails<ISequenceElement>();
-		expectedVoyageDetails2.setOptions(expectedOptions2);
+		expectedVoyageDetails2.setOptions(expectedOptions2_a);
 		expectedVoyageDetails2.setStartTime(11);
 
 		final VoyageDetails<ISequenceElement> expectedVoyageDetails3 = new VoyageDetails<ISequenceElement>();
-		expectedVoyageDetails3.setOptions(expectedOptions3);
+		expectedVoyageDetails3.setOptions(expectedOptions3_a);
 		expectedVoyageDetails3.setStartTime(16);
-
 		
+		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
+		expectedBasicSequence1.add(expectedPortDetails1);
+		expectedBasicSequence1.add(expectedOptions1_a);
+		expectedBasicSequence1.add(expectedPortDetails2);
+		expectedBasicSequence1.add(expectedOptions2_a);
+		expectedBasicSequence1.add(expectedPortDetails3);
+		
+		final List<Object> expectedBasicSequence2 = new LinkedList<Object>();
+		expectedBasicSequence2.add(expectedPortDetails3);
+		expectedBasicSequence2.add(expectedOptions3_a);
+		expectedBasicSequence2.add(expectedPortDetails4);
+		
+		
+		// TODO: Implement
+//		Object[] testSequence = new Object[] { ... , ... , ... };
+//		IVoyagePlan testVoyagePlan = new VoyagePlan();
+//		testVoyagePlan.setDischargeVolume(1000l);
+//		testVoyagePlan.setLoadVolume(1000l);
+//		testVoyagePlan.setPurchaseCost(1000l);
+//		testVoyagePlan.setSalesRevenue(1000l);
+//		
+//		testVoyagePlan.setSequence(testSequence);
+//		
+//		testVoyagePlan.setTotalFuelCost(FuelComponent.Base, 100);
+//		testVoyagePlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 100);
+//		testVoyagePlan.setTotalFuelCost(FuelComponent.NBO, 100);
+//		testVoyagePlan.setTotalFuelCost(FuelComponent.FBO, 100);
+//		testVoyagePlan.setTotalFuelCost(FuelComponent.IdleBase, 100);
+//		testVoyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, 100);
+//		
+//		context.setDefaultResultForType(IVoyagePlan.class, testVoyagePlan);
+//		
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		context.checking(new Expectations() {
 			{
-				one(voyageCalculator).calculateVoyageFuelRequirements(
-						with(equal(expectedOptions1)),
-						with(aNonNull(IVoyageDetails.class)));
-				one(voyageCalculator).calculateVoyageFuelRequirements(
-						with(equal(expectedOptions2)),
-						with(aNonNull(IVoyageDetails.class)));
-				one(voyageCalculator).calculateVoyageFuelRequirements(
-						with(equal(expectedOptions3)),
-						with(aNonNull(IVoyageDetails.class)));
-				one(voyageCalculator)
-						.calculateVoyagePlan(
-								with(aNonNull(IVoyagePlan.class)),
-								with(equal(vessel)),
-								with(equal(new Object[] { expectedPortDetails1,
-										expectedVoyageDetails1,
-										expectedPortDetails2,
-										expectedVoyageDetails2,
-										expectedPortDetails3 })));
-				one(voyageCalculator)
-						.calculateVoyagePlan(
-								with(aNonNull(IVoyagePlan.class)),
-								with(equal(vessel)),
-								with(equal(new Object[] { expectedPortDetails3,
-										expectedVoyageDetails3,
-										expectedPortDetails4 })));
+				one(voyagePlanOptimiser).setVessel(vessel);
+
+				// Set expected list of VPO choices
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions1_a, new boolean[] { true, false}))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions1_a, new boolean[] { true, false}))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new RouteVoyagePlanChoice(expectedOptions1_a, new String[] { IMultiMatrixProvider.Default_Key }, distanceProvider))));
+				
+				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedOptions2_a, new boolean[] { true, false}))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions2_a, new boolean[] { true, false}))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions2_a, new boolean[] { true, false}))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new RouteVoyagePlanChoice(expectedOptions2_a, new String[] { IMultiMatrixProvider.Default_Key }, distanceProvider))));
+
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions3_a, new boolean[] { true, false}))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions3_a, new boolean[] { true, false}))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new RouteVoyagePlanChoice(expectedOptions3_a, new String[] { IMultiMatrixProvider.Default_Key }, distanceProvider))));
+				
+				// Expect two runs of the VPO
+				one(voyagePlanOptimiser).setBasicSequence(with(equal(expectedBasicSequence1)));
+				one(voyagePlanOptimiser).setBasicSequence(with(equal(expectedBasicSequence2)));
+
+				one(voyagePlanOptimiser).init();
+				one(voyagePlanOptimiser).optimise();
+				one(voyagePlanOptimiser).reset();
+				one(voyagePlanOptimiser).init();
+				one(voyagePlanOptimiser).optimise();
+				one(voyagePlanOptimiser).reset();
 			}
 		});
 
@@ -308,7 +348,34 @@ public final class SimpleSequenceSchedulerTest {
 		List<IVoyagePlan> plans = scheduler.schedule(resource, sequence);
 
 		Assert.assertNotNull(plans);
+		Assert.assertEquals(2, plans.size());
 
+		// TODO: Check plan details are as expected
+		// TODO: Return a default plan from VPO and check expected output is populated correctly.
+		// TODO: Can we return different objects for each invocation?
+//		
+//		// Check plan 1
+//		IVoyagePlan plan1 = plans.get(0);
+//		Assert.assertNotNull(plan1);
+//		Assert.assertEquals(0, plan1.getLoadVolume());
+//		Assert.assertEquals(0, plan1.getDischargeVolume());
+//		Assert.assertEquals(0, plan1.getPurchaseCost());
+//		Assert.assertEquals(0, plan1.getSalesRevenue());
+//		Object[] sequence1 = plan1.getSequence();
+//		Assert.assertNotNull(sequence1);
+//		Assert.assertEquals(5, sequence1.length);
+//		
+//		// Check plan 2
+//		IVoyagePlan plan2 = plans.get(0);
+//		Assert.assertNotNull(plan2);
+//		Assert.assertEquals(0, plan2.getLoadVolume());
+//		Assert.assertEquals(0, plan2.getDischargeVolume());
+//		Assert.assertEquals(0, plan2.getPurchaseCost());
+//		Assert.assertEquals(0, plan2.getSalesRevenue());
+//		Object[] sequence2 = plan2.getSequence();
+//		Assert.assertNotNull(sequence2);
+//		Assert.assertEquals(3, sequence2.length);		
+		
 		context.assertIsSatisfied();
 	}
 	
@@ -325,7 +392,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -337,7 +404,7 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 		
@@ -352,7 +419,7 @@ public final class SimpleSequenceSchedulerTest {
 		Assert.assertNull(scheduler.getPortTypeProvider());
 		Assert.assertNull(scheduler.getTimeWindowProvider());
 		Assert.assertNull(scheduler.getVesselProvider());
-		Assert.assertNull(scheduler.getVoyageCalculator());
+		Assert.assertNull(scheduler.getVoyagePlanOptimiser());
 	}
 	
 	
@@ -368,7 +435,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -380,7 +447,7 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
@@ -397,7 +464,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 //		IMatrixProvider distanceProvider = context.mock(IMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -409,7 +476,7 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
@@ -427,7 +494,7 @@ public final class SimpleSequenceSchedulerTest {
 //		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -439,7 +506,7 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
@@ -456,7 +523,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -468,7 +535,7 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
@@ -485,7 +552,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -497,7 +564,7 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
@@ -514,7 +581,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -526,7 +593,7 @@ public final class SimpleSequenceSchedulerTest {
 //		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
@@ -543,7 +610,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 //		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -555,7 +622,7 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 //		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
@@ -572,7 +639,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -584,7 +651,7 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 //		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyageCalculator(voyageCalculator);
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
@@ -601,7 +668,7 @@ public final class SimpleSequenceSchedulerTest {
 		IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
-//		ILNGVoyageCalculator voyageCalculator = context.mock(ILNGVoyageCalculator.class);
+//		IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		
 		// Set on SSS
 		SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
@@ -613,9 +680,8 @@ public final class SimpleSequenceSchedulerTest {
 		scheduler.setPortTypeProvider(portTypeProvider);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
-//		scheduler.setVoyageCalculator(voyageCalculator);
+//		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 		
 		scheduler.init();
 	}
-	
 }
