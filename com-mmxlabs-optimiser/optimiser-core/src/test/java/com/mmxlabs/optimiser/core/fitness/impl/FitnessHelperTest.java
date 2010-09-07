@@ -79,8 +79,11 @@ public class FitnessHelperTest {
 		context.checking(new Expectations() {
 			{
 				one(core1).evaluate(sequences);
+				will(returnValue(true));
 				one(core2).evaluate(sequences);
+				will(returnValue(true));
 				one(core3).evaluate(sequences);
+				will(returnValue(true));
 			}
 		});
 
@@ -109,8 +112,11 @@ public class FitnessHelperTest {
 		context.checking(new Expectations() {
 			{
 				one(core1).evaluate(sequences);
+				will(returnValue(true));
 				one(core2).evaluate(sequences);
+				will(returnValue(true));
 				one(core3).evaluate(sequences);
+				will(returnValue(true));
 			}
 		});
 
@@ -145,8 +151,11 @@ public class FitnessHelperTest {
 		context.checking(new Expectations() {
 			{
 				one(core1).evaluate(sequences, resources);
+				will(returnValue(true));
 				one(core2).evaluate(sequences, resources);
+				will(returnValue(true));
 				one(core3).evaluate(sequences, resources);
+				will(returnValue(true));
 			}
 		});
 
@@ -177,8 +186,11 @@ public class FitnessHelperTest {
 		context.checking(new Expectations() {
 			{
 				one(core1).evaluate(sequences, resources);
+				will(returnValue(true));
 				one(core2).evaluate(sequences, resources);
+				will(returnValue(true));
 				one(core3).evaluate(sequences, resources);
+				will(returnValue(true));
 			}
 		});
 
