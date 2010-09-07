@@ -210,10 +210,11 @@ public interface ISchedulerBuilder {
 	 * @param minVolume
 	 * @param maxVolume
 	 * @param price
+	 * @param cargoCVValue
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
-			long minVolume, long maxVolume, int unitPrice);
+			long minVolume, long maxVolume, int unitPrice, int cargoCVValue);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected

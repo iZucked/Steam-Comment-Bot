@@ -45,7 +45,7 @@ public class SchedulerBuilderTest {
 		IPort port = context.mock(IPort.class);
 		ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		builder.createLoadSlot("id", port, window, 0, 0, 0);
+		builder.createLoadSlot("id", port, window, 0, 0, 0, 0);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -56,7 +56,7 @@ public class SchedulerBuilderTest {
 		IPort port = builder.createPort("port");
 		ITimeWindow window = context.mock(ITimeWindow.class);
 
-		builder.createLoadSlot("id", port, window, 0, 0, 0);
+		builder.createLoadSlot("id", port, window, 0, 0, 0, 0);
 	}
 
 	@Test
@@ -116,7 +116,7 @@ public class SchedulerBuilderTest {
 		ITimeWindow window = builder.createTimeWindow(0, 0);
 
 		ILoadSlot loadSlot = builder
-				.createLoadSlot("id", port, window, 0, 0, 0);
+				.createLoadSlot("id", port, window, 0, 0, 0, 0);
 		IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
 
 		builder.createCargo("id", loadSlot, dischargeSlot);

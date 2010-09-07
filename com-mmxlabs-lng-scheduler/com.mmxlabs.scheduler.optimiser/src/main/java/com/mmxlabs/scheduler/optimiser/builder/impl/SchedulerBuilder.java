@@ -175,7 +175,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolume,
-			final long maxVolume, final int price) {
+			final long maxVolume, final int price, int cargoCVValue) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
@@ -193,7 +193,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setMinLoadVolume(minVolume);
 		slot.setMaxLoadVolume(maxVolume);
 		slot.setPurchasePrice(price);
-
+		slot.setCargoCVValue(cargoCVValue);
+		
 		loadSlots.add(slot);
 
 		// Create a sequence element against this load slot
