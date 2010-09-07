@@ -23,7 +23,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @param <T>
  *            Sequence element type
  */
-public final class VoyagePlanOptimiser<T> {
+public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
 
@@ -40,6 +40,7 @@ public final class VoyagePlanOptimiser<T> {
 	/**
 	 * Check internal state is valid (i.e. all setters have been called).
 	 */
+	@Override
 	public void init() {
 		if (vessel == null) {
 			throw new IllegalStateException("Vessel has not been set");
@@ -56,6 +57,7 @@ public final class VoyagePlanOptimiser<T> {
 	/**
 	 * Reset the state of this object ready for a new optimisation.
 	 */
+	@Override
 	public void reset() {
 		choices.clear();
 		basicSequence = null;
@@ -66,6 +68,7 @@ public final class VoyagePlanOptimiser<T> {
 	/**
 	 * Clean up all references.
 	 */
+	@Override
 	public void dispose() {
 		choices.clear();
 		vessel = null;
@@ -79,6 +82,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @return
 	 */
+	@Override
 	public IVoyagePlan optimise() {
 
 		runLoop(0);
@@ -172,6 +176,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @return
 	 */
+	@Override
 	public List<Object> getBasicSequence() {
 		return basicSequence;
 	}
@@ -184,6 +189,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @param basicSequence
 	 */
+	@Override
 	public void setBasicSequence(final List<Object> basicSequence) {
 		this.basicSequence = basicSequence;
 	}
@@ -193,6 +199,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @return
 	 */
+	@Override
 	public IVessel getVessel() {
 		return vessel;
 	}
@@ -202,6 +209,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @param vessel
 	 */
+	@Override
 	public void setVessel(final IVessel vessel) {
 		this.vessel = vessel;
 	}
@@ -211,6 +219,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @return
 	 */
+	@Override
 	public long getBestCost() {
 		return bestCost;
 	}
@@ -220,6 +229,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @return
 	 */
+	@Override
 	public IVoyagePlan getBestPlan() {
 		return bestPlan;
 	}
@@ -230,6 +240,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @return
 	 */
+	@Override
 	public ILNGVoyageCalculator<T> getVoyageCalculator() {
 		return voyageCalculator;
 	}
@@ -239,6 +250,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @param voyageCalculator
 	 */
+	@Override
 	public void setVoyageCalculator(
 			final ILNGVoyageCalculator<T> voyageCalculator) {
 		this.voyageCalculator = voyageCalculator;
@@ -251,6 +263,7 @@ public final class VoyagePlanOptimiser<T> {
 	 * 
 	 * @param choice
 	 */
+	@Override
 	public void addChoice(final IVoyagePlanChoice choice) {
 		choices.add(choice);
 	}
