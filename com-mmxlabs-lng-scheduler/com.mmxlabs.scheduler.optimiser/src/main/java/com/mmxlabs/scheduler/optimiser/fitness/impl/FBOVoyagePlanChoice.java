@@ -1,5 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.Arrays;
+
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -35,9 +38,30 @@ public final class FBOVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public boolean apply(final int choice) {
 
-		boolean useFBOForSupplement = choices[choice];
+		final boolean useFBOForSupplement = choices[choice];
 		options.setUseFBOForSupplement(useFBOForSupplement);
 		// Only a valid choice if NBO is enabled.
 		return options.useNBOForTravel();
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj instanceof FBOVoyagePlanChoice) {
+
+			final FBOVoyagePlanChoice other = (FBOVoyagePlanChoice) obj;
+
+			if (!Arrays.equals(choices, other.choices)) {
+				return false;
+			}
+
+			if (!Equality.isEqual(options, other.options)) {
+				return false;
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 }

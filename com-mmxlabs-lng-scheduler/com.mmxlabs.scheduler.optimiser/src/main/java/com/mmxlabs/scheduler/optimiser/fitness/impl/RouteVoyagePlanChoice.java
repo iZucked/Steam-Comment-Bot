@@ -1,5 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.Arrays;
+
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -53,14 +56,40 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 		final int distance = m.get(options.getFromPortSlot().getPort(), options
 				.getToPortSlot().getPort());
-		
+
 		// Invalid distance
 		if (distance == Integer.MAX_VALUE) {
 			return false;
 		}
-		
+
 		options.setDistance(distance);
 
 		return true;
 	}
+
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj instanceof RouteVoyagePlanChoice) {
+
+			final RouteVoyagePlanChoice other = (RouteVoyagePlanChoice) obj;
+
+			if (multiProvider != other.multiProvider) {
+				return false;
+			}
+
+			if (!Arrays.equals(choices, other.choices)) {
+				return false;
+			}
+
+			if (!Equality.isEqual(options, other.options)) {
+				return false;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
 }
