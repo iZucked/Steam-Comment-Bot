@@ -168,7 +168,7 @@ public class LNGScenarioTransformer {
 					loadWindow, 
 					loadSlot.getMinQuantity(), 
 					loadSlot.getMaxQuantity(), 
-					loadSlot.getUnitPrice());
+					loadSlot.getUnitPrice(), loadSlot.getCargoCVValue());
 			
 			IDischargeSlot discharge = builder.createDischargeSlot(dischargeSlot.getId(), 
 					ports.lookup(dischargeSlot.getPort()), 

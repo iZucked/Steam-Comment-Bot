@@ -80,10 +80,10 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolume,
-			final long maxVolume, final int unitPrice) {
+			final long maxVolume, final int unitPrice, int cargoCVValue) {
 
 		ILoadSlot slot = delegate.createLoadSlot(id, port, window, minVolume,
-				maxVolume, unitPrice);
+				maxVolume, unitPrice, cargoCVValue);
 
 		scenario.cargo.Slot eLoadSlot = CargoFactory.eINSTANCE
 				.createSlot();
@@ -92,6 +92,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		eLoadSlot.setMinQuantity(minVolume);
 		eLoadSlot.setPort(ePorts.get(port));
 		eLoadSlot.setUnitPrice(unitPrice);
+		eLoadSlot.setCargoCVValue(cargoCVValue);
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.HOUR_OF_DAY, window.getStart());
 		eLoadSlot.setWindowStart(now.getTime());
