@@ -96,5 +96,7 @@ public class PortExclusionConstraintCheckerTest {
 		
 		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
 		Assert.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
+		
+		context.assertIsSatisfied();
 	}
 }
