@@ -303,12 +303,12 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		}
 
 		@Override
-		public void evaluateSequence(final IResource resource,
+		public boolean evaluateSequence(final IResource resource,
 				final ISequence<T> sequence,
 				final IAnnotatedSequence<T> annotatedSequence,
 				final boolean newSequence) {
 			fail("This method is not part of the test");
-
+			return false;
 		}
 
 		@Override
