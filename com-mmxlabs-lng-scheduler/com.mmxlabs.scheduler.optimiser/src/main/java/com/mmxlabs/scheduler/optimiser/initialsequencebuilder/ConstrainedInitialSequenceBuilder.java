@@ -25,11 +25,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * A second constraint-respecting initial sequence builder,
- * which should work better; it constructs the graph of valid following relationships, picks a resource,
- * and then chooses the longest path through that graph which connects its start and end elements
- * 
- * is this hard to do?
+ * A pairwise constraint respecting initial sequence builder. This sorts elements by their earliest arrival time
+ * and then constructs a sequence for each resource by picking the earliest element which can be appended
+ * to the route without violating the consequent pairwise constraint.
  * 
  * @author hinton
  *
@@ -124,9 +122,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		}
 		
 		if (orderedElements.isEmpty() == false) {
-			System.err.println("Error: "  + orderedElements.size() + " elements not scheduled anywhere!");
-			
-			
+			System.err.println("Warning: "  + orderedElements.size() + " elements remain unscheduled - this scenario may not be feasible.");
 			for (T t : orderedElements) {
 				System.err.println("Did not schedule: " + portSlotProvider.getPortSlot(t));
 			}
