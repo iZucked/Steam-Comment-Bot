@@ -13,4 +13,12 @@ public interface IPortExclusionProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	public Set<IPort> getExcludedPorts(IVesselClass vesselClass);
+
+	/**
+	 * If there are no exclusions set at all, this returns true. Useful
+	 * for quickly avoiding execution if this is empty.
+	 * 
+	 * @return
+	 */
+	public boolean hasNoExclusions();
 }
