@@ -8,20 +8,15 @@ import java.util.Random;
  * @author hinton
  *
  */
-public class RandomHelper extends Random {
-	private Random delegate;
-	public RandomHelper(Random delegate) {
-		this.delegate = delegate;
-	}
-	
+public class RandomHelper {
 	/**
 	 * Return an integer between from 0 to n-1 which is not equal to d, drawn from a uniform distribution.
 	 * @param n
 	 * @param d
 	 * @return
 	 */
-	public int nextDifferentInt(int n, int d) {
-		final int k = nextInt(n-1);
+	public static final int nextDifferentInt(final Random random, final int n, final int d) {
+		final int k = random.nextInt(n-1);
 		if (k >= d) {
 			return k + 1;
 		} else {
@@ -35,38 +30,7 @@ public class RandomHelper extends Random {
 	 * @param collection
 	 * @return
 	 */
-	public <T> T chooseElementFrom(List<T> collection) {
-		return collection.get(nextInt(collection.size()-1));
-	}
-	
-	public void setSeed(long seed) {
-		delegate.setSeed(seed);
-	}
-	public void nextBytes(byte[] bytes) {
-		delegate.nextBytes(bytes);
-	}
-	public int nextInt() {
-		return delegate.nextInt();
-	}
-	public int nextInt(int n) {
-		return delegate.nextInt(n);
-	}
-	public String toString() {
-		return delegate.toString();
-	}
-	public long nextLong() {
-		return delegate.nextLong();
-	}
-	public boolean nextBoolean() {
-		return delegate.nextBoolean();
-	}
-	public float nextFloat() {
-		return delegate.nextFloat();
-	}
-	public double nextDouble() {
-		return delegate.nextDouble();
-	}
-	public double nextGaussian() {
-		return delegate.nextGaussian();
+	public static final <T> T chooseElementFrom(final Random random, final List<T> collection) {
+		return collection.get(random.nextInt(collection.size()-1));
 	}
 }
