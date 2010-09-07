@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
@@ -122,6 +123,11 @@ public class OptimisationTransformer {
 		
 		constraintRegistry.registerConstraintCheckerFactory(
 				new TravelTimeConstraintCheckerFactory());
+		
+		constraintRegistry.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory(
+				SchedulerConstants.DCP_portExclusionProvider, 
+				SchedulerConstants.DCP_vesselProvider, 
+				SchedulerConstants.DCP_portProvider));	
 		
 		return constraintRegistry;
 	}
