@@ -36,14 +36,18 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * have already been scheduled and can be queried. If newSequence is set to
 	 * false, then this method is being invoked as part of a full evaluation. If
 	 * it is true, then it is a partial/delta evaluation as part of a
-	 * {@link IMove} evaluation.
+	 * {@link IMove} evaluation. 
+	 * 
+	 * Returns false if the given sequence is so bad it's not worth proceeding with,
+	 * and the caller must ensure that accepted() is never called for a sequences
+	 * which has had this outcome (if it is accepted, the internal state will be invalid).
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @param annotatedSequence
 	 * @param newSequence
 	 */
-	void evaluateSequence(final IResource resource,
+	boolean evaluateSequence(final IResource resource,
 			final ISequence<T> sequence,
 			final IAnnotatedSequence<T> annotatedSequence, boolean newSequence);
 

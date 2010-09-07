@@ -97,7 +97,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public void evaluate(final ISequences<T> sequences) {
+	public boolean evaluate(final ISequences<T> sequences) {
 
 		// Notify fitness components a new full evaluation is about to begin
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
@@ -110,22 +110,25 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 			final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
 			final List<IVoyagePlan> plans = scheduler.schedule(resource,
 					sequence);
-			voyagePlanAnnotator.annonateFromVoyagePlan(resource, plans,
+			voyagePlanAnnotator.annotateFromVoyagePlan(resource, plans,
 					annotatedSequence);
 
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
-			evaluateSequence(resource, sequence, annotatedSequence, false);
+			if (evaluateSequence(resource, sequence, annotatedSequence, false) == false)
+				return false;
 		}
 
 		// Notify fitness components that all sequences have been scheduled
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.complete();
 		}
+		
+		return true;
 	}
 
 	@Override
-	public void evaluate(final ISequences<T> sequences,
+	public boolean evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
 // TODO!!
 //		TODO!!
@@ -151,11 +154,13 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				final List<IVoyagePlan> plans = scheduler.schedule(resource,
 						sequence);
 
-				voyagePlanAnnotator.annonateFromVoyagePlan(resource, plans,
+				voyagePlanAnnotator.annotateFromVoyagePlan(resource, plans,
 						annotatedSequence);
 			}
-			evaluateSequence(resource, sequence, annotatedSequence, true);
+			if (evaluateSequence(resource, sequence, annotatedSequence, true) == false)
+				return false;
 		}
+		return true;
 	}
 
 	@Override
@@ -186,15 +191,16 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	}
 
-	private void evaluateSequence(final IResource resource,
+	private boolean evaluateSequence(final IResource resource,
 			final ISequence<T> sequence,
 			final IAnnotatedSequence<T> annotatedSequence,
 			final boolean newSequence) {
 
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			c.evaluateSequence(resource, sequence, annotatedSequence,
-					newSequence);
+			if (c.evaluateSequence(resource, sequence, annotatedSequence,
+					newSequence) == false) return false;
 		}
+		return true;
 	}
 
 	/**
