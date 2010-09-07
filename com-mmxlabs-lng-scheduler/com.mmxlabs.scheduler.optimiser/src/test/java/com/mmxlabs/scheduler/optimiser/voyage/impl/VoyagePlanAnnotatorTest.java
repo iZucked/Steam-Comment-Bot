@@ -193,7 +193,7 @@ public class VoyagePlanAnnotatorTest {
 		final IResource resource = context.mock(IResource.class);
 
 		final AnnotatedSequence<Object> annotatedSequence = new AnnotatedSequence<Object>();
-		annotator.annonateFromVoyagePlan(resource, plans, annotatedSequence);
+		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
 
 		{
 			final IJourneyEvent<Object> journey = annotatedSequence

@@ -43,7 +43,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 			FuelComponent.Base_Supplemental, FuelComponent.FBO };
 
 	@Override
-	public void annonateFromVoyagePlan(final IResource resource,
+	public void annotateFromVoyagePlan(final IResource resource,
 			final List<IVoyagePlan> plans,
 			final IAnnotatedSequence<T> annotatedSequence) {
 
