@@ -329,6 +329,7 @@ public interface VesselClass extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel Equivalence Factor</b></em>' attribute.
+	 * The default value is <code>"0.5"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -337,7 +338,7 @@ public interface VesselClass extends EObject {
 	 * @return the value of the '<em>Base Fuel Equivalence Factor</em>' attribute.
 	 * @see #setBaseFuelEquivalenceFactor(double)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_BaseFuelEquivalenceFactor()
-	 * @model
+	 * @model default="0.5" required="true"
 	 * @generated
 	 */
 	double getBaseFuelEquivalenceFactor();

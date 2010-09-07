@@ -256,7 +256,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT = 0.0;
+	protected static final double BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT = 0.5;
 
 	/**
 	 * The cached value of the '{@link #getBaseFuelEquivalenceFactor() <em>Base Fuel Equivalence Factor</em>}' attribute.
