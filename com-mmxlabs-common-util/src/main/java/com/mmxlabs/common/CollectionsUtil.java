@@ -2,8 +2,10 @@ package com.mmxlabs.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Utility class for to create java.util Collections objects.
@@ -71,5 +73,19 @@ public final class CollectionsUtil {
 			return map.get(key);
 		}
 		return defaultValue;
+	}
+
+	/**
+	 * Create a hash set containing the given elements
+	 * @param <T>
+	 * @param elements
+	 * @return
+	 */
+	public static <T> Set<T> makeHashSet(final T ... elements) {
+		HashSet<T> result = new HashSet<T>();
+		for (int i = 0; i<elements.length; i++) {
+			result.add(elements[i]);
+		}
+		return result;
 	}
 }
