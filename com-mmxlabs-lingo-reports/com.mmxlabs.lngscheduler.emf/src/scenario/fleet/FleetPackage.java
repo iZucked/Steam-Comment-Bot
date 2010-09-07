@@ -271,13 +271,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR = 11;
 
 	/**
+	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__INACCESSIBLE_PORTS = 12;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = 12;
+	int VESSEL_CLASS_FEATURE_COUNT = 13;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
@@ -658,6 +667,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_BaseFuelEquivalenceFactor();
 
 	/**
+	 * Returns the meta object for the reference list '{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Inaccessible Ports</em>'.
+	 * @see scenario.fleet.VesselClass#getInaccessiblePorts()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_InaccessiblePorts();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.fleet.FuelConsumptionLine <em>Fuel Consumption Line</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -991,6 +1011,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR = eINSTANCE.getVesselClass_BaseFuelEquivalenceFactor();
+
+		/**
+		 * The meta object literal for the '<em><b>Inaccessible Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__INACCESSIBLE_PORTS = eINSTANCE.getVesselClass_InaccessiblePorts();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.

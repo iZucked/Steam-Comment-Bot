@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
@@ -46,7 +48,6 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 
 /**
@@ -315,6 +316,19 @@ public class LNGScenarioTransformer {
 			 */
 			buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden,eVc.getLadenAttributes());
 			buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast,eVc.getBallastAttributes());
+			
+			/*
+			 * set up inaccessible ports by applying resource allocation constraints
+			 */
+			Set<IPort> inaccessiblePorts = new HashSet<IPort>();
+			for (Port ePort : eVc.getInaccessiblePorts()) {
+				final IPort port = portAssociation.lookup(ePort);
+				inaccessiblePorts.add(port);
+			}
+			
+			if (inaccessiblePorts.isEmpty() == false) {
+				builder.setVesselClassInaccessiblePorts(vc, inaccessiblePorts);
+			}
 		}
 
 		/*

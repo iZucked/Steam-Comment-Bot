@@ -8,6 +8,7 @@ package scenario.fleet;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import scenario.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getBaseFuelEquivalenceFactor <em>Base Fuel Equivalence Factor</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -349,5 +351,20 @@ public interface VesselClass extends EObject {
 	 * @generated
 	 */
 	void setBaseFuelEquivalenceFactor(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list.
+	 * The list contents are of type {@link scenario.port.Port}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * A list of ports where this vessel can't dock because it is too large in some way.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Inaccessible Ports</em>' reference list.
+	 * @see scenario.fleet.FleetPackage#getVesselClass_InaccessiblePorts()
+	 * @model
+	 * @generated
+	 */
+	EList<Port> getInaccessiblePorts();
 
 } // VesselClass

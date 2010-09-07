@@ -73,6 +73,12 @@
           <details key="documentation" value="The factor relating boiloff to base fuel; one unit of boiloff is equivalent to this many units of base fuel."/>
         </eAnnotations>
       </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1"
+          eType="#//port/Port">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A list of ports where this vessel can't dock because it is too large in some way."/>
+        </eAnnotations>
+      </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FuelConsumptionLine">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

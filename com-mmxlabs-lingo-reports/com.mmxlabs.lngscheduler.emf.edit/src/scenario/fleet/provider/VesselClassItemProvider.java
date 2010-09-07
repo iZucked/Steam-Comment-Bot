@@ -75,6 +75,7 @@ public class VesselClassItemProvider
 			addDailyCharterPricePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
 			addBaseFuelEquivalenceFactorPropertyDescriptor(object);
+			addInaccessiblePortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -295,6 +296,28 @@ public class VesselClassItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Inaccessible Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInaccessiblePortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_inaccessiblePorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_inaccessiblePorts_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__INACCESSIBLE_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
