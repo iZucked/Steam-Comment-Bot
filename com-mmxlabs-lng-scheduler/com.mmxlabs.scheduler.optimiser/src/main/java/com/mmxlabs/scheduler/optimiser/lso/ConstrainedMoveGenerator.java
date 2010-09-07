@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import com.mmxlabs.common.Pair;
@@ -130,7 +131,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	 */
 	private ISequences<T> sequences = null;
 	
-	private RandomHelper random;
+	private Random random;
 	
 	int breakableVertexCount = 0;
 	
@@ -311,7 +312,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				//TODO it might be worth caching this as a source of possible moves to allow 
 				//quick generation on subsequent calls, if this move is rejected
 				
-				final Pair<Integer, Integer> selectedSecondBreak = random.chooseElementFrom(viableSecondBreaks);
+				final Pair<Integer, Integer> selectedSecondBreak = RandomHelper.chooseElementFrom(random, viableSecondBreaks);
 				//so now we have two breaks, which either means a 4opt2 or a 3opt2, so we just have to decode these and see.
 				//second element of the pair is in sequence1, first is in sequence2.
 				
@@ -368,6 +369,12 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			}
 		}
 	}
-	
 
+	public Random getRandom() {
+		return random;
+	}
+
+	public void setRandom(Random random) {
+		this.random = random;
+	}
 }
