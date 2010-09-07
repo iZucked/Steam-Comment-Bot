@@ -18,17 +18,21 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	private int purchasePrice;
 
+	private int cargoCVValue;
+
 	public LoadSlot() {
 
 	}
 
 	public LoadSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minLoadVolume,
-			final long maxLoadVolume, final int purchasePrice) {
+			final long maxLoadVolume, final int purchasePrice,
+			final int cargoCVValue) {
 		super(id, port, timwWindow);
 		this.minLoadVolume = minLoadVolume;
 		this.maxLoadVolume = maxLoadVolume;
 		this.purchasePrice = purchasePrice;
+		this.cargoCVValue = cargoCVValue;
 	}
 
 	@Override
@@ -67,16 +71,30 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 			if (minLoadVolume != slot.minLoadVolume) {
 				return false;
 			}
+			
 			if (maxLoadVolume != slot.maxLoadVolume) {
 				return false;
 			}
+			
 			if (purchasePrice != slot.purchasePrice) {
 				return false;
 			}
 
+			if (cargoCVValue != slot.cargoCVValue) {
+				return false;
+			}
+			
 			return super.equals(obj);
 		}
 		return false;
+	}
+
+	public int getCargoCVValue() {
+		return cargoCVValue;
+	}
+
+	public void setCargoCVValue(final int cargoCVValue) {
+		this.cargoCVValue = cargoCVValue;
 	}
 
 }
