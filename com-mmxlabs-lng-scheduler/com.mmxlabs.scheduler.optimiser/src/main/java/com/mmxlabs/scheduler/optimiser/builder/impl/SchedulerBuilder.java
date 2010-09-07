@@ -26,7 +26,6 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
@@ -574,6 +573,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_startEndRequirementProvider, 
 				startEndRequirementProvider);
 
+		data.addDataComponentProvider(SchedulerConstants.DCP_portExclusionProvider, 
+				portExclusionProvider);
+		
 		if (true) {
 			for (final IPort from : ports) {
 				if (!(from instanceof IXYPort)) {
