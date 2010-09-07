@@ -37,7 +37,8 @@ public interface IVesselClass {
 	IConsumptionRateCalculator getConsumptionRate(VesselState vesselState);
 
 	/**
-	 * Returns the fuel consumption requirements when the vessel is idle.
+	 * Returns the fuel consumption requirements when the vessel is idle. Units
+	 * are MT Per Hour
 	 * 
 	 * @param vesselState
 	 * @return
@@ -45,7 +46,7 @@ public interface IVesselClass {
 	long getIdleConsumptionRate(VesselState vesselState);
 
 	/**
-	 * Returns the rate of NBO when the vessel is idle.
+	 * Returns the rate of NBO when the vessel is idle. Units are M3 Per Hour
 	 * 
 	 * @param vesselState
 	 * @return
@@ -82,7 +83,8 @@ public interface IVesselClass {
 	int getMinSpeed();
 
 	/**
-	 * Returns the rate of NBO when the vessel is travelling.
+	 * Returns the rate of NBO when the vessel is travelling. Units are M3 Per
+	 * Hour
 	 * 
 	 * @param vesselState
 	 * @return
@@ -124,6 +126,7 @@ public interface IVesselClass {
 
 	/**
 	 * Returns the hourly charter price for this vessel class, if chartered.
+	 * 
 	 * @return hourly charter price
 	 */
 	int getHourlyCharterPrice();
