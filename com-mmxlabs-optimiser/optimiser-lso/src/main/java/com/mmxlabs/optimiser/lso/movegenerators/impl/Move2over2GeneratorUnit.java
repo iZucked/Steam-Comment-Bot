@@ -1,6 +1,7 @@
 package com.mmxlabs.optimiser.lso.movegenerators.impl;
 
 import java.util.List;
+import java.util.Random;
 
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IResource;
@@ -20,7 +21,7 @@ public class Move2over2GeneratorUnit<T> implements
 	@Override
 	public IMove<T> generateRandomMove(RandomMoveGenerator<T> moveGenerator,
 			ISequences<T> sequences) {
-		final RandomHelper random = new RandomHelper(moveGenerator.getRandom());
+		final Random random = moveGenerator.getRandom();
 		
 		final List<IResource> resources = sequences.getResources();
 		final int resourceCount = resources.size();
@@ -28,7 +29,7 @@ public class Move2over2GeneratorUnit<T> implements
 		
 		//pick two random sequences
 		final int resource1 = random.nextInt(resourceCount);
-		final int resource2 = random.nextDifferentInt(resourceCount, resource1);
+		final int resource2 = RandomHelper.nextDifferentInt(random, resourceCount, resource1);
 
 		//generate breakpoints (this should be OK regarding start and end).
 		final int resource1Start = moveGenerator.generateBreakPoint(sequences.getSequence(resource1));
