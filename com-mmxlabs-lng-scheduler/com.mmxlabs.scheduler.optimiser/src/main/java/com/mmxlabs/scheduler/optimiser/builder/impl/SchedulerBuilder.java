@@ -113,13 +113,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<ITimeWindow> timeWindows = new LinkedList<ITimeWindow>();
 
 	/**
-	 * List of end slots, which need to be corrected in getOptimisationData to have the latest time in them
+	 * List of end slots, which need to be corrected in getOptimisationData to
+	 * have the latest time in them
 	 */
-	private final List<Pair<ISequenceElement,PortSlot>> endSlots = new LinkedList<Pair<ISequenceElement,PortSlot>>();
-	
+	private final List<Pair<ISequenceElement, PortSlot>> endSlots = new LinkedList<Pair<ISequenceElement, PortSlot>>();
+
 	/**
-	 * A "virtual" port which is zero distance from all other ports, to be used in cases where a vessel can be in any location.
-	 * This can be replaced with a real location at a later date, after running an optimisation.
+	 * A "virtual" port which is zero distance from all other ports, to be used
+	 * in cases where a vessel can be in any location. This can be replaced with
+	 * a real location at a later date, after running an optimisation.
 	 */
 	private final IPort ANYWHERE;
 
@@ -164,10 +166,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				new HashMapMatrixProvider<IPort, Integer>(
 						SchedulerConstants.DCP_portDistanceProvider,
 						Integer.MAX_VALUE));
-		
+
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE");
-		
+
 	}
 
 	@Override
@@ -250,8 +252,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		portSlotsProvider.setPortSlot(element, slot);
 
-		portTypeProvider.setPortType(element,
-				PortType.Discharge);
+		portTypeProvider.setPortType(element, PortType.Discharge);
 
 		timeWindowProvider.setTimeWindows(element,
 				Collections.singletonList(window));
@@ -299,16 +300,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		ports.add(port);
 
 		/*
-		 * ANYWHERE is not present in the /real/ distance matrix, so we must set its distances here.
+		 * ANYWHERE is not present in the /real/ distance matrix, so we must set
+		 * its distances here.
 		 */
 		if (ANYWHERE != null) {
-			setPortToPortDistance(port, ANYWHERE, IMultiMatrixProvider.Default_Key, 0);
-			setPortToPortDistance(ANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
+			setPortToPortDistance(port, ANYWHERE,
+					IMultiMatrixProvider.Default_Key, 0);
+			setPortToPortDistance(ANYWHERE, port,
+					IMultiMatrixProvider.Default_Key, 0);
 		}
-		
+
 		// travel time from A to A should be zero, right?
-		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
-		
+		this.setPortToPortDistance(port, port,
+				IMultiMatrixProvider.Default_Key, 0);
+
 		return port;
 	}
 
@@ -323,10 +328,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		ports.add(port);
 
 		if (ANYWHERE != null) {
-			setPortToPortDistance(port, ANYWHERE, IMultiMatrixProvider.Default_Key, 0);
-			setPortToPortDistance(ANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
+			setPortToPortDistance(port, ANYWHERE,
+					IMultiMatrixProvider.Default_Key, 0);
+			setPortToPortDistance(ANYWHERE, port,
+					IMultiMatrixProvider.Default_Key, 0);
 		}
-		
+
 		return port;
 	}
 
@@ -334,11 +341,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public ITimeWindow createTimeWindow(final int start, final int end) {
 
 		final TimeWindow window = new TimeWindow(start, end);
-		
+
 		if (end > endOfLatestWindow) {
-			endOfLatestWindow  = end;
+			endOfLatestWindow = end;
 		}
-		
+
 		timeWindows.add(window);
 		return window;
 	}
@@ -346,7 +353,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IVessel createVessel(final String name, final IVesselClass vesselClass, final IStartEndRequirement start,
 			final IStartEndRequirement end) {
-		return this.createVessel(name, vesselClass, VesselInstanceType.FLEET, start, end);
+		return this.createVessel(name, vesselClass, VesselInstanceType.FLEET,
+				start, end);
 	}
 	
 	/**
@@ -379,33 +387,34 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		
 		return createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, start, end);
 	}
-	
+
 	@Override
 	public IVessel createVessel(final String name,
-			final IVesselClass vesselClass, final VesselInstanceType vesselInstanceType, 
-			IStartEndRequirement start, IStartEndRequirement end){
+			final IVesselClass vesselClass,
+			final VesselInstanceType vesselInstanceType,
+			IStartEndRequirement start, IStartEndRequirement end) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException(
 					"IVesselClass was not created using this builder");
 		}
 
-//		if (!ports.contains(startPort)) {
-//			throw new IllegalArgumentException(
-//					"Start IPort was not created using this builder");
-//		}
+		// if (!ports.contains(startPort)) {
+		// throw new IllegalArgumentException(
+		// "Start IPort was not created using this builder");
+		// }
 
-//		if (!ports.contains(endPort)) {
-//			throw new IllegalArgumentException(
-//					"End IPort was not created using this builder");
-//		}
+		// if (!ports.contains(endPort)) {
+		// throw new IllegalArgumentException(
+		// "End IPort was not created using this builder");
+		// }
 
 		final Vessel vessel = new Vessel();
 		vessel.setName(name);
 		vessel.setVesselClass(vesselClass);
 
 		vessel.setVesselInstanceType(vesselInstanceType);
-		
+
 		vessels.add(vessel);
 
 		final IResource resource = new Resource(name);
@@ -413,75 +422,78 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// Register with provider
 		vesselProvider.setVesselResource(resource, vessel);
-		
-		// If no time requirement is specified then the time window is at the very start of the job
-		ITimeWindow startWindow = 
-			start.hasTimeRequirement() ? 
-					createTimeWindow(start.getTime(), start.getTime()) :
-						createTimeWindow(0, 0);
-		
+
+		// If no time requirement is specified then the time window is at the
+		// very start of the job
+		ITimeWindow startWindow = start.hasTimeRequirement() ? createTimeWindow(
+				start.getTime(), start.getTime()) : createTimeWindow(0, 0);
+
 		PortSlot startSlot = new PortSlot();
 		startSlot.setId("start-" + name);
-		startSlot.setPort(start.hasPortRequirement() ? start.getLocation() : ANYWHERE);
-		
+		startSlot.setPort(start.hasPortRequirement() ? start.getLocation()
+				: ANYWHERE);
+
 		startSlot.setTimeWindow(startWindow);
 
-		
-		
 		PortSlot endSlot = new PortSlot();
 		endSlot.setId("end-" + name);
 		endSlot.setPort(end.hasPortRequirement() ? end.getLocation() : ANYWHERE);
-		
 
 		// Create start/end sequence elements for this route
 		SequenceElement startElement = new SequenceElement();
 		SequenceElement endElement = new SequenceElement();
-		
+
 		sequenceElements.add(startElement);
 		sequenceElements.add(endElement);
-		
+
 		if (end.hasTimeRequirement() == false) {
-			//put end slot into list of slots to patch up later.
-			endSlots.add(new Pair<ISequenceElement,PortSlot>(endElement, endSlot));
-		} else {			
-			endSlot.setTimeWindow(
-					createTimeWindow(end.getTime(), end.getTime() + 1)
-			);
+			// put end slot into list of slots to patch up later.
+			endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement,
+					endSlot));
+		} else {
+			endSlot.setTimeWindow(createTimeWindow(end.getTime(),
+					end.getTime() + 1));
 		}
-		
-		timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startSlot.getTimeWindow()));
-		
+
+		timeWindowProvider.setTimeWindows(startElement,
+				Collections.singletonList(startSlot.getTimeWindow()));
+
 		if (end.hasTimeRequirement()) {
-			timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endSlot.getTimeWindow()));
-		} //otherwise this will be set in getOptimisationData().
-		
-		
-		startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
+			timeWindowProvider.setTimeWindows(endElement,
+					Collections.singletonList(endSlot.getTimeWindow()));
+		} // otherwise this will be set in getOptimisationData().
+
+		startElement.setName(startSlot.getId() + "-"
+				+ startSlot.getPort().getName());
 		endElement.setName(endSlot.getId() + "-" + endSlot.getPort().getName());
-		
+
 		startElement.setPortSlot(startSlot);
 		endElement.setPortSlot(endSlot);
-		
+
 		portProvider.setPortForElement(startSlot.getPort(), startElement);
 		portProvider.setPortForElement(endSlot.getPort(), endElement);
-		
+
 		portTypeProvider.setPortType(startElement, PortType.Start);
 		portTypeProvider.setPortType(endElement, PortType.End);
-		
+
 		portSlotsProvider.setPortSlot(startElement, startSlot);
 		portSlotsProvider.setPortSlot(endElement, endSlot);
-		
-		resourceAllocationProvider.setAllowedResources(startElement, Collections.singleton(resource));
-		resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
-		
-		startEndRequirementProvider.setStartEndRequirements(resource, start, end);
-		startEndRequirementProvider.setStartEndElements(resource, startElement, endElement);
-		
-//		TODO specify initial vessel state?
-		
+
+		resourceAllocationProvider.setAllowedResources(startElement,
+				Collections.singleton(resource));
+		resourceAllocationProvider.setAllowedResources(endElement,
+				Collections.singleton(resource));
+
+		startEndRequirementProvider.setStartEndRequirements(resource, start,
+				end);
+		startEndRequirementProvider.setStartEndElements(resource, startElement,
+				endElement);
+
+		// TODO specify initial vessel state?
+
 		return vessel;
 	}
-	
+
 	@Override
 	public IStartEndRequirement createStartEndRequirement(IPort fixedPort) {
 		return new StartEndRequirement(fixedPort, true, 0, false);
@@ -497,7 +509,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			int fixedTime) {
 		return new StartEndRequirement(fixedPort, true, fixedTime, true);
 	}
-	
+
 	@Override
 	public IStartEndRequirement createStartEndRequirement() {
 		return new StartEndRequirement(ANYWHERE, false, 0, false);
@@ -534,13 +546,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Patch up end time windows
 		final int latestTime = endOfLatestWindow + 24 * 7;
 		for (Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
-			ITimeWindow endWindow = createTimeWindow(latestTime, latestTime+1);
+			ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + 1);
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
-			timeWindowProvider.setTimeWindows(elementAndSlot.getFirst(), Collections.singletonList(endWindow));
+			timeWindowProvider.setTimeWindows(elementAndSlot.getFirst(),
+					Collections.singletonList(endWindow));
 		}
-		
+
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
-		
+
 		data.setResources(resources);
 		data.setSequenceElements(sequenceElements);
 
@@ -568,9 +581,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.addDataComponentProvider(
 				SchedulerConstants.DCP_resourceAllocationProvider,
 				resourceAllocationProvider);
-		
+
 		data.addDataComponentProvider(
-				SchedulerConstants.DCP_startEndRequirementProvider, 
+				SchedulerConstants.DCP_startEndRequirementProvider,
 				startEndRequirementProvider);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_portExclusionProvider, 
@@ -613,18 +626,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// TODO: Null provider refs
 	}
 
-	
-	
 	@Override
 	public IVesselClass createVesselClass(String name, int minSpeed,
-			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelConversionFactor) {
-		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice, baseFuelConversionFactor, 0);
+			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT) {
+		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice, baseFuelEquivalenceInM3TOMT, 0);
 	}
 
 	@Override
 	public IVesselClass createVesselClass(final String name,
 			final int minSpeed, final int maxSpeed, final long capacity,
-			final int minHeel, int baseFuelUnitPrice, int baseFuelConversionFactor, 
+			final int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, 
 			int hourlyCharterPrice) {
 
 		final VesselClass vesselClass = new VesselClass();
@@ -637,10 +648,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setMinHeel(minHeel);
 
 		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPrice);
+		vesselClass.setBaseFuelConversionFactor(baseFuelEquivalenceInM3TOMT);
 
 		vesselClass.setHourlyCharterPrice(hourlyCharterPrice);
-		
-		vesselClass.setBaseFuelConversionFactor(baseFuelConversionFactor);
 		
 		vesselClasses.add(vesselClass);
 
@@ -649,8 +659,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void setVesselClassStateParamaters(final IVesselClass vesselClass,
-			final VesselState state, final int nboRate, final int idleNBORate,
-			final int idleConsumptionRate,
+			final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
+			final int idleConsumptionRateInMTPerHOur,
 			final IConsumptionRateCalculator consumptionRateCalculator,
 			final int nboSpeed) {
 
@@ -667,15 +677,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final VesselClass vc = (VesselClass) vesselClass;
 
-		vc.setNBORate(state, nboRate);
-		vc.setIdleNBORate(state, idleNBORate);
-		vc.setIdleConsumptionRate(state, idleConsumptionRate);
+		vc.setNBORate(state, nboRateInM3PerHour);
+		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
+		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHOur);
 		vc.setConsumptionRate(state, consumptionRateCalculator);
 		vc.setNBOSpeed(state, nboSpeed);
 	}
 
 	/**
-	 * Like the other setVesselClassStateParameters, but the NBO speed is calculated automatically.
+	 * Like the other setVesselClassStateParameters, but the NBO speed is
+	 * calculated automatically.
 	 * 
 	 * @param vc
 	 * @param state
@@ -688,9 +699,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			VesselState state, int nboRate, int idleNBORate,
 			int idleConsumptionRate,
 			InterpolatingConsumptionRateCalculator consumptionCalculator) {
-		//TODO there is something stupid going on with units here.
+		// TODO there is something stupid going on with units here.
 		final int nboSpeed = consumptionCalculator.getSpeed(nboRate);
-		this.setVesselClassStateParamaters(vc, state, nboRate, idleNBORate, idleConsumptionRate, consumptionCalculator, nboSpeed);
+		this.setVesselClassStateParamaters(vc, state, nboRate, idleNBORate,
+				idleConsumptionRate, consumptionCalculator, nboSpeed);
 	}
 
 	@Override

@@ -43,25 +43,34 @@ public interface ISchedulerBuilder {
 	 * for each {@link VesselState}.
 	 * 
 	 * @param name
+	 * @param minSpeed
+	 * @param maxSpeed
+	 * @param capacity
+	 * @param minHeel
+	 * @param baseFuelUnitPrice
+	 * @param baseFuelEquivalenceInM3TOMT
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
 			long capacity, int minHeel, int baseFuelUnitPrice,
-			int baseFuelConversionFactor);
+			int baseFuelEquivalenceInM3TOMT);
 
 	/**
-	 * Like the other {@link createVesselClass}, but with an hourly charter price specified (defaults to zero otherwise); 
+	 * Like the other {@link createVesselClass}, but with an hourly charter
+	 * price specified (defaults to zero otherwise);
+	 * 
 	 * @param name
 	 * @param minSpeed
 	 * @param maxSpeed
 	 * @param capacity
 	 * @param minHeel
 	 * @param baseFuelUnitPrice
+	 * @param baseFuelEquivalenceInM3TOMT
 	 * @param dailyCharterPrice
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
-			long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelConversionFactor, int hourlyCharterPrice);
+			long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int hourlyCharterPrice);
 	
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the
@@ -91,6 +100,7 @@ public interface ISchedulerBuilder {
 	
 	/**
 	 * Create a fleet vessel with the given name, class and instance type.
+	 * 
 	 * @param name
 	 * @param vesselClass
 	 * @param vesselInstanceType
@@ -101,12 +111,14 @@ public interface ISchedulerBuilder {
 	IVessel createVessel(String name, IVesselClass vesselClass,
 			VesselInstanceType vesselInstanceType, IStartEndRequirement start,
 			IStartEndRequirement end);
-	
+
 	/**
 	 * Create a start/end requirement which constrains nothing
+	 * 
 	 * @return
 	 */
 	IStartEndRequirement createStartEndRequirement();
+
 	/**
 	 * Create a requirement that the vessel start/end at the given port, but at an arbitrary time
 	 * @param fixedPort
@@ -221,7 +233,7 @@ public interface ISchedulerBuilder {
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the
 	 * data providers. However, the builder will own them until then. Dispose
-	 * should selectively clean these up.
+	 * should selectively clean these upbaseFuelConversionFactor.
 	 */
 	void dispose();
 
