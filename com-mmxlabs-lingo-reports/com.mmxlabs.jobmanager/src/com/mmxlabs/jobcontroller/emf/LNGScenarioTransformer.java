@@ -302,14 +302,17 @@ public class LNGScenarioTransformer {
 		 */
 		Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<VesselClass, IVesselClass>();
 
+		// TODO: Check that we are mutliplying/dividing correctly to maintain precision
+		
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
 			IVesselClass vc = builder.createVesselClass(eVc.getName(), 
 					Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()), 
 					Calculator.scale(eVc.getCapacity() * eVc.getFillCapacity()), // TODO is capacity mean to be scaled?
 					Calculator.scaleToInt(eVc.getMinHeelVolume()),
-					eVc.getBaseFuelUnitPrice(),
+					Calculator.scale(eVc.getBaseFuelUnitPrice()),
 					Calculator.scaleToInt(eVc.getBaseFuelEquivalenceFactor()),
-					eVc.getDailyCharterPrice() * 24);
+					// This should be divide?
+					Calculator.scale(eVc.getDailyCharterPrice()) / 24);
 			vesselClassAssociation.add(eVc, vc);
 
 			/*
