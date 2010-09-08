@@ -54,7 +54,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	private final Scenario eScenario;
 
 	private final Map<IPort, scenario.port.Port> ePorts = new HashMap<IPort, scenario.port.Port>();
-	private final Map<ILoadSlot, scenario.cargo.Slot> eLoadSlots = new HashMap<ILoadSlot, scenario.cargo.Slot>();
+	private final Map<ILoadSlot, scenario.cargo.LoadSlot> eLoadSlots = new HashMap<ILoadSlot, scenario.cargo.LoadSlot>();
 	private final Map<IDischargeSlot, scenario.cargo.Slot> eDischargeSlots = new HashMap<IDischargeSlot, scenario.cargo.Slot>();
 	private final Map<ICargo, scenario.cargo.Cargo> eCargoes = new HashMap<ICargo, scenario.cargo.Cargo>();
 	private final Map<IVessel, scenario.fleet.Vessel> eVessels = new HashMap<IVessel, scenario.fleet.Vessel>();
@@ -85,14 +85,14 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		ILoadSlot slot = delegate.createLoadSlot(id, port, window, minVolume,
 				maxVolume, unitPrice, cargoCVValue);
 
-		scenario.cargo.Slot eLoadSlot = CargoFactory.eINSTANCE
-				.createSlot();
+		scenario.cargo.LoadSlot eLoadSlot = CargoFactory.eINSTANCE
+				.createLoadSlot();
 		eLoadSlot.setId(id);
 		eLoadSlot.setMaxQuantity(maxVolume);
 		eLoadSlot.setMinQuantity(minVolume);
 		eLoadSlot.setPort(ePorts.get(port));
 		eLoadSlot.setUnitPrice(unitPrice);
-		eLoadSlot.setCargoCVValue(cargoCVValue);
+		eLoadSlot.setCargoCVvalue(cargoCVValue);
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.HOUR_OF_DAY, window.getStart());
 		eLoadSlot.setWindowStart(now.getTime());
