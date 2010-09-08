@@ -24,7 +24,7 @@ public class DistanceComponentTest {
 	Mockery context = new JUnit4Mockery();
 
 	@Test
-	public void testDistanceCOomponent() {
+	public void testDistanceComponent() {
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
 		final DistanceComponent<Object> c = new DistanceComponent<Object>(name,
