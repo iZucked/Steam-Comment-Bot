@@ -7,6 +7,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -90,6 +91,19 @@ public interface ISchedulerBuilder {
 			int idleConsumptionRate,
 			IConsumptionRateCalculator consumptionRateCalculator, int nboSpeed);
 
+	
+	/**
+	 * Create a charter out object.
+	 * @param arrivalTimeWindow
+	 * @param port
+	 * @param durationHours
+	 * @return
+	 */
+	ICharterOut createCharterOut(ITimeWindow arrivalTimeWindow, IPort port, int durationHours);
+	
+	void addCharterOutVessel(ICharterOut charterOut, IVessel vessel);
+	void addCharterOutVesselClass(ICharterOut charterOut, IVesselClass vesselClass);
+	
 	/**
 	 * Create a core fleet vessel with the given name and class.
 	 * 
@@ -261,6 +275,4 @@ public interface ISchedulerBuilder {
 
 	void setVesselClassInaccessiblePorts(IVesselClass vc,
 			Set<IPort> inaccessiblePorts);
-
-
 }

@@ -2,8 +2,11 @@ package com.mmxlabs.scheduler.optimiser.builder.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.common.Pair;
@@ -30,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -42,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
+import com.mmxlabs.scheduler.optimiser.components.impl.CharterOut;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -133,7 +138,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private int endOfLatestWindow = 0;
 
 	private IPortExclusionProviderEditor portExclusionProvider;
+
+	private Set<ICharterOut> charterOuts = new HashSet<ICharterOut>();
+	private Map<ICharterOut, Set<IVessel>> vesselCharterOuts =
+		new HashMap<ICharterOut, Set<IVessel>>();
 	
+	private Map<ICharterOut, Set<IVesselClass>> vesselClassCharterOuts =
+		new HashMap<ICharterOut, Set<IVesselClass>>();
+	
+		
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
 				SchedulerConstants.DCP_vesselProvider);
@@ -553,6 +566,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					Collections.singletonList(endWindow));
 		}
 
+		// Create charter out elements
+		buildCharterOuts();
+		
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
 
 		data.setResources(resources);
@@ -710,5 +726,61 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public void setVesselClassInaccessiblePorts(IVesselClass vc,
 			Set<IPort> inaccessiblePorts) {
 		this.portExclusionProvider.setExcludedPorts(vc, inaccessiblePorts);
+	}
+
+	@Override
+	public ICharterOut createCharterOut(ITimeWindow arrival, IPort port, int durationHours) {
+		ICharterOut result = new CharterOut(arrival, durationHours, port);
+		charterOuts.add(result);
+		vesselCharterOuts.put(result, new HashSet<IVessel>());
+		vesselClassCharterOuts.put(result, new HashSet<IVesselClass>());
+		return result;
+	}
+	
+	@Override
+	public void addCharterOutVessel(ICharterOut charterOut, IVessel vessel) {
+		if (!vessels.contains(vessel)) {
+			throw new IllegalArgumentException("IVessel was not created using this builder");
+		}
+		if (!charterOuts.contains(charterOut)) {
+			throw new IllegalArgumentException("ICharterOut was not created using this builder");
+		}
+		vesselCharterOuts.get(charterOut).add(vessel);
+	}
+	
+	@Override
+	public void addCharterOutVesselClass(ICharterOut charterOut,
+			IVesselClass vesselClass) {
+		if (!vesselClasses.contains(vesselClass)) {
+			throw new IllegalArgumentException("IVesselClass was not created using this builder");
+		}
+		if (!charterOuts.contains(charterOut)) {
+			throw new IllegalArgumentException("ICharterOut was not created using this builder");
+		}
+		vesselClassCharterOuts.get(charterOut).add(vesselClass);
+	}
+	
+	protected void buildCharterOuts() {
+		for (final ICharterOut charterOut : charterOuts) {
+			final SequenceElement element = new SequenceElement();
+			timeWindowProvider.setTimeWindows(element, 
+					Collections.singletonList(charterOut.getTimeWindow()));
+			portTypeProvider.setPortType(element, PortType.CharterOut);
+			
+			final Set<IResource> resources = new HashSet<IResource>();
+			final Set<IVessel> supportedVessels = vesselCharterOuts.get(charterOut);
+			final Set<IVesselClass> supportedClasses = vesselClassCharterOuts.get(charterOut);
+			for (final IVessel vessel : vessels) {
+				if (supportedClasses.contains(vessel.getVesselClass()) &&
+						supportedVessels.contains(vessel)) {
+					final IResource resource = vesselProvider.getResource(vessel);
+					resources.add(resource);
+					elementDurationsProvider.setElementDuration(element, resource, 
+							charterOut.getDurationHours());
+				}
+			}
+			
+			resourceAllocationProvider.setAllowedResources(element, resources);
+		}
 	}
 }
