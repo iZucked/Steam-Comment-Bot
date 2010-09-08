@@ -62,12 +62,12 @@ public interface Cargo extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Load Slot</em>' containment reference.
-	 * @see #setLoadSlot(Slot)
+	 * @see #setLoadSlot(LoadSlot)
 	 * @see scenario.cargo.CargoPackage#getCargo_LoadSlot()
 	 * @model containment="true"
 	 * @generated
 	 */
-	Slot getLoadSlot();
+	LoadSlot getLoadSlot();
 
 	/**
 	 * Sets the value of the '{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}' containment reference.
@@ -77,7 +77,7 @@ public interface Cargo extends EObject {
 	 * @see #getLoadSlot()
 	 * @generated
 	 */
-	void setLoadSlot(Slot value);
+	void setLoadSlot(LoadSlot value);
 
 	/**
 	 * Returns the value of the '<em><b>Discharge Slot</b></em>' containment reference.

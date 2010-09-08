@@ -17,6 +17,7 @@ import scenario.cargo.Cargo;
 import scenario.cargo.CargoFactory;
 import scenario.cargo.CargoModel;
 import scenario.cargo.CargoPackage;
+import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.contract.ContractPackage;
 import scenario.contract.impl.ContractPackageImpl;
@@ -61,6 +62,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass slotEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass loadSlotEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -284,6 +292,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getLoadSlot() {
+		return loadSlotEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLoadSlot_CargoCVvalue() {
+		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public CargoFactory getCargoFactory() {
 		return (CargoFactory)getEFactoryInstance();
@@ -324,6 +350,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(slotEClass, SLOT__PORT);
 		createEAttribute(slotEClass, SLOT__WINDOW_START);
 		createEAttribute(slotEClass, SLOT__WINDOW_DURATION);
+
+		loadSlotEClass = createEClass(LOAD_SLOT);
+		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CVVALUE);
 	}
 
 	/**
@@ -357,6 +386,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		loadSlotEClass.getESuperTypes().add(this.getSlot());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -364,7 +394,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(cargoEClass, Cargo.class, "Cargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCargo_Id(), ecorePackage.getEString(), "id", null, 0, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargo_LoadSlot(), this.getSlot(), null, "loadSlot", null, 0, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargo_LoadSlot(), this.getLoadSlot(), null, "loadSlot", null, 0, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargo_DischargeSlot(), this.getSlot(), null, "dischargeSlot", null, 0, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotEClass, Slot.class, "Slot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -375,6 +405,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getSlot_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowStart(), ecorePackage.getEDate(), "windowStart", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowDuration(), ecorePackage.getEInt(), "windowDuration", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLoadSlot_CargoCVvalue(), ecorePackage.getEInt(), "cargoCVvalue", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //CargoPackageImpl

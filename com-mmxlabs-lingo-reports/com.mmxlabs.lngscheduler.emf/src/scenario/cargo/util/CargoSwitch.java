@@ -108,6 +108,13 @@ public class CargoSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.LOAD_SLOT: {
+				LoadSlot loadSlot = (LoadSlot)theEObject;
+				T result = caseLoadSlot(loadSlot);
+				if (result == null) result = caseSlot(loadSlot);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -154,6 +161,21 @@ public class CargoSwitch<T> {
 	 * @generated
 	 */
 	public T caseSlot(Slot object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Load Slot</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Load Slot</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLoadSlot(LoadSlot object) {
 		return null;
 	}
 

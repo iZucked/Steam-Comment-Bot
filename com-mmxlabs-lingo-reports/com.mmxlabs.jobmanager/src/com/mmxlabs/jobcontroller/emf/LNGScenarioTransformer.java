@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.Cargo;
+import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
@@ -154,7 +155,7 @@ public class LNGScenarioTransformer {
 		
 		for (Cargo eCargo: scenario.getCargoModel().getCargoes()) {
 			//not escargot.
-			Slot loadSlot = eCargo.getLoadSlot();
+			LoadSlot loadSlot = eCargo.getLoadSlot();
 			Slot dischargeSlot = eCargo.getDischargeSlot();
 			int loadStart = convertTime(earliestTime, loadSlot.getWindowStart());
 			int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart());
@@ -166,15 +167,15 @@ public class LNGScenarioTransformer {
 			ILoadSlot load = builder.createLoadSlot(loadSlot.getId(), 
 					ports.lookup(loadSlot.getPort()), 
 					loadWindow, 
-					loadSlot.getMinQuantity(), 
-					loadSlot.getMaxQuantity(), 
-					loadSlot.getUnitPrice(), loadSlot.getCargoCVValue());
+					Calculator.scale(loadSlot.getMinQuantity()), 
+					Calculator.scale(loadSlot.getMaxQuantity()), 
+					loadSlot.getUnitPrice(), loadSlot.getCargoCVvalue());
 			
 			IDischargeSlot discharge = builder.createDischargeSlot(dischargeSlot.getId(), 
 					ports.lookup(dischargeSlot.getPort()), 
 					dischargeWindow, 
-					dischargeSlot.getMinQuantity(),
-					dischargeSlot.getMaxQuantity(), 
+					Calculator.scale(dischargeSlot.getMinQuantity()),
+					Calculator.scale(dischargeSlot.getMaxQuantity()), 
 					dischargeSlot.getUnitPrice());
 			
 			builder.createCargo(eCargo.getId(), load, discharge);
@@ -223,7 +224,7 @@ public class LNGScenarioTransformer {
 
 			modeledEdges[portIndices.get(from)][portIndices.get(to)] = true;
 
-			final int distance = Calculator.scale(dl.getDistance());
+			final int distance = dl.getDistance();
 			defaultDistances[portIndices.get(from)][portIndices.get(to)] = 
 				distance;
 			builder.setPortToPortDistance(from, to, IMultiMatrixProvider.Default_Key, 
@@ -274,8 +275,8 @@ public class LNGScenarioTransformer {
 						                                             [portIndices.get(to)];
 
 						final int distanceViaCanal = distance + 
-						Calculator.scale(enter.getDistance()) +
-						Calculator.scale(exit.getDistance());	
+							enter.getDistance() +
+							exit.getDistance();	
 
 						if (distanceViaCanal < defaultDistance) {
 							//TODO this currently triggers an NPE, because I don't know how to specify

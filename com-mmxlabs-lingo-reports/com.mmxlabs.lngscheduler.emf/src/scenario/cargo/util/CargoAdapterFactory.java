@@ -85,6 +85,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createSlotAdapter();
 			}
 			@Override
+			public Adapter caseLoadSlot(LoadSlot object) {
+				return createLoadSlotAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -143,6 +147,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSlotAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.cargo.LoadSlot
+	 * @generated
+	 */
+	public Adapter createLoadSlotAdapter() {
 		return null;
 	}
 

@@ -53,6 +53,15 @@ public interface CargoFactory extends EFactory {
 	Slot createSlot();
 
 	/**
+	 * Returns a new object of class '<em>Load Slot</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Load Slot</em>'.
+	 * @generated
+	 */
+	LoadSlot createLoadSlot();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

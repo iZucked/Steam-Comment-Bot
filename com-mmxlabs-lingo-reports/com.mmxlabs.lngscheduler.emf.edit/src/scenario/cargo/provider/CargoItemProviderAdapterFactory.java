@@ -144,6 +144,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.cargo.LoadSlot} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LoadSlotItemProvider loadSlotItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.cargo.LoadSlot}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLoadSlotAdapter() {
+		if (loadSlotItemProvider == null) {
+			loadSlotItemProvider = new LoadSlotItemProvider(this);
+		}
+
+		return loadSlotItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -245,6 +268,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (cargoModelItemProvider != null) cargoModelItemProvider.dispose();
 		if (cargoItemProvider != null) cargoItemProvider.dispose();
 		if (slotItemProvider != null) slotItemProvider.dispose();
+		if (loadSlotItemProvider != null) loadSlotItemProvider.dispose();
 	}
 
 }

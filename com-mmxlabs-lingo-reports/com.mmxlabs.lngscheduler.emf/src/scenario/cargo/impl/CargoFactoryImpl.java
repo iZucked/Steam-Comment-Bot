@@ -65,6 +65,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.CARGO_MODEL: return createCargoModel();
 			case CargoPackage.CARGO: return createCargo();
 			case CargoPackage.SLOT: return createSlot();
+			case CargoPackage.LOAD_SLOT: return createLoadSlot();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -100,6 +101,16 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public Slot createSlot() {
 		SlotImpl slot = new SlotImpl();
 		return slot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LoadSlot createLoadSlot() {
+		LoadSlotImpl loadSlot = new LoadSlotImpl();
+		return loadSlot;
 	}
 
 	/**

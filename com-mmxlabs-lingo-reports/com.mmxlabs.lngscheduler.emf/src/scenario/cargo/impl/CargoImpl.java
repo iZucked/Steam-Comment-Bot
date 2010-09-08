@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
+import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 
 /**
@@ -61,7 +62,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * @generated
 	 * @ordered
 	 */
-	protected Slot loadSlot;
+	protected LoadSlot loadSlot;
 
 	/**
 	 * The cached value of the '{@link #getDischargeSlot() <em>Discharge Slot</em>}' containment reference.
@@ -120,7 +121,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Slot getLoadSlot() {
+	public LoadSlot getLoadSlot() {
 		return loadSlot;
 	}
 
@@ -129,8 +130,8 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetLoadSlot(Slot newLoadSlot, NotificationChain msgs) {
-		Slot oldLoadSlot = loadSlot;
+	public NotificationChain basicSetLoadSlot(LoadSlot newLoadSlot, NotificationChain msgs) {
+		LoadSlot oldLoadSlot = loadSlot;
 		loadSlot = newLoadSlot;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, newLoadSlot);
@@ -144,7 +145,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot(Slot newLoadSlot) {
+	public void setLoadSlot(LoadSlot newLoadSlot) {
 		if (newLoadSlot != loadSlot) {
 			NotificationChain msgs = null;
 			if (loadSlot != null)
@@ -247,7 +248,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				setId((String)newValue);
 				return;
 			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((Slot)newValue);
+				setLoadSlot((LoadSlot)newValue);
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((Slot)newValue);
@@ -268,7 +269,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				setId(ID_EDEFAULT);
 				return;
 			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((Slot)null);
+				setLoadSlot((LoadSlot)null);
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((Slot)null);

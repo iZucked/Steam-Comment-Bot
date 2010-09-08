@@ -217,6 +217,97 @@ public interface CargoPackage extends EPackage {
 	int SLOT_FEATURE_COUNT = 7;
 
 	/**
+	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.cargo.impl.LoadSlotImpl
+	 * @see scenario.cargo.impl.CargoPackageImpl#getLoadSlot()
+	 * @generated
+	 */
+	int LOAD_SLOT = 3;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ID = SLOT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__MIN_QUANTITY = SLOT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__MAX_QUANTITY = SLOT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__UNIT_PRICE = SLOT__UNIT_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PORT = SLOT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__WINDOW_START = SLOT__WINDOW_START;
+
+	/**
+	 * The feature id for the '<em><b>Window Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__WINDOW_DURATION = SLOT__WINDOW_DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Cargo CVvalue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CARGO_CVVALUE = SLOT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Load Slot</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 1;
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.CargoModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -368,6 +459,27 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_WindowDuration();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Load Slot</em>'.
+	 * @see scenario.cargo.LoadSlot
+	 * @generated
+	 */
+	EClass getLoadSlot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo CVvalue</em>'.
+	 * @see scenario.cargo.LoadSlot#getCargoCVvalue()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_CargoCVvalue();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -506,6 +618,24 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__WINDOW_DURATION = eINSTANCE.getSlot_WindowDuration();
+
+		/**
+		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.cargo.impl.LoadSlotImpl
+		 * @see scenario.cargo.impl.CargoPackageImpl#getLoadSlot()
+		 * @generated
+		 */
+		EClass LOAD_SLOT = eINSTANCE.getLoadSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo CVvalue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__CARGO_CVVALUE = eINSTANCE.getLoadSlot_CargoCVvalue();
 
 	}
 

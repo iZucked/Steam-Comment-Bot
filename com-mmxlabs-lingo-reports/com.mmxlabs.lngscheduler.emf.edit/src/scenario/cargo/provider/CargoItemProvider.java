@@ -185,12 +185,17 @@ public class CargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.CARGO__LOAD_SLOT,
-				 CargoFactory.eINSTANCE.createSlot()));
+				 CargoFactory.eINSTANCE.createLoadSlot()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.CARGO__DISCHARGE_SLOT,
 				 CargoFactory.eINSTANCE.createSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO__DISCHARGE_SLOT,
+				 CargoFactory.eINSTANCE.createLoadSlot()));
 	}
 
 	/**
