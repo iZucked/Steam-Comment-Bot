@@ -9,47 +9,67 @@ package com.mmxlabs.scheduler.optimiser;
  * @author Simon Goodall
  * 
  */
-public class Calculator {
+public final class Calculator {
 
 	public static final int ScaleFactor = 1000;
 
-	public static int speedFromDistanceTime(long distance, int time) {
+	/**
+	 * Simple multiplication between scaled integer based values
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static long multiply(final long a, final long b) {
+		return (a * b) / ScaleFactor;
+	}
+	
+	/**
+	 * Simple division between scaled integer based values
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static long divide(final long a, final long b) {
+		return (a * ScaleFactor) / b;
+	}
+	
+	public static int speedFromDistanceTime(final long distance, final int time) {
 
 		return (int) ((distance * ScaleFactor) / time);
 	}
 
-	public static int getTimeFromSpeedDistance(int speed, long distance) {
+	public static int getTimeFromSpeedDistance(final int speed, final long distance) {
 
 		return (int) ((distance * ScaleFactor) / speed);
 	}
 
-	public static long quantityFromRateTime(long rate, int time) {
+	public static long quantityFromRateTime(final long rate, final int time) {
 
 		return (rate * time);
 	}
 
-	public static int getTimeFromRateQuantity(long rate, long quantity) {
+	public static int getTimeFromRateQuantity(final long rate, final long quantity) {
 
 		return (int) (quantity / rate);
 	}
 
-	public static long costFromConsumption(long consumption, int unitPrice) {
+	public static long costFromConsumption(final long consumption, final int unitPrice) {
 		return (consumption * unitPrice) / ScaleFactor;
 	}
 
-	public static long convertM3ToMMBTu(long m3, int factor) {
+	public static long convertM3ToMMBTu(final long m3, final int factor) {
 		return (m3 * factor) / ScaleFactor;
 	}
 
-	public static long convertMMBTuToM3(long mmbtu, int factor) {
+	public static long convertMMBTuToM3(final long mmbtu, final int factor) {
 		return (mmbtu * ScaleFactor) / factor;
 	}
 
-	public static long convertM3ToMT(long m3, int factor) {
+	public static long convertM3ToMT(final long m3, final int factor) {
 		return (m3 * factor) / ScaleFactor;
 	}
 
-	public static long convertMTToM3(long mt, int factor) {
+	public static long convertMTToM3(final long mt, final int factor) {
 		return (mt * ScaleFactor) / factor;
 	}
 	
@@ -58,7 +78,7 @@ public class Calculator {
 	 * @param value
 	 * @return scaled version of value
 	 */
-	public static int scale(int value) {
+	public static int scale(final int value) {
 		return ScaleFactor * value;	
 	}
 
@@ -67,11 +87,11 @@ public class Calculator {
 	 * @param f
 	 * @return scaled float
 	 */
-	public static long scale(float f) {
+	public static long scale(final float f) {
 		return (long) (ScaleFactor * f);
 	}
 	
-	public static int scaleToInt(double d) {
+	public static int scaleToInt(final double d) {
 		return (int) (ScaleFactor * d);
 	}
 }
