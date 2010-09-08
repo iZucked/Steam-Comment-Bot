@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
@@ -19,7 +20,7 @@ public interface IVesselClass {
 	String getName();
 
 	/**
-	 * Return the upper limit of usable cargo capacity.
+	 * Return the upper limit of usable cargo capacity in M3
 	 * 
 	 * @return
 	 */
@@ -29,7 +30,8 @@ public interface IVesselClass {
 	 * Returns a {@link IConsumptionRateCalculator} to calculate required fuel
 	 * consumption for the given state at the given speed. The valid range of
 	 * input values should be between {@link #getMinSpeed()} and
-	 * {@link #getMaxSpeed()} inclusively.
+	 * {@link #getMaxSpeed()} inclusively. It is expected that the rate in MT
+	 * per Hour.
 	 * 
 	 * @param vesselState
 	 * @return
@@ -110,7 +112,8 @@ public interface IVesselClass {
 	void setNBOSpeed(VesselState vesselState, int nboSpeed);
 
 	/**
-	 * Returns the unit price of base fuel for this vessel class.
+	 * Returns the unit price of base fuel for this vessel class, where the unit
+	 * is {@link FuelComponent#getDefaultFuelUnit()}
 	 * 
 	 * @return
 	 */
