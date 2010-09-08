@@ -84,6 +84,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			assert minSpeed <= maxSpeed;
 			assert speed != 0;
 		}
+		
 		// Calculate total, travel and idle time
 
 		// May be longer than available time
@@ -200,7 +201,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			}
 		}
 
-		// TODO: Calculate extras - route specific costs etc
+		// TODO: Calculate extras - route specific data etc
 	}
 
 	/**
@@ -229,19 +230,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		final long[] fuelConsumptions = new long[FuelComponent.values().length];
 
-		// Build up LNG prices from discharge port - initialise to zero
-		final int[] fuelUnitPrices = new int[FuelComponent.values().length];
-		fuelUnitPrices[FuelComponent.NBO.ordinal()] = 0;
-		fuelUnitPrices[FuelComponent.FBO.ordinal()] = 0;
-		fuelUnitPrices[FuelComponent.IdleNBO.ordinal()] = 0;
-
-		// Obtain base fuel from vessel class
-		fuelUnitPrices[FuelComponent.Base.ordinal()] = vessel.getVesselClass()
+		final int baseFuelPricePerMT = vessel.getVesselClass()
 				.getBaseFuelUnitPrice();
-		fuelUnitPrices[FuelComponent.Base_Supplemental.ordinal()] = vessel
-				.getVesselClass().getBaseFuelUnitPrice();
-		fuelUnitPrices[FuelComponent.IdleBase.ordinal()] = vessel
-				.getVesselClass().getBaseFuelUnitPrice();
 
 		for (int i = 0; i < sequence.length; ++i) {
 			if (i % 2 == 0) {
@@ -292,13 +282,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 								.getOptions().getVesselState() == VesselState.Ballast);
 
 				// TODO: Add test case for this information
-				details.setFuelUnitPrice(FuelComponent.Base,
-						fuelUnitPrices[FuelComponent.Base.ordinal()]);
-				details.setFuelUnitPrice(FuelComponent.Base_Supplemental,
-						fuelUnitPrices[FuelComponent.Base_Supplemental
-								.ordinal()]);
-				details.setFuelUnitPrice(FuelComponent.IdleBase,
-						fuelUnitPrices[FuelComponent.IdleBase.ordinal()]);
+				details.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
+				details.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricePerMT);
+				details.setFuelUnitPrice(FuelComponent.IdleBase, baseFuelPricePerMT);
 			}
 		}
 
@@ -306,11 +292,16 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		assert loadIdx == -1 || dischargeIdx != -1;
 		assert dischargeIdx == -1 || loadIdx != -1;
 
-		long loadVolume = 0;
-		long dischargeVolume = 0;
+		long loadVolumeInM3 = 0;
+		long dischargeVolumeInM3 = 0;
 
 		int loadUnitPrice = 0;
 		int dischargeUnitPrice = 0;
+		
+		int loadM3Price = 0;
+		int dischargeM3Price = 0;
+		
+		int cargoCVValue = 0;
 
 		// Load/Discharge sequence
 		if (loadIdx != -1 && dischargeIdx != -1) {
@@ -323,11 +314,12 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			loadUnitPrice = loadSlot.getPurchasePrice();
 			dischargeUnitPrice = dischargeSlot.getSalesPrice();
 
-			// Set LNG prices from discharge sales price
-			fuelUnitPrices[FuelComponent.NBO.ordinal()] = dischargeUnitPrice;
-			fuelUnitPrices[FuelComponent.FBO.ordinal()] = dischargeUnitPrice;
-			fuelUnitPrices[FuelComponent.IdleNBO.ordinal()] = dischargeUnitPrice;
-
+			// Store cargoCVValue
+			cargoCVValue = loadSlot.getCargoCVValue();
+			
+			dischargeM3Price = (int)Calculator.multiply(dischargeUnitPrice, cargoCVValue);
+			loadM3Price = (int)Calculator.multiply(loadUnitPrice, cargoCVValue);
+			
 			final long lngConsumed = fuelConsumptions[FuelComponent.NBO
 					.ordinal()]
 					+ fuelConsumptions[FuelComponent.FBO.ordinal()]
@@ -350,35 +342,35 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			// highest intersecting point as the additional amount of lng we can
 			// load to max out load and discharge. This is the sales quantity.
 
-			dischargeVolume = Math.min(upperLoadLimit - lngConsumed,
+			dischargeVolumeInM3 = Math.min(upperLoadLimit - lngConsumed,
 					maxDischargeVolume);
 
-			if (dischargeVolume < 0) {
+			if (dischargeVolumeInM3 < 0) {
 				throw new RuntimeException("Capacity violation");
 			}
-			loadVolume = dischargeVolume + lngConsumed;
+			loadVolumeInM3 = dischargeVolumeInM3 + lngConsumed;
 
 			// These should be guaranteed by the Math.min call above
-			assert (loadVolume <= upperLoadLimit);
-			assert (dischargeVolume <= maxDischargeVolume);
+			assert (loadVolumeInM3 <= upperLoadLimit);
+			assert (dischargeVolumeInM3 <= maxDischargeVolume);
 
 			// Check the bounds
-			if (loadVolume < minLoadVolume) {
+			if (loadVolumeInM3 < minLoadVolume) {
 				// problem
 				throw new RuntimeException("Capacity violation");
 			}
 
-			if (dischargeVolume < minDischargeVolume) {
+			if (dischargeVolumeInM3 < minDischargeVolume) {
 				// problem
 				throw new RuntimeException("Capacity violation");
 			}
 
 			// Sanity checks
-			assert loadVolume <= cargoCapacity;
-			assert loadVolume <= maxLoadVolume;
-			assert loadVolume >= minLoadVolume;
-			assert dischargeVolume <= maxDischargeVolume;
-			assert dischargeVolume >= minDischargeVolume;
+			assert loadVolumeInM3 <= cargoCapacity;
+			assert loadVolumeInM3 <= maxLoadVolume;
+			assert loadVolumeInM3 >= minLoadVolume;
+			assert dischargeVolumeInM3 <= maxDischargeVolume;
+			assert dischargeVolumeInM3 >= minDischargeVolume;
 
 		} else {
 			final long lngConsumed = fuelConsumptions[FuelComponent.NBO
@@ -397,15 +389,23 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// same price is used in all valid voyage legs.
 		if (dischargeIdx != -1) {
 
+//			assert FuelComponent.NBO.getDefaultFuelUnit() == FuelUnit.M3;
+//			assert FuelComponent.FBO.getDefaultFuelUnit() == FuelUnit.M3;
+//			assert FuelComponent.IdleNBO.getDefaultFuelUnit() == FuelUnit.M3;
+			
 			for (int i = 0; i < sequence.length; ++i) {
 				if (i % 2 == 1) {
+					assert sequence[i] instanceof IVoyageDetails;
+					
 					final IVoyageDetails<?> details = (IVoyageDetails<?>) sequence[i];
 					details.setFuelUnitPrice(FuelComponent.NBO,
-							dischargeUnitPrice);
+							dischargeM3Price);
 					details.setFuelUnitPrice(FuelComponent.FBO,
-							dischargeUnitPrice);
+							dischargeM3Price);
 					details.setFuelUnitPrice(FuelComponent.IdleNBO,
-							dischargeUnitPrice);
+							dischargeM3Price);
+				} else {
+					assert sequence[i] instanceof IPortDetails;
 				}
 			}
 		}
@@ -413,21 +413,26 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// Store results in plan
 		voyagePlan.setSequence(sequence);
 
+		// We can just loop over each component here for consumptions ....
 		for (final FuelComponent fc : FuelComponent.values()) {
 			final long consumption = fuelConsumptions[fc.ordinal()];
 			voyagePlan.setFuelConsumption(fc, consumption);
-
-			int unitPrice = fuelUnitPrices[fc.ordinal()];
-			assert consumption == 0 || unitPrice != 0;
-
-			voyagePlan.setTotalFuelCost(fc,
-					Calculator.costFromConsumption(consumption, unitPrice));
 		}
+		// .. but costs need to be calculated differently
+		voyagePlan.setTotalFuelCost(FuelComponent.Base, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Base.ordinal()], baseFuelPricePerMT));
+		voyagePlan.setTotalFuelCost(FuelComponent.Base_Supplemental, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Base_Supplemental.ordinal()], baseFuelPricePerMT));
+		voyagePlan.setTotalFuelCost(FuelComponent.IdleBase, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdleBase.ordinal()], baseFuelPricePerMT));
+		
+		voyagePlan.setTotalFuelCost(FuelComponent.NBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.NBO.ordinal()], dischargeM3Price));
+		voyagePlan.setTotalFuelCost(FuelComponent.FBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.FBO.ordinal()], dischargeM3Price));
+		voyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdleNBO.ordinal()], dischargeM3Price));
 
-		voyagePlan.setLoadVolume(loadVolume);
-		voyagePlan.setPurchaseCost(loadVolume * loadUnitPrice);
+		voyagePlan.setLoadVolume(loadVolumeInM3);
+		long purchaseCost = Calculator.multiply(loadM3Price, loadVolumeInM3);
+		voyagePlan.setPurchaseCost(purchaseCost);
 
-		voyagePlan.setDischargeVolume(dischargeVolume);
-		voyagePlan.setSalesRevenue(dischargeVolume * dischargeUnitPrice);
+		voyagePlan.setDischargeVolume(dischargeVolumeInM3);
+		long salesRevenue = Calculator.multiply(dischargeM3Price, dischargeVolumeInM3);
+		voyagePlan.setSalesRevenue(salesRevenue);
 	}
 }

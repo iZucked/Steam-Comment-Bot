@@ -607,6 +607,7 @@ public class LNGVoyageCalculatorTest {
 
 		loadSlot.setPurchasePrice(1000);
 		dischargeSlot.setSalesPrice(1000);
+		loadSlot.setCargoCVValue(2000);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		final IVoyageOptions options = context.mock(IVoyageOptions.class);
@@ -642,14 +643,14 @@ public class LNGVoyageCalculatorTest {
 				one(plan).setTotalFuelCost(FuelComponent.Base, 20000);
 				one(plan).setTotalFuelCost(FuelComponent.Base_Supplemental, 40000);
 				one(plan).setTotalFuelCost(FuelComponent.IdleBase, 120000);
-				one(plan).setTotalFuelCost(FuelComponent.NBO, 30000);
-				one(plan).setTotalFuelCost(FuelComponent.FBO, 40000);
-				one(plan).setTotalFuelCost(FuelComponent.IdleNBO, 50000);
+				one(plan).setTotalFuelCost(FuelComponent.NBO, 60000);
+				one(plan).setTotalFuelCost(FuelComponent.FBO, 80000);
+				one(plan).setTotalFuelCost(FuelComponent.IdleNBO, 100000);
 
 				one(plan).setLoadVolume(150000);
 				one(plan).setDischargeVolume(30000);
-				one(plan).setPurchaseCost(150000000l);
-				one(plan).setSalesRevenue(30000000l);
+				one(plan).setPurchaseCost(300000l);
+				one(plan).setSalesRevenue(60000l);
 			}
 		});
 
@@ -763,7 +764,7 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setPurchasePrice(1000);
 		dischargeSlot.setSalesPrice(1000);
 
-
+		loadSlot.setCargoCVValue(2000);
 		
 		
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();
@@ -814,15 +815,15 @@ public class LNGVoyageCalculatorTest {
 
 				one(plan).setTotalFuelCost(FuelComponent.Base, 160000);
 				one(plan).setTotalFuelCost(FuelComponent.Base_Supplemental, 200000);
-				one(plan).setTotalFuelCost(FuelComponent.NBO, 120000);
-				one(plan).setTotalFuelCost(FuelComponent.FBO, 140000);
-				one(plan).setTotalFuelCost(FuelComponent.IdleNBO, 160000);
+				one(plan).setTotalFuelCost(FuelComponent.NBO, 240000);
+				one(plan).setTotalFuelCost(FuelComponent.FBO, 280000);
+				one(plan).setTotalFuelCost(FuelComponent.IdleNBO, 320000);
 				one(plan).setTotalFuelCost(FuelComponent.IdleBase, 360000);
 
 				one(plan).setDischargeVolume(3000000l);
 				one(plan).setLoadVolume(3420000l);
-				one(plan).setPurchaseCost(3420000000l);
-				one(plan).setSalesRevenue(3000000000l);
+				one(plan).setPurchaseCost(6840000l);
+				one(plan).setSalesRevenue(6000000l);
 			}
 		});
 
