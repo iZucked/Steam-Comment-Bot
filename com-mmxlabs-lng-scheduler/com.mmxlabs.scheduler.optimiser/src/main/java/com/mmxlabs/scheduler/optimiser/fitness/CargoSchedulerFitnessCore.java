@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +23,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.GASequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.IndividualEvaluator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -80,11 +81,11 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 						.makeArrayList(FuelComponent.Base,
 								FuelComponent.Base_Supplemental,
 								FuelComponent.IdleBase), this));
-		
+
 		components.add(new CharterCostFitnessComponent<T>(
 				CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME,
 				this));
-				
+
 	}
 
 	@Override
@@ -124,28 +125,29 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.complete();
 		}
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
-// TODO!!
-//		TODO!!
-		//TODO!!
-//		Add test case to catch missing prepareDelta calls
-//		
-//		Add a rejectMove() to completement accept();
-//		
-//		
-//		TODO: Rethink how this ICargoSchedulerFitnessComponent should work as we now have far too many method calls
-		
-//		Notify fitness components a new delta evaluation is about to begin
+		// TODO!!
+		// TODO!!
+		// TODO!!
+		// Add test case to catch missing prepareDelta calls
+		//
+		// Add a rejectMove() to completement accept();
+		//
+		//
+		// TODO: Rethink how this ICargoSchedulerFitnessComponent should work as
+		// we now have far too many method calls
+
+		// Notify fitness components a new delta evaluation is about to begin
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.prepareDelta();
 		}
-		
+
 		// Re-schedule changed sequences
 		for (final IResource resource : affectedResources) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
@@ -175,14 +177,12 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		this.data = data;
 
-
 		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
 		vpa.setPortSlotProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portSlotsProvider,
 				IPortSlotProvider.class));
 
 		voyagePlanAnnotator = vpa;
-
 
 		// TODO: getter/setters should provide these e.g. use factory to
 		// populate
@@ -238,11 +238,77 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
 
 		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
-		
+
 		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
 		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
-		
+
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
+
+		scheduler.init();
+
+		return scheduler;
+	}
+
+	/**
+	 * Create a new {@link ISequenceScheduler} instance.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private ISequenceScheduler<T> createGASequenceScheduler() {
+		final GASequenceScheduler<T> scheduler = new GASequenceScheduler<T>();
+
+		final IMultiMatrixProvider distanceProvider = data
+				.getDataComponentProvider(
+						SchedulerConstants.DCP_portDistanceProvider,
+						IMultiMatrixProvider.class);
+		scheduler.setDistanceProvider(distanceProvider);
+		scheduler.setDurationsProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_elementDurationsProvider,
+				IElementDurationProvider.class));
+		scheduler.setPortProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_portProvider, IPortProvider.class));
+		final ITimeWindowDataComponentProvider timeWindowProvider = data
+				.getDataComponentProvider(
+						SchedulerConstants.DCP_timeWindowProvider,
+						ITimeWindowDataComponentProvider.class);
+		scheduler.setTimeWindowProvider(timeWindowProvider);
+		scheduler.setPortSlotProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_portSlotsProvider,
+				IPortSlotProvider.class));
+		scheduler.setPortTypeProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_portTypeProvider,
+				IPortTypeProvider.class));
+
+		scheduler.setVesselProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
+
+		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
+
+		scheduler.setVoyageCalculator(voyageCalculator);
+
+		// Set GA params
+		final IndividualEvaluator<T> individualEvaluator = new IndividualEvaluator<T>();
+		individualEvaluator.setSequenceScheduler(scheduler);
+		individualEvaluator.setTimeWindowProvider(timeWindowProvider);
+		individualEvaluator.setVoyagePlanAnnotator(voyagePlanAnnotator);
+		individualEvaluator.setFitnessComponents(components);
+		// TODO: Use same weights as passed into LinearCombiner?
+		// individualEvaluator.setFitnessComponentWeights(null);
+		individualEvaluator.init();
+
+		scheduler.setIndividualEvaluator(individualEvaluator);
+
+		// TODO: Pull from external API parameters held in the
+		// IOptimisationContext
+		// Set
+		scheduler.setMutateThreshold(0.01f);
+		// Population of 40 individuals
+		scheduler.setPopulationSize(40);
+		// Retain top 10 each iteration
+		scheduler.setTopN(10);
+		// Have 40 iterations
+		scheduler.setNumIterations(40);
 
 		scheduler.init();
 
