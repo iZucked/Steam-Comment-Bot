@@ -155,6 +155,7 @@ public final class PortTypeConstraintChecker<T> implements
 				break;
 			case Waypoint:
 				break;
+			case CharterOut:
 			case DryDock:
 			case Other:
 				if (seenLoad) {
