@@ -771,7 +771,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final Set<IVessel> supportedVessels = vesselCharterOuts.get(charterOut);
 			final Set<IVesselClass> supportedClasses = vesselClassCharterOuts.get(charterOut);
 			for (final IVessel vessel : vessels) {
-				if (supportedClasses.contains(vessel.getVesselClass()) &&
+				if (supportedClasses.contains(vessel.getVesselClass()) ||
 						supportedVessels.contains(vessel)) {
 					final IResource resource = vesselProvider.getResource(vessel);
 					resources.add(resource);
