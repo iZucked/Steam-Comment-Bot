@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSequence;
@@ -87,6 +88,6 @@ public final class CostComponent<T> extends
 	}
 
 	public List<FuelComponent> getFuelComponents() {
-		return fuelComponents;
+		return Collections.unmodifiableList(fuelComponents);
 	}
 }
