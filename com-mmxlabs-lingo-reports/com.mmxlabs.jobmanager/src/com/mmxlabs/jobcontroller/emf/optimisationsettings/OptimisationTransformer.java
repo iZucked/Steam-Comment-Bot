@@ -119,7 +119,8 @@ public class OptimisationTransformer {
 		}
 
 		constraintRegistry.registerConstraintCheckerFactory(
-				new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider));
+				new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider,
+						SchedulerConstants.DCP_vesselProvider));
 		
 		constraintRegistry.registerConstraintCheckerFactory(
 				new TravelTimeConstraintCheckerFactory());
