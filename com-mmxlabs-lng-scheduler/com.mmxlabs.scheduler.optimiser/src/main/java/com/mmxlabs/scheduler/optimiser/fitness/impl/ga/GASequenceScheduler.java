@@ -1,0 +1,145 @@
+package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
+
+import java.util.List;
+import java.util.Random;
+
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+
+/**
+ * Simple scheduler.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
+
+	private long randomSeed;
+
+	private IndividualEvaluator<T> individualEvaluator;
+
+	private float mutateThreshold;
+
+	private int populationSize;
+
+	private int numIterations;
+
+	private int topN;
+
+	public void setIndividualEvaluator(
+			final IndividualEvaluator<T> individualEvaluator) {
+		this.individualEvaluator = individualEvaluator;
+	}
+
+	@Override
+	public List<IVoyagePlan> schedule(final IResource resource,
+			final ISequence<T> sequence) {
+
+		final int numBytes = individualEvaluator.setup(resource, sequence);
+		
+		// Create a new random each time to ensure repeatability.
+		Random random = new Random(randomSeed);
+		// Run the GA
+		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
+				individualEvaluator, mutateThreshold, populationSize, topN,
+				numBytes);
+
+		algorithm.init();
+
+		for (int i = 0; i < numIterations; ++i) {
+			algorithm.step();
+		}
+
+		final Individual bestIndividual = algorithm.getBestIndividual();
+		if (bestIndividual == null) {
+			return null;
+		}
+
+		final int[] arrivalTimes = new int[sequence.size()];
+		individualEvaluator.decode(bestIndividual, arrivalTimes);
+
+		return super.schedule(resource, sequence, arrivalTimes, false);
+	}
+
+	@Override
+	public void init() {
+
+		if (individualEvaluator == null) {
+			throw new IllegalStateException(
+					"Individual Evaluator has not been set");
+		}
+
+		if (numIterations == 0) {
+			throw new IllegalStateException(
+					"Number of iterations has not been set");
+		}
+
+		if (populationSize == 0) {
+			throw new IllegalStateException("Population size has not been set");
+		}
+
+		if (topN == 0) {
+			throw new IllegalStateException("Top N elements has not been set");
+		}
+
+		if (mutateThreshold == 0.0f) {
+			throw new IllegalStateException("Mutate threshold has not been set");
+		}
+
+		super.init();
+	}
+
+	@Override
+	public void dispose() {
+
+		individualEvaluator = null;
+
+		super.dispose();
+	}
+
+	public final float getMutateThreshold() {
+		return mutateThreshold;
+	}
+
+	public final void setMutateThreshold(float mutateThreshold) {
+		this.mutateThreshold = mutateThreshold;
+	}
+
+	public final int getPopulationSize() {
+		return populationSize;
+	}
+
+	public final void setPopulationSize(int populationSize) {
+		this.populationSize = populationSize;
+	}
+
+	public final int getNumIterations() {
+		return numIterations;
+	}
+
+	public final void setNumIterations(int numIterations) {
+		this.numIterations = numIterations;
+	}
+
+	public final int getTopN() {
+		return topN;
+	}
+
+	public final void setTopN(int topN) {
+		this.topN = topN;
+	}
+
+	public final IndividualEvaluator<T> getIndividualEvaluator() {
+		return individualEvaluator;
+	}
+
+	public final long getRandomSeed() {
+		return randomSeed;
+	}
+
+	public final void setRandomSeed(long randomSeed) {
+		this.randomSeed = randomSeed;
+	}
+}
