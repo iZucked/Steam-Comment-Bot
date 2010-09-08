@@ -384,13 +384,13 @@ public final class TestUtils {
 		// WHY DO WE ONLY GET MIN/MAX SPEEDS IN OUTPUT?
 
 		final IVesselClass vesselClass4 = builder.createVesselClass(
-				"STEAM-126", 12000, 19500, 126000000l, 0, 500, 200000);
+				"STEAM-126", 12000, 19500, 126000000l, 0, 200000, 500);
 		final IVesselClass vesselClass1 = builder.createVesselClass(
-				"STEAM-138", 12000, 20000, 138000000l, 0, 500, 200000);
+				"STEAM-138", 12000, 20000, 138000000l, 0, 200000, 500);
 		final IVesselClass vesselClass2 = builder.createVesselClass(
-				"STEAM-145", 12000, 20000, 145000000l, 0, 500, 200000);
+				"STEAM-145", 12000, 20000, 145000000l, 0, 200000, 500);
 		final IVesselClass vesselClass3 = builder.createVesselClass("DFDE-177",
-				12000, 20000, 177000000l, 0, 500, 200000);
+				12000, 20000, 177000000l, 0, 200000, 500);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
 				138000 / 24, 118000 / 24, 10000 / 24,
