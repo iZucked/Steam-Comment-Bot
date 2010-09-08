@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -9,7 +10,9 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -35,13 +38,15 @@ public final class PortTypeConstraintChecker<T> implements
 
 	private final String name;
 
-	private final String key;
+	private final String key, vesselKey;
 
 	private IPortTypeProvider<T> portTypeProvider;
-
-	public PortTypeConstraintChecker(final String name, final String key) {
+	private IVesselProvider vesselProvider;
+	
+	public PortTypeConstraintChecker(final String name, final String key, final String vesselKey) {
 		this.name = name;
 		this.key = key;
+		this.vesselKey = vesselKey;
 	}
 
 	@Override
@@ -66,12 +71,16 @@ public final class PortTypeConstraintChecker<T> implements
 
 		final Collection<ISequence<T>> sequencesCollection = sequences
 				.getSequences().values();
-		for (final ISequence<T> s : sequencesCollection) {
-			if (!checkSequence(s, messages)) {
-				return false;
-			}
+		
+		for (final Map.Entry<IResource, ISequence<T>> entry :
+			sequences.getSequences().entrySet()) {
+			if (!checkSequence(entry.getValue(), messages, 
+			
+					vesselProvider.getVessel(entry.getKey()).getVesselInstanceType()
+					
+			)) return false;
 		}
-
+		
 		return true;
 	}
 
@@ -81,6 +90,9 @@ public final class PortTypeConstraintChecker<T> implements
 
 		setPortTypeProvider(optimisationData.getDataComponentProvider(key,
 				IPortTypeProvider.class));
+		
+		setVesselProvider(optimisationData.getDataComponentProvider(vesselKey,
+				IVesselProvider.class));
 	}
 	
 	/**
@@ -91,7 +103,7 @@ public final class PortTypeConstraintChecker<T> implements
 	 * @return
 	 */
 	public final boolean checkSequence(final ISequence<T> sequence,
-			final List<String> messages) {
+			final List<String> messages, VesselInstanceType instanceType) {
 
 		boolean seenLoad = false;
 		boolean seenDischarge = false;
@@ -101,8 +113,10 @@ public final class PortTypeConstraintChecker<T> implements
 		for (final T t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
-				if (type != PortType.Start) {
-					// Must start with a Start type.
+				if (!((type == PortType.Start && instanceType != VesselInstanceType.SPOT_CHARTER) ||
+						(type == PortType.Load && instanceType == VesselInstanceType.SPOT_CHARTER))) {
+					//must either start with Start and be not a spot charter,
+					//or must start with a load and be a spot charter
 					if (messages != null)
 						messages.add("Sequence must begin with PortType.Start");
 					return false;
@@ -197,6 +211,14 @@ public final class PortTypeConstraintChecker<T> implements
 
 	public void setPortTypeProvider(IPortTypeProvider<T> portTypeProvider) {
 		this.portTypeProvider = portTypeProvider;
+	}
+	
+	public IVesselProvider getVesselProvider() {
+		return vesselProvider;
+	}
+
+	public void setVesselProvider(IVesselProvider vesselProvider) {
+		this.vesselProvider = vesselProvider;
 	}
 
 	@Override
