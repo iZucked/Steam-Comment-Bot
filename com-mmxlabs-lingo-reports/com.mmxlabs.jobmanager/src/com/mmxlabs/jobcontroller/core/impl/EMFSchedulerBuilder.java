@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -398,4 +399,21 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 			ports.add(ePorts.get(port));
 		}
 	}
+
+	public ICharterOut createCharterOut(ITimeWindow arrivalTimeWindow,
+			IPort port, int durationHours) {
+		return delegate
+				.createCharterOut(arrivalTimeWindow, port, durationHours);
+	}
+
+	public void addCharterOutVessel(ICharterOut charterOut, IVessel vessel) {
+		delegate.addCharterOutVessel(charterOut, vessel);
+	}
+
+	public void addCharterOutVesselClass(ICharterOut charterOut,
+			IVesselClass vesselClass) {
+		delegate.addCharterOutVesselClass(charterOut, vesselClass);
+	}
+	
+	
 }
