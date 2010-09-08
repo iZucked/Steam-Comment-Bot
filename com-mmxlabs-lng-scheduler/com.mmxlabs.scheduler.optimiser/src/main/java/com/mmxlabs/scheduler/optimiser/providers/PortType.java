@@ -50,6 +50,12 @@ public enum PortType {
 	Waypoint,
 
 	/**
+	 * Port type is a charter out, which will have a start time window
+	 * and duration.
+	 */
+	CharterOut,
+	
+	/**
 	 * Generic port type.
 	 */
 	Other;
