@@ -18,10 +18,12 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.LegalSequencingChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -94,7 +96,27 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		Collections.sort(orderedElements, comparator);
 		
 		//now construct routes
-		final List<IResource> resources = data.getResources();
+		
+		//First sort resources to prefer fleet vessels
+		//Fortunately the enum is already in order of goodness, barring unknown type vessels
+		List<IResource> resources = new ArrayList<IResource>(data.getResources());
+		{
+			final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+			Collections.sort(resources, new Comparator<IResource>(){
+				@Override
+				public int compare(IResource o1, IResource o2) {
+					final VesselInstanceType vit1 = vesselProvider.getVessel(o1).getVesselInstanceType();
+					final VesselInstanceType vit2 = vesselProvider.getVessel(o2).getVesselInstanceType();
+					
+					if (vit1.ordinal() < vit2.ordinal()) {
+						return -1;
+					} else if (vit1.ordinal() > vit2.ordinal()) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}});
+		}
 		ModifiableSequences<T> result = new ModifiableSequences<T>(resources);
 		
 		for (final IResource resource : resources) {
