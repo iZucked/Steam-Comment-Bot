@@ -366,14 +366,14 @@ public final class TestUtils {
 		// DFDE is approx 40 MT less than steam at 20 knots. Steam is roughly
 		// 180MT at 20 knots
 		final TreeMap<Integer, Long> dfdeKeypoints = new TreeMap<Integer, Long>();
-		dfdeKeypoints.put(12000, 8000l);
-		dfdeKeypoints.put(20000, 16000l);
+		dfdeKeypoints.put(12000, 800000l / 24);
+		dfdeKeypoints.put(20000, 1400000l / 24);
 		final InterpolatingConsumptionRateCalculator dfdeConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				dfdeKeypoints);
 
 		final TreeMap<Integer, Long> steamKeypoints = new TreeMap<Integer, Long>();
-		steamKeypoints.put(12000, 12000l);
-		steamKeypoints.put(20000, 20000l);
+		steamKeypoints.put(12000, 120000l / 24);
+		steamKeypoints.put(20000, 180000l / 24);
 		final InterpolatingConsumptionRateCalculator steamConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				steamKeypoints);
 
