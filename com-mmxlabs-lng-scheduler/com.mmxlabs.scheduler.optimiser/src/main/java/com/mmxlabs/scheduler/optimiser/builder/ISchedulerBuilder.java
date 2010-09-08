@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
  * A builder to create {@link IOptimisationData} instances for Scheduler
@@ -60,13 +61,13 @@ public interface ISchedulerBuilder {
 	 * price specified (defaults to zero otherwise);
 	 * 
 	 * @param name
-	 * @param minSpeed
-	 * @param maxSpeed
-	 * @param capacity
-	 * @param minHeel
-	 * @param baseFuelUnitPrice
-	 * @param baseFuelEquivalenceInM3TOMT
-	 * @param dailyCharterPrice
+	 * @param minSpeed Minimum vessel speed in scaled knots
+	 * @param maxSpeed Maximum vessel speed in scaled knots
+	 * @param capacity Maximum loadable cargo quantity in scaled M3 
+	 * @param minHeel  Minimum heel to retain (when appropriate) in scaled M3
+	 * @param baseFuelUnitPrice Price of base fuel in scaled $/MT
+	 * @param baseFuelEquivalenceInM3TOMT Scaled Conversion factor to convert M3 LNG to equivalent MT base fuel
+	 * @param hourlyCharterPrice $/Hour rate to charter-in vessels of this class   
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
@@ -78,11 +79,11 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @param vesselClass
 	 * @param state
-	 * @param nboRate
-	 * @param idleNBORate
-	 * @param idleConsumptionRate
-	 * @param consumptionRateCalculator
-	 * @param nboSpeed
+	 * @param nboRate Hourly scaled M3 of LNG rate of boil-off when travelling
+	 * @param idleNBORate Hourly scaled M3 of LNG rate of boil-off when idling
+	 * @param idleConsumptionRate Hourly scaled MT of base fuel consumption rate when idle
+	 * @param consumptionRateCalculator {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed. 
+	 * @param nboSpeed Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling.
 	 */
 	void setVesselClassStateParamaters(IVesselClass vesselClass,
 			VesselState state, int nboRate, int idleNBORate,
@@ -207,10 +208,10 @@ public interface ISchedulerBuilder {
 	 * @param id
 	 * @param port
 	 * @param window
-	 * @param minVolume
-	 * @param maxVolume
-	 * @param price
-	 * @param cargoCVValue
+	 * @param minVolume Scaled minimum loadable quantity of LNG in M3
+	 * @param maxVolume Scaled maximum loadable quantity of LNG in M3
+	 * @param price Scaled purchase price in $/MMBTu
+	 * @param cargoCVValue Scaled conversion factor to convert from M3 to MMBTU of LNG
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
@@ -223,9 +224,9 @@ public interface ISchedulerBuilder {
 	 * @param id
 	 * @param port
 	 * @param window
-	 * @param minVolume
-	 * @param maxVolume
-	 * @param price
+	 * @param minVolume Scaled minimum dischargable quantity of LNG in M3 (TODO: this may need to be MMBTu, perhaps add a {@link FuelUnit}?)
+	 * @param maxVolume Scaled maximum dischargable quantity of LNG in M3 (TODO: this may need to be MMBTu, perhaps add a {@link FuelUnit}?)
+	 * @param price Scaled sales price in $/MMBTu
 	 * @return
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port,
