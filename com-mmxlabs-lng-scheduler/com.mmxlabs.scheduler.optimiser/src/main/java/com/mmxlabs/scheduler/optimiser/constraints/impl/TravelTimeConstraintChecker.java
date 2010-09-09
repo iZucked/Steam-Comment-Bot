@@ -1,9 +1,12 @@
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -51,13 +54,31 @@ public class TravelTimeConstraintChecker<T> implements
 
 	@Override
 	public boolean checkConstraints(ISequences<T> sequences) {
+		for (Map.Entry<IResource, ISequence<T>> entry : sequences
+				.getSequences().entrySet()) {
+			if (!checkSequence(entry.getValue(), entry.getKey())) return false;
+		}
+		return true;
+	}
+
+	private boolean checkSequence(ISequence<T> sequence, IResource resource) {
+		Iterator<T> iter = sequence.iterator();
+		T prev, cur;
+		prev = cur = null;
+		while (iter.hasNext()) {
+			prev = cur;
+			cur = iter.next();
+			if (prev != null) {
+				if (!checkPairwiseConstraint(prev, cur, resource)) return false;
+			}
+		}
 		return true;
 	}
 
 	@Override
 	public boolean checkConstraints(ISequences<T> sequences,
 			List<String> messages) {
-		return true;
+		return checkConstraints(sequences);
 	}
 
 	@SuppressWarnings("unchecked")
