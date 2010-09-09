@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
@@ -707,19 +708,23 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * 
 	 * @param vc
 	 * @param state
-	 * @param nboRate
-	 * @param idleNBORate
-	 * @param idleConsumptionRate
-	 * @param consumptionCalculator
+	 * @param nboRateInM3PerHour
+	 * @param idleNBORateInM3PerHour
+	 * @param idleConsumptionRateInMTPerHour
+	 * @param consumptionCalculatorInMTPerHour
 	 */
 	public void setVesselClassStateParamaters(IVesselClass vc,
-			VesselState state, int nboRate, int idleNBORate,
-			int idleConsumptionRate,
-			InterpolatingConsumptionRateCalculator consumptionCalculator) {
-		// TODO there is something stupid going on with units here.
-		final int nboSpeed = consumptionCalculator.getSpeed(nboRate);
-		this.setVesselClassStateParamaters(vc, state, nboRate, idleNBORate,
-				idleConsumptionRate, consumptionCalculator, nboSpeed);
+			VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour,
+			int idleConsumptionRateInMTPerHour,
+			InterpolatingConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
+		
+		// Convert rate to MT equivalent per hour
+		int nboRateInMTPerHour = (int)Calculator.convertM3ToMT(nboRateInM3PerHour, vc.getBaseFuelConversionFactor());
+		
+		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
+		
+		this.setVesselClassStateParamaters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour,
+				idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour, nboSpeed);
 	}
 
 	@Override
