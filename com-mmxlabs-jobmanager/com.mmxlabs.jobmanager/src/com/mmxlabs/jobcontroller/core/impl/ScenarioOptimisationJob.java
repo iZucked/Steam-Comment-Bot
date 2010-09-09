@@ -268,25 +268,25 @@ public class ScenarioOptimisationJob implements IManagedJob {
 							}
 							
 						}
-						monitor.subTask("Evaluate fitness of initial solution");
+//						monitor.subTask("Evaluate fitness of initial solution");
 						
-						final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
+//						final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
 
-						linearFitnessEvaluator.setOptimisationData(context
-								.getOptimisationData());
-						linearFitnessEvaluator.setInitialSequences(context
-								.getInitialSequences());
+//						linearFitnessEvaluator.setOptimisationData(context
+//								.getOptimisationData());
+//						linearFitnessEvaluator.setInitialSequences(context
+//								.getInitialSequences());
 
 						// printSequences(context.getInitialSequences());
 
-						System.out.println("Initial fitness "
-								+ linearFitnessEvaluator.getBestFitness());
+//						System.out.println("Initial fitness "
+//								+ linearFitnessEvaluator.getBestFitness());
 
 						monitor.subTask("Run optimisation");
 						optimiser.optimise(context);
 
-						System.out.println("Final fitness "
-								+ linearFitnessEvaluator.getBestFitness());
+//						System.out.println("Final fitness "
+//								+ linearFitnessEvaluator.getBestFitness());
 					} catch (IncompleteScenarioException ex) {
 						fireJobCancelled();
 						return Status.CANCEL_STATUS; // die
