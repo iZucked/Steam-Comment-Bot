@@ -11,7 +11,7 @@ import com.mmxlabs.optimiser.lso.IThresholder;
  *
  */
 public class CalibratingGeometricThresholder implements IThresholder {
-	private static final double ACCEPTABLE_ERROR = 0.05;
+	private static final double ACCEPTABLE_ERROR = 0.01;
 	private double initialAcceptanceRate;
 	private int epochLength;
 	private Random random;
@@ -49,7 +49,7 @@ public class CalibratingGeometricThresholder implements IThresholder {
 			if (samples >= epochLength) {
 				calibrate();
 			}
-			return true;
+			return delta < 0;
 		}
 	}
 
@@ -78,14 +78,19 @@ public class CalibratingGeometricThresholder implements IThresholder {
 		calibratedTemperature = T0;
 		delegate = new GeometricThresholder(random, epochLength, T0, alpha);
 		delegate.init();
+		System.err.println("Calibrated temperature: " + T0);
 	}
 	
 	private double evaluate(final double temperature) {
 		double result = 0;
+		int realSamples = 0;
 		for (long l : sample) {
-			result += GeometricThresholder.acceptanceProbability(l, temperature);
+			if (l > 0) {
+				realSamples ++;
+				result += GeometricThresholder.acceptanceProbability(l, temperature);
+			}
 		}
-		return result / sample.length;
+		return result / realSamples;
 	}
 
 	@Override
