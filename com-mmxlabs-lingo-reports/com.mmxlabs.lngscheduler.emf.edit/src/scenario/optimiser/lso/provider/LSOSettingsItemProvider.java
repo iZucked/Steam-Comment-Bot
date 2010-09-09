@@ -110,6 +110,7 @@ public class LSOSettingsItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LsoPackage.Literals.LSO_SETTINGS__THRESHOLDER_SETTINGS);
+			childrenFeatures.add(LsoPackage.Literals.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS);
 		}
 		return childrenFeatures;
 	}
@@ -168,6 +169,7 @@ public class LSOSettingsItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
+			case LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -189,6 +191,21 @@ public class LSOSettingsItemProvider
 			(createChildParameter
 				(LsoPackage.Literals.LSO_SETTINGS__THRESHOLDER_SETTINGS,
 				 LsoFactory.eINSTANCE.createThresholderSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LsoPackage.Literals.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS,
+				 LsoFactory.eINSTANCE.createMoveGeneratorSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LsoPackage.Literals.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS,
+				 LsoFactory.eINSTANCE.createRandomMoveGeneratorSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LsoPackage.Literals.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS,
+				 LsoFactory.eINSTANCE.createConstrainedMoveGeneratorSettings()));
 	}
 
 	/**

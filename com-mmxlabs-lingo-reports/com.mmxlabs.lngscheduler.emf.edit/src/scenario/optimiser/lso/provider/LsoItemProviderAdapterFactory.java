@@ -122,6 +122,75 @@ public class LsoItemProviderAdapterFactory extends LsoAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.optimiser.lso.MoveGeneratorSettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MoveGeneratorSettingsItemProvider moveGeneratorSettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.optimiser.lso.MoveGeneratorSettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMoveGeneratorSettingsAdapter() {
+		if (moveGeneratorSettingsItemProvider == null) {
+			moveGeneratorSettingsItemProvider = new MoveGeneratorSettingsItemProvider(this);
+		}
+
+		return moveGeneratorSettingsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.optimiser.lso.RandomMoveGeneratorSettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RandomMoveGeneratorSettingsItemProvider randomMoveGeneratorSettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.optimiser.lso.RandomMoveGeneratorSettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRandomMoveGeneratorSettingsAdapter() {
+		if (randomMoveGeneratorSettingsItemProvider == null) {
+			randomMoveGeneratorSettingsItemProvider = new RandomMoveGeneratorSettingsItemProvider(this);
+		}
+
+		return randomMoveGeneratorSettingsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.optimiser.lso.ConstrainedMoveGeneratorSettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ConstrainedMoveGeneratorSettingsItemProvider constrainedMoveGeneratorSettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.optimiser.lso.ConstrainedMoveGeneratorSettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createConstrainedMoveGeneratorSettingsAdapter() {
+		if (constrainedMoveGeneratorSettingsItemProvider == null) {
+			constrainedMoveGeneratorSettingsItemProvider = new ConstrainedMoveGeneratorSettingsItemProvider(this);
+		}
+
+		return constrainedMoveGeneratorSettingsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -222,6 +291,9 @@ public class LsoItemProviderAdapterFactory extends LsoAdapterFactory implements 
 	public void dispose() {
 		if (lsoSettingsItemProvider != null) lsoSettingsItemProvider.dispose();
 		if (thresholderSettingsItemProvider != null) thresholderSettingsItemProvider.dispose();
+		if (moveGeneratorSettingsItemProvider != null) moveGeneratorSettingsItemProvider.dispose();
+		if (randomMoveGeneratorSettingsItemProvider != null) randomMoveGeneratorSettingsItemProvider.dispose();
+		if (constrainedMoveGeneratorSettingsItemProvider != null) constrainedMoveGeneratorSettingsItemProvider.dispose();
 	}
 
 }
