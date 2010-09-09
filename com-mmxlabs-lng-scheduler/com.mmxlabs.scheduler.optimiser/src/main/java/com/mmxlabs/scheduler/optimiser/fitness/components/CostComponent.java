@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSequence;
@@ -31,7 +32,8 @@ public final class CostComponent<T> extends
 
 	private final List<FuelComponent> fuelComponents;
 
-	public CostComponent(final String name, List<FuelComponent> fuelComponents,
+	public CostComponent(final String name,
+			final List<FuelComponent> fuelComponents,
 			final CargoSchedulerFitnessCore<T> core) {
 		super(name, core);
 		this.fuelComponents = fuelComponents;
@@ -53,7 +55,7 @@ public final class CostComponent<T> extends
 						element, SchedulerConstants.AI_journeyInfo,
 						IJourneyEvent.class);
 
-				for (FuelComponent fuel : fuelComponents) {
+				for (final FuelComponent fuel : fuelComponents) {
 					cost += e.getFuelCost(fuel);
 				}
 			}
@@ -63,7 +65,7 @@ public final class CostComponent<T> extends
 						element, SchedulerConstants.AI_idleInfo,
 						IIdleEvent.class);
 
-				for (FuelComponent fuel : fuelComponents) {
+				for (final FuelComponent fuel : fuelComponents) {
 					cost += e.getFuelCost(fuel);
 				}
 			}
@@ -72,16 +74,20 @@ public final class CostComponent<T> extends
 		// Remove scale factor from result (back into external units)
 		// TODO: Use Calculator to convert back
 		cost /= Calculator.ScaleFactor;
-		
+
 		return cost;
 	}
 
 	@Override
-	public void init(IOptimisationData<T> data) {
+	public void init(final IOptimisationData<T> data) {
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
+	}
+
+	public List<FuelComponent> getFuelComponents() {
+		return Collections.unmodifiableList(fuelComponents);
 	}
 }

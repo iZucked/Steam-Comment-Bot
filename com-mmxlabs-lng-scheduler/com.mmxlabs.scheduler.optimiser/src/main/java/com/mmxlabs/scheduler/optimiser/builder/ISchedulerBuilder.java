@@ -80,16 +80,16 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @param vesselClass
 	 * @param state
-	 * @param nboRate Hourly scaled M3 of LNG rate of boil-off when travelling
-	 * @param idleNBORate Hourly scaled M3 of LNG rate of boil-off when idling
-	 * @param idleConsumptionRate Hourly scaled MT of base fuel consumption rate when idle
-	 * @param consumptionRateCalculator {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed. 
+	 * @param nboRateInM3PerHour Hourly scaled M3 of LNG rate of boil-off when travelling
+	 * @param idleNBORateInM3PerHour Hourly scaled M3 of LNG rate of boil-off when idling
+	 * @param idleConsumptionRateInMTPerHour Hourly scaled MT of base fuel consumption rate when idle
+	 * @param consumptionRateCalculatorInMTPerHour {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed. 
 	 * @param nboSpeed Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling.
 	 */
 	void setVesselClassStateParamaters(IVesselClass vesselClass,
-			VesselState state, int nboRate, int idleNBORate,
-			int idleConsumptionRate,
-			IConsumptionRateCalculator consumptionRateCalculator, int nboSpeed);
+			VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour,
+			int idleConsumptionRateInMTPerHour,
+			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
 
 	
 	/**

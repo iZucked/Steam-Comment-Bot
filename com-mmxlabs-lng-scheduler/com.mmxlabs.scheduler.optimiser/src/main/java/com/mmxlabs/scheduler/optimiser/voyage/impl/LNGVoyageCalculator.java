@@ -46,18 +46,18 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		final IVesselClass vesselClass = vessel.getVesselClass();
 		final VesselState vesselState = options.getVesselState();
 
-		final int equivalenceFactor = vesselClass.getBaseFuelConversionFactor();
+		final int equivalenceFactorM3ToMT = vesselClass.getBaseFuelConversionFactor();
 
 		// Get distance
 		final long distance = options.getDistance();
 
 		// Get available time
-		final int availableTime = options.getAvailableTime();
+		final int availableTimeInHours = options.getAvailableTime();
 
 		// Calculate speed
 		// cast to int as if long is required, then what are we doing?
-		int speed = availableTime == 0 ? 0 : Calculator.speedFromDistanceTime(
-				distance, availableTime);
+		int speed = availableTimeInHours == 0 ? 0 : Calculator.speedFromDistanceTime(
+				distance, availableTimeInHours);
 
 		if (distance != 0) {
 			// Check NBO speed
@@ -88,27 +88,27 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// Calculate total, travel and idle time
 
 		// May be longer than available time
-		final int travelTime = speed == 0 ? 0 : Calculator
+		final int travelTimeInHours = speed == 0 ? 0 : Calculator
 				.getTimeFromSpeedDistance(speed, distance);
-		final int idleTime = Math.max(0, availableTime - travelTime);
+		final int idleTimeInHours = Math.max(0, availableTimeInHours - travelTimeInHours);
 
-		output.setTravelTime(travelTime);
-		output.setIdleTime(idleTime);
+		output.setTravelTime(travelTimeInHours);
+		output.setIdleTime(idleTimeInHours);
 
-		final long consuptionRateInMT = speed == 0 ? 0 : vesselClass
+		final long consuptionRateInMTPerHour = speed == 0 ? 0 : vesselClass
 				.getConsumptionRate(vesselState).getRate(speed);
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(
-				consuptionRateInMT, travelTime);
+				consuptionRateInMTPerHour, travelTimeInHours);
 
 		// Calculate fuel requirements
 		if (options.useNBOForTravel()) {
 
 			long nboRateInM3PerHour = vesselClass.getNBORate(vesselState);
 			final long nboProvidedInM3 = Calculator.quantityFromRateTime(
-					nboRateInM3PerHour, travelTime);
+					nboRateInM3PerHour, travelTimeInHours);
 
 			final long nboProvidedInMT = Calculator.convertM3ToMT(
-					nboProvidedInM3, equivalenceFactor);
+					nboProvidedInM3, equivalenceFactorM3ToMT);
 
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3,
 					nboProvidedInM3);
@@ -118,7 +118,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			if (nboProvidedInMT < requiredConsumptionInMT) {
 				final long diffInMT = requiredConsumptionInMT - nboProvidedInMT;
 				final long diffInM3 = Calculator.convertMTToM3(diffInMT,
-						equivalenceFactor);
+						equivalenceFactorM3ToMT);
 				if (options.useFBOForSupplement()) {
 					// Use FBO for remaining quantity
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3,
@@ -148,9 +148,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				.getIdleNBORate(vesselState);
 		if (options.useNBOForIdle()) {
 			final long nboProvidedInM3 = Calculator.quantityFromRateTime(
-					idleNBORateInM3PerHour, idleTime);
+					idleNBORateInM3PerHour, idleTimeInHours);
 			final long nboProvidedInMT = Calculator.convertM3ToMT(
-					nboProvidedInM3, equivalenceFactor);
+					nboProvidedInM3, equivalenceFactorM3ToMT);
 
 			output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3,
 					nboProvidedInM3);
@@ -162,7 +162,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					.getIdleConsumptionRate(vesselState);
 
 			long idleConsumptionInMT = Calculator.quantityFromRateTime(
-					idleRateInMTPerHour, idleTime);
+					idleRateInMTPerHour, idleTimeInHours);
 			if (options.useNBOForTravel()) {
 
 				// Run down boil off after travel. On ballast voyages running on
@@ -176,15 +176,15 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				// boil-off time rather than use the raw quantity directly.
 				final long minHeelInM3 = vesselClass.getMinHeel();
 				final long minHeelInMT = Calculator.convertM3ToMT(minHeelInM3,
-						equivalenceFactor);
+						equivalenceFactorM3ToMT);
 
 				// How long will the boil-off last
-				final int deltaTime = Calculator.getTimeFromRateQuantity(
+				final int deltaTimeInHours = Calculator.getTimeFromRateQuantity(
 						idleNBORateInM3PerHour, minHeelInM3);
 
 				// Get fuel equivalence factor
 				final long equivalentConsumptionInMT = Calculator
-						.quantityFromRateTime(idleRateInMTPerHour, deltaTime);
+						.quantityFromRateTime(idleRateInMTPerHour, deltaTimeInHours);
 
 				idleConsumptionInMT -= equivalentConsumptionInMT;
 
