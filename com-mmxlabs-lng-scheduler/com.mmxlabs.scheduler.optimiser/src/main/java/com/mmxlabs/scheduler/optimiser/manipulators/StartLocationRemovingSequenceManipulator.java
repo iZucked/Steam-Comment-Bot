@@ -6,6 +6,8 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -22,6 +24,9 @@ public class StartLocationRemovingSequenceManipulator<T> implements
 	
 	@Override
 	public void manipulate(IModifiableSequences<T> sequences) {
+		if (vesselProvider == null) {
+			throw new RuntimeException("Vessel Provider has not been set in StartLocationRemovingSequenceManipulator");
+		}
 		// Loop through each sequence in turn and manipulate
 		for (final Map.Entry<IResource, IModifiableSequence<T>> entry : sequences
 				.getModifiableSequences().entrySet()) {
@@ -42,4 +47,16 @@ public class StartLocationRemovingSequenceManipulator<T> implements
 		vesselProvider = null;
 	}
 
+	public IVesselProvider getVesselProvider() {
+		return vesselProvider;
+	}
+
+	public void setVesselProvider(IVesselProvider vesselProvider) {
+		this.vesselProvider = vesselProvider;
+	}
+
+	public void setOptimisationData(IOptimisationData<T> data) {
+		setVesselProvider(data.getDataComponentProvider(
+				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
+	}
 }
