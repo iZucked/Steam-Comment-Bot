@@ -5,6 +5,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
@@ -61,7 +62,7 @@ public class CharterCostFitnessComponent<T> extends
 					final int arrivalTime = annotatedSequence.getAnnotation(lastElement, 
 							SchedulerConstants.AI_visitInfo, IPortVisitEvent.class).getStartTime(); //TODO check this is arrival time at last port
 					final int delta = arrivalTime - loadTime;
-					hireCost = ((long)delta) * ((long)vessel.getVesselClass().getHourlyCharterPrice());
+					hireCost = Calculator.multiply(delta, vessel.getVesselClass().getHourlyCharterPrice()); 
 				}
 				
 				break;
