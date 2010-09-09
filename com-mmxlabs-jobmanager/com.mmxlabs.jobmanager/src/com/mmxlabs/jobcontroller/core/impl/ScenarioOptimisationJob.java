@@ -140,7 +140,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						fireProgressUpdate(work);
 
 						System.out.println("Iteration: " + iteration
-								+ " Fitness: " + bestFitness);
+								+ " Best Fitness: " + bestFitness + " Current Fitness: " + currentFitness);
 
 						// TODO: We should verify delta fitness is equal to a
 						// whole new fitness
