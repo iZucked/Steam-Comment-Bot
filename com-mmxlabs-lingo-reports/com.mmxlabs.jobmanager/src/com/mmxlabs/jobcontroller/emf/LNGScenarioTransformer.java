@@ -312,7 +312,7 @@ public class LNGScenarioTransformer {
 					Calculator.scale(eVc.getBaseFuelUnitPrice()),
 					Calculator.scaleToInt(eVc.getBaseFuelEquivalenceFactor()),
 					// This should be divide?
-					Calculator.scale(eVc.getDailyCharterPrice()) / 24);
+					Calculator.scaleToInt(eVc.getDailyCharterPrice() / 24.0));
 			vesselClassAssociation.add(eVc, vc);
 
 			/*
