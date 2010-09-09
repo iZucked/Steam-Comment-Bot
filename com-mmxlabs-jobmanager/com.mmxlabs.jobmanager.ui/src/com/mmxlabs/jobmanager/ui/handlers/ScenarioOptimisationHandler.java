@@ -70,6 +70,7 @@ public class ScenarioOptimisationHandler extends AbstractHandler {
 								Scenario s = (Scenario) e;
 								ScenarioOptimisationJob job = new ScenarioOptimisationJob("Optimise " + file.getName(), s);
 								jmv.addJob(job);
+								job.start();
 							}
 						}
 					}

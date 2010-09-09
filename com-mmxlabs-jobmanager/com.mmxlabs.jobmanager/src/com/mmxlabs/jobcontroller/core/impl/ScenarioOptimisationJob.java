@@ -43,14 +43,12 @@ import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
@@ -93,7 +91,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 		state = JobState.INITIALISED;
 
-		//		updateSchedule(context.getInitialSequences());
+		// updateSchedule(context.getInitialSequences());
 	}
 
 	/**
@@ -144,8 +142,10 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						System.out.println("Iteration: " + iteration
 								+ " Fitness: " + bestFitness);
 
-						//TODO: We should verify delta fitness is equal to a whole new fitness
-						// As currently the fitness report shows different results!
+						// TODO: We should verify delta fitness is equal to a
+						// whole new fitness
+						// As currently the fitness report shows different
+						// results!
 
 						// HERE: Process the solution in a runnable and update
 						// getSchedule() output
@@ -189,7 +189,8 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 					@Override
 					public void done(final IOptimiser<ISequenceElement> arg0,
-							final long arg1, final ISequences<ISequenceElement> arg2) {
+							final long arg1,
+							final ISequences<ISequenceElement> arg2) {
 
 						updateSchedule(arg2);
 
@@ -197,7 +198,8 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 					@Override
 					public void begin(final IOptimiser<ISequenceElement> arg0,
-							final long arg1, final ISequences<ISequenceElement> arg2) {
+							final long arg1,
+							final ISequences<ISequenceElement> arg2) {
 
 						updateSchedule(arg2);
 
@@ -208,24 +210,28 @@ public class ScenarioOptimisationJob implements IManagedJob {
 				try {
 					monitor.subTask("Pre-process scenario");
 
-					LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
-					OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
+					LNGScenarioTransformer lst = new LNGScenarioTransformer(
+							scenario);
+					OptimisationTransformer ot = new OptimisationTransformer(
+							lst.getOptimisationSettings());
 					try {
-						IOptimisationData<ISequenceElement> data = lst.createOptimisationData();
+						IOptimisationData<ISequenceElement> data = lst
+								.createOptimisationData();
 
-						Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext 
-						= ot.createOptimiserAndContext(data);
+						Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
+								.createOptimiserAndContext(data);
 
 						monitor.subTask("Prepare optimisation");
 
 						context = optAndContext.getFirst();
-						final LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext.getSecond();
-						
+						final LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext
+								.getSecond();
+
 						optimiser.setProgressMonitor(optMonitor);
 						optimiser.init();
-						
-						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = 
-							optimiser.getFitnessEvaluator();
+
+						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
+								.getFitnessEvaluator();
 
 						//check feasibility of initial sequences
 						{
@@ -283,7 +289,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 								+ linearFitnessEvaluator.getBestFitness());
 					} catch (IncompleteScenarioException ex) {
 						fireJobCancelled();
-						return Status.CANCEL_STATUS; //die
+						return Status.CANCEL_STATUS; // die
 					}
 				} finally {
 					monitor.done();
@@ -464,7 +470,8 @@ public class ScenarioOptimisationJob implements IManagedJob {
 		return state;
 	}
 
-	private void setSchedule(final IAnnotatedSolution<ISequenceElement> annotatedSequences) {
+	private void setSchedule(
+			final IAnnotatedSolution<ISequenceElement> annotatedSequences) {
 
 		this.schedule = annotatedSequences;
 
@@ -475,7 +482,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 		{
 
 			final IOptimisationData<ISequenceElement> data = context
-			.getOptimisationData();
+					.getOptimisationData();
 
 			final SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
 			scheduler.setDistanceProvider(data.getDataComponentProvider(
@@ -489,24 +496,26 @@ public class ScenarioOptimisationJob implements IManagedJob {
 			scheduler.setTimeWindowProvider(data.getDataComponentProvider(
 					SchedulerConstants.DCP_timeWindowProvider,
 					ITimeWindowDataComponentProvider.class));
-			final IPortSlotProvider<ISequenceElement> portSlotProvider = data.getDataComponentProvider(
-					SchedulerConstants.DCP_portSlotsProvider,
-					IPortSlotProvider.class);
+			final IPortSlotProvider<ISequenceElement> portSlotProvider = data
+					.getDataComponentProvider(
+							SchedulerConstants.DCP_portSlotsProvider,
+							IPortSlotProvider.class);
 			scheduler.setPortSlotProvider(portSlotProvider);
 			scheduler.setPortTypeProvider(data.getDataComponentProvider(
 					SchedulerConstants.DCP_portTypeProvider,
 					IPortTypeProvider.class));
-			final IVesselProvider vesselProvider = data.getDataComponentProvider(
-					SchedulerConstants.DCP_vesselProvider,
-					IVesselProvider.class);
+			final IVesselProvider vesselProvider = data
+					.getDataComponentProvider(
+							SchedulerConstants.DCP_vesselProvider,
+							IVesselProvider.class);
 			scheduler.setVesselProvider(vesselProvider);
-			final IVoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>();
-			final ILNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-			
+
+			final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
+			final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>();
 			voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
 			
 			scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-			
+
 			// This may throw IllegalStateException if not all
 			// the elements are set.
 			scheduler.init();

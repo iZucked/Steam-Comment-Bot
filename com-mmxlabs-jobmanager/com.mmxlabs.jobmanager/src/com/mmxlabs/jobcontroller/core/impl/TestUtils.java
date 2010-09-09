@@ -366,14 +366,14 @@ public final class TestUtils {
 		// DFDE is approx 40 MT less than steam at 20 knots. Steam is roughly
 		// 180MT at 20 knots
 		final TreeMap<Integer, Long> dfdeKeypoints = new TreeMap<Integer, Long>();
-		dfdeKeypoints.put(12000, 8000l);
-		dfdeKeypoints.put(20000, 16000l);
+		dfdeKeypoints.put(12000, 800000l / 24);
+		dfdeKeypoints.put(20000, 1400000l / 24);
 		final InterpolatingConsumptionRateCalculator dfdeConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				dfdeKeypoints);
 
 		final TreeMap<Integer, Long> steamKeypoints = new TreeMap<Integer, Long>();
-		steamKeypoints.put(12000, 12000l);
-		steamKeypoints.put(20000, 20000l);
+		steamKeypoints.put(12000, 120000l / 24);
+		steamKeypoints.put(20000, 180000l / 24);
 		final InterpolatingConsumptionRateCalculator steamConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				steamKeypoints);
 
@@ -384,13 +384,13 @@ public final class TestUtils {
 		// WHY DO WE ONLY GET MIN/MAX SPEEDS IN OUTPUT?
 
 		final IVesselClass vesselClass4 = builder.createVesselClass(
-				"STEAM-126", 12000, 19500, 126000000l, 0, 500, 200000);
+				"STEAM-126", 12000, 19500, 126000000l, 0, 200000, 500);
 		final IVesselClass vesselClass1 = builder.createVesselClass(
-				"STEAM-138", 12000, 20000, 138000000l, 0, 500, 200000);
+				"STEAM-138", 12000, 20000, 138000000l, 0, 200000, 500);
 		final IVesselClass vesselClass2 = builder.createVesselClass(
-				"STEAM-145", 12000, 20000, 145000000l, 0, 500, 200000);
+				"STEAM-145", 12000, 20000, 145000000l, 0, 200000, 500);
 		final IVesselClass vesselClass3 = builder.createVesselClass("DFDE-177",
-				12000, 20000, 177000000l, 0, 500, 200000);
+				12000, 20000, 177000000l, 0, 200000, 500);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
 				138000 / 24, 118000 / 24, 10000 / 24,
