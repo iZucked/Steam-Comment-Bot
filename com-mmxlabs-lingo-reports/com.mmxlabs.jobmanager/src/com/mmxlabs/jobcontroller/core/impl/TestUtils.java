@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
+import javax.xml.stream.events.StartElement;
+
 import org.eclipse.emf.common.util.URI;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -58,6 +60,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.manipulators.StartLocationRemovingSequenceManipulator;
 
 /**
  * Utility class to help build up test components.
@@ -146,7 +149,9 @@ public final class TestUtils {
 		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
 
 		lso.setNumberOfIterations(numberOfIterations);
-		lso.setSequenceManipulator(new NullSequencesManipulator<T>());
+		StartLocationRemovingSequenceManipulator<T> manipulator = new StartLocationRemovingSequenceManipulator<T>();
+		manipulator.setOptimisationData(context.getOptimisationData());
+		lso.setSequenceManipulator(manipulator);
 		lso.setMoveGenerator(moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
