@@ -114,13 +114,12 @@ public final class PortTypeConstraintChecker<T> implements
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
 				if (!((type == PortType.Start && instanceType != VesselInstanceType.SPOT_CHARTER) ||
-						(/*type == PortType.Load && */instanceType == VesselInstanceType.SPOT_CHARTER))) {
+						(instanceType == VesselInstanceType.SPOT_CHARTER && (type == PortType.Load || type == PortType.End)))) {
 					//must either start with Start and be not a spot charter,
-					//or must start with a load and be a spot charter
-					//I have relaxed the requirement that spot charter start with a load,
-					//because the sequence manipulator for spot charters might not have been added.
+					//or must start with a load or an End and be a spot charter
+				
 					if (messages != null)
-						messages.add("Sequence must begin with PortType.Start");
+						messages.add("Sequence must begin with PortType.Start or, if charter, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
 					return false;
 				}
 			} else {
