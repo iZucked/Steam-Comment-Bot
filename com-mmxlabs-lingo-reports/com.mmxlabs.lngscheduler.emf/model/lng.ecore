@@ -227,6 +227,8 @@
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfSteps" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="thresholderSettings"
             lowerBound="1" eType="#//optimiser/lso/ThresholderSettings" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="moveGeneratorSettings"
+            eType="#//optimiser/lso/MoveGeneratorSettings" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="ThresholderSettings">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="alpha" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
@@ -237,6 +239,15 @@
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="epochLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
             defaultValueLiteral="1000"/>
       </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="MoveGeneratorSettings"/>
+      <eClassifiers xsi:type="ecore:EClass" name="RandomMoveGeneratorSettings" eSuperTypes="#//optimiser/lso/MoveGeneratorSettings">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="using2over2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="using3over2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="using4over1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="using4over2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ConstrainedMoveGeneratorSettings"
+          eSuperTypes="#//optimiser/lso/MoveGeneratorSettings"/>
     </eSubpackages>
   </eSubpackages>
 </ecore:EPackage>

@@ -126,13 +126,22 @@ public interface LsoPackage extends EPackage {
 	int LSO_SETTINGS__THRESHOLDER_SETTINGS = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Move Generator Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__MOVE_GENERATOR_SETTINGS = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>LSO Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LSO_SETTINGS_FEATURE_COUNT = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 2;
+	int LSO_SETTINGS_FEATURE_COUNT = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.optimiser.lso.impl.ThresholderSettingsImpl <em>Thresholder Settings</em>}' class.
@@ -182,6 +191,100 @@ public interface LsoPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.optimiser.lso.impl.MoveGeneratorSettingsImpl <em>Move Generator Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.optimiser.lso.impl.MoveGeneratorSettingsImpl
+	 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getMoveGeneratorSettings()
+	 * @generated
+	 */
+	int MOVE_GENERATOR_SETTINGS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Move Generator Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.optimiser.lso.impl.RandomMoveGeneratorSettingsImpl <em>Random Move Generator Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.optimiser.lso.impl.RandomMoveGeneratorSettingsImpl
+	 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Using2over2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS__USING2OVER2 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Using3over2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS__USING3OVER2 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Using4over1</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER1 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Using4over2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER2 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Random Move Generator Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link scenario.optimiser.lso.impl.ConstrainedMoveGeneratorSettingsImpl <em>Constrained Move Generator Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.optimiser.lso.impl.ConstrainedMoveGeneratorSettingsImpl
+	 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getConstrainedMoveGeneratorSettings()
+	 * @generated
+	 */
+	int CONSTRAINED_MOVE_GENERATOR_SETTINGS = 4;
+
+	/**
+	 * The number of structural features of the '<em>Constrained Move Generator Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINED_MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.lso.LSOSettings <em>LSO Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -212,6 +315,17 @@ public interface LsoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLSOSettings_ThresholderSettings();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link scenario.optimiser.lso.LSOSettings#getMoveGeneratorSettings <em>Move Generator Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Move Generator Settings</em>'.
+	 * @see scenario.optimiser.lso.LSOSettings#getMoveGeneratorSettings()
+	 * @see #getLSOSettings()
+	 * @generated
+	 */
+	EReference getLSOSettings_MoveGeneratorSettings();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.lso.ThresholderSettings <em>Thresholder Settings</em>}'.
@@ -255,6 +369,80 @@ public interface LsoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getThresholderSettings_EpochLength();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.optimiser.lso.MoveGeneratorSettings <em>Move Generator Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Move Generator Settings</em>'.
+	 * @see scenario.optimiser.lso.MoveGeneratorSettings
+	 * @generated
+	 */
+	EClass getMoveGeneratorSettings();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings <em>Random Move Generator Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Random Move Generator Settings</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings
+	 * @generated
+	 */
+	EClass getRandomMoveGeneratorSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings#isUsing2over2 <em>Using2over2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Using2over2</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings#isUsing2over2()
+	 * @see #getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	EAttribute getRandomMoveGeneratorSettings_Using2over2();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings#isUsing3over2 <em>Using3over2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Using3over2</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings#isUsing3over2()
+	 * @see #getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	EAttribute getRandomMoveGeneratorSettings_Using3over2();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings#isUsing4over1 <em>Using4over1</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Using4over1</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings#isUsing4over1()
+	 * @see #getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	EAttribute getRandomMoveGeneratorSettings_Using4over1();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings#isUsing4over2 <em>Using4over2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Using4over2</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings#isUsing4over2()
+	 * @see #getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	EAttribute getRandomMoveGeneratorSettings_Using4over2();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.optimiser.lso.ConstrainedMoveGeneratorSettings <em>Constrained Move Generator Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Constrained Move Generator Settings</em>'.
+	 * @see scenario.optimiser.lso.ConstrainedMoveGeneratorSettings
+	 * @generated
+	 */
+	EClass getConstrainedMoveGeneratorSettings();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -305,6 +493,14 @@ public interface LsoPackage extends EPackage {
 		EReference LSO_SETTINGS__THRESHOLDER_SETTINGS = eINSTANCE.getLSOSettings_ThresholderSettings();
 
 		/**
+		 * The meta object literal for the '<em><b>Move Generator Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LSO_SETTINGS__MOVE_GENERATOR_SETTINGS = eINSTANCE.getLSOSettings_MoveGeneratorSettings();
+
+		/**
 		 * The meta object literal for the '{@link scenario.optimiser.lso.impl.ThresholderSettingsImpl <em>Thresholder Settings</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -337,6 +533,68 @@ public interface LsoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute THRESHOLDER_SETTINGS__EPOCH_LENGTH = eINSTANCE.getThresholderSettings_EpochLength();
+
+		/**
+		 * The meta object literal for the '{@link scenario.optimiser.lso.impl.MoveGeneratorSettingsImpl <em>Move Generator Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.optimiser.lso.impl.MoveGeneratorSettingsImpl
+		 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getMoveGeneratorSettings()
+		 * @generated
+		 */
+		EClass MOVE_GENERATOR_SETTINGS = eINSTANCE.getMoveGeneratorSettings();
+
+		/**
+		 * The meta object literal for the '{@link scenario.optimiser.lso.impl.RandomMoveGeneratorSettingsImpl <em>Random Move Generator Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.optimiser.lso.impl.RandomMoveGeneratorSettingsImpl
+		 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getRandomMoveGeneratorSettings()
+		 * @generated
+		 */
+		EClass RANDOM_MOVE_GENERATOR_SETTINGS = eINSTANCE.getRandomMoveGeneratorSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Using2over2</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__USING2OVER2 = eINSTANCE.getRandomMoveGeneratorSettings_Using2over2();
+
+		/**
+		 * The meta object literal for the '<em><b>Using3over2</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__USING3OVER2 = eINSTANCE.getRandomMoveGeneratorSettings_Using3over2();
+
+		/**
+		 * The meta object literal for the '<em><b>Using4over1</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER1 = eINSTANCE.getRandomMoveGeneratorSettings_Using4over1();
+
+		/**
+		 * The meta object literal for the '<em><b>Using4over2</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER2 = eINSTANCE.getRandomMoveGeneratorSettings_Using4over2();
+
+		/**
+		 * The meta object literal for the '{@link scenario.optimiser.lso.impl.ConstrainedMoveGeneratorSettingsImpl <em>Constrained Move Generator Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.optimiser.lso.impl.ConstrainedMoveGeneratorSettingsImpl
+		 * @see scenario.optimiser.lso.impl.LsoPackageImpl#getConstrainedMoveGeneratorSettings()
+		 * @generated
+		 */
+		EClass CONSTRAINED_MOVE_GENERATOR_SETTINGS = eINSTANCE.getConstrainedMoveGeneratorSettings();
 
 	}
 

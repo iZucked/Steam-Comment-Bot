@@ -82,6 +82,18 @@ public class LsoAdapterFactory extends AdapterFactoryImpl {
 				return createThresholderSettingsAdapter();
 			}
 			@Override
+			public Adapter caseMoveGeneratorSettings(MoveGeneratorSettings object) {
+				return createMoveGeneratorSettingsAdapter();
+			}
+			@Override
+			public Adapter caseRandomMoveGeneratorSettings(RandomMoveGeneratorSettings object) {
+				return createRandomMoveGeneratorSettingsAdapter();
+			}
+			@Override
+			public Adapter caseConstrainedMoveGeneratorSettings(ConstrainedMoveGeneratorSettings object) {
+				return createConstrainedMoveGeneratorSettingsAdapter();
+			}
+			@Override
 			public Adapter caseOptimisationSettings(OptimisationSettings object) {
 				return createOptimisationSettingsAdapter();
 			}
@@ -130,6 +142,48 @@ public class LsoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createThresholderSettingsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.optimiser.lso.MoveGeneratorSettings <em>Move Generator Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.optimiser.lso.MoveGeneratorSettings
+	 * @generated
+	 */
+	public Adapter createMoveGeneratorSettingsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings <em>Random Move Generator Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings
+	 * @generated
+	 */
+	public Adapter createRandomMoveGeneratorSettingsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.optimiser.lso.ConstrainedMoveGeneratorSettings <em>Constrained Move Generator Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.optimiser.lso.ConstrainedMoveGeneratorSettings
+	 * @generated
+	 */
+	public Adapter createConstrainedMoveGeneratorSettingsAdapter() {
 		return null;
 	}
 

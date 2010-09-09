@@ -44,6 +44,33 @@ public interface LsoFactory extends EFactory {
 	ThresholderSettings createThresholderSettings();
 
 	/**
+	 * Returns a new object of class '<em>Move Generator Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Move Generator Settings</em>'.
+	 * @generated
+	 */
+	MoveGeneratorSettings createMoveGeneratorSettings();
+
+	/**
+	 * Returns a new object of class '<em>Random Move Generator Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Random Move Generator Settings</em>'.
+	 * @generated
+	 */
+	RandomMoveGeneratorSettings createRandomMoveGeneratorSettings();
+
+	/**
+	 * Returns a new object of class '<em>Constrained Move Generator Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Constrained Move Generator Settings</em>'.
+	 * @generated
+	 */
+	ConstrainedMoveGeneratorSettings createConstrainedMoveGeneratorSettings();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

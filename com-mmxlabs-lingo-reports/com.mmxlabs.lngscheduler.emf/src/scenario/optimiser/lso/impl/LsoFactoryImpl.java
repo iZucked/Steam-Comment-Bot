@@ -62,6 +62,9 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 		switch (eClass.getClassifierID()) {
 			case LsoPackage.LSO_SETTINGS: return createLSOSettings();
 			case LsoPackage.THRESHOLDER_SETTINGS: return createThresholderSettings();
+			case LsoPackage.MOVE_GENERATOR_SETTINGS: return createMoveGeneratorSettings();
+			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS: return createRandomMoveGeneratorSettings();
+			case LsoPackage.CONSTRAINED_MOVE_GENERATOR_SETTINGS: return createConstrainedMoveGeneratorSettings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -85,6 +88,36 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	public ThresholderSettings createThresholderSettings() {
 		ThresholderSettingsImpl thresholderSettings = new ThresholderSettingsImpl();
 		return thresholderSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MoveGeneratorSettings createMoveGeneratorSettings() {
+		MoveGeneratorSettingsImpl moveGeneratorSettings = new MoveGeneratorSettingsImpl();
+		return moveGeneratorSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RandomMoveGeneratorSettings createRandomMoveGeneratorSettings() {
+		RandomMoveGeneratorSettingsImpl randomMoveGeneratorSettings = new RandomMoveGeneratorSettingsImpl();
+		return randomMoveGeneratorSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ConstrainedMoveGeneratorSettings createConstrainedMoveGeneratorSettings() {
+		ConstrainedMoveGeneratorSettingsImpl constrainedMoveGeneratorSettings = new ConstrainedMoveGeneratorSettingsImpl();
+		return constrainedMoveGeneratorSettings;
 	}
 
 	/**

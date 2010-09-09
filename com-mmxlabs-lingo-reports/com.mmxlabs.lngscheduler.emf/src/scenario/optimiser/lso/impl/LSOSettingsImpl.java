@@ -18,6 +18,7 @@ import scenario.optimiser.impl.OptimisationSettingsImpl;
 
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.MoveGeneratorSettings;
 import scenario.optimiser.lso.ThresholderSettings;
 
 /**
@@ -29,6 +30,7 @@ import scenario.optimiser.lso.ThresholderSettings;
  * <ul>
  *   <li>{@link scenario.optimiser.lso.impl.LSOSettingsImpl#getNumberOfSteps <em>Number Of Steps</em>}</li>
  *   <li>{@link scenario.optimiser.lso.impl.LSOSettingsImpl#getThresholderSettings <em>Thresholder Settings</em>}</li>
+ *   <li>{@link scenario.optimiser.lso.impl.LSOSettingsImpl#getMoveGeneratorSettings <em>Move Generator Settings</em>}</li>
  * </ul>
  * </p>
  *
@@ -64,6 +66,16 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * @ordered
 	 */
 	protected ThresholderSettings thresholderSettings;
+
+	/**
+	 * The cached value of the '{@link #getMoveGeneratorSettings() <em>Move Generator Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMoveGeneratorSettings()
+	 * @generated
+	 * @ordered
+	 */
+	protected MoveGeneratorSettings moveGeneratorSettings;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -153,11 +165,56 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public MoveGeneratorSettings getMoveGeneratorSettings() {
+		return moveGeneratorSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMoveGeneratorSettings(MoveGeneratorSettings newMoveGeneratorSettings, NotificationChain msgs) {
+		MoveGeneratorSettings oldMoveGeneratorSettings = moveGeneratorSettings;
+		moveGeneratorSettings = newMoveGeneratorSettings;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS, oldMoveGeneratorSettings, newMoveGeneratorSettings);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMoveGeneratorSettings(MoveGeneratorSettings newMoveGeneratorSettings) {
+		if (newMoveGeneratorSettings != moveGeneratorSettings) {
+			NotificationChain msgs = null;
+			if (moveGeneratorSettings != null)
+				msgs = ((InternalEObject)moveGeneratorSettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS, null, msgs);
+			if (newMoveGeneratorSettings != null)
+				msgs = ((InternalEObject)newMoveGeneratorSettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS, null, msgs);
+			msgs = basicSetMoveGeneratorSettings(newMoveGeneratorSettings, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS, newMoveGeneratorSettings, newMoveGeneratorSettings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
 				return basicSetThresholderSettings(null, msgs);
+			case LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS:
+				return basicSetMoveGeneratorSettings(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -174,6 +231,8 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 				return getNumberOfSteps();
 			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
 				return getThresholderSettings();
+			case LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS:
+				return getMoveGeneratorSettings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -191,6 +250,9 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 				return;
 			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
 				setThresholderSettings((ThresholderSettings)newValue);
+				return;
+			case LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS:
+				setMoveGeneratorSettings((MoveGeneratorSettings)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -210,6 +272,9 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
 				setThresholderSettings((ThresholderSettings)null);
 				return;
+			case LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS:
+				setMoveGeneratorSettings((MoveGeneratorSettings)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -226,6 +291,8 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 				return numberOfSteps != NUMBER_OF_STEPS_EDEFAULT;
 			case LsoPackage.LSO_SETTINGS__THRESHOLDER_SETTINGS:
 				return thresholderSettings != null;
+			case LsoPackage.LSO_SETTINGS__MOVE_GENERATOR_SETTINGS:
+				return moveGeneratorSettings != null;
 		}
 		return super.eIsSet(featureID);
 	}

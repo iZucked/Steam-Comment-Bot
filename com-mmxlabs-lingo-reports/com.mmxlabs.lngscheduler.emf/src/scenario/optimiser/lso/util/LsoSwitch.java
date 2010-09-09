@@ -102,6 +102,26 @@ public class LsoSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LsoPackage.MOVE_GENERATOR_SETTINGS: {
+				MoveGeneratorSettings moveGeneratorSettings = (MoveGeneratorSettings)theEObject;
+				T result = caseMoveGeneratorSettings(moveGeneratorSettings);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS: {
+				RandomMoveGeneratorSettings randomMoveGeneratorSettings = (RandomMoveGeneratorSettings)theEObject;
+				T result = caseRandomMoveGeneratorSettings(randomMoveGeneratorSettings);
+				if (result == null) result = caseMoveGeneratorSettings(randomMoveGeneratorSettings);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LsoPackage.CONSTRAINED_MOVE_GENERATOR_SETTINGS: {
+				ConstrainedMoveGeneratorSettings constrainedMoveGeneratorSettings = (ConstrainedMoveGeneratorSettings)theEObject;
+				T result = caseConstrainedMoveGeneratorSettings(constrainedMoveGeneratorSettings);
+				if (result == null) result = caseMoveGeneratorSettings(constrainedMoveGeneratorSettings);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -133,6 +153,51 @@ public class LsoSwitch<T> {
 	 * @generated
 	 */
 	public T caseThresholderSettings(ThresholderSettings object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Move Generator Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Move Generator Settings</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMoveGeneratorSettings(MoveGeneratorSettings object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Random Move Generator Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Random Move Generator Settings</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRandomMoveGeneratorSettings(RandomMoveGeneratorSettings object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constrained Move Generator Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constrained Move Generator Settings</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConstrainedMoveGeneratorSettings(ConstrainedMoveGeneratorSettings object) {
 		return null;
 	}
 

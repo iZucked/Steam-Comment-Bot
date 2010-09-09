@@ -37,9 +37,12 @@ import scenario.optimiser.OptimiserPackage;
 
 import scenario.optimiser.impl.OptimiserPackageImpl;
 
+import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoFactory;
 import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.MoveGeneratorSettings;
+import scenario.optimiser.lso.RandomMoveGeneratorSettings;
 import scenario.optimiser.lso.ThresholderSettings;
 
 import scenario.port.PortPackage;
@@ -70,6 +73,27 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * @generated
 	 */
 	private EClass thresholderSettingsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass moveGeneratorSettingsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass randomMoveGeneratorSettingsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass constrainedMoveGeneratorSettingsEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -190,6 +214,15 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getLSOSettings_MoveGeneratorSettings() {
+		return (EReference)lsoSettingsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getThresholderSettings() {
 		return thresholderSettingsEClass;
 	}
@@ -226,6 +259,69 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getMoveGeneratorSettings() {
+		return moveGeneratorSettingsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getRandomMoveGeneratorSettings() {
+		return randomMoveGeneratorSettingsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRandomMoveGeneratorSettings_Using2over2() {
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRandomMoveGeneratorSettings_Using3over2() {
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRandomMoveGeneratorSettings_Using4over1() {
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRandomMoveGeneratorSettings_Using4over2() {
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getConstrainedMoveGeneratorSettings() {
+		return constrainedMoveGeneratorSettingsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public LsoFactory getLsoFactory() {
 		return (LsoFactory)getEFactoryInstance();
 	}
@@ -252,11 +348,22 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		lsoSettingsEClass = createEClass(LSO_SETTINGS);
 		createEAttribute(lsoSettingsEClass, LSO_SETTINGS__NUMBER_OF_STEPS);
 		createEReference(lsoSettingsEClass, LSO_SETTINGS__THRESHOLDER_SETTINGS);
+		createEReference(lsoSettingsEClass, LSO_SETTINGS__MOVE_GENERATOR_SETTINGS);
 
 		thresholderSettingsEClass = createEClass(THRESHOLDER_SETTINGS);
 		createEAttribute(thresholderSettingsEClass, THRESHOLDER_SETTINGS__ALPHA);
 		createEAttribute(thresholderSettingsEClass, THRESHOLDER_SETTINGS__INITIAL_ACCEPTANCE_RATE);
 		createEAttribute(thresholderSettingsEClass, THRESHOLDER_SETTINGS__EPOCH_LENGTH);
+
+		moveGeneratorSettingsEClass = createEClass(MOVE_GENERATOR_SETTINGS);
+
+		randomMoveGeneratorSettingsEClass = createEClass(RANDOM_MOVE_GENERATOR_SETTINGS);
+		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__USING2OVER2);
+		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__USING3OVER2);
+		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER1);
+		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER2);
+
+		constrainedMoveGeneratorSettingsEClass = createEClass(CONSTRAINED_MOVE_GENERATOR_SETTINGS);
 	}
 
 	/**
@@ -291,16 +398,29 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 		// Add supertypes to classes
 		lsoSettingsEClass.getESuperTypes().add(theOptimiserPackage.getOptimisationSettings());
+		randomMoveGeneratorSettingsEClass.getESuperTypes().add(this.getMoveGeneratorSettings());
+		constrainedMoveGeneratorSettingsEClass.getESuperTypes().add(this.getMoveGeneratorSettings());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(lsoSettingsEClass, LSOSettings.class, "LSOSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLSOSettings_NumberOfSteps(), ecorePackage.getEInt(), "numberOfSteps", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLSOSettings_ThresholderSettings(), this.getThresholderSettings(), null, "thresholderSettings", null, 1, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLSOSettings_MoveGeneratorSettings(), this.getMoveGeneratorSettings(), null, "moveGeneratorSettings", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(thresholderSettingsEClass, ThresholderSettings.class, "ThresholderSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getThresholderSettings_Alpha(), ecorePackage.getEDouble(), "alpha", "0.95", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getThresholderSettings_InitialAcceptanceRate(), ecorePackage.getEDouble(), "initialAcceptanceRate", "0.75", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getThresholderSettings_EpochLength(), ecorePackage.getEInt(), "epochLength", "1000", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(moveGeneratorSettingsEClass, MoveGeneratorSettings.class, "MoveGeneratorSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(randomMoveGeneratorSettingsEClass, RandomMoveGeneratorSettings.class, "RandomMoveGeneratorSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRandomMoveGeneratorSettings_Using2over2(), ecorePackage.getEBoolean(), "using2over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_Using3over2(), ecorePackage.getEBoolean(), "using3over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_Using4over1(), ecorePackage.getEBoolean(), "using4over1", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_Using4over2(), ecorePackage.getEBoolean(), "using4over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(constrainedMoveGeneratorSettingsEClass, ConstrainedMoveGeneratorSettings.class, "ConstrainedMoveGeneratorSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 	}
 
 } //LsoPackageImpl
