@@ -61,7 +61,7 @@ public class CharterCostFitnessComponent<T> extends
 					final int arrivalTime = annotatedSequence.getAnnotation(lastElement, 
 							SchedulerConstants.AI_visitInfo, IPortVisitEvent.class).getStartTime(); //TODO check this is arrival time at last port
 					final int delta = arrivalTime - loadTime;
-					hireCost = delta * vessel.getVesselClass().getHourlyCharterPrice();
+					hireCost = ((long)delta) * ((long)vessel.getVesselClass().getHourlyCharterPrice());
 				}
 				
 				break;
