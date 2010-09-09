@@ -31,6 +31,6 @@ public class RandomHelper {
 	 * @return
 	 */
 	public static final <T> T chooseElementFrom(final Random random, final List<T> collection) {
-		return collection.get(random.nextInt(collection.size()-1));
+		return collection.get(random.nextInt(collection.size()));
 	}
 }
