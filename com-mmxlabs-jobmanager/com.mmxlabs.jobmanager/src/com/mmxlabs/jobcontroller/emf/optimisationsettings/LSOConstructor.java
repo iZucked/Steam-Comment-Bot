@@ -6,9 +6,10 @@ import java.util.Map;
 import java.util.Random;
 
 import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.MoveGeneratorSettings;
+import scenario.optimiser.lso.RandomMoveGeneratorSettings;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -16,7 +17,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.impl.ChainedSequencesManipulator;
-import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
@@ -24,13 +24,12 @@ import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.CalibratingGeometricThresholder;
-import com.mmxlabs.optimiser.lso.impl.thresholders.StepThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulator;
+import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.manipulators.StartLocationRemovingSequenceManipulator;
 
 /**
@@ -74,7 +73,7 @@ public class LSOConstructor {
 //						fitnessComponents);
 
 		final IMoveGenerator<T> moveGenerator = 
-			createMoveGenerator();
+			createMoveGenerator(context);
 //			TestUtils
 //				.createRandomMoveGenerator(getRandom());
 
@@ -100,18 +99,28 @@ public class LSOConstructor {
 		return lso;
 	}
 	
-	private <T> IMoveGenerator<T> createMoveGenerator() {
-		// TODO add configuration parameters to the model
-		
-		final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
-		moveGenerator.setRandom(getRandom());
-		
-		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit<T>());
-		
-		return moveGenerator;
+	private <T> IMoveGenerator<T> createMoveGenerator(IOptimisationContext<T> context) {
+		final MoveGeneratorSettings generatorSettings = settings.getMoveGeneratorSettings();
+		if (generatorSettings != null && generatorSettings instanceof RandomMoveGeneratorSettings) {
+			//Ideally this code should go in the EMF classes, to be honest.
+			final RandomMoveGeneratorSettings rmgs = (RandomMoveGeneratorSettings) generatorSettings;
+			final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
+			moveGenerator.setRandom(getRandom());
+			if (rmgs.isUsing2over2())
+				moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit<T>());
+			if (rmgs.isUsing3over2())
+				moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
+			if (rmgs.isUsing4over2())
+				moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
+			if (rmgs.isUsing4over1())
+				moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
+			
+			return moveGenerator;
+		} else {
+			final ConstrainedMoveGenerator<T> cmg = new ConstrainedMoveGenerator<T>(context);
+			cmg.setRandom(getRandom());
+			return cmg;
+		}
 	}
 	
 	private <T> IFitnessEvaluator<T> createFitnessEvaluator(List<IFitnessComponent<T>> fitnessComponents) {
