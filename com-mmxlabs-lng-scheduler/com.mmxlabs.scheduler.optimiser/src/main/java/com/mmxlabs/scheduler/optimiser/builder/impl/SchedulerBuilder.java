@@ -188,8 +188,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
-			final ITimeWindow window, final long minVolume,
-			final long maxVolume, final int price, int cargoCVValue) {
+			final ITimeWindow window, final long minVolumeInM3,
+			final long maxVolumeInM3, final int pricePerMMBTu, int cargoCVValue) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
@@ -204,9 +204,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setId(id);
 		slot.setPort(port);
 		slot.setTimeWindow(window);
-		slot.setMinLoadVolume(minVolume);
-		slot.setMaxLoadVolume(maxVolume);
-		slot.setPurchasePrice(price);
+		slot.setMinLoadVolume(minVolumeInM3);
+		slot.setMaxLoadVolume(maxVolumeInM3);
+		slot.setPurchasePrice(pricePerMMBTu);
 		slot.setCargoCVValue(cargoCVValue);
 		
 		loadSlots.add(slot);
@@ -233,8 +233,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id,
-			final IPort port, final ITimeWindow window, final long minVolume,
-			final long maxVolume, final int price) {
+			final IPort port, final ITimeWindow window, final long minVolumeInM3,
+			final long maxVolumeInM3, final int pricePerMMBTu) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
@@ -249,9 +249,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setId(id);
 		slot.setPort(port);
 		slot.setTimeWindow(window);
-		slot.setMinDischargeVolume(minVolume);
-		slot.setMaxDischargeVolume(maxVolume);
-		slot.setSalesPrice(price);
+		slot.setMinDischargeVolume(minVolumeInM3);
+		slot.setMaxDischargeVolume(maxVolumeInM3);
+		slot.setSalesPrice(pricePerMMBTu);
 
 		dischargeSlots.add(slot);
 
@@ -646,14 +646,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVesselClass createVesselClass(String name, int minSpeed,
-			int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT) {
-		return createVesselClass(name, minSpeed, maxSpeed, capacity, minHeel, baseFuelUnitPrice, baseFuelEquivalenceInM3TOMT, 0);
+			int maxSpeed, long capacityInM3, int minHeelInM3, int baseFuelUnitPricePerMT, int baseFuelEquivalenceInM3TOMT) {
+		return createVesselClass(name, minSpeed, maxSpeed, capacityInM3, minHeelInM3, baseFuelUnitPricePerMT, baseFuelEquivalenceInM3TOMT, 0);
 	}
 
 	@Override
 	public IVesselClass createVesselClass(final String name,
-			final int minSpeed, final int maxSpeed, final long capacity,
-			final int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, 
+			final int minSpeed, final int maxSpeed, final long capacityInM3,
+			final int minHeelInM3, int baseFuelUnitPricePerMT, int baseFuelEquivalenceInM3TOMT, 
 			int hourlyCharterPrice) {
 
 		final VesselClass vesselClass = new VesselClass();
@@ -662,10 +662,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setMinSpeed(minSpeed);
 		vesselClass.setMaxSpeed(maxSpeed);
 
-		vesselClass.setCargoCapacity(capacity);
-		vesselClass.setMinHeel(minHeel);
+		vesselClass.setCargoCapacity(capacityInM3);
+		vesselClass.setMinHeel(minHeelInM3);
 
-		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPrice);
+		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPricePerMT);
 		vesselClass.setBaseFuelConversionFactor(baseFuelEquivalenceInM3TOMT);
 
 		vesselClass.setHourlyCharterPrice(hourlyCharterPrice);
@@ -678,8 +678,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setVesselClassStateParamaters(final IVesselClass vesselClass,
 			final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
-			final int idleConsumptionRateInMTPerHOur,
-			final IConsumptionRateCalculator consumptionRateCalculator,
+			final int idleConsumptionRateInMTPerHour,
+			final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour,
 			final int nboSpeed) {
 
 		if (!vesselClasses.contains(vesselClass)) {
@@ -697,8 +697,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vc.setNBORate(state, nboRateInM3PerHour);
 		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
-		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHOur);
-		vc.setConsumptionRate(state, consumptionRateCalculator);
+		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
+		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
 		vc.setNBOSpeed(state, nboSpeed);
 	}
 
