@@ -176,11 +176,14 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	 */
 	private Pair<T, T> pickLegalPair() {
 		int k = random.nextInt(breakpointCount);
+//		int k0 = k;
 		for (Map.Entry<T, IndexedSet<T>> entry : validFollowers.entrySet()) {
+//			System.err.println(entry.getKey() + " has " + entry.getValue().size() + " followers");
 			if (k < entry.getValue().size()) {
 				return new Pair<T, T>(entry.getKey(), entry.getValue().get(k));
 			} else {
-				k -= (entry.getValue().size()-1);
+				k -= (entry.getValue().size());
+//				System.err.println("k = " + k);
 			}
 		}
 		return null;
@@ -207,7 +210,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			
 			final ISequence<T> sequence = sequences.getSequence(sequence1);
 			final int beforeFirstCut = Math.min(position1, position2);
-			final int beforeSecondCut = Math.max(position1, position2);
+			final int beforeSecondCut = Math.max(position1, position2)-1;
 			final T firstElementInSegment = sequence.get(beforeFirstCut + 1);
 			final T lastElementInSegment = sequence.get(beforeSecondCut);
 			
@@ -311,6 +314,20 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				//So, we have collected some possible breaks, pick one
 				//TODO it might be worth caching this as a source of possible moves to allow 
 				//quick generation on subsequent calls, if this move is rejected
+				
+				if (viableSecondBreaks.isEmpty()) {
+					if (valid2opt2) {
+						Move2over2<T> result = new Move2over2<T>();
+						result.setResource1(resources.get(sequence1));
+						result.setResource2(resources.get(sequence2));
+						//add 1 because the positions are inclusive, and we need to cut after the first element
+						result.setResource1Position(position1+1);
+						result.setResource2Position(position2);
+						return result;
+					} else {
+						return null;
+					}
+				}
 				
 				final Pair<Integer, Integer> selectedSecondBreak = RandomHelper.chooseElementFrom(random, viableSecondBreaks);
 				//so now we have two breaks, which either means a 4opt2 or a 3opt2, so we just have to decode these and see.
