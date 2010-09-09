@@ -8,12 +8,14 @@ import java.util.Random;
 import scenario.optimiser.lso.LSOSettings;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
+import com.mmxlabs.optimiser.core.impl.ChainedSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.IThresholder;
@@ -28,6 +30,8 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulator;
+import com.mmxlabs.scheduler.optimiser.manipulators.StartLocationRemovingSequenceManipulator;
 
 /**
  * A class for converting the settings in the EMF into optimisation jobs
@@ -77,7 +81,13 @@ public class LSOConstructor {
 		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
 
 		lso.setNumberOfIterations(getNumberOfIterations());
-		lso.setSequenceManipulator(new NullSequencesManipulator<T>());
+		ChainedSequencesManipulator<T> manipulator = new ChainedSequencesManipulator<T>();
+		StartLocationRemovingSequenceManipulator<T> slrsm = new StartLocationRemovingSequenceManipulator<T>();
+		slrsm.setOptimisationData(context.getOptimisationData());
+		
+		manipulator.addDelegate(slrsm);
+		lso.setSequenceManipulator(manipulator);
+		
 		lso.setMoveGenerator(moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
