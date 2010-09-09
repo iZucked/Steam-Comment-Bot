@@ -164,6 +164,11 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		//TODO check for MAX_VALUE here and throw some kind of death condition.
 		final long totalFitness = evaluateSequencesIntern(initialSequences,
 				null);
+		
+		if (totalFitness == Long.MAX_VALUE) {
+			System.err.println("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
+		}
+		
 		bestFitness = totalFitness;
 		currentFitness = totalFitness;
 		bestSequences = new Sequences<T>(initialSequences);
