@@ -2,6 +2,7 @@ package com.mmxlabs.demo.app.wizards;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Random;
 
@@ -90,8 +91,28 @@ public class RandomScenarioUtils {
 		Scenario scenario = ScenarioPackage.eINSTANCE.getScenarioFactory()
 				.createScenario();
 		// create standard elements of scenario
-		addDistanceMatrixFromFile(scenario, distanceMatrixFilePath);
+		addDistanceMatrixFromDistanceImporter(scenario, new DistanceImporter(
+				distanceMatrixFilePath));
 
+		return finishCreatingRandomScenario(scenario, addStandardFleet,
+				randomCargoCount, addStandardOptimiserSettings);
+	}
+
+	public Scenario createRandomScenario(InputStream stream,
+			boolean addStandardFleet, int randomCargoCount,
+			boolean addStandardOptimiserSettings) throws IOException {
+		Scenario scenario = ScenarioPackage.eINSTANCE.getScenarioFactory()
+				.createScenario();
+		addDistanceMatrixFromDistanceImporter(scenario, new DistanceImporter(
+				stream));
+
+		return finishCreatingRandomScenario(scenario, addStandardFleet,
+				randomCargoCount, addStandardOptimiserSettings);
+	}
+
+	protected Scenario finishCreatingRandomScenario(Scenario scenario,
+			boolean addStandardFleet, int randomCargoCount,
+			boolean addStandardOptimiserSettings) {
 		scenario.setFleetModel(FleetPackage.eINSTANCE.getFleetFactory()
 				.createFleetModel());
 		scenario.setCargoModel(CargoPackage.eINSTANCE.getCargoFactory()
@@ -113,18 +134,17 @@ public class RandomScenarioUtils {
 	}
 
 	/**
-	 * Replace the distances and ports in the given scenario with ones from a
-	 * CSV file at the given path.
+	 * Replace the distances and ports in the given scenario with ones from the
+	 * given distance importer
 	 * 
 	 * @param scenario
 	 * @param distanceMatrixFilePath
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	void addDistanceMatrixFromFile(Scenario scenario,
-			String distanceMatrixFilePath) throws FileNotFoundException,
-			IOException {
-		DistanceImporter di = new DistanceImporter(distanceMatrixFilePath);
+	void addDistanceMatrixFromDistanceImporter(Scenario scenario,
+			DistanceImporter di) {
+		// DistanceImporter di = new DistanceImporter(distanceMatrixFilePath);
 		final PortFactory pf = PortPackage.eINSTANCE.getPortFactory();
 		final PortModel portModel = pf.createPortModel();
 		scenario.setPortModel(portModel);
@@ -454,4 +474,5 @@ public class RandomScenarioUtils {
 			scenario.getCargoModel().getCargoes().add(c);
 		}
 	}
+
 }
