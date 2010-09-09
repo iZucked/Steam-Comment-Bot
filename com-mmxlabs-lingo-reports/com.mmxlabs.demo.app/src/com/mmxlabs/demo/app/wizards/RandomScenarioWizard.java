@@ -23,7 +23,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.views.navigator.ResourceNavigator;
 
 import com.mmxlabs.common.csv.DistanceImporter;
 
@@ -38,13 +40,10 @@ import scenario.port.PortFactory;
 import scenario.port.PortPackage;
 import scenario.presentation.LngEditorAdvisor;
 
-
-
 public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 	private IWorkbench workbench;
 	private DetailsPage details;
-
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
@@ -52,70 +51,27 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 		this.details = new DetailsPage("Details");
 	}
 
-
 	@Override
 	public void addPages() {
 		super.addPages();
 		addPage(details);
 	}
 
-
-
 	@Override
 	public boolean performFinish() {
-		final URI fileURI = details.getFileURI();
-
+		final String outputFileName = details.getFileName();
+		
 		/*
-		 * Have to create scenario first, because otherwise it won't be registered with the resourcesetimpl
-		 * when we try to save.
+		 * Have to create scenario first, because otherwise it won't be
+		 * registered with the resourcesetimpl when we try to save.
 		 */
-		Scenario scenario = ScenarioPackage.eINSTANCE.getScenarioFactory().createScenario();
-		/*
-		 * Now load distance matrix and add to scenario
-		 */
-
+		Scenario scenario = null;
 
 		try {
-			DistanceImporter di = new DistanceImporter(details.getMatrixURI().toFileString());
-			final PortFactory pf = PortPackage.eINSTANCE.getPortFactory();
-			scenario.setPortModel(pf.createPortModel());
-			//TODO put this somewhere more sensible
-			for (String s : di.getKeys()) {
-				Port port = pf.createPort();
-				port.setName(s);
-				scenario.getPortModel().getPorts().add(port);
-			}
-
-			//add useful default models
-			scenario.setFleetModel(FleetPackage.eINSTANCE.getFleetFactory().createFleetModel());
-			scenario.setCargoModel(CargoPackage.eINSTANCE.getCargoFactory().createCargoModel());
-
-			scenario.setDistanceModel(pf.createDistanceModel());
-			final DistanceModel dm = scenario.getDistanceModel();
-
-			for (Port a : scenario.getPortModel().getPorts()) {
-				for (Port b : scenario.getPortModel().getPorts()) {
-					final int distance = di.getDistance(a.getName(), b.getName());
-					if (!(a.equals(b)) && distance != Integer.MAX_VALUE) {
-						final DistanceLine dl = pf.createDistanceLine();
-						dl.setFromPort(a);
-						dl.setToPort(b);
-						dl.setDistance(distance);
-						dm.getDistances().add(dl);
-					}
-				}
-			}
-
-			//hack
 			RandomScenarioUtils utils = new RandomScenarioUtils();
-			//add standard optimiser settings
-			utils.addStandardSettings(scenario);
-
-			if (details.shouldCreateVesselClasses()) {
-				utils.addStandardFleet(scenario);
-				utils.createRandomCargoes(scenario, details.getCargoCount());
-			}
-			
+			scenario = utils.createRandomScenario(details.getMatrixURI()
+					.toFileString(), details.shouldCreateVesselClasses(),
+					details.getCargoCount(), true);
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 			return false;
@@ -123,7 +79,10 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			e1.printStackTrace();
 			return false;
 		}
+		
+		final URI fileURI = URI.createFileURI(outputFileName);
 
+		// save scenario to file
 		ResourceSet resourceSet = new ResourceSetImpl();
 		Resource resource = resourceSet.createResource(fileURI);
 
@@ -136,6 +95,8 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			return false;
 		}
 
+		//try adding file to selected project?
+		
 		return LngEditorAdvisor.openEditor(workbench, fileURI);
 	}
 
@@ -144,14 +105,14 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			super(pageName);
 		}
 
-		public URI getFileURI() {
+		public String getFileName() {
 			String s = fileField.getText();
 
 			if (!s.endsWith(".scenario")) {
 				s = s + ".scenario";
 			}
-
-			return URI.createFileURI(s);
+			return s;
+//			return URI.createFileURI(s);
 		}
 
 		public URI getMatrixURI() {
@@ -177,8 +138,10 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			GridLayout layout = new GridLayout(1, false);
 			myContents.setLayout(layout);
 
-			fileField = makeElement(myContents,"Scenario file to create", "scenario", false);
-			matrixField = makeElement(myContents, "Distance matrix to import", "csv", true);
+			fileField = makeElement(myContents, "Scenario file to create",
+					"scenario", false);
+			matrixField = makeElement(myContents, "Distance matrix to import",
+					"csv", true);
 
 			Label label = new Label(myContents, SWT.NONE);
 			label.setText("Other model features");
@@ -197,13 +160,16 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			setControl(myContents);
 		}
 
-		public Text makeElement(Composite contents, String caption, String extension, boolean open) {
+		public Text makeElement(Composite contents, String caption,
+				String extension, boolean open) {
 			Label label = new Label(contents, SWT.NONE);
 			label.setText(caption);
-			return makeFilePicker(contents, new String[] {"*." + extension}, open);
+			return makeFilePicker(contents, new String[] { "*." + extension },
+					open);
 		}
 
-		public Text makeFilePicker(Composite container, final String[] extensions, final boolean open) {
+		public Text makeFilePicker(Composite container,
+				final String[] extensions, final boolean open) {
 			Composite row = new Composite(container, SWT.NONE);
 
 			row.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -220,24 +186,23 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 			picker.addSelectionListener(
 
-					new SelectionListener() {
+			new SelectionListener() {
 
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							FileDialog fd = 
-								new FileDialog(getShell(), open ? SWT.OPEN : SWT.SAVE);
-							fd.setFilterExtensions(extensions);
-							String sd = fd.open();
-							t.setText(sd);
-						}
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					FileDialog fd = new FileDialog(getShell(), open ? SWT.OPEN
+							: SWT.SAVE);
+					fd.setFilterExtensions(extensions);
+					String sd = fd.open();
+					t.setText(sd);
+				}
 
-						@Override
-						public void widgetDefaultSelected(SelectionEvent e) {
-						}
-					}
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+				}
+			}
 
 			);
-
 
 			return t;
 		}

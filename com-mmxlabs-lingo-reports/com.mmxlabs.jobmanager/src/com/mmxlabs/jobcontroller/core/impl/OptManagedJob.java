@@ -33,14 +33,12 @@ import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
@@ -435,13 +433,12 @@ public class OptManagedJob implements IManagedJob {
 					SchedulerConstants.DCP_vesselProvider,
 					IVesselProvider.class);
 			scheduler.setVesselProvider(vesselProvider);
-			final IVoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>();
-			final ILNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-			
+
+			final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
+			final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>();
 			voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
 			
 			scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-			
 
 			// This may throw IllegalStateException if not all
 			// the elements are set.
@@ -465,6 +462,10 @@ public class OptManagedJob implements IManagedJob {
 				final List<IVoyagePlan> plans = scheduler
 						.schedule(resource, sequence);
 
+				if (plans == null) {
+					throw new RuntimeException("Handle me");
+				}
+				
 				final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 
 				final ArrayList<ISequenceElement> elements = new ArrayList<ISequenceElement>(
