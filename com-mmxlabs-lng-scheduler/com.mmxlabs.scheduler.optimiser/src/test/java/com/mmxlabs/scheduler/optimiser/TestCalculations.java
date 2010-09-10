@@ -28,8 +28,10 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.events.IDischargeEvent;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
+import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
@@ -1250,6 +1252,8 @@ public class TestCalculations {
 			Assert.assertEquals(25, event.getStartTime());
 			Assert.assertEquals(25, event.getEndTime());
 			Assert.assertEquals(loadElement, event.getSequenceElement());
+			
+			Assert.assertTrue(event instanceof ILoadEvent);
 		}
 
 		
@@ -1355,6 +1359,15 @@ public class TestCalculations {
 			Assert.assertEquals(50, event.getStartTime());
 			Assert.assertEquals(50, event.getEndTime());
 			Assert.assertEquals(dischargeElement, event.getSequenceElement());
+			
+			Assert.assertTrue(event instanceof IDischargeEvent);
+			
+			IDischargeEvent<ISequenceElement> discharge = (IDischargeEvent<ISequenceElement>)event;
+			Assert.assertEquals(loadSlot.getMaxLoadVolume()
+					- (18 * 1200 + 7 * 1000), discharge.getDischargeVolume());
+			
+			Assert.assertEquals((loadSlot.getMaxLoadVolume()
+					- (18 * 1200 + 7 * 1000)) * 2 * 200, discharge.getSalesPrice());
 		}
 
 		{
