@@ -41,14 +41,18 @@ public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 		final boolean useNBOForIdle = choices[choice];
 		options.setUseNBOForIdle(useNBOForIdle);
-		
+
 		// We have to use idle NBO when laden
 		if (!useNBOForIdle && options.getVesselState() == VesselState.Laden) {
 			return false;
 		}
+
+		if (useNBOForIdle) {
+			// Only a valid choice if NBO is enabled.
+			return options.useNBOForTravel();
+		}
 		
-		// Only a valid choice if NBO is enabled.
-		return options.useNBOForTravel();
+		return true;
 	}
 
 	@Override

@@ -40,8 +40,13 @@ public final class FBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 		final boolean useFBOForSupplement = choices[choice];
 		options.setUseFBOForSupplement(useFBOForSupplement);
-		// Only a valid choice if NBO is enabled.
-		return options.useNBOForTravel();
+		
+		if (useFBOForSupplement) {
+			// Only a valid choice if NBO is enabled.
+			return options.useNBOForTravel();
+		}
+		
+		return true;
 	}
 
 	@Override
