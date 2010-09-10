@@ -75,6 +75,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 		IPortSlot prevPortSlot = null;
 		PortType prevPortType = null;
 		VesselState vesselState = VesselState.Ballast;
+		VoyageOptions previousOptions = null;
 
 		voyagePlanOptimiser.setVessel(vessel);
 
@@ -137,7 +138,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 					if (vesselState == VesselState.Ballast) {
 						voyagePlanOptimiser
 								.addChoice(new NBOTravelVoyagePlanChoice(
-										options));
+										previousOptions, options));
 					}
 
 					voyagePlanOptimiser.addChoice(new FBOVoyagePlanChoice(
@@ -154,6 +155,8 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				currentSequence.add(options);
 
 				estimatedTime += availableTime;
+				
+				previousOptions = options;
 			}
 
 			final int visitDuration = durationsProvider.getElementDuration(
@@ -175,6 +178,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				
 				// Reset useNBO flag
 				useNBO = false;
+				previousOptions = null;
 				
 				if (currentPlan == null) {
 					// Unable to schedule.

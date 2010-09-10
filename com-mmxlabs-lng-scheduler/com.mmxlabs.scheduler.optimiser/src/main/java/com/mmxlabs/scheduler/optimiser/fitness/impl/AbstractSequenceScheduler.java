@@ -133,7 +133,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 					if (vesselState == VesselState.Ballast) {
 						optimiser.addChoice(new NBOTravelVoyagePlanChoice(
-								options));
+								null, options));
 					}
 
 					optimiser.addChoice(new FBOVoyagePlanChoice(options));

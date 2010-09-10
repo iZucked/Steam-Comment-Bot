@@ -3,6 +3,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.Arrays;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -14,17 +15,21 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
  */
 public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 
+	private final VoyageOptions previousOptions;
+	
 	private final VoyageOptions options;
 
 	private final boolean[] choices;
 
-	public NBOTravelVoyagePlanChoice(final VoyageOptions options) {
+	public NBOTravelVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options) {
+		this.previousOptions = previousOptions;
 		this.options = options;
 		this.choices = new boolean[] { true, false };
 	}
 
-	public NBOTravelVoyagePlanChoice(final VoyageOptions options,
+	public NBOTravelVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options,
 			final boolean[] choices) {
+		this.previousOptions = previousOptions;
 		this.options = options;
 		this.choices = choices;
 	}
@@ -40,6 +45,10 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 		boolean useNBO = choices[choice];
 		
 		options.setUseNBOForTravel(useNBO);
+		
+		if (useNBO && previousOptions != null) {
+			return previousOptions.useNBOForTravel();
+		}
 		
 		// Ensure NBO is always true when state is laden
 		if (!useNBO && options.getVesselState() == VesselState.Laden) {
@@ -64,6 +73,10 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 				return false;
 			}
 
+			if (!Equality.isEqual(previousOptions, other.previousOptions)) {
+				return false;
+			}
+			
 			return true;
 		}
 

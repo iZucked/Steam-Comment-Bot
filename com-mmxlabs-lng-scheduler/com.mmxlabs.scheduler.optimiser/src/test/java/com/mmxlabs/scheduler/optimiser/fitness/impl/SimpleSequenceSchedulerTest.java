@@ -52,12 +52,10 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @RunWith(JMock.class)
 public final class SimpleSequenceSchedulerTest {
@@ -322,7 +320,7 @@ public final class SimpleSequenceSchedulerTest {
 				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions1_a, new boolean[] { true, false}))));
 				one(voyagePlanOptimiser).addChoice(with(equal(new RouteVoyagePlanChoice(expectedOptions1_a, new String[] { IMultiMatrixProvider.Default_Key }, distanceProvider))));
 				
-				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedOptions2_a, new boolean[] { true, false}))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedOptions1_a, expectedOptions2_a, new boolean[] { true, false}))));
 				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions2_a, new boolean[] { true, false}))));
 				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions2_a, new boolean[] { true, false}))));
 				one(voyagePlanOptimiser).addChoice(with(equal(new RouteVoyagePlanChoice(expectedOptions2_a, new String[] { IMultiMatrixProvider.Default_Key }, distanceProvider))));
