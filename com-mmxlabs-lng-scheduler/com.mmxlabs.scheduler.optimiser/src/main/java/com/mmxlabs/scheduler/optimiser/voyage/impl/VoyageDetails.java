@@ -34,17 +34,23 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 
 	private int startTime;
 
+	public VoyageDetails() {
+		for (FuelComponent fuel : FuelComponent.values()) {
+			fuelConsumption.put(fuel, new EnumMap<FuelUnit, Long>(FuelUnit.class));
+		}
+	}
+	
 	@Override
 	public long getFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit) {
 
-		if (fuelConsumption.containsKey(fuel)) {
+//		if (fuelConsumption.containsKey(fuel)) {
 
 			final EnumMap<FuelUnit, Long> map = fuelConsumption.get(fuel);
 			if (map.containsKey(fuelUnit)) {
 				return map.get(fuelUnit);
 			}
-		}
+//		}
 		return 0l;
 	}
 
@@ -71,14 +77,15 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	@Override
 	public void setFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit, final long consumption) {
-		final EnumMap<FuelUnit, Long> map;
-		if (fuelConsumption.containsKey(fuel)) {
-			map = fuelConsumption.get(fuel);
-		} else {
-			map = new EnumMap<FuelUnit, Long>(FuelUnit.class);
-			fuelConsumption.put(fuel, map);
-		}
-		map.put(fuelUnit, consumption);
+//		final EnumMap<FuelUnit, Long> map;
+//		if (fuelConsumption.containsKey(fuel)) {
+//			map = fuelConsumption.get(fuel);
+//		} else {
+//			map = new EnumMap<FuelUnit, Long>(FuelUnit.class);
+//			fuelConsumption.put(fuel, map);
+//		}
+//		map.put(fuelUnit, consumption);
+		fuelConsumption.get(fuel).put(fuelUnit, consumption);
 	}
 
 	@Override
