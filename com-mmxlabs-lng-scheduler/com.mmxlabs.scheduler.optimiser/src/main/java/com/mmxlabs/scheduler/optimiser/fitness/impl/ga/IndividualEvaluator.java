@@ -251,7 +251,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setSequenceScheduler(
-			AbstractSequenceScheduler<T> sequenceScheduler) {
+			final AbstractSequenceScheduler<T> sequenceScheduler) {
 		this.sequenceScheduler = sequenceScheduler;
 	}
 
@@ -260,7 +260,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setVoyagePlanAnnotator(
-			IVoyagePlanAnnotator<T> voyagePlanAnnotator) {
+			final IVoyagePlanAnnotator<T> voyagePlanAnnotator) {
 		this.voyagePlanAnnotator = voyagePlanAnnotator;
 	}
 
@@ -269,7 +269,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setTimeWindowProvider(
-			ITimeWindowDataComponentProvider timeWindowProvider) {
+			final ITimeWindowDataComponentProvider timeWindowProvider) {
 		this.timeWindowProvider = timeWindowProvider;
 	}
 
@@ -278,7 +278,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setFitnessComponents(
-			Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
+			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
 	}
 
@@ -287,7 +287,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setFitnessComponentWeights(
-			Map<String, Double> fitnessComponentWeights) {
+			final Map<String, Double> fitnessComponentWeights) {
 		this.fitnessComponentWeights = fitnessComponentWeights;
 		// TODO: Currently there is no mechanism to get this data from outside,
 		// so we will assume a weight of 1 internally.
