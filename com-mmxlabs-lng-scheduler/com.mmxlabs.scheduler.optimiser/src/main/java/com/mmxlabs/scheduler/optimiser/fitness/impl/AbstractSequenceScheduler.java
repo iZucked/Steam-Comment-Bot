@@ -20,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
@@ -50,7 +49,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
-	private ILNGVoyageCalculator<T> voyageCalculator;
+	private IVoyagePlanOptimiser<T> voyagePlanOptimiser;
 
 	/**
 	 * Schedule an {@link ISequence} using the given array of arrivalTimes,
@@ -84,10 +83,11 @@ public abstract class AbstractSequenceScheduler<T> implements
 		IPortSlot prevPortSlot = null;
 		PortType prevPortType = null;
 		VesselState vesselState = VesselState.Ballast;
+		VoyageOptions previousOptions = null;
 
-		final IVoyagePlanOptimiser<T> optimiser = new VoyagePlanOptimiser<T>();
-		optimiser.setVessel(vessel);
-		optimiser.setVoyageCalculator(voyageCalculator);
+		voyagePlanOptimiser.setVessel(vessel);
+		
+		boolean useNBO = false;
 
 		final Iterator<T> itr = sequence.iterator();
 		for (int idx = 0; itr.hasNext(); ++idx) {
@@ -101,6 +101,10 @@ public abstract class AbstractSequenceScheduler<T> implements
 			// be no voyage to plan.
 			if (prevPort != null) {
 
+				if (prevPortType == PortType.Load) {
+					useNBO = true;
+				}
+				
 				// Available time, as determined by inputs.
 				final int availableTime = arrivalTimes[idx]
 						- arrivalTimes[idx - 1];
@@ -108,8 +112,6 @@ public abstract class AbstractSequenceScheduler<T> implements
 				// Get the min NBO travelling speed
 				final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(
 						vesselState);
-
-				final boolean useNBO = prevPortType != PortType.Other;
 
 				final VoyageOptions options = new VoyageOptions();
 
@@ -125,6 +127,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 				options.setUseFBOForSupplement(false);
 				options.setUseNBOForIdle(false);
 
+				// Enable choices only if NBO could be available.
 				if (useNBO) {
 					// Note ordering of choices is important = NBO must be set
 					// before FBO and Idle choices, otherwise if NBO choice is
@@ -132,15 +135,19 @@ public abstract class AbstractSequenceScheduler<T> implements
 					// NBO
 
 					if (vesselState == VesselState.Ballast) {
-						optimiser.addChoice(new NBOTravelVoyagePlanChoice(
-								null, options));
+						voyagePlanOptimiser
+								.addChoice(new NBOTravelVoyagePlanChoice(
+										previousOptions, options));
 					}
 
-					optimiser.addChoice(new FBOVoyagePlanChoice(options));
+					voyagePlanOptimiser.addChoice(new FBOVoyagePlanChoice(
+							options));
 
-					optimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
+					voyagePlanOptimiser.addChoice(new IdleNBOVoyagePlanChoice(
+							options));
 				}
 
+				// Only add route choice if there is one
 				final String[] routeKeys = distanceProvider.getKeys();
 				if (routeKeys.length == 1) {
 					final int distance = distanceProvider.get(
@@ -149,11 +156,12 @@ public abstract class AbstractSequenceScheduler<T> implements
 					options.setDistance(distance);
 					options.setRoute(IMultiMatrixProvider.Default_Key);
 				} else {
-					optimiser.addChoice(new RouteVoyagePlanChoice(options,
-							routeKeys, distanceProvider));
+					voyagePlanOptimiser.addChoice(new RouteVoyagePlanChoice(
+							options, routeKeys, distanceProvider));
 				}
 
 				currentSequence.add(options);
+				previousOptions = options;
 			}
 
 			final int visitDuration = durationsProvider.getElementDuration(
@@ -169,7 +177,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 			if (currentSequence.size() > 1 && portType == PortType.Load) {
 
 				currentTime = optimiseSequence(adjustArrivals, currentTime,
-						voyagePlans, currentSequence, optimiser);
+						voyagePlans, currentSequence, voyagePlanOptimiser);
 				if (currentTime == Integer.MAX_VALUE) {
 					// Problem optimising sequence, most likely forbidden to
 					// adjust arrival times. Return null to indicate problematic
@@ -177,12 +185,13 @@ public abstract class AbstractSequenceScheduler<T> implements
 					return null;
 				}
 
+				// Reset useNBO flag
+				useNBO = false;
+				previousOptions = null;
+				
 				currentSequence.clear();
 
 				currentSequence.add(portDetails);
-
-				// Reset VPO ready for next iteration
-				optimiser.reset();
 			}
 
 			// Setup for next iteration
@@ -203,14 +212,13 @@ public abstract class AbstractSequenceScheduler<T> implements
 		// Populate final plan details
 		if (!currentSequence.isEmpty()) {
 			currentTime = optimiseSequence(adjustArrivals, currentTime,
-					voyagePlans, currentSequence, optimiser);
+					voyagePlans, currentSequence, voyagePlanOptimiser);
 			if (currentTime == Integer.MAX_VALUE) {
 				// Problem optimising sequence, most likely forbidden to adjust
 				// arrival times. Return null to indicate problematic sequence.
 				return null;
 			}
 		}
-		optimiser.dispose();
 
 		return voyagePlans;
 	}
@@ -269,40 +277,11 @@ public abstract class AbstractSequenceScheduler<T> implements
 			}
 		}
 		voyagePlans.add(currentPlan);
+
+		// Reset VPO ready for next iteration
+		optimiser.reset();
+		
 		return currentTime;
-	}
-
-	/**
-	 * Ensures all required data items are present, otherwise an
-	 * {@link IllegalStateException} will be thrown.
-	 */
-	public void init() {
-
-		// Verify that everything is in place
-		if (portProvider == null) {
-			throw new IllegalStateException("No port provider set");
-		}
-		if (portSlotProvider == null) {
-			throw new IllegalStateException("No port slot provider set");
-		}
-		if (portTypeProvider == null) {
-			throw new IllegalStateException("No port type provider set");
-		}
-		if (distanceProvider == null) {
-			throw new IllegalStateException("No port distance provider set");
-		}
-		if (timeWindowProvider == null) {
-			throw new IllegalStateException("No time window provider set");
-		}
-		if (durationsProvider == null) {
-			throw new IllegalStateException("No port durations provider set");
-		}
-		if (vesselProvider == null) {
-			throw new IllegalStateException("No vessel provider set");
-		}
-		if (voyageCalculator == null) {
-			throw new IllegalStateException("No voyage calculator set");
-		}
 	}
 
 	public final IPortSlotProvider<T> getPortSlotProvider() {
@@ -366,13 +345,47 @@ public abstract class AbstractSequenceScheduler<T> implements
 		this.vesselProvider = vesselProvider;
 	}
 
-	public final ILNGVoyageCalculator<T> getVoyageCalculator() {
-		return voyageCalculator;
+	public IVoyagePlanOptimiser<T> getVoyagePlanOptimiser() {
+		return voyagePlanOptimiser;
 	}
 
-	public final void setVoyageCalculator(
-			final ILNGVoyageCalculator<T> voyageCalculator) {
-		this.voyageCalculator = voyageCalculator;
+	public void setVoyagePlanOptimiser(
+			final IVoyagePlanOptimiser<T> voyagePlanOptimiser) {
+		this.voyagePlanOptimiser = voyagePlanOptimiser;
+	}
+
+	/**
+	 * Ensures all required data items are present, otherwise an
+	 * {@link IllegalStateException} will be thrown.
+	 */
+	public void init() {
+
+		// Verify that everything is in place
+
+		if (portProvider == null) {
+			throw new IllegalStateException("No port provider set");
+		}
+		if (portSlotProvider == null) {
+			throw new IllegalStateException("No port slot provider set");
+		}
+		if (portTypeProvider == null) {
+			throw new IllegalStateException("No port type provider set");
+		}
+		if (distanceProvider == null) {
+			throw new IllegalStateException("No port distance provider set");
+		}
+		if (timeWindowProvider == null) {
+			throw new IllegalStateException("No time window provider set");
+		}
+		if (durationsProvider == null) {
+			throw new IllegalStateException("No port durations provider set");
+		}
+		if (vesselProvider == null) {
+			throw new IllegalStateException("No vessel provider set");
+		}
+		if (voyagePlanOptimiser == null) {
+			throw new IllegalStateException("No voyage plan optimiser set");
+		}
 	}
 
 	@Override
@@ -385,6 +398,6 @@ public abstract class AbstractSequenceScheduler<T> implements
 		portTypeProvider = null;
 		vesselProvider = null;
 		distanceProvider = null;
-		voyageCalculator = null;
+		voyagePlanOptimiser = null;
 	}
 }
