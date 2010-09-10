@@ -45,6 +45,8 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	private int[] multipler;
 	private int[] windowStarts;
 
+	private boolean adjustArrivalTimes = true;
+
 	public IndividualEvaluator() {
 
 	}
@@ -62,7 +64,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		// TODO: Update the scheduler code to handle -1 as arrival time and just
 		// arrav
 		final List<IVoyagePlan> voyagePlans = sequenceScheduler.schedule(
-				resource, sequence, arrivalTimes, false);
+				resource, sequence, arrivalTimes, adjustArrivalTimes);
 
 		if (voyagePlans == null) {
 			return Long.MAX_VALUE;
@@ -309,5 +311,13 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		ranges = null;
 		multipler = null;
 		windowStarts = null;
+	}
+
+	public boolean isAdjustArrivalTimes() {
+		return adjustArrivalTimes;
+	}
+
+	public void setAdjustArrivalTimes(boolean adjustArrivalTimes) {
+		this.adjustArrivalTimes = adjustArrivalTimes;
 	}
 }
