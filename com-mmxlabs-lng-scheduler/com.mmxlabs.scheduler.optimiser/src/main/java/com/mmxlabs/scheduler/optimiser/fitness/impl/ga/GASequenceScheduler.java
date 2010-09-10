@@ -5,11 +5,12 @@ import java.util.Random;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
- * Simple scheduler.
+ * {@link ISequenceScheduler} implementation using a Genetic Algorithm to determine arrival times.
  * 
  * @author Simon Goodall
  * 
@@ -40,9 +41,10 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 			final ISequence<T> sequence) {
 
 		final int numBytes = individualEvaluator.setup(resource, sequence);
-		
+
 		// Create a new random each time to ensure repeatability.
 		Random random = new Random(randomSeed);
+
 		// Run the GA
 		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
 				individualEvaluator, mutateThreshold, populationSize, topN,
