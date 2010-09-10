@@ -28,6 +28,8 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 
 	private int topN;
 
+	private boolean adjustArrivalTimes = true;
+
 	public void setIndividualEvaluator(
 			final IndividualEvaluator<T> individualEvaluator) {
 		this.individualEvaluator = individualEvaluator;
@@ -60,7 +62,8 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 		final int[] arrivalTimes = new int[sequence.size()];
 		individualEvaluator.decode(bestIndividual, arrivalTimes);
 
-		return super.schedule(resource, sequence, arrivalTimes, false);
+		return super.schedule(resource, sequence, arrivalTimes,
+				adjustArrivalTimes);
 	}
 
 	@Override
@@ -69,6 +72,11 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 		if (individualEvaluator == null) {
 			throw new IllegalStateException(
 					"Individual Evaluator has not been set");
+		}
+
+		if (adjustArrivalTimes != individualEvaluator.isAdjustArrivalTimes()) {
+			throw new IllegalStateException(
+					"Individual evaluator and scheduler disagree about adjusting arrival times");
 		}
 
 		if (numIterations == 0) {
@@ -141,5 +149,13 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 
 	public final void setRandomSeed(long randomSeed) {
 		this.randomSeed = randomSeed;
+	}
+
+	public boolean isAdjustArrivalTimes() {
+		return adjustArrivalTimes;
+	}
+
+	public void setAdjustArrivalTimes(boolean adjustArrivalTimes) {
+		this.adjustArrivalTimes = adjustArrivalTimes;
 	}
 }
