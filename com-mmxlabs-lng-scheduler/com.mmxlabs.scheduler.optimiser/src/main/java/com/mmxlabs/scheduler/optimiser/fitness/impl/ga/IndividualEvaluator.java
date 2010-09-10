@@ -79,10 +79,15 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
 			final long rawFitness = component.rawEvaluateSequence(resource,
 					sequence, annotatedSequence);
-			final double weight = fitnessComponentWeights.get(component
-					.getName());
-			final long fitness = Math.round(weight * (double) rawFitness);
-			totalFitness += fitness;
+			// Enable this block once weights are set
+			// final String componentName = component.getName();
+			// if (fitnessComponentWeights.containsKey(componentName)) {
+			// final double weight = fitnessComponentWeights
+			// .get(componentName);
+			// final long fitness = Math.round(weight * (double) rawFitness);
+			// totalFitness += fitness;
+			// }
+			totalFitness += rawFitness;
 		}
 		return totalFitness;
 	}
