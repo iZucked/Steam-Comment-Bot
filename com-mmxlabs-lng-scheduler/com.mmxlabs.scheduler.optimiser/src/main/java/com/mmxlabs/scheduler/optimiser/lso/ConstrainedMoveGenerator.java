@@ -138,6 +138,8 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	int breakpointCount = 0;
 //	private IOptimisationContext<T> context;
 	
+	final private ArrayList<Pair<T, T>> validBreaks = new ArrayList<Pair<T, T>>();
+	
 	public ConstrainedMoveGenerator(IOptimisationContext<T> context) {
 //		this.context = context;
 		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(context);
@@ -163,35 +165,21 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			for (T e2 : data.getSequenceElements()) {
 				if (e1 == e2) continue;
 				if (checker.allowSequence(e1, e2)) {
+					if (followers.size() == 1) {
+						validBreaks.add(new Pair<T, T>(e1, followers.iterator().next()));
+					}
 					followers.add(e2);
-					breakpointCount++;
+					if (followers.size() > 1) {
+						validBreaks.add(new Pair<T, T>(e1, e2));
+					}
 				}
 			}
 		}
 	}
 	
-	/**
-	 * Pick a pair of elements which can follow one another randomly from all such pairs
-	 * @return
-	 */
-	private Pair<T, T> pickLegalPair() {
-		int k = random.nextInt(breakpointCount);
-//		int k0 = k;
-		for (Map.Entry<T, IndexedSet<T>> entry : validFollowers.entrySet()) {
-//			System.err.println(entry.getKey() + " has " + entry.getValue().size() + " followers");
-			if (k < entry.getValue().size()) {
-				return new Pair<T, T>(entry.getKey(), entry.getValue().get(k));
-			} else {
-				k -= (entry.getValue().size());
-//				System.err.println("k = " + k);
-			}
-		}
-		return null;
-	}
-	
 	@Override
 	public IMove<T> generateMove() {
-		final Pair<T, T> newPair = pickLegalPair();
+		final Pair<T, T> newPair = RandomHelper.chooseElementFrom(random, validBreaks);
 		final Pair<Integer, Integer> pos1 = reverseLookup.get(newPair.getFirst());
 		final Pair<Integer, Integer> pos2 = reverseLookup.get(newPair.getSecond());
 		final List<IResource> resources = sequences.getResources();
