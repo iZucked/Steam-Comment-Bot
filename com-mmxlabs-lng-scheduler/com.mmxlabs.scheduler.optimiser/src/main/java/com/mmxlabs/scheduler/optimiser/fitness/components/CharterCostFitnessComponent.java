@@ -46,7 +46,7 @@ public class CharterCostFitnessComponent<T> extends
 				boolean foundLoadPort = false;
 				for (final T element : sequence) {
 					final PortType portType = portTypeProvider.getPortType(element);
-					if (portType.equals(portType.Load)) {
+					if (portType.equals(PortType.Load)) {
 						// load port located
 						loadTime = annotatedSequence.getAnnotation(element, 
 								SchedulerConstants.AI_visitInfo, 
