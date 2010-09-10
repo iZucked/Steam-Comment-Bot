@@ -170,7 +170,9 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
-			if (currentSequence.size() > 1 && portType == PortType.Load) {
+			if (currentSequence.size() > 1 && 
+					(portType == PortType.Load || portType == PortType.CharterOut)
+				) {
 
 				voyagePlanOptimiser.setBasicSequence(currentSequence);
 				voyagePlanOptimiser.init();
@@ -243,12 +245,16 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			prevPortType = portType;
 
 			// Update vessel state
-			if (portType == PortType.Load) {
+			switch (portType) {
+			case Load:
 				vesselState = VesselState.Laden;
-			} else if (portType == PortType.Discharge) {
+				break;
+			case Discharge:
+			case CharterOut: //after a charter out the vessel is empty?
 				vesselState = VesselState.Ballast;
-			} else {
-				// No change in state
+				break;
+			default:
+				//state is unchanged
 			}
 		}
 
