@@ -106,6 +106,7 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 	protected void updateFitness(final IResource resource, final long fitness,
 			final boolean newSequence) {
 		if (newSequence) {
+			// If the initial evaluation fails, then this can throw a NPE as the entry may not have been set.  
 			final long oldValue = newFitnessByResource.get(resource);
 			newFitness -= oldValue;
 
