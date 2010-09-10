@@ -37,8 +37,15 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public boolean apply(final int choice) {
 
-		options.setUseNBOForTravel(choices[choice]);
-
+		boolean useNBO = choices[choice];
+		
+		options.setUseNBOForTravel(useNBO);
+		
+		// Ensure NBO is always true when state is laden
+		if (!useNBO && options.getVesselState() == VesselState.Laden) {
+			return false;
+		}
+		
 		return true;
 	}
 
