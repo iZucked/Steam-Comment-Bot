@@ -71,7 +71,7 @@ public final class GAAlgorithm<T> {
 	}
 
 	public void init() {
-		// Create the inital population
+		// Create the initial population
 		initPopulation();
 
 		// Reset best state to unknown
