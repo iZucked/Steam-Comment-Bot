@@ -41,7 +41,7 @@ public class Move2over2<T> implements IMove<T> {
 	 * If true, the last elements of each sequence are not included in the exchange,
 	 * making this a limited class of 4opt2.
 	 */
-	private boolean preserveStartAndEnd;
+	private boolean preserveStartAndEnd = true;
 	/**
 	 * The breakpoint in the sequence for resource 1; elements before this element will remain assigned to resource 1
 	 * and elements from this element onward will be moved to the sequence for resource 2
@@ -101,9 +101,9 @@ public class Move2over2<T> implements IMove<T> {
 
 	@Override
 	public String toString() {
-		return String.format("r1 (%2) %d, r2 (%s) %d %s",
-				resource1, resource1Position, resource2, resource2Position, 
-				preserveStartAndEnd ? "(preserve start and end)" :"");
+		return String.format("r1 (%s) %d, r2 (%s) %d %s",
+				resource1.getName(), resource1Position, resource2.getName(), resource2Position, 
+				preserveStartAndEnd ? "(preserve start and end)" : "");
 	}
 
 	public boolean isPreserveStartAndEnd() {
