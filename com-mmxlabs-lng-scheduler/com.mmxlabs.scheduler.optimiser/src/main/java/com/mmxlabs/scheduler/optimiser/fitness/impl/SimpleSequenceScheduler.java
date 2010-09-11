@@ -79,7 +79,6 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 
 		voyagePlanOptimiser.setVessel(vessel);
 
-		
 		boolean useNBO = false;
 		for (final T element : sequence) {
 			final List<ITimeWindow> timeWindows = timeWindowProvider
@@ -101,11 +100,11 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 					IMultiMatrixProvider.Default_Key).get(prevPort, thisPort);
 
 			if (prevPort != null) {
-				
+
 				if (prevPortType == PortType.Load) {
 					useNBO = true;
 				}
-				
+
 				final int availableTime = Math.max(0, timeWindowStart
 						- estimatedTime);
 
@@ -155,7 +154,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				currentSequence.add(options);
 
 				estimatedTime += availableTime;
-				
+
 				previousOptions = options;
 			}
 
@@ -170,18 +169,15 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
-			if (currentSequence.size() > 1 && 
-					(portType == PortType.Load || portType == PortType.CharterOut)
-				) {
+			if (currentSequence.size() > 1
+					&& (portType == PortType.Load || portType == PortType.CharterOut)) {
 
 				voyagePlanOptimiser.setBasicSequence(currentSequence);
 				voyagePlanOptimiser.init();
 				IVoyagePlan currentPlan = voyagePlanOptimiser.optimise();
-				
 				// Reset useNBO flag
 				useNBO = false;
 				previousOptions = null;
-				
 				if (currentPlan == null) {
 					// Unable to schedule.
 
@@ -250,11 +246,11 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 				vesselState = VesselState.Laden;
 				break;
 			case Discharge:
-			case CharterOut: //after a charter out the vessel is empty?
+			case CharterOut: // after a charter out the vessel is empty?
 				vesselState = VesselState.Ballast;
 				break;
 			default:
-				//state is unchanged
+				// state is unchanged
 			}
 		}
 
@@ -378,7 +374,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 	public void init() {
 
 		// Verify that everything is in place
-		
+
 		if (portProvider == null) {
 			throw new IllegalStateException("No port provider set");
 		}
@@ -404,7 +400,7 @@ public final class SimpleSequenceScheduler<T> implements ISequenceScheduler<T> {
 			throw new IllegalStateException("No voyage plan optimiser set");
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
 
