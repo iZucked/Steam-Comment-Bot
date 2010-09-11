@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -161,6 +162,19 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				heads.remove(tail);
 			}
 		}
+
+		/*{
+			System.out.println("Contention information: there are "
+					+ heads.size() + " movable chunks, containing "
+					+ tails.size() + " forced-follow elements");
+			TreeMap<Integer, Integer> histogram = new TreeMap<Integer, Integer>();
+			for (T t : tails) {
+				final Integer sz = followerCache.get(t).size();
+				
+				histogram.put(sz, histogram.containsKey(sz) ? histogram.get(sz) + 1 : 1);
+			}
+			System.out.println("Histogram : " + histogram);
+		}*/
 
 		// Heads now contains the head of every chunk that has to go together.
 		// We need to pull out all the chunks and sort out their rules
