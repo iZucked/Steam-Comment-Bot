@@ -71,7 +71,7 @@ public final class GAAlgorithm<T> {
 	}
 
 	public void init() {
-		// Create the inital population
+		// Create the initial population
 		initPopulation();
 
 		// Reset best state to unknown
@@ -194,7 +194,7 @@ public final class GAAlgorithm<T> {
 				// .. then process the rest populating the bad array
 			} else if (f < worstFitness) {
 				// remove lowest entry..
-				Tuple lowest = topN.pollFirst();
+				final Tuple lowest = topN.pollFirst();
 
 				// .. and add it to the bad array as it is no longer a top N
 				// entry

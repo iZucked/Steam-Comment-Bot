@@ -285,7 +285,10 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
 
-		scheduler.setVoyageCalculator(voyageCalculator);
+		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
+		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+
+		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
 		// Set GA params
 		final IndividualEvaluator<T> individualEvaluator = new IndividualEvaluator<T>();

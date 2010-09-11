@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Random;
 import java.util.TreeMap;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -223,13 +224,18 @@ public class SimpleSchedulerTest {
 
 		printSequences(context.getInitialSequences());
 
+		final long initialFitness = linearFitnessEvaluator.getBestFitness();
 		System.out.println("Initial fitness "
-				+ linearFitnessEvaluator.getBestFitness());
+				+ initialFitness);
 
+		Assert.assertFalse(initialFitness == Long.MAX_VALUE);
+		
 		optimiser.optimise(context);
 
+		final long finalFitness = linearFitnessEvaluator.getBestFitness();
 		System.out.println("Final fitness "
-				+ linearFitnessEvaluator.getBestFitness());
+				+ finalFitness);
+		Assert.assertFalse(finalFitness == Long.MAX_VALUE);
 
 		printSequences(fitnessEvaluator.getBestSequences());
 

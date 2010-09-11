@@ -45,6 +45,8 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	private int[] multipler;
 	private int[] windowStarts;
 
+	private boolean adjustArrivalTimes = true;
+
 	public IndividualEvaluator() {
 
 	}
@@ -62,7 +64,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		// TODO: Update the scheduler code to handle -1 as arrival time and just
 		// arrav
 		final List<IVoyagePlan> voyagePlans = sequenceScheduler.schedule(
-				resource, sequence, arrivalTimes, false);
+				resource, sequence, arrivalTimes, adjustArrivalTimes);
 
 		if (voyagePlans == null) {
 			return Long.MAX_VALUE;
@@ -79,10 +81,15 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
 			final long rawFitness = component.rawEvaluateSequence(resource,
 					sequence, annotatedSequence);
-			final double weight = fitnessComponentWeights.get(component
-					.getName());
-			final long fitness = Math.round(weight * (double) rawFitness);
-			totalFitness += fitness;
+			// Enable this block once weights are set
+			// final String componentName = component.getName();
+			// if (fitnessComponentWeights.containsKey(componentName)) {
+			// final double weight = fitnessComponentWeights
+			// .get(componentName);
+			// final long fitness = Math.round(weight * (double) rawFitness);
+			// totalFitness += fitness;
+			// }
+			totalFitness += rawFitness;
 		}
 		return totalFitness;
 	}
@@ -244,7 +251,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setSequenceScheduler(
-			AbstractSequenceScheduler<T> sequenceScheduler) {
+			final AbstractSequenceScheduler<T> sequenceScheduler) {
 		this.sequenceScheduler = sequenceScheduler;
 	}
 
@@ -253,7 +260,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setVoyagePlanAnnotator(
-			IVoyagePlanAnnotator<T> voyagePlanAnnotator) {
+			final IVoyagePlanAnnotator<T> voyagePlanAnnotator) {
 		this.voyagePlanAnnotator = voyagePlanAnnotator;
 	}
 
@@ -262,7 +269,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setTimeWindowProvider(
-			ITimeWindowDataComponentProvider timeWindowProvider) {
+			final ITimeWindowDataComponentProvider timeWindowProvider) {
 		this.timeWindowProvider = timeWindowProvider;
 	}
 
@@ -271,7 +278,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setFitnessComponents(
-			Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
+			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
 	}
 
@@ -280,7 +287,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final void setFitnessComponentWeights(
-			Map<String, Double> fitnessComponentWeights) {
+			final Map<String, Double> fitnessComponentWeights) {
 		this.fitnessComponentWeights = fitnessComponentWeights;
 		// TODO: Currently there is no mechanism to get this data from outside,
 		// so we will assume a weight of 1 internally.
@@ -304,5 +311,13 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		ranges = null;
 		multipler = null;
 		windowStarts = null;
+	}
+
+	public boolean isAdjustArrivalTimes() {
+		return adjustArrivalTimes;
+	}
+
+	public void setAdjustArrivalTimes(boolean adjustArrivalTimes) {
+		this.adjustArrivalTimes = adjustArrivalTimes;
 	}
 }

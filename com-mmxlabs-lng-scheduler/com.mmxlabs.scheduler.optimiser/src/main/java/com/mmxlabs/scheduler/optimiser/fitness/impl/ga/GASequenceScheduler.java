@@ -5,11 +5,12 @@ import java.util.Random;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
- * Simple scheduler.
+ * {@link ISequenceScheduler} implementation using a Genetic Algorithm to determine arrival times.
  * 
  * @author Simon Goodall
  * 
@@ -28,6 +29,8 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 
 	private int topN;
 
+	private boolean adjustArrivalTimes = true;
+
 	public void setIndividualEvaluator(
 			final IndividualEvaluator<T> individualEvaluator) {
 		this.individualEvaluator = individualEvaluator;
@@ -38,9 +41,10 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 			final ISequence<T> sequence) {
 
 		final int numBytes = individualEvaluator.setup(resource, sequence);
-		
+
 		// Create a new random each time to ensure repeatability.
 		Random random = new Random(randomSeed);
+
 		// Run the GA
 		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
 				individualEvaluator, mutateThreshold, populationSize, topN,
@@ -60,7 +64,8 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 		final int[] arrivalTimes = new int[sequence.size()];
 		individualEvaluator.decode(bestIndividual, arrivalTimes);
 
-		return super.schedule(resource, sequence, arrivalTimes, false);
+		return super.schedule(resource, sequence, arrivalTimes,
+				adjustArrivalTimes);
 	}
 
 	@Override
@@ -69,6 +74,11 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 		if (individualEvaluator == null) {
 			throw new IllegalStateException(
 					"Individual Evaluator has not been set");
+		}
+
+		if (adjustArrivalTimes != individualEvaluator.isAdjustArrivalTimes()) {
+			throw new IllegalStateException(
+					"Individual evaluator and scheduler disagree about adjusting arrival times");
 		}
 
 		if (numIterations == 0) {
@@ -141,5 +151,13 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 
 	public final void setRandomSeed(long randomSeed) {
 		this.randomSeed = randomSeed;
+	}
+
+	public boolean isAdjustArrivalTimes() {
+		return adjustArrivalTimes;
+	}
+
+	public void setAdjustArrivalTimes(boolean adjustArrivalTimes) {
+		this.adjustArrivalTimes = adjustArrivalTimes;
 	}
 }
