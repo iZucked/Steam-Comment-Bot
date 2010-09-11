@@ -10,6 +10,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -56,7 +57,8 @@ public class TravelTimeConstraintChecker<T> implements
 	public boolean checkConstraints(ISequences<T> sequences) {
 		for (Map.Entry<IResource, ISequence<T>> entry : sequences
 				.getSequences().entrySet()) {
-			if (!checkSequence(entry.getValue(), entry.getKey())) return false;
+			if (!checkSequence(entry.getValue(), entry.getKey()))
+				return false;
 		}
 		return true;
 	}
@@ -65,11 +67,17 @@ public class TravelTimeConstraintChecker<T> implements
 		Iterator<T> iter = sequence.iterator();
 		T prev, cur;
 		prev = cur = null;
+
+		final IVessel vessel = vesselProvider.getVessel(resource);
+		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
+		final IMatrixProvider<IPort, Integer> distanceMatrix = distanceProvider
+				.get(IMultiMatrixProvider.Default_Key);
 		while (iter.hasNext()) {
 			prev = cur;
 			cur = iter.next();
 			if (prev != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource)) return false;
+				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed, distanceMatrix))
+					return false;
 			}
 		}
 		return true;
@@ -109,15 +117,22 @@ public class TravelTimeConstraintChecker<T> implements
 	 * @return
 	 */
 	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+		final IVessel vessel = vesselProvider.getVessel(resource);
+
+		return checkPairwiseConstraint(first, second, resource, vessel
+				.getVesselClass().getMaxSpeed(),
+				distanceProvider.get(IMultiMatrixProvider.Default_Key));
+	}
+
+	public boolean checkPairwiseConstraint(final T first, final T second,
+			final IResource resource, final int resourceMaxSpeed,
+			final IMatrixProvider<IPort, Integer> distanceMatrix) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 
-		final IVessel vessel = vesselProvider.getVessel(resource);
-
 		final int travelTime = Calculator.getTimeFromSpeedDistance(
-				vessel.getVesselClass().getMaxSpeed(),
-				distanceProvider.get(IMultiMatrixProvider.Default_Key).get(
-						slot1.getPort(), slot2.getPort()));
+				resourceMaxSpeed,
+				distanceMatrix.get(slot1.getPort(), slot2.getPort()));
 
 		final int earliestArrivalTime = slot1.getTimeWindow().getStart()
 				+ elementDurationProvider.getElementDuration(first, resource)
