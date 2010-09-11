@@ -244,6 +244,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			final boolean valid2opt2 = 
 				validFollowers.get(sequences.getSequence(sequence2).get(position2-1)).contains(
 					sequences.getSequence(sequence1).get(position1+1));
+			
 			//if it would be, maybe do it
 			if (valid2opt2 && random.nextBoolean()) {
 				//make 2opt2
@@ -344,7 +345,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 					result.setResource2(resources.get(sequence2));
 					
 					result.setResource1Start(position1+1);
-					result.setResource2End(secondPosition1);
+					result.setResource1End(secondPosition1);
 					
 					result.setResource2Start(position2);
 					result.setResource2End(secondPosition2+1);
