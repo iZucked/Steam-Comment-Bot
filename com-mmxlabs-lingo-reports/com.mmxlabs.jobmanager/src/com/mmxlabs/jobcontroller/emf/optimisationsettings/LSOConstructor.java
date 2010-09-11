@@ -24,12 +24,15 @@ import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.CalibratingGeometricThresholder;
+import com.mmxlabs.optimiser.lso.impl.thresholders.InstrumentingThresholder;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulator;
 import com.mmxlabs.scheduler.optimiser.manipulators.StartLocationRemovingSequenceManipulator;
 
 /**
@@ -39,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.manipulators.StartLocationRemovingSequenc
  */
 public class LSOConstructor {
 	private LSOSettings settings;
+	private boolean instrumenting = false;
 
 	public LSOConstructor(LSOSettings settings) {
 		this.settings = settings;
@@ -66,14 +70,28 @@ public class LSOConstructor {
 				.instantiateFitnesses(context.getFitnessFunctionRegistry(),
 						context.getFitnessComponents());
 
-		final IFitnessEvaluator<T> fitnessEvaluator = 
-			createFitnessEvaluator(fitnessComponents);
+		
 //			TestUtils
 //				.createLinearSAFitnessEvaluator(getStepSize(), getNumberOfIterations(),
 //						fitnessComponents);
 
-		final IMoveGenerator<T> moveGenerator = 
+		
+		
+//		final IMoveGenerator<T> moveGenerator = 
+//			createMoveGenerator(context);
+		
+		final IMoveGenerator<T> moveGenerator =
 			createMoveGenerator(context);
+		
+		
+		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator =
+			instrumenting  ?
+			new InstrumentingMoveGenerator<T>(moveGenerator)
+			: null;
+		
+		final IFitnessEvaluator<T> fitnessEvaluator = 
+			createFitnessEvaluator(fitnessComponents, instrumentingMoveGenerator);
+		
 //			TestUtils
 //				.createRandomMoveGenerator(getRandom());
 
@@ -83,6 +101,8 @@ public class LSOConstructor {
 		ChainedSequencesManipulator<T> manipulator = new ChainedSequencesManipulator<T>();
 		StartLocationRemovingSequenceManipulator<T> slrsm = new StartLocationRemovingSequenceManipulator<T>();
 		slrsm.setOptimisationData(context.getOptimisationData());
+		
+//		EndLocationSequenceManipulator<T> endLocationManipulator = new EndLocationSequenceManipulator<T>();
 		
 		manipulator.addDelegate(slrsm);
 		lso.setSequenceManipulator(manipulator);
@@ -123,7 +143,7 @@ public class LSOConstructor {
 		}
 	}
 	
-	private <T> IFitnessEvaluator<T> createFitnessEvaluator(List<IFitnessComponent<T>> fitnessComponents) {
+	private <T> IFitnessEvaluator<T> createFitnessEvaluator(List<IFitnessComponent<T>> fitnessComponents, InstrumentingMoveGenerator<T> img) {
 		//create a linear FE for now.
 		
 		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
@@ -143,8 +163,11 @@ public class LSOConstructor {
 
 		fitnessEvaluator.setFitnessCombiner(combiner);
 
-		final IThresholder thresholder = getThresholder();
-		
+		final IThresholder thresholder = 
+			instrumenting ? 
+			new InstrumentingThresholder( getThresholder(), img )
+			: getThresholder();
+			
 		fitnessEvaluator.setThresholder(thresholder);
 
 		fitnessEvaluator.init();
