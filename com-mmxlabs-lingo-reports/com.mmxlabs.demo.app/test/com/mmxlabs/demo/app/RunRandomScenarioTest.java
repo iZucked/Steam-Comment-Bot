@@ -22,6 +22,15 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 public class RunRandomScenarioTest {
+	public static void main(String[] args) throws IOException, IncompleteScenarioException, InterruptedException {
+		//run test!
+		while (System.in.read() != 'g') {
+			System.out.println("waiting to start, press g");
+		}
+		RunRandomScenarioTest test = new RunRandomScenarioTest();
+		test.runRandomScenarioTest();
+	}
+	
 	@Test
 	public void runRandomScenarioTest() throws IOException,
 			IncompleteScenarioException {
