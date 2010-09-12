@@ -91,8 +91,8 @@ public class Move2over2<T> implements IMove<T> {
 			if (sequenceMap.containsKey(resource2) == false) return false;
 			final ISequence<T> A = sequenceMap.get(resource1);
 			final ISequence<T> B = sequenceMap.get(resource2);
-			if (resource1Position >= (A.size() -  offset)) return false;
-			if (resource2Position >= (B.size() -  offset)) return false;
+			if (resource1Position >= (A.size() /*-  offset*/)) return false;
+			if (resource2Position >= (B.size() /*-  offset*/)) return false;
 			return true;
 		} catch (Exception e) {
 			return false;
