@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComp
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.GASequenceScheduler;
@@ -117,8 +118,9 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
-			if (evaluateSequence(resource, sequence, annotatedSequence, false) == false)
+			if (evaluateSequence(resource, sequence, annotatedSequence, false) == false) {
 				return false;
+			}
 		}
 
 		// Notify fitness components that all sequences have been scheduled
@@ -178,6 +180,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		this.data = data;
 
 		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
+		
 		vpa.setPortSlotProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portSlotsProvider,
 				IPortSlotProvider.class));
@@ -186,7 +189,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		// TODO: getter/setters should provide these e.g. use factory to
 		// populate
-		scheduler = createSimpleSequenceScheduler();
+//		scheduler = SchedulerUtils.createSimpleSequenceScheduler(data);
+		scheduler = SchedulerUtils.createGASequenceScheduler(data, components);
 
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
@@ -205,117 +209,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 					newSequence) == false) return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Create a new {@link ISequenceScheduler} instance.
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private ISequenceScheduler<T> createSimpleSequenceScheduler() {
-		final SimpleSequenceScheduler<T> scheduler = new SimpleSequenceScheduler<T>();
-
-		scheduler.setDistanceProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portDistanceProvider,
-				IMultiMatrixProvider.class));
-		scheduler.setDurationsProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_elementDurationsProvider,
-				IElementDurationProvider.class));
-		scheduler.setPortProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portProvider, IPortProvider.class));
-		scheduler.setTimeWindowProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider,
-				ITimeWindowDataComponentProvider.class));
-		scheduler.setPortSlotProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portSlotsProvider,
-				IPortSlotProvider.class));
-		scheduler.setPortTypeProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portTypeProvider,
-				IPortTypeProvider.class));
-
-		scheduler.setVesselProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
-
-		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
-
-		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
-
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
-
-		return scheduler;
-	}
-
-	/**
-	 * Create a new {@link ISequenceScheduler} instance.
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private ISequenceScheduler<T> createGASequenceScheduler() {
-		final GASequenceScheduler<T> scheduler = new GASequenceScheduler<T>();
-
-		final IMultiMatrixProvider distanceProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portDistanceProvider,
-						IMultiMatrixProvider.class);
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_elementDurationsProvider,
-				IElementDurationProvider.class));
-		scheduler.setPortProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portProvider, IPortProvider.class));
-		final ITimeWindowDataComponentProvider timeWindowProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_timeWindowProvider,
-						ITimeWindowDataComponentProvider.class);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setPortSlotProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portSlotsProvider,
-				IPortSlotProvider.class));
-		scheduler.setPortTypeProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portTypeProvider,
-				IPortTypeProvider.class));
-
-		scheduler.setVesselProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
-
-		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
-
-		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
-
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		// Set GA params
-		final IndividualEvaluator<T> individualEvaluator = new IndividualEvaluator<T>();
-		individualEvaluator.setSequenceScheduler(scheduler);
-		individualEvaluator.setTimeWindowProvider(timeWindowProvider);
-		individualEvaluator.setVoyagePlanAnnotator(voyagePlanAnnotator);
-		individualEvaluator.setFitnessComponents(components);
-		// TODO: Use same weights as passed into LinearCombiner?
-		// individualEvaluator.setFitnessComponentWeights(null);
-		individualEvaluator.init();
-
-		scheduler.setIndividualEvaluator(individualEvaluator);
-
-		// TODO: Pull from external API parameters held in the
-		// IOptimisationContext
-		// Set
-		scheduler.setMutateThreshold(0.01f);
-		// Population of 40 individuals
-		scheduler.setPopulationSize(40);
-		// Retain top 10 each iteration
-		scheduler.setTopN(10);
-		// Have 40 iterations
-		scheduler.setNumIterations(40);
-
-		scheduler.init();
-
-		return scheduler;
 	}
 
 	@Override

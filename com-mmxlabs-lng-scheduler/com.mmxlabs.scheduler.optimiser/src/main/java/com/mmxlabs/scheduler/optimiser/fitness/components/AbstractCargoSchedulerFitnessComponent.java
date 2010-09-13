@@ -149,6 +149,4 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 		oldFitnessByResource.clear();
 		newFitnessByResource.clear();
 	}
-	
-	
 }
