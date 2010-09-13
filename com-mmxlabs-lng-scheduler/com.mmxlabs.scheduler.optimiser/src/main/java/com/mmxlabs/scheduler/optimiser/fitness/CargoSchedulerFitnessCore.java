@@ -118,8 +118,9 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
-			if (evaluateSequence(resource, sequence, annotatedSequence, false) == false)
+			if (evaluateSequence(resource, sequence, annotatedSequence, false) == false) {
 				return false;
+			}
 		}
 
 		// Notify fitness components that all sequences have been scheduled
@@ -179,6 +180,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		this.data = data;
 
 		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
+		
 		vpa.setPortSlotProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portSlotsProvider,
 				IPortSlotProvider.class));
