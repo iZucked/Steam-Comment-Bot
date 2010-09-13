@@ -88,7 +88,7 @@ public final class SchedulerUtils {
 		
 		scheduler.setDistanceProvider(distanceProvider);
 		
-		IElementDurationProvider durationsProvider = data.getDataComponentProvider(
+		IElementDurationProvider<T> durationsProvider = data.getDataComponentProvider(
 				SchedulerConstants.DCP_elementDurationsProvider,
 				IElementDurationProvider.class);
 		scheduler.setDurationsProvider(durationsProvider);
