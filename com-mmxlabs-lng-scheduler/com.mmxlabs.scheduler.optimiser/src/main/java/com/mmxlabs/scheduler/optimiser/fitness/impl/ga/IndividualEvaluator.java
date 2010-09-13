@@ -24,8 +24,20 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
 /**
+ * The {@link IndividualEvaluator} evaluates a GA {@link Individual} using the
+ * {@link ICargoSchedulerFitnessComponent} implementation to evaluate the
+ * fitness of a scheduled {@link ISequence}. This bitstring represents offsets
+ * in time from the start of each sequence element's {@link ITimeWindow} up
+ * until the end of the window. The bitstring decodes each of these offsets and
+ * generates a set of arrival times at each element. The
+ * {@link IndividualEvaluator} also takes into account the time it takes to
+ * travel between elements and will ensure that the arrival times are not too
+ * close together so that it would be impossible to travel there in time.
  * 
  * 
+ * 
+ * TODO: This implementation assumes that a {@link ITimeWindow} exists for each
+ * element in the schedule.
  * 
  * @author Simon Goodall
  * 
@@ -175,15 +187,15 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 				// best options.
 				offsets[i] = -1;
 			}
-			
+
 			if (i > 0) {
 				// Ensure that we have the minimum travel time between ports
-				int diff = offsets[i] - offsets[i-1];
+				int diff = offsets[i] - offsets[i - 1];
 				if (diff < travelTimes[i]) {
-					offsets[i] = travelTimes[i] + offsets[i-1];
+					offsets[i] = travelTimes[i] + offsets[i - 1];
 				}
 			}
-			
+
 		}
 	}
 
