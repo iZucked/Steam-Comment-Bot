@@ -29,7 +29,7 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 
 	private int topN;
 
-	private boolean adjustArrivalTimes = true;
+	private boolean adjustArrivalTimes = false;
 
 	public void setIndividualEvaluator(
 			final IndividualEvaluator<T> individualEvaluator) {
