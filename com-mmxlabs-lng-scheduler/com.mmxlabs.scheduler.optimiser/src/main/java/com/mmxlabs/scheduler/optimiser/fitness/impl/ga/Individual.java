@@ -17,4 +17,14 @@ public final class Individual {
 	public Individual(final byte[] bytes) {
 		this.bytes = bytes;
 	}
+	
+	public final int hashBytes() {
+		int hash = 9;
+		final int multiplier = 17;
+		for (int i = 0; i<bytes.length; i+=2) {
+			hash = hash * multiplier + bytes[i];
+		}
+		//make positive (handy trick)
+		return  (hash ^ (hash>>31)) - (hash>>31);
+	}
 }
