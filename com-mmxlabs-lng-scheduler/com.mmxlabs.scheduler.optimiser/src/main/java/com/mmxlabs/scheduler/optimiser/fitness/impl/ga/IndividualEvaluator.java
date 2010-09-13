@@ -6,13 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
@@ -33,6 +40,14 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
+	private IElementDurationProvider<T> durationsProvider;
+
+	private IVesselProvider vesselProvider;
+
+	private IPortProvider portProvider;
+
+	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+
 	private Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents;
 
 	private Map<String, Double> fitnessComponentWeights;
@@ -41,11 +56,20 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	private IResource resource;
 
+	/**
+	 * Maximum value for the indexed component.
+	 */
 	private int[] ranges;
+
+	/**
+	 * Minimum time between elements. Including visit duration and travel time
+	 * at maximum speed.
+	 */
+	private int[] travelTimes;
 	private int[] multipler;
 	private int[] windowStarts;
 
-	private boolean adjustArrivalTimes = true;
+	private boolean adjustArrivalTimes = false;
 
 	public IndividualEvaluator() {
 
@@ -151,6 +175,15 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 				// best options.
 				offsets[i] = -1;
 			}
+			
+			if (i > 0) {
+				// Ensure that we have the minimum travel time between ports
+				int diff = offsets[i] - offsets[i-1];
+				if (diff < travelTimes[i]) {
+					offsets[i] = travelTimes[i] + offsets[i-1];
+				}
+			}
+			
 		}
 	}
 
@@ -170,11 +203,16 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		int numBytes = 0;
 
 		ranges = new int[numElements];
+		travelTimes = new int[numElements];
 		windowStarts = new int[numElements];
 		multipler = new int[numElements];
 
+		final IVessel vessel = vesselProvider.getVessel(resource);
+		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
+
 		// Loop through sequence, extract time windows and determine number of
 		// bite required to represent them.
+		T prevT = null;
 		final Iterator<T> itr = sequence.iterator();
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final T t = itr.next();
@@ -195,6 +233,26 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 			final ITimeWindow tw = timeWindows.isEmpty() ? null : timeWindows
 					.get(0);
+
+			// Add Visit duration to "travel" time between elements
+			final int duration = durationsProvider.getElementDuration(t,
+					resource);
+			travelTimes[idx] = duration;
+
+			if (prevT != null) {
+				// TODO: Cache these items
+				final IPort from = portProvider.getPortForElement(prevT);
+				final IPort to = portProvider.getPortForElement(t);
+				// Determine minimum travel time between ports
+				// TODO: find quickest route - canals may have additional time
+				// constraints
+				final int distance = distanceProvider.get(
+						IMultiMatrixProvider.Default_Key).get(from, to);
+				final int minTime = Calculator.getTimeFromSpeedDistance(
+						maxSpeed, distance);
+				travelTimes[idx] += minTime;
+			}
+
 			if (tw != null) {
 				ranges[idx] = tw.getEnd() - tw.getStart();
 
@@ -216,6 +274,8 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 				windowStarts[idx] = -1;
 				multipler[idx] = 1;
 			}
+
+			prevT = t;
 		}
 
 		return numBytes;
@@ -243,6 +303,18 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		}
 		if (timeWindowProvider == null) {
 			throw new IllegalStateException("No time window provider set");
+		}
+		if (portProvider == null) {
+			throw new IllegalStateException("No port provider set");
+		}
+		if (distanceProvider == null) {
+			throw new IllegalStateException("No distance provider set");
+		}
+		if (vesselProvider == null) {
+			throw new IllegalStateException("No vessel provider set");
+		}
+		if (durationsProvider == null) {
+			throw new IllegalStateException("No durations provider set");
 		}
 	}
 
@@ -309,6 +381,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		resource = null;
 
 		ranges = null;
+		travelTimes = null;
 		multipler = null;
 		windowStarts = null;
 	}
@@ -317,7 +390,41 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		return adjustArrivalTimes;
 	}
 
-	public void setAdjustArrivalTimes(boolean adjustArrivalTimes) {
+	public void setAdjustArrivalTimes(final boolean adjustArrivalTimes) {
 		this.adjustArrivalTimes = adjustArrivalTimes;
+	}
+
+	public IVesselProvider getVesselProvider() {
+		return vesselProvider;
+	}
+
+	public void setVesselProvider(final IVesselProvider vesselProvider) {
+		this.vesselProvider = vesselProvider;
+	}
+
+	public IPortProvider getPortProvider() {
+		return portProvider;
+	}
+
+	public void setPortProvider(final IPortProvider portProvider) {
+		this.portProvider = portProvider;
+	}
+
+	public IMultiMatrixProvider<IPort, Integer> getDistanceProvider() {
+		return distanceProvider;
+	}
+
+	public void setDistanceProvider(
+			final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
+		this.distanceProvider = distanceProvider;
+	}
+
+	public IElementDurationProvider<T> getDurationsProvider() {
+		return durationsProvider;
+	}
+
+	public void setDurationsProvider(
+			final IElementDurationProvider<T> durationsProvider) {
+		this.durationsProvider = durationsProvider;
 	}
 }
