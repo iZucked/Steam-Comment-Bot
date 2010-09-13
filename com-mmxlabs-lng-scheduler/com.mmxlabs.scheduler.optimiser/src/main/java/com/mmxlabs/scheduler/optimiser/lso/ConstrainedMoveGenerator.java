@@ -140,6 +140,18 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	
 	final private ArrayList<Pair<T, T>> validBreaks = new ArrayList<Pair<T, T>>();
 	
+	class Move2over2A<T> extends Move2over2<T> {
+		
+	}
+	
+	class Move2over2B<T> extends Move2over2<T> {
+		
+	}
+	
+	class Move2over2C<T> extends Move2over2<T> {
+		
+	}
+	
 	public ConstrainedMoveGenerator(IOptimisationContext<T> context) {
 //		this.context = context;
 		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(context);
@@ -248,7 +260,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			//if it would be, maybe do it
 			if (valid2opt2 && random.nextBoolean()) {
 				//make 2opt2
-				Move2over2<T> result = new Move2over2<T>();
+				Move2over2<T> result = new Move2over2A<T>();
 				result.setResource1(resources.get(sequence1));
 				result.setResource2(resources.get(sequence2));
 				//add 1 because the positions are inclusive, and we need to cut after the first element
@@ -306,7 +318,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				
 				if (viableSecondBreaks.isEmpty()) {
 					if (valid2opt2) {
-						Move2over2<T> result = new Move2over2<T>();
+						Move2over2<T> result = new Move2over2B<T>();
 						result.setResource1(resources.get(sequence1));
 						result.setResource2(resources.get(sequence2));
 						//add 1 because the positions are inclusive, and we need to cut after the first element
