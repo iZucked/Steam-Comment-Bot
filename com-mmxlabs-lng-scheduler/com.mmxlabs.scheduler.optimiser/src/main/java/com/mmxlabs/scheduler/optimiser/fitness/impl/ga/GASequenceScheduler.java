@@ -47,7 +47,10 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 
 		// Run the GA
 		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
-				individualEvaluator, mutateThreshold, populationSize, topN,
+				
+				new CachingIndividualEvaluator<T>(individualEvaluator, numIterations * populationSize * 2), 
+				
+				mutateThreshold, populationSize, topN,
 				numBytes);
 
 		algorithm.init();
