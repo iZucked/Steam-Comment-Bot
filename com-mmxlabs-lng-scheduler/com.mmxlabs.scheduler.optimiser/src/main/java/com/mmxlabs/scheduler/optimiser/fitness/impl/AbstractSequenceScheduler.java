@@ -89,9 +89,10 @@ public abstract class AbstractSequenceScheduler<T> implements
 		VoyageOptions previousOptions = null;
 
 		voyagePlanOptimiser.setVessel(vessel);
-		
+
 		boolean useNBO = false;
 
+		int prevVisitDuration = 0;
 		final Iterator<T> itr = sequence.iterator();
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final T element = itr.next();
@@ -107,10 +108,10 @@ public abstract class AbstractSequenceScheduler<T> implements
 				if (prevPortType == PortType.Load) {
 					useNBO = true;
 				}
-				
+
 				// Available time, as determined by inputs.
 				final int availableTime = arrivalTimes[idx]
-						- arrivalTimes[idx - 1];
+						- arrivalTimes[idx - 1] - prevVisitDuration;
 
 				// Get the min NBO travelling speed
 				final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(
@@ -192,7 +193,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 				// Reset useNBO flag
 				useNBO = false;
 				previousOptions = null;
-				
+
 				currentSequence.clear();
 
 				currentSequence.add(portDetails);
@@ -202,6 +203,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 			prevPort = thisPort;
 			prevPortSlot = thisPortSlot;
 			prevPortType = portType;
+			prevVisitDuration = visitDuration;
 
 			// Update vessel state
 			if (portType == PortType.Load) {
@@ -285,7 +287,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 		// Reset VPO ready for next iteration
 		optimiser.reset();
-		
+
 		return currentTime;
 	}
 
