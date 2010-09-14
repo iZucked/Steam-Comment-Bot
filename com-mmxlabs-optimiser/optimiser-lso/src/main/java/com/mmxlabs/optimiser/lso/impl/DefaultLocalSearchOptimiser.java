@@ -104,7 +104,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			IModifiableSequences<T> potentialFullSequences = new ModifiableSequences<T>(
 					potentialRawSequences);
 			manipulator.manipulate(potentialFullSequences);
-
+			
 			// Apply hard constraint checkers
 			for (final IConstraintChecker<T> checker : constraintCheckers) {
 				if (checker.checkConstraints(potentialFullSequences) == false) {
