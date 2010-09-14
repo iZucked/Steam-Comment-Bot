@@ -88,12 +88,12 @@ public final class SchedulerUtils {
 		
 		scheduler.setDistanceProvider(distanceProvider);
 		
-		IElementDurationProvider<T> durationsProvider = data.getDataComponentProvider(
+		final IElementDurationProvider<T> durationsProvider = data.getDataComponentProvider(
 				SchedulerConstants.DCP_elementDurationsProvider,
 				IElementDurationProvider.class);
 		scheduler.setDurationsProvider(durationsProvider);
 		
-		IPortProvider portProvider = data.getDataComponentProvider(
+		final IPortProvider portProvider = data.getDataComponentProvider(
 				SchedulerConstants.DCP_portProvider, IPortProvider.class);
 		scheduler.setPortProvider(portProvider);
 		
@@ -103,7 +103,7 @@ public final class SchedulerUtils {
 						ITimeWindowDataComponentProvider.class);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		
-		IPortSlotProvider<T> portSlotProvider = data.getDataComponentProvider(
+		final IPortSlotProvider<T> portSlotProvider = data.getDataComponentProvider(
 				SchedulerConstants.DCP_portSlotsProvider,
 				IPortSlotProvider.class);
 		
@@ -113,7 +113,7 @@ public final class SchedulerUtils {
 				SchedulerConstants.DCP_portTypeProvider,
 				IPortTypeProvider.class));
 
-		IVesselProvider vesselProvider = data.getDataComponentProvider(
+		final IVesselProvider vesselProvider = data.getDataComponentProvider(
 				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		scheduler.setVesselProvider(vesselProvider);
 

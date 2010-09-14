@@ -24,8 +24,20 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
 /**
+ * The {@link IndividualEvaluator} evaluates a GA {@link Individual} using the
+ * {@link ICargoSchedulerFitnessComponent} implementation to evaluate the
+ * fitness of a scheduled {@link ISequence}. This bitstring represents offsets
+ * in time from the start of each sequence element's {@link ITimeWindow} up
+ * until the end of the window. The bitstring decodes each of these offsets and
+ * generates a set of arrival times at each element. The
+ * {@link IndividualEvaluator} also takes into account the time it takes to
+ * travel between elements and will ensure that the arrival times are not too
+ * close together so that it would be impossible to travel there in time.
  * 
  * 
+ * 
+ * TODO: This implementation assumes that a {@link ITimeWindow} exists for each
+ * element in the schedule.
  * 
  * @author Simon Goodall
  * 
@@ -63,18 +75,31 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	/**
 	 * Minimum time between elements. Including visit duration and travel time
-	 * at maximum speed.
+	 * at maximum speed. Indexes as time to get to the sequence element.
 	 */
 	private int[] travelTimes;
-	private int[] multipler;
+
+	/**
+	 * UNUSED. Array indicating the multiplier to apply to the decoded offset.
+	 */
+	private int[] multiplier;
+
+	/**
+	 * Cached array of {@link ITimeWindow} starts
+	 */
 	private int[] windowStarts;
 
+	/**
+	 * Flag passed to the {@link GASequenceScheduler} to indicate whether or not
+	 * it is allowed to adjust arrival times.
+	 */
 	private boolean adjustArrivalTimes = false;
 
 	public IndividualEvaluator() {
 
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public final long evaluate(final Individual individual) {
 
@@ -82,43 +107,56 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		final int[] arrivalTimes = new int[ranges.length];
 		decode(individual, arrivalTimes);
 
-		// TODO: FAll back to GAScheduler to calculate the costs.
-		// TOOD: Generalise the SImpleShceduler to take an array of arrival
-		// times, to share between simple and GA case
-		// TODO: Update the scheduler code to handle -1 as arrival time and just
-		// arrav
+		// Use the sequence schedule to evaluate the arrival time profile.
 		final List<IVoyagePlan> voyagePlans = sequenceScheduler.schedule(
 				resource, sequence, arrivalTimes, adjustArrivalTimes);
 
+		// Was the set of arrival times valid?
 		if (voyagePlans == null) {
+			// Bad set of times
 			return Long.MAX_VALUE;
 		}
 
-		// Should this site around the sequence scheduler? - rather than
-		// otherway around?
-
+		// Annotate the scheduled sequence to that the fitness components can
+		// evaluate it.
 		final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
 		voyagePlanAnnotator.annotateFromVoyagePlan(resource, voyagePlans,
 				annotatedSequence);
 
+		// Evaluate fitness
 		long totalFitness = 0;
 		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
 			final long rawFitness = component.rawEvaluateSequence(resource,
 					sequence, annotatedSequence);
+
 			// Enable this block once weights are set
-			// final String componentName = component.getName();
-			// if (fitnessComponentWeights.containsKey(componentName)) {
-			// final double weight = fitnessComponentWeights
-			// .get(componentName);
-			// final long fitness = Math.round(weight * (double) rawFitness);
-			// totalFitness += fitness;
-			// }
-			totalFitness += rawFitness;
+			if (false) {
+				final String componentName = component.getName();
+				if (fitnessComponentWeights.containsKey(componentName)) {
+					final double weight = fitnessComponentWeights
+							.get(componentName);
+					final long fitness = Math.round(weight
+							* (double) rawFitness);
+					totalFitness += fitness;
+				}
+			} else {
+				// Current just use the raw fitness value
+				totalFitness += rawFitness;
+			}
 		}
 		return totalFitness;
 	}
 
-	public final void decode(final Individual individual, final int[] offsets) {
+	/**
+	 * Decode an {@link Individual} into an array of arrival times for each
+	 * sequence element. This method uses the {@link #travelTimes} array to
+	 * ensure the time between each arrival is at least the travel time.
+	 * 
+	 * @param individual
+	 * @param arrivalTimes
+	 */
+	public final void decode(final Individual individual,
+			final int[] arrivalTimes) {
 
 		// TODO: Currently the byte array can be under utilised. E.g. a 6 hour
 		// window only requires 3 bits out of the byte, leaving 5 bits unused.
@@ -140,7 +178,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 		final int numElements = ranges.length;
 		for (int i = 0; i < numElements; ++i) {
-
+			
 			if (windowStarts[i] != -1) {
 				final int range = ranges[i];
 
@@ -152,7 +190,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 				// Add on all whole bytes to the offset
 				int offset = 0;
-				for (int j = 0; i < numBytes; ++j) {
+				for (int j = 0; j < numBytes; ++j) {
 					offset <<= 8;
 					// TODO: Does OR apply as I expect, or should I just use + ?
 					offset |= bytes[idx++];
@@ -169,21 +207,24 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 					offset >>= (8 - extraBits);
 				}
 
-				offsets[i] = windowStarts[i] + offset * multipler[i];
+				arrivalTimes[i] = windowStarts[i] + offset * multiplier[i];
 			} else {
-				// No time window, so do nothing here. Let evaluator work out
-				// best options.
-				offsets[i] = -1;
+//				 No time window, so do nothing here. Let evaluator work out
+//				 best options.
+//				arrivalTimes[i] = -1;
+				
+				// Set arrival time to max speed travel time
+				arrivalTimes[i] = travelTimes[i] + arrivalTimes[i - 1];
 			}
-			
+
 			if (i > 0) {
 				// Ensure that we have the minimum travel time between ports
-				int diff = offsets[i] - offsets[i-1];
+				int diff = arrivalTimes[i] - arrivalTimes[i - 1];
 				if (diff < travelTimes[i]) {
-					offsets[i] = travelTimes[i] + offsets[i-1];
+					arrivalTimes[i] = travelTimes[i] + arrivalTimes[i - 1];
 				}
 			}
-			
+
 		}
 	}
 
@@ -205,7 +246,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		ranges = new int[numElements];
 		travelTimes = new int[numElements];
 		windowStarts = new int[numElements];
-		multipler = new int[numElements];
+		multiplier = new int[numElements];
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
@@ -260,7 +301,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 				// E.g. one or two days use to the hour, then multiple up to 2
 				// hours, 4 hours, 6 hours, 12 hours, per day etc. This requires
 				// another array containing a multiplier.
-				multipler[idx] = 1;
+				multiplier[idx] = 1;
 
 				// Calc num bits
 				numBytes += (ranges[idx] / 8);
@@ -272,7 +313,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			} else {
 				ranges[idx] = 0;
 				windowStarts[idx] = -1;
-				multipler[idx] = 1;
+				multiplier[idx] = 1;
 			}
 
 			prevT = t;
@@ -382,7 +423,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 		ranges = null;
 		travelTimes = null;
-		multipler = null;
+		multiplier = null;
 		windowStarts = null;
 	}
 
