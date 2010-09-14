@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChec
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
 
 /**
  * Utility for taking an OptimisationSettings from the EMF and starting an optimiser accordingly. At the moment, it's pretty much 
@@ -57,7 +58,9 @@ public class OptimisationTransformer {
 		LSOConstructor lsoConstructor = new LSOConstructor((LSOSettings) settings);
 		
 		return new Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>>
-			(context, lsoConstructor.buildOptimiser(context));
+			(context, lsoConstructor.buildOptimiser(context,
+				SequencesManipulatorUtil.createDefaultSequenceManipulators(data)
+			));
 	}
 	
 	private List<String> getEnabledConstraintNames() {
