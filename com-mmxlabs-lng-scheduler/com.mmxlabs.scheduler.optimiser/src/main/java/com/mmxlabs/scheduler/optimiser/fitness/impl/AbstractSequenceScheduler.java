@@ -27,7 +27,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
- * Simple scheduler.
+ * Abstract {@link ISequenceScheduler} implementation to manage the sequence
+ * optimisation given a set of arrival times at each sequence element. This
+ * class handles the construction of {@link IVoyagePlan}s and uses a
+ * {@link IVoyagePlanOptimiser} implementation to make the best route choices.
  * 
  * @author Simon Goodall
  * 
