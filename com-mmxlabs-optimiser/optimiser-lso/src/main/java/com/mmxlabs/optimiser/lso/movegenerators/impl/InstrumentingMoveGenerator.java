@@ -1,11 +1,8 @@
 package com.mmxlabs.optimiser.lso.movegenerators.impl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -34,6 +31,11 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 			addSample(delta, accepted);
 		}
 		
+		public Stats(Class<? extends IMove> lastMoveClass) {
+			this.moveClass = lastMoveClass;
+			
+		}
+
 		public void addSample(long delta, boolean accepted) {
 			moveCount++;
 			if (accepted) {
@@ -49,8 +51,14 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		}
 		
 		public String toString() {
-			return "Move " + moveClass.getSimpleName() + generatedCount + "generated, " + moveCount + " tested, " + acceptCount + " accepted. Mean good delta "
-			 + meanGoodDelta / goodMoves + ", bad delta = " + meanBadDelta / badMoves;
+			StringBuilder sb = new StringBuilder();
+			return String.format(
+					"%s : %d generated, %.2f%% feasible, %.2f%% accepted. %.2f%% improving, %.2f%% detrimental",
+					moveClass.getSimpleName(), generatedCount, moveCount / (0.01*generatedCount),
+					acceptCount / (0.01*generatedCount), goodMoves / (0.01*generatedCount),
+					badMoves / (0.01*generatedCount));
+//			return "Move " + moveClass.getSimpleName() +": "+ generatedCount + " generated, " + moveCount + " tested, " + acceptCount + " accepted. Mean good delta "
+//			 + meanGoodDelta / goodMoves + ", bad delta = " + meanBadDelta / badMoves;
 		}
 
 		public void moveGenerated() {
@@ -68,6 +76,9 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		final IMove<T> move = delegate.generateMove();
 		if (move != null) {
 			lastMoveClass = move.getClass();
+			if (!stats.containsKey(lastMoveClass)) {
+				stats.put(lastMoveClass, new Stats(lastMoveClass));
+			}
 			stats.get(lastMoveClass).moveGenerated();
 			hits++;
 			if (hits >= 10000) {
