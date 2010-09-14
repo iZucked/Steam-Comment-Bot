@@ -3,8 +3,7 @@ package com.mmxlabs.scheduler.optimiser;
 import java.util.List;
 import java.util.TreeMap;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
