@@ -16,7 +16,25 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
  * 
  */
 public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
-
+	public boolean reset() {
+		for (int i = 0; i<numChoices(); i++)
+			if (apply(i)) return true;
+		return false;
+	}
+	
+	@Override
+	public boolean nextChoice() {
+		while (true) {
+			if (choice + 1 == numChoices()) {
+				return true;
+			}
+			if (apply(choice + 1))
+				return false;
+		}
+	}
+	private int choice;
+	
+	
 	private final VoyageOptions options;
 
 	private final IMultiMatrixProvider<IPort, Integer> multiProvider;
@@ -45,7 +63,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public boolean apply(final int choice) {
-
+		this.choice = choice;
 		options.setRoute(choices[choice]);
 
 		final IMatrixProvider<IPort, Integer> m = multiProvider

@@ -36,4 +36,7 @@ public interface IVoyagePlanChoice {
 	 * @param choice
 	 */
 	boolean apply(int choice);
+
+	boolean reset();
+	boolean nextChoice();
 }

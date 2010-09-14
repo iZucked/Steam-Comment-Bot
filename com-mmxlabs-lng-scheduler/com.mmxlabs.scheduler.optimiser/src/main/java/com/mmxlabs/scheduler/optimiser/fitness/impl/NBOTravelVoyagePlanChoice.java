@@ -14,35 +14,53 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
  * 
  */
 public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
-
+	public boolean reset() {
+		for (int i = 0; i<numChoices(); i++)
+			if (apply(i)) return true;
+		return false;
+	}
+	
+	@Override
+	public boolean nextChoice() {
+		while (true) {
+			if (choice + 1 == numChoices()) {
+				return true;
+			}
+			if (apply(choice + 1))
+				return true;
+		}
+	}
+	private int choice;
+	
 	private final VoyageOptions previousOptions;
 	
 	private final VoyageOptions options;
 
-	private final boolean[] choices;
+//	private final boolean[] choices;
 
 	public NBOTravelVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options) {
 		this.previousOptions = previousOptions;
 		this.options = options;
-		this.choices = new boolean[] { true, false };
+//		this.choices = new boolean[] { true, false };
 	}
 
 	public NBOTravelVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options,
 			final boolean[] choices) {
 		this.previousOptions = previousOptions;
 		this.options = options;
-		this.choices = choices;
+//		this.choices = choices;
 	}
 
 	@Override
 	public int numChoices() {
-		return choices.length;
+//		return choices.length;
+		return 2;
 	}
 
 	@Override
 	public boolean apply(final int choice) {
-
-		boolean useNBO = choices[choice];
+		this.choice = choice;
+		boolean useNBO = choice == 0;
 		
 		options.setUseNBOForTravel(useNBO);
 		
@@ -65,9 +83,9 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 
 			final NBOTravelVoyagePlanChoice other = (NBOTravelVoyagePlanChoice) obj;
 
-			if (!Arrays.equals(choices, other.choices)) {
-				return false;
-			}
+//			if (!Arrays.equals(choices, other.choices)) {
+//				return false;
+//			}
 
 			if (!Equality.isEqual(options, other.options)) {
 				return false;

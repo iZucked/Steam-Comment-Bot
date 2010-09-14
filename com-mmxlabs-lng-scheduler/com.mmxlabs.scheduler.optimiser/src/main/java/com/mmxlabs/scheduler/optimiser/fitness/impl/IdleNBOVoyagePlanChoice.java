@@ -16,30 +16,49 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
  */
 public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 
+	public boolean reset() {
+		for (int i = 0; i<numChoices(); i++)
+			if (apply(i)) return true;
+		return false;
+	}
+	
+	@Override
+	public boolean nextChoice() {
+		while (true) {
+			if (choice + 1 == numChoices()) {
+				return true;
+			}
+			if (apply(choice + 1))
+				return false;
+		}
+	}
+	private int choice;
+	
 	private final VoyageOptions options;
 
-	private final boolean[] choices;
+//	private final boolean[] choices;
 
 	public IdleNBOVoyagePlanChoice(final VoyageOptions options) {
 		this.options = options;
-		this.choices = new boolean[] { true, false };
+//		this.choices = new boolean[] { true, false };
 	}
 
 	public IdleNBOVoyagePlanChoice(final VoyageOptions options,
 			final boolean[] choices) {
 		this.options = options;
-		this.choices = choices;
+//		this.choices = choices;
 	}
 
 	@Override
 	public int numChoices() {
-		return choices.length;
+//		return choices.length;
+		return 2;
 	}
 
 	@Override
 	public boolean apply(final int choice) {
-
-		final boolean useNBOForIdle = choices[choice];
+		this.choice = choice;
+		final boolean useNBOForIdle = choice == 0;
 		options.setUseNBOForIdle(useNBOForIdle);
 
 		// We have to use idle NBO when laden
@@ -62,9 +81,9 @@ public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 			final IdleNBOVoyagePlanChoice other = (IdleNBOVoyagePlanChoice) obj;
 
-			if (!Arrays.equals(choices, other.choices)) {
-				return false;
-			}
+//			if (!Arrays.equals(choices, other.choices)) {
+//				return false;
+//			}
 
 			if (!Equality.isEqual(options, other.options)) {
 				return false;

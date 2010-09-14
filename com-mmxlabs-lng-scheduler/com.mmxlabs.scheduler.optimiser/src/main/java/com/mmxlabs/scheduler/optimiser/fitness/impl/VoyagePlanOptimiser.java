@@ -85,11 +85,39 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	@Override
 	public IVoyagePlan optimise() {
 
-		runLoop(0);
+		nonRecursiveRunLoop();
+//		runLoop(0);
 
 		return bestPlan;
 	}
 
+	private void nonRecursiveRunLoop() {
+		for (IVoyagePlanChoice c : choices) {
+			if (c.reset() == false) {
+				return; //handle error properly.
+			}
+		}
+		final int cc = choices.size();
+		if (cc == 0) {
+			evaluateVoyagePlan();
+			return;
+		}
+		while (true) {
+			evaluateVoyagePlan();
+			int i;
+			carry:
+				for (i = 0; i< cc ; i++) {
+				if (choices.get(i).nextChoice() == false) {
+					break carry;
+				}
+			}
+			if (i == cc-1) {
+				return;
+			}
+		}
+	}
+	
+	
 	/**
 	 * Recursive function to iterate through all the possible combinations of
 	 * {@link IVoyagePlanChoice}s. For each set of choices, calculate a
@@ -100,7 +128,6 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	 * @param i
 	 */
 	private void runLoop(final int i) {
-
 		// Recursive termination point.
 		if (i == choices.size()) {
 			// Perform voyage calculations and populate plan.
