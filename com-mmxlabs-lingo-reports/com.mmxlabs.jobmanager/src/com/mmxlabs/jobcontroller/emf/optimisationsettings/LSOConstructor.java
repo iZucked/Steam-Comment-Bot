@@ -10,6 +10,7 @@ import scenario.optimiser.lso.MoveGeneratorSettings;
 import scenario.optimiser.lso.RandomMoveGeneratorSettings;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -54,7 +55,7 @@ public class LSOConstructor {
 	 * @param context
 	 * @return
 	 */
-	public <T> LocalSearchOptimiser<T> buildOptimiser(final IOptimisationContext<T> context) {
+	public <T> LocalSearchOptimiser<T> buildOptimiser(final IOptimisationContext<T> context, final ISequencesManipulator<T> manipulator) {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker<T>> constraintCheckers = constraintCheckerInstantiator
 				.instantiateConstraintCheckers(
@@ -69,16 +70,6 @@ public class LSOConstructor {
 		final List<IFitnessComponent<T>> fitnessComponents = fitnessComponentInstantiator
 				.instantiateFitnesses(context.getFitnessFunctionRegistry(),
 						context.getFitnessComponents());
-
-		
-//			TestUtils
-//				.createLinearSAFitnessEvaluator(getStepSize(), getNumberOfIterations(),
-//						fitnessComponents);
-
-		
-		
-//		final IMoveGenerator<T> moveGenerator = 
-//			createMoveGenerator(context);
 		
 		final IMoveGenerator<T> moveGenerator =
 			createMoveGenerator(context);
@@ -92,22 +83,12 @@ public class LSOConstructor {
 		final IFitnessEvaluator<T> fitnessEvaluator = 
 			createFitnessEvaluator(fitnessComponents, instrumentingMoveGenerator);
 		
-//			TestUtils
-//				.createRandomMoveGenerator(getRandom());
-
 		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
 
 		lso.setNumberOfIterations(getNumberOfIterations());
-		ChainedSequencesManipulator<T> manipulator = new ChainedSequencesManipulator<T>();
-		StartLocationRemovingSequenceManipulator<T> slrsm = new StartLocationRemovingSequenceManipulator<T>();
-		slrsm.setOptimisationData(context.getOptimisationData());
-		
-//		EndLocationSequenceManipulator<T> endLocationManipulator = new EndLocationSequenceManipulator<T>();
-		
-		manipulator.addDelegate(slrsm);
 		lso.setSequenceManipulator(manipulator);
 		
-		lso.setMoveGenerator(moveGenerator);
+		lso.setMoveGenerator(instrumenting ? instrumentingMoveGenerator : moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
 
