@@ -20,6 +20,7 @@ public final class SchedulerConstants {
 	public static final String DCP_resourceAllocationProvider = "provider-resource-allocation";
 	public static final String DCP_startEndRequirementProvider = "provider-start-end-requirement";
 	public static final String DCP_portExclusionProvider = "provider-port-exclusions";
+	public static final String DCP_returnElementProvider = "provider-return-elements";
 	
 	// Additional Info keys
 	public static final String AI_idleInfo = "info-idle";

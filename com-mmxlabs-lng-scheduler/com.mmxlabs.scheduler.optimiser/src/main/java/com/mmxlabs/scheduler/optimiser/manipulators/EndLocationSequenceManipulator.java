@@ -9,12 +9,15 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 
@@ -38,20 +41,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  *            Sequence element type.
  */
 public final class EndLocationSequenceManipulator<T> implements
-		ISequencesManipulator<T> {
-
-	/**
-	 * An interface used to allow the {@link EndLocationSequenceManipulator}
-	 * to create new dummy sequence elements to swap out for genuine end elements.
-	 * 
-	 * @author hinton
-	 *
-	 * @param <T>
-	 */
-	public interface IElementFactory<T> {
-		public T createElement();
-	}
-	
+		ISequencesManipulator<T> {	
 	/**
 	 * An enum of the different end location rules that can be applied.
 	 * 
@@ -77,24 +67,15 @@ public final class EndLocationSequenceManipulator<T> implements
 
 	private IPortTypeProvider<T> portTypeProvider;
 	
-	/**
-	 * This is needed both to find out the location to which we are returning,
-	 * and to set that as the location associated with the new dummy sequence element.
-	 */
-	private IPortProviderEditor portProviderEditor;
-
-	private IPortSlotProviderEditor<T> portSlotProviderEditor;
-	
+	private IPortProvider portProvider;
+		
 	private final Map<IResource, EndLocationRule> ruleMap = 
 		new HashMap<IResource, EndLocationSequenceManipulator.EndLocationRule>();
 
-	private IElementFactory<T> elementFactory = null;
-
-	private final Map<IResource, Pair<T, PortSlot>> dummyElements = 
-		new HashMap<IResource, Pair<T, PortSlot>>();
-
-	public EndLocationSequenceManipulator(final IElementFactory<T> elementFactory) {
-		this.elementFactory = elementFactory;
+	private IReturnElementProvider<T> returnElementProvider;
+	
+	public EndLocationSequenceManipulator() {
+		
 	}
 
 	@Override
@@ -164,15 +145,12 @@ public final class EndLocationSequenceManipulator<T> implements
 		 * Look up the port we are returning to, and then set that as the port
 		 * for the dummy element.
 		 */
-		final IPort returnPort = portProviderEditor.getPortForElement(returnElement);
-		final Pair<T, PortSlot> dummyElement = dummyElements.get(resource);
-		portProviderEditor.setPortForElement(returnPort, dummyElement.getFirst());
-		dummyElement.getSecond().setPort(returnPort);
+		final IPort returnPort = portProvider.getPortForElement(returnElement);
 		
 		/*
 		 * Replace the final sequence element with the dummy
 		 */
-		sequence.set(sequence.size()-1, dummyElement.getFirst());
+		sequence.set(sequence.size()-1, returnElementProvider.getReturnElement(returnPort));
 	}
 	
 	/**
@@ -200,22 +178,22 @@ public final class EndLocationSequenceManipulator<T> implements
 	public void setPortTypeProvider(final IPortTypeProvider<T> portTypeProvider) {
 		this.portTypeProvider = portTypeProvider;
 	}
-
-	public IPortProviderEditor getPortProviderEditor() {
-		return portProviderEditor;
+	
+	public IPortProvider getPortProvider() {
+		return portProvider;
 	}
 
-	public void setPortProviderEditor(IPortProviderEditor portProviderEditor) {
-		this.portProviderEditor = portProviderEditor;
+	public void setPortProvider(IPortProvider portProvider) {
+		this.portProvider = portProvider;
+	}
+	
+	public IReturnElementProvider<T> getReturnElementProvider() {
+		return returnElementProvider;
 	}
 
-	public IPortSlotProviderEditor<T> getPortSlotProviderEditor() {
-		return portSlotProviderEditor;
-	}
-
-	public void setPortSlotProviderEditor(
-			IPortSlotProviderEditor<T> portSlotProviderEditor) {
-		this.portSlotProviderEditor = portSlotProviderEditor;
+	public void setReturnElementProvider(
+			IReturnElementProvider<T> returnElementProvider) {
+		this.returnElementProvider = returnElementProvider;
 	}
 
 	/**
@@ -226,17 +204,6 @@ public final class EndLocationSequenceManipulator<T> implements
 	 */
 	public void setEndLocationRule(final IResource resource,
 			final EndLocationRule rule) {
-		if (ruleMap.containsKey(resource) == false) {
-			/* 
-			 * Set up a dummy element for this resource,
-			 * because we might need it
-			 */
-			T element = elementFactory.createElement();
-			PortSlot slot = new PortSlot();
-			slot.setId(resource.getName() + "-return");
-			portSlotProviderEditor.setPortSlot(element, slot);
-			dummyElements.put(resource, new Pair<T, PortSlot>(element, slot));
-		}
 		ruleMap.put(resource, rule);
 	}
 

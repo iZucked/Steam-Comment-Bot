@@ -6,11 +6,10 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulator.EndLocationRule;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -44,13 +43,7 @@ public class SequencesManipulatorUtil {
 		 * An end location sequence manipulator, to return spot charters to their first load port
 		 */
 		EndLocationSequenceManipulator<ISequenceElement> endLocationManipulator = 
-			new EndLocationSequenceManipulator<ISequenceElement>(
-					new EndLocationSequenceManipulator.IElementFactory<ISequenceElement>() {
-						@Override
-						public ISequenceElement createElement() {
-							return new SequenceElement();
-						}
-					});
+			new EndLocationSequenceManipulator<ISequenceElement>();
 		
 		/*
 		 * Set the various DCPs. Some of these are editors, which is dodgy,
@@ -63,19 +56,20 @@ public class SequencesManipulatorUtil {
 				.getDataComponentProvider(
 						SchedulerConstants.DCP_portTypeProvider,
 						IPortTypeProvider.class);
-		final IPortProviderEditor portProviderEditor = data
+		
+		final IPortProvider portProvider = data
 				.getDataComponentProvider(SchedulerConstants.DCP_portProvider,
-						IPortProviderEditor.class);
-
+						IPortProvider.class);
+		
 		@SuppressWarnings("unchecked")
-		final IPortSlotProviderEditor<ISequenceElement> portSlotProviderEditor = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portSlotsProvider,
-						IPortSlotProviderEditor.class);
-
-		endLocationManipulator.setPortSlotProviderEditor(portSlotProviderEditor);
+		final IReturnElementProvider<ISequenceElement> returnElementProvider = data
+		.getDataComponentProvider(SchedulerConstants.DCP_returnElementProvider,
+				IReturnElementProvider.class);
+		
+		
 		endLocationManipulator.setPortTypeProvider(portTypeProvider);
-		endLocationManipulator.setPortProviderEditor(portProviderEditor);
+		endLocationManipulator.setReturnElementProvider(returnElementProvider);
+		endLocationManipulator.setPortProvider(portProvider);
 		
 		/*
 		 * Set up manipulators for use with spot charter vessels only
