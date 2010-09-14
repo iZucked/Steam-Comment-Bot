@@ -348,7 +348,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		Iterator<SequenceChunk<T>> iterator = chunks.iterator();
 		while (iterator.hasNext()) {
 			final SequenceChunk<T> here = iterator.next();
-			for (Map.Entry<IResource, List<SequenceChunk<T>>> entry : sequences
+			top: for (Map.Entry<IResource, List<SequenceChunk<T>>> entry : sequences
 					.entrySet()) {
 				final IResource res = entry.getKey();
 				final List<SequenceChunk<T>> sequence = entry.getValue();
@@ -357,6 +357,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 							sequence.get(i + 1), res)) {
 						sequence.add(i + 1, here);
 						iterator.remove();
+						break top;
 					}
 				}
 			}
