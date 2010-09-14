@@ -66,6 +66,7 @@ public class RunRandomScenarioTest {
 				Assert.assertTrue(currentFitness > 0);
 				Assert.assertTrue(bestFitness > 0);
 				Assert.assertTrue(bestFitness <= currentFitness);
+				System.err.println(iteration + ", " + currentFitness + ", " + bestFitness);
 			}
 			
 			@Override
