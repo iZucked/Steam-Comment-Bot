@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
@@ -60,6 +61,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
 import com.mmxlabs.scheduler.optimiser.manipulators.StartLocationRemovingSequenceManipulator;
 
 /**
@@ -123,7 +125,8 @@ public final class TestUtils {
 	public static <T> LocalSearchOptimiser<T> buildOptimiser(
 			final IOptimisationContext<T> context, final Random random,
 			final int numberOfIterations, final int stepSize,
-			final IOptimiserProgressMonitor<T> monitor) {
+			final IOptimiserProgressMonitor<T> monitor,
+			final ISequencesManipulator<T> manipulator) {
 
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker<T>> constraintCheckers = constraintCheckerInstantiator
@@ -149,13 +152,13 @@ public final class TestUtils {
 		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
 
 		lso.setNumberOfIterations(numberOfIterations);
-		StartLocationRemovingSequenceManipulator<T> manipulator = new StartLocationRemovingSequenceManipulator<T>();
-		manipulator.setOptimisationData(context.getOptimisationData());
-		lso.setSequenceManipulator(manipulator);
+		
 		lso.setMoveGenerator(moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
 
+		lso.setSequenceManipulator(manipulator);
+		
 		lso.setProgressMonitor(monitor);
 		lso.setReportInterval(Math.max(10, numberOfIterations / 100));
 
