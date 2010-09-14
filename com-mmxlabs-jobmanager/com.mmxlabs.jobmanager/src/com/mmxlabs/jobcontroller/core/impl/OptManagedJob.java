@@ -35,6 +35,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -194,8 +195,15 @@ public class OptManagedJob implements IManagedJob {
 
 					monitor.subTask("Prepare optimisation");
 					final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils
-							.buildOptimiser(context, new Random(1),
-									totalProgress, 5000, optMonitor);
+							.buildOptimiser(
+									context,
+									new Random(1),
+									totalProgress,
+									5000,
+									optMonitor,
+									SequencesManipulatorUtil
+											.createDefaultSequenceManipulators(context
+													.getOptimisationData()));
 
 					final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
 							.getFitnessEvaluator();
