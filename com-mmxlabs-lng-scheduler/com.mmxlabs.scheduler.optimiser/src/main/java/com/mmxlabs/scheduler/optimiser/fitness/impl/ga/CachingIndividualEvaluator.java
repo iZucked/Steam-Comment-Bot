@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
