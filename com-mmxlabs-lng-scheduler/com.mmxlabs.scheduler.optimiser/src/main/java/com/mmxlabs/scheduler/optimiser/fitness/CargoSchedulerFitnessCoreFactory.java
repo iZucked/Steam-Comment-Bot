@@ -3,7 +3,6 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 import java.util.Collection;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 
 /**
@@ -39,7 +38,7 @@ public final class CargoSchedulerFitnessCoreFactory implements
 	}
 
 	@Override
-	public <T> IFitnessCore<T> instantiate() {
+	public <T> CargoSchedulerFitnessCore<T> instantiate() {
 		return new CargoSchedulerFitnessCore<T>();
 	}
 }
