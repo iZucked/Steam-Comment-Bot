@@ -190,7 +190,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 				// Add on all whole bytes to the offset
 				int offset = 0;
-				for (int j = 0; i < numBytes; ++j) {
+				for (int j = 0; j < numBytes; ++j) {
 					offset <<= 8;
 					// TODO: Does OR apply as I expect, or should I just use + ?
 					offset |= bytes[idx++];
