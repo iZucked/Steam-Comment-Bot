@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -15,25 +13,16 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.GASequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.IndividualEvaluator;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
