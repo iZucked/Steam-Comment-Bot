@@ -48,7 +48,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		// Create the fitness components
 
-		components = new ArrayList<ICargoSchedulerFitnessComponent<T>>(2);
+		components = new ArrayList<ICargoSchedulerFitnessComponent<T>>(5);
 		components
 				.add(new DistanceComponent<T>(
 						CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME,
