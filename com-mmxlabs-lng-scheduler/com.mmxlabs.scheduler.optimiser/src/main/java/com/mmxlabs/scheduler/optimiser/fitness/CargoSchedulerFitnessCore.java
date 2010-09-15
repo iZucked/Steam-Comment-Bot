@@ -40,8 +40,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	private final List<ICargoSchedulerFitnessComponent<T>> components;
 
-	private IOptimisationData<T> data;
-
 	private ISequenceScheduler<T> scheduler;
 
 	private IVoyagePlanAnnotator<T> voyagePlanAnnotator;
@@ -166,10 +164,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void init(final IOptimisationData<T> data) {
 
-		this.data = data;
-
 		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
-		
+
 		vpa.setPortSlotProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portSlotsProvider,
 				IPortSlotProvider.class));
@@ -203,7 +199,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void dispose() {
 
-		this.data = null;
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.dispose();
 		}
