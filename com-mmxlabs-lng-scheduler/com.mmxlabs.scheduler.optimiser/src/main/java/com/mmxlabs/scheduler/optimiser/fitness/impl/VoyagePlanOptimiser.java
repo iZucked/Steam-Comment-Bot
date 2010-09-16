@@ -85,8 +85,8 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	@Override
 	public IVoyagePlan optimise() {
 
-		nonRecursiveRunLoop();
-//		runLoop(0);
+//		nonRecursiveRunLoop();
+		runLoop(0);
 
 		return bestPlan;
 	}
@@ -127,7 +127,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	 * 
 	 * @param i
 	 */
-	private void runLoop(final int i) {
+	private final void runLoop(final int i) {
 		// Recursive termination point.
 		if (i == choices.size()) {
 			// Perform voyage calculations and populate plan.
