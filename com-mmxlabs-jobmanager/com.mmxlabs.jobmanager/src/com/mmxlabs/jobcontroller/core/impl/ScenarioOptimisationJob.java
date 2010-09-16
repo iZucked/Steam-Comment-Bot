@@ -268,19 +268,22 @@ public class ScenarioOptimisationJob implements IManagedJob {
 							}
 							
 						}
-//						monitor.subTask("Evaluate fitness of initial solution");
 						
-//						final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
+						
+						monitor.subTask("Evaluate fitness of initial solution");
+						
+						final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> 
+							linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
 
-//						linearFitnessEvaluator.setOptimisationData(context
-//								.getOptimisationData());
-//						linearFitnessEvaluator.setInitialSequences(context
-//								.getInitialSequences());
+						linearFitnessEvaluator.setOptimisationData(context
+								.getOptimisationData());
+						linearFitnessEvaluator.setInitialSequences(context
+								.getInitialSequences());
 
-						// printSequences(context.getInitialSequences());
+//						 printSequences(context.getInitialSequences());
 
-//						System.out.println("Initial fitness "
-//								+ linearFitnessEvaluator.getBestFitness());
+						System.out.println("Initial fitness "
+								+ linearFitnessEvaluator.getBestFitness());
 
 						monitor.subTask("Run optimisation");
 						optimiser.optimise(context);
