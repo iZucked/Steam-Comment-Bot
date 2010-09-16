@@ -43,7 +43,7 @@ import com.mmxlabs.scheduler.optimiser.manipulators.StartLocationRemovingSequenc
  */
 public class LSOConstructor {
 	private LSOSettings settings;
-	private boolean instrumenting = false;
+	private boolean instrumenting = true;
 
 	public LSOConstructor(LSOSettings settings) {
 		this.settings = settings;
@@ -77,7 +77,9 @@ public class LSOConstructor {
 		
 		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator =
 			instrumenting  ?
-			new InstrumentingMoveGenerator<T>(moveGenerator)
+			new InstrumentingMoveGenerator<T>(moveGenerator, 
+					false //profile moves (true) or just rate (false)
+					)
 			: null;
 		
 		final IFitnessEvaluator<T> fitnessEvaluator = 
