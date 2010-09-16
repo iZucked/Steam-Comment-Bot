@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * The {@link VoyagePlanOptimiser} performs an exhaustive search through the
  * choices in a {@link IVoyagePlan}. {@link IVoyagePlanChoice} implementations
  * are provided in a set order which edit the voyage plan objects.
- * TODO: Extract interface. Develop unit tests. 
+ * TODO: Develop unit tests. 
  * @author Simon Goodall
  * 
  * @param <T>
@@ -92,7 +92,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	private void nonRecursiveRunLoop() {
-		for (IVoyagePlanChoice c : choices) {
+		for (final IVoyagePlanChoice c : choices) {
 			if (c.reset() == false) {
 				return; //handle error properly.
 			}
@@ -157,17 +157,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 				final VoyageOptions options = (VoyageOptions) element;
 
 				final VoyageDetails<T> voyageDetails = new VoyageDetails<T>();
-				// Clone options so further iterations through choices do
-				// not change the options stored in these voyage details.
-				// This could be made more efficient by only cloning when
-				// the plan is the cheapest found so far.
-				try {
-					voyageDetails.setOptions((IVoyageOptions) options
-							.clone());
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				voyageDetails.setOptions(options);
 
 				// Calculate voyage cost
 				voyageCalculator.calculateVoyageFuelRequirements(options,
@@ -195,6 +185,26 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		if (cost < bestCost) {
 			bestCost = cost;
 			bestPlan = currentPlan;
+			
+			// We need to ensure the best plan as a set of options which are not
+			// changed by further iterations through choices, so lets loop
+			// through the plan and replace the voyage details options with
+			// cloned ones. 
+			for (final Object obj : bestPlan.getSequence()) {
+				if (obj instanceof VoyageDetails) {
+					@SuppressWarnings("unchecked")
+					final VoyageDetails<T> details = (VoyageDetails<T>)obj;
+					// Skip cast check as we created the object in the first place
+					final VoyageOptions options = (VoyageOptions)details.getOptions();
+
+					try {
+						details.setOptions((IVoyageOptions) options.clone());
+					} catch (final CloneNotSupportedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 

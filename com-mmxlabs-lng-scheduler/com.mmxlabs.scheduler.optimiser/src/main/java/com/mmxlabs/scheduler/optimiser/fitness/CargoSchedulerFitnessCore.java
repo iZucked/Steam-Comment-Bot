@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -15,25 +13,16 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.GASequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.IndividualEvaluator;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
@@ -51,8 +40,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	private final List<ICargoSchedulerFitnessComponent<T>> components;
 
-	private IOptimisationData<T> data;
-
 	private ISequenceScheduler<T> scheduler;
 
 	private IVoyagePlanAnnotator<T> voyagePlanAnnotator;
@@ -61,7 +48,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		// Create the fitness components
 
-		components = new ArrayList<ICargoSchedulerFitnessComponent<T>>(2);
+		components = new ArrayList<ICargoSchedulerFitnessComponent<T>>(5);
 		components
 				.add(new DistanceComponent<T>(
 						CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME,
@@ -177,10 +164,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void init(final IOptimisationData<T> data) {
 
-		this.data = data;
-
 		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
-		
+
 		vpa.setPortSlotProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portSlotsProvider,
 				IPortSlotProvider.class));
@@ -214,7 +199,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void dispose() {
 
-		this.data = null;
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.dispose();
 		}
