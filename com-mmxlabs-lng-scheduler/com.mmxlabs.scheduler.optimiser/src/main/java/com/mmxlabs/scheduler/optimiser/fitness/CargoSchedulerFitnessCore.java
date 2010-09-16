@@ -191,7 +191,9 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			if (c.evaluateSequence(resource, sequence, annotatedSequence,
-					newSequence) == false) return false;
+					newSequence) == false) {
+				return false;
+			}
 		}
 		return true;
 	}
