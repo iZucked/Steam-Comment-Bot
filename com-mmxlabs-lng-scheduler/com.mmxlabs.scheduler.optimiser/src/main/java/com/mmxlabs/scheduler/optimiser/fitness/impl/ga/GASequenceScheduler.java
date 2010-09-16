@@ -6,7 +6,7 @@ import java.util.Random;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingAbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
@@ -15,7 +15,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
  * @author Simon Goodall
  * 
  */
-public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
+public final class GASequenceScheduler<T> extends CachingAbstractSequenceScheduler<T> {
+
+	public GASequenceScheduler() {
+		super(5000); 
+		//hack : cache size from somewhere TODO
+		//use weak references to make this automagical
+	}
 
 	private long randomSeed;
 
@@ -45,10 +51,14 @@ public final class GASequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 		// Create a new random each time to ensure repeatability.
 		Random random = new Random(randomSeed);
 
+		final int cacheSize = numIterations * populationSize * 2;
+		
 		// Run the GA
 		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
 				
-				new CachingIndividualEvaluator<T>(individualEvaluator, numIterations * populationSize * 2), 
+				new CachingIndividualEvaluator<T>(
+						individualEvaluator, 
+						cacheSize), 
 				
 				mutateThreshold, populationSize, topN,
 				numBytes);
