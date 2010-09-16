@@ -8,12 +8,18 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
+	private static final int HIT_COUNT = 2000;
+
+	private final boolean collectStats;
+
 	private final IMoveGenerator<T> delegate;
 
 	int hits = 0;
-	
+	long lastPrintTime;
 	Class<? extends IMove> lastMoveClass;
 	Map<Class<? extends IMove>, Stats> stats = new HashMap<Class<? extends IMove>, Stats>();
+
+	private long lastBatchTime;
 
 	class Stats {
 		private Class<? extends IMove> moveClass;
@@ -25,15 +31,16 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		double meanGoodDelta;
 
 		private int generatedCount = 0;
-		
-		public Stats(Class<? extends IMove> moveClass, long delta, boolean accepted) {
+
+		public Stats(Class<? extends IMove> moveClass, long delta,
+				boolean accepted) {
 			this.moveClass = moveClass;
 			addSample(delta, accepted);
 		}
-		
+
 		public Stats(Class<? extends IMove> lastMoveClass) {
 			this.moveClass = lastMoveClass;
-			
+
 		}
 
 		public void addSample(long delta, boolean accepted) {
@@ -49,25 +56,32 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 				meanBadDelta += Math.abs(delta);
 			}
 		}
-		
+
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			return String.format(
-					"%s : %d generated, %.2f%% feasible, %.2f%% accepted. %.2f%% improving, %.2f%% detrimental",
-					moveClass.getSimpleName(), generatedCount, moveCount / (0.01*generatedCount),
-					acceptCount / (0.01*generatedCount), goodMoves / (0.01*generatedCount),
-					badMoves / (0.01*generatedCount));
-//			return "Move " + moveClass.getSimpleName() +": "+ generatedCount + " generated, " + moveCount + " tested, " + acceptCount + " accepted. Mean good delta "
-//			 + meanGoodDelta / goodMoves + ", bad delta = " + meanBadDelta / badMoves;
+			return String
+					.format("%s : %d generated, %.2f%% feasible, %.2f%% accepted. %.2f%% improving, %.2f%% detrimental",
+							moveClass.getSimpleName(), generatedCount,
+							moveCount / (0.01 * generatedCount), acceptCount
+									/ (0.01 * generatedCount), goodMoves
+									/ (0.01 * generatedCount), badMoves
+									/ (0.01 * generatedCount));
+			// return "Move " + moveClass.getSimpleName() +": "+ generatedCount
+			// + " generated, " + moveCount + " tested, " + acceptCount +
+			// " accepted. Mean good delta "
+			// + meanGoodDelta / goodMoves + ", bad delta = " + meanBadDelta /
+			// badMoves;
 		}
 
 		public void moveGenerated() {
-			this.generatedCount ++;
+			this.generatedCount++;
 		}
 	}
-	
-	public InstrumentingMoveGenerator(IMoveGenerator<T> delegate) {
+
+	public InstrumentingMoveGenerator(IMoveGenerator<T> delegate,
+			boolean collectStats) {
 		super();
+		this.collectStats = collectStats;
 		this.delegate = delegate;
 	}
 
@@ -75,14 +89,20 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 	public IMove<T> generateMove() {
 		final IMove<T> move = delegate.generateMove();
 		if (move != null) {
-			lastMoveClass = move.getClass();
-			if (!stats.containsKey(lastMoveClass)) {
-				stats.put(lastMoveClass, new Stats(lastMoveClass));
+			if (collectStats) {
+				lastMoveClass = move.getClass();
+				if (!stats.containsKey(lastMoveClass)) {
+					stats.put(lastMoveClass, new Stats(lastMoveClass));
+				}
+				stats.get(lastMoveClass).moveGenerated();
 			}
-			stats.get(lastMoveClass).moveGenerated();
+			if (hits == 0) {
+				lastBatchTime = System.currentTimeMillis();
+			}
 			hits++;
-			if (hits >= 10000) {
+			if (hits >= HIT_COUNT) {
 				hits = 0;
+				lastBatchTime = System.currentTimeMillis() - lastBatchTime;
 				System.err.println(this);
 			}
 		}
@@ -101,20 +121,26 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 
 	@SuppressWarnings("unchecked")
 	public void notifyOfThresholderDecision(long delta, boolean answer) {
-		if (stats.containsKey(lastMoveClass)) {
-			stats.get(lastMoveClass).addSample(delta, answer);
-		} else {
-			stats.put(lastMoveClass, new Stats(lastMoveClass, delta, answer));
+		if (collectStats) {
+			if (stats.containsKey(lastMoveClass)) {
+				stats.get(lastMoveClass).addSample(delta, answer);
+			} else {
+				stats.put(lastMoveClass,
+						new Stats(lastMoveClass, delta, answer));
+			}
 		}
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-	
+
 		for (Stats stat : stats.values()) {
 			sb.append(stat.toString() + "\n");
 		}
-		
+
+		sb.append("Timing: " + 1000 * HIT_COUNT / (double) lastBatchTime
+				+ " moves/second");
+
 		return sb.toString();
 	}
 }
