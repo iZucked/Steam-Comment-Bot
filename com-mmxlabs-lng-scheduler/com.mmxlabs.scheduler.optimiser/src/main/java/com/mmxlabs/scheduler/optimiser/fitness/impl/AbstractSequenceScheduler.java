@@ -67,7 +67,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 	 * @param arrivalTimes
 	 * @return
 	 */
-	public final List<IVoyagePlan> schedule(final IResource resource,
+	public List<IVoyagePlan> schedule(final IResource resource,
 			final ISequence<T> sequence, final int[] arrivalTimes,
 			final boolean adjustArrivals) {
 
