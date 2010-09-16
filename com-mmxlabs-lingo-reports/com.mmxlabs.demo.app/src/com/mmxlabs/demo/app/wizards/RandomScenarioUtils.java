@@ -33,6 +33,8 @@ import scenario.optimiser.OptimiserPackage;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoFactory;
 import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.MoveGeneratorSettings;
+import scenario.optimiser.lso.RandomMoveGeneratorSettings;
 import scenario.optimiser.lso.ThresholderSettings;
 import scenario.port.DistanceLine;
 import scenario.port.DistanceModel;
@@ -232,14 +234,22 @@ public class RandomScenarioUtils {
 							0));
 		}
 
-		settings.setNumberOfSteps(1000000);
+		settings.setNumberOfSteps(750000);
 		ThresholderSettings thresholderSettings = lsof
 				.createThresholderSettings();
 		thresholderSettings.setAlpha(0.95);
-		thresholderSettings.setEpochLength(1000);
-		thresholderSettings.setInitialAcceptanceRate(0.75);
+		thresholderSettings.setEpochLength(5000);
+		thresholderSettings.setInitialAcceptanceRate(0.25);
 		settings.setThresholderSettings(thresholderSettings);
 
+//		RandomMoveGeneratorSettings mgs = lsof.createRandomMoveGeneratorSettings();
+//		mgs.setUsing2over2(true);
+//		mgs.setUsing3over2(true);
+//		mgs.setUsing4over1(true);
+//		mgs.setUsing4over2(true);
+		
+//		settings.setMoveGeneratorSettings(mgs);
+		
 		optimisation.getAllSettings().add(settings);
 		optimisation.setCurrentSettings(settings);
 		scenario.setOptimisation(optimisation);
