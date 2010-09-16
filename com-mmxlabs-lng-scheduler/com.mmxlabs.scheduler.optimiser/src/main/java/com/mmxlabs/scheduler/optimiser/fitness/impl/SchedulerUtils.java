@@ -57,18 +57,38 @@ public final class SchedulerUtils {
 		scheduler.setVesselProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
 
-		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
-
-		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
-
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
+		scheduler.setVoyagePlanOptimiser((IVoyagePlanOptimiser<T>) 
+				createVPO());
 
 		scheduler.init();
 
 		return scheduler;
 	}
+	
+	public static <T> IVoyagePlanOptimiser<T> createVoyagePlanOptimiser() {
+		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
 
+		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
+		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+		return voyagePlanOptimiser;
+	}
+	
+	
+	public static <T> IVoyagePlanOptimiser<T> createCachingVoyagePlanOptimiser() {
+		//duplicate code due to type erasure
+		
+		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
+
+		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
+		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+		
+		return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser, 4000);
+	}
+
+	public static IVoyagePlanOptimiser createVPO(){
+		return createCachingVoyagePlanOptimiser();
+	}
+	
 	/**
 	 * Create a new {@link ISequenceScheduler} instance.
 	 * 
@@ -117,15 +137,9 @@ public final class SchedulerUtils {
 				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		scheduler.setVesselProvider(vesselProvider);
 
-		
-		
-		
-		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
 
-		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
-
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
+		scheduler.setVoyagePlanOptimiser(
+				(IVoyagePlanOptimiser<T>) createVPO());
 
 		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
 
