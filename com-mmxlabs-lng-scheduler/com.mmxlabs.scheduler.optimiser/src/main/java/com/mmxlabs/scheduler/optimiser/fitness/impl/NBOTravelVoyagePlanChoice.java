@@ -27,7 +27,7 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 				return true;
 			}
 			if (apply(choice + 1))
-				return true;
+				return false;
 		}
 	}
 	private int choice;
