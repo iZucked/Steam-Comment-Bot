@@ -16,8 +16,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 /**
  * The {@link VoyagePlanOptimiser} performs an exhaustive search through the
  * choices in a {@link IVoyagePlan}. {@link IVoyagePlanChoice} implementations
- * are provided in a set order which edit the voyage plan objects.
- * TODO: Develop unit tests. 
+ * are provided in a set order which edit the voyage plan objects. TODO: Develop
+ * unit tests.
+ * 
  * @author Simon Goodall
  * 
  * @param <T>
