@@ -1,6 +1,9 @@
 package com.mmxlabs.scheduler.optimiser.voyage;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Calculate voyage details for LNG vessels. Typically LNG vessels are dual fuel
@@ -22,25 +25,25 @@ public interface ILNGVoyageCalculator<T> {
 
 	/**
 	 * Calculate the fuel requirements, speed and times for the port to port
-	 * journey options defined in {@link IVoyageOptions} and store the results
+	 * journey options defined in {@link VoyageOptions} and store the results
 	 * in {@link IVoyageDetails}.
 	 * 
 	 * @param options
 	 * @param output
 	 */
-	void calculateVoyageFuelRequirements(IVoyageOptions options,
-			IVoyageDetails<T> output);
+	void calculateVoyageFuelRequirements(VoyageOptions options,
+			VoyageDetails<T> output);
 
 	/**
 	 * Given an alternating sequence of {@link IPortDetails} and
-	 * {@link IVoyageDetails}, populate a {@link IVoyagePlan} object with the
+	 * {@link IVoyageDetails}, populate a {@link VoyagePlan} object with the
 	 * group voyage details. E.g. calculate load and discharge quantities.
 	 * 
 	 * @param voyagePlan
 	 * @param vessel
 	 * @param sequence
 	 */
-	void calculateVoyagePlan(IVoyagePlan voyagePlan, IVessel vessel,
+	void calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel,
 			Object... sequence);
 
 }

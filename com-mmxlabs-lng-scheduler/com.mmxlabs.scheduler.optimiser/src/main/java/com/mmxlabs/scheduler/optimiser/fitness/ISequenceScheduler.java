@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * This class contains the logic required to schedule a {@link ISequence}. This
@@ -19,13 +19,13 @@ public interface ISequenceScheduler<T> {
 
 	/**
 	 * Attempt to schedule the given {@link ISequence}. Returns a {@link List}
-	 * of {@link IVoyagePlan}s or null if there was a problem.
+	 * of {@link VoyagePlan}s or null if there was a problem.
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @return
 	 */
-	List<IVoyagePlan> schedule(IResource resource, ISequence<T> sequence);
+	List<VoyagePlan> schedule(IResource resource, ISequence<T> sequence);
 
 	/**
 	 * Release resources.

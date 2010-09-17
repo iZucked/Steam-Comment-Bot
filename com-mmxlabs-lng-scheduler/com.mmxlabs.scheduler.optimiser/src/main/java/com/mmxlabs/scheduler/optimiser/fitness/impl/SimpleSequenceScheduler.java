@@ -5,7 +5,7 @@ import java.util.List;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Simple scheduler. Try to arrive at the {@link ITimeWindow} start.
@@ -17,7 +17,7 @@ public final class SimpleSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
 
 	@Override
-	public List<IVoyagePlan> schedule(final IResource resource,
+	public List<VoyagePlan> schedule(final IResource resource,
 			final ISequence<T> sequence) {
 
 		int[] arrivalTimes = new int[sequence.size()];

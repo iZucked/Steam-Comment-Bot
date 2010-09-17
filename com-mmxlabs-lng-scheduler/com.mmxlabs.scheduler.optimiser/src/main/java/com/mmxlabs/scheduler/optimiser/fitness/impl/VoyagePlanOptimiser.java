@@ -7,15 +7,13 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * The {@link VoyagePlanOptimiser} performs an exhaustive search through the
- * choices in a {@link IVoyagePlan}. {@link IVoyagePlanChoice} implementations
+ * choices in a {@link VoyagePlan}. {@link IVoyagePlanChoice} implementations
  * are provided in a set order which edit the voyage plan objects. TODO: Develop
  * unit tests.
  * 
@@ -34,7 +32,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	private long bestCost = Long.MAX_VALUE;
 
-	private IVoyagePlan bestPlan = null;
+	private VoyagePlan bestPlan = null;
 
 	private ILNGVoyageCalculator<T> voyageCalculator;
 
@@ -84,7 +82,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	 * @return
 	 */
 	@Override
-	public IVoyagePlan optimise() {
+	public VoyagePlan optimise() {
 
 		nonRecursiveRunLoop();
 //		runLoop(0);
@@ -121,9 +119,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	/**
 	 * Recursive function to iterate through all the possible combinations of
 	 * {@link IVoyagePlanChoice}s. For each set of choices, calculate a
-	 * {@link IVoyagePlan} and store the cheapest cost plan. The
-	 * {@link IVoyageOptions} objects will be modified, but cloned into each
-	 * {@link IVoyagePlan} calculated.
+	 * {@link VoyagePlan} and store the cheapest cost plan. The
+	 * {@link VoyageOptions} objects will be modified, but cloned into each
+	 * {@link VoyagePlan} calculated.
 	 * 
 	 * @param i
 	 */
@@ -296,8 +294,8 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	/**
 	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot}
-	 * instances separated by {@link IVoyageOptions} instances implementing
-	 * {@link Cloneable}. The {@link IVoyageOptions} objects will be modified
+	 * instances separated by {@link VoyageOptions} instances implementing
+	 * {@link Cloneable}. The {@link VoyageOptions} objects will be modified
 	 * during optimisation.
 	 * 
 	 * @param basicSequence
@@ -328,7 +326,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	/**
-	 * Once optimised, returns the best {@link IVoyagePlan} cost.
+	 * Once optimised, returns the best {@link VoyagePlan} cost.
 	 * 
 	 * @return
 	 */
@@ -338,12 +336,12 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	/**
-	 * Once optimised, returns the best {@link IVoyagePlan}.
+	 * Once optimised, returns the best {@link VoyagePlan}.
 	 * 
 	 * @return
 	 */
 	@Override
-	public IVoyagePlan getBestPlan() {
+	public VoyagePlan getBestPlan() {
 		return bestPlan;
 	}
 

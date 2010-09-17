@@ -26,9 +26,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 @RunWith(JMock.class)
 public class LNGVoyageCalculatorTest {
@@ -50,7 +47,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(48);
 		options.setDistance(15 * 48);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -97,7 +94,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(48);
 		options.setDistance(15 * 48);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -144,7 +141,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(96);
 		options.setDistance(15 * 48);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -191,7 +188,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(96);
 		options.setDistance(15 * 48);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -239,7 +236,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(120);
 		options.setDistance(15 * 48);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -288,7 +285,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(36);
 		options.setDistance(15 * 48);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -335,7 +332,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(36);
 		options.setDistance(15 * 48);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -382,7 +379,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(20);
 		options.setDistance(15 * 48);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -491,7 +488,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(48);
 		options.setDistance(0);
 
-		final IVoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -527,7 +524,7 @@ public class LNGVoyageCalculatorTest {
 
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
-		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
+		final VoyagePlan plan = context.mock(VoyagePlan.class);
 		final IVessel vessel = context.mock(IVessel.class);
 
 		final IPortDetails loadDetails = new PortDetails();
@@ -540,7 +537,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeDetails.setPortSlot(dischargeSlot);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
-		final IVoyageOptions options = context.mock(IVoyageOptions.class);
+		final VoyageOptions options = context.mock(VoyageOptions.class);
 		details.setOptions(options);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
@@ -585,7 +582,7 @@ public class LNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateVoyagePlan2() {
 
-		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
+		final VoyagePlan plan = context.mock(VoyagePlan.class);
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setBaseFuelUnitPrice(2000);
@@ -610,7 +607,7 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setCargoCVValue(2000);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
-		final IVoyageOptions options = context.mock(IVoyageOptions.class);
+		final VoyageOptions options = context.mock(VoyageOptions.class);
 		details.setOptions(options);
 
 		details.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 10000);
@@ -662,7 +659,7 @@ public class LNGVoyageCalculatorTest {
 	@Test(expected = RuntimeException.class)
 	public void testCalculateVoyagePlan3() {
 
-		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
+		final VoyagePlan plan = context.mock(VoyagePlan.class);
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
@@ -682,7 +679,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setMaxDischargeVolume(30l);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
-		final IVoyageOptions options = context.mock(IVoyageOptions.class);
+		final VoyageOptions options = context.mock(VoyageOptions.class);
 		details.setOptions(options);
 
 		details.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 10);
@@ -739,7 +736,7 @@ public class LNGVoyageCalculatorTest {
 
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
-		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
+		final VoyagePlan plan = context.mock(VoyagePlan.class);
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setBaseFuelUnitPrice(2000);
@@ -837,7 +834,7 @@ public class LNGVoyageCalculatorTest {
 
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
-		final IVoyagePlan plan = context.mock(IVoyagePlan.class);
+		final VoyagePlan plan = context.mock(VoyagePlan.class);
 		final IVessel vessel = context.mock(IVessel.class);
 
 		final IPortDetails otherDetails = new PortDetails();
@@ -862,12 +859,12 @@ public class LNGVoyageCalculatorTest {
 		
 		
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();
-		final IVoyageOptions options1 = context.mock(IVoyageOptions.class,
+		final VoyageOptions options1 = context.mock(VoyageOptions.class,
 				"options-1");
 		details1.setOptions(options1);
 
 		final VoyageDetails<Object> details2 = new VoyageDetails<Object>();
-		final IVoyageOptions options2 = context.mock(IVoyageOptions.class,
+		final VoyageOptions options2 = context.mock(VoyageOptions.class,
 				"options-2");
 		details2.setOptions(options2);
 

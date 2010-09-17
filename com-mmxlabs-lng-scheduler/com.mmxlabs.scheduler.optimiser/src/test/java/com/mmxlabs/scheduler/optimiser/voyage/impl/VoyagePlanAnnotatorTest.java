@@ -181,7 +181,7 @@ public class VoyagePlanAnnotatorTest {
 		plan2.setSequence(new Object[] { loadDetails2, voyageDetails3,
 				dischargeDetails2 });
 
-		final List<IVoyagePlan> plans = new LinkedList<IVoyagePlan>();
+		final List<VoyagePlan> plans = new LinkedList<VoyagePlan>();
 		plans.add(plan1);
 		plans.add(plan2);
 

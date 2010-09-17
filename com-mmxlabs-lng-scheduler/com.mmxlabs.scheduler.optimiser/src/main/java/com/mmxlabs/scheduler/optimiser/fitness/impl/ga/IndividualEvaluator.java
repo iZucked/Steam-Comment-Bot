@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * The {@link IndividualEvaluator} evaluates a GA {@link Individual} using the
@@ -104,7 +104,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		decode(individual, arrivalTimes);
 
 		// Use the sequence schedule to evaluate the arrival time profile.
-		final List<IVoyagePlan> voyagePlans = sequenceScheduler.schedule(
+		final List<VoyagePlan> voyagePlans = sequenceScheduler.schedule(
 				resource, sequence, arrivalTimes, adjustArrivalTimes);
 
 		// Was the set of arrival times valid?

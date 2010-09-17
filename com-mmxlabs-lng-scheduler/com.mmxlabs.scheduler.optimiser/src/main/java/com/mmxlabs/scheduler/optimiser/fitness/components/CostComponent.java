@@ -12,9 +12,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * 
@@ -41,15 +40,15 @@ public final class CostComponent<T> extends
 
 	@Override
 	public long rawEvaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final List<IVoyagePlan> plans) {
+			final ISequence<T> sequence, final List<VoyagePlan> plans) {
 
 		long cost = 0;
 
-		for (final IVoyagePlan plan : plans) {
+		for (final VoyagePlan plan : plans) {
 			for (final Object obj : plan.getSequence()) {
 				if (obj instanceof VoyageDetails) {
 					@SuppressWarnings("unchecked")
-					final IVoyageDetails<T> detail = (IVoyageDetails<T>) obj;
+					final VoyageDetails<T> detail = (VoyageDetails<T>) obj;
 
 					for (final FuelComponent fuel : fuelComponents) {
 

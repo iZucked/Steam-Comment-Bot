@@ -13,7 +13,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CharterCostFitnessComponent<T> extends
 		AbstractCargoSchedulerFitnessComponent<T> implements
@@ -34,7 +34,7 @@ public class CharterCostFitnessComponent<T> extends
 
 	@Override
 	public long rawEvaluateSequence(final IResource resource, final ISequence<T> sequence,
-			final List<IVoyagePlan> plans) {
+			final List<VoyagePlan> plans) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		long hireCost = 0;
 		switch (vessel.getVesselInstanceType()) {
@@ -42,7 +42,7 @@ public class CharterCostFitnessComponent<T> extends
 			// Check whether there are any load ports in the sequence
 			int loadTime = 0;
 			boolean foundLoadPort = false;
-			for (final IVoyagePlan plan : plans) {
+			for (final VoyagePlan plan : plans) {
 				for (final Object obj : plan.getSequence()) {
 					if (obj instanceof IPortDetails) {
 						final IPortDetails detail = (IPortDetails) obj;
@@ -57,7 +57,7 @@ public class CharterCostFitnessComponent<T> extends
 			}
 
 			if (foundLoadPort) {
-				final IVoyagePlan plan = plans.get(plans.size() - 1);
+				final VoyagePlan plan = plans.get(plans.size() - 1);
 				final Object[] seq = plan.getSequence();
 				final Object obj = seq[seq.length - 1];
 				// We should always finish at a port

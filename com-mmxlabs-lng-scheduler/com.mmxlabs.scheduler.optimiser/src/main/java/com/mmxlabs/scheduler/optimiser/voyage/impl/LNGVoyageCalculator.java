@@ -11,9 +11,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
  * Implementation of {@link ILNGVoyageCalculator}.
@@ -27,7 +24,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The
-	 * {@link IVoyageOptions} provides the specific choices to evaluate for this
+	 * {@link VoyageOptions} provides the specific choices to evaluate for this
 	 * voyage (e.g. fuel choice, route, ...).
 	 * 
 	 * @param vessel
@@ -37,8 +34,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 	 * @param output
 	 */
 	@Override
-	public void calculateVoyageFuelRequirements(final IVoyageOptions options,
-			final IVoyageDetails<T> output) {
+	public void calculateVoyageFuelRequirements(final VoyageOptions options,
+			final VoyageDetails<T> output) {
 
 		output.setOptions(options);
 
@@ -206,7 +203,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 	/**
 	 * Given a sequence of {@link IPortDetails} interleaved with
-	 * {@link IVoyageDetails}, compute the total base fuel and LNG requirements,
+	 * {@link VoyageDetails}, compute the total base fuel and LNG requirements,
 	 * taking into account initial conditions, load and discharge commitments
 	 * etc. It is assumed that the first and last {@link IPortDetails} will be a
 	 * Loading slot or other slot where the vessel state is set to a known
@@ -217,7 +214,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 	 * @param sequence
 	 */
 	@Override
-	public void calculateVoyagePlan(final IVoyagePlan voyagePlan,
+	public void calculateVoyagePlan(final VoyagePlan voyagePlan,
 			final IVessel vessel, final Object... sequence) {
 
 		// Ensure odd number of elements
@@ -257,7 +254,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				}
 			} else {
 				// Voyage
-				final IVoyageDetails<?> details = (IVoyageDetails<?>) sequence[i];
+				final VoyageDetails<?> details = (VoyageDetails<?>) sequence[i];
 				for (final FuelComponent fc : FuelComponent.values()) {
 					fuelConsumptions[fc.ordinal()] += details
 							.getFuelConsumption(fc, fc.getDefaultFuelUnit());
@@ -395,9 +392,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			
 			for (int i = 0; i < sequence.length; ++i) {
 				if (i % 2 == 1) {
-					assert sequence[i] instanceof IVoyageDetails;
+					assert sequence[i] instanceof VoyageDetails;
 					
-					final IVoyageDetails<?> details = (IVoyageDetails<?>) sequence[i];
+					final VoyageDetails<?> details = (VoyageDetails<?>) sequence[i];
 					details.setFuelUnitPrice(FuelComponent.NBO,
 							dischargeM3Price);
 					details.setFuelUnitPrice(FuelComponent.FBO,

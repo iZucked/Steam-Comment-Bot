@@ -10,7 +10,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Extension of the {@link IFitnessComponent} interface for use with the
@@ -51,7 +51,7 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 */
 	boolean evaluateSequence(IResource resource,
 			ISequence<T> sequence,
-			List<IVoyagePlan> plans, boolean newSequence);
+			List<VoyagePlan> plans, boolean newSequence);
 
 	/**
 	 * Notify fitness component that the last evaluation has been accepted.
@@ -93,7 +93,7 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * @return
 	 */
 	long rawEvaluateSequence(IResource resource, ISequence<T> sequence,
-			List<IVoyagePlan> plans);
+			List<VoyagePlan> plans);
 
 	/**
 	 * Clean up references as this component is no longer required.

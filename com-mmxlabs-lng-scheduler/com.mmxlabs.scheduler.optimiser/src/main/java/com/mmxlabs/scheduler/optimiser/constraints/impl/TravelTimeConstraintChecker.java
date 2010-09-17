@@ -23,12 +23,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 /**
  * A constraint checker which tests whether the ports in a sequence can be
  * reached from one another presuming the vessel travels at its maximum speed
- * all the way and spends a minimum amount of time at each point.
+ * all the way and spends a minimum amount of time at each point. Allows
+ * a certain quantity of lateness.
  * 
- * Currently only actually checks the pairwise constraint, because it is only
- * interesting to pairwise constraint users, but it might be useful to implement
- * in general as a quick first-pass rejection of routes which contain a leg
- * which cannot be made in the available time.
  * 
  * @author hinton
  * 
@@ -127,6 +124,9 @@ public class TravelTimeConstraintChecker<T> implements
 	public boolean checkPairwiseConstraint(final T first, final T second,
 			final IResource resource, final int resourceMaxSpeed,
 			final IMatrixProvider<IPort, Integer> distanceMatrix) {
+		
+		//TODO accept a little lateness O(10d)
+		
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 

@@ -10,7 +10,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * 
@@ -33,11 +33,11 @@ public final class LatenessComponent<T> extends
 
 	@Override
 	public long rawEvaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final List<IVoyagePlan> plans) {
+			final ISequence<T> sequence, final List<VoyagePlan> plans) {
 
 		long lateness = 0;
 
-		for (final IVoyagePlan plan : plans) {
+		for (final VoyagePlan plan : plans) {
 			for (final Object obj : plan.getSequence()) {
 				if (obj instanceof IPortDetails) {
 					final IPortDetails detail = (IPortDetails) obj;

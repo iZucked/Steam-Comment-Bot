@@ -7,7 +7,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingAbstractSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * {@link ISequenceScheduler} implementation using a Genetic Algorithm to determine arrival times.
@@ -43,7 +43,7 @@ public final class GASequenceScheduler<T> extends CachingAbstractSequenceSchedul
 	}
 
 	@Override
-	public List<IVoyagePlan> schedule(final IResource resource,
+	public List<VoyagePlan> schedule(final IResource resource,
 			final ISequence<T> sequence) {
 
 		final int numBytes = individualEvaluator.setup(resource, sequence);

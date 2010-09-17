@@ -2,7 +2,6 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +12,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * An extension of the abstract sequence scheduler which caches subclass calls
@@ -118,14 +117,14 @@ public abstract class CachingAbstractSequenceScheduler<T>
 //	final int[][] arrivalTimess;
 //	final IResource[] resources;
 	
-	private final ConcurrentMap<CacheKey, List<IVoyagePlan>> cache = 
+	private final ConcurrentMap<CacheKey, List<VoyagePlan>> cache = 
 		new MapMaker()
 			.concurrencyLevel(1)
 			.weakValues()
 			.expiration(10, TimeUnit.MINUTES)
-			.makeComputingMap(new Function<CacheKey, List<IVoyagePlan>>() {
+			.makeComputingMap(new Function<CacheKey, List<VoyagePlan>>() {
 				@Override
-				public List<IVoyagePlan> apply(CacheKey arg) {
+				public List<VoyagePlan> apply(CacheKey arg) {
 					return reallySchedule(arg.getResource(), arg.getSequence(), arg.getArrivalTimes());
 				}
 			});
@@ -146,12 +145,12 @@ public abstract class CachingAbstractSequenceScheduler<T>
 		
 	}
 
-	private final List<IVoyagePlan> reallySchedule(final IResource resource, final ISequence<T> sequence, final int [] arrivalTimes) {
+	private final List<VoyagePlan> reallySchedule(final IResource resource, final ISequence<T> sequence, final int [] arrivalTimes) {
 		return super.schedule(resource, sequence, arrivalTimes, false);
 	}
 	
 	@Override
-	public List<IVoyagePlan> schedule(final IResource resource,
+	public List<VoyagePlan> schedule(final IResource resource,
 			final ISequence<T> sequence, final int[] arrivalTimes, 
 			final boolean adjustArrivals) {
 

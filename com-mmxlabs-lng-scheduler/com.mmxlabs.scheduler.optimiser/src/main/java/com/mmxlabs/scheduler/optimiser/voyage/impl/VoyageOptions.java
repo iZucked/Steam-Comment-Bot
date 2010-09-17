@@ -4,15 +4,14 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
 
 /**
- * Default implementation of {@link IVoyageOptions}.
+ * Default implementation of {@link VoyageOptions}.
  * This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
  * @author Simon Goodall
  * 
  */
-public final class VoyageOptions implements IVoyageOptions, Cloneable {
+public final class VoyageOptions implements Cloneable {
 
 	private int availableTime;
 	private int distance;
@@ -29,57 +28,46 @@ public final class VoyageOptions implements IVoyageOptions, Cloneable {
 
 	private VesselState vesselState;
 
-	@Override
 	public final int getAvailableTime() {
 		return availableTime;
 	}
 
-	@Override
 	public final int getDistance() {
 		return distance;
 	}
 
-	@Override
 	public final IPortSlot getFromPortSlot() {
 		return fromPortSlot;
 	}
 
-	@Override
 	public final int getNBOSpeed() {
 		return nboSpeed;
 	}
 
-	@Override
 	public final String getRoute() {
 		return route;
 	}
 
-	@Override
 	public final IPortSlot getToPortSlot() {
 		return toPortSlot;
 	}
 
-	@Override
 	public final IVessel getVessel() {
 		return vessel;
 	}
 
-	@Override
 	public final VesselState getVesselState() {
 		return vesselState;
 	}
 
-	@Override
 	public final boolean useFBOForSupplement() {
 		return useFBOForSupplement;
 	}
 
-	@Override
 	public final boolean useNBOForIdle() {
 		return useNBOForIdle;
 	}
 
-	@Override
 	public final boolean useNBOForTravel() {
 		return useNBOForTravel;
 	}

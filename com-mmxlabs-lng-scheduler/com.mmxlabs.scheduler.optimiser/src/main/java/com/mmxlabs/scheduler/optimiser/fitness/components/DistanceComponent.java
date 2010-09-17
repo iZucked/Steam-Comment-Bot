@@ -8,8 +8,8 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
@@ -36,15 +36,15 @@ public final class DistanceComponent<T> extends
 
 	@Override
 	public long rawEvaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final List<IVoyagePlan> plans) {
+			final ISequence<T> sequence, final List<VoyagePlan> plans) {
 		// Calculate sum distance travelled.
 
 		long distance = 0;
-		for (final IVoyagePlan plan : plans) {
+		for (final VoyagePlan plan : plans) {
 			for (final Object obj : plan.getSequence()) {
-				if (obj instanceof IVoyageDetails) {
+				if (obj instanceof VoyageDetails) {
 					@SuppressWarnings("unchecked")
-					final IVoyageDetails<T> detail = (IVoyageDetails<T>) obj;
+					final VoyageDetails<T> detail = (VoyageDetails<T>) obj;
 					distance += detail.getOptions().getDistance();
 				}
 			}

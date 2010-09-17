@@ -3,6 +3,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 import static org.junit.Assert.fail;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jmock.Mockery;
@@ -18,6 +19,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @RunWith(JMock.class)
 public class AbstractCargoSchedulerFitnessComponentTest {
@@ -303,15 +305,6 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		}
 
 		@Override
-		public boolean evaluateSequence(final IResource resource,
-				final ISequence<T> sequence,
-				final IAnnotatedSequence<T> annotatedSequence,
-				final boolean newSequence) {
-			fail("This method is not part of the test");
-			return false;
-		}
-
-		@Override
 		public void init(final IOptimisationData<T> data) {
 
 			fail("This method is not part of the test");
@@ -353,7 +346,7 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 
 		@Override
 		public long rawEvaluateSequence(IResource resource,
-				ISequence<T> sequence, IAnnotatedSequence<T> annotatedSequence) {
+				ISequence<T> sequence, List<VoyagePlan> plans) {
 			fail("This method is not part of the test");
 			return 0;
 		}

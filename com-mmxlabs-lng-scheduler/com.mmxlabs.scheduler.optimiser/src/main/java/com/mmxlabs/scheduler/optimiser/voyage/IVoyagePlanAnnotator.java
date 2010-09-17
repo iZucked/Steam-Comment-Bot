@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * A {@link IVoyagePlanAnnotator} uses {@link IVoyagePlan}s to annotate
+ * A {@link IVoyagePlanAnnotator} uses {@link VoyagePlan}s to annotate
  * {@link IAnnotatedSequence} objects.
  * 
  * @author Simon Goodall
@@ -18,13 +19,13 @@ public interface IVoyagePlanAnnotator<T> {
 
 	/**
 	 * Annotate the {@link IAnnotatedSequence} from the list of
-	 * {@link IVoyagePlan} objects.
+	 * {@link VoyagePlan} objects.
 	 * 
 	 * @param resource
 	 * @param plans
 	 * @param annotatedSequence
 	 */
-	void annotateFromVoyagePlan(IResource resource, List<IVoyagePlan> plans,
+	void annotateFromVoyagePlan(IResource resource, List<VoyagePlan> plans,
 			IAnnotatedSequence<T> annotatedSequence);
 
 }

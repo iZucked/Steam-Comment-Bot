@@ -21,15 +21,15 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Abstract {@link ISequenceScheduler} implementation to manage the sequence
  * optimisation given a set of arrival times at each sequence element. This
- * class handles the construction of {@link IVoyagePlan}s and uses a
+ * class handles the construction of {@link VoyagePlan}s and uses a
  * {@link IVoyagePlanOptimiser} implementation to make the best route choices.
  * 
  * @author Simon Goodall
@@ -60,14 +60,14 @@ public abstract class AbstractSequenceScheduler<T> implements
 	 * base arrival time. However is some cases the time between elements may be
 	 * too short (i.e. because the vessel is already travelling at max speed).
 	 * In such cases, if adjustArrivals is true, then arrival times will be
-	 * adjusted in the {@link IVoyagePlan}s. Otherwise null will be returned.
+	 * adjusted in the {@link VoyagePlan}s. Otherwise null will be returned.
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @param arrivalTimes
 	 * @return
 	 */
-	public List<IVoyagePlan> schedule(final IResource resource,
+	public List<VoyagePlan> schedule(final IResource resource,
 			final ISequence<T> sequence, final int[] arrivalTimes,
 			final boolean adjustArrivals) {
 
@@ -79,7 +79,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		// current time will be incremented after each element
 		int currentTime = startTime;
 
-		final List<IVoyagePlan> voyagePlans = new LinkedList<IVoyagePlan>();
+		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
 		final List<Object> currentSequence = new ArrayList<Object>(5);
 
 		IPort prevPort = null;
@@ -231,14 +231,14 @@ public abstract class AbstractSequenceScheduler<T> implements
 	}
 
 	public final int optimiseSequence(final boolean adjustArrivals,
-			int currentTime, final List<IVoyagePlan> voyagePlans,
+			int currentTime, final List<VoyagePlan> voyagePlans,
 			final List<Object> currentSequence,
 			final IVoyagePlanOptimiser<T> optimiser) {
 
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(currentSequence);
 		optimiser.init();
-		final IVoyagePlan currentPlan = optimiser.optimise();
+		final VoyagePlan currentPlan = optimiser.optimise();
 
 		for (final Object obj : currentPlan.getSequence()) {
 			if (obj instanceof IPortDetails) {
@@ -248,9 +248,9 @@ public abstract class AbstractSequenceScheduler<T> implements
 				// Set current time to after this element has finished
 				currentTime += details.getVisitDuration();
 
-			} else if (obj instanceof IVoyageDetails) {
+			} else if (obj instanceof VoyageDetails) {
 				@SuppressWarnings("unchecked")
-				final IVoyageDetails<T> details = (IVoyageDetails<T>) obj;
+				final VoyageDetails<T> details = (VoyageDetails<T>) obj;
 
 				details.setStartTime(currentTime);
 

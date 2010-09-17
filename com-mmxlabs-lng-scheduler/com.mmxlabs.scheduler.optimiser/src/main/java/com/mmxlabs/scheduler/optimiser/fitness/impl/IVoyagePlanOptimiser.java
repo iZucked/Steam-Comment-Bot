@@ -5,12 +5,12 @@ import java.util.List;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * The {@link IVoyagePlanOptimiser} optimises the choices in a
- * {@link IVoyagePlan} based on {@link IVoyagePlanChoice} implementations. These
+ * {@link VoyagePlan} based on {@link IVoyagePlanChoice} implementations. These
  * are provided in a set order and they can edit the voyage plan objects.
  * 
  * @author Simon Goodall
@@ -40,7 +40,7 @@ public interface IVoyagePlanOptimiser<T> {
 	 * 
 	 * @return
 	 */
-	IVoyagePlan optimise();
+	VoyagePlan optimise();
 
 	/**
 	 * Returns the basic sequence that is being optimised over.
@@ -51,8 +51,8 @@ public interface IVoyagePlanOptimiser<T> {
 
 	/**
 	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot}
-	 * instances separated by {@link IVoyageOptions} instances implementing
-	 * {@link Cloneable}. The {@link IVoyageOptions} objects will be modified
+	 * instances separated by {@link VoyageOptions} instances implementing
+	 * {@link Cloneable}. The {@link VoyageOptions} objects will be modified
 	 * during optimisation.
 	 * 
 	 * @param basicSequence
@@ -74,18 +74,18 @@ public interface IVoyagePlanOptimiser<T> {
 	void setVessel(final IVessel vessel);
 
 	/**
-	 * Once optimised, returns the best {@link IVoyagePlan} cost.
+	 * Once optimised, returns the best {@link VoyagePlan} cost.
 	 * 
 	 * @return
 	 */
 	long getBestCost();
 
 	/**
-	 * Once optimised, returns the best {@link IVoyagePlan}.
+	 * Once optimised, returns the best {@link VoyagePlan}.
 	 * 
 	 * @return
 	 */
-	IVoyagePlan getBestPlan();
+	VoyagePlan getBestPlan();
 
 	/**
 	 * Returns the {@link ILNGVoyageCalculator} used in the

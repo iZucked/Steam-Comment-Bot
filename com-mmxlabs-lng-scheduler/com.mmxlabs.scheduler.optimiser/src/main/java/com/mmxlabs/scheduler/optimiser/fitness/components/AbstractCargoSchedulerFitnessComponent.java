@@ -12,7 +12,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Abstract implementation of {@link ICargoSchedulerFitnessComponent}
@@ -79,7 +79,7 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 
 	@Override
 	public boolean evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final List<IVoyagePlan> plans,
+			final ISequence<T> sequence, final List<VoyagePlan> plans,
 			final boolean newSequence) {
 		final long fitness = rawEvaluateSequence(resource, sequence, plans);
 		if (fitness == Long.MAX_VALUE) {

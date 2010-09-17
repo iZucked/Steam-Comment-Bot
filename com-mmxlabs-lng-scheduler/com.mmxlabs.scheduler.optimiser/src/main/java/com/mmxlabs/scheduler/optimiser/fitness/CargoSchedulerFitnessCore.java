@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * {@link IFitnessCore} which schedules {@link ISequences} objects using an
@@ -90,7 +90,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// For each ISequence, run the scheduler
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
-			final List<IVoyagePlan> plans = scheduler.schedule(resource,
+			final List<VoyagePlan> plans = scheduler.schedule(resource,
 					sequence);
 
 			// Notify fitness components that the given ISequence has been
@@ -132,7 +132,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			if (sequence.size() > 0) {
 
-				final List<IVoyagePlan> plans = scheduler.schedule(resource,
+				final List<VoyagePlan> plans = scheduler.schedule(resource,
 						sequence);
 				if (evaluateSequence(resource, sequence, plans, true) == false) {
 					return false;
@@ -163,7 +163,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	private boolean evaluateSequence(final IResource resource,
 			final ISequence<T> sequence,
-			final List<IVoyagePlan> plans,
+			final List<VoyagePlan> plans,
 			final boolean newSequence) {
 
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {

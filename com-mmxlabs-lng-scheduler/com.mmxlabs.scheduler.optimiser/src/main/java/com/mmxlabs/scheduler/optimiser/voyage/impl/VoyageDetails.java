@@ -5,20 +5,18 @@ import java.util.EnumMap;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
 
 /**
- * Implementation of {@link IVoyageDetails}.
+ * Implementation of {@link VoyageDetails}.
  * 
  * @author Simon Goodall
  * 
  * @param <T>
  *            Sequence element type.
  */
-public final class VoyageDetails<T> implements IVoyageDetails<T> {
+public final class VoyageDetails<T> {
 
-	private IVoyageOptions options;
+	private VoyageOptions options;
 
 	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(
 			FuelComponent.class);
@@ -40,7 +38,6 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 		}
 	}
 
-	@Override
 	public final long getFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit) {
 
@@ -54,27 +51,22 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 		return 0l;
 	}
 
-	@Override
 	public final int getIdleTime() {
 		return idleTime;
 	}
 
-	@Override
-	public final IVoyageOptions getOptions() {
+	public final VoyageOptions getOptions() {
 		return options;
 	}
 
-	@Override
 	public final int getSpeed() {
 		return speed;
 	}
 
-	@Override
 	public final int getTravelTime() {
 		return travelTime;
 	}
 
-	@Override
 	public final void setFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit, final long consumption) {
 //		final EnumMap<FuelUnit, Long> map;
@@ -92,32 +84,26 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 		this.idleTime = idleTime;
 	}
 
-	@Override
-	public final void setOptions(final IVoyageOptions options) {
+	public final void setOptions(final VoyageOptions options) {
 		this.options = options;
 	}
 
-	@Override
 	public final void setSpeed(final int speed) {
 		this.speed = speed;
 	}
 
-	@Override
 	public final void setTravelTime(final int travelTime) {
 		this.travelTime = travelTime;
 	}
 
-	@Override
 	public final int getStartTime() {
 		return startTime;
 	}
 
-	@Override
 	public final void setStartTime(final int startTime) {
 		this.startTime = startTime;
 	}
 
-	@Override
 	public final int getFuelUnitPrice(final FuelComponent fuel) {
 
 		if (fuelUnitPrices.containsKey(fuel)) {
@@ -127,7 +113,6 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 		}
 	}
 
-	@Override
 	public final void setFuelUnitPrice(final FuelComponent fuel,
 			final int unitPrice) {
 		fuelUnitPrices.put(fuel, unitPrice);

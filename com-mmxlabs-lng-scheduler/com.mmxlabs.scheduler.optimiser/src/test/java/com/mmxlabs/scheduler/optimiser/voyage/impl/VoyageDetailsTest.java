@@ -44,7 +44,7 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetOptions() {
 
-		final IVoyageOptions options = context.mock(IVoyageOptions.class);
+		final VoyageOptions options = context.mock(VoyageOptions.class);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		Assert.assertNull(details.getOptions());
@@ -94,10 +94,10 @@ public class VoyageDetailsTest {
 	@Test
 	public void testEquals() {
 
-		final IVoyageOptions options1 = context
-				.mock(IVoyageOptions.class, "o1");
-		final IVoyageOptions options2 = context
-				.mock(IVoyageOptions.class, "o2");
+		final VoyageOptions options1 = context
+				.mock(VoyageOptions.class, "o1");
+		final VoyageOptions options2 = context
+				.mock(VoyageOptions.class, "o2");
 
 		final FuelComponent fuel1 = FuelComponent.Base;
 		final FuelComponent fuel2 = FuelComponent.NBO;
@@ -145,7 +145,7 @@ public class VoyageDetailsTest {
 	}
 
 	<T> VoyageDetails<T> make(final int idleTime, final int travelTime,
-			final int speed, final int startTime, final IVoyageOptions options,
+			final int speed, final int startTime, final VoyageOptions options,
 			final FuelComponent fuel, final FuelUnit unit,
 			final long consumption, final int unitPrice) {
 

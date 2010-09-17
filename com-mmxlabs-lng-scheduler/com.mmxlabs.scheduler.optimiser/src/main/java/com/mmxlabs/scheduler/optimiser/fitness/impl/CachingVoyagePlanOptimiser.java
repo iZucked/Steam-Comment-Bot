@@ -12,8 +12,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * A voyage plan optimiser which acts as a caching proxy for a real VPO,
@@ -41,7 +41,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 				if (o instanceof IPortDetails) {
 					slots[slotix++] = ((IPortDetails) o).getPortSlot();
 				} else {
-					times[timeix++] = ((IVoyageOptions) o).getAvailableTime();
+					times[timeix++] = ((VoyageOptions) o).getAvailableTime();
 				}
 			}
 		}
@@ -100,15 +100,15 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 //	private final List<IPortSlot>[] storedSlotLists;
 	
 	
-	private final ConcurrentMap<CacheKey, Pair<IVoyagePlan, Long>> cache = 
+	private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache = 
 		new MapMaker()
 			.concurrencyLevel(1)
 			.weakValues()
 			.expiration(1, TimeUnit.MINUTES)
-			.makeComputingMap(new Function<CacheKey, Pair<IVoyagePlan, Long>>() {
+			.makeComputingMap(new Function<CacheKey, Pair<VoyagePlan, Long>>() {
 				@Override
-				public Pair<IVoyagePlan, Long> apply(CacheKey arg) {
-					final Pair<IVoyagePlan, Long> answer = new Pair<IVoyagePlan, Long>();
+				public Pair<VoyagePlan, Long> apply(CacheKey arg) {
+					final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
 					
 					//this is horribly dodgy, and depends on assumptions about
 					//the inner workings of the mapmaker.
@@ -119,7 +119,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 				}
 			});
 	
-	IVoyagePlan bestPlan;
+	VoyagePlan bestPlan;
 	long bestCost;
 	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> delegate,
 			final int cacheSize) {
@@ -237,7 +237,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 //	int totalMisses = 0;
 	
 	@Override
-	public IVoyagePlan optimise() {
+	public VoyagePlan optimise() {
 //		// check whether the current state is already in the cache; if it is,
 //		// we can sneakily just recover it
 //		tests++;
@@ -283,7 +283,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 //			bestPlan = cachedPlans[hash];
 //		}
 		
-		final Pair<IVoyagePlan, Long> best = cache.get(new CacheKey(getVessel(), getBasicSequence()));
+		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(getVessel(), getBasicSequence()));
 		
 		bestPlan = best.getFirst();
 		bestCost = best.getSecond();
@@ -332,7 +332,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	@Override
-	public IVoyagePlan getBestPlan() {
+	public VoyagePlan getBestPlan() {
 		return bestPlan;
 	}
 

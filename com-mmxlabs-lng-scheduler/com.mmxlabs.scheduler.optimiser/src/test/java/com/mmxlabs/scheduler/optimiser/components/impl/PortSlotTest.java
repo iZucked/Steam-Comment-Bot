@@ -21,7 +21,7 @@ public class PortSlotTest {
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow tw = context.mock(ITimeWindow.class);
 
-		final PortSlot slot = new PortSlot(id, port, tw);
+		final PortSlot slot = new StartPortSlot(id, port, tw);
 
 		Assert.assertSame(id, slot.getId());
 		Assert.assertSame(port, slot.getPort());
@@ -33,7 +33,7 @@ public class PortSlotTest {
 
 		final IPort port = context.mock(IPort.class);
 
-		final PortSlot slot = new PortSlot();
+		final PortSlot slot = new StartPortSlot();
 		Assert.assertNull(slot.getPort());
 		slot.setPort(port);
 		Assert.assertSame(port, slot.getPort());
@@ -42,7 +42,7 @@ public class PortSlotTest {
 	@Test
 	public void testGetSetTimeWindow() {
 		final ITimeWindow window = context.mock(ITimeWindow.class);
-		final PortSlot slot = new PortSlot();
+		final PortSlot slot = new StartPortSlot();
 		Assert.assertNull(slot.getTimeWindow());
 		slot.setTimeWindow(window);
 		Assert.assertSame(window, slot.getTimeWindow());
@@ -51,7 +51,7 @@ public class PortSlotTest {
 	@Test
 	public void testGetSetID() {
 		final String id = "id";
-		final PortSlot slot = new PortSlot();
+		final PortSlot slot = new StartPortSlot();
 		Assert.assertNull(slot.getId());
 		slot.setId(id);
 		Assert.assertSame(id, slot.getId());
@@ -68,12 +68,12 @@ public class PortSlotTest {
 		final ITimeWindow tw1 = context.mock(ITimeWindow.class, "tw1");
 		final ITimeWindow tw2 = context.mock(ITimeWindow.class, "tw2");
 
-		final PortSlot slot1 = new PortSlot(id1, port1, tw1);
-		final PortSlot slot2 = new PortSlot(id1, port1, tw1);
+		final PortSlot slot1 = new StartPortSlot(id1, port1, tw1);
+		final PortSlot slot2 = new StartPortSlot(id1, port1, tw1);
 
-		final PortSlot slot3 = new PortSlot(id2, port1, tw1);
-		final PortSlot slot4 = new PortSlot(id1, port2, tw1);
-		final PortSlot slot5 = new PortSlot(id1, port1, tw2);
+		final PortSlot slot3 = new StartPortSlot(id2, port1, tw1);
+		final PortSlot slot4 = new StartPortSlot(id1, port2, tw1);
+		final PortSlot slot5 = new StartPortSlot(id1, port1, tw2);
 
 		Assert.assertTrue(slot1.equals(slot1));
 		Assert.assertTrue(slot1.equals(slot2));

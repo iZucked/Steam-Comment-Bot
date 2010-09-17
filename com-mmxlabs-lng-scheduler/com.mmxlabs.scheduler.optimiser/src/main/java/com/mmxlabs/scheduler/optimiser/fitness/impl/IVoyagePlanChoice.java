@@ -1,16 +1,16 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * 
  * Implementations of {@link IVoyagePlanChoice} represent the range of choices
  * that need to be considered for a particular variable when optimising the
- * {@link IVoyagePlan}. For example this may be the flag indicating whether or
+ * {@link VoyagePlan}. For example this may be the flag indicating whether or
  * not to use base fuel as the supplement. Note: Currently it is assumed that
- * only {@link IVoyageOptions} implementations will be modified and
+ * only {@link VoyageOptions} implementations will be modified and
  * {@link IPortSlot} implementations will be left unchanged. As
  * {@link IPortSlot} objects are part of the input data, additional layers will
  * need to be created - such as an IPortOptions set of classes.

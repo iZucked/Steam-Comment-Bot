@@ -41,8 +41,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
@@ -201,7 +201,7 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		final List<IVoyagePlan> plans = scheduler.schedule(resource, sequence);
+		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
@@ -805,7 +805,7 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		final List<IVoyagePlan> plans = scheduler.schedule(resource, sequence);
+		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
@@ -1414,7 +1414,7 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		final List<IVoyagePlan> plans = scheduler.schedule(resource, sequence);
+		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);

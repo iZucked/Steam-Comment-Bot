@@ -18,14 +18,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
 /**
  * The {@link VoyagePlanAnnotator} annotates a {@link IAnnotatedSequence} object
- * from a sequence of {@link IVoyagePlan}s.
+ * from a sequence of {@link VoyagePlan}s.
  * 
  * @author Simon Goodall
  * 
@@ -44,10 +41,10 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 	@Override
 	public void annotateFromVoyagePlan(final IResource resource,
-			final List<IVoyagePlan> plans,
+			final List<VoyagePlan> plans,
 			final IAnnotatedSequence<T> annotatedSequence) {
 
-		for (final IVoyagePlan plan : plans) {
+		for (final VoyagePlan plan : plans) {
 			for (final Object e : plan.getSequence()) {
 
 				if (e instanceof IPortDetails) {
@@ -96,11 +93,11 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					visit.setStartTime(details.getStartTime());
 					visit.setEndTime(details.getStartTime() + visitDuration);
 
-				} else if (e instanceof IVoyageDetails<?>) {
+				} else if (e instanceof VoyageDetails<?>) {
 					@SuppressWarnings({ "unchecked", "rawtypes" })
-					final IVoyageDetails<T> details = (IVoyageDetails) e;
+					final VoyageDetails<T> details = (VoyageDetails) e;
 
-					final IVoyageOptions options = details.getOptions();
+					final VoyageOptions options = details.getOptions();
 
 					final IPortSlot prevPortSlot = options.getFromPortSlot();
 					final IPortSlot currentPortSlot = options.getToPortSlot();

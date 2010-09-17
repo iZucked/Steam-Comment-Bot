@@ -52,10 +52,10 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @RunWith(JMock.class)
 public final class SimpleSequenceSchedulerTest {
@@ -343,7 +343,7 @@ public final class SimpleSequenceSchedulerTest {
 		});
 
 		// Schedule sequence
-		List<IVoyagePlan> plans = scheduler.schedule(resource, sequence);
+		List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
 
 		Assert.assertNotNull(plans);
 		Assert.assertEquals(2, plans.size());

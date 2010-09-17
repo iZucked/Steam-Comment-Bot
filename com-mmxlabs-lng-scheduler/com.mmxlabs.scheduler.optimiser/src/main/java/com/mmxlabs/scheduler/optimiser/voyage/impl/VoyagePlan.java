@@ -4,15 +4,14 @@ import java.util.EnumMap;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
- * Implementation of {@link IVoyagePlan}.
+ * Implementation of {@link VoyagePlan}.
  * 
  * @author Simon Goodall
  * 
  */
-public final class VoyagePlan implements IVoyagePlan {
+public final class VoyagePlan  {
 
 	private Object[] sequence;
 	private long dischargeVolume;
