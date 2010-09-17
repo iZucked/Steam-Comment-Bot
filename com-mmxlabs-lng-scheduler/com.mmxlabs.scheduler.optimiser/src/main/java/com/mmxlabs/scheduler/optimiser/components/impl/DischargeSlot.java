@@ -4,6 +4,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Default implementation of {@link ILoadSlot}.
@@ -20,7 +21,7 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 	private int salesPrice;
 
 	public DischargeSlot() {
-
+		setPortType(PortType.Discharge);
 	}
 
 	public DischargeSlot(final String id, final IPort port,

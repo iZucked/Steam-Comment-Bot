@@ -3,6 +3,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Default implementation of {@link ILoadSlot}.
@@ -21,7 +22,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 	private int cargoCVValue;
 
 	public LoadSlot() {
-
+		setPortType(PortType.Load);
 	}
 
 	public LoadSlot(final String id, final IPort port,

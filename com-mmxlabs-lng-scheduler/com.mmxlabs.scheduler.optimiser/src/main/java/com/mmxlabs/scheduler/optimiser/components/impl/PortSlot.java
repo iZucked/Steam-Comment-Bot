@@ -4,15 +4,18 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-public class PortSlot implements IPortSlot {
+public abstract class PortSlot implements IPortSlot {
 
 	private String id;
 
 	private IPort port;
 
 	private ITimeWindow timeWindow;
-
+	
+	private PortType portType;
+	
 	public PortSlot() {
 
 	}
@@ -73,7 +76,17 @@ public class PortSlot implements IPortSlot {
 		return false;
 	}
 	
+
+	public PortType getPortType() {
+		return portType;
+	}
+
+	public void setPortType(final PortType portType) {
+		this.portType = portType;
+	}
+
 	public String toString() {
-		return id + " <" + timeWindow.getStart() + ", " + timeWindow.getEnd() + ">";
+		return id + " <" + timeWindow.getStart() + ", " + timeWindow.getEnd()
+				+ ">";
 	}
 }

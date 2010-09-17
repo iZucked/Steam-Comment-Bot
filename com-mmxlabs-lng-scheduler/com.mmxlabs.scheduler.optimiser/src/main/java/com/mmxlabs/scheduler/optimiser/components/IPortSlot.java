@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Represents a single time slot at a given port.
@@ -15,5 +16,7 @@ public interface IPortSlot {
 	IPort getPort();
 
 	ITimeWindow getTimeWindow();
+	
+	PortType getPortType();
 
 }
