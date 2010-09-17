@@ -49,12 +49,14 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.CharterOut;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
@@ -342,7 +344,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private ISequenceElement createReturnElement(final IPort port) {
 		final String name = "return-to-" + port.getName();
-		final PortSlot slot = new PortSlot(name, port, null);
+		final EndPortSlot slot = new EndPortSlot(name, port, null);
 		final SequenceElement element = new SequenceElement("return-to-"
 				+ port.getName(), slot);
 
@@ -474,14 +476,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		ITimeWindow startWindow = start.hasTimeRequirement() ? createTimeWindow(
 				start.getTime(), start.getTime()) : createTimeWindow(0, 0);
 
-		PortSlot startSlot = new PortSlot();
+		StartPortSlot startSlot = new StartPortSlot();
 		startSlot.setId("start-" + name);
 		startSlot.setPort(start.hasPortRequirement() ? start.getLocation()
 				: ANYWHERE);
 
 		startSlot.setTimeWindow(startWindow);
 
-		PortSlot endSlot = new PortSlot();
+		EndPortSlot endSlot = new EndPortSlot();
 		endSlot.setId("end-" + name);
 		endSlot.setPort(end.hasPortRequirement() ? end.getLocation() : ANYWHERE);
 
