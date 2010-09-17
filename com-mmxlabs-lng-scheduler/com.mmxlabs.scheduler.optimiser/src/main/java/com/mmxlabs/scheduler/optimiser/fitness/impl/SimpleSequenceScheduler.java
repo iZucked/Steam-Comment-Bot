@@ -36,6 +36,6 @@ public final class SimpleSequenceScheduler<T> extends
 			}
 			arrivalTimes[idx++] = timeWindowStart;
 		}
-		return super.schedule(resource, sequence, arrivalTimes, true);
+		return super.schedule(resource, sequence, arrivalTimes, false);
 	}
 }
