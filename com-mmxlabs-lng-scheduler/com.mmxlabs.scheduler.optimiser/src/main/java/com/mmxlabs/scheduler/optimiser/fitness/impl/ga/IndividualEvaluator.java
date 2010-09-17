@@ -8,10 +8,8 @@ import java.util.Map;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -21,7 +19,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
 /**
  * The {@link IndividualEvaluator} evaluates a GA {@link Individual} using the
@@ -48,7 +45,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	private AbstractSequenceScheduler<T> sequenceScheduler;
 
-	private IVoyagePlanAnnotator<T> voyagePlanAnnotator;
 
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
@@ -117,17 +113,12 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			return Long.MAX_VALUE;
 		}
 
-		// Annotate the scheduled sequence to that the fitness components can
-		// evaluate it.
-		final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
-		voyagePlanAnnotator.annotateFromVoyagePlan(resource, voyagePlans,
-				annotatedSequence);
 
 		// Evaluate fitness
 		long totalFitness = 0;
 		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
 			final long rawFitness = component.rawEvaluateSequence(resource,
-					sequence, annotatedSequence);
+					sequence, voyagePlans);
 
 			// Enable this block once weights are set
 			if (false) {
@@ -339,9 +330,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		// if (fitnessComponentWeights == null) {
 		// throw new IllegalStateException("No fitness component weights set");
 		// }
-		if (voyagePlanAnnotator == null) {
-			throw new IllegalStateException("No voyage plan annotator set");
-		}
 		if (timeWindowProvider == null) {
 			throw new IllegalStateException("No time window provider set");
 		}
@@ -368,14 +356,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		this.sequenceScheduler = sequenceScheduler;
 	}
 
-	public final IVoyagePlanAnnotator<T> getVoyagePlanAnnotator() {
-		return voyagePlanAnnotator;
-	}
-
-	public final void setVoyagePlanAnnotator(
-			final IVoyagePlanAnnotator<T> voyagePlanAnnotator) {
-		this.voyagePlanAnnotator = voyagePlanAnnotator;
-	}
 
 	public final ITimeWindowDataComponentProvider getTimeWindowProvider() {
 		return timeWindowProvider;
@@ -416,7 +396,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		timeWindowProvider = null;
 		fitnessComponents = null;
 		fitnessComponentWeights = null;
-		voyagePlanAnnotator = null;
 
 		sequence = null;
 		resource = null;

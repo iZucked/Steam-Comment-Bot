@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
@@ -9,6 +10,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
  * Extension of the {@link IFitnessComponent} interface for use with the
@@ -47,9 +49,9 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * @param annotatedSequence
 	 * @param newSequence
 	 */
-	boolean evaluateSequence(final IResource resource,
-			final ISequence<T> sequence,
-			final IAnnotatedSequence<T> annotatedSequence, boolean newSequence);
+	boolean evaluateSequence(IResource resource,
+			ISequence<T> sequence,
+			List<IVoyagePlan> plans, boolean newSequence);
 
 	/**
 	 * Notify fitness component that the last evaluation has been accepted.
@@ -91,7 +93,7 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * @return
 	 */
 	long rawEvaluateSequence(IResource resource, ISequence<T> sequence,
-			IAnnotatedSequence<T> annotatedSequence);
+			List<IVoyagePlan> plans);
 
 	/**
 	 * Clean up references as this component is no longer required.

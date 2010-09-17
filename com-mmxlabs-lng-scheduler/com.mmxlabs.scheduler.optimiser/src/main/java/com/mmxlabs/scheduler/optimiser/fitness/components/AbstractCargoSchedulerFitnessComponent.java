@@ -2,9 +2,9 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
  * Abstract implementation of {@link ICargoSchedulerFitnessComponent}
@@ -77,10 +78,10 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 	public abstract void init(IOptimisationData<T> data);
 
 	@Override
-	public boolean evaluateSequence(IResource resource,
-			ISequence<T> sequence, IAnnotatedSequence<T> annotatedSequence,
-			boolean newSequence) {
-		final long fitness = rawEvaluateSequence(resource, sequence, annotatedSequence);
+	public boolean evaluateSequence(final IResource resource,
+			final ISequence<T> sequence, final List<IVoyagePlan> plans,
+			final boolean newSequence) {
+		final long fitness = rawEvaluateSequence(resource, sequence, plans);
 		if (fitness == Long.MAX_VALUE) {
 			return false;
 		} else {
@@ -106,7 +107,8 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 	protected void updateFitness(final IResource resource, final long fitness,
 			final boolean newSequence) {
 		if (newSequence) {
-			// If the initial evaluation fails, then this can throw a NPE as the entry may not have been set.  
+			// If the initial evaluation fails, then this can throw a NPE as the
+			// entry may not have been set.
 			final long oldValue = newFitnessByResource.get(resource);
 			newFitness -= oldValue;
 
@@ -130,7 +132,7 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 	public void prepareDelta() {
 		complete();
 	}
-	
+
 	@Override
 	public void complete() {
 

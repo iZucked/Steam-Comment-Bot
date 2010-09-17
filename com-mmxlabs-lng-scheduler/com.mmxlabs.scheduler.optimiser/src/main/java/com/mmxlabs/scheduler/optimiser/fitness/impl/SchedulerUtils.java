@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+
 import java.util.Collection;
 
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -17,7 +18,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 public final class SchedulerUtils {
 
@@ -85,7 +85,7 @@ public final class SchedulerUtils {
 		return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser, 4000);
 	}
 
-	public static IVoyagePlanOptimiser createVPO(){
+	public static <T> IVoyagePlanOptimiser<T> createVPO(){
 		return createCachingVoyagePlanOptimiser();
 	}
 	
@@ -141,15 +141,10 @@ public final class SchedulerUtils {
 		scheduler.setVoyagePlanOptimiser(
 				(IVoyagePlanOptimiser<T>) createVPO());
 
-		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
-
-		vpa.setPortSlotProvider(portSlotProvider);
-
 		// Set GA params
 		final IndividualEvaluator<T> individualEvaluator = new IndividualEvaluator<T>();
 		individualEvaluator.setSequenceScheduler(scheduler);
 		individualEvaluator.setTimeWindowProvider(timeWindowProvider);
-		individualEvaluator.setVoyagePlanAnnotator(vpa);
 		individualEvaluator.setFitnessComponents(fitnessComponents);
 		individualEvaluator.setDistanceProvider(distanceProvider);
 		individualEvaluator.setPortProvider(portProvider);

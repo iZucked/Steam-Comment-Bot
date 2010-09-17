@@ -1,14 +1,15 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import java.util.List;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 
 /**
  * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
@@ -33,25 +34,24 @@ public final class DistanceComponent<T> extends
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public long rawEvaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final IAnnotatedSequence<T> annotatedSequence) {
+			final ISequence<T> sequence, final List<IVoyagePlan> plans) {
 		// Calculate sum distance travelled.
+
 		long distance = 0;
-
-		for (final T element : sequence) {
-
-			final IJourneyEvent<T> e = annotatedSequence.getAnnotation(
-					element, SchedulerConstants.AI_journeyInfo,
-					IJourneyEvent.class);
-
-			if (e != null) {
-				distance += e.getDistance();
+		for (final IVoyagePlan plan : plans) {
+			for (final Object obj : plan.getSequence()) {
+				if (obj instanceof IVoyageDetails) {
+					@SuppressWarnings("unchecked")
+					final IVoyageDetails<T> detail = (IVoyageDetails<T>) obj;
+					distance += detail.getOptions().getDistance();
+				}
 			}
 		}
 
-		//TODO: Temp remove distance from fitness - should really alter weight or remove component from evaluations instead
+		// TODO: Temp remove distance from fitness - should really alter weight
+		// or remove component from evaluations instead
 		distance = 0;
 		return distance;
 	}

@@ -5,25 +5,19 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
  * {@link IFitnessCore} which schedules {@link ISequences} objects using an
@@ -42,7 +36,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	private ISequenceScheduler<T> scheduler;
 
-	private IVoyagePlanAnnotator<T> voyagePlanAnnotator;
 
 	public CargoSchedulerFitnessCore() {
 
@@ -97,15 +90,12 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// For each ISequence, run the scheduler
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
-			final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
 			final List<IVoyagePlan> plans = scheduler.schedule(resource,
 					sequence);
-			voyagePlanAnnotator.annotateFromVoyagePlan(resource, plans,
-					annotatedSequence);
 
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
-			if (evaluateSequence(resource, sequence, annotatedSequence, false) == false) {
+			if (evaluateSequence(resource, sequence, plans, false) == false) {
 				return false;
 			}
 		}
@@ -140,17 +130,14 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// Re-schedule changed sequences
 		for (final IResource resource : affectedResources) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
-			final IAnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
 			if (sequence.size() > 0) {
 
 				final List<IVoyagePlan> plans = scheduler.schedule(resource,
 						sequence);
-
-				voyagePlanAnnotator.annotateFromVoyagePlan(resource, plans,
-						annotatedSequence);
+				if (evaluateSequence(resource, sequence, plans, true) == false) {
+					return false;
+				}
 			}
-			if (evaluateSequence(resource, sequence, annotatedSequence, true) == false)
-				return false;
 		}
 		return true;
 	}
@@ -160,17 +147,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		return new ArrayList<IFitnessComponent<T>>(components);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init(final IOptimisationData<T> data) {
-
-		final VoyagePlanAnnotator<T> vpa = new VoyagePlanAnnotator<T>();
-
-		vpa.setPortSlotProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portSlotsProvider,
-				IPortSlotProvider.class));
-
-		voyagePlanAnnotator = vpa;
 
 		// TODO: getter/setters should provide these e.g. use factory to
 		// populate
@@ -181,16 +159,15 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.init(data);
 		}
-
 	}
 
 	private boolean evaluateSequence(final IResource resource,
 			final ISequence<T> sequence,
-			final IAnnotatedSequence<T> annotatedSequence,
+			final List<IVoyagePlan> plans,
 			final boolean newSequence) {
 
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			if (c.evaluateSequence(resource, sequence, annotatedSequence,
+			if (c.evaluateSequence(resource, sequence, plans,
 					newSequence) == false) {
 				return false;
 			}
@@ -206,5 +183,9 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		}
 		components.clear();
 		scheduler.dispose();
+	}
+
+	public List<ICargoSchedulerFitnessComponent<T>> getCargoSchedulerFitnessComponent() {
+		return components;
 	}
 }

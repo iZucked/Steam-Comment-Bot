@@ -36,9 +36,9 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 	private IPortSlotProvider<T> portSlotProvider;
 
-	private FuelComponent[] idleFuelComponents = new FuelComponent[] {
+	private final FuelComponent[] idleFuelComponents = new FuelComponent[] {
 			FuelComponent.IdleBase, FuelComponent.IdleNBO };
-	private FuelComponent[] travelFuelComponents = new FuelComponent[] {
+	private final FuelComponent[] travelFuelComponents = new FuelComponent[] {
 			FuelComponent.Base, FuelComponent.NBO,
 			FuelComponent.Base_Supplemental, FuelComponent.FBO };
 
@@ -47,13 +47,6 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 			final List<IVoyagePlan> plans,
 			final IAnnotatedSequence<T> annotatedSequence) {
 
-		// TODO: Get start time
-		final int startTime = 0;
-
-		// current time will be incremented after each element
-		int currentTime = startTime;
-
-		Object lastElement = null;
 		for (final IVoyagePlan plan : plans) {
 			for (final Object e : plan.getSequence()) {
 
@@ -71,14 +64,14 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					// Add port annotations
 					final PortVisitEventImpl<T> visit;
 					if (currentPortSlot instanceof ILoadSlot) {
-						LoadEventImpl<T> load = new LoadEventImpl<T>();
+						final LoadEventImpl<T> load = new LoadEventImpl<T>();
 						load.setLoadVolume(plan.getLoadVolume());
 						// TODO: Check unit vs. actual
 						load.setPurchasePrice(plan.getPurchaseCost());
 
 						visit = load;
 					} else if (currentPortSlot instanceof IDischargeSlot) {
-						DischargeEventImpl<T> discharge = new DischargeEventImpl<T>();
+						final DischargeEventImpl<T> discharge = new DischargeEventImpl<T>();
 
 						discharge.setDischargeVolume(plan.getDischargeVolume());
 
@@ -100,27 +93,9 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					annotatedSequence.setAnnotation(element,
 							SchedulerConstants.AI_visitInfo, visit);
 
-					// Consecutive voyage plans will end and start with the same
-					// element. The above code will overwrite the previous
-					// entry, however here we need to be careful not to
-					// increment the current time, otherwise we will have a
-					// "hole" in the schedule equal to visitDuration. We can't
-					// skip generation of the end element as the final voyage
-					// plan will, by definition, not have a follow on plan. We
-					// also can't skip as the details of the visit will be
-					// different. If the last element is a LoadEvent, there will
-					// be no load volume set, as that is calculated are part of
-					// the next voyage plan.
-					if (e != lastElement) {
-						visit.setStartTime(currentTime);
-						visit.setEndTime(currentTime + visitDuration);
-						currentTime += visitDuration;
-					} else {
-						// Back-out visit duration set in the previous
-						// iteration.
-						visit.setStartTime(currentTime - visitDuration);
-						visit.setEndTime(currentTime);
-					}
+					visit.setStartTime(details.getStartTime());
+					visit.setEndTime(details.getStartTime() + visitDuration);
+
 				} else if (e instanceof IVoyageDetails<?>) {
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					final IVoyageDetails<T> details = (IVoyageDetails) e;
@@ -142,8 +117,8 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					journey.setFromPort(prevPortSlot.getPort());
 					journey.setToPort(currentPortSlot.getPort());
 					journey.setSequenceElement(element);
-					journey.setStartTime(currentTime);
-					journey.setEndTime(currentTime + travelTime);
+					journey.setStartTime(details.getStartTime());
+					journey.setEndTime(details.getStartTime() + travelTime);
 					journey.setDistance(options.getDistance());
 					journey.setRoute(options.getRoute());
 
@@ -172,16 +147,15 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					annotatedSequence.setAnnotation(element,
 							SchedulerConstants.AI_journeyInfo, journey);
 
-					currentTime += travelTime;
-
 					final int idleTime = details.getIdleTime();
 
 					final IdleEventImpl<T> idle = new IdleEventImpl<T>();
 					idle.setName("idle");
 					idle.setPort(currentPortSlot.getPort());
-					idle.setStartTime(currentTime);
+					idle.setStartTime(details.getStartTime() + travelTime);
 					idle.setDuration(idleTime);
-					idle.setEndTime(currentTime + idleTime);
+					idle.setEndTime(details.getStartTime() + travelTime
+							+ idleTime);
 					idle.setSequenceElement(element);
 
 					for (final FuelComponent fuel : idleFuelComponents) {
@@ -204,13 +178,9 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					annotatedSequence.setAnnotation(element,
 							SchedulerConstants.AI_idleInfo, idle);
 
-					currentTime += idleTime;
-
 				} else {
 					throw new IllegalStateException("Unexpected element " + e);
 				}
-
-				lastElement = e;
 			}
 		}
 	}
