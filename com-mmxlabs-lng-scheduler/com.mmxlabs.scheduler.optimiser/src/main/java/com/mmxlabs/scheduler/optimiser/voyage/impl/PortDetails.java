@@ -25,7 +25,7 @@ public final class PortDetails implements IPortDetails {
 	private int startTime;
 
 	@Override
-	public long getFuelConsumption(final FuelComponent fuel) {
+	public final long getFuelConsumption(final FuelComponent fuel) {
 
 		if (fuelConsumption.containsKey(fuel)) {
 			return fuelConsumption.get(fuel);
@@ -35,48 +35,48 @@ public final class PortDetails implements IPortDetails {
 	}
 
 	@Override
-	public void setFuelConsumption(final FuelComponent fuel,
+	public final void setFuelConsumption(final FuelComponent fuel,
 			final long consumption) {
 		fuelConsumption.put(fuel, consumption);
 	}
 
 	@Override
-	public int getVisitDuration() {
+	public final int getVisitDuration() {
 		return visitDuration;
 	}
 
 	@Override
-	public void setVisitDuration(final int visitDuration) {
+	public final void setVisitDuration(final int visitDuration) {
 		this.visitDuration = visitDuration;
 	}
 
 	@Override
-	public long getPortCost(final Object key) {
+	public final long getPortCost(final Object key) {
 		throw new UnsupportedOperationException("Undefined API");
 	}
 
 	@Override
-	public IPortSlot getPortSlot() {
+	public final IPortSlot getPortSlot() {
 		return portSlot;
 	}
 
 	@Override
-	public void setPortSlot(final IPortSlot portSlot) {
+	public final void setPortSlot(final IPortSlot portSlot) {
 		this.portSlot = portSlot;
 	}
 
 	@Override
-	public int getStartTime() {
+	public final int getStartTime() {
 		return startTime;
 	}
 
 	@Override
-	public void setStartTime(final int startTime) {
+	public final void setStartTime(final int startTime) {
 		this.startTime = startTime;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 
 		if (obj instanceof PortDetails) {
 			final PortDetails d = (PortDetails) obj;
@@ -86,14 +86,14 @@ public final class PortDetails implements IPortDetails {
 			if (visitDuration != d.visitDuration) {
 				return false;
 			}
-			
+
 			if (!Equality.isEqual(fuelConsumption, d.fuelConsumption)) {
 				return false;
 			}
 			if (!Equality.isEqual(portSlot, d.portSlot)) {
 				return false;
 			}
-			
+
 			return true;
 		}
 
