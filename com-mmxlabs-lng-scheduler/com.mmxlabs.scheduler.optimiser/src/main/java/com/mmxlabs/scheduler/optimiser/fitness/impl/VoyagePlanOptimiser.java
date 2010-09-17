@@ -86,8 +86,8 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	@Override
 	public IVoyagePlan optimise() {
 
-//		nonRecursiveRunLoop();
-		runLoop(0);
+		nonRecursiveRunLoop();
+//		runLoop(0);
 
 		return bestPlan;
 	}
@@ -226,7 +226,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 							.getOptions();
 
 					try {
-						details.setOptions((IVoyageOptions) options.clone());
+						details.setOptions(options.clone());
 					} catch (final CloneNotSupportedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
