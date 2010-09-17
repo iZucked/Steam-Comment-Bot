@@ -12,7 +12,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
  * @author Simon Goodall
  * 
  */
-public class VoyageOptions implements IVoyageOptions, Cloneable {
+public final class VoyageOptions implements IVoyageOptions, Cloneable {
 
 	private int availableTime;
 	private int distance;
@@ -30,106 +30,106 @@ public class VoyageOptions implements IVoyageOptions, Cloneable {
 	private VesselState vesselState;
 
 	@Override
-	public int getAvailableTime() {
+	public final int getAvailableTime() {
 		return availableTime;
 	}
 
 	@Override
-	public int getDistance() {
+	public final int getDistance() {
 		return distance;
 	}
 
 	@Override
-	public IPortSlot getFromPortSlot() {
+	public final IPortSlot getFromPortSlot() {
 		return fromPortSlot;
 	}
 
 	@Override
-	public int getNBOSpeed() {
+	public final int getNBOSpeed() {
 		return nboSpeed;
 	}
 
 	@Override
-	public String getRoute() {
+	public final String getRoute() {
 		return route;
 	}
 
 	@Override
-	public IPortSlot getToPortSlot() {
+	public final IPortSlot getToPortSlot() {
 		return toPortSlot;
 	}
 
 	@Override
-	public IVessel getVessel() {
+	public final IVessel getVessel() {
 		return vessel;
 	}
 
 	@Override
-	public VesselState getVesselState() {
+	public final VesselState getVesselState() {
 		return vesselState;
 	}
 
 	@Override
-	public boolean useFBOForSupplement() {
+	public final boolean useFBOForSupplement() {
 		return useFBOForSupplement;
 	}
 
 	@Override
-	public boolean useNBOForIdle() {
+	public final boolean useNBOForIdle() {
 		return useNBOForIdle;
 	}
 
 	@Override
-	public boolean useNBOForTravel() {
+	public final boolean useNBOForTravel() {
 		return useNBOForTravel;
 	}
 
-	public void setNBOSpeed(final int nboSpeed) {
+	public final void setNBOSpeed(final int nboSpeed) {
 		this.nboSpeed = nboSpeed;
 	}
 
-	public void setUseNBOForIdle(final boolean useNBOForIdle) {
+	public final void setUseNBOForIdle(final boolean useNBOForIdle) {
 		this.useNBOForIdle = useNBOForIdle;
 	}
 
-	public void setUseNBOForTravel(final boolean useNBOForTravel) {
+	public final void setUseNBOForTravel(final boolean useNBOForTravel) {
 		this.useNBOForTravel = useNBOForTravel;
 	}
 
-	public void setUseFBOForSupplement(final boolean useFBOForSupplement) {
+	public final void setUseFBOForSupplement(final boolean useFBOForSupplement) {
 		this.useFBOForSupplement = useFBOForSupplement;
 	}
 
-	public void setAvailableTime(final int availableTime) {
+	public final void setAvailableTime(final int availableTime) {
 		this.availableTime = availableTime;
 	}
 
-	public void setDistance(final int distance) {
+	public final void setDistance(final int distance) {
 		this.distance = distance;
 	}
 
-	public void setVessel(final IVessel vessel) {
+	public final void setVessel(final IVessel vessel) {
 		this.vessel = vessel;
 	}
 
-	public void setFromPortSlot(final IPortSlot fromPortSlot) {
+	public final void setFromPortSlot(final IPortSlot fromPortSlot) {
 		this.fromPortSlot = fromPortSlot;
 	}
 
-	public void setToPortSlot(final IPortSlot toPortSlot) {
+	public final void setToPortSlot(final IPortSlot toPortSlot) {
 		this.toPortSlot = toPortSlot;
 	}
 
-	public void setRoute(final String route) {
+	public final void setRoute(final String route) {
 		this.route = route;
 	}
 
-	public void setVesselState(final VesselState vesselState) {
+	public final void setVesselState(final VesselState vesselState) {
 		this.vesselState = vesselState;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 
 		if (obj instanceof VoyageOptions) {
 			final VoyageOptions vo = (VoyageOptions) obj;
