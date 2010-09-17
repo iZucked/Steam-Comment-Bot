@@ -39,9 +39,9 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 			fuelConsumption.put(fuel, new EnumMap<FuelUnit, Long>(FuelUnit.class));
 		}
 	}
-	
+
 	@Override
-	public long getFuelConsumption(final FuelComponent fuel,
+	public final long getFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit) {
 
 //		if (fuelConsumption.containsKey(fuel)) {
@@ -55,27 +55,27 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	}
 
 	@Override
-	public int getIdleTime() {
+	public final int getIdleTime() {
 		return idleTime;
 	}
 
 	@Override
-	public IVoyageOptions getOptions() {
+	public final IVoyageOptions getOptions() {
 		return options;
 	}
 
 	@Override
-	public int getSpeed() {
+	public final int getSpeed() {
 		return speed;
 	}
 
 	@Override
-	public int getTravelTime() {
+	public final int getTravelTime() {
 		return travelTime;
 	}
 
 	@Override
-	public void setFuelConsumption(final FuelComponent fuel,
+	public final void setFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit, final long consumption) {
 //		final EnumMap<FuelUnit, Long> map;
 //		if (fuelConsumption.containsKey(fuel)) {
@@ -88,38 +88,37 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 		fuelConsumption.get(fuel).put(fuelUnit, consumption);
 	}
 
-	@Override
-	public void setIdleTime(final int idleTime) {
+	public final void setIdleTime(final int idleTime) {
 		this.idleTime = idleTime;
 	}
 
 	@Override
-	public void setOptions(final IVoyageOptions options) {
+	public final void setOptions(final IVoyageOptions options) {
 		this.options = options;
 	}
 
 	@Override
-	public void setSpeed(final int speed) {
+	public final void setSpeed(final int speed) {
 		this.speed = speed;
 	}
 
 	@Override
-	public void setTravelTime(final int travelTime) {
+	public final void setTravelTime(final int travelTime) {
 		this.travelTime = travelTime;
 	}
 
 	@Override
-	public int getStartTime() {
+	public final int getStartTime() {
 		return startTime;
 	}
 
 	@Override
-	public void setStartTime(final int startTime) {
+	public final void setStartTime(final int startTime) {
 		this.startTime = startTime;
 	}
 
 	@Override
-	public int getFuelUnitPrice(final FuelComponent fuel) {
+	public final int getFuelUnitPrice(final FuelComponent fuel) {
 
 		if (fuelUnitPrices.containsKey(fuel)) {
 			return fuelUnitPrices.get(fuel);
@@ -129,12 +128,13 @@ public final class VoyageDetails<T> implements IVoyageDetails<T> {
 	}
 
 	@Override
-	public void setFuelUnitPrice(final FuelComponent fuel, final int unitPrice) {
+	public final void setFuelUnitPrice(final FuelComponent fuel,
+			final int unitPrice) {
 		fuelUnitPrices.put(fuel, unitPrice);
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 
 		if (obj instanceof VoyageDetails) {
 			@SuppressWarnings("rawtypes")
