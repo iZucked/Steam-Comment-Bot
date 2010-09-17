@@ -175,8 +175,8 @@ public class VoyageOptions implements IVoyageOptions, Cloneable {
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public final VoyageOptions clone() throws CloneNotSupportedException {
 
-		return super.clone();
+		return (VoyageOptions) super.clone();
 	}
 }
