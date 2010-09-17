@@ -25,85 +25,71 @@ public final class VoyagePlan implements IVoyagePlan {
 	private final EnumMap<FuelComponent, Long> fuelCosts = new EnumMap<FuelComponent, Long>(
 			FuelComponent.class);
 
-	@Override
-	public long getFuelConsumption(final FuelComponent fuel) {
+	public final long getFuelConsumption(final FuelComponent fuel) {
 		if (fuelConsumptions.containsKey(fuel)) {
 			return fuelConsumptions.get(fuel);
 		}
 		return 0;
 	}
 
-	@Override
-	public void setFuelConsumption(final FuelComponent fuel,
+	public final void setFuelConsumption(final FuelComponent fuel,
 			final long consumption) {
 		fuelConsumptions.put(fuel, consumption);
 	}
 
-	@Override
-	public long getTotalFuelCost(final FuelComponent fuel) {
+	public final long getTotalFuelCost(final FuelComponent fuel) {
 		if (fuelCosts.containsKey(fuel)) {
 			return fuelCosts.get(fuel);
 		}
 		return 0;
 	}
 
-	@Override
-	public void setTotalFuelCost(final FuelComponent fuel, final long cost) {
+	public final void setTotalFuelCost(final FuelComponent fuel, final long cost) {
 		fuelCosts.put(fuel, cost);
 	}
 
-	@Override
-	public long getDischargeVolume() {
+	public final long getDischargeVolume() {
 		return dischargeVolume;
 	}
 
-	@Override
-	public void setDischargeVolume(final long dischargeVolume) {
+	public final void setDischargeVolume(final long dischargeVolume) {
 		this.dischargeVolume = dischargeVolume;
 	}
 
-	@Override
-	public long getLoadVolume() {
+	public final long getLoadVolume() {
 		return loadVolume;
 	}
 
-	@Override
-	public void setLoadVolume(final long loadVolume) {
+	public final void setLoadVolume(final long loadVolume) {
 		this.loadVolume = loadVolume;
 	}
 
-	@Override
-	public long getSalesRevenue() {
+	public final long getSalesRevenue() {
 		return salesRevenue;
 	}
 
-	@Override
-	public void setSalesRevenue(final long salesRevenue) {
+	public final void setSalesRevenue(final long salesRevenue) {
 		this.salesRevenue = salesRevenue;
 	}
 
-	@Override
-	public long getPurchaseCost() {
+	public final long getPurchaseCost() {
 		return purchaseCost;
 	}
 
-	@Override
-	public void setPurchaseCost(final long purchaseCost) {
+	public final void setPurchaseCost(final long purchaseCost) {
 		this.purchaseCost = purchaseCost;
 	}
 
-	@Override
-	public Object[] getSequence() {
+	public final Object[] getSequence() {
 		return sequence;
 	}
 
-	@Override
-	public void setSequence(final Object[] sequence) {
+	public final void setSequence(final Object[] sequence) {
 		this.sequence = sequence;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 
 		if (obj instanceof VoyagePlan) {
 			final VoyagePlan p = (VoyagePlan) obj;
