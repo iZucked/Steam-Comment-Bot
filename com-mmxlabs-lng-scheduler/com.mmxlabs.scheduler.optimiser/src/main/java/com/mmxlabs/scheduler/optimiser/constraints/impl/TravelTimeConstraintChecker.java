@@ -34,6 +34,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 public class TravelTimeConstraintChecker<T> implements
 		IPairwiseConstraintChecker<T> {
 
+	/**
+	 * The maximum amount of lateness which will even be considered (10 days)
+	 */
+	private static final int MAX_LATENESS = 24*10;
 	private final String name;
 	private IOptimisationData<T> data;
 	private IPortSlotProvider<T> portSlotProvider;
@@ -125,20 +129,22 @@ public class TravelTimeConstraintChecker<T> implements
 			final IResource resource, final int resourceMaxSpeed,
 			final IMatrixProvider<IPort, Integer> distanceMatrix) {
 		
-		//TODO accept a little lateness O(10d)
-		
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 
+		final int distance = distanceMatrix.get(slot1.getPort(), slot2.getPort());
+		if (distance == Integer.MAX_VALUE) return false;
+		
 		final int travelTime = Calculator.getTimeFromSpeedDistance(
 				resourceMaxSpeed,
-				distanceMatrix.get(slot1.getPort(), slot2.getPort()));
+				distance);
 
 		final int earliestArrivalTime = slot1.getTimeWindow().getStart()
 				+ elementDurationProvider.getElementDuration(first, resource)
 				+ travelTime;
 
-		final int latestAllowableTime = slot2.getTimeWindow().getEnd();
+		final int latestAllowableTime = slot2.getTimeWindow().getEnd()
+			+ MAX_LATENESS;
 
 		return earliestArrivalTime < latestAllowableTime;
 	}
