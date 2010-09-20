@@ -44,7 +44,7 @@ public final class LatenessComponent<T> extends
 					final int arrival = detail.getStartTime();
 					final ITimeWindow tw = detail.getPortSlot().getTimeWindow();
 
-					if (arrival > tw.getEnd()) {
+					if (tw != null && arrival > tw.getEnd()) {
 						lateness += arrival - tw.getEnd();
 					}
 				}
