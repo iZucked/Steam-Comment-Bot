@@ -367,7 +367,7 @@ public final class TestUtils {
 		}
 	}
 
-	private static void buildFleet(final ISchedulerBuilder builder,
+	public static void buildFleet(final ISchedulerBuilder builder,
 			Random random, List<IPort> startPorts, List<IPort> endPorts) {
 
 		// Consumption Curves
@@ -489,42 +489,10 @@ public final class TestUtils {
 
 		// Other vessels
 
-		builder.createVessel("Extra-Charter-1", vesselClass1,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-2", vesselClass2,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-3", vesselClass3,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-4", vesselClass4,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-5", vesselClass1,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-6", vesselClass2,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-7", vesselClass3,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-8", vesselClass4,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-9", vesselClass1,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-10", vesselClass2,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-11", vesselClass3,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Extra-Charter-12", vesselClass4,
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+		builder.createSpotVessels("spot-" + vesselClass1.getName(),vesselClass1, 3);
+		builder.createSpotVessels("spot-" + vesselClass2.getName(),vesselClass2, 3);
+		builder.createSpotVessels("spot-" + vesselClass3.getName(),vesselClass3, 3);
+		builder.createSpotVessels("spot-" + vesselClass4.getName(),vesselClass4, 3);
 	}
 
 	/**
