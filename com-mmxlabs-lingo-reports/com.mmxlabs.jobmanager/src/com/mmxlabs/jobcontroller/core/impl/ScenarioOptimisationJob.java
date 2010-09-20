@@ -49,8 +49,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 //TODO Generate a base class and provide some methods for job creation etc.
@@ -538,7 +538,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 				final ISequence<ISequenceElement> sequence = entry.getValue();
 
 				// Schedule sequence
-				final List<IVoyagePlan> plans = scheduler
+				final List<VoyagePlan> plans = scheduler
 				.schedule(resource, sequence);
 
 				final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
