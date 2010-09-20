@@ -23,25 +23,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.INewWizard;
-import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.views.navigator.ResourceNavigator;
-
-import com.mmxlabs.common.csv.DistanceImporter;
 
 import scenario.Scenario;
-import scenario.ScenarioPackage;
-import scenario.cargo.CargoPackage;
-import scenario.fleet.FleetPackage;
-import scenario.port.DistanceLine;
-import scenario.port.DistanceModel;
-import scenario.port.Port;
-import scenario.port.PortFactory;
-import scenario.port.PortPackage;
 import scenario.presentation.LngEditorAdvisor;
 
 public class RandomScenarioWizard extends Wizard implements INewWizard {
-
 	private IWorkbench workbench;
 	private DetailsPage details;
 
