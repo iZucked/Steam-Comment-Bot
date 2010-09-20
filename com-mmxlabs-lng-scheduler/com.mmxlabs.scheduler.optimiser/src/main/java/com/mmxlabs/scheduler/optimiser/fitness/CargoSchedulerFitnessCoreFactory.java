@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 
 /**
  * {@link IFitnessCoreFactory} to create the cargo scheduler fitness function
@@ -26,6 +28,17 @@ public final class CargoSchedulerFitnessCoreFactory implements
 
 	public static final String CHARTER_COST_COMPONENT_NAME = "cargo-scheduler-charter-cost";
 
+	/* default scheduler factory creates default GA scheduler */
+	private ISchedulerFactory schedulerFactory =
+		new ISchedulerFactory() {
+
+			@Override
+			public ISequenceScheduler createScheduler(IOptimisationData data,
+					Collection components) {
+				return SchedulerUtils.createGASequenceScheduler(data, components);
+			}
+	};
+
 	@Override
 	public Collection<String> getFitnessComponentNames() {
 		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME,
@@ -39,6 +52,12 @@ public final class CargoSchedulerFitnessCoreFactory implements
 
 	@Override
 	public <T> CargoSchedulerFitnessCore<T> instantiate() {
-		return new CargoSchedulerFitnessCore<T>();
+		CargoSchedulerFitnessCore<T> core = new CargoSchedulerFitnessCore<T>();
+		core.setSchedulerFactory(schedulerFactory);
+		return core;
+	}
+	
+	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
+		this.schedulerFactory = schedulerFactory;
 	}
 }

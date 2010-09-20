@@ -36,6 +36,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	private ISequenceScheduler<T> scheduler;
 
+	private ISchedulerFactory<T> schedulerFactory;
+
 
 	public CargoSchedulerFitnessCore() {
 
@@ -153,7 +155,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// TODO: getter/setters should provide these e.g. use factory to
 		// populate
 //		scheduler = SchedulerUtils.createSimpleSequenceScheduler(data);
-		scheduler = SchedulerUtils.createGASequenceScheduler(data, components);
+		scheduler = schedulerFactory.createScheduler(data, components); 
+			/*SchedulerUtils.createGASequenceScheduler(data, components);*/
 
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
@@ -187,5 +190,9 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	public List<ICargoSchedulerFitnessComponent<T>> getCargoSchedulerFitnessComponent() {
 		return components;
+	}
+
+	public void setSchedulerFactory(ISchedulerFactory<T> schedulerFactory) {
+		this.schedulerFactory = schedulerFactory;
 	}
 }
