@@ -86,7 +86,7 @@ public abstract class PortSlot implements IPortSlot {
 	}
 
 	public String toString() {
-		return id + " <" + timeWindow.getStart() + ", " + timeWindow.getEnd()
-				+ ">";
+		return id + (timeWindow == null ? " <any>" : " <" + timeWindow.getStart() + ", " + timeWindow.getEnd()
+				+ ">");
 	}
 }
