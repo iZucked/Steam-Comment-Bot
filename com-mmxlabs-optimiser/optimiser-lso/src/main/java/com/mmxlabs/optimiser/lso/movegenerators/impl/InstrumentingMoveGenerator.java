@@ -8,7 +8,7 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
-	private static final int HIT_COUNT = 2000;
+	private static final int HIT_COUNT = 100;
 
 	private final boolean collectStats;
 
