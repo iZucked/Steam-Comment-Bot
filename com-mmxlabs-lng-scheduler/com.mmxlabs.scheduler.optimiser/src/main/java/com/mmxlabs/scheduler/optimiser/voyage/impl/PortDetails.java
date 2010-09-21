@@ -13,7 +13,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
  * @author Simon Goodall
  * 
  */
-public final class PortDetails implements IPortDetails {
+public final class PortDetails implements IPortDetails, Cloneable {
 
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(
 			FuelComponent.class);
@@ -23,6 +23,18 @@ public final class PortDetails implements IPortDetails {
 	private IPortSlot portSlot;
 
 	private int startTime;
+
+	public PortDetails() {
+		
+	}
+	
+	private PortDetails(int visitDuration2, IPortSlot portSlot2, int startTime2,
+			EnumMap<FuelComponent, Long> fuelConsumption2) {
+		this.visitDuration = visitDuration2;
+		this.portSlot = portSlot2;
+		this.startTime = startTime2;
+		this.fuelConsumption.putAll(fuelConsumption2);
+	}
 
 	@Override
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -98,5 +110,16 @@ public final class PortDetails implements IPortDetails {
 		}
 
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "PortDetails [fuelConsumption=" + fuelConsumption
+				+ ", visitDuration=" + visitDuration + ", portSlot=" + portSlot
+				+ ", startTime=" + startTime + "]";
+	}
+	
+	public PortDetails clone() {
+		return new PortDetails(visitDuration, portSlot, startTime, fuelConsumption);
 	}
 }

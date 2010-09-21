@@ -28,6 +28,24 @@ public final class VoyageOptions implements Cloneable {
 
 	private VesselState vesselState;
 
+	public VoyageOptions() {
+		
+	}
+	
+	public VoyageOptions(VoyageOptions options) {
+		setAvailableTime(options.getAvailableTime());
+		setDistance(options.getDistance());
+		setVessel(options.getVessel());
+		setFromPortSlot(options.getFromPortSlot());
+		setToPortSlot(options.getToPortSlot());
+		setNBOSpeed(options.getNBOSpeed());
+		setUseNBOForTravel(options.useNBOForTravel());
+		setUseFBOForSupplement(options.useFBOForSupplement());
+		setUseNBOForIdle(options.useNBOForIdle());
+		setRoute(options.getRoute());
+		setVesselState(options.getVesselState());
+	}
+
 	public final int getAvailableTime() {
 		return availableTime;
 	}
@@ -167,4 +185,17 @@ public final class VoyageOptions implements Cloneable {
 
 		return (VoyageOptions) super.clone();
 	}
+
+	@Override
+	public String toString() {
+		return "VoyageOptions [availableTime=" + availableTime + ", distance="
+				+ distance + ", vessel=" + vessel + ", fromPortSlot="
+				+ fromPortSlot + ", toPortSlot=" + toPortSlot + ", nboSpeed="
+				+ nboSpeed + ", useNBOForIdle=" + useNBOForIdle
+				+ ", useNBOForTravel=" + useNBOForTravel
+				+ ", useFBOForSupplement=" + useFBOForSupplement + ", route="
+				+ route + ", vesselState=" + vesselState + "]";
+	}
+	
+	
 }

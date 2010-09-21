@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.EnumMap;
+import java.util.Map.Entry;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -14,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * @param <T>
  *            Sequence element type.
  */
-public final class VoyageDetails<T> {
+public final class VoyageDetails<T> implements Cloneable {
 
 	private VoyageOptions options;
 
@@ -36,6 +37,26 @@ public final class VoyageDetails<T> {
 		for (FuelComponent fuel : FuelComponent.values()) {
 			fuelConsumption.put(fuel, new EnumMap<FuelUnit, Long>(FuelUnit.class));
 		}
+	}
+	
+	public VoyageDetails(int idleTime2, int travelTime2, int speed2,
+			int startTime2, VoyageOptions options,
+			EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption2,
+			EnumMap<FuelComponent, Integer> fuelUnitPrices2) {
+		this();
+		this.idleTime = idleTime2;
+		this.travelTime = travelTime2;
+		this.speed = speed2;
+		this.startTime = startTime2;
+		this.options = options;
+		for (Entry<FuelComponent, EnumMap<FuelUnit, Long>> x : fuelConsumption.entrySet()) {
+			x.getValue().putAll(fuelConsumption2.get(x.getKey()));
+		}
+		fuelUnitPrices.putAll(fuelUnitPrices2);
+	}
+
+	public VoyageDetails clone() {
+		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, fuelUnitPrices);
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel,
@@ -153,5 +174,13 @@ public final class VoyageDetails<T> {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "VoyageDetails [options=" + options + ", fuelConsumption="
+				+ fuelConsumption + ", fuelUnitPrices=" + fuelUnitPrices
+				+ ", idleTime=" + idleTime + ", travelTime=" + travelTime
+				+ ", speed=" + speed + ", startTime=" + startTime + "]";
 	}
 }

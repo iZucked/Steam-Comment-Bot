@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 
 import com.mmxlabs.common.Equality;
@@ -11,7 +12,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * @author Simon Goodall
  * 
  */
-public final class VoyagePlan  {
+public final class VoyagePlan implements Cloneable {
 
 	private Object[] sequence;
 	private long dischargeVolume;
@@ -120,4 +121,41 @@ public final class VoyagePlan  {
 
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "VoyagePlan [sequence=" + Arrays.toString(sequence)
+				+ ", dischargeVolume=" + dischargeVolume + ", loadVolume="
+				+ loadVolume + ", salesRevenue=" + salesRevenue
+				+ ", purchaseCost=" + purchaseCost + ", fuelConsumptions="
+				+ fuelConsumptions + ", fuelCosts=" + fuelCosts + "]";
+	}
+
+	@Override
+	public VoyagePlan clone() {
+		VoyagePlan result = new VoyagePlan();
+		
+		result.dischargeVolume = dischargeVolume;
+		result.fuelConsumptions.putAll(fuelConsumptions);
+		result.fuelCosts.putAll(fuelCosts);
+		result.loadVolume = loadVolume;
+		result.purchaseCost = purchaseCost;
+		result.salesRevenue = salesRevenue;
+		result.sequence = new Object[sequence.length];
+		int k = 0;
+		for (Object o : sequence) {
+			if (o instanceof VoyageDetails) {
+				result.sequence[k++] = ((VoyageDetails)o).clone();
+			} else if (o instanceof PortDetails) {
+				result.sequence[k++] = ((PortDetails)o).clone();
+			} else {
+				result.sequence[k++] = o;
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	
 }
