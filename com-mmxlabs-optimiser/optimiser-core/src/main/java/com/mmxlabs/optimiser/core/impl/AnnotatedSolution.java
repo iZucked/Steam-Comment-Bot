@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.ISequences;
  * @param <T>
  *            Sequence element type
  */
-public final class AnnotationSolution<T> implements IAnnotatedSolution<T> {
+public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 
 	private ISequences<T> sequences;
 
