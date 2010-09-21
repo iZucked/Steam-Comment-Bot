@@ -5,6 +5,8 @@ import java.util.List;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -30,9 +32,24 @@ public final class SimpleSequenceScheduler<T> extends
 			// Find earliest start time.
 			// TODO: No time windows means time window is Integer.MAX_VALUE -
 			// not really sure if this is a sane thing to use.
+
+			//if there's no time window, setting this to max value causes a 
+			//capacity violation. needs something better. can't just set it to
+			//the previous arrival time, because that won't allow enough travel time
 			int timeWindowStart = Integer.MAX_VALUE;
-			for (final ITimeWindow window : timeWindows) {
-				timeWindowStart = Math.min(timeWindowStart, window.getStart());
+			if (timeWindows.isEmpty() && idx > 0) {
+				
+				final int lastTimeWindowStart = arrivalTimes[idx-1];
+				timeWindowStart = lastTimeWindowStart +
+				Calculator.getTimeFromSpeedDistance(
+					getVesselProvider().getVessel(resource).getVesselClass().getMaxSpeed(),
+					getDistanceProvider().get(IMultiMatrixProvider.Default_Key).get(
+							getPortProvider().getPortForElement(sequence.get(idx-1)),
+							getPortProvider().getPortForElement(element)));
+			} else {
+				for (final ITimeWindow window : timeWindows) {
+					timeWindowStart = Math.min(timeWindowStart, window.getStart());
+				}
 			}
 			arrivalTimes[idx++] = timeWindowStart;
 		}
