@@ -43,8 +43,12 @@ import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.GASequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.IIndividualEvaluator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.IndividualEvaluator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -107,9 +111,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 	public void start() {
 
 		if (!(state == JobState.INITIALISED || state == JobState.COMPLETED || state == JobState.ABORTED)) {
-
 			// Already running!
-
 			return;
 		}
 
@@ -123,8 +125,9 @@ public class ScenarioOptimisationJob implements IManagedJob {
 			protected IStatus run(final IProgressMonitor monitor) {
 
 				final IOptimiserProgressMonitor<ISequenceElement> optMonitor = new IOptimiserProgressMonitor<ISequenceElement>() {
-
+					long firstFitness;
 					int lastReport = 0;
+					private long startTime;
 
 					@Override
 					public void report(final IOptimiser<ISequenceElement> arg0,
@@ -140,7 +143,9 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						fireProgressUpdate(work);
 
 						System.out.println("Iteration: " + iteration
-								+ " Best Fitness: " + bestFitness + " Current Fitness: " + currentFitness);
+								+ " Best Fitness: " + bestFitness + " Current Fitness: " + currentFitness + " gain: " +
+								100*(firstFitness - bestFitness) / (double)firstFitness + "%" + " Wall time : " + 
+								(System.currentTimeMillis() - startTime) / 1000 + " s");
 
 						// TODO: We should verify delta fitness is equal to a
 						// whole new fitness
@@ -200,9 +205,9 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					public void begin(final IOptimiser<ISequenceElement> arg0,
 							final long arg1,
 							final ISequences<ISequenceElement> arg2) {
-
+						firstFitness = arg1;
 						updateSchedule(arg2);
-
+						startTime = System.currentTimeMillis();
 					}
 				};
 
@@ -488,6 +493,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					.getOptimisationData();
 
 			final SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
+			
 			scheduler.setDistanceProvider(data.getDataComponentProvider(
 					SchedulerConstants.DCP_portDistanceProvider,
 					IMultiMatrixProvider.class));
@@ -538,9 +544,12 @@ public class ScenarioOptimisationJob implements IManagedJob {
 				final ISequence<ISequenceElement> sequence = entry.getValue();
 
 				// Schedule sequence
-				final List<VoyagePlan> plans = scheduler
-				.schedule(resource, sequence);
+				final List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
 
+				if (plans == null) {
+					System.err.println("Solution cannot be scheduled by Simple Scheduler - perhaps some elements cannot be reached at the earliest legal time?");
+					return;
+				}
 				final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 
 				final ArrayList<ISequenceElement> elements = new ArrayList<ISequenceElement>(
@@ -549,8 +558,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					elements.add(e);
 				}
 
-				annotator.annotateFromVoyagePlan(resource, plans,
-						annotatedSequence);
+				annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
 
 				solution.setAnnotatedSequence(resource, annotatedSequence);
 			}
