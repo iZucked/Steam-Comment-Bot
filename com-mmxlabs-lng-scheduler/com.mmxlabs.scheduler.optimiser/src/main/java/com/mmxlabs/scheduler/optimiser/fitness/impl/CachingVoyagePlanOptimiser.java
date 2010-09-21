@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
@@ -23,13 +24,14 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @param <T>
  */
 public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
-	
 	private final class CacheKey {
 		private final IVessel vessel;
 		private final int[] times;
 		private final IPortSlot[] slots;
+		private final List<Object> sequence;
+		private final List<IVoyagePlanChoice> choices;
 		
-		public CacheKey(IVessel vessel, List<Object> sequence) {
+		public CacheKey(IVessel vessel, List<Object> sequence, List<IVoyagePlanChoice> choices) {
 			super();
 			this.vessel = vessel;
 			final int sz = sequence.size();
@@ -44,10 +46,14 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 					times[timeix++] = ((VoyageOptions) o).getAvailableTime();
 				}
 			}
+			this.sequence = sequence;
+			this.choices = choices;
 		}
 
+		
+
 		@Override
-		public final int hashCode() {
+		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + getOuterType().hashCode();
@@ -58,8 +64,10 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			return result;
 		}
 
+
+
 		@Override
-		public final boolean equals(Object obj) {
+		public boolean equals(Object obj) {
 			if (this == obj)
 				return true;
 			if (obj == null)
@@ -81,6 +89,8 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			return true;
 		}
 
+
+
 		private final CachingVoyagePlanOptimiser getOuterType() {
 			return CachingVoyagePlanOptimiser.this;
 		}	
@@ -88,204 +98,54 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	
 	private final IVoyagePlanOptimiser<T> delegate;
 	
-//	private int cacheSize;
-//	
-//	final int[] hits;
-//	final int[] misses;
-//	final long[] cachedBestCosts;
-//	final IVoyagePlan [] cachedPlans;
-//
-//	private final IVessel[] storedVessels;
-//	private final List<Integer>[] storedDurationLists;
-//	private final List<IPortSlot>[] storedSlotLists;
-	
-	
-	private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache = 
-		new MapMaker()
-			.concurrencyLevel(1)
-			.weakValues()
-			.expiration(1, TimeUnit.MINUTES)
-			.makeComputingMap(new Function<CacheKey, Pair<VoyagePlan, Long>>() {
-				@Override
-				public Pair<VoyagePlan, Long> apply(CacheKey arg) {
-					final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
-					
-					//this is horribly dodgy, and depends on assumptions about
-					//the inner workings of the mapmaker.
-					delegate.optimise();
-					answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
-					
-					return answer;
-				}
-			});
+	private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache;// = null;
+		
 	
 	VoyagePlan bestPlan;
 	long bestCost;
+
+
+	private List<Object> basicSequence;
+	private IVessel vessel;
+	private List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
+	
 	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> delegate,
 			final int cacheSize) {
 		super();
 		this.delegate = delegate;
-//		this.cacheSize = cacheSize;
-//		hits = new int[cacheSize];
-//		misses = new int[cacheSize];
-//		cachedBestCosts = new long[cacheSize];
-//		cachedPlans = new IVoyagePlan[cacheSize];
-//		
-//		storedVessels = new IVessel[cacheSize];
-//		storedDurationLists = new List[cacheSize];
-//		storedSlotLists = new List[cacheSize];
-//		for (int i = 0; i<cacheSize; i++) {
-//			storedDurationLists[i] = new ArrayList();
-//			storedSlotLists[i] = new ArrayList();
-//		}
+		this.cache = new MapMaker()
+		.concurrencyLevel(1)
+		.weakValues()
+		.expiration(10, TimeUnit.MINUTES)
+		.initialCapacity(cacheSize)
+		.makeComputingMap(new Function<CacheKey, Pair<VoyagePlan, Long>>() {
+			@Override
+			public Pair<VoyagePlan, Long> apply(CacheKey arg) {
+				final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
+
+				delegate.reset();
+				for (IVoyagePlanChoice c:arg.choices) {
+					delegate.addChoice(c);
+				}
+				delegate.setVessel(arg.vessel);
+
+				delegate.setBasicSequence(arg.sequence);
+				delegate.init();
+				delegate.optimise();
+
+				answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
+
+				return answer;
+			}
+		});
 	}
 
-//	/**
-//	 * Store the input data for collision checking in the cache
-//	 * @param hash
-//	 */
-//	private final void storeInputs(final int hash) {
-//		storedVessels[hash] = getVessel();
-//		
-//		final List<Object> sequence = delegate.getBasicSequence();
-//		final List<IPortSlot> storedSlotList = storedSlotLists[hash];
-//		final List<Integer> storedDurationList = storedDurationLists[hash];
-//		
-//		storedSlotList.clear();
-//		storedDurationList.clear();
-//		
-//		for (final Object o : sequence) {
-//			if (o instanceof IPortDetails) {
-//				storedSlotList.add(((IPortDetails)o).getPortSlot());
-//			} else {
-//				storedDurationList.add(((IVoyageOptions)o).getAvailableTime());
-//			}
-//		}
-//	}
-//	/**
-//	 * Determine whether a collision has happened
-//	 * @param hash
-//	 * @return
-//	 */
-//	private final boolean collision(final int hash) {
-//		if (getVessel() != storedVessels[hash]) return true;
-//		
-//		final List<IPortSlot> storedSlotList = storedSlotLists[hash];
-//		final List<Integer> storedDurationList = storedDurationLists[hash];
-//		
-//		final List<Object> sequence = delegate.getBasicSequence();
-//		
-//		if (storedSlotList.size() + storedDurationList.size() != sequence.size()) 
-//			return true;
-//		
-//		final Iterator<IPortSlot> slotIterator = storedSlotList.iterator();
-//		final Iterator<Integer> durationIterator = storedDurationList.iterator();
-//		
-//		for (final Object o : sequence) {
-//			if (o instanceof IPortDetails) {
-//				final IPortDetails slot = (IPortDetails) o;
-//				if (slot.getPortSlot() != slotIterator.next())
-//					return true;
-//			} else {
-//				final IVoyageOptions voy = (IVoyageOptions) o;
-//				if (durationIterator.next().intValue() != voy.getAvailableTime()) 
-//					return true;
-//			}
-//		}
-//		
-//		return false;
-//	}
-//	/**
-//	 * Compute a hash of the current input to the delegate
-//	 * @return
-//	 */
-//	private final int hash() {
-//		int hash = 23;
-//		final int multiplier = 17;
-//		//what things do we hash together?
-//		//the vessel
-//		hash = hash * multiplier + getVessel().hashCode();
-//		
-//		//some features of the basic sequence
-//		final List<Object> sequence = delegate.getBasicSequence();
-////		boolean isPortDetails = true;
-//		for (final Object o : sequence) {
-//			if (o instanceof IPortDetails) {
-//				IPortDetails portDetails = (IPortDetails) o;
-//				//we care about: the port slot
-//				//TODO should this just be the port
-//				hash = hash * multiplier + portDetails.getPortSlot().hashCode();
-//			} else {
-//				final IVoyageOptions voy = (IVoyageOptions) o;
-//				hash = hash * multiplier + 
-//					voy.getAvailableTime();
-//			}
-////			isPortDetails = !isPortDetails;
-//		}
-//		
-//		return ((hash ^ (hash>>31)) - (hash>>31)) % cacheSize;
-//	}
-//	
-//	private final boolean evict(final int hash) {
-//		return misses[hash] > 25;
-////		return misses[hash] > hits[hash]; //TODO perhaps this should just be
-//		//misses > 10 (or so) and reset every time there's a hit?
-//	}
-//	
-//	int tests = 0;
-//	int totalHits = 0;
-//	int totalMisses = 0;
-	
 	@Override
 	public VoyagePlan optimise() {
-//		// check whether the current state is already in the cache; if it is,
-//		// we can sneakily just recover it
-//		tests++;
-//		
-//		if (tests % 600000 == 0) {
-//
-//			System.err.println("CVPO Cache Data");
-//			int emptySlots = 0;
-//			for (IVessel v : storedVessels) {
-//				if (v == null) {
-//					emptySlots++;
-//				}
-//			}
-//			
-//			System.err.println(emptySlots + " of " + cacheSize + " empty");
-//			System.err.println(totalHits + " hits, " + totalMisses + " misses");
-//			System.err.println(100.0 * totalHits / tests + " % hit rate");
-//		}
-//		
-//		final int hash = hash();
-//		if (collision(hash)) {
-//			bestPlan = delegate.optimise();
-//			bestCost = delegate.getBestCost();
-//			totalMisses++;
-//			if (evict(hash)) {
-//				misses[hash] = 0;
-//				hits[hash] = 1;
-//				
-//				//store result (ought I clone it?)
-//				cachedBestCosts[hash] = bestCost;
-//				cachedPlans[hash] = bestPlan;
-//				
-//				//store inputs, for next collision check
-//				storeInputs(hash);
-//			} else {
-//				misses[hash]++;
-//			}
-//		} else {
-//			totalHits++;
-//			hits[hash]++;
-//			misses[hash] = 0;
-//			bestCost = cachedBestCosts[hash];
-//			bestPlan = cachedPlans[hash];
-//		}
 		
-		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(getVessel(), getBasicSequence()));
+		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey( vessel, basicSequence, choices ));
 		
-		bestPlan = best.getFirst();
+		bestPlan = (VoyagePlan) best.getFirst().clone();
 		bestCost = best.getSecond();
 		
 		return bestPlan;
@@ -293,12 +153,12 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	
 	@Override
 	public void init() {
-		delegate.init();
+		
 	}
 
 	@Override
 	public void reset() {
-		delegate.reset();
+		choices.clear();
 	}
 
 	@Override
@@ -308,22 +168,22 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	@Override
 	public List<Object> getBasicSequence() {
-		return delegate.getBasicSequence();
+		return basicSequence;
 	}
 
 	@Override
 	public void setBasicSequence(List<Object> basicSequence) {
-		delegate.setBasicSequence(basicSequence);
+		this.basicSequence = basicSequence;
 	}
 
 	@Override
 	public IVessel getVessel() {
-		return delegate.getVessel();
+		return this.vessel;
 	}
 
 	@Override
 	public void setVessel(IVessel vessel) {
-		delegate.setVessel(vessel);
+		this.vessel = vessel;
 	}
 
 	@Override
@@ -348,7 +208,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	@Override
 	public void addChoice(IVoyagePlanChoice choice) {
-		delegate.addChoice(choice);
+		choices.add(choice);
 	}
 
 }
