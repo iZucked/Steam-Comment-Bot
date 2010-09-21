@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
