@@ -87,6 +87,8 @@ public final class SchedulerUtils {
 
 	public static <T> IVoyagePlanOptimiser<T> createVPO(){
 		return createCachingVoyagePlanOptimiser();
+//		return new CheckingVPO<T>((IVoyagePlanOptimiser<T>)createVoyagePlanOptimiser(), 
+//				(IVoyagePlanOptimiser<T>)createCachingVoyagePlanOptimiser());
 	}
 	
 	/**
