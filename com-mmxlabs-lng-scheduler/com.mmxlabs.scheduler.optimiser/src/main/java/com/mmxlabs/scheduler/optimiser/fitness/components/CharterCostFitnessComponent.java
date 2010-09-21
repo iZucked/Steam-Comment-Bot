@@ -67,6 +67,7 @@ public class CharterCostFitnessComponent<T> extends
 
 				// check time of arrival at end port.
 				final int delta = arrivalTime - loadTime;
+				assert(delta >= 0);
 				hireCost = Calculator.multiply(delta, vessel.getVesselClass()
 						.getHourlyCharterPrice());
 			}
