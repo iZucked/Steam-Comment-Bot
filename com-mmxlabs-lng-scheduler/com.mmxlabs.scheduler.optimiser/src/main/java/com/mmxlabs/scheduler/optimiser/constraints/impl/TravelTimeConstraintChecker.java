@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -37,7 +38,7 @@ public class TravelTimeConstraintChecker<T> implements
 	/**
 	 * The maximum amount of lateness which will even be considered (10 days)
 	 */
-	private static final int MAX_LATENESS = 24*10;
+	private static final int MAX_LATENESS = 24 * 10;
 	private final String name;
 	private IOptimisationData<T> data;
 	private IPortSlotProvider<T> portSlotProvider;
@@ -138,12 +139,16 @@ public class TravelTimeConstraintChecker<T> implements
 		final int travelTime = Calculator.getTimeFromSpeedDistance(
 				resourceMaxSpeed,
 				distance);
-
-		final int earliestArrivalTime = slot1.getTimeWindow().getStart()
+		final ITimeWindow tw1 = slot1.getTimeWindow();
+		final ITimeWindow tw2 = slot2.getTimeWindow();
+		
+		if (tw1 == null || tw2 == null) return true; //if the time windows are null, there is no effective constraint
+		
+		final int earliestArrivalTime = tw1.getStart()
 				+ elementDurationProvider.getElementDuration(first, resource)
 				+ travelTime;
 
-		final int latestAllowableTime = slot2.getTimeWindow().getEnd()
+		final int latestAllowableTime = tw2.getEnd()
 			+ MAX_LATENESS;
 
 		return earliestArrivalTime < latestAllowableTime;
