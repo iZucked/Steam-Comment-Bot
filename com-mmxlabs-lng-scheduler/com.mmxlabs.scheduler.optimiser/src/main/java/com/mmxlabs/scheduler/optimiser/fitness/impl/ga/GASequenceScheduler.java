@@ -10,22 +10,23 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingAbstractSequenceSched
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * {@link ISequenceScheduler} implementation using a Genetic Algorithm to determine arrival times.
+ * {@link ISequenceScheduler} implementation using a Genetic Algorithm to
+ * determine arrival times.
  * 
  * @author Simon Goodall
  * 
  */
-public final class GASequenceScheduler<T> extends CachingAbstractSequenceScheduler<T> {
+public final class GASequenceScheduler<T> extends
+		CachingAbstractSequenceScheduler<T> {
 
 	public GASequenceScheduler() {
-		super(5000); 
-		//hack : cache size from somewhere TODO
-		//use weak references to make this automagical
+		// hack : cache size from somewhere TODO
+		// use weak references to make this automagical
 	}
 
 	private long randomSeed;
 
-	private IndividualEvaluator<T> individualEvaluator;
+	private CachingIndividualEvaluator<T> cachingIndividualEvaluator;
 
 	private float mutateThreshold;
 
@@ -37,9 +38,14 @@ public final class GASequenceScheduler<T> extends CachingAbstractSequenceSchedul
 
 	private boolean adjustArrivalTimes = false;
 
+	private IndividualEvaluator<T> individualEvaluator;
+
 	public void setIndividualEvaluator(
 			final IndividualEvaluator<T> individualEvaluator) {
 		this.individualEvaluator = individualEvaluator;
+
+		this.cachingIndividualEvaluator = new CachingIndividualEvaluator<T>(
+				individualEvaluator, numIterations * populationSize * 2);
 	}
 
 	@Override
@@ -51,17 +57,15 @@ public final class GASequenceScheduler<T> extends CachingAbstractSequenceSchedul
 		// Create a new random each time to ensure repeatability.
 		Random random = new Random(randomSeed);
 
-		final int cacheSize = numIterations * populationSize * 2;
-		
+		cachingIndividualEvaluator.clearCache();
 		// Run the GA
 		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
-				
-				new CachingIndividualEvaluator<T>(
-						individualEvaluator, 
-						cacheSize), 
-				
-				mutateThreshold, populationSize, topN,
-				numBytes);
+
+		// new CachingIndividualEvaluator<T>(
+				cachingIndividualEvaluator,
+				// cacheSize),
+
+				mutateThreshold, populationSize, topN, numBytes);
 
 		algorithm.init();
 
