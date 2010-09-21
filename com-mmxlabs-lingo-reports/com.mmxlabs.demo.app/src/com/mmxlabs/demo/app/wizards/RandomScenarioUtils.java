@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import javax.management.timer.Timer;
 
@@ -288,27 +290,27 @@ public class RandomScenarioUtils {
 		// create class parameters; currently model uses containment for curves,
 		// so we need to do duplicates
 		class1.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 138 / 24.0f, 118 / 24.0f, 1 / 24.0f, steam));
+				VesselState.LADEN, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f, steam));
 		class1.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 138 / 24.0f, 118 / 24.0f, 1 / 24.0f, steam));
+				VesselState.BALLAST, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f, steam));
 		class1.setBaseFuelEquivalenceFactor(0.5);
 
 		class2.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 145 / 24.0f, 125 / 24.0f, 1 / 24.0f, steam));
+				VesselState.LADEN, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f, steam));
 		class2.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 145 / 24.0f, 125 / 24.0f, 1 / 24.0f, steam));
+				VesselState.BALLAST, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f, steam));
 		class2.setBaseFuelEquivalenceFactor(0.5);
 
 		class3.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 177 / 24.0f, 157 / 24.0f, 1 / 24.0f, dfde));
+				VesselState.LADEN, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f, dfde));
 		class3.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 177 / 24.0f, 157 / 24.0f, 1 / 24.0f, dfde));
+				VesselState.BALLAST, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f, dfde));
 		class3.setBaseFuelEquivalenceFactor(0.5);
 
 		class4.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 126 / 24.0f, 106 / 24.0f, 1 / 24.0f, steam));
+				VesselState.LADEN, 1.26f / 24.0f, 1.06f / 24.0f, 1 / 24.0f, steam));
 		class4.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 125 / 24.0f, 106 / 24.0f, 1 / 24.0f, steam));
+				VesselState.BALLAST, 1.25f / 24.0f, 1.06f / 24.0f, 1 / 24.0f, steam));
 		class4.setBaseFuelEquivalenceFactor(0.5);
 
 		class1.setSpotCharterCount(3);
@@ -437,17 +439,49 @@ public class RandomScenarioUtils {
 
 		long now = (new Date()).getTime();
 
+		final Set<Port> loadPorts = new HashSet<Port>();
+		final Set<Port> dischargePorts = new HashSet<Port>();
+		
 		for (int i = 0; i < cargoCount; i++) {
 			// create a random cargo
 			Cargo c = cf.createCargo();
 			LoadSlot load = cf.createLoadSlot();
 			Slot discharge = cf.createSlot();
-
+			
+			DistanceLine dl = null;
 			// invalid distance lines shouldn't be in the model
-			final DistanceLine dl = lines.get(random.nextInt(lines.size()));
-			load.setPort(dl.getFromPort());
-			discharge.setPort(dl.getToPort());
-
+			while (true) {
+				dl = lines.get(random.nextInt(lines.size()));
+				final Port p1 = dl.getFromPort();
+				final Port p2 = dl.getToPort();
+				
+				final boolean p1l = loadPorts.contains(p1);
+				final boolean p2l = loadPorts.contains(p2);
+				
+				final boolean p1d = dischargePorts.contains(p1);
+				final boolean p2d = dischargePorts.contains(p2);
+				
+				if (p1l && !p2l) {
+					load.setPort(p1);
+					discharge.setPort(p2);
+					loadPorts.add(p1);
+					dischargePorts.add(p2);
+					break;
+				} else if (p2l && !p1l) {
+					load.setPort(p2);
+					discharge.setPort(p1);
+					loadPorts.add(p2);
+					dischargePorts.add(p1);
+					break;
+				} else if (!p1l && !p2l && !p1d && !p2d) {
+					load.setPort(p1);
+					discharge.setPort(p2);
+					loadPorts.add(p1);
+					dischargePorts.add(p2);
+					break;
+				}
+			}	
+			
 			load.setId("load-" + i);
 			discharge.setId("discharge-" + i);
 
@@ -464,8 +498,8 @@ public class RandomScenarioUtils {
 			load.setWindowStart(startDate);
 			discharge.setWindowStart(endDate);
 
-			load.setWindowDuration(1);
-			discharge.setWindowDuration(1);
+			load.setWindowDuration(6);
+			discharge.setWindowDuration(6);
 
 			discharge.setUnitPrice(170 + random.nextInt(100));
 			load.setUnitPrice(discharge.getUnitPrice() - 20);
