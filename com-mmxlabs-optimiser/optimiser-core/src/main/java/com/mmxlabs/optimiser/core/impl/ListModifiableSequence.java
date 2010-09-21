@@ -112,10 +112,11 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 			if (seq.size() != size()) {
 				return false;
 			}
-			for (int i = 0; i < size(); ++i) {
-				if (get(i).equals(seq.get(i)) == false) {
-					return false;
-				}
+			Iterator<T> it1, it2;
+			it1 = iterator();
+			it2 = seq.iterator();
+			while (it1.hasNext()) {
+				if (it1.next().equals(it2.next()) == false) return false;
 			}
 			return true;
 		
