@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
 
 @RunWith(JMock.class)
 public class VoyageDetailsTest {
