@@ -67,10 +67,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>r06</version>
-			<type>jar</type>
+			<groupId>com.mmxlabs.scheduler</groupId>
+			<artifactId>com.google.guava.bundle</artifactId>
+			<version>1.0.6</version>
+			<type>bundle</type>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
