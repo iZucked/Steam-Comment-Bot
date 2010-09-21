@@ -89,7 +89,7 @@ public class SequencesManipulatorUtil {
 		 * Add them to the chained manipulator. 
 		 */
 		chainedManipulator.addDelegate(startLocationRemover);
-//		chainedManipulator.addDelegate(endLocationManipulator);
+		chainedManipulator.addDelegate(endLocationManipulator);
 		
 		return chainedManipulator;
 	}
