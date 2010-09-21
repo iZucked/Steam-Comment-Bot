@@ -7,6 +7,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -84,12 +85,21 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	@Override
 	public VoyagePlan optimise() {
 
-		nonRecursiveRunLoop();
-//		runLoop(0);
+//		nonRecursiveRunLoop();
+
+		runLoop(0);
 
 		return bestPlan;
 	}
 
+	private void evaluateVoyagePlan() {
+		final PortDetails endElement = (PortDetails) basicSequence.get(basicSequence.size()-1); 
+		
+		final boolean calculateEndTime = endElement.getPortSlot().getTimeWindow() == null;
+		
+		evaluateVoyagePlan(calculateEndTime);
+	}
+	
 	private void nonRecursiveRunLoop() {
 		for (final IVoyagePlanChoice c : choices) {
 			if (c.reset() == false) {
@@ -98,11 +108,11 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		}
 		final int cc = choices.size();
 		if (cc == 0) {
-			evaluateVoyagePlan(false);
+			evaluateVoyagePlan();
 			return;
 		}
 		while (true) {
-			evaluateVoyagePlan(false);
+			evaluateVoyagePlan();
 			int i;
 			carry:
 				for (i = 0; i< cc ; i++) {
@@ -129,7 +139,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		// Recursive termination point.
 		if (i == choices.size()) {
 			// Perform voyage calculations and populate plan.
-			evaluateVoyagePlan(false);
+			evaluateVoyagePlan();
 		} else {
 			// Perform recursive application of choice objects.
 			final IVoyagePlanChoice c = choices.get(i);
@@ -173,31 +183,33 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			final VoyageOptions options = (VoyageOptions) basicSequence
 					.get(basicSequence.size() - 2);
 			final int originalTime = options.getAvailableTime();
-			currentPlan = null;
-			final long bestCost = Long.MAX_VALUE;
-
-			// Arbitarily picked number of steps
-			for (int i = 0; i < 500; ++i) {
-				// Increase available time
+			
+			VoyagePlan bestLastLegPlan = null;
+			long bestLastLegCost = Long.MAX_VALUE;
+			long lastCost = Long.MAX_VALUE;
+			
+			for (int i = 0; i<500; i++) {
 				options.setAvailableTime(originalTime + i);
-				// Evaluate plan with new time
+				
 				currentPlan = calculateVoyagePlan();
-				// Is plan valid?
 				if (currentPlan != null) {
 					final long currentCost = evaluatePlan(currentPlan);
-					// Has cost increased over previous best (i.e. last
-					// iteration)
-					if (currentCost > bestCost) {
-						// Lets assume cost always increases from this point on
-						// and terminate the evaluation
-						// If we do not have this condition, i.e. evaluate all
-						// loop iterations, we will need to store and clone best
-						// plan/options
-						break;
+					if (currentCost < bestLastLegCost) {
+						bestLastLegCost = currentCost;
+						bestLastLegPlan = currentPlan;
+					}
+					
+					if (currentCost > lastCost) {
+						options.setAvailableTime(originalTime + i - 1); //back out one step. this is ugly.
+						break; //presume minimum.
+					} else {
+						lastCost = currentCost;
 					}
 				}
 			}
-			cost = bestCost;
+			
+			cost = bestLastLegCost;
+			currentPlan = bestLastLegPlan;
 		} else {
 			// Fall back to a single evaluation assuming final voyage options
 			// are good
