@@ -73,6 +73,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvid
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
@@ -151,6 +152,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IReturnElementProviderEditor<ISequenceElement> returnElementProvider;
 
+	private HashMapRouteCostProviderEditor routeCostProvider;
+
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
 				SchedulerConstants.DCP_vesselProvider);
@@ -187,6 +190,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		returnElementProvider = new HashMapReturnElementProviderEditor<ISequenceElement>(
 				SchedulerConstants.DCP_returnElementProvider);
 
+		routeCostProvider = new HashMapRouteCostProviderEditor(
+				SchedulerConstants.DCP_routePriceProvider,
+				IMultiMatrixProvider.Default_Key);
+
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE");
 
@@ -195,7 +202,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolumeInM3,
-			final long maxVolumeInM3, final int pricePerMMBTu, final int cargoCVValue) {
+			final long maxVolumeInM3, final int pricePerMMBTu,
+			final int cargoCVValue, final int durationHours) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
@@ -234,6 +242,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		timeWindowProvider.setTimeWindows(element,
 				Collections.singletonList(window));
 
+		elementDurationsProvider.setElementDuration(element, durationHours);
+		
 		return slot;
 	}
 
@@ -241,7 +251,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IDischargeSlot createDischargeSlot(final String id,
 			final IPort port, final ITimeWindow window,
 			final long minVolumeInM3, final long maxVolumeInM3,
-			final int pricePerMMBTu) {
+			final int pricePerMMBTu, final int durationHours) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
@@ -279,6 +289,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		timeWindowProvider.setTimeWindows(element,
 				Collections.singletonList(window));
 
+		elementDurationsProvider.setElementDuration(element, durationHours);
+		
 		return slot;
 	}
 
@@ -553,8 +565,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IStartEndRequirement createStartEndRequirement(final IPort fixedPort,
-			final int fixedTime) {
+	public IStartEndRequirement createStartEndRequirement(
+			final IPort fixedPort, final int fixedTime) {
 		return new StartEndRequirement(fixedPort, true, fixedTime, true);
 	}
 
@@ -576,10 +588,33 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					"To IPort was not created using this builder");
 		}
 
+		if (portDistanceProvider.containsKey(route) == false) {
+			/*
+			 * This route has not previously been added to the PDP; initialize a
+			 * blank matrix here?
+			 */
+
+			portDistanceProvider.set(route,
+					new HashMapMatrixProvider<IPort, Integer>(
+							SchedulerConstants.DCP_portDistanceProvider,
+							Integer.MAX_VALUE));
+		}
+
 		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider
 				.get(route);
 
 		matrix.set(from, to, distance);
+	}
+
+	@Override
+	public void setVesselClassRouteCost(String route,
+			IVesselClass vesselClass, VesselState state, int tollPrice) {
+		routeCostProvider.setRouteCost(route, vesselClass, state, tollPrice);
+	}
+	
+	@Override
+	public void setDefaultRouteCost(String route, int defaultPrice) {
+		routeCostProvider.setDefaultRouteCost(route, defaultPrice);
 	}
 
 	@Override
@@ -594,7 +629,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Patch up end time windows
 		final int latestTime = endOfLatestWindow + 24 * 7;
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
-			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + 1);
+			final ITimeWindow endWindow = createTimeWindow(latestTime,
+					latestTime + 1);
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
 			timeWindowProvider.setTimeWindows(elementAndSlot.getFirst(),
 					Collections.singletonList(endWindow));
@@ -645,6 +681,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_returnElementProvider,
 				returnElementProvider);
 
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_routePriceProvider, routeCostProvider);
+
 		if (true) {
 			for (final IPort from : ports) {
 				if (!(from instanceof IXYPort)) {
@@ -683,9 +722,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IVesselClass createVesselClass(final String name, final int minSpeed,
-			final int maxSpeed, final long capacityInM3, final int minHeelInM3,
-			final int baseFuelUnitPricePerMT, final int baseFuelEquivalenceInM3TOMT) {
+	public IVesselClass createVesselClass(final String name,
+			final int minSpeed, final int maxSpeed, final long capacityInM3,
+			final int minHeelInM3, final int baseFuelUnitPricePerMT,
+			final int baseFuelEquivalenceInM3TOMT) {
 		return createVesselClass(name, minSpeed, maxSpeed, capacityInM3,
 				minHeelInM3, baseFuelUnitPricePerMT,
 				baseFuelEquivalenceInM3TOMT, 0);
@@ -784,8 +824,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ICharterOut createCharterOut(final ITimeWindow arrival, final IPort port,
-			final int durationHours) {
+	public ICharterOut createCharterOut(final ITimeWindow arrival,
+			final IPort port, final int durationHours) {
 		final ICharterOut result = new CharterOut(arrival, durationHours, port);
 		charterOuts.add(result);
 		vesselCharterOuts.put(result, new HashSet<IVessel>());
@@ -794,7 +834,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void addCharterOutVessel(final ICharterOut charterOut, final IVessel vessel) {
+	public void addCharterOutVessel(final ICharterOut charterOut,
+			final IVessel vessel) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException(
 					"IVessel was not created using this builder");

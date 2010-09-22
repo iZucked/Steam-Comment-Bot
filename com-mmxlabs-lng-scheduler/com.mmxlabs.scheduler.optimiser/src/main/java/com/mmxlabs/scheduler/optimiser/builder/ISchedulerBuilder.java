@@ -205,6 +205,17 @@ public interface ISchedulerBuilder {
 	void setPortToPortDistance(IPort from, IPort to, String route, int distance);
 
 	/**
+	 * Set a toll for sending a given vessel class + state via a given route
+	 * @param route
+	 * @param vesselClass
+	 * @param state
+	 * @param tollPrice
+	 */
+	void setVesselClassRouteCost(final String route,
+			final IVesselClass vesselClass, final VesselState state,
+			final int tollPrice);
+
+	/**
 	 * Specify an amount of time a given {@link IResource} must incur if
 	 * assigned to the given {@link ISequenceElement}.
 	 * 
@@ -229,7 +240,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
-			long minVolume, long maxVolume, int unitPrice, int cargoCVValue);
+			long minVolume, long maxVolume, int unitPrice, int cargoCVValue, int durationHours);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected
@@ -244,7 +255,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port,
-			ITimeWindow window, long minVolume, long maxVolume, int unitPrice);
+			ITimeWindow window, long minVolume, long maxVolume, int unitPrice, int durationHours);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the
@@ -275,4 +286,6 @@ public interface ISchedulerBuilder {
 
 	void setVesselClassInaccessiblePorts(IVesselClass vc,
 			Set<IPort> inaccessiblePorts);
+
+	void setDefaultRouteCost(String route, int defaultPrice);
 }
