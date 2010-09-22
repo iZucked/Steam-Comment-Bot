@@ -6,6 +6,7 @@ import java.util.Random;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingAbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -17,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public final class GASequenceScheduler<T> extends
-		CachingAbstractSequenceScheduler<T> {
+		AbstractSequenceScheduler<T> {
 
 	public GASequenceScheduler() {
 
@@ -29,10 +30,11 @@ public final class GASequenceScheduler<T> extends
 
 	private float mutateThreshold;
 
+	private int iterationsByteMultiplier;
+
+	
 	private int populationSize;
-
-	private int numIterations;
-
+	
 	private int topN;
 
 	private boolean adjustArrivalTimes = false;
@@ -42,9 +44,7 @@ public final class GASequenceScheduler<T> extends
 	public void setIndividualEvaluator(
 			final IndividualEvaluator<T> individualEvaluator) {
 		this.individualEvaluator = individualEvaluator;
-
-		this.cachingIndividualEvaluator = new CachingIndividualEvaluator<T>(
-				individualEvaluator, numIterations * populationSize * 2);
+		this.cachingIndividualEvaluator = null;
 	}
 
 	@Override
@@ -55,8 +55,13 @@ public final class GASequenceScheduler<T> extends
 
 		// Create a new random each time to ensure repeatability.
 		Random random = new Random(randomSeed);
-
-		cachingIndividualEvaluator.clearCache();
+		
+		if (cachingIndividualEvaluator == null) {
+			cachingIndividualEvaluator = new CachingIndividualEvaluator<T>(
+					individualEvaluator, populationSize * 10);
+		} else {
+			cachingIndividualEvaluator.clearCache();
+		}
 		// Run the GA
 		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
 
@@ -67,6 +72,8 @@ public final class GASequenceScheduler<T> extends
 
 		algorithm.init();
 
+		final int numIterations = numBytes * iterationsByteMultiplier;
+		
 		for (int i = 0; i < numIterations; ++i) {
 			algorithm.step();
 		}
@@ -96,13 +103,13 @@ public final class GASequenceScheduler<T> extends
 					"Individual evaluator and scheduler disagree about adjusting arrival times");
 		}
 
-		if (numIterations == 0) {
+		if (populationSize == 0) {
 			throw new IllegalStateException(
-					"Number of iterations has not been set");
+					"Population size has not been set");
 		}
 
-		if (populationSize == 0) {
-			throw new IllegalStateException("Population size has not been set");
+		if (iterationsByteMultiplier == 0) {
+			throw new IllegalStateException("Iterations byte multiplier has not been set");
 		}
 
 		if (topN == 0) {
@@ -132,20 +139,20 @@ public final class GASequenceScheduler<T> extends
 		this.mutateThreshold = mutateThreshold;
 	}
 
-	public final int getPopulationSize() {
+	public int getIterationsByteMultiplier() {
+		return iterationsByteMultiplier;
+	}
+
+	public void setIterationsByteMultiplier(int populationByteMultiplier) {
+		this.iterationsByteMultiplier = populationByteMultiplier;
+	}
+
+	public int getPopulationSize() {
 		return populationSize;
 	}
 
-	public final void setPopulationSize(int populationSize) {
+	public void setPopulationSize(int populationSize) {
 		this.populationSize = populationSize;
-	}
-
-	public final int getNumIterations() {
-		return numIterations;
-	}
-
-	public final void setNumIterations(int numIterations) {
-		this.numIterations = numIterations;
 	}
 
 	public final int getTopN() {
