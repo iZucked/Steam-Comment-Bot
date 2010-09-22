@@ -36,9 +36,9 @@ public class TravelTimeConstraintChecker<T> implements
 		IPairwiseConstraintChecker<T> {
 
 	/**
-	 * The maximum amount of lateness which will even be considered (10 days)
+	 * The maximum amount of lateness which will even be considered (5 days)
 	 */
-	private static final int MAX_LATENESS = 24 * 10;
+	private int maxLateness = 5*24;
 	private final String name;
 	private IOptimisationData<T> data;
 	private IPortSlotProvider<T> portSlotProvider;
@@ -149,7 +149,7 @@ public class TravelTimeConstraintChecker<T> implements
 				+ travelTime;
 
 		final int latestAllowableTime = tw2.getEnd()
-			+ MAX_LATENESS;
+			+ maxLateness;
 
 		return earliestArrivalTime < latestAllowableTime;
 	}
@@ -171,10 +171,20 @@ public class TravelTimeConstraintChecker<T> implements
 		+ travelTime;
 
 		final int latestAllowableTime = tw2.getEnd()
-			+ MAX_LATENESS;
+			+ maxLateness;
 		return "Excessive lateness : "
 			+ slot1.getPort().getName() +" to " + slot2.getPort().getName() + " = " + distance + ", but "+
 			" start of first tw = " + tw1.getStart() + " and end of second = " + tw2.getEnd();
 	}
+
+	public int getMaxLateness() {
+		return maxLateness;
+	}
+
+	public void setMaxLateness(int maxLateness) {
+		this.maxLateness = maxLateness;
+	}
+	
+	
 
 }
