@@ -3,12 +3,13 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Function;
 import com.google.common.collect.MapMaker;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.caches.Cache;
+import com.mmxlabs.common.caches.Cache.IKeyEvaluator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -53,7 +54,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		
 
 		@Override
-		public int hashCode() {
+		public final int hashCode() {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + getOuterType().hashCode();
@@ -65,27 +66,28 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		}
 
 
-
+		/**
+		 * This equals method almost certainly doesn't fulfil the normal equality contract; however
+		 * it should be fast, and because this class is final and private it ought not end up getting used wrongly.
+		 */
 		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			CacheKey other = (CacheKey) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
+		public final boolean equals(Object obj) {
+			final CacheKey other = (CacheKey) obj;
+//			if (getClass() != obj.getClass())
+//				return false;
+//			CacheKey other = (CacheKey) obj;
+//			if (!getOuterType().equals(other.getOuterType()))
+//				return false;
 			if (!Arrays.equals(slots, other.slots))
 				return false;
 			if (!Arrays.equals(times, other.times))
 				return false;
-			if (vessel == null) {
-				if (other.vessel != null)
-					return false;
-			} else if (!vessel.equals(other.vessel))
-				return false;
+			if (vessel != other.vessel) return false;
+//			if (vessel == null) {
+//				if (other.vessel != null)
+//					return false;
+//			} else if (!vessel.equals(other.vessel))
+//				return false;
 			return true;
 		}
 
@@ -98,8 +100,8 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	
 	private final IVoyagePlanOptimiser<T> delegate;
 	
-	private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache;// = null;
-		
+//	private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache;// = null;
+	private final Cache<CacheKey, Pair<VoyagePlan, Long>> cache;
 	
 	VoyagePlan bestPlan;
 	long bestCost;
@@ -113,7 +115,31 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			final int cacheSize) {
 		super();
 		this.delegate = delegate;
-		this.cache = new MapMaker()
+		this.cache = new Cache<CacheKey, Pair<VoyagePlan, Long>>("VPO",
+				new IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>() {
+
+					@Override
+					public Pair<VoyagePlan, Long> evaluate(CacheKey arg) {
+						final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
+
+						delegate.reset();
+						for (IVoyagePlanChoice c:arg.choices) {
+							delegate.addChoice(c);
+						}
+						delegate.setVessel(arg.vessel);
+
+						delegate.setBasicSequence(arg.sequence);
+						delegate.init();
+						delegate.optimise();
+
+						answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
+
+						return answer;
+					}
+					
+				},
+				cacheSize, 1);
+			/*new MapMaker()
 		.concurrencyLevel(1)
 		.weakValues()
 		.expiration(10, TimeUnit.MINUTES)
@@ -137,7 +163,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 				return answer;
 			}
-		});
+		});*/
 	}
 
 	@Override

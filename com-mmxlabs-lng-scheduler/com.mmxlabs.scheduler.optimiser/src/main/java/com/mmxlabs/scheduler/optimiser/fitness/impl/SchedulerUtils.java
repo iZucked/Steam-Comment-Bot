@@ -82,7 +82,7 @@ public final class SchedulerUtils {
 		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
 		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
 		
-		return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser, 4000);
+		return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser, 6000);
 	}
 
 	public static <T> IVoyagePlanOptimiser<T> createVPO(){
@@ -167,8 +167,8 @@ public final class SchedulerUtils {
 		scheduler.setPopulationSize(40);
 		// Retain top 10 each iteration
 		scheduler.setTopN(10);
-		// Have 40 iterations
-		scheduler.setNumIterations(40);
+		// Have 2 iterations for every byte in the individuals
+		scheduler.setIterationsByteMultiplier(2);
 
 		scheduler.init();
 
