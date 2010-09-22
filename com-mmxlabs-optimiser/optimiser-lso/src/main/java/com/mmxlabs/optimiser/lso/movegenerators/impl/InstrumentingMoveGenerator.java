@@ -14,7 +14,11 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 
 	private final IMoveGenerator<T> delegate;
 
+	int nulls = 0;
 	int hits = 0;
+	int total = 0;
+	int totalAccepted = 0;
+	
 	long lastPrintTime;
 	Class<? extends IMove> lastMoveClass;
 	Map<Class<? extends IMove>, Stats> stats = new HashMap<Class<? extends IMove>, Stats>();
@@ -88,6 +92,7 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 	@Override
 	public IMove<T> generateMove() {
 		final IMove<T> move = delegate.generateMove();
+		total++;
 		if (move != null) {
 			if (collectStats) {
 				lastMoveClass = move.getClass();
@@ -105,6 +110,8 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 				lastBatchTime = System.currentTimeMillis() - lastBatchTime;
 				System.err.println(this);
 			}
+		} else {
+			nulls++;
 		}
 		return move;
 	}
@@ -121,6 +128,8 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 
 	@SuppressWarnings("unchecked")
 	public void notifyOfThresholderDecision(long delta, boolean answer) {
+		if (answer)
+			totalAccepted++;
 		if (collectStats) {
 			if (stats.containsKey(lastMoveClass)) {
 				stats.get(lastMoveClass).addSample(delta, answer);
@@ -137,6 +146,7 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		for (Stats stat : stats.values()) {
 			sb.append(stat.toString() + "\n");
 		}
+		sb.append("Called " + total + " times, " + nulls + " nulls, " + totalAccepted + " accepted\n");
 
 		sb.append("Timing: " + 1000 * HIT_COUNT / (double) lastBatchTime
 				+ " moves/second");
