@@ -528,46 +528,8 @@ public class RandomScenarioUtils {
 						//create a load/discharge pair
 						dischargePorts.remove(x);
 						
-						Cargo c = cf.createCargo();
-						LoadSlot load = cf.createLoadSlot();
-						Slot discharge = cf.createSlot();
-						
-						load.setPort(loadPort);
-						discharge.setPort(dis);
-						
-						load.setId("load-" + i);
-						discharge.setId("discharge-" + i);
-						
-						final int minTime = (int) Math.ceil(dl.getDistance() / 20 / 24);
-						final int maxTime = (int) Math.ceil(dl.getDistance() / 12 / 24);
-
-						final int start = random.nextInt(365);
-						final int end = 1 + start + minTime
-								+ random.nextInt(maxTime - minTime + 15);
-
-						Date startDate = new Date(now + start * Timer.ONE_DAY);
-						Date endDate = new Date(now + end * Timer.ONE_DAY);
-
-						load.setWindowStart(startDate);
-						discharge.setWindowStart(endDate);
-
-						load.setWindowDuration(6);
-						discharge.setWindowDuration(6);
-
-						discharge.setUnitPrice(3.70f + random.nextInt(10));
-						load.setUnitPrice(discharge.getUnitPrice() - 0.2f);
-
-						load.setMinQuantity(0);
-						load.setMaxQuantity(200000);
-						load.setCargoCVvalue(22.8f);
-
-						discharge.setMinQuantity(0);
-						discharge.setMaxQuantity(200000);
-
-						c.setId("cargo-" + i);
-						c.setLoadSlot(load);
-						c.setDischargeSlot(discharge);
-						scenario.getCargoModel().getCargoes().add(c);
+						scenario.getCargoModel().getCargoes().add(
+								createCargo(cf, dl, loadPort, dis, i, now));
 						i++;
 						loads--;
 						break;
@@ -578,6 +540,49 @@ public class RandomScenarioUtils {
 		}
 	}
 
+	Cargo createCargo(CargoFactory cf, DistanceLine dl, Port loadPort, Port dischargePort, int i, long now) {
+		Cargo c = cf.createCargo();
+		LoadSlot load = cf.createLoadSlot();
+		Slot discharge = cf.createSlot();
+		
+		load.setPort(loadPort);
+		discharge.setPort(dischargePort);
+		
+		load.setId("load-" + i);
+		discharge.setId("discharge-" + i);
+		
+		final int minTime = (int) Math.ceil(dl.getDistance() / 20 / 24);
+		final int maxTime = (int) Math.ceil(dl.getDistance() / 12 / 24);
+
+		final int start = random.nextInt(365);
+		final int end = 1 + start + minTime
+				+ random.nextInt(maxTime - minTime + 15);
+
+		Date startDate = new Date(now + start * Timer.ONE_DAY);
+		Date endDate = new Date(now + end * Timer.ONE_DAY);
+
+		load.setWindowStart(startDate);
+		discharge.setWindowStart(endDate);
+
+		load.setWindowDuration(6);
+		discharge.setWindowDuration(6);
+
+		discharge.setUnitPrice(3.70f + random.nextInt(10));
+		load.setUnitPrice(discharge.getUnitPrice() - 0.2f);
+
+		load.setMinQuantity(0);
+		load.setMaxQuantity(200000);
+		load.setCargoCVvalue(22.8f);
+
+		discharge.setMinQuantity(0);
+		discharge.setMaxQuantity(200000);
+
+		c.setId("cargo-" + i);
+		c.setLoadSlot(load);
+		c.setDischargeSlot(discharge);
+		return c;
+	}
+	
 	void createRandomCargoes(Scenario scenario, int cargoCount) {
 		// TODO this is not how it was before; load and discharge ports are more
 		// random; there will be less contention.
@@ -591,12 +596,12 @@ public class RandomScenarioUtils {
 
 		for (int i = 0; i < cargoCount; i++) {
 			// create a random cargo
-			Cargo c = cf.createCargo();
-			LoadSlot load = cf.createLoadSlot();
-			Slot discharge = cf.createSlot();
-
+			
 			DistanceLine dl = null;
 			// invalid distance lines shouldn't be in the model
+			
+			Port loadPort, dischargePort;
+			
 			while (true) {
 				dl = lines.get(random.nextInt(lines.size()));
 				final Port p1 = dl.getFromPort();
@@ -609,59 +614,24 @@ public class RandomScenarioUtils {
 				final boolean p2d = dischargePorts.contains(p2);
 
 				if (p1l && !p2l) {
-					load.setPort(p1);
-					discharge.setPort(p2);
-					loadPorts.add(p1);
-					dischargePorts.add(p2);
+					loadPort = p1;
+					dischargePort = p2;
 					break;
 				} else if (p2l && !p1l) {
-					load.setPort(p2);
-					discharge.setPort(p1);
-					loadPorts.add(p2);
-					dischargePorts.add(p1);
+					loadPort = p2;
+					dischargePort = p1;
+
 					break;
 				} else if (!p1l && !p2l && !p1d && !p2d) {
-					load.setPort(p1);
-					discharge.setPort(p2);
-					loadPorts.add(p1);
-					dischargePorts.add(p2);
+					loadPort = p1;
+					dischargePort = p2;
 					break;
 				}
 			}
-
-			load.setId("load-" + i);
-			discharge.setId("discharge-" + i);
-
-			final int minTime = (int) Math.ceil(dl.getDistance() / 20 / 24);
-			final int maxTime = (int) Math.ceil(dl.getDistance() / 12 / 24);
-
-			final int start = random.nextInt(365);
-			final int end = 1 + start + minTime
-					+ random.nextInt(maxTime - minTime + 15);
-
-			Date startDate = new Date(now + start * Timer.ONE_DAY);
-			Date endDate = new Date(now + end * Timer.ONE_DAY);
-
-			load.setWindowStart(startDate);
-			discharge.setWindowStart(endDate);
-
-			load.setWindowDuration(6);
-			discharge.setWindowDuration(6);
-
-			discharge.setUnitPrice(3.70f + random.nextInt(10));
-			load.setUnitPrice(discharge.getUnitPrice() - 0.2f);
-
-			load.setMinQuantity(0);
-			load.setMaxQuantity(200000);
-			load.setCargoCVvalue(22.8f);
-
-			discharge.setMinQuantity(0);
-			discharge.setMaxQuantity(200000);
-
-			c.setId("cargo-" + i);
-			c.setLoadSlot(load);
-			c.setDischargeSlot(discharge);
-			scenario.getCargoModel().getCargoes().add(c);
+			
+			
+			scenario.getCargoModel().getCargoes().add(
+					createCargo(cf, dl, loadPort, dischargePort, i, now));
 		}
 	}
 
