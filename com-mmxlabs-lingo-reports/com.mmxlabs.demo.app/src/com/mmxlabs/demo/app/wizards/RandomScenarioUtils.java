@@ -554,12 +554,12 @@ public class RandomScenarioUtils {
 						load.setWindowDuration(6);
 						discharge.setWindowDuration(6);
 
-						discharge.setUnitPrice(170 + random.nextInt(100));
-						load.setUnitPrice(discharge.getUnitPrice() - 20);
+						discharge.setUnitPrice(3.70f + random.nextInt(10));
+						load.setUnitPrice(discharge.getUnitPrice() - 0.2f);
 
 						load.setMinQuantity(0);
 						load.setMaxQuantity(200000);
-						load.setCargoCVvalue(22800);
+						load.setCargoCVvalue(22.8f);
 
 						discharge.setMinQuantity(0);
 						discharge.setMaxQuantity(200000);
