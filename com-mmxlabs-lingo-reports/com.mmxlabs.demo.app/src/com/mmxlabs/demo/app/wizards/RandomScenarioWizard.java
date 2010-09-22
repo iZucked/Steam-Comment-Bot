@@ -57,7 +57,9 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 		try {
 			RandomScenarioUtils utils = new RandomScenarioUtils();
 			scenario = utils.createRandomScenario(details.getMatrixURI()
-					.toFileString(), details.shouldCreateVesselClasses(),
+					.toFileString(), 
+					details.getSlotsURI().toFileString(),
+					details.shouldCreateVesselClasses(),
 					details.getCargoCount(), true);
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -92,6 +94,10 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			super(pageName);
 		}
 
+		public URI getSlotsURI() {
+			return URI.createFileURI(slotsField.getText());
+		}
+
 		public String getFileName() {
 			String s = fileField.getText();
 
@@ -118,6 +124,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 		protected Text matrixField;
 		private Spinner cargoSpinner;
 		protected Button vesselClasses;
+		private Text slotsField;
 
 		@Override
 		public void createControl(Composite parent) {
@@ -130,6 +137,8 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			matrixField = makeElement(myContents, "Distance matrix to import",
 					"csv", true);
 
+			slotsField = makeElement(myContents, "Slot count list", "csv", true);
+			
 			Label label = new Label(myContents, SWT.NONE);
 			label.setText("Other model features");
 			Composite row = new Composite(myContents, SWT.NONE);
@@ -141,9 +150,10 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			vesselClasses.setText("Add default Fleet Model");
 
 			label = new Label(row, SWT.NONE);
-			label.setText("Number of random cargo slots:");
+			label.setText("Slot multiplier (%):");
 			cargoSpinner = new Spinner(row, SWT.NONE);
-
+			cargoSpinner.setMaximum(1000);
+			cargoSpinner.setMinimum(10);
 			setControl(myContents);
 		}
 

@@ -1,10 +1,17 @@
 package com.mmxlabs.demo.app.wizards;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -35,7 +42,6 @@ import scenario.optimiser.OptimiserPackage;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoFactory;
 import scenario.optimiser.lso.LsoPackage;
-import scenario.optimiser.lso.RandomMoveGeneratorSettings;
 import scenario.optimiser.lso.ThresholderSettings;
 import scenario.port.DistanceLine;
 import scenario.port.DistanceModel;
@@ -100,6 +106,47 @@ public class RandomScenarioUtils {
 		return finishCreatingRandomScenario(scenario, addStandardFleet,
 				randomCargoCount, addStandardOptimiserSettings);
 	}
+
+	public Scenario createRandomScenario(String distanceMatrixFilePath, String slotListFilePath,
+			boolean shouldCreateVesselClasses, int slotMultiplierPercentage, 
+			boolean addSettings)
+			throws FileNotFoundException, IOException {
+		
+		Scenario scenario = ScenarioPackage.eINSTANCE.getScenarioFactory()
+		.createScenario();
+		// create standard elements of scenario
+		addDistanceMatrixFromDistanceImporter(scenario, new DistanceImporter(
+				distanceMatrixFilePath));
+		finishCreatingRandomScenario(scenario, shouldCreateVesselClasses, 0, addSettings);
+		
+		//create cargoes according to slot list
+		
+		BufferedReader br = new BufferedReader(new FileReader(new File(slotListFilePath)));
+		
+		Map<String, Integer> loadSlots = new HashMap<String, Integer>();
+		Map<String, Integer> dischargeSlots = new HashMap<String, Integer>();
+		
+		final double multiplier = slotMultiplierPercentage/100.0;
+		
+		String line;
+		while ((line = br.readLine()) != null) {
+			String[] parts = line.split(",");
+			String pn = parts[0];
+			Integer count = (int) (Integer.parseInt(parts[2]) * multiplier);
+			if (parts[1].equals("L")) {
+				loadSlots.put(parts[0], count);
+			} else {
+				dischargeSlots.put(parts[0], count);
+			}
+		}
+		
+		//create cargoes according to the suggested l/d slot counts
+		createRandomCargoes(scenario, loadSlots, dischargeSlots);
+		
+		return scenario;
+	}
+
+
 
 	public Scenario createRandomScenario(InputStream stream,
 			boolean addStandardFleet, int randomCargoCount,
@@ -235,22 +282,23 @@ public class RandomScenarioUtils {
 							0));
 		}
 
-		settings.setNumberOfSteps(750000);
+		settings.setNumberOfSteps(100000);
 		ThresholderSettings thresholderSettings = lsof
 				.createThresholderSettings();
-		thresholderSettings.setAlpha(0.95);
-		thresholderSettings.setEpochLength(5000);
-		thresholderSettings.setInitialAcceptanceRate(0.25);
+		thresholderSettings.setAlpha(0.98);
+		thresholderSettings.setEpochLength(1000);
+		thresholderSettings.setInitialAcceptanceRate(0.5);
 		settings.setThresholderSettings(thresholderSettings);
+		//
+		// RandomMoveGeneratorSettings mgs =
+		// lsof.createRandomMoveGeneratorSettings();
+		// mgs.setUsing2over2(true);
+		// mgs.setUsing3over2(true);
+		// mgs.setUsing4over1(true);
+		// mgs.setUsing4over2(true);
+		//
+		// settings.setMoveGeneratorSettings(mgs);
 
-		RandomMoveGeneratorSettings mgs = lsof.createRandomMoveGeneratorSettings();
-		mgs.setUsing2over2(true);
-		mgs.setUsing3over2(true);
-		mgs.setUsing4over1(true);
-		mgs.setUsing4over2(true);
-		
-		settings.setMoveGeneratorSettings(mgs);
-		
 		optimisation.getAllSettings().add(settings);
 		optimisation.setCurrentSettings(settings);
 		scenario.setOptimisation(optimisation);
@@ -290,27 +338,35 @@ public class RandomScenarioUtils {
 		// create class parameters; currently model uses containment for curves,
 		// so we need to do duplicates
 		class1.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f, steam));
+				VesselState.LADEN, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f,
+				steam));
 		class1.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f, steam));
+				VesselState.BALLAST, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f,
+				steam));
 		class1.setBaseFuelEquivalenceFactor(0.5);
 
 		class2.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f, steam));
+				VesselState.LADEN, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f,
+				steam));
 		class2.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f, steam));
+				VesselState.BALLAST, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f,
+				steam));
 		class2.setBaseFuelEquivalenceFactor(0.5);
 
 		class3.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f, dfde));
+				VesselState.LADEN, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f,
+				dfde));
 		class3.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f, dfde));
+				VesselState.BALLAST, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f,
+				dfde));
 		class3.setBaseFuelEquivalenceFactor(0.5);
 
 		class4.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 1.26f / 24.0f, 1.06f / 24.0f, 1 / 24.0f, steam));
+				VesselState.LADEN, 1.26f / 24.0f, 1.06f / 24.0f, 1 / 24.0f,
+				steam));
 		class4.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 1.25f / 24.0f, 1.06f / 24.0f, 1 / 24.0f, steam));
+				VesselState.BALLAST, 1.25f / 24.0f, 1.06f / 24.0f, 1 / 24.0f,
+				steam));
 		class4.setBaseFuelEquivalenceFactor(0.5);
 
 		class1.setSpotCharterCount(3);
@@ -430,6 +486,97 @@ public class RandomScenarioUtils {
 
 		return vc;
 	}
+	
+	private void createRandomCargoes(Scenario scenario,
+			Map<String, Integer> loadPorts, Map<String, Integer> dischargePortsByName) {
+		CargoFactory cf = CargoPackage.eINSTANCE.getCargoFactory();
+		
+		List<Port> dischargePorts = new ArrayList<Port>();
+		for (Map.Entry<String, Integer> e : dischargePortsByName.entrySet()) {
+			Port port = null;
+			for (Port p : scenario.getPortModel().getPorts())
+				if (p.getName().equals(e.getKey())) {
+					port = p;
+					break;
+				}
+			
+			for (int i = 0; i<e.getValue(); i++) {
+				dischargePorts.add(port);
+			}
+		}
+		
+		long now = (new Date()).getTime();
+		int i = 0;
+		for (final String lp : loadPorts.keySet()) {
+			//find the port
+			int loads = loadPorts.get(lp);
+			
+			Port loadPort = null;
+			for (Port p : scenario.getPortModel().getPorts()) {
+				if (p.getName().equals(lp)) {
+					loadPort=p;
+					break;
+				}
+			}
+			while (loads > 0 && dischargePorts.size() > 0) {
+				//pick a discharge port
+				int x = random.nextInt(dischargePorts.size());
+				Port dis = dischargePorts.get(x);
+				for (DistanceLine dl : scenario.getDistanceModel().getDistances()) {
+					if (dl.getFromPort().equals(dis) && dl.getToPort().equals(loadPort)) {
+						
+						//create a load/discharge pair
+						dischargePorts.remove(x);
+						
+						Cargo c = cf.createCargo();
+						LoadSlot load = cf.createLoadSlot();
+						Slot discharge = cf.createSlot();
+						
+						load.setPort(loadPort);
+						discharge.setPort(dis);
+						
+						load.setId("load-" + i);
+						discharge.setId("discharge-" + i);
+						
+						final int minTime = (int) Math.ceil(dl.getDistance() / 20 / 24);
+						final int maxTime = (int) Math.ceil(dl.getDistance() / 12 / 24);
+
+						final int start = random.nextInt(365);
+						final int end = 1 + start + minTime
+								+ random.nextInt(maxTime - minTime + 15);
+
+						Date startDate = new Date(now + start * Timer.ONE_DAY);
+						Date endDate = new Date(now + end * Timer.ONE_DAY);
+
+						load.setWindowStart(startDate);
+						discharge.setWindowStart(endDate);
+
+						load.setWindowDuration(6);
+						discharge.setWindowDuration(6);
+
+						discharge.setUnitPrice(170 + random.nextInt(100));
+						load.setUnitPrice(discharge.getUnitPrice() - 20);
+
+						load.setMinQuantity(0);
+						load.setMaxQuantity(200000);
+						load.setCargoCVvalue(22800);
+
+						discharge.setMinQuantity(0);
+						discharge.setMaxQuantity(200000);
+
+						c.setId("cargo-" + i);
+						c.setLoadSlot(load);
+						c.setDischargeSlot(discharge);
+						scenario.getCargoModel().getCargoes().add(c);
+						i++;
+						loads--;
+						break;
+					}
+						
+				}
+			}
+		}
+	}
 
 	void createRandomCargoes(Scenario scenario, int cargoCount) {
 		// TODO this is not how it was before; load and discharge ports are more
@@ -441,26 +588,26 @@ public class RandomScenarioUtils {
 
 		final Set<Port> loadPorts = new HashSet<Port>();
 		final Set<Port> dischargePorts = new HashSet<Port>();
-		
+
 		for (int i = 0; i < cargoCount; i++) {
 			// create a random cargo
 			Cargo c = cf.createCargo();
 			LoadSlot load = cf.createLoadSlot();
 			Slot discharge = cf.createSlot();
-			
+
 			DistanceLine dl = null;
 			// invalid distance lines shouldn't be in the model
 			while (true) {
 				dl = lines.get(random.nextInt(lines.size()));
 				final Port p1 = dl.getFromPort();
 				final Port p2 = dl.getToPort();
-				
+
 				final boolean p1l = loadPorts.contains(p1);
 				final boolean p2l = loadPorts.contains(p2);
-				
+
 				final boolean p1d = dischargePorts.contains(p1);
 				final boolean p2d = dischargePorts.contains(p2);
-				
+
 				if (p1l && !p2l) {
 					load.setPort(p1);
 					discharge.setPort(p2);
@@ -480,8 +627,8 @@ public class RandomScenarioUtils {
 					dischargePorts.add(p2);
 					break;
 				}
-			}	
-			
+			}
+
 			load.setId("load-" + i);
 			discharge.setId("discharge-" + i);
 
