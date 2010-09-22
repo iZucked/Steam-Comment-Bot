@@ -24,8 +24,9 @@ public final class CachingIndividualEvaluator<T> implements
 			final int size) {
 		super();
 
-		cache = new MapMaker().concurrencyLevel(1).weakValues()
-				.initialCapacity(size).expiration(1, TimeUnit.MINUTES)
+		cache = new MapMaker().concurrencyLevel(1)
+				.softKeys()
+				.initialCapacity(size)
 				.makeComputingMap(new Function<Individual, Long>() {
 					@Override
 					public Long apply(Individual arg) {
@@ -37,8 +38,11 @@ public final class CachingIndividualEvaluator<T> implements
 	}
 
 	@Override
-	public long evaluate(Individual individual) {
-		return cache.get(individual.clone());
+	public final long evaluate(Individual individual) {
+		// final long x = delegate.evaluate(individual);
+		final long y = cache.get(individual.clone());
+		// assert(x == y);
+		return y;
 	}
 
 	@Override
@@ -47,7 +51,7 @@ public final class CachingIndividualEvaluator<T> implements
 		cache.clear();
 	}
 
-	public void clearCache() {
+	public final void clearCache() {
 		cache.clear();
 	}
 }
