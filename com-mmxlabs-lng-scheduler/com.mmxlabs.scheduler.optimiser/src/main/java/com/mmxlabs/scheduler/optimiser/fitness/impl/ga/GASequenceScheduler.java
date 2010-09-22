@@ -20,8 +20,7 @@ public final class GASequenceScheduler<T> extends
 		CachingAbstractSequenceScheduler<T> {
 
 	public GASequenceScheduler() {
-		// hack : cache size from somewhere TODO
-		// use weak references to make this automagical
+
 	}
 
 	private long randomSeed;
@@ -61,9 +60,8 @@ public final class GASequenceScheduler<T> extends
 		// Run the GA
 		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
 
-		// new CachingIndividualEvaluator<T>(
 				cachingIndividualEvaluator,
-				// cacheSize),
+//				individualEvaluator,
 
 				mutateThreshold, populationSize, topN, numBytes);
 
