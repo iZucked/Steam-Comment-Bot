@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -22,40 +21,24 @@ import com.mmxlabs.jobcontroller.emf.IncompleteScenarioException;
 import com.mmxlabs.jobcontroller.emf.LNGScenarioTransformer;
 import com.mmxlabs.jobcontroller.emf.optimisationsettings.OptimisationTransformer;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
-import com.mmxlabs.optimiser.core.impl.AnnotationSolution;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.GASequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.IIndividualEvaluator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.IndividualEvaluator;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerExporter;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 //TODO Generate a base class and provide some methods for job creation etc.
 
@@ -275,20 +258,20 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						}
 						
 						
-						monitor.subTask("Evaluate fitness of initial solution");
-						
-						final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> 
-							linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
-
-						linearFitnessEvaluator.setOptimisationData(context
-								.getOptimisationData());
-						linearFitnessEvaluator.setInitialSequences(context
-								.getInitialSequences());
-
-//						 printSequences(context.getInitialSequences());
-
-						System.out.println("Initial fitness "
-								+ linearFitnessEvaluator.getBestFitness());
+//						monitor.subTask("Evaluate fitness of initial solution");
+//						
+//						final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> 
+//							linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
+//
+//						linearFitnessEvaluator.setOptimisationData(context
+//								.getOptimisationData());
+//						linearFitnessEvaluator.setInitialSequences(context
+//								.getInitialSequences());
+//
+////						 printSequences(context.getInitialSequences());
+//
+//						System.out.println("Initial fitness "
+//								+ linearFitnessEvaluator.getBestFitness());
 
 						monitor.subTask("Run optimisation");
 						optimiser.optimise(context);
