@@ -73,12 +73,14 @@ public class LatenessComponentTest {
 		final LoadSlot loadSlot = new LoadSlot();
 		loadSlot.setTimeWindow(window1);
 
-		final IPortDetails loadDetails = context.mock(IPortDetails.class, "details-1");
-		final IPortDetails dischargeDetails = context.mock(IPortDetails.class, "details-2");
+		final IPortDetails loadDetails = context.mock(IPortDetails.class,
+				"details-1");
+		final IPortDetails dischargeDetails = context.mock(IPortDetails.class,
+				"details-2");
 
 		final Object[] routeSequence = new Object[] { loadDetails, null,
 				dischargeDetails };
-		
+
 		final VoyagePlan voyagePlan = new VoyagePlan();
 		voyagePlan.setSequence(routeSequence);
 
@@ -86,19 +88,16 @@ public class LatenessComponentTest {
 		final IModifiableSequence<Object> sequence = OptimiserTestUtil
 				.makeSequence(obj1, obj2);
 
-		
 		context.checking(new Expectations() {
 			{
-				
 				one(loadDetails).getStartTime();
 				one(dischargeDetails).getStartTime();
 				one(loadDetails).getPortSlot();
 				one(dischargeDetails).getPortSlot();
 			}
-			
-			
+
 		});
-		
+
 		c.prepare();
 
 		c.evaluateSequence(resource, sequence,
