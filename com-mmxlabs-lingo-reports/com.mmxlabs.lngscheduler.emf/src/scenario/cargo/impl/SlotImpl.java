@@ -35,6 +35,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowDuration <em>Window Duration</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getSlotDuration <em>Slot Duration</em>}</li>
  * </ul>
  * </p>
  *
@@ -170,6 +171,26 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int windowDuration = WINDOW_DURATION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSlotDuration() <em>Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSlotDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SLOT_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getSlotDuration() <em>Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSlotDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int slotDuration = SLOT_DURATION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -359,6 +380,27 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getSlotDuration() {
+		return slotDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSlotDuration(int newSlotDuration) {
+		int oldSlotDuration = slotDuration;
+		slotDuration = newSlotDuration;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SLOT_DURATION, oldSlotDuration, slotDuration));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -377,6 +419,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getWindowStart();
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				return getWindowDuration();
+			case CargoPackage.SLOT__SLOT_DURATION:
+				return getSlotDuration();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -409,6 +453,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				setWindowDuration((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__SLOT_DURATION:
+				setSlotDuration((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -443,6 +490,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				setWindowDuration(WINDOW_DURATION_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__SLOT_DURATION:
+				setSlotDuration(SLOT_DURATION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -469,6 +519,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return WINDOW_START_EDEFAULT == null ? windowStart != null : !WINDOW_START_EDEFAULT.equals(windowStart);
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				return windowDuration != WINDOW_DURATION_EDEFAULT;
+			case CargoPackage.SLOT__SLOT_DURATION:
+				return slotDuration != SLOT_DURATION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -495,6 +547,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		result.append(windowStart);
 		result.append(", windowDuration: ");
 		result.append(windowDuration);
+		result.append(", slotDuration: ");
+		result.append(slotDuration);
 		result.append(')');
 		return result.toString();
 	}

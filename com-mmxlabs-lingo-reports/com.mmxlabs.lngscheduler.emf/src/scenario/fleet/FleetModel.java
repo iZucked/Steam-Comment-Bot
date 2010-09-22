@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link scenario.fleet.FleetModel#getFleet <em>Fleet</em>}</li>
  *   <li>{@link scenario.fleet.FleetModel#getVesselClasses <em>Vessel Classes</em>}</li>
+ *   <li>{@link scenario.fleet.FleetModel#getCharterOuts <em>Charter Outs</em>}</li>
  * </ul>
  * </p>
  *
@@ -58,5 +59,21 @@ public interface FleetModel extends EObject {
 	 * @generated
 	 */
 	EList<VesselClass> getVesselClasses();
+
+	/**
+	 * Returns the value of the '<em><b>Charter Outs</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.fleet.CharterOut}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Outs</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Outs</em>' containment reference list.
+	 * @see scenario.fleet.FleetPackage#getFleetModel_CharterOuts()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CharterOut> getCharterOuts();
 
 } // FleetModel

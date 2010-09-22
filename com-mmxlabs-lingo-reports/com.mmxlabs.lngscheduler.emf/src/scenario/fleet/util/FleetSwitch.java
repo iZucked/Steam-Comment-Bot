@@ -129,6 +129,12 @@ public class FleetSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FleetPackage.CHARTER_OUT: {
+				CharterOut charterOut = (CharterOut)theEObject;
+				T result = caseCharterOut(charterOut);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -220,6 +226,21 @@ public class FleetSwitch<T> {
 	 * @generated
 	 */
 	public T casePortAndTime(PortAndTime object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Out</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Out</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterOut(CharterOut object) {
 		return null;
 	}
 

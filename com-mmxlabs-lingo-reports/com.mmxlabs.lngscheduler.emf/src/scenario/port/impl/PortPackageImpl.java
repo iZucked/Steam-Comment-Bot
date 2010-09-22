@@ -35,6 +35,7 @@ import scenario.port.Port;
 import scenario.port.PortFactory;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
+import scenario.port.VesselClassCost;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.impl.SchedulePackageImpl;
 
@@ -92,7 +93,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass partialDistanceEClass = null;
+	private EClass vesselClassCostEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -308,8 +309,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCanal_Distance() {
-		return (EAttribute)canalEClass.getEStructuralFeatures().get(1);
+	public EReference getCanal_ClassCosts() {
+		return (EReference)canalEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -317,8 +318,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCanal_EntryDistances() {
-		return (EReference)canalEClass.getEStructuralFeatures().get(2);
+	public EAttribute getCanal_DefaultCost() {
+		return (EAttribute)canalEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -326,7 +327,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCanal_ExitDistances() {
+	public EReference getCanal_DistanceModel() {
 		return (EReference)canalEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -353,8 +354,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getPartialDistance() {
-		return partialDistanceEClass;
+	public EClass getVesselClassCost() {
+		return vesselClassCostEClass;
 	}
 
 	/**
@@ -362,8 +363,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPartialDistance_Distance() {
-		return (EAttribute)partialDistanceEClass.getEStructuralFeatures().get(0);
+	public EReference getVesselClassCost_VesselClass() {
+		return (EReference)vesselClassCostEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -371,8 +372,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPartialDistance_Port() {
-		return (EReference)partialDistanceEClass.getEStructuralFeatures().get(1);
+	public EAttribute getVesselClassCost_LadenCost() {
+		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselClassCost_UnladenCost() {
+		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -421,16 +431,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		canalEClass = createEClass(CANAL);
 		createEAttribute(canalEClass, CANAL__NAME);
-		createEAttribute(canalEClass, CANAL__DISTANCE);
-		createEReference(canalEClass, CANAL__ENTRY_DISTANCES);
-		createEReference(canalEClass, CANAL__EXIT_DISTANCES);
+		createEReference(canalEClass, CANAL__CLASS_COSTS);
+		createEAttribute(canalEClass, CANAL__DEFAULT_COST);
+		createEReference(canalEClass, CANAL__DISTANCE_MODEL);
 
 		canalModelEClass = createEClass(CANAL_MODEL);
 		createEReference(canalModelEClass, CANAL_MODEL__CANALS);
 
-		partialDistanceEClass = createEClass(PARTIAL_DISTANCE);
-		createEAttribute(partialDistanceEClass, PARTIAL_DISTANCE__DISTANCE);
-		createEReference(partialDistanceEClass, PARTIAL_DISTANCE__PORT);
+		vesselClassCostEClass = createEClass(VESSEL_CLASS_COST);
+		createEReference(vesselClassCostEClass, VESSEL_CLASS_COST__VESSEL_CLASS);
+		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__LADEN_COST);
+		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__UNLADEN_COST);
 	}
 
 	/**
@@ -458,6 +469,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		// Obtain other dependent packages
 		MarketPackage theMarketPackage = (MarketPackage)EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -483,16 +495,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		initEClass(canalEClass, Canal.class, "Canal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCanal_Name(), ecorePackage.getEString(), "name", null, 0, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCanal_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCanal_EntryDistances(), this.getPartialDistance(), null, "entryDistances", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCanal_ExitDistances(), this.getPartialDistance(), null, "exitDistances", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanal_ClassCosts(), this.getVesselClassCost(), null, "classCosts", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanal_DefaultCost(), ecorePackage.getEInt(), "defaultCost", null, 0, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanal_DistanceModel(), this.getDistanceModel(), null, "distanceModel", null, 1, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalModelEClass, CanalModel.class, "CanalModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalModel_Canals(), this.getCanal(), null, "canals", null, 0, -1, CanalModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(partialDistanceEClass, PartialDistance.class, "PartialDistance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getPartialDistance_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, PartialDistance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPartialDistance_Port(), this.getPort(), null, "port", null, 0, 1, PartialDistance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(vesselClassCostEClass, VesselClassCost.class, "VesselClassCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselClassCost_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClassCost_LadenCost(), ecorePackage.getEInt(), "ladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClassCost_UnladenCost(), ecorePackage.getEInt(), "unladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //PortPackageImpl

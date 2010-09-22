@@ -31,6 +31,8 @@
           eType="#//fleet/Vessel" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
           eType="#//fleet/VesselClass" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="charterOuts" upperBound="-1"
+          eType="#//fleet/CharterOut" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Vessel">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -107,6 +109,17 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
           unsettable="true"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CharterOut">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
+          eType="#//port/Port"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
+          eType="#//fleet/Vessel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
+          eType="#//fleet/VesselClass"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel"/>
@@ -131,19 +144,21 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Canal">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="entryDistances" upperBound="-1"
-          eType="#//port/PartialDistance" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="exitDistances" upperBound="-1"
-          eType="#//port/PartialDistance" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="classCosts" upperBound="-1"
+          eType="#//port/VesselClassCost" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="distanceModel" lowerBound="1"
+          eType="#//port/DistanceModel" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CanalModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="canals" upperBound="-1"
           eType="#//port/Canal" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="PartialDistance">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"/>
+    <eClassifiers xsi:type="ecore:EClass" name="VesselClassCost">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
+          eType="#//fleet/VesselClass"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unladenCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="cargo" nsURI="http://com.mmxlabs.lng.emf/cargo" nsPrefix="com.mmxlabs.lng.emf.cargo">
@@ -166,6 +181,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//cargo/Slot">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCVvalue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat">

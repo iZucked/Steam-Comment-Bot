@@ -26,18 +26,18 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.port.PartialDistance;
 import scenario.port.PortPackage;
+import scenario.port.VesselClassCost;
 
 import scenario.provider.LngEditPlugin;
 
 /**
- * This is the item provider adapter for a {@link scenario.port.PartialDistance} object.
+ * This is the item provider adapter for a {@link scenario.port.VesselClassCost} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PartialDistanceItemProvider
+public class VesselClassCostItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -51,7 +51,7 @@ public class PartialDistanceItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PartialDistanceItemProvider(AdapterFactory adapterFactory) {
+	public VesselClassCostItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -66,26 +66,49 @@ public class PartialDistanceItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addDistancePropertyDescriptor(object);
-			addPortPropertyDescriptor(object);
+			addVesselClassPropertyDescriptor(object);
+			addLadenCostPropertyDescriptor(object);
+			addUnladenCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Distance feature.
+	 * This adds a property descriptor for the Vessel Class feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDistancePropertyDescriptor(Object object) {
+	protected void addVesselClassPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PartialDistance_distance_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PartialDistance_distance_feature", "_UI_PartialDistance_type"),
-				 PortPackage.Literals.PARTIAL_DISTANCE__DISTANCE,
+				 getString("_UI_VesselClassCost_vesselClass_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_vesselClass_feature", "_UI_VesselClassCost_type"),
+				 PortPackage.Literals.VESSEL_CLASS_COST__VESSEL_CLASS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Laden Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLadenCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClassCost_ladenCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_ladenCost_feature", "_UI_VesselClassCost_type"),
+				 PortPackage.Literals.VESSEL_CLASS_COST__LADEN_COST,
 				 true,
 				 false,
 				 false,
@@ -95,36 +118,36 @@ public class PartialDistanceItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Port feature.
+	 * This adds a property descriptor for the Unladen Cost feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPortPropertyDescriptor(Object object) {
+	protected void addUnladenCostPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PartialDistance_port_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PartialDistance_port_feature", "_UI_PartialDistance_type"),
-				 PortPackage.Literals.PARTIAL_DISTANCE__PORT,
+				 getString("_UI_VesselClassCost_unladenCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_unladenCost_feature", "_UI_VesselClassCost_type"),
+				 PortPackage.Literals.VESSEL_CLASS_COST__UNLADEN_COST,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This returns PartialDistance.gif.
+	 * This returns VesselClassCost.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PartialDistance"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselClassCost"));
 	}
 
 	/**
@@ -135,8 +158,8 @@ public class PartialDistanceItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		PartialDistance partialDistance = (PartialDistance)object;
-		return getString("_UI_PartialDistance_type") + " " + partialDistance.getDistance();
+		VesselClassCost vesselClassCost = (VesselClassCost)object;
+		return getString("_UI_VesselClassCost_type") + " " + vesselClassCost.getLadenCost();
 	}
 
 	/**
@@ -150,8 +173,9 @@ public class PartialDistanceItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(PartialDistance.class)) {
-			case PortPackage.PARTIAL_DISTANCE__DISTANCE:
+		switch (notification.getFeatureID(VesselClassCost.class)) {
+			case PortPackage.VESSEL_CLASS_COST__LADEN_COST:
+			case PortPackage.VESSEL_CLASS_COST__UNLADEN_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

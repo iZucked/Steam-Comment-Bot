@@ -208,13 +208,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__WINDOW_DURATION = 6;
 
 	/**
+	 * The feature id for the '<em><b>Slot Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SLOT_DURATION = 7;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = 7;
+	int SLOT_FEATURE_COUNT = 8;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -288,6 +297,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__WINDOW_DURATION = SLOT__WINDOW_DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Slot Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SLOT_DURATION = SLOT__SLOT_DURATION;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CVvalue</b></em>' attribute.
@@ -459,6 +477,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_WindowDuration();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Slot Duration</em>'.
+	 * @see scenario.cargo.Slot#getSlotDuration()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_SlotDuration();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -618,6 +647,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__WINDOW_DURATION = eINSTANCE.getSlot_WindowDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__SLOT_DURATION = eINSTANCE.getSlot_SlotDuration();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

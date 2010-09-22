@@ -27,6 +27,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.Slot#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getWindowDuration <em>Window Duration</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}</li>
  * </ul>
  * </p>
  *
@@ -216,5 +217,31 @@ public interface Slot extends EObject {
 	 * @generated
 	 */
 	void setWindowDuration(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Slot Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Slot Duration</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Slot Duration</em>' attribute.
+	 * @see #setSlotDuration(int)
+	 * @see scenario.cargo.CargoPackage#getSlot_SlotDuration()
+	 * @model
+	 * @generated
+	 */
+	int getSlotDuration();
+
+	/**
+	 * Sets the value of the '{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Slot Duration</em>' attribute.
+	 * @see #getSlotDuration()
+	 * @generated
+	 */
+	void setSlotDuration(int value);
 
 } // Slot

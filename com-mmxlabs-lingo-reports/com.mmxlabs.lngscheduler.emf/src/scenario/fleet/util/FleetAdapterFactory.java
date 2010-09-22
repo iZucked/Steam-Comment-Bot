@@ -100,6 +100,10 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createPortAndTimeAdapter();
 			}
 			@Override
+			public Adapter caseCharterOut(CharterOut object) {
+				return createCharterOutAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -200,6 +204,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortAndTimeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.CharterOut <em>Charter Out</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.CharterOut
+	 * @generated
+	 */
+	public Adapter createCharterOutAdapter() {
 		return null;
 	}
 

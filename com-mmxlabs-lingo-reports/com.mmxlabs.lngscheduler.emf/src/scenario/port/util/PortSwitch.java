@@ -128,9 +128,9 @@ public class PortSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case PortPackage.PARTIAL_DISTANCE: {
-				PartialDistance partialDistance = (PartialDistance)theEObject;
-				T result = casePartialDistance(partialDistance);
+			case PortPackage.VESSEL_CLASS_COST: {
+				VesselClassCost vesselClassCost = (VesselClassCost)theEObject;
+				T result = caseVesselClassCost(vesselClassCost);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -229,17 +229,17 @@ public class PortSwitch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Partial Distance</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Class Cost</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Partial Distance</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Class Cost</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePartialDistance(PartialDistance object) {
+	public T caseVesselClassCost(VesselClassCost object) {
 		return null;
 	}
 

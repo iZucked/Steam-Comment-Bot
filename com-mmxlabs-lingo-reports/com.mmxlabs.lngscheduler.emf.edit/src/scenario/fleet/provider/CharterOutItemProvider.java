@@ -4,10 +4,11 @@
  *
  * $Id$
  */
-package scenario.cargo.provider;
+package scenario.fleet.provider;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -26,18 +27,18 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.cargo.CargoPackage;
-import scenario.cargo.Slot;
+import scenario.fleet.CharterOut;
+import scenario.fleet.FleetPackage;
 
 import scenario.provider.LngEditPlugin;
 
 /**
- * This is the item provider adapter for a {@link scenario.cargo.Slot} object.
+ * This is the item provider adapter for a {@link scenario.fleet.CharterOut} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SlotItemProvider
+public class CharterOutItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -51,7 +52,7 @@ public class SlotItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SlotItemProvider(AdapterFactory adapterFactory) {
+	public CharterOutItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -66,104 +67,14 @@ public class SlotItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIdPropertyDescriptor(object);
-			addMinQuantityPropertyDescriptor(object);
-			addMaxQuantityPropertyDescriptor(object);
-			addUnitPricePropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
-			addWindowStartPropertyDescriptor(object);
-			addWindowDurationPropertyDescriptor(object);
-			addSlotDurationPropertyDescriptor(object);
+			addVesselsPropertyDescriptor(object);
+			addVesselClassesPropertyDescriptor(object);
+			addStartDatePropertyDescriptor(object);
+			addEndDatePropertyDescriptor(object);
+			addDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Id feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addIdPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_id_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_id_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__ID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Min Quantity feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMinQuantityPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_minQuantity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_minQuantity_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__MIN_QUANTITY,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Max Quantity feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMaxQuantityPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_maxQuantity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_maxQuantity_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__MAX_QUANTITY,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Unit Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addUnitPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_unitPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_unitPrice_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__UNIT_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -177,9 +88,9 @@ public class SlotItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Slot_port_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_port_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__PORT,
+				 getString("_UI_CharterOut_port_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_port_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__PORT,
 				 true,
 				 false,
 				 true,
@@ -189,19 +100,63 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Window Start feature.
+	 * This adds a property descriptor for the Vessels feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addWindowStartPropertyDescriptor(Object object) {
+	protected void addVesselsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Slot_windowStart_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_windowStart_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__WINDOW_START,
+				 getString("_UI_CharterOut_vessels_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_vessels_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Classes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselClassesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOut_vesselClasses_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_vesselClasses_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__VESSEL_CLASSES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Start Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStartDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOut_startDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_startDate_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__START_DATE,
 				 true,
 				 false,
 				 false,
@@ -211,19 +166,41 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Window Duration feature.
+	 * This adds a property descriptor for the End Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addWindowDurationPropertyDescriptor(Object object) {
+	protected void addEndDatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Slot_windowDuration_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_windowDuration_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__WINDOW_DURATION,
+				 getString("_UI_CharterOut_endDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_endDate_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__END_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOut_duration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_duration_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__DURATION,
 				 true,
 				 false,
 				 false,
@@ -233,36 +210,14 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Slot Duration feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSlotDurationPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_slotDuration_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_slotDuration_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__SLOT_DURATION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns Slot.gif.
+	 * This returns CharterOut.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Slot"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CharterOut"));
 	}
 
 	/**
@@ -273,10 +228,11 @@ public class SlotItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Slot)object).getId();
+		Date labelValue = ((CharterOut)object).getStartDate();
+		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Slot_type") :
-			getString("_UI_Slot_type") + " " + label;
+			getString("_UI_CharterOut_type") :
+			getString("_UI_CharterOut_type") + " " + label;
 	}
 
 	/**
@@ -290,14 +246,10 @@ public class SlotItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Slot.class)) {
-			case CargoPackage.SLOT__ID:
-			case CargoPackage.SLOT__MIN_QUANTITY:
-			case CargoPackage.SLOT__MAX_QUANTITY:
-			case CargoPackage.SLOT__UNIT_PRICE:
-			case CargoPackage.SLOT__WINDOW_START:
-			case CargoPackage.SLOT__WINDOW_DURATION:
-			case CargoPackage.SLOT__SLOT_DURATION:
+		switch (notification.getFeatureID(CharterOut.class)) {
+			case FleetPackage.CHARTER_OUT__START_DATE:
+			case FleetPackage.CHARTER_OUT__END_DATE:
+			case FleetPackage.CHARTER_OUT__DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

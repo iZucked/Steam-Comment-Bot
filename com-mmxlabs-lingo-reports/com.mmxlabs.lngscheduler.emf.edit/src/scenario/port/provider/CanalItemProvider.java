@@ -70,7 +70,7 @@ public class CanalItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addDistancePropertyDescriptor(object);
+			addDefaultCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -98,19 +98,19 @@ public class CanalItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Distance feature.
+	 * This adds a property descriptor for the Default Cost feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDistancePropertyDescriptor(Object object) {
+	protected void addDefaultCostPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Canal_distance_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Canal_distance_feature", "_UI_Canal_type"),
-				 PortPackage.Literals.CANAL__DISTANCE,
+				 getString("_UI_Canal_defaultCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Canal_defaultCost_feature", "_UI_Canal_type"),
+				 PortPackage.Literals.CANAL__DEFAULT_COST,
 				 true,
 				 false,
 				 false,
@@ -131,8 +131,8 @@ public class CanalItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PortPackage.Literals.CANAL__ENTRY_DISTANCES);
-			childrenFeatures.add(PortPackage.Literals.CANAL__EXIT_DISTANCES);
+			childrenFeatures.add(PortPackage.Literals.CANAL__CLASS_COSTS);
+			childrenFeatures.add(PortPackage.Literals.CANAL__DISTANCE_MODEL);
 		}
 		return childrenFeatures;
 	}
@@ -188,11 +188,11 @@ public class CanalItemProvider
 
 		switch (notification.getFeatureID(Canal.class)) {
 			case PortPackage.CANAL__NAME:
-			case PortPackage.CANAL__DISTANCE:
+			case PortPackage.CANAL__DEFAULT_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case PortPackage.CANAL__ENTRY_DISTANCES:
-			case PortPackage.CANAL__EXIT_DISTANCES:
+			case PortPackage.CANAL__CLASS_COSTS:
+			case PortPackage.CANAL__DISTANCE_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -212,36 +212,13 @@ public class CanalItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.CANAL__ENTRY_DISTANCES,
-				 PortFactory.eINSTANCE.createPartialDistance()));
+				(PortPackage.Literals.CANAL__CLASS_COSTS,
+				 PortFactory.eINSTANCE.createVesselClassCost()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.CANAL__EXIT_DISTANCES,
-				 PortFactory.eINSTANCE.createPartialDistance()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == PortPackage.Literals.CANAL__ENTRY_DISTANCES ||
-			childFeature == PortPackage.Literals.CANAL__EXIT_DISTANCES;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
+				(PortPackage.Literals.CANAL__DISTANCE_MODEL,
+				 PortFactory.eINSTANCE.createDistanceModel()));
 	}
 
 	/**

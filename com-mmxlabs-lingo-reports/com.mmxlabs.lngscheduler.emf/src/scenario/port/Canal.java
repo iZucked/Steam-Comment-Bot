@@ -19,9 +19,9 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.port.Canal#getName <em>Name</em>}</li>
- *   <li>{@link scenario.port.Canal#getDistance <em>Distance</em>}</li>
- *   <li>{@link scenario.port.Canal#getEntryDistances <em>Entry Distances</em>}</li>
- *   <li>{@link scenario.port.Canal#getExitDistances <em>Exit Distances</em>}</li>
+ *   <li>{@link scenario.port.Canal#getClassCosts <em>Class Costs</em>}</li>
+ *   <li>{@link scenario.port.Canal#getDefaultCost <em>Default Cost</em>}</li>
+ *   <li>{@link scenario.port.Canal#getDistanceModel <em>Distance Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -57,61 +57,71 @@ public interface Canal extends EObject {
 	void setName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Distance</b></em>' attribute.
+	 * Returns the value of the '<em><b>Class Costs</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.port.VesselClassCost}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Distance</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Class Costs</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Distance</em>' attribute.
-	 * @see #setDistance(int)
-	 * @see scenario.port.PortPackage#getCanal_Distance()
+	 * @return the value of the '<em>Class Costs</em>' containment reference list.
+	 * @see scenario.port.PortPackage#getCanal_ClassCosts()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<VesselClassCost> getClassCosts();
+
+	/**
+	 * Returns the value of the '<em><b>Default Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Cost</em>' attribute.
+	 * @see #setDefaultCost(int)
+	 * @see scenario.port.PortPackage#getCanal_DefaultCost()
 	 * @model
 	 * @generated
 	 */
-	int getDistance();
+	int getDefaultCost();
 
 	/**
-	 * Sets the value of the '{@link scenario.port.Canal#getDistance <em>Distance</em>}' attribute.
+	 * Sets the value of the '{@link scenario.port.Canal#getDefaultCost <em>Default Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Distance</em>' attribute.
-	 * @see #getDistance()
+	 * @param value the new value of the '<em>Default Cost</em>' attribute.
+	 * @see #getDefaultCost()
 	 * @generated
 	 */
-	void setDistance(int value);
+	void setDefaultCost(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Entry Distances</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.port.PartialDistance}.
+	 * Returns the value of the '<em><b>Distance Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Entry Distances</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Distance Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Entry Distances</em>' containment reference list.
-	 * @see scenario.port.PortPackage#getCanal_EntryDistances()
-	 * @model containment="true"
+	 * @return the value of the '<em>Distance Model</em>' containment reference.
+	 * @see #setDistanceModel(DistanceModel)
+	 * @see scenario.port.PortPackage#getCanal_DistanceModel()
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	EList<PartialDistance> getEntryDistances();
+	DistanceModel getDistanceModel();
 
 	/**
-	 * Returns the value of the '<em><b>Exit Distances</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.port.PartialDistance}.
+	 * Sets the value of the '{@link scenario.port.Canal#getDistanceModel <em>Distance Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Exit Distances</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Exit Distances</em>' containment reference list.
-	 * @see scenario.port.PortPackage#getCanal_ExitDistances()
-	 * @model containment="true"
+	 * @param value the new value of the '<em>Distance Model</em>' containment reference.
+	 * @see #getDistanceModel()
 	 * @generated
 	 */
-	EList<PartialDistance> getExitDistances();
+	void setDistanceModel(DistanceModel value);
 
 } // Canal

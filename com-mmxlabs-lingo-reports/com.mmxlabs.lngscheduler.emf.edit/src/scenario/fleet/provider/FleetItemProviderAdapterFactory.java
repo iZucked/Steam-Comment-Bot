@@ -213,6 +213,29 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.fleet.CharterOut} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutItemProvider charterOutItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.fleet.CharterOut}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutAdapter() {
+		if (charterOutItemProvider == null) {
+			charterOutItemProvider = new CharterOutItemProvider(this);
+		}
+
+		return charterOutItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -317,6 +340,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (fuelConsumptionLineItemProvider != null) fuelConsumptionLineItemProvider.dispose();
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
 		if (portAndTimeItemProvider != null) portAndTimeItemProvider.dispose();
+		if (charterOutItemProvider != null) charterOutItemProvider.dispose();
 	}
 
 }

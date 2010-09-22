@@ -220,31 +220,31 @@ public interface PortPackage extends EPackage {
 	int CANAL__NAME = 0;
 
 	/**
-	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * The feature id for the '<em><b>Class Costs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__DISTANCE = 1;
+	int CANAL__CLASS_COSTS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Entry Distances</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Default Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__ENTRY_DISTANCES = 2;
+	int CANAL__DEFAULT_COST = 2;
 
 	/**
-	 * The feature id for the '<em><b>Exit Distances</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Distance Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__EXIT_DISTANCES = 3;
+	int CANAL__DISTANCE_MODEL = 3;
 
 	/**
 	 * The number of structural features of the '<em>Canal</em>' class.
@@ -285,42 +285,50 @@ public interface PortPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '{@link scenario.port.impl.PartialDistanceImpl <em>Partial Distance</em>}' class.
+	 * The meta object id for the '{@link scenario.port.impl.VesselClassCostImpl <em>Vessel Class Cost</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see scenario.port.impl.PartialDistanceImpl
-	 * @see scenario.port.impl.PortPackageImpl#getPartialDistance()
+	 * @see scenario.port.impl.VesselClassCostImpl
+	 * @see scenario.port.impl.PortPackageImpl#getVesselClassCost()
 	 * @generated
 	 */
-	int PARTIAL_DISTANCE = 6;
+	int VESSEL_CLASS_COST = 6;
 
 	/**
-	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_DISTANCE__DISTANCE = 0;
+	int VESSEL_CLASS_COST__VESSEL_CLASS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * The feature id for the '<em><b>Laden Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_DISTANCE__PORT = 1;
+	int VESSEL_CLASS_COST__LADEN_COST = 1;
 
 	/**
-	 * The number of structural features of the '<em>Partial Distance</em>' class.
+	 * The feature id for the '<em><b>Unladen Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_DISTANCE_FEATURE_COUNT = 2;
+	int VESSEL_CLASS_COST__UNLADEN_COST = 2;
 
+	/**
+	 * The number of structural features of the '<em>Vessel Class Cost</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST_FEATURE_COUNT = 3;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.PortModel <em>Model</em>}'.
@@ -461,37 +469,37 @@ public interface PortPackage extends EPackage {
 	EAttribute getCanal_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.port.Canal#getDistance <em>Distance</em>}'.
+	 * Returns the meta object for the containment reference list '{@link scenario.port.Canal#getClassCosts <em>Class Costs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Distance</em>'.
-	 * @see scenario.port.Canal#getDistance()
+	 * @return the meta object for the containment reference list '<em>Class Costs</em>'.
+	 * @see scenario.port.Canal#getClassCosts()
 	 * @see #getCanal()
 	 * @generated
 	 */
-	EAttribute getCanal_Distance();
+	EReference getCanal_ClassCosts();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.port.Canal#getEntryDistances <em>Entry Distances</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.port.Canal#getDefaultCost <em>Default Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Entry Distances</em>'.
-	 * @see scenario.port.Canal#getEntryDistances()
+	 * @return the meta object for the attribute '<em>Default Cost</em>'.
+	 * @see scenario.port.Canal#getDefaultCost()
 	 * @see #getCanal()
 	 * @generated
 	 */
-	EReference getCanal_EntryDistances();
+	EAttribute getCanal_DefaultCost();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.port.Canal#getExitDistances <em>Exit Distances</em>}'.
+	 * Returns the meta object for the containment reference '{@link scenario.port.Canal#getDistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Exit Distances</em>'.
-	 * @see scenario.port.Canal#getExitDistances()
+	 * @return the meta object for the containment reference '<em>Distance Model</em>'.
+	 * @see scenario.port.Canal#getDistanceModel()
 	 * @see #getCanal()
 	 * @generated
 	 */
-	EReference getCanal_ExitDistances();
+	EReference getCanal_DistanceModel();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.CanalModel <em>Canal Model</em>}'.
@@ -515,36 +523,47 @@ public interface PortPackage extends EPackage {
 	EReference getCanalModel_Canals();
 
 	/**
-	 * Returns the meta object for class '{@link scenario.port.PartialDistance <em>Partial Distance</em>}'.
+	 * Returns the meta object for class '{@link scenario.port.VesselClassCost <em>Vessel Class Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Partial Distance</em>'.
-	 * @see scenario.port.PartialDistance
+	 * @return the meta object for class '<em>Vessel Class Cost</em>'.
+	 * @see scenario.port.VesselClassCost
 	 * @generated
 	 */
-	EClass getPartialDistance();
+	EClass getVesselClassCost();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.port.PartialDistance#getDistance <em>Distance</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.port.VesselClassCost#getVesselClass <em>Vessel Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Distance</em>'.
-	 * @see scenario.port.PartialDistance#getDistance()
-	 * @see #getPartialDistance()
+	 * @return the meta object for the reference '<em>Vessel Class</em>'.
+	 * @see scenario.port.VesselClassCost#getVesselClass()
+	 * @see #getVesselClassCost()
 	 * @generated
 	 */
-	EAttribute getPartialDistance_Distance();
+	EReference getVesselClassCost_VesselClass();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.port.PartialDistance#getPort <em>Port</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.port.VesselClassCost#getLadenCost <em>Laden Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see scenario.port.PartialDistance#getPort()
-	 * @see #getPartialDistance()
+	 * @return the meta object for the attribute '<em>Laden Cost</em>'.
+	 * @see scenario.port.VesselClassCost#getLadenCost()
+	 * @see #getVesselClassCost()
 	 * @generated
 	 */
-	EReference getPartialDistance_Port();
+	EAttribute getVesselClassCost_LadenCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.VesselClassCost#getUnladenCost <em>Unladen Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unladen Cost</em>'.
+	 * @see scenario.port.VesselClassCost#getUnladenCost()
+	 * @see #getVesselClassCost()
+	 * @generated
+	 */
+	EAttribute getVesselClassCost_UnladenCost();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -683,28 +702,28 @@ public interface PortPackage extends EPackage {
 		EAttribute CANAL__NAME = eINSTANCE.getCanal_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Class Costs</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CANAL__DISTANCE = eINSTANCE.getCanal_Distance();
+		EReference CANAL__CLASS_COSTS = eINSTANCE.getCanal_ClassCosts();
 
 		/**
-		 * The meta object literal for the '<em><b>Entry Distances</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Default Cost</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CANAL__ENTRY_DISTANCES = eINSTANCE.getCanal_EntryDistances();
+		EAttribute CANAL__DEFAULT_COST = eINSTANCE.getCanal_DefaultCost();
 
 		/**
-		 * The meta object literal for the '<em><b>Exit Distances</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Distance Model</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CANAL__EXIT_DISTANCES = eINSTANCE.getCanal_ExitDistances();
+		EReference CANAL__DISTANCE_MODEL = eINSTANCE.getCanal_DistanceModel();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.CanalModelImpl <em>Canal Model</em>}' class.
@@ -725,30 +744,38 @@ public interface PortPackage extends EPackage {
 		EReference CANAL_MODEL__CANALS = eINSTANCE.getCanalModel_Canals();
 
 		/**
-		 * The meta object literal for the '{@link scenario.port.impl.PartialDistanceImpl <em>Partial Distance</em>}' class.
+		 * The meta object literal for the '{@link scenario.port.impl.VesselClassCostImpl <em>Vessel Class Cost</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see scenario.port.impl.PartialDistanceImpl
-		 * @see scenario.port.impl.PortPackageImpl#getPartialDistance()
+		 * @see scenario.port.impl.VesselClassCostImpl
+		 * @see scenario.port.impl.PortPackageImpl#getVesselClassCost()
 		 * @generated
 		 */
-		EClass PARTIAL_DISTANCE = eINSTANCE.getPartialDistance();
+		EClass VESSEL_CLASS_COST = eINSTANCE.getVesselClassCost();
 
 		/**
-		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute PARTIAL_DISTANCE__DISTANCE = eINSTANCE.getPartialDistance_Distance();
+		EReference VESSEL_CLASS_COST__VESSEL_CLASS = eINSTANCE.getVesselClassCost_VesselClass();
 
 		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Laden Cost</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PARTIAL_DISTANCE__PORT = eINSTANCE.getPartialDistance_Port();
+		EAttribute VESSEL_CLASS_COST__LADEN_COST = eINSTANCE.getVesselClassCost_LadenCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Unladen Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_COST__UNLADEN_COST = eINSTANCE.getVesselClassCost_UnladenCost();
 
 	}
 

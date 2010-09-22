@@ -81,6 +81,7 @@ public class FleetModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__FLEET);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES);
+			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__CHARTER_OUTS);
 		}
 		return childrenFeatures;
 	}
@@ -134,6 +135,7 @@ public class FleetModelItemProvider
 		switch (notification.getFeatureID(FleetModel.class)) {
 			case FleetPackage.FLEET_MODEL__FLEET:
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
+			case FleetPackage.FLEET_MODEL__CHARTER_OUTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -160,6 +162,11 @@ public class FleetModelItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES,
 				 FleetFactory.eINSTANCE.createVesselClass()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.FLEET_MODEL__CHARTER_OUTS,
+				 FleetFactory.eINSTANCE.createCharterOut()));
 	}
 
 	/**
