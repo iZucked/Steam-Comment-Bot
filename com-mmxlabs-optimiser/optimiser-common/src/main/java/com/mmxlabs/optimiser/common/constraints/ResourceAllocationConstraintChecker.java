@@ -117,4 +117,10 @@ public final class ResourceAllocationConstraintChecker<T> implements
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		return (resources == null || resources.contains(resource));
 	}
+
+	@Override
+	public String explain(T first, T second, IResource resource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

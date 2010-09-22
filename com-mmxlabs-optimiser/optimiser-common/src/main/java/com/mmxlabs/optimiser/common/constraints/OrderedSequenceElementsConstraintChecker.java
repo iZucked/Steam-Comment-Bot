@@ -142,4 +142,10 @@ public final class OrderedSequenceElementsConstraintChecker<T> implements
 			return afterFirst.equals(second);
 		}
 	}
+
+	@Override
+	public String explain(T first, T second, IResource resource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
