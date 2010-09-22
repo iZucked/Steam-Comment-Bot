@@ -25,4 +25,13 @@ public interface IPairwiseConstraintChecker<T> extends IConstraintChecker<T> {
 	 * @return
 	 */
 	public boolean checkPairwiseConstraint(T first, T second, IResource resource);
+	
+	/**
+	 * Return a string explaining why these two items cannot follow one another
+	 * @param first
+	 * @param second
+	 * @param resource
+	 * @return
+	 */
+	public String explain(T first, T second, IResource resource);
 }
