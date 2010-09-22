@@ -75,6 +75,14 @@ public class RandomScenarioUtils {
 		this(new Random(1));
 	}
 
+	public Scenario createRandomScenario(String distanceMatrixFilePath,
+			boolean addStandardFleet, int randomCargoCount,
+			boolean addStandardOptimiserSettings) throws FileNotFoundException,
+			IOException {
+		return createRandomScenario(distanceMatrixFilePath, addStandardFleet,
+				randomCargoCount, addStandardOptimiserSettings, 6, 6);
+	}
+
 	/**
 	 * Create a random EMF scenario object.
 	 * 
@@ -94,8 +102,8 @@ public class RandomScenarioUtils {
 	 */
 	public Scenario createRandomScenario(String distanceMatrixFilePath,
 			boolean addStandardFleet, int randomCargoCount,
-			boolean addStandardOptimiserSettings) throws FileNotFoundException,
-			IOException {
+			boolean addStandardOptimiserSettings, int minWindow, int maxWindow)
+			throws FileNotFoundException, IOException {
 		// create scenario
 		Scenario scenario = ScenarioPackage.eINSTANCE.getScenarioFactory()
 				.createScenario();
@@ -104,30 +112,42 @@ public class RandomScenarioUtils {
 				distanceMatrixFilePath));
 
 		return finishCreatingRandomScenario(scenario, addStandardFleet,
-				randomCargoCount, addStandardOptimiserSettings);
+				randomCargoCount, addStandardOptimiserSettings, minWindow,
+				maxWindow);
 	}
 
-	public Scenario createRandomScenario(String distanceMatrixFilePath, String slotListFilePath,
-			boolean shouldCreateVesselClasses, int slotMultiplierPercentage, 
-			boolean addSettings)
+	public Scenario createRandomScenario(String distanceMatrixFilePath,
+			String slotListFilePath, boolean shouldCreateVesselClasses,
+			int slotMultiplierPercentage, boolean addSettings)
 			throws FileNotFoundException, IOException {
-		
+		return createRandomScenario(distanceMatrixFilePath, slotListFilePath,
+				shouldCreateVesselClasses, slotMultiplierPercentage,
+				addSettings, 6, 6);
+	}
+
+	public Scenario createRandomScenario(String distanceMatrixFilePath,
+			String slotListFilePath, boolean shouldCreateVesselClasses,
+			int slotMultiplierPercentage, boolean addSettings, int minWindow,
+			int maxWindow) throws FileNotFoundException, IOException {
+
 		Scenario scenario = ScenarioPackage.eINSTANCE.getScenarioFactory()
-		.createScenario();
+				.createScenario();
 		// create standard elements of scenario
 		addDistanceMatrixFromDistanceImporter(scenario, new DistanceImporter(
 				distanceMatrixFilePath));
-		finishCreatingRandomScenario(scenario, shouldCreateVesselClasses, 0, addSettings);
-		
-		//create cargoes according to slot list
-		
-		BufferedReader br = new BufferedReader(new FileReader(new File(slotListFilePath)));
-		
+		finishCreatingRandomScenario(scenario, shouldCreateVesselClasses, 0,
+				addSettings, minWindow, maxWindow);
+
+		// create cargoes according to slot list
+
+		BufferedReader br = new BufferedReader(new FileReader(new File(
+				slotListFilePath)));
+
 		Map<String, Integer> loadSlots = new HashMap<String, Integer>();
 		Map<String, Integer> dischargeSlots = new HashMap<String, Integer>();
-		
-		final double multiplier = slotMultiplierPercentage/100.0;
-		
+
+		final double multiplier = slotMultiplierPercentage / 100.0;
+
 		String line;
 		while ((line = br.readLine()) != null) {
 			String[] parts = line.split(",");
@@ -139,30 +159,38 @@ public class RandomScenarioUtils {
 				dischargeSlots.put(parts[0], count);
 			}
 		}
-		
-		//create cargoes according to the suggested l/d slot counts
-		createRandomCargoes(scenario, loadSlots, dischargeSlots);
-		
+
+		// create cargoes according to the suggested l/d slot counts
+		createRandomCargoes(scenario, loadSlots, dischargeSlots, minWindow,
+				maxWindow);
+
 		return scenario;
 	}
-
-
 
 	public Scenario createRandomScenario(InputStream stream,
 			boolean addStandardFleet, int randomCargoCount,
 			boolean addStandardOptimiserSettings) throws IOException {
+		return createRandomScenario(stream, addStandardFleet, randomCargoCount,
+				addStandardOptimiserSettings, 6, 6);
+	}
+
+	public Scenario createRandomScenario(InputStream stream,
+			boolean addStandardFleet, int randomCargoCount,
+			boolean addStandardOptimiserSettings, int minWindow, int maxWindow)
+			throws IOException {
 		Scenario scenario = ScenarioPackage.eINSTANCE.getScenarioFactory()
 				.createScenario();
 		addDistanceMatrixFromDistanceImporter(scenario, new DistanceImporter(
 				stream));
 
 		return finishCreatingRandomScenario(scenario, addStandardFleet,
-				randomCargoCount, addStandardOptimiserSettings);
+				randomCargoCount, addStandardOptimiserSettings, minWindow,
+				maxWindow);
 	}
 
 	protected Scenario finishCreatingRandomScenario(Scenario scenario,
 			boolean addStandardFleet, int randomCargoCount,
-			boolean addStandardOptimiserSettings) {
+			boolean addStandardOptimiserSettings, int minWindow, int maxWindow) {
 		scenario.setFleetModel(FleetPackage.eINSTANCE.getFleetFactory()
 				.createFleetModel());
 		scenario.setCargoModel(CargoPackage.eINSTANCE.getCargoFactory()
@@ -172,7 +200,8 @@ public class RandomScenarioUtils {
 		if (addStandardFleet) {
 			addStandardFleet(scenario);
 			if (randomCargoCount > 0) {
-				createRandomCargoes(scenario, randomCargoCount);
+				createRandomCargoes(scenario, randomCargoCount, minWindow,
+						maxWindow);
 			}
 		}
 
@@ -486,11 +515,13 @@ public class RandomScenarioUtils {
 
 		return vc;
 	}
-	
+
 	private void createRandomCargoes(Scenario scenario,
-			Map<String, Integer> loadPorts, Map<String, Integer> dischargePortsByName) {
+			Map<String, Integer> loadPorts,
+			Map<String, Integer> dischargePortsByName, int minWindow,
+			int maxWindow) {
 		CargoFactory cf = CargoPackage.eINSTANCE.getCargoFactory();
-		
+
 		List<Port> dischargePorts = new ArrayList<Port>();
 		for (Map.Entry<String, Integer> e : dischargePortsByName.entrySet()) {
 			Port port = null;
@@ -499,58 +530,62 @@ public class RandomScenarioUtils {
 					port = p;
 					break;
 				}
-			
-			for (int i = 0; i<e.getValue(); i++) {
+
+			for (int i = 0; i < e.getValue(); i++) {
 				dischargePorts.add(port);
 			}
 		}
-		
+
 		long now = (new Date()).getTime();
 		int i = 0;
 		for (final String lp : loadPorts.keySet()) {
-			//find the port
+			// find the port
 			int loads = loadPorts.get(lp);
-			
+
 			Port loadPort = null;
 			for (Port p : scenario.getPortModel().getPorts()) {
 				if (p.getName().equals(lp)) {
-					loadPort=p;
+					loadPort = p;
 					break;
 				}
 			}
 			while (loads > 0 && dischargePorts.size() > 0) {
-				//pick a discharge port
+				// pick a discharge port
 				int x = random.nextInt(dischargePorts.size());
 				Port dis = dischargePorts.get(x);
-				for (DistanceLine dl : scenario.getDistanceModel().getDistances()) {
-					if (dl.getFromPort().equals(dis) && dl.getToPort().equals(loadPort)) {
-						
-						//create a load/discharge pair
+				for (DistanceLine dl : scenario.getDistanceModel()
+						.getDistances()) {
+					if (dl.getFromPort().equals(dis)
+							&& dl.getToPort().equals(loadPort)) {
+
+						// create a load/discharge pair
 						dischargePorts.remove(x);
-						
-						scenario.getCargoModel().getCargoes().add(
-								createCargo(cf, dl, loadPort, dis, i, now));
+
+						scenario.getCargoModel()
+								.getCargoes()
+								.add(createCargo(cf, dl, loadPort, dis, i, now, minWindow, maxWindow));
 						i++;
 						loads--;
 						break;
 					}
-						
+
 				}
 			}
 		}
 	}
 
-	Cargo createCargo(CargoFactory cf, DistanceLine dl, Port loadPort, Port dischargePort, int i, long now) {
+	Cargo createCargo(CargoFactory cf, DistanceLine dl, Port loadPort,
+			Port dischargePort, int i, long now, int minWindow, int maxWindow) {
 		Cargo c = cf.createCargo();
 		LoadSlot load = cf.createLoadSlot();
 		Slot discharge = cf.createSlot();
-		
+
 		load.setPort(loadPort);
 		discharge.setPort(dischargePort);
-		
+
 		load.setId("load-" + i);
 		discharge.setId("discharge-" + i);
-		
+
 		final int minTime = (int) Math.ceil(dl.getDistance() / 20 / 24);
 		final int maxTime = (int) Math.ceil(dl.getDistance() / 12 / 24);
 
@@ -564,8 +599,8 @@ public class RandomScenarioUtils {
 		load.setWindowStart(startDate);
 		discharge.setWindowStart(endDate);
 
-		load.setWindowDuration(6);
-		discharge.setWindowDuration(6);
+		load.setWindowDuration(minWindow + random.nextInt(maxWindow - minWindow + 1));
+		discharge.setWindowDuration(minWindow + random.nextInt(maxWindow - minWindow + 1));
 
 		discharge.setUnitPrice(3.70f + random.nextInt(10));
 		load.setUnitPrice(discharge.getUnitPrice() - 0.2f);
@@ -582,8 +617,8 @@ public class RandomScenarioUtils {
 		c.setDischargeSlot(discharge);
 		return c;
 	}
-	
-	void createRandomCargoes(Scenario scenario, int cargoCount) {
+
+	void createRandomCargoes(Scenario scenario, int cargoCount, int minWindow, int maxWindow) {
 		// TODO this is not how it was before; load and discharge ports are more
 		// random; there will be less contention.
 		CargoFactory cf = CargoPackage.eINSTANCE.getCargoFactory();
@@ -596,12 +631,12 @@ public class RandomScenarioUtils {
 
 		for (int i = 0; i < cargoCount; i++) {
 			// create a random cargo
-			
+
 			DistanceLine dl = null;
 			// invalid distance lines shouldn't be in the model
-			
+
 			Port loadPort, dischargePort;
-			
+
 			while (true) {
 				dl = lines.get(random.nextInt(lines.size()));
 				final Port p1 = dl.getFromPort();
@@ -628,10 +663,9 @@ public class RandomScenarioUtils {
 					break;
 				}
 			}
-			
-			
-			scenario.getCargoModel().getCargoes().add(
-					createCargo(cf, dl, loadPort, dischargePort, i, now));
+
+			scenario.getCargoModel().getCargoes()
+					.add(createCargo(cf, dl, loadPort, dischargePort, i, now, minWindow, maxWindow));
 		}
 	}
 
