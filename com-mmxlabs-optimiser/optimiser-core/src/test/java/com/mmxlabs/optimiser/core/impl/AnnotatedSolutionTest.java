@@ -11,11 +11,11 @@ import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.impl.AnnotationSolution;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 
 @RunWith(JMock.class)
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class AnnotationSolutionTest {
+public class AnnotatedSolutionTest {
 
 	Mockery context = new JUnit4Mockery();
 
@@ -26,7 +26,7 @@ public class AnnotationSolutionTest {
 		final IAnnotatedSequence sequence = context
 				.mock(IAnnotatedSequence.class);
 
-		final AnnotationSolution solution = new AnnotationSolution();
+		final AnnotatedSolution solution = new AnnotatedSolution();
 		Assert.assertNull(solution.getAnnotatedSequence(resource));
 		solution.setAnnotatedSequence(resource, sequence);
 		Assert.assertSame(sequence, solution.getAnnotatedSequence(resource));
@@ -35,7 +35,7 @@ public class AnnotationSolutionTest {
 	@Test
 	public void testGetSetSequences() {
 		final ISequences sequences = context.mock(ISequences.class);
-		final AnnotationSolution solution = new AnnotationSolution();
+		final AnnotatedSolution solution = new AnnotatedSolution();
 		Assert.assertNull(solution.getSequences());
 		solution.setSequences(sequences);
 		Assert.assertSame(sequences, solution.getSequences());
@@ -45,7 +45,7 @@ public class AnnotationSolutionTest {
 	public void testGetSetContext() {
 		final IOptimisationContext optContext = context
 				.mock(IOptimisationContext.class);
-		final AnnotationSolution solution = new AnnotationSolution();
+		final AnnotatedSolution solution = new AnnotatedSolution();
 		Assert.assertNull(solution.getContext());
 		solution.setContext(optContext);
 		Assert.assertSame(optContext, solution.getContext());
@@ -60,7 +60,7 @@ public class AnnotationSolutionTest {
 		final IOptimisationContext optContext = context
 				.mock(IOptimisationContext.class);
 
-		final AnnotationSolution solution = new AnnotationSolution();
+		final AnnotatedSolution solution = new AnnotatedSolution();
 
 		Assert.assertNull(solution.getSequences());
 		Assert.assertNull(solution.getContext());
