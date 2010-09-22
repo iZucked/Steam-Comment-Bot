@@ -116,8 +116,8 @@ public abstract class CachingAbstractSequenceScheduler<T>
 		cache = 
 			new MapMaker()
 				.concurrencyLevel(1)
+				.expiration(10, TimeUnit.MINUTES)
 				.weakValues()
-				.expiration(5, TimeUnit.MINUTES)
 				.initialCapacity(cacheSize)
 				.makeComputingMap(new Function<CacheKey, List<VoyagePlan>>() {
 					@Override
