@@ -276,6 +276,8 @@ public abstract class AbstractSequenceScheduler<T> implements
 						// Integer.MAX_VALUE to say this is a bad sequence.
 						return Integer.MAX_VALUE;
 					}
+				} else {
+					currentTime += availableTime;
 				}
 
 			} else {

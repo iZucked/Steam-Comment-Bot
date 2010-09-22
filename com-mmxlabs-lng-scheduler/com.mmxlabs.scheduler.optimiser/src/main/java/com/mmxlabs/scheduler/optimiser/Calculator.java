@@ -54,11 +54,11 @@ public final class Calculator {
 	}
 
 	public static long costFromConsumption(final long consumption, final int unitPrice) {
-		return (consumption * unitPrice) / ScaleFactor;
+		return (consumption * (long)unitPrice) / ScaleFactor;
 	}
 
 	public static long convertM3ToMMBTu(final long m3, final int factor) {
-		return (m3 * factor) / ScaleFactor;
+		return (m3 * (long)factor) / ScaleFactor;
 	}
 
 	public static long convertMMBTuToM3(final long mmbtu, final int factor) {
@@ -66,7 +66,7 @@ public final class Calculator {
 	}
 
 	public static long convertM3ToMT(final long m3, final int factor) {
-		return (m3 * factor) / ScaleFactor;
+		return (m3 * (long)factor) / ScaleFactor;
 	}
 
 	public static long convertMTToM3(final long mt, final int factor) {
@@ -82,6 +82,10 @@ public final class Calculator {
 		return ScaleFactor * value;	
 	}
 
+	public static long descale(final long value) {
+		return value / ScaleFactor;	
+	}
+	
 	/**
 	 * Scale a float
 	 * @param f

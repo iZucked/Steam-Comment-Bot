@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyageOptions;
 
 @RunWith(JMock.class)
 public class VoyageDetailsTest {
@@ -44,7 +43,7 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetOptions() {
 
-		final VoyageOptions options = context.mock(VoyageOptions.class);
+		final VoyageOptions options = new VoyageOptions();
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		Assert.assertNull(details.getOptions());
@@ -94,10 +93,11 @@ public class VoyageDetailsTest {
 	@Test
 	public void testEquals() {
 
-		final VoyageOptions options1 = context
-				.mock(VoyageOptions.class, "o1");
-		final VoyageOptions options2 = context
-				.mock(VoyageOptions.class, "o2");
+		final VoyageOptions options1 = new VoyageOptions();
+		final VoyageOptions options2 = new VoyageOptions();
+		// Set as different so Equals test will fail when comparing these objects
+		options1.setAvailableTime(1);
+		options2.setAvailableTime(2);
 
 		final FuelComponent fuel1 = FuelComponent.Base;
 		final FuelComponent fuel2 = FuelComponent.NBO;
