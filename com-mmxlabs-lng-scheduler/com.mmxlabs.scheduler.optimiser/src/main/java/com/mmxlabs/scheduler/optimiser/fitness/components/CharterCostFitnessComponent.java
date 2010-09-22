@@ -21,15 +21,18 @@ public class CharterCostFitnessComponent<T> extends
 
 	private IVesselProvider vesselProvider;
 
-	public CharterCostFitnessComponent(final String name,
+	final String vesselProviderKey;
+	
+	public CharterCostFitnessComponent(final String name, final String vesselProviderKey,
 			final CargoSchedulerFitnessCore<T> core) {
 		super(name, core);
+		this.vesselProviderKey = vesselProviderKey;
 	}
 
 	@Override
 	public void init(final IOptimisationData<T> data) {
 		this.vesselProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+				vesselProviderKey, IVesselProvider.class);
 	}
 
 	@Override

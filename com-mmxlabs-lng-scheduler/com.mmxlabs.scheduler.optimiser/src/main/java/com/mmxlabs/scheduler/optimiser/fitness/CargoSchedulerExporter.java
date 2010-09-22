@@ -75,7 +75,8 @@ public final class CargoSchedulerExporter {
 				.createDefaultSequenceManipulators(data);
 		final IModifiableSequences<T> modifiedSequences = new ModifiableSequences<T>(
 				state);
-		manipulator.manipulate(modifiedSequences);
+		//Whoops: manipulator gets applied twice if we're not careful.
+//		manipulator.manipulate(modifiedSequences); 
 
 		// Schedule sequences and generate the output data
 		for (final Map.Entry<IResource, ISequence<T>> entry : modifiedSequences

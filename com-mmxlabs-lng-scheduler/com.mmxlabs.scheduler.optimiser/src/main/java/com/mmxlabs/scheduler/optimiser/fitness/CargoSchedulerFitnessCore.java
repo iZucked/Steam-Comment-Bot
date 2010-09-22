@@ -11,11 +11,12 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
+import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -67,7 +68,13 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		components.add(new CharterCostFitnessComponent<T>(
 				CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME,
+				SchedulerConstants.DCP_vesselProvider, //not sure if this should be here or somewhere else
 				this));
+		
+		components.add(new RouteCostFitnessComponent<T>(
+			SchedulerConstants.DCP_routePriceProvider, SchedulerConstants.DCP_vesselProvider,
+			CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
+			this));
 
 	}
 
