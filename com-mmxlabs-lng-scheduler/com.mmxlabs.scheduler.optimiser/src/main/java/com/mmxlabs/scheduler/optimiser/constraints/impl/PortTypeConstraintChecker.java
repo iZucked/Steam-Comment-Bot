@@ -242,4 +242,10 @@ public final class PortTypeConstraintChecker<T> implements
 		
 		return true;
 	}
+
+	@Override
+	public String explain(T first, T second, IResource resource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

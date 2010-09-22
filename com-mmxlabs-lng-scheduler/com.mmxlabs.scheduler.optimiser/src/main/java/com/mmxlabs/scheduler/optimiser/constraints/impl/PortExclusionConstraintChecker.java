@@ -149,4 +149,10 @@ public class PortExclusionConstraintChecker<T> implements IPairwiseConstraintChe
 		return !(exclusions.contains(portProvider.getPortForElement(first)) ||
 			exclusions.contains(portProvider.getPortForElement(second)));
 	}
+
+	@Override
+	public String explain(T first, T second, IResource resource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -154,4 +154,27 @@ public class TravelTimeConstraintChecker<T> implements
 		return earliestArrivalTime < latestAllowableTime;
 	}
 
+	@Override
+	public String explain(T first, T second, IResource resource) {
+		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
+		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
+		final int distance = distanceProvider.get(IMultiMatrixProvider.Default_Key)
+			.get(slot1.getPort(), slot2.getPort());
+		if (distance == Integer.MAX_VALUE) return "No edge connecting ports";
+		final int travelTime = Calculator.getTimeFromSpeedDistance(
+				vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed(),
+				distance);
+		final ITimeWindow tw1 = slot1.getTimeWindow();
+		final ITimeWindow tw2 = slot2.getTimeWindow();
+		final int earliestArrivalTime = tw1.getStart()
+		+ elementDurationProvider.getElementDuration(first, resource)
+		+ travelTime;
+
+		final int latestAllowableTime = tw2.getEnd()
+			+ MAX_LATENESS;
+		return "Excessive lateness : "
+			+ slot1.getPort().getName() +" to " + slot2.getPort().getName() + " = " + distance + ", but "+
+			" start of first tw = " + tw1.getStart() + " and end of second = " + tw2.getEnd();
+	}
+
 }
