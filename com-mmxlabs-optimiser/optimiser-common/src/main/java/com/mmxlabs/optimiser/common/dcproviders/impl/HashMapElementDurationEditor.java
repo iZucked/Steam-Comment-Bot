@@ -22,11 +22,14 @@ public final class HashMapElementDurationEditor<T> implements
 
 	private final Map<IResource, Map<T, Integer>> durations;
 
+	private final Map<T, Integer> nonResourceDurations;
+	
 	private int defaultValue;
 
 	public HashMapElementDurationEditor(final String name) {
 		this.name = name;
 		this.durations = new HashMap<IResource, Map<T, Integer>>();
+		this.nonResourceDurations = new HashMap<T, Integer>();
 		this.defaultValue = 0;
 	}
 
@@ -51,7 +54,8 @@ public final class HashMapElementDurationEditor<T> implements
 				return map.get(element);
 			}
 		}
-		return defaultValue;
+		final Integer x = nonResourceDurations.get(element);
+		return x == null ? defaultValue : x;
 	}
 
 	@Override
@@ -72,5 +76,10 @@ public final class HashMapElementDurationEditor<T> implements
 	@Override
 	public void setDefaultValue(int defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	@Override
+	public void setElementDuration(T element, int durationHours) {
+		nonResourceDurations.put(element, durationHours);
 	}
 }

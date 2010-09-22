@@ -16,4 +16,6 @@ public interface IElementDurationProviderEditor<T> extends
 	void setElementDuration(T element, IResource resource, int duration);
 
 	void setDefaultValue(int defaultValue);
+
+	void setElementDuration(T element, int durationHours);
 }
