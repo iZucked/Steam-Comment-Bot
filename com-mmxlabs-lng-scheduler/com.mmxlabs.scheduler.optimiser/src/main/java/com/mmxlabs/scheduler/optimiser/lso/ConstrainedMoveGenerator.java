@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -152,9 +154,42 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		
 	}
 	
+	class NullMove<T> implements IMove<T> {
+
+		@Override
+		public Collection<IResource> getAffectedResources() {
+
+			return Collections.emptyList();
+		}
+
+		@Override
+		public void apply(IModifiableSequences<T> sequences) {
+			
+		}
+
+		@Override
+		public boolean validate(ISequences<T> sequences) {
+			return true;
+		}
+		
+	}
+	
+	class NullMoveA<T> extends NullMove<T> {}
+	class NullMoveB<T> extends NullMove<T> {}
+	class NullMoveC<T> extends NullMove<T> {}
+	class NullMoveD<T> extends NullMove<T> {}
+	class NullMoveE<T> extends NullMove<T> {}
+	
+	NullMove<T> nullMoveA = new NullMoveA<T>();
+	NullMove<T> nullMoveB = new NullMoveB<T>();
+	NullMove<T> nullMoveC = new NullMoveC<T>();
+	NullMove<T> nullMoveD = new NullMoveD<T>();
+
+	private final LegalSequencingChecker<T> checker;
+	
 	public ConstrainedMoveGenerator(IOptimisationContext<T> context) {
 //		this.context = context;
-		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(context);
+		this.checker = new LegalSequencingChecker<T>(context);
 		final IOptimisationData<T> data = context.getOptimisationData();
 		
 		@SuppressWarnings("unchecked")
@@ -199,7 +234,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		final int sequence1 = pos1.getFirst();
 		final int sequence2 = pos2.getFirst();
 		final int position1 = pos1.getSecond();
-		final int position2 = pos2.getSecond();
+		int position2 = pos2.getSecond();
 		
 		// are both these elements currently in the same route
 		if (sequence1 == sequence2) {
@@ -253,9 +288,21 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			//conjunction and then construct a suitable move
 			
 			//check if it'd be a legal 2opt2
-			final boolean valid2opt2 = 
-				validFollowers.get(sequences.getSequence(sequence2).get(position2-1)).contains(
-					sequences.getSequence(sequence1).get(position1+1));
+			
+			final ISequence<T> seq1 = sequences.getSequence(sequence1);
+			final ISequence<T> seq2 = sequences.getSequence(sequence2);
+			
+			boolean valid2opt2 = 
+				validFollowers.get(seq2.get(position2-1)).contains(
+					seq1.get(position1+1));
+			
+			while (!valid2opt2 && position2 > 1) {
+				//rewind position 2? after all if we don't have a valid 2opt2
+				//we probably won't get a valid 4opt2 out of it either?
+				position2--;
+				valid2opt2 = validFollowers.get(seq2.get(position2-1)).contains(
+						seq1.get(position1+1));
+			}
 			
 			//if it would be, maybe do it
 			if (valid2opt2 && random.nextBoolean()) {
@@ -278,8 +325,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				 * we want to iterate over the elements following B and see if any of them
 				 * can precede anything in S1 after or including A. 
 				 */
-				final ISequence<T> seq1 = sequences.getSequence(sequence1);
-				final ISequence<T> seq2 = sequences.getSequence(sequence2);
+				
 				
 				final Set<T> followersOfSecondElementsPredecessor = 
 					validFollowers.get(seq2.get(position2-1));
@@ -326,6 +372,13 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 						result.setResource2Position(position2);
 						return result;
 					} else {
+//						System.err.println("No valid 2opt2");
+//						
+//						System.err.println("Disallowed by:"
+//								+checker.getSequencingProblems(
+//										seq2.get(position2-1), seq1.get(position1+1),
+//										resources.get(sequence2)));
+//						
 						return null;
 					}
 				}
