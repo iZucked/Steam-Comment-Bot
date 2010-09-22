@@ -8,7 +8,7 @@
 
    <launcherArgs>
       <vmArgs>-ea</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts -d32</vmArgsMac>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="icons/alt_window_16.gif" i32="icons/alt_window_32.gif"/>
@@ -28,7 +28,6 @@
    </vm>
 
    <plugins>
-      <plugin id="com.google.guava"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.mmxlabs.common.util"/>
       <plugin id="com.mmxlabs.demo.app"/>
