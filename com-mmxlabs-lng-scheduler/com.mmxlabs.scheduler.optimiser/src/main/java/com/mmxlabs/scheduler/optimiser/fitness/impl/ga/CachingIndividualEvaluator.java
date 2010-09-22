@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Function;
 import com.google.common.collect.MapMaker;
+import com.mmxlabs.common.caches.Cache;
+import com.mmxlabs.common.caches.Cache.IKeyEvaluator;
 
 /**
  * A memoizing evaluator; wraps another evaluator but adds a cache to make
@@ -18,21 +20,30 @@ public final class CachingIndividualEvaluator<T> implements
 		IIndividualEvaluator<T> {
 	final IIndividualEvaluator<T> delegate;
 
-	private final ConcurrentMap<Individual, Long> cache;
-
+//	private final ConcurrentMap<Individual, Long> cache;
+	private final Cache<Individual, Long> cache;
 	public CachingIndividualEvaluator(final IIndividualEvaluator<T> delegate,
 			final int size) {
 		super();
 
-		cache = new MapMaker().concurrencyLevel(1)
-				.softKeys()
-				.initialCapacity(size)
-				.makeComputingMap(new Function<Individual, Long>() {
+		cache = new Cache<Individual, Long>("IE", 
+				new IKeyEvaluator<Individual, Long>() {
+
 					@Override
-					public Long apply(Individual arg) {
-						return delegate.evaluate(arg);
+					public Long evaluate(Individual key) {
+						return delegate.evaluate(key);
 					}
-				});
+				}, size, 3);
+		
+//		cache = new MapMaker().concurrencyLevel(1)
+//				.softKeys()
+//				.initialCapacity(size)
+//				.makeComputingMap(new Function<Individual, Long>() {
+//					@Override
+//					public Long apply(Individual arg) {
+//						return delegate.evaluate(arg);
+//					}
+//				});
 
 		this.delegate = delegate;
 	}
@@ -40,7 +51,7 @@ public final class CachingIndividualEvaluator<T> implements
 	@Override
 	public final long evaluate(Individual individual) {
 		// final long x = delegate.evaluate(individual);
-		final long y = cache.get(individual.clone());
+		final long y = cache.get((Individual)individual.clone());
 		// assert(x == y);
 		return y;
 	}
