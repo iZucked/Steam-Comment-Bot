@@ -57,7 +57,7 @@ public class Move2over2Test {
 		Assert.assertFalse(move.validate(sequences));
 		
 		move.setResource1Position(4);
-		Assert.assertFalse(move.validate(sequences));
+		Assert.assertTrue(move.validate(sequences));
 	}
 	
 	@Test
