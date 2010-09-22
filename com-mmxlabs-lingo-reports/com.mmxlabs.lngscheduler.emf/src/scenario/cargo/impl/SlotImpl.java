@@ -69,7 +69,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final long MIN_QUANTITY_EDEFAULT = 0L;
+	protected static final int MIN_QUANTITY_EDEFAULT = 0;
 
 	/**
 	 * The cached value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
@@ -79,7 +79,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected long minQuantity = MIN_QUANTITY_EDEFAULT;
+	protected int minQuantity = MIN_QUANTITY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
@@ -89,7 +89,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final long MAX_QUANTITY_EDEFAULT = 0L;
+	protected static final int MAX_QUANTITY_EDEFAULT = 0;
 
 	/**
 	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
@@ -99,7 +99,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected long maxQuantity = MAX_QUANTITY_EDEFAULT;
+	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
@@ -109,7 +109,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int UNIT_PRICE_EDEFAULT = 0;
+	protected static final float UNIT_PRICE_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
@@ -119,7 +119,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected int unitPrice = UNIT_PRICE_EDEFAULT;
+	protected float unitPrice = UNIT_PRICE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -216,7 +216,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public long getMinQuantity() {
+	public int getMinQuantity() {
 		return minQuantity;
 	}
 
@@ -225,8 +225,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMinQuantity(long newMinQuantity) {
-		long oldMinQuantity = minQuantity;
+	public void setMinQuantity(int newMinQuantity) {
+		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MIN_QUANTITY, oldMinQuantity, minQuantity));
@@ -237,7 +237,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public long getMaxQuantity() {
+	public int getMaxQuantity() {
 		return maxQuantity;
 	}
 
@@ -246,8 +246,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMaxQuantity(long newMaxQuantity) {
-		long oldMaxQuantity = maxQuantity;
+	public void setMaxQuantity(int newMaxQuantity) {
+		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MAX_QUANTITY, oldMaxQuantity, maxQuantity));
@@ -258,7 +258,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getUnitPrice() {
+	public float getUnitPrice() {
 		return unitPrice;
 	}
 
@@ -267,8 +267,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setUnitPrice(int newUnitPrice) {
-		int oldUnitPrice = unitPrice;
+	public void setUnitPrice(float newUnitPrice) {
+		float oldUnitPrice = unitPrice;
 		unitPrice = newUnitPrice;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__UNIT_PRICE, oldUnitPrice, unitPrice));
@@ -393,13 +393,13 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				setId((String)newValue);
 				return;
 			case CargoPackage.SLOT__MIN_QUANTITY:
-				setMinQuantity((Long)newValue);
+				setMinQuantity((Integer)newValue);
 				return;
 			case CargoPackage.SLOT__MAX_QUANTITY:
-				setMaxQuantity((Long)newValue);
+				setMaxQuantity((Integer)newValue);
 				return;
 			case CargoPackage.SLOT__UNIT_PRICE:
-				setUnitPrice((Integer)newValue);
+				setUnitPrice((Float)newValue);
 				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)newValue);

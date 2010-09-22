@@ -70,12 +70,12 @@ public interface Slot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Min Quantity</em>' attribute.
-	 * @see #setMinQuantity(long)
+	 * @see #setMinQuantity(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_MinQuantity()
 	 * @model
 	 * @generated
 	 */
-	long getMinQuantity();
+	int getMinQuantity();
 
 	/**
 	 * Sets the value of the '{@link scenario.cargo.Slot#getMinQuantity <em>Min Quantity</em>}' attribute.
@@ -85,7 +85,7 @@ public interface Slot extends EObject {
 	 * @see #getMinQuantity()
 	 * @generated
 	 */
-	void setMinQuantity(long value);
+	void setMinQuantity(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
@@ -96,12 +96,12 @@ public interface Slot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Max Quantity</em>' attribute.
-	 * @see #setMaxQuantity(long)
+	 * @see #setMaxQuantity(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_MaxQuantity()
 	 * @model
 	 * @generated
 	 */
-	long getMaxQuantity();
+	int getMaxQuantity();
 
 	/**
 	 * Sets the value of the '{@link scenario.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}' attribute.
@@ -111,7 +111,7 @@ public interface Slot extends EObject {
 	 * @see #getMaxQuantity()
 	 * @generated
 	 */
-	void setMaxQuantity(long value);
+	void setMaxQuantity(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Unit Price</b></em>' attribute.
@@ -122,12 +122,12 @@ public interface Slot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Unit Price</em>' attribute.
-	 * @see #setUnitPrice(int)
+	 * @see #setUnitPrice(float)
 	 * @see scenario.cargo.CargoPackage#getSlot_UnitPrice()
 	 * @model
 	 * @generated
 	 */
-	int getUnitPrice();
+	float getUnitPrice();
 
 	/**
 	 * Sets the value of the '{@link scenario.cargo.Slot#getUnitPrice <em>Unit Price</em>}' attribute.
@@ -137,7 +137,7 @@ public interface Slot extends EObject {
 	 * @see #getUnitPrice()
 	 * @generated
 	 */
-	void setUnitPrice(int value);
+	void setUnitPrice(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.

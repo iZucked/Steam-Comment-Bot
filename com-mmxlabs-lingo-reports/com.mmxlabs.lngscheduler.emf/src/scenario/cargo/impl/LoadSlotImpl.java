@@ -37,7 +37,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int CARGO_CVVALUE_EDEFAULT = 0;
+	protected static final float CARGO_CVVALUE_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getCargoCVvalue() <em>Cargo CVvalue</em>}' attribute.
@@ -47,7 +47,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @generated
 	 * @ordered
 	 */
-	protected int cargoCVvalue = CARGO_CVVALUE_EDEFAULT;
+	protected float cargoCVvalue = CARGO_CVVALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -73,7 +73,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getCargoCVvalue() {
+	public float getCargoCVvalue() {
 		return cargoCVvalue;
 	}
 
@@ -82,8 +82,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCargoCVvalue(int newCargoCVvalue) {
-		int oldCargoCVvalue = cargoCVvalue;
+	public void setCargoCVvalue(float newCargoCVvalue) {
+		float oldCargoCVvalue = cargoCVvalue;
 		cargoCVvalue = newCargoCVvalue;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__CARGO_CVVALUE, oldCargoCVvalue, cargoCVvalue));
@@ -112,7 +112,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CVVALUE:
-				setCargoCVvalue((Integer)newValue);
+				setCargoCVvalue((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

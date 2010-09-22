@@ -32,12 +32,12 @@ public interface LoadSlot extends Slot {
 	 * The energy content conversion factor for this cargo; because LNG is priced by MMBTU but measured by volume, we need to know both the energy content and volume. This value lets us derive the former from the latter.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Cargo CVvalue</em>' attribute.
-	 * @see #setCargoCVvalue(int)
+	 * @see #setCargoCVvalue(float)
 	 * @see scenario.cargo.CargoPackage#getLoadSlot_CargoCVvalue()
 	 * @model
 	 * @generated
 	 */
-	int getCargoCVvalue();
+	float getCargoCVvalue();
 
 	/**
 	 * Sets the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute.
@@ -47,6 +47,6 @@ public interface LoadSlot extends Slot {
 	 * @see #getCargoCVvalue()
 	 * @generated
 	 */
-	void setCargoCVvalue(int value);
+	void setCargoCVvalue(float value);
 
 } // LoadSlot

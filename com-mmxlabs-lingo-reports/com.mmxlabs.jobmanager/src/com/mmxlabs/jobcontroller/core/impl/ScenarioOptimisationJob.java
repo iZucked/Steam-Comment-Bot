@@ -487,82 +487,10 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 	@SuppressWarnings("unchecked")
 	private void updateSchedule(final ISequences<ISequenceElement> bestState) {
-		{
 
-			final IOptimisationData<ISequenceElement> data = context
-					.getOptimisationData();
+		final IAnnotatedSolution<ISequenceElement> solution = CargoSchedulerExporter.exportState(context, bestState);
 
-			final SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
-			
-			scheduler.setDistanceProvider(data.getDataComponentProvider(
-					SchedulerConstants.DCP_portDistanceProvider,
-					IMultiMatrixProvider.class));
-			scheduler.setDurationsProvider(data.getDataComponentProvider(
-					SchedulerConstants.DCP_elementDurationsProvider,
-					IElementDurationProvider.class));
-			scheduler.setPortProvider(data.getDataComponentProvider(
-					SchedulerConstants.DCP_portProvider, IPortProvider.class));
-			scheduler.setTimeWindowProvider(data.getDataComponentProvider(
-					SchedulerConstants.DCP_timeWindowProvider,
-					ITimeWindowDataComponentProvider.class));
-			final IPortSlotProvider<ISequenceElement> portSlotProvider = data
-					.getDataComponentProvider(
-							SchedulerConstants.DCP_portSlotsProvider,
-							IPortSlotProvider.class);
-			scheduler.setPortSlotProvider(portSlotProvider);
-			scheduler.setPortTypeProvider(data.getDataComponentProvider(
-					SchedulerConstants.DCP_portTypeProvider,
-					IPortTypeProvider.class));
-			final IVesselProvider vesselProvider = data
-					.getDataComponentProvider(
-							SchedulerConstants.DCP_vesselProvider,
-							IVesselProvider.class);
-			scheduler.setVesselProvider(vesselProvider);
+		setSchedule(solution);
 
-			final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-			final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>();
-			voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
-			
-			scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-			// This may throw IllegalStateException if not all
-			// the elements are set.
-			scheduler.init();
-
-			// TODO: Integrate this into the optimiser process rather than here
-			final AnnotationSolution<ISequenceElement> solution = new AnnotationSolution<ISequenceElement>();
-			solution.setSequences(bestState);
-			solution.setContext(context);
-
-			for (final Map.Entry<IResource, ISequence<ISequenceElement>> entry : bestState
-					.getSequences().entrySet()) {
-
-				final VoyagePlanAnnotator<ISequenceElement> annotator = new VoyagePlanAnnotator<ISequenceElement>();
-				annotator.setPortSlotProvider(portSlotProvider);
-
-				final IResource resource = entry.getKey();
-				final ISequence<ISequenceElement> sequence = entry.getValue();
-
-				// Schedule sequence
-				final List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
-
-				if (plans == null) {
-					System.err.println("Solution cannot be scheduled by Simple Scheduler - perhaps some elements cannot be reached at the earliest legal time?");
-					return;
-				}
-				final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
-
-				final ArrayList<ISequenceElement> elements = new ArrayList<ISequenceElement>(
-						sequence.size());
-				for (final ISequenceElement e : sequence) {
-					elements.add(e);
-				}
-
-				annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
-
-				solution.setAnnotatedSequence(resource, annotatedSequence);
-			}
-			setSchedule(solution);
-		}
 	}
 }
