@@ -85,6 +85,18 @@ private IPortSlotProvider<T> portSlotProvider;
 		
 		return true;
 	}
+	
+	public List<String> getSequencingProblems(T e1, T e2, IResource resource) {
+		List<String> result = new ArrayList<String>();
+		
+		for (IPairwiseConstraintChecker<T> pairwiseChecker : pairwiseCheckers) {
+			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
+				result.add(pairwiseChecker.getName() + " says " + pairwiseChecker.explain(e1, e2, resource));
+			}
+		}
+		
+		return result;
+	}
 
 	public boolean allowSequence(T e1, T e2) {
 		for (IResource r : resources) {
