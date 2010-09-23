@@ -2,6 +2,12 @@ package com.mmxlabs.optimiser.common.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
+/**
+ * Implementation of {@link ITimeWindow} to create an immutable time window.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public final class TimeWindow implements ITimeWindow {
 
 	private final int start;
