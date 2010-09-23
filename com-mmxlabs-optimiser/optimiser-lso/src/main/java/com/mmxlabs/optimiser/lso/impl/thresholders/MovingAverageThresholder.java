@@ -8,13 +8,14 @@ public class MovingAverageThresholder implements IThresholder {
 	private long[] window;
 	private double sum = 0;
 	private int front = 0;
-	private double mlogAlpha;
+	private double logAlpha;
 	final double alpha0;
 	final double cooling;
 	final private Random random;
 	int tick = 0;
 	int epoch = 0;
 	private final int epochLength;
+	private double lastT;
 	
 	public MovingAverageThresholder(Random random, double initialAcceptance, double cooling, int epochLength, int window) {
 		this.random = random;
@@ -32,7 +33,7 @@ public class MovingAverageThresholder implements IThresholder {
 
 	@Override
 	public boolean accept(long delta) {
-		if (delta < 0) return true;
+		if (delta <= 0) return true;
 		
 		sum -= window[front];
 		sum += delta;
@@ -41,7 +42,8 @@ public class MovingAverageThresholder implements IThresholder {
 		
 		final double mean = sum/window.length;
 		
-		final double T = mlogAlpha/mean;
+		final double T = -mean/logAlpha;
+		lastT = T;
 		return random.nextDouble() < Math.exp(-delta/T);
 	}
 
@@ -52,8 +54,8 @@ public class MovingAverageThresholder implements IThresholder {
 			epoch++;
 		} else {
 			if (tick == 0) {
-				mlogAlpha = -Math.log(alpha0 * Math.pow(cooling, epoch));
-				System.err.println("Epoch " + epoch + ", alpha = " + alpha0 *Math.pow(cooling, epoch));
+				logAlpha = Math.log(alpha0 * Math.pow(cooling, epoch));
+				System.err.println("Epoch " + epoch + ", alpha = " + alpha0 *Math.pow(cooling, epoch) + " T=" + lastT);
 			}
 			tick++;
 		}
