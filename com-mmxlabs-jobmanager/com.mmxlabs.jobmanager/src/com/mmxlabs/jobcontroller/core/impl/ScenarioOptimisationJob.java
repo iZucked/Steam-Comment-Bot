@@ -33,7 +33,6 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
-import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -126,9 +125,13 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						fireProgressUpdate(work);
 
 						System.out.println("Iteration: " + iteration
-								+ " Best Fitness: " + bestFitness + " Current Fitness: " + currentFitness + " gain: " +
-								100*(firstFitness - bestFitness) / (double)firstFitness + "%" + " Wall time : " + 
-								(System.currentTimeMillis() - startTime) / 1000 + " s");
+								+ " Best Fitness: " + bestFitness
+								+ " Current Fitness: " + currentFitness
+								+ " gain: " + 100
+								* (firstFitness - bestFitness)
+								/ (double) firstFitness + "%" + " Wall time : "
+								+ (System.currentTimeMillis() - startTime)
+								/ 1000 + " s");
 
 						// TODO: We should verify delta fitness is equal to a
 						// whole new fitness
@@ -198,15 +201,15 @@ public class ScenarioOptimisationJob implements IManagedJob {
 				try {
 					monitor.subTask("Pre-process scenario");
 
-					LNGScenarioTransformer lst = new LNGScenarioTransformer(
+					final LNGScenarioTransformer lst = new LNGScenarioTransformer(
 							scenario);
-					OptimisationTransformer ot = new OptimisationTransformer(
+					final OptimisationTransformer ot = new OptimisationTransformer(
 							lst.getOptimisationSettings());
 					try {
-						IOptimisationData<ISequenceElement> data = lst
+						final IOptimisationData<ISequenceElement> data = lst
 								.createOptimisationData();
 
-						Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
+						final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
 								.createOptimiserAndContext(data);
 
 						monitor.subTask("Prepare optimisation");
@@ -221,64 +224,82 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
 								.getFitnessEvaluator();
 
-						//check feasibility of initial sequences
+						// check feasibility of initial sequences
 						{
-							IConstraintCheckerRegistry registry = context.getConstraintCheckerRegistry();
-							Collection<IConstraintCheckerFactory> factories = 
-								registry.getConstraintCheckerFactories(context.getConstraintCheckers());
+							final IConstraintCheckerRegistry registry = context
+									.getConstraintCheckerRegistry();
+							final Collection<IConstraintCheckerFactory> factories = registry
+									.getConstraintCheckerFactories(context
+											.getConstraintCheckers());
 							monitor.subTask("Check initial solution is feasible");
-							for (IConstraintCheckerFactory factory : factories) {
-								List<String> errors = new ArrayList<String>();
-								IConstraintChecker<ISequenceElement> checker = factory.instantiate();
+							for (final IConstraintCheckerFactory factory : factories) {
+								final List<String> errors = new ArrayList<String>();
+								final IConstraintChecker<ISequenceElement> checker = factory
+										.instantiate();
 								checker.setOptimisationData(data);
-								if (checker.checkConstraints(context.getInitialSequences(), errors) == false) {
-									System.err.println("Constraint violations for " + checker + ":");
+								if (checker.checkConstraints(
+										context.getInitialSequences(), errors) == false) {
+									System.err
+											.println("Constraint violations for "
+													+ checker + ":");
 									System.err.println("\t" + errors);
 								}
 							}
 						}
-						
-						System.err.println("Initial solution feasibility test completed");
+
+						System.err
+								.println("Initial solution feasibility test completed");
 						{
-							final ISequences<ISequenceElement> sequences = context.getInitialSequences();
-							ITimeWindowDataComponentProvider twp = data.getDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, 
-									ITimeWindowDataComponentProvider.class);
-							IPortSlotProvider<ISequenceElement> psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-							
-							for (int i = 0; i<sequences.size(); i++) {
-								ISequence<ISequenceElement> sequence = sequences.getSequence(i);
+							final ISequences<ISequenceElement> sequences = context
+									.getInitialSequences();
+							final ITimeWindowDataComponentProvider twp = data
+									.getDataComponentProvider(
+											SchedulerConstants.DCP_timeWindowProvider,
+											ITimeWindowDataComponentProvider.class);
+							final IPortSlotProvider<ISequenceElement> psp = data
+									.getDataComponentProvider(
+											SchedulerConstants.DCP_portSlotsProvider,
+											IPortSlotProvider.class);
+
+							for (int i = 0; i < sequences.size(); i++) {
+								final ISequence<ISequenceElement> sequence = sequences
+										.getSequence(i);
 								System.err.print("Sequence " + i + ": ");
-								for (int j = 0; j<sequence.size(); j++) {
-									final ITimeWindow tw = twp.getTimeWindows(sequence.get(j)).get(0);
-									System.err.print(psp.getPortSlot(sequence.get(j)) + " -> ");
+								for (int j = 0; j < sequence.size(); j++) {
+									final ITimeWindow tw = twp.getTimeWindows(
+											sequence.get(j)).get(0);
+									System.err.print(psp.getPortSlot(sequence
+											.get(j)) + " -> ");
 								}
 								System.err.println();
 							}
-							
+
 						}
-						
-						
-//						monitor.subTask("Evaluate fitness of initial solution");
-//						
-//						final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> 
-//							linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
-//
-//						linearFitnessEvaluator.setOptimisationData(context
-//								.getOptimisationData());
-//						linearFitnessEvaluator.setInitialSequences(context
-//								.getInitialSequences());
-//
-////						 printSequences(context.getInitialSequences());
-//
-//						System.out.println("Initial fitness "
-//								+ linearFitnessEvaluator.getBestFitness());
+
+						// monitor.subTask("Evaluate fitness of initial solution");
+						//
+						// final
+						// LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>
+						// linearFitnessEvaluator =
+						// (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>)
+						// fitnessEvaluator;
+						//
+						// linearFitnessEvaluator.setOptimisationData(context
+						// .getOptimisationData());
+						// linearFitnessEvaluator.setInitialSequences(context
+						// .getInitialSequences());
+						//
+						// // printSequences(context.getInitialSequences());
+						//
+						// System.out.println("Initial fitness "
+						// + linearFitnessEvaluator.getBestFitness());
 
 						monitor.subTask("Run optimisation");
 						optimiser.optimise(context);
 
-//						System.out.println("Final fitness "
-//								+ linearFitnessEvaluator.getBestFitness());
-					} catch (IncompleteScenarioException ex) {
+						// System.out.println("Final fitness "
+						// + linearFitnessEvaluator.getBestFitness());
+					} catch (final IncompleteScenarioException ex) {
 						fireJobCancelled();
 						return Status.CANCEL_STATUS; // die
 					}
@@ -468,12 +489,10 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	private void updateSchedule(final ISequences<ISequenceElement> bestState) {
 
-		final IAnnotatedSolution<ISequenceElement> solution = CargoSchedulerExporter.exportState(context, bestState);
-
+		final IAnnotatedSolution<ISequenceElement> solution = CargoSchedulerExporter
+				.exportState(context, bestState);
 		setSchedule(solution);
-
 	}
 }
