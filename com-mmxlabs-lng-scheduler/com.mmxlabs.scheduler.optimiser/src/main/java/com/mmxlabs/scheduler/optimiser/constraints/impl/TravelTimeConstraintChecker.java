@@ -38,7 +38,7 @@ public class TravelTimeConstraintChecker<T> implements
 	/**
 	 * The maximum amount of lateness which will even be considered (5 days)
 	 */
-	private int maxLateness = 5*24;
+	private int maxLateness = 8*24;
 	private final String name;
 	private IOptimisationData<T> data;
 	private IPortSlotProvider<T> portSlotProvider;
