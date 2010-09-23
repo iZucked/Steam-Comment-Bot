@@ -1006,6 +1006,14 @@ public final class AbstractSequenceSchedulerTest {
 		scheduler.init();
 	}
 
+	/**
+	 * Mock implementation of {@link AbstractSequenceScheduler} to allow use of
+	 * abstract class in tests
+	 * 
+	 * @author Simon Goodall
+	 * 
+	 * @param <T>
+	 */
 	private static class MockSequenceScheduler<T> extends
 			AbstractSequenceScheduler<T> {
 
