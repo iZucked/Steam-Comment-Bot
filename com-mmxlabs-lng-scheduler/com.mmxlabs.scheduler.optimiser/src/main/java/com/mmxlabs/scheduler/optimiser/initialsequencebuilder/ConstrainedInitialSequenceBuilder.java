@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.lso.LegalSequencingChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -47,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class ConstrainedInitialSequenceBuilder<T> implements
 		IInitialSequenceBuilder<T> {
 	private List<IPairwiseConstraintChecker<T>> pairwiseCheckers;
+	private TravelTimeConstraintChecker<T> travelTimeChecker;
 
 	class ChunkChecker<T> {
 		private LegalSequencingChecker<T> checker;
@@ -106,6 +108,9 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 			IConstraintChecker<T> checker = factory.instantiate();
 			if (checker instanceof IPairwiseConstraintChecker) {
 				pairwiseCheckers.add((IPairwiseConstraintChecker<T>) checker);
+			}
+			if (checker instanceof TravelTimeConstraintChecker){
+				this.travelTimeChecker = (TravelTimeConstraintChecker<T>)checker;
 			}
 		}
 	}
@@ -344,23 +349,39 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
-
-		Iterator<SequenceChunk<T>> iterator = chunks.iterator();
-		while (iterator.hasNext()) {
-			final SequenceChunk<T> here = iterator.next();
-			top: for (Map.Entry<IResource, List<SequenceChunk<T>>> entry : sequences
-					.entrySet()) {
-				final IResource res = entry.getKey();
-				final List<SequenceChunk<T>> sequence = entry.getValue();
-				for (int i = 0; i < sequence.size() - 1; i++) {
-					if (chunkChecker.canInsert(sequence.get(i), here,
-							sequence.get(i + 1), res)) {
-						sequence.add(i + 1, here);
-						iterator.remove();
-						break top;
+		int retry = 0;
+		int originalMaxLateness = (travelTimeChecker == null) ? 0 : travelTimeChecker.getMaxLateness();
+		while (!chunks.isEmpty() && retry++ < 100) {
+			Iterator<SequenceChunk<T>> iterator = chunks.iterator();
+			while (iterator.hasNext()) {
+				final SequenceChunk<T> here = iterator.next();
+				top: for (Map.Entry<IResource, List<SequenceChunk<T>>> entry : sequences
+						.entrySet()) {
+					final IResource res = entry.getKey();
+					final List<SequenceChunk<T>> sequence = entry.getValue();
+					for (int i = 0; i < sequence.size() - 1; i++) {
+						if (chunkChecker.canInsert(sequence.get(i), here,
+								sequence.get(i + 1), res)) {
+							sequence.add(i + 1, here);
+							iterator.remove();
+							break top;
+						}
 					}
 				}
 			}
+			if (travelTimeChecker == null) break;
+			//relax constraint
+			final int maxLateness = travelTimeChecker.getMaxLateness();
+			travelTimeChecker.setMaxLateness(maxLateness+6);
+		}
+		
+		if (chunks.isEmpty() == false) {
+			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSolutionBuilder. " + chunks + " could not be scheduled anywhere.");
+		}
+		
+		if (retry > 1) {
+//			System.err.println();
+			throw new RuntimeException("Had to increase max. lateness to " + travelTimeChecker.getMaxLateness() + " to construct an initial solution");
 		}
 
 		// OK, we have done our best, now build the modifiablesequences
