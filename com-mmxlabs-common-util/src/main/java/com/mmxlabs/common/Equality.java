@@ -9,6 +9,10 @@ package com.mmxlabs.common;
  */
 public final class Equality {
 
+	private Equality() {
+		
+	}
+	
 	/**
 	 * Compare two object using their {@link #equals(Object)} method. However
 	 * check for <code>null</code>. Returns true if both object are null or
