@@ -76,11 +76,9 @@ public final class PortTypeConstraintChecker<T> implements
 		for (final Map.Entry<IResource, ISequence<T>> entry : sequences
 				.getSequences().entrySet()) {
 			if (!checkSequence(entry.getValue(), messages,
-
-			vesselProvider.getVessel(entry.getKey()).getVesselInstanceType()
-
-			))
+			vesselProvider.getVessel(entry.getKey()).getVesselInstanceType())) {
 				return false;
+			}
 		}
 
 		return true;
