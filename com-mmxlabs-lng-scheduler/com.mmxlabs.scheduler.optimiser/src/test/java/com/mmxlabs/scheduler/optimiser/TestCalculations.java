@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
@@ -53,10 +54,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 public class TestCalculations {
 
 	/**
-	 * 
-	 * TODO: Complete tests, fix up abstract sequence scheduler and rebase
-	 * simple on that. Retest. Then only use abstract sequence scheduler here,
-	 * passing in the expected arrival times.
 	 * 
 	 * 
 	 * TODO: Need to test NBO speed (lets increase rate so we get e.g. 13/14
@@ -136,7 +133,7 @@ public class TestCalculations {
 		final IOptimisationData<ISequenceElement> data = builder
 				.getOptimisationData();
 
-		final SimpleSequenceScheduler<ISequenceElement> scheduler = new SimpleSequenceScheduler<ISequenceElement>();
+		final MockSequenceScheduler<ISequenceElement> scheduler = new MockSequenceScheduler<ISequenceElement>();
 
 		scheduler.setDistanceProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portDistanceProvider,
@@ -201,7 +198,8 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
+		int[] expectedArrivalTimes = new int[] { 0, 25, 50, 75 };
+		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
@@ -805,7 +803,8 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
+		int[] expectedArrivalTimes = new int[] { 0, 25, 50, 75 };
+		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
@@ -1414,7 +1413,8 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence);
+		int[] expectedArrivalTimes = new int[] { 0, 25, 50, 75 };
+		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
@@ -1902,4 +1902,14 @@ public class TestCalculations {
 		}
 	}
 
+	private static class MockSequenceScheduler<T> extends
+			AbstractSequenceScheduler<T> {
+
+		@Override
+		public List<VoyagePlan> schedule(final IResource resource,
+				final ISequence<T> sequence) {
+			throw new UnsupportedOperationException(
+					"Method invocation is not part of the tests!");
+		}
+	}
 }
