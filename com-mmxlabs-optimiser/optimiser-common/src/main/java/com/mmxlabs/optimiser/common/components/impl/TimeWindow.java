@@ -20,17 +20,17 @@ public final class TimeWindow implements ITimeWindow {
 	}
 
 	@Override
-	public int getEnd() {
+	public final int getEnd() {
 		return end;
 	}
 
 	@Override
-	public int getStart() {
+	public final int getStart() {
 		return start;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (obj instanceof TimeWindow) {
 			final TimeWindow tw = (TimeWindow) obj;
 			if (start != tw.start) {
