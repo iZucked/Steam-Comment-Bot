@@ -199,6 +199,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 			}
 		});
 
+		context.setDefaultResultForType(boolean.class, true);
 		context.setDefaultResultForType(long.class, 1000l);
 
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
@@ -206,6 +207,8 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		evaluator.setInitialSequences(source);
 
+		context.assertIsSatisfied();
+		
 		Assert.assertEquals(1000, evaluator.getBestFitness());
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());
 
@@ -238,6 +241,8 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		evaluator.evaluateSequences(source, affectedResources);
 
+		context.assertIsSatisfied();
+		
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(500, evaluator.getCurrentFitness());
 
@@ -276,6 +281,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertSame(best, evaluator.getBestSequences());
 		current = evaluator.getCurrentSequences();
 
+		Assert.fail("This test will fail as we need the thresholder to return false, but the helper to return true!"); 
 		context.setDefaultResultForType(boolean.class, false);
 		context.setDefaultResultForType(long.class, 600l);
 
@@ -339,6 +345,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		});
 
 		context.setDefaultResultForType(long.class, 1000l);
+		context.setDefaultResultForType(boolean.class, true);
 
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
@@ -357,3 +364,4 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	}
 
 }
+
