@@ -154,7 +154,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	/**
 	 * Evaluates the current sequences from the current choice set. Optionally,
 	 * the last voyage can be further optimised to find the best arrival time
-	 * that miminises cost.
+	 * that minimises cost.
 	 * 
 	 * @param optimiseLastLeg
 	 */
