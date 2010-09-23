@@ -182,17 +182,15 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 				// Add on all whole bytes to the offset
 				int offset = 0;
 				for (int j = 0; j < numBytes; ++j) {
-					offset <<= 8;
 					// TODO: Does OR apply as I expect, or should I just use + ?
-					offset |= bytes[idx++];
+					offset = (offset << 8) | (bytes[idx++] & 0xff);
 				}
 
 				// For partial bytes, right shift back afterwards
 				final int extraBits = range % 8;
 				if (extraBits > 0) {
-					offset <<= 8;
 					// TODO: Does OR apply as I expect, or should I just use + ?
-					offset |= bytes[idx++];
+					offset = (offset << 8) | (bytes[idx++] & 0xff);
 
 					// TODO: Do we need >>>= ?
 					offset >>= (8 - extraBits);
