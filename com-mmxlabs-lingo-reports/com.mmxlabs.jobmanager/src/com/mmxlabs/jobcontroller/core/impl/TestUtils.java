@@ -355,9 +355,9 @@ public final class TestUtils {
 			int purchasePrice = salesPrice - 20000;
 
 			final ILoadSlot load = builder.createLoadSlot("load" + i, port1,
-					tw1, 0, 200000000, purchasePrice, 22800);
+					tw1, 0, 200000000, purchasePrice, 22800, 24);
 			final IDischargeSlot discharge = builder.createDischargeSlot(
-					"discharge" + i, port2, tw2, 0, 200000000, salesPrice);
+					"discharge" + i, port2, tw2, 0, 200000000, salesPrice, 24);
 			builder.createCargo("cargo" + i, load, discharge);
 
 			// Only build 200 cargoes
