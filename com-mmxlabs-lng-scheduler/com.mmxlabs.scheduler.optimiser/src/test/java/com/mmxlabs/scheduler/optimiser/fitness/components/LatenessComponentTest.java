@@ -1,29 +1,23 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import java.lang.ref.WeakReference;
-import java.util.Collections;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
-import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
+import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class LatenessComponentTest {
 
@@ -52,14 +46,9 @@ public class LatenessComponentTest {
 		final IOptimisationData<Object> data = context
 				.mock(IOptimisationData.class);
 
-		context.setDefaultResultForType(IDataComponentProvider.class, context
-				.mock(ITimeWindowDataComponentProvider.class));
-
 		context.checking(new Expectations() {
 			{
-				one(data).getDataComponentProvider(
-						SchedulerConstants.DCP_timeWindowProvider,
-						ITimeWindowDataComponentProvider.class);
+				// Expect nothing
 			}
 		});
 
@@ -74,65 +63,49 @@ public class LatenessComponentTest {
 		final CargoSchedulerFitnessCore<Object> core = null;
 		final LatenessComponent<Object> c = new LatenessComponent<Object>(name,
 				core);
+		c.init(null);
 
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
 
 		final TimeWindow window1 = new TimeWindow(10, 11);
-		final TimeWindow window2 = new TimeWindow(20, 21);
 
-		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider);
-		provider.setTimeWindows(obj1, Collections
-				.singletonList((ITimeWindow) window1));
-		provider.setTimeWindows(obj2, Collections
-				.singletonList((ITimeWindow) window2));
+		final LoadSlot loadSlot = new LoadSlot();
+		loadSlot.setTimeWindow(window1);
 
-		context.setDefaultResultForType(IDataComponentProvider.class, provider);
+		final IPortDetails loadDetails = context.mock(IPortDetails.class,
+				"details-1");
+		final IPortDetails dischargeDetails = context.mock(IPortDetails.class,
+				"details-2");
 
-		@SuppressWarnings("unchecked")
-		final IOptimisationData<Object> data = context
-				.mock(IOptimisationData.class);
+		final Object[] routeSequence = new Object[] { loadDetails, null,
+				dischargeDetails };
 
-		context.checking(new Expectations() {
-			{
-				one(data).getDataComponentProvider(
-						SchedulerConstants.DCP_timeWindowProvider,
-						ITimeWindowDataComponentProvider.class);
-			}
-		});
-
-		c.init(data);
-
-		@SuppressWarnings("unchecked")
-		final IAnnotatedSequence<Object> scheduler = context
-				.mock(IAnnotatedSequence.class);
+		final VoyagePlan voyagePlan = new VoyagePlan();
+		voyagePlan.setSequence(routeSequence);
 
 		final IResource resource = context.mock(IResource.class);
 		final IModifiableSequence<Object> sequence = OptimiserTestUtil
 				.makeSequence(obj1, obj2);
 
-		final PortVisitEventImpl<Object> portEvent = new PortVisitEventImpl<Object>();
-		portEvent.setStartTime(10);
-		portEvent.setEndTime(11);
-
-		context.setDefaultResultForType(Object.class, portEvent);
 		context.checking(new Expectations() {
 			{
-				one(scheduler).getAnnotation(obj1,
-						SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				one(scheduler).getAnnotation(obj2,
-						SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
+				one(loadDetails).getStartTime();
+				one(dischargeDetails).getStartTime();
+				one(loadDetails).getPortSlot();
+				one(dischargeDetails).getPortSlot();
 			}
+
 		});
 
 		c.prepare();
 
-		c.evaluateSequence(resource, sequence, scheduler, false);
+		c.evaluateSequence(resource, sequence,
+				CollectionsUtil.makeArrayList(voyagePlan), false);
 
 		c.complete();
 
-		// Ontime or early -- no penalty
+		// Nothing to calculate
 		Assert.assertEquals(0, c.getFitness());
 
 		context.assertIsSatisfied();
@@ -144,6 +117,7 @@ public class LatenessComponentTest {
 		final CargoSchedulerFitnessCore<Object> core = null;
 		final LatenessComponent<Object> c = new LatenessComponent<Object>(name,
 				core);
+		c.init(null);
 
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
@@ -151,95 +125,39 @@ public class LatenessComponentTest {
 		final TimeWindow window1 = new TimeWindow(10, 11);
 		final TimeWindow window2 = new TimeWindow(20, 21);
 
-		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider);
-		provider.setTimeWindows(obj1, Collections
-				.singletonList((ITimeWindow) window1));
-		provider.setTimeWindows(obj2, Collections
-				.singletonList((ITimeWindow) window2));
+		final LoadSlot loadSlot = new LoadSlot();
+		loadSlot.setTimeWindow(window1);
 
-		context.setDefaultResultForType(IDataComponentProvider.class, provider);
+		final DischargeSlot dischargeSlot = new DischargeSlot();
+		dischargeSlot.setTimeWindow(window2);
 
-		@SuppressWarnings("unchecked")
-		final IOptimisationData<Object> data = context
-				.mock(IOptimisationData.class);
+		final PortDetails loadDetails = new PortDetails();
+		loadDetails.setPortSlot(loadSlot);
+		loadDetails.setStartTime(15);
 
-		context.checking(new Expectations() {
-			{
-				one(data).getDataComponentProvider(
-						SchedulerConstants.DCP_timeWindowProvider,
-						ITimeWindowDataComponentProvider.class);
-			}
-		});
+		final PortDetails dischargeDetails = new PortDetails();
+		dischargeDetails.setPortSlot(dischargeSlot);
+		dischargeDetails.setStartTime(20);
 
-		c.init(data);
-
-		@SuppressWarnings("unchecked")
-		final IAnnotatedSequence<Object> scheduler = context
-				.mock(IAnnotatedSequence.class);
+		final Object[] routeSequence = new Object[] { loadDetails, null,
+				dischargeDetails };
+		final VoyagePlan voyagePlan = new VoyagePlan();
+		voyagePlan.setSequence(routeSequence);
 
 		final IResource resource = context.mock(IResource.class);
 		final IModifiableSequence<Object> sequence = OptimiserTestUtil
 				.makeSequence(obj1, obj2);
 
-		final PortVisitEventImpl<Object> portEvent = new PortVisitEventImpl<Object>();
-		portEvent.setStartTime(20);
-		portEvent.setEndTime(21);
-
-		context.setDefaultResultForType(Object.class, portEvent);
-		context.checking(new Expectations() {
-			{
-				one(scheduler).getAnnotation(obj1,
-						SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				one(scheduler).getAnnotation(obj2,
-						SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-			}
-		});
-
 		c.prepare();
 
-		c.evaluateSequence(resource, sequence, scheduler, false);
+		c.evaluateSequence(resource, sequence,
+				CollectionsUtil.makeArrayList(voyagePlan), false);
 
 		c.complete();
 
-		// Late!
-		Assert.assertEquals(9, c.getFitness());
+		// 4 hours lateness * hardcoded weight
+		Assert.assertEquals(4 * 1000000, c.getFitness());
 
 		context.assertIsSatisfied();
-	}
-
-	@Test
-	public void testDispose() {
-
-		final String name = "name";
-		final CargoSchedulerFitnessCore<Object> core = null;
-		final LatenessComponent<Object> c = new LatenessComponent<Object>(name,
-				core);
-
-		// Avoid using jmock here in case it caches object refs.
-		OptimisationData<Object> data = new OptimisationData<Object>();
-		TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider);
-		data.addDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider, provider);
-
-		c.init(data);
-
-		final WeakReference<TimeWindowDataComponentProvider> ref = new WeakReference<TimeWindowDataComponentProvider>(
-				provider);
-
-		// Call dispose to clean up internal refs
-		data.dispose();
-		c.dispose();
-		// Remove local refs
-		data = null;
-		provider = null;
-
-		// Run GC. WeakRef will *hopefully* be cleaned up.
-		// We may wish to run this a few times to be sure(r)
-		System.gc();
-
-		// This should return null if the object ref has been properly cleared.
-		Assert.assertNull(ref.get());
 	}
 }

@@ -178,11 +178,12 @@ public abstract class AbstractSequenceScheduler<T> implements
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
-			if (currentSequence.size() > 1 && 
-					(portType == PortType.Load) || portType == PortType.CharterOut) {
+			if (currentSequence.size() > 1 && (portType == PortType.Load)
+					|| portType == PortType.CharterOut) {
 
 				currentTime = optimiseSequence(adjustArrivals, currentTime,
 						voyagePlans, currentSequence, voyagePlanOptimiser);
+
 				if (currentTime == Integer.MAX_VALUE) {
 					// Problem optimising sequence, most likely forbidden to
 					// adjust arrival times. Return null to indicate problematic
@@ -216,8 +217,11 @@ public abstract class AbstractSequenceScheduler<T> implements
 			}
 		}
 
+		// TODO: Do we need to run optimiser when we only have a load port here?
+
 		// Populate final plan details
-		if (!currentSequence.isEmpty()) {
+		// if (!currentSequence.isEmpty()) {
+		if (currentSequence.size() > 1) {
 			currentTime = optimiseSequence(adjustArrivals, currentTime,
 					voyagePlans, currentSequence, voyagePlanOptimiser);
 			if (currentTime == Integer.MAX_VALUE) {
@@ -240,13 +244,23 @@ public abstract class AbstractSequenceScheduler<T> implements
 		optimiser.init();
 		final VoyagePlan currentPlan = optimiser.optimise();
 
-		for (final Object obj : currentPlan.getSequence()) {
+		final Object[] sequence = currentPlan.getSequence();
+		for (int i = 0; i < sequence.length; ++i) {
+			final Object obj = sequence[i];
 			if (obj instanceof IPortDetails) {
 				final IPortDetails details = (IPortDetails) obj;
+
 				details.setStartTime(currentTime);
 
-				// Set current time to after this element has finished
-				currentTime += details.getVisitDuration();
+				// PortDetails can be processed twice when they are on the
+				// boundary of the voyage plan.
+				// Therefore we need to be careful not to increment the current
+				// time twice
+				final int visitDuration = details.getVisitDuration();
+				if (i != sequence.length - 1) {
+					// Not end element so increment by visit duration
+					currentTime += visitDuration;
+				}
 
 			} else if (obj instanceof VoyageDetails) {
 				@SuppressWarnings("unchecked")
@@ -256,6 +270,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 				final int availableTime = details.getOptions()
 						.getAvailableTime();
+
 				// Take voyage details time as this can be larger than
 				// available time e.g. due to reaching max speed.
 				final int duration = details.getTravelTime()

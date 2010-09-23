@@ -20,9 +20,11 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
@@ -65,16 +67,25 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getIdleTime());
 		Assert.assertEquals(48, details.getTravelTime());
 
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				150 * 48 * Calculator.ScaleFactor,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -112,16 +123,26 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getIdleTime());
 		Assert.assertEquals(48, details.getTravelTime());
 
-		Assert.assertEquals(75 * 48 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(75 * 48 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.Base,
+						FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -159,16 +180,25 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(48, details.getIdleTime());
 		Assert.assertEquals(48, details.getTravelTime());
 
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				150 * 48 * Calculator.ScaleFactor,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.IdleNBO,
+						FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -206,16 +236,26 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(72, details.getTravelTime());
 		Assert.assertEquals(24, details.getIdleTime());
 
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(50 * 72 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
-		Assert.assertEquals(10 * 24 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(50 * 72 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.Base,
+						FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(10 * 24 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.IdleBase,
+						FuelComponent.IdleBase.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -254,18 +294,27 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(48, details.getTravelTime());
 		Assert.assertEquals(72, details.getIdleTime());
 
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				150 * 48 * Calculator.ScaleFactor,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
 
-		Assert.assertEquals(10 * 24 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(10 * 24 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.IdleBase,
+						FuelComponent.IdleBase.getDefaultFuelUnit()));
 
-		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.IdleNBO,
+						FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -303,17 +352,25 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getIdleTime());
 		Assert.assertEquals(36, details.getTravelTime());
 
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(150 * 36 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(50 * 36 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				150 * 36 * Calculator.ScaleFactor,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				50 * 36 * Calculator.ScaleFactor,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -350,16 +407,25 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getIdleTime());
 		Assert.assertEquals(36, details.getTravelTime());
 
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(25 * 36 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(150 * 36 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(25 * 36 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.Base_Supplemental,
+						FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				150 * 36 * Calculator.ScaleFactor,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -397,17 +463,25 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getIdleTime());
 		Assert.assertEquals(36, details.getTravelTime());
 
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(150 * 36 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(50 * 36 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				150 * 36 * Calculator.ScaleFactor,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				50 * 36 * Calculator.ScaleFactor,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -425,8 +499,8 @@ public class LNGVoyageCalculatorTest {
 		options.setNBOSpeed(15 * Calculator.ScaleFactor);
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-		keypoints.put(10 * Calculator.ScaleFactor,
-				50l * Calculator.ScaleFactor);
+		keypoints
+				.put(10 * Calculator.ScaleFactor, 50l * Calculator.ScaleFactor);
 		keypoints.put(20 * Calculator.ScaleFactor,
 				100l * Calculator.ScaleFactor);
 
@@ -456,7 +530,7 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setName("class-1");
 
 		vesselClass.setBaseFuelConversionFactor(500);
-		
+
 		// 2 days of boil off
 		vesselClass.setMinHeel(300 * 24 * Calculator.ScaleFactor);
 
@@ -506,15 +580,25 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(48, details.getIdleTime());
 		Assert.assertEquals(0, details.getTravelTime());
 
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
-		Assert.assertEquals(0,
-				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor,
-				details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.NBO,
+						FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(
+				0,
+				details.getFuelConsumption(FuelComponent.FBO,
+						FuelComponent.FBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(
+				FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(150 * 48 * Calculator.ScaleFactor, details
+				.getFuelConsumption(FuelComponent.IdleNBO,
+						FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -524,7 +608,7 @@ public class LNGVoyageCalculatorTest {
 
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
-		final VoyagePlan plan = context.mock(VoyagePlan.class);
+		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = context.mock(IVessel.class);
 
 		final IPortDetails loadDetails = new PortDetails();
@@ -537,7 +621,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeDetails.setPortSlot(dischargeSlot);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
-		final VoyageOptions options = context.mock(VoyageOptions.class);
+		final VoyageOptions options = new VoyageOptions();
 		details.setOptions(options);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
@@ -547,34 +631,21 @@ public class LNGVoyageCalculatorTest {
 
 		context.checking(new Expectations() {
 			{
-				allowing(options).getVesselState();
 				allowing(vessel).getVesselClass();
 
-				one(plan).setSequence(sequence);
-
-				one(plan).setFuelConsumption(FuelComponent.Base, 0);
-				one(plan)
-						.setFuelConsumption(FuelComponent.Base_Supplemental, 0);
-				one(plan).setFuelConsumption(FuelComponent.NBO, 0);
-				one(plan).setFuelConsumption(FuelComponent.FBO, 0);
-				one(plan).setFuelConsumption(FuelComponent.IdleNBO, 0);
-				one(plan).setFuelConsumption(FuelComponent.IdleBase, 0);
-
-				one(plan).setTotalFuelCost(FuelComponent.Base, 0);
-				one(plan).setTotalFuelCost(FuelComponent.Base_Supplemental, 0);
-				one(plan).setTotalFuelCost(FuelComponent.NBO, 0);
-				one(plan).setTotalFuelCost(FuelComponent.FBO, 0);
-				one(plan).setTotalFuelCost(FuelComponent.IdleNBO, 0);
-				one(plan).setTotalFuelCost(FuelComponent.IdleBase, 0);
-
-				one(plan).setLoadVolume(0);
-				one(plan).setDischargeVolume(0);
-				one(plan).setPurchaseCost(0);
-				one(plan).setSalesRevenue(0);
 			}
 		});
 
 		calc.calculateVoyagePlan(plan, vessel, sequence);
+
+		final VoyagePlan expectedPlan = new VoyagePlan();
+		expectedPlan.setSequence(sequence);
+		for (final FuelComponent fuel : FuelComponent.values()) {
+			expectedPlan.setFuelConsumption(fuel, 0);
+			expectedPlan.setTotalFuelCost(fuel, 0);
+		}
+
+		Assert.assertEquals(expectedPlan, plan);
 
 		context.assertIsSatisfied();
 	}
@@ -582,7 +653,8 @@ public class LNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateVoyagePlan2() {
 
-		final VoyagePlan plan = context.mock(VoyagePlan.class);
+		final VoyagePlan plan = new VoyagePlan();
+
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setBaseFuelUnitPrice(2000);
@@ -607,15 +679,21 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setCargoCVValue(2000);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
-		final VoyageOptions options = context.mock(VoyageOptions.class);
+		final VoyageOptions options = new VoyageOptions();
 		details.setOptions(options);
 
-		details.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 10000);
-		details.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 20000);
-		details.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 30000);
-		details.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 40000);
-		details.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 50000);
-		details.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 60000);
+		details.setFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit(), 10000);
+		details.setFuelConsumption(FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 20000);
+		details.setFuelConsumption(FuelComponent.NBO,
+				FuelComponent.NBO.getDefaultFuelUnit(), 30000);
+		details.setFuelConsumption(FuelComponent.FBO,
+				FuelComponent.FBO.getDefaultFuelUnit(), 40000);
+		details.setFuelConsumption(FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit(), 50000);
+		details.setFuelConsumption(FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit(), 60000);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -624,34 +702,37 @@ public class LNGVoyageCalculatorTest {
 
 		context.checking(new Expectations() {
 			{
-				allowing(options).getVesselState();
 				allowing(vessel).getVesselClass();
-
-				one(plan).setSequence(sequence);
-
-				one(plan).setFuelConsumption(FuelComponent.Base, 10000);
-				one(plan).setFuelConsumption(FuelComponent.Base_Supplemental,
-						20000);
-				one(plan).setFuelConsumption(FuelComponent.NBO, 30000);
-				one(plan).setFuelConsumption(FuelComponent.FBO, 40000);
-				one(plan).setFuelConsumption(FuelComponent.IdleNBO, 50000);
-				one(plan).setFuelConsumption(FuelComponent.IdleBase, 60000);
-
-				one(plan).setTotalFuelCost(FuelComponent.Base, 20000);
-				one(plan).setTotalFuelCost(FuelComponent.Base_Supplemental, 40000);
-				one(plan).setTotalFuelCost(FuelComponent.IdleBase, 120000);
-				one(plan).setTotalFuelCost(FuelComponent.NBO, 60000);
-				one(plan).setTotalFuelCost(FuelComponent.FBO, 80000);
-				one(plan).setTotalFuelCost(FuelComponent.IdleNBO, 100000);
-
-				one(plan).setLoadVolume(150000);
-				one(plan).setDischargeVolume(30000);
-				one(plan).setPurchaseCost(300000l);
-				one(plan).setSalesRevenue(60000l);
 			}
 		});
 
 		calc.calculateVoyagePlan(plan, vessel, sequence);
+
+		final VoyagePlan expectedPlan = new VoyagePlan();
+		expectedPlan.setSequence(sequence);
+
+		expectedPlan.setFuelConsumption(FuelComponent.Base, 10000);
+		expectedPlan.setFuelConsumption(FuelComponent.Base_Supplemental, 20000);
+		expectedPlan.setFuelConsumption(FuelComponent.NBO, 30000);
+		expectedPlan.setFuelConsumption(FuelComponent.FBO, 40000);
+		expectedPlan.setFuelConsumption(FuelComponent.IdleNBO, 50000);
+		expectedPlan.setFuelConsumption(FuelComponent.IdleBase, 60000);
+
+		expectedPlan.setTotalFuelCost(FuelComponent.Base, 20000);
+		expectedPlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 40000);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 120000);
+		expectedPlan.setTotalFuelCost(FuelComponent.NBO, 60000);
+		expectedPlan.setTotalFuelCost(FuelComponent.FBO, 80000);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleNBO, 100000);
+
+		// TODO: Check
+		expectedPlan.setDischargeVolume(30000l);
+		expectedPlan.setLoadVolume(150000);
+
+		expectedPlan.setSalesRevenue(60000l);
+		expectedPlan.setPurchaseCost(300000);
+
+		Assert.assertEquals(expectedPlan, plan);
 
 		context.assertIsSatisfied();
 	}
@@ -659,7 +740,7 @@ public class LNGVoyageCalculatorTest {
 	@Test(expected = RuntimeException.class)
 	public void testCalculateVoyagePlan3() {
 
-		final VoyagePlan plan = context.mock(VoyagePlan.class);
+		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
@@ -679,15 +760,21 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setMaxDischargeVolume(30l);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
-		final VoyageOptions options = context.mock(VoyageOptions.class);
+		final VoyageOptions options = new VoyageOptions();
 		details.setOptions(options);
 
-		details.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 10);
-		details.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 20);
-		details.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 30);
-		details.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 40);
-		details.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 50);
-		details.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 60);
+		details.setFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit(), 10);
+		details.setFuelConsumption(FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 20);
+		details.setFuelConsumption(FuelComponent.NBO,
+				FuelComponent.NBO.getDefaultFuelUnit(), 30);
+		details.setFuelConsumption(FuelComponent.FBO,
+				FuelComponent.FBO.getDefaultFuelUnit(), 40);
+		details.setFuelConsumption(FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit(), 50);
+		details.setFuelConsumption(FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit(), 60);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -697,38 +784,16 @@ public class LNGVoyageCalculatorTest {
 		context.checking(new Expectations() {
 			{
 
-				allowing(options).getVesselState();
 				allowing(vessel).getVesselClass();
-
-				// one(plan).setSequence(sequence);
-				//
-				// one(plan).setFuelConsumption(FuelComponent.Base, 10);
-				// one(plan).setFuelConsumption(FuelComponent.Base_Supplemental,
-				// 20);
-				// one(plan).setFuelConsumption(FuelComponent.NBO, 30);
-				// one(plan).setFuelConsumption(FuelComponent.FBO, 40);
-				// one(plan).setFuelConsumption(FuelComponent.IdleNBO, 50);
-				// one(plan).setFuelConsumption(FuelComponent.IdleBase, 60);
-				//
-				// one(plan).setFuelCost(FuelComponent.Base, 10);
-				// one(plan).setFuelCost(FuelComponent.Base_Supplemental, 20);
-				// one(plan).setFuelCost(FuelComponent.NBO, 30);
-				// one(plan).setFuelCost(FuelComponent.FBO, 40);
-				// one(plan).setFuelCost(FuelComponent.IdleNBO, 50);
-				// one(plan).setFuelCost(FuelComponent.IdleBase, 60);
-				//
-				// one(plan).setLoadVolume(150);
-				// one(plan).setDischargeVolume(30);
-				// one(plan).setPurchaseCost(150);
-				// one(plan).setSalesRevenue(30);
 			}
 		});
 
+		// Expect to throw a RuntimeException here for a capacity violation
+		fail("Better to return object, recording the error");
 		calc.calculateVoyagePlan(plan, vessel, sequence);
 
 		context.assertIsSatisfied();
 
-		fail("Better to return object, recording the error");
 	}
 
 	@Test
@@ -736,20 +801,20 @@ public class LNGVoyageCalculatorTest {
 
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
-		final VoyagePlan plan = context.mock(VoyagePlan.class);
+		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setBaseFuelUnitPrice(2000);
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
-		
+
 		final IPortDetails loadDetails = new PortDetails();
 		final IPortDetails dischargeDetails = new PortDetails();
 		final IPortDetails otherDetails = new PortDetails();
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
-		final IPortSlot otherSlot = new PortSlot();
+		final IPortSlot otherSlot = new EndPortSlot();
 
 		loadDetails.setPortSlot(loadSlot);
 		dischargeDetails.setPortSlot(dischargeSlot);
@@ -762,35 +827,43 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setSalesPrice(1000);
 
 		loadSlot.setCargoCVValue(2000);
-		
-		
+
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();
 		final VoyageOptions options1 = new VoyageOptions();
 		options1.setVesselState(VesselState.Laden);
 		details1.setOptions(options1);
 
-		details1.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 10000);
-		details1.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 20000);
-		details1.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 30000);
-		details1.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 40000);
-		details1.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 50000);
-		details1.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 60000);
+		details1.setFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit(), 10000);
+		details1.setFuelConsumption(FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 20000);
+		details1.setFuelConsumption(FuelComponent.NBO,
+				FuelComponent.NBO.getDefaultFuelUnit(), 30000);
+		details1.setFuelConsumption(FuelComponent.FBO,
+				FuelComponent.FBO.getDefaultFuelUnit(), 40000);
+		details1.setFuelConsumption(FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit(), 50000);
+		details1.setFuelConsumption(FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit(), 60000);
 
-		
-		
 		final VoyageDetails<Object> details2 = new VoyageDetails<Object>();
 		final VoyageOptions options2 = new VoyageOptions();
 		options2.setVesselState(VesselState.Ballast);
 		details2.setOptions(options2);
 
-		details2.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 70000);
-		details2.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 80000);
-		details2.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 90000);
-		details2.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 100000);
-		details2.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 110000);
-		details2.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 120000);
+		details2.setFuelConsumption(FuelComponent.Base,
+				FuelComponent.Base.getDefaultFuelUnit(), 70000);
+		details2.setFuelConsumption(FuelComponent.Base_Supplemental,
+				FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 80000);
+		details2.setFuelConsumption(FuelComponent.NBO,
+				FuelComponent.NBO.getDefaultFuelUnit(), 90000);
+		details2.setFuelConsumption(FuelComponent.FBO,
+				FuelComponent.FBO.getDefaultFuelUnit(), 100000);
+		details2.setFuelConsumption(FuelComponent.IdleNBO,
+				FuelComponent.IdleNBO.getDefaultFuelUnit(), 110000);
+		details2.setFuelConsumption(FuelComponent.IdleBase,
+				FuelComponent.IdleBase.getDefaultFuelUnit(), 120000);
 
-		
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
 		final Object[] sequence = new Object[] { loadDetails, details1,
@@ -799,32 +872,34 @@ public class LNGVoyageCalculatorTest {
 		context.checking(new Expectations() {
 			{
 				allowing(vessel).getVesselClass();
-
-				one(plan).setSequence(sequence);
-
-				one(plan).setFuelConsumption(FuelComponent.Base, 80000);
-				one(plan)
-						.setFuelConsumption(FuelComponent.Base_Supplemental, 100000);
-				one(plan).setFuelConsumption(FuelComponent.NBO, 120000);
-				one(plan).setFuelConsumption(FuelComponent.FBO, 140000);
-				one(plan).setFuelConsumption(FuelComponent.IdleNBO, 160000);
-				one(plan).setFuelConsumption(FuelComponent.IdleBase, 180000);
-
-				one(plan).setTotalFuelCost(FuelComponent.Base, 160000);
-				one(plan).setTotalFuelCost(FuelComponent.Base_Supplemental, 200000);
-				one(plan).setTotalFuelCost(FuelComponent.NBO, 240000);
-				one(plan).setTotalFuelCost(FuelComponent.FBO, 280000);
-				one(plan).setTotalFuelCost(FuelComponent.IdleNBO, 320000);
-				one(plan).setTotalFuelCost(FuelComponent.IdleBase, 360000);
-
-				one(plan).setDischargeVolume(3000000l);
-				one(plan).setLoadVolume(3420000l);
-				one(plan).setPurchaseCost(6840000l);
-				one(plan).setSalesRevenue(6000000l);
 			}
 		});
 
 		calc.calculateVoyagePlan(plan, vessel, sequence);
+
+		final VoyagePlan expectedPlan = new VoyagePlan();
+		expectedPlan.setSequence(sequence);
+		expectedPlan.setFuelConsumption(FuelComponent.Base, 80000);
+		expectedPlan
+				.setFuelConsumption(FuelComponent.Base_Supplemental, 100000);
+		expectedPlan.setFuelConsumption(FuelComponent.NBO, 120000);
+		expectedPlan.setFuelConsumption(FuelComponent.FBO, 140000);
+		expectedPlan.setFuelConsumption(FuelComponent.IdleNBO, 160000);
+		expectedPlan.setFuelConsumption(FuelComponent.IdleBase, 180000);
+
+		expectedPlan.setTotalFuelCost(FuelComponent.Base, 160000);
+		expectedPlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 200000);
+		expectedPlan.setTotalFuelCost(FuelComponent.NBO, 240000);
+		expectedPlan.setTotalFuelCost(FuelComponent.FBO, 280000);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleNBO, 320000);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 360000);
+
+		expectedPlan.setDischargeVolume(3000000l);
+		expectedPlan.setLoadVolume(3420000l);
+		expectedPlan.setPurchaseCost(6840000l);
+		expectedPlan.setSalesRevenue(6000000l);
+
+		Assert.assertEquals(expectedPlan, plan);
 
 		context.assertIsSatisfied();
 	}
@@ -834,14 +909,14 @@ public class LNGVoyageCalculatorTest {
 
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
-		final VoyagePlan plan = context.mock(VoyagePlan.class);
+		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = context.mock(IVessel.class);
 
 		final IPortDetails otherDetails = new PortDetails();
 		final IPortDetails loadDetails = new PortDetails();
 		final IPortDetails dischargeDetails = new PortDetails();
 
-		final PortSlot otherSlot = new PortSlot();
+		final PortSlot otherSlot = new StartPortSlot();
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
@@ -854,18 +929,13 @@ public class LNGVoyageCalculatorTest {
 
 		loadSlot.setPurchasePrice(1000);
 		dischargeSlot.setSalesPrice(1000);
-		
 
-		
-		
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();
-		final VoyageOptions options1 = context.mock(VoyageOptions.class,
-				"options-1");
+		final VoyageOptions options1 = new VoyageOptions();
 		details1.setOptions(options1);
 
 		final VoyageDetails<Object> details2 = new VoyageDetails<Object>();
-		final VoyageOptions options2 = context.mock(VoyageOptions.class,
-				"options-2");
+		final VoyageOptions options2 = new VoyageOptions();
 		details2.setOptions(options2);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
@@ -875,36 +945,33 @@ public class LNGVoyageCalculatorTest {
 
 		context.checking(new Expectations() {
 			{
-				allowing(options1).getVesselState();
-				allowing(options2).getVesselState();
-
 				allowing(vessel).getVesselClass();
-
-				one(plan).setSequence(sequence);
-
-				one(plan).setFuelConsumption(FuelComponent.Base, 0);
-				one(plan)
-						.setFuelConsumption(FuelComponent.Base_Supplemental, 0);
-				one(plan).setFuelConsumption(FuelComponent.NBO, 0);
-				one(plan).setFuelConsumption(FuelComponent.FBO, 0);
-				one(plan).setFuelConsumption(FuelComponent.IdleNBO, 0);
-				one(plan).setFuelConsumption(FuelComponent.IdleBase, 0);
-
-				one(plan).setTotalFuelCost(FuelComponent.Base, 0);
-				one(plan).setTotalFuelCost(FuelComponent.Base_Supplemental, 0);
-				one(plan).setTotalFuelCost(FuelComponent.NBO, 0);
-				one(plan).setTotalFuelCost(FuelComponent.FBO, 0);
-				one(plan).setTotalFuelCost(FuelComponent.IdleNBO, 0);
-				one(plan).setTotalFuelCost(FuelComponent.IdleBase, 0);
-
-				one(plan).setLoadVolume(0);
-				one(plan).setDischargeVolume(0);
-				one(plan).setPurchaseCost(0);
-				one(plan).setSalesRevenue(0);
 			}
 		});
 
 		calc.calculateVoyagePlan(plan, vessel, sequence);
+
+		final VoyagePlan expectedPlan = new VoyagePlan();
+		expectedPlan.setSequence(sequence);
+
+		expectedPlan.setFuelConsumption(FuelComponent.Base, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.Base_Supplemental, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.NBO, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.FBO, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.IdleNBO, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.IdleBase, 0);
+
+		expectedPlan.setTotalFuelCost(FuelComponent.Base, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.NBO, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.FBO, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleNBO, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 0);
+
+		expectedPlan.setLoadVolume(0);
+		expectedPlan.setDischargeVolume(0);
+		expectedPlan.setPurchaseCost(0);
+		expectedPlan.setSalesRevenue(0);
 
 		context.assertIsSatisfied();
 	}

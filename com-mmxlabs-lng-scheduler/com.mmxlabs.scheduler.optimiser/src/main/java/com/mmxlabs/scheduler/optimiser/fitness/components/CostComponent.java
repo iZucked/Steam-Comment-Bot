@@ -74,11 +74,7 @@ public final class CostComponent<T> extends
 
 	@Override
 	public void init(final IOptimisationData<T> data) {
-	}
 
-	@Override
-	public void dispose() {
-		super.dispose();
 	}
 
 	public List<FuelComponent> getFuelComponents() {

@@ -24,11 +24,6 @@ public class CostComponentTest {
 	}
 
 	@Test
-	public void testDispose() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testCostComponent() {
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();

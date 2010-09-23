@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -8,15 +7,15 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
-import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @RunWith(JMock.class)
 public class DistanceComponentTest {
@@ -59,14 +58,18 @@ public class DistanceComponentTest {
 		final DistanceComponent<Object> c = new DistanceComponent<Object>(name,
 				core);
 
-		@SuppressWarnings("unchecked")
-		final IOptimisationData<Object> data = context
-				.mock(IOptimisationData.class);
-		c.init(data);
+		c.init(null);
 
-		@SuppressWarnings("unchecked")
-		final IAnnotatedSequence<Object> scheduler = context
-				.mock(IAnnotatedSequence.class);
+		VoyageOptions options = new VoyageOptions();
+		options.setDistance(20);
+
+		VoyageDetails<Object> voyageDetails = new VoyageDetails<Object>();
+		voyageDetails.setOptions(options);
+
+		final Object[] routeSequence = new Object[] { null, voyageDetails, null };
+
+		final VoyagePlan voyagePlan = new VoyagePlan();
+		voyagePlan.setSequence(routeSequence);
 
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
@@ -75,25 +78,14 @@ public class DistanceComponentTest {
 		final IModifiableSequence<Object> sequence = OptimiserTestUtil
 				.makeSequence(obj1, obj2);
 
-		final JourneyEventImpl<Object> journeyEvent = new JourneyEventImpl<Object>();
-		journeyEvent.setDistance(10);
-
-		context.setDefaultResultForType(Object.class, journeyEvent);
-		context.checking(new Expectations() {
-			{
-				one(scheduler).getAnnotation(obj1,
-						SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				one(scheduler).getAnnotation(obj2,
-						SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-			}
-		});
-
 		c.prepare();
 
-		c.evaluateSequence(resource, sequence, scheduler, false);
+		c.evaluateSequence(resource, sequence,
+				CollectionsUtil.makeArrayList(voyagePlan), false);
 
 		c.complete();
 
+		Assert.fail("Component always returns zero!");
 		Assert.assertEquals(20, c.getFitness());
 
 		context.assertIsSatisfied();

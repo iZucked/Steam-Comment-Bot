@@ -61,9 +61,4 @@ public final class LatenessComponent<T> extends
 	public void init(final IOptimisationData<T> data) {
 		
 	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
 }
