@@ -1,12 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
-
-import com.google.common.base.Function;
-import com.google.common.collect.MapMaker;
-import com.mmxlabs.common.caches.Cache;
-import com.mmxlabs.common.caches.Cache.IKeyEvaluator;
+import com.mmxlabs.common.caches.AbstractCache;
+import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
+import com.mmxlabs.common.caches.LHMCache;
 
 /**
  * A memoizing evaluator; wraps another evaluator but adds a cache to make
@@ -21,19 +17,19 @@ public final class CachingIndividualEvaluator<T> implements
 	final IIndividualEvaluator<T> delegate;
 
 //	private final ConcurrentMap<Individual, Long> cache;
-	private final Cache<Individual, Long> cache;
+	private final AbstractCache<Individual, Long> cache;
 	public CachingIndividualEvaluator(final IIndividualEvaluator<T> delegate,
 			final int size) {
 		super();
 
-		cache = new Cache<Individual, Long>("IE", 
+		cache = new LHMCache<Individual, Long>("IE", 
 				new IKeyEvaluator<Individual, Long>() {
 
 					@Override
 					public Long evaluate(Individual key) {
 						return delegate.evaluate(key);
 					}
-				}, size, 3);
+				}, size/*, 3*/);
 		
 //		cache = new MapMaker().concurrencyLevel(1)
 //				.softKeys()

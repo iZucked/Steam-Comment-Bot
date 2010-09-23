@@ -2,16 +2,10 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Function;
-import com.google.common.collect.MapMaker;
-import com.mmxlabs.common.caches.Cache;
-import com.mmxlabs.common.caches.Cache.IKeyEvaluator;
+import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
+import com.mmxlabs.common.caches.SimpleCache;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -112,11 +106,11 @@ public abstract class CachingAbstractSequenceScheduler<T>
 	}
 	
 //	private final ConcurrentMap<CacheKey, List<VoyagePlan>> cache ;
-	private final Cache<CacheKey, List<VoyagePlan>> cache;
+	private final SimpleCache<CacheKey, List<VoyagePlan>> cache;
 	public CachingAbstractSequenceScheduler(int cacheSize) {
 		super();
 		
-		cache = new Cache<CacheKey, List<VoyagePlan>>("Sequence Scheduler",
+		cache = new SimpleCache<CacheKey, List<VoyagePlan>>("Sequence Scheduler",
 				new IKeyEvaluator<CacheKey, List<VoyagePlan>>() {
 
 					@Override

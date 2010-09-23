@@ -3,13 +3,12 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Function;
-import com.google.common.collect.MapMaker;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.caches.Cache;
-import com.mmxlabs.common.caches.Cache.IKeyEvaluator;
+import com.mmxlabs.common.caches.AbstractCache;
+import com.mmxlabs.common.caches.LHMCache;
+import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
+import com.mmxlabs.common.caches.SimpleCache;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -18,10 +17,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * A voyage plan optimiser which acts as a caching proxy for a real VPO,
- * passed in through the constructor
+ * A voyage plan optimiser which acts as a caching proxy for a real VPO, passed
+ * in through the constructor
+ * 
  * @author hinton
- *
+ * 
  * @param <T>
  */
 public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
@@ -31,8 +31,9 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		private final IPortSlot[] slots;
 		private final List<Object> sequence;
 		private final List<IVoyagePlanChoice> choices;
-		
-		public CacheKey(IVessel vessel, List<Object> sequence, List<IVoyagePlanChoice> choices) {
+
+		public CacheKey(IVessel vessel, List<Object> sequence,
+				List<IVoyagePlanChoice> choices) {
 			super();
 			this.vessel = vessel;
 			final int sz = sequence.size();
@@ -51,8 +52,6 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			this.choices = choices;
 		}
 
-		
-
 		@Override
 		public final int hashCode() {
 			final int prime = 31;
@@ -65,81 +64,79 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			return result;
 		}
 
-
 		/**
-		 * This equals method almost certainly doesn't fulfil the normal equality contract; however
-		 * it should be fast, and because this class is final and private it ought not end up getting used wrongly.
+		 * This equals method almost certainly doesn't fulfil the normal
+		 * equality contract; however it should be fast, and because this class
+		 * is final and private it ought not end up getting used wrongly.
 		 */
 		@Override
 		public final boolean equals(Object obj) {
 			final CacheKey other = (CacheKey) obj;
-//			if (getClass() != obj.getClass())
-//				return false;
-//			CacheKey other = (CacheKey) obj;
-//			if (!getOuterType().equals(other.getOuterType()))
-//				return false;
+			// if (getClass() != obj.getClass())
+			// return false;
+			// CacheKey other = (CacheKey) obj;
+			// if (!getOuterType().equals(other.getOuterType()))
+			// return false;
 			if (!Arrays.equals(slots, other.slots))
 				return false;
 			if (!Arrays.equals(times, other.times))
 				return false;
-			if (vessel != other.vessel) return false;
-//			if (vessel == null) {
-//				if (other.vessel != null)
-//					return false;
-//			} else if (!vessel.equals(other.vessel))
-//				return false;
+			if (vessel != other.vessel)
+				return false;
+			// if (vessel == null) {
+			// if (other.vessel != null)
+			// return false;
+			// } else if (!vessel.equals(other.vessel))
+			// return false;
 			return true;
 		}
 
-
-
 		private final CachingVoyagePlanOptimiser getOuterType() {
 			return CachingVoyagePlanOptimiser.this;
-		}	
+		}
 	}
-	
+
 	private final IVoyagePlanOptimiser<T> delegate;
-	
-//	private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache;// = null;
-	private final Cache<CacheKey, Pair<VoyagePlan, Long>> cache;
-	
+
+	// private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache;// =
+	// null;
+	private final AbstractCache<CacheKey,Pair<VoyagePlan,Long>> cache;
+
 	VoyagePlan bestPlan;
 	long bestCost;
-
 
 	private List<Object> basicSequence;
 	private IVessel vessel;
 	private List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
-	
+
 	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> delegate,
 			final int cacheSize) {
 		super();
 		this.delegate = delegate;
-		this.cache = new Cache<CacheKey, Pair<VoyagePlan, Long>>("VPO",
-				new IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>() {
+		final IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>
+		evaluator = new IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>() {
 
-					@Override
-					public Pair<VoyagePlan, Long> evaluate(CacheKey arg) {
-						final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
+			@Override
+			public Pair<VoyagePlan, Long> evaluate(CacheKey arg) {
+				final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
 
-						delegate.reset();
-						for (IVoyagePlanChoice c:arg.choices) {
-							delegate.addChoice(c);
-						}
-						delegate.setVessel(arg.vessel);
+				delegate.reset();
+				for (IVoyagePlanChoice c:arg.choices) {
+					delegate.addChoice(c);
+				}
+				delegate.setVessel(arg.vessel);
 
-						delegate.setBasicSequence(arg.sequence);
-						delegate.init();
-						delegate.optimise();
+				delegate.setBasicSequence(arg.sequence);
+				delegate.init();
+				delegate.optimise();
 
-						answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
+				answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
 
-						return answer;
-					}
-					
-				},
-				cacheSize, 1);
-			/*new MapMaker()
+				return answer;
+			}
+		};
+		this.cache = new LHMCache<CacheKey, Pair<VoyagePlan, Long>>("VPO", evaluator, cacheSize);
+		/*new MapMaker()
 		.concurrencyLevel(1)
 		.weakValues()
 		.expiration(10, TimeUnit.MINUTES)
@@ -168,18 +165,19 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	@Override
 	public VoyagePlan optimise() {
-		
-		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey( vessel, basicSequence, choices ));
-		
+
+		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel,
+				basicSequence, choices));
+
 		bestPlan = (VoyagePlan) best.getFirst().clone();
 		bestCost = best.getSecond();
-		
+
 		return bestPlan;
 	}
-	
+
 	@Override
 	public void init() {
-		
+
 	}
 
 	@Override

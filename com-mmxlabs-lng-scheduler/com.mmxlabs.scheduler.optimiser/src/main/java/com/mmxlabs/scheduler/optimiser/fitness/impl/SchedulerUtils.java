@@ -74,7 +74,7 @@ public final class SchedulerUtils {
 	}
 	
 	
-	public static <T> IVoyagePlanOptimiser<T> createCachingVoyagePlanOptimiser() {
+	public static <T> IVoyagePlanOptimiser<T> createCachingVoyagePlanOptimiser(final int cacheSize) {
 		//duplicate code due to type erasure
 		
 		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
@@ -82,24 +82,34 @@ public final class SchedulerUtils {
 		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
 		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
 		
-		return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser, 6000);
+		if (cacheSize == 0)
+			return voyagePlanOptimiser;
+		else
+			return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser, cacheSize);
 	}
 
 	public static <T> IVoyagePlanOptimiser<T> createVPO(){
-		return createCachingVoyagePlanOptimiser();
+		return createCachingVoyagePlanOptimiser(6000);
 //		return new CheckingVPO<T>((IVoyagePlanOptimiser<T>)createVoyagePlanOptimiser(), 
 //				(IVoyagePlanOptimiser<T>)createCachingVoyagePlanOptimiser());
 	}
 	
+	
+	public static <T> ISequenceScheduler<T> createGASequenceScheduler(
+			final IOptimisationData<T> data,
+			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
+		return createGASequenceScheduler(data, fitnessComponents, 6000);
+	}
 	/**
 	 * Create a new {@link ISequenceScheduler} instance.
+	 * @param vpoCacheSize 
 	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> ISequenceScheduler<T> createGASequenceScheduler(
 			final IOptimisationData<T> data,
-			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
+			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents, int vpoCacheSize) {
 
 		final GASequenceScheduler<T> scheduler = new GASequenceScheduler<T>();
 
@@ -141,7 +151,7 @@ public final class SchedulerUtils {
 
 
 		scheduler.setVoyagePlanOptimiser(
-				(IVoyagePlanOptimiser<T>) createVPO());
+				(IVoyagePlanOptimiser<T>) createCachingVoyagePlanOptimiser(vpoCacheSize));
 
 		// Set GA params
 		final IndividualEvaluator<T> individualEvaluator = new IndividualEvaluator<T>();
