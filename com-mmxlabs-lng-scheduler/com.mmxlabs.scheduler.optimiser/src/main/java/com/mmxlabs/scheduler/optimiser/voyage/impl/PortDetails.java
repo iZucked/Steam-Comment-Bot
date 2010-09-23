@@ -5,15 +5,15 @@ import java.util.EnumMap;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 
 /**
- * Implementation of {@link IPortDetails}
+ * Object recording the details of a port visit.
  * 
  * @author Simon Goodall
  * 
  */
-public final class PortDetails implements IPortDetails, Cloneable {
+
+public final class PortDetails implements Cloneable {
 
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(
 			FuelComponent.class);
@@ -25,18 +25,18 @@ public final class PortDetails implements IPortDetails, Cloneable {
 	private int startTime;
 
 	public PortDetails() {
-		
+
 	}
-	
-	private PortDetails(int visitDuration2, IPortSlot portSlot2, int startTime2,
-			EnumMap<FuelComponent, Long> fuelConsumption2) {
+
+	private PortDetails(final int visitDuration2, final IPortSlot portSlot2,
+			final int startTime2,
+			final EnumMap<FuelComponent, Long> fuelConsumption2) {
 		this.visitDuration = visitDuration2;
 		this.portSlot = portSlot2;
 		this.startTime = startTime2;
 		this.fuelConsumption.putAll(fuelConsumption2);
 	}
 
-	@Override
 	public final long getFuelConsumption(final FuelComponent fuel) {
 
 		if (fuelConsumption.containsKey(fuel)) {
@@ -46,43 +46,35 @@ public final class PortDetails implements IPortDetails, Cloneable {
 		}
 	}
 
-	@Override
 	public final void setFuelConsumption(final FuelComponent fuel,
 			final long consumption) {
 		fuelConsumption.put(fuel, consumption);
 	}
 
-	@Override
 	public final int getVisitDuration() {
 		return visitDuration;
 	}
 
-	@Override
 	public final void setVisitDuration(final int visitDuration) {
 		this.visitDuration = visitDuration;
 	}
 
-	@Override
 	public final long getPortCost(final Object key) {
 		throw new UnsupportedOperationException("Undefined API");
 	}
 
-	@Override
 	public final IPortSlot getPortSlot() {
 		return portSlot;
 	}
 
-	@Override
 	public final void setPortSlot(final IPortSlot portSlot) {
 		this.portSlot = portSlot;
 	}
 
-	@Override
 	public final int getStartTime() {
 		return startTime;
 	}
 
-	@Override
 	public final void setStartTime(final int startTime) {
 		this.startTime = startTime;
 	}
@@ -118,8 +110,9 @@ public final class PortDetails implements IPortDetails, Cloneable {
 				+ ", visitDuration=" + visitDuration + ", portSlot=" + portSlot
 				+ ", startTime=" + startTime + "]";
 	}
-	
+
 	public PortDetails clone() {
-		return new PortDetails(visitDuration, portSlot, startTime, fuelConsumption);
+		return new PortDetails(visitDuration, portSlot, startTime,
+				fuelConsumption);
 	}
 }

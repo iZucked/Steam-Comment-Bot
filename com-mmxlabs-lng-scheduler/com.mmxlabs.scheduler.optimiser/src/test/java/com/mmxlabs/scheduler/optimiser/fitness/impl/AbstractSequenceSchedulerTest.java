@@ -53,7 +53,6 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -610,20 +609,27 @@ public final class AbstractSequenceSchedulerTest {
 		// TODO: Can we return different objects for each invocation?
 		//
 		// // Check plan 1
-		 final VoyagePlan plan1 = plans.get(0);
-		 Assert.assertSame(testVoyagePlan, plan1);
-		 
-		 final Object[] outputSequence = testVoyagePlan.getSequence();
-		 
-		 Assert.assertEquals(5, ((IPortDetails)outputSequence[0]).getStartTime());
-		 Assert.assertEquals(1, ((IPortDetails)outputSequence[0]).getVisitDuration());
-		 Assert.assertEquals(6, ((VoyageDetails)outputSequence[1]).getStartTime());
-		 Assert.assertEquals(10, ((IPortDetails)outputSequence[2]).getStartTime());
-		 Assert.assertEquals(1, ((IPortDetails)outputSequence[2]).getVisitDuration());
-		 Assert.assertEquals(11, ((VoyageDetails)outputSequence[3]).getStartTime());
-		 Assert.assertEquals(15, ((IPortDetails)outputSequence[4]).getStartTime());
-		 Assert.assertEquals(1, ((IPortDetails)outputSequence[4]).getVisitDuration());
-		 
+		final VoyagePlan plan1 = plans.get(0);
+		Assert.assertSame(testVoyagePlan, plan1);
+
+		final Object[] outputSequence = testVoyagePlan.getSequence();
+
+		Assert.assertEquals(5,
+				((PortDetails) outputSequence[0]).getStartTime());
+		Assert.assertEquals(1,
+				((PortDetails) outputSequence[0]).getVisitDuration());
+		Assert.assertEquals(6,
+				((VoyageDetails) outputSequence[1]).getStartTime());
+		Assert.assertEquals(10,
+				((PortDetails) outputSequence[2]).getStartTime());
+		Assert.assertEquals(1,
+				((PortDetails) outputSequence[2]).getVisitDuration());
+		Assert.assertEquals(11,
+				((VoyageDetails) outputSequence[3]).getStartTime());
+		Assert.assertEquals(15,
+				((PortDetails) outputSequence[4]).getStartTime());
+		Assert.assertEquals(1,
+				((PortDetails) outputSequence[4]).getVisitDuration());
 
 		context.assertIsSatisfied();
 	}

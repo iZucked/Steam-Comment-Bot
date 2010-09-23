@@ -20,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -247,8 +246,8 @@ public abstract class AbstractSequenceScheduler<T> implements
 		final Object[] sequence = currentPlan.getSequence();
 		for (int i = 0; i < sequence.length; ++i) {
 			final Object obj = sequence[i];
-			if (obj instanceof IPortDetails) {
-				final IPortDetails details = (IPortDetails) obj;
+			if (obj instanceof PortDetails) {
+				final PortDetails details = (PortDetails) obj;
 
 				details.setStartTime(currentTime);
 

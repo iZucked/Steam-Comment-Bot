@@ -10,7 +10,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 
 /**
  * Implementation of {@link ILNGVoyageCalculator}.
@@ -233,7 +232,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		for (int i = 0; i < sequence.length; ++i) {
 			if (i % 2 == 0) {
 				// Port Slot
-				final IPortDetails details = (IPortDetails) sequence[i];
+				final PortDetails details = (PortDetails) sequence[i];
 				final IPortSlot slot = details.getPortSlot();
 				if (slot instanceof ILoadSlot) {
 					if (i == sequence.length - 1) {
@@ -302,9 +301,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		// Load/Discharge sequence
 		if (loadIdx != -1 && dischargeIdx != -1) {
-			final ILoadSlot loadSlot = (ILoadSlot) ((IPortDetails) sequence[loadIdx])
+			final ILoadSlot loadSlot = (ILoadSlot) ((PortDetails) sequence[loadIdx])
 					.getPortSlot();
-			final IDischargeSlot dischargeSlot = (IDischargeSlot) ((IPortDetails) sequence[dischargeIdx])
+			final IDischargeSlot dischargeSlot = (IDischargeSlot) ((PortDetails) sequence[dischargeIdx])
 					.getPortSlot();
 
 			// Store unit prices for later on
@@ -402,7 +401,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					details.setFuelUnitPrice(FuelComponent.IdleNBO,
 							dischargeM3Price);
 				} else {
-					assert sequence[i] instanceof IPortDetails;
+					assert sequence[i] instanceof PortDetails;
 				}
 			}
 		}

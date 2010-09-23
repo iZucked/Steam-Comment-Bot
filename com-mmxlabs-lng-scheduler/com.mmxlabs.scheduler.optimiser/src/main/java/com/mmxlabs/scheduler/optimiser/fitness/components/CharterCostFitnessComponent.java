@@ -12,7 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CharterCostFitnessComponent<T> extends
@@ -47,8 +47,8 @@ public class CharterCostFitnessComponent<T> extends
 			boolean foundLoadPort = false;
 			for (final VoyagePlan plan : plans) {
 				for (final Object obj : plan.getSequence()) {
-					if (obj instanceof IPortDetails) {
-						final IPortDetails detail = (IPortDetails) obj;
+					if (obj instanceof PortDetails) {
+						final PortDetails detail = (PortDetails) obj;
 						if (detail.getPortSlot().getPortType() == PortType.Load) {
 							// Start costing from time loading begins
 							loadTime = detail.getStartTime();
@@ -64,8 +64,8 @@ public class CharterCostFitnessComponent<T> extends
 				final Object[] seq = plan.getSequence();
 				final Object obj = seq[seq.length - 1];
 				// We should always finish at a port
-				assert obj instanceof IPortDetails;
-				final IPortDetails detail = (IPortDetails) obj;
+				assert obj instanceof PortDetails;
+				final PortDetails detail = (PortDetails) obj;
 				final int arrivalTime = detail.getStartTime();
 
 				// check time of arrival at end port.
