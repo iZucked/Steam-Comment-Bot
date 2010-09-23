@@ -81,16 +81,16 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolume,
-			final long maxVolume, final int unitPrice, int cargoCVValue) {
+			final long maxVolume, final int unitPrice, int cargoCVValue, final int duration) {
 
 		ILoadSlot slot = delegate.createLoadSlot(id, port, window, minVolume,
-				maxVolume, unitPrice, cargoCVValue);
+				maxVolume, unitPrice, cargoCVValue, duration);
 
 		scenario.cargo.LoadSlot eLoadSlot = CargoFactory.eINSTANCE
 				.createLoadSlot();
 		eLoadSlot.setId(id);
-		eLoadSlot.setMaxQuantity(maxVolume);
-		eLoadSlot.setMinQuantity(minVolume);
+		eLoadSlot.setMaxQuantity((int) maxVolume);
+		eLoadSlot.setMinQuantity((int) minVolume);
 		eLoadSlot.setPort(ePorts.get(port));
 		eLoadSlot.setUnitPrice(unitPrice);
 		eLoadSlot.setCargoCVvalue(cargoCVValue);
@@ -99,6 +99,8 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		eLoadSlot.setWindowStart(now.getTime());
 		eLoadSlot.setWindowDuration(window.getEnd() - window.getStart());
 
+		eLoadSlot.setSlotDuration(duration);
+		
 		eLoadSlots.put(slot, eLoadSlot);
 
 		return slot;
@@ -107,16 +109,16 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id,
 			final IPort port, final ITimeWindow window, final long minVolume,
-			final long maxVolume, final int unitPrice) {
+			final long maxVolume, final int unitPrice, final int duration) {
 
 		IDischargeSlot slot = delegate.createDischargeSlot(id, port, window,
-				minVolume, maxVolume, unitPrice);
+				minVolume, maxVolume, unitPrice, duration);
 
 		scenario.cargo.Slot eDischargeSlot = CargoFactory.eINSTANCE
 				.createSlot();
 		eDischargeSlot.setId(id);
-		eDischargeSlot.setMaxQuantity(maxVolume);
-		eDischargeSlot.setMinQuantity(minVolume);
+		eDischargeSlot.setMaxQuantity((int) maxVolume);
+		eDischargeSlot.setMinQuantity((int) minVolume);
 		eDischargeSlot.setPort(ePorts.get(port));
 		eDischargeSlot.setUnitPrice(unitPrice);
 		Calendar now = Calendar.getInstance();
@@ -124,6 +126,8 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		eDischargeSlot.setWindowStart(now.getTime());
 		eDischargeSlot.setWindowDuration(window.getEnd() - window.getStart());
 
+		eDischargeSlot.setSlotDuration(duration);
+		
 		eDischargeSlots.put(slot, eDischargeSlot);
 
 		return slot;
@@ -413,6 +417,18 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	public void addCharterOutVesselClass(ICharterOut charterOut,
 			IVesselClass vesselClass) {
 		delegate.addCharterOutVesselClass(charterOut, vesselClass);
+	}
+
+	@Override
+	public void setVesselClassRouteCost(String route, IVesselClass vesselClass,
+			VesselState state, int tollPrice) {
+		delegate.setVesselClassRouteCost(route, vesselClass, state, tollPrice);
+		
+	}
+
+	@Override
+	public void setDefaultRouteCost(String route, int defaultPrice) {
+		delegate.setDefaultRouteCost(route, defaultPrice);
 	}
 	
 	
