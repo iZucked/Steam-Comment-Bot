@@ -188,7 +188,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			long bestLastLegCost = Long.MAX_VALUE;
 			long lastCost = Long.MAX_VALUE;
 			
-			for (int i = 0; i<500; i++) {
+			for (int i = 0; i < 500; ++i) {
 				options.setAvailableTime(originalTime + i);
 				
 				currentPlan = calculateVoyagePlan();
