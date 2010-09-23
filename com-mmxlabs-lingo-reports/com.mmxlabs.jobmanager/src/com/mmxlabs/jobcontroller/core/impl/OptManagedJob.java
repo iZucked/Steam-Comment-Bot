@@ -1,9 +1,6 @@
 package com.mmxlabs.jobcontroller.core.impl;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -15,34 +12,17 @@ import org.eclipse.ui.progress.IProgressConstants2;
 
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerExporter;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 //TODO Generate a base class and provide some methods for job creation etc.
 
@@ -65,7 +45,8 @@ public class OptManagedJob implements IManagedJob {
 
 	private IAnnotatedSolution<ISequenceElement> schedule = null;
 
-	public OptManagedJob(final String name, final IOptimisationContext<ISequenceElement> context) {
+	public OptManagedJob(final String name,
+			final IOptimisationContext<ISequenceElement> context) {
 		this.name = name;
 		this.context = context;
 	}
@@ -78,7 +59,7 @@ public class OptManagedJob implements IManagedJob {
 		totalProgress = 2000000;
 
 		state = JobState.INITIALISED;
-		
+
 		updateSchedule(context.getInitialSequences());
 	}
 
@@ -130,9 +111,11 @@ public class OptManagedJob implements IManagedJob {
 						System.out.println("Iteration: " + iteration
 								+ " Fitness: " + bestFitness);
 
-						//TODO: We should verify delta fitness is equal to a whole new fitness
-						// As currently the fitness report shows different results!
-						
+						// TODO: We should verify delta fitness is equal to a
+						// whole new fitness
+						// As currently the fitness report shows different
+						// results!
+
 						// HERE: Process the solution in a runnable and update
 						// getSchedule() output
 						updateSchedule(bestState);
@@ -175,7 +158,8 @@ public class OptManagedJob implements IManagedJob {
 
 					@Override
 					public void done(final IOptimiser<ISequenceElement> arg0,
-							final long arg1, final ISequences<ISequenceElement> arg2) {
+							final long arg1,
+							final ISequences<ISequenceElement> arg2) {
 
 						updateSchedule(arg2);
 
@@ -183,7 +167,8 @@ public class OptManagedJob implements IManagedJob {
 
 					@Override
 					public void begin(final IOptimiser<ISequenceElement> arg0,
-							final long arg1, final ISequences<ISequenceElement> arg2) {
+							final long arg1,
+							final ISequences<ISequenceElement> arg2) {
 
 						updateSchedule(arg2);
 
@@ -405,17 +390,16 @@ public class OptManagedJob implements IManagedJob {
 		return state;
 	}
 
-	private void setSchedule(final IAnnotatedSolution<ISequenceElement> annotatedSequences) {
+	private void setSchedule(
+			final IAnnotatedSolution<ISequenceElement> annotatedSequences) {
 
 		this.schedule = annotatedSequences;
 
 	}
 
-	@SuppressWarnings("unchecked")
 	private void updateSchedule(final ISequences<ISequenceElement> bestState) {
 
 		final IAnnotatedSolution<ISequenceElement> solution = CargoSchedulerExporter.exportState(context, bestState);
-
 		setSchedule(solution);
 	}
 }
