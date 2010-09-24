@@ -34,7 +34,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 	 * @param output
 	 */
 	@Override
-	public void calculateVoyageFuelRequirements(final VoyageOptions options,
+	public final void calculateVoyageFuelRequirements(final VoyageOptions options,
 			final VoyageDetails<T> output) {
 
 		output.setOptions(options);
@@ -214,7 +214,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 	 * @param sequence
 	 */
 	@Override
-	public void calculateVoyagePlan(final VoyagePlan voyagePlan,
+	public final void calculateVoyagePlan(final VoyagePlan voyagePlan,
 			final IVessel vessel, final Object... sequence) {
 
 		// Ensure odd number of elements
@@ -343,7 +343,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					maxDischargeVolume);
 
 			if (dischargeVolumeInM3 < 0) {
-				throw new RuntimeException("Capacity violation");
+				throw new RuntimeException("Capacity violation: discharge volume = " + dischargeVolumeInM3);
 			}
 			loadVolumeInM3 = dischargeVolumeInM3 + lngConsumed;
 
