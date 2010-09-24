@@ -9,7 +9,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -39,8 +39,8 @@ public final class LatenessComponent<T> extends
 
 		for (final VoyagePlan plan : plans) {
 			for (final Object obj : plan.getSequence()) {
-				if (obj instanceof IPortDetails) {
-					final IPortDetails detail = (IPortDetails) obj;
+				if (obj instanceof PortDetails) {
+					final PortDetails detail = (PortDetails) obj;
 					final int arrival = detail.getStartTime();
 					final ITimeWindow tw = detail.getPortSlot().getTimeWindow();
 

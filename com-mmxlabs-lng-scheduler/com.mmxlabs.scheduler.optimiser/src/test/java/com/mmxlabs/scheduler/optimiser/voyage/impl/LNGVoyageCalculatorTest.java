@@ -27,7 +27,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 
 @RunWith(JMock.class)
 public class LNGVoyageCalculatorTest {
@@ -611,8 +610,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = context.mock(IVessel.class);
 
-		final IPortDetails loadDetails = new PortDetails();
-		final IPortDetails dischargeDetails = new PortDetails();
+		final PortDetails loadDetails = new PortDetails();
+		final PortDetails dischargeDetails = new PortDetails();
 
 		final ILoadSlot loadSlot = new LoadSlot();
 		final IDischargeSlot dischargeSlot = new DischargeSlot();
@@ -662,8 +661,8 @@ public class LNGVoyageCalculatorTest {
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
-		final IPortDetails loadDetails = new PortDetails();
-		final IPortDetails dischargeDetails = new PortDetails();
+		final PortDetails loadDetails = new PortDetails();
+		final PortDetails dischargeDetails = new PortDetails();
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
@@ -747,8 +746,8 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
-		final IPortDetails loadDetails = new PortDetails();
-		final IPortDetails dischargeDetails = new PortDetails();
+		final PortDetails loadDetails = new PortDetails();
+		final PortDetails dischargeDetails = new PortDetails();
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
@@ -808,9 +807,9 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
-		final IPortDetails loadDetails = new PortDetails();
-		final IPortDetails dischargeDetails = new PortDetails();
-		final IPortDetails otherDetails = new PortDetails();
+		final PortDetails loadDetails = new PortDetails();
+		final PortDetails dischargeDetails = new PortDetails();
+		final PortDetails otherDetails = new PortDetails();
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
@@ -912,9 +911,9 @@ public class LNGVoyageCalculatorTest {
 		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = context.mock(IVessel.class);
 
-		final IPortDetails otherDetails = new PortDetails();
-		final IPortDetails loadDetails = new PortDetails();
-		final IPortDetails dischargeDetails = new PortDetails();
+		final PortDetails otherDetails = new PortDetails();
+		final PortDetails loadDetails = new PortDetails();
+		final PortDetails dischargeDetails = new PortDetails();
 
 		final PortSlot otherSlot = new StartPortSlot();
 		final LoadSlot loadSlot = new LoadSlot();

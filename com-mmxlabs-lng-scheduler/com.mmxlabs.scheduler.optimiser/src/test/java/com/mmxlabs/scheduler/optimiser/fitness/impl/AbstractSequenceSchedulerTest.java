@@ -292,8 +292,8 @@ public final class AbstractSequenceSchedulerTest {
 		expectedBasicSequence2.add(expectedPortDetails4);
 
 		// Return "empty" plan from optimiser
-		VoyagePlan testVoyagePlan = new VoyagePlan();
-		Object[] testSequence = new Object[] {};
+		final VoyagePlan testVoyagePlan = new VoyagePlan();
+		final Object[] testSequence = new Object[] {};
 		testVoyagePlan.setSequence(testSequence);
 
 		context.setDefaultResultForType(VoyagePlan.class, testVoyagePlan);
@@ -347,7 +347,7 @@ public final class AbstractSequenceSchedulerTest {
 			}
 		});
 
-		int[] arrivalTimes = new int[] { 5, 10, 15, 20 };
+		final int[] arrivalTimes = new int[] { 5, 10, 15, 20 };
 
 		// Schedule sequence
 		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence,
@@ -364,7 +364,7 @@ public final class AbstractSequenceSchedulerTest {
 	 * 
 	 * @throws CloneNotSupportedException
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testSchedule_2() throws CloneNotSupportedException {
 
@@ -538,8 +538,8 @@ public final class AbstractSequenceSchedulerTest {
 		expectedBasicSequence1.add(expectedOptions2a);
 		expectedBasicSequence1.add(expectedPortDetails3);
 
-		VoyagePlan testVoyagePlan = new VoyagePlan();
-		Object[] testSequence = new Object[] { expectedPortDetails1,
+		final VoyagePlan testVoyagePlan = new VoyagePlan();
+		final Object[] testSequence = new Object[] { expectedPortDetails1,
 				expectedVoyageDetails1, expectedPortDetails2,
 				expectedVoyageDetails2, expectedPortDetails3 };
 		testVoyagePlan.setSequence(testSequence);
@@ -594,7 +594,7 @@ public final class AbstractSequenceSchedulerTest {
 			}
 		});
 
-		int[] arrivalTimes = new int[] { 5, 10, 15 };
+		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 
 		// Schedule sequence
 		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence,
@@ -609,26 +609,27 @@ public final class AbstractSequenceSchedulerTest {
 		// TODO: Can we return different objects for each invocation?
 		//
 		// // Check plan 1
-		// IVoyagePlan plan1 = plans.get(0);
-		// Assert.assertNotNull(plan1);
-		// Assert.assertEquals(0, plan1.getLoadVolume());
-		// Assert.assertEquals(0, plan1.getDischargeVolume());
-		// Assert.assertEquals(0, plan1.getPurchaseCost());
-		// Assert.assertEquals(0, plan1.getSalesRevenue());
-		// Object[] sequence1 = plan1.getSequence();
-		// Assert.assertNotNull(sequence1);
-		// Assert.assertEquals(5, sequence1.length);
-		//
-		// // Check plan 2
-		// IVoyagePlan plan2 = plans.get(0);
-		// Assert.assertNotNull(plan2);
-		// Assert.assertEquals(0, plan2.getLoadVolume());
-		// Assert.assertEquals(0, plan2.getDischargeVolume());
-		// Assert.assertEquals(0, plan2.getPurchaseCost());
-		// Assert.assertEquals(0, plan2.getSalesRevenue());
-		// Object[] sequence2 = plan2.getSequence();
-		// Assert.assertNotNull(sequence2);
-		// Assert.assertEquals(3, sequence2.length);
+		final VoyagePlan plan1 = plans.get(0);
+		Assert.assertSame(testVoyagePlan, plan1);
+
+		final Object[] outputSequence = testVoyagePlan.getSequence();
+
+		Assert.assertEquals(5,
+				((PortDetails) outputSequence[0]).getStartTime());
+		Assert.assertEquals(1,
+				((PortDetails) outputSequence[0]).getVisitDuration());
+		Assert.assertEquals(6,
+				((VoyageDetails) outputSequence[1]).getStartTime());
+		Assert.assertEquals(10,
+				((PortDetails) outputSequence[2]).getStartTime());
+		Assert.assertEquals(1,
+				((PortDetails) outputSequence[2]).getVisitDuration());
+		Assert.assertEquals(11,
+				((VoyageDetails) outputSequence[3]).getStartTime());
+		Assert.assertEquals(15,
+				((PortDetails) outputSequence[4]).getStartTime());
+		Assert.assertEquals(1,
+				((PortDetails) outputSequence[4]).getVisitDuration());
 
 		context.assertIsSatisfied();
 	}
@@ -1005,6 +1006,14 @@ public final class AbstractSequenceSchedulerTest {
 		scheduler.init();
 	}
 
+	/**
+	 * Mock implementation of {@link AbstractSequenceScheduler} to allow use of
+	 * abstract class in tests
+	 * 
+	 * @author Simon Goodall
+	 * 
+	 * @param <T>
+	 */
 	private static class MockSequenceScheduler<T> extends
 			AbstractSequenceScheduler<T> {
 

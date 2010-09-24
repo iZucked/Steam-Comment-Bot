@@ -15,7 +15,6 @@ import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -59,60 +58,6 @@ public class LatenessComponentTest {
 
 	@Test
 	public void testEvaluateSequence() {
-		final String name = "name";
-		final CargoSchedulerFitnessCore<Object> core = null;
-		final LatenessComponent<Object> c = new LatenessComponent<Object>(name,
-				core);
-		c.init(null);
-
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-
-		final TimeWindow window1 = new TimeWindow(10, 11);
-
-		final LoadSlot loadSlot = new LoadSlot();
-		loadSlot.setTimeWindow(window1);
-
-		final IPortDetails loadDetails = context.mock(IPortDetails.class,
-				"details-1");
-		final IPortDetails dischargeDetails = context.mock(IPortDetails.class,
-				"details-2");
-
-		final Object[] routeSequence = new Object[] { loadDetails, null,
-				dischargeDetails };
-
-		final VoyagePlan voyagePlan = new VoyagePlan();
-		voyagePlan.setSequence(routeSequence);
-
-		final IResource resource = context.mock(IResource.class);
-		final IModifiableSequence<Object> sequence = OptimiserTestUtil
-				.makeSequence(obj1, obj2);
-
-		context.checking(new Expectations() {
-			{
-				one(loadDetails).getStartTime();
-				one(dischargeDetails).getStartTime();
-				one(loadDetails).getPortSlot();
-				one(dischargeDetails).getPortSlot();
-			}
-
-		});
-
-		c.prepare();
-
-		c.evaluateSequence(resource, sequence,
-				CollectionsUtil.makeArrayList(voyagePlan), false);
-
-		c.complete();
-
-		// Nothing to calculate
-		Assert.assertEquals(0, c.getFitness());
-
-		context.assertIsSatisfied();
-	}
-
-	@Test
-	public void testEvaluateSequence2() {
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = null;
 		final LatenessComponent<Object> c = new LatenessComponent<Object>(name,

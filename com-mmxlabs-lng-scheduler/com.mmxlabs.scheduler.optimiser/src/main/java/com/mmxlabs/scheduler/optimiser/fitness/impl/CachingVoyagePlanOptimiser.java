@@ -12,7 +12,7 @@ import com.mmxlabs.common.caches.SimpleCache;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -42,8 +42,8 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			int slotix = 0;
 			int timeix = 0;
 			for (final Object o : sequence) {
-				if (o instanceof IPortDetails) {
-					slots[slotix++] = ((IPortDetails) o).getPortSlot();
+				if (o instanceof PortDetails) {
+					slots[slotix++] = ((PortDetails) o).getPortSlot();
 				} else {
 					times[timeix++] = ((VoyageOptions) o).getAvailableTime();
 				}

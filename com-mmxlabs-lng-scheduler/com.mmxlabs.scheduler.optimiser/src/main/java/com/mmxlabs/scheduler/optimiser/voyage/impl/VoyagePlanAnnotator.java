@@ -18,7 +18,6 @@ import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
 /**
@@ -48,8 +47,8 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 		for (final VoyagePlan plan : plans) {
 			for (final Object e : plan.getSequence()) {
 
-				if (e instanceof IPortDetails) {
-					final IPortDetails details = (IPortDetails) e;
+				if (e instanceof PortDetails) {
+					final PortDetails details = (PortDetails) e;
 					final IPortSlot currentPortSlot = details.getPortSlot();
 
 					// Get element from port slot provider
