@@ -20,10 +20,31 @@ public final class VoyagePlan implements Cloneable {
 	private long salesRevenue;
 	private long purchaseCost;
 
-	private final EnumMap<FuelComponent, Long> fuelConsumptions = new EnumMap<FuelComponent, Long>(
-			FuelComponent.class);
-	private final EnumMap<FuelComponent, Long> fuelCosts = new EnumMap<FuelComponent, Long>(
-			FuelComponent.class);
+	private final EnumMap<FuelComponent, Long> fuelConsumptions;
+	private final EnumMap<FuelComponent, Long> fuelCosts;
+
+	public VoyagePlan() {
+		fuelConsumptions = new EnumMap<FuelComponent, Long>(FuelComponent.class);
+		fuelCosts = new EnumMap<FuelComponent, Long>(FuelComponent.class);
+	}
+
+	
+	
+	protected VoyagePlan(Object[] sequence, long dischargeVolume, long loadVolume,
+			long salesRevenue, long purchaseCost,
+			EnumMap<FuelComponent, Long> fuelConsumptions,
+			EnumMap<FuelComponent, Long> fuelCosts) {
+		super();
+		this.sequence = sequence;
+		this.dischargeVolume = dischargeVolume;
+		this.loadVolume = loadVolume;
+		this.salesRevenue = salesRevenue;
+		this.purchaseCost = purchaseCost;
+		this.fuelConsumptions = fuelConsumptions;
+		this.fuelCosts = fuelCosts;
+	}
+
+
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
 		if (fuelConsumptions.containsKey(fuel)) {
@@ -132,30 +153,20 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	@Override
-	public VoyagePlan clone() {
-		VoyagePlan result = new VoyagePlan();
-		
-		result.dischargeVolume = dischargeVolume;
-		result.fuelConsumptions.putAll(fuelConsumptions);
-		result.fuelCosts.putAll(fuelCosts);
-		result.loadVolume = loadVolume;
-		result.purchaseCost = purchaseCost;
-		result.salesRevenue = salesRevenue;
-		result.sequence = new Object[sequence.length];
+	public final VoyagePlan clone() {
+		final Object[] clonedSequence = new Object[sequence.length];
 		int k = 0;
 		for (Object o : sequence) {
 			if (o instanceof VoyageDetails) {
-				result.sequence[k++] = ((VoyageDetails)o).clone();
+				clonedSequence[k++] = ((VoyageDetails) o).clone();
 			} else if (o instanceof PortDetails) {
-				result.sequence[k++] = ((PortDetails)o).clone();
+				clonedSequence[k++] = ((PortDetails) o).clone();
 			} else {
-				result.sequence[k++] = o;
+				clonedSequence[k++] = o;
 			}
 		}
-		
-		return result;
+		return new VoyagePlan(clonedSequence, dischargeVolume, loadVolume, salesRevenue, 
+				purchaseCost, fuelConsumptions, fuelCosts);
 	}
-	
-	
-	
+
 }

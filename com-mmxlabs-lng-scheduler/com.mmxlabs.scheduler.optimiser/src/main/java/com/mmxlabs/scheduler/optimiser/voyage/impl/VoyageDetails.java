@@ -19,11 +19,9 @@ public final class VoyageDetails<T> implements Cloneable {
 
 	private VoyageOptions options;
 
-	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(
-			FuelComponent.class);
+	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption;
 
-	private final EnumMap<FuelComponent, Integer> fuelUnitPrices = new EnumMap<FuelComponent, Integer>(
-			FuelComponent.class);
+	private final EnumMap<FuelComponent, Integer> fuelUnitPrices;
 
 	private int idleTime;
 
@@ -34,6 +32,10 @@ public final class VoyageDetails<T> implements Cloneable {
 	private int startTime;
 
 	public VoyageDetails() {
+		fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(
+				FuelComponent.class);
+		fuelUnitPrices = new EnumMap<FuelComponent, Integer>(
+				FuelComponent.class);
 		for (FuelComponent fuel : FuelComponent.values()) {
 			fuelConsumption.put(fuel, new EnumMap<FuelUnit, Long>(FuelUnit.class));
 		}
@@ -43,16 +45,13 @@ public final class VoyageDetails<T> implements Cloneable {
 			int startTime2, VoyageOptions options,
 			EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption2,
 			EnumMap<FuelComponent, Integer> fuelUnitPrices2) {
-		this();
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
 		this.startTime = startTime2;
 		this.options = options;
-		for (Entry<FuelComponent, EnumMap<FuelUnit, Long>> x : fuelConsumption.entrySet()) {
-			x.getValue().putAll(fuelConsumption2.get(x.getKey()));
-		}
-		fuelUnitPrices.putAll(fuelUnitPrices2);
+		this.fuelConsumption = fuelConsumption2;
+		this.fuelUnitPrices = fuelUnitPrices2;
 	}
 
 	public VoyageDetails clone() {
