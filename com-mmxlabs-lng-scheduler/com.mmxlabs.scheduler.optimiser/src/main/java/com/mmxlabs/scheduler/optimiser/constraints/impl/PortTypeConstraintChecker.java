@@ -42,8 +42,9 @@ public final class PortTypeConstraintChecker<T> implements
 
 	private IPortTypeProvider<T> portTypeProvider;
 	private IVesselProvider vesselProvider;
-	
-	public PortTypeConstraintChecker(final String name, final String key, final String vesselKey) {
+
+	public PortTypeConstraintChecker(final String name, final String key,
+			final String vesselKey) {
 		this.name = name;
 		this.key = key;
 		this.vesselKey = vesselKey;
@@ -71,16 +72,17 @@ public final class PortTypeConstraintChecker<T> implements
 
 		final Collection<ISequence<T>> sequencesCollection = sequences
 				.getSequences().values();
-		
-		for (final Map.Entry<IResource, ISequence<T>> entry :
-			sequences.getSequences().entrySet()) {
-			if (!checkSequence(entry.getValue(), messages, 
-			
-					vesselProvider.getVessel(entry.getKey()).getVesselInstanceType()
-					
-			)) return false;
+
+		for (final Map.Entry<IResource, ISequence<T>> entry : sequences
+				.getSequences().entrySet()) {
+			if (!checkSequence(entry.getValue(), messages,
+
+			vesselProvider.getVessel(entry.getKey()).getVesselInstanceType()
+
+			))
+				return false;
 		}
-		
+
 		return true;
 	}
 
@@ -90,11 +92,11 @@ public final class PortTypeConstraintChecker<T> implements
 
 		setPortTypeProvider(optimisationData.getDataComponentProvider(key,
 				IPortTypeProvider.class));
-		
+
 		setVesselProvider(optimisationData.getDataComponentProvider(vesselKey,
 				IVesselProvider.class));
 	}
-	
+
 	/**
 	 * Check ISequence for {@link PortType} ordering violations.
 	 * 
@@ -113,13 +115,16 @@ public final class PortTypeConstraintChecker<T> implements
 		for (final T t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
-				if (!((type == PortType.Start && instanceType != VesselInstanceType.SPOT_CHARTER) ||
-						(instanceType == VesselInstanceType.SPOT_CHARTER && (type == PortType.Load || type == PortType.End)))) {
-					//must either start with Start and be not a spot charter,
-					//or must start with a load or an End and be a spot charter
-				
+				if (!((type == PortType.Start && instanceType != VesselInstanceType.SPOT_CHARTER) || (instanceType == VesselInstanceType.SPOT_CHARTER && (type == PortType.Load || type == PortType.End)))) {
+					// must either start with Start and be not a spot charter,
+					// or must start with a load or an End and be a spot charter
+
 					if (messages != null)
-						messages.add("Sequence must begin with PortType.Start or, if charter, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
+						messages.add("Sequence must begin with PortType.Start or, if charter, End or Load, but actually begins with "
+								+ type
+								+ " (for instance type "
+								+ instanceType
+								+ ")");
 					return false;
 				}
 			} else {
@@ -131,8 +136,6 @@ public final class PortTypeConstraintChecker<T> implements
 				}
 			}
 
-			
-			
 			switch (type) {
 			case Discharge:
 				if (seenDischarge) {
@@ -213,7 +216,7 @@ public final class PortTypeConstraintChecker<T> implements
 	public void setPortTypeProvider(IPortTypeProvider<T> portTypeProvider) {
 		this.portTypeProvider = portTypeProvider;
 	}
-	
+
 	public IVesselProvider getVesselProvider() {
 		return vesselProvider;
 	}
@@ -221,25 +224,33 @@ public final class PortTypeConstraintChecker<T> implements
 	public void setVesselProvider(IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
 	}
-
+	
 	@Override
 	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 		
-		//check the legality of this sequencing decision
-		//End can't come before anything and Start can't come after anything
-		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start)) return false;
-		
-		if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) return false; //first port should be a load slot (TODO is this true?)
-		
-		//load must precede discharge or waypoint, but nothing else
-		if (firstType.equals(PortType.Load)) return (secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint));
-		
-		//discharge may precede anything but Discharge (and start, but we already did that)
-		if (firstType.equals(PortType.Discharge) &&
-				secondType.equals(PortType.Discharge)) return false; 
-		
+		// check the legality of this sequencing decision
+		// End can't come before anything and Start can't come after anything
+		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start))
+			return false;
+
+		if (firstType.equals(PortType.Start)
+				&& secondType.equals(PortType.Discharge))
+			return false; // first port should be a load slot (TODO is this
+							// true?)
+
+		// load must precede discharge or waypoint, but nothing else
+		if (firstType.equals(PortType.Load))
+			return (secondType.equals(PortType.Discharge) || secondType
+					.equals(PortType.Waypoint));
+
+		// discharge may precede anything but Discharge (and start, but we
+		// already did that)
+		if (firstType.equals(PortType.Discharge)
+				&& secondType.equals(PortType.Discharge))
+			return false;
+
 		return true;
 	}
 
