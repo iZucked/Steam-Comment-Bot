@@ -114,11 +114,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, 5000, 2000);
+				loadWindow, 0, 150000000, 5000, 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, 5000);
+				"discharge-1", port3, dischargeWindow, 0, 150000000, 5000, 1);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
 				dischargeSlot);
@@ -138,11 +138,11 @@ public class TestCalculations {
 		scheduler.setDistanceProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portDistanceProvider,
 				IMultiMatrixProvider.class));
+		
 		final IElementDurationProviderEditor<ISequenceElement> durationsProvider = data
 				.getDataComponentProvider(
 						SchedulerConstants.DCP_elementDurationsProvider,
 						IElementDurationProviderEditor.class);
-		durationsProvider.setDefaultValue(1);
 		scheduler.setDurationsProvider(durationsProvider);
 		scheduler.setPortProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portProvider, IPortProvider.class));
@@ -198,8 +198,10 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		int[] expectedArrivalTimes = new int[] { 0, 25, 50, 75 };
+		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
+		
+		Assert.assertNotNull(plans);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
 		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
@@ -215,8 +217,8 @@ public class TestCalculations {
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
-			Assert.assertEquals(1, event.getDuration());
-			Assert.assertEquals(0, event.getStartTime());
+			Assert.assertEquals(0, event.getDuration());
+			Assert.assertEquals(1, event.getStartTime());
 			Assert.assertEquals(1, event.getEndTime());
 			Assert.assertEquals(startElement, event.getSequenceElement());
 		}
@@ -661,9 +663,9 @@ public class TestCalculations {
 					.getAnnotation(endElement, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
-			Assert.assertEquals(1, event.getDuration());
+			Assert.assertEquals(0, event.getDuration());
 			Assert.assertEquals(75, event.getStartTime());
-			Assert.assertEquals(76, event.getEndTime());
+			Assert.assertEquals(75, event.getEndTime());
 			Assert.assertEquals(endElement, event.getSequenceElement());
 		}
 	}
@@ -719,11 +721,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, 5000, 2000);
+				loadWindow, 0, 150000000, 5000, 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, 5000);
+				"discharge-1", port3, dischargeWindow, 0, 150000000, 5000, 1);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
 				dischargeSlot);
@@ -747,7 +749,7 @@ public class TestCalculations {
 				.getDataComponentProvider(
 						SchedulerConstants.DCP_elementDurationsProvider,
 						IElementDurationProviderEditor.class);
-		durationsProvider.setDefaultValue(1);
+
 		scheduler.setDurationsProvider(durationsProvider);
 		scheduler.setPortProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portProvider, IPortProvider.class));
@@ -803,7 +805,7 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		int[] expectedArrivalTimes = new int[] { 0, 25, 50, 75 };
+		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
@@ -820,8 +822,8 @@ public class TestCalculations {
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
-			Assert.assertEquals(1, event.getDuration());
-			Assert.assertEquals(0, event.getStartTime());
+			Assert.assertEquals(0, event.getDuration());
+			Assert.assertEquals(1, event.getStartTime());
 			Assert.assertEquals(1, event.getEndTime());
 			Assert.assertEquals(startElement, event.getSequenceElement());
 		}
@@ -1270,9 +1272,9 @@ public class TestCalculations {
 					.getAnnotation(endElement, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
-			Assert.assertEquals(1, event.getDuration());
+			Assert.assertEquals(0, event.getDuration());
 			Assert.assertEquals(75, event.getStartTime());
-			Assert.assertEquals(76, event.getEndTime());
+			Assert.assertEquals(75, event.getEndTime());
 			Assert.assertEquals(endElement, event.getSequenceElement());
 		}
 	}
@@ -1329,11 +1331,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, 5000, 2000);
+				loadWindow, 0, 150000000, 5000, 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, 200000);
+				"discharge-1", port3, dischargeWindow, 0, 150000000, 200000, 1);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
 				dischargeSlot);
@@ -1357,7 +1359,7 @@ public class TestCalculations {
 				.getDataComponentProvider(
 						SchedulerConstants.DCP_elementDurationsProvider,
 						IElementDurationProviderEditor.class);
-		durationsProvider.setDefaultValue(1);
+
 		scheduler.setDurationsProvider(durationsProvider);
 		scheduler.setPortProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portProvider, IPortProvider.class));
@@ -1413,7 +1415,7 @@ public class TestCalculations {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Schedule sequence
-		int[] expectedArrivalTimes = new int[] { 0, 25, 50, 75 };
+		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
@@ -1430,8 +1432,8 @@ public class TestCalculations {
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
-			Assert.assertEquals(1, event.getDuration());
-			Assert.assertEquals(0, event.getStartTime());
+			Assert.assertEquals(0, event.getDuration());
+			Assert.assertEquals(1, event.getStartTime());
 			Assert.assertEquals(1, event.getEndTime());
 			Assert.assertEquals(startElement, event.getSequenceElement());
 		}
@@ -1895,9 +1897,9 @@ public class TestCalculations {
 					.getAnnotation(endElement, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
-			Assert.assertEquals(1, event.getDuration());
+			Assert.assertEquals(0, event.getDuration());
 			Assert.assertEquals(75, event.getStartTime());
-			Assert.assertEquals(76, event.getEndTime());
+			Assert.assertEquals(75, event.getEndTime());
 			Assert.assertEquals(endElement, event.getSequenceElement());
 		}
 	}
