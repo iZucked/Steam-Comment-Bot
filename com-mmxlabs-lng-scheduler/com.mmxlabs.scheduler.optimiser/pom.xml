@@ -66,13 +66,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.mmxlabs.scheduler</groupId>
-			<artifactId>com.google.guava.bundle</artifactId>
-			<version>1.0.6</version>
-			<type>bundle</type>
-			<scope>compile</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
