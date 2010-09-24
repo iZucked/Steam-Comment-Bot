@@ -6,6 +6,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -48,7 +49,6 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 			for (final Object e : plan.getSequence()) {
 
 				if (e instanceof IPortDetails) {
-
 					final IPortDetails details = (IPortDetails) e;
 					final IPortSlot currentPortSlot = details.getPortSlot();
 
@@ -77,6 +77,8 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 						visit = discharge;
 
+					} else if (currentPortSlot instanceof ICharterOutPortSlot) {
+						visit = new PortVisitEventImpl<T>();
 					} else {
 						visit = new PortVisitEventImpl<T>();
 					}

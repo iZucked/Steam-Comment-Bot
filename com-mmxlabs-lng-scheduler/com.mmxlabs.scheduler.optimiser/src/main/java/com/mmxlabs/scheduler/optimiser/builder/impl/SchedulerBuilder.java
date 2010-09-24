@@ -48,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.CharterOut;
+import com.mmxlabs.scheduler.optimiser.components.impl.CharterOutPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
@@ -862,12 +863,31 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	protected void buildCharterOuts() {
+		int i = 0;
+		
 		for (final ICharterOut charterOut : charterOuts) {
-			final SequenceElement element = new SequenceElement();
+			
+			CharterOutPortSlot slot =
+				new CharterOutPortSlot("charter-out-" + i, 
+						charterOut.getPort(), 
+						charterOut.getTimeWindow());
+			
+			final SequenceElement element = new SequenceElement("charter-out-"+i, slot);
+			
+			sequenceElements.add(element); 
+			
 			timeWindowProvider.setTimeWindows(element,
 					Collections.singletonList(charterOut.getTimeWindow()));
 			portTypeProvider.setPortType(element, PortType.CharterOut);
 
+			elementDurationsProvider.setElementDuration(element, charterOut.getDurationHours());
+			
+			//element needs a port slot
+			
+			portSlotsProvider.setPortSlot(element, slot);
+			
+			portProvider.setPortForElement(charterOut.getPort(), element);
+			
 			final Set<IResource> resources = new HashSet<IResource>();
 			final Set<IVessel> supportedVessels = vesselCharterOuts
 					.get(charterOut);
@@ -879,12 +899,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					final IResource resource = vesselProvider
 							.getResource(vessel);
 					resources.add(resource);
-					elementDurationsProvider.setElementDuration(element,
-							resource, charterOut.getDurationHours());
 				}
 			}
 
 			resourceAllocationProvider.setAllowedResources(element, resources);
+			i++;
 		}
 	}
 }
