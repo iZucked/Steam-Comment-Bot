@@ -34,7 +34,7 @@ final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 		 * ISequence to forbid calls to #remove()
 		 */
 		return new Iterator<T>() {
-			Iterator<? extends T> i = wrapped.iterator();
+			private final Iterator<? extends T> i = wrapped.iterator();
 
 			public boolean hasNext() {
 				return i.hasNext();
