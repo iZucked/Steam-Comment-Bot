@@ -28,4 +28,8 @@ public final class Resource implements IResource {
 	public void setName(final String name) {
 		this.name = name;
 	}
+	
+	public String toString() {
+		return "Resource " + name;
+	}
 }
