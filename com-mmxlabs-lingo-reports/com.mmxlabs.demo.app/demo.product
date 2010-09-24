@@ -41,7 +41,6 @@
       <plugin id="com.mmxlabs.optimiser.common"/>
       <plugin id="com.mmxlabs.optimiser.core"/>
       <plugin id="com.mmxlabs.optimiser.lso"/>
-      <plugin id="com.mmxlabs.scheduler.com.google.guava.bundle"/>
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser"/>
       <plugin id="com.mmxlabs.scheduleview"/>
       <plugin id="org.eclipse.compare"/>
