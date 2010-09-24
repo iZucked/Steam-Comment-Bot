@@ -109,34 +109,34 @@ public class SimpleSchedulerTest {
 		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
 
 		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800);
+				150000 * Calculator.ScaleFactor, 5, 22800, 24);
 		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800);
+				150000 * Calculator.ScaleFactor, 5, 22800, 24);
 		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800);
+				150000 * Calculator.ScaleFactor, 5, 22800, 24);
 		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800);
+				150000 * Calculator.ScaleFactor, 5, 22800, 24);
 		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800);
+				150000 * Calculator.ScaleFactor, 5, 22800, 24);
 		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800);
+				150000 * Calculator.ScaleFactor, 5, 22800, 24);
 		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800);
+				150000 * Calculator.ScaleFactor, 5, 22800, 24);
 
 		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1",
-				port2, tw2, 0, 100000 * Calculator.ScaleFactor, 200000);
+				port2, tw2, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
 		final IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2",
-				port2, tw4, 0, 100000 * Calculator.ScaleFactor, 200000);
+				port2, tw4, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
 		final IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3",
-				port2, tw6, 0, 100000 * Calculator.ScaleFactor, 200000);
+				port2, tw6, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
 		final IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4",
-				port6, tw6, 0, 100000 * Calculator.ScaleFactor, 200000);
+				port6, tw6, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
 		final IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5",
-				port4, tw3, 0, 100000 * Calculator.ScaleFactor, 200000);
+				port4, tw3, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
 		final IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6",
-				port4, tw5, 0, 100000 * Calculator.ScaleFactor, 200000);
+				port4, tw5, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
 		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7",
-				port6, tw7, 0, 100000 * Calculator.ScaleFactor, 200000);
+				port6, tw7, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
 
 		builder.createCargo("cargo1", load1, discharge1);
 		builder.createCargo("cargo2", load2, discharge2);
