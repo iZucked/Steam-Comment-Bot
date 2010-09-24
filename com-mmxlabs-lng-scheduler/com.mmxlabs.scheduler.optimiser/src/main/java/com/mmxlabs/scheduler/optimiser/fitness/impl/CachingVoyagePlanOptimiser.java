@@ -6,9 +6,8 @@ import java.util.List;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache;
-import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
-import com.mmxlabs.common.caches.SimpleCache;
+import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -223,11 +222,6 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	@Override
 	public ILNGVoyageCalculator<T> getVoyageCalculator() {
 		return delegate.getVoyageCalculator();
-	}
-
-	@Override
-	public void setVoyageCalculator(ILNGVoyageCalculator<T> voyageCalculator) {
-		delegate.setVoyageCalculator(voyageCalculator);
 	}
 
 	@Override

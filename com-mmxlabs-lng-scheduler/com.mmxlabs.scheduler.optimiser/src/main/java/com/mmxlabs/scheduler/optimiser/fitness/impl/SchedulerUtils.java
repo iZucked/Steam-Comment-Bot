@@ -68,8 +68,7 @@ public final class SchedulerUtils {
 	public static <T> IVoyagePlanOptimiser<T> createVoyagePlanOptimiser() {
 		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
 
-		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>(voyageCalculator);
 		return voyagePlanOptimiser;
 	}
 	
@@ -79,13 +78,13 @@ public final class SchedulerUtils {
 		
 		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
 
-		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>(voyageCalculator);
 		
-		if (cacheSize == 0)
+		if (cacheSize == 0) {
 			return voyagePlanOptimiser;
-		else
+		} else {
 			return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser, cacheSize);
+		}
 	}
 
 	public static <T> IVoyagePlanOptimiser<T> createVPO(){

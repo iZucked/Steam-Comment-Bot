@@ -96,13 +96,6 @@ public interface IVoyagePlanOptimiser<T> {
 	ILNGVoyageCalculator<T> getVoyageCalculator();
 
 	/**
-	 * Set the {@link ILNGVoyageCalculator} to use.
-	 * 
-	 * @param voyageCalculator
-	 */
-	void setVoyageCalculator(final ILNGVoyageCalculator<T> voyageCalculator);
-
-	/**
 	 * Add a new choice to the ordered stack of choices. If this choice depends
 	 * upon the choice of another {@link IVoyagePlanChoice}, then that object
 	 * should have already been added.

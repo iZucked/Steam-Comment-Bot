@@ -86,12 +86,6 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	@Override
-	public void setVoyageCalculator(ILNGVoyageCalculator<T> voyageCalculator) {
-		delegate.setVoyageCalculator(voyageCalculator);
-		reference.setVoyageCalculator(voyageCalculator);
-	}
-
-	@Override
 	public void addChoice(IVoyagePlanChoice choice) {
 		reference.addChoice(choice);
 		delegate.addChoice(choice);

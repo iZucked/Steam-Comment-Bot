@@ -167,8 +167,7 @@ public class TestCalculations {
 						IStartEndRequirementProvider.class);
 
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(voyageCalculator);
 
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
@@ -774,8 +773,7 @@ public class TestCalculations {
 						IStartEndRequirementProvider.class);
 
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(voyageCalculator);
 
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
@@ -1384,8 +1382,7 @@ public class TestCalculations {
 						IStartEndRequirementProvider.class);
 
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>();
-		voyagePlanOptimiser.setVoyageCalculator(voyageCalculator);
+		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(voyageCalculator);
 
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 

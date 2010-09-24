@@ -35,8 +35,13 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	private VoyagePlan bestPlan = null;
 
-	private ILNGVoyageCalculator<T> voyageCalculator;
+	private final ILNGVoyageCalculator<T> voyageCalculator;
 
+	
+	public VoyagePlanOptimiser(final ILNGVoyageCalculator<T> voyageCalculator) {
+		this.voyageCalculator = voyageCalculator;
+	}
+	
 	/**
 	 * Check internal state is valid (i.e. all setters have been called).
 	 */
@@ -72,7 +77,6 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	public void dispose() {
 		choices.clear();
 		vessel = null;
-		voyageCalculator = null;
 		basicSequence = null;
 		bestPlan = null;
 	}
@@ -366,17 +370,6 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	@Override
 	public ILNGVoyageCalculator<T> getVoyageCalculator() {
 		return voyageCalculator;
-	}
-
-	/**
-	 * Set the {@link ILNGVoyageCalculator} to use.
-	 * 
-	 * @param voyageCalculator
-	 */
-	@Override
-	public void setVoyageCalculator(
-			final ILNGVoyageCalculator<T> voyageCalculator) {
-		this.voyageCalculator = voyageCalculator;
 	}
 
 	/**
