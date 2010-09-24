@@ -36,9 +36,9 @@ public class TravelTimeConstraintChecker<T> implements
 		IPairwiseConstraintChecker<T> {
 
 	/**
-	 * The maximum amount of lateness which will even be considered (5 days)
+	 * The maximum amount of lateness which will even be considered (10 days)
 	 */
-	private int maxLateness = 8*24;
+	private int maxLateness = 10*24;
 	private final String name;
 	private IOptimisationData<T> data;
 	private IPortSlotProvider<T> portSlotProvider;
