@@ -13,7 +13,6 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
