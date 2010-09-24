@@ -612,6 +612,9 @@ public class RandomScenarioUtils {
 		discharge.setMinQuantity(0);
 		discharge.setMaxQuantity(200000);
 
+		load.setSlotDuration(24);
+		discharge.setSlotDuration(24);
+		
 		c.setId("cargo-" + i);
 		c.setLoadSlot(load);
 		c.setDischargeSlot(discharge);
