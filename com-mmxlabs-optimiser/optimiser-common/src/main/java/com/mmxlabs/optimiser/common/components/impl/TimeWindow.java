@@ -2,6 +2,12 @@ package com.mmxlabs.optimiser.common.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
+/**
+ * Implementation of {@link ITimeWindow} to create an immutable time window.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public final class TimeWindow implements ITimeWindow {
 
 	private final int start;
@@ -14,17 +20,17 @@ public final class TimeWindow implements ITimeWindow {
 	}
 
 	@Override
-	public int getEnd() {
+	public final int getEnd() {
 		return end;
 	}
 
 	@Override
-	public int getStart() {
+	public final int getStart() {
 		return start;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (obj instanceof TimeWindow) {
 			final TimeWindow tw = (TimeWindow) obj;
 			if (start != tw.start) {
@@ -37,5 +43,11 @@ public final class TimeWindow implements ITimeWindow {
 		}
 
 		return false;
+	}
+
+	@Override
+	public final int hashCode() {
+		// Based on Arrays.hashCode(int[])
+		return 31 * start + end;
 	}
 }
