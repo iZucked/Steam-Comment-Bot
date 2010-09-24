@@ -143,6 +143,13 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(data,
 				pairwiseCheckers);
 
+		final int initialMaxLateness = (travelTimeChecker == null) ? 0 :
+			travelTimeChecker.getMaxLateness();
+		
+		if (travelTimeChecker != null)
+			travelTimeChecker.setMaxLateness(initialMaxLateness *3/4); //schedule with 5d lateness at first, we'll try more lateness later.
+		
+		
 		// stick together elements which must be stuck together
 		Map<T, Set<T>> followerCache = new HashMap<T, Set<T>>();
 		Set<T> heads = new HashSet<T>();
@@ -167,7 +174,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				heads.remove(tail);
 			}
 		}
-
+		
 		/*{
 			System.out.println("Contention information: there are "
 					+ heads.size() + " movable chunks, containing "
@@ -296,10 +303,10 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				final int rc1 = chunk1.getResourceCount();
 				final int rc2 = chunk2.getResourceCount();
 
-				if (rc1 < rc2)
-					return -1;
-				else if (rc1 > rc2)
-					return 1;
+//				if (rc1 < rc2)
+//					return -1;
+//				else if (rc1 > rc2)
+//					return 1;
 
 				final T o1 = chunk1.get(0);
 				final T o2 = chunk2.get(0);
@@ -349,9 +356,8 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
-		int retry = 0;
-		int originalMaxLateness = (travelTimeChecker == null) ? 0 : travelTimeChecker.getMaxLateness();
-		while (!chunks.isEmpty() && retry++ < 100) {
+		
+		while (!chunks.isEmpty()) {
 			Iterator<SequenceChunk<T>> iterator = chunks.iterator();
 			while (iterator.hasNext()) {
 				final SequenceChunk<T> here = iterator.next();
@@ -372,17 +378,17 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 			if (travelTimeChecker == null) break;
 			//relax constraint
 			final int maxLateness = travelTimeChecker.getMaxLateness();
-			travelTimeChecker.setMaxLateness(maxLateness+6);
+			if (maxLateness == initialMaxLateness) break;
+			
+			travelTimeChecker.setMaxLateness(maxLateness+1);
+			System.err.println("Allowing lateness " + (maxLateness + 1) + " " + chunks.size() + " left...");
 		}
 		
 		if (chunks.isEmpty() == false) {
 			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSolutionBuilder. " + chunks + " could not be scheduled anywhere.");
 		}
 		
-		if (retry > 1) {
-//			System.err.println();
-			throw new RuntimeException("Had to increase max. lateness to " + travelTimeChecker.getMaxLateness() + " to construct an initial solution");
-		}
+
 
 		// OK, we have done our best, now build the modifiablesequences
 		// from the intermediate gack
