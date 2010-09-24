@@ -41,10 +41,11 @@ public abstract class AbstractCache<K, V> {
 	}
 	
 	protected final void report() {
-//		if (hits == SAMPLE) {
-//			System.err.println(this);
-//			resetCounters();
-//		}
+		if (hits == SAMPLE) {
+			System.err.println("Free memory: "+Runtime.getRuntime().freeMemory()/1024 +"K");
+			System.err.println(this);
+			resetCounters();
+		}
 	}
 	
 	public abstract void clear();

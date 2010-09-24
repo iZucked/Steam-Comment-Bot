@@ -4,7 +4,7 @@ import java.lang.ref.SoftReference;
 
 import com.mmxlabs.common.Pair;
 
-public class SimpleCache<K, V> extends AbstractCache<K, V> {
+public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 	final int evictionThreshold;
 	
 	class Entry {
@@ -20,17 +20,17 @@ public class SimpleCache<K, V> extends AbstractCache<K, V> {
 			queries++;
 			if (entry != null && key.equals(entry.getFirst())) {
 				misses = 0;
-				hits++;
+//				hits++;
 				return entry.getSecond();
 			} else {
 				final V value = evaluator.evaluate(key);
 				
-				if (entry == null) memoryMisses++;
-				else valueMisses++;
+//				if (entry == null) memoryMisses++;
+//				else valueMisses++;
 				
 				if (entry == null || misses > evictionThreshold) {
 					this.reference = new SoftReference<Pair<K, V>>(new Pair<K, V>(key, value));
-					evictions++;
+//					evictions++;
 					misses = 0;
 				} else {
 					misses++;
@@ -42,6 +42,10 @@ public class SimpleCache<K, V> extends AbstractCache<K, V> {
 	
 	Object[] entries;
 	
+	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator, final int size) {
+		this(name, evaluator, size, 2);
+	}
+	
 	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator, final int binCount, final int maxMisses) {
 		super(name, evaluator);
 		this.evictionThreshold = maxMisses;
@@ -51,7 +55,7 @@ public class SimpleCache<K, V> extends AbstractCache<K, V> {
 		}
 	}
 	
-	public V get(final K key) {
+	public final V get(final K key) {
 		final int hash = key.hashCode();
 		final int hashPosition = Math.abs(hash) % entries.length;
 		final Entry e = (Entry) entries[hashPosition];
