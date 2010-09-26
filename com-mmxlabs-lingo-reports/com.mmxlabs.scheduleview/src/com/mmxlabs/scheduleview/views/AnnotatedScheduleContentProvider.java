@@ -9,6 +9,7 @@ import org.eclipse.ui.IViewSite;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
@@ -150,12 +151,15 @@ public class AnnotatedScheduleContentProvider implements
 
 		if (element instanceof IPortVisitEvent) {
 			IPortVisitEvent event = (IPortVisitEvent) element;
-			int startTime = event.getPortSlot().getTimeWindow().getStart();
-			// TODO: Get proper start time
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.HOUR_OF_DAY, startTime);
+			ITimeWindow timeWindow = event.getPortSlot().getTimeWindow();
+			if (timeWindow != null) {
+				int startTime = timeWindow.getStart();
+				// 	TODO: Get proper start time
+				Calendar c = Calendar.getInstance();
+				c.add(Calendar.HOUR_OF_DAY, startTime);
 
-			return c;
+				return c;
+			}
 		}
 
 		return null;
@@ -167,12 +171,15 @@ public class AnnotatedScheduleContentProvider implements
 
 		if (element instanceof IPortVisitEvent) {
 			IPortVisitEvent event = (IPortVisitEvent) element;
-			int endTime = event.getPortSlot().getTimeWindow().getEnd();
-			// TODO: Get proper end time
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.HOUR_OF_DAY, endTime);
-
-			return c;
+			ITimeWindow timeWindow = event.getPortSlot().getTimeWindow();
+			if (timeWindow != null) {
+				int endTime = timeWindow.getEnd();
+				// TODO: Get proper end time
+				Calendar c = Calendar.getInstance();
+				c.add(Calendar.HOUR_OF_DAY, endTime);
+	
+				return c;
+			}
 		}
 
 		return null;
