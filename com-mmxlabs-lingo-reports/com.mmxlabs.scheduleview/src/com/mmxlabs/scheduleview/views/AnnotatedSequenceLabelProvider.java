@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
@@ -83,7 +84,8 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 				int b = 0;
 
 				if (event.getFuelConsumption(FuelComponent.Base, FuelUnit.MT) > 0
-						|| event.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT) > 0) {
+						|| event.getFuelConsumption(
+								FuelComponent.Base_Supplemental, FuelUnit.MT) > 0) {
 					r = 255;
 				}
 				if (event.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3) > 0) {
@@ -98,10 +100,12 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 		// else if (mode == Mode.Lateness) {
 		if (element instanceof IPortVisitEvent) {
 			final IPortVisitEvent event = (IPortVisitEvent) element;
-
-			int end = event.getPortSlot().getTimeWindow().getEnd();
-			if (event.getStartTime() > end) {
+			if (event.getPortSlot().getTimeWindow() != null
+					&& event.getPortSlot().getTimeWindow().getEnd() < event
+							.getStartTime()) {
 				return ColorCache.getColor(255, 0, 0);
+			} else if (event.getPortSlot() instanceof ICharterOutPortSlot) {
+				return ColorCache.getColor(100, 100, 100);
 			}
 		}
 		// }
@@ -116,15 +120,24 @@ public class AnnotatedSequenceLabelProvider extends BaseLabelProvider implements
 		} else if (element instanceof IPortVisitEvent) {
 			final IPortVisitEvent portVisit = (IPortVisitEvent) element;
 			final StringBuilder sb = new StringBuilder();
+
+			if (portVisit.getPortSlot() instanceof ICharterOutPortSlot) {
+				sb.append("Confirmed Charter Out\n");
+			}
+
 			sb.append("Port: " + portVisit.getPortSlot().getPort().getName()
 					+ "\n");
+
 			sb.append("Start Time: " + portVisit.getStartTime() + "\n");
 			sb.append("End Time: " + portVisit.getEndTime() + "\n");
-			sb.append("Window Start Time: "
-					+ portVisit.getPortSlot().getTimeWindow().getStart() + "\n");
-			sb.append("Window End Time: "
-					+ portVisit.getPortSlot().getTimeWindow().getEnd() + "\n");
-
+			if (portVisit.getPortSlot().getTimeWindow() != null) {
+				sb.append("Window Start Time: "
+						+ portVisit.getPortSlot().getTimeWindow().getStart()
+						+ "\n");
+				sb.append("Window End Time: "
+						+ portVisit.getPortSlot().getTimeWindow().getEnd()
+						+ "\n");
+			}
 			sb.append("Duration: " + portVisit.getDuration() + "\n");
 			return sb.toString();
 		} else if (element instanceof IJourneyEvent) {
