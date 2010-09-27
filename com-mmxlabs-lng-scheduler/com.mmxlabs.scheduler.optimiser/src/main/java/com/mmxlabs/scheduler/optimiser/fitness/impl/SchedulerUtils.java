@@ -173,7 +173,7 @@ public final class SchedulerUtils {
 		// Set
 		scheduler.setMutateThreshold(0.01f);
 		// Population of 40 individuals
-		scheduler.setPopulationSize(40);
+		scheduler.setPopulationSize(80);
 		// Retain top 10 each iteration
 		scheduler.setTopN(10);
 		// Have 2 iterations for every byte in the individuals
