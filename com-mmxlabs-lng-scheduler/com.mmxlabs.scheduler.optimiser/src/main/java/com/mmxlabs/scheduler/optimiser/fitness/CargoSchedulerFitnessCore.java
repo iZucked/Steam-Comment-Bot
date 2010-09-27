@@ -104,6 +104,10 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
+			if (plans == null) {
+				return false;
+			}
+			
 			if (evaluateSequence(resource, sequence, plans, false) == false) {
 				return false;
 			}
@@ -143,6 +147,11 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 				final List<VoyagePlan> plans = scheduler.schedule(resource,
 						sequence);
+				if (plans == null) {
+					System.err.println("Scheduler has returned null voyage plan; backing out of move.");
+					return false; //for some reason, this move has no valid plans. this
+					//should probably be a serious issue.
+				}
 				if (evaluateSequence(resource, sequence, plans, true) == false) {
 					return false;
 				}
