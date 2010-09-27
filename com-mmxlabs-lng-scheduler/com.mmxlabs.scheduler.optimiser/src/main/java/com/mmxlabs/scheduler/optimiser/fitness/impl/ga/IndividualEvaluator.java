@@ -264,10 +264,12 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			final ITimeWindow tw = timeWindows.isEmpty() ? null : timeWindows
 					.get(0);
 
-			// Add Visit duration to "travel" time between elements
-			final int duration = durationsProvider.getElementDuration(t,
-					resource);
-			travelTimes[idx] = duration;
+			if (idx < travelTimes.length -1) {
+				// Add Visit duration to "travel" time between elements
+				final int duration = durationsProvider.getElementDuration(t,
+						resource);
+				travelTimes[idx+1] = duration;
+			}
 
 			if (prevT != null) {
 				// TODO: Cache these items
