@@ -44,6 +44,7 @@ public class MovingAverageThresholder implements IThresholder {
 		
 		final double T = -mean/logAlpha;
 		lastT = T;
+		
 		return random.nextDouble() < Math.exp(-delta/T);
 	}
 

@@ -20,6 +20,7 @@ public class InstrumentingThresholder implements IThresholder {
 	@Override
 	public boolean accept(long delta) {
 		final boolean answer = delegate.accept(delta);
+		
 		client.notifyOfThresholderDecision(delta, answer);
 		
 		return answer;

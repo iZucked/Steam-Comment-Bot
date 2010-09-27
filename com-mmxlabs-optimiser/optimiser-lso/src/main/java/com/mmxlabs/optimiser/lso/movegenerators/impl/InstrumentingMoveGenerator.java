@@ -31,6 +31,8 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		int moveCount;
 		int acceptCount;
 		int goodMoves, badMoves;
+		int zMoves;
+
 		double meanBadDelta;
 		double meanGoodDelta;
 
@@ -55,17 +57,20 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 			if (delta < 0) {
 				goodMoves++;
 				meanGoodDelta += Math.abs(delta);
-			} else {
+			} else if (delta > 0) {
 				badMoves++;
 				meanBadDelta += Math.abs(delta);
+			} else {
+				zMoves++;
 			}
 		}
 
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			return String
-					.format("%s : %d generated, %.2f%% feasible, %.2f%% accepted. %.2f%% improving, %.2f%% detrimental",
+					.format("%s : %d generated, %d accepted, %d bad accepted, %.2f%% feasible, %.2f%% accepted. %.2f%% improving, %.2f%% detrimental",
 							moveClass.getSimpleName(), generatedCount,
+							acceptCount, acceptCount - (goodMoves + zMoves),
 							moveCount / (0.01 * generatedCount), acceptCount
 									/ (0.01 * generatedCount), goodMoves
 									/ (0.01 * generatedCount), badMoves
