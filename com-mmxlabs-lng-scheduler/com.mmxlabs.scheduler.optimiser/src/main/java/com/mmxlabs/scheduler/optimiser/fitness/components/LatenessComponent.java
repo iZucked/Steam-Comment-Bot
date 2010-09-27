@@ -52,7 +52,7 @@ public final class LatenessComponent<T> extends
 		}
 
 		// TODO: Hack in a weighting
-		lateness *= 1000000;
+		lateness *= 10000;
 
 		return lateness;
 	}
