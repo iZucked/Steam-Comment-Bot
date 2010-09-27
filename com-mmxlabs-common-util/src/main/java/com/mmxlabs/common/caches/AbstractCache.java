@@ -1,5 +1,7 @@
 package com.mmxlabs.common.caches;
 
+import com.mmxlabs.common.Pair;
+
 public abstract class AbstractCache<K, V> {
 	private static final int SAMPLE = 100000;
 	int queries = 0;
@@ -10,7 +12,7 @@ public abstract class AbstractCache<K, V> {
 	private final String name;
 	
 	public interface IKeyEvaluator<K, V> {
-		public V evaluate(K key);
+		public Pair<K, V> evaluate(K key);
 	}
 	protected final IKeyEvaluator<K, V> evaluator;
 	
@@ -19,7 +21,7 @@ public abstract class AbstractCache<K, V> {
 		this.name = name;
 	}
 	
-	protected final V evaluate(final K key) {
+	protected final Pair<K, V> evaluate(final K key) {
 		return evaluator.evaluate(key);
 	}
 	
