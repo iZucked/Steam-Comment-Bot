@@ -1,7 +1,9 @@
 package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -45,10 +47,13 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		this.fitnessCombiner = fitnessCombiner;
 	}
 
+	
 	private ISequences<T> bestSequences = null;
 
 	private long bestFitness = Long.MAX_VALUE;
 
+	private Map<String, Long> bestFitnesses = new HashMap<String, Long>();
+	
 	private ISequences<T> currentSequences = null;
 
 	private long currentFitness = Long.MAX_VALUE;
@@ -102,6 +107,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 			// Do we need to copy here too? 
 			bestSequences = currentSequences;
 			bestFitness = currentFitness;
+			
+			for (final IFitnessComponent component : fitnessComponents) {
+				bestFitnesses.put(component.getName(), component.getFitness());
+			}
 		}
 	}
 
@@ -241,4 +250,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	public long getCurrentFitness() {
 		return currentFitness;
 	}
+
+	public Map<String, Long> getBestFitnesses() {
+		return bestFitnesses;
+	}
+	
+	
 }
