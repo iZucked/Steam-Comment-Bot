@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
 import com.mmxlabs.common.caches.LHMCache;
@@ -16,7 +17,6 @@ public final class CachingIndividualEvaluator<T> implements
 		IIndividualEvaluator<T> {
 	final IIndividualEvaluator<T> delegate;
 
-//	private final ConcurrentMap<Individual, Long> cache;
 	private final AbstractCache<Individual, Long> cache;
 	public CachingIndividualEvaluator(final IIndividualEvaluator<T> delegate,
 			final int size) {
@@ -26,20 +26,12 @@ public final class CachingIndividualEvaluator<T> implements
 				new IKeyEvaluator<Individual, Long>() {
 
 					@Override
-					public Long evaluate(Individual key) {
-						return delegate.evaluate(key);
+					public Pair<Individual, Long> evaluate(Individual key) {
+						return new Pair<Individual, Long>(
+								(Individual)key.clone(), //do clone key
+								delegate.evaluate(key));
 					}
-				}, size/*, 3*/);
-		
-//		cache = new MapMaker().concurrencyLevel(1)
-//				.softKeys()
-//				.initialCapacity(size)
-//				.makeComputingMap(new Function<Individual, Long>() {
-//					@Override
-//					public Long apply(Individual arg) {
-//						return delegate.evaluate(arg);
-//					}
-//				});
+				}, size);
 
 		this.delegate = delegate;
 	}

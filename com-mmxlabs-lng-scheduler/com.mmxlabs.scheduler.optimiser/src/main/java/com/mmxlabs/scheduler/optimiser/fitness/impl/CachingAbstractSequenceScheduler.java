@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
 import com.mmxlabs.common.caches.SimpleCache;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -114,8 +115,8 @@ public abstract class CachingAbstractSequenceScheduler<T>
 				new IKeyEvaluator<CacheKey, List<VoyagePlan>>() {
 
 					@Override
-					public List<VoyagePlan> evaluate(CacheKey arg) {
-						return  reallySchedule(arg.getResource(), arg.getSequence(), arg.getArrivalTimes());
+					public Pair<CacheKey, List<VoyagePlan>> evaluate(CacheKey arg) {
+						return new Pair<CacheKey, List<VoyagePlan>>(arg,  reallySchedule(arg.getResource(), arg.getSequence(), arg.getArrivalTimes()));
 					}
 			
 				}, cacheSize, 3);

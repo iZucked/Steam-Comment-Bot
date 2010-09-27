@@ -116,7 +116,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		evaluator = new IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>() {
 
 			@Override
-			public Pair<VoyagePlan, Long> evaluate(CacheKey arg) {
+			final public Pair<CacheKey, Pair<VoyagePlan, Long>> evaluate(CacheKey arg) {
 				final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
 
 				delegate.reset();
@@ -131,35 +131,10 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 				answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
 
-				return answer;
+				return new Pair<CacheKey, Pair<VoyagePlan, Long>>(arg, answer); //don't clone key
 			}
 		};
 		this.cache = new LHMCache<CacheKey, Pair<VoyagePlan, Long>>("VPO", evaluator, cacheSize);
-		/*new MapMaker()
-		.concurrencyLevel(1)
-		.weakValues()
-		.expiration(10, TimeUnit.MINUTES)
-		.initialCapacity(cacheSize)
-		.makeComputingMap(new Function<CacheKey, Pair<VoyagePlan, Long>>() {
-			@Override
-			public Pair<VoyagePlan, Long> apply(CacheKey arg) {
-				final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
-
-				delegate.reset();
-				for (IVoyagePlanChoice c:arg.choices) {
-					delegate.addChoice(c);
-				}
-				delegate.setVessel(arg.vessel);
-
-				delegate.setBasicSequence(arg.sequence);
-				delegate.init();
-				delegate.optimise();
-
-				answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
-
-				return answer;
-			}
-		});*/
 	}
 
 	@Override
