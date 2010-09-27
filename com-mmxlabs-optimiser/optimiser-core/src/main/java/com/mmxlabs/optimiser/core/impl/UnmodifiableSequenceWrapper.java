@@ -29,8 +29,12 @@ final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 	@Override
 	public Iterator<T> iterator() {
 
+		/**
+		 * A new anonymous Iterator wrapping iterator from the 'wrapped'
+		 * ISequence to forbid calls to #remove()
+		 */
 		return new Iterator<T>() {
-			Iterator<? extends T> i = wrapped.iterator();
+			private final Iterator<? extends T> i = wrapped.iterator();
 
 			public boolean hasNext() {
 				return i.hasNext();
@@ -60,7 +64,7 @@ final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 	public int size() {
 		return wrapped.size();
 	}
-	
+
 	@Override
 	public final T last() {
 		return wrapped.last();

@@ -192,4 +192,80 @@ public class ListSequenceTest {
 		final ListSequence<Object> sequence = new ListSequence<Object>(l);
 		Assert.assertNotNull(sequence.toString());
 	}
+
+	@Test
+	public void testFirst1() {
+
+		final Object object1 = new Object();
+		final Object object2 = new Object();
+
+		final List<Object> l = CollectionsUtil.makeArrayList(object1, object2);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
+
+		Assert.assertSame(object1, sequence.first());
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testFirst2() {
+
+		final List<Object> l = CollectionsUtil.makeArrayList();
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
+
+		sequence.first();
+	}
+
+	@Test
+	public void testLast1() {
+
+		final Object object1 = new Object();
+		final Object object2 = new Object();
+
+		final List<Object> l = CollectionsUtil.makeArrayList(object1, object2);
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
+
+		Assert.assertSame(object2, sequence.last());
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testLast2() {
+
+		final List<Object> l = CollectionsUtil.makeArrayList();
+		final ListSequence<Object> sequence = new ListSequence<Object>(l);
+
+		sequence.last();
+	}
+
+	@Test
+	public void testEquals() {
+
+		final Object object1 = new Object();
+		final Object object2 = new Object();
+
+		final List<Object> l1 = CollectionsUtil.makeArrayList(object1, object2);
+		final List<Object> l2 = CollectionsUtil.makeArrayList(object1, object2);
+
+		final List<Object> l3 = CollectionsUtil.makeArrayList(object1);
+		final List<Object> l4 = CollectionsUtil.makeArrayList(object2);
+
+		final ListSequence<Object> sequence0 = new ListSequence<Object>(l1);
+		// Same list as sequence0
+		final ListSequence<Object> sequence1 = new ListSequence<Object>(l1);
+		// Same list contents as sequence0
+		final ListSequence<Object> sequence2 = new ListSequence<Object>(l2);
+		final ListSequence<Object> sequence3 = new ListSequence<Object>(l3);
+		final ListSequence<Object> sequence4 = new ListSequence<Object>(l4);
+
+		Assert.assertTrue(sequence0.equals(sequence0));
+		Assert.assertTrue(sequence0.equals(sequence1));
+		Assert.assertTrue(sequence0.equals(sequence2));
+		Assert.assertFalse(sequence0.equals(sequence3));
+		Assert.assertFalse(sequence0.equals(sequence4));
+
+		Assert.assertTrue(sequence0.equals(sequence0));
+		Assert.assertTrue(sequence1.equals(sequence0));
+		Assert.assertTrue(sequence2.equals(sequence0));
+		Assert.assertFalse(sequence3.equals(sequence0));
+		Assert.assertFalse(sequence4.equals(sequence0));
+	}
+
 }
