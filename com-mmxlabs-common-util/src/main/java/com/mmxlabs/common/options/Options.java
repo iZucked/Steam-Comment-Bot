@@ -129,8 +129,9 @@ public class Options {
 			b = true;
 			sb.append("\n");
 			sb.append("    ");
-			sb.append(quoteify(e.getKey()) + ":" + quoteify(e.getValue()));
-			
+			sb.append(quoteify(e.getKey()));
+			sb.append(":");
+			sb.append(quoteify(e.getValue()));
 		}
 		
 		sb.append("\n}");
