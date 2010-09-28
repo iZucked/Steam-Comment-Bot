@@ -210,7 +210,11 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 				// arrivalTimes[i] = -1;
 
 				// Set arrival time to max speed travel time
-				arrivalTimes[i] = travelTimes[i] + arrivalTimes[i - 1];
+				if (i == 0) {
+					arrivalTimes[i] = travelTimes[i];
+				} else {
+					arrivalTimes[i] = travelTimes[i] + arrivalTimes[i - 1];
+				}
 			}
 
 			if (i > 0) {
@@ -221,7 +225,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 					arrivalTimes[i] = travelTimes[i] + arrivalTimes[i - 1];
 				}
 			}
-
 		}
 	}
 
