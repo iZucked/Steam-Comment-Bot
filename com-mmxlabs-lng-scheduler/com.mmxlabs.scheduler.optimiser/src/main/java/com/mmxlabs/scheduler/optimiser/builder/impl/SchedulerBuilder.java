@@ -591,7 +591,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		if (portDistanceProvider.containsKey(route) == false) {
 			/*
-			 * This route has not previously been added to the PDP; initialize a
+			 * This route has not previously been added to the PDP; initialise a
 			 * blank matrix here?
 			 */
 
