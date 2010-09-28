@@ -511,27 +511,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 				"TODO: Re-enable init() check for this component");
 	}
 
-	@Override
-	public void dispose() {
-
-		portProvider = null;
-		distanceProvider = null;
-		durationsProvider = null;
-		vesselProvider = null;
-		sequenceScheduler = null;
-		timeWindowProvider = null;
-		fitnessComponents = null;
-		fitnessComponentWeights = null;
-
-		sequence = null;
-		resource = null;
-
-		ranges = null;
-		travelTimes = null;
-		multiplier = null;
-		windowStarts = null;
-	}
-
 	public boolean isAdjustArrivalTimes() {
 		return adjustArrivalTimes;
 	}
@@ -572,5 +551,26 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	public void setDurationsProvider(
 			final IElementDurationProvider<T> durationsProvider) {
 		this.durationsProvider = durationsProvider;
+	}
+
+	@Override
+	public void dispose() {
+
+		portProvider = null;
+		distanceProvider = null;
+		durationsProvider = null;
+		vesselProvider = null;
+		sequenceScheduler = null;
+		timeWindowProvider = null;
+		fitnessComponents = null;
+		fitnessComponentWeights = null;
+
+		sequence = null;
+		resource = null;
+
+		ranges = null;
+		travelTimes = null;
+		multiplier = null;
+		windowStarts = null;
 	}
 }
