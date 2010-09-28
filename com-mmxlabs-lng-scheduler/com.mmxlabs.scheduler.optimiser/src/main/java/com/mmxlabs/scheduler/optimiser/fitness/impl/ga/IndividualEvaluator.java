@@ -45,7 +45,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	private AbstractSequenceScheduler<T> sequenceScheduler;
 
-
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
 	private IElementDurationProvider<T> durationsProvider;
@@ -113,7 +112,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			return Long.MAX_VALUE;
 		}
 
-
 		// Evaluate fitness
 		long totalFitness = 0;
 		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
@@ -169,46 +167,56 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 		final int numElements = ranges.length;
 		for (int i = 0; i < numElements; ++i) {
-			
+
 			if (windowStarts[i] != -1) {
 				final int range = ranges[i];
 
 				if (range == -1) {
 					// No time window,
+					assert false;
+				} else if (range == 0) {
+					arrivalTimes[i] = windowStarts[i];
+				} else {
+
+					final int numBytes = range / 8;
+
+					// Add on all whole bytes to the offset
+					int offset = 0;
+					for (int j = 0; j < numBytes; ++j) {
+						// TODO: Does OR apply as I expect, or should I just use
+						// + ?
+						offset = (offset << 8) | (bytes[idx++] & 0xff);
+					}
+
+					// For partial bytes, right shift back afterwards
+					final int extraBits = range % 8;
+					if (extraBits > 0) {
+						// TODO: Does OR apply as I expect, or should I just use
+						// + ?
+						offset = (offset << 8) | (bytes[idx++] & 0xff);
+
+						// TODO: Do we need >>>= ?
+						offset >>= (8 - extraBits);
+					}
+
+					// TODO: We are not handling values outside of the range! -
+					// lets just wrap!
+					arrivalTimes[i] = windowStarts[i]
+							+ (offset * multiplier[i]) % range;
 				}
-
-				final int numBytes = range / 8;
-
-				// Add on all whole bytes to the offset
-				int offset = 0;
-				for (int j = 0; j < numBytes; ++j) {
-					// TODO: Does OR apply as I expect, or should I just use + ?
-					offset = (offset << 8) | (bytes[idx++] & 0xff);
-				}
-
-				// For partial bytes, right shift back afterwards
-				final int extraBits = range % 8;
-				if (extraBits > 0) {
-					// TODO: Does OR apply as I expect, or should I just use + ?
-					offset = (offset << 8) | (bytes[idx++] & 0xff);
-
-					// TODO: Do we need >>>= ?
-					offset >>= (8 - extraBits);
-				}
-
-				arrivalTimes[i] = windowStarts[i] + offset * multiplier[i];
 			} else {
-//				 No time window, so do nothing here. Let evaluator work out
-//				 best options.
-//				arrivalTimes[i] = -1;
-				
+				// No time window, so do nothing here. Let evaluator work out
+				// best options.
+				// arrivalTimes[i] = -1;
+
 				// Set arrival time to max speed travel time
 				arrivalTimes[i] = travelTimes[i] + arrivalTimes[i - 1];
 			}
 
 			if (i > 0) {
-				// Ensure that we have the minimum travel time between ports
-				int diff = arrivalTimes[i] - arrivalTimes[i - 1];
+				// Ensure that we have the minimum travel time between ports -
+				// this may introduce lateness into the solution
+				final int diff = arrivalTimes[i] - arrivalTimes[i - 1];
 				if (diff < travelTimes[i]) {
 					arrivalTimes[i] = travelTimes[i] + arrivalTimes[i - 1];
 				}
@@ -264,18 +272,22 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			final ITimeWindow tw = timeWindows.isEmpty() ? null : timeWindows
 					.get(0);
 
-			// Add Visit duration to "travel" time between elements
-			final int duration = durationsProvider.getElementDuration(t,
-					resource);
-			travelTimes[idx] = duration;
+			if (idx < travelTimes.length - 1) {
+				// Add Visit duration to "travel" time between elements
+				final int duration = durationsProvider.getElementDuration(t,
+						resource);
+				travelTimes[idx + 1] = duration;
+			}
 
 			if (prevT != null) {
 				// TODO: Cache these items
 				final IPort from = portProvider.getPortForElement(prevT);
 				final IPort to = portProvider.getPortForElement(t);
 				// Determine minimum travel time between ports
+
 				// TODO: find quickest route - canals may have additional time
 				// constraints
+
 				final int distance = distanceProvider.get(
 						IMultiMatrixProvider.Default_Key).get(from, to);
 				final int minTime = Calculator.getTimeFromSpeedDistance(
@@ -284,21 +296,21 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			}
 
 			if (tw != null) {
-				ranges[idx] = tw.getEnd() - tw.getStart();
+				// Record early arrival time as window start
+				windowStarts[idx] = tw.getStart();
+
+				// Determine range of values between arrival and end window.
+				final int r = tw.getEnd() - tw.getStart();
+				// Should we be forced to arrive too late, i.e. past the end
+				// window, then there is nothing to optimise over here, so set
+				// range to zero.
+				ranges[idx] = r;
 
 				// TODO: Larger time windows should scale the time units used.
 				// E.g. one or two days use to the hour, then multiple up to 2
 				// hours, 4 hours, 6 hours, 12 hours, per day etc. This requires
 				// another array containing a multiplier.
 				multiplier[idx] = 1;
-
-				// Calc num bits
-				numBytes += (ranges[idx] / 8);
-				if (ranges[idx] % 8 != 0) {
-					++numBytes;
-				}
-
-				windowStarts[idx] = tw.getStart();
 			} else {
 				ranges[idx] = 0;
 				windowStarts[idx] = -1;
@@ -306,6 +318,119 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			}
 
 			prevT = t;
+		}
+
+		// The first pass constructed the GA range to match the available
+		// service aim windows. However, this leads to a larger number of
+		// possible states than would be allowed. The next sections of code
+		// attempt to restrict the ranges based upon the minimum travel time and
+		// visit time.
+
+		// Forward pass: Starting with the fixed vessel start time, add on port
+		// visit duration and the minimum travel time to get the earliest
+		// arrival time at the next port. If this time is after the port visit
+		// window start, then move this forward to the calculated arrival time
+		// and reduce the range value accordingly. If it is less than the window
+		// start, set the earliest time to the window start for use as the base
+		// time for the next port visit - as we would have to idle until this
+		// bound anyway. If there is no time window, then there is no check to
+		// make.
+
+		// Current earliest arrival time at port.
+		int currentEarliestArrival = 0;
+
+		for (int idx = 0; idx < windowStarts.length; ++idx) {
+
+			// Add on travel time to get to this port. When idx == 0, this is
+			// empty.
+			currentEarliestArrival += travelTimes[idx];
+
+			if (windowStarts[idx] != -1) {
+
+				// If we can only arrive after the window start, then update
+				// bounds to this value
+				if (currentEarliestArrival > windowStarts[idx]) {
+
+					// Determine range of values between arrival and end window.
+					final int windowEnd = windowStarts[idx] + ranges[idx];
+					final int r = windowEnd - currentEarliestArrival;
+
+					// Should we be forced to arrive too late, i.e. past the end
+					// window, then there is nothing to optimise over here, so
+					// set range to zero.
+					ranges[idx] = Math.max(0, r);
+
+					// Record early arrival time as window start
+					windowStarts[idx] = currentEarliestArrival;
+				} else {
+					// If time window has a later start, then update the current
+					// time to the window
+					currentEarliestArrival = windowStarts[idx];
+				}
+			}
+		}
+
+		// Backwards pass: Apply a similar rule, but setting the latest arrival
+		// time. Starting at the last arrival, work backwards through the
+		// ranges, reducing them is necessary to avoid causing lateness. Unlike
+		// the forward pass where we can push arrival times forward, the
+		// backwards pass will only reduce the range.
+
+		int currentLatestArrival = Integer.MAX_VALUE;
+		// Reverse loop doing a similar operation, but reducing the range vasle
+		for (int idx = windowStarts.length - 1; idx > 0; --idx) {
+			if (windowStarts[idx] != -1) {
+
+				final int windowEnd = windowStarts[idx] + ranges[idx];
+
+				// If the latest we can arrive if before the window end, then we
+				// need to reduce the range to accomodate this.
+				if (currentLatestArrival < windowEnd) {
+
+					// Determine range of values between arrival and end window.
+					final int r = currentLatestArrival - windowStarts[idx];
+
+					// Should we be forced to arrive too late, i.e. past the end
+					// window, then there is nothing to optimise over here, so
+					// set range to zero.
+					ranges[idx] = Math.max(0, r);
+
+					// TODO: Do we want this -- need to think it through more.
+					// If r is negative, we update currentLatestArrival to get
+					// the actual arrival time that will be used.
+					currentLatestArrival = windowStarts[idx] + ranges[idx];
+				} else {
+					// If time window has a earlier end, then update the current
+					// time to the window
+					currentLatestArrival = windowEnd;
+				}
+			}
+
+			// Take off travel time to get to this port to get new latest
+			// arrival at preceeding port.
+			currentLatestArrival -= travelTimes[idx];
+		}
+
+		// Finally, after the previous stages of range manipulation, we can
+		// calculate the bit string size.
+		for (int idx = 0; idx < windowStarts.length; ++idx) {
+			// TODO: Larger time windows should scale the time units used.
+			// E.g. one or two days use to the hour, then multiple up to 2
+			// hours, 4 hours, 6 hours, 12 hours, per day etc. This requires
+			// another array containing a multiplier.
+			multiplier[idx] = 1;
+
+			assert ranges[idx] >= 0;
+
+			// Calculate number of bits required
+
+			// Get whole number of bytes required
+			numBytes += (ranges[idx] / 8);
+
+			// Use a whole byte to represent any excess bits
+			if (ranges[idx] % 8 != 0) {
+				++numBytes;
+			}
 		}
 
 		return numBytes;
@@ -353,7 +478,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			final AbstractSequenceScheduler<T> sequenceScheduler) {
 		this.sequenceScheduler = sequenceScheduler;
 	}
-
 
 	public final ITimeWindowDataComponentProvider getTimeWindowProvider() {
 		return timeWindowProvider;
