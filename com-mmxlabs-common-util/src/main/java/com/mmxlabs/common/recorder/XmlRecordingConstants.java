@@ -8,6 +8,10 @@ package com.mmxlabs.common.recorder;
  */
 public class XmlRecordingConstants {
 
+	private XmlRecordingConstants() {
+
+	}
+
 	public static final String ELEMENT_OPERATIONS = "operations";
 	public static final String ATTR_OPERATIONS_INTERFACE = "interface";
 
