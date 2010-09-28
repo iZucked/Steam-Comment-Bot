@@ -26,6 +26,7 @@ import scenario.cargo.CargoFactory;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.fleet.CharterOut;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
@@ -50,9 +51,11 @@ import scenario.port.PortFactory;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
 
+import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.common.csv.DistanceImporter;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
@@ -203,6 +206,10 @@ public class RandomScenarioUtils {
 				createRandomCargoes(scenario, randomCargoCount, minWindow,
 						maxWindow);
 			}
+			
+			//add a couple of charter outs
+			createRandomCharterout(scenario, 20, 40);
+			createRandomCharterout(scenario, 20, 40);
 		}
 
 		if (addStandardOptimiserSettings) {
@@ -311,12 +318,12 @@ public class RandomScenarioUtils {
 							0));
 		}
 
-		settings.setNumberOfSteps(100000);
+		settings.setNumberOfSteps(20000);
 		ThresholderSettings thresholderSettings = lsof
 				.createThresholderSettings();
-		thresholderSettings.setAlpha(0.98);
+		thresholderSettings.setAlpha(0.9);
 		thresholderSettings.setEpochLength(1000);
-		thresholderSettings.setInitialAcceptanceRate(0.5);
+		thresholderSettings.setInitialAcceptanceRate(0.2);
 		settings.setThresholderSettings(thresholderSettings);
 		//
 		// RandomMoveGeneratorSettings mgs =
@@ -586,15 +593,16 @@ public class RandomScenarioUtils {
 		load.setId("load-" + i);
 		discharge.setId("discharge-" + i);
 
-		final int minTime = (int) Math.ceil(dl.getDistance() / 20 / 24);
-		final int maxTime = (int) Math.ceil(dl.getDistance() / 12 / 24);
-
-		final int start = random.nextInt(365);
-		final int end = 1 + start + minTime
-				+ random.nextInt(maxTime - minTime + 15);
-
-		Date startDate = new Date(now + start * Timer.ONE_DAY);
-		Date endDate = new Date(now + end * Timer.ONE_DAY);
+		
+		final int minTravelTime = Calculator.getTimeFromSpeedDistance(Calculator.scale(20), dl.getDistance()) / 24;
+		final int maxTravelTime = Calculator.getTimeFromSpeedDistance(Calculator.scale(12), dl.getDistance()) / 24;
+		
+		final int startDay = random.nextInt(265);
+		
+		final int endDay = startDay + minTravelTime + 1 + random.nextInt(minTravelTime - maxTravelTime + 15);
+		
+		Date startDate = new Date(now + startDay * Timer.ONE_DAY);
+		Date endDate = new Date(now + endDay * Timer.ONE_DAY);
 
 		load.setWindowStart(startDate);
 		discharge.setWindowStart(endDate);
@@ -621,6 +629,20 @@ public class RandomScenarioUtils {
 		return c;
 	}
 
+	void createRandomCharterout(Scenario scenario, int minSize, int maxSize) {
+		final FleetFactory ff = FleetPackage.eINSTANCE.getFleetFactory();
+		CharterOut co = ff.createCharterOut();
+		
+		//narrow initial TW for now
+		final long now  = (new Date()).getTime();
+		final int size = random.nextInt(maxSize - minSize) + minSize;
+		final int startDay = random.nextInt(365 - size);
+		co.setStartDate(new Date(now + startDay * Timer.ONE_DAY));
+		co.setEndDate(new Date(now + startDay * Timer.ONE_DAY + 6 * Timer.ONE_HOUR));
+		co.setDuration(size);
+		co.getVesselClasses().add(RandomHelper.chooseElementFrom(random, scenario.getFleetModel().getVesselClasses()));
+	}
+	
 	void createRandomCargoes(Scenario scenario, int cargoCount, int minWindow, int maxWindow) {
 		// TODO this is not how it was before; load and discharge ports are more
 		// random; there will be less contention.
