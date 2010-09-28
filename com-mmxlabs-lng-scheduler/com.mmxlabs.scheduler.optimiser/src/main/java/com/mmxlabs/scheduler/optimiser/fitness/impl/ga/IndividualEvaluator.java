@@ -556,6 +556,30 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		this.durationsProvider = durationsProvider;
 	}
 
+	public final ISequence<T> getSequence() {
+		return sequence;
+	}
+
+	public final IResource getResource() {
+		return resource;
+	}
+
+	public final int[] getRanges() {
+		return ranges;
+	}
+
+	public final int[] getTravelTimes() {
+		return travelTimes;
+	}
+
+	public final int[] getMultiplier() {
+		return multiplier;
+	}
+
+	public final int[] getWindowStarts() {
+		return windowStarts;
+	}
+	
 	@Override
 	public void dispose() {
 
