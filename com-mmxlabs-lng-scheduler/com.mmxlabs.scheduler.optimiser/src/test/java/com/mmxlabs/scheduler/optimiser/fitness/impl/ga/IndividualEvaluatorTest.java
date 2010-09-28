@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -501,7 +502,6 @@ public class IndividualEvaluatorTest {
 		Assert.assertEquals(4, ranges.length);
 		Assert.assertArrayEquals(expectedRanges, ranges);
 
-
 		final int[] travelTimes = evaluator.getTravelTimes();
 		final int[] expectedTravelTimes = new int[] { 0, 6, 6, 6 };
 		Assert.assertEquals(4, travelTimes.length);
@@ -746,12 +746,150 @@ public class IndividualEvaluatorTest {
 	}
 
 	@Test
-	public void testEvaluate() {
-		fail("Not yet implemented");
+	public void testDecode() {
+
+		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+
+		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>(
+				"default");
+		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
+				"distanceProvider");
+		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
+		evaluator.setDistanceProvider(distanceProvider);
+
+		final IResource resource = context.mock(IResource.class);
+		final VesselClass vesselClass = new VesselClass();
+		vesselClass.setMaxSpeed(20000);
+		context.setDefaultResultForType(IVesselClass.class, vesselClass);
+
+		final IVesselProvider vesselProvider = context
+				.mock(IVesselProvider.class);
+		evaluator.setVesselProvider(vesselProvider);
+
+		final IPortProviderEditor portProvider = new HashMapPortEditor(
+				"portProvider");
+		evaluator.setPortProvider(portProvider);
+
+		final IPort port1 = context.mock(IPort.class, "port-1");
+		final IPort port2 = context.mock(IPort.class, "port-2");
+		final IPort port3 = context.mock(IPort.class, "port-3");
+		final IPort port4 = context.mock(IPort.class, "port-4");
+
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
+				"timeWindowProvider");
+		evaluator.setTimeWindowProvider(timeWindowProvider);
+		final IElementDurationProviderEditor<Object> durationsProvider = new HashMapElementDurationEditor<Object>(
+				"durationsProvider");
+		evaluator.setDurationsProvider(durationsProvider);
+
+		final Object element1 = new Object();
+		final Object element2 = new Object();
+		final Object element3 = new Object();
+		final Object element4 = new Object();
+
+		portProvider.setPortForElement(port1, element1);
+		portProvider.setPortForElement(port2, element2);
+		portProvider.setPortForElement(port3, element3);
+		portProvider.setPortForElement(port4, element4);
+
+		durationsProvider.setElementDuration(element1, 1);
+		durationsProvider.setElementDuration(element2, 1);
+		durationsProvider.setElementDuration(element3, 1);
+		durationsProvider.setElementDuration(element4, 1);
+
+		matrix.set(port1, port2, 100);
+		matrix.set(port2, port3, 100);
+		matrix.set(port3, port4, 100);
+
+		final ITimeWindow tw1 = new TimeWindow(0, 0);
+		final ITimeWindow tw2 = new TimeWindow(5, 6);
+		final ITimeWindow tw3 = new TimeWindow(10, 15);
+		final ITimeWindow tw4 = new TimeWindow(20, 25);
+
+		timeWindowProvider.setTimeWindows(element1,
+				Collections.singletonList(tw1));
+		timeWindowProvider.setTimeWindows(element2,
+				Collections.singletonList(tw2));
+		timeWindowProvider.setTimeWindows(element3,
+				Collections.singletonList(tw3));
+		timeWindowProvider.setTimeWindows(element4,
+				Collections.singletonList(tw4));
+
+		evaluator.setSequenceScheduler(new MockSequenceScheduler());
+		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
+				.emptyList();
+		evaluator.setFitnessComponents(fitnessComponents);
+
+		evaluator.init();
+
+		final ISequence<Object> sequence = new ListSequence<Object>(
+				CollectionsUtil.makeArrayList(element1, element2, element3,
+						element4));
+
+		context.checking(new Expectations() {
+			{
+				one(vesselProvider).getVessel(resource);
+			}
+		});
+
+		int numBytes = evaluator.setup(resource, sequence);
+
+		Assert.assertSame(resource, evaluator.getResource());
+		Assert.assertSame(sequence, evaluator.getSequence());
+
+		final int[] multiplier = evaluator.getMultiplier();
+		Assert.assertEquals(4, multiplier.length);
+		for (int i = 0; i < multiplier.length; ++i) {
+			Assert.assertEquals(1, multiplier[i]);
+		}
+
+		final int[] ranges = evaluator.getRanges();
+		final int[] expectedRanges = new int[] { 0, 0, 3, 5 };
+		Assert.assertEquals(4, ranges.length);
+		Assert.assertArrayEquals(expectedRanges, ranges);
+
+		final int[] travelTimes = evaluator.getTravelTimes();
+		final int[] expectedTravelTimes = new int[] { 0, 6, 6, 6 };
+		Assert.assertEquals(4, travelTimes.length);
+		Assert.assertArrayEquals(expectedTravelTimes, travelTimes);
+
+		final int[] windowStarts = evaluator.getWindowStarts();
+		final int[] expectedWindowStarts = new int[] { 0, 6, 12, 20 };
+		Assert.assertEquals(4, windowStarts.length);
+		Assert.assertArrayEquals(expectedWindowStarts, windowStarts);
+
+		int[] arrivalTimes = new int[4];
+		byte[] bytes = new byte[numBytes];
+		Individual individual = new Individual(bytes);
+		{
+			Arrays.fill(arrivalTimes, 0);
+			Arrays.fill(bytes, (byte) 0);
+			evaluator.decode(individual, arrivalTimes);
+			int[] expectedArrivalTimes = new int[] { 0, 6, 12, 20 };
+			Assert.assertArrayEquals(expectedArrivalTimes, arrivalTimes);
+		}
+		{
+			Arrays.fill(arrivalTimes, 0);
+			Arrays.fill(bytes, (byte) 0);
+			bytes[0] = 0x30;
+			evaluator.decode(individual, arrivalTimes);
+			int[] expectedArrivalTimes = new int[] { 0, 6, 13, 20 };
+			Assert.assertArrayEquals(expectedArrivalTimes, arrivalTimes);
+		}
+		{
+			Arrays.fill(arrivalTimes, 0);
+			Arrays.fill(bytes, (byte) 0);
+			bytes[0] = 0x30;
+			bytes[1] = 0x30;
+			evaluator.decode(individual, arrivalTimes);
+			int[] expectedArrivalTimes = new int[] { 0, 6, 13, 21 };
+			Assert.assertArrayEquals(expectedArrivalTimes, arrivalTimes);
+		}
+
 	}
 
 	@Test
-	public void testDecode() {
+	public void testEvaluate() {
 		fail("Not yet implemented");
 	}
 
