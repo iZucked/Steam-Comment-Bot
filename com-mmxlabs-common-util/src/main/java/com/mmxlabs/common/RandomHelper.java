@@ -8,7 +8,12 @@ import java.util.Random;
  * @author hinton
  *
  */
-public class RandomHelper {
+public final class RandomHelper {
+	
+	private RandomHelper() {
+
+	}
+	
 	/**
 	 * Return an integer between from 0 to n-1 which is not equal to d, drawn from a uniform distribution.
 	 * @param n
