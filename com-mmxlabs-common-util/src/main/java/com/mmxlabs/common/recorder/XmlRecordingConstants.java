@@ -6,7 +6,7 @@ package com.mmxlabs.common.recorder;
  * @author Simon Goodall
  * 
  */
-public class XmlRecordingConstants {
+public final class XmlRecordingConstants {
 
 	private XmlRecordingConstants() {
 
@@ -23,6 +23,5 @@ public class XmlRecordingConstants {
 	public static final String ATTR_ARGUMENT_TYPE = "type";
 	public static final String ATTR_ARGUMENT_VALUE = "value";
 	public static final String ATTR_ARGUMENT_REF = "ref";
-
 
 }
