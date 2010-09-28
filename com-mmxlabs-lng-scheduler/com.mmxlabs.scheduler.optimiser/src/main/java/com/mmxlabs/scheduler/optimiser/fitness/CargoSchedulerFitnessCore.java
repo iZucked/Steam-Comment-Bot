@@ -104,9 +104,9 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
-			if (plans == null) {
-				return false;
-			}
+//			if (plans == null) {
+//				return false;
+//			}
 			
 			if (evaluateSequence(resource, sequence, plans, false) == false) {
 				return false;
