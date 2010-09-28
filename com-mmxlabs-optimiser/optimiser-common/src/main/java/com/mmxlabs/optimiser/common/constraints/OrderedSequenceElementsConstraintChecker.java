@@ -116,10 +116,10 @@ public final class OrderedSequenceElementsConstraintChecker<T> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setOptimisationData(final IOptimisationData<T> optimisationData) {
-		final IOrderedSequenceElementsDataComponentProvider<T> provider = optimisationData
+		final IOrderedSequenceElementsDataComponentProvider<T> dataProvider = optimisationData
 				.getDataComponentProvider(dataProviderKey,
 						IOrderedSequenceElementsDataComponentProvider.class);
-		setProvider(provider);
+		setProvider(dataProvider);
 	}
 
 	@Override
