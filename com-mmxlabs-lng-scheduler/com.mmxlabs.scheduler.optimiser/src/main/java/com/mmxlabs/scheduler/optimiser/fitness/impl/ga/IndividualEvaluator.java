@@ -514,6 +514,10 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	@Override
 	public void dispose() {
 
+		portProvider = null;
+		distanceProvider = null;
+		durationsProvider = null;
+		vesselProvider = null;
 		sequenceScheduler = null;
 		timeWindowProvider = null;
 		fitnessComponents = null;
