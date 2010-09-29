@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
@@ -76,12 +77,16 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			// CacheKey other = (CacheKey) obj;
 			// if (!getOuterType().equals(other.getOuterType()))
 			// return false;
-			if (!Arrays.equals(slots, other.slots))
-				return false;
-			if (!Arrays.equals(times, other.times))
-				return false;
+			
 			if (vessel != other.vessel)
 				return false;
+			
+			if (!Equality.shallowEquals(slots, other.slots))
+				return false;
+			
+			if (!Arrays.equals(times, other.times))
+				return false;
+			
 			// if (vessel == null) {
 			// if (other.vessel != null)
 			// return false;
@@ -143,7 +148,8 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel,
 				basicSequence, choices));
 
-		bestPlan = (VoyagePlan) best.getFirst().clone();
+//		bestPlan = (VoyagePlan) best.getFirst().clone();
+		bestPlan = best.getFirst();
 		bestCost = best.getSecond();
 
 		return bestPlan;
