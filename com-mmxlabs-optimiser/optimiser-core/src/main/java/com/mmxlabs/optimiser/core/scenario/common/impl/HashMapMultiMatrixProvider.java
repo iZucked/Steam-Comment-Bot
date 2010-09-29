@@ -38,7 +38,7 @@ public final class HashMapMultiMatrixProvider<T, U> implements
 	}
 
 	@Override
-	public IMatrixProvider<T, U> get(final String key) {
+	public final IMatrixProvider<T, U> get(final String key) {
 
 		if (matricies.containsKey(key)) {
 			return matricies.get(key);
@@ -48,36 +48,36 @@ public final class HashMapMultiMatrixProvider<T, U> implements
 	}
 
 	@Override
-	public boolean containsKey(final String key) {
+	public final boolean containsKey(final String key) {
 
 		return matricies.containsKey(key);
 	}
 
 	@Override
-	public void set(final String key, final IMatrixProvider<T, U> row) {
+	public final void set(final String key, final IMatrixProvider<T, U> row) {
 		// Reset keys list
 		keys = null;
 		matricies.put(key, row);
 	}
 
 	@Override
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
 	@Override
-	public void dispose() {
+	public final void dispose() {
 		matricies.clear();
 		keys = null;
 	}
 
 	@Override
-	public Set<String> getKeySet() {
+	public final Set<String> getKeySet() {
 		return matricies.keySet();
 	}
 
 	@Override
-	public String[] getKeys() {
+	public final String[] getKeys() {
 		if (keys == null) {
 			keys = matricies.keySet().toArray(new String[matricies.size()]);
 		}
