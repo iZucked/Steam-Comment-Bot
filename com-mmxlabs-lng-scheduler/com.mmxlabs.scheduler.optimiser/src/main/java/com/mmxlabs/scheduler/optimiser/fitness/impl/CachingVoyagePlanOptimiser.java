@@ -56,7 +56,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		public final int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + getOuterType().hashCode();
+//			result = prime * result + getOuterType().hashCode();
 			result = prime * result + Arrays.hashCode(slots);
 			result = prime * result + Arrays.hashCode(times);
 			result = prime * result
