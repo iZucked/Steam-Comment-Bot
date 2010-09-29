@@ -11,6 +11,7 @@ import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -286,13 +287,16 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 				// TODO: Cache these items
 				final IPort from = portProvider.getPortForElement(prevT);
 				final IPort to = portProvider.getPortForElement(t);
+
+				// Find the quickest route between the ports
+				final Collection<MatrixEntry<IPort, Integer>> distances = distanceProvider
+						.getValues(from, to);
+				int distance = Integer.MAX_VALUE;
+				for (final MatrixEntry<IPort, Integer> d : distances) {
+					distance = Math.min(distance, d.getValue());
+				}
+
 				// Determine minimum travel time between ports
-
-				// TODO: find quickest route - canals may have additional time
-				// constraints
-
-				final int distance = distanceProvider.get(
-						IMultiMatrixProvider.Default_Key).get(from, to);
 				final int minTime = Calculator.getTimeFromSpeedDistance(
 						maxSpeed, distance);
 				travelTimes[idx] += minTime;
@@ -579,7 +583,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	public final int[] getWindowStarts() {
 		return windowStarts;
 	}
-	
+
 	@Override
 	public void dispose() {
 
