@@ -10,6 +10,7 @@ import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -150,17 +151,16 @@ public abstract class AbstractSequenceScheduler<T> implements
 							options));
 				}
 
+				final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<IMultiMatrixProvider.MatrixEntry<IPort, Integer>>(
+						distanceProvider.getValues(prevPort, thisPort));
 				// Only add route choice if there is one
-				final String[] routeKeys = distanceProvider.getKeys();
-				if (routeKeys.length == 1) {
-					final int distance = distanceProvider.get(
-							IMultiMatrixProvider.Default_Key).get(prevPort,
-							thisPort);
-					options.setDistance(distance);
-					options.setRoute(IMultiMatrixProvider.Default_Key);
+				if (distances.size() == 1) {
+					final MatrixEntry<IPort, Integer> d = distances.get(0);
+					options.setDistance(d.getValue());
+					options.setRoute(d.getKey());
 				} else {
 					voyagePlanOptimiser.addChoice(new RouteVoyagePlanChoice(
-							options, routeKeys, distanceProvider));
+							options, distances));
 				}
 
 				currentSequence.add(options);

@@ -1,10 +1,9 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.Arrays;
+import java.util.List;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
@@ -16,64 +15,55 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
  * 
  */
 public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
-	public boolean reset() {
-		for (int i = 0; i<numChoices(); i++)
-			if (apply(i)) return true;
+
+	private int choice;
+
+	private final VoyageOptions options;
+
+	private final List<MatrixEntry<IPort, Integer>> distances;
+
+	public RouteVoyagePlanChoice(final VoyageOptions options,
+			final List<MatrixEntry<IPort, Integer>> distances) {
+		this.options = options;
+		this.distances = distances;
+	}
+
+	@Override
+	public final boolean reset() {
+		for (int i = 0; i < numChoices(); i++) {
+			if (apply(i)) {
+				return true;
+			}
+		}
 		return false;
 	}
-	
+
 	@Override
-	public boolean nextChoice() {
+	public final boolean nextChoice() {
 		while (true) {
 			if (choice + 1 == numChoices()) {
 				return true;
 			}
-			if (apply(choice + 1))
+			if (apply(choice + 1)) {
 				return false;
+			}
 		}
-	}
-	private int choice;
-	
-	
-	private final VoyageOptions options;
-
-	private final IMultiMatrixProvider<IPort, Integer> multiProvider;
-
-	private final String[] choices;
-
-	public RouteVoyagePlanChoice(final VoyageOptions options,
-			final IMultiMatrixProvider<IPort, Integer> multiProvider) {
-		this.options = options;
-		this.choices = new String[] { "default" };
-		this.multiProvider = multiProvider;
-	}
-
-	public RouteVoyagePlanChoice(final VoyageOptions options,
-			final String[] choices,
-			final IMultiMatrixProvider<IPort, Integer> multiProvider) {
-		this.options = options;
-		this.choices = choices;
-		this.multiProvider = multiProvider;
 	}
 
 	@Override
 	public int numChoices() {
-		return choices.length;
+		return distances.size();
 	}
 
 	@Override
-	public boolean apply(final int choice) {
+	public final boolean apply(final int choice) {
 		this.choice = choice;
-		options.setRoute(choices[choice]);
 
-		final IMatrixProvider<IPort, Integer> m = multiProvider
-				.get(choices[choice]);
-		if (m == null) {
-			return false;
-		}
+		final MatrixEntry<IPort, Integer> entry = distances.get(choice);
 
-		final int distance = m.get(options.getFromPortSlot().getPort(), options
-				.getToPortSlot().getPort());
+		options.setRoute(entry.getKey());
+
+		final int distance = entry.getValue();
 
 		// Invalid distance
 		if (distance == Integer.MAX_VALUE) {
@@ -86,17 +76,13 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 
 		if (obj instanceof RouteVoyagePlanChoice) {
 
 			final RouteVoyagePlanChoice other = (RouteVoyagePlanChoice) obj;
 
-			if (multiProvider != other.multiProvider) {
-				return false;
-			}
-
-			if (!Arrays.equals(choices, other.choices)) {
+			if (!Equality.isEqual(distances, other.distances)) {
 				return false;
 			}
 
@@ -109,5 +95,4 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 		return false;
 	}
-
 }
