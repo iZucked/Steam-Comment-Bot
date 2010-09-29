@@ -21,7 +21,7 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @param <T>
  *            Sequence element type
  */
-public class Move3over2<T> implements IMove<T> {
+public final class Move3over2<T> implements IMove<T> {
 
 	private IResource resource1;
 
@@ -34,7 +34,7 @@ public class Move3over2<T> implements IMove<T> {
 	private int resource2Position = -1;
 
 	@Override
-	public void apply(final IModifiableSequences<T> sequences) {
+	public final void apply(final IModifiableSequences<T> sequences) {
 
 		// Get sequences
 		final IModifiableSequence<T> sequence1 = sequences
@@ -54,12 +54,12 @@ public class Move3over2<T> implements IMove<T> {
 	}
 
 	@Override
-	public Collection<IResource> getAffectedResources() {
+	public final Collection<IResource> getAffectedResources() {
 		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 
 	@Override
-	public boolean validate(final ISequences<T> sequences) {
+	public final boolean validate(final ISequences<T> sequences) {
 
 		// Validate basic parameters
 		if (resource1 == null) {
@@ -108,39 +108,39 @@ public class Move3over2<T> implements IMove<T> {
 		return true;
 	}
 
-	public IResource getResource1() {
+	public final IResource getResource1() {
 		return resource1;
 	}
 
-	public void setResource1(final IResource resource1) {
+	public final void setResource1(final IResource resource1) {
 		this.resource1 = resource1;
 	}
 
-	public IResource getResource2() {
+	public final IResource getResource2() {
 		return resource2;
 	}
 
-	public void setResource2(final IResource resource2) {
+	public final void setResource2(final IResource resource2) {
 		this.resource2 = resource2;
 	}
 
-	public int getResource1Start() {
+	public final int getResource1Start() {
 		return resource1Start;
 	}
 
-	public void setResource1Start(final int resource1Start) {
+	public final void setResource1Start(final int resource1Start) {
 		this.resource1Start = resource1Start;
 	}
 
-	public int getResource1End() {
+	public final int getResource1End() {
 		return resource1End;
 	}
 
-	public void setResource1End(final int resource1End) {
+	public final void setResource1End(final int resource1End) {
 		this.resource1End = resource1End;
 	}
 
-	public int getResource2Position() {
+	public final int getResource2Position() {
 		return resource2Position;
 	}
 
@@ -149,12 +149,12 @@ public class Move3over2<T> implements IMove<T> {
 	 * The insert is inclusive, so to insert a segment between elements A and B, pass the position of B into this method.
 	 * @param resource2Position
 	 */
-	public void setResource2Position(final int resource2Position) {
+	public final void setResource2Position(final int resource2Position) {
 		this.resource2Position = resource2Position;
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return String.format("r1 (%s) [%d -> %d], r2 (%s) [%d]",
 				getResource1(), getResource1Start(), getResource1End(),
 				getResource2(), getResource2Position());
