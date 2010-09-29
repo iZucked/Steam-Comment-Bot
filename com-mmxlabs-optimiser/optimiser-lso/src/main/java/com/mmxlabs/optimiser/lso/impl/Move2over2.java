@@ -35,6 +35,7 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @author hinton
  *
  * @param <T>
+ *            Sequence element type
  */
 public class Move2over2<T> implements IMove<T> {
 	/**
