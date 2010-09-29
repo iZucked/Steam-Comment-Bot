@@ -1,5 +1,6 @@
 package com.mmxlabs.optimiser.core.scenario.common;
 
+import java.util.Collection;
 import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -17,6 +18,51 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  *            Value type
  */
 public interface IMultiMatrixProvider<T, U> extends IDataComponentProvider {
+
+	/**
+	 * Class representing an entry from a {@link IMatrixProvider}.
+	 * 
+	 * @author Simon Goodall
+	 * 
+	 * @param <T>
+	 *            Key type
+	 * 
+	 * @param <U>
+	 *            Value type
+	 */
+	public static final class MatrixEntry<T, U> {
+
+		private final String key;
+
+		private final T x;
+
+		private final T y;
+
+		private final U value;
+
+		public MatrixEntry(final String key, final T x, final T y, final U value) {
+			this.key = key;
+			this.x = x;
+			this.y = y;
+			this.value = value;
+		}
+
+		public final String getKey() {
+			return key;
+		}
+
+		public final T getX() {
+			return x;
+		}
+
+		public final T getY() {
+			return y;
+		}
+
+		public final U getValue() {
+			return value;
+		}
+	}
 
 	/**
 	 * Key for the default matrix.
@@ -55,4 +101,15 @@ public interface IMultiMatrixProvider<T, U> extends IDataComponentProvider {
 	 * @return
 	 */
 	String[] getKeys();
+
+	/**
+	 * Returns the {@link Collection} of matrix entries, one from each
+	 * {@link IMatrixProvider}, that corresponds to
+	 * {@link IMatrixProvider#get(Object, Object)} for the given arguments.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	Collection<MatrixEntry<T, U>> getValues(T x, T y);
 }

@@ -1,6 +1,10 @@
 package com.mmxlabs.optimiser.core.scenario.common.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
@@ -82,5 +86,20 @@ public final class HashMapMultiMatrixProvider<T, U> implements
 			keys = matricies.keySet().toArray(new String[matricies.size()]);
 		}
 		return keys;
+	}
+
+	@Override
+	public final Collection<MatrixEntry<T, U>> getValues(final T x, final T y) {
+		final List<MatrixEntry<T, U>> entries = new ArrayList<MatrixEntry<T, U>>(
+				matricies.size());
+		
+		for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies
+				.entrySet()) {
+			final String key = entry.getKey();
+			final IMatrixProvider<T, U> p = entry.getValue();
+			final U u = p.get(x, y);
+			entries.add(new MatrixEntry<T, U>(key, x, y, u));
+		}
+		return entries;
 	}
 }
