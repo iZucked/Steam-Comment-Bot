@@ -43,8 +43,8 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 	private long bestFitness = Long.MAX_VALUE;
 
-	private Map<String, Long> bestFitnesses = new HashMap<String, Long>();
-	
+	private final Map<String, Long> bestFitnesses = new HashMap<String, Long>();
+
 	private ISequences<T> currentSequences = null;
 
 	private long currentFitness = Long.MAX_VALUE;
@@ -99,7 +99,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 			bestSequences = currentSequences;
 			bestFitness = currentFitness;
 			
-			for (final IFitnessComponent component : fitnessComponents) {
+			for (final IFitnessComponent<T> component : fitnessComponents) {
 				bestFitnesses.put(component.getName(), component.getFitness());
 			}
 		}
