@@ -27,7 +27,9 @@
 	</issueManagement>
 	<inceptionYear>2010</inceptionYear>
 	<scm>
-		<url>https://mmxlabs.kilnhg.com/Repo/Repositories/Group/com-mmxlabs-optimiser</url>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-optimiser.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-optimiser.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-optimiser/</url>
 	</scm>
 	<organization>
 		<name>Minimax Labs</name>
