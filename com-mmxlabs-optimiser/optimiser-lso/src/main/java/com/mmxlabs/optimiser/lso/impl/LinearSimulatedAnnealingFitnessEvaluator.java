@@ -39,15 +39,6 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 	private IFitnessCombiner fitnessCombiner;
 
-	public IFitnessCombiner getFitnessCombiner() {
-		return fitnessCombiner;
-	}
-
-	public void setFitnessCombiner(IFitnessCombiner fitnessCombiner) {
-		this.fitnessCombiner = fitnessCombiner;
-	}
-
-	
 	private ISequences<T> bestSequences = null;
 
 	private long bestFitness = Long.MAX_VALUE;
@@ -257,6 +248,14 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 	public Map<String, Long> getBestFitnesses() {
 		return bestFitnesses;
+	}
+
+	public IFitnessCombiner getFitnessCombiner() {
+		return fitnessCombiner;
+	}
+
+	public void setFitnessCombiner(final IFitnessCombiner fitnessCombiner) {
+		this.fitnessCombiner = fitnessCombiner;
 	}
 
 	@Override
