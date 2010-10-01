@@ -55,7 +55,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		// Evaluate initial sequences
 		{
 			// Apply sequence manipulators
-			IModifiableSequences<T> fullSequences = new ModifiableSequences<T>(
+			final IModifiableSequences<T> fullSequences = new ModifiableSequences<T>(
 					currentRawSequences);
 			manipulator.manipulate(fullSequences);
 
@@ -101,7 +101,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			move.apply(potentialRawSequences);
 
 			// Apply sequence manipulators
-			IModifiableSequences<T> potentialFullSequences = new ModifiableSequences<T>(
+			final IModifiableSequences<T> potentialFullSequences = new ModifiableSequences<T>(
 					potentialRawSequences);
 			manipulator.manipulate(potentialFullSequences);
 			
@@ -139,5 +139,4 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				fitnessEvaluator.getBestSequences());
 
 	}
-
 }
