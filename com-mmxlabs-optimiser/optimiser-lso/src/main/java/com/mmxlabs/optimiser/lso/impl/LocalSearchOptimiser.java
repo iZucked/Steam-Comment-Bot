@@ -111,7 +111,7 @@ public abstract class LocalSearchOptimiser<T> implements
 	 * @param destination
 	 * @param affectedResources
 	 */
-	protected void updateSequences(final ISequences<T> source,
+	protected final void updateSequences(final ISequences<T> source,
 			final IModifiableSequences<T> destination,
 			final Collection<IResource> affectedResources) {
 
@@ -148,48 +148,50 @@ public abstract class LocalSearchOptimiser<T> implements
 		return numberOfIterations;
 	}
 
-	public void setConstraintCheckers(
+	public final void setConstraintCheckers(
 			final List<IConstraintChecker<T>> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 	}
 
 	@Override
-	public List<IConstraintChecker<T>> getConstraintCheckers() {
+	public final List<IConstraintChecker<T>> getConstraintCheckers() {
 		return constraintCheckers;
 	}
 
-	public void setFitnessEvaluator(final IFitnessEvaluator<T> fitnessEvaluator) {
+	public final void setFitnessEvaluator(
+			final IFitnessEvaluator<T> fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
 	@Override
-	public IFitnessEvaluator<T> getFitnessEvaluator() {
+	public final IFitnessEvaluator<T> getFitnessEvaluator() {
 		return fitnessEvaluator;
 	}
 
-	public void setSequenceManipulator(
+	public final void setSequenceManipulator(
 			final ISequencesManipulator<T> sequenceManipulator) {
 		this.sequenceManipulator = sequenceManipulator;
 	}
 
 	@Override
-	public ISequencesManipulator<T> getSequenceManipulator() {
+	public final ISequencesManipulator<T> getSequenceManipulator() {
 		return sequenceManipulator;
 	}
 
-	public IOptimiserProgressMonitor<T> getProgressMonitor() {
+	public final IOptimiserProgressMonitor<T> getProgressMonitor() {
 		return progressMonitor;
 	}
 
-	public void setProgressMonitor(IOptimiserProgressMonitor<T> progressMonitor) {
+	public final void setProgressMonitor(
+			IOptimiserProgressMonitor<T> progressMonitor) {
 		this.progressMonitor = progressMonitor;
 	}
 
-	public int getReportInterval() {
+	public final int getReportInterval() {
 		return reportInterval;
 	}
 
-	public void setReportInterval(int reportInterval) {
+	public final void setReportInterval(int reportInterval) {
 		this.reportInterval = reportInterval;
 	}
 
