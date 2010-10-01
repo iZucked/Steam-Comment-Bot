@@ -13,8 +13,11 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<description>Project containing commonly used classes and utility
-		functions.</description>
+	<description>Project containing commonly used classes and utility functions.</description>
+	<issueManagement>
+		<system>CodebaseHQ</system>
+		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
+	</issueManagement>
 	<inceptionYear>2010</inceptionYear>
 
 	<scm>
