@@ -7,11 +7,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -152,8 +152,9 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		
 		// stick together elements which must be stuck together
 		Map<T, Set<T>> followerCache = new HashMap<T, Set<T>>();
-		Set<T> heads = new HashSet<T>();
-		Set<T> tails = new HashSet<T>();
+		Set<T> heads = new LinkedHashSet<T>(); 
+		Set<T> tails = new LinkedHashSet<T>();
+		
 		for (T element1 : data.getSequenceElements()) {
 			Set<T> after1 = new HashSet<T>();
 			followerCache.put(element1, after1);
