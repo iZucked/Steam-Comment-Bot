@@ -100,7 +100,7 @@ public class Options {
 					spare.add(it.next());
 			}
 		}
-		return null;
+		return spare;
 	}
 
 	public List<String> parse(String[] args) throws InvalidOptionException, InvalidArgumentException {
