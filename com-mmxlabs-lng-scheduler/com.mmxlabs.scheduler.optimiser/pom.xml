@@ -9,6 +9,10 @@
 
 	<description>LNG Scheduler </description>
 
+	<issueManagement>
+		<system>CodebaseHQ</system>
+		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
+	</issueManagement>
 	<inceptionYear>2010</inceptionYear>
 	<organization>
 		<name>Minimax Labs</name>
