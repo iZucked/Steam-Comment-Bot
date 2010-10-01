@@ -258,6 +258,16 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	public Map<String, Long> getBestFitnesses() {
 		return bestFitnesses;
 	}
-	
-	
+
+	@Override
+	public void dispose() {
+		this.bestFitnesses.clear();
+		this.bestSequences = null;
+		this.currentSequences = null;
+		this.fitnessCombiner = null;
+		this.fitnessComponents = null;
+		this.fitnessHelper = null;
+		this.thresholder = null;
+	}
+
 }
