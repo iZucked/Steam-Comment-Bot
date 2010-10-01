@@ -1,14 +1,13 @@
 package com.mmxlabs.common.options;
 
 
-public class InvalidArgumentException extends Exception {
+public class InvalidArgumentException extends OptionsException {
+
+	private String message;
+	private String option;
 
 	public InvalidArgumentException(String string) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public InvalidArgumentException() {
-		// TODO Auto-generated constructor stub
+		this.message = string;
 	}
 
 	/**
@@ -16,4 +15,15 @@ public class InvalidArgumentException extends Exception {
 	 */
 	private static final long serialVersionUID = 6971609184244683139L;
 
+	public void setOption(String opt) {
+		this.option = opt;
+	}
+
+	@Override
+	public String getMessage() {
+		return "Invalid argument for " + option + " : " + message;
+	}
+
+	
+	
 }

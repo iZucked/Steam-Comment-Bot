@@ -90,7 +90,12 @@ public class Options {
 				String opt = arg.substring(optionPrefix.length());
 				if (parsers.containsKey(opt)) {
 					OptionParser parser = parsers.get(opt);
-					results.put(opt, parser.parse(opt, it));
+					try {
+						results.put(opt, parser.parse(opt, it));
+					} catch (InvalidArgumentException ex) {
+						ex.setOption(opt);
+						throw ex;
+					}
 				} else {
 					throw new InvalidOptionException(arg);
 				}

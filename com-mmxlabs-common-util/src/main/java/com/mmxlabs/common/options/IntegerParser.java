@@ -29,7 +29,7 @@ public class IntegerParser implements OptionParser {
 			Integer i = Integer.valueOf(s);
 			return i;
 		} catch (Exception e) {
-			throw new InvalidArgumentException();
+			throw new InvalidArgumentException(e.getMessage());
 		}
 	}
 

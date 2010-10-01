@@ -1,7 +1,7 @@
 package com.mmxlabs.common.options;
 
 
-public class InvalidOptionException extends Exception {
+public class InvalidOptionException extends OptionsException {
 
 	/**
 	 * 
