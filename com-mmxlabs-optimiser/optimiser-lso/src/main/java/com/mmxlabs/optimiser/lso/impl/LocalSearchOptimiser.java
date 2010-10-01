@@ -42,7 +42,7 @@ public abstract class LocalSearchOptimiser<T> implements
 	private IOptimiserProgressMonitor<T> progressMonitor;
 
 	private int reportInterval = -1;
-	
+
 	/**
 	 * Initialise method checking the object has all the correct pieces of data
 	 * to be able to perform the
@@ -71,11 +71,11 @@ public abstract class LocalSearchOptimiser<T> implements
 		if (sequenceManipulator == null) {
 			throw new IllegalStateException("Sequence Manipulator is not set");
 		}
-		
+
 		if (progressMonitor == null) {
 			throw new IllegalStateException("Progress Monitor is not set");
 		}
-		
+
 		if (reportInterval < 1) {
 			throw new IllegalStateException("Report interval is not set");
 		}
