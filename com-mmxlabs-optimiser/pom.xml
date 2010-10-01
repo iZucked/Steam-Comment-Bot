@@ -22,8 +22,8 @@
 
 	<description>Parent maven project for core optimisation projects</description>
 	<issueManagement>
-		<system>FogBugz</system>
-		<url>https://mmxlabs.fogbugz.com</url>
+		<system>CodebaseHQ</system>
+		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
 	</issueManagement>
 	<inceptionYear>2010</inceptionYear>
 	<scm>
