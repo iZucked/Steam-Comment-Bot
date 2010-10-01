@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -11,6 +12,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -47,14 +49,23 @@ public final class CargoSchedulerExporter {
 
 		// Create a fitness core to grab the components - need these for the GA
 		// Scheduler
+		
+		// we need to get the scheduler factory out of the existing core
+		ISchedulerFactory schedulerFactory = null;
+		for (IFitnessCoreFactory factory : context.getFitnessFunctionRegistry().getFitnessCoreFactories()) {
+			if (factory instanceof CargoSchedulerFitnessCoreFactory) {
+				schedulerFactory = ((CargoSchedulerFitnessCoreFactory)factory).getSchedulerFactory();
+			}
+		}
+		
 		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
+		factory.setSchedulerFactory(schedulerFactory);
 		final CargoSchedulerFitnessCore<T> core = factory.instantiate();
 
 		core.init(data);
 
-		final ISequenceScheduler<T> scheduler = SchedulerUtils
-				.createGASequenceScheduler(data,
-						core.getCargoSchedulerFitnessComponent());
+		final ISequenceScheduler<T> scheduler = schedulerFactory.createScheduler(data, 
+				core.getCargoSchedulerFitnessComponent());
 
 		@SuppressWarnings("unchecked")
 		final IPortSlotProvider<T> portSlotProvider = data
@@ -90,7 +101,7 @@ public final class CargoSchedulerExporter {
 			if (sequence.size() > 0) {
 
 				// Schedule sequence
-				final List<VoyagePlan> plans = scheduler.schedule(resource,
+				final Pair<Integer, List<VoyagePlan>> plans = scheduler.schedule(resource,
 						sequence);
 
 				final ArrayList<T> elements = new ArrayList<T>(sequence.size());
@@ -99,7 +110,7 @@ public final class CargoSchedulerExporter {
 					elements.add(e);
 				}
 
-				annotator.annotateFromVoyagePlan(resource, plans,
+				annotator.annotateFromVoyagePlan(resource, plans.getSecond(), plans.getFirst(),
 						annotatedSequence);
 			}
 			solution.setAnnotatedSequence(resource, annotatedSequence);
