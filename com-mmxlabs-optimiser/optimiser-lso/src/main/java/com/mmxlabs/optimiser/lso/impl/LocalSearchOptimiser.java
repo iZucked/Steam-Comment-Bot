@@ -192,4 +192,13 @@ public abstract class LocalSearchOptimiser<T> implements
 	public void setReportInterval(int reportInterval) {
 		this.reportInterval = reportInterval;
 	}
+
+	@Override
+	public void dispose() {
+		this.constraintCheckers = null;
+		this.fitnessEvaluator = null;
+		this.moveGenerator = null;
+		this.progressMonitor = null;
+		this.sequenceManipulator = null;
+	}
 }
