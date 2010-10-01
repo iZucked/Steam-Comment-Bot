@@ -68,8 +68,8 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 				updateBest(sequences, totalFitness);
 
 				// Update fitness functions state
-				fitnessHelper.acceptFromComponents(fitnessComponents, sequences,
-						affectedResources);
+				fitnessHelper.acceptFromComponents(fitnessComponents,
+						sequences, affectedResources);
 			}
 		}
 		// Step to the next threshold levels
@@ -95,10 +95,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		// If this is the best state seen so far, then record it.
 		if (currentFitness < bestFitness) {
 			// Store this as the new best
-			// Do we need to copy here too? 
+			// Do we need to copy here too?
 			bestSequences = currentSequences;
 			bestFitness = currentFitness;
-			
+
 			for (final IFitnessComponent<T> component : fitnessComponents) {
 				bestFitnesses.put(component.getName(), component.getFitness());
 			}
@@ -118,10 +118,12 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		// Evaluates the current sequences
 		if (affectedResources == null) {
 			if (!fitnessHelper.evaluateSequencesFromComponents(sequences,
-					fitnessComponents)) return Long.MAX_VALUE;
+					fitnessComponents))
+				return Long.MAX_VALUE;
 		} else {
 			if (!fitnessHelper.evaluateSequencesFromComponents(sequences,
-					fitnessComponents, affectedResources)) return Long.MAX_VALUE;
+					fitnessComponents, affectedResources))
+				return Long.MAX_VALUE;
 		}
 
 		return fitnessCombiner.calculateFitness(fitnessComponents);
@@ -161,14 +163,15 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 					"Initial sequences cannot be null");
 		}
 
-		//TODO check for MAX_VALUE here and throw some kind of death condition.
+		// TODO check for MAX_VALUE here and throw some kind of death condition.
 		final long totalFitness = evaluateSequencesIntern(initialSequences,
 				null);
-		
+
 		if (totalFitness == Long.MAX_VALUE) {
-			System.err.println("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
+			System.err
+					.println("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
 		}
-		
+
 		bestFitness = totalFitness;
 		currentFitness = totalFitness;
 		bestSequences = new Sequences<T>(initialSequences);
