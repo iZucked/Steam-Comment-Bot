@@ -38,14 +38,16 @@ public final class CargoSchedulerFitnessCoreFactory implements
 			public ISequenceScheduler createScheduler(IOptimisationData data,
 					Collection components) {
 //				return SchedulerUtils.createSimpleSequenceScheduler(data);
-				return SchedulerUtils.createGASequenceScheduler(data, components);
+//				return SchedulerUtils.createGASequenceScheduler(data, components);
+				return SchedulerUtils.createRandomSequenceScheduler(data, components);
 			}
 	};
 
 	@Override
 	public Collection<String> getFitnessComponentNames() {
 		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME,
-				LATENESS_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME);
+				LATENESS_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME,
+				CHARTER_COST_COMPONENT_NAME, ROUTE_PRICE_COMPONENT_NAME);
 	}
 
 	@Override
@@ -62,5 +64,9 @@ public final class CargoSchedulerFitnessCoreFactory implements
 	
 	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
 		this.schedulerFactory = schedulerFactory;
+	}
+
+	public ISchedulerFactory getSchedulerFactory() {
+		return schedulerFactory;
 	}
 }

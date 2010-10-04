@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.List;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -25,7 +26,7 @@ public interface ISequenceScheduler<T> {
 	 * @param sequence
 	 * @return
 	 */
-	List<VoyagePlan> schedule(IResource resource, ISequence<T> sequence);
+	Pair<Integer, List<VoyagePlan>> schedule(IResource resource, ISequence<T> sequence);
 
 	/**
 	 * Release resources.

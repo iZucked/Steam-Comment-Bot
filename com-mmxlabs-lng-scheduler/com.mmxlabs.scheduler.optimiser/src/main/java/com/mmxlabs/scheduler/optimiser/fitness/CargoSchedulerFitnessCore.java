@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -17,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -38,7 +40,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	private ISequenceScheduler<T> scheduler;
 
 	private ISchedulerFactory<T> schedulerFactory;
-
 
 	public CargoSchedulerFitnessCore() {
 
@@ -68,13 +69,16 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 		components.add(new CharterCostFitnessComponent<T>(
 				CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME,
-				SchedulerConstants.DCP_vesselProvider, //not sure if this should be here or somewhere else
+				SchedulerConstants.DCP_vesselProvider, // not sure if this
+														// should be here or
+														// somewhere else
 				this));
-		
+
 		components.add(new RouteCostFitnessComponent<T>(
-			SchedulerConstants.DCP_routePriceProvider, SchedulerConstants.DCP_vesselProvider,
-			CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
-			this));
+				SchedulerConstants.DCP_routePriceProvider,
+				SchedulerConstants.DCP_vesselProvider,
+				CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
+				this));
 
 	}
 
@@ -99,16 +103,17 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// For each ISequence, run the scheduler
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence<T> sequence = sequences.getSequence(resource);
-			final List<VoyagePlan> plans = scheduler.schedule(resource,
-					sequence);
+			final Pair<Integer, List<VoyagePlan>> plans = scheduler.schedule(
+					resource, sequence);
 
 			// Notify fitness components that the given ISequence has been
 			// scheduled and is ready to be evaluated.
-//			if (plans == null) {
-//				return false;
-//			}
-			
-			if (evaluateSequence(resource, sequence, plans, false) == false) {
+			// if (plans == null) {
+			// return false;
+			// }
+
+			if (evaluateSequence(resource, sequence, plans.getSecond(), false,
+					plans.getFirst()) == false) {
 				return false;
 			}
 		}
@@ -145,14 +150,17 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 			final ISequence<T> sequence = sequences.getSequence(resource);
 			if (sequence.size() > 0) {
 
-				final List<VoyagePlan> plans = scheduler.schedule(resource,
-						sequence);
+				final Pair<Integer, List<VoyagePlan>> plans = scheduler
+						.schedule(resource, sequence);
 				if (plans == null) {
-					System.err.println("Scheduler has returned null voyage plan; backing out of move.");
-					return false; //for some reason, this move has no valid plans. this
-					//should probably be a serious issue.
+					System.err
+							.println("Scheduler has returned null voyage plan; backing out of move.");
+					return false; // for some reason, this move has no valid
+									// plans. this
+					// should probably be a serious issue.
 				}
-				if (evaluateSequence(resource, sequence, plans, true) == false) {
+				if (evaluateSequence(resource, sequence, plans.getSecond(),
+						true, plans.getFirst()) == false) {
 					return false;
 				}
 			}
@@ -165,29 +173,41 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		return new ArrayList<IFitnessComponent<T>>(components);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(final IOptimisationData<T> data) {
 
 		// TODO: getter/setters should provide these e.g. use factory to
 		// populate
-//		scheduler = SchedulerUtils.createSimpleSequenceScheduler(data);
-		scheduler = schedulerFactory.createScheduler(data, components); 
-			/*SchedulerUtils.createGASequenceScheduler(data, components);*/
+		// scheduler = SchedulerUtils.createSimpleSequenceScheduler(data);
+		scheduler = schedulerFactory.createScheduler(data, components);
+		/* SchedulerUtils.createGASequenceScheduler(data, components); */
 
+		List<ICargoSchedulerFitnessComponent<T>> iterators = new ArrayList<ICargoSchedulerFitnessComponent<T>>();
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.init(data);
+			if (c.shouldIterate())
+				iterators.add(c);
+		}
+		this.iterators = new ICargoSchedulerFitnessComponent[iterators.size()];
+		for (int i = 0; i<iterators.size(); i++) {
+			this.iterators[i] = iterators.get(i);
 		}
 	}
 
+	final VoyagePlanIterator<T> iterator = new VoyagePlanIterator<T>();
+	ICargoSchedulerFitnessComponent<T>[] iterators;
+
 	private boolean evaluateSequence(final IResource resource,
-			final ISequence<T> sequence,
-			final List<VoyagePlan> plans,
-			final boolean newSequence) {
+			final ISequence<T> sequence, final List<VoyagePlan> plans,
+			final boolean newSequence, final int startTime) {
+
+		iterator.iterateComponents(plans, startTime, resource, iterators);
 
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			if (c.evaluateSequence(resource, sequence, plans,
-					newSequence) == false) {
+			if (c.evaluateSequence(resource, sequence, plans, newSequence,
+					startTime) == false) {
 				return false;
 			}
 		}

@@ -51,8 +51,14 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 */
 	boolean evaluateSequence(IResource resource,
 			ISequence<T> sequence,
-			List<VoyagePlan> plans, boolean newSequence);
+			List<VoyagePlan> plans, boolean newSequence, final int startTime);
 
+	boolean shouldIterate();
+	
+	void beginIterating(IResource resource);
+	void evaluateNextObject(final Object object, final int startTime);
+	void endIterating();
+	
 	/**
 	 * Notify fitness component that the last evaluation has been accepted.
 	 * 
@@ -93,7 +99,7 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * @return
 	 */
 	long rawEvaluateSequence(IResource resource, ISequence<T> sequence,
-			List<VoyagePlan> plans);
+			List<VoyagePlan> plans, int startTime);
 
 	/**
 	 * Clean up references as this component is no longer required.
