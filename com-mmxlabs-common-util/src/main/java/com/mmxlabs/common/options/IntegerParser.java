@@ -9,7 +9,9 @@ public class IntegerParser implements OptionParser {
 		this.defaultValue = defaultValue;
 	}
 
-	
+	public IntegerParser(String value) {
+		this.defaultValue = Integer.parseInt(value);
+	}
 	public IntegerParser() {
 		
 	}

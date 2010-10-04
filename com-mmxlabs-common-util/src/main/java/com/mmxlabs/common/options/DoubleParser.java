@@ -7,6 +7,11 @@ public class DoubleParser implements OptionParser {
 
 	public DoubleParser() {
 	}
+	
+	public DoubleParser(String value) {
+		defaultValue = Double.parseDouble(value);
+	}
+	
 	public DoubleParser(double value) {
 		this.defaultValue = value;
 	}
