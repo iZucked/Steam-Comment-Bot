@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -66,17 +67,13 @@ public abstract class AbstractSequenceScheduler<T> implements
 	 * @param arrivalTimes
 	 * @return
 	 */
-	public List<VoyagePlan> schedule(final IResource resource,
-			final ISequence<T> sequence, final int[] arrivalTimes,
-			final boolean adjustArrivals) {
+	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
+			final ISequence<T> sequence, final int[] arrivalTimes) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
 		// Get start time
 		final int startTime = arrivalTimes[0];
-
-		// current time will be incremented after each element
-		int currentTime = startTime;
 
 		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
 		final List<Object> currentSequence = new ArrayList<Object>(5);
@@ -180,13 +177,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 			if (currentSequence.size() > 1 && (portType == PortType.Load)
 					|| portType == PortType.CharterOut) {
 
-				currentTime = optimiseSequence(adjustArrivals, currentTime,
-						voyagePlans, currentSequence, voyagePlanOptimiser);
-
-				if (currentTime == Integer.MAX_VALUE) {
-					// Problem optimising sequence, most likely forbidden to
-					// adjust arrival times. Return null to indicate problematic
-					// sequence.
+				if (!optimiseSequence(voyagePlans, currentSequence, voyagePlanOptimiser)) {
 					return null;
 				}
 
@@ -221,20 +212,15 @@ public abstract class AbstractSequenceScheduler<T> implements
 		// Populate final plan details
 		// if (!currentSequence.isEmpty()) {
 		if (currentSequence.size() > 1) {
-			currentTime = optimiseSequence(adjustArrivals, currentTime,
-					voyagePlans, currentSequence, voyagePlanOptimiser);
-			if (currentTime == Integer.MAX_VALUE) {
-				// Problem optimising sequence, most likely forbidden to adjust
-				// arrival times. Return null to indicate problematic sequence.
-				return null;
-			}
+			 if (!optimiseSequence(voyagePlans, currentSequence, voyagePlanOptimiser)) {
+				 return null;
+			 }
 		}
 
-		return voyagePlans;
+		return new Pair<Integer, List<VoyagePlan>>(startTime, voyagePlans);
 	}
 
-	public final int optimiseSequence(final boolean adjustArrivals,
-			int currentTime, final List<VoyagePlan> voyagePlans,
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans,
 			final List<Object> currentSequence,
 			final IVoyagePlanOptimiser<T> optimiser) {
 
@@ -246,57 +232,21 @@ public abstract class AbstractSequenceScheduler<T> implements
 		final Object[] sequence = currentPlan.getSequence();
 		for (int i = 0; i < sequence.length; ++i) {
 			final Object obj = sequence[i];
-			if (obj instanceof PortDetails) {
-				final PortDetails details = (PortDetails) obj;
-
-				details.setStartTime(currentTime);
-
-				// PortDetails can be processed twice when they are on the
-				// boundary of the voyage plan.
-				// Therefore we need to be careful not to increment the current
-				// time twice
-				final int visitDuration = details.getVisitDuration();
-				if (i != sequence.length - 1) {
-					// Not end element so increment by visit duration
-					currentTime += visitDuration;
-				}
-
-			} else if (obj instanceof VoyageDetails) {
+			if (obj instanceof VoyageDetails) {
 				@SuppressWarnings("unchecked")
 				final VoyageDetails<T> details = (VoyageDetails<T>) obj;
-
-				details.setStartTime(currentTime);
-
 				final int availableTime = details.getOptions()
-						.getAvailableTime();
+				.getAvailableTime();
 
 				// Take voyage details time as this can be larger than
 				// available time e.g. due to reaching max speed.
 				final int duration = details.getTravelTime()
 						+ details.getIdleTime();
-
+		
 				assert duration >= availableTime;
-
 				if (duration > availableTime) {
-					if (adjustArrivals) {
-						// TODO: For JMock tests, the voyage calculator
-						// is mocked and so does not set any values in
-						// voyage details. So we use max to cover up
-						// this problem.
-						// TODO: Is this comment still relevant?
-						currentTime += Math.max(availableTime, duration);
-					} else {
-						// Time was adjusted, but it's forbidden. Return
-						// Integer.MAX_VALUE to say this is a bad sequence.
-						return Integer.MAX_VALUE;
-					}
-				} else {
-					currentTime += availableTime;
+					return false;
 				}
-
-			} else {
-				throw new IllegalStateException("Unexpected element of type "
-						+ obj.getClass().getCanonicalName());
 			}
 		}
 		voyagePlans.add(currentPlan);
@@ -304,7 +254,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		// Reset VPO ready for next iteration
 		optimiser.reset();
 
-		return currentTime;
+		return true;
 	}
 
 	public final IPortSlotProvider<T> getPortSlotProvider() {

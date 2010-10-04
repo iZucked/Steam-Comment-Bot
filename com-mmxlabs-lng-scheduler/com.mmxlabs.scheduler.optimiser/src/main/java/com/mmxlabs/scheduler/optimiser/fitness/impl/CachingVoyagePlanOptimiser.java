@@ -78,21 +78,10 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			// if (!getOuterType().equals(other.getOuterType()))
 			// return false;
 			
-			if (vessel != other.vessel)
-				return false;
-			
-			if (!Equality.shallowEquals(slots, other.slots))
-				return false;
-			
-			if (!Arrays.equals(times, other.times))
-				return false;
-			
-			// if (vessel == null) {
-			// if (other.vessel != null)
-			// return false;
-			// } else if (!vessel.equals(other.vessel))
-			// return false;
-			return true;
+			return  
+				Equality.shallowEquals(slots, other.slots) 
+				&&(vessel == other.vessel)&&
+				Arrays.equals(times, other.times);
 		}
 
 		private final CachingVoyagePlanOptimiser getOuterType() {

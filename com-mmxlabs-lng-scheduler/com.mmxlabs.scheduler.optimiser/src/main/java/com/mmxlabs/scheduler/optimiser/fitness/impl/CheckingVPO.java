@@ -40,9 +40,13 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 		final VoyagePlan res = delegate.optimise();
 		
 		if (ref.toString().equals(res.toString())  == false) {
-			System.err.println("Checking VPO Error:");
+			System.err.println("Checking VPO Error: (plans are different)");
 			System.err.println("   reference value:" + ref.toString());
 			System.err.println("    delegate value:" + res.toString());
+		} else if (reference.getBestCost() != delegate.getBestCost()) {
+			System.err.println("Checking VPO Error: (Costs are different)");
+			System.err.println("    reference cost:" + reference.getBestCost());
+			System.err.println("     delegate cost:" + delegate.getBestCost());
 		}
 		
 		return res;

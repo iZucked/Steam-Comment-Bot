@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -19,7 +20,7 @@ public final class SimpleSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
 
 	@Override
-	public List<VoyagePlan> schedule(final IResource resource,
+	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
 			final ISequence<T> sequence) {
 
 		int[] arrivalTimes = new int[sequence.size()];
@@ -53,6 +54,6 @@ public final class SimpleSequenceScheduler<T> extends
 			}
 			arrivalTimes[idx++] = timeWindowStart;
 		}
-		return super.schedule(resource, sequence, arrivalTimes, false);
+		return super.schedule(resource, sequence, arrivalTimes);
 	}
 }
