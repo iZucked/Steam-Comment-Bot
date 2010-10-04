@@ -35,4 +35,21 @@ public final class Equality {
 		// Null check over, fall back to proper equals method
 		return a.equals(b);
 	}
+	
+	/**
+	 * Shallow equality test for object arrays; checks whether two object arrays
+	 * contain identical references (it is true iff (a) both arrays have the same length and
+	 * (b) a[i] == b[i] for all valid i) 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static final boolean shallowEquals(final Object[] a, final Object[] b) {
+		if (a==b) return true;
+		if (a == null || b == null || a.length!=b.length) return false;
+		for (int x = 0; x<a.length; x++) {
+			if (a[x] != b[x]) return false;
+		}
+		return true;
+	}
 }
