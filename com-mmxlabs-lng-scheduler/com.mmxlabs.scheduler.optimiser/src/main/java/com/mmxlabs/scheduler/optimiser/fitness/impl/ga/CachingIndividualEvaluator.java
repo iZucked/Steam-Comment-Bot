@@ -3,7 +3,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
-import com.mmxlabs.common.caches.LHMCache;
+import com.mmxlabs.common.caches.SimpleCache;
 
 /**
  * A memoizing evaluator; wraps another evaluator but adds a cache to make
@@ -22,7 +22,7 @@ public final class CachingIndividualEvaluator<T> implements
 			final int size) {
 		super();
 
-		cache = new LHMCache<Individual, Long>("IE", 
+		cache = new SimpleCache<Individual, Long>("IE", 
 				new IKeyEvaluator<Individual, Long>() {
 
 					@Override
@@ -31,7 +31,7 @@ public final class CachingIndividualEvaluator<T> implements
 								(Individual)key.clone(), //do clone key
 								delegate.evaluate(key));
 					}
-				}, size);
+				}, size, 3);
 
 		this.delegate = delegate;
 	}
