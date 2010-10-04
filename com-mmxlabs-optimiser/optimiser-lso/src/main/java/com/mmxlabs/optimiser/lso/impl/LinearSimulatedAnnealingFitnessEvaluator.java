@@ -183,6 +183,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		bestSequences = new Sequences<T>(initialSequences);
 		currentSequences = new Sequences<T>(initialSequences);
 
+		for (final IFitnessComponent component : fitnessComponents) {
+			bestFitnesses.put(component.getName(), component.getFitness());
+		}
+		
 		// Setup initial conditions
 		thresholder.init();
 	}
