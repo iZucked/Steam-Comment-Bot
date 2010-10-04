@@ -105,7 +105,7 @@ public final class SchedulerUtils {
 		return createGASequenceScheduler(data, fitnessComponents, DEFAULT_VPO_CACHE_SIZE);
 	}
 	
-	public static <T> ISequenceScheduler<T> createRandomSequenceScheduler(
+	public static <T> RandomSequenceScheduler createRandomSequenceScheduler(
 			final IOptimisationData<T> data,
 			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents,
 			int vpoCacheSize) {
