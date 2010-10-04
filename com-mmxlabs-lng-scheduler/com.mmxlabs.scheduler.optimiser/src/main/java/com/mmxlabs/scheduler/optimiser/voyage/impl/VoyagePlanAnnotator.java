@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -42,145 +43,159 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 	@Override
 	public void annotateFromVoyagePlan(final IResource resource,
 			final List<VoyagePlan> plans,
-			final IAnnotatedSequence<T> annotatedSequence) {
+			final int startTime, final IAnnotatedSequence<T> annotatedSequence) {
+		VoyagePlanIterator vpi = new VoyagePlanIterator();
+		vpi.setVoyagePlans(plans, startTime);
+		
+		vpi.reset();
+		
+//		for (final VoyagePlan plan : plans) {
+//			for (final Object e : plan.getSequence()) {
+		while (vpi.hasNextObject()) {
+			final Object e = vpi.nextObject();
+			final VoyagePlan plan = vpi.getCurrentPlan();
+			if (e instanceof PortDetails) {
+				final PortDetails details = (PortDetails) e;
+				final IPortSlot currentPortSlot = details.getPortSlot();
 
-		for (final VoyagePlan plan : plans) {
-			for (final Object e : plan.getSequence()) {
+				// Get element from port slot provider
+				final T element = getPortSlotProvider().getElement(
+						currentPortSlot);
 
-				if (e instanceof PortDetails) {
-					final PortDetails details = (PortDetails) e;
-					final IPortSlot currentPortSlot = details.getPortSlot();
+				final int visitDuration = details.getVisitDuration();
 
-					// Get element from port slot provider
-					final T element = getPortSlotProvider().getElement(
-							currentPortSlot);
+				// Add port annotations
+				final PortVisitEventImpl<T> visit;
+				if (currentPortSlot instanceof ILoadSlot) {
+					final LoadEventImpl<T> load = new LoadEventImpl<T>();
+					load.setLoadVolume(plan.getLoadVolume());
+					// TODO: Check unit vs. actual
+					load.setPurchasePrice(plan.getPurchaseCost());
 
-					final int visitDuration = details.getVisitDuration();
+					visit = load;
+				} else if (currentPortSlot instanceof IDischargeSlot) {
+					final DischargeEventImpl<T> discharge = new DischargeEventImpl<T>();
 
-					// Add port annotations
-					final PortVisitEventImpl<T> visit;
-					if (currentPortSlot instanceof ILoadSlot) {
-						final LoadEventImpl<T> load = new LoadEventImpl<T>();
-						load.setLoadVolume(plan.getLoadVolume());
-						// TODO: Check unit vs. actual
-						load.setPurchasePrice(plan.getPurchaseCost());
+					discharge.setDischargeVolume(plan.getDischargeVolume());
 
-						visit = load;
-					} else if (currentPortSlot instanceof IDischargeSlot) {
-						final DischargeEventImpl<T> discharge = new DischargeEventImpl<T>();
+					// TODO: Check unit vs. actual
+					discharge.setSalesPrice(plan.getSalesRevenue());
 
-						discharge.setDischargeVolume(plan.getDischargeVolume());
+					visit = discharge;
 
-						// TODO: Check unit vs. actual
-						discharge.setSalesPrice(plan.getSalesRevenue());
-
-						visit = discharge;
-
-					} else if (currentPortSlot instanceof ICharterOutPortSlot) {
-						visit = new PortVisitEventImpl<T>();
-					} else {
-						visit = new PortVisitEventImpl<T>();
-					}
-
-					visit.setName("visit");
-					visit.setSequenceElement(element);
-					visit.setPortSlot(currentPortSlot);
-
-					visit.setDuration(visitDuration);
-
-					annotatedSequence.setAnnotation(element,
-							SchedulerConstants.AI_visitInfo, visit);
-
-					visit.setStartTime(details.getStartTime());
-					visit.setEndTime(details.getStartTime() + visitDuration);
-
-				} else if (e instanceof VoyageDetails<?>) {
-					@SuppressWarnings({ "unchecked", "rawtypes" })
-					final VoyageDetails<T> details = (VoyageDetails) e;
-
-					final VoyageOptions options = details.getOptions();
-
-					final IPortSlot prevPortSlot = options.getFromPortSlot();
-					final IPortSlot currentPortSlot = options.getToPortSlot();
-
-					// Get element from port slot provider
-					final T element = getPortSlotProvider().getElement(
-							currentPortSlot);
-
-					final int travelTime = details.getTravelTime();
-
-					final JourneyEventImpl<T> journey = new JourneyEventImpl<T>();
-
-					journey.setName("journey");
-					journey.setFromPort(prevPortSlot.getPort());
-					journey.setToPort(currentPortSlot.getPort());
-					journey.setSequenceElement(element);
-					journey.setStartTime(details.getStartTime());
-					journey.setEndTime(details.getStartTime() + travelTime);
-					journey.setDistance(options.getDistance());
-					journey.setRoute(options.getRoute());
-
-					journey.setDuration(travelTime);
-
-					journey.setSpeed(details.getSpeed());
-
-					for (final FuelComponent fuel : travelFuelComponents) {
-						for (final FuelUnit unit : FuelUnit.values()) {
-							final long consumption = details
-									.getFuelConsumption(fuel, unit);
-							journey.setFuelConsumption(fuel, unit, consumption);
-							if (unit == fuel.getDefaultFuelUnit()) {
-								final long cost = Calculator
-										.costFromConsumption(consumption,
-												details.getFuelUnitPrice(fuel));
-
-								journey.setFuelCost(fuel, cost);
-							}
-						}
-					}
-
-					journey.setVesselState(details.getOptions()
-							.getVesselState());
-
-					annotatedSequence.setAnnotation(element,
-							SchedulerConstants.AI_journeyInfo, journey);
-
-					final int idleTime = details.getIdleTime();
-
-					final IdleEventImpl<T> idle = new IdleEventImpl<T>();
-					idle.setName("idle");
-					idle.setPort(currentPortSlot.getPort());
-					idle.setStartTime(details.getStartTime() + travelTime);
-					idle.setDuration(idleTime);
-					idle.setEndTime(details.getStartTime() + travelTime
-							+ idleTime);
-					idle.setSequenceElement(element);
-
-					for (final FuelComponent fuel : idleFuelComponents) {
-						for (final FuelUnit unit : FuelUnit.values()) {
-							final long consumption = details
-									.getFuelConsumption(fuel, unit);
-
-							idle.setFuelConsumption(fuel, unit, consumption);
-							// Calculate cost on default unit
-							if (unit == fuel.getDefaultFuelUnit()) {
-								final long cost = Calculator
-										.costFromConsumption(consumption,
-												details.getFuelUnitPrice(fuel));
-								idle.setFuelCost(fuel, cost);
-							}
-						}
-					}
-					idle.setVesselState(details.getOptions().getVesselState());
-
-					annotatedSequence.setAnnotation(element,
-							SchedulerConstants.AI_idleInfo, idle);
-
+				} else if (currentPortSlot instanceof ICharterOutPortSlot) {
+					visit = new PortVisitEventImpl<T>();
 				} else {
-					throw new IllegalStateException("Unexpected element " + e);
+					visit = new PortVisitEventImpl<T>();
 				}
+
+				visit.setName("visit");
+				visit.setSequenceElement(element);
+				visit.setPortSlot(currentPortSlot);
+
+				visit.setDuration(visitDuration);
+
+				annotatedSequence.setAnnotation(element,
+						SchedulerConstants.AI_visitInfo, visit);
+
+				visit.setStartTime(vpi.getCurrentTime()); //details.getStartTime()
+				visit.setEndTime(vpi.getCurrentTime() + visitDuration);
+
+			} else if (e instanceof VoyageDetails<?>) {
+				@SuppressWarnings({ "unchecked", "rawtypes" })
+				final VoyageDetails<T> details = (VoyageDetails) e;
+
+				final VoyageOptions options = details.getOptions();
+
+				final IPortSlot prevPortSlot = options.getFromPortSlot();
+				final IPortSlot currentPortSlot = options.getToPortSlot();
+
+				// Get element from port slot provider
+				final T element = getPortSlotProvider().getElement(
+						currentPortSlot);
+
+				final int travelTime = details.getTravelTime();
+
+				final JourneyEventImpl<T> journey = new JourneyEventImpl<T>();
+
+				final int currentTime = vpi.getCurrentTime();
+				
+				journey.setName("journey");
+				journey.setFromPort(prevPortSlot.getPort());
+				journey.setToPort(currentPortSlot.getPort());
+				journey.setSequenceElement(element);
+				
+				journey.setStartTime(currentTime);
+				journey.setEndTime(currentTime + travelTime);
+				
+				journey.setDistance(options.getDistance());
+				journey.setRoute(options.getRoute());
+
+				journey.setDuration(travelTime);
+
+				journey.setSpeed(details.getSpeed());
+
+				for (final FuelComponent fuel : travelFuelComponents) {
+					for (final FuelUnit unit : FuelUnit.values()) {
+						final long consumption = details
+								.getFuelConsumption(fuel, unit);
+						journey.setFuelConsumption(fuel, unit, consumption);
+						if (unit == fuel.getDefaultFuelUnit()) {
+							final long cost = Calculator
+									.costFromConsumption(consumption,
+											details.getFuelUnitPrice(fuel));
+
+							journey.setFuelCost(fuel, cost);
+						}
+					}
+				}
+
+				journey.setVesselState(details.getOptions()
+						.getVesselState());
+
+				annotatedSequence.setAnnotation(element,
+						SchedulerConstants.AI_journeyInfo, journey);
+
+				final int idleTime = details.getIdleTime();
+
+				final IdleEventImpl<T> idle = new IdleEventImpl<T>();
+				idle.setName("idle");
+				idle.setPort(currentPortSlot.getPort());
+				
+				
+				
+				idle.setStartTime(currentTime + travelTime);
+				idle.setDuration(idleTime);
+				idle.setEndTime(currentTime + travelTime
+						+ idleTime);
+				idle.setSequenceElement(element);
+
+				for (final FuelComponent fuel : idleFuelComponents) {
+					for (final FuelUnit unit : FuelUnit.values()) {
+						final long consumption = details
+								.getFuelConsumption(fuel, unit);
+
+						idle.setFuelConsumption(fuel, unit, consumption);
+						// Calculate cost on default unit
+						if (unit == fuel.getDefaultFuelUnit()) {
+							final long cost = Calculator
+									.costFromConsumption(consumption,
+											details.getFuelUnitPrice(fuel));
+							idle.setFuelCost(fuel, cost);
+						}
+					}
+				}
+				idle.setVesselState(details.getOptions().getVesselState());
+
+				annotatedSequence.setAnnotation(element,
+						SchedulerConstants.AI_idleInfo, idle);
+
+			} else {
+				throw new IllegalStateException("Unexpected element " + e);
 			}
 		}
+				
+			
 	}
 
 	public void setPortSlotProvider(final IPortSlotProvider<T> portSlotProvider) {

@@ -71,13 +71,13 @@ public final class PortDetails implements Cloneable {
 		this.portSlot = portSlot;
 	}
 
-	public final int getStartTime() {
-		return startTime;
-	}
-
-	public final void setStartTime(final int startTime) {
-		this.startTime = startTime;
-	}
+//	public final int getStartTime() {
+//		return startTime;
+//	}
+//
+//	public final void setStartTime(final int startTime) {
+//		this.startTime = startTime;
+//	}
 
 	@Override
 	public final boolean equals(final Object obj) {
