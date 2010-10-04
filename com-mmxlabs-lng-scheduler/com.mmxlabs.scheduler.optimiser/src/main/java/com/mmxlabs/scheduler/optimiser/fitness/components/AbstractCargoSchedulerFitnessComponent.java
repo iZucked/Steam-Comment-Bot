@@ -80,8 +80,8 @@ public abstract class AbstractCargoSchedulerFitnessComponent<T> implements
 	@Override
 	public boolean evaluateSequence(final IResource resource,
 			final ISequence<T> sequence, final List<VoyagePlan> plans,
-			final boolean newSequence) {
-		final long fitness = rawEvaluateSequence(resource, sequence, plans);
+			final boolean newSequence, final int startTime) {
+		final long fitness = rawEvaluateSequence(resource, sequence, plans, startTime);
 		if (fitness == Long.MAX_VALUE) {
 			return false;
 		} else {

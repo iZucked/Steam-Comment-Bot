@@ -31,25 +31,25 @@ public class RouteCostFitnessComponent<T> extends
 
 	@Override
 	public long rawEvaluateSequence(IResource resource, ISequence<T> sequence,
-			List<VoyagePlan> plans) {
+			List<VoyagePlan> plans, final int startTime) {
 		final IVesselClass vesselClass = vesselProvider
 				.getVessel(resource).getVesselClass();
-		long totalCost = 0;
+//		long totalCost = 0;
+//
+//		for (final VoyagePlan plan : plans) {
+//			for (final Object obj : plan.getSequence()) {
+//				if (obj instanceof VoyageDetails) {
+//					final VoyageDetails<T> details = (VoyageDetails<T>) obj;
+//					final String route = details.getOptions().getRoute();
+//					final VesselState vesselState = details.getOptions()
+//							.getVesselState();
+//					totalCost += routeCostProvider.getRouteCost(route,
+//							vesselClass, vesselState);
+//				}
+//			}
+//		}
 
-		for (final VoyagePlan plan : plans) {
-			for (final Object obj : plan.getSequence()) {
-				if (obj instanceof VoyageDetails) {
-					final VoyageDetails<T> details = (VoyageDetails<T>) obj;
-					final String route = details.getOptions().getRoute();
-					final VesselState vesselState = details.getOptions()
-							.getVesselState();
-					totalCost += routeCostProvider.getRouteCost(route,
-							vesselClass, vesselState);
-				}
-			}
-		}
-
-		return 0;
+		return totalCost;
 	}
 
 	@Override
@@ -74,5 +74,36 @@ public class RouteCostFitnessComponent<T> extends
 
 	public void setVesselProvider(IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
+	}
+
+	@Override
+	public boolean shouldIterate() {
+		return true;
+	}
+
+	IVesselClass vesselClass;
+	long totalCost = 0;
+	
+	@Override
+	public void beginIterating(IResource resource) {
+		totalCost = 0;
+		vesselClass = vesselProvider.getVessel(resource).getVesselClass();
+	}
+
+	@Override
+	public void evaluateNextObject(final Object obj, final int startTime) {
+		if (obj instanceof VoyageDetails) {
+			final VoyageDetails<T> details = (VoyageDetails<T>) obj;
+			final String route = details.getOptions().getRoute();
+			final VesselState vesselState = details.getOptions()
+					.getVesselState();
+			totalCost += routeCostProvider.getRouteCost(route,
+					vesselClass, vesselState);
+		}		
+	}
+
+	@Override
+	public void endIterating() {
+		
 	}
 }
