@@ -1,10 +1,12 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
@@ -16,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -84,11 +87,9 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	 */
 	private int[] windowStarts;
 
-	/**
-	 * Flag passed to the {@link GASequenceScheduler} to indicate whether or not
-	 * it is allowed to adjust arrival times.
-	 */
-	private boolean adjustArrivalTimes = false;
+	VoyagePlanIterator<T> voyagePlanIterator = new VoyagePlanIterator<T>();
+	private ICargoSchedulerFitnessComponent<T>[] iteratingComponents;
+//	private List<ICargoSchedulerFitnessComponent<T>> iteratingComponents = new ArrayList<ICargoSchedulerFitnessComponent<T>>();
 
 	public IndividualEvaluator() {
 
@@ -103,8 +104,8 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		decode(individual, arrivalTimes);
 
 		// Use the sequence schedule to evaluate the arrival time profile.
-		final List<VoyagePlan> voyagePlans = sequenceScheduler.schedule(
-				resource, sequence, arrivalTimes, adjustArrivalTimes);
+		final Pair<Integer, List<VoyagePlan>> voyagePlans = sequenceScheduler
+				.schedule(resource, sequence, arrivalTimes);
 
 		// Was the set of arrival times valid?
 		if (voyagePlans == null) {
@@ -114,9 +115,13 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 		// Evaluate fitness
 		long totalFitness = 0;
+
+		voyagePlanIterator.iterateComponents(voyagePlans.getSecond(),
+				voyagePlans.getFirst().intValue(), resource, iteratingComponents);
+
 		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
 			final long rawFitness = component.rawEvaluateSequence(resource,
-					sequence, voyagePlans);
+					sequence, voyagePlans.getSecond(), voyagePlans.getFirst());
 
 			// Enable this block once weights are set
 			if (false) {
@@ -495,6 +500,15 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	public final void setFitnessComponents(
 			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
+		List<ICargoSchedulerFitnessComponent<T>> iteratingComponents = 
+			new ArrayList<ICargoSchedulerFitnessComponent<T>>();
+		for (ICargoSchedulerFitnessComponent<T> csfc : fitnessComponents) {
+			if (csfc.shouldIterate()) iteratingComponents.add(csfc);
+		}
+		this.iteratingComponents = new ICargoSchedulerFitnessComponent[iteratingComponents.size()];
+		for (int i = 0; i<iteratingComponents.size(); i++) {
+			this.iteratingComponents[i] = iteratingComponents.get(i);
+		}
 	}
 
 	public final Map<String, Double> getFitnessComponentWeights() {
@@ -526,14 +540,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		travelTimes = null;
 		multiplier = null;
 		windowStarts = null;
-	}
-
-	public boolean isAdjustArrivalTimes() {
-		return adjustArrivalTimes;
-	}
-
-	public void setAdjustArrivalTimes(final boolean adjustArrivalTimes) {
-		this.adjustArrivalTimes = adjustArrivalTimes;
 	}
 
 	public IVesselProvider getVesselProvider() {
