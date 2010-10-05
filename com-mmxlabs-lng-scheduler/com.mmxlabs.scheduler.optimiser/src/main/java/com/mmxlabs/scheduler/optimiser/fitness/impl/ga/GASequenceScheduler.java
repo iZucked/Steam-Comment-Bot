@@ -1,13 +1,18 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingAbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -20,8 +25,23 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class GASequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
 
+	static int TAG = 0;
+	
+	private static synchronized int getTag() {
+		return TAG++;
+	}
+	
+	BufferedWriter output;
+	
 	public GASequenceScheduler() {
-
+//		try {
+//			final File file = new File("/Users/hinton/Desktop/data/ga_random_scheduler_log" + getTag() + ".py");
+//			System.err.println("Log to " + file.getAbsolutePath());
+//			output = new BufferedWriter(new FileWriter(file));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			output = null;
+//		}
 	}
 
 	private long randomSeed;
@@ -37,8 +57,6 @@ public final class GASequenceScheduler<T> extends
 	
 	private int topN;
 
-	private boolean adjustArrivalTimes = false;
-
 	private IndividualEvaluator<T> individualEvaluator;
 
 	public void setIndividualEvaluator(
@@ -48,7 +66,7 @@ public final class GASequenceScheduler<T> extends
 	}
 
 	@Override
-	public List<VoyagePlan> schedule(final IResource resource,
+	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
 			final ISequence<T> sequence) {
 
 		final int numBytes = individualEvaluator.setup(resource, sequence);
@@ -74,7 +92,10 @@ public final class GASequenceScheduler<T> extends
 
 		final int numIterations = numBytes * iterationsByteMultiplier;
 		
+		long[] trace = new long[numIterations]; //LOGGING
+		
 		for (int i = 0; i < numIterations; ++i) {
+			trace[i] = algorithm.getBestFitness();
 			algorithm.step();
 		}
 
@@ -82,12 +103,20 @@ public final class GASequenceScheduler<T> extends
 		if (bestIndividual == null) {
 			return null;
 		}
+		
+//		if (output != null) {
+//			try {
+//				output.write("Schedule(" + numBytes + ", " + Arrays.toString(trace) +")\n");
+//				output.flush();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 
 		final int[] arrivalTimes = new int[sequence.size()];
 		individualEvaluator.decode(bestIndividual, arrivalTimes);
 
-		return super.schedule(resource, sequence, arrivalTimes,
-				adjustArrivalTimes);
+		return super.schedule(resource, sequence, arrivalTimes);
 	}
 
 	@Override
@@ -96,11 +125,6 @@ public final class GASequenceScheduler<T> extends
 		if (individualEvaluator == null) {
 			throw new IllegalStateException(
 					"Individual Evaluator has not been set");
-		}
-
-		if (adjustArrivalTimes != individualEvaluator.isAdjustArrivalTimes()) {
-			throw new IllegalStateException(
-					"Individual evaluator and scheduler disagree about adjusting arrival times");
 		}
 
 		if (populationSize == 0) {
@@ -173,13 +197,5 @@ public final class GASequenceScheduler<T> extends
 
 	public final void setRandomSeed(long randomSeed) {
 		this.randomSeed = randomSeed;
-	}
-
-	public boolean isAdjustArrivalTimes() {
-		return adjustArrivalTimes;
-	}
-
-	public void setAdjustArrivalTimes(boolean adjustArrivalTimes) {
-		this.adjustArrivalTimes = adjustArrivalTimes;
 	}
 }

@@ -44,14 +44,14 @@ public class RandomSequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 	BufferedWriter output;
 	
 	public RandomSequenceScheduler() {
-		try {
-			final File file = new File("/Users/hinton/Desktop/data/random_scheduler_log" + getTag() + ".py");
-			System.err.println("Log to " + file.getAbsolutePath());
-			output = new BufferedWriter(new FileWriter(file));
-		} catch (IOException e) {
-			e.printStackTrace();
-			output = null;
-		}
+//		try {
+//			final File file = new File("/Users/hinton/Desktop/data/random_scheduler_log" + getTag() + ".py");
+//			System.err.println("Log to " + file.getAbsolutePath());
+//			output = new BufferedWriter(new FileWriter(file));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			output = null;
+//		}
 	}
 	
 	@Override
@@ -86,14 +86,14 @@ public class RandomSequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 		final int[] arrivalTimes = new int[sequence.size()];
 		individualEvaluator.decode(best, arrivalTimes);
 
-		if (output != null) {
-			try {
-				output.write("Schedule(" + bytes + ", " + Arrays.toString(all_samples) +")\n");
-				output.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+//		if (output != null) {
+//			try {
+//				output.write("Schedule(" + bytes + ", " + Arrays.toString(all_samples) +")\n");
+//				output.flush();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		return super.schedule(resource, sequence, arrivalTimes);
 	}
