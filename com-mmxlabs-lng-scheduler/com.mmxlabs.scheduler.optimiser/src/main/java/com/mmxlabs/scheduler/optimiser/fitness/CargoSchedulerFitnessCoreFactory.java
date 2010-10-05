@@ -40,6 +40,7 @@ public final class CargoSchedulerFitnessCoreFactory implements
 //				return SchedulerUtils.createSimpleSequenceScheduler(data);
 //				return SchedulerUtils.createGASequenceScheduler(data, components);
 				return SchedulerUtils.createRandomSequenceScheduler(data, components);
+//				return SchedulerUtils.createEnumeratingSequenceScheduler(data, components);
 			}
 	};
 
