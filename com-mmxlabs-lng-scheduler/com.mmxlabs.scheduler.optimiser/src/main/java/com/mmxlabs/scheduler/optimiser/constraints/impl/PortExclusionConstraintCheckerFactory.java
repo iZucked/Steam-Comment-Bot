@@ -10,11 +10,10 @@ public class PortExclusionConstraintCheckerFactory implements
 	private final String exclusionProviderKey;
 	private final String vesselProviderKey;
 	private final String portProviderKey;
-	
-	
-	
-	public PortExclusionConstraintCheckerFactory(String exclusionProviderKey,
-			String vesselProviderKey, String portProviderKey) {
+
+	public PortExclusionConstraintCheckerFactory(
+			final String exclusionProviderKey, final String vesselProviderKey,
+			final String portProviderKey) {
 		super();
 		this.exclusionProviderKey = exclusionProviderKey;
 		this.vesselProviderKey = vesselProviderKey;
@@ -28,7 +27,7 @@ public class PortExclusionConstraintCheckerFactory implements
 
 	@Override
 	public <T> IConstraintChecker<T> instantiate() {
-		return new PortExclusionConstraintChecker<T>(NAME, exclusionProviderKey, vesselProviderKey, portProviderKey);
+		return new PortExclusionConstraintChecker<T>(NAME,
+				exclusionProviderKey, vesselProviderKey, portProviderKey);
 	}
-
 }

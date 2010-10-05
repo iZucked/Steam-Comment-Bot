@@ -21,7 +21,8 @@ public final class FBOVoyagePlanChoice implements IVoyagePlanChoice {
 		this.options = options;
 	}
 
-	public boolean reset() {
+	@Override
+	public final boolean reset() {
 		for (int i = 0; i < numChoices(); i++) {
 			if (apply(i)) {
 				return true;
@@ -31,7 +32,7 @@ public final class FBOVoyagePlanChoice implements IVoyagePlanChoice {
 	}
 
 	@Override
-	public boolean nextChoice() {
+	public final boolean nextChoice() {
 		while (true) {
 			if (choice + 1 == numChoices()) {
 				return true;
@@ -43,13 +44,13 @@ public final class FBOVoyagePlanChoice implements IVoyagePlanChoice {
 	}
 
 	@Override
-	public int numChoices() {
+	public final int numChoices() {
 
 		return 2;
 	}
 
 	@Override
-	public boolean apply(final int choice) {
+	public final boolean apply(final int choice) {
 		this.choice = choice;
 		final boolean useFBOForSupplement = choice == 0;
 		options.setUseFBOForSupplement(useFBOForSupplement);
@@ -63,7 +64,7 @@ public final class FBOVoyagePlanChoice implements IVoyagePlanChoice {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 
 		if (obj instanceof FBOVoyagePlanChoice) {
 

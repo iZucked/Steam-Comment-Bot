@@ -4,6 +4,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
  * {@link IConstraintCheckerFactory} implementation to create
@@ -22,12 +23,13 @@ public final class PortTypeConstraintCheckerFactory implements
 	private String vesselKey;
 
 	/**
-	 * Constructor taking the key to use in {@link IOptimisationData} to find
-	 * the {@link IPortTypeProvider}.
+	 * Constructor taking the keys to use in {@link IOptimisationData} to find
+	 * the {@link IPortTypeProvider} and {@link IVesselProvider}.
 	 * 
 	 * @param key
 	 */
-	public PortTypeConstraintCheckerFactory(final String key, final String vesselKey) {
+	public PortTypeConstraintCheckerFactory(final String key,
+			final String vesselKey) {
 		this.key = key;
 		this.vesselKey = vesselKey;
 	}

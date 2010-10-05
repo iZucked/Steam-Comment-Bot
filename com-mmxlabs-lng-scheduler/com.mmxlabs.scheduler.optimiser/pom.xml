@@ -9,7 +9,16 @@
 
 	<description>LNG Scheduler </description>
 
+	<issueManagement>
+		<system>CodebaseHQ</system>
+		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
+	</issueManagement>
 	<inceptionYear>2010</inceptionYear>
+	<scm>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler.h</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler.h</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-lng-scheduler/</url>
+	</scm>
 	<organization>
 		<name>Minimax Labs</name>
 	</organization>
