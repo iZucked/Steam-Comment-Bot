@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @param <U>
  *            Value type
  */
-public interface IMultiMatrixProvider<T, U> extends IDataComponentProvider {
+public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataComponentProvider {
 
 	/**
 	 * Class representing an entry from a {@link IMatrixProvider}.
@@ -30,7 +30,7 @@ public interface IMultiMatrixProvider<T, U> extends IDataComponentProvider {
 	 * @param <U>
 	 *            Value type
 	 */
-	public static final class MatrixEntry<T, U> {
+	public static final class MatrixEntry<T, U extends Comparable<U>> implements Comparable<MatrixEntry<T, U>> {
 
 		private final String key;
 
@@ -61,6 +61,10 @@ public interface IMultiMatrixProvider<T, U> extends IDataComponentProvider {
 
 		public final U getValue() {
 			return value;
+		}
+		
+		public final int compareTo(final MatrixEntry<T, U> other) {
+			return value.compareTo(other.value);
 		}
 	}
 

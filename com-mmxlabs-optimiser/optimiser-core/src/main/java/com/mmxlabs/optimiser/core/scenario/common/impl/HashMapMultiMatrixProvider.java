@@ -23,7 +23,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
  * @param <U>
  *            Value type
  */
-public final class HashMapMultiMatrixProvider<T, U> implements
+public final class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements
 		IMultiMatrixProvider<T, U>, IMultiMatrixEditor<T, U> {
 
 	private final HashMap<String, IMatrixProvider<T, U>> matricies;

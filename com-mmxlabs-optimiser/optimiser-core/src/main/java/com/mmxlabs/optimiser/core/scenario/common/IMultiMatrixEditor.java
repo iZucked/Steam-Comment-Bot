@@ -10,7 +10,7 @@ package com.mmxlabs.optimiser.core.scenario.common;
  * @param <U>
  *            Value type
  */
-public interface IMultiMatrixEditor<T, U> extends IMultiMatrixProvider<T, U> {
+public interface IMultiMatrixEditor<T, U extends Comparable<U>> extends IMultiMatrixProvider<T, U> {
 
 	/**
 	 * Set the matrix provider for the given key.
