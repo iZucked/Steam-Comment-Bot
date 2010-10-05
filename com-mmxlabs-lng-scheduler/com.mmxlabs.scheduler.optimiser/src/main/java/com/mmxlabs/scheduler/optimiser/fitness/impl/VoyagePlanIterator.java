@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -109,5 +111,17 @@ public final class VoyagePlanIterator<T> {
 		for (final ICargoSchedulerFitnessComponent<T> component : iteratingComponents) {
 			component.endIterating();
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static final <T> ICargoSchedulerFitnessComponent<T>[] filterIteratingComponents(
+			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
+		final ArrayList<ICargoSchedulerFitnessComponent<T>> result = new ArrayList<ICargoSchedulerFitnessComponent<T>>();
+		for (ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
+			if (component.shouldIterate()) {
+				result.add(component);
+			}
+		}
+		return result.toArray(new ICargoSchedulerFitnessComponent[]{});
 	}
 }
