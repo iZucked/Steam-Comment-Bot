@@ -182,18 +182,13 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// scheduler = SchedulerUtils.createSimpleSequenceScheduler(data);
 		scheduler = schedulerFactory.createScheduler(data, components);
 		/* SchedulerUtils.createGASequenceScheduler(data, components); */
-
-		List<ICargoSchedulerFitnessComponent<T>> iterators = new ArrayList<ICargoSchedulerFitnessComponent<T>>();
+		
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.init(data);
-			if (c.shouldIterate())
-				iterators.add(c);
 		}
-		this.iterators = new ICargoSchedulerFitnessComponent[iterators.size()];
-		for (int i = 0; i<iterators.size(); i++) {
-			this.iterators[i] = iterators.get(i);
-		}
+		
+		iterators = VoyagePlanIterator.filterIteratingComponents(components);
 	}
 
 	final VoyagePlanIterator<T> iterator = new VoyagePlanIterator<T>();

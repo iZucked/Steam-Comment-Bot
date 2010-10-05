@@ -96,14 +96,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	}
 
-	@SuppressWarnings("unused")
-	@Override
-	public final long evaluate(final Individual individual) {
-
-		// Decode into a set of start times
-		final int[] arrivalTimes = new int[ranges.length];
-		decode(individual, arrivalTimes);
-
+	public final long evaluate(final int[] arrivalTimes) {
 		// Use the sequence schedule to evaluate the arrival time profile.
 		final Pair<Integer, List<VoyagePlan>> voyagePlans = sequenceScheduler
 				.schedule(resource, sequence, arrivalTimes);
@@ -140,6 +133,15 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 			}
 		}
 		return totalFitness;
+	}
+	
+	@SuppressWarnings("unused")
+	@Override
+	public final long evaluate(final Individual individual) {
+		// Decode into a set of start times
+		final int[] arrivalTimes = new int[ranges.length];
+		decode(individual, arrivalTimes);
+		return evaluate(arrivalTimes);
 	}
 
 	/**
@@ -506,16 +508,8 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	public final void setFitnessComponents(
 			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
-		this.fitnessComponents = fitnessComponents;
-		List<ICargoSchedulerFitnessComponent<T>> iteratingComponents = 
-			new ArrayList<ICargoSchedulerFitnessComponent<T>>();
-		for (ICargoSchedulerFitnessComponent<T> csfc : fitnessComponents) {
-			if (csfc.shouldIterate()) iteratingComponents.add(csfc);
-		}
-		this.iteratingComponents = new ICargoSchedulerFitnessComponent[iteratingComponents.size()];
-		for (int i = 0; i<iteratingComponents.size(); i++) {
-			this.iteratingComponents[i] = iteratingComponents.get(i);
-		}
+		this.fitnessComponents = fitnessComponents;		
+		iteratingComponents = VoyagePlanIterator.filterIteratingComponents(fitnessComponents);
 	}
 
 	public final Map<String, Double> getFitnessComponentWeights() {
