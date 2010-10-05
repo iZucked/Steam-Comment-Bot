@@ -13,16 +13,22 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<description>Project containing commonly used classes and utility
-		functions.</description>
+	<description>Project containing commonly used classes and utility functions.</description>
+	<issueManagement>
+		<system>CodebaseHQ</system>
+		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
+	</issueManagement>
 	<inceptionYear>2010</inceptionYear>
 
 	<scm>
-		<url>ssh://codebasehq.com/mmxlabs/repositories/com-mmxlabs-common-util.hg</url>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-common-util.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-common-util.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-common-util/</url>
 	</scm>
 
 	<organization>
 		<name>Minimax Labs</name>
+		<url>http://www.minimaxlabs.com/</url>
 	</organization>
 
 	<build>
@@ -62,7 +68,7 @@
 						<manifestFile>META-INF/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>
-      			</plugin>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

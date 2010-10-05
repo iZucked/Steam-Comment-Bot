@@ -1,6 +1,16 @@
 package com.mmxlabs.common.recorder;
 
-public class XmlRecordingConstants {
+/**
+ * Set of constants used in the {@link InterfaceRecorder} to generate XML files.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public final class XmlRecordingConstants {
+
+	private XmlRecordingConstants() {
+
+	}
 
 	public static final String ELEMENT_OPERATIONS = "operations";
 	public static final String ATTR_OPERATIONS_INTERFACE = "interface";
@@ -13,6 +23,5 @@ public class XmlRecordingConstants {
 	public static final String ATTR_ARGUMENT_TYPE = "type";
 	public static final String ATTR_ARGUMENT_VALUE = "value";
 	public static final String ATTR_ARGUMENT_REF = "ref";
-
 
 }

@@ -15,6 +15,10 @@ import java.util.Set;
  */
 public final class CollectionsUtil {
 
+	private CollectionsUtil() {
+		
+	}
+	
 	/**
 	 * Create a {@link ArrayList} of objects from an unbounded list.
 	 * 

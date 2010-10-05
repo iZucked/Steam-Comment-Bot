@@ -17,7 +17,7 @@ public class Options {
 
 	StringBuilder allHelp = new StringBuilder();
 
-	public Options(String optionPrefix) {
+	public Options(final String optionPrefix) {
 		this.optionPrefix = optionPrefix;
 		this.parsers = new HashMap<String, OptionParser>();
 		this.results = new HashMap<String, Object>();
@@ -106,16 +106,16 @@ public class Options {
 		return result.toString();
 	}
 
-	public void addOption(String name, OptionParser parser) {
+	public void addOption(final String name, final OptionParser parser) {
 		addOption(name, "undocumented", parser);
 	}
 
-	public void addOption(String[] names, OptionParser parser) {
+	public void addOption(final String[] names, final OptionParser parser) {
 		addOption(names, "undocumented", parser);
 	}
 
-	public void addOption(String[] names, String help, OptionParser parser) {
-		for (String name : names) {
+	public void addOption(final String[] names, final String help, final OptionParser parser) {
+		for (final String name : names) {
 			parsers.put(name, parser);
 		}
 		if (help != null) {
@@ -142,13 +142,13 @@ public class Options {
 		return allHelp.toString();
 	}
 
-	public void addOption(String name, String help, OptionParser parser) {
+	public void addOption(final String name, final String help, final OptionParser parser) {
 		addOption(new String[] { name }, help, parser);
 	}
 
 	// TODO cleanup
 	@SuppressWarnings("unchecked")
-	public <T> T getOption(String s) {
+	public <T> T getOption(final String s) {
 		if (results.containsKey(s)) {
 			return (T) results.get(s);
 		} else if (parsers.containsKey(s)) {
@@ -161,17 +161,18 @@ public class Options {
 		}
 	}
 
-	public List<String> parse(List<String> args) throws InvalidOptionException,
-			InvalidArgumentException {
-		Iterator<String> it = args.iterator();
-		List<String> spare = new ArrayList<String>();
+	public List<String> parse(final List<String> args) 
+		throws  InvalidOptionException, InvalidArgumentException
+	{
+		final Iterator<String> it = args.iterator();
+		final List<String> spare = new ArrayList<String>();
 		while (it.hasNext()) {
-			String arg = it.next();
+			final String arg = it.next();
 			if (arg.startsWith(optionPrefix)) {
 				// split off the prefix and lookup the parser
-				String opt = arg.substring(optionPrefix.length());
+				final String opt = arg.substring(optionPrefix.length());
 				if (parsers.containsKey(opt)) {
-					OptionParser parser = parsers.get(opt);
+					final OptionParser parser = parsers.get(opt);
 					try {
 						results.put(opt, parser.parse(opt, it));
 					} catch (InvalidArgumentException ex) {
@@ -190,37 +191,37 @@ public class Options {
 		return spare;
 	}
 
-	public List<String> parse(String[] args) throws InvalidOptionException,
-			InvalidArgumentException {
+	public List<String> parse(final String[] args) throws InvalidOptionException, InvalidArgumentException {
 		return parse(Arrays.asList(args));
 	}
 
-	public boolean hasOption(String s) {
+	public boolean hasOption(final String s) {
 		if (results.containsKey(s))
 			return true;
 		else
 			return parsers.containsKey(s) && parsers.get(s).hasDefaultValue();
 	}
 
-	private final String quoteify(Object o) {
+	private final String quoteify(final Object o) {
 		return "\"" + o.toString().replace("\"", "\\\"") + "\"";
 	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		final StringBuffer sb = new StringBuffer();
 
 		sb.append("{");
 
 		boolean b = false;
-		for (Map.Entry<String, Object> e : results.entrySet()) {
+		for (final Map.Entry<String, Object> e : results.entrySet()) {
 			if (b)
 				sb.append(", ");
 			b = true;
 			sb.append("\n");
 			sb.append("    ");
-			sb.append(quoteify(e.getKey()) + ":" + quoteify(e.getValue()));
-
+			sb.append(quoteify(e.getKey()));
+			sb.append(":");
+			sb.append(quoteify(e.getValue()));
 		}
 
 		sb.append("\n}");
