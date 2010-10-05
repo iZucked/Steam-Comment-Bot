@@ -38,4 +38,15 @@ public final class RandomHelper {
 	public static final <T> T chooseElementFrom(final Random random, final List<T> collection) {
 		return collection.get(random.nextInt(collection.size()));
 	}
+
+	/**
+	 * Return a random integer uniformly distributed from min to max (inclusive).
+	 * @param random
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public static final int nextIntBetween(final Random random, final int min, final int max) {
+		return min + random.nextInt(max - min + 1);
+	}
 }
