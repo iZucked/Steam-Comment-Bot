@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.ISequence;
  * @param <T>
  *            Sequence element type
  */
-final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
+public final class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 
 	private final ISequence<T> wrapped;
 
@@ -27,7 +27,7 @@ final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 	}
 
 	@Override
-	public Iterator<T> iterator() {
+	public final Iterator<T> iterator() {
 
 		/**
 		 * A new anonymous Iterator wrapping iterator from the 'wrapped'
@@ -36,32 +36,32 @@ final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 		return new Iterator<T>() {
 			private final Iterator<? extends T> i = wrapped.iterator();
 
-			public boolean hasNext() {
+			public final boolean hasNext() {
 				return i.hasNext();
 			}
 
-			public T next() {
+			public final T next() {
 				return i.next();
 			}
 
-			public void remove() {
+			public final void remove() {
 				throw new UnsupportedOperationException();
 			}
 		};
 	}
 
 	@Override
-	public T get(final int index) {
+	public final T get(final int index) {
 		return wrapped.get(index);
 	}
 
 	@Override
-	public ISegment<T> getSegment(final int start, final int end) {
+	public final ISegment<T> getSegment(final int start, final int end) {
 		return wrapped.getSegment(start, end);
 	}
 
 	@Override
-	public int size() {
+	public final int size() {
 		return wrapped.size();
 	}
 
@@ -71,7 +71,7 @@ final public class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 	}
 
 	@Override
-	public T first() {
+	public final T first() {
 		return wrapped.first();
 	}
 }

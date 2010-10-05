@@ -31,7 +31,7 @@ public final class Move4over2<T> implements IMove<T> {
 	private int resource2Start = -1, resource2End = -1;
 
 	@Override
-	public void apply(final IModifiableSequences<T> sequences) {
+	public final void apply(final IModifiableSequences<T> sequences) {
 
 		// Get sequences
 		final IModifiableSequence<T> sequence1 = sequences
@@ -55,12 +55,12 @@ public final class Move4over2<T> implements IMove<T> {
 	}
 
 	@Override
-	public Collection<IResource> getAffectedResources() {
+	public final Collection<IResource> getAffectedResources() {
 		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 
 	@Override
-	public boolean validate(final ISequences<T> sequences) {
+	public final boolean validate(final ISequences<T> sequences) {
 
 		// Validate basic parameters
 		if (resource1 == null) {
@@ -112,56 +112,56 @@ public final class Move4over2<T> implements IMove<T> {
 		return true;
 	}
 
-	public IResource getResource1() {
+	public final IResource getResource1() {
 		return resource1;
 	}
 
-	public void setResource1(final IResource resource1) {
+	public final void setResource1(final IResource resource1) {
 		this.resource1 = resource1;
 	}
 
-	public IResource getResource2() {
+	public final IResource getResource2() {
 		return resource2;
 	}
 
-	public void setResource2(final IResource resource2) {
+	public final void setResource2(final IResource resource2) {
 		this.resource2 = resource2;
 	}
 
-	public int getResource1Start() {
+	public final int getResource1Start() {
 		return resource1Start;
 	}
 
-	public void setResource1Start(final int resource1Start) {
+	public final void setResource1Start(final int resource1Start) {
 		this.resource1Start = resource1Start;
 	}
 
-	public int getResource1End() {
+	public final int getResource1End() {
 		return resource1End;
 	}
 
-	public void setResource1End(final int resource1End) {
+	public final void setResource1End(final int resource1End) {
 		this.resource1End = resource1End;
 	}
 
-	public int getResource2Start() {
+	public final int getResource2Start() {
 		return resource2Start;
 	}
 
-	public void setResource2Start(final int resource2Start) {
+	public final void setResource2Start(final int resource2Start) {
 		this.resource2Start = resource2Start;
 	}
 
-	public int getResource2End() {
+	public final int getResource2End() {
 		return resource2End;
 	}
 
-	public void setResource2End(final int resource2End) {
+	public final void setResource2End(final int resource2End) {
 		this.resource2End = resource2End;
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return String.format("r1 (%s) [%d -> %d], r2 (%s) [%d -> %d]",
 				getResource1(), getResource1Start(), getResource1End(),
 				getResource2(), getResource2Start(), getResource2End());

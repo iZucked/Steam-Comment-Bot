@@ -35,6 +35,7 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @author hinton
  *
  * @param <T>
+ *            Sequence element type
  */
 public class Move2over2<T> implements IMove<T> {
 	/**
@@ -54,17 +55,15 @@ public class Move2over2<T> implements IMove<T> {
 	private int resource2Position;
 	private IResource resource1, resource2;
 	
-	
-	
 	@Override
-	public Collection<IResource> getAffectedResources() {
+	public final Collection<IResource> getAffectedResources() {
 		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 
 	@Override
-	public void apply(IModifiableSequences<T> sequences) {
-		IModifiableSequence<T> A = sequences.getModifiableSequence(resource1);
-		IModifiableSequence<T> B = sequences.getModifiableSequence(resource2);
+	public final void apply(final IModifiableSequences<T> sequences) {
+		final IModifiableSequence<T> A = sequences.getModifiableSequence(resource1);
+		final IModifiableSequence<T> B = sequences.getModifiableSequence(resource2);
 		
 		final int end1 = A.size() - (preserveStartAndEnd ? 1 : 0);
 		final int end2 = B.size() - (preserveStartAndEnd ? 1 : 0);
@@ -79,7 +78,7 @@ public class Move2over2<T> implements IMove<T> {
 	}
 
 	@Override
-	public boolean validate(ISequences<T> sequences) {
+	public final boolean validate(final ISequences<T> sequences) {
 		try {
 			final int offset = preserveStartAndEnd ? 1 : 0;
 			if (resource1 == null) return false;
@@ -94,55 +93,55 @@ public class Move2over2<T> implements IMove<T> {
 			if (resource1Position >= (A.size() /*-  offset*/)) return false;
 			if (resource2Position >= (B.size() /*-  offset*/)) return false;
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return false;
 		}
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return String.format("r1 (%s) %d, r2 (%s) %d %s",
 				resource1.getName(), resource1Position, resource2.getName(), resource2Position, 
 				preserveStartAndEnd ? "(preserve start and end)" : "");
 	}
 
-	public boolean isPreserveStartAndEnd() {
+	public final boolean isPreserveStartAndEnd() {
 		return preserveStartAndEnd;
 	}
 
-	public void setPreserveStartAndEnd(boolean preserveStartAndEnd) {
+	public final void setPreserveStartAndEnd(final boolean preserveStartAndEnd) {
 		this.preserveStartAndEnd = preserveStartAndEnd;
 	}
 
-	public int getResource1Position() {
+	public final int getResource1Position() {
 		return resource1Position;
 	}
 
-	public void setResource1Position(int resource1Position) {
+	public final void setResource1Position(final int resource1Position) {
 		this.resource1Position = resource1Position;
 	}
 
-	public int getResource2Position() {
+	public final int getResource2Position() {
 		return resource2Position;
 	}
 
-	public void setResource2Position(int resource2Position) {
+	public final void setResource2Position(final int resource2Position) {
 		this.resource2Position = resource2Position;
 	}
 
-	public IResource getResource1() {
+	public final IResource getResource1() {
 		return resource1;
 	}
 
-	public void setResource1(IResource resource1) {
+	public final void setResource1(final IResource resource1) {
 		this.resource1 = resource1;
 	}
 
-	public IResource getResource2() {
+	public final IResource getResource2() {
 		return resource2;
 	}
 
-	public void setResource2(IResource resource2) {
+	public final void setResource2(final IResource resource2) {
 		this.resource2 = resource2;
 	}
 }

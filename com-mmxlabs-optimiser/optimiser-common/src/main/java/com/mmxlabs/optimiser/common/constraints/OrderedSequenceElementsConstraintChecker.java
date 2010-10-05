@@ -116,10 +116,10 @@ public final class OrderedSequenceElementsConstraintChecker<T> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setOptimisationData(final IOptimisationData<T> optimisationData) {
-		final IOrderedSequenceElementsDataComponentProvider<T> provider = optimisationData
+		final IOrderedSequenceElementsDataComponentProvider<T> dataProvider = optimisationData
 				.getDataComponentProvider(dataProviderKey,
 						IOrderedSequenceElementsDataComponentProvider.class);
-		setProvider(provider);
+		setProvider(dataProvider);
 	}
 
 	@Override
@@ -128,14 +128,15 @@ public final class OrderedSequenceElementsConstraintChecker<T> implements
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+	public boolean checkPairwiseConstraint(final T first, final T second,
+			final IResource resource) {
 		final T afterFirst = provider.getNextElement(first);
 		if (afterFirst == null) {
 			final T beforeSecond = provider.getPreviousElement(second);
 			if (beforeSecond == null) {
 				return true;
 			} else {
-				//This should be reflexive anyway.
+				// This should be reflexive anyway.
 				return first.equals(beforeSecond);
 			}
 		} else {
@@ -144,7 +145,8 @@ public final class OrderedSequenceElementsConstraintChecker<T> implements
 	}
 
 	@Override
-	public String explain(T first, T second, IResource resource) {
+	public String explain(final T first, final T second,
+			final IResource resource) {
 		// TODO Auto-generated method stub
 		return null;
 	}

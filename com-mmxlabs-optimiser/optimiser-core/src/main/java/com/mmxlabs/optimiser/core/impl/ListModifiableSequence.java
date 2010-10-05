@@ -103,12 +103,12 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		
+	public boolean equals(final Object obj) {
+
 		if (obj instanceof ListModifiableSequence) {
-			return list.equals(((ListModifiableSequence)obj).list);
+			return list.equals(((ListModifiableSequence) obj).list);
 		} else if (obj instanceof ISequence) {
-			ISequence seq = (ISequence)obj;
+			final ISequence seq = (ISequence) obj;
 			if (seq.size() != size()) {
 				return false;
 			}
@@ -116,17 +116,18 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 			it1 = iterator();
 			it2 = seq.iterator();
 			while (it1.hasNext()) {
-				if (it1.next().equals(it2.next()) == false) return false;
+				if (it1.next().equals(it2.next()) == false)
+					return false;
 			}
 			return true;
-		
+
 		}
 		return false;
 	}
 
 	@Override
 	public final T last() {
-		return get(size()-1);
+		return get(size() - 1);
 	}
 
 	@Override

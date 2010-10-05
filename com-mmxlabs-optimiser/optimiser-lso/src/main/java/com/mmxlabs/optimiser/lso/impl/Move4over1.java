@@ -30,7 +30,7 @@ public final class Move4over1<T> implements IMove<T> {
 	private int segment2Start = -1, segment2End = -1;
 
 	@Override
-	public void apply(final IModifiableSequences<T> sequences) {
+	public final void apply(final IModifiableSequences<T> sequences) {
 
 		// Get sequences
 		final IModifiableSequence<T> sequence = sequences
@@ -64,12 +64,12 @@ public final class Move4over1<T> implements IMove<T> {
 	}
 
 	@Override
-	public Collection<IResource> getAffectedResources() {
+	public final Collection<IResource> getAffectedResources() {
 		return Collections.singletonList(resource);
 	}
 
 	@Override
-	public boolean validate(final ISequences<T> sequences) {
+	public final boolean validate(final ISequences<T> sequences) {
 
 		// Validate basic parameters
 		if (resource == null) {
@@ -118,48 +118,48 @@ public final class Move4over1<T> implements IMove<T> {
 		return true;
 	}
 
-	public IResource getResource() {
+	public final IResource getResource() {
 		return resource;
 	}
 
-	public void setResource(final IResource resource) {
+	public final void setResource(final IResource resource) {
 		this.resource = resource;
 	}
 
-	public int getSegment1Start() {
+	public final int getSegment1Start() {
 		return segment1Start;
 	}
 
-	public void setSegment1Start(final int segment1Start) {
+	public final void setSegment1Start(final int segment1Start) {
 		this.segment1Start = segment1Start;
 	}
 
-	public int getSegment1End() {
+	public final int getSegment1End() {
 		return segment1End;
 	}
 
-	public void setSegment1End(final int segment1End) {
+	public final void setSegment1End(final int segment1End) {
 		this.segment1End = segment1End;
 	}
 
-	public int getSegment2Start() {
+	public final int getSegment2Start() {
 		return segment2Start;
 	}
 
-	public void setSegment2Start(final int segment2Start) {
+	public final void setSegment2Start(final int segment2Start) {
 		this.segment2Start = segment2Start;
 	}
 
-	public int getSegment2End() {
+	public final int getSegment2End() {
 		return segment2End;
 	}
 
-	public void setSegment2End(final int segment2End) {
+	public final void setSegment2End(final int segment2End) {
 		this.segment2End = segment2End;
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return String.format("r1 (%s) [%d -> %d], [%d -> %d]", getResource(),
 				getSegment1Start(), getSegment1End(), getSegment2Start(),
 				getSegment2End());
