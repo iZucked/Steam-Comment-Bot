@@ -10,6 +10,9 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.GASequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.IndividualEvaluator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.RandomSequenceScheduler;
@@ -25,7 +28,7 @@ public final class SchedulerUtils {
 	private SchedulerUtils() {
 
 	}
-
+	
 	/**
 	 * Create a new {@link ISequenceScheduler} instance.
 	 * 
@@ -104,13 +107,17 @@ public final class SchedulerUtils {
 			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
 		return createGASequenceScheduler(data, fitnessComponents, DEFAULT_VPO_CACHE_SIZE);
 	}
-	
-	public static <T> RandomSequenceScheduler createRandomSequenceScheduler(
-			final IOptimisationData<T> data,
-			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents,
-			int vpoCacheSize) {
-		final RandomSequenceScheduler<T> scheduler = new RandomSequenceScheduler<T>();
 
+	/**
+	 * Set all the standard DCPs for any abstract sequence scheduler 
+	 * @param <T>
+	 * @param data
+	 * @param scheduler
+	 */
+	@SuppressWarnings("unchecked")
+	private static <T> void setDataComponentProviders(
+			final IOptimisationData<T> data,
+			final AbstractSequenceScheduler<T> scheduler) {
 		final IMultiMatrixProvider<IPort, Integer> distanceProvider = data
 				.getDataComponentProvider(
 						SchedulerConstants.DCP_portDistanceProvider,
@@ -148,14 +155,49 @@ public final class SchedulerUtils {
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(
 				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		scheduler.setVesselProvider(vesselProvider);
+	}
+
+	/**
+	 * Create an {@link EnumeratingSequenceScheduler}, which enumerates all feasible arrival time combinations.
+	 * @param <T>
+	 * @param data
+	 * @param fitnessComponents
+	 * @param vpoCacheSize
+	 * @return
+	 */
+	public static <T> EnumeratingSequenceScheduler<T> createEnumeratingSequenceScheduler(
+			final IOptimisationData<T> data, 
+			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents,
+			final int vpoCacheSize) {
+		final EnumeratingSequenceScheduler<T> scheduler = new DirectRandomSequenceScheduler<T>();
+		final ScheduleEvaluator<T> evaluator = new ScheduleEvaluator<T>(); 
+		
+		//set up scheduler
+		setDataComponentProviders(data, scheduler);
+		scheduler.setVoyagePlanOptimiser((IVoyagePlanOptimiser<T>) createVPO(vpoCacheSize));
+		scheduler.setScheduleEvaluator(evaluator);
+		
+		evaluator.setFitnessComponents(fitnessComponents);
+		
+		return scheduler;
+	}
+	
+	public static <T> RandomSequenceScheduler<T> createRandomSequenceScheduler(
+			final IOptimisationData<T> data,
+			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents,
+			int vpoCacheSize) {
+		final RandomSequenceScheduler<T> scheduler = new RandomSequenceScheduler<T>();
+
+		setDataComponentProviders(data, scheduler);
 
 		scheduler
 				.setVoyagePlanOptimiser((IVoyagePlanOptimiser<T>) createVPO(vpoCacheSize));
 
 		final IndividualEvaluator<T> individualEvaluator = createIndividualEvaluator(
-				scheduler, timeWindowProvider, fitnessComponents,
-				distanceProvider, portProvider, durationsProvider,
-				vesselProvider);
+				scheduler, scheduler.getTimeWindowProvider(),
+				fitnessComponents, scheduler.getDistanceProvider(),
+				scheduler.getPortProvider(), scheduler.getDurationsProvider(),
+				scheduler.getVesselProvider());
 
 		individualEvaluator.init();
 
@@ -200,52 +242,17 @@ public final class SchedulerUtils {
 
 		final GASequenceScheduler<T> scheduler = new GASequenceScheduler<T>();
 
-		final IMultiMatrixProvider<IPort, Integer> distanceProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portDistanceProvider,
-						IMultiMatrixProvider.class);
-
-		scheduler.setDistanceProvider(distanceProvider);
-
-		final IElementDurationProvider<T> durationsProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_elementDurationsProvider,
-						IElementDurationProvider.class);
-		scheduler.setDurationsProvider(durationsProvider);
-
-		final IPortProvider portProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_portProvider, IPortProvider.class);
-		scheduler.setPortProvider(portProvider);
-
-		final ITimeWindowDataComponentProvider timeWindowProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_timeWindowProvider,
-						ITimeWindowDataComponentProvider.class);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-
-		final IPortSlotProvider<T> portSlotProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portSlotsProvider,
-						IPortSlotProvider.class);
-
-		scheduler.setPortSlotProvider(portSlotProvider);
-
-		scheduler.setPortTypeProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portTypeProvider,
-				IPortTypeProvider.class));
-
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		scheduler.setVesselProvider(vesselProvider);
+		setDataComponentProviders(data, scheduler);
 
 		scheduler
 				.setVoyagePlanOptimiser((IVoyagePlanOptimiser<T>) createVPO(vpoCacheSize));
 
 		// Set GA params
 		final IndividualEvaluator<T> individualEvaluator = createIndividualEvaluator(
-				scheduler, timeWindowProvider, fitnessComponents,
-				distanceProvider, portProvider, durationsProvider,
-				vesselProvider);
+				scheduler, scheduler.getTimeWindowProvider(),
+				fitnessComponents, scheduler.getDistanceProvider(),
+				scheduler.getPortProvider(), scheduler.getDurationsProvider(),
+				scheduler.getVesselProvider());
 
 		// TODO: Use same weights as passed into LinearCombiner?
 		// individualEvaluator.setFitnessComponentWeights(null);
@@ -269,8 +276,14 @@ public final class SchedulerUtils {
 		return scheduler;
 	}
 
-	public static ISequenceScheduler createRandomSequenceScheduler(
-			IOptimisationData data, Collection components) {
+	public static <T> ISequenceScheduler<T> createRandomSequenceScheduler(
+			IOptimisationData<T> data, Collection<ICargoSchedulerFitnessComponent<T>> components) {
 		return createRandomSequenceScheduler(data, components, DEFAULT_VPO_CACHE_SIZE);
 	}
+
+	public static <T> ISequenceScheduler<T> createEnumeratingSequenceScheduler(
+			IOptimisationData<T> data, Collection<ICargoSchedulerFitnessComponent<T>> components) {
+		return createEnumeratingSequenceScheduler(data, components, DEFAULT_VPO_CACHE_SIZE);
+	}
+
 }
