@@ -48,19 +48,36 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		final String outputFileName = details.getFileName();
 		
-		/*
-		 * Have to create scenario first, because otherwise it won't be
-		 * registered with the resourcesetimpl when we try to save.
-		 */
 		Scenario scenario = null;
 
 		try {
 			RandomScenarioUtils utils = new RandomScenarioUtils();
-			scenario = utils.createRandomScenario(details.getMatrixURI()
-					.toFileString(), 
-					details.getSlotsURI().toFileString(),
-					details.shouldCreateVesselClasses(),
-					details.getCargoCount(), true);
+			scenario = utils.createScenario();
+			final String matrixPath = details.getMatrixURI().toFileString();
+			final String slotsPath = details.getSlotsURI().toFileString();
+			
+			utils.addDistanceModel(scenario, matrixPath);
+			
+			if (details.shouldCreateVesselClasses()) {
+				//default setting: add 3* each vessel class as a charter-in
+				utils.addDefaultFleet(scenario, 3);
+			}
+			
+			if (details.getCargoCount() > 0) {
+				// default settings:
+				// 6 hr time windows, 24 hr visits, 1-15 days of slack between pickup and delivery, 
+				// no locality bias and 1 year total duration.
+				
+				// if you want to control all of these variables, there is a command-line
+				// class called {@link HeadlessScenarioGenerator} which exposes these parameters
+				
+				utils.addRandomCargoes(scenario, matrixPath, slotsPath, details.getCargoCount(), 
+						6, 6, 24, 24, 1, 15, 0, 365);
+			}
+			
+			utils.addCharterOuts(scenario, 1, 25, 35, 365);
+			utils.addStandardSettings(scenario);
+			
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 			return false;
