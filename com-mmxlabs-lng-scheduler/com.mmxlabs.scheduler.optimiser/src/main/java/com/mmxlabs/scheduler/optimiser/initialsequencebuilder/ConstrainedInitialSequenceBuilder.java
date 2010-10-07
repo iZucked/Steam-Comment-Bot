@@ -304,10 +304,10 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				final int rc1 = chunk1.getResourceCount();
 				final int rc2 = chunk2.getResourceCount();
 
-//				if (rc1 < rc2)
-//					return -1;
-//				else if (rc1 > rc2)
-//					return 1;
+				if (rc1 < rc2)
+					return -1;
+				else if (rc1 > rc2)
+					return 1;
 
 				final T o1 = chunk1.get(0);
 				final T o2 = chunk2.get(0);
