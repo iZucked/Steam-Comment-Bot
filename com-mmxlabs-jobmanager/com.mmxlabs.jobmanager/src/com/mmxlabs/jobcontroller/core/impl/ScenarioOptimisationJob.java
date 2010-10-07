@@ -224,58 +224,6 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
 								.getFitnessEvaluator();
 
-						// check feasibility of initial sequences
-						{
-							final IConstraintCheckerRegistry registry = context
-									.getConstraintCheckerRegistry();
-							final Collection<IConstraintCheckerFactory> factories = registry
-									.getConstraintCheckerFactories(context
-											.getConstraintCheckers());
-							monitor.subTask("Check initial solution is feasible");
-							for (final IConstraintCheckerFactory factory : factories) {
-								final List<String> errors = new ArrayList<String>();
-								final IConstraintChecker<ISequenceElement> checker = factory
-										.instantiate();
-								checker.setOptimisationData(data);
-								if (checker.checkConstraints(
-										context.getInitialSequences(), errors) == false) {
-									System.err
-											.println("Constraint violations for "
-													+ checker + ":");
-									System.err.println("\t" + errors);
-								}
-							}
-						}
-
-						System.err
-								.println("Initial solution feasibility test completed");
-						{
-							final ISequences<ISequenceElement> sequences = context
-									.getInitialSequences();
-							final ITimeWindowDataComponentProvider twp = data
-									.getDataComponentProvider(
-											SchedulerConstants.DCP_timeWindowProvider,
-											ITimeWindowDataComponentProvider.class);
-							final IPortSlotProvider<ISequenceElement> psp = data
-									.getDataComponentProvider(
-											SchedulerConstants.DCP_portSlotsProvider,
-											IPortSlotProvider.class);
-
-							for (int i = 0; i < sequences.size(); i++) {
-								final ISequence<ISequenceElement> sequence = sequences
-										.getSequence(i);
-								System.err.print("Sequence " + i + ": ");
-								for (int j = 0; j < sequence.size(); j++) {
-									final ITimeWindow tw = twp.getTimeWindows(
-											sequence.get(j)).get(0);
-									System.err.print(psp.getPortSlot(sequence
-											.get(j)) + " -> ");
-								}
-								System.err.println();
-							}
-
-						}
-
 						// monitor.subTask("Evaluate fitness of initial solution");
 						//
 						// final
