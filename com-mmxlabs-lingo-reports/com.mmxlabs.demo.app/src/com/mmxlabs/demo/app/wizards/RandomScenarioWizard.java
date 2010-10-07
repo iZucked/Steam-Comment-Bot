@@ -76,7 +76,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			}
 			
 			utils.addCharterOuts(scenario, 1, 25, 35, 365);
-			utils.addStandardSettings(scenario);
+			utils.addDefaultSettings(scenario);
 			
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -167,10 +167,11 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			vesselClasses.setText("Add default Fleet Model");
 
 			label = new Label(row, SWT.NONE);
-			label.setText("Slot multiplier (%):");
+			label.setText("Cargo count:");
 			cargoSpinner = new Spinner(row, SWT.NONE);
 			cargoSpinner.setMaximum(1000);
 			cargoSpinner.setMinimum(10);
+			cargoSpinner.setSelection(200);
 			setControl(myContents);
 		}
 
