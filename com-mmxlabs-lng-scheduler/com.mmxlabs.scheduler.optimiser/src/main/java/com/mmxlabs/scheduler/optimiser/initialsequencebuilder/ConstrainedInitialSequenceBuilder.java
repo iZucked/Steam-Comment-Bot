@@ -147,7 +147,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 			travelTimeChecker.getMaxLateness();
 		
 		if (travelTimeChecker != null)
-			travelTimeChecker.setMaxLateness(initialMaxLateness *3/4); //schedule with 5d lateness at first, we'll try more lateness later.
+			travelTimeChecker.setMaxLateness(0);
 		
 		
 		// stick together elements which must be stuck together
@@ -200,7 +200,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 							IVesselProvider.class);
 			Collections.sort(resources, new Comparator<IResource>() {
 				@Override
-				public int compare(IResource o1, IResource o2) {
+				public int compare(final IResource o1, final IResource o2) {
 					final IVessel vessel1 = vesselProvider.getVessel(o1);
 					final IVessel vessel2 = vesselProvider.getVessel(o2);
 					final VesselInstanceType vit1 = vessel1
