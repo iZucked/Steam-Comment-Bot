@@ -1,5 +1,9 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -243,7 +247,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 				final int duration = details.getTravelTime()
 						+ details.getIdleTime();
 		
-				assert duration >= availableTime;
+				assert duration >= (availableTime-1); //hack
 				if (duration > availableTime) {
 					return false;
 				}
@@ -361,6 +365,63 @@ public abstract class AbstractSequenceScheduler<T> implements
 		}
 	}
 
+
+	private BufferedWriter logWriter;
+	private final static boolean LOGGING_ENABLED = false;
+	
+	private static int tag = 0;
+	private static synchronized int getTag() {
+		return tag++;
+	}
+	
+	protected final void createLog() {
+		if (!LOGGING_ENABLED) return;
+		try {
+		final String name = getClass().getSimpleName() + "_log_" + getTag();
+		final File f = File.createTempFile(name, ".py");
+		logWriter = new BufferedWriter(new FileWriter(f));
+		
+		System.err.println("Created scheduler log " + f.getAbsolutePath());
+		} catch (IOException ex) {
+		}
+	}
+	
+	protected final void startLogEntry(final int sequenceSize) {
+		if (!LOGGING_ENABLED) return;
+		try {
+			logWriter.write("Schedule(" + sequenceSize + ",[");
+		} catch (IOException e) {
+
+		}
+	}
+	
+	protected final void logValue(final long fitness) {
+		if (!LOGGING_ENABLED) return;
+		try {
+			logWriter.write(fitness + ", ");
+		} catch (IOException e) {
+		}
+	}
+	
+	protected final void endLogEntry() {
+		if (!LOGGING_ENABLED) return;
+		try {
+			logWriter.write("])\n");
+			logWriter.flush();
+		} catch (IOException e) {
+		}
+	}
+	
+	protected final void closeLog() {
+		if (!LOGGING_ENABLED) return;
+		try {
+			logWriter.flush();
+			logWriter.close();
+		} catch (IOException e) {
+		}
+		logWriter = null;
+	}
+	
 	@Override
 	public void dispose() {
 
