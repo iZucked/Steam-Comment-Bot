@@ -61,18 +61,23 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		public IndexedSet() {
 			
 		}
+		@Override
 		public int size() {
 			return setDelegate.size();
 		}
+		@Override
 		public boolean isEmpty() {
 			return setDelegate.isEmpty();
 		}
+		@Override
 		public boolean contains(Object o) {
 			return setDelegate.contains(o);
 		}
+		@Override
 		public Iterator<T> iterator() {
 			return setDelegate.iterator();
 		}
+		@Override
 		public Object[] toArray() {
 			return setDelegate.toArray();
 		}
@@ -80,36 +85,45 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		public <U> U[] toArray(U[] a) {
 			return setDelegate.toArray(a);
 		}
+		@Override
 		public boolean add(T e) {
 			listDelegate.add(e);
 			return setDelegate.add(e);
 		}
+		@Override
 		public boolean remove(Object o) {
 			listDelegate.remove(o);
 			return setDelegate.remove(o);
 		}
+		@Override
 		public boolean containsAll(Collection<?> c) {
 			return setDelegate.containsAll(c);
 		}
+		@Override
 		public boolean addAll(Collection<? extends T> c) {
 			listDelegate.addAll(c);
 			return setDelegate.addAll(c);
 		}
+		@Override
 		public boolean retainAll(Collection<?> c) {
 			listDelegate.retainAll(c);
 			return setDelegate.retainAll(c);
 		}
+		@Override
 		public boolean removeAll(Collection<?> c) {
 			listDelegate.removeAll(c);
 			return setDelegate.removeAll(c);
 		}
+		@Override
 		public void clear() {
 			listDelegate.clear();
 			setDelegate.clear();
 		}
+		@Override
 		public boolean equals(Object o) {
 			return setDelegate.equals(o);
 		}
+		@Override
 		public int hashCode() {
 			return setDelegate.hashCode();
 		}
