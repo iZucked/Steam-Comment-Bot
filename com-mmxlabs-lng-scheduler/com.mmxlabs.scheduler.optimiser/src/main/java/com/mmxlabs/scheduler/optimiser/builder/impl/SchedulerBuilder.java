@@ -509,8 +509,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		if (end.hasTimeRequirement() == false) {
 			// put end slot into list of slots to patch up later.
-			endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement,
-					endSlot));
+			// Only fleet vessels have the late end window set.
+			if (vesselInstanceType.equals(VesselInstanceType.FLEET))
+				endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement,
+						endSlot));
 		} else {
 			endSlot.setTimeWindow(createTimeWindow(end.getTime(),
 					end.getTime() + 1));
