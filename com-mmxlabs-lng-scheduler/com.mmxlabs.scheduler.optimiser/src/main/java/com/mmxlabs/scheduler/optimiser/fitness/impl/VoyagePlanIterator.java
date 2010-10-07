@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public final class VoyagePlanIterator<T> {
+	private static final Object[] EMPTY_SEQUENCE = new Object[]{};
 	private int startTime;
 	private List<VoyagePlan> plans;
 	private Iterator<VoyagePlan> planIterator;
@@ -47,6 +48,8 @@ public final class VoyagePlanIterator<T> {
 		if (planIterator.hasNext()) {
 			currentPlan = planIterator.next();
 			currentSequence = currentPlan.getSequence();
+		} else {
+			currentSequence = EMPTY_SEQUENCE;
 		}
 		currentIndex = 0;
 	}
@@ -70,7 +73,8 @@ public final class VoyagePlanIterator<T> {
 			if (currentIndex != currentSequence.length - 1)
 				extraTime = details.getVisitDuration();
 		} else if (obj instanceof VoyageDetails) {
-			final VoyageDetails details = (VoyageDetails) obj;
+			@SuppressWarnings("unchecked")
+			final VoyageDetails<T> details = (VoyageDetails<T>) obj;
 			extraTime = details.getOptions().getAvailableTime();
 		}
 
