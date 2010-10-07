@@ -463,4 +463,10 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	public void setRandom(Random random) {
 		this.random = random;
 	}
+	
+	public void init() {
+		if (random == null) {
+			throw new IllegalStateException("Random number generator has not been set");
+		}
+	}
 }
