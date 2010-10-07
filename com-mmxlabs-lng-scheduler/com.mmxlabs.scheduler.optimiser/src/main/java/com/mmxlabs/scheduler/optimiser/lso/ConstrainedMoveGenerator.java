@@ -55,9 +55,9 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	 *
 	 * @param <T>
 	 */
-	class IndexedSet<T> implements Set<T> {
-		List<T> listDelegate = new ArrayList<T>();
-		Set<T> setDelegate = new HashSet<T>();
+	private static class IndexedSet<T> implements Set<T> {
+		private List<T> listDelegate = new ArrayList<T>();
+		private Set<T> setDelegate = new HashSet<T>();
 		public IndexedSet() {
 			
 		}
