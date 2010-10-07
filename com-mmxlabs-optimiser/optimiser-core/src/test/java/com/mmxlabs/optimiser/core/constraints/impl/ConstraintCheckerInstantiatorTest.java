@@ -19,7 +19,7 @@ public class ConstraintCheckerInstantiatorTest {
 		final IConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker<Object>> checkers = inst
-				.instantiateConstraintCheckers(registry);
+				.instantiateConstraintCheckers(registry, null);
 
 		Assert.assertTrue(checkers.isEmpty());
 	}
@@ -34,7 +34,7 @@ public class ConstraintCheckerInstantiatorTest {
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker<Object>> checkers = inst
-				.instantiateConstraintCheckers(registry);
+				.instantiateConstraintCheckers(registry, null);
 
 		Assert.assertEquals(1, checkers.size());
 
@@ -51,7 +51,7 @@ public class ConstraintCheckerInstantiatorTest {
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
 		final List<String> names = Collections.emptyList();
 		final List<IConstraintChecker<Object>> checkers = inst
-				.instantiateConstraintCheckers(registry, names);
+				.instantiateConstraintCheckers(registry, names, null);
 
 		Assert.assertTrue(checkers.isEmpty());
 	}
@@ -66,7 +66,7 @@ public class ConstraintCheckerInstantiatorTest {
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker<Object>> checkers = inst
 				.instantiateConstraintCheckers(registry, Collections
-						.singletonList("Unknown"));
+						.singletonList("Unknown"), null);
 
 		Assert.assertEquals(1, checkers.size());
 
@@ -84,7 +84,7 @@ public class ConstraintCheckerInstantiatorTest {
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker<Object>> checkers = inst
 				.instantiateConstraintCheckers(registry, Collections
-						.singletonList("Checker"));
+						.singletonList("Checker"), null);
 
 		Assert.assertEquals(1, checkers.size());
 
