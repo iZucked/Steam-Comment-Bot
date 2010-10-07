@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 
 /**
  * Interface defining multiple two dimensional matrix with a simple value
@@ -116,4 +117,21 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataC
 	 * @return
 	 */
 	Collection<MatrixEntry<T, U>> getValues(T x, T y);
+
+	/**
+	 * Returns the {@link MatrixEntry} with minimum cost for points x and y
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	MatrixEntry<T, U> getMinimum(T x, T y);
+
+	/**
+	 * Returns the cost of the matrix entry returned by {@link IMultiMatrixProvider#getValues(T, T)}.
+	 * This is the shortest distance between these two points in this multimatrix.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	U getMinimumValue(T x, T y);
 }

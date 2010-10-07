@@ -2,11 +2,13 @@ package com.mmxlabs.optimiser.core.scenario.common.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -101,5 +103,22 @@ public final class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implem
 			entries.add(new MatrixEntry<T, U>(key, x, y, u));
 		}
 		return entries;
+	}
+	
+	/**
+	 * Get the minimum distance and associated route key. This method is here for 
+	 * eventual precomputation optimisation
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	@Override
+	public final MatrixEntry<T, U> getMinimum(final T x, final T y) {
+		return Collections.min(getValues(x,y));
+	}
+	
+	@Override
+	public final U getMinimumValue(final T x, final T y) {
+		return getMinimum(x, y).getValue();
 	}
 }
