@@ -157,19 +157,19 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	
 	final private ArrayList<Pair<T, T>> validBreaks = new ArrayList<Pair<T, T>>();
 	
-	class Move2over2A<T> extends Move2over2<T> {
+	class Move2over2A extends Move2over2<T> {
 		
 	}
 	
-	class Move2over2B<T> extends Move2over2<T> {
+	class Move2over2B extends Move2over2<T> {
 		
 	}
 	
-	class Move2over2C<T> extends Move2over2<T> {
+	class Move2over2C extends Move2over2<T> {
 		
 	}
 	
-	class NullMove<T> implements IMove<T> {
+	class NullMove implements IMove<T> {
 
 		@Override
 		public Collection<IResource> getAffectedResources() {
@@ -189,16 +189,16 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		
 	}
 	
-	class NullMoveA<T> extends NullMove<T> {}
-	class NullMoveB<T> extends NullMove<T> {}
-	class NullMoveC<T> extends NullMove<T> {}
-	class NullMoveD<T> extends NullMove<T> {}
-	class NullMoveE<T> extends NullMove<T> {}
+	class NullMoveA extends NullMove {}
+	class NullMoveB extends NullMove {}
+	class NullMoveC extends NullMove {}
+	class NullMoveD extends NullMove {}
+	class NullMoveE extends NullMove {}
 	
-	NullMove<T> nullMoveA = new NullMoveA<T>();
-	NullMove<T> nullMoveB = new NullMoveB<T>();
-	NullMove<T> nullMoveC = new NullMoveC<T>();
-	NullMove<T> nullMoveD = new NullMoveD<T>();
+	NullMove nullMoveA = new NullMoveA();
+	NullMove nullMoveB = new NullMoveB();
+	NullMove nullMoveC = new NullMoveC();
+	NullMove nullMoveD = new NullMoveD();
 
 	private final LegalSequencingChecker<T> checker;
 	
@@ -283,7 +283,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 					}
 				}
 				
-				Move3over2<T> result = new Move3over2<T>();
+				final Move3over2<T> result = new Move3over2<T>();
 				result.setResource1(resources.get(sequence1));
 				result.setResource1Start(beforeFirstCut+1);
 				result.setResource1End(beforeSecondCut);
@@ -322,7 +322,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			//if it would be, maybe do it
 			if (valid2opt2 && random.nextBoolean()) {
 				//make 2opt2
-				Move2over2<T> result = new Move2over2A<T>();
+				final Move2over2<T> result = new Move2over2A();
 				result.setResource1(resources.get(sequence1));
 				result.setResource2(resources.get(sequence2));
 				//add 1 because the positions are inclusive, and we need to cut after the first element
@@ -379,7 +379,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				
 				if (viableSecondBreaks.isEmpty()) {
 					if (valid2opt2) {
-						Move2over2<T> result = new Move2over2B<T>();
+						final Move2over2<T> result = new Move2over2B();
 						result.setResource1(resources.get(sequence1));
 						result.setResource2(resources.get(sequence2));
 						//add 1 because the positions are inclusive, and we need to cut after the first element
