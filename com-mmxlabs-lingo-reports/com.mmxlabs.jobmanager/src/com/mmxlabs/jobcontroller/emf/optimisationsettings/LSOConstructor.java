@@ -62,11 +62,8 @@ public class LSOConstructor {
 		final List<IConstraintChecker<T>> constraintCheckers = constraintCheckerInstantiator
 				.instantiateConstraintCheckers(
 						context.getConstraintCheckerRegistry(),
-						context.getConstraintCheckers());
-
-		for (final IConstraintChecker<T> checker : constraintCheckers) {
-			checker.setOptimisationData(context.getOptimisationData());
-		}
+						context.getConstraintCheckers(),
+						context.getOptimisationData());
 
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent<T>> fitnessComponents = fitnessComponentInstantiator
