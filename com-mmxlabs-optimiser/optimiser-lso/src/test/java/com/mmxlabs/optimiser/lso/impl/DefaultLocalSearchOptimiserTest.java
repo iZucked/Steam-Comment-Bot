@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 
 public class DefaultLocalSearchOptimiserTest {
 
+
 	@Test
 	public void testOptimise() {
 
@@ -87,31 +88,7 @@ public class DefaultLocalSearchOptimiserTest {
 				data, sequences, fitnessComponentNames, fitnessRegistry,
 				constraintCheckerNames, checkerRegistry);
 
-		final IOptimiserProgressMonitor<Integer> monitor = new IOptimiserProgressMonitor<Integer>() {
-
-			@Override
-			public void begin(final IOptimiser<Integer> optimiser,
-					final long initialFitness,
-					final ISequences<Integer> initialState) {
-				System.out.println("Initial Fitness: " + initialFitness);
-			}
-
-			@Override
-			public void report(final IOptimiser<Integer> optimiser,
-					final int iteration, final long currentFitness,
-					final long bestFitness,
-					final ISequences<Integer> currentState,
-					final ISequences<Integer> bestState) {
-				System.out.println("Iter: " + iteration + " Fitness: "
-						+ bestFitness);
-			}
-
-			@Override
-			public void done(final IOptimiser<Integer> optimiser,
-					final long bestFitness, final ISequences<Integer> bestState) {
-				System.out.println("Final Fitness: " + bestFitness);
-			}
-		};
+		final IOptimiserProgressMonitor<Integer> monitor = new SystemOutProgressMonitor();
 
 		final LocalSearchOptimiser<Integer> lso = GeneralTestUtils.buildOptimiser(
 				context, random, numberOfIterations, 1, monitor);
