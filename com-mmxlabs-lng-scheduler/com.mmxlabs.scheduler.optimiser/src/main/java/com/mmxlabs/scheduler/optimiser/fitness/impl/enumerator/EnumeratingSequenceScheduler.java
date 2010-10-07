@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class EnumeratingSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
-	private static final int EMPTY_WINDOW_SIZE = 24 * 5;
+	private static final int EMPTY_WINDOW_SIZE = 24 * 2;
 	
 	/**
 	 * Tracks the number of evaluations done so far
@@ -65,7 +66,12 @@ public class EnumeratingSequenceScheduler<T> extends
 	private long bestValue;
 	private Pair<Integer, List<VoyagePlan>> bestResult;
 
-	private long initialValue;
+	public EnumeratingSequenceScheduler() {
+		super();
+		
+		createLog();
+		
+	}
 	
 	@Override
 	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
@@ -74,9 +80,13 @@ public class EnumeratingSequenceScheduler<T> extends
 		resetBest();
 		setResourceAndSequence(resource, sequence);
 		
+		startLogEntry(sequence.size());
+		
 		prepare();
 		enumerate(0);
 
+		endLogEntry();
+		
 		return bestResult;
 	}
 	
@@ -103,8 +113,9 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
 	 * @param sequence
+	 * @return 
 	 */
-	protected final void prepare() {
+	protected final long prepare() {
 		arrivalTimes = new int[sequence.size()];
 		windowStartTime = new int[sequence.size()];
 		windowEndTime = new int[sequence.size()];
@@ -130,7 +141,7 @@ public class EnumeratingSequenceScheduler<T> extends
 			// Calculate minimum inter-element durations
 			minTimeToNextElement[index] = durationProvider.getElementDuration(
 					element, resource);
-
+			
 			if (lastElement != null) {
 				final IPort lastPort = portProvider.getPortForElement(lastElement);
 				final IPort port = portProvider.getPortForElement(element);
@@ -157,7 +168,7 @@ public class EnumeratingSequenceScheduler<T> extends
 							+ EMPTY_WINDOW_SIZE;
 				} else {
 					windowStartTime[index] = 0;
-					windowEndTime[index] = EMPTY_WINDOW_SIZE;
+					windowEndTime[index] = sequence.size() == 1 ? 0 : EMPTY_WINDOW_SIZE;
 				}
 			} else {
 				assert windows.size() == 1 : "Multiple time windows are not yet supported!";
@@ -192,6 +203,12 @@ public class EnumeratingSequenceScheduler<T> extends
 					Math.min(windowEndTime[index], windowEndTime[index + 1]
 							- minTimeToNextElement[index]));
 		}
+		
+		long approximateCombinations = 1;
+		for (index = 0; index < arrivalTimes.length; index++) {
+			approximateCombinations *= windowEndTime[index] - windowStartTime[index]+1;
+		}
+		return approximateCombinations;
 	}
 
 	/**
@@ -228,6 +245,9 @@ public class EnumeratingSequenceScheduler<T> extends
 				.schedule(resource, sequence, arrivalTimes);
 		
 		final long value = evaluator.evaluateVoyagePlans(startTimeAndPlans);
+		
+		logValue(value);
+		
 		if (value < bestValue) {
 //			if (bestValue == Long.MAX_VALUE) {
 //				initialValue = value;

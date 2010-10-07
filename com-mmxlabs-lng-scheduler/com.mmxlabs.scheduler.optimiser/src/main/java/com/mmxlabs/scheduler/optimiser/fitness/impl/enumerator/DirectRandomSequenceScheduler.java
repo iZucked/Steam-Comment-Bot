@@ -22,6 +22,18 @@ public class DirectRandomSequenceScheduler<T> extends
 	private int seed = 0;
 	private Random random;
 	
+	/**
+	 * Below this number of possibilities, enumerate all options
+	 */
+	private int samplingLowerBound = 100; 
+	/**
+	 * Never do more than this many samples
+	 */
+	private int samplingUpperBound = 5000;
+	/**
+	 * Sample this proportion of the search space, up to {@code samplingUpperBound}
+	 */
+	private double sampleProportion = 0.01;
 	
 	@Override
 	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
@@ -30,12 +42,19 @@ public class DirectRandomSequenceScheduler<T> extends
 		
 		setResourceAndSequence(resource, sequence);
 		resetBest();
-		prepare();
+		final long approximateSpaceSize = prepare();
 
-		final int maxCount = 10 * sequence.size();
-		
-		while (count < maxCount) {
-			flatEnumerate();
+		if (approximateSpaceSize < samplingLowerBound) {
+//			System.err.println("Exhaustive search " + approximateSpaceSize);
+			enumerate(0);
+//			System.err.println("Actually did " + count);
+		} else {
+			final int maxCount = Math.min(samplingUpperBound,
+					(int)(sampleProportion * approximateSpaceSize));
+//			System.err.println("Sample " + maxCount);
+			for (int i = 0; i<maxCount; i++) {
+				flatEnumerate();
+			}
 		}
 		
 		return getBestResult();
@@ -47,7 +66,31 @@ public class DirectRandomSequenceScheduler<T> extends
 			final int max = getMaxArrivalTime(index);
 			arrivalTimes[index] = RandomHelper.nextIntBetween(random, min, max);
 		}
+		
 		evaluate();
 	}
 
+	public int getSamplingLowerBound() {
+		return samplingLowerBound;
+	}
+
+	public void setSamplingLowerBound(final int samplingLowerBound) {
+		this.samplingLowerBound = samplingLowerBound;
+	}
+
+	public int getSamplingUpperBound() {
+		return samplingUpperBound;
+	}
+
+	public void setSamplingUpperBound(final int samplingUpperBound) {
+		this.samplingUpperBound = samplingUpperBound;
+	}
+
+	public double getSampleProportion() {
+		return sampleProportion;
+	}
+
+	public void setSampleProportion(final double sampleProportion) {
+		this.sampleProportion = sampleProportion;
+	}
 }
