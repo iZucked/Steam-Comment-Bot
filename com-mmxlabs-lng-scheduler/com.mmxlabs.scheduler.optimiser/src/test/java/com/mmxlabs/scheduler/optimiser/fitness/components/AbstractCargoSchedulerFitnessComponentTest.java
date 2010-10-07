@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -345,11 +344,32 @@ public class AbstractCargoSchedulerFitnessComponentTest {
 		}
 
 		@Override
-		public long rawEvaluateSequence(IResource resource,
-				ISequence<T> sequence, List<VoyagePlan> plans) {
+		public long rawEvaluateSequence(final IResource resource,
+				final ISequence<T> sequence, final List<VoyagePlan> plans,
+				final int startTime) {
 			fail("This method is not part of the test");
 			return 0;
 		}
 
+		@Override
+		public boolean shouldIterate() {
+			fail("This method is not part of the test");
+			return false;
+		}
+
+		@Override
+		public void beginIterating(final IResource resource) {
+			fail("This method is not part of the test");
+		}
+
+		@Override
+		public void evaluateNextObject(final Object object, final int startTime) {
+			fail("This method is not part of the test");
+		}
+
+		@Override
+		public void endIterating() {
+			fail("This method is not part of the test");
+		}
 	}
 }
