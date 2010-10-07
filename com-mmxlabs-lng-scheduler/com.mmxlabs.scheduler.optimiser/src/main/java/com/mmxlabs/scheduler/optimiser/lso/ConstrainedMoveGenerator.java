@@ -76,7 +76,8 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		public Object[] toArray() {
 			return setDelegate.toArray();
 		}
-		public <T> T[] toArray(T[] a) {
+		@Override
+		public <U> U[] toArray(U[] a) {
 			return setDelegate.toArray(a);
 		}
 		public boolean add(T e) {
