@@ -7,10 +7,8 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -23,8 +21,6 @@ public class CharterCostFitnessComponent<T> extends
 	private IVesselProvider vesselProvider;
 
 	final String vesselProviderKey;
-	
-	final private VoyagePlanIterator vpi = new VoyagePlanIterator();
 	
 	public CharterCostFitnessComponent(final String name, final String vesselProviderKey,
 			final CargoSchedulerFitnessCore<T> core) {
@@ -106,7 +102,7 @@ public class CharterCostFitnessComponent<T> extends
 
 	boolean active;
 	long hireCost;
-	int firstLoadTime;
+	int firstLoadTime = -1;
 	int lastTime;
 	int charterPrice;
 	
@@ -119,12 +115,15 @@ public class CharterCostFitnessComponent<T> extends
 	public void beginIterating(final IResource resource) {
 		active = vesselProvider.getVessel(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER);
 		firstLoadTime = -1;
-		hireCost = 0;
-		charterPrice = vesselProvider.getVessel(resource).getVesselClass().getHourlyCharterPrice();
+		lastTime = -1;
+		if (active) {
+			charterPrice = vesselProvider.getVessel(resource).getVesselClass().getHourlyCharterPrice();
+		}
 	}
 
 	@Override
 	public void evaluateNextObject(Object object, int startTime) {
+		if (!active) return;
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
 			if (detail.getPortSlot().getPortType() == PortType.Load) {
@@ -139,6 +138,8 @@ public class CharterCostFitnessComponent<T> extends
 	public void endIterating() {
 		if (firstLoadTime != -1) {
 			hireCost = Calculator.multiply(lastTime - firstLoadTime, charterPrice);
+		} else {
+			hireCost = 0;
 		}
 	}
 }
