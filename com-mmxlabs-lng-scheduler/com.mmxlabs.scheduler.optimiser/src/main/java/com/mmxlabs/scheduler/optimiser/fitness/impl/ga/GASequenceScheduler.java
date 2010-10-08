@@ -24,24 +24,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public final class GASequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
-
-	static int TAG = 0;
-	
-	private static synchronized int getTag() {
-		return TAG++;
-	}
-	
-	BufferedWriter output;
 	
 	public GASequenceScheduler() {
-//		try {
-//			final File file = new File("/Users/hinton/Desktop/data/ga_random_scheduler_log" + getTag() + ".py");
-//			System.err.println("Log to " + file.getAbsolutePath());
-//			output = new BufferedWriter(new FileWriter(file));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			output = null;
-//		}
+		createLog();
 	}
 
 	private long randomSeed;
@@ -91,27 +76,18 @@ public final class GASequenceScheduler<T> extends
 		algorithm.init();
 
 		final int numIterations = numBytes * iterationsByteMultiplier;
-		
-		long[] trace = new long[numIterations]; //LOGGING
-		
+		startLogEntry(sequence.size());
 		for (int i = 0; i < numIterations; ++i) {
-			trace[i] = algorithm.getBestFitness();
+			logValue(algorithm.getBestFitness());
 			algorithm.step();
 		}
-
+		logValue(algorithm.getBestFitness());
+		endLogEntry();
 		final Individual bestIndividual = algorithm.getBestIndividual();
 		if (bestIndividual == null) {
 			return null;
 		}
 		
-//		if (output != null) {
-//			try {
-//				output.write("Schedule(" + numBytes + ", " + Arrays.toString(trace) +")\n");
-//				output.flush();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
 
 		final int[] arrivalTimes = new int[sequence.size()];
 		individualEvaluator.decode(bestIndividual, arrivalTimes);
