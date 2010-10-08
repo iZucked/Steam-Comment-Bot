@@ -78,11 +78,11 @@ public class LatenessComponentTest {
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setPortSlot(loadSlot);
-		loadDetails.setStartTime(15);
+		
 
 		final PortDetails dischargeDetails = new PortDetails();
 		dischargeDetails.setPortSlot(dischargeSlot);
-		dischargeDetails.setStartTime(20);
+		
 
 		final Object[] routeSequence = new Object[] { loadDetails, null,
 				dischargeDetails };
@@ -95,8 +95,13 @@ public class LatenessComponentTest {
 
 		c.prepare();
 
+		c.beginIterating(resource);
+		c.evaluateNextObject(loadDetails, 15);
+		c.evaluateNextObject(dischargeDetails, 20);
+		c.endIterating();
+		
 		c.evaluateSequence(resource, sequence,
-				CollectionsUtil.makeArrayList(voyagePlan), false);
+				CollectionsUtil.makeArrayList(voyagePlan),false,0);
 
 		c.complete();
 
