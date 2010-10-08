@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -49,7 +50,7 @@ public class IndividualEvaluatorTest {
 	private static final class MockSequenceScheduler extends
 			AbstractSequenceScheduler<Object> {
 		@Override
-		public List<VoyagePlan> schedule(final IResource resource,
+		public Pair<Integer,List<VoyagePlan>> schedule(final IResource resource,
 				final ISequence<Object> sequence) {
 			throw new UnsupportedOperationException();
 		}
@@ -230,16 +231,6 @@ public class IndividualEvaluatorTest {
 		Assert.assertNull(evaluator.getFitnessComponentWeights());
 		evaluator.setFitnessComponentWeights(null);
 
-	}
-
-	@Test
-	public void testGetSetAdjustArrivalTimes() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
-		Assert.assertFalse(evaluator.isAdjustArrivalTimes());
-		evaluator.setAdjustArrivalTimes(true);
-		Assert.assertTrue(evaluator.isAdjustArrivalTimes());
-		evaluator.setAdjustArrivalTimes(false);
-		Assert.assertFalse(evaluator.isAdjustArrivalTimes());
 	}
 
 	@Test
