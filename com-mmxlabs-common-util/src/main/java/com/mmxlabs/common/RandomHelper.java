@@ -47,6 +47,10 @@ public final class RandomHelper {
 	 * @return
 	 */
 	public static final int nextIntBetween(final Random random, final int min, final int max) {
-		return min + random.nextInt(max - min + 1);
+		final int diff = max-min;
+		if (diff == 0) {
+			return min;
+		}
+		return min + random.nextInt(diff + 1);
 	}
 }
