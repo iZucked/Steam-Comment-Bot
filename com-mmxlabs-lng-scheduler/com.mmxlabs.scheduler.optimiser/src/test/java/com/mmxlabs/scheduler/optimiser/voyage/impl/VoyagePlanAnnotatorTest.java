@@ -70,23 +70,23 @@ public class VoyagePlanAnnotatorTest {
 		loadDetails1.setPortSlot(loadSlot1);
 		
 		loadDetails1.setVisitDuration(10);
-		loadDetails1.setStartTime(100);
+		
 		
 		
 		final PortDetails dischargeDetails1 = new PortDetails();
 		dischargeDetails1.setPortSlot(dischargeSlot1);
 		dischargeDetails1.setVisitDuration(20);
-		dischargeDetails1.setStartTime(200);
+		
 
 		final PortDetails loadDetails2 = new PortDetails();
 		loadDetails2.setPortSlot(loadSlot2);
 		loadDetails2.setVisitDuration(30);
-		loadDetails2.setStartTime(300);
+		
 
 		final PortDetails dischargeDetails2 = new PortDetails();
 		dischargeDetails2.setPortSlot(dischargeSlot2);
 		dischargeDetails2.setVisitDuration(40);
-		dischargeDetails2.setStartTime(400);
+		
 
 		final VoyageDetails<Object> voyageDetails1 = new VoyageDetails<Object>();
 		final VoyageOptions options1 = new VoyageOptions();
@@ -203,7 +203,7 @@ public class VoyagePlanAnnotatorTest {
 		final IResource resource = context.mock(IResource.class);
 
 		final AnnotatedSequence<Object> annotatedSequence = new AnnotatedSequence<Object>();
-		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
+		annotator.annotateFromVoyagePlan(resource, plans, 0, annotatedSequence);
 
 		{
 			final IJourneyEvent<Object> journey = annotatedSequence
