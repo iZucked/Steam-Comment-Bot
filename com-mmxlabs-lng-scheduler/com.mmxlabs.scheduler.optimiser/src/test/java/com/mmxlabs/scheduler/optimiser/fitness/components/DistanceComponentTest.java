@@ -81,7 +81,7 @@ public class DistanceComponentTest {
 		c.prepare();
 
 		c.evaluateSequence(resource, sequence,
-				CollectionsUtil.makeArrayList(voyagePlan), false);
+				CollectionsUtil.makeArrayList(voyagePlan), false, 0);
 
 		c.complete();
 
