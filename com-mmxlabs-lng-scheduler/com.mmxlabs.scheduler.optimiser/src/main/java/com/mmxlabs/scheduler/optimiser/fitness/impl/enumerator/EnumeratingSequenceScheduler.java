@@ -146,9 +146,8 @@ public class EnumeratingSequenceScheduler<T> extends
 				final IPort lastPort = portProvider.getPortForElement(lastElement);
 				final IPort port = portProvider.getPortForElement(element);
 				
-				final int minDistance = Collections
-						.min(distanceProvider.getValues(lastPort, port))
-						.getValue().intValue();
+				final int minDistance = distanceProvider.getMinimumValue(
+						lastPort, port);
 
 				final int minTravelTime = Calculator.getTimeFromSpeedDistance(
 						maxSpeed, minDistance);

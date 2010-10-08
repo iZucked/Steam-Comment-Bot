@@ -25,15 +25,15 @@ public class DirectRandomSequenceScheduler<T> extends
 	/**
 	 * Below this number of possibilities, enumerate all options
 	 */
-	private int samplingLowerBound = 100; 
+	private int samplingLowerBound = 128; 
 	/**
 	 * Never do more than this many samples
 	 */
-	private int samplingUpperBound = 5000;
+	private int samplingUpperBound = 1000;
 	/**
 	 * Sample this proportion of the search space, up to {@code samplingUpperBound}
 	 */
-	private double sampleProportion = 0.01;
+	private double sampleProportion = 0.005;
 	
 	@Override
 	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
