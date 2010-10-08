@@ -53,16 +53,6 @@ public class PortDetailsTest {
 	}
 
 	@Test
-	public void testGetSetStartTime() {
-
-		final int value = 100;
-		final PortDetails details = new PortDetails();
-		Assert.assertEquals(0, details.getStartTime());
-		details.setStartTime(value);
-		Assert.assertEquals(value, details.getStartTime());
-	}
-
-	@Test
 	public void testEquals() {
 
 		final IPortSlot slot1 = context.mock(IPortSlot.class, "s1");
@@ -71,14 +61,14 @@ public class PortDetailsTest {
 		final FuelComponent fuel1 = FuelComponent.Base;
 		final FuelComponent fuel2 = FuelComponent.NBO;
 
-		final PortDetails details1 = make(1, 2, slot1, fuel1, 5);
-		final PortDetails details2 = make(1, 2, slot1, fuel1, 5);
+		final PortDetails details1 = make(1, slot1, fuel1, 5);
+		final PortDetails details2 = make(1, slot1, fuel1, 5);
 
-		final PortDetails details3 = make(21, 2, slot1, fuel1, 5);
-		final PortDetails details4 = make(1, 22, slot1, fuel1, 5);
-		final PortDetails details5 = make(1, 2, slot2, fuel1, 5);
-		final PortDetails details6 = make(1, 2, slot1, fuel2, 5);
-		final PortDetails details7 = make(1, 2, slot1, fuel1, 25);
+		final PortDetails details3 = make(21,  slot1, fuel1, 5);
+		final PortDetails details4 = make(1, slot1, fuel1, 5);
+		final PortDetails details5 = make(1, slot2, fuel1, 5);
+		final PortDetails details6 = make(1, slot1, fuel2, 5);
+		final PortDetails details7 = make(1, slot1, fuel1, 25);
 
 		Assert.assertTrue(details1.equals(details1));
 		Assert.assertTrue(details1.equals(details2));
@@ -99,14 +89,13 @@ public class PortDetailsTest {
 		Assert.assertFalse(details1.equals(new Object()));
 	}
 
-	PortDetails make(final int duration, final int startTime,
+	PortDetails make(final int duration,
 			final IPortSlot portSlot, final FuelComponent fuel,
 			final long consumption) {
 
 		final PortDetails d = new PortDetails();
 
 		d.setVisitDuration(duration);
-		d.setStartTime(startTime);
 		d.setPortSlot(portSlot);
 		d.setFuelConsumption(fuel, consumption);
 
