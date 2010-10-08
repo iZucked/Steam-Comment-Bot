@@ -25,4 +25,6 @@ public interface IOptimiser<T> {
 	 * @return
 	 */
 	IFitnessEvaluator<T> getFitnessEvaluator();
+
+	void dispose();
 }

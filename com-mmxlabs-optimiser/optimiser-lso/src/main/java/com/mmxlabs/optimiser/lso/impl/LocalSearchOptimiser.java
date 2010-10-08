@@ -42,7 +42,7 @@ public abstract class LocalSearchOptimiser<T> implements
 	private IOptimiserProgressMonitor<T> progressMonitor;
 
 	private int reportInterval = -1;
-	
+
 	/**
 	 * Initialise method checking the object has all the correct pieces of data
 	 * to be able to perform the
@@ -71,11 +71,11 @@ public abstract class LocalSearchOptimiser<T> implements
 		if (sequenceManipulator == null) {
 			throw new IllegalStateException("Sequence Manipulator is not set");
 		}
-		
+
 		if (progressMonitor == null) {
 			throw new IllegalStateException("Progress Monitor is not set");
 		}
-		
+
 		if (reportInterval < 1) {
 			throw new IllegalStateException("Report interval is not set");
 		}
@@ -148,48 +148,59 @@ public abstract class LocalSearchOptimiser<T> implements
 		return numberOfIterations;
 	}
 
-	public void setConstraintCheckers(
+	public final void setConstraintCheckers(
 			final List<IConstraintChecker<T>> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 	}
 
 	@Override
-	public List<IConstraintChecker<T>> getConstraintCheckers() {
+	public final List<IConstraintChecker<T>> getConstraintCheckers() {
 		return constraintCheckers;
 	}
 
-	public void setFitnessEvaluator(final IFitnessEvaluator<T> fitnessEvaluator) {
+	public final void setFitnessEvaluator(
+			final IFitnessEvaluator<T> fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
 	@Override
-	public IFitnessEvaluator<T> getFitnessEvaluator() {
+	public final IFitnessEvaluator<T> getFitnessEvaluator() {
 		return fitnessEvaluator;
 	}
 
-	public void setSequenceManipulator(
+	public final void setSequenceManipulator(
 			final ISequencesManipulator<T> sequenceManipulator) {
 		this.sequenceManipulator = sequenceManipulator;
 	}
 
 	@Override
-	public ISequencesManipulator<T> getSequenceManipulator() {
+	public final ISequencesManipulator<T> getSequenceManipulator() {
 		return sequenceManipulator;
 	}
 
-	public IOptimiserProgressMonitor<T> getProgressMonitor() {
+	public final IOptimiserProgressMonitor<T> getProgressMonitor() {
 		return progressMonitor;
 	}
 
-	public void setProgressMonitor(IOptimiserProgressMonitor<T> progressMonitor) {
+	public final void setProgressMonitor(
+			IOptimiserProgressMonitor<T> progressMonitor) {
 		this.progressMonitor = progressMonitor;
 	}
 
-	public int getReportInterval() {
+	public final int getReportInterval() {
 		return reportInterval;
 	}
 
-	public void setReportInterval(int reportInterval) {
+	public final void setReportInterval(int reportInterval) {
 		this.reportInterval = reportInterval;
+	}
+
+	@Override
+	public void dispose() {
+		this.constraintCheckers = null;
+		this.fitnessEvaluator = null;
+		this.moveGenerator = null;
+		this.progressMonitor = null;
+		this.sequenceManipulator = null;
 	}
 }

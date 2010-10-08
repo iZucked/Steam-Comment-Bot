@@ -127,4 +127,6 @@ public interface IFitnessEvaluator<T> {
 	 * @return
 	 */
 	long getCurrentFitness();
+
+	void dispose();
 }

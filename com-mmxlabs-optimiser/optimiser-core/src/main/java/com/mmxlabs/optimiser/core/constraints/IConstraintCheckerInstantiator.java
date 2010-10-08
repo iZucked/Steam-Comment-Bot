@@ -3,6 +3,7 @@ package com.mmxlabs.optimiser.core.constraints;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public interface IConstraintCheckerInstantiator {
 
@@ -16,7 +17,8 @@ public interface IConstraintCheckerInstantiator {
 	 */
 
 	<T> List<IConstraintChecker<T>> instantiateConstraintCheckers(
-			IConstraintCheckerRegistry registry);
+			IConstraintCheckerRegistry registry,
+			IOptimisationData<T> optimisationData);
 
 	/**
 	 * Return new instances of all {@link IConstraintChecker}s the
@@ -31,7 +33,8 @@ public interface IConstraintCheckerInstantiator {
 	 * @return
 	 */
 	<T> List<IConstraintChecker<T>> instantiateConstraintCheckers(
-			final IConstraintCheckerRegistry registry,
-			final List<String> constraintCheckerNames);
+			IConstraintCheckerRegistry registry,
+			List<String> constraintCheckerNames,
+			IOptimisationData<T> optimisationData);
 
 }

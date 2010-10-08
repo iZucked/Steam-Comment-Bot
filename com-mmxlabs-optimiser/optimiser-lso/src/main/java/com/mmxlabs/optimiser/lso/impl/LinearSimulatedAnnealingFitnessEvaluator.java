@@ -39,21 +39,12 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 	private IFitnessCombiner fitnessCombiner;
 
-	public IFitnessCombiner getFitnessCombiner() {
-		return fitnessCombiner;
-	}
-
-	public void setFitnessCombiner(IFitnessCombiner fitnessCombiner) {
-		this.fitnessCombiner = fitnessCombiner;
-	}
-
-	
 	private ISequences<T> bestSequences = null;
 
 	private long bestFitness = Long.MAX_VALUE;
 
-	private Map<String, Long> bestFitnesses = new HashMap<String, Long>();
-	
+	private final Map<String, Long> bestFitnesses = new HashMap<String, Long>();
+
 	private ISequences<T> currentSequences = null;
 
 	private long currentFitness = Long.MAX_VALUE;
@@ -77,8 +68,8 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 				updateBest(sequences, totalFitness);
 
 				// Update fitness functions state
-				fitnessHelper.acceptFromComponents(fitnessComponents, sequences,
-						affectedResources);
+				fitnessHelper.acceptFromComponents(fitnessComponents,
+						sequences, affectedResources);
 			}
 		}
 		// Step to the next threshold levels
@@ -104,11 +95,11 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		// If this is the best state seen so far, then record it.
 		if (currentFitness < bestFitness) {
 			// Store this as the new best
-			// Do we need to copy here too? 
+			// Do we need to copy here too?
 			bestSequences = currentSequences;
 			bestFitness = currentFitness;
-			
-			for (final IFitnessComponent component : fitnessComponents) {
+
+			for (final IFitnessComponent<T> component : fitnessComponents) {
 				bestFitnesses.put(component.getName(), component.getFitness());
 			}
 		}
@@ -127,10 +118,12 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		// Evaluates the current sequences
 		if (affectedResources == null) {
 			if (!fitnessHelper.evaluateSequencesFromComponents(sequences,
-					fitnessComponents)) return Long.MAX_VALUE;
+					fitnessComponents))
+				return Long.MAX_VALUE;
 		} else {
 			if (!fitnessHelper.evaluateSequencesFromComponents(sequences,
-					fitnessComponents, affectedResources)) return Long.MAX_VALUE;
+					fitnessComponents, affectedResources))
+				return Long.MAX_VALUE;
 		}
 
 		return fitnessCombiner.calculateFitness(fitnessComponents);
@@ -170,14 +163,15 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 					"Initial sequences cannot be null");
 		}
 
-		//TODO check for MAX_VALUE here and throw some kind of death condition.
+		// TODO check for MAX_VALUE here and throw some kind of death condition.
 		final long totalFitness = evaluateSequencesIntern(initialSequences,
 				null);
-		
+
 		if (totalFitness == Long.MAX_VALUE) {
-			System.err.println("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
+			System.err
+					.println("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
 		}
-		
+
 		bestFitness = totalFitness;
 		currentFitness = totalFitness;
 		bestSequences = new Sequences<T>(initialSequences);
@@ -258,6 +252,24 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	public Map<String, Long> getBestFitnesses() {
 		return bestFitnesses;
 	}
-	
-	
+
+	public IFitnessCombiner getFitnessCombiner() {
+		return fitnessCombiner;
+	}
+
+	public void setFitnessCombiner(final IFitnessCombiner fitnessCombiner) {
+		this.fitnessCombiner = fitnessCombiner;
+	}
+
+	@Override
+	public void dispose() {
+		this.bestFitnesses.clear();
+		this.bestSequences = null;
+		this.currentSequences = null;
+		this.fitnessCombiner = null;
+		this.fitnessComponents = null;
+		this.fitnessHelper = null;
+		this.thresholder = null;
+	}
+
 }
