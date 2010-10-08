@@ -24,6 +24,7 @@ import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.thresholders.CalibratingGeometricThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.InstrumentingThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.MovingAverageThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
@@ -169,7 +170,8 @@ public class LSOConstructor {
 	private IThresholder getThresholder() {
 		// For now we are just going to generate a self-calibrating thresholder
 		final ThresholderSettings ts = settings.getThresholderSettings();
-		return new MovingAverageThresholder(getRandom(), ts.getInitialAcceptanceRate(), ts.getAlpha(), ts.getEpochLength(), 500);
+//		return new MovingAverageThresholder(getRandom(), ts.getInitialAcceptanceRate(), ts.getAlpha(), ts.getEpochLength(), 3000);
+		return new CalibratingGeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
 	}
 
 	private Random getRandom() {
