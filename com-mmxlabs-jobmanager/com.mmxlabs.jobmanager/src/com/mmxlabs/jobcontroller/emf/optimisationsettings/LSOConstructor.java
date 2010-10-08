@@ -26,7 +26,6 @@ import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.CalibratingGeometricThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.InstrumentingThresholder;
-import com.mmxlabs.optimiser.lso.impl.thresholders.MovingAverageThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
