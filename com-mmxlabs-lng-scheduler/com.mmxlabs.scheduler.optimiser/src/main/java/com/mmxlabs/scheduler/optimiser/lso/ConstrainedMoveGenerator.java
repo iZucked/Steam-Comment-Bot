@@ -55,64 +55,79 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	 *
 	 * @param <T>
 	 */
-	class IndexedSet<T> implements Set<T> {
-		List<T> listDelegate = new ArrayList<T>();
-		Set<T> setDelegate = new HashSet<T>();
+	private static class IndexedSet<T> implements Set<T> {
+		private final List<T> listDelegate = new ArrayList<T>();
+		private final Set<T> setDelegate = new HashSet<T>();
 		public IndexedSet() {
 			
 		}
+		@Override
 		public int size() {
 			return setDelegate.size();
 		}
+		@Override
 		public boolean isEmpty() {
 			return setDelegate.isEmpty();
 		}
-		public boolean contains(Object o) {
+		@Override
+		public boolean contains(final Object o) {
 			return setDelegate.contains(o);
 		}
+		@Override
 		public Iterator<T> iterator() {
 			return setDelegate.iterator();
 		}
+		@Override
 		public Object[] toArray() {
 			return setDelegate.toArray();
 		}
-		public <T> T[] toArray(T[] a) {
+		@Override
+		public <U> U[] toArray(final U[] a) {
 			return setDelegate.toArray(a);
 		}
-		public boolean add(T e) {
+		@Override
+		public boolean add(final T e) {
 			listDelegate.add(e);
 			return setDelegate.add(e);
 		}
-		public boolean remove(Object o) {
+		@Override
+		public boolean remove(final Object o) {
 			listDelegate.remove(o);
 			return setDelegate.remove(o);
 		}
-		public boolean containsAll(Collection<?> c) {
+		@Override
+		public boolean containsAll(final Collection<?> c) {
 			return setDelegate.containsAll(c);
 		}
-		public boolean addAll(Collection<? extends T> c) {
+		@Override
+		public boolean addAll(final Collection<? extends T> c) {
 			listDelegate.addAll(c);
 			return setDelegate.addAll(c);
 		}
-		public boolean retainAll(Collection<?> c) {
+		@Override
+		public boolean retainAll(final Collection<?> c) {
 			listDelegate.retainAll(c);
 			return setDelegate.retainAll(c);
 		}
-		public boolean removeAll(Collection<?> c) {
+		@Override
+		public boolean removeAll(final Collection<?> c) {
 			listDelegate.removeAll(c);
 			return setDelegate.removeAll(c);
 		}
+		@Override
 		public void clear() {
 			listDelegate.clear();
 			setDelegate.clear();
 		}
-		public boolean equals(Object o) {
+		@Override
+		public boolean equals(final Object o) {
 			return setDelegate.equals(o);
 		}
+		@Override
 		public int hashCode() {
 			return setDelegate.hashCode();
 		}
-		public T get(int index) {
+		public T get(final int index) {
 			return listDelegate.get(index);
 		}
 	}
@@ -121,12 +136,12 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element
 	 * x is in the set mapped to by key y, x can legally follow y under some circumstance
 	 */
-	private Map<T, IndexedSet<T>> validFollowers = new HashMap<T, IndexedSet<T>>();
+	private final Map<T, IndexedSet<T>> validFollowers = new HashMap<T, IndexedSet<T>>();
 	
 	/**
 	 * A reverse lookup table from elements to positions
 	 */
-	private Map<T, Pair<Integer, Integer>> reverseLookup = new HashMap<T, Pair<Integer, Integer>>();
+	private final Map<T, Pair<Integer, Integer>> reverseLookup = new HashMap<T, Pair<Integer, Integer>>();
 	
 	/**
 	 * A reference to the current set of sequences, which will be used in generating moves 
@@ -142,19 +157,19 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	
 	final private ArrayList<Pair<T, T>> validBreaks = new ArrayList<Pair<T, T>>();
 	
-	class Move2over2A<T> extends Move2over2<T> {
+	class Move2over2A extends Move2over2<T> {
 		
 	}
 	
-	class Move2over2B<T> extends Move2over2<T> {
+	class Move2over2B extends Move2over2<T> {
 		
 	}
 	
-	class Move2over2C<T> extends Move2over2<T> {
+	class Move2over2C extends Move2over2<T> {
 		
 	}
 	
-	class NullMove<T> implements IMove<T> {
+	class NullMove implements IMove<T> {
 
 		@Override
 		public Collection<IResource> getAffectedResources() {
@@ -163,53 +178,54 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		}
 
 		@Override
-		public void apply(IModifiableSequences<T> sequences) {
+		public void apply(final IModifiableSequences<T> sequences) {
 			
 		}
 
 		@Override
-		public boolean validate(ISequences<T> sequences) {
+		public boolean validate(final ISequences<T> sequences) {
 			return true;
 		}
 		
 	}
 	
-	class NullMoveA<T> extends NullMove<T> {}
-	class NullMoveB<T> extends NullMove<T> {}
-	class NullMoveC<T> extends NullMove<T> {}
-	class NullMoveD<T> extends NullMove<T> {}
-	class NullMoveE<T> extends NullMove<T> {}
+	class NullMoveA extends NullMove {}
+	class NullMoveB extends NullMove {}
+	class NullMoveC extends NullMove {}
+	class NullMoveD extends NullMove {}
+	class NullMoveE extends NullMove {}
 	
-	NullMove<T> nullMoveA = new NullMoveA<T>();
-	NullMove<T> nullMoveB = new NullMoveB<T>();
-	NullMove<T> nullMoveC = new NullMoveC<T>();
-	NullMove<T> nullMoveD = new NullMoveD<T>();
+	NullMove nullMoveA = new NullMoveA();
+	NullMove nullMoveB = new NullMoveB();
+	NullMove nullMoveC = new NullMoveC();
+	NullMove nullMoveD = new NullMoveD();
 
 	private final LegalSequencingChecker<T> checker;
 	
-	public ConstrainedMoveGenerator(IOptimisationContext<T> context) {
+	public ConstrainedMoveGenerator(final IOptimisationContext<T> context) {
 //		this.context = context;
 		this.checker = new LegalSequencingChecker<T>(context);
 		final IOptimisationData<T> data = context.getOptimisationData();
 		
 		@SuppressWarnings("unchecked")
+		final
 		IPortTypeProvider<T> portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 		
 		//create a massive lookup table, caching all legal sequencing decisions
 		//this might be a terrible idea, we could just keep the checker instead
 		//also need to fix the resource binding now
-		for (T e1 : data.getSequenceElements()) {
+		for (final T e1 : data.getSequenceElements()) {
 			if (!portTypeProvider.getPortType(e1).equals(PortType.End)) {
 				breakableVertexCount++;
 			}
 			
 			reverseLookup.put(e1, new Pair<Integer, Integer>(0,0));
 			
-			IndexedSet<T> followers = new IndexedSet<T>();
+			final IndexedSet<T> followers = new IndexedSet<T>();
 			
 			validFollowers.put(e1, followers);
 			
-			for (T e2 : data.getSequenceElements()) {
+			for (final T e2 : data.getSequenceElements()) {
 				if (e1 == e2) continue;
 				if (checker.allowSequence(e1, e2)) {
 					if (followers.size() == 1) {
@@ -268,7 +284,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 					}
 				}
 				
-				Move3over2<T> result = new Move3over2<T>();
+				final Move3over2<T> result = new Move3over2<T>();
 				result.setResource1(resources.get(sequence1));
 				result.setResource1Start(beforeFirstCut+1);
 				result.setResource1End(beforeSecondCut);
@@ -307,7 +323,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			//if it would be, maybe do it
 			if (valid2opt2 && random.nextBoolean()) {
 				//make 2opt2
-				Move2over2<T> result = new Move2over2A<T>();
+				final Move2over2<T> result = new Move2over2A();
 				result.setResource1(resources.get(sequence1));
 				result.setResource2(resources.get(sequence2));
 				//add 1 because the positions are inclusive, and we need to cut after the first element
@@ -330,10 +346,10 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				final Set<T> followersOfSecondElementsPredecessor = 
 					validFollowers.get(seq2.get(position2-1));
 				
-				List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
+				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
 				for (int i = position2+1; i<seq2.size()-1; i++) { //ignore last element
 					final T here = seq2.get(i);
-					for (T elt : validFollowers.get(here)) {
+					for (final T elt : validFollowers.get(here)) {
 						final Pair<Integer, Integer> loc = reverseLookup.get(elt);
 						if (loc.getFirst().intValue() == sequence1) {
 							//it can be adjacent to something in sequence 1, that's good
@@ -364,7 +380,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				
 				if (viableSecondBreaks.isEmpty()) {
 					if (valid2opt2) {
-						Move2over2<T> result = new Move2over2B<T>();
+						final Move2over2<T> result = new Move2over2B();
 						result.setResource1(resources.get(sequence1));
 						result.setResource2(resources.get(sequence2));
 						//add 1 because the positions are inclusive, and we need to cut after the first element
@@ -427,15 +443,15 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	@Override
-	public void setSequences(ISequences<T> sequences) {
+	public void setSequences(final ISequences<T> sequences) {
 		this.sequences = sequences;
 		
 		/*
 		 * TODO profile this horrible thing
 		 */
-		for (int i = 0; i<sequences.size(); i++) {
+		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence<T> sequence = sequences.getSequence(i);
-			for (int j = 0; j<sequence.size(); j++) {
+			for (int j = 0; j < sequence.size(); j++) {
 				reverseLookup.get(sequence.get(j)).setBoth(i, j);
 			}
 		}
@@ -445,7 +461,13 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		return random;
 	}
 
-	public void setRandom(Random random) {
+	public void setRandom(final Random random) {
 		this.random = random;
+	}
+	
+	public void init() {
+		if (random == null) {
+			throw new IllegalStateException("Random number generator has not been set");
+		}
 	}
 }
