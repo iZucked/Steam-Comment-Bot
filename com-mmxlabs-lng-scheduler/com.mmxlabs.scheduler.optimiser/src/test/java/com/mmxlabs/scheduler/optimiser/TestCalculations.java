@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
@@ -198,12 +199,12 @@ public class TestCalculations {
 
 		// Schedule sequence
 		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
+		final Pair<Integer, List<VoyagePlan>> plansAndStartTime = scheduler.schedule(resource, sequence, expectedArrivalTimes);
 		
-		Assert.assertNotNull(plans);
+		Assert.assertNotNull(plansAndStartTime);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
-		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
+		annotator.annotateFromVoyagePlan(resource, plansAndStartTime.getSecond(), plansAndStartTime.getFirst(), annotatedSequence);
 
 		// TODO: Start checking results
 		{
@@ -804,10 +805,10 @@ public class TestCalculations {
 
 		// Schedule sequence
 		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
+		final Pair<Integer, List<VoyagePlan>> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
-		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
+		annotator.annotateFromVoyagePlan(resource, plans.getSecond(), plans.getFirst(), annotatedSequence);
 
 		// TODO: Start checking results
 		{
@@ -1413,10 +1414,10 @@ public class TestCalculations {
 
 		// Schedule sequence
 		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final List<VoyagePlan> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes, false);
+		final Pair<Integer,List<VoyagePlan>> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes);
 
 		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
-		annotator.annotateFromVoyagePlan(resource, plans, annotatedSequence);
+		annotator.annotateFromVoyagePlan(resource, plans.getSecond(), plans.getFirst(), annotatedSequence);
 
 		// TODO: Start checking results
 		{
@@ -1905,7 +1906,7 @@ public class TestCalculations {
 			AbstractSequenceScheduler<T> {
 
 		@Override
-		public List<VoyagePlan> schedule(final IResource resource,
+		public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
 				final ISequence<T> sequence) {
 			throw new UnsupportedOperationException(
 					"Method invocation is not part of the tests!");
