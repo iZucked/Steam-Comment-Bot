@@ -25,11 +25,11 @@ public class DirectRandomSequenceScheduler<T> extends
 	/**
 	 * Below this number of possibilities, enumerate all options
 	 */
-	private int samplingLowerBound = 128; 
+	private int samplingLowerBound = 50; 
 	/**
 	 * Never do more than this many samples
 	 */
-	private int samplingUpperBound = 1000;
+	private int samplingUpperBound = 500;
 	/**
 	 * Sample this proportion of the search space, up to {@code samplingUpperBound}
 	 */
@@ -42,8 +42,8 @@ public class DirectRandomSequenceScheduler<T> extends
 		
 		setResourceAndSequence(resource, sequence);
 		resetBest();
-		final long approximateSpaceSize = prepare();
-
+		final long approximateSpaceSize = prepare(samplingUpperBound);
+//		System.err.println("approx. size = " + approximateSpaceSize);
 		if (approximateSpaceSize < samplingLowerBound) {
 //			System.err.println("Exhaustive search " + approximateSpaceSize);
 			enumerate(0);

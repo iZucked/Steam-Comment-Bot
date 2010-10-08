@@ -82,7 +82,7 @@ public class EnumeratingSequenceScheduler<T> extends
 		
 		startLogEntry(sequence.size());
 		
-		prepare();
+		prepare(Long.MAX_VALUE);
 		enumerate(0);
 
 		endLogEntry();
@@ -111,11 +111,12 @@ public class EnumeratingSequenceScheduler<T> extends
 
 	/**
 	 * Unpack some distance/time/speed information, set up arrays etc
+	 * @param maxValue 
 	 * 
 	 * @param sequence
 	 * @return 
 	 */
-	protected final long prepare() {
+	protected final long prepare(final long maxValue) {
 		arrivalTimes = new int[sequence.size()];
 		windowStartTime = new int[sequence.size()];
 		windowEndTime = new int[sequence.size()];
@@ -206,6 +207,8 @@ public class EnumeratingSequenceScheduler<T> extends
 		long approximateCombinations = 1;
 		for (index = 0; index < arrivalTimes.length; index++) {
 			approximateCombinations *= windowEndTime[index] - windowStartTime[index]+1;
+			if (approximateCombinations >= maxValue)
+				break;
 		}
 		return approximateCombinations;
 	}
