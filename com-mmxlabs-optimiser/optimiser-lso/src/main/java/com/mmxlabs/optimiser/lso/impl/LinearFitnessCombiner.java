@@ -23,7 +23,7 @@ public final class LinearFitnessCombiner implements IFitnessCombiner {
 	 * 
 	 * @return
 	 */
-	public void setFitnessComponentWeights(
+	public final void setFitnessComponentWeights(
 			final Map<String, Double> fitnessComponentWeights) {
 		this.fitnessComponentWeights = fitnessComponentWeights;
 	}
@@ -33,12 +33,12 @@ public final class LinearFitnessCombiner implements IFitnessCombiner {
 	 * 
 	 * @return
 	 */
-	public Map<String, Double> getFitnessComponentWeights() {
+	public final Map<String, Double> getFitnessComponentWeights() {
 		return fitnessComponentWeights;
 	}
 
 	@Override
-	public <T> long calculateFitness(
+	public final <T> long calculateFitness(
 			final Collection<IFitnessComponent<T>> fitnessComponents) {
 		// Sum up total fitness, combining raw values with weights
 		long totalFitness = 0;
