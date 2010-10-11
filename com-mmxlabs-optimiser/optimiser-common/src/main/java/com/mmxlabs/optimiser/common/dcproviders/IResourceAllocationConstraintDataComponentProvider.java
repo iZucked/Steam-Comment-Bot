@@ -12,7 +12,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @author Simon Goodall
  * 
  */
-public interface IResourceAllocationConstraintDataComponentProvider extends
+public interface IResourceAllocationConstraintDataComponentProvider<T> extends
 		IDataComponentProvider {
 
 	/**
@@ -23,6 +23,6 @@ public interface IResourceAllocationConstraintDataComponentProvider extends
 	 * @param element
 	 * @return
 	 */
-	Collection<IResource> getAllowedResources(final Object element);
+	Collection<IResource> getAllowedResources(final T element);
 
 }

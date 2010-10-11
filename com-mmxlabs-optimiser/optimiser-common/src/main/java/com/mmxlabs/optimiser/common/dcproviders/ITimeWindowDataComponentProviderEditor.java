@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
-public interface ITimeWindowDataComponentProviderEditor extends
-		ITimeWindowDataComponentProvider {
+public interface ITimeWindowDataComponentProviderEditor<T> extends
+		ITimeWindowDataComponentProvider<T> {
 
 
 	/**
@@ -15,7 +15,7 @@ public interface ITimeWindowDataComponentProviderEditor extends
 	 * @param element
 	 * @param timeWindows
 	 */
-	void setTimeWindows(Object element, List<ITimeWindow> timeWindows);
+	void setTimeWindows(T element, List<ITimeWindow> timeWindows);
 
 	
 }

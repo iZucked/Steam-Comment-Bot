@@ -12,7 +12,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @author Simon Goodall
  * 
  */
-public interface ITimeWindowDataComponentProvider extends
+public interface ITimeWindowDataComponentProvider<T> extends
 		IDataComponentProvider {
 
 	/**
@@ -22,6 +22,6 @@ public interface ITimeWindowDataComponentProvider extends
 	 * @param element
 	 * @return
 	 */
-	List<ITimeWindow> getTimeWindows(Object element);
+	List<ITimeWindow> getTimeWindows(T element);
 
 }

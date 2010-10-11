@@ -4,10 +4,10 @@ import java.util.Collection;
 
 import com.mmxlabs.optimiser.core.IResource;
 
-public interface IResourceAllocationConstraintDataComponentProviderEditor
-		extends IResourceAllocationConstraintDataComponentProvider {
+public interface IResourceAllocationConstraintDataComponentProviderEditor<T>
+		extends IResourceAllocationConstraintDataComponentProvider<T> {
 
-	void setAllowedResources(final Object element,
+	void setAllowedResources(final T element,
 			final Collection<IResource> resources);
 
 }
