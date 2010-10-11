@@ -3,7 +3,7 @@ package com.mmxlabs.common.caches;
 import com.mmxlabs.common.Pair;
 
 public abstract class AbstractCache<K, V> {
-	private static final int SAMPLE = 1000000;
+	private static final int SAMPLE = 100000;
 	private final String name;
 	
 	int hits = 0;
@@ -24,7 +24,7 @@ public abstract class AbstractCache<K, V> {
 	}
 	
 	public String toString() {
-		return String.format("%s cache: size %d, hit rate %.2f",
+		return String.format("%s cache: size %d, hit rate %.2f%%",
 				name, size() , 100*(hits/(double)queries));
 	}
 	
