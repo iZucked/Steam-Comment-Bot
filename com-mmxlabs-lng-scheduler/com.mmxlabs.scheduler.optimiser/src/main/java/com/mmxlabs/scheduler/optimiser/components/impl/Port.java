@@ -1,6 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
@@ -9,15 +11,16 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * @author Simon Goodall
  * 
  */
-public final class Port implements IPort {
+public final class Port extends IndexedObject implements IPort {
 
 	private String name;
 
-	public Port() {
-
+	public Port(final IIndexingContext context) {
+		super(context);
 	}
 
-	public Port(final String name) {
+	public Port(final IIndexingContext context, final String name) {
+		super(context);
 		setName(name);
 	}
 

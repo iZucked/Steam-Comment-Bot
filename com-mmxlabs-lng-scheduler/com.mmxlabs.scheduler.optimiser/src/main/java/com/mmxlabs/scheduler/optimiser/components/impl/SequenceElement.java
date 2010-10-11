@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
@@ -9,17 +11,18 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
  * @author Simon Goodall
  * 
  */
-public final class SequenceElement implements ISequenceElement {
+public final class SequenceElement extends IndexedObject implements ISequenceElement {
 
 	private String name;
 
 	private IPortSlot portSlot;
 
-	public SequenceElement() {
-
+	public SequenceElement(final IIndexingContext context) {
+		super(context);
 	}
 
-	public SequenceElement(final String name, IPortSlot portSlot) {
+	public SequenceElement(final IIndexingContext context, final String name, IPortSlot portSlot) {
+		super(context);
 		this.name = name;
 		this.portSlot = portSlot;
 	}

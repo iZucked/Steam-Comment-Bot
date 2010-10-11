@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
@@ -12,7 +13,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @author Simon Goodall
  * 
  */
-public interface ISequenceElement {
+public interface ISequenceElement extends IIndexedObject {
 
 	/**
 	 * A name for this element.

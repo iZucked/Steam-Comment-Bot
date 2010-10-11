@@ -1,5 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.IndexedObject;
+import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -10,7 +13,11 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
  * @author Simon Goodall
  * 
  */
-public final class Vessel implements IVessel {
+public final class Vessel extends IndexedObject implements IVessel {
+
+	public Vessel(IIndexingContext provider) {
+		super(provider);
+	}
 
 	private String name;
 
@@ -46,8 +53,8 @@ public final class Vessel implements IVessel {
 		this.vesselInstanceType = vesselInstanceType;
 	}
 
-	@Override
 	public String toString() {
 		return getName();
 	}
+
 }

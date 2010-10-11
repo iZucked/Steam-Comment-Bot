@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.common.indexedobjects.IIndexedObject;
+
 /**
  * This interface defines a Port, a physical location that can be used as a
  * source or destination point for travel.
@@ -7,7 +9,7 @@ package com.mmxlabs.scheduler.optimiser.components;
  * @author Simon Goodall
  * 
  */
-public interface IPort {
+public interface IPort extends IIndexedObject {
 
 	/**
 	 * The name of the port.

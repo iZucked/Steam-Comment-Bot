@@ -1,6 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 
 /**
@@ -9,7 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
  * @author Simon Goodall
  * 
  */
-public final class XYPort implements IXYPort {
+public final class XYPort extends IndexedObject implements IXYPort {
 
 	private String name;
 
@@ -17,11 +19,12 @@ public final class XYPort implements IXYPort {
 
 	private float y;
 
-	public XYPort() {
-		
+	public XYPort(final IIndexingContext context) {
+		super(context);
 	}
 	
-	public XYPort(final String name, final float x, final float y) {
+	public XYPort(final IIndexingContext context, final String name, final float x, final float y) {
+		super(context);
 		this.name = name;
 		this.x = x;
 		this.y = y;
