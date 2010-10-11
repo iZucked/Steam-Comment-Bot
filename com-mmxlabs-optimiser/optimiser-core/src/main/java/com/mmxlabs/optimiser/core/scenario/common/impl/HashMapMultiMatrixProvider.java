@@ -25,7 +25,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
  * @param <U>
  *            Value type
  */
-public final class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements
+public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements
 		IMultiMatrixProvider<T, U>, IMultiMatrixEditor<T, U> {
 
 	private final HashMap<String, IMatrixProvider<T, U>> matricies;
@@ -118,7 +118,7 @@ public final class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implem
 	}
 	
 	@Override
-	public final U getMinimumValue(final T x, final T y) {
+	public U getMinimumValue(final T x, final T y) {
 		return getMinimum(x, y).getValue();
 	}
 }
