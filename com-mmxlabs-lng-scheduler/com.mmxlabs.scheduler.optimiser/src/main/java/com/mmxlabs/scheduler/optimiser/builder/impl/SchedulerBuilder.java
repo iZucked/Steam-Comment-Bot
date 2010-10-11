@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.indexedobjects.HashMapIndexingContext;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
@@ -20,6 +22,9 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEdito
 import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.ResourceAllocationConstraintProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurationEditor;
+import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
+import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedTimeWindowEditor;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -28,6 +33,8 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMatrixEditor;
+import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -77,6 +84,9 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProvid
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
 
 /**
  * Implementation of {@link ISchedulerBuilder}
@@ -102,21 +112,21 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IVesselProviderEditor vesselProvider;
 
-	private final IPortProviderEditor portProvider;
+	private final IPortProviderEditor<ISequenceElement> portProvider;
 
 	private final IPortSlotProviderEditor<ISequenceElement> portSlotsProvider;
 
 	private final IOrderedSequenceElementsDataComponentProviderEditor<ISequenceElement> orderedSequenceElementsEditor;
 
-	private final ITimeWindowDataComponentProviderEditor timeWindowProvider;
+	private final ITimeWindowDataComponentProviderEditor<ISequenceElement> timeWindowProvider;
 
-	private final IMultiMatrixEditor<IPort, Integer> portDistanceProvider;
+	private final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
 
 	private final IPortTypeProviderEditor<ISequenceElement> portTypeProvider;
 
 	private final IElementDurationProviderEditor<ISequenceElement> elementDurationsProvider;
 
-	private final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider;
+	private final IResourceAllocationConstraintDataComponentProviderEditor<ISequenceElement> resourceAllocationProvider;
 
 	private final List<ILoadSlot> loadSlots = new LinkedList<ILoadSlot>();
 
@@ -155,24 +165,64 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private HashMapRouteCostProviderEditor routeCostProvider;
 
+	private final IIndexingContext indexingContext = new HashMapIndexingContext();
+	
 	public SchedulerBuilder() {
 		vesselProvider = new HashMapVesselEditor(
 				SchedulerConstants.DCP_vesselProvider);
-		portProvider = new HashMapPortEditor(
-				SchedulerConstants.DCP_portProvider);
-		orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider<ISequenceElement>(
-				SchedulerConstants.DCP_orderedElementsProvider);
-		timeWindowProvider = new TimeWindowDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider);
-		portDistanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
-				SchedulerConstants.DCP_portDistanceProvider);
-		portSlotsProvider = new HashMapPortSlotEditor<ISequenceElement>(
-				SchedulerConstants.DCP_portSlotsProvider);
-		elementDurationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
-				SchedulerConstants.DCP_elementDurationsProvider);
-		portTypeProvider = new HashMapPortTypeEditor<ISequenceElement>(
-				SchedulerConstants.DCP_portTypeProvider);
 
+		
+		portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>(
+				SchedulerConstants.DCP_portDistanceProvider);
+		
+		
+		if (true) {
+			portProvider = new IndexedPortEditor<ISequenceElement>(
+					SchedulerConstants.DCP_portProvider);
+			portSlotsProvider = new IndexedPortSlotEditor<ISequenceElement>(
+					SchedulerConstants.DCP_portSlotsProvider);
+			portTypeProvider = new IndexedPortTypeEditor<ISequenceElement>(
+					SchedulerConstants.DCP_portTypeProvider);
+
+			timeWindowProvider = new IndexedTimeWindowEditor<ISequenceElement>(
+					SchedulerConstants.DCP_timeWindowProvider);
+			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor<ISequenceElement>(
+					SchedulerConstants.DCP_orderedElementsProvider);
+
+			elementDurationsProvider = new IndexedElementDurationEditor<ISequenceElement>(
+					SchedulerConstants.DCP_elementDurationsProvider);
+			
+			// Create a default matrix entry
+			portDistanceProvider.set(IMultiMatrixProvider.Default_Key,
+					new IndexedMatrixEditor<IPort, Integer>(
+							SchedulerConstants.DCP_portDistanceProvider,
+							Integer.MAX_VALUE));
+		} else {
+
+			elementDurationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
+					SchedulerConstants.DCP_elementDurationsProvider);
+
+			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider<ISequenceElement>(
+					SchedulerConstants.DCP_orderedElementsProvider);
+
+			timeWindowProvider = new TimeWindowDataComponentProvider(
+					SchedulerConstants.DCP_timeWindowProvider);
+			
+			portTypeProvider = new HashMapPortTypeEditor<ISequenceElement>(
+					SchedulerConstants.DCP_portTypeProvider);
+
+			portSlotsProvider = new HashMapPortSlotEditor<ISequenceElement>(
+					SchedulerConstants.DCP_portSlotsProvider);
+
+			portProvider = new HashMapPortEditor(
+					SchedulerConstants.DCP_portProvider);
+			
+			// Create a default matrix entry
+			portDistanceProvider.set(IMultiMatrixProvider.Default_Key,
+					new HashMapMatrixProvider<IPort, Integer>(
+							SchedulerConstants.DCP_portDistanceProvider,
+							Integer.MAX_VALUE));
+		}
 		resourceAllocationProvider = new ResourceAllocationConstraintProvider(
 				SchedulerConstants.DCP_resourceAllocationProvider);
 
@@ -181,12 +231,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		portExclusionProvider = new HashMapPortExclusionProvider(
 				SchedulerConstants.DCP_portExclusionProvider);
-
-		// Create a default matrix entry
-		portDistanceProvider.set(IMultiMatrixProvider.Default_Key,
-				new HashMapMatrixProvider<IPort, Integer>(
-						SchedulerConstants.DCP_portDistanceProvider,
-						Integer.MAX_VALUE));
 
 		returnElementProvider = new HashMapReturnElementProviderEditor<ISequenceElement>(
 				SchedulerConstants.DCP_returnElementProvider);
@@ -227,7 +271,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		loadSlots.add(slot);
 
 		// Create a sequence element against this load slot
-		final SequenceElement element = new SequenceElement();
+		final SequenceElement element = new SequenceElement(indexingContext);
 		element.setName(id + "-" + port.getName());
 		element.setPortSlot(slot);
 
@@ -274,7 +318,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		dischargeSlots.add(slot);
 
 		// Create a sequence element against this discharge slot
-		final SequenceElement element = new SequenceElement();
+		final SequenceElement element = new SequenceElement(indexingContext);
 		element.setPortSlot(slot);
 		element.setName(id + "-" + port.getName());
 
@@ -309,6 +353,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		final Cargo cargo = new Cargo();
+		cargo.setId(id);
 		cargo.setLoadSlot(loadSlot);
 		cargo.setDischargeSlot(dischargeSlot);
 
@@ -329,7 +374,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IPort createPort(final String name) {
 
-		final Port port = new Port();
+		final Port port = new Port(indexingContext);
 		port.setName(name);
 
 		ports.add(port);
@@ -358,7 +403,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private ISequenceElement createReturnElement(final IPort port) {
 		final String name = "return-to-" + port.getName();
 		final EndPortSlot slot = new EndPortSlot(name, port, null);
-		final SequenceElement element = new SequenceElement("return-to-"
+		final SequenceElement element = new SequenceElement(indexingContext, "return-to-"
 				+ port.getName(), slot);
 
 		portProvider.setPortForElement(port, element);
@@ -374,7 +419,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IXYPort createPort(final String name, final float x, final float y) {
 
-		final XYPort port = new XYPort();
+		final XYPort port = new XYPort(indexingContext);
 		port.setName(name);
 		port.setX(x);
 		port.setY(y);
@@ -470,7 +515,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// "End IPort was not created using this builder");
 		// }
 
-		final Vessel vessel = new Vessel();
+		final Vessel vessel = new Vessel(indexingContext);
 		vessel.setName(name);
 		vessel.setVesselClass(vesselClass);
 
@@ -478,7 +523,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vessels.add(vessel);
 
-		final IResource resource = new Resource(name);
+		final IResource resource = new Resource(indexingContext, name);
 		resources.add(resource);
 
 		// Register with provider
@@ -501,8 +546,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		endSlot.setPort(end.hasPortRequirement() ? end.getLocation() : ANYWHERE);
 
 		// Create start/end sequence elements for this route
-		final SequenceElement startElement = new SequenceElement();
-		final SequenceElement endElement = new SequenceElement();
+		final SequenceElement startElement = new SequenceElement(indexingContext);
+		final SequenceElement endElement = new SequenceElement(indexingContext);
 
 		sequenceElements.add(startElement);
 		sequenceElements.add(endElement);
@@ -596,11 +641,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			 * This route has not previously been added to the PDP; initialise a
 			 * blank matrix here?
 			 */
-
-			portDistanceProvider.set(route,
-					new HashMapMatrixProvider<IPort, Integer>(
-							SchedulerConstants.DCP_portDistanceProvider,
-							Integer.MAX_VALUE));
+			if (true) {				
+				portDistanceProvider.set(route,
+						new IndexedMatrixEditor<IPort, Integer>(
+								SchedulerConstants.DCP_portDistanceProvider,
+								Integer.MAX_VALUE));
+			} else {
+				portDistanceProvider.set(route,
+						new HashMapMatrixProvider<IPort, Integer>(
+								SchedulerConstants.DCP_portDistanceProvider,
+								Integer.MAX_VALUE));
+			}
 		}
 
 		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider
@@ -642,6 +693,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Create charter out elements
 		buildCharterOuts();
 
+		portDistanceProvider.cacheMinimumValues(ports);
+		
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
 
 		data.setResources(resources);
@@ -874,7 +927,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						charterOut.getPort(), 
 						charterOut.getTimeWindow());
 			
-			final SequenceElement element = new SequenceElement("charter-out-"+i, slot);
+			final SequenceElement element = new SequenceElement(indexingContext, "charter-out-"+i, slot);
 			
 			sequenceElements.add(element); 
 			
