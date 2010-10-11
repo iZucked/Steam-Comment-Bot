@@ -153,8 +153,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				final Pair<Integer, List<VoyagePlan>> plans = scheduler
 						.schedule(resource, sequence);
 				if (plans == null) {
-					System.err
-							.println("Scheduler has returned null voyage plan; backing out of move.");
+//					System.err
+//							.println("Scheduler has returned null voyage plan; backing out of move.");
 					return false; // for some reason, this move has no valid
 									// plans. this
 					// should probably be a serious issue.
