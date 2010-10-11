@@ -15,8 +15,8 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @author Simon Goodall
  * 
  */
-public final class ResourceAllocationConstraintProvider implements
-		IResourceAllocationConstraintDataComponentProviderEditor {
+public final class ResourceAllocationConstraintProvider<T> implements
+		IResourceAllocationConstraintDataComponentProviderEditor<T> {
 
 	private final String name;
 
@@ -33,7 +33,7 @@ public final class ResourceAllocationConstraintProvider implements
 	}
 
 	@Override
-	public Collection<IResource> getAllowedResources(final Object element) {
+	public Collection<IResource> getAllowedResources(final T element) {
 
 		if (allowedResourceMap.containsKey(element)) {
 			return allowedResourceMap.get(element);
@@ -43,7 +43,7 @@ public final class ResourceAllocationConstraintProvider implements
 	}
 
 	@Override
-	public void setAllowedResources(final Object element,
+	public void setAllowedResources(final T element,
 			final Collection<IResource> resources) {
 		allowedResourceMap.put(element, resources);
 	}

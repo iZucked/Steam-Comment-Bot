@@ -14,8 +14,8 @@ import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider
  * @author Simon Goodall
  * 
  */
-public final class TimeWindowDataComponentProvider implements
-		ITimeWindowDataComponentProviderEditor {
+public final class TimeWindowDataComponentProvider<T> implements
+		ITimeWindowDataComponentProviderEditor<T> {
 
 	private final String name;
 
@@ -27,7 +27,7 @@ public final class TimeWindowDataComponentProvider implements
 	}
 
 	@Override
-	public List<ITimeWindow> getTimeWindows(final Object element) {
+	public List<ITimeWindow> getTimeWindows(final T element) {
 		if (timeWindowsMap.containsKey(element)) {
 			return timeWindowsMap.get(element);
 		}
@@ -35,7 +35,7 @@ public final class TimeWindowDataComponentProvider implements
 	}
 
 	@Override
-	public void setTimeWindows(final Object element,
+	public void setTimeWindows(final T element,
 			final List<ITimeWindow> timeWindows) {
 		this.timeWindowsMap.put(element, timeWindows);
 	}
