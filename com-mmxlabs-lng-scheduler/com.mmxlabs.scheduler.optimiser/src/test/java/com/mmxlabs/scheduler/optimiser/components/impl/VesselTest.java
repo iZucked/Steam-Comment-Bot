@@ -7,17 +7,19 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 
 @RunWith(JMock.class)
 public class VesselTest {
-
+	final IIndexingContext index = new SimpleIndexingContext();
 	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testGetSetName() {
-		final Vessel vessel = new Vessel();
+		final Vessel vessel = new Vessel(index);
 		Assert.assertNull(vessel.getName());
 		final String name = "name";
 		vessel.setName(name);
@@ -26,7 +28,7 @@ public class VesselTest {
 
 	@Test
 	public void testGetSetVesselClass() {
-		final Vessel vessel = new Vessel();
+		final Vessel vessel = new Vessel(index);
 		Assert.assertNull(vessel.getVesselClass());
 		IVesselClass vesselClass = context.mock(IVesselClass.class);
 		vessel.setVesselClass(vesselClass);
@@ -35,7 +37,7 @@ public class VesselTest {
 
 	@Test
 	public void testGetSetVesselInstanceType() {
-		final Vessel vessel = new Vessel();
+		final Vessel vessel = new Vessel(index);
 		Assert.assertSame(VesselInstanceType.UNKNOWN, vessel.getVesselInstanceType());
 		VesselInstanceType value = VesselInstanceType.FLEET;
 		vessel.setVesselInstanceType(value);

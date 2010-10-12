@@ -3,11 +3,14 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class PortTest {
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 
+public class PortTest {
+	final IIndexingContext index = new SimpleIndexingContext();
 	@Test
 	public void testGetSetName() {
-		final Port port = new Port();
+		final Port port = new Port(index);
 		Assert.assertNull(port.getName());
 		final String name = "name";
 		port.setName(name);
@@ -18,10 +21,10 @@ public class PortTest {
 	@Test
 	public void testEquals() {
 		
-		Port port1 = new Port("name");
-		Port port2 = new Port("name");
+		Port port1 = new Port(index,"name");
+		Port port2 = new Port(index,"name");
 		
-		Port port3 = new Port("name2");
+		Port port3 = new Port(index,"name2");
 		
 		Assert.assertTrue(port1.equals(port1));
 		Assert.assertTrue(port1.equals(port2));

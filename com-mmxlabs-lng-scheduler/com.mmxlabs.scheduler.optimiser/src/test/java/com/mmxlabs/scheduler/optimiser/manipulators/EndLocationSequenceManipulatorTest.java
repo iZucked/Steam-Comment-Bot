@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -49,13 +51,13 @@ public class EndLocationSequenceManipulatorTest {
 
 	@Test
 	public void testGetSetEndLocationRule() {
-
+		final IIndexingContext index = new SimpleIndexingContext();
 		final EndLocationSequenceManipulator<Object> manipulator = 
 			new EndLocationSequenceManipulator<Object>();
 
-		final IResource resource1 = new Resource();
-		final IResource resource2 = new Resource();
-		final IResource resource3 = new Resource();
+		final IResource resource1 = new Resource(index);
+		final IResource resource2 = new Resource(index);
+		final IResource resource3 = new Resource(index);
 
 		Assert.assertSame(EndLocationRule.NONE,
 				manipulator.getEndLocationRule(resource1));

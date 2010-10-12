@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -61,7 +63,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @RunWith(JMock.class)
 public final class AbstractSequenceSchedulerTest {
-
+	
 	Mockery context = new JUnit4Mockery();
 
 	/**
@@ -75,13 +77,13 @@ public final class AbstractSequenceSchedulerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSchedule_1() throws CloneNotSupportedException {
-
+		final IIndexingContext index = new SimpleIndexingContext();
 		final MockSequenceScheduler<ISequenceElement> scheduler = new MockSequenceScheduler<ISequenceElement>();
 
-		final Port port1 = new Port("port1");
-		final Port port2 = new Port("port2");
-		final Port port3 = new Port("port3");
-		final Port port4 = new Port("port4");
+		final Port port1 = new Port(index, "port1");
+		final Port port2 = new Port(index, "port2");
+		final Port port3 = new Port(index, "port3");
+		final Port port4 = new Port(index, "port4");
 
 		final ITimeWindow timeWindow1 = new TimeWindow(5, 6);
 		final ITimeWindow timeWindow2 = new TimeWindow(10, 11);
@@ -112,13 +114,13 @@ public final class AbstractSequenceSchedulerTest {
 		cargo2.setLoadSlot(loadSlot2);
 		cargo2.setDischargeSlot(dischargeSlot2);
 
-		final ISequenceElement element1 = new SequenceElement("element1",
+		final ISequenceElement element1 = new SequenceElement(index, "element1",
 				loadSlot1);
-		final ISequenceElement element2 = new SequenceElement("element2",
+		final ISequenceElement element2 = new SequenceElement(index, "element2",
 				dischargeSlot1);
-		final ISequenceElement element3 = new SequenceElement("element3",
+		final ISequenceElement element3 = new SequenceElement(index, "element3",
 				loadSlot2);
-		final ISequenceElement element4 = new SequenceElement("element4",
+		final ISequenceElement element4 = new SequenceElement(index, "element4",
 				dischargeSlot2);
 
 		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
@@ -180,8 +182,8 @@ public final class AbstractSequenceSchedulerTest {
 		scheduler.setPortSlotProvider(portSlotProvider);
 		scheduler.setPortTypeProvider(portTypeProvider);
 
-		final IResource resource = new Resource();
-		final Vessel vessel = new Vessel();
+		final IResource resource = new Resource(index);
+		final Vessel vessel = new Vessel(index);
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
 		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);
@@ -368,12 +370,12 @@ public final class AbstractSequenceSchedulerTest {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testSchedule_2() throws CloneNotSupportedException {
-
+		final IIndexingContext index = new SimpleIndexingContext();
 		final MockSequenceScheduler<ISequenceElement> scheduler = new MockSequenceScheduler<ISequenceElement>();
 
-		final Port port1 = new Port("port1");
-		final Port port2 = new Port("port2");
-		final Port port3 = new Port("port3");
+		final Port port1 = new Port(index, "port1");
+		final Port port2 = new Port(index, "port2");
+		final Port port3 = new Port(index, "port3");
 
 		final ITimeWindow timeWindow1 = new TimeWindow(5, 6);
 		final ITimeWindow timeWindow2 = new TimeWindow(10, 11);
@@ -395,11 +397,11 @@ public final class AbstractSequenceSchedulerTest {
 		loadSlot2.setPort(port3);
 		loadSlot2.setTimeWindow(timeWindow3);
 
-		final ISequenceElement element1 = new SequenceElement("element1",
+		final ISequenceElement element1 = new SequenceElement(index, "element1",
 				loadSlot1);
-		final ISequenceElement element2 = new SequenceElement("element2",
+		final ISequenceElement element2 = new SequenceElement(index, "element2",
 				dischargeSlot1);
-		final ISequenceElement element3 = new SequenceElement("element3",
+		final ISequenceElement element3 = new SequenceElement(index, "element3",
 				loadSlot2);
 
 		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
@@ -455,8 +457,8 @@ public final class AbstractSequenceSchedulerTest {
 		scheduler.setPortSlotProvider(portSlotProvider);
 		scheduler.setPortTypeProvider(portTypeProvider);
 
-		final IResource resource = new Resource();
-		final Vessel vessel = new Vessel();
+		final IResource resource = new Resource(index);
+		final Vessel vessel = new Vessel(index);
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
 		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);

@@ -7,11 +7,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 @RunWith(JMock.class)
 public class SequenceElementTest {
-
+	final IIndexingContext index = new SimpleIndexingContext();
 	Mockery context = new JUnit4Mockery();
 
 	@Test
@@ -19,7 +21,7 @@ public class SequenceElementTest {
 
 		final String name = "name";
 		final IPortSlot slot = context.mock(IPortSlot.class);
-		final SequenceElement element = new SequenceElement(name, slot);
+		final SequenceElement element = new SequenceElement(index, name, slot);
 
 		Assert.assertSame(name, element.getName());
 		Assert.assertSame(slot, element.getPortSlot());
@@ -28,7 +30,7 @@ public class SequenceElementTest {
 	@Test
 	public void testGetSetPortSlot() {
 
-		final SequenceElement element = new SequenceElement();
+		final SequenceElement element = new SequenceElement(index);
 		Assert.assertNull(element.getPortSlot());
 		final IPortSlot slot = context.mock(IPortSlot.class);
 		element.setPortSlot(slot);
@@ -38,7 +40,7 @@ public class SequenceElementTest {
 	@Test
 	public void testGetSetName() {
 
-		final SequenceElement element = new SequenceElement();
+		final SequenceElement element = new SequenceElement(index);
 		Assert.assertNull(element.getName());
 		final String name = "name";
 		element.setName(name);
