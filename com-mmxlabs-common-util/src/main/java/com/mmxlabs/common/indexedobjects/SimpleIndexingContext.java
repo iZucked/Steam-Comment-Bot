@@ -8,7 +8,17 @@ import java.util.Set;
 import com.mmxlabs.common.Pair;
 
 public class SimpleIndexingContext implements IIndexingContext {
+	/**
+	 * The list of indices; each element is a pair containing a type, and the
+	 * next index for objects of that type or (or with that as their closest
+	 * superclass).
+	 */
 	private final List<Pair<Class<? extends Object>, Integer>> indices = new ArrayList<Pair<Class<? extends Object>, Integer>>();
+	/**
+	 * A set to keep track of what types we have complained about indexing as
+	 * plain Objects
+	 */
+	private final Set<Class<? extends Object>> warnedTypes = new HashSet<Class<? extends Object>>();
 
 	public SimpleIndexingContext() {
 		super();
@@ -33,18 +43,17 @@ public class SimpleIndexingContext implements IIndexingContext {
 	public synchronized int assignIndex(final Object indexedObject) {
 		final Pair<Class<? extends Object>, Integer> index = getLowestSuperclass(indexedObject
 				.getClass());
-		
+
 		final int value = index.getSecond();
 		index.setSecond(value + 1);
-		
+
 		return value;
 	}
 
-	private final Set<Class<? extends Object>> warnedTypes = new HashSet<Class<? extends Object>>();
-	
 	/**
-	 * This method is slow and clumsy, but we need it to avoid unexpected consequences of
-	 * subclassing a type which is indexed and suddenly breaking all our indexed data structures.
+	 * This method is slow and clumsy, but we need it to avoid unexpected
+	 * consequences of subclassing a type which is indexed and suddenly breaking
+	 * all our indexed data structures.
 	 * 
 	 * @param type
 	 * @return
@@ -55,8 +64,10 @@ public class SimpleIndexingContext implements IIndexingContext {
 		while (true) {
 			for (final Pair<Class<? extends Object>, Integer> index : indices) {
 				if (index.getFirst().equals(type)) {
-					if (index.getFirst().equals(Object.class) && !warnedTypes.contains(baseType)) {
-						System.err.println("Warning: using object index for " + baseType.getSimpleName());
+					if (index.getFirst().equals(Object.class)
+							&& !warnedTypes.contains(baseType)) {
+						System.err.println("Warning: using object index for "
+								+ baseType.getSimpleName());
 						warnedTypes.add(baseType);
 					}
 					return index;
