@@ -19,7 +19,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * using the {@link GASequenceScheduler} code), and returns whichever randomly sampled individual
  * was best. 
  * 
- * © Minimax Labs inc. 2010
+ * (C) Minimax Labs inc. 2010
  * @author hinton
  *
  * @param <T>
