@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * This is similar to the IndividualEvaluator, but just uses a schedule 
  * The IE could probably be refactored to use this, but it's a bit tangled at the moment
  *
- * © Minimax labs inc. 2010
+ * (C) Minimax labs inc. 2010
  * 
  * @author hinton
  * 
