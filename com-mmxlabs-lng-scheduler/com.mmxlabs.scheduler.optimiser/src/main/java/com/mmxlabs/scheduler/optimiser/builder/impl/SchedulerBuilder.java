@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
@@ -29,10 +29,8 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
@@ -167,6 +165,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IIndexingContext indexingContext = new SimpleIndexingContext();
 	
+	/**
+	 * For debug & timing purposes. Switches the indexing DCPs on or off.
+	 */
+	private final boolean USE_INDEXED_DCPS = true;
+	
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
 		indexingContext.registerType(Port.class);
@@ -181,7 +184,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				SchedulerConstants.DCP_portDistanceProvider);
 		
 		
-		if (true) {
+		if (USE_INDEXED_DCPS) {
 			portProvider = new IndexedPortEditor<ISequenceElement>(
 					SchedulerConstants.DCP_portProvider);
 			portSlotsProvider = new IndexedPortSlotEditor<ISequenceElement>(
@@ -646,7 +649,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			 * This route has not previously been added to the PDP; initialise a
 			 * blank matrix here?
 			 */
-			if (true) {				
+			if (USE_INDEXED_DCPS) {				
 				portDistanceProvider.set(route,
 						new IndexedMatrixEditor<IPort, Integer>(
 								SchedulerConstants.DCP_portDistanceProvider,
