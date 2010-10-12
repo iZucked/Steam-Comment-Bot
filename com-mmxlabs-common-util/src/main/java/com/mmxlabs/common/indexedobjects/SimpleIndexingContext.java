@@ -1,12 +1,14 @@
 package com.mmxlabs.common.indexedobjects;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.mmxlabs.common.Pair;
 
 public class SimpleIndexingContext implements IIndexingContext {
-	private List<Pair<Class<? extends Object>, Integer>> indices = new ArrayList<Pair<Class<? extends Object>, Integer>>();
+	private final List<Pair<Class<? extends Object>, Integer>> indices = new ArrayList<Pair<Class<? extends Object>, Integer>>();
 
 	public SimpleIndexingContext() {
 		super();
@@ -38,6 +40,8 @@ public class SimpleIndexingContext implements IIndexingContext {
 		return value;
 	}
 
+	private final Set<Class<? extends Object>> warnedTypes = new HashSet<Class<? extends Object>>();
+	
 	/**
 	 * This method is slow and clumsy, but we need it to avoid unexpected consequences of
 	 * subclassing a type which is indexed and suddenly breaking all our indexed data structures.
@@ -46,11 +50,17 @@ public class SimpleIndexingContext implements IIndexingContext {
 	 * @return
 	 */
 	private final Pair<Class<? extends Object>, Integer> getLowestSuperclass(
-			Class<? extends Object> type) {
+			final Class<? extends Object> baseType) {
+		Class<? extends Object> type = baseType;
 		while (true) {
 			for (final Pair<Class<? extends Object>, Integer> index : indices) {
-				if (index.getFirst().equals(type))
+				if (index.getFirst().equals(type)) {
+					if (index.getFirst().equals(Object.class) && !warnedTypes.contains(baseType)) {
+						System.err.println("Warning: using object index for " + baseType.getSimpleName());
+						warnedTypes.add(baseType);
+					}
 					return index;
+				}
 			}
 			type = type.getSuperclass();
 		}
