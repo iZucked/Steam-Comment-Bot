@@ -11,6 +11,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
@@ -25,6 +27,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public class ResourceAllocationConstraintCheckerTest {
 
+	IIndexingContext index = new SimpleIndexingContext();
 	Mockery context = new JUnit4Mockery();
 
 	@Test
@@ -47,8 +50,8 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Object obj3 = new Object();
 		final Object obj4 = new Object();
 
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
 		provider.setAllowedResources(obj2, CollectionsUtil
@@ -85,8 +88,8 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Object obj3 = new Object();
 		final Object obj4 = new Object();
 
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
 		provider.setAllowedResources(obj2, CollectionsUtil
@@ -123,8 +126,8 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Object obj3 = new Object();
 		final Object obj4 = new Object();
 
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
 		provider.setAllowedResources(obj2, CollectionsUtil
@@ -165,8 +168,8 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Object obj3 = new Object();
 		final Object obj4 = new Object();
 
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
 		provider.setAllowedResources(obj2, CollectionsUtil

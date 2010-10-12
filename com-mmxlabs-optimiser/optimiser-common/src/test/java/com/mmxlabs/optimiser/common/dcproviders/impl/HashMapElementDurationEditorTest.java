@@ -4,12 +4,16 @@ package com.mmxlabs.optimiser.common.dcproviders.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.core.impl.Resource;
 
 
 public class HashMapElementDurationEditorTest {
 
+	IIndexingContext index = new SimpleIndexingContext();
+	
 	@Test
 	public void testHashMapElementDurationEditor() {
 
@@ -26,8 +30,8 @@ public class HashMapElementDurationEditorTest {
 		final HashMapElementDurationEditor<Object> provider = new HashMapElementDurationEditor<Object>(
 				"name");
 
-		final Resource r1 = new Resource();
-		final Resource r2 = new Resource();
+		final Resource r1 = new Resource(index);
+		final Resource r2 = new Resource(index);
 		final Object obj = new Object();
 
 		Assert.assertEquals(provider.getDefaultValue(), provider
@@ -47,8 +51,8 @@ public class HashMapElementDurationEditorTest {
 		final HashMapElementDurationEditor<Object> provider = new HashMapElementDurationEditor<Object>(
 				"name");
 
-		final Resource r1 = new Resource();
-		final Resource r2 = new Resource();
+		final Resource r1 = new Resource(index);
+		final Resource r2 = new Resource(index);
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
 
@@ -78,7 +82,7 @@ public class HashMapElementDurationEditorTest {
 		final HashMapElementDurationEditor<Object> provider = new HashMapElementDurationEditor<Object>(
 				"name");
 
-		final Resource r1 = new Resource();
+		final Resource r1 = new Resource(index);
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
 
@@ -102,8 +106,8 @@ public class HashMapElementDurationEditorTest {
 		final HashMapElementDurationEditor<Object> provider = new HashMapElementDurationEditor<Object>(
 				"name");
 
-		final Resource r1 = new Resource();
-		final Resource r2 = new Resource();
+		final Resource r1 = new Resource(index);
+		final Resource r2 = new Resource(index);
 		final Object obj = new Object();
 
 		Assert.assertEquals(provider.getDefaultValue(), provider

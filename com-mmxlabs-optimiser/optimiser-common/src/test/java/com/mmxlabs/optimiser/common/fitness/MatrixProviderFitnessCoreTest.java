@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.fitness.MatrixProviderFitnessComponent;
 import com.mmxlabs.optimiser.common.fitness.MatrixProviderFitnessCore;
 import com.mmxlabs.optimiser.core.IResource;
@@ -21,7 +23,7 @@ import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 
 public class MatrixProviderFitnessCoreTest {
-
+	final IIndexingContext index = new SimpleIndexingContext();
 	@Test
 	public void testMatrixProviderFitnessCore() {
 		final String componentName = "componentName";
@@ -60,8 +62,8 @@ public class MatrixProviderFitnessCoreTest {
 		final Object obj3 = new Object();
 		final Object obj4 = new Object();
 
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 		final Sequences<Object> sequences;
 		{
 			final ListSequence<Object> seq1 = new ListSequence<Object>(
@@ -144,8 +146,8 @@ public class MatrixProviderFitnessCoreTest {
 		final Object obj3 = new Object();
 		final Object obj4 = new Object();
 
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 
 		final ListSequence<Object> seq1 = new ListSequence<Object>(
 				CollectionsUtil.makeArrayList(obj1, obj2));
@@ -194,8 +196,8 @@ public class MatrixProviderFitnessCoreTest {
 		final Object obj3 = new Object();
 		final Object obj4 = new Object();
 
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 		final Sequences<Object> sequences;
 		{
 			final ListSequence<Object> seq1 = new ListSequence<Object>(

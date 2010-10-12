@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintChecker;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
@@ -28,6 +30,8 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 @RunWith(JMock.class)
 public class OrderedSequenceElementsConstraintCheckerTest {
 
+	IIndexingContext index = new SimpleIndexingContext();
+	
 	Mockery context = new JUnit4Mockery();
 
 	@Test
@@ -64,7 +68,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final ListSequence<Object> seq1 = new ListSequence<Object>(
 				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5,
 						obj6));
-		final IResource r = new Resource();
+		final IResource r = new Resource(index);
 
 		final Map<IResource, ISequence<Object>> map = CollectionsUtil
 				.makeHashMap(r, seq1);
@@ -99,7 +103,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final ListSequence<Object> seq1 = new ListSequence<Object>(
 				CollectionsUtil.makeArrayList(obj1, obj6, obj2, obj3, obj4,
 						obj5));
-		final IResource r = new Resource();
+		final IResource r = new Resource(index);
 
 		final Map<IResource, ISequence<Object>> map = CollectionsUtil
 				.makeHashMap(r, seq1);
@@ -134,7 +138,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final ListSequence<Object> seq1 = new ListSequence<Object>(
 				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6,
 						obj5));
-		final IResource r = new Resource();
+		final IResource r = new Resource(index);
 
 		final Map<IResource, ISequence<Object>> map = CollectionsUtil
 				.makeHashMap(r, seq1);
@@ -169,7 +173,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final ListSequence<Object> seq1 = new ListSequence<Object>(
 				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5,
 						obj6));
-		final IResource r = new Resource();
+		final IResource r = new Resource(index);
 
 		final Map<IResource, ISequence<Object>> map = CollectionsUtil
 				.makeHashMap(r, seq1);
@@ -208,7 +212,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final ListSequence<Object> seq1 = new ListSequence<Object>(
 				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6,
 						obj5));
-		final IResource r = new Resource();
+		final IResource r = new Resource(index);
 
 		final Map<IResource, ISequence<Object>> map = CollectionsUtil
 				.makeHashMap(r, seq1);
@@ -244,7 +248,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final ListSequence<Object> seq1 = new ListSequence<Object>(
 				CollectionsUtil.makeArrayList(obj1));
-		final IResource r = new Resource();
+		final IResource r = new Resource(index);
 
 		final Map<IResource, ISequence<Object>> map = CollectionsUtil
 				.makeHashMap(r, seq1);
@@ -280,7 +284,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final ListSequence<Object> seq1 = new ListSequence<Object>(
 				CollectionsUtil.makeArrayList(obj2));
-		final IResource r = new Resource();
+		final IResource r = new Resource(index);
 
 		final Map<IResource, ISequence<Object>> map = CollectionsUtil
 				.makeHashMap(r, seq1);
