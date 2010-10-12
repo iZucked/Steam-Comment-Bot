@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -265,9 +267,9 @@ public class LocalSearchOptimiserTest {
 
 	@Test
 	public void testUpdateSequences() {
-
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		IIndexingContext index = new SimpleIndexingContext();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 
 		final IModifiableSequence<Integer> seq1 = OptimiserTestUtil
 				.makeSequence(1, 2, 3, 4, 5);
@@ -314,9 +316,9 @@ public class LocalSearchOptimiserTest {
 
 	@Test
 	public void testUpdateSequences2() {
-
-		final IResource r1 = new Resource();
-		final IResource r2 = new Resource();
+		IIndexingContext index = new SimpleIndexingContext();
+		final IResource r1 = new Resource(index);
+		final IResource r2 = new Resource(index);
 
 		final ISequence<Integer> seq1 = context.mock(ISequence.class, "seq1");
 		final ISequence<Integer> seq2 = context.mock(ISequence.class, "seq2");
