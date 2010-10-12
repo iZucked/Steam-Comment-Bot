@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.indexedobjects.HashMapIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
@@ -165,9 +165,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private HashMapRouteCostProviderEditor routeCostProvider;
 
-	private final IIndexingContext indexingContext = new HashMapIndexingContext();
+	private final IIndexingContext indexingContext = new SimpleIndexingContext();
 	
 	public SchedulerBuilder() {
+		indexingContext.registerType(SequenceElement.class);
+		indexingContext.registerType(Port.class);
+		indexingContext.registerType(Resource.class);
+		indexingContext.registerType(Vessel.class);
+		
 		vesselProvider = new HashMapVesselEditor(
 				SchedulerConstants.DCP_vesselProvider);
 
