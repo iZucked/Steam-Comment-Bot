@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -13,7 +15,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Resource;
 
 public class OptimiserTestUtil {
-
+	public static IIndexingContext index = new SimpleIndexingContext();
 	/**
 	 * Create a {@link IModifiableSequence} from an arbitrary list of inputs of
 	 * the same type.
@@ -29,7 +31,7 @@ public class OptimiserTestUtil {
 	}
 
 	public static IResource makeResource() {
-		return new Resource();
+		return new Resource(index);
 	}
 
 	/**
