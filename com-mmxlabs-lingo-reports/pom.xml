@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mmxlabs.shiplingo</groupId>
+	<artifactId>com.mmxlabs.shiplingo.demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<properties>
+		<!-- Tycho version to use -->
+		<tycho.version>0.11.0-SNAPSHOT</tycho.version>
+		<maven.test.failure.ignore>true</maven.test.failure.ignore>
+		<maven.javadoc.plugin.version>2.7</maven.javadoc.plugin.version>
+	</properties>
+
+	<modules>
+		<!-- Platform target file - when it's correctly configured, we won't need 
+			the repositories section below -->
+		<module>target-definition</module>
+		<!-- Product file project -->
+		<module>com.mmxlabs.demo.product</module>
+		<!-- Proper plugin projects -->
+		<module>com.mmxlabs.demo.app</module>
+		<module>com.mmxlabs.lngscheduler.emf</module>
+		<module>com.mmxlabs.demo.reports</module>
+		<module>com.mmxlabs.lngscheduler.emf.edit</module>
+		<module>com.mmxlabs.ganttviewer</module>
+		<module>com.mmxlabs.lngscheduler.emf.editor</module>
+		<module>com.mmxlabs.jobmanager</module>
+		<module>com.mmxlabs.scheduleview</module>
+		<module>com.mmxlabs.jobmanager.ui</module>
+	</modules>
+
+	<!-- Pom dependencies to "consider". These need to be OSGi bundles for the 
+		P2 resolver to correctly pick them up. Ideally these would be installed in 
+		a p2 repository which can be specified in the target definition. -->
+	<dependencies>
+
+		<dependency>
+			<groupId>com.mmxlabs.scheduler</groupId>
+			<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mmxlabs.optimiser</groupId>
+			<artifactId>optimiser-common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mmxlabs.optimiser</groupId>
+			<artifactId>optimiser-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mmxlabs.optimiser</groupId>
+			<artifactId>optimiser-lso</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<!-- Required for some tycho workaround - may no longer be needed -->
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven.javadoc.plugin.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+
+
+			<!-- Tycho uses it's own compiler, so we need to set the compliance levels 
+				differently here. -->
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>maven-osgi-compiler-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<!-- Tell the resolver to look at POM dependencies for additional bundles -->
+					<pomDependencies>consider</pomDependencies>
+
+					<resolver>p2</resolver>
+
+					<!-- Where to find the target definition -->
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.shiplingo</groupId>
+							<artifactId>target-definition</artifactId>
+							<version>0.0.1-SNAPSHOT</version>
+							<classifier>shiplingo</classifier>
+						</artifact>
+					</target>
+
+					<!-- List of target environments. However, Tycho seems to only be able 
+						to build one at a time and complains if the product definition contains the 
+						other launcher fragments. -->
+					<environments>
+
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>motif</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>maven-osgi-test-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<!-- Increase max heap size and enable a debug connection to port 8998 -->
+					<argLine>-Xmx512m -Xdebug
+						-Xrunjdwp:transport=dt_socket,address=8998,server=y,suspend=n</argLine>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<!-- List of p2 repositories to search for dependencies. This can be removed 
+		once the target definition is working correctly. -->
+	<repositories>
+		<repository>
+			<id>helios</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/eclipse/updates/3.6</url>
+		</repository>
+
+		<repository>
+			<id>emf</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/emf/updates/releases/</url>
+		</repository>
+
+		<repository>
+			<id>gef</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/tools/gef/updates/releases/</url>
+		</repository>
+
+		<repository>
+			<id>ajdt</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/tools/ajdt/36/update</url>
+		</repository>
+
+	</repositories>
+
+	<pluginRepositories>
+		<!-- maven plugin repository for tycho snapshots -->
+		<pluginRepository>
+			<id>org.sonatype.tycho</id>
+			<name>Tycho snapshot repository</name>
+			<url>http://repository.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>
