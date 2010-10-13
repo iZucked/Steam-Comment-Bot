@@ -190,35 +190,6 @@
 		</plugins>
 	</build>
 
-	<!-- List of p2 repositories to search for dependencies. This can be removed 
-		once the target definition is working correctly. -->
-	<repositories>
-		<repository>
-			<id>helios</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/3.6</url>
-		</repository>
-
-		<repository>
-			<id>emf</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/modeling/emf/updates/releases/</url>
-		</repository>
-
-		<repository>
-			<id>gef</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/tools/gef/updates/releases/</url>
-		</repository>
-
-		<repository>
-			<id>ajdt</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/tools/ajdt/36/update</url>
-		</repository>
-
-	</repositories>
-
 	<pluginRepositories>
 		<!-- maven plugin repository for tycho snapshots -->
 		<pluginRepository>
