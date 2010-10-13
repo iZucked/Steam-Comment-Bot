@@ -20,6 +20,11 @@ public class Pair<A, B> {
 		this.first = first;
 		this.second = second;
 	}
+	
+	public Pair(Pair<A, B> copy) {
+		setBoth(copy.getFirst(), copy.getSecond());
+	}
+
 	public A getFirst() {
 		return first;
 	}
