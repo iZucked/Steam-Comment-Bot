@@ -15,8 +15,14 @@
 	<properties>
 		<!-- Tycho version to use -->
 		<tycho.version>0.11.0-SNAPSHOT</tycho.version>
-		<maven.test.failure.ignore>true</maven.test.failure.ignore>
 		<maven.javadoc.plugin.version>2.7</maven.javadoc.plugin.version>
+
+		<maven.test.failure.ignore>true</maven.test.failure.ignore>
+		
+		<!-- Avoid platform dependent build warning -->
+                <!-- Code files should also be in UTF-8 -->
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 	</properties>
 
 	<modules>
