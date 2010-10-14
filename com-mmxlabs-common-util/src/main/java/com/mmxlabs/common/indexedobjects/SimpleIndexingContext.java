@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.mmxlabs.common.Pair;
 
@@ -13,7 +14,7 @@ public class SimpleIndexingContext implements IIndexingContext {
 	 * next index for objects of that type or (or with that as their closest
 	 * superclass).
 	 */
-	private final List<Pair<Class<? extends Object>, Integer>> indices = new ArrayList<Pair<Class<? extends Object>, Integer>>();
+	private final List<Pair<Class<? extends Object>, AtomicInteger>> indices = new ArrayList<Pair<Class<? extends Object>, AtomicInteger>>();
 	/**
 	 * A set to keep track of what types we have complained about indexing as
 	 * plain Objects
@@ -28,7 +29,7 @@ public class SimpleIndexingContext implements IIndexingContext {
 
 	@Override
 	public void registerType(Class<? extends Object> type) {
-		for (final Pair<Class<? extends Object>, Integer> index : indices) {
+		for (final Pair<Class<? extends Object>, AtomicInteger> index : indices) {
 			if (index.getFirst().equals(type))
 				throw new RuntimeException(type
 						+ " has already been registered");
@@ -36,16 +37,15 @@ public class SimpleIndexingContext implements IIndexingContext {
 				throw new RuntimeException(
 						"This context has been used - no more types can be registered, for the sake of index consistency");
 		}
-		indices.add(new Pair<Class<? extends Object>, Integer>(type, 0));
+		indices.add(new Pair<Class<? extends Object>, AtomicInteger>(type, new AtomicInteger(-1)));
 	}
 
 	@Override
-	public synchronized int assignIndex(final Object indexedObject) {
-		final Pair<Class<? extends Object>, Integer> index = getLowestSuperclass(indexedObject
+	public int assignIndex(final Object indexedObject) {
+		final Pair<Class<? extends Object>, AtomicInteger> index = getLowestSuperclass(indexedObject
 				.getClass());
 
-		final int value = index.getSecond();
-		index.setSecond(value + 1);
+		final int value = index.getSecond().incrementAndGet();
 
 		return value;
 	}
@@ -58,11 +58,11 @@ public class SimpleIndexingContext implements IIndexingContext {
 	 * @param type
 	 * @return
 	 */
-	private final Pair<Class<? extends Object>, Integer> getLowestSuperclass(
+	private final Pair<Class<? extends Object>, AtomicInteger> getLowestSuperclass(
 			final Class<? extends Object> baseType) {
 		Class<? extends Object> type = baseType;
 		while (true) {
-			for (final Pair<Class<? extends Object>, Integer> index : indices) {
+			for (final Pair<Class<? extends Object>, AtomicInteger> index : indices) {
 				if (index.getFirst().equals(type)) {
 					if (index.getFirst().equals(Object.class)
 							&& !warnedTypes.contains(baseType)) {
