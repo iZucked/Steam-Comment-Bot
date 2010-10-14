@@ -16,6 +16,7 @@ public class AutoSizingArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public E set(int index, E element) {
+		ensureCapacity(index+1);
 		while (index >= size()) {
 			add(null);
 		}
