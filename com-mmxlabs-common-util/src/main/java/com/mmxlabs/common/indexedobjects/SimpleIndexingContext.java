@@ -71,7 +71,6 @@ public final class SimpleIndexingContext implements IIndexingContext {
 		Class<? extends Object> type = baseType;
 
 		while (type != null) {
-
 			if (indices.containsKey(type)) {
 				if (type == Object.class && !warnedTypes.contains(baseType)) {
 					System.err.println("Warning: using object index for "
@@ -86,5 +85,11 @@ public final class SimpleIndexingContext implements IIndexingContext {
 		// Should never get here as Object.class is a registered type.
 		throw new IllegalStateException(
 				"Error, baseType does not have a registered class");
+	}
+
+	@Override
+	public String toString() {
+		return "SimpleIndexingContext [indices=" + indices + ", warnedTypes="
+				+ warnedTypes + ", used=" + used + "]";
 	}
 }
