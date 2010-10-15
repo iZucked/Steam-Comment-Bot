@@ -1,5 +1,7 @@
 package com.mmxlabs.common.indexedobjects;
 
+import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
+
 /**
  * An indexing context, which provides indices (unique numbers) to Objects.
  * Separate counters are maintained for different classes.

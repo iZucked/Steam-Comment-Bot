@@ -4,6 +4,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+
 public class SimpleIndexingContextTest {
 	@Test
 	public void testObjectIndexAllocation() {

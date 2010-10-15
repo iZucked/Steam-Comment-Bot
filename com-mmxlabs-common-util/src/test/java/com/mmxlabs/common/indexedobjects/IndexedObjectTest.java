@@ -3,6 +3,9 @@ package com.mmxlabs.common.indexedobjects;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
+import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+
 public class IndexedObjectTest {
 	@Test
 	public void testIndexedObject() {

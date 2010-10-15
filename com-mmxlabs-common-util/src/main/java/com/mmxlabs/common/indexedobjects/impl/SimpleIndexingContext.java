@@ -1,10 +1,12 @@
-package com.mmxlabs.common.indexedobjects;
+package com.mmxlabs.common.indexedobjects.impl;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
 
 public final class SimpleIndexingContext implements IIndexingContext {
 	/**

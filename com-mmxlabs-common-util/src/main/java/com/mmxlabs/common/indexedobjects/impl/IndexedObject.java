@@ -1,4 +1,7 @@
-package com.mmxlabs.common.indexedobjects;
+package com.mmxlabs.common.indexedobjects.impl;
+
+import com.mmxlabs.common.indexedobjects.IIndexedObject;
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
 
 public class IndexedObject implements IIndexedObject {
 	public final int index;
