@@ -103,6 +103,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 		};
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void clear() {
 		contents = (U[]) new Object[128];
