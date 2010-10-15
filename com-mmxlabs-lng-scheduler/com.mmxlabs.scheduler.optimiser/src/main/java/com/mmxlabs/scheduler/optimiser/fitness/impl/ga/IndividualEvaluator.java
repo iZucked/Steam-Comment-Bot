@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -90,7 +89,9 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	VoyagePlanIterator<T> voyagePlanIterator = new VoyagePlanIterator<T>();
 	private ICargoSchedulerFitnessComponent<T>[] iteratingComponents;
-//	private List<ICargoSchedulerFitnessComponent<T>> iteratingComponents = new ArrayList<ICargoSchedulerFitnessComponent<T>>();
+
+	// private List<ICargoSchedulerFitnessComponent<T>> iteratingComponents =
+	// new ArrayList<ICargoSchedulerFitnessComponent<T>>();
 
 	public IndividualEvaluator() {
 
@@ -111,7 +112,8 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		long totalFitness = 0;
 
 		voyagePlanIterator.iterateComponents(voyagePlans.getSecond(),
-				voyagePlans.getFirst().intValue(), resource, iteratingComponents);
+				voyagePlans.getFirst().intValue(), resource,
+				iteratingComponents);
 
 		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
 			final long rawFitness = component.rawEvaluateSequence(resource,
@@ -134,7 +136,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		}
 		return totalFitness;
 	}
-	
+
 	@SuppressWarnings("unused")
 	@Override
 	public final long evaluate(final Individual individual) {
@@ -508,8 +510,9 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	public final void setFitnessComponents(
 			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
-		this.fitnessComponents = fitnessComponents;		
-		iteratingComponents = VoyagePlanIterator.filterIteratingComponents(fitnessComponents);
+		this.fitnessComponents = fitnessComponents;
+		iteratingComponents = VoyagePlanIterator
+				.filterIteratingComponents(fitnessComponents);
 	}
 
 	public final Map<String, Double> getFitnessComponentWeights() {
@@ -575,5 +578,53 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	public void setDurationsProvider(
 			final IElementDurationProvider<T> durationsProvider) {
 		this.durationsProvider = durationsProvider;
+	}
+
+	public final ISequence<T> getSequence() {
+		return sequence;
+	}
+
+	public final void setSequence(ISequence<T> sequence) {
+		this.sequence = sequence;
+	}
+
+	public final IResource getResource() {
+		return resource;
+	}
+
+	public final void setResource(IResource resource) {
+		this.resource = resource;
+	}
+
+	public final int[] getRanges() {
+		return ranges;
+	}
+
+	public final void setRanges(int[] ranges) {
+		this.ranges = ranges;
+	}
+
+	public final int[] getTravelTimes() {
+		return travelTimes;
+	}
+
+	public final void setTravelTimes(int[] travelTimes) {
+		this.travelTimes = travelTimes;
+	}
+
+	public final int[] getMultiplier() {
+		return multiplier;
+	}
+
+	public final void setMultiplier(int[] multiplier) {
+		this.multiplier = multiplier;
+	}
+
+	public final int[] getWindowStarts() {
+		return windowStarts;
+	}
+
+	public final void setWindowStarts(int[] windowStarts) {
+		this.windowStarts = windowStarts;
 	}
 }

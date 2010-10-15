@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * be subclassable into a random sequence scheduler as well, with reduced
  * decoding overhead
  * 
- * © Minimax labs inc. 2010
+ * (C) Minimax labs inc. 2010
  * 
  * @author hinton
  * 
