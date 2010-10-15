@@ -1,7 +1,7 @@
 package com.mmxlabs.optimiser.core.impl;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
-import com.mmxlabs.common.indexedobjects.IndexedObject;
+import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.optimiser.core.IResource;
 
 /**
