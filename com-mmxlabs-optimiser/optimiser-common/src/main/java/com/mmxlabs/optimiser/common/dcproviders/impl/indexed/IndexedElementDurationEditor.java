@@ -1,18 +1,19 @@
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
-import com.mmxlabs.common.indexedobjects.AutoSizingArrayList;
+import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
+import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
 
 public class IndexedElementDurationEditor<T extends IIndexedObject> implements
 		IElementDurationProviderEditor<T> {
 
-	private final AutoSizingArrayList<AutoSizingArrayList<Integer>>
-		durationByElementByResource = new AutoSizingArrayList<AutoSizingArrayList<Integer>>();
+	private final IIndexMap<IResource, IIndexMap<T, Integer>>
+		durationByElementByResource = new ArrayIndexMap<IResource,IIndexMap<T, Integer>>();
 	
-	private final AutoSizingArrayList<Integer> durationByElement = 
-		new AutoSizingArrayList<Integer>();
+	private final IIndexMap<T, Integer> durationByElement = 
+		new ArrayIndexMap<T, Integer>();
 	
 	private int defaultDuration;
 	
@@ -26,7 +27,7 @@ public class IndexedElementDurationEditor<T extends IIndexedObject> implements
 
 	@Override
 	public int getElementDuration(final T element, final IResource resource) {
-		final AutoSizingArrayList<Integer> byElementForResource = 
+		final IIndexMap<T, Integer> byElementForResource = 
 			durationByElementByResource.maybeGet(resource);
 		
 		if (byElementForResource != null) {
@@ -62,10 +63,10 @@ public class IndexedElementDurationEditor<T extends IIndexedObject> implements
 
 	@Override
 	public void setElementDuration(T element, IResource resource, int duration) {
-		AutoSizingArrayList<Integer> byElementForResource = 
+		IIndexMap<T, Integer> byElementForResource = 
 			durationByElementByResource.maybeGet(resource);
 		if (byElementForResource == null) {
-			byElementForResource = new AutoSizingArrayList<Integer>();
+			byElementForResource = new ArrayIndexMap<T,Integer>();
 			durationByElementByResource.set(resource, byElementForResource);
 		}
 		

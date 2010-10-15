@@ -3,18 +3,19 @@ package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 import java.util.Collections;
 import java.util.List;
 
-import com.mmxlabs.common.indexedobjects.AutoSizingArrayList;
+import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
+import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 
 public class IndexedTimeWindowEditor<T extends IIndexedObject> implements
 		ITimeWindowDataComponentProviderEditor<T> {
 
-	private final AutoSizingArrayList<List<ITimeWindow>> timeWindowsByElement = new AutoSizingArrayList<List<ITimeWindow>>();
+	private final IIndexMap<T, List<ITimeWindow>> timeWindowsByElement = new ArrayIndexMap<T, List<ITimeWindow>>();
 
 	private final String name;
-	
+
 	public IndexedTimeWindowEditor(String name) {
 		super();
 		this.name = name;
@@ -22,9 +23,12 @@ public class IndexedTimeWindowEditor<T extends IIndexedObject> implements
 
 	@Override
 	public List<ITimeWindow> getTimeWindows(final T element) {
-		final List<ITimeWindow> windows = timeWindowsByElement.maybeGet(element);
-		if (windows == null) return Collections.emptyList();
-		else return windows;
+		final List<ITimeWindow> windows = timeWindowsByElement
+				.maybeGet(element);
+		if (windows == null)
+			return Collections.emptyList();
+		else
+			return windows;
 	}
 
 	@Override

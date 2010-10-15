@@ -1,14 +1,15 @@
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
-import com.mmxlabs.common.indexedobjects.AutoSizingArrayList;
+import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
+import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 
 public class IndexedOrderedSequenceElementsEditor<T extends IIndexedObject> implements
 		IOrderedSequenceElementsDataComponentProviderEditor<T> {
 
-	private final AutoSizingArrayList<T> successors = new AutoSizingArrayList<T>();
-	private final AutoSizingArrayList<T> predecessors = new AutoSizingArrayList<T>();
+	private final IIndexMap<T, T> successors = new ArrayIndexMap<T,T>();
+	private final IIndexMap<T, T> predecessors = new ArrayIndexMap<T,T>();
 	
 	private final String name;
 	
@@ -43,5 +44,4 @@ public class IndexedOrderedSequenceElementsEditor<T extends IIndexedObject> impl
 		successors.set(previousElement, nextElement);
 		predecessors.set(nextElement, previousElement);
 	}
-
 }

@@ -2,8 +2,9 @@ package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
 import java.util.Collection;
 
-import com.mmxlabs.common.indexedobjects.AutoSizingArrayList;
+import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
+import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
 
@@ -12,7 +13,8 @@ public class IndexedResourceAllocationConstraintProvider<T extends IIndexedObjec
 
 	private final String name;
 
-	private final AutoSizingArrayList<Collection<IResource>> allowedResources = new AutoSizingArrayList<Collection<IResource>>();
+	private final IIndexMap<T, Collection<IResource>> allowedResources = 
+		new ArrayIndexMap<T, Collection<IResource>>();
 
 	public IndexedResourceAllocationConstraintProvider(String name) {
 		super();

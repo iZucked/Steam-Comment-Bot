@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
-import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
+import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.fitness.MatrixProviderFitnessComponent;
 import com.mmxlabs.optimiser.common.fitness.MatrixProviderFitnessCore;
 import com.mmxlabs.optimiser.core.IResource;
