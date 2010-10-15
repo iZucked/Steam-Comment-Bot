@@ -1,25 +1,28 @@
 package com.mmxlabs.common.indexedobjects;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.mmxlabs.common.Pair;
-
-public class SimpleIndexingContext implements IIndexingContext {
+public final class SimpleIndexingContext implements IIndexingContext {
 	/**
-	 * The list of indices; each element is a pair containing a type, and the
-	 * next index for objects of that type or (or with that as their closest
-	 * superclass).
+	 * The {@link Map} of indices; each entry maps the type to the next index
+	 * for objects of that type or (or with that as their closest superclass).
 	 */
-	private final List<Pair<Class<? extends Object>, AtomicInteger>> indices = new ArrayList<Pair<Class<? extends Object>, AtomicInteger>>();
+	private final Map<Class<? extends Object>, AtomicInteger> indices = new HashMap<Class<? extends Object>, AtomicInteger>();
 	/**
 	 * A set to keep track of what types we have complained about indexing as
 	 * plain Objects
 	 */
 	private final Set<Class<? extends Object>> warnedTypes = new HashSet<Class<? extends Object>>();
+
+	/**
+	 * Flag indicating whether or not this context has been used to generate an
+	 * index.
+	 */
+	private boolean used = false;
 
 	public SimpleIndexingContext() {
 		super();
@@ -28,26 +31,30 @@ public class SimpleIndexingContext implements IIndexingContext {
 	}
 
 	@Override
-	public void registerType(Class<? extends Object> type) {
-		for (final Pair<Class<? extends Object>, AtomicInteger> index : indices) {
-			if (index.getFirst().equals(type))
-				throw new RuntimeException(type
-						+ " has already been registered");
-			if (index.getSecond().equals(0) == false)
-				throw new RuntimeException(
-						"This context has been used - no more types can be registered, for the sake of index consistency");
+	public void registerType(final Class<? extends Object> type) {
+		if (indices.containsKey(type)) {
+			throw new RuntimeException(type + " has already been registered");
 		}
-		indices.add(new Pair<Class<? extends Object>, AtomicInteger>(type, new AtomicInteger(-1)));
+
+		if (used) {
+			throw new RuntimeException(
+					"This context has been used - no more types can be registered, for the sake of index consistency");
+		}
+
+		indices.put(type, new AtomicInteger(-1));
 	}
 
 	@Override
-	public int assignIndex(final Object indexedObject) {
-		final Pair<Class<? extends Object>, AtomicInteger> index = getLowestSuperclass(indexedObject
+	public final int assignIndex(final Object indexedObject) {
+
+		used = true;
+
+		final AtomicInteger index = getLowestSuperclass(indexedObject
 				.getClass());
 
-		final int value = index.getSecond().incrementAndGet();
+		assert index != null;
 
-		return value;
+		return index.incrementAndGet();
 	}
 
 	/**
@@ -58,22 +65,26 @@ public class SimpleIndexingContext implements IIndexingContext {
 	 * @param type
 	 * @return
 	 */
-	private final Pair<Class<? extends Object>, AtomicInteger> getLowestSuperclass(
+	private final AtomicInteger getLowestSuperclass(
 			final Class<? extends Object> baseType) {
+
 		Class<? extends Object> type = baseType;
-		while (true) {
-			for (final Pair<Class<? extends Object>, AtomicInteger> index : indices) {
-				if (index.getFirst().equals(type)) {
-					if (index.getFirst().equals(Object.class)
-							&& !warnedTypes.contains(baseType)) {
-						System.err.println("Warning: using object index for "
-								+ baseType.getSimpleName());
-						warnedTypes.add(baseType);
-					}
-					return index;
+
+		while (type != null) {
+
+			if (indices.containsKey(type)) {
+				if (type == Object.class && !warnedTypes.contains(baseType)) {
+					System.err.println("Warning: using object index for "
+							+ baseType.getSimpleName());
+					warnedTypes.add(baseType);
 				}
+				return indices.get(type);
 			}
 			type = type.getSuperclass();
 		}
+
+		// Should never get here as Object.class is a registered type.
+		throw new IllegalStateException(
+				"Error, baseType does not have a registered class");
 	}
 }
