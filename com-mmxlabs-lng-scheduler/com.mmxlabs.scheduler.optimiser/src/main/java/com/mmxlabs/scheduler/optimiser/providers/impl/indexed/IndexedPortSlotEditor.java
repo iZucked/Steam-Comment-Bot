@@ -2,14 +2,15 @@ package com.mmxlabs.scheduler.optimiser.providers.impl.indexed;
 
 import java.util.HashMap;
 
-import com.mmxlabs.common.indexedobjects.AutoSizingArrayList;
+import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
+import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 
 public final class IndexedPortSlotEditor<T extends IIndexedObject> implements IPortSlotProviderEditor<T> {
 	private final String name;
-	private AutoSizingArrayList<IPortSlot> slots = new AutoSizingArrayList<IPortSlot>();
+	private IIndexMap<T, IPortSlot> slots = new ArrayIndexMap<T, IPortSlot>();
 	
 	//TODO maybe make this indexed as well, although the getElement method is not called in the main loop 
 	private HashMap<IPortSlot, T> elements = new HashMap<IPortSlot, T>();
@@ -21,7 +22,7 @@ public final class IndexedPortSlotEditor<T extends IIndexedObject> implements IP
 
 	@Override
 	public final IPortSlot getPortSlot(T element) {
-		return slots.get(element.getIndex());
+		return slots.maybeGet(element);
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public final class IndexedPortSlotEditor<T extends IIndexedObject> implements IP
 
 	@Override
 	public final void setPortSlot(T element, IPortSlot portSlot) {
-		slots.set(element.getIndex(), portSlot);
+		slots.set(element, portSlot);
 		elements.put(portSlot, element);
 	}
 }

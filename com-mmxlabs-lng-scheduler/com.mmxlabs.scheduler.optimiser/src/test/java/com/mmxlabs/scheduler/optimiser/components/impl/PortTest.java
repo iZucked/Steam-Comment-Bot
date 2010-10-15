@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
-import com.mmxlabs.common.indexedobjects.SimpleIndexingContext;
+import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 
 public class PortTest {
 	final IIndexingContext index = new SimpleIndexingContext();
