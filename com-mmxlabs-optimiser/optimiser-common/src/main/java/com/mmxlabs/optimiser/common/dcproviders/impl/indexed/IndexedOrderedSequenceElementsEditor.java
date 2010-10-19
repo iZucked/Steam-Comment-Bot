@@ -10,7 +10,7 @@ import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 
-public class IndexedOrderedSequenceElementsEditor<T extends IIndexedObject> implements
+public final class IndexedOrderedSequenceElementsEditor<T extends IIndexedObject> implements
 		IOrderedSequenceElementsDataComponentProviderEditor<T> {
 
 	private final IIndexMap<T, T> successors = new ArrayIndexMap<T,T>();
