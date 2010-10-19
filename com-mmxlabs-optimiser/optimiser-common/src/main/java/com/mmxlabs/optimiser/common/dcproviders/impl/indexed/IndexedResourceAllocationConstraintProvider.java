@@ -13,7 +13,7 @@ import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
 
-public class IndexedResourceAllocationConstraintProvider<T extends IIndexedObject> implements
+public final class IndexedResourceAllocationConstraintProvider<T extends IIndexedObject> implements
 		IResourceAllocationConstraintDataComponentProviderEditor<T> {
 
 	private final String name;
