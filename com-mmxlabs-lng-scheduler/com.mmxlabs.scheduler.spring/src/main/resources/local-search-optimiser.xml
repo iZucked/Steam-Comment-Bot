@@ -134,7 +134,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 	<bean id="optimiser"
 		class="com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser"
 		init-method="init" destroy-method="dispose" p:numberOfIterations="${lso.numberOfIterations}"
-		p:reportInterval="#{ T(java.lang.Math).max(10,${lso.reportInterval} / 100) }">
+		p:reportInterval="#{ T(java.lang.Math).max(10,${lso.numberOfIterations} / 100) }">
 		<property name="fitnessEvaluator" ref="fitnessEvaluator" />
 		<property name="constraintCheckers" ref="constraintCheckers" />
 		<property name="sequenceManipulator" ref="manipulator" />
