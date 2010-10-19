@@ -49,7 +49,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 	public void annotateFromVoyagePlan(final IResource resource,
 			final List<VoyagePlan> plans,
 			final int startTime, final IAnnotatedSequence<T> annotatedSequence) {
-		VoyagePlanIterator vpi = new VoyagePlanIterator();
+		VoyagePlanIterator<T> vpi = new VoyagePlanIterator<T>();
 		vpi.setVoyagePlans(plans, startTime);
 		
 		vpi.reset();
