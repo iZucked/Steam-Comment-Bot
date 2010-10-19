@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Collection;

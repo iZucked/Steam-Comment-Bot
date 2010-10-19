@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
