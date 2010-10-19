@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.common.recorder.conversion.impl;
 
 import com.mmxlabs.common.recorder.conversion.ITypeConvertor;
