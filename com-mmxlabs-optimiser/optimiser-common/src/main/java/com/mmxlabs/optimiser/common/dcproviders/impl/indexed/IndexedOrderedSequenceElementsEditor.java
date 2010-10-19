@@ -18,7 +18,7 @@ public final class IndexedOrderedSequenceElementsEditor<T extends IIndexedObject
 	
 	private final String name;
 	
-	public IndexedOrderedSequenceElementsEditor(String name) {
+	public IndexedOrderedSequenceElementsEditor(final String name) {
 		super();
 		this.name = name;
 	}
