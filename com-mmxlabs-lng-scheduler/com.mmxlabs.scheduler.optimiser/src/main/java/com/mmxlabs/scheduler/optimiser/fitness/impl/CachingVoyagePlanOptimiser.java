@@ -29,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @param <T>
  */
-public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
+public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	private final class CacheKey {
 		private final IVessel vessel;
 		private final int[] times;
