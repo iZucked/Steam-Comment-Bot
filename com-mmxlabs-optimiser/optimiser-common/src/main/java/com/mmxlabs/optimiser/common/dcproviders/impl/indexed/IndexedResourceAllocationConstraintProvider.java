@@ -42,9 +42,8 @@ public final class IndexedResourceAllocationConstraintProvider<T extends IIndexe
 	}
 
 	@Override
-	public void setAllowedResources(T element,
-			Collection<IResource> resources) {
+	public void setAllowedResources(final T element,
+			final Collection<IResource> resources) {
 		allowedResources.set(element, resources);
 	}
-
 }
