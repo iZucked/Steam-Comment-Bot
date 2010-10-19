@@ -158,7 +158,7 @@
 					<instructions>
 						 Export all packages with this prefix. Default is all local excluding 
 							.impl packages 
-						<Export-Package>com.mmxlabs.scheduler.runner.*;version="${project.version}"</Export-Package>
+						<Export-Package>com.mmxlabs.scheduler.spring.*;version="${project.version}"</Export-Package>
 					</instructions>
 				</configuration>
 
