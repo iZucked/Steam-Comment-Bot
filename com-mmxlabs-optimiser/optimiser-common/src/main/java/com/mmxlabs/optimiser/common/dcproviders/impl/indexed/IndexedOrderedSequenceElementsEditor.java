@@ -24,17 +24,17 @@ public final class IndexedOrderedSequenceElementsEditor<T extends IIndexedObject
 	}
 
 	@Override
-	public T getNextElement(T previousElement) {
+	public final T getNextElement(final T previousElement) {
 		return successors.maybeGet(previousElement);
 	}
 
 	@Override
-	public T getPreviousElement(final T nextElement) {
+	public final T getPreviousElement(final T nextElement) {
 		return predecessors.maybeGet(nextElement);
 	}
 
 	@Override
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
