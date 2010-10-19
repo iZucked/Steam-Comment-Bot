@@ -11,7 +11,7 @@ import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
 
-public class IndexedElementDurationEditor<T extends IIndexedObject> implements
+public final class IndexedElementDurationEditor<T extends IIndexedObject> implements
 		IElementDurationProviderEditor<T> {
 
 	private final IIndexMap<IResource, IIndexMap<T, Integer>>
