@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.spring;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -8,7 +9,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
@@ -29,6 +29,7 @@ public class SpringOptimisationCreator<T> {
 	public SpringOptimisationCreator(
 			final IOptimisationData<T> optimisationData,
 			final Properties props, final Map<String, Double> fitnessWeights,
+			final List<String> constraintCheckers,
 			final IOptimiserProgressMonitor<T> monitor) {
 
 		// Create a parent application context containing the common beans
@@ -48,6 +49,8 @@ public class SpringOptimisationCreator<T> {
 				optimisationData);
 		staticContext.getBeanFactory().registerSingleton("fitnessWeights",
 				fitnessWeights);
+		staticContext.getBeanFactory().registerSingleton(
+				"constraintCheckerNames", constraintCheckers);
 		staticContext.getBeanFactory().registerSingleton("progressMonitor",
 				monitor);
 
@@ -74,11 +77,11 @@ public class SpringOptimisationCreator<T> {
 		// TODO: Destroy other parent contexts too?
 	}
 
-	public IOptimiser<T> getOptimiser() {
+	public ILocalSearchOptimiser<T> getOptimiser() {
 
 		@SuppressWarnings("unchecked")
-		final IOptimiser<T> optimiser = context.getBean("optimiser",
-				IOptimiser.class);
+		final ILocalSearchOptimiser<T> optimiser = context.getBean("optimiser",
+				ILocalSearchOptimiser.class);
 
 		return optimiser;
 	}
