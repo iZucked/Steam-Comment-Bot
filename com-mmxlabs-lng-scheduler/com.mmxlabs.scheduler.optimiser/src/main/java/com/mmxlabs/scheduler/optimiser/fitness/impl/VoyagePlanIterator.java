@@ -126,7 +126,7 @@ public final class VoyagePlanIterator<T> {
 	public static final <T> ICargoSchedulerFitnessComponent<T>[] filterIteratingComponents(
 			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
 		final ArrayList<ICargoSchedulerFitnessComponent<T>> result = new ArrayList<ICargoSchedulerFitnessComponent<T>>();
-		for (ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
+		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
 			if (component.shouldIterate()) {
 				result.add(component);
 			}
