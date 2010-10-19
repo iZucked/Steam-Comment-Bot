@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.jobcontoller;
 
 import org.eclipse.jface.resource.ImageDescriptor;

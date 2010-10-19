@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.scheduleview;
 
 import org.eclipse.jface.resource.ImageDescriptor;

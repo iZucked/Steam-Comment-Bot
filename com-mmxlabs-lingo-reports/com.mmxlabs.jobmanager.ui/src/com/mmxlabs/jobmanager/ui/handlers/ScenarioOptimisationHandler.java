@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.jobmanager.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;

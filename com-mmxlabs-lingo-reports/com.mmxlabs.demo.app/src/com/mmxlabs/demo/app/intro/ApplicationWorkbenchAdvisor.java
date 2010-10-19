@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.demo.app.intro;
 
 import java.lang.reflect.InvocationTargetException;

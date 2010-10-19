@@ -1,9 +1,8 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
  */
+
 package scenario.contract.util;
 
 import org.eclipse.emf.common.notify.Adapter;

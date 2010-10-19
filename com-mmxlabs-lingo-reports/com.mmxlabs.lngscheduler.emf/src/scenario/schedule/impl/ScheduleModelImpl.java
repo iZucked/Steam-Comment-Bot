@@ -1,9 +1,8 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
  */
+
 package scenario.schedule.impl;
 
 import org.eclipse.emf.ecore.EClass;

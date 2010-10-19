@@ -1,9 +1,8 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
  */
+
 package scenario.optimiser.impl;
 
 import java.util.Collection;
