@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimaxlabs, 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
 import java.util.Collection;
