@@ -25,7 +25,7 @@ public final class IndexedElementDurationEditor<T extends IIndexedObject> implem
 	private final String name;
 	
 	
-	public IndexedElementDurationEditor( String name) {
+	public IndexedElementDurationEditor(final String name) {
 		super();
 		this.name = name;
 	}
@@ -84,7 +84,7 @@ public final class IndexedElementDurationEditor<T extends IIndexedObject> implem
 	}
 
 	@Override
-	public void setElementDuration(T element, int durationHours) {
+	public void setElementDuration(final T element, final int durationHours) {
 		durationByElement.set(element, durationHours);
 	}
 }
