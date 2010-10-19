@@ -13,8 +13,8 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 		</constructor-arg>
 	</bean>
 
-	<bean id="constraintCheckerNames" factory-bean="constraintCheckerRegistry"
-		factory-method="getConstraintCheckerNames" />
+<!--	<bean id="constraintCheckerNames" factory-bean="constraintCheckerRegistry"-->
+<!--		factory-method="getConstraintCheckerNames" />-->
 
 	<bean id="fitnessComponentNames" factory-bean="fitnessRegistry"
 		factory-method="getFitnessComponentNames" />
