@@ -46,9 +46,10 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	}
 
 	@Override
-	public void insert(int index, final ISegment<T> segment) {
+	public void insert(final int index, final ISegment<T> segment) {
+		int idx = index;
 		for (final T e : segment) {
-			list.add(index++, e);
+			list.add(idx++, e);
 		}
 	}
 
@@ -106,7 +107,7 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 			list.add(t);
 		}
 	}
-	
+
 	@Override
 	public boolean equals(final Object obj) {
 
