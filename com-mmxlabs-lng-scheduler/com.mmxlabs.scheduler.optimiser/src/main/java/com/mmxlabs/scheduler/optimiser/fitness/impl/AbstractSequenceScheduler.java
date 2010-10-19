@@ -50,9 +50,9 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 	private IElementDurationProvider<T> durationsProvider;
 
-	private ITimeWindowDataComponentProvider timeWindowProvider;
+	private ITimeWindowDataComponentProvider<T> timeWindowProvider;
 
-	private IPortProvider portProvider;
+	private IPortProvider<T> portProvider;
 
 	private IPortSlotProvider<T> portSlotProvider;
 
@@ -293,20 +293,20 @@ public abstract class AbstractSequenceScheduler<T> implements
 		this.durationsProvider = durationsProvider;
 	}
 
-	public final ITimeWindowDataComponentProvider getTimeWindowProvider() {
+	public final ITimeWindowDataComponentProvider<T> getTimeWindowProvider() {
 		return timeWindowProvider;
 	}
 
 	public final void setTimeWindowProvider(
-			final ITimeWindowDataComponentProvider timeWindowProvider) {
+			final ITimeWindowDataComponentProvider<T> timeWindowProvider) {
 		this.timeWindowProvider = timeWindowProvider;
 	}
 
-	public final IPortProvider getPortProvider() {
+	public final IPortProvider<T> getPortProvider() {
 		return portProvider;
 	}
 
-	public final void setPortProvider(final IPortProvider portProvider) {
+	public final void setPortProvider(final IPortProvider<T> portProvider) {
 		this.portProvider = portProvider;
 	}
 
