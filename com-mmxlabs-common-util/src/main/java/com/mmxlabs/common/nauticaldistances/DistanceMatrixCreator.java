@@ -26,16 +26,6 @@ public class DistanceMatrixCreator {
 	private String outputFilePath;
 	private String coordinatesFilePath;
 	private double maxLatitude;
-	private double resolution;
-
-	public double getResolution() {
-		return resolution;
-	}
-
-	@Option(defaultValue = "0.5", help = "How many grid squares per pixel of input, roughly")
-	public void setResolution(double resolution) {
-		this.resolution = resolution;
-	}
 
 	/**
 	 * @param args
@@ -74,12 +64,10 @@ public class DistanceMatrixCreator {
 				landMatrix[i][j] = isLand(pixel);
 			}
 		}
-		final int lonRes = (int) (getResolution() * landMatrix.length);
-		final int latRes = (int) (getResolution() * landMatrix[0].length * 90 / getMaxLatitude());
-		System.err.println("Map resolution: " + latRes + "x" + lonRes);
-		final NauticalDistanceCalculator calculator = new NauticalDistanceCalculator(
-				landMatrix, getMaxLatitude(), latRes, lonRes);
-
+		
+		final AccurateNauticalDistanceCalculator calculator = 
+			new AccurateNauticalDistanceCalculator(landMatrix, getMaxLatitude());
+		
 		final BufferedReader portReader = new BufferedReader(new FileReader(
 				getCoordinatesFilePath()));
 		final List<Pair<String, Pair<Double, Double>>> ports = new ArrayList<Pair<String, Pair<Double, Double>>>();
@@ -99,7 +87,7 @@ public class DistanceMatrixCreator {
 			for (int j = 0; j < i; j++)
 				otherPorts.add(ports.get(j).getSecond());
 			System.err.println("Calculating distances from " + ports.get(i));
-			final List<Integer> distances = calculator.getMultipleDistances(
+			final List<Integer> distances = calculator.getShortestPaths(
 					startPort, otherPorts);
 
 			for (int j = 0; j < i; j++) {
