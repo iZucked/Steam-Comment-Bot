@@ -25,7 +25,6 @@ public class DistanceMatrixCreator {
 	private String imageFilePath;
 	private String outputFilePath;
 	private String coordinatesFilePath;
-	private double maxLatitude;
 
 	/**
 	 * @param args
@@ -64,9 +63,24 @@ public class DistanceMatrixCreator {
 				landMatrix[i][j] = isLand(pixel);
 			}
 		}
+
+		final double mlat = Math.atan(2 * Math.PI * image.getHeight()
+				/ (double) image.getWidth())
+				* 180 / Math.PI;
+
+		System.err.println("Presuming max. latitude = " + mlat);
 		
-		final AccurateNauticalDistanceCalculator calculator = 
-			new AccurateNauticalDistanceCalculator(landMatrix, getMaxLatitude());
+		
+		
+		final AccurateNauticalDistanceCalculator calculator = new AccurateNauticalDistanceCalculator(
+				landMatrix, mlat);
+		
+		{
+			BufferedWriter coast = new BufferedWriter(new FileWriter(
+					"./coast.txt"));
+			calculator.writeCoastalPoints(coast);
+			coast.close();
+		}
 		
 		final BufferedReader portReader = new BufferedReader(new FileReader(
 				getCoordinatesFilePath()));
@@ -83,9 +97,7 @@ public class DistanceMatrixCreator {
 		final ArrayList<Pair<Double, Double>> otherPorts = new ArrayList<Pair<Double, Double>>();
 		for (int i = 0; i < matrix.length; i++) {
 			final Pair<Double, Double> startPort = ports.get(i).getSecond();
-			otherPorts.clear();
-			for (int j = 0; j < i; j++)
-				otherPorts.add(ports.get(j).getSecond());
+			
 			System.err.println("Calculating distances from " + ports.get(i));
 			final List<Integer> distances = calculator.getShortestPaths(
 					startPort, otherPorts);
@@ -93,6 +105,16 @@ public class DistanceMatrixCreator {
 			for (int j = 0; j < i; j++) {
 				matrix[i][j] = matrix[j][i] = distances.get(j);
 			}
+			
+			otherPorts.add(ports.get(i).getSecond());
+		}
+		
+		{
+			BufferedWriter snap = new BufferedWriter(new FileWriter("./snapports.txt"));
+			BufferedWriter real = new BufferedWriter(new FileWriter("./realports.txt"));
+			calculator.writeSnappedPoints(snap, real, otherPorts);
+			
+			snap.close();real.close();
 		}
 
 		// write matrix out
@@ -141,14 +163,6 @@ public class DistanceMatrixCreator {
 		this.outputFilePath = outputFilePath;
 	}
 
-	public double getMaxLatitude() {
-		return maxLatitude;
-	}
-
-	@Option(defaultValue = "70", help = "Maximum/minimum latitude of image in degrees")
-	public void setMaxLatitude(double maxLatitude) {
-		this.maxLatitude = maxLatitude;
-	}
 
 	public String getCoordinatesFilePath() {
 		return coordinatesFilePath;

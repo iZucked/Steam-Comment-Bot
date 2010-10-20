@@ -1,5 +1,7 @@
 package com.mmxlabs.common.nauticaldistances;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,12 +12,19 @@ import java.util.Set;
 
 import com.mmxlabs.common.Pair;
 
+/**
+ * Distance matrix calculator which calculates proper point-point distances
+ * using dijkstra's algorithm on a graph constructed
+ * 
+ * @author hinton
+ * 
+ */
 public class AccurateNauticalDistanceCalculator {
 	final int[][] distanceMatrix;
 	final List<double[]> coast;
 
 	public AccurateNauticalDistanceCalculator(
-			final boolean[][] mercatorLandMatrix, final double dmaxLatitude) {
+			final boolean[][] mercatorLandMatrix, final double dmaxLatitude) throws IOException {
 		final int width = mercatorLandMatrix.length;
 		final int height = mercatorLandMatrix[0].length;
 		// transform coast pixels to points in cartesian 3-space on the unit
@@ -62,9 +71,9 @@ public class AccurateNauticalDistanceCalculator {
 
 		System.err.println();
 
-//		for (int[] x : distanceMatrix) {
-//			System.err.println(Arrays.toString(x));
-//		}
+		// for (int[] x : distanceMatrix) {
+		// System.err.println(Arrays.toString(x));
+		// }
 		System.err.println("Sparseness = " + goodEdges
 				/ (double) (badEdges + goodEdges));
 		// distance matrix is computed, now ready for normal use
@@ -157,8 +166,8 @@ public class AccurateNauticalDistanceCalculator {
 		final double lat = pair.getFirst() * Math.PI / 180;
 		final double lon = pair.getSecond() * Math.PI / 180;
 
-		final double[] xyz = new double[] { Math.sin(lat) * Math.cos(lon),
-				Math.sin(lat) * Math.sin(lon), Math.cos(lat) };
+		final double[] xyz = new double[] { Math.cos(lat) * Math.cos(lon),
+				Math.cos(lat) * Math.sin(lon), Math.sin(lat) };
 
 		double minDistance = Double.MAX_VALUE;
 		int winner = -1;
@@ -170,6 +179,9 @@ public class AccurateNauticalDistanceCalculator {
 				winner = i;
 			}
 		}
+
+		// System.err.println("Snapped " + Arrays.toString(xyz) + " to " +
+		// Arrays.toString(coast.get(winner)));
 
 		return winner;
 	}
@@ -201,47 +213,83 @@ public class AccurateNauticalDistanceCalculator {
 	 * @param mercatorLandMatrix
 	 * @param maxLatitude
 	 * @param maxProjectedLatitude
+	 * @param loslog
 	 * @return
+	 * @throws IOException
 	 */
 	private boolean lineOfSight(final double[] v1, final double[] v2,
 			final boolean[][] mercatorLandMatrix, final double maxLatitude,
-			double maxProjectedLatitude) {
+			double maxProjectedLatitude)//, BufferedWriter loslog)
+			throws IOException {
 		// find angle between v1 and v2;
 		double angle = angleBetween(v1, v2);
-
+		// System.err.println("Angle = " + angle);
 		// sweep along great circle by rotating v1 by a small quantity until it
 		// coincides with v2
 
 		// in mercator, distances are smallest at the equator
-		final double rotationAngle = Math.PI * 2
-				/ (mercatorLandMatrix.length * 2);
+		final double rotationAngle = Math.PI * 2 / (mercatorLandMatrix.length);
 
-		if (angle < 2 * rotationAngle)
+		if (angle < 3 * rotationAngle)
 			return true;
 
-		final double[] axis = cross(v1, v2);
+		double[] axis = cross(v1, v2);
 		normalise(axis);
 
-		final double[][] rotationMatrix = rotator(axis, rotationAngle);
+		double[][] rotationMatrix = rotator(axis, rotationAngle);
 
 		double[] pt = v1;
 		// System.err.println("Sweeping through "+angle + " rads in " +
 		// rotationAngle + " jumps");
-		while (angle > 0) {
+
+		// System.err
+		// .println("Sweep from " + Arrays.toString(v1) + " to "
+		// + Arrays.toString(v2) + " " + rotationAngle
+		// + " rads at a time");
+
+		int bad = 0;
+		// StringBuffer sb = new StringBuffer();
+		// sb.append(pt[0] + ", " + pt[1] + ", "+pt[2] +"\n");
+		
+		int applications = 0;
+		
+//		loslog.write(pt[0] + "," + pt[1] + "," + pt[2] + "\n");
+		while (angle > rotationAngle * 3) {
+			applications++;
+			if (applications >= 10) {
+				//Reset matrix, due to cumulative drift problems.
+				//this ensure that the matrix always points towards the destination
+				axis = cross(pt, v2);
+				rotationMatrix = rotator(axis, rotationAngle);
+			}
+			
 			pt = applyMatrix(rotationMatrix, pt);
 			normalise(pt);// /just in case
+			// sb.append(pt[0] + ", " + pt[1] + ", "+pt[2] +"\n");
+//			loslog.write(pt[0] + ", " + pt[1] + ", " + pt[2] + "\n");
 			// project out point and test land/sea. should be fine as pt is
 			// unitary
 			final double lat = Math.asin(pt[2]);
 			final double lon = Math.atan2(pt[1], pt[0]);
+
+			// System.err.println("Testing point " + Arrays.toString(pt) + " ("
+			// + lat + ", " + lon + ")");
+
 			// System.err.println("Sweep : " + lat + ", " + lon);
-			if (getMercatorPoint(mercatorLandMatrix, maxLatitude,
-					maxProjectedLatitude, lat, lon))
-				return false;
+			if (getMercatorPoint(mercatorLandMatrix, maxLatitude, lat, lon,
+					maxProjectedLatitude)) {
+				bad++;
+				if (bad > 0)
+					return false;
+			} else {
+				bad = 0;
+			}
 
-			angle -= rotationAngle;
+			angle = angleBetween(pt, v2);
 		}
-
+//		loslog.write("0,0,0\n");
+		// sb.append(v2[0] + ", " + v2[1] + ", "+v2[2] +"\n");
+		// loslog.write(sb.toString());
 		return true;
 	}
 
@@ -251,22 +299,25 @@ public class AccurateNauticalDistanceCalculator {
 		// lookup lat/lon in matrix
 		// 1. everything out of range is land
 
-		final int mapWidth = mercatorLandMatrix.length;
-		final int mapHeight = mercatorLandMatrix[0].length;
+		final int mapWidth = mercatorLandMatrix.length - 1;
+		final int mapHeight = mercatorLandMatrix[0].length - 1;
 
 		if (Math.abs(lat) > maxLatitude) {
 			return true;
 		}
 		// compute mercator position
 		final double px = ((lon / Math.PI) + 1) / 2;
-		final double py = (((Math.log(Math.tan(lat) + 1 / Math.cos(lat)) / maxProjectedLatitude))
+		final double py = (((((Math.log(Math.tan(lat) + 1 / Math.cos(lat)) / maxProjectedLatitude)) // -1..1
+		) * -1) // upside down
+		+ 1) / 2; // all positive, scaled to fit in unit
 
-		+ 1) / 2;
+		final boolean answer = mercatorLandMatrix[(int) Math.floor(px
+				* mapWidth)][(int) Math.floor(py * mapHeight)];
 
-		// System.err.println(px + ", " + py);
+//		System.err.println(lat + ", " + lon + " => " + px + ", " + px
+//				* mapWidth + ", " + py * mapHeight + " = " + answer);
 
-		return mercatorLandMatrix[(int) Math.floor(px * mapWidth)][(int) Math
-				.floor((1 - py) * mapHeight - 1)];
+		return answer;
 	}
 
 	/**
@@ -276,9 +327,11 @@ public class AccurateNauticalDistanceCalculator {
 	 * @param pt
 	 */
 	private double[] applyMatrix(double[][] M, double[] V) {
-		return new double[] { M[0][0] * V[0] + M[0][1] * V[1] + M[0][2] * V[2],
-				M[1][0] * V[0] + M[1][1] * V[1] + M[1][2] * V[2],
-				M[2][0] * V[0] + M[2][1] * V[1] + M[2][2] * V[2] };
+		return new double[] { dot(M[0], V), dot(M[1], V), dot(M[2], V) };
+	}
+
+	private double dot(double[] a, double[] b) {
+		return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 	}
 
 	/**
@@ -298,9 +351,9 @@ public class AccurateNauticalDistanceCalculator {
 		final double z = axis[2];
 
 		return new double[][] {
-				{ t * x * x + c, t * x * y - z * s, t * x * z + y * s },
-				{ t * x * y + z * s, t * y * y + c, t * y * z - x * s },
-				{ t * x * z - y * s, t * y * z + x * s, t * z * z + c } };
+				{ t * x * x + c, t * x * y - s * z, t * x * z + s * y },
+				{ t * x * y + s * z, t * y * y + c, t * y * z - s * x },
+				{ t * x * z - s * y, t * y * z + x * s, t * z * z + c } };
 	}
 
 	/**
@@ -311,11 +364,8 @@ public class AccurateNauticalDistanceCalculator {
 	 * @return
 	 */
 	private double[] cross(double[] v1, double[] v2) {
-		double[] result = new double[3];
-		result[0] = v1[1] * v2[2] - v1[2] * v2[1];
-		result[1] = v1[2] * v2[0] - v1[0] * v2[2];
-		result[2] = v1[0] * v2[1] - v1[1] * v2[0];
-		return result;
+		return new double[] { v1[1] * v2[2] - v1[2] * v2[1],
+				v1[2] * v1[0] - v1[0] * v2[2], v1[0] * v2[1] - v1[1] * v2[0] };
 	}
 
 	private double length(final double[] v1) {
@@ -337,7 +387,7 @@ public class AccurateNauticalDistanceCalculator {
 	 * @return
 	 */
 	private double angleBetween(final double[] v1, final double[] v2) {
-		final double dot = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+		final double dot = dot(v1, v2);
 
 		final double l1 = length(v1);
 		final double l2 = length(v2);
@@ -356,11 +406,12 @@ public class AccurateNauticalDistanceCalculator {
 																// and shift
 																// equator to
 																// middle
-		final double lat = 2 * Math.atan(Math.exp(y)) - Math.PI / 2.0;
+		final double lat = Math.atan(Math.sinh(y));
 
 		// convert to cartesian 3d unit vector
-		return new double[] { Math.sin(lat) * Math.cos(lon),
-				Math.sin(lat) * Math.sin(lon), Math.cos(lat) };
+
+		return new double[] { Math.cos(lat) * Math.cos(lon),
+				Math.cos(lat) * Math.sin(lon), Math.sin(lat) };
 	}
 
 	private List<Pair<Integer, Integer>> findCoastalPixels(
@@ -387,8 +438,9 @@ public class AccurateNauticalDistanceCalculator {
 		final int xu = clip(width, x + 1);
 		final int xd = clip(width, x - 1);
 
-		return m[x][yu] || m[x][yd] || m[xu][y] || m[xu][yu] || m[xu][yd]
-				|| m[xd][y] || m[xd][yu] || m[xd][yd];
+		// return m[x][yu] || m[x][yd] || m[xu][y] || m[xu][yu] || m[xu][yd]
+		// || m[xd][y] || m[xd][yu] || m[xd][yd];
+		return m[xd][y] || m[xu][y] || m[x][yd] || m[x][yu];
 	}
 
 	private int clip(int width, int i) {
@@ -397,5 +449,26 @@ public class AccurateNauticalDistanceCalculator {
 		if (i >= width)
 			return i - width;
 		return i;
+	}
+
+	public void writeCoastalPoints(final BufferedWriter output)
+			throws IOException {
+		for (final double[] pt : coast) {
+			output.write(pt[0] + "," + pt[1] + "," + pt[2] + "\n");
+		}
+	}
+
+	public void writeSnappedPoints(BufferedWriter output,
+			BufferedWriter realValues,
+			ArrayList<Pair<Double, Double>> otherPorts) throws IOException {
+		for (final Pair<Double, Double> pt : otherPorts) {
+			final double[] ptxyz = coast.get(snap(pt));
+			final double lat = pt.getFirst() * Math.PI / 180;
+			final double lon = pt.getSecond() * Math.PI / 180;
+			final double[] xyz = new double[] { Math.cos(lat) * Math.cos(lon),
+					Math.cos(lat) * Math.sin(lon), Math.sin(lat) };
+			realValues.write(xyz[0] + "," + xyz[1] + "," + xyz[2] + "\n");
+			output.write(ptxyz[0] + "," + ptxyz[1] + "," + ptxyz[2] + "\n");
+		}
 	}
 }
