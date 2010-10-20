@@ -1,5 +1,5 @@
 ====
-    Copyright (C) Minimaxlabs, 2010
+    Copyright (C) Minimax Labs Ltd., 2010
     All rights reserved.
 ====
 
