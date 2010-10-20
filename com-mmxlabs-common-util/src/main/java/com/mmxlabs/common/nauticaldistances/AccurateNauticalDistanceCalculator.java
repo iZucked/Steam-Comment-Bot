@@ -13,8 +13,16 @@ import java.util.Set;
 import com.mmxlabs.common.Pair;
 
 /**
- * Distance matrix calculator which calculates proper point-point distances
- * using dijkstra's algorithm on a graph constructed
+ * Nautical distance matrix calculator which models the earth as a sphere.
+ * 
+ * Given a bitmap of passable/impassable terrain (passable = false, impassable = true),
+ * finds all the "coastal" pixels (passable with impassable in one of the cardinal directions),
+ * and then computes line-of-sight distances by sweeping out a great circle between pairs
+ * of coastal pixels and testing for impassable terrain in between them. Finally, given
+ * the line-of-sight great-circle distances uses Dijkstra's algorithm to find the shortest
+ * navigable path between pairs of coastal points. Not very fast, because of lots of matrix
+ * maths.
+ *
  * 
  * @author hinton
  * 
@@ -24,7 +32,7 @@ public class AccurateNauticalDistanceCalculator {
 	final List<double[]> coast;
 
 	public AccurateNauticalDistanceCalculator(
-			final boolean[][] mercatorLandMatrix, final double dmaxLatitude) throws IOException {
+			final boolean[][] mercatorLandMatrix, final double dmaxLatitude) {
 		final int width = mercatorLandMatrix.length;
 		final int height = mercatorLandMatrix[0].length;
 		// transform coast pixels to points in cartesian 3-space on the unit
@@ -81,7 +89,10 @@ public class AccurateNauticalDistanceCalculator {
 
 	/**
 	 * Get the shortest distances from origin to each point in the list, after
-	 * snapping points to their closest points on the coast.
+	 * snapping all points to their nearest (by great-circle distance) coastal points.
+	 * 
+	 * In principle runs the risk of snapping a point to something on the other side of a
+	 * landmass, but so far I haven't seen that happen.
 	 * 
 	 * @param origin
 	 * @param latLonPairs
@@ -154,6 +165,74 @@ public class AccurateNauticalDistanceCalculator {
 				return false;
 		return true;
 	}
+	
+	public List<double[]> shortestPath(final Pair<Double, Double> from, final Pair<Double, Double> to) {
+		final ArrayList<double[]> result = new ArrayList<double[]>();
+		
+		int before[] = new int[coast.size()];
+		
+		int startPoint = snap(from);
+		int endPoint = snap(to);
+		before[startPoint] = -1;
+		
+		final boolean[] marks = new boolean[coast.size()];
+		final int[] distances = new int[coast.size()];
+		Arrays.fill(distances, Integer.MAX_VALUE);
+		distances[startPoint] = 0;
+
+		final Comparator<Integer> comparator = new Comparator<Integer>() {
+			@Override
+			public int compare(final Integer o1, final Integer o2) {
+				Integer v1 = distances[o1];
+				Integer v2 = distances[o2];
+				return v1.compareTo(v2);
+			}
+		};
+
+		final PriorityQueue<Integer> queue = new PriorityQueue<Integer>(
+				coast.size(), comparator);
+		final Set<Integer> remaining = new HashSet<Integer>();
+		for (int i = 0; i < coast.size(); i++) {
+			remaining.add(i);
+			queue.add(i);
+		}
+
+		while (!marks[endPoint]) {
+			final int next = queue.remove(); // get closest guy
+			marks[next] = true;
+			remaining.remove(next);
+
+			if (distances[next] == Integer.MAX_VALUE)
+				break;
+
+			for (final int nbr : remaining) {
+				if (distanceMatrix[next][nbr] == Integer.MAX_VALUE)
+					continue;
+				final int altDistance = distances[next]
+						+ distanceMatrix[next][nbr];
+				if (altDistance < distances[nbr]) {
+					// relax nbr
+					before[nbr] = next;
+					queue.remove(nbr);
+					distances[nbr] = altDistance;
+					queue.add(nbr);
+				}
+			}
+		}
+		
+		while (true) {
+			final double[] pt = coast.get(endPoint);
+			 
+			result.add(new double[] {
+					pt[0], pt[1], pt[2], distances[endPoint] 
+			});
+			endPoint = before[endPoint];
+			if (endPoint == -1)
+				break;
+		}
+		
+		return result;
+	}
 
 	/**
 	 * Snap a lat/lon pair to a coast point. Input are in degrees, coast in
@@ -197,12 +276,34 @@ public class AccurateNauticalDistanceCalculator {
 	 */
 	private int greatCircleDistance(final double[] p1, final double[] p2) {
 		// length of arc between them, scaled up. always the inner angle.
-		final double angle = angleBetween(p1, p2);
-		return (int) Math.floor(RAD_KNOTS * angle); // radians, yay
+//		final double angle = angleBetween(p1, p2);
+//		return (int) Math.floor(RAD_KNOTS * angle); // radians, yay
+		
+		return (int) Math.floor(RAD_KNOTS * latLonDistance(
+				cartesianToLatLon(p1),
+				cartesianToLatLon(p2)));
 	}
 
 	private static final double RAD_KNOTS = 3443.89849;
 
+	private double[] cartesianToLatLon(final double[] pt) {
+		return new double[] {
+				Math.asin(pt[2]),
+				Math.atan2(pt[1], pt[0])
+		};
+	}
+	
+	private double latLonDistance(final double[] ll1, final double[] ll2) {
+		return 
+		2
+		*Math.asin(
+				Math.sqrt(
+						Math.pow(Math.sin(
+								(ll1[0]-ll2[0])/2),2) + 
+                Math.cos(ll1[0])*Math.cos(ll2[0])*
+                Math.pow(Math.sin((ll1[1]-ll2[1])/2),2)));
+	}
+	
 	/**
 	 * Test all the pixels between cartesian normal sphere points v1 and v2 in
 	 * the given mercator matrix, and return true if and only if they are all
@@ -219,8 +320,8 @@ public class AccurateNauticalDistanceCalculator {
 	 */
 	private boolean lineOfSight(final double[] v1, final double[] v2,
 			final boolean[][] mercatorLandMatrix, final double maxLatitude,
-			double maxProjectedLatitude)//, BufferedWriter loslog)
-			throws IOException {
+			double maxProjectedLatitude)
+			 {
 		// find angle between v1 and v2;
 		double angle = angleBetween(v1, v2);
 		// System.err.println("Angle = " + angle);
@@ -228,69 +329,104 @@ public class AccurateNauticalDistanceCalculator {
 		// coincides with v2
 
 		// in mercator, distances are smallest at the equator
-		final double rotationAngle = Math.PI * 2 / (mercatorLandMatrix.length);
-
-		if (angle < 3 * rotationAngle)
+		final double rotationAngle = Math.PI * 2 / (mercatorLandMatrix.length * 1.5);
+		
+		if (angle < 4 * rotationAngle)
 			return true;
-
-		double[] axis = cross(v1, v2);
-		normalise(axis);
-
-		double[][] rotationMatrix = rotator(axis, rotationAngle);
-
-		double[] pt = v1;
-		// System.err.println("Sweeping through "+angle + " rads in " +
-		// rotationAngle + " jumps");
-
-		// System.err
-		// .println("Sweep from " + Arrays.toString(v1) + " to "
-		// + Arrays.toString(v2) + " " + rotationAngle
-		// + " rads at a time");
-
-		int bad = 0;
-		// StringBuffer sb = new StringBuffer();
-		// sb.append(pt[0] + ", " + pt[1] + ", "+pt[2] +"\n");
 		
-		int applications = 0;
+		final double[] ll1 = cartesianToLatLon(v1);
+		final double[] ll2 = cartesianToLatLon(v2);
 		
-//		loslog.write(pt[0] + "," + pt[1] + "," + pt[2] + "\n");
-		while (angle > rotationAngle * 3) {
-			applications++;
-			if (applications >= 10) {
-				//Reset matrix, due to cumulative drift problems.
-				//this ensure that the matrix always points towards the destination
-				axis = cross(pt, v2);
-				rotationMatrix = rotator(axis, rotationAngle);
-			}
+		final double d = latLonDistance(ll1, ll2);
+		final double sind = Math.sin(d);
+		
+		double f = 0;
+		final double deltaf = rotationAngle / angle;
+//		StringBuffer buffer = new StringBuffer();
+//		buffer.append("0,0,0\n");
+		while (f < 1) {
+			final double A = Math.sin((1-f) * d) / sind;
+			final double B = Math.sin(f * d) / sind;
+			final double x = A * Math.cos(ll1[0]) * Math.cos(ll1[1]) +
+				B * Math.cos(ll2[0]) * Math.cos(ll2[1]);
+			final double y = A * Math.cos(ll1[0]) * Math.sin(ll1[1]) +
+				B * Math.cos(ll2[0]) * Math.sin(ll2[1]);
+			final double z = A * Math.sin(ll1[0]) + B * Math.sin(ll2[0]);
 			
-			pt = applyMatrix(rotationMatrix, pt);
-			normalise(pt);// /just in case
-			// sb.append(pt[0] + ", " + pt[1] + ", "+pt[2] +"\n");
-//			loslog.write(pt[0] + ", " + pt[1] + ", " + pt[2] + "\n");
-			// project out point and test land/sea. should be fine as pt is
-			// unitary
-			final double lat = Math.asin(pt[2]);
-			final double lon = Math.atan2(pt[1], pt[0]);
-
-			// System.err.println("Testing point " + Arrays.toString(pt) + " ("
-			// + lat + ", " + lon + ")");
-
-			// System.err.println("Sweep : " + lat + ", " + lon);
+			final double lat = Math.atan2(z, Math.sqrt(x*x+y*y));
+			final double lon = Math.atan2(y, x);
+			
+//			buffer.append(x+","+y+","+z+"\n");
+			
 			if (getMercatorPoint(mercatorLandMatrix, maxLatitude, lat, lon,
-					maxProjectedLatitude)) {
-				bad++;
-				if (bad > 0)
-					return false;
-			} else {
-				bad = 0;
-			}
-
-			angle = angleBetween(pt, v2);
+					maxProjectedLatitude)) return false;
+			
+			f += deltaf;
 		}
-//		loslog.write("0,0,0\n");
-		// sb.append(v2[0] + ", " + v2[1] + ", "+v2[2] +"\n");
-		// loslog.write(sb.toString());
+//		loslog.write(buffer.toString());
 		return true;
+		
+//		if (angle < 3 * rotationAngle)
+//			return true;
+//
+//		double[] axis = cross(v1, v2);
+//		normalise(axis);
+//
+//		double[][] rotationMatrix = rotator(axis, rotationAngle);
+//
+//		double[] pt = v1;
+//		// System.err.println("Sweeping through "+angle + " rads in " +
+//		// rotationAngle + " jumps");
+//
+//		// System.err
+//		// .println("Sweep from " + Arrays.toString(v1) + " to "
+//		// + Arrays.toString(v2) + " " + rotationAngle
+//		// + " rads at a time");
+//
+//		int bad = 0;
+//		// StringBuffer sb = new StringBuffer();
+//		// sb.append(pt[0] + ", " + pt[1] + ", "+pt[2] +"\n");
+//		
+//		int applications = 0;
+//		
+////		loslog.write(pt[0] + "," + pt[1] + "," + pt[2] + "\n");
+//		while (angle > rotationAngle * 3) {
+//			applications++;
+//			if (applications >= 10) {
+//				//Reset matrix, due to cumulative drift problems.
+//				//this ensure that the matrix always points towards the destination
+//				axis = cross(pt, v2);
+//				rotationMatrix = rotator(axis, rotationAngle);
+//			}
+//			
+//			pt = applyMatrix(rotationMatrix, pt);
+//			normalise(pt);// /just in case
+//			// sb.append(pt[0] + ", " + pt[1] + ", "+pt[2] +"\n");
+////			loslog.write(pt[0] + ", " + pt[1] + ", " + pt[2] + "\n");
+//			// project out point and test land/sea. should be fine as pt is
+//			// unitary
+//			final double lat = Math.asin(pt[2]);
+//			final double lon = Math.atan2(pt[1], pt[0]);
+//
+//			// System.err.println("Testing point " + Arrays.toString(pt) + " ("
+//			// + lat + ", " + lon + ")");
+//
+//			// System.err.println("Sweep : " + lat + ", " + lon);
+//			if (getMercatorPoint(mercatorLandMatrix, maxLatitude, lat, lon,
+//					maxProjectedLatitude)) {
+//				bad++;
+//				if (bad > 0)
+//					return false;
+//			} else {
+//				bad = 0;
+//			}
+//
+//			angle = angleBetween(pt, v2);
+//		}
+////		loslog.write("0,0,0\n");
+//		// sb.append(v2[0] + ", " + v2[1] + ", "+v2[2] +"\n");
+//		// loslog.write(sb.toString());
+//		return true;
 	}
 
 	private boolean getMercatorPoint(boolean[][] mercatorLandMatrix,
