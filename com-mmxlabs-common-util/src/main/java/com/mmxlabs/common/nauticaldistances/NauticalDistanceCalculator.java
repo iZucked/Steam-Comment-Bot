@@ -23,6 +23,7 @@ import com.mmxlabs.common.Pair;
  * @author hinton
  * 
  */
+@Deprecated
 public class NauticalDistanceCalculator {
 	private final int longitudeResolution;
 	private final int latitudeResolution;
