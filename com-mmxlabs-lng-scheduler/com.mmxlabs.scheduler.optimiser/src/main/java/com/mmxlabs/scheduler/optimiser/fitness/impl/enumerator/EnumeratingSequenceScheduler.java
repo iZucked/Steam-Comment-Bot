@@ -58,6 +58,15 @@ public class EnumeratingSequenceScheduler<T> extends
 	 */
 	private int[] minTimeToNextElement;
 	
+	/**
+	 * Holds a list of points at which the cost function can be separated.
+	 * This occurs when a given journey leg <em>always</em> involves some idle
+	 * time, so there can be no knock-on effects on the segment following the point
+	 * from the times chosen up to the point.
+	 * 
+	 * These are the indexes of the sequence elements at the <em>start</em> of
+	 * such legs.
+	 */
 	protected final ArrayList<Integer> separationPoints = 
 		new ArrayList<Integer>();
 
