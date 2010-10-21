@@ -32,12 +32,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class EnumeratingSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
 	private static final int EMPTY_WINDOW_SIZE = 24 * 2;
-	
+
 	/**
 	 * Tracks the number of evaluations done so far
 	 */
 	protected int count = 0;
-	
+
 	protected int[] arrivalTimes;
 	/**
 	 * The start times of each window, appropriately `clipped' to deal with
@@ -54,11 +54,11 @@ public class EnumeratingSequenceScheduler<T> extends
 	 */
 	private int[] minTimeToNextElement;
 
-//	private ITimeWindowDataComponentProvider timeWindowProvider;
-//	private IElementDurationProvider<T> durationProvider;
-//	private IVesselProvider vesselProvider;
-//	private IMultiMatrixProvider<T, Integer> distanceProvider;
-//	
+	// private ITimeWindowDataComponentProvider timeWindowProvider;
+	// private IElementDurationProvider<T> durationProvider;
+	// private IVesselProvider vesselProvider;
+	// private IMultiMatrixProvider<T, Integer> distanceProvider;
+	//
 	private IResource resource;
 	protected ISequence<T> sequence;
 
@@ -66,34 +66,36 @@ public class EnumeratingSequenceScheduler<T> extends
 	private long bestValue;
 	private Pair<Integer, List<VoyagePlan>> bestResult;
 
+	private int[] maxTimeToNextElement;
+
 	public EnumeratingSequenceScheduler() {
 		super();
-		
+
 		createLog();
-		
+
 	}
-	
+
 	@Override
 	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
 			final ISequence<T> sequence) {
 
 		resetBest();
 		setResourceAndSequence(resource, sequence);
-		
+
 		startLogEntry(sequence.size());
-		
+
 		prepare(Long.MAX_VALUE);
 		enumerate(0);
 
 		endLogEntry();
-		
+
 		return bestResult;
 	}
-	
+
 	protected final Pair<Integer, List<VoyagePlan>> getBestResult() {
 		return bestResult;
 	}
-	
+
 	protected final void resetBest() {
 		this.bestResult = null;
 		this.bestValue = Long.MAX_VALUE;
@@ -107,29 +109,37 @@ public class EnumeratingSequenceScheduler<T> extends
 		evaluator.setResourceAndSequence(resource, sequence);
 	}
 
-
-
 	/**
 	 * Unpack some distance/time/speed information, set up arrays etc
-	 * @param maxValue 
+	 * 
+	 * @param maxValue
 	 * 
 	 * @param sequence
-	 * @return 
+	 * @return
 	 */
 	protected final long prepare(final long maxValue) {
-		arrivalTimes = new int[sequence.size()];
-		windowStartTime = new int[sequence.size()];
-		windowEndTime = new int[sequence.size()];
-		minTimeToNextElement = new int[sequence.size()];
-
+		{
+			final int size = sequence.size();
+			arrivalTimes = new int[size];
+			windowStartTime = new int[size];
+			windowEndTime = new int[size];
+			minTimeToNextElement = new int[size];
+			maxTimeToNextElement = new int[size];
+		}
 		final IVesselProvider vesselProvider = super.getVesselProvider();
-		final ITimeWindowDataComponentProvider timeWindowProvider = super.getTimeWindowProvider();
+		final ITimeWindowDataComponentProvider timeWindowProvider = super
+				.getTimeWindowProvider();
 		final IPortProvider portProvider = super.getPortProvider();
-		final IMultiMatrixProvider<IPort, Integer> distanceProvider = super.getDistanceProvider();
-		final IElementDurationProvider<T> durationProvider = super.getDurationsProvider();
-		
+		final IMultiMatrixProvider<IPort, Integer> distanceProvider = super
+				.getDistanceProvider();
+		final IElementDurationProvider<T> durationProvider = super
+				.getDurationsProvider();
+
 		final int maxSpeed = vesselProvider.getVessel(resource)
 				.getVesselClass().getMaxSpeed();
+
+		final int minSpeed = vesselProvider.getVessel(resource)
+				.getVesselClass().getMinSpeed();
 
 		int index = 0;
 		T lastElement = null;
@@ -140,20 +150,27 @@ public class EnumeratingSequenceScheduler<T> extends
 					.getTimeWindows(element);
 
 			// Calculate minimum inter-element durations
-			minTimeToNextElement[index] = durationProvider.getElementDuration(
-					element, resource);
-			
+			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider
+					.getElementDuration(element, resource);
+
 			if (lastElement != null) {
-				final IPort lastPort = portProvider.getPortForElement(lastElement);
+				final IPort lastPort = portProvider
+						.getPortForElement(lastElement);
 				final IPort port = portProvider.getPortForElement(element);
-				
+
 				final int minDistance = distanceProvider.getMinimumValue(
 						lastPort, port);
+
+				final int maxDistance = minDistance; // TODO this is incorrect
 
 				final int minTravelTime = Calculator.getTimeFromSpeedDistance(
 						maxSpeed, minDistance);
 
+				final int maxTravelTime = Calculator.getTimeFromRateQuantity(
+						minSpeed, maxDistance);
+
 				minTimeToNextElement[index - 1] += minTravelTime;
+				maxTimeToNextElement[index - 1] += maxTravelTime;
 			}
 
 			// Handle time windows
@@ -168,7 +185,8 @@ public class EnumeratingSequenceScheduler<T> extends
 							+ EMPTY_WINDOW_SIZE;
 				} else {
 					windowStartTime[index] = 0;
-					windowEndTime[index] = sequence.size() == 1 ? 0 : EMPTY_WINDOW_SIZE;
+					windowEndTime[index] = sequence.size() == 1 ? 0
+							: EMPTY_WINDOW_SIZE;
 				}
 			} else {
 				assert windows.size() == 1 : "Multiple time windows are not yet supported!";
@@ -203,10 +221,29 @@ public class EnumeratingSequenceScheduler<T> extends
 					Math.min(windowEndTime[index], windowEndTime[index + 1]
 							- minTimeToNextElement[index]));
 		}
+
+		// find possible separation points
+		int separableElementCount = 0;
+		for (index = 1; index < arrivalTimes.length; index++) {
+			// if there's an edge where window start > prev. window end + max
+			// travel time,
+			// that edge is separable, and it should be possible to solve from
+			// here independently
+			// of what has gone before
+
+			final int latestArrivalTime = windowEndTime[index - 1]
+					+ maxTimeToNextElement[index - 1];
+			if (latestArrivalTime < windowStartTime[index]) {
+				separableElementCount++;
+			}
+		}
+
+		System.err.println(separableElementCount + " separable elements");
 		
 		long approximateCombinations = 1;
 		for (index = 0; index < arrivalTimes.length; index++) {
-			approximateCombinations *= windowEndTime[index] - windowStartTime[index]+1;
+			approximateCombinations *= windowEndTime[index]
+					- windowStartTime[index] + 1;
 			if (approximateCombinations >= maxValue)
 				break;
 		}
@@ -245,18 +282,20 @@ public class EnumeratingSequenceScheduler<T> extends
 		count++;
 		final Pair<Integer, List<VoyagePlan>> startTimeAndPlans = super
 				.schedule(resource, sequence, arrivalTimes);
-		
+
 		final long value = evaluator.evaluateVoyagePlans(startTimeAndPlans);
-		
+
 		logValue(value);
-		
+
 		if (value < bestValue) {
-//			if (bestValue == Long.MAX_VALUE) {
-//				initialValue = value;
-//			}
+			// if (bestValue == Long.MAX_VALUE) {
+			// initialValue = value;
+			// }
 			bestValue = value;
 			bestResult = startTimeAndPlans;
-//			System.err.println(String.format("%.2f%% gain at %d (%s)", (100.0 * (initialValue - bestValue))/initialValue, count, Long.toString(bestValue)));
+			// System.err.println(String.format("%.2f%% gain at %d (%s)", (100.0
+			// * (initialValue - bestValue))/initialValue, count,
+			// Long.toString(bestValue)));
 		}
 	}
 
