@@ -133,6 +133,7 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * @param sequence
 	 * @return
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected final long prepare(final long maxValue) {
 		{
 			final int size = sequence.size();
@@ -144,6 +145,7 @@ public class EnumeratingSequenceScheduler<T> extends
 			separationPoints.clear();
 		}
 		final IVesselProvider vesselProvider = super.getVesselProvider();
+		
 		final ITimeWindowDataComponentProvider timeWindowProvider = super
 				.getTimeWindowProvider();
 		final IPortProvider portProvider = super.getPortProvider();
@@ -255,6 +257,8 @@ public class EnumeratingSequenceScheduler<T> extends
 				separationPoints.add(index-1);
 			}
 		}
+		
+		separationPoints.add(arrivalTimes.length-1);
 		
 		long approximateCombinations = 1;
 		for (index = 0; index < arrivalTimes.length; index++) {
