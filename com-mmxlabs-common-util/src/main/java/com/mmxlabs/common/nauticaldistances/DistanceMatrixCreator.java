@@ -37,6 +37,9 @@ import com.mmxlabs.common.options.OptionsException;
  * </ol>
  * Run with --help argument for more help.
  * 
+ * Copyright (C) Minimax Labs Ltd., 2010 
+ * All rights reserved. 
+ * 
  * @author hinton
  * 
  */

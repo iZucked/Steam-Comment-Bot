@@ -23,6 +23,8 @@ import com.mmxlabs.common.Pair;
  * navigable path between pairs of coastal points. Not very fast, because of lots of matrix
  * maths.
  *
+ * Copyright (C) Minimax Labs Ltd., 2010 
+ * All rights reserved. 
  * 
  * @author hinton
  * 

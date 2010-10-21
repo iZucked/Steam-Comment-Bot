@@ -20,6 +20,9 @@ import com.mmxlabs.common.Pair;
  * have to find all coastal points, determine which coastal points are great-circle
  * reachable from one another, build a graph on that and then run dijkstra like this.
  * 
+ * Copyright (C) Minimax Labs Ltd., 2010 
+ * All rights reserved. 
+ * 
  * @author hinton
  * 
  */
