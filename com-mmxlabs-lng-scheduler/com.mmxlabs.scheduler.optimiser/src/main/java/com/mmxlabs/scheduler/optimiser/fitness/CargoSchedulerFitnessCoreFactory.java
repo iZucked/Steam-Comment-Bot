@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.Collection;
@@ -31,6 +36,7 @@ public final class CargoSchedulerFitnessCoreFactory implements
 	public static final String ROUTE_PRICE_COMPONENT_NAME = "cargo-scheduler-route-price";
 
 	/* default scheduler factory creates default GA scheduler */
+	//TODO: Make static class
 	private ISchedulerFactory schedulerFactory =
 		new ISchedulerFactory() {
 

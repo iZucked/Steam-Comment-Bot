@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
@@ -24,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @param <T>
  */
-public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
+public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	private final class CacheKey {
 		private final IVessel vessel;
 		private final int[] times;
@@ -32,8 +37,8 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		private final List<Object> sequence;
 		private final List<IVoyagePlanChoice> choices;
 
-		public CacheKey(IVessel vessel, List<Object> sequence,
-				List<IVoyagePlanChoice> choices) {
+		public CacheKey(final IVessel vessel, final List<Object> sequence,
+				final List<IVoyagePlanChoice> choices) {
 			super();
 			this.vessel = vessel;
 			final int sz = sequence.size();
@@ -70,7 +75,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		 * is final and private it ought not end up getting used wrongly.
 		 */
 		@Override
-		public final boolean equals(Object obj) {
+		public final boolean equals(final Object obj) {
 			final CacheKey other = (CacheKey) obj;
 			// if (getClass() != obj.getClass())
 			// return false;
@@ -84,7 +89,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 				Arrays.equals(times, other.times);
 		}
 
-		private final CachingVoyagePlanOptimiser getOuterType() {
+		private final CachingVoyagePlanOptimiser<T> getOuterType() {
 			return CachingVoyagePlanOptimiser.this;
 		}
 	}
@@ -100,7 +105,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	private List<Object> basicSequence;
 	private IVessel vessel;
-	private List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
+	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
 
 	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> delegate,
 			final int cacheSize) {
@@ -110,11 +115,11 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		evaluator = new IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>() {
 
 			@Override
-			final public Pair<CacheKey, Pair<VoyagePlan, Long>> evaluate(CacheKey arg) {
+			final public Pair<CacheKey, Pair<VoyagePlan, Long>> evaluate(final CacheKey arg) {
 				final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
 
 				delegate.reset();
-				for (IVoyagePlanChoice c:arg.choices) {
+				for (final IVoyagePlanChoice c:arg.choices) {
 					delegate.addChoice(c);
 				}
 				delegate.setVessel(arg.vessel);
@@ -165,7 +170,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	@Override
-	public void setBasicSequence(List<Object> basicSequence) {
+	public void setBasicSequence(final List<Object> basicSequence) {
 		this.basicSequence = basicSequence;
 	}
 
@@ -175,7 +180,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	@Override
-	public void setVessel(IVessel vessel) {
+	public void setVessel(final IVessel vessel) {
 		this.vessel = vessel;
 	}
 
@@ -195,7 +200,7 @@ public class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	@Override
-	public void addChoice(IVoyagePlanChoice choice) {
+	public void addChoice(final IVoyagePlanChoice choice) {
 		choices.add(choice);
 	}
 

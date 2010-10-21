@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.scheduler.optimiser.events.impl;
 
 import com.mmxlabs.scheduler.optimiser.events.IDischargeEvent;
