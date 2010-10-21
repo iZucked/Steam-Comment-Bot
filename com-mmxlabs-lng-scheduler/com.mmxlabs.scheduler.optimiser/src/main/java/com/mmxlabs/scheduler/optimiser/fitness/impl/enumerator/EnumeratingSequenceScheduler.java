@@ -5,8 +5,7 @@
 
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
-import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mmxlabs.common.Pair;
@@ -58,6 +57,9 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * its successor. i.e. min travel time + visit time at indexed element.
 	 */
 	private int[] minTimeToNextElement;
+	
+	protected final ArrayList<Integer> separationPoints = 
+		new ArrayList<Integer>();
 
 	// private ITimeWindowDataComponentProvider timeWindowProvider;
 	// private IElementDurationProvider<T> durationProvider;
@@ -130,6 +132,7 @@ public class EnumeratingSequenceScheduler<T> extends
 			windowEndTime = new int[size];
 			minTimeToNextElement = new int[size];
 			maxTimeToNextElement = new int[size];
+			separationPoints.clear();
 		}
 		final IVesselProvider vesselProvider = super.getVesselProvider();
 		final ITimeWindowDataComponentProvider timeWindowProvider = super
@@ -227,8 +230,9 @@ public class EnumeratingSequenceScheduler<T> extends
 							- minTimeToNextElement[index]));
 		}
 
-		// find possible separation points
-		int separableElementCount = 0;
+		
+		// Compute separation points
+		
 		for (index = 1; index < arrivalTimes.length; index++) {
 			// if there's an edge where window start > prev. window end + max
 			// travel time,
@@ -239,11 +243,9 @@ public class EnumeratingSequenceScheduler<T> extends
 			final int latestArrivalTime = windowEndTime[index - 1]
 					+ maxTimeToNextElement[index - 1];
 			if (latestArrivalTime < windowStartTime[index]) {
-				separableElementCount++;
+				separationPoints.add(index-1);
 			}
 		}
-
-		System.err.println(separableElementCount + " separable elements");
 		
 		long approximateCombinations = 1;
 		for (index = 0; index < arrivalTimes.length; index++) {
