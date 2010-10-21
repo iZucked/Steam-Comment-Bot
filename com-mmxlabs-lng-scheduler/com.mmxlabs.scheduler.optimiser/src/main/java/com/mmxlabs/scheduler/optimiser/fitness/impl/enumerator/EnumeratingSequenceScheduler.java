@@ -57,18 +57,17 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * its successor. i.e. min travel time + visit time at indexed element.
 	 */
 	private int[] minTimeToNextElement;
-	
+
 	/**
-	 * Holds a list of points at which the cost function can be separated.
-	 * This occurs when a given journey leg <em>always</em> involves some idle
-	 * time, so there can be no knock-on effects on the segment following the point
+	 * Holds a list of points at which the cost function can be separated. This
+	 * occurs when a given journey leg <em>always</em> involves some idle time,
+	 * so there can be no knock-on effects on the segment following the point
 	 * from the times chosen up to the point.
 	 * 
 	 * These are the indexes of the sequence elements at the <em>start</em> of
 	 * such legs.
 	 */
-	protected final ArrayList<Integer> separationPoints = 
-		new ArrayList<Integer>();
+	protected final ArrayList<Integer> separationPoints = new ArrayList<Integer>();
 
 	// private ITimeWindowDataComponentProvider timeWindowProvider;
 	// private IElementDurationProvider<T> durationProvider;
@@ -145,7 +144,7 @@ public class EnumeratingSequenceScheduler<T> extends
 			separationPoints.clear();
 		}
 		final IVesselProvider vesselProvider = super.getVesselProvider();
-		
+
 		final ITimeWindowDataComponentProvider timeWindowProvider = super
 				.getTimeWindowProvider();
 		final IPortProvider portProvider = super.getPortProvider();
@@ -180,7 +179,8 @@ public class EnumeratingSequenceScheduler<T> extends
 				final int minDistance = distanceProvider.getMinimumValue(
 						lastPort, port);
 
-				final int maxDistance = minDistance; // TODO this is incorrect
+				final int maxDistance = distanceProvider.getMaximumValue(
+						lastPort, port);
 
 				final int minTravelTime = Calculator.getTimeFromSpeedDistance(
 						maxSpeed, minDistance);
@@ -241,9 +241,8 @@ public class EnumeratingSequenceScheduler<T> extends
 							- minTimeToNextElement[index]));
 		}
 
-		
 		// Compute separation points
-		
+
 		for (index = 1; index < arrivalTimes.length; index++) {
 			// if there's an edge where window start > prev. window end + max
 			// travel time,
@@ -254,12 +253,12 @@ public class EnumeratingSequenceScheduler<T> extends
 			final int latestArrivalTime = windowEndTime[index - 1]
 					+ maxTimeToNextElement[index - 1];
 			if (latestArrivalTime < windowStartTime[index]) {
-				separationPoints.add(index-1);
+				separationPoints.add(index - 1);
 			}
 		}
-		
-		separationPoints.add(arrivalTimes.length-1);
-		
+
+		separationPoints.add(arrivalTimes.length - 1);
+
 		long approximateCombinations = 1;
 		for (index = 0; index < arrivalTimes.length; index++) {
 			approximateCombinations *= windowEndTime[index]
