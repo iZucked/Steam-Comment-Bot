@@ -1,4 +1,11 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.common;
+
+import java.util.Arrays;
 
 
 /**
@@ -38,8 +45,11 @@ public final class Equality {
 	
 	/**
 	 * Shallow equality test for object arrays; checks whether two object arrays
-	 * contain identical references (it is true iff (a) both arrays have the same length and
-	 * (b) a[i] == b[i] for all valid i) 
+	 * contain identical references (it is true iff (a) both arrays have the
+	 * same length and (b) a[i] == b[i] for all valid i). This differs to
+	 * {@link Arrays#equals(Object[], Object[])} in that is uses the == operator
+	 * rather than {@link Object#equals(Object)} to compare objects.
+	 * 
 	 * @param a
 	 * @param b
 	 * @return
