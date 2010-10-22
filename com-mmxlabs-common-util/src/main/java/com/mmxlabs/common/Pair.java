@@ -20,30 +20,30 @@ public class Pair<A, B> {
 		this(null, null);
 	}
 	
-	public Pair(A first, B second) {
+	public Pair(final A first, final B second) {
 		super();
 		this.first = first;
 		this.second = second;
 	}
 	
-	public Pair(Pair<A, B> copy) {
+	public Pair(final Pair<A, B> copy) {
 		setBoth(copy.getFirst(), copy.getSecond());
 	}
 
 	public A getFirst() {
 		return first;
 	}
-	public void setFirst(A first) {
+	public void setFirst(final A first) {
 		this.first = first;
 	}
 	public B getSecond() {
 		return second;
 	}
-	public void setSecond(B second) {
+	public void setSecond(final B second) {
 		this.second = second;
 	}
 
-	public void setBoth(A i, B j) {
+	public void setBoth(final A i, final B j) {
 		setFirst(i);
 		setSecond(j);
 	}
