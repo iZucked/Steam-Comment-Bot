@@ -47,7 +47,8 @@ public class Pair<A, B> {
 		setFirst(i);
 		setSecond(j);
 	}
-	
+
+	@Override
 	public String toString() {
 		return "(" + first.toString() + ", " + second.toString() + ")";
 	}
