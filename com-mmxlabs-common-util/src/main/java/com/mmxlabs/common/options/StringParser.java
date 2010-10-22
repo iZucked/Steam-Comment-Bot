@@ -15,12 +15,15 @@ public class StringParser implements OptionParser {
 		this.defaultValue = defaultValue;
 	}
 	
+	@Override
 	public Object parse(String op, Iterator<String> iter) throws InvalidArgumentException {
 		return iter.next();
 	}
+	@Override
 	public Object getDefaultValue() {
 		return this.defaultValue;
 	}
+	@Override
 	public boolean hasDefaultValue() {
 		return (this.defaultValue != null);
 	}
