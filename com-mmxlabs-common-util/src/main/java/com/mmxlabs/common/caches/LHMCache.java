@@ -29,6 +29,7 @@ public final class LHMCache<K, V> extends AbstractCache<K, V> {
 		};
 	}
 
+	@Override
 	public final V get(final K key) {
 		query();
 		final Reference<V> ref = map.get(key);
