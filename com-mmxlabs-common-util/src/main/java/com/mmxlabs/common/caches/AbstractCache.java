@@ -28,6 +28,7 @@ public abstract class AbstractCache<K, V> {
 		return evaluator.evaluate(key);
 	}
 	
+	@Override
 	public String toString() {
 		return String.format("%s cache: size %d, hit rate %.2f%%",
 				name, size() , 100*(hits/(double)queries));
