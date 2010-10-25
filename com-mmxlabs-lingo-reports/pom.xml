@@ -12,32 +12,31 @@
 		<maven>3.0</maven>
 	</prerequisites>
 
-        <issueManagement>
-                <system>CodebaseHQ</system>
-                <url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
-        </issueManagement>
-        <inceptionYear>2010</inceptionYear>
-        <scm>
-                <connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-demo.hg</connection>
-                <developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-demo.hg</developerConnection>
-                <url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-shiplingo-demo</url>
-        </scm>
-        <organization>
-                <name>Minimax Labs</name>
-                <url>http://www.minimaxlabs.com/</url>
-        </organization>
+	<issueManagement>
+		<system>CodebaseHQ</system>
+		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
+	</issueManagement>
+	<inceptionYear>2010</inceptionYear>
+	<scm>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-demo.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-demo.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-shiplingo-demo</url>
+	</scm>
+	<organization>
+		<name>Minimax Labs</name>
+		<url>http://www.minimaxlabs.com/</url>
+	</organization>
 
 
 	<properties>
 		<!-- Tycho version to use -->
 		<tycho.version>0.11.0-SNAPSHOT</tycho.version>
-		<maven.javadoc.plugin.version>2.7</maven.javadoc.plugin.version>
 
 		<maven.test.failure.ignore>true</maven.test.failure.ignore>
-		
+
 		<!-- Avoid platform dependent build warning -->
-                <!-- Code files should also be in UTF-8 -->
-                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Code files should also be in UTF-8 -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 	</properties>
 
