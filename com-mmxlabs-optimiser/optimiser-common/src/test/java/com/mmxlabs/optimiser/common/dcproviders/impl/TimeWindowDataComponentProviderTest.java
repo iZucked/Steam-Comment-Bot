@@ -19,14 +19,14 @@ public class TimeWindowDataComponentProviderTest {
 	@Test
 	public void testTimeWindowDataComponentProvider() {
 		final String name = "name";
-		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
+		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
 				name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetTimeWindows() {
-		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
+		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
 				"name");
 		final Object obj1 = new Object();
 
@@ -44,7 +44,7 @@ public class TimeWindowDataComponentProviderTest {
 
 	@Test
 	public void testDispose() {
-		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(
+		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
 				"name");
 		final Object obj1 = new Object();
 
