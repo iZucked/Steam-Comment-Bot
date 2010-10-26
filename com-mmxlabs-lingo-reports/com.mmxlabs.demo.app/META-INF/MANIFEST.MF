@@ -26,3 +26,7 @@ Require-Bundle: org.eclipse.ui,
  org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.demo.app,
+ com.mmxlabs.demo.app.actions,
+ com.mmxlabs.demo.app.intro,
+ com.mmxlabs.demo.app.wizards
