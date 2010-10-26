@@ -125,17 +125,19 @@ public class Options {
 		}
 		if (help != null) {
 			allHelp.append("\t --" + names[0] + " : " + help);
-			if (parser.hasDefaultValue())
+			if (parser.hasDefaultValue()) {
 				allHelp.append(" (default value : " + parser.getDefaultValue()
 						+ ")");
-			else
+			} else {
 				allHelp.append(" (no default value)");
+			}
 			if (names.length > 1) {
 				allHelp.append(" (synonyms : ");
 				for (int x = 1; x < names.length; x++) {
-					allHelp.append(names[x]);
-					if (x > 1)
+					allHelp.append(names[x]); 
+					if (x > 1) {
 						allHelp.append(", ");
+					}
 				}
 				allHelp.append(")");
 			}
@@ -157,10 +159,11 @@ public class Options {
 		if (results.containsKey(s)) {
 			return (T) results.get(s);
 		} else if (parsers.containsKey(s)) {
-			if (parsers.get(s).hasDefaultValue())
+			if (parsers.get(s).hasDefaultValue()) {
 				return (T) parsers.get(s).getDefaultValue();
-			else
+			} else {
 				return (T) results.get(s);
+			}
 		} else {
 			return (T) results.get(s);
 		}
@@ -189,8 +192,9 @@ public class Options {
 				}
 			} else {
 				spare.add(arg);
-				while (it.hasNext())
+				while (it.hasNext()) {
 					spare.add(it.next());
+				}
 			}
 		}
 		return spare;
@@ -201,10 +205,11 @@ public class Options {
 	}
 
 	public boolean hasOption(final String s) {
-		if (results.containsKey(s))
+		if (results.containsKey(s)) {
 			return true;
-		else
+		} else {
 			return parsers.containsKey(s) && parsers.get(s).hasDefaultValue();
+		}
 	}
 
 	private final String quoteify(final Object o) {
