@@ -14,12 +14,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class Options {
-	protected String optionPrefix;
-	protected Map<String, OptionParser> parsers;
-	protected Map<String, Object> results;
+public final class Options {
+	private String optionPrefix;
+	private Map<String, OptionParser> parsers;
+	private Map<String, Object> results;
 
-	StringBuilder allHelp = new StringBuilder();
+	private StringBuilder allHelp = new StringBuilder();
 
 	public Options(final String optionPrefix) {
 		this.optionPrefix = optionPrefix;
