@@ -31,9 +31,9 @@ public class Options {
 		this("--");
 	}
 
-	public List<String> parseAndSet(String[] args, Object object)
+	public List<String> parseAndSet(final String[] args, final Object object)
 			throws InvalidOptionException, InvalidArgumentException {
-		Map<String, Method> methodMap = new HashMap<String, Method>();
+		final Map<String, Method> methodMap = new HashMap<String, Method>();
 
 		for (final Method m : object.getClass().getMethods()) {
 			if (m.isAnnotationPresent(Option.class)) {
@@ -71,21 +71,22 @@ public class Options {
 			}
 		}
 
-		List<String> r = parse(args);
+		final List<String> r = parse(args);
 
 		for (final Map.Entry<String, Method> entry : methodMap.entrySet()) {
 			final Method method = entry.getValue();
 			try { 
 				method.invoke(object, getOption(entry.getKey()));
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				final InvalidArgumentException ex = new InvalidArgumentException(
 						"Wrong argument " + getOption(entry.getKey()));
 				ex.setOption(entry.getKey());
 				throw ex;
-			} catch (IllegalAccessException e) {
+			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(
-						"@Option used incorrectly for field " + method.getName());
-			} catch (InvocationTargetException e) {
+						"@Option used incorrectly for field "
+								+ method.getName());
+			} catch (final InvocationTargetException e) {
 				throw new RuntimeException("This really should never happen");
 			}
 		}
@@ -96,9 +97,9 @@ public class Options {
 		if (name.startsWith("set")) {
 			name = name.substring(3);
 		}
-		StringBuilder result = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 
-		for (char b : name.toCharArray()) {
+		for (final char b : name.toCharArray()) {
 			if (Character.isUpperCase(b)) {
 				if (!(result.length() == 0))
 					result.append("-");
@@ -179,7 +180,7 @@ public class Options {
 					final OptionParser parser = parsers.get(opt);
 					try {
 						results.put(opt, parser.parse(opt, it));
-					} catch (InvalidArgumentException ex) {
+					} catch (final InvalidArgumentException ex) {
 						ex.setOption(opt);
 						throw ex;
 					}
