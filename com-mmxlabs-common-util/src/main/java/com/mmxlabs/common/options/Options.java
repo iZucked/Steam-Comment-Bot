@@ -221,7 +221,7 @@ public class Options {
 		}
 	}
 
-	private final String quoteify(final Object o) {
+	private String quoteify(final Object o) {
 		return "\"" + o.toString().replace("\"", "\\\"") + "\"";
 	}
 
