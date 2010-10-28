@@ -68,6 +68,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataC
 			return value;
 		}
 		
+		@Override
 		public final int compareTo(final MatrixEntry<T, U> other) {
 			return value.compareTo(other.value);
 		}
