@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 
 /**
  * Interface defining multiple two dimensional matrix with a simple value
