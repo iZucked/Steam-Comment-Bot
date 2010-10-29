@@ -44,7 +44,7 @@ public final class ListSequence<T> implements ISequence<T> {
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
-			Iterator<? extends T> i = list.iterator();
+			private final Iterator<? extends T> i = list.iterator();
 
 			@Override
 			public boolean hasNext() {
