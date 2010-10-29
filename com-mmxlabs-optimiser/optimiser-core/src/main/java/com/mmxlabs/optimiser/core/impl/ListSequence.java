@@ -85,28 +85,7 @@ public final class ListSequence<T> implements ISequence<T> {
 	public String toString() {
 		return list.toString();
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (obj instanceof ListSequence) {
-			return list.equals(((ListSequence)obj).list);
-		} else if (obj instanceof ISequence) {
-			ISequence seq = (ISequence)obj;
-			if (seq.size() != size()) {
-				return false;
-			}
-			for (int i = 0; i < size(); ++i) {
-				if (get(i).equals(seq.get(i)) == false) {
-					return false;
-				}
-			}
-			return true;
-		
-		}
-		return false;
-	}
-	
+
 	@Override
 	public final T last() {
 		return get(size()-1);
@@ -115,5 +94,38 @@ public final class ListSequence<T> implements ISequence<T> {
 	@Override
 	public T first() {
 		return get(0);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (obj == this) {
+			return true;
+		} else if (!(obj instanceof ISequence)) {
+			return false;
+		} else {
+			final Iterator<T> e1 = iterator();
+			final Iterator e2 = ((ISequence) obj).iterator();
+			while (e1.hasNext() && e2.hasNext()) {
+				final T o1 = e1.next();
+				final Object o2 = e2.next();
+				if (!(o1 == null ? o2 == null : o1.equals(o2))) {
+					return false;
+				}
+			}
+			return !(e1.hasNext() || e2.hasNext());
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		int hashCode = 1;
+		final Iterator<T> i = iterator();
+		while (i.hasNext()) {
+			final T obj = i.next();
+			hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
+		}
+		return hashCode;
 	}
 }
