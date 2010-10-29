@@ -20,14 +20,14 @@ public class ResourceAllocationConstraintProviderTest {
 	public void testResourceAllocationConstraintProvider() {
 
 		final String name = "name";
-		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider(
+		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
 				name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetAllowedResources() {
-		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider(
+		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
 				"name");
 
 		final Object obj1 = new Object();
@@ -45,7 +45,7 @@ public class ResourceAllocationConstraintProviderTest {
 	@Test
 	public void testDispose() {
 
-		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider(
+		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
 				"name");
 		final Object obj1 = new Object();
 
