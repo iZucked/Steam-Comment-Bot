@@ -29,7 +29,6 @@ public class MatrixProviderFitnessCoreFactoryTest {
 				.iterator().next());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testInstantiate() {
 		final String coreName = "coreName";
