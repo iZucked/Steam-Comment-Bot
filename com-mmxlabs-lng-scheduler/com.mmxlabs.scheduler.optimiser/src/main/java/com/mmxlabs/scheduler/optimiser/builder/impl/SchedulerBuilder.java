@@ -706,7 +706,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Create charter out elements
 		buildCharterOuts();
 
-		portDistanceProvider.cacheMinimumValues(ports);
+		portDistanceProvider.cacheExtremalValues(ports);
 		
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
 
