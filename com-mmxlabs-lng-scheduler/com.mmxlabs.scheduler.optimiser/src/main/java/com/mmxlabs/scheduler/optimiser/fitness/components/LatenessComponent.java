@@ -5,17 +5,12 @@
 
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import java.util.List;
-
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * 
@@ -28,89 +23,49 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  *            Sequence element type
  */
 public final class LatenessComponent<T> extends
-		AbstractCargoSchedulerFitnessComponent<T> implements
+		AbstractPerRouteSchedulerFitnessComponent<T> implements
 		IFitnessComponent<T> {
-
-//	private VoyagePlanIterator voyagePlanIterator = 
-//		new VoyagePlanIterator();
 	
+	private static final int PENALTY = 1000000;
+	private long accumulator = 0;
+
 	public LatenessComponent(final String name,
 			final CargoSchedulerFitnessCore<T> core) {
 		super(name, core);
 	}
 
-	@Override
-	public final long rawEvaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final List<VoyagePlan> plans, final int startTime) {
-//		if (plans.size() == 0) return 0;
-//		long lateness = 0;
-////		if (true) {
-//		voyagePlanIterator.setVoyagePlans(plans, startTime);
-//		while (voyagePlanIterator.hasNextObject()) {
-//			final Object obj = voyagePlanIterator.nextObject();
-//			if (obj instanceof PortDetails) {
-//				final PortDetails detail = (PortDetails) obj;
-//				final ITimeWindow tw = detail.getPortSlot().getTimeWindow();
-//				final int arrival = voyagePlanIterator.getCurrentTime();
-//				
-//				if (tw != null && arrival > tw.getEnd()) {
-//					lateness += arrival - tw.getEnd();
-//				}
-//				
-//			}
-//		}
-////		} else {
-////		for (final VoyagePlan plan : plans) {
-////			for (final Object obj : plan.getSequence()) {
-////				if (obj instanceof PortDetails) {
-////					final PortDetails detail = (PortDetails) obj;
-////					final int arrival = detail.getStartTime();
-////					final ITimeWindow tw = detail.getPortSlot().getTimeWindow();
-////
-////					if (tw != null && arrival > tw.getEnd()) {
-////						lateness += arrival - tw.getEnd();
-////					}
-////				}
-////			}
-////		}
-////		}
-//		// TODO: Hack in a weighting
-//		lateness *= 1000000;
 
-		return lateness;
-	}
-
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
+	 */
 	@Override
-	public void init(final IOptimisationData<T> data) {
-		
-	}
-
-	@Override
-	public final boolean shouldIterate() {
+	protected boolean reallyStartSequence(final IResource resource) {
+		accumulator = 0;
 		return true;
 	}
 
-	long lateness = 0;
-	
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyEvaluateObject(java.lang.Object, int)
+	 */
 	@Override
-	public final void beginIterating(final IResource resource) {
-		lateness = 0;
-	}
-
-	@Override
-	public final void evaluateNextObject(final Object object, final int startTime) {
+	protected boolean reallyEvaluateObject(Object object, int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
 			final ITimeWindow tw = detail.getPortSlot().getTimeWindow();
 			
-			if (tw != null && startTime > tw.getEnd()) {
-				lateness += startTime - tw.getEnd();
+			if (tw != null && time > tw.getEnd()) {
+//				addDiscountedValue(time, 1000000*(time - tw.getEnd()));
+				accumulator  += PENALTY * (time - tw.getEnd());
 			}
 		}
+		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#endSequenceAndGetCost()
+	 */
 	@Override
-	public final void endIterating() {
-		lateness *= 1000000;
+	protected long endSequenceAndGetCost() {
+		return accumulator;
 	}
 }

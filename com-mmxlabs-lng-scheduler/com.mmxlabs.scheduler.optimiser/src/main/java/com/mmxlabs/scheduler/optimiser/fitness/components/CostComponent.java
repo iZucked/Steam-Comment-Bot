@@ -10,16 +10,13 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * 
@@ -32,19 +29,19 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  *            Sequence element type
  */
 public final class CostComponent<T> extends
-		AbstractCargoSchedulerFitnessComponent<T> implements
+		AbstractPerRouteSchedulerFitnessComponent<T> implements
 		IFitnessComponent<T> {
 
-//	private final List<FuelComponent> fuelComponents;
+	// private final List<FuelComponent> fuelComponents;
 	private final FuelComponent[] fuelComponents;
 	private final FuelUnit[] defaultUnits;
 	private final int fuelComponentCount;
-	
+
 	public CostComponent(final String name,
 			final List<FuelComponent> fuelComponents,
 			final CargoSchedulerFitnessCore<T> core) {
 		super(name, core);
-//		this.fuelComponents = fuelComponents;
+		// this.fuelComponents = fuelComponents;
 		this.fuelComponentCount = fuelComponents.size();
 		this.fuelComponents = new FuelComponent[fuelComponentCount];
 		this.defaultUnits = new FuelUnit[fuelComponentCount];
@@ -55,81 +52,50 @@ public final class CostComponent<T> extends
 		}
 	}
 
-	@Override
-	public long rawEvaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final List<VoyagePlan> plans, final int startTime) {
-
-//		long cost = 0;
-
-//		for (final VoyagePlan plan : plans) {
-//			for (final Object obj : plan.getSequence()) {
-//				if (obj instanceof VoyageDetails) {
-//					@SuppressWarnings("unchecked")
-//					final VoyageDetails<T> detail = (VoyageDetails<T>) obj;
-//
-//					for (final FuelComponent fuel : fuelComponents) {
-//
-//						final FuelUnit defaultFuelUnit = fuel
-//								.getDefaultFuelUnit();
-//						final long consumption = detail.getFuelConsumption(
-//								fuel, defaultFuelUnit);
-//						final long fuelCost = Calculator.costFromConsumption(
-//								consumption, detail.getFuelUnitPrice(fuel));
-//
-//						cost += fuelCost;
-//					}
-//				}
-//			}
-//		}
-
-		// Remove scale factor from result (back into external units)
-		// TODO: Use Calculator to convert back
-//		cost /= Calculator.ScaleFactor;
-
-		return cost;
-	}
-
-	@Override
-	public void init(final IOptimisationData<T> data) {
-
-	}
-
 	public List<FuelComponent> getFuelComponents() {
 		return Collections.unmodifiableList(Arrays.asList(fuelComponents));
 	}
 
+	private long accumulator;
+	
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
+	 */
 	@Override
-	public boolean shouldIterate() {
+	protected boolean reallyStartSequence(final IResource resource) {
+		accumulator = 0;
 		return true;
 	}
-	long cost = 0;
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyEvaluateObject(java.lang.Object, int)
+	 */
 	@Override
-	public void beginIterating(IResource resource) {
-		cost = 0;
-	}
+	protected boolean reallyEvaluateObject(Object object, int time) {
+		if (object instanceof VoyageDetails) {
+			@SuppressWarnings("unchecked")
+			final VoyageDetails<T> detail = (VoyageDetails<T>) object;
 
-	@Override
-	public void evaluateNextObject(final Object obj, final int startTime) {
-		// TODO Auto-generated method stub
-		if (obj instanceof VoyageDetails) {
-		@SuppressWarnings("unchecked")
-		final VoyageDetails<T> detail = (VoyageDetails<T>) obj;
+			for (int i = 0; i < fuelComponentCount; i++) {
+				final FuelComponent fuel = fuelComponents[i];
+				final FuelUnit defaultFuelUnit = defaultUnits[i];
+				final long consumption = detail.getFuelConsumption(fuel,
+						defaultFuelUnit);
+				final long fuelCost = Calculator.costFromConsumption(
+						consumption, detail.getFuelUnitPrice(fuel));
 
-		for (int i = 0; i<fuelComponentCount; i++) {
-			final FuelComponent fuel = fuelComponents[i];
-			final FuelUnit defaultFuelUnit = defaultUnits[i];
-			final long consumption = detail.getFuelConsumption(
-					fuel, defaultFuelUnit);
-			final long fuelCost = Calculator.costFromConsumption(
-					consumption, detail.getFuelUnitPrice(fuel));
-
-			cost += fuelCost;
+//				addDiscountedValue(time, fuelCost);
+				accumulator += fuelCost;
+			}
 		}
-	}
+		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#endSequenceAndGetCost()
+	 */
 	@Override
-	public void endIterating() {
-		cost /= Calculator.ScaleFactor;
+	protected long endSequenceAndGetCost() {
+		return accumulator / Calculator.ScaleFactor;
 	}
 }

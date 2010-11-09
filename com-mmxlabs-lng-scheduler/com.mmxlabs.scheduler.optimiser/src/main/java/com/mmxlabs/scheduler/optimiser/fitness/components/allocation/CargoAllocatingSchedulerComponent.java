@@ -118,8 +118,7 @@ public class CargoAllocatingSchedulerComponent<T> extends
 	 */
 	@Override
 	public boolean endSequence() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	/*
