@@ -27,6 +27,7 @@ public final class VoyagePlan implements Cloneable {
 
 	private final EnumMap<FuelComponent, Long> fuelConsumptions;
 	private final EnumMap<FuelComponent, Long> fuelCosts;
+	private long lngFuelVolume;
 
 	public VoyagePlan() {
 		fuelConsumptions = new EnumMap<FuelComponent, Long>(FuelComponent.class);
@@ -172,6 +173,22 @@ public final class VoyagePlan implements Cloneable {
 		}
 		return new VoyagePlan(clonedSequence, dischargeVolume, loadVolume, salesRevenue, 
 				purchaseCost, fuelConsumptions, fuelCosts);
+	}
+
+
+	/**
+	 * Set the total quantity of LNG used for fuel in this voyageplan
+	 * @param lngConsumed
+	 */
+	public void setLNGFuelVolume(final long lngConsumed) {
+		this.lngFuelVolume = lngConsumed;
+	}
+	
+	/**
+	 * @return the total quantity of LNG used for fuel in this plan.
+	 */
+	public final long getLNGFuelVolume() {
+		return lngFuelVolume;
 	}
 
 }

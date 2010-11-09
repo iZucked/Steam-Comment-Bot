@@ -304,6 +304,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		
 		int cargoCVValue = 0;
 
+		final long lngConsumed;
+		
 		// Load/Discharge sequence
 		if (loadIdx != -1 && dischargeIdx != -1) {
 			final ILoadSlot loadSlot = (ILoadSlot) ((PortDetails) sequence[loadIdx])
@@ -321,11 +323,11 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			dischargeM3Price = (int)Calculator.multiply(dischargeUnitPrice, cargoCVValue);
 			loadM3Price = (int)Calculator.multiply(loadUnitPrice, cargoCVValue);
 			
-			final long lngConsumed = fuelConsumptions[FuelComponent.NBO
+			lngConsumed = fuelConsumptions[FuelComponent.NBO
 					.ordinal()]
 					+ fuelConsumptions[FuelComponent.FBO.ordinal()]
 					+ fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
-
+			
 			long cargoCapacity = vesselClass.getCargoCapacity();
 
 			long minLoadVolume = loadSlot.getMinLoadVolume();
@@ -374,7 +376,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			assert dischargeVolumeInM3 >= minDischargeVolume;
 
 		} else {
-			final long lngConsumed = fuelConsumptions[FuelComponent.NBO
+			lngConsumed = fuelConsumptions[FuelComponent.NBO
 					.ordinal()]
 					+ fuelConsumptions[FuelComponent.FBO.ordinal()]
 					+ fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
@@ -428,6 +430,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		voyagePlan.setTotalFuelCost(FuelComponent.FBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.FBO.ordinal()], dischargeM3Price));
 		voyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdleNBO.ordinal()], dischargeM3Price));
 
+		
+		voyagePlan.setLNGFuelVolume(lngConsumed);
+		
 		voyagePlan.setLoadVolume(loadVolumeInM3);
 		long purchaseCost = Calculator.multiply(loadM3Price, loadVolumeInM3);
 		voyagePlan.setPurchaseCost(purchaseCost);
