@@ -5,22 +5,19 @@
 
 package com.mmxlabs.scheduler.optimiser.fitness;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Extension of the {@link IFitnessComponent} interface for use with the
  * {@link CargoSchedulerFitnessCore} to provide fitnesses based on
  * {@link ISequence}s scheduled with an {@link ISequenceScheduler}.
+ * 
+ * Uses an iterating interface, as this is currently sufficient for all the
+ * implementors. To evaluate a scheduled solution,
  * 
  * @author Simon Goodall
  * 
@@ -39,72 +36,70 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	void init(IOptimisationData<T> data);
 
 	/**
-	 * Evaluate the given {@link ISequence}. The {@link IAnnotatedSequence} will
-	 * have already been scheduled and can be queried. If newSequence is set to
-	 * false, then this method is being invoked as part of a full evaluation. If
-	 * it is true, then it is a partial/delta evaluation as part of a
-	 * {@link IMove} evaluation. 
-	 * 
-	 * Returns false if the given sequence is so bad it's not worth proceeding with,
-	 * and the caller must ensure that accepted() is never called for a sequences
-	 * which has had this outcome (if it is accepted, the internal state will be invalid).
+	 * Start evaluating a solution
+	 */
+	void startEvaluation();
+
+	/**
+	 * Start evaluating a sequence, which has the given resource associated with
+	 * it
 	 * 
 	 * @param resource
-	 * @param sequence
-	 * @param annotatedSequence
-	 * @param newSequence
+	 *            the resource for the next sequence
+	 * @param sequenceHasChanged
+	 *            whether the sequence for this resource has changed at all
+	 *            since the last accepted evaluation
 	 */
-	boolean evaluateSequence(IResource resource,
-			ISequence<T> sequence,
-			List<VoyagePlan> plans, boolean newSequence, final int startTime);
+	void startSequence(IResource resource, boolean sequenceHasChanged);
 
-	boolean shouldIterate();
-	
-	void beginIterating(IResource resource);
-	void evaluateNextObject(final Object object, final int startTime);
-	void endIterating();
-	
 	/**
-	 * Notify fitness component that the last evaluation has been accepted.
+	 * Evaluate an object from the sequence, either a VoyageDetails or a
+	 * PortDetails
 	 * 
-	 * @param sequences
-	 * @param affectedResources
+	 * @param object
+	 *            a PortDetails or a VoyageDetails
+	 * @param time
+	 *            the time at this port
+	 * @return true if this is an OK object, or false if this solution is
+	 *         invalid
 	 */
-	void accepted(ISequences<T> sequences,
-			Collection<IResource> affectedResources);
+	boolean nextObject(final Object object, final int time);
 
 	/**
-	 * Notify fitness component that a full evaluation is about to begin. Expect
-	 * {@link #evaluateSequence(IResource, ISequence, ISequenceScheduler, boolean)}
-	 * with newSequence set to false.
-	 */
-	void prepare();
-
-	/**
-	 * Notify fitness component that a full evaluation is now complete. Ensure
-	 * we are ready for partial/delta evaluations - where
-	 * {@link #evaluateSequence(IResource, ISequence, ISequenceScheduler, boolean)}
-	 * will be passed with newSequence set to true.
-	 */
-	void complete();
-
-	/**
-	 * Prepare for a new partial evaluation.
-	 */
-	void prepareDelta();
-
-	/**
-	 * Evaluate the given {@link ISequence}. The {@link IAnnotatedSequence} will
-	 * have already been scheduled and can be queried. This method does not
-	 * update internal state.
+	 * Consider the next voyageplan - note that the contents of the given plan
+	 * will be presented to nextObject after this
 	 * 
-	 * @param resource
-	 * @param sequence
-	 * @param annotatedSequence
+	 * @param voyagePlan
+	 * @param time
 	 * @return
 	 */
-	long rawEvaluateSequence(IResource resource, ISequence<T> sequence,
-			List<VoyagePlan> plans, int startTime);
+	boolean nextVoyagePlan(final VoyagePlan voyagePlan, final int time);
+
+	/**
+	 * Indicates the end of the current sequence
+	 * 
+	 * @return true if the sequence is OK, or false if there's a problem
+	 */
+	boolean endSequence();
+
+	/**
+	 * Finish evaluating a solution and return its cost. The cost should also be
+	 * stored for {@link IFitnessComponent#getFitness()}.
+	 * 
+	 * @return the total cost of this solution
+	 */
+	long endEvaluationAndGetCost();
+
+	/**
+	 * Reject the last evaluation (relates to
+	 * {@link IFitnessComponent#getFitness()}
+	 */
+	void rejectLastEvaluation();
+
+	/**
+	 * Accept the last evaluation (for {@link IFitnessComponent#getFitness()}
+	 */
+	void acceptLastEvaluation();
 
 	/**
 	 * Clean up references as this component is no longer required.

@@ -5,14 +5,11 @@
 
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
-import java.util.List;
 import java.util.Random;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
 /**
  * Another random sequence scheduler, which works by resting on top of the {@link EnumeratingSequenceScheduler}
@@ -40,39 +37,36 @@ public class DirectRandomSequenceScheduler<T> extends
 	 */
 	private double sampleProportion = 0.005;
 	
+	
+	
 	@Override
-	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
-			final ISequence<T> sequence) {
+	public ScheduledSequences schedule(ISequences<T> sequences) {
 		random = new Random(seed);
 		
-		setResourceAndSequence(resource, sequence);
+		setSequences(sequences);
 		resetBest();
 		final long approximateSpaceSize = prepare(samplingUpperBound);
-//		System.err.println("approx. size = " + approximateSpaceSize);
-		if (approximateSpaceSize < samplingLowerBound) {
-//			System.err.println("Exhaustive search " + approximateSpaceSize);
-			enumerate(0);
-//			System.err.println("Actually did " + count);
-		} else {
-			final int maxCount = Math.min(samplingUpperBound,
-					(int)(sampleProportion * approximateSpaceSize));
-//			System.err.println("Sample " + maxCount);
-			for (int i = 0; i<maxCount; i++) {
-				flatEnumerate();
-			}
+		final int sampleCount = (int) Math.min(samplingLowerBound, (long) (sampleProportion * approximateSpaceSize));
+		
+		for (int i = 0; i<sampleCount; i++) {
+			randomise();
+			evaluate();
 		}
 		
 		return getBestResult();
 	}
-	
-	private final void flatEnumerate() {
-		for (int index = 0; index<arrivalTimes.length; index++) {
-			final int min = getMinArrivalTime(index);
-			final int max = getMaxArrivalTime(index);
-			arrivalTimes[index] = RandomHelper.nextIntBetween(random, min, max);
+
+	/**
+	 * 
+	 */
+	private void randomise() {
+		for (int seq = 0; seq<arrivalTimes.length; seq++) {
+			for (int pos = 0; pos<arrivalTimes[seq].length; pos++) {
+				final int min = getMinArrivalTime(seq, pos);
+				final int max = getMaxArrivalTime(seq, pos);
+				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
+			}
 		}
-		
-		evaluate();
 	}
 
 	public int getSamplingLowerBound() {

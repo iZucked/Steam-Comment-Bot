@@ -10,9 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
@@ -25,7 +23,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * {@link IFitnessCore} which schedules {@link ISequences} objects using an
@@ -47,9 +44,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	private ISchedulerFactory<T> schedulerFactory;
 
 	public CargoSchedulerFitnessCore() {
-
-		// Create the fitness components
-
 		components = new ArrayList<ICargoSchedulerFitnessComponent<T>>(5);
 		components
 				.add(new DistanceComponent<T>(
@@ -84,93 +78,40 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				SchedulerConstants.DCP_vesselProvider,
 				CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
 				this));
-
 	}
 
 	@Override
 	public void accepted(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
 
-		// Notify fitness components last state was accepted.
-		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			c.accepted(sequences, affectedResources);
+		for (final ICargoSchedulerFitnessComponent<T> component : components) {
+			component.acceptLastEvaluation();
 		}
 	}
 
+	final VoyagePlanIterator<T> planIterator = new VoyagePlanIterator<T>();
+
 	@Override
 	public boolean evaluate(final ISequences<T> sequences) {
+		// perform a full evaluation
 
-		// Notify fitness components a new full evaluation is about to begin
-		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			c.prepare();
-		}
-
-		// For each ISequence, run the scheduler
-		for (final IResource resource : sequences.getResources()) {
-			final ISequence<T> sequence = sequences.getSequence(resource);
-			final Pair<Integer, List<VoyagePlan>> plans = scheduler.schedule(
-					resource, sequence);
-
-			// Notify fitness components that the given ISequence has been
-			// scheduled and is ready to be evaluated.
-			// if (plans == null) {
-			// return false;
-			// }
-
-			if (evaluateSequence(resource, sequence, plans.getSecond(), false,
-					plans.getFirst()) == false) {
-				return false;
-			}
-		}
-
-		// Notify fitness components that all sequences have been scheduled
-		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			c.complete();
-		}
-
-		return true;
+		return planIterator.iterateSchedulerComponents(components,
+				scheduler.schedule(sequences));
 	}
 
 	@Override
 	public boolean evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
-		// TODO!!
-		// TODO!!
-		// TODO!!
-		// Add test case to catch missing prepareDelta calls
-		//
-		// Add a rejectMove() to completement accept();
-		//
-		//
-		// TODO: Rethink how this ICargoSchedulerFitnessComponent should work as
-		// we now have far too many method calls
 
-		// Notify fitness components a new delta evaluation is about to begin
-		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			c.prepareDelta();
-		}
+		// now we have some real horror - the scheduler needs to deal with which
+		// sequences are changed
+		// if we are to do this efficiently. Currently there is no
+		// implementation of this, and it's hard to see
+		// how there can be one if we really want to allow scheduler components
+		// to depend on every route together.
 
-		// Re-schedule changed sequences
-		for (final IResource resource : affectedResources) {
-			final ISequence<T> sequence = sequences.getSequence(resource);
-			if (sequence.size() > 0) {
-
-				final Pair<Integer, List<VoyagePlan>> plans = scheduler
-						.schedule(resource, sequence);
-				if (plans == null) {
-//					System.err
-//							.println("Scheduler has returned null voyage plan; backing out of move.");
-					return false; // for some reason, this move has no valid
-									// plans. this
-					// should probably be a serious issue.
-				}
-				if (evaluateSequence(resource, sequence, plans.getSecond(),
-						true, plans.getFirst()) == false) {
-					return false;
-				}
-			}
-		}
-		return true;
+		return planIterator.iterateSchedulerComponents(components,
+				scheduler.schedule(sequences));
 	}
 
 	@Override
@@ -178,40 +119,14 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		return new ArrayList<IFitnessComponent<T>>(components);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init(final IOptimisationData<T> data) {
-
-		// TODO: getter/setters should provide these e.g. use factory to
-		// populate
-		// scheduler = SchedulerUtils.createSimpleSequenceScheduler(data);
 		scheduler = schedulerFactory.createScheduler(data, components);
-		/* SchedulerUtils.createGASequenceScheduler(data, components); */
-		
+
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoSchedulerFitnessComponent<T> c : components) {
 			c.init(data);
 		}
-		
-		iterators = VoyagePlanIterator.filterIteratingComponents(components);
-	}
-
-	final VoyagePlanIterator<T> iterator = new VoyagePlanIterator<T>();
-	ICargoSchedulerFitnessComponent<T>[] iterators;
-
-	private boolean evaluateSequence(final IResource resource,
-			final ISequence<T> sequence, final List<VoyagePlan> plans,
-			final boolean newSequence, final int startTime) {
-
-		iterator.iterateComponents(plans, startTime, resource, iterators);
-
-		for (final ICargoSchedulerFitnessComponent<T> c : components) {
-			if (c.evaluateSequence(resource, sequence, plans, newSequence,
-					startTime) == false) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	@Override

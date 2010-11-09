@@ -5,12 +5,8 @@
 
 package com.mmxlabs.scheduler.optimiser.fitness;
 
-import java.util.List;
-
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.optimiser.core.ISequences;
 
 /**
  * This class contains the logic required to schedule a {@link ISequence}. This
@@ -24,14 +20,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface ISequenceScheduler<T> {
 
 	/**
-	 * Attempt to schedule the given {@link ISequence}. Returns a {@link List}
-	 * of {@link VoyagePlan}s or null if there was a problem.
+	 * Schedule the given set of sequences, returning a {@link ScheduledSequences}
 	 * 
-	 * @param resource
-	 * @param sequence
 	 * @return
 	 */
-	Pair<Integer, List<VoyagePlan>> schedule(IResource resource, ISequence<T> sequence);
+	ScheduledSequences schedule(
+			ISequences<T> sequences);
 
 	/**
 	 * Release resources.

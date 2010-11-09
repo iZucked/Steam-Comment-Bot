@@ -6,14 +6,16 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
+import java.util.Map;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
 /**
  * Simple scheduler. Try to arrive at the {@link ITimeWindow} start.
@@ -24,8 +26,17 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class SimpleSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
 
-	@Override
-	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
+	public ScheduledSequences schedule(final ISequences<T> sequences) {
+		final ScheduledSequences answer = new ScheduledSequences();
+		
+		for (Map.Entry<IResource, ISequence<T>> entry : sequences.getSequences().entrySet()) {
+			answer.add(schedule(entry.getKey(), entry.getValue()));
+		}
+		
+		return answer;
+	}
+	
+	public ScheduledSequence schedule(final IResource resource,
 			final ISequence<T> sequence) {
 
 		int[] arrivalTimes = new int[sequence.size()];

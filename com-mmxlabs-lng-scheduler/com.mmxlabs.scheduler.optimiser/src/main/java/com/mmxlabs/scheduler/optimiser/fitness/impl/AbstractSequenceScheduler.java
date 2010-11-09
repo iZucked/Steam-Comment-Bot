@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -26,6 +28,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -64,6 +68,22 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 	private IVoyagePlanOptimiser<T> voyagePlanOptimiser;
 
+	public ScheduledSequences schedule(
+			final ISequences<T> sequences, final int[][] arrivalTimes) {
+		final ScheduledSequences result = new ScheduledSequences();
+
+		final List<IResource> resources = sequences.getResources();
+		
+		for (int i = 0; i<sequences.size(); i++) {
+			final ISequence<T> sequence = sequences.getSequence(i);
+			final IResource resource = resources.get(i);
+			
+			result.add(schedule(resource, sequence, arrivalTimes[i]));
+		}
+		
+		return result;
+	}
+
 	/**
 	 * Schedule an {@link ISequence} using the given array of arrivalTimes,
 	 * indexed according to sequence elements. These times will be used as the
@@ -77,7 +97,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 	 * @param arrivalTimes
 	 * @return
 	 */
-	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
+	public ScheduledSequence schedule(final IResource resource,
 			final ISequence<T> sequence, final int[] arrivalTimes) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
@@ -186,7 +206,8 @@ public abstract class AbstractSequenceScheduler<T> implements
 			if (currentSequence.size() > 1 && (portType == PortType.Load)
 					|| portType == PortType.CharterOut) {
 
-				if (!optimiseSequence(voyagePlans, currentSequence, voyagePlanOptimiser)) {
+				if (!optimiseSequence(voyagePlans, currentSequence,
+						voyagePlanOptimiser)) {
 					return null;
 				}
 
@@ -221,12 +242,13 @@ public abstract class AbstractSequenceScheduler<T> implements
 		// Populate final plan details
 		// if (!currentSequence.isEmpty()) {
 		if (currentSequence.size() > 1) {
-			 if (!optimiseSequence(voyagePlans, currentSequence, voyagePlanOptimiser)) {
-				 return null;
-			 }
+			if (!optimiseSequence(voyagePlans, currentSequence,
+					voyagePlanOptimiser)) {
+				return null;
+			}
 		}
 
-		return new Pair<Integer, List<VoyagePlan>>(startTime, voyagePlans);
+		return new ScheduledSequence(resource, startTime, voyagePlans);
 	}
 
 	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans,
@@ -245,14 +267,14 @@ public abstract class AbstractSequenceScheduler<T> implements
 				@SuppressWarnings("unchecked")
 				final VoyageDetails<T> details = (VoyageDetails<T>) obj;
 				final int availableTime = details.getOptions()
-				.getAvailableTime();
+						.getAvailableTime();
 
 				// Take voyage details time as this can be larger than
 				// available time e.g. due to reaching max speed.
 				final int duration = details.getTravelTime()
 						+ details.getIdleTime();
-		
-				assert duration >= (availableTime-1); //hack
+
+				assert duration >= (availableTime - 1); // hack
 				if (duration > availableTime) {
 					return false;
 				}
@@ -370,55 +392,64 @@ public abstract class AbstractSequenceScheduler<T> implements
 		}
 	}
 
-
 	private BufferedWriter logWriter;
-	private final static boolean LOGGING_ENABLED = false;
-	
+	private static boolean loggingEnabled = false;
+
+	public static void setLoggingEnabled(boolean loggingEnabled) {
+		AbstractSequenceScheduler.loggingEnabled = loggingEnabled;
+	}
+
 	private static int tag = 0;
+
 	private static synchronized int getTag() {
 		return tag++;
 	}
-	
+
 	protected final void createLog() {
-		if (!LOGGING_ENABLED) return;
+		if (!loggingEnabled)
+			return;
 		try {
-		final String name = getClass().getSimpleName() + "_log_" + getTag();
-		final File f = File.createTempFile(name, ".py");
-		logWriter = new BufferedWriter(new FileWriter(f));
-		
-		System.err.println("Created scheduler log " + f.getAbsolutePath());
+			final String name = getClass().getSimpleName() + "_log_" + getTag();
+			final File f = new File("./" + name + ".py");
+			logWriter = new BufferedWriter(new FileWriter(f));
+
+			System.err.println("Created scheduler log " + f.getAbsolutePath());
 		} catch (IOException ex) {
 		}
 	}
-	
+
 	protected final void startLogEntry(final int sequenceSize) {
-		if (!LOGGING_ENABLED) return;
+		if (!loggingEnabled)
+			return;
 		try {
 			logWriter.write("Schedule(" + sequenceSize + ",[");
 		} catch (IOException e) {
 
 		}
 	}
-	
+
 	protected final void logValue(final long fitness) {
-		if (!LOGGING_ENABLED) return;
+		if (!loggingEnabled)
+			return;
 		try {
 			logWriter.write(fitness + ", ");
 		} catch (IOException e) {
 		}
 	}
-	
+
 	protected final void endLogEntry() {
-		if (!LOGGING_ENABLED) return;
+		if (!loggingEnabled)
+			return;
 		try {
 			logWriter.write("])\n");
 			logWriter.flush();
 		} catch (IOException e) {
 		}
 	}
-	
+
 	protected final void closeLog() {
-		if (!LOGGING_ENABLED) return;
+		if (!loggingEnabled)
+			return;
 		try {
 			logWriter.flush();
 			logWriter.close();
@@ -426,7 +457,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		}
 		logWriter = null;
 	}
-	
+
 	@Override
 	public void dispose() {
 

@@ -103,42 +103,42 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	public final long evaluate(final int[] arrivalTimes) {
-		// Use the sequence schedule to evaluate the arrival time profile.
-		final Pair<Integer, List<VoyagePlan>> voyagePlans = sequenceScheduler
-				.schedule(resource, sequence, arrivalTimes);
-
-		// Was the set of arrival times valid?
-		if (voyagePlans == null) {
-			// Bad set of times
-			return Long.MAX_VALUE;
-		}
-
-		// Evaluate fitness
+//		// Use the sequence schedule to evaluate the arrival time profile.
+////		final Pair<Integer, List<VoyagePlan>> voyagePlans = sequenceScheduler
+////				.schedule(resource, sequence, arrivalTimes);
+//
+//		// Was the set of arrival times valid?
+//		if (voyagePlans == null) {
+//			// Bad set of times
+//			return Long.MAX_VALUE;
+//		}
+//
+//		// Evaluate fitness
 		long totalFitness = 0;
-
-		voyagePlanIterator.iterateComponents(voyagePlans.getSecond(),
-				voyagePlans.getFirst().intValue(), resource,
-				iteratingComponents);
-
-		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
-			final long rawFitness = component.rawEvaluateSequence(resource,
-					sequence, voyagePlans.getSecond(), voyagePlans.getFirst());
-
-			// Enable this block once weights are set
-			if (false) {
-				final String componentName = component.getName();
-				if (fitnessComponentWeights.containsKey(componentName)) {
-					final double weight = fitnessComponentWeights
-							.get(componentName);
-					final long fitness = Math.round(weight
-							* (double) rawFitness);
-					totalFitness += fitness;
-				}
-			} else {
-				// Current just use the raw fitness value
-				totalFitness += rawFitness;
-			}
-		}
+//
+////		voyagePlanIterator.iterateComponents(voyagePlans.getSecond(),
+////				voyagePlans.getFirst().intValue(), resource,
+////				iteratingComponents);
+//
+//		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
+////			final long rawFitness = component.rawEvaluateSequence(resource,
+////					sequence, voyagePlans.getSecond(), voyagePlans.getFirst());
+//
+//			// Enable this block once weights are set
+//			if (false) {
+//				final String componentName = component.getName();
+//				if (fitnessComponentWeights.containsKey(componentName)) {
+//					final double weight = fitnessComponentWeights
+//							.get(componentName);
+//					final long fitness = Math.round(weight
+//							* (double) rawFitness);
+//					totalFitness += fitness;
+//				}
+//			} else {
+//				// Current just use the raw fitness value
+//				totalFitness += rawFitness;
+//			}
+//		}
 		return totalFitness;
 	}
 
@@ -516,8 +516,8 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	public final void setFitnessComponents(
 			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
-		iteratingComponents = VoyagePlanIterator
-				.filterIteratingComponents(fitnessComponents);
+//		iteratingComponents = VoyagePlanIterator
+//				.filterIteratingComponents(fitnessComponents);
 	}
 
 	public final Map<String, Double> getFitnessComponentWeights() {

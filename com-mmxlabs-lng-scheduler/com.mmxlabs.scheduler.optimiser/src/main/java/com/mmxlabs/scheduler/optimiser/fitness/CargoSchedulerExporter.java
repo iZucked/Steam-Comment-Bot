@@ -6,10 +6,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -24,11 +21,9 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ga.GASequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
@@ -47,6 +42,7 @@ public final class CargoSchedulerExporter {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> IAnnotatedSolution<T> exportState(
 			IOptimisationContext<T> context, ISequences<T> state) {
 
@@ -56,7 +52,7 @@ public final class CargoSchedulerExporter {
 		// Scheduler
 		
 		// we need to get the scheduler factory out of the existing core
-		ISchedulerFactory schedulerFactory = null;
+		ISchedulerFactory<T> schedulerFactory = null;
 		for (IFitnessCoreFactory factory : context.getFitnessFunctionRegistry().getFitnessCoreFactories()) {
 			if (factory instanceof CargoSchedulerFitnessCoreFactory) {
 				schedulerFactory = ((CargoSchedulerFitnessCoreFactory)factory).getSchedulerFactory();
@@ -87,35 +83,30 @@ public final class CargoSchedulerExporter {
 		annotator.setPortSlotProvider(portSlotProvider);
 
 		// Run sequence manipulator to obtain a sequence to evaluate
-		final ISequencesManipulator<T> manipulator = SequencesManipulatorUtil
-				.createDefaultSequenceManipulators(data);
+//		final ISequencesManipulator<T> manipulator = SequencesManipulatorUtil
+//				.createDefaultSequenceManipulators(data);
 		final IModifiableSequences<T> modifiedSequences = new ModifiableSequences<T>(
 				state);
 		//Whoops: manipulator gets applied twice if we're not careful.
 //		manipulator.manipulate(modifiedSequences); 
 
 		// Schedule sequences and generate the output data
-		for (final Map.Entry<IResource, ISequence<T>> entry : modifiedSequences
-				.getSequences().entrySet()) {
+		final ScheduledSequences scheduledSequences = scheduler.schedule(modifiedSequences);
+		for (ScheduledSequence scheduledSequence : scheduledSequences) {
 
-			final IResource resource = entry.getKey();
-			final ISequence<T> sequence = entry.getValue();
+			final IResource resource = scheduledSequence.getResource();
+			final ISequence<T> sequence = modifiedSequences.getSequence(resource);
 
 			final AnnotatedSequence<T> annotatedSequence = new AnnotatedSequence<T>();
 
 			if (sequence.size() > 0) {
-
-				// Schedule sequence
-				final Pair<Integer, List<VoyagePlan>> plans = scheduler.schedule(resource,
-						sequence);
-
 				final ArrayList<T> elements = new ArrayList<T>(sequence.size());
 
 				for (final T e : sequence) {
 					elements.add(e);
 				}
 
-				annotator.annotateFromVoyagePlan(resource, plans.getSecond(), plans.getFirst(),
+				annotator.annotateFromVoyagePlan(resource, scheduledSequence.getVoyagePlans(), scheduledSequence.getStartTime(),
 						annotatedSequence);
 			}
 			solution.setAnnotatedSequence(resource, annotatedSequence);
