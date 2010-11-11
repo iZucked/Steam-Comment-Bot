@@ -9,8 +9,8 @@ import java.util.Random;
 
 import com.mmxlabs.optimiser.lso.IThresholder;
 
-public class MovingAverageThresholder implements IThresholder {
-	private long[] window;
+public class MovingAverageThresholder implements IThresholder {	
+	private final long[] window;
 	private double sum = 0;
 	private int front = 0;
 	private double logAlpha;
@@ -22,7 +22,7 @@ public class MovingAverageThresholder implements IThresholder {
 	private final int epochLength;
 	private double lastT;
 	
-	public MovingAverageThresholder(Random random, double initialAcceptance, double cooling, int epochLength, int window) {
+	public MovingAverageThresholder(final Random random, final double initialAcceptance, final double cooling, final int epochLength, final int window) {
 		this.random = random;
 		this.window = new long[window];
 		this.alpha0 = initialAcceptance;
