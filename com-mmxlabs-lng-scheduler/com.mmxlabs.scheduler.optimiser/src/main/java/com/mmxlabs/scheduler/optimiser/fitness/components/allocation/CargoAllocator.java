@@ -22,6 +22,7 @@ import org.apache.commons.math.optimization.linear.Relationship;
 import org.apache.commons.math.optimization.linear.SimplexSolver;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -124,10 +125,14 @@ public final class CargoAllocator<T> {
 
 		this.vesselCapacity[cargoIndex] = vesselCapacity;
 
-		// TODO unit conversion is required here (MMBTU vs M3)
-		unitPrices[cargoIndex] = dischargeSlot.getSalesPriceAtTime(dischargeTime)
-				- loadSlot.getPurchasePriceAtTime(loadTime);
-
+		final int cargoCVValue = loadSlot.getCargoCVValue();
+		final int dischargeM3Price = (int) Calculator.multiply(dischargeSlot.getSalesPriceAtTime(dischargeTime),
+				cargoCVValue);
+		final int loadM3Price = (int) Calculator
+				.multiply(loadSlot.getPurchasePriceAtTime(loadTime), cargoCVValue);
+		
+		unitPrices[cargoIndex] = dischargeM3Price - loadM3Price;
+		
 		cargoIndex++;
 	}
 
@@ -176,7 +181,7 @@ public final class CargoAllocator<T> {
 
 		// TODO think about how gas-year constraints work; really these should
 		// be handled by the next level up, which can just call the allocator
-		// for each gas year independently
+		// for each gas year independently. 
 
 		// set multi-cargo constraints (the real point of this optimiser).
 		for (final Pair<Integer, Collection<IPortSlot>> yearlyLimit : cargoAllocationProvider
