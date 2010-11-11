@@ -8,9 +8,9 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.math.optimization.GoalType;
 import org.apache.commons.math.optimization.OptimizationException;
@@ -178,7 +178,7 @@ public final class SimplexCargoAllocator<T> implements ICargoAllocator<T> {
 		// for each gas year independently. 
 
 		// set multi-cargo constraints (the real point of this optimiser).
-		for (final Pair<Integer, Collection<IPortSlot>> yearlyLimit : cargoAllocationProvider
+		for (final Pair<Integer, Set<IPortSlot>> yearlyLimit : cargoAllocationProvider
 				.getCargoAllocationLimits()) {
 			final double[] selector = new double[variableCount];
 
