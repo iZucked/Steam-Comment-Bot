@@ -117,6 +117,7 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 		 */
 		@Override
 		public final boolean equals(final Object obj) {
+			@SuppressWarnings("unchecked")
 			final CacheKey other = (CacheKey) obj;
 			// if (getClass() != obj.getClass())
 			// return false;
@@ -130,10 +131,6 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 				Arrays.equals(times, other.times) &&
 				loadPrice == other.loadPrice &&
 				dischargePrice == other.dischargePrice;
-		}
-
-		private final CachingVoyagePlanOptimiser<T> getOuterType() {
-			return CachingVoyagePlanOptimiser.this;
 		}
 	}
 
