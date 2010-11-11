@@ -4,7 +4,7 @@
  * All rights reserved. 
  * 
  */
-package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
+package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +26,8 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocationProvider;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
@@ -43,7 +45,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
  * @author hinton
  * 
  */
-public final class CargoAllocator<T> {
+public final class SimplexCargoAllocator<T> implements ICargoAllocator<T> {
 	/**
 	 * The linear optimiser
 	 */
@@ -62,10 +64,14 @@ public final class CargoAllocator<T> {
 	private long[] forcedLoadVolume;
 	private long[] vesselCapacity;
 
-	public CargoAllocator() {
+	public SimplexCargoAllocator() {
 		super();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#init()
+	 */
+	@Override
 	public void init() {
 
 		if (cargoAllocationProvider == null) {
@@ -73,36 +79,20 @@ public final class CargoAllocator<T> {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#reset()
+	 */
+	@Override
 	public void reset() {
 		cargoIndex = 0;
 		Arrays.fill(unitPrices, 0);
 		variableTable.clear();
 	}
 
-	/**
-	 * Notify the allocator of a cargo to be included in the allocation. This
-	 * method will probably be called in a loop iterating over a sequence. It
-	 * allows for quite a lot of flexibility in the outer optimisation, so load
-	 * and discharge slots can be freely connected up without causing problems.
-	 * 
-	 * This might loose a little performance in the solver, as no constraints
-	 * can be kept between runs.
-	 * 
-	 * @param loadDetails
-	 *            The details of the load slot
-	 * @param dischargeDetails
-	 *            details of the paired discharge slot
-	 * @param loadTime
-	 *            time at which loading happens
-	 * @param dischargeTime
-	 *            time at which discharge happens
-	 * @param requiredLoadVolume
-	 *            the volume of LNG which must be loaded to meet fuel
-	 *            requirements for the voyage
-	 * @param vesselCapacity
-	 *            the capacity of the vessel to which this cargo has been
-	 *            allocated
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#addCargo(com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails, com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails, int, int, long, long)
 	 */
+	@Override
 	public void addCargo(final PortDetails loadDetails,
 			final PortDetails dischargeDetails, final int loadTime,
 			final int dischargeTime, final long requiredLoadVolume,
@@ -136,6 +126,10 @@ public final class CargoAllocator<T> {
 		cargoIndex++;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#solve()
+	 */
+	@Override
 	public void solve() {
 		final ArrayList<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
 		final int variableCount = cargoIndex;

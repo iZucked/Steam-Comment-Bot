@@ -12,6 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.AbstractSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.SimplexCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -29,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class CargoAllocatingSchedulerComponent<T> extends
 		AbstractSchedulerFitnessComponent<T> {
 	private IVesselProvider vesselProvider;
-	private final CargoAllocator<T> allocator = new CargoAllocator<T>();
+	private final ICargoAllocator<T> allocator = new SimplexCargoAllocator<T>();
 
 	/**
 	 * @param name

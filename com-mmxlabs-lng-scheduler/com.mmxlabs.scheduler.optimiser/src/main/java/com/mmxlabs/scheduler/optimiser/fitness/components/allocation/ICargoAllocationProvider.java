@@ -11,9 +11,10 @@ import java.util.Collection;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.SimplexCargoAllocator;
 
 /**
- * DCP which tells the {@link CargoAllocator} what the allocation limits are.
+ * DCP which tells the {@link SimplexCargoAllocator} what the allocation limits are.
  * 
  * @author hinton
  * 
