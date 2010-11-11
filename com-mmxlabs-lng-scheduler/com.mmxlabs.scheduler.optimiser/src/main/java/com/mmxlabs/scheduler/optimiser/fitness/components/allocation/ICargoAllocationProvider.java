@@ -6,7 +6,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
-import java.util.Collection;
+import java.util.Set;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -28,5 +28,5 @@ public interface ICargoAllocationProvider<T> extends IDataComponentProvider {
 	 * 
 	 * @return
 	 */
-	public Iterable<Pair<Integer, Collection<IPortSlot>>> getCargoAllocationLimits();
+	public Iterable<Pair<Integer, Set<IPortSlot>>> getCargoAllocationLimits();
 }
