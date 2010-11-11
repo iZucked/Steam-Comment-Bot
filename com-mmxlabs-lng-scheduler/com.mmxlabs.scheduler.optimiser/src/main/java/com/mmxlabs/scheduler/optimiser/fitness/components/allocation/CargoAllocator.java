@@ -124,10 +124,9 @@ public final class CargoAllocator<T> {
 
 		this.vesselCapacity[cargoIndex] = vesselCapacity;
 
-		// TODO price curve support here. This is what loadTime and
-		// dischargeTime are for.
-		unitPrices[cargoIndex] = dischargeSlot.getSalesPrice()
-				- loadSlot.getPurchasePrice();
+		// TODO unit conversion is required here (MMBTU vs M3)
+		unitPrices[cargoIndex] = dischargeSlot.getSalesPriceAtTime(dischargeTime)
+				- loadSlot.getPurchasePriceAtTime(loadTime);
 
 		cargoIndex++;
 	}
