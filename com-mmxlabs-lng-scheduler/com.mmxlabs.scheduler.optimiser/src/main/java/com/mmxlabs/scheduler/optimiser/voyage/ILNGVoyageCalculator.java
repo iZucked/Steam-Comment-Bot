@@ -30,8 +30,8 @@ public interface ILNGVoyageCalculator<T> {
 
 	/**
 	 * Calculate the fuel requirements, speed and times for the port to port
-	 * journey options defined in {@link VoyageOptions} and store the results
-	 * in {@link IVoyageDetails}.
+	 * journey options defined in {@link VoyageOptions} and store the results in
+	 * {@link IVoyageDetails}.
 	 * 
 	 * @param options
 	 * @param output
@@ -46,9 +46,16 @@ public interface ILNGVoyageCalculator<T> {
 	 * 
 	 * @param voyagePlan
 	 * @param vessel
+	 * @param arrivalTimes
+	 *            an array of arrival times at each slot in the sequence
+	 *            <pre>
+	 *            arrivalTimes[0] <=> sequence[0]
+	 *            arrivalTimes[1] <=> sequence[2]
+	 *            ...
+	 *            </pre>
 	 * @param sequence
 	 */
 	void calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel,
-			Object... sequence);
+			int[] arrivalTimes, Object... sequence);
 
 }
