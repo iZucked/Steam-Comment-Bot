@@ -35,8 +35,8 @@ public interface ILoadSlot extends IPortSlot {
 	 * 
 	 * @return
 	 */
-	int getPurchasePrice();
-
+	int getPurchasePriceAtTime(int time);
+	
 	/**
 	 * Returns the CV of the cargo loaded from this slot. This will be used to
 	 * convert between M3 and MMBTu of LNG.

@@ -8,6 +8,7 @@ package com.mmxlabs.scheduler.optimiser.builder;
 import java.util.List;
 import java.util.Set;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -245,7 +246,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
-			long minVolume, long maxVolume, int unitPrice, int cargoCVValue, int durationHours);
+			long minVolume, long maxVolume, ICurve unitPrice, int cargoCVValue, int durationHours);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected
@@ -260,7 +261,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port,
-			ITimeWindow window, long minVolume, long maxVolume, int unitPrice, int durationHours);
+			ITimeWindow window, long minVolume, long maxVolume, ICurve unitPrice, int durationHours);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the

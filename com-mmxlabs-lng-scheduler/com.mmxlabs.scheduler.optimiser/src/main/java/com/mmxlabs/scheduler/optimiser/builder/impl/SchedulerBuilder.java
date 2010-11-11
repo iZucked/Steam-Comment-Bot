@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -260,7 +261,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolumeInM3,
-			final long maxVolumeInM3, final int pricePerMMBTu,
+			final long maxVolumeInM3, final ICurve pricePerMMBTu,
 			final int cargoCVValue, final int durationHours) {
 
 		if (!ports.contains(port)) {
@@ -278,7 +279,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setTimeWindow(window);
 		slot.setMinLoadVolume(minVolumeInM3);
 		slot.setMaxLoadVolume(maxVolumeInM3);
-		slot.setPurchasePrice(pricePerMMBTu);
+		slot.setPurchasePriceCurve(pricePerMMBTu);
 		slot.setCargoCVValue(cargoCVValue);
 
 		loadSlots.add(slot);
@@ -309,7 +310,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IDischargeSlot createDischargeSlot(final String id,
 			final IPort port, final ITimeWindow window,
 			final long minVolumeInM3, final long maxVolumeInM3,
-			final int pricePerMMBTu, final int durationHours) {
+			final ICurve pricePerMMBTu, final int durationHours) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
@@ -326,7 +327,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setTimeWindow(window);
 		slot.setMinDischargeVolume(minVolumeInM3);
 		slot.setMaxDischargeVolume(maxVolumeInM3);
-		slot.setSalesPrice(pricePerMMBTu);
+		slot.setSalesPriceCurve(pricePerMMBTu);
 
 		dischargeSlots.add(slot);
 

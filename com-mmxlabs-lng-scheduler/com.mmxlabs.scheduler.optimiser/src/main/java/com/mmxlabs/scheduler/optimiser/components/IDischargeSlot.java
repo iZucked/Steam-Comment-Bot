@@ -35,5 +35,5 @@ public interface IDischargeSlot extends IPortSlot {
 	 * 
 	 * @return
 	 */
-	int getSalesPrice();
+	int getSalesPriceAtTime(int time);
 }
