@@ -6,6 +6,7 @@
 package com.mmxlabs.common;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,21 @@ public final class CollectionsUtil {
 
 	private CollectionsUtil() {
 		
+	}
+	
+	/**
+	 * A workaround for the horrible effect of autoboxing on collections.
+	 * Convert a collection of Integers to an array of ints.
+	 * @param integers
+	 * @return
+	 */
+	public static final int[] integersToIntArray(final Collection<Integer> integers) {
+		final int [] result = new int[integers.size()];
+		int ix = 0;
+		for (int x : integers) {
+			result[ix++]=x;
+		}
+		return result;
 	}
 	
 	/**
