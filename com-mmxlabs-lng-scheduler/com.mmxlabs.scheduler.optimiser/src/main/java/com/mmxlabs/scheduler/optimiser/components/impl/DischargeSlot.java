@@ -5,6 +5,7 @@
 
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -23,7 +24,7 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 
 	private long maxDischargeVolume;
 
-	private int salesPrice;
+	private ICurve salesPriceCurve;
 
 	public DischargeSlot() {
 		setPortType(PortType.Discharge);
@@ -31,11 +32,11 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 
 	public DischargeSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minDischargeVolume,
-			final long maxDischargeVolume, final int salesPrice) {
+			final long maxDischargeVolume, final ICurve salesPriceCurve) {
 		super(id, port, timwWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
-		this.salesPrice = salesPrice;
+		this.salesPriceCurve = salesPriceCurve;
 	}
 
 	@Override
@@ -57,12 +58,8 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 	}
 
 	@Override
-	public int getSalesPrice() {
-		return salesPrice;
-	}
-
-	public void setSalesPrice(final int salesPrice) {
-		this.salesPrice = salesPrice;
+	public int getSalesPriceAtTime(final int time) {
+		return (int) salesPriceCurve.getValueAtPoint(time);
 	}
 
 	@Override
@@ -76,12 +73,19 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 			if (minDischargeVolume != slot.minDischargeVolume) {
 				return false;
 			}
-			if (salesPrice != slot.salesPrice) {
+			if (salesPriceCurve != slot.salesPriceCurve) {
 				return false;
 			}
 
 			return super.equals(obj);
 		}
 		return false;
+	}
+
+	/**
+	 * @param salesPriceCurve
+	 */
+	public void setSalesPriceCurve(ICurve salesPriceCurve) {
+		this.salesPriceCurve = salesPriceCurve;
 	}
 }

@@ -5,6 +5,7 @@
 
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -22,7 +23,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	private long maxLoadVolume;
 
-	private int purchasePrice;
+	private ICurve purchasePriceCurve;
 
 	private int cargoCVValue;
 
@@ -32,12 +33,12 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	public LoadSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minLoadVolume,
-			final long maxLoadVolume, final int purchasePrice,
+			final long maxLoadVolume, final ICurve purchasePriceCurve,
 			final int cargoCVValue) {
 		super(id, port, timwWindow);
 		this.minLoadVolume = minLoadVolume;
 		this.maxLoadVolume = maxLoadVolume;
-		this.purchasePrice = purchasePrice;
+		this.purchasePriceCurve = purchasePriceCurve;
 		this.cargoCVValue = cargoCVValue;
 	}
 
@@ -59,13 +60,13 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		this.maxLoadVolume = maxLoadVolume;
 	}
 
-	@Override
-	public int getPurchasePrice() {
-		return purchasePrice;
+	public void setPurchasePriceCurve(final ICurve curve) {
+		this.purchasePriceCurve = curve;
 	}
-
-	public void setPurchasePrice(final int purchasePrice) {
-		this.purchasePrice = purchasePrice;
+	
+	@Override
+	public int getPurchasePriceAtTime(final int time) {
+		return (int) purchasePriceCurve.getValueAtPoint(time);
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 				return false;
 			}
 			
-			if (purchasePrice != slot.purchasePrice) {
+			if (purchasePriceCurve != slot.purchasePriceCurve) {
 				return false;
 			}
 
