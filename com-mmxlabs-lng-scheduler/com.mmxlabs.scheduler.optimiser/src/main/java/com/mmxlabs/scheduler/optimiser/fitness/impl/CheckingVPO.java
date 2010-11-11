@@ -100,4 +100,12 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 		delegate.addChoice(choice);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser#setArrivalTimes(java.util.List)
+	 */
+	@Override
+	public void setArrivalTimes(List<Integer> currentTimes) {
+		reference.setArrivalTimes(currentTimes);
+		delegate.setArrivalTimes(currentTimes);	
+	}
 }

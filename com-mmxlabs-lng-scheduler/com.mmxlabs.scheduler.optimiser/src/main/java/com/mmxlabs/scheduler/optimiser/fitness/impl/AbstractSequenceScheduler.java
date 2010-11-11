@@ -107,7 +107,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
 		final List<Object> currentSequence = new ArrayList<Object>(5);
-
+		final List<Integer> currentTimes = new ArrayList<Integer>(3);
 		IPort prevPort = null;
 		IPortSlot prevPortSlot = null;
 		PortType prevPortType = null;
@@ -199,7 +199,8 @@ public abstract class AbstractSequenceScheduler<T> implements
 			final PortDetails portDetails = new PortDetails();
 			portDetails.setVisitDuration(visitDuration);
 			portDetails.setPortSlot(thisPortSlot);
-
+			
+			currentTimes.add(arrivalTimes[idx]);
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
@@ -207,6 +208,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 					|| portType == PortType.CharterOut) {
 
 				if (!optimiseSequence(voyagePlans, currentSequence,
+						currentTimes,
 						voyagePlanOptimiser)) {
 					return null;
 				}
@@ -216,8 +218,10 @@ public abstract class AbstractSequenceScheduler<T> implements
 				previousOptions = null;
 
 				currentSequence.clear();
+				currentTimes.clear();
 
 				currentSequence.add(portDetails);
+				currentTimes.add(arrivalTimes[idx]);
 			}
 
 			// Setup for next iteration
@@ -243,6 +247,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		// if (!currentSequence.isEmpty()) {
 		if (currentSequence.size() > 1) {
 			if (!optimiseSequence(voyagePlans, currentSequence,
+					currentTimes,
 					voyagePlanOptimiser)) {
 				return null;
 			}
@@ -253,10 +258,12 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans,
 			final List<Object> currentSequence,
+			final List<Integer> currentTimes,
 			final IVoyagePlanOptimiser<T> optimiser) {
 
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(currentSequence);
+		optimiser.setArrivalTimes(currentTimes);
 		optimiser.init();
 		final VoyagePlan currentPlan = optimiser.optimise();
 

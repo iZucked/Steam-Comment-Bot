@@ -8,6 +8,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -62,6 +63,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		if (basicSequence == null) {
 			throw new IllegalStateException("Basic sequence has not been set");
 		}
+		if (arrivalTimes == null) {
+			throw new IllegalStateException("Arrival times have not been set");
+		}
 	}
 
 	/**
@@ -73,6 +77,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		basicSequence = null;
 		bestPlan = null;
 		bestCost = Long.MAX_VALUE;
+		arrivalTimes = null;
 	}
 
 	/**
@@ -298,9 +303,16 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 		// Calculate voyage plan
 		voyageCalculator.calculateVoyagePlan(currentPlan, vessel,
+				CollectionsUtil.integersToIntArray(arrivalTimes),
 				currentSequence.toArray());
 
 		return currentPlan;
+	}
+	
+	private List<Integer> arrivalTimes;
+	
+	public void setArrivalTimes(final List<Integer> arrivalTimes) {
+		this.arrivalTimes = arrivalTimes;
 	}
 
 	/**

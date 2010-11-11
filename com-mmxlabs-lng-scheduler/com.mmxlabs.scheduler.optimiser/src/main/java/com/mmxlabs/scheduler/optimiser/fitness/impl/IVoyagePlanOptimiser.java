@@ -64,6 +64,8 @@ public interface IVoyagePlanOptimiser<T> {
 	 */
 	void setBasicSequence(final List<Object> basicSequence);
 
+	void setArrivalTimes(final List<Integer> currentTimes);
+	
 	/**
 	 * Get the {@link IVessel} to evaluate voyages against.
 	 * 
