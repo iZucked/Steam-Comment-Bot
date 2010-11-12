@@ -1,5 +1,7 @@
 package com.mmxlabs.jobcontroller.emf;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -31,6 +34,9 @@ import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselStateAttributes;
+import scenario.market.Market;
+import scenario.market.StepwisePrice;
+import scenario.market.StepwisePriceCurve;
 import scenario.optimiser.OptimisationSettings;
 import scenario.port.Canal;
 import scenario.port.DistanceLine;
@@ -39,6 +45,8 @@ import scenario.port.VesselClassCost;
 
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -116,6 +124,31 @@ public class LNGScenarioTransformer {
 	 */
 	public IOptimisationData<ISequenceElement> createOptimisationData()
 			throws IncompleteScenarioException {
+		/*
+		 * Set reference for hour 0
+		 */
+		findEarliestAndLatestTimes();
+
+		/**
+		 * First, create all the market curves (should these come through the
+		 * builder?)
+		 */
+
+		final Association<Market, ICurve> marketAssociation = new Association<Market, ICurve>();
+
+		for (final Market market : scenario.getMarketModel().getMarkets()) {
+			final StepwisePriceCurve curveModel = market.getPriceCurve();
+			final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+
+			curve.setDefaultValue(curveModel.getDefaultValue());
+			for (final StepwisePrice price : curveModel.getPrices()) {
+				final int hours = convertTime(price.getDate());
+				curve.setValueAfter(hours, price.getPriceFromDate());
+			}
+
+			marketAssociation.add(market, curve);
+		}
+
 		SchedulerBuilder builder = new SchedulerBuilder();
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the
@@ -142,15 +175,54 @@ public class LNGScenarioTransformer {
 			allPorts.add(port);
 		}
 
-		Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> 
-			vesselAssociations = buildFleet(
+		Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(
 				builder, portAssociation);
-		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst());
-		buildCargoes(builder, portAssociation);
-		
-		buildCharterOuts(builder, portAssociation, vesselAssociations.getFirst(), vesselAssociations.getSecond());
-		
+		buildDistances(builder, portAssociation, allPorts, portIndices,
+				vesselAssociations.getFirst());
+		buildCargoes(builder, portAssociation, marketAssociation);
+
+		buildCharterOuts(builder, portAssociation,
+				vesselAssociations.getFirst(), vesselAssociations.getSecond());
+
 		return builder.getOptimisationData();
+	}
+
+	/**
+	 * Find the earliest date entry in the model, for relative hours
+	 * calculations. Uses a slightly naff bit of reflection to find all getters
+	 * which return a date.
+	 */
+	private void findEarliestAndLatestTimes() {
+		/*
+		 * Find the earliest date, to convert from absolute date and time to
+		 * offset hours
+		 */
+		earliestTime = null;
+		latestTime = null;
+		TreeIterator<EObject> iterator = scenario.eAllContents();
+		while (iterator.hasNext()) {
+			final EObject object = iterator.next();
+
+			@SuppressWarnings("unchecked")
+			final Class<EObject> type = (Class<EObject>) object.getClass();
+			for (final Method m : type.getMethods()) {
+				if (m.getName().startsWith("get")
+						&& m.getReturnType().equals(Date.class)
+						&& m.getParameterTypes().length == 0) {
+					try {
+						final Date date = (Date) m.invoke(object,
+								(Object[]) null);
+						if (earliestTime == null || earliestTime.after(date)) {
+							earliestTime = date;
+						}
+						if (latestTime == null || latestTime.before(date)) {
+							latestTime = date;
+						}
+					} catch (Exception e) {
+					}
+				}
+			}
+		}
 	}
 
 	private void buildCharterOuts(SchedulerBuilder builder,
@@ -159,18 +231,24 @@ public class LNGScenarioTransformer {
 			Association<Vessel, IVessel> vessels) {
 		for (CharterOut charterOut : scenario.getFleetModel().getCharterOuts()) {
 			final ITimeWindow window = builder.createTimeWindow(
-					convertTime(charterOut.getStartDate()), convertTime(charterOut.getEndDate()));
+					convertTime(charterOut.getStartDate()),
+					convertTime(charterOut.getEndDate()));
 			final IPort port = portAssociation.lookup(charterOut.getPort());
-			
-			final ICharterOut builderCharterOut = builder.createCharterOut(window, port, 
-					charterOut.getDuration() * 24); //EMF measures in days here.
-			
+
+			final ICharterOut builderCharterOut = builder.createCharterOut(
+					window, port, charterOut.getDuration() * 24); // EMF
+																	// measures
+																	// in days
+																	// here.
+
 			for (final Vessel v : charterOut.getVessels()) {
-				builder.addCharterOutVessel(builderCharterOut, vessels.lookup(v));
+				builder.addCharterOutVessel(builderCharterOut,
+						vessels.lookup(v));
 			}
-			
+
 			for (final VesselClass vc : charterOut.getVesselClasses()) {
-				builder.addCharterOutVesselClass(builderCharterOut, classes.lookup(vc));
+				builder.addCharterOutVesselClass(builderCharterOut,
+						classes.lookup(vc));
 			}
 		}
 	}
@@ -181,54 +259,47 @@ public class LNGScenarioTransformer {
 	 * @param builder
 	 *            current builder. should already have ports/distances/vessels
 	 *            built
+	 * @param marketAssociation
 	 */
-	private void buildCargoes(SchedulerBuilder builder,
-			Association<Port, IPort> ports) {
-		/*
-		 * Find the earliest date, to convert from absolute date and time to
-		 * offset hours
-		 */
-		earliestTime = null;
-		latestTime = null;
-		for (Cargo eCargo : scenario.getCargoModel().getCargoes()) {
-			final Date loadDate = eCargo.getLoadSlot().getWindowStart();
-			if (earliestTime == null || earliestTime.after(loadDate)) {
-				earliestTime = loadDate;
-			}
-			if (latestTime == null || latestTime.before(loadDate)) {
-				latestTime = loadDate;
-			}
-		}
-
+	private void buildCargoes(final SchedulerBuilder builder,
+			final Association<Port, IPort> ports,
+			final Association<Market, ICurve> marketAssociation) {
 		for (Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// not escargot.
-			LoadSlot loadSlot = eCargo.getLoadSlot();
-			Slot dischargeSlot = eCargo.getDischargeSlot();
-			int loadStart = convertTime(earliestTime, loadSlot.getWindowStart());
-			int dischargeStart = convertTime(earliestTime,
+			final LoadSlot loadSlot = eCargo.getLoadSlot();
+			final Slot dischargeSlot = eCargo.getDischargeSlot();
+			final int loadStart = convertTime(earliestTime,
+					loadSlot.getWindowStart());
+			final int dischargeStart = convertTime(earliestTime,
 					dischargeSlot.getWindowStart());
 
 			// TODO check units again
-			ITimeWindow loadWindow = builder.createTimeWindow(loadStart,
+			final ITimeWindow loadWindow = builder.createTimeWindow(loadStart,
 					loadStart + loadSlot.getWindowDuration());
-			ITimeWindow dischargeWindow = builder.createTimeWindow(
+			final ITimeWindow dischargeWindow = builder.createTimeWindow(
 					dischargeStart,
 					dischargeStart + dischargeSlot.getWindowDuration());
 
-			ILoadSlot load = builder.createLoadSlot(loadSlot.getId(),
+			final Market loadMarket = loadSlot.isSetMarket() ? loadSlot
+					.getMarket() : loadSlot.getPort().getDefaultMarket();
+
+			final Market dischargeMarket = dischargeSlot.isSetMarket() ? dischargeSlot
+					.getMarket() : dischargeSlot.getPort().getDefaultMarket();
+
+			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(),
 					ports.lookup(loadSlot.getPort()), loadWindow,
 					Calculator.scale(loadSlot.getMinQuantity()),
 					Calculator.scale(loadSlot.getMaxQuantity()),
-					(int) Calculator.scale(loadSlot.getUnitPrice()),
+					marketAssociation.lookup(loadMarket),
 					(int) Calculator.scale(loadSlot.getCargoCVvalue()),
 					dischargeSlot.getSlotDuration());
 
-			IDischargeSlot discharge = builder.createDischargeSlot(
+			final IDischargeSlot discharge = builder.createDischargeSlot(
 					dischargeSlot.getId(),
 					ports.lookup(dischargeSlot.getPort()), dischargeWindow,
 					Calculator.scale(dischargeSlot.getMinQuantity()),
 					Calculator.scale(dischargeSlot.getMaxQuantity()),
-					(int) Calculator.scale(dischargeSlot.getUnitPrice()),
+					marketAssociation.lookup(dischargeMarket),
 					dischargeSlot.getSlotDuration());
 
 			builder.createCargo(eCargo.getId(), load, discharge);
