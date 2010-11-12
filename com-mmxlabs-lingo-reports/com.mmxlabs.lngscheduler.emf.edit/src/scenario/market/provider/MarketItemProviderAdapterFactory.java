@@ -98,6 +98,52 @@ public class MarketItemProviderAdapterFactory extends MarketAdapterFactory imple
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.market.StepwisePriceCurve} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected StepwisePriceCurveItemProvider stepwisePriceCurveItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.market.StepwisePriceCurve}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createStepwisePriceCurveAdapter() {
+		if (stepwisePriceCurveItemProvider == null) {
+			stepwisePriceCurveItemProvider = new StepwisePriceCurveItemProvider(this);
+		}
+
+		return stepwisePriceCurveItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.market.StepwisePrice} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected StepwisePriceItemProvider stepwisePriceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.market.StepwisePrice}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createStepwisePriceAdapter() {
+		if (stepwisePriceItemProvider == null) {
+			stepwisePriceItemProvider = new StepwisePriceItemProvider(this);
+		}
+
+		return stepwisePriceItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link scenario.market.Market} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -118,29 +164,6 @@ public class MarketItemProviderAdapterFactory extends MarketAdapterFactory imple
 		}
 
 		return marketItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link scenario.market.ForwardPrice} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ForwardPriceItemProvider forwardPriceItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.market.ForwardPrice}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createForwardPriceAdapter() {
-		if (forwardPriceItemProvider == null) {
-			forwardPriceItemProvider = new ForwardPriceItemProvider(this);
-		}
-
-		return forwardPriceItemProvider;
 	}
 
 	/**
@@ -242,9 +265,10 @@ public class MarketItemProviderAdapterFactory extends MarketAdapterFactory imple
 	 * @generated
 	 */
 	public void dispose() {
-		if (marketModelItemProvider != null) marketModelItemProvider.dispose();
 		if (marketItemProvider != null) marketItemProvider.dispose();
-		if (forwardPriceItemProvider != null) forwardPriceItemProvider.dispose();
+		if (marketModelItemProvider != null) marketModelItemProvider.dispose();
+		if (stepwisePriceCurveItemProvider != null) stepwisePriceCurveItemProvider.dispose();
+		if (stepwisePriceItemProvider != null) stepwisePriceItemProvider.dispose();
 	}
 
 }

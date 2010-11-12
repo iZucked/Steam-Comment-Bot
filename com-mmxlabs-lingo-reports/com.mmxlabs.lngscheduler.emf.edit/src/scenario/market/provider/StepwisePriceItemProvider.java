@@ -13,7 +13,9 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -25,17 +27,18 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.market.ForwardPrice;
 import scenario.market.MarketPackage;
+import scenario.market.StepwisePrice;
+
 import scenario.provider.LngEditPlugin;
 
 /**
- * This is the item provider adapter for a {@link scenario.market.ForwardPrice} object.
+ * This is the item provider adapter for a {@link scenario.market.StepwisePrice} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ForwardPriceItemProvider
+public class StepwisePriceItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -49,7 +52,7 @@ public class ForwardPriceItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ForwardPriceItemProvider(AdapterFactory adapterFactory) {
+	public StepwisePriceItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -65,7 +68,7 @@ public class ForwardPriceItemProvider
 			super.getPropertyDescriptors(object);
 
 			addDatePropertyDescriptor(object);
-			addPricePropertyDescriptor(object);
+			addPriceFromDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -81,9 +84,9 @@ public class ForwardPriceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ForwardPrice_date_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ForwardPrice_date_feature", "_UI_ForwardPrice_type"),
-				 MarketPackage.Literals.FORWARD_PRICE__DATE,
+				 getString("_UI_StepwisePrice_date_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StepwisePrice_date_feature", "_UI_StepwisePrice_type"),
+				 MarketPackage.Literals.STEPWISE_PRICE__DATE,
 				 true,
 				 false,
 				 false,
@@ -93,19 +96,19 @@ public class ForwardPriceItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Price feature.
+	 * This adds a property descriptor for the Price From Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPricePropertyDescriptor(Object object) {
+	protected void addPriceFromDatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ForwardPrice_price_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ForwardPrice_price_feature", "_UI_ForwardPrice_type"),
-				 MarketPackage.Literals.FORWARD_PRICE__PRICE,
+				 getString("_UI_StepwisePrice_priceFromDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StepwisePrice_priceFromDate_feature", "_UI_StepwisePrice_type"),
+				 MarketPackage.Literals.STEPWISE_PRICE__PRICE_FROM_DATE,
 				 true,
 				 false,
 				 false,
@@ -115,14 +118,14 @@ public class ForwardPriceItemProvider
 	}
 
 	/**
-	 * This returns ForwardPrice.gif.
+	 * This returns StepwisePrice.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ForwardPrice"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/StepwisePrice"));
 	}
 
 	/**
@@ -133,11 +136,11 @@ public class ForwardPriceItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((ForwardPrice)object).getDate();
+		Date labelValue = ((StepwisePrice)object).getDate();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ForwardPrice_type") :
-			getString("_UI_ForwardPrice_type") + " " + label;
+			getString("_UI_StepwisePrice_type") :
+			getString("_UI_StepwisePrice_type") + " " + label;
 	}
 
 	/**
@@ -151,9 +154,9 @@ public class ForwardPriceItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ForwardPrice.class)) {
-			case MarketPackage.FORWARD_PRICE__DATE:
-			case MarketPackage.FORWARD_PRICE__PRICE:
+		switch (notification.getFeatureID(StepwisePrice.class)) {
+			case MarketPackage.STEPWISE_PRICE__DATE:
+			case MarketPackage.STEPWISE_PRICE__PRICE_FROM_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -69,11 +69,11 @@ public class SlotItemProvider
 			addIdPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
-			addUnitPricePropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addWindowStartPropertyDescriptor(object);
 			addWindowDurationPropertyDescriptor(object);
 			addSlotDurationPropertyDescriptor(object);
+			addMarketPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -140,28 +140,6 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Unit Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addUnitPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_unitPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_unitPrice_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__UNIT_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -255,6 +233,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Market feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarketPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_market_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_market_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__MARKET,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -294,7 +294,6 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__ID:
 			case CargoPackage.SLOT__MIN_QUANTITY:
 			case CargoPackage.SLOT__MAX_QUANTITY:
-			case CargoPackage.SLOT__UNIT_PRICE:
 			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_DURATION:
 			case CargoPackage.SLOT__SLOT_DURATION:

@@ -104,7 +104,7 @@ public class MarketItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(MarketPackage.Literals.MARKET__FORWARD_PRICE_CURVE);
+			childrenFeatures.add(MarketPackage.Literals.MARKET__PRICE_CURVE);
 		}
 		return childrenFeatures;
 	}
@@ -162,7 +162,7 @@ public class MarketItemProvider
 			case MarketPackage.MARKET__NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case MarketPackage.MARKET__FORWARD_PRICE_CURVE:
+			case MarketPackage.MARKET__PRICE_CURVE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -182,8 +182,8 @@ public class MarketItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(MarketPackage.Literals.MARKET__FORWARD_PRICE_CURVE,
-				 MarketFactory.eINSTANCE.createForwardPrice()));
+				(MarketPackage.Literals.MARKET__PRICE_CURVE,
+				 MarketFactory.eINSTANCE.createStepwisePriceCurve()));
 	}
 
 	/**
