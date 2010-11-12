@@ -10,6 +10,7 @@ import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.market.Market;
 import scenario.port.Port;
 
 /**
@@ -23,11 +24,11 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.Slot#getId <em>Id</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
- *   <li>{@link scenario.cargo.Slot#getUnitPrice <em>Unit Price</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getMarket <em>Market</em>}</li>
  * </ul>
  * </p>
  *
@@ -113,32 +114,6 @@ public interface Slot extends EObject {
 	 * @generated
 	 */
 	void setMaxQuantity(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Unit Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Unit Price</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Unit Price</em>' attribute.
-	 * @see #setUnitPrice(float)
-	 * @see scenario.cargo.CargoPackage#getSlot_UnitPrice()
-	 * @model
-	 * @generated
-	 */
-	float getUnitPrice();
-
-	/**
-	 * Sets the value of the '{@link scenario.cargo.Slot#getUnitPrice <em>Unit Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Unit Price</em>' attribute.
-	 * @see #getUnitPrice()
-	 * @generated
-	 */
-	void setUnitPrice(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.
@@ -243,5 +218,58 @@ public interface Slot extends EObject {
 	 * @generated
 	 */
 	void setSlotDuration(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Market</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Market</em>' reference.
+	 * @see #isSetMarket()
+	 * @see #unsetMarket()
+	 * @see #setMarket(Market)
+	 * @see scenario.cargo.CargoPackage#getSlot_Market()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	Market getMarket();
+
+	/**
+	 * Sets the value of the '{@link scenario.cargo.Slot#getMarket <em>Market</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Market</em>' reference.
+	 * @see #isSetMarket()
+	 * @see #unsetMarket()
+	 * @see #getMarket()
+	 * @generated
+	 */
+	void setMarket(Market value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.cargo.Slot#getMarket <em>Market</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMarket()
+	 * @see #getMarket()
+	 * @see #setMarket(Market)
+	 * @generated
+	 */
+	void unsetMarket();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.cargo.Slot#getMarket <em>Market</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Market</em>' reference is set.
+	 * @see #unsetMarket()
+	 * @see #getMarket()
+	 * @see #setMarket(Market)
+	 * @generated
+	 */
+	boolean isSetMarket();
 
 } // Slot

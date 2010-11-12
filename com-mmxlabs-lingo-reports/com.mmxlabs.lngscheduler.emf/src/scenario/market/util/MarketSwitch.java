@@ -87,21 +87,27 @@ public class MarketSwitch<T> {
 	 */
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case MarketPackage.MARKET_MODEL: {
-				MarketModel marketModel = (MarketModel)theEObject;
-				T result = caseMarketModel(marketModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case MarketPackage.MARKET: {
 				Market market = (Market)theEObject;
 				T result = caseMarket(market);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MarketPackage.FORWARD_PRICE: {
-				ForwardPrice forwardPrice = (ForwardPrice)theEObject;
-				T result = caseForwardPrice(forwardPrice);
+			case MarketPackage.MARKET_MODEL: {
+				MarketModel marketModel = (MarketModel)theEObject;
+				T result = caseMarketModel(marketModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MarketPackage.STEPWISE_PRICE_CURVE: {
+				StepwisePriceCurve stepwisePriceCurve = (StepwisePriceCurve)theEObject;
+				T result = caseStepwisePriceCurve(stepwisePriceCurve);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MarketPackage.STEPWISE_PRICE: {
+				StepwisePrice stepwisePrice = (StepwisePrice)theEObject;
+				T result = caseStepwisePrice(stepwisePrice);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -125,6 +131,36 @@ public class MarketSwitch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Stepwise Price Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Stepwise Price Curve</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStepwisePriceCurve(StepwisePriceCurve object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Stepwise Price</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Stepwise Price</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStepwisePrice(StepwisePrice object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Market</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -136,21 +172,6 @@ public class MarketSwitch<T> {
 	 * @generated
 	 */
 	public T caseMarket(Market object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Forward Price</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Forward Price</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseForwardPrice(ForwardPrice object) {
 		return null;
 	}
 

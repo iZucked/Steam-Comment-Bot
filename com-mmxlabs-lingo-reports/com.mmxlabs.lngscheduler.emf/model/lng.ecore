@@ -131,7 +131,8 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Port">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="market" eType="#//market/Market"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultMarket" lowerBound="1"
+          eType="#//market/Market"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DistanceModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="distances" upperBound="-1"
@@ -177,11 +178,12 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
+          eType="#//market/Market" unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//cargo/Slot">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCVvalue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat">
@@ -202,18 +204,25 @@
     <eClassifiers xsi:type="ecore:EClass" name="SalesContract"/>
   </eSubpackages>
   <eSubpackages name="market" nsURI="http://com.mmxlabs.lng.emf/market" nsPrefix="com.mmxlabs.lng.emf.market">
+    <eClassifiers xsi:type="ecore:EClass" name="Market">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="priceCurve" lowerBound="1"
+          eType="#//market/StepwisePriceCurve" containment="true"/>
+    </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="MarketModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="markets" upperBound="-1"
           eType="#//market/Market" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Market">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="forwardPriceCurve" upperBound="-1"
-          eType="#//market/ForwardPrice" containment="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StepwisePriceCurve">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="prices" upperBound="-1"
+          eType="#//market/StepwisePrice" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ForwardPrice">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StepwisePrice">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceFromDate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="optimiser" nsURI="http://com.mmxlabs.lng.emf/optimiser" nsPrefix="com.mmxlabs.lng.emf.optimiser">

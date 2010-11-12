@@ -9,28 +9,30 @@ package scenario.market.impl;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import scenario.market.ForwardPrice;
 import scenario.market.MarketPackage;
+import scenario.market.StepwisePrice;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Forward Price</b></em>'.
+ * An implementation of the model object '<em><b>Stepwise Price</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.market.impl.ForwardPriceImpl#getDate <em>Date</em>}</li>
- *   <li>{@link scenario.market.impl.ForwardPriceImpl#getPrice <em>Price</em>}</li>
+ *   <li>{@link scenario.market.impl.StepwisePriceImpl#getDate <em>Date</em>}</li>
+ *   <li>{@link scenario.market.impl.StepwisePriceImpl#getPriceFromDate <em>Price From Date</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
+public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	/**
 	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -52,31 +54,31 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	protected Date date = DATE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getPrice() <em>Price</em>}' attribute.
+	 * The default value of the '{@link #getPriceFromDate() <em>Price From Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPrice()
+	 * @see #getPriceFromDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int PRICE_EDEFAULT = 0;
+	protected static final int PRICE_FROM_DATE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getPrice() <em>Price</em>}' attribute.
+	 * The cached value of the '{@link #getPriceFromDate() <em>Price From Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPrice()
+	 * @see #getPriceFromDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected int price = PRICE_EDEFAULT;
+	protected int priceFromDate = PRICE_FROM_DATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ForwardPriceImpl() {
+	protected StepwisePriceImpl() {
 		super();
 	}
 
@@ -87,7 +89,7 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MarketPackage.Literals.FORWARD_PRICE;
+		return MarketPackage.Literals.STEPWISE_PRICE;
 	}
 
 	/**
@@ -95,7 +97,6 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Date getDate() {
 		return date;
 	}
@@ -105,12 +106,11 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setDate(Date newDate) {
 		Date oldDate = date;
 		date = newDate;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.FORWARD_PRICE__DATE, oldDate, date));
+			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.STEPWISE_PRICE__DATE, oldDate, date));
 	}
 
 	/**
@@ -118,9 +118,8 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public int getPrice() {
-		return price;
+	public int getPriceFromDate() {
+		return priceFromDate;
 	}
 
 	/**
@@ -128,12 +127,11 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setPrice(int newPrice) {
-		int oldPrice = price;
-		price = newPrice;
+	public void setPriceFromDate(int newPriceFromDate) {
+		int oldPriceFromDate = priceFromDate;
+		priceFromDate = newPriceFromDate;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.FORWARD_PRICE__PRICE, oldPrice, price));
+			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.STEPWISE_PRICE__PRICE_FROM_DATE, oldPriceFromDate, priceFromDate));
 	}
 
 	/**
@@ -144,10 +142,10 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MarketPackage.FORWARD_PRICE__DATE:
+			case MarketPackage.STEPWISE_PRICE__DATE:
 				return getDate();
-			case MarketPackage.FORWARD_PRICE__PRICE:
-				return getPrice();
+			case MarketPackage.STEPWISE_PRICE__PRICE_FROM_DATE:
+				return getPriceFromDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -160,11 +158,11 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MarketPackage.FORWARD_PRICE__DATE:
+			case MarketPackage.STEPWISE_PRICE__DATE:
 				setDate((Date)newValue);
 				return;
-			case MarketPackage.FORWARD_PRICE__PRICE:
-				setPrice((Integer)newValue);
+			case MarketPackage.STEPWISE_PRICE__PRICE_FROM_DATE:
+				setPriceFromDate((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -178,11 +176,11 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MarketPackage.FORWARD_PRICE__DATE:
+			case MarketPackage.STEPWISE_PRICE__DATE:
 				setDate(DATE_EDEFAULT);
 				return;
-			case MarketPackage.FORWARD_PRICE__PRICE:
-				setPrice(PRICE_EDEFAULT);
+			case MarketPackage.STEPWISE_PRICE__PRICE_FROM_DATE:
+				setPriceFromDate(PRICE_FROM_DATE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -196,10 +194,10 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MarketPackage.FORWARD_PRICE__DATE:
+			case MarketPackage.STEPWISE_PRICE__DATE:
 				return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
-			case MarketPackage.FORWARD_PRICE__PRICE:
-				return price != PRICE_EDEFAULT;
+			case MarketPackage.STEPWISE_PRICE__PRICE_FROM_DATE:
+				return priceFromDate != PRICE_FROM_DATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -216,10 +214,10 @@ public class ForwardPriceImpl extends EObjectImpl implements ForwardPrice {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (date: ");
 		result.append(date);
-		result.append(", price: ");
-		result.append(price);
+		result.append(", priceFromDate: ");
+		result.append(priceFromDate);
 		result.append(')');
 		return result.toString();
 	}
 
-} //ForwardPriceImpl
+} //StepwisePriceImpl

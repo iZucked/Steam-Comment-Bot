@@ -63,9 +63,10 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case MarketPackage.MARKET_MODEL: return createMarketModel();
 			case MarketPackage.MARKET: return createMarket();
-			case MarketPackage.FORWARD_PRICE: return createForwardPrice();
+			case MarketPackage.MARKET_MODEL: return createMarketModel();
+			case MarketPackage.STEPWISE_PRICE_CURVE: return createStepwisePriceCurve();
+			case MarketPackage.STEPWISE_PRICE: return createStepwisePrice();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -87,10 +88,19 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Market createMarket() {
-		MarketImpl market = new MarketImpl();
-		return market;
+	public StepwisePriceCurve createStepwisePriceCurve() {
+		StepwisePriceCurveImpl stepwisePriceCurve = new StepwisePriceCurveImpl();
+		return stepwisePriceCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StepwisePrice createStepwisePrice() {
+		StepwisePriceImpl stepwisePrice = new StepwisePriceImpl();
+		return stepwisePrice;
 	}
 
 	/**
@@ -99,9 +109,9 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 * @generated
 	 */
 	@Override
-	public ForwardPrice createForwardPrice() {
-		ForwardPriceImpl forwardPrice = new ForwardPriceImpl();
-		return forwardPrice;
+	public Market createMarket() {
+		MarketImpl market = new MarketImpl();
+		return market;
 	}
 
 	/**

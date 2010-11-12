@@ -35,4 +35,5 @@ Export-Package: scenario,
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy
-Import-Package: scenario.optimiser
+Import-Package: org.eclipse.emf.ecore.xmi.impl,
+ scenario.optimiser

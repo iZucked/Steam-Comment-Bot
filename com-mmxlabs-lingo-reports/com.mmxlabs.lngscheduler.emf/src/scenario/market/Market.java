@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.market.Market#getName <em>Name</em>}</li>
- *   <li>{@link scenario.market.Market#getForwardPriceCurve <em>Forward Price Curve</em>}</li>
+ *   <li>{@link scenario.market.Market#getPriceCurve <em>Price Curve</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,19 +54,29 @@ public interface Market extends EObject {
 	void setName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Forward Price Curve</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.market.ForwardPrice}.
+	 * Returns the value of the '<em><b>Price Curve</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Forward Price Curve</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Price Curve</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Forward Price Curve</em>' containment reference list.
-	 * @see scenario.market.MarketPackage#getMarket_ForwardPriceCurve()
-	 * @model containment="true"
+	 * @return the value of the '<em>Price Curve</em>' containment reference.
+	 * @see #setPriceCurve(StepwisePriceCurve)
+	 * @see scenario.market.MarketPackage#getMarket_PriceCurve()
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	EList<ForwardPrice> getForwardPriceCurve();
+	StepwisePriceCurve getPriceCurve();
+
+	/**
+	 * Sets the value of the '{@link scenario.market.Market#getPriceCurve <em>Price Curve</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price Curve</em>' containment reference.
+	 * @see #getPriceCurve()
+	 * @generated
+	 */
+	void setPriceCurve(StepwisePriceCurve value);
 
 } // Market

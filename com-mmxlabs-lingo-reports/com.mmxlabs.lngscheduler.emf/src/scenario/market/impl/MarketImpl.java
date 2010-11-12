@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import scenario.market.ForwardPrice;
 import scenario.market.Market;
 import scenario.market.MarketPackage;
+import scenario.market.StepwisePriceCurve;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +31,7 @@ import scenario.market.MarketPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.market.impl.MarketImpl#getName <em>Name</em>}</li>
- *   <li>{@link scenario.market.impl.MarketImpl#getForwardPriceCurve <em>Forward Price Curve</em>}</li>
+ *   <li>{@link scenario.market.impl.MarketImpl#getPriceCurve <em>Price Curve</em>}</li>
  * </ul>
  * </p>
  *
@@ -58,14 +59,14 @@ public class MarketImpl extends EObjectImpl implements Market {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getForwardPriceCurve() <em>Forward Price Curve</em>}' containment reference list.
+	 * The cached value of the '{@link #getPriceCurve() <em>Price Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getForwardPriceCurve()
+	 * @see #getPriceCurve()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ForwardPrice> forwardPriceCurve;
+	protected StepwisePriceCurve priceCurve;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -114,12 +115,42 @@ public class MarketImpl extends EObjectImpl implements Market {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EList<ForwardPrice> getForwardPriceCurve() {
-		if (forwardPriceCurve == null) {
-			forwardPriceCurve = new EObjectContainmentEList<ForwardPrice>(ForwardPrice.class, this, MarketPackage.MARKET__FORWARD_PRICE_CURVE);
+	public StepwisePriceCurve getPriceCurve() {
+		return priceCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPriceCurve(StepwisePriceCurve newPriceCurve, NotificationChain msgs) {
+		StepwisePriceCurve oldPriceCurve = priceCurve;
+		priceCurve = newPriceCurve;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MarketPackage.MARKET__PRICE_CURVE, oldPriceCurve, newPriceCurve);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return forwardPriceCurve;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPriceCurve(StepwisePriceCurve newPriceCurve) {
+		if (newPriceCurve != priceCurve) {
+			NotificationChain msgs = null;
+			if (priceCurve != null)
+				msgs = ((InternalEObject)priceCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MarketPackage.MARKET__PRICE_CURVE, null, msgs);
+			if (newPriceCurve != null)
+				msgs = ((InternalEObject)newPriceCurve).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MarketPackage.MARKET__PRICE_CURVE, null, msgs);
+			msgs = basicSetPriceCurve(newPriceCurve, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.MARKET__PRICE_CURVE, newPriceCurve, newPriceCurve));
 	}
 
 	/**
@@ -130,8 +161,8 @@ public class MarketImpl extends EObjectImpl implements Market {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MarketPackage.MARKET__FORWARD_PRICE_CURVE:
-				return ((InternalEList<?>)getForwardPriceCurve()).basicRemove(otherEnd, msgs);
+			case MarketPackage.MARKET__PRICE_CURVE:
+				return basicSetPriceCurve(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -146,8 +177,8 @@ public class MarketImpl extends EObjectImpl implements Market {
 		switch (featureID) {
 			case MarketPackage.MARKET__NAME:
 				return getName();
-			case MarketPackage.MARKET__FORWARD_PRICE_CURVE:
-				return getForwardPriceCurve();
+			case MarketPackage.MARKET__PRICE_CURVE:
+				return getPriceCurve();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -164,9 +195,8 @@ public class MarketImpl extends EObjectImpl implements Market {
 			case MarketPackage.MARKET__NAME:
 				setName((String)newValue);
 				return;
-			case MarketPackage.MARKET__FORWARD_PRICE_CURVE:
-				getForwardPriceCurve().clear();
-				getForwardPriceCurve().addAll((Collection<? extends ForwardPrice>)newValue);
+			case MarketPackage.MARKET__PRICE_CURVE:
+				setPriceCurve((StepwisePriceCurve)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -183,8 +213,8 @@ public class MarketImpl extends EObjectImpl implements Market {
 			case MarketPackage.MARKET__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case MarketPackage.MARKET__FORWARD_PRICE_CURVE:
-				getForwardPriceCurve().clear();
+			case MarketPackage.MARKET__PRICE_CURVE:
+				setPriceCurve((StepwisePriceCurve)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -200,8 +230,8 @@ public class MarketImpl extends EObjectImpl implements Market {
 		switch (featureID) {
 			case MarketPackage.MARKET__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case MarketPackage.MARKET__FORWARD_PRICE_CURVE:
-				return forwardPriceCurve != null && !forwardPriceCurve.isEmpty();
+			case MarketPackage.MARKET__PRICE_CURVE:
+				return priceCurve != null;
 		}
 		return super.eIsSet(featureID);
 	}

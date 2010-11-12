@@ -72,16 +72,20 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 	protected MarketSwitch<Adapter> modelSwitch =
 		new MarketSwitch<Adapter>() {
 			@Override
-			public Adapter caseMarketModel(MarketModel object) {
-				return createMarketModelAdapter();
-			}
-			@Override
 			public Adapter caseMarket(Market object) {
 				return createMarketAdapter();
 			}
 			@Override
-			public Adapter caseForwardPrice(ForwardPrice object) {
-				return createForwardPriceAdapter();
+			public Adapter caseMarketModel(MarketModel object) {
+				return createMarketModelAdapter();
+			}
+			@Override
+			public Adapter caseStepwisePriceCurve(StepwisePriceCurve object) {
+				return createStepwisePriceCurveAdapter();
+			}
+			@Override
+			public Adapter caseStepwisePrice(StepwisePrice object) {
+				return createStepwisePriceAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -118,6 +122,34 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link scenario.market.StepwisePriceCurve <em>Stepwise Price Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.market.StepwisePriceCurve
+	 * @generated
+	 */
+	public Adapter createStepwisePriceCurveAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.market.StepwisePrice <em>Stepwise Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.market.StepwisePrice
+	 * @generated
+	 */
+	public Adapter createStepwisePriceAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link scenario.market.Market <em>Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -128,20 +160,6 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMarketAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link scenario.market.ForwardPrice <em>Forward Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see scenario.market.ForwardPrice
-	 * @generated
-	 */
-	public Adapter createForwardPriceAdapter() {
 		return null;
 	}
 

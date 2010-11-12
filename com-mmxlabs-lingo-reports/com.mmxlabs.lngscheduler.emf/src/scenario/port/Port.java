@@ -19,7 +19,7 @@ import scenario.market.Market;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.port.Port#getName <em>Name</em>}</li>
- *   <li>{@link scenario.port.Port#getMarket <em>Market</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultMarket <em>Default Market</em>}</li>
  * </ul>
  * </p>
  *
@@ -55,29 +55,29 @@ public interface Port extends EObject {
 	void setName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Market</b></em>' reference.
+	 * Returns the value of the '<em><b>Default Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Market</em>' reference isn't clear,
+	 * If the meaning of the '<em>Default Market</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Market</em>' reference.
-	 * @see #setMarket(Market)
-	 * @see scenario.port.PortPackage#getPort_Market()
-	 * @model
+	 * @return the value of the '<em>Default Market</em>' reference.
+	 * @see #setDefaultMarket(Market)
+	 * @see scenario.port.PortPackage#getPort_DefaultMarket()
+	 * @model required="true"
 	 * @generated
 	 */
-	Market getMarket();
+	Market getDefaultMarket();
 
 	/**
-	 * Sets the value of the '{@link scenario.port.Port#getMarket <em>Market</em>}' reference.
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultMarket <em>Default Market</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Market</em>' reference.
-	 * @see #getMarket()
+	 * @param value the new value of the '<em>Default Market</em>' reference.
+	 * @see #getDefaultMarket()
 	 * @generated
 	 */
-	void setMarket(Market value);
+	void setDefaultMarket(Market value);
 
 } // Port

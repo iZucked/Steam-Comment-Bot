@@ -35,6 +35,24 @@ public interface MarketFactory extends EFactory {
 	MarketModel createMarketModel();
 
 	/**
+	 * Returns a new object of class '<em>Stepwise Price Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Stepwise Price Curve</em>'.
+	 * @generated
+	 */
+	StepwisePriceCurve createStepwisePriceCurve();
+
+	/**
+	 * Returns a new object of class '<em>Stepwise Price</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Stepwise Price</em>'.
+	 * @generated
+	 */
+	StepwisePrice createStepwisePrice();
+
+	/**
 	 * Returns a new object of class '<em>Market</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -42,15 +60,6 @@ public interface MarketFactory extends EFactory {
 	 * @generated
 	 */
 	Market createMarket();
-
-	/**
-	 * Returns a new object of class '<em>Forward Price</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Forward Price</em>'.
-	 * @generated
-	 */
-	ForwardPrice createForwardPrice();
 
 	/**
 	 * Returns the package supported by this factory.

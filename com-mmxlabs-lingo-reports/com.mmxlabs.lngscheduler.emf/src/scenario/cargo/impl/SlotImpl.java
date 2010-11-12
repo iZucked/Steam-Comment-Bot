@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 
+import scenario.market.Market;
 import scenario.port.Port;
 
 /**
@@ -31,11 +32,11 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.impl.SlotImpl#getId <em>Id</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
- *   <li>{@link scenario.cargo.impl.SlotImpl#getUnitPrice <em>Unit Price</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getSlotDuration <em>Slot Duration</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getMarket <em>Market</em>}</li>
  * </ul>
  * </p>
  *
@@ -101,26 +102,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUnitPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final float UNIT_PRICE_EDEFAULT = 0.0F;
-
-	/**
-	 * The cached value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUnitPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected float unitPrice = UNIT_PRICE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -191,6 +172,25 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int slotDuration = SLOT_DURATION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getMarket() <em>Market</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarket()
+	 * @generated
+	 * @ordered
+	 */
+	protected Market market;
+
+	/**
+	 * This is true if the Market reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean marketESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -272,27 +272,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		maxQuantity = newMaxQuantity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MAX_QUANTITY, oldMaxQuantity, maxQuantity));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public float getUnitPrice() {
-		return unitPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setUnitPrice(float newUnitPrice) {
-		float oldUnitPrice = unitPrice;
-		unitPrice = newUnitPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__UNIT_PRICE, oldUnitPrice, unitPrice));
 	}
 
 	/**
@@ -401,6 +380,69 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Market getMarket() {
+		if (market != null && market.eIsProxy()) {
+			InternalEObject oldMarket = (InternalEObject)market;
+			market = (Market)eResolveProxy(oldMarket);
+			if (market != oldMarket) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__MARKET, oldMarket, market));
+			}
+		}
+		return market;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Market basicGetMarket() {
+		return market;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMarket(Market newMarket) {
+		Market oldMarket = market;
+		market = newMarket;
+		boolean oldMarketESet = marketESet;
+		marketESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MARKET, oldMarket, market, !oldMarketESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMarket() {
+		Market oldMarket = market;
+		boolean oldMarketESet = marketESet;
+		market = null;
+		marketESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__MARKET, oldMarket, null, oldMarketESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMarket() {
+		return marketESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -410,8 +452,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				return getMaxQuantity();
-			case CargoPackage.SLOT__UNIT_PRICE:
-				return getUnitPrice();
 			case CargoPackage.SLOT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
@@ -421,6 +461,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getWindowDuration();
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return getSlotDuration();
+			case CargoPackage.SLOT__MARKET:
+				if (resolve) return getMarket();
+				return basicGetMarket();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -442,9 +485,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
 				return;
-			case CargoPackage.SLOT__UNIT_PRICE:
-				setUnitPrice((Float)newValue);
-				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)newValue);
 				return;
@@ -456,6 +496,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__MARKET:
+				setMarket((Market)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -478,9 +521,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__UNIT_PRICE:
-				setUnitPrice(UNIT_PRICE_EDEFAULT);
-				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)null);
 				return;
@@ -492,6 +532,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration(SLOT_DURATION_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__MARKET:
+				unsetMarket();
 				return;
 		}
 		super.eUnset(featureID);
@@ -511,8 +554,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return minQuantity != MIN_QUANTITY_EDEFAULT;
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
-			case CargoPackage.SLOT__UNIT_PRICE:
-				return unitPrice != UNIT_PRICE_EDEFAULT;
 			case CargoPackage.SLOT__PORT:
 				return port != null;
 			case CargoPackage.SLOT__WINDOW_START:
@@ -521,6 +562,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return windowDuration != WINDOW_DURATION_EDEFAULT;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return slotDuration != SLOT_DURATION_EDEFAULT;
+			case CargoPackage.SLOT__MARKET:
+				return isSetMarket();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -541,8 +584,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
 		result.append(maxQuantity);
-		result.append(", unitPrice: ");
-		result.append(unitPrice);
 		result.append(", windowStart: ");
 		result.append(windowStart);
 		result.append(", windowDuration: ");

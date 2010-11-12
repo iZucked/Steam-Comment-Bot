@@ -25,6 +25,8 @@ import scenario.market.Market;
 import scenario.market.MarketFactory;
 import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
+import scenario.market.StepwisePrice;
+import scenario.market.StepwisePriceCurve;
 import scenario.optimiser.OptimiserPackage;
 import scenario.optimiser.impl.OptimiserPackageImpl;
 import scenario.optimiser.lso.LsoPackage;
@@ -53,14 +55,21 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass marketEClass = null;
+	private EClass stepwisePriceCurveEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass forwardPriceEClass = null;
+	private EClass stepwisePriceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass marketEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -174,6 +183,60 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getStepwisePriceCurve() {
+		return stepwisePriceCurveEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getStepwisePriceCurve_Prices() {
+		return (EReference)stepwisePriceCurveEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStepwisePriceCurve_DefaultValue() {
+		return (EAttribute)stepwisePriceCurveEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getStepwisePrice() {
+		return stepwisePriceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStepwisePrice_Date() {
+		return (EAttribute)stepwisePriceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStepwisePrice_PriceFromDate() {
+		return (EAttribute)stepwisePriceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getMarket() {
 		return marketEClass;
@@ -194,39 +257,8 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EReference getMarket_ForwardPriceCurve() {
+	public EReference getMarket_PriceCurve() {
 		return (EReference)marketEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getForwardPrice() {
-		return forwardPriceEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getForwardPrice_Date() {
-		return (EAttribute)forwardPriceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getForwardPrice_Price() {
-		return (EAttribute)forwardPriceEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -258,16 +290,20 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		isCreated = true;
 
 		// Create classes and their features
+		marketEClass = createEClass(MARKET);
+		createEAttribute(marketEClass, MARKET__NAME);
+		createEReference(marketEClass, MARKET__PRICE_CURVE);
+
 		marketModelEClass = createEClass(MARKET_MODEL);
 		createEReference(marketModelEClass, MARKET_MODEL__MARKETS);
 
-		marketEClass = createEClass(MARKET);
-		createEAttribute(marketEClass, MARKET__NAME);
-		createEReference(marketEClass, MARKET__FORWARD_PRICE_CURVE);
+		stepwisePriceCurveEClass = createEClass(STEPWISE_PRICE_CURVE);
+		createEReference(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE__PRICES);
+		createEAttribute(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE__DEFAULT_VALUE);
 
-		forwardPriceEClass = createEClass(FORWARD_PRICE);
-		createEAttribute(forwardPriceEClass, FORWARD_PRICE__DATE);
-		createEAttribute(forwardPriceEClass, FORWARD_PRICE__PRICE);
+		stepwisePriceEClass = createEClass(STEPWISE_PRICE);
+		createEAttribute(stepwisePriceEClass, STEPWISE_PRICE__DATE);
+		createEAttribute(stepwisePriceEClass, STEPWISE_PRICE__PRICE_FROM_DATE);
 	}
 
 	/**
@@ -300,16 +336,20 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		// Add supertypes to classes
 
 		// Initialize classes and features; add operations and parameters
+		initEClass(marketEClass, Market.class, "Market", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMarket_Name(), ecorePackage.getEString(), "name", null, 0, 1, Market.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarket_PriceCurve(), this.getStepwisePriceCurve(), null, "priceCurve", null, 1, 1, Market.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(marketModelEClass, MarketModel.class, "MarketModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketModel_Markets(), this.getMarket(), null, "markets", null, 0, -1, MarketModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(marketEClass, Market.class, "Market", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getMarket_Name(), ecorePackage.getEString(), "name", null, 0, 1, Market.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMarket_ForwardPriceCurve(), this.getForwardPrice(), null, "forwardPriceCurve", null, 0, -1, Market.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(stepwisePriceCurveEClass, StepwisePriceCurve.class, "StepwisePriceCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getStepwisePriceCurve_Prices(), this.getStepwisePrice(), null, "prices", null, 0, -1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStepwisePriceCurve_DefaultValue(), ecorePackage.getEInt(), "defaultValue", null, 0, 1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(forwardPriceEClass, ForwardPrice.class, "ForwardPrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getForwardPrice_Date(), ecorePackage.getEDate(), "date", null, 0, 1, ForwardPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getForwardPrice_Price(), ecorePackage.getEInt(), "price", null, 0, 1, ForwardPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(stepwisePriceEClass, StepwisePrice.class, "StepwisePrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStepwisePrice_Date(), ecorePackage.getEDate(), "date", null, 1, 1, StepwisePrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStepwisePrice_PriceFromDate(), ecorePackage.getEInt(), "priceFromDate", null, 1, 1, StepwisePrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //MarketPackageImpl

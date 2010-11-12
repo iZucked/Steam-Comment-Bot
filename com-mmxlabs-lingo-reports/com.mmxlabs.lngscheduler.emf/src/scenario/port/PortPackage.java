@@ -107,13 +107,13 @@ public interface PortPackage extends EPackage {
 	int PORT__NAME = 0;
 
 	/**
-	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * The feature id for the '<em><b>Default Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__MARKET = 1;
+	int PORT__DEFAULT_MARKET = 1;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -373,15 +373,15 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_Name();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.port.Port#getMarket <em>Market</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.port.Port#getDefaultMarket <em>Default Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Market</em>'.
-	 * @see scenario.port.Port#getMarket()
+	 * @return the meta object for the reference '<em>Default Market</em>'.
+	 * @see scenario.port.Port#getDefaultMarket()
 	 * @see #getPort()
 	 * @generated
 	 */
-	EReference getPort_Market();
+	EReference getPort_DefaultMarket();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
@@ -624,12 +624,12 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__NAME = eINSTANCE.getPort_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Default Market</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PORT__MARKET = eINSTANCE.getPort_Market();
+		EReference PORT__DEFAULT_MARKET = eINSTANCE.getPort_DefaultMarket();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.

@@ -67,7 +67,64 @@ public interface MarketPackage extends EPackage {
 	 * @see scenario.market.impl.MarketPackageImpl#getMarketModel()
 	 * @generated
 	 */
-	int MARKET_MODEL = 0;
+	int MARKET_MODEL = 1;
+
+	/**
+	 * The meta object id for the '{@link scenario.market.impl.StepwisePriceCurveImpl <em>Stepwise Price Curve</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.market.impl.StepwisePriceCurveImpl
+	 * @see scenario.market.impl.MarketPackageImpl#getStepwisePriceCurve()
+	 * @generated
+	 */
+	int STEPWISE_PRICE_CURVE = 2;
+
+	/**
+	 * The meta object id for the '{@link scenario.market.impl.StepwisePriceImpl <em>Stepwise Price</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.market.impl.StepwisePriceImpl
+	 * @see scenario.market.impl.MarketPackageImpl#getStepwisePrice()
+	 * @generated
+	 */
+	int STEPWISE_PRICE = 3;
+
+	/**
+	 * The meta object id for the '{@link scenario.market.impl.MarketImpl <em>Market</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.market.impl.MarketImpl
+	 * @see scenario.market.impl.MarketPackageImpl#getMarket()
+	 * @generated
+	 */
+	int MARKET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Price Curve</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET__PRICE_CURVE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Market</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_FEATURE_COUNT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Markets</b></em>' containment reference list.
@@ -88,51 +145,31 @@ public interface MarketPackage extends EPackage {
 	int MARKET_MODEL_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link scenario.market.impl.MarketImpl <em>Market</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see scenario.market.impl.MarketImpl
-	 * @see scenario.market.impl.MarketPackageImpl#getMarket()
-	 * @generated
-	 */
-	int MARKET = 1;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * The feature id for the '<em><b>Prices</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET__NAME = 0;
+	int STEPWISE_PRICE_CURVE__PRICES = 0;
 
 	/**
-	 * The feature id for the '<em><b>Forward Price Curve</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Default Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET__FORWARD_PRICE_CURVE = 1;
+	int STEPWISE_PRICE_CURVE__DEFAULT_VALUE = 1;
 
 	/**
-	 * The number of structural features of the '<em>Market</em>' class.
+	 * The number of structural features of the '<em>Stepwise Price Curve</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the '{@link scenario.market.impl.ForwardPriceImpl <em>Forward Price</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see scenario.market.impl.ForwardPriceImpl
-	 * @see scenario.market.impl.MarketPackageImpl#getForwardPrice()
-	 * @generated
-	 */
-	int FORWARD_PRICE = 2;
+	int STEPWISE_PRICE_CURVE_FEATURE_COUNT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -141,26 +178,25 @@ public interface MarketPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FORWARD_PRICE__DATE = 0;
+	int STEPWISE_PRICE__DATE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Price</b></em>' attribute.
+	 * The feature id for the '<em><b>Price From Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FORWARD_PRICE__PRICE = 1;
+	int STEPWISE_PRICE__PRICE_FROM_DATE = 1;
 
 	/**
-	 * The number of structural features of the '<em>Forward Price</em>' class.
+	 * The number of structural features of the '<em>Stepwise Price</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FORWARD_PRICE_FEATURE_COUNT = 2;
-
+	int STEPWISE_PRICE_FEATURE_COUNT = 2;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.market.MarketModel <em>Model</em>}'.
@@ -184,6 +220,70 @@ public interface MarketPackage extends EPackage {
 	EReference getMarketModel_Markets();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.market.StepwisePriceCurve <em>Stepwise Price Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Stepwise Price Curve</em>'.
+	 * @see scenario.market.StepwisePriceCurve
+	 * @generated
+	 */
+	EClass getStepwisePriceCurve();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.market.StepwisePriceCurve#getPrices <em>Prices</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Prices</em>'.
+	 * @see scenario.market.StepwisePriceCurve#getPrices()
+	 * @see #getStepwisePriceCurve()
+	 * @generated
+	 */
+	EReference getStepwisePriceCurve_Prices();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.market.StepwisePriceCurve#getDefaultValue <em>Default Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Value</em>'.
+	 * @see scenario.market.StepwisePriceCurve#getDefaultValue()
+	 * @see #getStepwisePriceCurve()
+	 * @generated
+	 */
+	EAttribute getStepwisePriceCurve_DefaultValue();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.market.StepwisePrice <em>Stepwise Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Stepwise Price</em>'.
+	 * @see scenario.market.StepwisePrice
+	 * @generated
+	 */
+	EClass getStepwisePrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.market.StepwisePrice#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see scenario.market.StepwisePrice#getDate()
+	 * @see #getStepwisePrice()
+	 * @generated
+	 */
+	EAttribute getStepwisePrice_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.market.StepwisePrice#getPriceFromDate <em>Price From Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price From Date</em>'.
+	 * @see scenario.market.StepwisePrice#getPriceFromDate()
+	 * @see #getStepwisePrice()
+	 * @generated
+	 */
+	EAttribute getStepwisePrice_PriceFromDate();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.market.Market <em>Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -205,47 +305,15 @@ public interface MarketPackage extends EPackage {
 	EAttribute getMarket_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.market.Market#getForwardPriceCurve <em>Forward Price Curve</em>}'.
+	 * Returns the meta object for the containment reference '{@link scenario.market.Market#getPriceCurve <em>Price Curve</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Forward Price Curve</em>'.
-	 * @see scenario.market.Market#getForwardPriceCurve()
+	 * @return the meta object for the containment reference '<em>Price Curve</em>'.
+	 * @see scenario.market.Market#getPriceCurve()
 	 * @see #getMarket()
 	 * @generated
 	 */
-	EReference getMarket_ForwardPriceCurve();
-
-	/**
-	 * Returns the meta object for class '{@link scenario.market.ForwardPrice <em>Forward Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Forward Price</em>'.
-	 * @see scenario.market.ForwardPrice
-	 * @generated
-	 */
-	EClass getForwardPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.market.ForwardPrice#getDate <em>Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Date</em>'.
-	 * @see scenario.market.ForwardPrice#getDate()
-	 * @see #getForwardPrice()
-	 * @generated
-	 */
-	EAttribute getForwardPrice_Date();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.market.ForwardPrice#getPrice <em>Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price</em>'.
-	 * @see scenario.market.ForwardPrice#getPrice()
-	 * @see #getForwardPrice()
-	 * @generated
-	 */
-	EAttribute getForwardPrice_Price();
+	EReference getMarket_PriceCurve();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -288,6 +356,58 @@ public interface MarketPackage extends EPackage {
 		EReference MARKET_MODEL__MARKETS = eINSTANCE.getMarketModel_Markets();
 
 		/**
+		 * The meta object literal for the '{@link scenario.market.impl.StepwisePriceCurveImpl <em>Stepwise Price Curve</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.market.impl.StepwisePriceCurveImpl
+		 * @see scenario.market.impl.MarketPackageImpl#getStepwisePriceCurve()
+		 * @generated
+		 */
+		EClass STEPWISE_PRICE_CURVE = eINSTANCE.getStepwisePriceCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Prices</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference STEPWISE_PRICE_CURVE__PRICES = eINSTANCE.getStepwisePriceCurve_Prices();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STEPWISE_PRICE_CURVE__DEFAULT_VALUE = eINSTANCE.getStepwisePriceCurve_DefaultValue();
+
+		/**
+		 * The meta object literal for the '{@link scenario.market.impl.StepwisePriceImpl <em>Stepwise Price</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.market.impl.StepwisePriceImpl
+		 * @see scenario.market.impl.MarketPackageImpl#getStepwisePrice()
+		 * @generated
+		 */
+		EClass STEPWISE_PRICE = eINSTANCE.getStepwisePrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STEPWISE_PRICE__DATE = eINSTANCE.getStepwisePrice_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Price From Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STEPWISE_PRICE__PRICE_FROM_DATE = eINSTANCE.getStepwisePrice_PriceFromDate();
+
+		/**
 		 * The meta object literal for the '{@link scenario.market.impl.MarketImpl <em>Market</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -306,38 +426,12 @@ public interface MarketPackage extends EPackage {
 		EAttribute MARKET__NAME = eINSTANCE.getMarket_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Forward Price Curve</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Price Curve</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKET__FORWARD_PRICE_CURVE = eINSTANCE.getMarket_ForwardPriceCurve();
-
-		/**
-		 * The meta object literal for the '{@link scenario.market.impl.ForwardPriceImpl <em>Forward Price</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see scenario.market.impl.ForwardPriceImpl
-		 * @see scenario.market.impl.MarketPackageImpl#getForwardPrice()
-		 * @generated
-		 */
-		EClass FORWARD_PRICE = eINSTANCE.getForwardPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FORWARD_PRICE__DATE = eINSTANCE.getForwardPrice_Date();
-
-		/**
-		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FORWARD_PRICE__PRICE = eINSTANCE.getForwardPrice_Price();
+		EReference MARKET__PRICE_CURVE = eINSTANCE.getMarket_PriceCurve();
 
 	}
 

@@ -24,7 +24,7 @@ import scenario.port.PortPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
- *   <li>{@link scenario.port.impl.PortImpl#getMarket <em>Market</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultMarket <em>Default Market</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,14 +52,14 @@ public class PortImpl extends EObjectImpl implements Port {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getMarket() <em>Market</em>}' reference.
+	 * The cached value of the '{@link #getDefaultMarket() <em>Default Market</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarket()
+	 * @see #getDefaultMarket()
 	 * @generated
 	 * @ordered
 	 */
-	protected Market market;
+	protected Market defaultMarket;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -108,17 +108,16 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Market getMarket() {
-		if (market != null && market.eIsProxy()) {
-			InternalEObject oldMarket = (InternalEObject)market;
-			market = (Market)eResolveProxy(oldMarket);
-			if (market != oldMarket) {
+	public Market getDefaultMarket() {
+		if (defaultMarket != null && defaultMarket.eIsProxy()) {
+			InternalEObject oldDefaultMarket = (InternalEObject)defaultMarket;
+			defaultMarket = (Market)eResolveProxy(oldDefaultMarket);
+			if (defaultMarket != oldDefaultMarket) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.PORT__MARKET, oldMarket, market));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.PORT__DEFAULT_MARKET, oldDefaultMarket, defaultMarket));
 			}
 		}
-		return market;
+		return defaultMarket;
 	}
 
 	/**
@@ -126,8 +125,8 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Market basicGetMarket() {
-		return market;
+	public Market basicGetDefaultMarket() {
+		return defaultMarket;
 	}
 
 	/**
@@ -135,12 +134,11 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setMarket(Market newMarket) {
-		Market oldMarket = market;
-		market = newMarket;
+	public void setDefaultMarket(Market newDefaultMarket) {
+		Market oldDefaultMarket = defaultMarket;
+		defaultMarket = newDefaultMarket;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__MARKET, oldMarket, market));
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_MARKET, oldDefaultMarket, defaultMarket));
 	}
 
 	/**
@@ -153,9 +151,9 @@ public class PortImpl extends EObjectImpl implements Port {
 		switch (featureID) {
 			case PortPackage.PORT__NAME:
 				return getName();
-			case PortPackage.PORT__MARKET:
-				if (resolve) return getMarket();
-				return basicGetMarket();
+			case PortPackage.PORT__DEFAULT_MARKET:
+				if (resolve) return getDefaultMarket();
+				return basicGetDefaultMarket();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -171,8 +169,8 @@ public class PortImpl extends EObjectImpl implements Port {
 			case PortPackage.PORT__NAME:
 				setName((String)newValue);
 				return;
-			case PortPackage.PORT__MARKET:
-				setMarket((Market)newValue);
+			case PortPackage.PORT__DEFAULT_MARKET:
+				setDefaultMarket((Market)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -189,8 +187,8 @@ public class PortImpl extends EObjectImpl implements Port {
 			case PortPackage.PORT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case PortPackage.PORT__MARKET:
-				setMarket((Market)null);
+			case PortPackage.PORT__DEFAULT_MARKET:
+				setDefaultMarket((Market)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -206,8 +204,8 @@ public class PortImpl extends EObjectImpl implements Port {
 		switch (featureID) {
 			case PortPackage.PORT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case PortPackage.PORT__MARKET:
-				return market != null;
+			case PortPackage.PORT__DEFAULT_MARKET:
+				return defaultMarket != null;
 		}
 		return super.eIsSet(featureID);
 	}

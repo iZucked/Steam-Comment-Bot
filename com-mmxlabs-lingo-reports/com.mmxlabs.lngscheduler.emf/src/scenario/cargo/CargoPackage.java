@@ -172,22 +172,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__MAX_QUANTITY = 2;
 
 	/**
-	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__UNIT_PRICE = 3;
-
-	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT = 4;
+	int SLOT__PORT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
@@ -196,7 +187,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START = 5;
+	int SLOT__WINDOW_START = 4;
 
 	/**
 	 * The feature id for the '<em><b>Window Duration</b></em>' attribute.
@@ -205,7 +196,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_DURATION = 6;
+	int SLOT__WINDOW_DURATION = 5;
 
 	/**
 	 * The feature id for the '<em><b>Slot Duration</b></em>' attribute.
@@ -214,7 +205,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__SLOT_DURATION = 7;
+	int SLOT__SLOT_DURATION = 6;
+
+	/**
+	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__MARKET = 7;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -263,15 +263,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__MAX_QUANTITY = SLOT__MAX_QUANTITY;
 
 	/**
-	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__UNIT_PRICE = SLOT__UNIT_PRICE;
-
-	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -306,6 +297,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__SLOT_DURATION = SLOT__SLOT_DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__MARKET = SLOT__MARKET;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CVvalue</b></em>' attribute.
@@ -433,17 +433,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_MaxQuantity();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getUnitPrice <em>Unit Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Unit Price</em>'.
-	 * @see scenario.cargo.Slot#getUnitPrice()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_UnitPrice();
-
-	/**
 	 * Returns the meta object for the reference '{@link scenario.cargo.Slot#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -486,6 +475,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlot_SlotDuration();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.cargo.Slot#getMarket <em>Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Market</em>'.
+	 * @see scenario.cargo.Slot#getMarket()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_Market();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -617,14 +617,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__MAX_QUANTITY = eINSTANCE.getSlot_MaxQuantity();
 
 		/**
-		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__UNIT_PRICE = eINSTANCE.getSlot_UnitPrice();
-
-		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -655,6 +647,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__SLOT_DURATION = eINSTANCE.getSlot_SlotDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__MARKET = eINSTANCE.getSlot_Market();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
