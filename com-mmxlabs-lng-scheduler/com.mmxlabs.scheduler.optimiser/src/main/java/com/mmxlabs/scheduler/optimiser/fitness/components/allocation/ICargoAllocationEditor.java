@@ -15,5 +15,5 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  *
  */
 public interface ICargoAllocationEditor<T> extends ICargoAllocationProvider<T> {
-	public void addCargoAllocationLimit(final Set<IPortSlot> slots, final int maximumQuantity);
+	public void addCargoAllocationLimit(final Set<IPortSlot> slots, final long maximumQuantity);
 }

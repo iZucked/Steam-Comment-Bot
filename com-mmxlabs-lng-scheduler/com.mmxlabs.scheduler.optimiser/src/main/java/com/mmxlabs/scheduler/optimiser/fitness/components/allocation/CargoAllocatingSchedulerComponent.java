@@ -14,10 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.AbstractSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.SimplexCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -131,8 +128,9 @@ public class CargoAllocatingSchedulerComponent<T> extends
 	 */
 	@Override
 	public long endEvaluationAndGetCost() {
-		// TODO Auto-generated method stub
-		return 0;
+		allocator.solve();
+		
+		return -allocator.getProfit(); //cost is just the p&l.
 	}
 
 }

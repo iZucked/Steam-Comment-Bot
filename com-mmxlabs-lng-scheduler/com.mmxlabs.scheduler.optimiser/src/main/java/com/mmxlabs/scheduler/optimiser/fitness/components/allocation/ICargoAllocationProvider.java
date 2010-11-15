@@ -11,10 +11,10 @@ import java.util.Set;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.SimplexCargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.BaseCargoAllocator;
 
 /**
- * DCP which tells the {@link SimplexCargoAllocator} what the allocation limits are.
+ * DCP which tells the {@link BaseCargoAllocator} what the allocation limits are.
  * 
  * @author hinton
  * 
@@ -28,5 +28,5 @@ public interface ICargoAllocationProvider<T> extends IDataComponentProvider {
 	 * 
 	 * @return
 	 */
-	public Iterable<Pair<Integer, Set<IPortSlot>>> getCargoAllocationLimits();
+	public Iterable<Pair<Long, Set<IPortSlot>>> getCargoAllocationLimits();
 }

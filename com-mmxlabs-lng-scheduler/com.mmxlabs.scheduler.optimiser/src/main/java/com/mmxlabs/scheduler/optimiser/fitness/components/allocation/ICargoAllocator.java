@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
@@ -50,4 +51,6 @@ public interface ICargoAllocator<T> {
 
 	public abstract void solve();
 
+	public abstract long getProfit();
+	public abstract long getAllocation(IPortSlot slot);
 }
