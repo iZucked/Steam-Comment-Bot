@@ -65,7 +65,7 @@ public interface Port extends EObject {
 	 * @return the value of the '<em>Default Market</em>' reference.
 	 * @see #setDefaultMarket(Market)
 	 * @see scenario.port.PortPackage#getPort_DefaultMarket()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
 	Market getDefaultMarket();

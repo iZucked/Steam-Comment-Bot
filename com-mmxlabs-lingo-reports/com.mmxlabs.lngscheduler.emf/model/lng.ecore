@@ -131,8 +131,7 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Port">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultMarket" lowerBound="1"
-          eType="#//market/Market"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultMarket" eType="#//market/Market"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DistanceModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="distances" upperBound="-1"
