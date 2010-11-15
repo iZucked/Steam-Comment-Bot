@@ -7,9 +7,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.math.optimization.GoalType;
@@ -22,115 +19,34 @@ import org.apache.commons.math.optimization.linear.Relationship;
 import org.apache.commons.math.optimization.linear.SimplexSolver;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocationProvider;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
- * A utility class for allocating the limited total load/discharge capacity to
- * different cargoes. Uses the simplex solver from Apache Commons Math.
- * 
- * It may be possible to solve this in a specialised way, rather than as a plain
- * LP - given only non-intersecting constraints on the discharge side, for
- * example, a greedy algorithm would probably work (sort by unit price and
- * allocate to the most valuable cargo first, and so on). However, allowing
- * total load constraints, especially with the possibility of disconnected load
- * and discharge sides, means that the constraints are not orthogonal and the
- * solution becomes less obvious.
+ * A cargo allocator which uses the simplex algorithm.
  * 
  * @author hinton
  * 
  */
-public final class SimplexCargoAllocator<T> implements ICargoAllocator<T> {
-	/**
-	 * The linear optimiser
-	 */
+public class SimplexCargoAllocator<T> extends BaseCargoAllocator<T> {
 	final LinearOptimizer optimizer = new SimplexSolver();
-	final double[] unitPrices = new double[] {};
-
-	// TODO index these types
-	final Map<IPortSlot, Integer> variableTable = new HashMap<IPortSlot, Integer>();
-
-	@SuppressWarnings("unchecked")
-	final Pair<ILoadSlot, IDischargeSlot> cargoes[] = new Pair[] {};
-
-	int cargoIndex = 0;
-
-	ICargoAllocationProvider<T> cargoAllocationProvider;
-	private long[] forcedLoadVolume;
-	private long[] vesselCapacity;
-
-	public SimplexCargoAllocator() {
-		super();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#init()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator
+	 * #solve()
 	 */
 	@Override
-	public void init() {
+	protected long[] allocateSpareVolume() {
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.
+		 * ICargoAllocator#solve()
+		 */
 
-		if (cargoAllocationProvider == null) {
-			throw new RuntimeException("Cargo allocation provider must be set");
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#reset()
-	 */
-	@Override
-	public void reset() {
-		cargoIndex = 0;
-		Arrays.fill(unitPrices, 0);
-		variableTable.clear();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#addCargo(com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails, com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails, int, int, long, long)
-	 */
-	@Override
-	public void addCargo(final PortDetails loadDetails,
-			final PortDetails dischargeDetails, final int loadTime,
-			final int dischargeTime, final long requiredLoadVolume,
-			final long vesselCapacity) {
-
-		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
-		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails
-				.getPortSlot();
-
-		cargoes[cargoIndex].setBoth(loadSlot, dischargeSlot);
-
-		// store the current cargo index (variable index in the LP) so that we
-		// can reverse-lookup from slots to LP variables
-		final Integer ci = cargoIndex;
-		variableTable.put(loadSlot, ci);
-		variableTable.put(dischargeSlot, ci);
-
-		// We have to load this much LNG no matter what
-		forcedLoadVolume[cargoIndex] = requiredLoadVolume;
-
-		this.vesselCapacity[cargoIndex] = vesselCapacity;
-
-		final int cargoCVValue = loadSlot.getCargoCVValue();
-		final int dischargeM3Price = (int) Calculator.multiply(dischargeSlot.getSalesPriceAtTime(dischargeTime),
-				cargoCVValue);
-		final int loadM3Price = (int) Calculator
-				.multiply(loadSlot.getPurchasePriceAtTime(loadTime), cargoCVValue);
-		
-		unitPrices[cargoIndex] = dischargeM3Price - loadM3Price;
-		
-		cargoIndex++;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#solve()
-	 */
-	@Override
-	public void solve() {
 		final ArrayList<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
 		final int variableCount = cargoIndex;
 
@@ -175,10 +91,10 @@ public final class SimplexCargoAllocator<T> implements ICargoAllocator<T> {
 
 		// TODO think about how gas-year constraints work; really these should
 		// be handled by the next level up, which can just call the allocator
-		// for each gas year independently. 
+		// for each gas year independently.
 
 		// set multi-cargo constraints (the real point of this optimiser).
-		for (final Pair<Integer, Set<IPortSlot>> yearlyLimit : cargoAllocationProvider
+		for (final Pair<Long, Set<IPortSlot>> yearlyLimit : cargoAllocationProvider
 				.getCargoAllocationLimits()) {
 			final double[] selector = new double[variableCount];
 
@@ -214,26 +130,20 @@ public final class SimplexCargoAllocator<T> implements ICargoAllocator<T> {
 		try {
 			final RealPointValuePair solution = optimizer.optimize(objective,
 					constraints, GoalType.MAXIMIZE, false);
-			@SuppressWarnings("unused")
 			double[] point = solution.getPointRef();// this is the
 													// load/discharge allocation
 													// for each cargo
-			// allocations are stored in this solution. Get them out for display
+			
+			final long[] result = new long[point.length];
+			for (int i = 0; i<point.length; i++) {
+				result[i] = (long) point[i];
+			}
+			return result;
 		} catch (OptimizationException e) {
 			// presumably we set some impossible constraints. shouldn't happen!
 			e.printStackTrace();
+			return null;
 		}
 	}
 
-	/**
-	 * Get the variable associated with this slot (load or discharge) in the
-	 * current run.
-	 * 
-	 * @param slot
-	 * @return
-	 */
-	private final int variableForSlot(final IPortSlot slot) {
-		final Integer i = variableTable.get(slot);
-		return i == null ? -1 : i.intValue();
-	}
 }

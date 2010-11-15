@@ -29,10 +29,10 @@ public class ArrayListCargoAllocationEditor<T> implements
 	}
 
 	private final String name;
-	private ArrayList<Pair<Integer, Set<IPortSlot>>> limits = new ArrayList<Pair<Integer, Set<IPortSlot>>>();
+	private ArrayList<Pair<Long, Set<IPortSlot>>> limits = new ArrayList<Pair<Long, Set<IPortSlot>>>();
 
 	@Override
-	public Iterable<Pair<Integer, Set<IPortSlot>>> getCargoAllocationLimits() {
+	public Iterable<Pair<Long, Set<IPortSlot>>> getCargoAllocationLimits() {
 		return limits;
 	}
 
@@ -48,7 +48,7 @@ public class ArrayListCargoAllocationEditor<T> implements
 
 	@Override
 	public void addCargoAllocationLimit(final Set<IPortSlot> slots,
-			final int maximumVolumeM3) {
-		limits.add(new Pair<Integer, Set<IPortSlot>>(maximumVolumeM3, slots));
+			final long maximumVolumeM3) {
+		limits.add(new Pair<Long, Set<IPortSlot>>(maximumVolumeM3, slots));
 	}
 }
