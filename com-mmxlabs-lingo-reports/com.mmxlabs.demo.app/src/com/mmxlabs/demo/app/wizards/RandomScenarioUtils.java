@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import javax.management.timer.Timer;
 
@@ -24,7 +22,6 @@ import scenario.ScenarioFactory;
 import scenario.ScenarioPackage;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoFactory;
-import scenario.cargo.CargoModel;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
@@ -37,6 +34,11 @@ import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
+import scenario.market.Market;
+import scenario.market.MarketFactory;
+import scenario.market.MarketPackage;
+import scenario.market.StepwisePrice;
+import scenario.market.StepwisePriceCurve;
 import scenario.optimiser.Constraint;
 import scenario.optimiser.Objective;
 import scenario.optimiser.Optimisation;
@@ -78,6 +80,8 @@ public class RandomScenarioUtils {
 			.getPortFactory();
 	private final CargoFactory cargoFactory = CargoPackage.eINSTANCE
 			.getCargoFactory();
+	private final MarketFactory marketFactory = MarketPackage.eINSTANCE
+			.getMarketFactory();
 
 	private final Random random;
 
@@ -225,6 +229,52 @@ public class RandomScenarioUtils {
 			final int count, int minWindow, int maxWindow, int minVisit,
 			int maxVisit, int minSlack, int maxSlack, double locality,
 			int scenarioDuration) throws NumberFormatException, IOException {
+		//set up markets
+		final Market loadMarket = marketFactory.createMarket();
+		final Market dischargeMarket = marketFactory.createMarket();
+		
+		final StepwisePriceCurve loadCurve = marketFactory.createStepwisePriceCurve();
+		final StepwisePriceCurve dischargeCurve = marketFactory.createStepwisePriceCurve();
+		
+		loadMarket.setPriceCurve(loadCurve);
+		dischargeMarket.setPriceCurve(dischargeCurve);
+		
+		loadMarket.setName("LNG Sales Market");
+		dischargeMarket.setName("LNG Purchase Market");
+		
+		//random walk time
+		//every 30d, price changes a bit. load price tracks discharge price though.
+		int dischargePrice = 5000;
+		final long now = new Date().getTime();
+		dischargeCurve.setDefaultValue(dischargePrice);
+		loadCurve.setDefaultValue(dischargePrice - 200);
+		
+		for (int i = 0; i<scenarioDuration; i+=30) {
+			final Date forwardDate = new Date(now + i * Timer.ONE_DAY); 
+			final StepwisePrice price = marketFactory.createStepwisePrice();
+			
+			dischargePrice += (random.nextInt(80)-40);
+			
+			dischargePrice = Math.max(dischargePrice, 3000);//arbitrarly prevent it getting cheap.
+			
+			price.setDate(forwardDate);
+			price.setPriceFromDate(dischargePrice);
+			
+			dischargeCurve.getPrices().add(price);
+			
+			final StepwisePrice loadPrice = marketFactory.createStepwisePrice();
+			loadPrice.setDate(forwardDate);
+			loadPrice.setPriceFromDate(dischargePrice - 200);
+			loadCurve.getPrices().add(loadPrice);
+		}
+		
+		scenario.setMarketModel(marketFactory.createMarketModel());
+		scenario.getMarketModel().getMarkets().add(loadMarket);
+		scenario.getMarketModel().getMarkets().add(dischargeMarket);
+		
+//		dischargeSlot.setUnitPrice(3.70f + random.nextInt(10));
+//		loadSlot.setUnitPrice(dischargeSlot.getUnitPrice() - 0.2f);
+		
 		// load slots file
 
 		BufferedReader br = new BufferedReader(new FileReader(new File(
@@ -283,7 +333,7 @@ public class RandomScenarioUtils {
 				totalp += p;
 			}
 		}
-		final long now = new Date().getTime();
+		
 		Collections.shuffle(wheel, random);
 		for (int i = 0; i < count; i++) {
 			double pin = random.nextDouble() * totalp;
@@ -293,7 +343,8 @@ public class RandomScenarioUtils {
 					addCargo(scenario, now, choice.getFirst().getFirst(),
 							choice.getFirst().getSecond(), minWindow,
 							maxWindow, minVisit, maxVisit, minSlack, maxSlack,
-							scenarioDuration);
+							scenarioDuration,
+							loadMarket, dischargeMarket);
 					break;
 				}
 				pin -= choice.getSecond();
@@ -328,11 +379,13 @@ public class RandomScenarioUtils {
 	 *            the maximum number of days of slack in the journey
 	 * @param scenarioDuration
 	 *            the number of days the scenario runs for.
+	 * @param dischargeMarket 
+	 * @param loadMarket 
 	 */
 	private void addCargo(final Scenario scenario, final long now,
 			final String loadPortName, String dischargePortName, int minWindow,
 			int maxWindow, int minVisit, int maxVisit, int minSlack,
-			int maxSlack, int scenarioDuration) {
+			int maxSlack, int scenarioDuration, Market loadMarket, Market dischargeMarket) {
 
 		final int index = scenario.getCargoModel().getCargoes().size();
 
@@ -365,11 +418,13 @@ public class RandomScenarioUtils {
 		dischargeSlot.setPort(dischargePort);
 
 		// How quickly can the fastest vessel arrive (days)
-		final int minTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance(
-				Calculator.scale(20), line.getDistance()) / 24.0);
-		//How slowly can the slowest vessel arrive (days)
-		final int maxTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance(
-				Calculator.scale(12), line.getDistance()) / 24.0);
+		final int minTravelTime = (int) Math.ceil(Calculator
+				.getTimeFromSpeedDistance(Calculator.scale(20),
+						line.getDistance()) / 24.0);
+		// How slowly can the slowest vessel arrive (days)
+		final int maxTravelTime = (int) Math.ceil(Calculator
+				.getTimeFromSpeedDistance(Calculator.scale(12),
+						line.getDistance()) / 24.0);
 
 		// Pick load start time window day
 		final int startDay = random.nextInt(scenarioDuration);
@@ -381,7 +436,7 @@ public class RandomScenarioUtils {
 
 		final int endDay = startDay
 				+ minTravelTime
-				+ (int)Math.ceil(loadVisitDuration/24.0)
+				+ (int) Math.ceil(loadVisitDuration / 24.0)
 				+ minSlack
 				+ random.nextInt(maxTravelTime - minTravelTime + maxSlack
 						- minSlack + 1);
@@ -400,9 +455,9 @@ public class RandomScenarioUtils {
 		loadSlot.setWindowStart(new Date(now + Timer.ONE_DAY * startDay));
 		dischargeSlot.setWindowStart(new Date(now + Timer.ONE_DAY * endDay));
 
-		dischargeSlot.setUnitPrice(3.70f + random.nextInt(10));
-		loadSlot.setUnitPrice(dischargeSlot.getUnitPrice() - 0.2f);
-
+		dischargeSlot.setMarket(dischargeMarket);
+		loadSlot.setMarket(loadMarket);
+		
 		loadSlot.setMinQuantity(0);
 		loadSlot.setMaxQuantity(200000);
 		loadSlot.setCargoCVvalue(22.8f);
