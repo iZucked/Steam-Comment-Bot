@@ -23,8 +23,9 @@ public class RouteCostFitnessComponent<T> extends
 	private final String vesselProviderKey;
 
 	public RouteCostFitnessComponent(
+			final String name, 
 			final String routePriceProviderKey, final String vesselProviderKey,
-			final String name, final CargoSchedulerFitnessCore<T> core) {
+			final CargoSchedulerFitnessCore<T> core) {
 		super(name, core);
 		this.routePriceProviderKey = routePriceProviderKey;
 		this.vesselProviderKey = vesselProviderKey;
