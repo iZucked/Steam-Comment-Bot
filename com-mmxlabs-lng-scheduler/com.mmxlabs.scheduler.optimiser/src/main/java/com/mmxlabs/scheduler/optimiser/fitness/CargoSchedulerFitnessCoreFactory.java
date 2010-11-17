@@ -35,6 +35,8 @@ public final class CargoSchedulerFitnessCoreFactory implements
 
 	public static final String ROUTE_PRICE_COMPONENT_NAME = "cargo-scheduler-route-price";
 
+	public static final String CARGO_ALLOCATION_COMPONENT_NAME = "cargo-scheduler-volume-allocation";
+
 	/* default scheduler factory creates default GA scheduler */
 	//TODO: Make static class
 	private ISchedulerFactory schedulerFactory =
@@ -51,7 +53,7 @@ public final class CargoSchedulerFitnessCoreFactory implements
 	public Collection<String> getFitnessComponentNames() {
 		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME,
 				LATENESS_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME,
-				CHARTER_COST_COMPONENT_NAME, ROUTE_PRICE_COMPONENT_NAME);
+				CHARTER_COST_COMPONENT_NAME, ROUTE_PRICE_COMPONENT_NAME, CARGO_ALLOCATION_COMPONENT_NAME);
 	}
 
 	@Override

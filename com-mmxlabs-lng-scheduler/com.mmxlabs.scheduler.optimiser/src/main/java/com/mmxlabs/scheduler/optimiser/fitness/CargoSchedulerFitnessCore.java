@@ -21,6 +21,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CargoAllocatingComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CargoAllocatingSchedulerComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
@@ -74,10 +76,17 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				this));
 
 		components.add(new RouteCostFitnessComponent<T>(
+				CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
 				SchedulerConstants.DCP_routePriceProvider,
 				SchedulerConstants.DCP_vesselProvider,
-				CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
 				this));
+		
+		components.add(
+				new CargoAllocatingSchedulerComponent<T>(
+						CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME,
+						SchedulerConstants.DCP_vesselProvider,
+						SchedulerConstants.DCP_totalVolumeLimitProvider,
+						this));
 	}
 
 	@Override
