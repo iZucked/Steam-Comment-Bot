@@ -68,48 +68,69 @@ public interface ISchedulerBuilder {
 	 * price specified (defaults to zero otherwise);
 	 * 
 	 * @param name
-	 * @param minSpeed Minimum vessel speed in scaled knots
-	 * @param maxSpeed Maximum vessel speed in scaled knots
-	 * @param capacity Maximum loadable cargo quantity in scaled M3 
-	 * @param minHeel  Minimum heel to retain (when appropriate) in scaled M3
-	 * @param baseFuelUnitPrice Price of base fuel in scaled $/MT
-	 * @param baseFuelEquivalenceInM3TOMT Scaled Conversion factor to convert M3 LNG to equivalent MT base fuel
-	 * @param hourlyCharterPrice $/Hour rate to charter-in vessels of this class   
+	 * @param minSpeed
+	 *            Minimum vessel speed in scaled knots
+	 * @param maxSpeed
+	 *            Maximum vessel speed in scaled knots
+	 * @param capacity
+	 *            Maximum loadable cargo quantity in scaled M3
+	 * @param minHeel
+	 *            Minimum heel to retain (when appropriate) in scaled M3
+	 * @param baseFuelUnitPrice
+	 *            Price of base fuel in scaled $/MT
+	 * @param baseFuelEquivalenceInM3TOMT
+	 *            Scaled Conversion factor to convert M3 LNG to equivalent MT
+	 *            base fuel
+	 * @param hourlyCharterPrice
+	 *            $/Hour rate to charter-in vessels of this class
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
-			long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int hourlyCharterPrice);
-	
+			long capacity, int minHeel, int baseFuelUnitPrice,
+			int baseFuelEquivalenceInM3TOMT, int hourlyCharterPrice);
+
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the
 	 * {@link VesselState}.
 	 * 
 	 * @param vesselClass
 	 * @param state
-	 * @param nboRateInM3PerHour Hourly scaled M3 of LNG rate of boil-off when travelling
-	 * @param idleNBORateInM3PerHour Hourly scaled M3 of LNG rate of boil-off when idling
-	 * @param idleConsumptionRateInMTPerHour Hourly scaled MT of base fuel consumption rate when idle
-	 * @param consumptionRateCalculatorInMTPerHour {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed. 
-	 * @param nboSpeed Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling.
+	 * @param nboRateInM3PerHour
+	 *            Hourly scaled M3 of LNG rate of boil-off when travelling
+	 * @param idleNBORateInM3PerHour
+	 *            Hourly scaled M3 of LNG rate of boil-off when idling
+	 * @param idleConsumptionRateInMTPerHour
+	 *            Hourly scaled MT of base fuel consumption rate when idle
+	 * @param consumptionRateCalculatorInMTPerHour
+	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT
+	 *            of base fuel consumption rate when travelling based upon
+	 *            speed.
+	 * @param nboSpeed
+	 *            Scaled speed in knots indicating the speed at which the vessel
+	 *            can travel to use up all NBO when travelling.
 	 */
 	void setVesselClassStateParamaters(IVesselClass vesselClass,
-			VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour,
-			int idleConsumptionRateInMTPerHour,
-			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
+			VesselState state, int nboRateInM3PerHour,
+			int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
+			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour,
+			int nboSpeed);
 
-	
 	/**
 	 * Create a charter out object.
+	 * 
 	 * @param arrivalTimeWindow
 	 * @param port
 	 * @param durationHours
 	 * @return
 	 */
-	ICharterOut createCharterOut(ITimeWindow arrivalTimeWindow, IPort port, int durationHours);
-	
+	ICharterOut createCharterOut(ITimeWindow arrivalTimeWindow, IPort port,
+			int durationHours);
+
 	void addCharterOutVessel(ICharterOut charterOut, IVessel vessel);
-	void addCharterOutVesselClass(ICharterOut charterOut, IVesselClass vesselClass);
-	
+
+	void addCharterOutVesselClass(ICharterOut charterOut,
+			IVesselClass vesselClass);
+
 	/**
 	 * Create a core fleet vessel with the given name and class.
 	 * 
@@ -117,8 +138,10 @@ public interface ISchedulerBuilder {
 	 * @param vesselClass
 	 * @return
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint);
-	
+	IVessel createVessel(String name, IVesselClass vesselClass,
+			IStartEndRequirement startConstraint,
+			IStartEndRequirement endConstraint);
+
 	/**
 	 * Create a fleet vessel with the given name, class and instance type.
 	 * 
@@ -141,25 +164,33 @@ public interface ISchedulerBuilder {
 	IStartEndRequirement createStartEndRequirement();
 
 	/**
-	 * Create a requirement that the vessel start/end at the given port, but at an arbitrary time
+	 * Create a requirement that the vessel start/end at the given port, but at
+	 * an arbitrary time
+	 * 
 	 * @param fixedPort
 	 * @return
 	 */
 	IStartEndRequirement createStartEndRequirement(IPort fixedPort);
+
 	/**
-	 * Create a requirement that the vessel start/end at any port at the given time
+	 * Create a requirement that the vessel start/end at any port at the given
+	 * time
+	 * 
 	 * @param fixedTime
 	 * @return
 	 */
 	IStartEndRequirement createStartEndRequirement(int fixedTime);
+
 	/**
 	 * Create a requirement that the vessel start/end at the given port and time
+	 * 
 	 * @param fixedPort
 	 * @param fixedTime
 	 * @return
 	 */
-	IStartEndRequirement createStartEndRequirement(IPort fixedPort, int fixedTime);
-	
+	IStartEndRequirement createStartEndRequirement(IPort fixedPort,
+			int fixedTime);
+
 	/**
 	 * Create a port with the given name.
 	 * 
@@ -212,6 +243,7 @@ public interface ISchedulerBuilder {
 
 	/**
 	 * Set a toll for sending a given vessel class + state via a given route
+	 * 
 	 * @param route
 	 * @param vesselClass
 	 * @param state
@@ -239,14 +271,19 @@ public interface ISchedulerBuilder {
 	 * @param id
 	 * @param port
 	 * @param window
-	 * @param minVolume Scaled minimum loadable quantity of LNG in M3
-	 * @param maxVolume Scaled maximum loadable quantity of LNG in M3
-	 * @param price Scaled purchase price in $/MMBTu
-	 * @param cargoCVValue Scaled conversion factor to convert from M3 to MMBTU of LNG
+	 * @param minVolume
+	 *            Scaled minimum loadable quantity of LNG in M3
+	 * @param maxVolume
+	 *            Scaled maximum loadable quantity of LNG in M3
+	 * @param price
+	 *            Scaled purchase price in $/MMBTu
+	 * @param cargoCVValue
+	 *            Scaled conversion factor to convert from M3 to MMBTU of LNG
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
-			long minVolume, long maxVolume, ICurve unitPrice, int cargoCVValue, int durationHours);
+			long minVolume, long maxVolume, ICurve unitPrice, int cargoCVValue,
+			int durationHours);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected
@@ -255,13 +292,19 @@ public interface ISchedulerBuilder {
 	 * @param id
 	 * @param port
 	 * @param window
-	 * @param minVolume Scaled minimum dischargable quantity of LNG in M3 (TODO: this may need to be MMBTu, perhaps add a {@link FuelUnit}?)
-	 * @param maxVolume Scaled maximum dischargable quantity of LNG in M3 (TODO: this may need to be MMBTu, perhaps add a {@link FuelUnit}?)
-	 * @param price Scaled sales price in $/MMBTu
+	 * @param minVolume
+	 *            Scaled minimum dischargable quantity of LNG in M3 (TODO: this
+	 *            may need to be MMBTu, perhaps add a {@link FuelUnit}?)
+	 * @param maxVolume
+	 *            Scaled maximum dischargable quantity of LNG in M3 (TODO: this
+	 *            may need to be MMBTu, perhaps add a {@link FuelUnit}?)
+	 * @param price
+	 *            Scaled sales price in $/MMBTu
 	 * @return
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port,
-			ITimeWindow window, long minVolume, long maxVolume, ICurve unitPrice, int durationHours);
+			ITimeWindow window, long minVolume, long maxVolume,
+			ICurve unitPrice, int durationHours);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the
@@ -271,19 +314,27 @@ public interface ISchedulerBuilder {
 	void dispose();
 
 	/**
-	 * Create {@code count} spot charter vessels of the given type. The ith vessel will be named namePrefix-i. 
-	 * The vessels are created by the {@code createVessel()} method.
-	 * @param namePrefix the common prefix for all these vessels' names
-	 * @param vesselClass the class of spot charter to create
-	 * @param count the number of spot charters to create
+	 * Create {@code count} spot charter vessels of the given type. The ith
+	 * vessel will be named namePrefix-i. The vessels are created by the
+	 * {@code createVessel()} method.
+	 * 
+	 * @param namePrefix
+	 *            the common prefix for all these vessels' names
+	 * @param vesselClass
+	 *            the class of spot charter to create
+	 * @param count
+	 *            the number of spot charters to create
 	 * @return
 	 */
 	List<IVessel> createSpotVessels(String namePrefix,
 			IVesselClass vesselClass, int count);
 
 	/**
-	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
-	 * {@code createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, createStartEndRequirement(), createStartEndRequirement())}.
+	 * Create a single spot vessel of the given class, with the given name. This
+	 * is equivalent to
+	 * {@code createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, createStartEndRequirement(), createStartEndRequirement())}
+	 * .
+	 * 
 	 * @param name
 	 * @param vesselClass
 	 * @return
@@ -294,4 +345,15 @@ public interface ISchedulerBuilder {
 			Set<IPort> inaccessiblePorts);
 
 	void setDefaultRouteCost(String route, int defaultPrice);
+
+	/**
+	 * Add a global total volume limit
+	 * @param ports The set of ports for which the limit should apply
+	 * @param loads Whether to apply to load slots
+	 * @param discharges Whether to apply to discharge slots
+	 * @param maximumTotalVolume The maximum total quantity which can be allocated to slots in the time window
+	 * @param timeWindow The time window within which the limit applies.
+	 */
+	void addTotalVolumeConstraint(Set<IPort> ports, boolean loads,
+			boolean discharges, long maximumTotalVolume, ITimeWindow timeWindow);
 }
