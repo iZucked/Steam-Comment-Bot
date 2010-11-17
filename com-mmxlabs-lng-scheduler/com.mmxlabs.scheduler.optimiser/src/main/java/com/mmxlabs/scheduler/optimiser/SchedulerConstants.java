@@ -27,6 +27,7 @@ public final class SchedulerConstants {
 	public static final String DCP_portExclusionProvider = "provider-port-exclusions";
 	public static final String DCP_returnElementProvider = "provider-return-elements";
 	public static final String DCP_routePriceProvider = "provider-route-prices";
+	public static final String DCP_totalVolumeLimitProvider = "provider-total-volume";
 	
 	// Additional Info keys
 	public static final String AI_idleInfo = "info-idle";
