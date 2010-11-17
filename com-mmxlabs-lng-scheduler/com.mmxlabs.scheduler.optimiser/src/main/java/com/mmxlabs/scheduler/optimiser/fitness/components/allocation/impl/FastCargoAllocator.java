@@ -11,24 +11,29 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
- * A faster than LP cargo allocator. Does a bit of finagling to make it all work,
- * which isn't hugely pretty. Each cargo is assigned an index by the base class;
- * this class maps ports slots to a single load/discharge sum constraint (i.e.
- * presumes that there cannot be two contractual limits applying to a single slot)
- * using the cargoConstraints array.
+ * A faster than LP cargo allocator. Does a bit of finagling to make it all
+ * work, which isn't hugely pretty. Each cargo is assigned an index by the base
+ * class; this class maps ports slots to a single load/discharge sum constraint
+ * (i.e. presumes that there cannot be two contractual limits applying to a
+ * single slot) using the cargoConstraints array.
  * 
- * Cargoes are then sorted by their unit price, and allocated the minimum of
- * (a) vessel capacity, (b) the remaining load limit and (c) the remaining discharge limit
- * for those cargoes.
+ * Cargoes are then sorted by their unit price, and allocated the minimum of (a)
+ * vessel capacity, (b) the remaining load limit and (c) the remaining discharge
+ * limit for those cargoes.
+ * 
+ * TODO has no handling of load lower bounds; need to do a first pass allocating
+ * LB to every cargo first.
  * 
  * @author hinton
  * 
@@ -37,25 +42,24 @@ public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
 	final Map<IPortSlot, Integer> volumeConstraintMap = new HashMap<IPortSlot, Integer>();
 	final ArrayList<Long> initialConstraintValues = new ArrayList<Long>();
 
-	final ArrayList<IPortSlot> loadSlots = new ArrayList<IPortSlot>();
-
 	@Override
 	public void init() {
 		super.init();
-		for (final Pair<Long, Set<IPortSlot>> constraint : cargoAllocationProvider
-				.getCargoAllocationLimits()) {
+		for (final ITotalVolumeLimit limit : cargoAllocationProvider
+				.getTotalVolumeLimits()) {
 			final int index = initialConstraintValues.size();
-			initialConstraintValues.add(constraint.getFirst());
+			initialConstraintValues.add(limit.getVolumeLimit());
 
-			for (final IPortSlot slot : constraint.getSecond()) {
-				volumeConstraintMap.put(slot, index);
-				if (slot instanceof ILoadSlot) {
-					loadSlots.add(slot);
+			for (final IPortSlot slot : limit.getPossibleSlots()) {
+				final int time = slotTimes.get(slot);
+				final ITimeWindow window = limit.getTimeWindow();
+				if (window.getStart() <= time && window.getEnd() >= time) {
+					volumeConstraintMap.put(slot, index);
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void reset() {
 		super.reset();
@@ -68,27 +72,25 @@ public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
 			long vesselCapacity) {
 		super.addCargo(loadDetails, dischargeDetails, loadTime, dischargeTime,
 				requiredLoadVolume, vesselCapacity);
-		
-		cargoConstraints.add(
-				new Pair<Integer, Integer>(
-						volumeConstraintMap.get(loadDetails.getPortSlot()),
-						volumeConstraintMap.get(dischargeDetails.getPortSlot())));
+
+		cargoConstraints.add(new Pair<Integer, Integer>(volumeConstraintMap
+				.get(loadDetails.getPortSlot()), volumeConstraintMap
+				.get(dischargeDetails.getPortSlot())));
 	}
 
-	final ArrayList<Pair<Integer, Integer>> cargoConstraints = 
-		new ArrayList<Pair<Integer, Integer>>();
+	final ArrayList<Pair<Integer, Integer>> cargoConstraints = new ArrayList<Pair<Integer, Integer>>();
 
 	@Override
 	protected long[] allocateSpareVolume() {
 		// sort cargoes by unit cost
-		final Integer[] variables = new Integer[cargoIndex];
+		final Integer[] variables = new Integer[cargoCount];
 		for (int i = 0; i < variables.length; i++)
 			variables[i] = i;
 		final Comparator<Integer> comparator = new Comparator<Integer>() {
 			@Override
 			public int compare(Integer arg0, Integer arg1) {
-				final double d0 = unitPrices[arg0];
-				final double d1 = unitPrices[arg1];
+				final double d0 = unitPrices.get(arg0);
+				final double d1 = unitPrices.get(arg1);
 
 				if (d0 > d1) {
 					return -1;
@@ -106,31 +108,81 @@ public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
 		final long[] remainders = CollectionsUtil
 				.longsToLongArray(initialConstraintValues);
 
-		final long[] allocations = new long[cargoIndex];
-		
-		// remove volume which load slots <em>must</em> load
-		for (final IPortSlot slot : loadSlots) {
-			final int variable = variableForSlot(slot);
-			if (variable != -1) {
-				remainders[volumeConstraintMap.get(slot)] -= forcedLoadVolume[variable];
+		final long[] allocations = new long[cargoCount];
+
+		// Now allocate whatever minimum quantity is required for each slot
+
+		for (final int variable : variables) {
+			final Pair<Integer, Integer> constraintIndices = cargoConstraints
+					.get(variable);
+			
+			// Firstly, remove the forced load volume from consideration
+			// Since every constraintIndices pair has first = load slot constraint
+			// 										  second = discharge slot constraint
+			// we can just knock this off the remaining volume at the start.
+			final long fuelVolume = forcedLoadVolume.get(variable);
+			if (constraintIndices.getFirst()!=null) {
+				remainders[constraintIndices.getFirst()] -= fuelVolume;
+			}
+			
+			// Now we find the lower bound for allocation above the fuel requirement 
+			final ILoadSlot loadSlot = loadSlots.get(variable);
+			final IDischargeSlot dischargeSlot = dischargeSlots.get(variable);
+
+			// It is, the greater of the minimum load LESS FUEL, and minimum discharge
+			final long lowerLoadBound = Math.max(loadSlot.getMinLoadVolume()
+					- fuelVolume, dischargeSlot.getMinDischargeVolume());
+			
+			// so allocate it
+			allocations[variable] = lowerLoadBound;
+			
+			// now remove this from any remainders which apply
+			// TODO check feasibility here
+			if (constraintIndices.getFirst()!=null) {
+				remainders[constraintIndices.getFirst()] -= lowerLoadBound;
+			}
+			
+			if (constraintIndices.getSecond()!=null) {
+				remainders[constraintIndices.getSecond()] -= lowerLoadBound;
 			}
 		}
-		
+
+		// Now run through variables (remember they are sorted in decreasing unit value)
 		for (final int variable : variables) {
-			final Pair<Integer, Integer> constraintIndices = 
-				cargoConstraints.get(variable);
-			final long slack1 = remainders[constraintIndices.getFirst()];
-			final long slack2 = remainders[constraintIndices.getSecond()];
+			final long fuelRequired = forcedLoadVolume.get(variable);
+			final Pair<Integer, Integer> constraintIndices = cargoConstraints
+					.get(variable);
+			// This is however much is left in the load-side summed volume constraint
+			final long slack1 = 
+				constraintIndices.getFirst() == null ? Long.MAX_VALUE :
+				remainders[constraintIndices.getFirst()];
+			// this is what is left in the discharge-side summed volume constraint
+			final long slack2 = constraintIndices.getSecond() == null ? Long.MAX_VALUE : 
+				remainders[constraintIndices.getSecond()];
+
+			// this is what is left from the load-side upper bound
+			// (we subtract the allocation which we enforced in the loop above, and the fuel load)
+			final long loadSlack = loadSlots.get(variable).getMaxLoadVolume()
+					- (fuelRequired + allocations[variable]);
+
+			// and this is what is left on the discharge side
+			final long dischargeSlack = dischargeSlots.get(variable)
+					.getMaxDischargeVolume() - allocations[variable];
+
+			// and finally this is what is left of the vessel cargo capacity
+			final long cargoSlack = vesselCapacity.get(variable) - fuelRequired;
 			
-			final long allocation = 
-				Math.min(
-						vesselCapacity[variable],
-						Math.min(slack1, slack2));
-			
-			remainders[constraintIndices.getFirst()] -= allocation;
-			remainders[constraintIndices.getSecond()] -= allocation;
-			
-			allocations[variable] = allocation;
+			//the maximum we can allocate here is the minimum of all of these
+			final long allocation = Math.min(Math.min(
+					Math.min(Math.min(loadSlack, dischargeSlack), slack1),
+					slack2), cargoSlack);
+
+			if (constraintIndices.getFirst() != null)
+				remainders[constraintIndices.getFirst()] -= allocation;
+			if (constraintIndices.getSecond() != null)
+				remainders[constraintIndices.getSecond()] -= allocation;
+
+			allocations[variable] += allocation;
 		}
 		return allocations;
 	}

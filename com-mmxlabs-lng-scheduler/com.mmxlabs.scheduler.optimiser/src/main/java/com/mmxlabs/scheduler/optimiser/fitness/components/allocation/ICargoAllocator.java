@@ -11,10 +11,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
  * @author hinton
- *
+ * 
  * @param <T>
  */
 public interface ICargoAllocator<T> {
+
+	public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider<T> tvlp);
 
 	public abstract void init();
 
@@ -52,5 +54,6 @@ public interface ICargoAllocator<T> {
 	public abstract void solve();
 
 	public abstract long getProfit();
+
 	public abstract long getAllocation(IPortSlot slot);
 }

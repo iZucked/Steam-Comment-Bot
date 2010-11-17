@@ -6,40 +6,63 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocationProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
- * Base class for allocating load/discharge volumes; doesn't implement the solve() method,
- * but does do various book-keeping tasks.
+ * Base class for allocating load/discharge volumes; doesn't implement the
+ * solve() method, but does do various book-keeping tasks.
  * 
  * @author hinton
  * 
  */
 public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
-	final double[] unitPrices = new double[] {};
-
-	// TODO index these types
+	ITotalVolumeLimitProvider<T> cargoAllocationProvider;
+	// TODO the following could all probably be replaced with something faster
+	/**
+	 * Maps from slots to cargo indices (LP variables, in the LP)
+	 */
 	final Map<IPortSlot, Integer> variableTable = new HashMap<IPortSlot, Integer>();
+	/**
+	 * Maps from slots to arrival times; subclasses need this to determine
+	 * whether a slot lies in a given gas year.
+	 */
+	final Map<IPortSlot, Integer> slotTimes = new HashMap<IPortSlot, Integer>();
 
-	@SuppressWarnings("unchecked")
-	final Pair<ILoadSlot, IDischargeSlot> cargoes[] = new Pair[] {};
+	/**
+	 * Contains the quantity of LNG which <em>must</em> be loaded for a given
+	 * cargo (by cargo index/LP variable, see {@link #variableTable})
+	 */
+	final ArrayList<Long> forcedLoadVolume = new ArrayList<Long>();
+	/**
+	 * Contains the capacity of the vessel carrying the cargo, by cargo index.
+	 */
+	final ArrayList<Long> vesselCapacity = new ArrayList<Long>();
+	/**
+	 * Contains the unit price (difference between sales price and purchase
+	 * price) for each cargo, by cargo index.
+	 */
+	final ArrayList<Integer> unitPrices = new ArrayList<Integer>();
 
-	int cargoIndex = 0;
-
-	ICargoAllocationProvider<T> cargoAllocationProvider;
-	protected long[] forcedLoadVolume;
-	protected long[] vesselCapacity;
+	/**
+	 * The load slot for each cargo 
+	 */
+	final ArrayList<ILoadSlot> loadSlots = new ArrayList<ILoadSlot>();
+	/**
+	 * The discharge slot for each cargo.
+	 */
+	final ArrayList<IDischargeSlot> dischargeSlots = new ArrayList<IDischargeSlot>();
+	
+	int cargoCount;
 
 	private long[] allocation;
 
@@ -49,29 +72,48 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		super();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#init()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator
+	 * #init()
 	 */
 	@Override
 	public void init() {
-
 		if (cargoAllocationProvider == null) {
 			throw new RuntimeException("Cargo allocation provider must be set");
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#reset()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator
+	 * #reset()
 	 */
 	@Override
 	public void reset() {
-		cargoIndex = 0;
-		Arrays.fill(unitPrices, 0);
+		cargoCount = 0;
+		
 		variableTable.clear();
+		slotTimes.clear();
+		unitPrices.clear();
+		loadSlots.clear();
+		dischargeSlots.clear();
+		vesselCapacity.clear();
+		forcedLoadVolume.clear();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#addCargo(com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails, com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails, int, int, long, long)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator
+	 * #addCargo(com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails,
+	 * com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails, int, int, long,
+	 * long)
 	 */
 	@Override
 	public void addCargo(final PortDetails loadDetails,
@@ -83,28 +125,31 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails
 				.getPortSlot();
 
-		cargoes[cargoIndex].setBoth(loadSlot, dischargeSlot);
+		slotTimes.put(loadSlot, loadTime);
+		slotTimes.put(dischargeSlot, dischargeTime);
+
+		loadSlots.add(loadSlot);
+		dischargeSlots.add(dischargeSlot);
 
 		// store the current cargo index (variable index in the LP) so that we
 		// can reverse-lookup from slots to LP variables
-		final Integer ci = cargoIndex;
+		final Integer ci = cargoCount;
 		variableTable.put(loadSlot, ci);
 		variableTable.put(dischargeSlot, ci);
 
 		// We have to load this much LNG no matter what
-		forcedLoadVolume[cargoIndex] = requiredLoadVolume;
-
-		this.vesselCapacity[cargoIndex] = vesselCapacity;
+		forcedLoadVolume.add(requiredLoadVolume);
+		this.vesselCapacity.add(vesselCapacity);
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
-		final int dischargeM3Price = (int) Calculator.multiply(dischargeSlot.getSalesPriceAtTime(dischargeTime),
-				cargoCVValue);
-		final int loadM3Price = (int) Calculator
-				.multiply(loadSlot.getPurchasePriceAtTime(loadTime), cargoCVValue);
-		
-		unitPrices[cargoIndex] = dischargeM3Price - loadM3Price;
-		
-		cargoIndex++;
+		final int dischargeM3Price = (int) Calculator.multiply(
+				dischargeSlot.getSalesPriceAtTime(dischargeTime), cargoCVValue);
+		final int loadM3Price = (int) Calculator.multiply(
+				loadSlot.getPurchasePriceAtTime(loadTime), cargoCVValue);
+
+		this.unitPrices.add(dischargeM3Price - loadM3Price);
+
+		cargoCount++;
 	}
 
 	/**
@@ -118,26 +163,32 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		final Integer i = variableTable.get(slot);
 		return i == null ? -1 : i.intValue();
 	}
-	
+
 	protected abstract long[] allocateSpareVolume();
-	
+
 	public void solve() {
 		this.allocation = allocateSpareVolume();
-		//convolve for p&l
-		
+		// convolve for p&l
+
 		this.profit = 0;
-		for (int i = 0; i<allocation.length; i++) {
-			profit += unitPrices[i] * allocation[i];
+		for (int i = 0; i < allocation.length; i++) {
+			profit += unitPrices.get(i) * allocation[i];
 		}
 	}
-	
+
 	public long getProfit() {
-		return profit;
+		return profit / 1000000; //why?
 	}
-	
+
 	public long getAllocation(final IPortSlot slot) {
 		final int index = variableForSlot(slot);
-		if (index == -1) return 0;
+		if (index == -1)
+			return 0;
 		return allocation[index];
+	}
+
+	@Override
+	public void setTotalVolumeLimitProvider(final ITotalVolumeLimitProvider<T> tvlp) {
+		cargoAllocationProvider = tvlp;
 	}
 }

@@ -7,21 +7,18 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 
 /**
- * Allocation provider editor for indexed port slots. Uses an arraylist of pairs
- * to hold the constraints.
+ * Allocation provider editor for indexed port slots. Just a list wrapper.
  * 
  * @author hinton
  * 
  */
 public class ArrayListCargoAllocationEditor<T> implements
-		ICargoAllocationEditor<T> {
+		ITotalVolumeLimitEditor<T> {
 
 	public ArrayListCargoAllocationEditor(String name) {
 		super();
@@ -29,11 +26,18 @@ public class ArrayListCargoAllocationEditor<T> implements
 	}
 
 	private final String name;
-	private ArrayList<Pair<Long, Set<IPortSlot>>> limits = new ArrayList<Pair<Long, Set<IPortSlot>>>();
+	
+	private ArrayList<ITotalVolumeLimit> totalVolumeLimits = 
+		new ArrayList<ITotalVolumeLimit>();
+	
+	@Override
+	public Iterable<ITotalVolumeLimit> getTotalVolumeLimits() {
+		return totalVolumeLimits;
+	}
 
 	@Override
-	public Iterable<Pair<Long, Set<IPortSlot>>> getCargoAllocationLimits() {
-		return limits;
+	public void addTotalVolumeLimit(final ITotalVolumeLimit limit) {
+		totalVolumeLimits.add(limit);
 	}
 
 	@Override
@@ -43,12 +47,14 @@ public class ArrayListCargoAllocationEditor<T> implements
 
 	@Override
 	public void dispose() {
-		limits = null;
+		totalVolumeLimits = null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider#isEmpty()
+	 */
 	@Override
-	public void addCargoAllocationLimit(final Set<IPortSlot> slots,
-			final long maximumVolumeM3) {
-		limits.add(new Pair<Long, Set<IPortSlot>>(maximumVolumeM3, slots));
+	public boolean isEmpty() {
+		return totalVolumeLimits.isEmpty();
 	}
 }

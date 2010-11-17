@@ -7,7 +7,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import org.apache.commons.math.optimization.GoalType;
 import org.apache.commons.math.optimization.OptimizationException;
@@ -18,10 +17,11 @@ import org.apache.commons.math.optimization.linear.LinearOptimizer;
 import org.apache.commons.math.optimization.linear.Relationship;
 import org.apache.commons.math.optimization.linear.SimplexSolver;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
 
 /**
  * A cargo allocator which uses the simplex algorithm.
@@ -31,6 +31,11 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  */
 public class SimplexCargoAllocator<T> extends BaseCargoAllocator<T> {
 	final LinearOptimizer optimizer = new SimplexSolver();
+	{
+		optimizer.setMaxIterations(1000);
+	}
+	private final static double SCALE = 10000;
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -40,24 +45,15 @@ public class SimplexCargoAllocator<T> extends BaseCargoAllocator<T> {
 	 */
 	@Override
 	protected long[] allocateSpareVolume() {
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.
-		 * ICargoAllocator#solve()
-		 */
-
 		final ArrayList<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
-		final int variableCount = cargoIndex;
-
 		// set simple constraints (max/min load/discharge volumes at slots)
-		int index = 0;
-		for (final Pair<ILoadSlot, IDischargeSlot> cargo : cargoes) {
-			final ILoadSlot load = cargo.getFirst();
-			final IDischargeSlot discharge = cargo.getSecond();
+
+		for (int index = 0; index < cargoCount; index++) {
+			final ILoadSlot load = loadSlots.get(index);
+			final IDischargeSlot discharge = dischargeSlots.get(index);
 
 			// constrain this variable. unfortunately a bit ugly.
-			final double[] selector = new double[variableCount];
+			final double[] selector = new double[cargoCount];
 			selector[index] = 1;
 
 			// the most we can load here (above forced load quantity) is
@@ -65,78 +61,92 @@ public class SimplexCargoAllocator<T> extends BaseCargoAllocator<T> {
 			// * the maximum load volume (less forced load)
 			// * the maximum discharge volume
 			// * the capacity remaining after forced load quantity is loaded
+			final long flv = forcedLoadVolume.get(index);
+			final long remainingVesselCapacity = vesselCapacity.get(index)
+					- flv;
+			final long remainingLoadSlotCapacity = load.getMaxLoadVolume()
+					- flv;
 
-			final double upperBound = Math.min(Math.min(load.getMaxLoadVolume()
-					- forcedLoadVolume[index],
-					discharge.getMaxDischargeVolume()), vesselCapacity[index]
-					- forcedLoadVolume[index]);
+			final long dischargeCapacity = discharge.getMaxDischargeVolume();
+			
+			final double upperBound = (double) (Math.min(Math.min(
+					remainingLoadSlotCapacity, remainingVesselCapacity),
+					dischargeCapacity));
 
 			final LinearConstraint upperBoundConstraint = new LinearConstraint(
-					selector, Relationship.LEQ, upperBound);
+					selector, Relationship.LEQ, upperBound / SCALE);
 
 			// the least we can load here (above FLQ) is
 			// the most of :
 			// * the minimum load above FLQ
 			// * the minimum required discharge
-			final double lowerBound = Math.max(load.getMinLoadVolume()
-					- forcedLoadVolume[index],
+//			final double lowerBound = 1;
+			final double lowerBound = Math.max(load.getMinLoadVolume() - flv,
 					discharge.getMinDischargeVolume());
 
 			final LinearConstraint lowerBoundConstraint = new LinearConstraint(
-					selector, Relationship.GEQ, lowerBound);
+					selector, Relationship.GEQ, lowerBound / SCALE);
 			constraints.add(upperBoundConstraint);
 			constraints.add(lowerBoundConstraint);
-			index++;
+
+			
 		}
 
-		// TODO think about how gas-year constraints work; really these should
-		// be handled by the next level up, which can just call the allocator
-		// for each gas year independently.
-
-		// set multi-cargo constraints (the real point of this optimiser).
-		for (final Pair<Long, Set<IPortSlot>> yearlyLimit : cargoAllocationProvider
-				.getCargoAllocationLimits()) {
-			final double[] selector = new double[variableCount];
+		// set multi-cargo constraints
+		for (final ITotalVolumeLimit limit : cargoAllocationProvider
+				.getTotalVolumeLimits()) {
+			final double[] selector = new double[cargoCount];
 
 			// this is the upper bound for all these slots
-			double quantity = yearlyLimit.getFirst();
+			double quantity = limit.getVolumeLimit();
 
 			// go through all the slots in this limit
-			for (final IPortSlot slot : yearlyLimit.getSecond()) {
-				// map the slot to a variable (because the load/discharge
-				// quantities are paired up
-				final int variable = variableForSlot(slot);
-				if (variable == -1)
-					continue; // this slot is not included (wrong gas year?)
-				selector[variable] = 1;
+			for (final IPortSlot slot : limit.getPossibleSlots()) {
+				// test whether the slot is in the associated period.
+				final int time = slotTimes.get(slot);
+				final ITimeWindow window = limit.getTimeWindow();
+				if (window.getStart() <= time && window.getEnd() >= time) {
+					// map the slot to a variable (because the load/discharge
+					// quantities are paired up
+					final int variable = variableForSlot(slot);
+					if (variable == -1)
+						continue; // this slot is not included (optional slot,
+									// or something)
+					selector[variable] = 1;
 
-				if (slot instanceof ILoadSlot) {
-					// decrease the right hand side by the amount we have been
-					// forced to load for fuel.
+					if (slot instanceof ILoadSlot) {
+						// decrease the right hand side by the amount we have
+						// been
+						// forced to load for fuel.
 
-					quantity -= forcedLoadVolume[variable];
+						quantity -= forcedLoadVolume.get(variable);
+					}
 				}
 			}
 
 			final LinearConstraint summedCargoConstraint = new LinearConstraint(
-					selector, Relationship.LEQ, quantity);
+					selector, Relationship.LEQ, quantity / SCALE);
 
 			constraints.add(summedCargoConstraint);
 		}
 
+		final double[] unitPricesArray = new double[cargoCount];
+		int index = 0;
+		for (int unitPrice : unitPrices)
+			unitPricesArray[index++] = unitPrice / SCALE;
 		final LinearObjectiveFunction objective = new LinearObjectiveFunction(
-				unitPrices, 0);
-
+				unitPricesArray, 0);
+		
 		try {
 			final RealPointValuePair solution = optimizer.optimize(objective,
-					constraints, GoalType.MAXIMIZE, false);
+					constraints, GoalType.MAXIMIZE, true);
 			double[] point = solution.getPointRef();// this is the
 													// load/discharge allocation
 													// for each cargo
-			
+
 			final long[] result = new long[point.length];
-			for (int i = 0; i<point.length; i++) {
-				result[i] = (long) point[i];
+			for (int i = 0; i < point.length; i++) {
+				result[i] = (long) (point[i] * SCALE);
 			}
 			return result;
 		} catch (OptimizationException e) {
