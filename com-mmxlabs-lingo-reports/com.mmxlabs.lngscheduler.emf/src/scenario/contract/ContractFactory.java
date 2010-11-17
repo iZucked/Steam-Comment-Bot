@@ -53,6 +53,15 @@ public interface ContractFactory extends EFactory {
 	SalesContract createSalesContract();
 
 	/**
+	 * Returns a new object of class '<em>Total Volume Limit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Total Volume Limit</em>'.
+	 * @generated
+	 */
+	TotalVolumeLimit createTotalVolumeLimit();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

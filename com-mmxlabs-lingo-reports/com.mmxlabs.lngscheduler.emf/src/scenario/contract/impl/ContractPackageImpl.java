@@ -6,6 +6,7 @@
  */
 package scenario.contract.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -19,6 +20,7 @@ import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.impl.FleetPackageImpl;
 import scenario.impl.ScenarioPackageImpl;
@@ -60,6 +62,13 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * @generated
 	 */
 	private EClass salesContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass totalVolumeLimitEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -183,6 +192,15 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getContractModel_VolumeConstraints() {
+		return (EReference)contractModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getPurchaseContract() {
 		return purchaseContractEClass;
@@ -196,6 +214,60 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	@Override
 	public EClass getSalesContract() {
 		return salesContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getTotalVolumeLimit() {
+		return totalVolumeLimitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getTotalVolumeLimit_Ports() {
+		return (EReference)totalVolumeLimitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getTotalVolumeLimit_MaximumVolume() {
+		return (EAttribute)totalVolumeLimitEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getTotalVolumeLimit_StartDate() {
+		return (EAttribute)totalVolumeLimitEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getTotalVolumeLimit_Duration() {
+		return (EAttribute)totalVolumeLimitEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getTotalVolumeLimit_Repeating() {
+		return (EAttribute)totalVolumeLimitEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -230,10 +302,18 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		contractModelEClass = createEClass(CONTRACT_MODEL);
 		createEReference(contractModelEClass, CONTRACT_MODEL__PURCHASE_CONTRACTS);
 		createEReference(contractModelEClass, CONTRACT_MODEL__SALES_CONTRACTS);
+		createEReference(contractModelEClass, CONTRACT_MODEL__VOLUME_CONSTRAINTS);
 
 		purchaseContractEClass = createEClass(PURCHASE_CONTRACT);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
+
+		totalVolumeLimitEClass = createEClass(TOTAL_VOLUME_LIMIT);
+		createEReference(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__PORTS);
+		createEAttribute(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__MAXIMUM_VOLUME);
+		createEAttribute(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__START_DATE);
+		createEAttribute(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__DURATION);
+		createEAttribute(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__REPEATING);
 	}
 
 	/**
@@ -259,6 +339,9 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
@@ -269,10 +352,18 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		initEClass(contractModelEClass, ContractModel.class, "ContractModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContractModel_PurchaseContracts(), this.getPurchaseContract(), null, "purchaseContracts", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContractModel_SalesContracts(), this.getSalesContract(), null, "salesContracts", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContractModel_VolumeConstraints(), this.getTotalVolumeLimit(), null, "volumeConstraints", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(purchaseContractEClass, PurchaseContract.class, "PurchaseContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(totalVolumeLimitEClass, TotalVolumeLimit.class, "TotalVolumeLimit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTotalVolumeLimit_Ports(), thePortPackage.getPort(), null, "ports", null, 0, -1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTotalVolumeLimit_MaximumVolume(), ecorePackage.getELong(), "maximumVolume", null, 0, 1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTotalVolumeLimit_StartDate(), ecorePackage.getEDate(), "startDate", null, 1, 1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTotalVolumeLimit_Duration(), ecorePackage.getEInt(), "duration", null, 1, 1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTotalVolumeLimit_Repeating(), ecorePackage.getEBoolean(), "repeating", null, 1, 1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //ContractPackageImpl

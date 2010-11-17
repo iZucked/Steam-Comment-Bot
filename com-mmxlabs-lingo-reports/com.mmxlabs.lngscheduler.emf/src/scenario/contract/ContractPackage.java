@@ -6,6 +6,7 @@
  */
 package scenario.contract;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -87,13 +88,22 @@ public interface ContractPackage extends EPackage {
 	int CONTRACT_MODEL__SALES_CONTRACTS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Volume Constraints</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_MODEL__VOLUME_CONSTRAINTS = 2;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_MODEL_FEATURE_COUNT = 2;
+	int CONTRACT_MODEL_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
@@ -135,6 +145,71 @@ public interface ContractPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.contract.impl.TotalVolumeLimitImpl <em>Total Volume Limit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.TotalVolumeLimitImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getTotalVolumeLimit()
+	 * @generated
+	 */
+	int TOTAL_VOLUME_LIMIT = 3;
+
+	/**
+	 * The feature id for the '<em><b>Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOTAL_VOLUME_LIMIT__PORTS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Maximum Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOTAL_VOLUME_LIMIT__MAXIMUM_VOLUME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOTAL_VOLUME_LIMIT__START_DATE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOTAL_VOLUME_LIMIT__DURATION = 3;
+
+	/**
+	 * The feature id for the '<em><b>Repeating</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOTAL_VOLUME_LIMIT__REPEATING = 4;
+
+	/**
+	 * The number of structural features of the '<em>Total Volume Limit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOTAL_VOLUME_LIMIT_FEATURE_COUNT = 5;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.contract.ContractModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -167,6 +242,17 @@ public interface ContractPackage extends EPackage {
 	EReference getContractModel_SalesContracts();
 
 	/**
+	 * Returns the meta object for the reference list '{@link scenario.contract.ContractModel#getVolumeConstraints <em>Volume Constraints</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Volume Constraints</em>'.
+	 * @see scenario.contract.ContractModel#getVolumeConstraints()
+	 * @see #getContractModel()
+	 * @generated
+	 */
+	EReference getContractModel_VolumeConstraints();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.contract.PurchaseContract <em>Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -185,6 +271,71 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSalesContract();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.contract.TotalVolumeLimit <em>Total Volume Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Total Volume Limit</em>'.
+	 * @see scenario.contract.TotalVolumeLimit
+	 * @generated
+	 */
+	EClass getTotalVolumeLimit();
+
+	/**
+	 * Returns the meta object for the reference list '{@link scenario.contract.TotalVolumeLimit#getPorts <em>Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Ports</em>'.
+	 * @see scenario.contract.TotalVolumeLimit#getPorts()
+	 * @see #getTotalVolumeLimit()
+	 * @generated
+	 */
+	EReference getTotalVolumeLimit_Ports();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.TotalVolumeLimit#getMaximumVolume <em>Maximum Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Maximum Volume</em>'.
+	 * @see scenario.contract.TotalVolumeLimit#getMaximumVolume()
+	 * @see #getTotalVolumeLimit()
+	 * @generated
+	 */
+	EAttribute getTotalVolumeLimit_MaximumVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.TotalVolumeLimit#getStartDate <em>Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Date</em>'.
+	 * @see scenario.contract.TotalVolumeLimit#getStartDate()
+	 * @see #getTotalVolumeLimit()
+	 * @generated
+	 */
+	EAttribute getTotalVolumeLimit_StartDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.TotalVolumeLimit#getDuration <em>Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Duration</em>'.
+	 * @see scenario.contract.TotalVolumeLimit#getDuration()
+	 * @see #getTotalVolumeLimit()
+	 * @generated
+	 */
+	EAttribute getTotalVolumeLimit_Duration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.TotalVolumeLimit#isRepeating <em>Repeating</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Repeating</em>'.
+	 * @see scenario.contract.TotalVolumeLimit#isRepeating()
+	 * @see #getTotalVolumeLimit()
+	 * @generated
+	 */
+	EAttribute getTotalVolumeLimit_Repeating();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -235,6 +386,14 @@ public interface ContractPackage extends EPackage {
 		EReference CONTRACT_MODEL__SALES_CONTRACTS = eINSTANCE.getContractModel_SalesContracts();
 
 		/**
+		 * The meta object literal for the '<em><b>Volume Constraints</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT_MODEL__VOLUME_CONSTRAINTS = eINSTANCE.getContractModel_VolumeConstraints();
+
+		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -253,6 +412,56 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SALES_CONTRACT = eINSTANCE.getSalesContract();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.TotalVolumeLimitImpl <em>Total Volume Limit</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.TotalVolumeLimitImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getTotalVolumeLimit()
+		 * @generated
+		 */
+		EClass TOTAL_VOLUME_LIMIT = eINSTANCE.getTotalVolumeLimit();
+
+		/**
+		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TOTAL_VOLUME_LIMIT__PORTS = eINSTANCE.getTotalVolumeLimit_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Maximum Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TOTAL_VOLUME_LIMIT__MAXIMUM_VOLUME = eINSTANCE.getTotalVolumeLimit_MaximumVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TOTAL_VOLUME_LIMIT__START_DATE = eINSTANCE.getTotalVolumeLimit_StartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TOTAL_VOLUME_LIMIT__DURATION = eINSTANCE.getTotalVolumeLimit_Duration();
+
+		/**
+		 * The meta object literal for the '<em><b>Repeating</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TOTAL_VOLUME_LIMIT__REPEATING = eINSTANCE.getTotalVolumeLimit_Repeating();
 
 	}
 

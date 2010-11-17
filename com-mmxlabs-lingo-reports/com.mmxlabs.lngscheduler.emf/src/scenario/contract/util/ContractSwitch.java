@@ -109,6 +109,12 @@ public class ContractSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ContractPackage.TOTAL_VOLUME_LIMIT: {
+				TotalVolumeLimit totalVolumeLimit = (TotalVolumeLimit)theEObject;
+				T result = caseTotalVolumeLimit(totalVolumeLimit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -155,6 +161,21 @@ public class ContractSwitch<T> {
 	 * @generated
 	 */
 	public T caseSalesContract(SalesContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Total Volume Limit</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Total Volume Limit</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTotalVolumeLimit(TotalVolumeLimit object) {
 		return null;
 	}
 

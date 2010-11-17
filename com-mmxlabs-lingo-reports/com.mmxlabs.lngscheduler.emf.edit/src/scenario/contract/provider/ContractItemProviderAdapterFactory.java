@@ -144,6 +144,29 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.contract.TotalVolumeLimit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected TotalVolumeLimitItemProvider totalVolumeLimitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.contract.TotalVolumeLimit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createTotalVolumeLimitAdapter() {
+		if (totalVolumeLimitItemProvider == null) {
+			totalVolumeLimitItemProvider = new TotalVolumeLimitItemProvider(this);
+		}
+
+		return totalVolumeLimitItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -245,6 +268,7 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 		if (contractModelItemProvider != null) contractModelItemProvider.dispose();
 		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
 		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
+		if (totalVolumeLimitItemProvider != null) totalVolumeLimitItemProvider.dispose();
 	}
 
 }

@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link scenario.contract.ContractModel#getPurchaseContracts <em>Purchase Contracts</em>}</li>
  *   <li>{@link scenario.contract.ContractModel#getSalesContracts <em>Sales Contracts</em>}</li>
+ *   <li>{@link scenario.contract.ContractModel#getVolumeConstraints <em>Volume Constraints</em>}</li>
  * </ul>
  * </p>
  *
@@ -58,5 +59,21 @@ public interface ContractModel extends EObject {
 	 * @generated
 	 */
 	EList<SalesContract> getSalesContracts();
+
+	/**
+	 * Returns the value of the '<em><b>Volume Constraints</b></em>' reference list.
+	 * The list contents are of type {@link scenario.contract.TotalVolumeLimit}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Constraints</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Constraints</em>' reference list.
+	 * @see scenario.contract.ContractPackage#getContractModel_VolumeConstraints()
+	 * @model
+	 * @generated
+	 */
+	EList<TotalVolumeLimit> getVolumeConstraints();
 
 } // ContractModel

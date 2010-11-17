@@ -66,6 +66,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 			case ContractPackage.CONTRACT_MODEL: return createContractModel();
 			case ContractPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case ContractPackage.SALES_CONTRACT: return createSalesContract();
+			case ContractPackage.TOTAL_VOLUME_LIMIT: return createTotalVolumeLimit();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -102,6 +103,16 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	public SalesContract createSalesContract() {
 		SalesContractImpl salesContract = new SalesContractImpl();
 		return salesContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TotalVolumeLimit createTotalVolumeLimit() {
+		TotalVolumeLimitImpl totalVolumeLimit = new TotalVolumeLimitImpl();
+		return totalVolumeLimit;
 	}
 
 	/**

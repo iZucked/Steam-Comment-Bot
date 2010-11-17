@@ -86,6 +86,10 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 				return createSalesContractAdapter();
 			}
 			@Override
+			public Adapter caseTotalVolumeLimit(TotalVolumeLimit object) {
+				return createTotalVolumeLimitAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -144,6 +148,20 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSalesContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.contract.TotalVolumeLimit <em>Total Volume Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.contract.TotalVolumeLimit
+	 * @generated
+	 */
+	public Adapter createTotalVolumeLimitAdapter() {
 		return null;
 	}
 

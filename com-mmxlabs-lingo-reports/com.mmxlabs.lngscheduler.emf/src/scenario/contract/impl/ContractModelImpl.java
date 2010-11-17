@@ -14,12 +14,14 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.contract.TotalVolumeLimit;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,6 +32,7 @@ import scenario.contract.SalesContract;
  * <ul>
  *   <li>{@link scenario.contract.impl.ContractModelImpl#getPurchaseContracts <em>Purchase Contracts</em>}</li>
  *   <li>{@link scenario.contract.impl.ContractModelImpl#getSalesContracts <em>Sales Contracts</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractModelImpl#getVolumeConstraints <em>Volume Constraints</em>}</li>
  * </ul>
  * </p>
  *
@@ -55,6 +58,16 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * @ordered
 	 */
 	protected EList<SalesContract> salesContracts;
+
+	/**
+	 * The cached value of the '{@link #getVolumeConstraints() <em>Volume Constraints</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeConstraints()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<TotalVolumeLimit> volumeConstraints;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,6 +119,18 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<TotalVolumeLimit> getVolumeConstraints() {
+		if (volumeConstraints == null) {
+			volumeConstraints = new EObjectResolvingEList<TotalVolumeLimit>(TotalVolumeLimit.class, this, ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
+		}
+		return volumeConstraints;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -129,6 +154,8 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				return getPurchaseContracts();
 			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
 				return getSalesContracts();
+			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
+				return getVolumeConstraints();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -150,6 +177,10 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				getSalesContracts().clear();
 				getSalesContracts().addAll((Collection<? extends SalesContract>)newValue);
 				return;
+			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
+				getVolumeConstraints().clear();
+				getVolumeConstraints().addAll((Collection<? extends TotalVolumeLimit>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -168,6 +199,9 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
 				getSalesContracts().clear();
 				return;
+			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
+				getVolumeConstraints().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -184,6 +218,8 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				return purchaseContracts != null && !purchaseContracts.isEmpty();
 			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
 				return salesContracts != null && !salesContracts.isEmpty();
+			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
+				return volumeConstraints != null && !volumeConstraints.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
