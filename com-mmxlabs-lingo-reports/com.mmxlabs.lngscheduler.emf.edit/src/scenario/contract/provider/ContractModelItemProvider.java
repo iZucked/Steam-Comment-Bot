@@ -64,31 +64,8 @@ public class ContractModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVolumeConstraintsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Volume Constraints feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVolumeConstraintsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ContractModel_volumeConstraints_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ContractModel_volumeConstraints_feature", "_UI_ContractModel_type"),
-				 ContractPackage.Literals.CONTRACT_MODEL__VOLUME_CONSTRAINTS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -105,6 +82,7 @@ public class ContractModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS);
 			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__SALES_CONTRACTS);
+			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
 		}
 		return childrenFeatures;
 	}
@@ -158,6 +136,7 @@ public class ContractModelItemProvider
 		switch (notification.getFeatureID(ContractModel.class)) {
 			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
 			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
+			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -184,6 +163,11 @@ public class ContractModelItemProvider
 			(createChildParameter
 				(ContractPackage.Literals.CONTRACT_MODEL__SALES_CONTRACTS,
 				 ContractFactory.eINSTANCE.createSalesContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__VOLUME_CONSTRAINTS,
+				 ContractFactory.eINSTANCE.createTotalVolumeLimit()));
 	}
 
 	/**

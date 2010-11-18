@@ -88,7 +88,7 @@ public interface ContractPackage extends EPackage {
 	int CONTRACT_MODEL__SALES_CONTRACTS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Volume Constraints</b></em>' reference list.
+	 * The feature id for the '<em><b>Volume Constraints</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -242,10 +242,10 @@ public interface ContractPackage extends EPackage {
 	EReference getContractModel_SalesContracts();
 
 	/**
-	 * Returns the meta object for the reference list '{@link scenario.contract.ContractModel#getVolumeConstraints <em>Volume Constraints</em>}'.
+	 * Returns the meta object for the containment reference list '{@link scenario.contract.ContractModel#getVolumeConstraints <em>Volume Constraints</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Volume Constraints</em>'.
+	 * @return the meta object for the containment reference list '<em>Volume Constraints</em>'.
 	 * @see scenario.contract.ContractModel#getVolumeConstraints()
 	 * @see #getContractModel()
 	 * @generated
@@ -386,7 +386,7 @@ public interface ContractPackage extends EPackage {
 		EReference CONTRACT_MODEL__SALES_CONTRACTS = eINSTANCE.getContractModel_SalesContracts();
 
 		/**
-		 * The meta object literal for the '<em><b>Volume Constraints</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Volume Constraints</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

@@ -61,7 +61,7 @@ public interface ContractModel extends EObject {
 	EList<SalesContract> getSalesContracts();
 
 	/**
-	 * Returns the value of the '<em><b>Volume Constraints</b></em>' reference list.
+	 * Returns the value of the '<em><b>Volume Constraints</b></em>' containment reference list.
 	 * The list contents are of type {@link scenario.contract.TotalVolumeLimit}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -69,9 +69,9 @@ public interface ContractModel extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Volume Constraints</em>' reference list.
+	 * @return the value of the '<em>Volume Constraints</em>' containment reference list.
 	 * @see scenario.contract.ContractPackage#getContractModel_VolumeConstraints()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<TotalVolumeLimit> getVolumeConstraints();

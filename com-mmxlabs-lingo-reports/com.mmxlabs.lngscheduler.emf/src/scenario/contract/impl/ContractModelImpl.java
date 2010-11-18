@@ -60,7 +60,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	protected EList<SalesContract> salesContracts;
 
 	/**
-	 * The cached value of the '{@link #getVolumeConstraints() <em>Volume Constraints</em>}' reference list.
+	 * The cached value of the '{@link #getVolumeConstraints() <em>Volume Constraints</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getVolumeConstraints()
@@ -121,7 +121,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 */
 	public EList<TotalVolumeLimit> getVolumeConstraints() {
 		if (volumeConstraints == null) {
-			volumeConstraints = new EObjectResolvingEList<TotalVolumeLimit>(TotalVolumeLimit.class, this, ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
+			volumeConstraints = new EObjectContainmentEList<TotalVolumeLimit>(TotalVolumeLimit.class, this, ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
 		}
 		return volumeConstraints;
 	}
@@ -138,6 +138,8 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				return ((InternalEList<?>)getPurchaseContracts()).basicRemove(otherEnd, msgs);
 			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
 				return ((InternalEList<?>)getSalesContracts()).basicRemove(otherEnd, msgs);
+			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
+				return ((InternalEList<?>)getVolumeConstraints()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
