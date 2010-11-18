@@ -199,7 +199,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="salesContracts" upperBound="-1"
           eType="#//contract/SalesContract" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="volumeConstraints" upperBound="-1"
-          eType="#//contract/TotalVolumeLimit"/>
+          eType="#//contract/TotalVolumeLimit" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract"/>
     <eClassifiers xsi:type="ecore:EClass" name="SalesContract"/>
