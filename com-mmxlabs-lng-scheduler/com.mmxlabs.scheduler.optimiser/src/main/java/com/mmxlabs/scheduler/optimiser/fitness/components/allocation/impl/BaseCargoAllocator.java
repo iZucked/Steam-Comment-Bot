@@ -177,7 +177,7 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 	}
 
 	public long getProfit() {
-		return profit / 1000000; //why?
+		return profit / Calculator.ScaleFactor; //why?
 	}
 
 	public long getAllocation(final IPortSlot slot) {
