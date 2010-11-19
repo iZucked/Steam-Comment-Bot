@@ -113,4 +113,18 @@ public final class CollectionsUtil {
 		}
 		return result;
 	}
+
+	/**
+	 * @param initialConstraintValues
+	 * @return
+	 */
+	public static long[] longsToLongArray(
+			ArrayList<Long> longs) {
+		final long [] result = new long[longs.size()];
+		int ix = 0;
+		for (long x : longs) {
+			result[ix++]=x;
+		}
+		return result;
+	}
 }
