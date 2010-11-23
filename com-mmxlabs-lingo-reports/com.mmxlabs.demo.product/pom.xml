@@ -10,11 +10,9 @@
 	</parent>
 	<groupId>com.mmxlabs.shiplingo</groupId>
 	<artifactId>com.mmxlabs.demo</artifactId>
-	<version>1.0.0.SNAPSHOT</version>
-	<packaging>eclipse-application</packaging>
+	<version>1.0.0-SNAPSHOT</version>
 
-
-<!-- p2 repo is disabled as it cannot find the pom deps
+	<!-- p2 repo is disabled as it cannot find the pom deps -->
 	<packaging>eclipse-repository</packaging>
 
 	<build>
@@ -49,14 +47,15 @@
 				<configuration>
 					<products>
 						<product>
-							<id>com.mmxlabs.demo.product.id</id>
+							<id>com.mmxlabs.demo.app.product.id</id>
+							<attachId>com.mmxlabs.demo.app.product</attachId>
+							<rootFolder>ShipLingo</rootFolder>
 						</product>
 					</products>
 				</configuration>
 
-
 			</plugin>
 		</plugins>
 	</build>
--->
+
 </project>
