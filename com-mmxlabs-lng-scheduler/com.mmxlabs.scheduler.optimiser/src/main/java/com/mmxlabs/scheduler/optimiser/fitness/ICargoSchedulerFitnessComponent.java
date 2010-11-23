@@ -5,6 +5,7 @@
 
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -66,6 +67,18 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	boolean nextObject(final Object object, final int time);
 
 	/**
+	 * Evaluate an object from the sequence and do any resulting annotations.
+	 * Note that you need to use a suitable provider to reverse-lookup a sequence element
+	 * for use with the annotated sequence.
+	 * 
+	 * @param object
+	 * @param time
+	 * @param annotatedSolution
+	 * @return
+	 */
+	boolean annotateNextObject(final Object object, final int time, final IAnnotatedSolution<T> annotatedSolution);
+	
+	/**
 	 * Consider the next voyageplan - note that the contents of the given plan
 	 * will be presented to nextObject after this
 	 * 
@@ -89,6 +102,12 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * @return the total cost of this solution
 	 */
 	long endEvaluationAndGetCost();
+	
+	/**
+	 * Finish evaluating a solution and add any laggardly annotations which may be required.
+	 * @param solution
+	 */
+	void endEvaluationAndAnnotate(IAnnotatedSolution<T> solution);
 
 	/**
 	 * Reject the last evaluation (relates to
