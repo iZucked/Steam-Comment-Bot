@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
