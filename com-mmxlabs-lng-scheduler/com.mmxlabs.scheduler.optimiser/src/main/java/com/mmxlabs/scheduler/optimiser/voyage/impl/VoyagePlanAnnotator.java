@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -45,17 +46,25 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 			FuelComponent.Base, FuelComponent.NBO,
 			FuelComponent.Base_Supplemental, FuelComponent.FBO };
 
+	public void annotateFromScheduledSequence(
+			final ScheduledSequence scheduledSequence,
+			final IAnnotatedSolution<T> solution) {
+		annotateFromVoyagePlan(scheduledSequence.getResource(),
+				scheduledSequence.getVoyagePlans(),
+				scheduledSequence.getStartTime(), solution);
+	}
+
 	@Override
 	public void annotateFromVoyagePlan(final IResource resource,
-			final List<VoyagePlan> plans,
-			final int startTime, final IAnnotatedSequence<T> annotatedSequence) {
+			final List<VoyagePlan> plans, final int startTime,
+			final IAnnotatedSolution<T> solution) {
 		VoyagePlanIterator<T> vpi = new VoyagePlanIterator<T>();
 		vpi.setVoyagePlans(plans, startTime);
-		
+
 		vpi.reset();
-		
-//		for (final VoyagePlan plan : plans) {
-//			for (final Object e : plan.getSequence()) {
+
+		// for (final VoyagePlan plan : plans) {
+		// for (final Object e : plan.getSequence()) {
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
 			final VoyagePlan plan = vpi.getCurrentPlan();
@@ -100,10 +109,10 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 				visit.setDuration(visitDuration);
 
-				annotatedSequence.setAnnotation(element,
+				solution.getElementAnnotations().setAnnotation(element,
 						SchedulerConstants.AI_visitInfo, visit);
 
-				visit.setStartTime(vpi.getCurrentTime()); //details.getStartTime()
+				visit.setStartTime(vpi.getCurrentTime()); // details.getStartTime()
 				visit.setEndTime(vpi.getCurrentTime() + visitDuration);
 
 			} else if (e instanceof VoyageDetails<?>) {
@@ -124,15 +133,15 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 				final JourneyEventImpl<T> journey = new JourneyEventImpl<T>();
 
 				final int currentTime = vpi.getCurrentTime();
-				
+
 				journey.setName("journey");
 				journey.setFromPort(prevPortSlot.getPort());
 				journey.setToPort(currentPortSlot.getPort());
 				journey.setSequenceElement(element);
-				
+
 				journey.setStartTime(currentTime);
 				journey.setEndTime(currentTime + travelTime);
-				
+
 				journey.setDistance(options.getDistance());
 				journey.setRoute(options.getRoute());
 
@@ -142,8 +151,8 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 				for (final FuelComponent fuel : travelFuelComponents) {
 					for (final FuelUnit unit : FuelUnit.values()) {
-						final long consumption = details
-								.getFuelConsumption(fuel, unit);
+						final long consumption = details.getFuelConsumption(
+								fuel, unit);
 						journey.setFuelConsumption(fuel, unit, consumption);
 						if (unit == fuel.getDefaultFuelUnit()) {
 							final long cost = Calculator
@@ -155,10 +164,9 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 					}
 				}
 
-				journey.setVesselState(details.getOptions()
-						.getVesselState());
+				journey.setVesselState(details.getOptions().getVesselState());
 
-				annotatedSequence.setAnnotation(element,
+				solution.getElementAnnotations().setAnnotation(element,
 						SchedulerConstants.AI_journeyInfo, journey);
 
 				final int idleTime = details.getIdleTime();
@@ -166,19 +174,16 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 				final IdleEventImpl<T> idle = new IdleEventImpl<T>();
 				idle.setName("idle");
 				idle.setPort(currentPortSlot.getPort());
-				
-				
-				
+
 				idle.setStartTime(currentTime + travelTime);
 				idle.setDuration(idleTime);
-				idle.setEndTime(currentTime + travelTime
-						+ idleTime);
+				idle.setEndTime(currentTime + travelTime + idleTime);
 				idle.setSequenceElement(element);
 
 				for (final FuelComponent fuel : idleFuelComponents) {
 					for (final FuelUnit unit : FuelUnit.values()) {
-						final long consumption = details
-								.getFuelConsumption(fuel, unit);
+						final long consumption = details.getFuelConsumption(
+								fuel, unit);
 
 						idle.setFuelConsumption(fuel, unit, consumption);
 						// Calculate cost on default unit
@@ -192,15 +197,14 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 				}
 				idle.setVesselState(details.getOptions().getVesselState());
 
-				annotatedSequence.setAnnotation(element,
+				solution.getElementAnnotations().setAnnotation(element,
 						SchedulerConstants.AI_idleInfo, idle);
 
 			} else {
 				throw new IllegalStateException("Unexpected element " + e);
 			}
 		}
-				
-			
+
 	}
 
 	public void setPortSlotProvider(final IPortSlotProvider<T> portSlotProvider) {

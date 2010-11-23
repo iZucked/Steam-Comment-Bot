@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -31,6 +31,6 @@ public interface IVoyagePlanAnnotator<T> {
 	 * @param annotatedSequence
 	 */
 	void annotateFromVoyagePlan(IResource resource, List<VoyagePlan> plans, int startTime,
-			IAnnotatedSequence<T> annotatedSequence);
+			IAnnotatedSolution<T> annotatedSolution);
 
 }
