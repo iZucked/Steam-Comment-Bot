@@ -8,8 +8,10 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -54,14 +56,14 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 	final ArrayList<Integer> unitPrices = new ArrayList<Integer>();
 
 	/**
-	 * The load slot for each cargo 
+	 * The load slot for each cargo
 	 */
 	final ArrayList<ILoadSlot> loadSlots = new ArrayList<ILoadSlot>();
 	/**
 	 * The discharge slot for each cargo.
 	 */
 	final ArrayList<IDischargeSlot> dischargeSlots = new ArrayList<IDischargeSlot>();
-	
+
 	int cargoCount;
 
 	private long[] allocation;
@@ -96,7 +98,7 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 	@Override
 	public void reset() {
 		cargoCount = 0;
-		
+
 		variableTable.clear();
 		slotTimes.clear();
 		unitPrices.clear();
@@ -172,12 +174,12 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 
 		this.profit = 0;
 		for (int i = 0; i < allocation.length; i++) {
-			profit += unitPrices.get(i) * allocation[i];
+			profit += Calculator.multiply(unitPrices.get(i), allocation[i]);
 		}
 	}
 
 	public long getProfit() {
-		return profit / Calculator.ScaleFactor; //why?
+		return profit / Calculator.ScaleFactor; // why?
 	}
 
 	public long getAllocation(final IPortSlot slot) {
@@ -188,7 +190,47 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 	}
 
 	@Override
-	public void setTotalVolumeLimitProvider(final ITotalVolumeLimitProvider<T> tvlp) {
+	public void setTotalVolumeLimitProvider(
+			final ITotalVolumeLimitProvider<T> tvlp) {
 		cargoAllocationProvider = tvlp;
+	}
+
+	@Override
+	public Iterable<CargoAllocation> getAllocations() {
+		return new Iterable<CargoAllocation>() {
+			@Override
+			public Iterator<ICargoAllocator.CargoAllocation> iterator() {
+				return new Iterator<CargoAllocation>() {
+					final Iterator<ILoadSlot> loadIterator = loadSlots
+							.iterator();
+					final Iterator<IDischargeSlot> dischargeIterator = dischargeSlots
+							.iterator();
+					final Iterator<Integer> priceIterator = unitPrices
+							.iterator();
+					int allocationIndex;
+
+					@Override
+					public boolean hasNext() {
+						return loadIterator.hasNext()
+								&& dischargeIterator.hasNext()
+								&& priceIterator.hasNext();
+					}
+
+					@Override
+					public CargoAllocation next() {
+						return new CargoAllocation(loadIterator.next(),
+								dischargeIterator.next(),
+								allocation[allocationIndex++],
+								priceIterator.next());
+					}
+
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+
+				};
+			}
+		};
 	}
 }

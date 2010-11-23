@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
@@ -110,6 +111,16 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	public long getAllocation(IPortSlot slot) {
 		// TODO Auto-generated method stub
 		return fastAllocator.getAllocation(slot);
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#getAllocations()
+	 */
+	@Override
+	public Iterable<CargoAllocation> getAllocations() {
+		return fastAllocator.getAllocations();
 	}
 
 }
