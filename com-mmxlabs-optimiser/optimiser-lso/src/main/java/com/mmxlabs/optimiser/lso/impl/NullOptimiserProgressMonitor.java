@@ -5,6 +5,7 @@
 
 package com.mmxlabs.optimiser.lso.impl;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
@@ -22,20 +23,21 @@ public final class NullOptimiserProgressMonitor<T> implements
 
 	@Override
 	public void begin(IOptimiser<T> optimiser, long initialFitness,
-			ISequences<T> initialState) {
+			IAnnotatedSolution<T> annotatedSolution) {
 
 	}
 
 	@Override
 	public void report(IOptimiser<T> optimiser, int iteration,
-			long currentFitness, long bestFitness, ISequences<T> currentState,
-			ISequences<T> bestState) {
+			long currentFitness, long bestFitness,
+			IAnnotatedSolution<T> currentSolution,
+			IAnnotatedSolution<T> annotatedSolution) {
 
 	}
 
 	@Override
 	public void done(IOptimiser<T> optimiser, long bestFitness,
-			ISequences<T> bestState) {
+			IAnnotatedSolution<T> annotatedSolution) {
 
 	}
 }
