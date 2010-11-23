@@ -11,6 +11,6 @@
 	</parent>
 	<groupId>com.mmxlabs.demo.reports</groupId>
 	<artifactId>com.mmxlabs.demo.reports</artifactId>
-	<version>1.0.0.qualifier</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
