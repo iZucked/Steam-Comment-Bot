@@ -115,8 +115,8 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					public void report(final IOptimiser<ISequenceElement> arg0,
 							final int iteration, final long currentFitness,
 							final long bestFitness,
-							final ISequences<ISequenceElement> currentState,
-							final ISequences<ISequenceElement> bestState) {
+							final IAnnotatedSolution<ISequenceElement> currentState,
+							final IAnnotatedSolution<ISequenceElement> bestState) {
 
 						final int work = iteration - lastReport;
 						monitor.worked(work);
@@ -181,7 +181,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					@Override
 					public void done(final IOptimiser<ISequenceElement> arg0,
 							final long arg1,
-							final ISequences<ISequenceElement> arg2) {
+							final IAnnotatedSolution<ISequenceElement> arg2) {
 
 						updateSchedule(arg2);
 
@@ -190,7 +190,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					@Override
 					public void begin(final IOptimiser<ISequenceElement> arg0,
 							final long arg1,
-							final ISequences<ISequenceElement> arg2) {
+							final IAnnotatedSolution<ISequenceElement> arg2) {
 						firstFitness = arg1;
 						updateSchedule(arg2);
 						startTime = System.currentTimeMillis();
@@ -437,10 +437,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 	}
 
-	private void updateSchedule(final ISequences<ISequenceElement> bestState) {
-
-		final IAnnotatedSolution<ISequenceElement> solution = CargoSchedulerExporter
-				.exportState(context, bestState);
+	private void updateSchedule(final IAnnotatedSolution<ISequenceElement> solution) {
 		setSchedule(solution);
 	}
 }
