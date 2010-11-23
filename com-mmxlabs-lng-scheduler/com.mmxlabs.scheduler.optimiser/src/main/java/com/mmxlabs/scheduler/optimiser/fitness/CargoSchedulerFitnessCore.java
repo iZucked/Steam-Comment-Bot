@@ -10,7 +10,9 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
@@ -21,10 +23,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CargoAllocatingComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CargoAllocatingSchedulerComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
  * {@link IFitnessCore} which schedules {@link ISequences} objects using an
@@ -78,14 +80,14 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		components.add(new RouteCostFitnessComponent<T>(
 				CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
 				SchedulerConstants.DCP_routePriceProvider,
-				SchedulerConstants.DCP_vesselProvider,
-				this));
-		
-		components.add(
-				new CargoAllocatingSchedulerComponent<T>(
+				SchedulerConstants.DCP_vesselProvider, this));
+
+		components
+				.add(new CargoAllocatingSchedulerComponent<T>(
 						CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME,
 						SchedulerConstants.DCP_vesselProvider,
-						SchedulerConstants.DCP_totalVolumeLimitProvider,
+						SchedulerConstants.DCP_totalVolumeLimitProvider, 
+						SchedulerConstants.DCP_portSlotsProvider,
 						this));
 	}
 
@@ -102,8 +104,6 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	@Override
 	public boolean evaluate(final ISequences<T> sequences) {
-		// perform a full evaluation
-
 		return planIterator.iterateSchedulerComponents(components,
 				scheduler.schedule(sequences));
 	}
@@ -111,14 +111,12 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public boolean evaluate(final ISequences<T> sequences,
 			final Collection<IResource> affectedResources) {
-
-		// now we have some real horror - the scheduler needs to deal with which
-		// sequences are changed
-		// if we are to do this efficiently. Currently there is no
-		// implementation of this, and it's hard to see
-		// how there can be one if we really want to allow scheduler components
-		// to depend on every route together.
-
+		// At the moment, we fully evaluate even when only some routes have been
+		// changed; in truth, because the question for components is whether the
+		// <em>schedule</em> has changed (incl. arrival times), and changing one
+		// sequence can change times in other sequences because the scheduler
+		// components can have global effects, we really need to have a
+		// cooperation with the scheduler here to make this any use.
 		return planIterator.iterateSchedulerComponents(components,
 				scheduler.schedule(sequences));
 	}
@@ -154,5 +152,26 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	public void setSchedulerFactory(ISchedulerFactory<T> schedulerFactory) {
 		this.schedulerFactory = schedulerFactory;
+	}
+
+	@Override
+	public void annotate(final ISequences<T> sequences,
+			final IAnnotatedSolution<T> solution) {
+		final ScheduledSequences schedule = scheduler.schedule(sequences);
+		// Do basic voyageplan annotation
+		final VoyagePlanAnnotator<T> annotator = new VoyagePlanAnnotator<T>();
+		
+		for (final ScheduledSequence scheduledSequence : schedule) {
+			final IResource resource = scheduledSequence.getResource();
+			final ISequence<T> sequence = sequences.getSequence(resource);
+			
+			if (sequence.size() > 0) {
+				annotator.annotateFromScheduledSequence(scheduledSequence, solution);
+			}
+		}
+		
+		// Allow components to do any extra annotations
+		planIterator.annotateSchedulerComponents(components, schedule, solution);
+		
 	}
 }
