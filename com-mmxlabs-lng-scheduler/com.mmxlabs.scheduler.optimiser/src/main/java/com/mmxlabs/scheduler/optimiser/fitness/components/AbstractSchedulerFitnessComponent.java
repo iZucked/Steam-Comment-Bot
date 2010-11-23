@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
@@ -71,4 +73,15 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 	@Override
 	public void init(IOptimisationData<T> data) {
 	}
+
+	@Override
+	public boolean annotateNextObject(final Object object, final int time,
+			final IAnnotatedSolution<T> solution) {
+		return nextObject(object, time);
+	}
+
+	@Override
+	public void endEvaluationAndAnnotate(IAnnotatedSolution<T> solution) {
+		
+	}	
 }
