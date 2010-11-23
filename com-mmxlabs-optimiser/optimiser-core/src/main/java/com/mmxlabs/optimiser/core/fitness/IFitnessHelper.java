@@ -8,6 +8,8 @@ package com.mmxlabs.optimiser.core.fitness;
 import java.util.Collection;
 import java.util.Set;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -47,7 +49,7 @@ public interface IFitnessHelper<T> {
 	 * 
 	 * @param sequences
 	 * @param fitnessFunctions
-	 * @return 
+	 * @return
 	 */
 
 	boolean evaluateSequencesFromCores(ISequences<T> sequences,
@@ -60,7 +62,7 @@ public interface IFitnessHelper<T> {
 	 * @param sequences
 	 * @param fitnessFunctions
 	 * @param affectedResources
-	 * @return 
+	 * @return
 	 */
 
 	boolean evaluateSequencesFromCores(ISequences<T> sequences,
@@ -73,7 +75,7 @@ public interface IFitnessHelper<T> {
 	 * 
 	 * @param sequences
 	 * @param fitnessFunctions
-	 * @return 
+	 * @return
 	 */
 
 	boolean evaluateSequencesFromComponents(ISequences<T> sequences,
@@ -85,7 +87,7 @@ public interface IFitnessHelper<T> {
 	 * 
 	 * @param sequences
 	 * @param fitnessFunctions
-	 * @return 
+	 * @return
 	 */
 
 	boolean evaluateSequencesFromComponents(ISequences<T> sequences,
@@ -114,11 +116,12 @@ public interface IFitnessHelper<T> {
 	 * a {@link ISequences} object is accepted as the new state. The
 	 * {@link ISequences} object must have been passed to the
 	 * {@link IFitnessCore#evaluate(ISequences, Collection) method previously.
-	 * This could be directly or via the {
-	 * @link #evaluateSequencesFromComponents(ISequences, Collection, Collection)}
-	 * or
-	 * {@link #evaluateSequencesFromCores(ISequences, Collection, Collection)}
-	 * methods.
+	 * This could be directly or via the
+	 * 
+	 * @link #evaluateSequencesFromComponents(ISequences, Collection,
+	 *       Collection)} or
+	 *       {@link #evaluateSequencesFromCores(ISequences, Collection, Collection)}
+	 *       methods.
 	 * 
 	 * @param sequences
 	 * @param affectedResources
@@ -135,5 +138,18 @@ public interface IFitnessHelper<T> {
 	 * @return
 	 */
 	Set<IFitnessCore<T>> getFitnessCores(
+			Collection<IFitnessComponent<T>> fitnessComponents);
+
+	/**
+	 * Construct an annotated solution for the given state. Performs an evaluation
+	 * with the given components as well, so watch out for that.
+	 * 
+	 * @param context
+	 * @param state
+	 * @param fitnessComponents
+	 * @return
+	 */
+	public IAnnotatedSolution<T> buildAnnotatedSolution(
+			IOptimisationContext<T> context, ISequences<T> state,
 			Collection<IFitnessComponent<T>> fitnessComponents);
 }

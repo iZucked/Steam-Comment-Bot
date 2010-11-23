@@ -5,13 +5,9 @@
 
 package com.mmxlabs.optimiser.core.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
@@ -28,18 +24,8 @@ public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 
 	private IOptimisationContext<T> context;
 
-	private final Map<IResource, IAnnotatedSequence<T>> annotatedSequences = new HashMap<IResource, IAnnotatedSequence<T>>();;
-
-	@Override
-	public IAnnotatedSequence<T> getAnnotatedSequence(final IResource resource) {
-		return annotatedSequences.get(resource);
-	}
-
-	public void setAnnotatedSequence(final IResource resource,
-			final IAnnotatedSequence<T> annotatedSequence) {
-		annotatedSequences.put(resource, annotatedSequence);
-	}
-
+	private IAnnotations<T> annotations = new HashMapAnnotations<T>();
+	
 	@Override
 	public ISequences<T> getSequences() {
 		return sequences;
@@ -62,6 +48,11 @@ public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 	public void dispose() {
 		context = null;
 		sequences = null;
-		annotatedSequences.clear();
+		annotations = null;
+	}
+
+	@Override
+	public IAnnotations<T> getElementAnnotations() {
+		return annotations;
 	}
 }

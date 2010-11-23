@@ -5,7 +5,6 @@
 
 package com.mmxlabs.optimiser.core;
 
-
 // TODO: Move into opt-core
 
 public interface IAnnotatedSolution<T> {
@@ -18,13 +17,17 @@ public interface IAnnotatedSolution<T> {
 	ISequences<T> getSequences();
 
 	/**
-	 * Returns the {@link IAnnotatedSequence} for the given {@link IResource}.
+	 * Returns the {@link IAnnotations} associated with the sequence elements in
+	 * this solution
 	 * 
-	 * @param resource
 	 * @return
 	 */
-	IAnnotatedSequence<T> getAnnotatedSequence(IResource resource);
+	IAnnotations<T> getElementAnnotations();
 
+	//annotations for other components?
+	//IAnnotations<IResource> getResourceAnnotations();
+	//IAnnotations<ISequence> getSequenceAnnotations();
+	
 	/**
 	 * Returns the {@link IOptimisationContext} used to create this solution.
 	 * 

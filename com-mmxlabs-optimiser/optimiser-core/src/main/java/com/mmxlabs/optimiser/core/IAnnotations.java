@@ -1,25 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010
- * All rights reserved.
+ *
+ * Copyright (C) Minimax Labs Ltd., 2010 
+ * All rights reserved. 
+ * 
  */
-
 package com.mmxlabs.optimiser.core;
 
-import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-
 /**
- * The {@link IAnnotatedSequence} provides additional information to the
- * standard {@link ISequence} typically populated as a results of an
- * {@link IFitnessCore} evaluation. This could include things such as time,
- * distance and cost information.
- * 
- * @author Simon Goodall
- * 
- * @param <T>
- *            Sequence element type
+ * @author hinton
+ *
  */
-public interface IAnnotatedSequence<T> {
-
+public interface IAnnotations<T> {
 	/**
 	 * Store an annotation object for the specified element under the given key.
 	 * 
@@ -49,7 +40,11 @@ public interface IAnnotatedSequence<T> {
 	boolean hasAnnotation(T element, String key);
 
 	/**
-	 * Release any internal resources.
+	 * Returns an iterable over all the keys for which the given element
+	 * has an annotation set.
+	 * 
+	 * @param element
+	 * @return
 	 */
-	void dispose();
+	Iterable<String> getAnnotations(T element);
 }

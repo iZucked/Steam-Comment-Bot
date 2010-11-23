@@ -8,6 +8,8 @@ package com.mmxlabs.optimiser.core.fitness;
 import java.util.Collection;
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
@@ -134,4 +136,17 @@ public interface IFitnessEvaluator<T> {
 	long getCurrentFitness();
 
 	void dispose();
+	
+	/**
+	 * Returns an annotated solution for the best sequences so far
+	 * @param context
+	 * @return
+	 */
+	IAnnotatedSolution<T> getBestAnnotatedSolution(final IOptimisationContext<T> context);
+	/**
+	 * Returns an annotated solution for the current sequences.
+	 * @param context
+	 * @return
+	 */
+	IAnnotatedSolution<T> getCurrentAnnotatedSolution(final IOptimisationContext<T> context);
 }
