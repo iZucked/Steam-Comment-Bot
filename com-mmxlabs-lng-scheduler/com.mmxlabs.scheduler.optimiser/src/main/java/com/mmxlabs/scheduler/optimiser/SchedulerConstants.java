@@ -33,4 +33,5 @@ public final class SchedulerConstants {
 	public static final String AI_idleInfo = "info-idle";
 	public static final String AI_journeyInfo = "info-journey";
 	public static final String AI_visitInfo = "info-visit";
+	public static final String AI_volumeAllocationInfo = "info-volume-allocation";
 }
