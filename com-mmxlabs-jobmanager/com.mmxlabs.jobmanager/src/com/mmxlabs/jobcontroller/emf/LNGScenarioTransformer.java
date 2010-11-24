@@ -1,7 +1,5 @@
 package com.mmxlabs.jobcontroller.emf;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +13,6 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -28,6 +25,7 @@ import scenario.ScenarioPackage;
 import scenario.cargo.Cargo;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.CharterOut;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
@@ -184,7 +182,44 @@ public class LNGScenarioTransformer {
 		buildCharterOuts(builder, portAssociation,
 				vesselAssociations.getFirst(), vesselAssociations.getSecond());
 
+		buildTotalVolumeLimits(builder, portAssociation);
+
 		return builder.getOptimisationData();
+	}
+
+	/**
+	 * Set up the total volume limits, if there are any
+	 * 
+	 * @param builder
+	 * @param portAssociation
+	 */
+	private void buildTotalVolumeLimits(final SchedulerBuilder builder,
+			final Association<Port, IPort> portAssociation) {
+
+		final int latestTimeAsInt = convertTime(latestTime);
+
+		if (scenario.getContractModel() != null) {
+			for (final TotalVolumeLimit tvl : scenario.getContractModel()
+					.getVolumeConstraints()) {
+				final Set<IPort> ports = new HashSet<IPort>();
+				for (final Port ePort : tvl.getPorts()) {
+					ports.add(portAssociation.lookup(ePort));
+				}
+
+				int startTime = convertTime(tvl.getStartDate());
+				final int duration = tvl.getDuration();
+				while (true) {
+					final ITimeWindow window = builder.createTimeWindow(
+							startTime, startTime + duration);
+					builder.addTotalVolumeConstraint(ports, true, true,
+							tvl.getMaximumVolume(), window);
+					
+					startTime += (duration + 1);
+					if (startTime > latestTimeAsInt || tvl.isRepeating() == false)
+						break;
+				}
+			}
+		}
 	}
 
 	/**
@@ -193,36 +228,10 @@ public class LNGScenarioTransformer {
 	 * which return a date.
 	 */
 	private void findEarliestAndLatestTimes() {
-		/*
-		 * Find the earliest date, to convert from absolute date and time to
-		 * offset hours
-		 */
-		earliestTime = null;
-		latestTime = null;
-		TreeIterator<EObject> iterator = scenario.eAllContents();
-		while (iterator.hasNext()) {
-			final EObject object = iterator.next();
-
-			@SuppressWarnings("unchecked")
-			final Class<EObject> type = (Class<EObject>) object.getClass();
-			for (final Method m : type.getMethods()) {
-				if (m.getName().startsWith("get")
-						&& m.getReturnType().equals(Date.class)
-						&& m.getParameterTypes().length == 0) {
-					try {
-						final Date date = (Date) m.invoke(object,
-								(Object[]) null);
-						if (earliestTime == null || earliestTime.after(date)) {
-							earliestTime = date;
-						}
-						if (latestTime == null || latestTime.before(date)) {
-							latestTime = date;
-						}
-					} catch (Exception e) {
-					}
-				}
-			}
-		}
+		final Pair<Date, Date> mm = EMFUtils.findMinMaxDateAttributes(scenario);
+		
+		earliestTime = mm.getFirst();
+		latestTime = mm.getSecond();
 	}
 
 	private void buildCharterOuts(SchedulerBuilder builder,
