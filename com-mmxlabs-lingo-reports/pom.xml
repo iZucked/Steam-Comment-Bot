@@ -180,6 +180,8 @@
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
+						<!-- Currently unable to build for mac (on linux) using eclipse-repository 
+							packaging type.
 						<environment>
 							<os>macosx</os>
 							<ws>carbon</ws>
@@ -195,7 +197,7 @@
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
 						</environment>
-
+					 -->
 					</environments>
 
 				</configuration>
