@@ -180,7 +180,10 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>META-INF/MANIFEST.MF</directory>
+							<directory>META-INF/</directory>
+							<includes>
+								<include>MANIFEST.MF</include>
+							</includes>
 						</fileset>
 					</filesets>
 				</configuration>
