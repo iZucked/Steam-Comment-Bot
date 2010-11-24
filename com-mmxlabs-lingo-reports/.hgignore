@@ -1,6 +1,14 @@
 syntax: regexp
 ^.*/bin$
 
+syntax: regexp
+^workspace$
+
+syntax: regexp
+^target$
 
 syntax: regexp
 ^.*/target$
+
+syntax: regexp
+^.*/\.settings$
