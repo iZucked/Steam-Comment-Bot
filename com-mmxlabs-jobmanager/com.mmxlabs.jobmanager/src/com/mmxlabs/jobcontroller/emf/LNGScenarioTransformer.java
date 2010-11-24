@@ -120,7 +120,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 * @throws IncompleteScenarioException
 	 */
-	public IOptimisationData<ISequenceElement> createOptimisationData()
+	public IOptimisationData<ISequenceElement> createOptimisationData(final ModelEntityMap entities)
 			throws IncompleteScenarioException {
 		/*
 		 * Set reference for hour 0
@@ -171,16 +171,20 @@ public class LNGScenarioTransformer {
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
+			
+			entities.addModelObject(ePort, port);
 		}
 
 		Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(
-				builder, portAssociation);
+				builder, portAssociation, entities);
+		
 		buildDistances(builder, portAssociation, allPorts, portIndices,
 				vesselAssociations.getFirst());
-		buildCargoes(builder, portAssociation, marketAssociation);
+		
+		buildCargoes(builder, portAssociation, marketAssociation, entities);
 
 		buildCharterOuts(builder, portAssociation,
-				vesselAssociations.getFirst(), vesselAssociations.getSecond());
+				vesselAssociations.getFirst(), vesselAssociations.getSecond(), entities);
 
 		buildTotalVolumeLimits(builder, portAssociation);
 
@@ -237,7 +241,7 @@ public class LNGScenarioTransformer {
 	private void buildCharterOuts(SchedulerBuilder builder,
 			Association<Port, IPort> portAssociation,
 			Association<VesselClass, IVesselClass> classes,
-			Association<Vessel, IVessel> vessels) {
+			Association<Vessel, IVessel> vessels, ModelEntityMap entities) {
 		for (CharterOut charterOut : scenario.getFleetModel().getCharterOuts()) {
 			final ITimeWindow window = builder.createTimeWindow(
 					convertTime(charterOut.getStartDate()),
@@ -249,7 +253,9 @@ public class LNGScenarioTransformer {
 																	// measures
 																	// in days
 																	// here.
-
+			
+			entities.addModelObject(charterOut, builderCharterOut);
+			
 			for (final Vessel v : charterOut.getVessels()) {
 				builder.addCharterOutVessel(builderCharterOut,
 						vessels.lookup(v));
@@ -269,10 +275,11 @@ public class LNGScenarioTransformer {
 	 *            current builder. should already have ports/distances/vessels
 	 *            built
 	 * @param marketAssociation
+	 * @param entities 
 	 */
 	private void buildCargoes(final SchedulerBuilder builder,
 			final Association<Port, IPort> ports,
-			final Association<Market, ICurve> marketAssociation) {
+			final Association<Market, ICurve> marketAssociation, final ModelEntityMap entities) {
 		for (Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
@@ -311,6 +318,9 @@ public class LNGScenarioTransformer {
 					marketAssociation.lookup(dischargeMarket),
 					dischargeSlot.getSlotDuration());
 
+			entities.addModelObject(loadSlot, load);
+			entities.addModelObject(dischargeSlot, discharge);
+			
 			builder.createCargo(eCargo.getId(), load, discharge);
 		}
 	}
@@ -425,10 +435,11 @@ public class LNGScenarioTransformer {
 	 * @param portAssociation
 	 *            the Port <-> IPort association to connect EMF Ports with
 	 *            builder IPorts
+	 * @param entities 
 	 * @return
 	 */
 	private Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> buildFleet(
-			SchedulerBuilder builder, Association<Port, IPort> portAssociation) {
+			SchedulerBuilder builder, Association<Port, IPort> portAssociation, ModelEntityMap entities) {
 
 		/*
 		 * Build the fleet model - first we must create the vessel classes from
@@ -494,10 +505,12 @@ public class LNGScenarioTransformer {
 					portAssociation, eV.getStartRequirement());
 			IStartEndRequirement endRequirement = createRequirement(builder,
 					portAssociation, eV.getEndRequirement());
-
-			vesselAssociation.add(eV, builder.createVessel(eV.getName(),
+			final IVessel vessel = builder.createVessel(eV.getName(),
 					vesselClassAssociation.lookup(eV.getClass_()),
-					startRequirement, endRequirement));
+					startRequirement, endRequirement);
+			vesselAssociation.add(eV, vessel);
+			
+			entities.addModelObject(eV, vessel);
 		}
 
 		/*
