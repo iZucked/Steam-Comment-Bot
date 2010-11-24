@@ -6,7 +6,6 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.EnumMap;
-import java.util.Map.Entry;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;

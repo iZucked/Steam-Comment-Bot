@@ -40,11 +40,10 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 	private IPortSlotProvider<T> portSlotProvider;
 
-	private final FuelComponent[] idleFuelComponents = new FuelComponent[] {
-			FuelComponent.IdleBase, FuelComponent.IdleNBO };
-	private final FuelComponent[] travelFuelComponents = new FuelComponent[] {
-			FuelComponent.Base, FuelComponent.NBO,
-			FuelComponent.Base_Supplemental, FuelComponent.FBO };
+	private final FuelComponent[] idleFuelComponents = FuelComponent
+			.getIdleFuelComponents();
+	private final FuelComponent[] travelFuelComponents = FuelComponent
+			.getTravelFuelComponents();
 
 	public void annotateFromScheduledSequence(
 			final ScheduledSequence scheduledSequence,

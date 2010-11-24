@@ -57,4 +57,19 @@ public enum FuelComponent {
 	public final FuelUnit getDefaultFuelUnit() {
 		return fuelUnit;
 	}
+	
+	private static final FuelComponent[] travelFuelComponents = new FuelComponent[] {
+			Base, NBO,
+			Base_Supplemental, FBO };
+	
+	public static FuelComponent[] getTravelFuelComponents() {
+		return travelFuelComponents;
+	}
+	
+	private static final FuelComponent[] idleFuelComponents = new FuelComponent[] {
+			FuelComponent.IdleBase, FuelComponent.IdleNBO };
+	
+	public static FuelComponent[] getIdleFuelComponents() {
+		return idleFuelComponents;
+	}
 }
