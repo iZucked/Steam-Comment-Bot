@@ -20,6 +20,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.options.InvalidArgumentException;
 import com.mmxlabs.common.options.InvalidOptionException;
@@ -50,6 +53,8 @@ import com.mmxlabs.common.options.OptionsException;
  */
 public class DistanceMatrixCreator {
 
+	private static final Logger log = LoggerFactory.getLogger(DistanceMatrixCreator.class);
+	
 	private String imageFilePath;
 	private String outputFilePath;
 	private String coordinatesFilePath;
@@ -67,15 +72,15 @@ public class DistanceMatrixCreator {
 		try {
 			options.parseAndSet(args, me);
 		} catch (OptionsException e1) {
-			System.err.println("Error: " + e1.getMessage());
-			System.err.println(options.getHelp());
+			log.error("Error: " + e1.getMessage(), e1);
+			log.error(options.getHelp());
 			return;
 		}
 
 		try {
 			me.run();
 		} catch (IOException e) {
-			System.err.println(e);
+			log.error(e.getMessage(), e);
 		}
 
 	}
@@ -96,8 +101,8 @@ public class DistanceMatrixCreator {
 				/ (double) image.getWidth())
 				* 180 / Math.PI;
 
-		System.err.println("Presuming max. latitude = " + mlat);
-		System.err.println("Computing line-of-sight distance matrix");
+		log.info("Presuming max. latitude = " + mlat);
+		log.info("Computing line-of-sight distance matrix");
 
 		// BufferedWriter loslog = new BufferedWriter(new
 		// FileWriter("./los.txt"));
@@ -110,8 +115,7 @@ public class DistanceMatrixCreator {
 					"./coast.txt"));
 			calculator.writeCoastalPoints(coast);
 			coast.close();
-			System.err
-					.println("Coastal points written to coast.txt (cartesian)");
+			log.info("Coastal points written to coast.txt (cartesian)");
 		}
 
 		final BufferedReader portReader = new BufferedReader(new FileReader(
@@ -136,14 +140,14 @@ public class DistanceMatrixCreator {
 
 				});
 
-		System.err.println("Computing full distance matrix");
+		log.info("Computing full distance matrix");
 
 		final int[][] matrix = new int[ports.size()][ports.size()];
 		final ArrayList<Pair<Double, Double>> otherPorts = new ArrayList<Pair<Double, Double>>();
 		for (int i = 0; i < matrix.length; i++) {
 			final Pair<Double, Double> startPort = ports.get(i).getSecond();
 
-			System.err.println("Calculating distances from " + ports.get(i));
+			log.info("Calculating distances from " + ports.get(i));
 			final List<Integer> distances = calculator.getShortestPaths(
 					startPort, otherPorts);
 
@@ -163,8 +167,7 @@ public class DistanceMatrixCreator {
 
 			snap.close();
 			real.close();
-			System.err
-					.println("Ports written to realports.txt and snapports.txt");
+			log.info("Ports written to realports.txt and snapports.txt");
 		}
 
 		// write matrix out
@@ -187,7 +190,7 @@ public class DistanceMatrixCreator {
 		}
 		distanceWriter.flush();
 		distanceWriter.close();
-		System.err.println("Distance matrix written to " + getOutputFilePath());
+		log.info("Distance matrix written to " + getOutputFilePath());
 		// plot all paths;
 
 		// for (Pair<String, Pair<Double, Double>> start : ports) {
