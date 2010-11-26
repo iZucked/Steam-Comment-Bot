@@ -118,6 +118,7 @@ public final class Sequences<T> implements ISequences<T> {
 		return sequenceMap.size();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 
