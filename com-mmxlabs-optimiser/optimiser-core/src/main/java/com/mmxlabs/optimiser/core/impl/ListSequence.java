@@ -47,17 +47,17 @@ public final class ListSequence<T> implements ISequence<T> {
 			private final Iterator<? extends T> i = list.iterator();
 
 			@Override
-			public boolean hasNext() {
+			public final boolean hasNext() {
 				return i.hasNext();
 			}
 
 			@Override
-			public T next() {
+			public final T next() {
 				return i.next();
 			}
 
 			@Override
-			public void remove() {
+			public final void remove() {
 				throw new UnsupportedOperationException();
 			}
 		};
@@ -80,7 +80,7 @@ public final class ListSequence<T> implements ISequence<T> {
 	public int size() {
 		return list.size();
 	}
-	
+
 	@Override
 	public String toString() {
 		return list.toString();
