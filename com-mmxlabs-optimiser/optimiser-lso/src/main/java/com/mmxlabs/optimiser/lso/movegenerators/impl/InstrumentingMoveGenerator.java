@@ -8,11 +8,17 @@ package com.mmxlabs.optimiser.lso.movegenerators.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
+	
+	private static final Logger log = LoggerFactory.getLogger(InstrumentingMoveGenerator.class);
+	
 	private static final int HIT_COUNT = 500;
 
 	private final boolean collectStats;
@@ -70,6 +76,7 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 			}
 		}
 
+		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			return String
@@ -118,7 +125,7 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 			if (hits >= HIT_COUNT) {
 				hits = 0;
 				lastBatchTime = System.currentTimeMillis() - lastBatchTime;
-				System.err.println(this);
+				log.error(this.toString());
 			}
 		} else {
 			nulls++;
@@ -136,7 +143,6 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		delegate.setSequences(sequences);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void notifyOfThresholderDecision(long delta, boolean answer) {
 		if (answer)
 			totalAccepted++;
@@ -150,6 +156,7 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		}
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 

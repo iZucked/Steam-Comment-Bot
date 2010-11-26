@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -36,6 +39,8 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		IFitnessEvaluator<T> {
 
+	private static final Logger log = LoggerFactory.getLogger(LinearSimulatedAnnealingFitnessEvaluator.class);
+	
 	private IFitnessHelper<T> fitnessHelper = null;
 
 	private List<IFitnessComponent<T>> fitnessComponents = null;
@@ -173,8 +178,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 				null);
 
 		if (totalFitness == Long.MAX_VALUE) {
-			System.err
-					.println("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
+			log.error("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
 		}
 
 		bestFitness = totalFitness;

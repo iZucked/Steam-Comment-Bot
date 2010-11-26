@@ -7,6 +7,9 @@ package com.mmxlabs.optimiser.lso.impl.thresholders;
 
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.optimiser.lso.IThresholder;
 
 /**
@@ -16,6 +19,9 @@ import com.mmxlabs.optimiser.lso.IThresholder;
  *
  */
 public class CalibratingGeometricThresholder implements IThresholder {
+	
+	private static final Logger log = LoggerFactory.getLogger(CalibratingGeometricThreholderTest.class);
+	
 	private static final double ACCEPTABLE_ERROR = 0.01;
 	private double initialAcceptanceRate;
 	private int epochLength;
@@ -83,7 +89,7 @@ public class CalibratingGeometricThresholder implements IThresholder {
 		calibratedTemperature = T0;
 		delegate = new GeometricThresholder(random, epochLength, T0, alpha);
 		delegate.init();
-		System.err.println("Calibrated temperature: " + T0);
+		log.debug("Calibrated temperature: " + T0);
 	}
 	
 	private double evaluate(final double temperature) {
