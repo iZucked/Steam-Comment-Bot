@@ -88,7 +88,7 @@ public final class ListSequence<T> implements ISequence<T> {
 
 	@Override
 	public final T last() {
-		return get(size()-1);
+		return get(size() - 1);
 	}
 
 	@Override
