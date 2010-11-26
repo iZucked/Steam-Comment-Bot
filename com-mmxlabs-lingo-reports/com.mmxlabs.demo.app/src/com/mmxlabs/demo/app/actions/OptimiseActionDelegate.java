@@ -17,6 +17,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
@@ -31,6 +33,9 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 public class OptimiseActionDelegate implements IViewActionDelegate {
+	
+	private static final Logger log = LoggerFactory.getLogger(OptimiseActionDelegate.class);
+	
 	ISelection lastSelection = null;
 	@Override
 	public void run(IAction action) {
@@ -64,8 +69,7 @@ public class OptimiseActionDelegate implements IViewActionDelegate {
 								//create and invoke a job.
 								
 							} catch (IncompleteScenarioException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+								log.error(e1.getMessage(), e1);
 							}
 						}
 					}
