@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
