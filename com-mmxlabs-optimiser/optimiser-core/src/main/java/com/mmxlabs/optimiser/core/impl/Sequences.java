@@ -139,4 +139,9 @@ public final class Sequences<T> implements ISequences<T> {
 
 		return false;
 	}
+
+	@Override
+	public int hashCode() {
+		return sequenceMap.hashCode();
+	}
 }
