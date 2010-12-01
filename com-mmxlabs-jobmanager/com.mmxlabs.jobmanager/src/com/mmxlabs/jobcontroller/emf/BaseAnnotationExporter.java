@@ -10,11 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import scenario.Scenario;
-import scenario.schedule.FuelQuantity;
-import scenario.schedule.FuelType;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFactory;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.EventsFactory;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.FuelQuantity;
+import scenario.schedule.events.FuelType;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -32,14 +34,16 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	protected Scenario inputScenario;
 	protected Schedule output;
 	protected ModelEntityMap entities;
-	protected final ScheduleFactory factory = SchedulePackage.eINSTANCE
+	protected final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE
 			.getScheduleFactory();
-	private static final Map<FuelUnit, scenario.schedule.FuelUnit> fuelUnits =
-		new HashMap<FuelUnit, scenario.schedule.FuelUnit>();
-	
-	private static final Map<FuelComponent, FuelType> fuelTypes = 
-		new HashMap<FuelComponent, FuelType>();
-	
+
+	protected final EventsFactory factory = EventsPackage.eINSTANCE
+			.getEventsFactory();
+
+	private static final Map<FuelUnit, scenario.schedule.events.FuelUnit> fuelUnits = new HashMap<FuelUnit, scenario.schedule.events.FuelUnit>();
+
+	private static final Map<FuelComponent, FuelType> fuelTypes = new HashMap<FuelComponent, FuelType>();
+
 	static {
 		fuelTypes.put(FuelComponent.Base, FuelType.BASE_FUEL);
 		fuelTypes.put(FuelComponent.Base_Supplemental, FuelType.BASE_FUEL);
@@ -47,9 +51,9 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 		fuelTypes.put(FuelComponent.NBO, FuelType.NBO);
 		fuelTypes.put(FuelComponent.IdleNBO, FuelType.NBO);
 		fuelTypes.put(FuelComponent.FBO, FuelType.FBO);
-		fuelUnits.put(FuelUnit.M3, scenario.schedule.FuelUnit.M3);
-		fuelUnits.put(FuelUnit.MT, scenario.schedule.FuelUnit.MT);
-		fuelUnits.put(FuelUnit.MMBTu, scenario.schedule.FuelUnit.MMB_TU);
+		fuelUnits.put(FuelUnit.M3, scenario.schedule.events.FuelUnit.M3);
+		fuelUnits.put(FuelUnit.MT, scenario.schedule.events.FuelUnit.MT);
+		fuelUnits.put(FuelUnit.MMBTu, scenario.schedule.events.FuelUnit.MMB_TU);
 	}
 
 	@Override
@@ -76,22 +80,25 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	/**
 	 * Create a fuel quantity
 	 * 
+	 * TODO some units need scaling.
+	 * 
 	 * @param fc
 	 * @param consumption
 	 * @param cost
 	 * @return
 	 */
-	protected FuelQuantity createFuelQuantity(final FuelComponent fc, final long consumption,
-			final long cost) {
+	protected FuelQuantity createFuelQuantity(final FuelComponent fc,
+			final long consumption, final long cost) {
 		final FuelQuantity fq = factory.createFuelQuantity();
-		
+
 		fq.setQuantity(consumption);
 		fq.setTotalPrice(cost);
-		fq.setUnitPrice(cost/consumption); // TODO float?
-		
+		fq.setUnitPrice(consumption == 0 ? 0 : cost / consumption); // TODO
+																	// float?
+
 		fq.setFuelType(fuelTypes.get(fc));
-		fq.setFuelUnit(fuelUnits .get(fc.getDefaultFuelUnit()));
-		
+		fq.setFuelUnit(fuelUnits.get(fc.getDefaultFuelUnit()));
+
 		return fq;
 	}
 }

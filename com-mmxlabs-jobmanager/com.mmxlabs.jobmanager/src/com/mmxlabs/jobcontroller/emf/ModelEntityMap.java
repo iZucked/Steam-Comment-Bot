@@ -7,6 +7,7 @@
 package com.mmxlabs.jobcontroller.emf;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.management.timer.Timer;
@@ -27,7 +28,8 @@ import scenario.Scenario;
  */
 public class ModelEntityMap {
 	private ResourceSet resourceSet;
-	private Map<Object, URI> uriMap;
+	private final Map<Object, URI> uriMap = 
+		new HashMap<Object, URI>();
 	private Date earliestDate;
 
 	/**
@@ -50,9 +52,10 @@ public class ModelEntityMap {
 	public <U> U getModelObject(final Object internalObject,
 			final Class<? extends U> clz) {
 
-		
+		final URI uri = uriMap.get(internalObject);
+		if (uri == null) return null;
 		return clz.cast(
-				resourceSet.getEObject(uriMap.get(internalObject), false)
+				resourceSet.getEObject(uri, false)
 				);
 		
 	}

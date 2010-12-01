@@ -6,8 +6,11 @@
  */
 package com.mmxlabs.jobcontroller.emf;
 
+import java.util.Map;
+
 import scenario.Scenario;
 import scenario.schedule.Schedule;
+import scenario.schedule.events.ScheduledEvent;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -45,8 +48,14 @@ public interface IAnnotationExporter {
 	void init();
 	
 	/**
+	 * Create a scheduled event from the given annotation.
+	 * 
+	 * Returns null if there is no scheduled event.
+	 * @param element
 	 * @param annotation
+	 * @param key
+	 * @return
 	 */
-	void exportAnnotation(ISequenceElement element, Object annotation);
-	
+	ScheduledEvent export(final ISequenceElement element,
+			final Map<String, Object> annotations);
 }

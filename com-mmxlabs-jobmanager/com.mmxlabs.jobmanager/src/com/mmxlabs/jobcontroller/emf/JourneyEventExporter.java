@@ -6,18 +6,19 @@
  */
 package com.mmxlabs.jobcontroller.emf;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 
-import scenario.cargo.Slot;
-import scenario.schedule.FuelQuantity;
-import scenario.schedule.Journey;
+import scenario.fleet.VesselState;
+import scenario.port.Port;
+import scenario.schedule.events.FuelQuantity;
+import scenario.schedule.events.Journey;
 
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
@@ -25,49 +26,64 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * 
  */
 public class JourneyEventExporter extends BaseAnnotationExporter {
-	private IPortSlotProvider<ISequenceElement> portSlotProvider;
-	private EMap<Slot, Journey> journeys;
-
 	@Override
 	public void init() {
-		this.portSlotProvider = annotatedSolution
-				.getContext()
-				.getOptimisationData()
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portSlotsProvider,
-						IPortSlotProvider.class);
 
-		this.journeys = output.getSlotJourneys();
 	}
 
 	@Override
-	public void exportAnnotation(final ISequenceElement element,
-			final Object annotation) {
-		assert annotation instanceof IJourneyEvent;
+	public Journey export(final ISequenceElement element,
+			final Map<String, Object> annotations) {
+
 		@SuppressWarnings("unchecked")
-		final IJourneyEvent<ISequenceElement> event = (IJourneyEvent<ISequenceElement>) annotation;
-		final IPortSlot slot = portSlotProvider.getPortSlot(element);
+		final IJourneyEvent<ISequenceElement> event = (IJourneyEvent<ISequenceElement>) annotations
+				.get(SchedulerConstants.AI_journeyInfo);
 
-		if (slot != null) {
-			final Slot eSlot = entities.getModelObject(slot, Slot.class);
-			if (eSlot != null) {
-				final Journey journey = factory.createJourney();
-				journeys.put(eSlot, journey);
+		if (event == null) return null;
+		
+		final Port eFromPort = entities.getModelObject(event.getFromPort(),
+				Port.class);
+		final Port eToPort = entities.getModelObject(event.getToPort(),
+				Port.class);
 
-				journey.setStartTime(entities.getDateFromHours(event
-						.getStartTime()));
-				journey.setEndTime(entities.getDateFromHours(event.getEndTime()));
-				final EList<FuelQuantity> fuelUsage = journey.getFuelUsage();
-				for (final FuelComponent fc : FuelComponent
-						.getTravelFuelComponents()) {
-					final long consumption = event.getFuelConsumption(fc,
-							fc.getDefaultFuelUnit());
-					final long cost = event.getFuelCost(fc);
-					final FuelQuantity fq = createFuelQuantity(fc, consumption, cost);
-					
-					fuelUsage.add(fq);
-				}
-			}
+		if (eFromPort == null || eToPort == null)
+			return null;
+
+		final Journey journey = factory.createJourney();
+
+		journey.setStartTime(entities.getDateFromHours(event.getStartTime()));
+		journey.setEndTime(entities.getDateFromHours(event.getEndTime()));
+
+		journey.setFromPort(eFromPort);
+		journey.setToPort(eToPort);
+
+		// journey.setDestination(entities.getModelObject(event.getToPort(),
+		// Port.class));
+
+		journey.setDistance(event.getDistance());
+		journey.setRoute(event.getRoute());
+
+		switch (event.getVesselState()) {
+		case Ballast:
+			journey.setVesselState(VesselState.BALLAST);
+			break;
+		case Laden:
+			journey.setVesselState(VesselState.LADEN);
+			break;
 		}
+
+		journey.setSpeed(event.getSpeed() / (double) Calculator.ScaleFactor);
+
+		final EList<FuelQuantity> fuelUsage = journey.getFuelUsage();
+		for (final FuelComponent fc : FuelComponent.getTravelFuelComponents()) {
+			final long consumption = event.getFuelConsumption(fc,
+					fc.getDefaultFuelUnit());
+			final long cost = event.getFuelCost(fc);
+			final FuelQuantity fq = createFuelQuantity(fc, consumption, cost);
+
+			fuelUsage.add(fq);
+		}
+
+		return journey;
 	}
 }
