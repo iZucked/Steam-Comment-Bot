@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CargoAllocatingSchedulerComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
@@ -86,9 +87,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 				.add(new CargoAllocatingSchedulerComponent<T>(
 						CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME,
 						SchedulerConstants.DCP_vesselProvider,
-						SchedulerConstants.DCP_totalVolumeLimitProvider, 
-						SchedulerConstants.DCP_portSlotsProvider,
-						this));
+						SchedulerConstants.DCP_totalVolumeLimitProvider,
+						SchedulerConstants.DCP_portSlotsProvider, this));
 	}
 
 	@Override
@@ -160,18 +160,30 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		final ScheduledSequences schedule = scheduler.schedule(sequences);
 		// Do basic voyageplan annotation
 		final VoyagePlanAnnotator<T> annotator = new VoyagePlanAnnotator<T>();
+
+		@SuppressWarnings("unchecked")
+		final IPortSlotProvider<T> portSlotProvider = solution
+				.getContext()
+				.getOptimisationData()
+				.getDataComponentProvider(
+						SchedulerConstants.DCP_portSlotsProvider,
+						IPortSlotProvider.class);
+
+		annotator.setPortSlotProvider(portSlotProvider);
 		
 		for (final ScheduledSequence scheduledSequence : schedule) {
 			final IResource resource = scheduledSequence.getResource();
 			final ISequence<T> sequence = sequences.getSequence(resource);
-			
+
 			if (sequence.size() > 0) {
-				annotator.annotateFromScheduledSequence(scheduledSequence, solution);
+				annotator.annotateFromScheduledSequence(scheduledSequence,
+						solution);
 			}
 		}
-		
+
 		// Allow components to do any extra annotations
-		planIterator.annotateSchedulerComponents(components, schedule, solution);
-		
+		planIterator
+				.annotateSchedulerComponents(components, schedule, solution);
+
 	}
 }
