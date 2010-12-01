@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -193,5 +194,12 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 		newFitnessByResource = null;
 		oldFitnessByResource = null;
 		// TODO: What about the component?
+	}
+
+	@Override
+	public void annotate(final ISequences<T> sequences,
+			final IAnnotatedSolution<T> solution) {
+		evaluate(sequences);
+		// Would annotate here
 	}
 }
