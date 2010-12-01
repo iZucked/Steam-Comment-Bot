@@ -7,8 +7,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -67,8 +67,8 @@ public class PortRotationContentProvider implements IStructuredContentProvider {
 
 			ISequence<ISequenceElement> sequence = solution.getSequences()
 					.getSequence(resource);
-			IAnnotatedSequence<ISequenceElement> annotatedSequence = solution
-					.getAnnotatedSequence(resource);
+			IAnnotations<ISequenceElement> annotatedSequence = solution
+					.getElementAnnotations();
 
 			for (final ISequenceElement o : sequence) {
 
