@@ -6,18 +6,19 @@
  */
 package com.mmxlabs.jobcontroller.emf;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
+import java.util.Map;
 
-import scenario.cargo.Slot;
-import scenario.schedule.FuelQuantity;
-import scenario.schedule.SlotIdle;
+import org.eclipse.emf.common.util.EList;
+
+import scenario.fleet.VesselState;
+import scenario.port.Port;
+import scenario.schedule.events.FuelQuantity;
+import scenario.schedule.events.Idle;
+import scenario.schedule.events.ScheduledEvent;
 
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
@@ -27,47 +28,47 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * 
  */
 public class IdleEventExporter extends BaseAnnotationExporter {
-	private IPortSlotProvider<ISequenceElement> portSlotProvider;
-	private EMap<Slot, SlotIdle> idles;
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
-		this.portSlotProvider = annotatedSolution
-				.getContext()
-				.getOptimisationData()
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portSlotsProvider,
-						IPortSlotProvider.class);
-		this.idles = output.getSlotIdles();
 	}
 
 	@Override
-	public void exportAnnotation(final ISequenceElement element,
-			final Object annotation) {
-		assert annotation instanceof IIdleEvent;
-
+	public ScheduledEvent export(final ISequenceElement element,
+			final Map<String, Object> annotations) {
 		@SuppressWarnings("unchecked")
-		final IIdleEvent<ISequenceElement> event = (IIdleEvent<ISequenceElement>) annotation;
-		final IPortSlot slot = portSlotProvider.getPortSlot(element);
-		if (slot != null) {
-			final Slot eSlot = entities.getModelObject(slot, Slot.class);
-			if (eSlot != null) {
-				final SlotIdle idle = factory.createSlotIdle();
-				idles.put(eSlot, idle);
-				
-				idle.setStartTime(entities.getDateFromHours(event.getStartTime()));
-				idle.setEndTime(entities.getDateFromHours(event.getEndTime()));
-				
-				final EList<FuelQuantity> fuelUsage = idle.getFuelUsage();
-				
-				for (final FuelComponent fc : FuelComponent.getIdleFuelComponents()) {
-					fuelUsage.add(createFuelQuantity(fc, 
-							event.getFuelConsumption(fc, fc.getDefaultFuelUnit()),
-							event.getFuelCost(fc)));
-				}
-			}
-		}
-	}
+		final IIdleEvent<ISequenceElement> event = (IIdleEvent<ISequenceElement>) annotations
+				.get(SchedulerConstants.AI_idleInfo);
 
+		if (event == null) return null;
+		
+		final Port ePort = entities.getModelObject(event.getPort(), Port.class);
+
+		if (ePort == null)
+			return null;
+
+		final Idle idle = factory.createIdle();
+
+		idle.setPort(ePort);
+		idle.setStartTime(entities.getDateFromHours(event.getStartTime()));
+		idle.setEndTime(entities.getDateFromHours(event.getEndTime()));
+
+		switch (event.getVesselState()) {
+		case Ballast:
+			idle.setVesselState(VesselState.BALLAST);
+			break;
+		case Laden:
+			idle.setVesselState(VesselState.LADEN);
+			break;
+		}
+
+		final EList<FuelQuantity> fuelUsage = idle.getFuelUsage();
+
+		for (final FuelComponent fc : FuelComponent.getIdleFuelComponents()) {
+			fuelUsage.add(createFuelQuantity(fc,
+					event.getFuelConsumption(fc, fc.getDefaultFuelUnit()),
+					event.getFuelCost(fc)));
+		}
+
+		return idle;
+	}
 }

@@ -495,6 +495,8 @@ public class LNGScenarioTransformer {
 			if (inaccessiblePorts.isEmpty() == false) {
 				builder.setVesselClassInaccessiblePorts(vc, inaccessiblePorts);
 			}
+			
+			entities.addModelObject(eVc, vc);
 		}
 
 		/*
