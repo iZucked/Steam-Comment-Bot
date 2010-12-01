@@ -26,37 +26,40 @@ public abstract class AbstractScenarioHandler extends AbstractHandler {
 		IWorkbenchWindow window = HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
 
-		ISelection selection = window.getSelectionService().getSelection(
-				IPageLayout.ID_RES_NAV);
+		ISelection selection = window.getSelectionService().getSelection();
 		System.out.println("Selection = " + selection);
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection items = (IStructuredSelection) selection;
 
-			ResourceSet resourceSet = new ResourceSetImpl();
-			resourceSet
-					.getResourceFactoryRegistry()
-					.getExtensionToFactoryMap()
-					.put(Resource.Factory.Registry.DEFAULT_EXTENSION,
-							new XMIResourceFactoryImpl());
-			resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI,
-					ScenarioPackage.eINSTANCE);
+//			ResourceSet resourceSet = new ResourceSetImpl();
+//			resourceSet
+//					.getResourceFactoryRegistry()
+//					.getExtensionToFactoryMap()
+//					.put(Resource.Factory.Registry.DEFAULT_EXTENSION,
+//							new XMIResourceFactoryImpl());
+//			resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI,
+//					ScenarioPackage.eINSTANCE);
 
 			// get the job manager view
 
-			for (Object x : items.toList()) {
-				if (x instanceof IFile) {
-					IFile file = (IFile) x;
-
-					Resource resource = resourceSet.getResource(
-							URI.createFileURI(file.getLocation().toOSString()),
-							true);
-
-					for (EObject e : resource.getContents()) {
-						if (e instanceof Scenario) {
-							handleScenario(event, file.getName(), (Scenario) e);
-						}
-					}
+			for (final Object x : items.toList()) {
+				if (x instanceof Scenario) {
+					final Scenario scenario = (Scenario) x;
+					handleScenario(event, "scenario", scenario);
 				}
+//				if (x instanceof IFile) {
+//					IFile file = (IFile) x;
+//
+//					Resource resource = resourceSet.getResource(
+//							URI.createFileURI(file.getLocation().toOSString()),
+//							true);
+//
+//					for (EObject e : resource.getContents()) {
+//						if (e instanceof Scenario) {
+//							handleScenario(event, file.getName(), (Scenario) e);
+//						}
+//					}
+//				}
 			}
 
 		}
