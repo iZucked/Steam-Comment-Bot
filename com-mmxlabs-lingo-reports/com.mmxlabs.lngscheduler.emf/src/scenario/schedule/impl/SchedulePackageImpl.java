@@ -6,8 +6,10 @@
  */
 package scenario.schedule.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.ScenarioPackage;
@@ -26,9 +28,14 @@ import scenario.optimiser.lso.LsoPackage;
 import scenario.optimiser.lso.impl.LsoPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
+import scenario.schedule.CargoAllocation;
+import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFactory;
 import scenario.schedule.ScheduleModel;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.Sequence;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.impl.EventsPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -43,6 +50,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass scheduleModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scheduleEClass = null;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass sequenceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass cargoAllocationEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -93,6 +120,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		// Obtain or create and register interdependencies
 		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
 		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
@@ -104,6 +132,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		theSchedulePackage.createPackageContents();
 		theScenarioPackage.createPackageContents();
 		theFleetPackage.createPackageContents();
+		theEventsPackage.createPackageContents();
 		thePortPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
@@ -115,6 +144,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		theSchedulePackage.initializePackageContents();
 		theScenarioPackage.initializePackageContents();
 		theFleetPackage.initializePackageContents();
+		theEventsPackage.initializePackageContents();
 		thePortPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
@@ -139,6 +169,168 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	@Override
 	public EClass getScheduleModel() {
 		return scheduleModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScheduleModel_Schedules() {
+		return (EReference)scheduleModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSchedule() {
+		return scheduleEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSchedule_Sequences() {
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSchedule_Name() {
+		return (EAttribute)scheduleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSchedule_CargoAllocations() {
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSequence() {
+		return sequenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSequence_FleetVessel() {
+		return (EReference)sequenceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSequence_Events() {
+		return (EReference)sequenceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSequence_CharterVesselClass() {
+		return (EReference)sequenceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCargoAllocation() {
+		return cargoAllocationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoAllocation_LoadSlot() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoAllocation_DischargeSlot() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCargoAllocation_FuelVolume() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCargoAllocation_DischargeVolume() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCargoAllocation_LoadDate() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCargoAllocation_DischargeDate() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCargoAllocation_LoadPriceM3() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCargoAllocation_DischargePriceM3() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -171,6 +363,27 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Create classes and their features
 		scheduleModelEClass = createEClass(SCHEDULE_MODEL);
+		createEReference(scheduleModelEClass, SCHEDULE_MODEL__SCHEDULES);
+
+		scheduleEClass = createEClass(SCHEDULE);
+		createEReference(scheduleEClass, SCHEDULE__SEQUENCES);
+		createEAttribute(scheduleEClass, SCHEDULE__NAME);
+		createEReference(scheduleEClass, SCHEDULE__CARGO_ALLOCATIONS);
+
+		sequenceEClass = createEClass(SEQUENCE);
+		createEReference(sequenceEClass, SEQUENCE__FLEET_VESSEL);
+		createEReference(sequenceEClass, SEQUENCE__EVENTS);
+		createEReference(sequenceEClass, SEQUENCE__CHARTER_VESSEL_CLASS);
+
+		cargoAllocationEClass = createEClass(CARGO_ALLOCATION);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_SLOT);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_SLOT);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__FUEL_VOLUME);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_VOLUME);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_DATE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_DATE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_PRICE_M3);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_PRICE_M3);
 	}
 
 	/**
@@ -196,6 +409,14 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		EventsPackage theEventsPackage = (EventsPackage)EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
+		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+
+		// Add subpackages
+		getESubpackages().add(theEventsPackage);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
@@ -204,6 +425,27 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getScheduleModel_Schedules(), this.getSchedule(), null, "schedules", null, 0, -1, ScheduleModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(scheduleEClass, Schedule.class, "Schedule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSchedule_Sequences(), this.getSequence(), null, "sequences", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSchedule_Name(), ecorePackage.getEString(), "name", null, 1, 1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSchedule_CargoAllocations(), this.getCargoAllocation(), null, "cargoAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(sequenceEClass, Sequence.class, "Sequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSequence_FleetVessel(), theFleetPackage.getVessel(), null, "fleetVessel", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSequence_Events(), theEventsPackage.getScheduledEvent(), null, "events", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSequence_CharterVesselClass(), theFleetPackage.getVesselClass(), null, "charterVesselClass", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(cargoAllocationEClass, CargoAllocation.class, "CargoAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCargoAllocation_LoadSlot(), theCargoPackage.getLoadSlot(), null, "loadSlot", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_DischargeSlot(), theCargoPackage.getSlot(), null, "dischargeSlot", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_FuelVolume(), ecorePackage.getELong(), "fuelVolume", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_DischargeVolume(), ecorePackage.getELong(), "dischargeVolume", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_LoadDate(), ecorePackage.getEDate(), "loadDate", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_DischargeDate(), ecorePackage.getEDate(), "dischargeDate", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_LoadPriceM3(), ecorePackage.getEInt(), "loadPriceM3", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_DischargePriceM3(), ecorePackage.getEInt(), "dischargePriceM3", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //SchedulePackageImpl

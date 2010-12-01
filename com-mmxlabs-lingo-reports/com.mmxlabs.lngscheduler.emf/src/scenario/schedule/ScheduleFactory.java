@@ -35,6 +35,33 @@ public interface ScheduleFactory extends EFactory {
 	ScheduleModel createScheduleModel();
 
 	/**
+	 * Returns a new object of class '<em>Schedule</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Schedule</em>'.
+	 * @generated
+	 */
+	Schedule createSchedule();
+
+	/**
+	 * Returns a new object of class '<em>Sequence</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sequence</em>'.
+	 * @generated
+	 */
+	Sequence createSequence();
+
+	/**
+	 * Returns a new object of class '<em>Cargo Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cargo Allocation</em>'.
+	 * @generated
+	 */
+	CargoAllocation createCargoAllocation();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

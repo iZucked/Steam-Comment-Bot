@@ -1,10 +1,5 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario.fleet.impl;
+
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -12,7 +7,6 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.impl.CargoPackageImpl;
@@ -25,7 +19,6 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
-import scenario.fleet.VesselAvailability;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
@@ -39,6 +32,8 @@ import scenario.optimiser.lso.impl.LsoPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.impl.EventsPackageImpl;
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -153,6 +148,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		// Obtain or create and register interdependencies
 		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
 		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
@@ -164,6 +160,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		theFleetPackage.createPackageContents();
 		theScenarioPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
+		theEventsPackage.createPackageContents();
 		thePortPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
@@ -175,6 +172,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		theFleetPackage.initializePackageContents();
 		theScenarioPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
+		theEventsPackage.initializePackageContents();
 		thePortPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
@@ -196,7 +194,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getFleetModel() {
 		return fleetModelEClass;
 	}
@@ -206,7 +203,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getFleetModel_Fleet() {
 		return (EReference)fleetModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -216,7 +212,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getFleetModel_VesselClasses() {
 		return (EReference)fleetModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -235,7 +230,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getVessel() {
 		return vesselEClass;
 	}
@@ -245,7 +239,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getVessel_Name() {
 		return (EAttribute)vesselEClass.getEStructuralFeatures().get(0);
 	}
@@ -255,7 +248,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getVessel_Class() {
 		return (EReference)vesselEClass.getEStructuralFeatures().get(1);
 	}
@@ -283,7 +275,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getVesselClass() {
 		return vesselClassEClass;
 	}
@@ -293,7 +284,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getVesselClass_Name() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(0);
 	}
@@ -303,7 +293,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getVesselClass_Capacity() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(1);
 	}
@@ -412,7 +401,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getFuelConsumptionLine() {
 		return fuelConsumptionLineEClass;
 	}
@@ -422,7 +410,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getFuelConsumptionLine_Speed() {
 		return (EAttribute)fuelConsumptionLineEClass.getEStructuralFeatures().get(0);
 	}
@@ -432,7 +419,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getFuelConsumptionLine_Consumption() {
 		return (EAttribute)fuelConsumptionLineEClass.getEStructuralFeatures().get(1);
 	}
@@ -595,7 +581,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FleetFactory getFleetFactory() {
 		return (FleetFactory)getEFactoryInstance();
 	}

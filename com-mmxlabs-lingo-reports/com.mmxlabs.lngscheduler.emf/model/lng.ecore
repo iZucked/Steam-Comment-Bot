@@ -122,7 +122,111 @@
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
-    <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schedules" upperBound="-1"
+          eType="#//schedule/Schedule" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Schedule">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
+          eType="#//schedule/Sequence" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocations" upperBound="-1"
+          eType="#//schedule/CargoAllocation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Sequence">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fleetVessel" lowerBound="1"
+          eType="#//fleet/Vessel" unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+          eType="#//schedule/events/ScheduledEvent" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="charterVesselClass" lowerBound="1"
+          eType="#//fleet/VesselClass" unsettable="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" lowerBound="1"
+          eType="#//cargo/LoadSlot"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" lowerBound="1"
+          eType="#//cargo/Slot"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuelVolume" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargeVolume" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadDate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargeDate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadPriceM3" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargePriceM3" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eSubpackages name="events" nsURI="http://com.mmxlabs.lng.emf/schedule/events"
+        nsPrefix="com.mmxlabs.lng.emf.schedule.events">
+      <eClassifiers xsi:type="ecore:EClass" name="FuelMixture">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fuelUsage" upperBound="-1"
+            eType="#//schedule/events/FuelQuantity" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="FuelUnit">
+        <eLiterals name="MT"/>
+        <eLiterals name="M3" value="1"/>
+        <eLiterals name="MMBTu" value="2"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="FuelType">
+        <eLiterals name="FBO"/>
+        <eLiterals name="NBO" value="1"/>
+        <eLiterals name="BaseFuel" value="2"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="FuelQuantity">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuelType" lowerBound="1"
+            eType="#//schedule/events/FuelType"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitPrice" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalPrice" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuelUnit" lowerBound="1"
+            eType="#//schedule/events/FuelUnit"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ScheduledEvent">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Idle" eSuperTypes="#//schedule/events/PortVisit #//schedule/events/FuelMixture">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselState" lowerBound="1"
+            eType="#//fleet/VesselState"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Journey" eSuperTypes="#//schedule/events/ScheduledEvent #//schedule/events/FuelMixture">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="toPort" lowerBound="1"
+            eType="#//port/Port"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselState" lowerBound="1"
+            eType="#//fleet/VesselState"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="route" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fromPort" lowerBound="1"
+            eType="#//port/Port"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//schedule/events/ScheduledEvent">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
+            eType="#//port/Port"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SlotVisit" eSuperTypes="#//schedule/events/PortVisit">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1"
+            eType="#//cargo/Slot"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" lowerBound="1"
+            eType="#//schedule/CargoAllocation"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="CharterOutVisit" eSuperTypes="#//schedule/events/PortVisit">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="charterOut" lowerBound="1"
+            eType="#//fleet/CharterOut"/>
+      </eClassifiers>
+    </eSubpackages>
   </eSubpackages>
   <eSubpackages name="port" nsURI="http://com.mmxlabs.lng.emf/port" nsPrefix="com.mmxlabs.lng.emf.port">
     <eClassifiers xsi:type="ecore:EClass" name="PortModel">

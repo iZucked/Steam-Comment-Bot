@@ -1,42 +1,23 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario.optimiser.lso.impl;
+
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import scenario.ScenarioPackage;
-
 import scenario.cargo.CargoPackage;
-
 import scenario.cargo.impl.CargoPackageImpl;
-
 import scenario.contract.ContractPackage;
-
 import scenario.contract.impl.ContractPackageImpl;
-
 import scenario.fleet.FleetPackage;
-
 import scenario.fleet.impl.FleetPackageImpl;
-
 import scenario.impl.ScenarioPackageImpl;
-
 import scenario.market.MarketPackage;
-
 import scenario.market.impl.MarketPackageImpl;
-
 import scenario.optimiser.OptimiserPackage;
-
 import scenario.optimiser.impl.OptimiserPackageImpl;
-
 import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoFactory;
@@ -44,13 +25,11 @@ import scenario.optimiser.lso.LsoPackage;
 import scenario.optimiser.lso.MoveGeneratorSettings;
 import scenario.optimiser.lso.RandomMoveGeneratorSettings;
 import scenario.optimiser.lso.ThresholderSettings;
-
 import scenario.port.PortPackage;
-
 import scenario.port.impl.PortPackageImpl;
-
 import scenario.schedule.SchedulePackage;
-
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.impl.EventsPackageImpl;
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -145,6 +124,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
 		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
 		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
@@ -156,6 +136,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		theScenarioPackage.createPackageContents();
 		theFleetPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
+		theEventsPackage.createPackageContents();
 		thePortPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
@@ -167,6 +148,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		theScenarioPackage.initializePackageContents();
 		theFleetPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
+		theEventsPackage.initializePackageContents();
 		thePortPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();

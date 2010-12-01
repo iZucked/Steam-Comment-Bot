@@ -6,11 +6,14 @@
  */
 package scenario.schedule.util;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.cargo.Slot;
+import scenario.fleet.Vessel;
 import scenario.schedule.*;
 import scenario.schedule.ScheduleModel;
 import scenario.schedule.SchedulePackage;
@@ -76,6 +79,18 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createScheduleModelAdapter();
 			}
 			@Override
+			public Adapter caseSchedule(Schedule object) {
+				return createScheduleAdapter();
+			}
+			@Override
+			public Adapter caseSequence(Sequence object) {
+				return createSequenceAdapter();
+			}
+			@Override
+			public Adapter caseCargoAllocation(CargoAllocation object) {
+				return createCargoAllocationAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -106,6 +121,48 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createScheduleModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.schedule.Schedule <em>Schedule</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.schedule.Schedule
+	 * @generated
+	 */
+	public Adapter createScheduleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.schedule.Sequence <em>Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.schedule.Sequence
+	 * @generated
+	 */
+	public Adapter createSequenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.schedule.CargoAllocation <em>Cargo Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.schedule.CargoAllocation
+	 * @generated
+	 */
+	public Adapter createCargoAllocationAdapter() {
 		return null;
 	}
 

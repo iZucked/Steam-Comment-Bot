@@ -29,6 +29,8 @@ Export-Package: scenario,
  scenario.port.impl,
  scenario.port.util,
  scenario.schedule,
+ scenario.schedule.events,
+ scenario.schedule.events.util,
  scenario.schedule.impl,
  scenario.schedule.util,
  scenario.util

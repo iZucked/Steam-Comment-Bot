@@ -1,17 +1,11 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario.impl;
+
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.ScenarioPackage;
@@ -30,6 +24,8 @@ import scenario.optimiser.lso.impl.LsoPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.impl.EventsPackageImpl;
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -95,6 +91,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		// Obtain or create and register interdependencies
 		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
 		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
@@ -106,6 +103,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		theScenarioPackage.createPackageContents();
 		theFleetPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
+		theEventsPackage.createPackageContents();
 		thePortPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
@@ -117,6 +115,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		theScenarioPackage.initializePackageContents();
 		theFleetPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
+		theEventsPackage.initializePackageContents();
 		thePortPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
@@ -138,7 +137,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getScenario() {
 		return scenarioEClass;
 	}
@@ -148,7 +146,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getScenario_FleetModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(0);
 	}
@@ -158,7 +155,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getScenario_PortModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(1);
 	}
@@ -168,7 +164,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getScenario_CargoModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(2);
 	}
@@ -178,7 +173,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getScenario_ContractModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(3);
 	}
@@ -188,7 +182,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getScenario_ScheduleModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(4);
 	}
@@ -198,7 +191,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getScenario_MarketModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(5);
 	}
@@ -244,7 +236,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
 	}

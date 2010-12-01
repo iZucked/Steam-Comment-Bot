@@ -8,9 +8,12 @@ package scenario.schedule.util;
 
 import java.util.List;
 
+import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.cargo.Slot;
+import scenario.fleet.Vessel;
 import scenario.schedule.*;
 import scenario.schedule.ScheduleModel;
 import scenario.schedule.SchedulePackage;
@@ -95,6 +98,24 @@ public class ScheduleSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.SCHEDULE: {
+				Schedule schedule = (Schedule)theEObject;
+				T result = caseSchedule(schedule);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.SEQUENCE: {
+				Sequence sequence = (Sequence)theEObject;
+				T result = caseSequence(sequence);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.CARGO_ALLOCATION: {
+				CargoAllocation cargoAllocation = (CargoAllocation)theEObject;
+				T result = caseCargoAllocation(cargoAllocation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -111,6 +132,51 @@ public class ScheduleSwitch<T> {
 	 * @generated
 	 */
 	public T caseScheduleModel(ScheduleModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Schedule</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Schedule</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSchedule(Schedule object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sequence</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sequence</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSequence(Sequence object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Cargo Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Cargo Allocation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCargoAllocation(CargoAllocation object) {
 		return null;
 	}
 

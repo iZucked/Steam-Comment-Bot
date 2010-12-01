@@ -1,10 +1,5 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario.fleet;
+
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -333,7 +328,6 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int FUEL_CONSUMPTION_LINE_FEATURE_COUNT = 2;
-
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.

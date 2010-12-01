@@ -1,10 +1,5 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario;
+
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;

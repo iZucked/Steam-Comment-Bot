@@ -1,17 +1,11 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario.contract.impl;
+
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.impl.CargoPackageImpl;
@@ -33,6 +27,8 @@ import scenario.optimiser.lso.impl.LsoPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.impl.EventsPackageImpl;
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -120,6 +116,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
 		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
 		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
@@ -131,6 +128,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		theScenarioPackage.createPackageContents();
 		theFleetPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
+		theEventsPackage.createPackageContents();
 		thePortPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theMarketPackage.createPackageContents();
@@ -142,6 +140,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		theScenarioPackage.initializePackageContents();
 		theFleetPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
+		theEventsPackage.initializePackageContents();
 		thePortPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theMarketPackage.initializePackageContents();
@@ -162,7 +161,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getContractModel() {
 		return contractModelEClass;
 	}
@@ -172,7 +170,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getContractModel_PurchaseContracts() {
 		return (EReference)contractModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -182,7 +179,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getContractModel_SalesContracts() {
 		return (EReference)contractModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -201,7 +197,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getPurchaseContract() {
 		return purchaseContractEClass;
 	}
@@ -211,7 +206,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getSalesContract() {
 		return salesContractEClass;
 	}
@@ -275,7 +269,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ContractFactory getContractFactory() {
 		return (ContractFactory)getEFactoryInstance();
 	}

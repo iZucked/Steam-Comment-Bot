@@ -6,6 +6,9 @@
  */
 package scenario.cargo;
 
+import java.util.Date;
+import scenario.port.Port;
+
 
 /**
  * <!-- begin-user-doc -->

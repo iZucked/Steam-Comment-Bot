@@ -6,14 +6,17 @@
  */
 package scenario.cargo.impl;
 
+import java.util.Date;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
+import scenario.port.Port;
 
 /**
  * <!-- begin-user-doc -->

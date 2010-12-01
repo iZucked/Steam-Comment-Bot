@@ -1,17 +1,11 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario.port.impl;
+
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.impl.CargoPackageImpl;
@@ -30,13 +24,14 @@ import scenario.port.Canal;
 import scenario.port.CanalModel;
 import scenario.port.DistanceLine;
 import scenario.port.DistanceModel;
-import scenario.port.PartialDistance;
 import scenario.port.Port;
 import scenario.port.PortFactory;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
 import scenario.port.VesselClassCost;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.impl.EventsPackageImpl;
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -145,6 +140,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
 		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
 		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
 		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
@@ -156,6 +152,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		theScenarioPackage.createPackageContents();
 		theFleetPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
+		theEventsPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
 		theMarketPackage.createPackageContents();
@@ -167,6 +164,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		theScenarioPackage.initializePackageContents();
 		theFleetPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
+		theEventsPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
 		theMarketPackage.initializePackageContents();
@@ -187,7 +185,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getPortModel() {
 		return portModelEClass;
 	}
@@ -197,7 +194,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getPortModel_Ports() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -207,7 +203,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getPort() {
 		return portEClass;
 	}
@@ -217,7 +212,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getPort_Name() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(0);
 	}
@@ -389,7 +383,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}

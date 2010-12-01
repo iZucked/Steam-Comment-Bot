@@ -1,17 +1,11 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario.market.impl;
+
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.impl.CargoPackageImpl;
@@ -20,7 +14,6 @@ import scenario.contract.impl.ContractPackageImpl;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.impl.FleetPackageImpl;
 import scenario.impl.ScenarioPackageImpl;
-import scenario.market.ForwardPrice;
 import scenario.market.Market;
 import scenario.market.MarketFactory;
 import scenario.market.MarketModel;
@@ -34,6 +27,8 @@ import scenario.optimiser.lso.impl.LsoPackageImpl;
 import scenario.port.PortPackage;
 import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.impl.EventsPackageImpl;
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -43,6 +38,13 @@ import scenario.schedule.impl.SchedulePackageImpl;
  * @generated
  */
 public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass marketEClass = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -63,13 +65,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * @generated
 	 */
 	private EClass stepwisePriceEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass marketEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -121,6 +116,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
 		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
 		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
@@ -132,6 +128,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		theScenarioPackage.createPackageContents();
 		theFleetPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
+		theEventsPackage.createPackageContents();
 		thePortPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
@@ -143,6 +140,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		theScenarioPackage.initializePackageContents();
 		theFleetPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
+		theEventsPackage.initializePackageContents();
 		thePortPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
@@ -163,7 +161,33 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
+	public EClass getMarket() {
+		return marketEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMarket_Name() {
+		return (EAttribute)marketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMarket_PriceCurve() {
+		return (EReference)marketEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMarketModel() {
 		return marketModelEClass;
 	}
@@ -173,7 +197,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getMarketModel_Markets() {
 		return (EReference)marketModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -237,36 +260,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EClass getMarket() {
-		return marketEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getMarket_Name() {
-		return (EAttribute)marketEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getMarket_PriceCurve() {
-		return (EReference)marketEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public MarketFactory getMarketFactory() {
 		return (MarketFactory)getEFactoryInstance();
 	}

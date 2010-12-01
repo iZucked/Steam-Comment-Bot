@@ -1,0 +1,652 @@
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
+package scenario.schedule.events.impl;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
+import scenario.ScenarioPackage;
+
+import scenario.cargo.CargoPackage;
+
+import scenario.cargo.impl.CargoPackageImpl;
+
+import scenario.contract.ContractPackage;
+
+import scenario.contract.impl.ContractPackageImpl;
+
+import scenario.fleet.FleetPackage;
+
+import scenario.fleet.impl.FleetPackageImpl;
+
+import scenario.impl.ScenarioPackageImpl;
+
+import scenario.market.MarketPackage;
+
+import scenario.market.impl.MarketPackageImpl;
+
+import scenario.optimiser.OptimiserPackage;
+
+import scenario.optimiser.impl.OptimiserPackageImpl;
+
+import scenario.optimiser.lso.LsoPackage;
+
+import scenario.optimiser.lso.impl.LsoPackageImpl;
+
+import scenario.port.PortPackage;
+
+import scenario.port.impl.PortPackageImpl;
+
+import scenario.schedule.SchedulePackage;
+
+import scenario.schedule.events.CharterOutVisit;
+import scenario.schedule.events.EventsFactory;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.FuelMixture;
+import scenario.schedule.events.FuelQuantity;
+import scenario.schedule.events.FuelType;
+import scenario.schedule.events.FuelUnit;
+import scenario.schedule.events.Idle;
+import scenario.schedule.events.Journey;
+import scenario.schedule.events.PortVisit;
+import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.SlotVisit;
+
+import scenario.schedule.impl.SchedulePackageImpl;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model <b>Package</b>.
+ * <!-- end-user-doc -->
+ * @generated
+ */
+public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fuelMixtureEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fuelQuantityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scheduledEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass idleEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass journeyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portVisitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass slotVisitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass charterOutVisitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum fuelUnitEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum fuelTypeEEnum = null;
+
+	/**
+	 * Creates an instance of the model <b>Package</b>, registered with
+	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+	 * package URI value.
+	 * <p>Note: the correct way to create the package is via the static
+	 * factory method {@link #init init()}, which also performs
+	 * initialization of the package, or returns the registered package,
+	 * if one already exists.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.emf.ecore.EPackage.Registry
+	 * @see scenario.schedule.events.EventsPackage#eNS_URI
+	 * @see #init()
+	 * @generated
+	 */
+	private EventsPackageImpl() {
+		super(eNS_URI, EventsFactory.eINSTANCE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private static boolean isInited = false;
+
+	/**
+	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
+	 * 
+	 * <p>This method is used to initialize {@link EventsPackage#eINSTANCE} when that field is accessed.
+	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #eNS_URI
+	 * @see #createPackageContents()
+	 * @see #initializePackageContents()
+	 * @generated
+	 */
+	public static EventsPackage init() {
+		if (isInited) return (EventsPackage)EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI);
+
+		// Obtain or create and register package
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new EventsPackageImpl());
+
+		isInited = true;
+
+		// Obtain or create and register interdependencies
+		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
+		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
+		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
+		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
+		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
+		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
+		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
+		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
+		LsoPackageImpl theLsoPackage = (LsoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI) instanceof LsoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI) : LsoPackage.eINSTANCE);
+
+		// Create package meta-data objects
+		theEventsPackage.createPackageContents();
+		theScenarioPackage.createPackageContents();
+		theFleetPackage.createPackageContents();
+		theSchedulePackage.createPackageContents();
+		thePortPackage.createPackageContents();
+		theCargoPackage.createPackageContents();
+		theContractPackage.createPackageContents();
+		theMarketPackage.createPackageContents();
+		theOptimiserPackage.createPackageContents();
+		theLsoPackage.createPackageContents();
+
+		// Initialize created meta-data
+		theEventsPackage.initializePackageContents();
+		theScenarioPackage.initializePackageContents();
+		theFleetPackage.initializePackageContents();
+		theSchedulePackage.initializePackageContents();
+		thePortPackage.initializePackageContents();
+		theCargoPackage.initializePackageContents();
+		theContractPackage.initializePackageContents();
+		theMarketPackage.initializePackageContents();
+		theOptimiserPackage.initializePackageContents();
+		theLsoPackage.initializePackageContents();
+
+		// Mark meta-data to indicate it can't be changed
+		theEventsPackage.freeze();
+
+  
+		// Update the registry and return the package
+		EPackage.Registry.INSTANCE.put(EventsPackage.eNS_URI, theEventsPackage);
+		return theEventsPackage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getFuelMixture() {
+		return fuelMixtureEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFuelMixture_FuelUsage() {
+		return (EReference)fuelMixtureEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getFuelQuantity() {
+		return fuelQuantityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFuelQuantity_FuelType() {
+		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFuelQuantity_Quantity() {
+		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFuelQuantity_UnitPrice() {
+		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFuelQuantity_TotalPrice() {
+		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFuelQuantity_FuelUnit() {
+		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getScheduledEvent() {
+		return scheduledEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScheduledEvent_StartTime() {
+		return (EAttribute)scheduledEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScheduledEvent_EndTime() {
+		return (EAttribute)scheduledEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getIdle() {
+		return idleEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getIdle_VesselState() {
+		return (EAttribute)idleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getJourney() {
+		return journeyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getJourney_ToPort() {
+		return (EReference)journeyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getJourney_VesselState() {
+		return (EAttribute)journeyEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getJourney_Route() {
+		return (EAttribute)journeyEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getJourney_Speed() {
+		return (EAttribute)journeyEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getJourney_Distance() {
+		return (EAttribute)journeyEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getJourney_FromPort() {
+		return (EReference)journeyEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPortVisit() {
+		return portVisitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPortVisit_Port() {
+		return (EReference)portVisitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSlotVisit() {
+		return slotVisitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotVisit_Slot() {
+		return (EReference)slotVisitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotVisit_CargoAllocation() {
+		return (EReference)slotVisitEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCharterOutVisit() {
+		return charterOutVisitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterOutVisit_CharterOut() {
+		return (EReference)charterOutVisitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getFuelUnit() {
+		return fuelUnitEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getFuelType() {
+		return fuelTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EventsFactory getEventsFactory() {
+		return (EventsFactory)getEFactoryInstance();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private boolean isCreated = false;
+
+	/**
+	 * Creates the meta-model objects for the package.  This method is
+	 * guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void createPackageContents() {
+		if (isCreated) return;
+		isCreated = true;
+
+		// Create classes and their features
+		fuelMixtureEClass = createEClass(FUEL_MIXTURE);
+		createEReference(fuelMixtureEClass, FUEL_MIXTURE__FUEL_USAGE);
+
+		fuelQuantityEClass = createEClass(FUEL_QUANTITY);
+		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__FUEL_TYPE);
+		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__QUANTITY);
+		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__UNIT_PRICE);
+		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__TOTAL_PRICE);
+		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__FUEL_UNIT);
+
+		scheduledEventEClass = createEClass(SCHEDULED_EVENT);
+		createEAttribute(scheduledEventEClass, SCHEDULED_EVENT__START_TIME);
+		createEAttribute(scheduledEventEClass, SCHEDULED_EVENT__END_TIME);
+
+		idleEClass = createEClass(IDLE);
+		createEAttribute(idleEClass, IDLE__VESSEL_STATE);
+
+		journeyEClass = createEClass(JOURNEY);
+		createEReference(journeyEClass, JOURNEY__TO_PORT);
+		createEAttribute(journeyEClass, JOURNEY__VESSEL_STATE);
+		createEAttribute(journeyEClass, JOURNEY__ROUTE);
+		createEAttribute(journeyEClass, JOURNEY__SPEED);
+		createEAttribute(journeyEClass, JOURNEY__DISTANCE);
+		createEReference(journeyEClass, JOURNEY__FROM_PORT);
+
+		portVisitEClass = createEClass(PORT_VISIT);
+		createEReference(portVisitEClass, PORT_VISIT__PORT);
+
+		slotVisitEClass = createEClass(SLOT_VISIT);
+		createEReference(slotVisitEClass, SLOT_VISIT__SLOT);
+		createEReference(slotVisitEClass, SLOT_VISIT__CARGO_ALLOCATION);
+
+		charterOutVisitEClass = createEClass(CHARTER_OUT_VISIT);
+		createEReference(charterOutVisitEClass, CHARTER_OUT_VISIT__CHARTER_OUT);
+
+		// Create enums
+		fuelUnitEEnum = createEEnum(FUEL_UNIT);
+		fuelTypeEEnum = createEEnum(FUEL_TYPE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private boolean isInitialized = false;
+
+	/**
+	 * Complete the initialization of the package and its meta-model.  This
+	 * method is guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void initializePackageContents() {
+		if (isInitialized) return;
+		isInitialized = true;
+
+		// Initialize package
+		setName(eNAME);
+		setNsPrefix(eNS_PREFIX);
+		setNsURI(eNS_URI);
+
+		// Obtain other dependent packages
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
+		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
+		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
+
+		// Create type parameters
+
+		// Set bounds for type parameters
+
+		// Add supertypes to classes
+		idleEClass.getESuperTypes().add(this.getPortVisit());
+		idleEClass.getESuperTypes().add(this.getFuelMixture());
+		journeyEClass.getESuperTypes().add(this.getScheduledEvent());
+		journeyEClass.getESuperTypes().add(this.getFuelMixture());
+		portVisitEClass.getESuperTypes().add(this.getScheduledEvent());
+		slotVisitEClass.getESuperTypes().add(this.getPortVisit());
+		charterOutVisitEClass.getESuperTypes().add(this.getPortVisit());
+
+		// Initialize classes and features; add operations and parameters
+		initEClass(fuelMixtureEClass, FuelMixture.class, "FuelMixture", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFuelMixture_FuelUsage(), this.getFuelQuantity(), null, "fuelUsage", null, 0, -1, FuelMixture.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(fuelQuantityEClass, FuelQuantity.class, "FuelQuantity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFuelQuantity_FuelType(), this.getFuelType(), "fuelType", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFuelQuantity_Quantity(), ecorePackage.getELong(), "quantity", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFuelQuantity_UnitPrice(), ecorePackage.getELong(), "unitPrice", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFuelQuantity_TotalPrice(), ecorePackage.getELong(), "totalPrice", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFuelQuantity_FuelUnit(), this.getFuelUnit(), "fuelUnit", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(scheduledEventEClass, ScheduledEvent.class, "ScheduledEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getScheduledEvent_StartTime(), ecorePackage.getEDate(), "startTime", null, 1, 1, ScheduledEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScheduledEvent_EndTime(), ecorePackage.getEDate(), "endTime", null, 1, 1, ScheduledEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIdle_VesselState(), theFleetPackage.getVesselState(), "vesselState", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(journeyEClass, Journey.class, "Journey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getJourney_ToPort(), thePortPackage.getPort(), null, "toPort", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_VesselState(), theFleetPackage.getVesselState(), "vesselState", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_Route(), ecorePackage.getEString(), "route", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_Speed(), ecorePackage.getEDouble(), "speed", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_Distance(), ecorePackage.getEInt(), "distance", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getJourney_FromPort(), thePortPackage.getPort(), null, "fromPort", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPortVisit_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(slotVisitEClass, SlotVisit.class, "SlotVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSlotVisit_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, SlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotVisit_CargoAllocation(), theSchedulePackage.getCargoAllocation(), null, "cargoAllocation", null, 1, 1, SlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(charterOutVisitEClass, CharterOutVisit.class, "CharterOutVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCharterOutVisit_CharterOut(), theFleetPackage.getCharterOut(), null, "charterOut", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");
+		addEEnumLiteral(fuelUnitEEnum, FuelUnit.MT);
+		addEEnumLiteral(fuelUnitEEnum, FuelUnit.M3);
+		addEEnumLiteral(fuelUnitEEnum, FuelUnit.MMB_TU);
+
+		initEEnum(fuelTypeEEnum, FuelType.class, "FuelType");
+		addEEnumLiteral(fuelTypeEEnum, FuelType.FBO);
+		addEEnumLiteral(fuelTypeEEnum, FuelType.NBO);
+		addEEnumLiteral(fuelTypeEEnum, FuelType.BASE_FUEL);
+	}
+
+} //EventsPackageImpl

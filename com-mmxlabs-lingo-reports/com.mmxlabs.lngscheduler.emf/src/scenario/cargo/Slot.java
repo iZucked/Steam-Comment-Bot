@@ -271,5 +271,7 @@ public interface Slot extends EObject {
 	 * @generated
 	 */
 	boolean isSetMarket();
+	
+	Date getWindowEnd();
 
 } // Slot

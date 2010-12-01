@@ -4,51 +4,56 @@
  *
  * $Id$
  */
-package scenario.schedule.impl;
+package scenario.schedule.events.impl;
 
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import scenario.schedule.Schedule;
-import scenario.schedule.ScheduleModel;
-import scenario.schedule.SchedulePackage;
+
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.FuelMixture;
+import scenario.schedule.events.FuelQuantity;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Model</b></em>'.
+ * An implementation of the model object '<em><b>Fuel Mixture</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.schedule.impl.ScheduleModelImpl#getSchedules <em>Schedules</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.FuelMixtureImpl#getFuelUsage <em>Fuel Usage</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
+public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 	/**
-	 * The cached value of the '{@link #getSchedules() <em>Schedules</em>}' containment reference list.
+	 * The cached value of the '{@link #getFuelUsage() <em>Fuel Usage</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSchedules()
+	 * @see #getFuelUsage()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Schedule> schedules;
+	protected EList<FuelQuantity> fuelUsage;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ScheduleModelImpl() {
+	protected FuelMixtureImpl() {
 		super();
 	}
 
@@ -59,7 +64,7 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return SchedulePackage.Literals.SCHEDULE_MODEL;
+		return EventsPackage.Literals.FUEL_MIXTURE;
 	}
 
 	/**
@@ -67,11 +72,11 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Schedule> getSchedules() {
-		if (schedules == null) {
-			schedules = new EObjectContainmentEList<Schedule>(Schedule.class, this, SchedulePackage.SCHEDULE_MODEL__SCHEDULES);
+	public EList<FuelQuantity> getFuelUsage() {
+		if (fuelUsage == null) {
+			fuelUsage = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, EventsPackage.FUEL_MIXTURE__FUEL_USAGE);
 		}
-		return schedules;
+		return fuelUsage;
 	}
 
 	/**
@@ -82,8 +87,8 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
-				return ((InternalEList<?>)getSchedules()).basicRemove(otherEnd, msgs);
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				return ((InternalEList<?>)getFuelUsage()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -96,8 +101,8 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
-				return getSchedules();
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				return getFuelUsage();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -111,9 +116,9 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
-				getSchedules().clear();
-				getSchedules().addAll((Collection<? extends Schedule>)newValue);
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				getFuelUsage().clear();
+				getFuelUsage().addAll((Collection<? extends FuelQuantity>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -127,8 +132,8 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
-				getSchedules().clear();
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				getFuelUsage().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -142,10 +147,10 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
-				return schedules != null && !schedules.isEmpty();
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				return fuelUsage != null && !fuelUsage.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //ScheduleModelImpl
+} //FuelMixtureImpl

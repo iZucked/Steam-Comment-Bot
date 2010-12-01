@@ -8,6 +8,8 @@ package scenario.cargo.impl;
 
 import java.util.Date;
 
+import javax.management.timer.Timer;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -592,6 +594,17 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		result.append(slotDuration);
 		result.append(')');
 		return result.toString();
+	}
+
+	/* (non-Javadoc)
+	 * @see scenario.cargo.Slot#getWindowEnd()
+	 */
+	@Override
+	public Date getWindowEnd() {
+		return new Date(getWindowStart()
+				.getTime()
+				+ Timer.ONE_HOUR
+				* getWindowDuration());
 	}
 
 } //SlotImpl
