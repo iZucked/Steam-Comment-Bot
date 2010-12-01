@@ -1,7 +1,6 @@
 package com.mmxlabs.scheduleview.views;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Iterator;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -9,26 +8,27 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+
+import scenario.schedule.Schedule;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.ManagedJobListenerNotifier;
 import com.mmxlabs.scheduleview.Activator;
-import com.mmxlabs.scheduleview.views.AnnotatedSequenceLabelProvider.Mode;
+import com.mmxlabs.scheduleview.views.EMFScheduleLabelProvider.Mode;
 
 public class SchedulerView extends ViewPart {
 
@@ -41,11 +41,6 @@ public class SchedulerView extends ViewPart {
 	private Action zoomInAction;
 	private Action zoomOutAction;
 
-	private List<IManagedJob> selectedJobs = new LinkedList<IManagedJob>();
-
-	private IManagedJobListener jobListener;
-
-	private IJobManagerListener jobManagerListener;
 
 	private Action toggleColourSchemeAction;
 
@@ -92,9 +87,12 @@ public class SchedulerView extends ViewPart {
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.BORDER, settings);
-		viewer.setContentProvider(new AnnotatedScheduleContentProvider());
-		viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
+//		viewer.setContentProvider(new AnnotatedScheduleContentProvider());
+//		viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
+		viewer.setContentProvider(new EMFScheduleContentProvider());
+		viewer.setLabelProvider(new EMFScheduleLabelProvider());
+		
 		// viewer.setSorter(new NameSorter());
 
 		viewer.setInput(getViewSite());
@@ -109,6 +107,33 @@ public class SchedulerView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
+		/*
+		 * Add selection listener. may need tidying up.
+		 */
+		
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(
+				new ISelectionListener() {
+					@Override
+					public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+						//if selection instanceof etc.
+						if (selection instanceof IStructuredSelection) {
+							final IStructuredSelection sel = (IStructuredSelection)selection;
+							if (sel.isEmpty()) {
+								setInput(null);
+							} else {
+								Iterator<Object> iter = sel.iterator();
+								while (iter.hasNext()) {
+									final Object o = iter.next();
+									if (o instanceof Schedule) {
+										setInput((Schedule) o);
+										return;
+									}
+								}
+							}
+						}
+					}
+				});
+		
 		// getSite().getPage().addSelectionListener(JobManagerView.ID,
 		// new ISelectionListener() {
 		//
@@ -128,54 +153,54 @@ public class SchedulerView extends ViewPart {
 		// }
 		// });
 
-		jobListener = new ManagedJobListenerNotifier() {
-
-			@Override
-			public void jobNotified(IManagedJob job) {
-
-				if (selectedJobs.contains(job)) {
-					setInput(job.getSchedule());
-					refresh();
-				}
-			}
-		};
-
-		jobManagerListener = new IJobManagerListener() {
-
-			@Override
-			public void jobRemoved(IJobManager jobManager, IManagedJob job) {
-				job.removeManagedJobListener(jobListener);
-			}
-
-			@Override
-			public void jobAdded(IJobManager jobManager, IManagedJob job) {
-				job.addManagedJobListener(jobListener);
-			}
-
-			@Override
-			public void jobSelected(IJobManager jobManager, IManagedJob job) {
-				selectedJobs.add(job);
-				if (selectedJobs.isEmpty()) {
-					setInput(null);
-				} else {
-					setInput(selectedJobs.get(0).getSchedule());
-				}
-			}
-
-			@Override
-			public void jobDeselected(IJobManager jobManager, IManagedJob job) {
-				selectedJobs.remove(job);
-				if (selectedJobs.isEmpty()) {
-					setInput(null);
-				} else {
-					setInput(selectedJobs.get(0).getSchedule());
-				}
-
-			}
-		};
-
-		Activator.getDefault().getJobManager()
-				.addJobManagerListener(jobManagerListener);
+//		jobListener = new ManagedJobListenerNotifier() {
+//
+//			@Override
+//			public void jobNotified(IManagedJob job) {
+//
+//				if (selectedJobs.contains(job)) {
+//					setInput(job.getSchedule());
+//					refresh();
+//				}
+//			}
+//		};
+//
+//		jobManagerListener = new IJobManagerListener() {
+//
+//			@Override
+//			public void jobRemoved(IJobManager jobManager, IManagedJob job) {
+//				job.removeManagedJobListener(jobListener);
+//			}
+//
+//			@Override
+//			public void jobAdded(IJobManager jobManager, IManagedJob job) {
+//				job.addManagedJobListener(jobListener);
+//			}
+//
+//			@Override
+//			public void jobSelected(IJobManager jobManager, IManagedJob job) {
+//				selectedJobs.add(job);
+//				if (selectedJobs.isEmpty()) {
+//					setInput(null);
+//				} else {
+//					setInput(selectedJobs.get(0).getSchedule());
+//				}
+//			}
+//
+//			@Override
+//			public void jobDeselected(IJobManager jobManager, IManagedJob job) {
+//				selectedJobs.remove(job);
+//				if (selectedJobs.isEmpty()) {
+//					setInput(null);
+//				} else {
+//					setInput(selectedJobs.get(0).getSchedule());
+//				}
+//
+//			}
+//		};
+//
+//		Activator.getDefault().getJobManager()
+//				.addJobManagerListener(jobManagerListener);
 
 	}
 
@@ -229,14 +254,14 @@ public class SchedulerView extends ViewPart {
 		
 		
 		toggleColourSchemeAction = new Action() {
-			Mode mode = Mode.VesselState;
+			EMFScheduleLabelProvider.Mode mode = EMFScheduleLabelProvider.Mode.VesselState;
 			
 			public void run() {
 				
-				AnnotatedSequenceLabelProvider lp =(AnnotatedSequenceLabelProvider)(viewer.getLabelProvider());
+				EMFScheduleLabelProvider lp =(EMFScheduleLabelProvider)(viewer.getLabelProvider());
 				
 				int nextMode = (mode.ordinal() + 1) % Mode.values().length;
-				mode = Mode.values()[nextMode];
+				mode = EMFScheduleLabelProvider.Mode.values()[nextMode];
 				lp.setMode(mode);
 				
 				viewer.setInput(viewer.getInput());
@@ -292,13 +317,5 @@ redraw();
 				}
 			}
 		});
-	}
-
-	@Override
-	public void dispose() {
-
-		selectedJobs.clear();
-
-		super.dispose();
 	}
 }
