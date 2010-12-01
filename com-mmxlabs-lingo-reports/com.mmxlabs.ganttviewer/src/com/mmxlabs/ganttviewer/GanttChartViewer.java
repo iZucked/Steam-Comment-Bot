@@ -252,6 +252,7 @@ public class GanttChartViewer extends StructuredViewer {
 
 			int layer = 0;
 			// Each resource to map to a GanntSection
+			try {
 			for (final Object r : resources) {
 				final String rName = getLabelProviderText(labelProvider, r);
 				final GanttSection section = new GanttSection(ganttChart, rName);
@@ -327,6 +328,10 @@ public class GanttChartViewer extends StructuredViewer {
 				}
 
 				layer++;
+			}
+			} catch (Exception ex) {
+				System.err.println(ex);
+				ex.printStackTrace();
 			}
 		} else {
 			throw new IllegalArgumentException(
