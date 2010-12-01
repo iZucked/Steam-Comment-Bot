@@ -165,13 +165,23 @@ public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
 					.getMaxDischargeVolume() - allocations[variable];
 
 			// and finally this is what is left of the vessel cargo capacity
-			final long cargoSlack = vesselCapacity.get(variable) - fuelRequired;
+			final long cargoSlack = vesselCapacity.get(variable)
+					- (fuelRequired + allocations[variable]);
 
 			// the maximum we can allocate here is the minimum of all of these
 			final long allocation = Math.min(Math.min(
 					Math.min(Math.min(loadSlack, dischargeSlack), slack1),
 					slack2), cargoSlack);
 
+//			System.err.println("Load SV Slack:" + slack1);
+//			System.err.println("Discharge SV Slack:" + slack2);
+//			
+//			System.err.println("Load Slot Slack:" + loadSlack);
+//			System.err.println("Discharge Slot Slack:" + dischargeSlack);
+//			System.err.println("Vessel Slack:" + cargoSlack);
+//			
+//			System.err.println("Allocated: " + allocation);
+			
 			if (constraintIndices.getFirst() != null)
 				remainders[constraintIndices.getFirst()] -= allocation;
 			if (constraintIndices.getSecond() != null)

@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
@@ -16,23 +14,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
  * 
  * @param <T>
  */
-public interface ICargoAllocator<T> {
-
-	public class CargoAllocation {
-		public final ILoadSlot loadSlot;
-		public final IDischargeSlot dischargeSlot;
-		public final long loadVolume;
-		public final int unitPrice;
-		public CargoAllocation(ILoadSlot loadSlot,
-				IDischargeSlot dischargeSlot, long loadVolume, int unitPrice) {
-			super();
-			this.loadSlot = loadSlot;
-			this.dischargeSlot = dischargeSlot;
-			this.loadVolume = loadVolume;
-			this.unitPrice = unitPrice;
-		}
-	}
-	
+public interface ICargoAllocator<T> {	
 	public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider<T> tvlp);
 
 	public abstract void init();
@@ -77,5 +59,5 @@ public interface ICargoAllocator<T> {
 	/**
 	 * @return
 	 */
-	public Iterable<CargoAllocation> getAllocations();
+	public Iterable<IAllocationAnnotation> getAllocations();
 }

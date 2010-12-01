@@ -6,8 +6,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -96,7 +96,13 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 		final long simplexResult = simplexAllocator.getProfit();
 		final long fastResult = fastAllocator.getProfit();
 		System.err.println("simplex = " + simplexResult + " fast = " + fastResult);
-		System.err.println((fastResult > simplexResult ? "fast" : "simplex") + " wins");
+		if (fastResult > simplexResult) {
+			System.err.println("Fast wins");
+		} else if (simplexResult > fastResult) {
+			System.err.println("Simplex wins");
+		} else {
+			System.err.println("Simplex = Fast");
+		}
 		return fastResult;
 	}
 
@@ -119,7 +125,7 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#getAllocations()
 	 */
 	@Override
-	public Iterable<CargoAllocation> getAllocations() {
+	public Iterable<IAllocationAnnotation> getAllocations() {
 		return fastAllocator.getAllocations();
 	}
 

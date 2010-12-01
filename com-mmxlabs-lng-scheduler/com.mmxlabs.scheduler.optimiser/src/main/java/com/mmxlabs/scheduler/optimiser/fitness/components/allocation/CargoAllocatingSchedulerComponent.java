@@ -6,20 +6,20 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.AbstractSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator.CargoAllocation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ComparingCargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.FastCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -35,7 +35,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class CargoAllocatingSchedulerComponent<T> extends
 		AbstractSchedulerFitnessComponent<T> {
 	private IVesselProvider vesselProvider;
-	private final ICargoAllocator<T> allocator = new ComparingCargoAllocator<T>();
+	private final ICargoAllocator<T> allocator = new FastCargoAllocator<T>();
 
 	private final String vesselProviderKey, volumeLimitProviderKey;
 	private IPortSlotProvider<T> portSlotProvider;
@@ -176,25 +176,23 @@ public class CargoAllocatingSchedulerComponent<T> extends
 		final IAnnotations<T> elementAnnotations = solution
 				.getElementAnnotations();
 
+		final List<IAllocationAnnotation> allocations = new LinkedList<IAllocationAnnotation>();
+		
 		// now add some more data for each load slot
-		for (final CargoAllocation allocation : allocator.getAllocations()) {
+		for (final IAllocationAnnotation annotation : allocator.getAllocations()) {
 			final T loadElement = portSlotProvider
-					.getElement(allocation.loadSlot);
+					.getElement(annotation.getLoadSlot());
 			final T dischargeElement = portSlotProvider
-					.getElement(allocation.dischargeSlot);
+					.getElement(annotation.getDischargeSlot());
 
-			// make annotations
-			final AllocationAnnotation annotation = new AllocationAnnotation();
-			annotation.setDischargeVolume(allocation.loadVolume);
-			annotation.setUnitProfit(allocation.unitPrice);
-			annotation.setTotalProfit(Calculator.multiply(allocation.unitPrice,
-					allocation.loadVolume));
-			annotation.setDischargeCV(0);// TODO fix this
-
+			allocations.add(annotation);
+			
 			elementAnnotations.setAnnotation(loadElement,
 					SchedulerConstants.AI_volumeAllocationInfo, annotation);
 			elementAnnotations.setAnnotation(dischargeElement,
 					SchedulerConstants.AI_volumeAllocationInfo, annotation);
 		}
+		
+		solution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, allocations);
 	}
 }
