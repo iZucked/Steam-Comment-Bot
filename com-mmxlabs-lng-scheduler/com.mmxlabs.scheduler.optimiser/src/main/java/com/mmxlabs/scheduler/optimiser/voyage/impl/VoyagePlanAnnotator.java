@@ -165,9 +165,11 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 				journey.setVesselState(details.getOptions().getVesselState());
 
-				solution.getElementAnnotations().setAnnotation(element,
+				// solution.getElementAnnotations().setAnnotation(element,
+				// SchedulerConstants.AI_journeyInfo, journey);
+				solution.getElementAnnotations().setAnnotation(
+						portSlotProvider.getElement(prevPortSlot),
 						SchedulerConstants.AI_journeyInfo, journey);
-
 				final int idleTime = details.getIdleTime();
 
 				final IdleEventImpl<T> idle = new IdleEventImpl<T>();
