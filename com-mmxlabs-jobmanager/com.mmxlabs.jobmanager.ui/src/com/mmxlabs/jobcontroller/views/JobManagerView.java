@@ -40,7 +40,6 @@ import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.impl.OptManagedJob;
 import com.mmxlabs.jobcontroller.core.impl.TestUtils;
 import com.mmxlabs.jobmanager.ui.Activator;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -610,11 +609,11 @@ public class JobManagerView extends ViewPart {
 								.getConstraintCheckerNames()),
 						constraintRegistry);
 
-				final OptManagedJob job = new OptManagedJob(name, context);
-
-				job.init();
-
-				jobManager.addJob(job);
+//				final OptManagedJob job = new OptManagedJob(name, context);
+//
+//				job.init();
+//
+//				jobManager.addJob(job);
 
 			}
 		};
@@ -633,9 +632,9 @@ public class JobManagerView extends ViewPart {
 						.iterator();
 				while (iter.hasNext()) {
 					Object obj = iter.next();
-					if (obj instanceof OptManagedJob) {
-						jobManager.toggleJobSelection((OptManagedJob) obj);
-					}
+//					if (obj instanceof OptManagedJob) {
+//						jobManager.toggleJobSelection((OptManagedJob) obj);
+//					}
 				}
 
 			}
