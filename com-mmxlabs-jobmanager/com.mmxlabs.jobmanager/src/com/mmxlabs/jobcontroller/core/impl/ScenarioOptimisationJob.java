@@ -1,9 +1,6 @@
 package com.mmxlabs.jobcontroller.core.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,31 +10,23 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.progress.IProgressConstants2;
 
 import scenario.Scenario;
+import scenario.schedule.Schedule;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
+import com.mmxlabs.jobcontroller.emf.AnnotatedSolutionExporter;
 import com.mmxlabs.jobcontroller.emf.IncompleteScenarioException;
 import com.mmxlabs.jobcontroller.emf.LNGScenarioTransformer;
+import com.mmxlabs.jobcontroller.emf.ModelEntityMap;
 import com.mmxlabs.jobcontroller.emf.optimisationsettings.OptimisationTransformer;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
-import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
-import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerExporter;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 //TODO Generate a base class and provide some methods for job creation etc.
 
@@ -61,6 +50,12 @@ public class ScenarioOptimisationJob implements IManagedJob {
 	private IAnnotatedSolution<ISequenceElement> schedule = null;
 
 	private final Scenario scenario;
+	
+	/**
+	 * Map between EMF entities and builder objects.
+	 */
+	private final ModelEntityMap entities = new ModelEntityMap();
+	
 
 	public ScenarioOptimisationJob(final String name, final Scenario scenario) {
 		this.name = name;
@@ -106,6 +101,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 
+			
 				final IOptimiserProgressMonitor<ISequenceElement> optMonitor = new IOptimiserProgressMonitor<ISequenceElement>() {
 					long firstFitness;
 					int lastReport = 0;
@@ -140,7 +136,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 						// HERE: Process the solution in a runnable and update
 						// getSchedule() output
-						updateSchedule(bestState);
+						updateSchedule(bestState, iteration);
 
 						// paused = true;
 
@@ -183,7 +179,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 							final long arg1,
 							final IAnnotatedSolution<ISequenceElement> arg2) {
 
-						updateSchedule(arg2);
+						updateSchedule(arg2, -1);
 
 					}
 
@@ -192,7 +188,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 							final long arg1,
 							final IAnnotatedSolution<ISequenceElement> arg2) {
 						firstFitness = arg1;
-						updateSchedule(arg2);
+						updateSchedule(arg2, 0);
 						startTime = System.currentTimeMillis();
 					}
 				};
@@ -207,7 +203,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 							lst.getOptimisationSettings());
 					try {
 						final IOptimisationData<ISequenceElement> data = lst
-								.createOptimisationData();
+								.createOptimisationData(entities);
 
 						final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
 								.createOptimiserAndContext(data);
@@ -221,8 +217,8 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						optimiser.setProgressMonitor(optMonitor);
 						optimiser.init();
 
-						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
-								.getFitnessEvaluator();
+//						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
+//								.getFitnessEvaluator();
 
 						// monitor.subTask("Evaluate fitness of initial solution");
 						//
@@ -437,7 +433,19 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 	}
 
-	private void updateSchedule(final IAnnotatedSolution<ISequenceElement> solution) {
+	private void updateSchedule(final IAnnotatedSolution<ISequenceElement> solution, int iterations) {
 		setSchedule(solution);
+		
+		// transform and add
+		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
+		if (iterations < 0) {
+			schedule.setName("finished");
+		} else if (iterations == 0) {
+			schedule.setName("initial");
+		} else {
+			schedule.setName(iterations + " iterations");
+		}
+		scenario.getScheduleModel().getSchedules().add(schedule);
 	}
 }
