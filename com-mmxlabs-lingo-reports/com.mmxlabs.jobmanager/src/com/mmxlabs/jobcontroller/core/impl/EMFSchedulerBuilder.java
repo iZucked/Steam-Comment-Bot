@@ -24,6 +24,7 @@ import scenario.port.Port;
 import scenario.port.PortFactory;
 import scenario.schedule.ScheduleFactory;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -81,7 +82,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolume,
-			final long maxVolume, final int unitPrice, int cargoCVValue, final int duration) {
+			final long maxVolume, final ICurve unitPrice, int cargoCVValue, final int duration) {
 
 		ILoadSlot slot = delegate.createLoadSlot(id, port, window, minVolume,
 				maxVolume, unitPrice, cargoCVValue, duration);
@@ -92,7 +93,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		eLoadSlot.setMaxQuantity((int) maxVolume);
 		eLoadSlot.setMinQuantity((int) minVolume);
 		eLoadSlot.setPort(ePorts.get(port));
-		eLoadSlot.setUnitPrice(unitPrice);
+//		eLoadSlot.setMarket(unitPrice);
 		eLoadSlot.setCargoCVvalue(cargoCVValue);
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.HOUR_OF_DAY, window.getStart());
@@ -109,7 +110,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id,
 			final IPort port, final ITimeWindow window, final long minVolume,
-			final long maxVolume, final int unitPrice, final int duration) {
+			final long maxVolume, final ICurve unitPrice, final int duration) {
 
 		IDischargeSlot slot = delegate.createDischargeSlot(id, port, window,
 				minVolume, maxVolume, unitPrice, duration);
@@ -120,7 +121,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		eDischargeSlot.setMaxQuantity((int) maxVolume);
 		eDischargeSlot.setMinQuantity((int) minVolume);
 		eDischargeSlot.setPort(ePorts.get(port));
-		eDischargeSlot.setUnitPrice(unitPrice);
+//		eDischargeSlot.setUnitPrice(unitPrice);
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.HOUR_OF_DAY, window.getStart());
 		eDischargeSlot.setWindowStart(now.getTime());
@@ -429,6 +430,16 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setDefaultRouteCost(String route, int defaultPrice) {
 		delegate.setDefaultRouteCost(route, defaultPrice);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder#addTotalVolumeConstraint(java.util.Set, boolean, boolean, long, com.mmxlabs.optimiser.common.components.ITimeWindow)
+	 */
+	@Override
+	public void addTotalVolumeConstraint(Set<IPort> ports, boolean loads,
+			boolean discharges, long maximumTotalVolume, ITimeWindow timeWindow) {
+		delegate.addTotalVolumeConstraint(ports, loads, discharges, maximumTotalVolume, timeWindow);
+		
 	}
 	
 	
