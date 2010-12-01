@@ -451,21 +451,23 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		 * The opportunity cost of burning a unit of LNG for fuel;
 		 * it doesn't cost 1 discharge unit to burn some fuel, it costs
 		 * whatever sales opportunity we lost on this leg.
+		 * 
+		 * TODO check this, have restored it to how it was.
 		 */
-		final int lngM3OpportunityCost = dischargeM3Price - loadM3Price;
+//		final int lngM3OpportunityCost = dischargeM3Price - loadM3Price;
 		
 		voyagePlan.setTotalFuelCost(FuelComponent.NBO, Calculator
 				.costFromConsumption(
 						fuelConsumptions[FuelComponent.NBO.ordinal()],
-						lngM3OpportunityCost));
+						dischargeM3Price));
 		voyagePlan.setTotalFuelCost(FuelComponent.FBO, Calculator
 				.costFromConsumption(
 						fuelConsumptions[FuelComponent.FBO.ordinal()],
-						lngM3OpportunityCost));
+						dischargeM3Price));
 		voyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, Calculator
 				.costFromConsumption(
 						fuelConsumptions[FuelComponent.IdleNBO.ordinal()],
-						lngM3OpportunityCost));
+						dischargeM3Price));
 
 		voyagePlan.setLNGFuelVolume(lngConsumed);
 
