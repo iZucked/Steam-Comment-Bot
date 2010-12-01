@@ -4,42 +4,35 @@
  *
  * $Id$
  */
-package scenario.schedule.provider;
+package scenario.schedule.events.provider;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.eclipse.emf.ecore.EStructuralFeature;
-
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.provider.LngEditPlugin;
-
-import scenario.schedule.ScheduleFactory;
-import scenario.schedule.ScheduleModel;
-import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.CharterOutVisit;
+import scenario.schedule.events.EventsPackage;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.ScheduleModel} object.
+ * This is the item provider adapter for a {@link scenario.schedule.events.CharterOutVisit} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleModelItemProvider
-	extends ItemProviderAdapter
+public class CharterOutVisitItemProvider
+	extends PortVisitItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -52,7 +45,7 @@ public class ScheduleModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScheduleModelItemProvider(AdapterFactory adapterFactory) {
+	public CharterOutVisitItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -67,49 +60,42 @@ public class ScheduleModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addCharterOutPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Charter Out feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES);
-		}
-		return childrenFeatures;
+	protected void addCharterOutPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutVisit_charterOut_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutVisit_charterOut_feature", "_UI_CharterOutVisit_type"),
+				 EventsPackage.Literals.CHARTER_OUT_VISIT__CHARTER_OUT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns ScheduleModel.gif.
+	 * This returns CharterOutVisit.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScheduleModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CharterOutVisit"));
 	}
 
 	/**
@@ -120,7 +106,11 @@ public class ScheduleModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ScheduleModel_type");
+		Date labelValue = ((CharterOutVisit)object).getStartTime();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_CharterOutVisit_type") :
+			getString("_UI_CharterOutVisit_type") + " " + label;
 	}
 
 	/**
@@ -133,12 +123,6 @@ public class ScheduleModelItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(ScheduleModel.class)) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
-		}
 		super.notifyChanged(notification);
 	}
 
@@ -152,22 +136,6 @@ public class ScheduleModelItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES,
-				 ScheduleFactory.eINSTANCE.createSchedule()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return LngEditPlugin.INSTANCE;
 	}
 
 }

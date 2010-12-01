@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -28,17 +29,18 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.provider.LngEditPlugin;
 
-import scenario.schedule.ScheduleFactory;
-import scenario.schedule.ScheduleModel;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.Sequence;
+
+import scenario.schedule.events.EventsFactory;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.ScheduleModel} object.
+ * This is the item provider adapter for a {@link scenario.schedule.Sequence} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleModelItemProvider
+public class SequenceItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -52,7 +54,7 @@ public class ScheduleModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScheduleModelItemProvider(AdapterFactory adapterFactory) {
+	public SequenceItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -67,8 +69,54 @@ public class ScheduleModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addFleetVesselPropertyDescriptor(object);
+			addCharterVesselClassPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Fleet Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFleetVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Sequence_fleetVessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_fleetVessel_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__FLEET_VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Charter Vessel Class feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterVesselClassPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Sequence_charterVesselClass_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_charterVesselClass_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__CHARTER_VESSEL_CLASS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -83,7 +131,7 @@ public class ScheduleModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES);
+			childrenFeatures.add(SchedulePackage.Literals.SEQUENCE__EVENTS);
 		}
 		return childrenFeatures;
 	}
@@ -102,14 +150,14 @@ public class ScheduleModelItemProvider
 	}
 
 	/**
-	 * This returns ScheduleModel.gif.
+	 * This returns Sequence.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScheduleModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Sequence"));
 	}
 
 	/**
@@ -120,7 +168,7 @@ public class ScheduleModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ScheduleModel_type");
+		return getString("_UI_Sequence_type");
 	}
 
 	/**
@@ -134,8 +182,8 @@ public class ScheduleModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ScheduleModel.class)) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
+		switch (notification.getFeatureID(Sequence.class)) {
+			case SchedulePackage.SEQUENCE__EVENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -155,8 +203,33 @@ public class ScheduleModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES,
-				 ScheduleFactory.eINSTANCE.createSchedule()));
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 EventsFactory.eINSTANCE.createScheduledEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 EventsFactory.eINSTANCE.createPortVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 EventsFactory.eINSTANCE.createIdle()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 EventsFactory.eINSTANCE.createJourney()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 EventsFactory.eINSTANCE.createSlotVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 EventsFactory.eINSTANCE.createCharterOutVisit()));
 	}
 
 	/**

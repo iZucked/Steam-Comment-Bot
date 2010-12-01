@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.provider;
+package scenario.schedule.events.provider;
 
 
 import java.util.Collection;
@@ -28,17 +28,17 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.provider.LngEditPlugin;
 
-import scenario.schedule.ScheduleFactory;
-import scenario.schedule.ScheduleModel;
-import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.EventsFactory;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.FuelMixture;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.ScheduleModel} object.
+ * This is the item provider adapter for a {@link scenario.schedule.events.FuelMixture} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleModelItemProvider
+public class FuelMixtureItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -52,7 +52,7 @@ public class ScheduleModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScheduleModelItemProvider(AdapterFactory adapterFactory) {
+	public FuelMixtureItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -83,7 +83,7 @@ public class ScheduleModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES);
+			childrenFeatures.add(EventsPackage.Literals.FUEL_MIXTURE__FUEL_USAGE);
 		}
 		return childrenFeatures;
 	}
@@ -102,14 +102,14 @@ public class ScheduleModelItemProvider
 	}
 
 	/**
-	 * This returns ScheduleModel.gif.
+	 * This returns FuelMixture.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScheduleModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/FuelMixture"));
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class ScheduleModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ScheduleModel_type");
+		return getString("_UI_FuelMixture_type");
 	}
 
 	/**
@@ -134,8 +134,8 @@ public class ScheduleModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ScheduleModel.class)) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
+		switch (notification.getFeatureID(FuelMixture.class)) {
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -155,8 +155,8 @@ public class ScheduleModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES,
-				 ScheduleFactory.eINSTANCE.createSchedule()));
+				(EventsPackage.Literals.FUEL_MIXTURE__FUEL_USAGE,
+				 EventsFactory.eINSTANCE.createFuelQuantity()));
 	}
 
 	/**

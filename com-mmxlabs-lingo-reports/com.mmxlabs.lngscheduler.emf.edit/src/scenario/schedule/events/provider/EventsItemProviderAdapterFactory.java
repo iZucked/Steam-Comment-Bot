@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.provider;
+package scenario.schedule.events.provider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +25,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import scenario.schedule.util.ScheduleAdapterFactory;
+import scenario.schedule.events.util.EventsAdapterFactory;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -36,7 +36,7 @@ import scenario.schedule.util.ScheduleAdapterFactory;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class EventsItemProviderAdapterFactory extends EventsAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -67,7 +67,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScheduleItemProviderAdapterFactory() {
+	public EventsItemProviderAdapterFactory() {
 		supportedTypes.add(IEditingDomainItemProvider.class);
 		supportedTypes.add(IStructuredItemContentProvider.class);
 		supportedTypes.add(ITreeItemContentProvider.class);
@@ -76,95 +76,187 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.ScheduleModel} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.FuelMixture} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ScheduleModelItemProvider scheduleModelItemProvider;
+	protected FuelMixtureItemProvider fuelMixtureItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.schedule.ScheduleModel}.
+	 * This creates an adapter for a {@link scenario.schedule.events.FuelMixture}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createScheduleModelAdapter() {
-		if (scheduleModelItemProvider == null) {
-			scheduleModelItemProvider = new ScheduleModelItemProvider(this);
+	public Adapter createFuelMixtureAdapter() {
+		if (fuelMixtureItemProvider == null) {
+			fuelMixtureItemProvider = new FuelMixtureItemProvider(this);
 		}
 
-		return scheduleModelItemProvider;
+		return fuelMixtureItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.Schedule} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.FuelQuantity} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ScheduleItemProvider scheduleItemProvider;
+	protected FuelQuantityItemProvider fuelQuantityItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.schedule.Schedule}.
+	 * This creates an adapter for a {@link scenario.schedule.events.FuelQuantity}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createScheduleAdapter() {
-		if (scheduleItemProvider == null) {
-			scheduleItemProvider = new ScheduleItemProvider(this);
+	public Adapter createFuelQuantityAdapter() {
+		if (fuelQuantityItemProvider == null) {
+			fuelQuantityItemProvider = new FuelQuantityItemProvider(this);
 		}
 
-		return scheduleItemProvider;
+		return fuelQuantityItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.Sequence} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.ScheduledEvent} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SequenceItemProvider sequenceItemProvider;
+	protected ScheduledEventItemProvider scheduledEventItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.schedule.Sequence}.
+	 * This creates an adapter for a {@link scenario.schedule.events.ScheduledEvent}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createSequenceAdapter() {
-		if (sequenceItemProvider == null) {
-			sequenceItemProvider = new SequenceItemProvider(this);
+	public Adapter createScheduledEventAdapter() {
+		if (scheduledEventItemProvider == null) {
+			scheduledEventItemProvider = new ScheduledEventItemProvider(this);
 		}
 
-		return sequenceItemProvider;
+		return scheduledEventItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.CargoAllocation} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.Idle} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CargoAllocationItemProvider cargoAllocationItemProvider;
+	protected IdleItemProvider idleItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.schedule.CargoAllocation}.
+	 * This creates an adapter for a {@link scenario.schedule.events.Idle}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createCargoAllocationAdapter() {
-		if (cargoAllocationItemProvider == null) {
-			cargoAllocationItemProvider = new CargoAllocationItemProvider(this);
+	public Adapter createIdleAdapter() {
+		if (idleItemProvider == null) {
+			idleItemProvider = new IdleItemProvider(this);
 		}
 
-		return cargoAllocationItemProvider;
+		return idleItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.Journey} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected JourneyItemProvider journeyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.events.Journey}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createJourneyAdapter() {
+		if (journeyItemProvider == null) {
+			journeyItemProvider = new JourneyItemProvider(this);
+		}
+
+		return journeyItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.PortVisit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortVisitItemProvider portVisitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.events.PortVisit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortVisitAdapter() {
+		if (portVisitItemProvider == null) {
+			portVisitItemProvider = new PortVisitItemProvider(this);
+		}
+
+		return portVisitItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.SlotVisit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SlotVisitItemProvider slotVisitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.events.SlotVisit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSlotVisitAdapter() {
+		if (slotVisitItemProvider == null) {
+			slotVisitItemProvider = new SlotVisitItemProvider(this);
+		}
+
+		return slotVisitItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.CharterOutVisit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutVisitItemProvider charterOutVisitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.events.CharterOutVisit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutVisitAdapter() {
+		if (charterOutVisitItemProvider == null) {
+			charterOutVisitItemProvider = new CharterOutVisitItemProvider(this);
+		}
+
+		return charterOutVisitItemProvider;
 	}
 
 	/**
@@ -266,10 +358,14 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	 * @generated
 	 */
 	public void dispose() {
-		if (scheduleModelItemProvider != null) scheduleModelItemProvider.dispose();
-		if (scheduleItemProvider != null) scheduleItemProvider.dispose();
-		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
-		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
+		if (fuelMixtureItemProvider != null) fuelMixtureItemProvider.dispose();
+		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
+		if (scheduledEventItemProvider != null) scheduledEventItemProvider.dispose();
+		if (idleItemProvider != null) idleItemProvider.dispose();
+		if (journeyItemProvider != null) journeyItemProvider.dispose();
+		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
+		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
+		if (charterOutVisitItemProvider != null) charterOutVisitItemProvider.dispose();
 	}
 
 }

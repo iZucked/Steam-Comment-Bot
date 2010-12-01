@@ -17,28 +17,30 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.provider.LngEditPlugin;
 
+import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFactory;
-import scenario.schedule.ScheduleModel;
 import scenario.schedule.SchedulePackage;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.ScheduleModel} object.
+ * This is the item provider adapter for a {@link scenario.schedule.Schedule} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleModelItemProvider
+public class ScheduleItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -52,7 +54,7 @@ public class ScheduleModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScheduleModelItemProvider(AdapterFactory adapterFactory) {
+	public ScheduleItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -67,8 +69,31 @@ public class ScheduleModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Schedule_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_name_feature", "_UI_Schedule_type"),
+				 SchedulePackage.Literals.SCHEDULE__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -83,7 +108,8 @@ public class ScheduleModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
 		}
 		return childrenFeatures;
 	}
@@ -102,14 +128,14 @@ public class ScheduleModelItemProvider
 	}
 
 	/**
-	 * This returns ScheduleModel.gif.
+	 * This returns Schedule.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScheduleModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Schedule"));
 	}
 
 	/**
@@ -120,7 +146,10 @@ public class ScheduleModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ScheduleModel_type");
+		String label = ((Schedule)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Schedule_type") :
+			getString("_UI_Schedule_type") + " " + label;
 	}
 
 	/**
@@ -134,8 +163,12 @@ public class ScheduleModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ScheduleModel.class)) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
+		switch (notification.getFeatureID(Schedule.class)) {
+			case SchedulePackage.SCHEDULE__NAME:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case SchedulePackage.SCHEDULE__SEQUENCES:
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -155,8 +188,13 @@ public class ScheduleModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES,
-				 ScheduleFactory.eINSTANCE.createSchedule()));
+				(SchedulePackage.Literals.SCHEDULE__SEQUENCES,
+				 ScheduleFactory.eINSTANCE.createSequence()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS,
+				 ScheduleFactory.eINSTANCE.createCargoAllocation()));
 	}
 
 	/**

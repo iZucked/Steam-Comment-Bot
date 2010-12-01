@@ -4,42 +4,40 @@
  *
  * $Id$
  */
-package scenario.schedule.provider;
+package scenario.schedule.events.provider;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.provider.LngEditPlugin;
-
-import scenario.schedule.ScheduleFactory;
-import scenario.schedule.ScheduleModel;
-import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.EventsFactory;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.Idle;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.ScheduleModel} object.
+ * This is the item provider adapter for a {@link scenario.schedule.events.Idle} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleModelItemProvider
-	extends ItemProviderAdapter
+public class IdleItemProvider
+	extends PortVisitItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -52,7 +50,7 @@ public class ScheduleModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScheduleModelItemProvider(AdapterFactory adapterFactory) {
+	public IdleItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -67,8 +65,31 @@ public class ScheduleModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addVesselStatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel State feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselStatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Idle_vesselState_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Idle_vesselState_feature", "_UI_Idle_type"),
+				 EventsPackage.Literals.IDLE__VESSEL_STATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -83,7 +104,7 @@ public class ScheduleModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES);
+			childrenFeatures.add(EventsPackage.Literals.FUEL_MIXTURE__FUEL_USAGE);
 		}
 		return childrenFeatures;
 	}
@@ -102,14 +123,14 @@ public class ScheduleModelItemProvider
 	}
 
 	/**
-	 * This returns ScheduleModel.gif.
+	 * This returns Idle.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScheduleModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Idle"));
 	}
 
 	/**
@@ -120,7 +141,11 @@ public class ScheduleModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ScheduleModel_type");
+		Date labelValue = ((Idle)object).getStartTime();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Idle_type") :
+			getString("_UI_Idle_type") + " " + label;
 	}
 
 	/**
@@ -134,8 +159,11 @@ public class ScheduleModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ScheduleModel.class)) {
-			case SchedulePackage.SCHEDULE_MODEL__SCHEDULES:
+		switch (notification.getFeatureID(Idle.class)) {
+			case EventsPackage.IDLE__VESSEL_STATE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case EventsPackage.IDLE__FUEL_USAGE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -155,19 +183,8 @@ public class ScheduleModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULES,
-				 ScheduleFactory.eINSTANCE.createSchedule()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return LngEditPlugin.INSTANCE;
+				(EventsPackage.Literals.FUEL_MIXTURE__FUEL_USAGE,
+				 EventsFactory.eINSTANCE.createFuelQuantity()));
 	}
 
 }
