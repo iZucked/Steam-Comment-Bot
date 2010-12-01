@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.presentation;
+package scenario.schedule.events.presentation;
 
 
 import java.io.IOException;
@@ -112,18 +112,20 @@ import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.port.provider.PortItemProviderAdapterFactory;
+import scenario.presentation.LngEditorAdvisor;
+import scenario.presentation.LngEditorPlugin;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
 
 /**
- * This is an example of a Scenario model editor.
+ * This is an example of a Events model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioEditor
+public class EventsEditor
 	extends MultiPageEditorPart
 	implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider {
 	/**
@@ -132,7 +134,7 @@ public class ScenarioEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions(ScenarioModelWizard.FILE_EXTENSIONS, "*.");
+	public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions(EventsModelWizard.FILE_EXTENSIONS, "*.");
 	
 	/**
 	 * Returns a new unmodifiable list containing prefixed versions of the extensions in the given list.
@@ -298,18 +300,18 @@ public class ScenarioEditor
 			public void partActivated(IWorkbenchPart p) {
 				if (p instanceof ContentOutline) {
 					if (((ContentOutline)p).getCurrentPage() == contentOutlinePage) {
-						getActionBarContributor().setActiveEditor(ScenarioEditor.this);
+						getActionBarContributor().setActiveEditor(EventsEditor.this);
 
 						setCurrentViewer(contentOutlineViewer);
 					}
 				}
 				else if (p instanceof PropertySheet) {
 					if (((PropertySheet)p).getCurrentPage() == propertySheetPage) {
-						getActionBarContributor().setActiveEditor(ScenarioEditor.this);
+						getActionBarContributor().setActiveEditor(EventsEditor.this);
 						handleActivate();
 					}
 				}
-				else if (p == ScenarioEditor.this) {
+				else if (p == EventsEditor.this) {
 					handleActivate();
 				}
 			}
@@ -438,7 +440,7 @@ public class ScenarioEditor
 
 		if (!removedResources.isEmpty()) {
 			if (handleDirtyConflict()) {
-				getSite().getPage().closeEditor(ScenarioEditor.this, false);
+				getSite().getPage().closeEditor(EventsEditor.this, false);
 			}
 			else {
 				removedResources.clear();
@@ -555,7 +557,7 @@ public class ScenarioEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioEditor() {
+	public EventsEditor() {
 		super();
 		initializeEditingDomain();
 	}
@@ -895,7 +897,7 @@ public class ScenarioEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), ScenarioEditor.this) {
+					new ViewerPane(getSite().getPage(), EventsEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							Tree tree = new Tree(composite, SWT.MULTI);
@@ -929,7 +931,7 @@ public class ScenarioEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), ScenarioEditor.this) {
+					new ViewerPane(getSite().getPage(), EventsEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							Tree tree = new Tree(composite, SWT.MULTI);
@@ -958,7 +960,7 @@ public class ScenarioEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), ScenarioEditor.this) {
+					new ViewerPane(getSite().getPage(), EventsEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							return new ListViewer(composite);
@@ -983,7 +985,7 @@ public class ScenarioEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), ScenarioEditor.this) {
+					new ViewerPane(getSite().getPage(), EventsEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TreeViewer(composite);
@@ -1010,7 +1012,7 @@ public class ScenarioEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), ScenarioEditor.this) {
+					new ViewerPane(getSite().getPage(), EventsEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TableViewer(composite);
@@ -1053,7 +1055,7 @@ public class ScenarioEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), ScenarioEditor.this) {
+					new ViewerPane(getSite().getPage(), EventsEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TreeViewer(composite);
@@ -1271,8 +1273,8 @@ public class ScenarioEditor
 				new ExtendedPropertySheetPage(editingDomain) {
 					@Override
 					public void setSelectionToViewer(List<?> selection) {
-						ScenarioEditor.this.setSelectionToViewer(selection);
-						ScenarioEditor.this.setFocus();
+						EventsEditor.this.setSelectionToViewer(selection);
+						EventsEditor.this.setFocus();
 					}
 
 					@Override

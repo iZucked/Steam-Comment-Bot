@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.optimiser.lso.presentation;
+package scenario.schedule.events.presentation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,16 +44,16 @@ import org.eclipse.ui.PartInitException;
 import scenario.presentation.LngEditorPlugin;
 
 /**
- * This is the action bar contributor for the Lso model editor.
+ * This is the action bar contributor for the Events model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class LsoActionBarContributor
+public class EventsActionBarContributor
 	extends EditingDomainActionBarContributor
 	implements ISelectionChangedListener {
 	/**
-	 * Action to create objects from the Lso model.
+	 * Action to create objects from the Events model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -66,7 +66,7 @@ public class LsoActionBarContributor
 		 * @generated
 		 */
 		public void run(IAction action) {
-			LsoModelWizard wizard = new LsoModelWizard();
+			EventsModelWizard wizard = new EventsModelWizard();
 			wizard.init(getWindow().getWorkbench(), StructuredSelection.EMPTY);
 			WizardDialog wizardDialog = new WizardDialog(getWindow().getShell(), wizard);
 			wizardDialog.open();
@@ -173,7 +173,7 @@ public class LsoActionBarContributor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LsoActionBarContributor() {
+	public EventsActionBarContributor() {
 		super(ADDITIONS_LAST_STYLE);
 		loadResourceAction = new LoadResourceAction();
 		validateAction = new ValidateAction();
@@ -188,8 +188,8 @@ public class LsoActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
-		toolBarManager.add(new Separator("lso-settings"));
-		toolBarManager.add(new Separator("lso-additions"));
+		toolBarManager.add(new Separator("events-settings"));
+		toolBarManager.add(new Separator("events-additions"));
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class LsoActionBarContributor
 	public void contributeToMenu(IMenuManager menuManager) {
 		super.contributeToMenu(menuManager);
 
-		IMenuManager submenuManager = new MenuManager(LngEditorPlugin.INSTANCE.getString("_UI_LsoEditor_menu"), "scenario.optimiser.lsoMenuID");
+		IMenuManager submenuManager = new MenuManager(LngEditorPlugin.INSTANCE.getString("_UI_EventsEditor_menu"), "scenario.schedule.eventsMenuID");
 		menuManager.insertAfter("additions", submenuManager);
 		submenuManager.add(new Separator("settings"));
 		submenuManager.add(new Separator("actions"));

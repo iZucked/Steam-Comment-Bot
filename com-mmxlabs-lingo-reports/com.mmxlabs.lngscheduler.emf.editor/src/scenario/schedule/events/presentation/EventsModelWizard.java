@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.optimiser.presentation;
+package scenario.schedule.events.presentation;
 
 
 import java.io.File;
@@ -48,11 +48,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import scenario.optimiser.OptimiserFactory;
-import scenario.optimiser.OptimiserPackage;
 import scenario.presentation.LngEditorAdvisor;
 import scenario.presentation.LngEditorPlugin;
 import scenario.provider.LngEditPlugin;
+import scenario.schedule.events.EventsFactory;
+import scenario.schedule.events.EventsPackage;
 
 
 /**
@@ -61,7 +61,7 @@ import scenario.provider.LngEditPlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class OptimiserModelWizard extends Wizard implements INewWizard {
+public class EventsModelWizard extends Wizard implements INewWizard {
 	/**
 	 * The supported extensions for created files.
 	 * <!-- begin-user-doc -->
@@ -69,7 +69,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	 * @generated
 	 */
 	public static final List<String> FILE_EXTENSIONS =
-		Collections.unmodifiableList(Arrays.asList(LngEditorPlugin.INSTANCE.getString("_UI_OptimiserEditorFilenameExtensions").split("\\s*,\\s*")));
+		Collections.unmodifiableList(Arrays.asList(LngEditorPlugin.INSTANCE.getString("_UI_EventsEditorFilenameExtensions").split("\\s*,\\s*")));
 
 	/**
 	 * A formatted list of supported file extensions, suitable for display.
@@ -78,7 +78,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	 * @generated
 	 */
 	public static final String FORMATTED_FILE_EXTENSIONS =
-		LngEditorPlugin.INSTANCE.getString("_UI_OptimiserEditorFilenameExtensions").replaceAll("\\s*,\\s*", ", ");
+		LngEditorPlugin.INSTANCE.getString("_UI_EventsEditorFilenameExtensions").replaceAll("\\s*,\\s*", ", ");
 
 	/**
 	 * This caches an instance of the model package.
@@ -86,7 +86,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected OptimiserPackage optimiserPackage = OptimiserPackage.eINSTANCE;
+	protected EventsPackage eventsPackage = EventsPackage.eINSTANCE;
 
 	/**
 	 * This caches an instance of the model factory.
@@ -94,7 +94,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected OptimiserFactory optimiserFactory = optimiserPackage.getOptimiserFactory();
+	protected EventsFactory eventsFactory = eventsPackage.getEventsFactory();
 
 	/**
 	 * This is the initial object creation page.
@@ -102,7 +102,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected OptimiserModelWizardInitialObjectCreationPage initialObjectCreationPage;
+	protected EventsModelWizardInitialObjectCreationPage initialObjectCreationPage;
 
 	/**
 	 * Remember the selection during initialization for populating the default container.
@@ -138,7 +138,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 		this.workbench = workbench;
 		this.selection = selection;
 		setWindowTitle(LngEditorPlugin.INSTANCE.getString("_UI_Wizard_label"));
-		setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(LngEditorPlugin.INSTANCE.getImage("full/wizban/NewOptimiser")));
+		setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(LngEditorPlugin.INSTANCE.getImage("full/wizban/NewEvents")));
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	protected Collection<String> getInitialObjectNames() {
 		if (initialObjectNames == null) {
 			initialObjectNames = new ArrayList<String>();
-			for (EClassifier eClassifier : optimiserPackage.getEClassifiers()) {
+			for (EClassifier eClassifier : eventsPackage.getEClassifiers()) {
 				if (eClassifier instanceof EClass) {
 					EClass eClass = (EClass)eClassifier;
 					if (!eClass.isAbstract()) {
@@ -170,8 +170,8 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	 * @generated
 	 */
 	protected EObject createInitialModel() {
-		EClass eClass = (EClass)optimiserPackage.getEClassifier(initialObjectCreationPage.getInitialObjectName());
-		EObject rootObject = optimiserFactory.create(eClass);
+		EClass eClass = (EClass)eventsPackage.getEClassifier(initialObjectCreationPage.getInitialObjectName());
+		EObject rootObject = eventsFactory.create(eClass);
 		return rootObject;
 	}
 
@@ -248,7 +248,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public class OptimiserModelWizardInitialObjectCreationPage extends WizardPage {
+	public class EventsModelWizardInitialObjectCreationPage extends WizardPage {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -283,7 +283,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		public OptimiserModelWizardInitialObjectCreationPage(String pageId) {
+		public EventsModelWizardInitialObjectCreationPage(String pageId) {
 			super(pageId);
 		}
 
@@ -347,7 +347,7 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 				(new SelectionAdapter() {
 					 @Override
 					 public void widgetSelected(SelectionEvent event) {
-						 String[] filters = OptimiserEditor.FILE_EXTENSION_FILTERS.toArray(new String[OptimiserEditor.FILE_EXTENSION_FILTERS.size()]);
+						 String[] filters = EventsEditor.FILE_EXTENSION_FILTERS.toArray(new String[EventsEditor.FILE_EXTENSION_FILTERS.size()]);
 						 String[] files = LngEditorAdvisor.openFilePathDialog(getShell(), SWT.SAVE, filters);
 						 if (files.length > 0) {
 							 fileField.setText(files[0]);
@@ -549,8 +549,8 @@ public class OptimiserModelWizard extends Wizard implements INewWizard {
 	 */
 		@Override
 	public void addPages() {
-		initialObjectCreationPage = new OptimiserModelWizardInitialObjectCreationPage("Whatever2");
-		initialObjectCreationPage.setTitle(LngEditorPlugin.INSTANCE.getString("_UI_OptimiserModelWizard_label"));
+		initialObjectCreationPage = new EventsModelWizardInitialObjectCreationPage("Whatever2");
+		initialObjectCreationPage.setTitle(LngEditorPlugin.INSTANCE.getString("_UI_EventsModelWizard_label"));
 		initialObjectCreationPage.setDescription(LngEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description"));
 		addPage(initialObjectCreationPage);
 	}

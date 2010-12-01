@@ -115,6 +115,7 @@ import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.LngEditorAdvisor;
 import scenario.presentation.LngEditorPlugin;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
+import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
 
@@ -576,6 +577,7 @@ public class ContractEditor
 		adapterFactory.addAdapterFactory(new ScenarioItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ScheduleItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new EventsItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new CargoItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ContractItemProviderAdapterFactory());

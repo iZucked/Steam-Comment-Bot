@@ -108,13 +108,14 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
+import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
-import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.LngEditorAdvisor;
 import scenario.presentation.LngEditorPlugin;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
+import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
 
@@ -576,6 +577,7 @@ public class MarketEditor
 		adapterFactory.addAdapterFactory(new ScenarioItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ScheduleItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new EventsItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new CargoItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ContractItemProviderAdapterFactory());
