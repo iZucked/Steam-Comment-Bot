@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import java.util.Map;
+
 /**
  * @author hinton
  *
@@ -46,5 +48,7 @@ public interface IAnnotations<T> {
 	 * @param element
 	 * @return
 	 */
-	Iterable<String> getAnnotations(T element);
+	Iterable<String> getAnnotationNames(T element);
+	
+	Map<String, Object> getAnnotations(T element);
 }

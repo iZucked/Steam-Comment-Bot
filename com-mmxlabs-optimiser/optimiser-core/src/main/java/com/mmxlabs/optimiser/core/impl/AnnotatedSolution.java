@@ -5,6 +5,10 @@
 
 package com.mmxlabs.optimiser.core.impl;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -24,7 +28,9 @@ public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 
 	private IOptimisationContext<T> context;
 
-	private IAnnotations<T> annotations = new HashMapAnnotations<T>();
+	private IAnnotations<T> elementAnnotations = new HashMapAnnotations<T>();
+	
+	private Map<String, Object> generalAnnotations = new HashMap<String, Object>();
 	
 	@Override
 	public ISequences<T> getSequences() {
@@ -48,11 +54,21 @@ public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 	public void dispose() {
 		context = null;
 		sequences = null;
-		annotations = null;
+		elementAnnotations = null;
 	}
 
 	@Override
 	public IAnnotations<T> getElementAnnotations() {
-		return annotations;
+		return elementAnnotations;
+	}
+	
+	@Override
+	public void setGeneralAnnotation(final String key, final Object value) {
+		generalAnnotations.put(key, value);
+	}
+	
+	@Override
+	public Map<String, Object> getGeneralAnnotations() {
+		return Collections.unmodifiableMap(generalAnnotations);
 	}
 }

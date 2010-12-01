@@ -6,8 +6,10 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IAnnotations;
 
@@ -45,7 +47,7 @@ public class HashMapAnnotations<T> implements IAnnotations<T> {
 	}
 
 	@Override
-	public Iterable<String> getAnnotations(final T element) {
+	public Iterable<String> getAnnotationNames(final T element) {
 		final HashMap<String, Object> inner = contents.get(element);
 		final LinkedList<String> results = new LinkedList<String>();
 		
@@ -54,6 +56,18 @@ public class HashMapAnnotations<T> implements IAnnotations<T> {
 		}
 		
 		return results;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.optimiser.core.IAnnotations#getAnnotations(java.lang.Object)
+	 */
+	@Override
+	public Map<String, Object> getAnnotations(T element) {
+		final Map<String, Object> inner = contents.get(element);
+		if (inner != null)
+			return Collections.unmodifiableMap(inner);
+		else
+			return Collections.emptyMap();
 	}
 
 }
