@@ -18,14 +18,17 @@ public class StringEatingParser implements OptionParser {
 	public StringEatingParser() {
 		hasDefaultValue = false;
 	}
+	@Override
 	public Object getDefaultValue() {
 		return defaultValue;
 	}
 
+	@Override
 	public boolean hasDefaultValue() {
 		return hasDefaultValue;
 	}
 
+	@Override
 	public Object parse(String op, Iterator<String> iter)
 			throws InvalidArgumentException {
 		StringBuffer sb = new StringBuffer();

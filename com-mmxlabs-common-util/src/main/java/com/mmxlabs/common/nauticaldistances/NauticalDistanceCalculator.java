@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.Pair;
 
 /**
@@ -33,6 +36,9 @@ import com.mmxlabs.common.Pair;
  */
 @Deprecated
 public class NauticalDistanceCalculator {
+	
+	private static final Logger log = LoggerFactory.getLogger(NauticalDistanceCalculator.class);
+	
 	private final int longitudeResolution;
 	private final int latitudeResolution;
 	private static final double RAD_KNOTS = 3443.89849;
@@ -141,8 +147,7 @@ public class NauticalDistanceCalculator {
 		// transform the lat/lon into simple map coordinates
 		startSquare = gridLatLon(latlon);
 		moveToSea(startSquare);
-		System.err
-				.println("Start square for "
+		log.info("Start square for "
 						+ latlon
 						+ " is "
 						+ startSquare
@@ -204,7 +209,7 @@ public class NauticalDistanceCalculator {
 			int newpercent = 100*markProgress / markCount;
 			if (newpercent != percent) {
 				percent = newpercent;
-				System.err.println(percent + "% of sea marked");
+				log.info(percent + "% of sea marked");
 			}
 			// find next location; ugly and slow, but sufficient
 			distanceToHere = Integer.MAX_VALUE;

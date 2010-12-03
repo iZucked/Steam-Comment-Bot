@@ -83,7 +83,7 @@ public class XmlStreamWriter {
 	public void recordMethod(final Method m, final Object[] args,
 			final Object ret) throws XMLStreamException {
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		final Class[] paramTypes = m.getParameterTypes();
 
 		final StartElement methodStart = eventFactory.createStartElement(

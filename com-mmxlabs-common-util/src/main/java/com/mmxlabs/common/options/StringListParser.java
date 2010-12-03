@@ -19,11 +19,13 @@ public class StringListParser implements OptionParser {
 	public StringListParser(String separator) {
 		this(separator, null);
 	}
+	@Override
 	public Object parse(String op, Iterator<String> iter) throws InvalidArgumentException {
 		String s = iter.next();
 		String [] args = s.split(separator);
 		return Arrays.asList(args);
 	}
+	@Override
 	public Object getDefaultValue() {
 		if (defaultValue != null) {
 			return Arrays.asList(defaultValue.split(separator));
@@ -31,6 +33,7 @@ public class StringListParser implements OptionParser {
 			return null;
 		}
 	}
+	@Override
 	public boolean hasDefaultValue() {
 		return defaultValue != null;
 	}

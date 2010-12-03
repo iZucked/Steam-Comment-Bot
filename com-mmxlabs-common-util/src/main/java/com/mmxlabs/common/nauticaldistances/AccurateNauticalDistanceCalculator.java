@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.Pair;
 
 /**
@@ -30,6 +33,9 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class AccurateNauticalDistanceCalculator {
+	
+	private final Logger log = LoggerFactory.getLogger(AccurateNauticalDistanceCalculator.class);
+	
 	final int[][] distanceMatrix;
 	final List<double[]> coast;
 
@@ -51,7 +57,7 @@ public class AccurateNauticalDistanceCalculator {
 					maxProjectedLat));
 		}
 
-		System.err.println("Coast has " + coast.size() + " points");
+		log.info("Coast has " + coast.size() + " points");
 
 		// now fill distance matrix for these points
 		distanceMatrix = new int[coast.size()][coast.size()];
@@ -62,8 +68,7 @@ public class AccurateNauticalDistanceCalculator {
 			int newPercent = 100 * i / coast.size();
 			if (newPercent != percent) {
 				percent = newPercent;
-				System.err.print("" + percent + "% ");
-				System.err.flush();
+				log.info("" + percent + "% ");
 			}
 			for (int j = 0; j < i; j++) {
 				if (lineOfSight(coast.get(i), coast.get(j), mercatorLandMatrix,
@@ -79,12 +84,10 @@ public class AccurateNauticalDistanceCalculator {
 			distanceMatrix[i][i] = 0;
 		}
 
-		System.err.println();
-
 		// for (int[] x : distanceMatrix) {
-		// System.err.println(Arrays.toString(x));
+		// log.info(Arrays.toString(x));
 		// }
-		System.err.println("Sparseness = " + goodEdges
+		log.info("Sparseness = " + goodEdges
 				/ (double) (badEdges + goodEdges));
 		// distance matrix is computed, now ready for normal use
 	}

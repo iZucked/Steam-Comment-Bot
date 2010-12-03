@@ -5,7 +5,6 @@
 
 package com.mmxlabs.common.options;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -15,12 +14,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class Options {
-	protected String optionPrefix;
-	protected Map<String, OptionParser> parsers;
-	protected Map<String, Object> results;
+public final class Options {
+	private String optionPrefix;
+	private Map<String, OptionParser> parsers;
+	private Map<String, Object> results;
 
-	StringBuilder allHelp = new StringBuilder();
+	private StringBuilder allHelp = new StringBuilder();
 
 	public Options(final String optionPrefix) {
 		this.optionPrefix = optionPrefix;
@@ -32,9 +31,9 @@ public class Options {
 		this("--");
 	}
 
-	public List<String> parseAndSet(String[] args, Object object)
+	public List<String> parseAndSet(final String[] args, final Object object)
 			throws InvalidOptionException, InvalidArgumentException {
-		Map<String, Method> methodMap = new HashMap<String, Method>();
+		final Map<String, Method> methodMap = new HashMap<String, Method>();
 
 		for (final Method m : object.getClass().getMethods()) {
 			if (m.isAnnotationPresent(Option.class)) {
@@ -42,28 +41,35 @@ public class Options {
 
 				final String name = option.name().equals("") ? mangleName(m
 						.getName()) : option.name();
-				
+
 				final boolean hasValue = option.defaultValue().equals(
 						Option.EMPTY_DEFAULT_STRING_HACK) == false;
 
 				final String value = option.defaultValue();
-				
+
 				final Class<?>[] parameters = m.getParameterTypes();
 				if (parameters.length == 1) {
 					OptionParser parser = null;
 					if (parameters[0].equals(String.class)) {
-						parser = hasValue ? new StringParser(value) : new StringParser();
+						parser = hasValue ? new StringParser(value)
+								: new StringParser();
 					} else if (parameters[0].equals(int.class)) {
-						parser = hasValue ? new IntegerParser(value) : new IntegerParser();
+						parser = hasValue ? new IntegerParser(value)
+								: new IntegerParser();
 					} else if (parameters[0].equals(double.class)) {
-						parser = hasValue ? new DoubleParser(value) : new DoubleParser();
+						parser = hasValue ? new DoubleParser(value)
+								: new DoubleParser();
 					} else {
 						throw new InvalidOptionException("Method "
 								+ m.getName() + " has argument type "
 								+ parameters[0].getSimpleName()
 								+ ", which cannot have a default value");
 					}
-					addOption(name, option.help() +" [" + parameters[0].getSimpleName() +"]", parser);
+					addOption(
+							name,
+							option.help() + " ["
+									+ parameters[0].getSimpleName() + "]",
+							parser);
 				} else {
 					throw new InvalidOptionException("Method " + m.getName()
 							+ " has too many parameters!");
@@ -72,21 +78,22 @@ public class Options {
 			}
 		}
 
-		List<String> r = parse(args);
+		final List<String> r = parse(args);
 
 		for (final Map.Entry<String, Method> entry : methodMap.entrySet()) {
 			final Method method = entry.getValue();
-			try { 
+			try {
 				method.invoke(object, getOption(entry.getKey()));
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				final InvalidArgumentException ex = new InvalidArgumentException(
 						"Wrong argument " + getOption(entry.getKey()));
 				ex.setOption(entry.getKey());
 				throw ex;
-			} catch (IllegalAccessException e) {
+			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(
-						"@Option used incorrectly for field " + method.getName());
-			} catch (InvocationTargetException e) {
+						"@Option used incorrectly for field "
+								+ method.getName());
+			} catch (final InvocationTargetException e) {
 				throw new RuntimeException("This really should never happen");
 			}
 		}
@@ -97,9 +104,9 @@ public class Options {
 		if (name.startsWith("set")) {
 			name = name.substring(3);
 		}
-		StringBuilder result = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 
-		for (char b : name.toCharArray()) {
+		for (final char b : name.toCharArray()) {
 			if (Character.isUpperCase(b)) {
 				if (!(result.length() == 0))
 					result.append("-");
@@ -119,23 +126,26 @@ public class Options {
 		addOption(names, "undocumented", parser);
 	}
 
-	public void addOption(final String[] names, final String help, final OptionParser parser) {
+	public void addOption(final String[] names, final String help,
+			final OptionParser parser) {
 		for (final String name : names) {
 			parsers.put(name, parser);
 		}
 		if (help != null) {
 			allHelp.append("\t --" + names[0] + " : " + help);
-			if (parser.hasDefaultValue())
+			if (parser.hasDefaultValue()) {
 				allHelp.append(" (default value : " + parser.getDefaultValue()
 						+ ")");
-			else
+			} else {
 				allHelp.append(" (no default value)");
+			}
 			if (names.length > 1) {
 				allHelp.append(" (synonyms : ");
 				for (int x = 1; x < names.length; x++) {
-					allHelp.append(names[x]);
-					if (x > 1)
+					allHelp.append(names[x]); 
+					if (x > 1) {
 						allHelp.append(", ");
+					}
 				}
 				allHelp.append(")");
 			}
@@ -147,7 +157,8 @@ public class Options {
 		return allHelp.toString();
 	}
 
-	public void addOption(final String name, final String help, final OptionParser parser) {
+	public void addOption(final String name, final String help,
+			final OptionParser parser) {
 		addOption(new String[] { name }, help, parser);
 	}
 
@@ -157,18 +168,18 @@ public class Options {
 		if (results.containsKey(s)) {
 			return (T) results.get(s);
 		} else if (parsers.containsKey(s)) {
-			if (parsers.get(s).hasDefaultValue())
+			if (parsers.get(s).hasDefaultValue()) {
 				return (T) parsers.get(s).getDefaultValue();
-			else
+			} else {
 				return (T) results.get(s);
+			}
 		} else {
 			return (T) results.get(s);
 		}
 	}
 
-	public List<String> parse(final List<String> args) 
-		throws  InvalidOptionException, InvalidArgumentException
-	{
+	public List<String> parse(final List<String> args)
+			throws InvalidOptionException, InvalidArgumentException {
 		final Iterator<String> it = args.iterator();
 		final List<String> spare = new ArrayList<String>();
 		while (it.hasNext()) {
@@ -180,7 +191,7 @@ public class Options {
 					final OptionParser parser = parsers.get(opt);
 					try {
 						results.put(opt, parser.parse(opt, it));
-					} catch (InvalidArgumentException ex) {
+					} catch (final InvalidArgumentException ex) {
 						ex.setOption(opt);
 						throw ex;
 					}
@@ -189,25 +200,28 @@ public class Options {
 				}
 			} else {
 				spare.add(arg);
-				while (it.hasNext())
+				while (it.hasNext()) {
 					spare.add(it.next());
+				}
 			}
 		}
 		return spare;
 	}
 
-	public List<String> parse(final String[] args) throws InvalidOptionException, InvalidArgumentException {
+	public List<String> parse(final String[] args)
+			throws InvalidOptionException, InvalidArgumentException {
 		return parse(Arrays.asList(args));
 	}
 
 	public boolean hasOption(final String s) {
-		if (results.containsKey(s))
+		if (results.containsKey(s)) {
 			return true;
-		else
+		} else {
 			return parsers.containsKey(s) && parsers.get(s).hasDefaultValue();
+		}
 	}
 
-	private final String quoteify(final Object o) {
+	private String quoteify(final Object o) {
 		return "\"" + o.toString().replace("\"", "\\\"") + "\"";
 	}
 

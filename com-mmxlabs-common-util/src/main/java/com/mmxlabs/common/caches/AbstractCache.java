@@ -5,9 +5,15 @@
 
 package com.mmxlabs.common.caches;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.Pair;
 
 public abstract class AbstractCache<K, V> {
+	
+	private static final Logger log = LoggerFactory.getLogger(AbstractCache.class);
+	
 	private static final int SAMPLE = 100000;
 	private final String name;
 	
@@ -28,6 +34,7 @@ public abstract class AbstractCache<K, V> {
 		return evaluator.evaluate(key);
 	}
 	
+	@Override
 	public String toString() {
 		return String.format("%s cache: size %d, hit rate %.2f%%",
 				name, size() , 100*(hits/(double)queries));
@@ -40,7 +47,7 @@ public abstract class AbstractCache<K, V> {
 	protected final void query() {
 		queries++;
 		if (queries == SAMPLE) {
-			System.err.println(this);
+			log.debug(this.toString());
 			queries = hits = 0;
 		}
 	}

@@ -21,15 +21,17 @@ public class IntegerParser implements OptionParser {
 		
 	}
 
-	
+	@Override
 	public Object getDefaultValue() {
 		return defaultValue;
 	}
 
+	@Override
 	public boolean hasDefaultValue() {
 		return defaultValue != null;
 	}
 
+	@Override
 	public Object parse(String op, Iterator<String> iter) throws InvalidArgumentException {
 		try {
 			String s = iter.next();

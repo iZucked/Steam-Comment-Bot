@@ -7,7 +7,6 @@ package com.mmxlabs.common;
 
 import java.util.Arrays;
 
-
 /**
  * Utility class to help with equality checks.
  * 
@@ -17,9 +16,9 @@ import java.util.Arrays;
 public final class Equality {
 
 	private Equality() {
-		
+
 	}
-	
+
 	/**
 	 * Compare two object using their {@link #equals(Object)} method. However
 	 * check for <code>null</code>. Returns true if both object are null or
@@ -42,7 +41,7 @@ public final class Equality {
 		// Null check over, fall back to proper equals method
 		return a.equals(b);
 	}
-	
+
 	/**
 	 * Shallow equality test for object arrays; checks whether two object arrays
 	 * contain identical references (it is true iff (a) both arrays have the
@@ -55,10 +54,16 @@ public final class Equality {
 	 * @return
 	 */
 	public static final boolean shallowEquals(final Object[] a, final Object[] b) {
-		if (a==b) return true;
-		if (a == null || b == null || a.length!=b.length) return false;
-		for (int x = 0; x<a.length; x++) {
-			if (a[x] != b[x]) return false;
+		if (a == b) {
+			return true;
+		}
+		if (a == null || b == null || a.length != b.length) {
+			return false;
+		}
+		for (int x = 0; x < a.length; x++) {
+			if (a[x] != b[x]) {
+				return false;
+			}
 		}
 		return true;
 	}

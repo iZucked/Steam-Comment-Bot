@@ -11,9 +11,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 
 public final class SimpleIndexingContext implements IIndexingContext {
+	
+	private static final Logger log = LoggerFactory.getLogger(SimpleIndexingContext.class);
+	
 	/**
 	 * The {@link Map} of indices; each entry maps the type to the next index
 	 * for objects of that type or (or with that as their closest superclass).
@@ -80,7 +86,7 @@ public final class SimpleIndexingContext implements IIndexingContext {
 		while (type != null) {
 			if (indices.containsKey(type)) {
 				if (type == Object.class && !warnedTypes.contains(baseType)) {
-					System.err.println("Warning: using object index for "
+					log.warn("Warning: using object index for "
 							+ baseType.getSimpleName());
 					warnedTypes.add(baseType);
 				}
