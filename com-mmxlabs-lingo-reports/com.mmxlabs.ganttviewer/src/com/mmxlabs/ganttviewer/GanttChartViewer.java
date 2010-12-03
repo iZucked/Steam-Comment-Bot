@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.ganttviewer;
 
 import java.util.ArrayList;
@@ -357,8 +362,9 @@ public class GanttChartViewer extends StructuredViewer {
 			final String text = toolTipProvider.getToolTipText(c);
 			final Image image = toolTipProvider.getToolTipImage(c);
 
-			if (title == null && text == null && image == null)
+			if (title == null && text == null && image == null) {
 				return null;
+			}
 
 			final AdvancedTooltip toolTip = new AdvancedTooltip(title, text,
 					image);

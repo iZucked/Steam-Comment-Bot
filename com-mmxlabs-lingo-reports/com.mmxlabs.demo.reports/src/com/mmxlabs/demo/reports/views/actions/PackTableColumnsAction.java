@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.demo.reports.views.actions;
 
 import org.eclipse.jface.action.Action;

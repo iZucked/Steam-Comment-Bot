@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010
+    All rights reserved.
+
+-->
+
 <?eclipse version="3.4"?>
 <plugin>
 
@@ -27,7 +34,7 @@
             name="ShipLiNGO">
          <property
                name="windowImages"
-               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+               value="icons/alt_window_16.gif,icons/alt_window_16.gif">
          </property>
          <property
                name="appName"

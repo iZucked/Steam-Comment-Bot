@@ -1,9 +1,9 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
  */
+ 
+
 package scenario.schedule;
 
 import org.eclipse.emf.ecore.EAttribute;

@@ -1,9 +1,8 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
  */
+
 package scenario.port;
 
 import org.eclipse.emf.ecore.EObject;

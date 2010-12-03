@@ -1,6 +1,23 @@
 syntax: regexp
 ^.*/bin$
 
+syntax: regexp
+^workspace$
+
+syntax: regexp
+^target$
 
 syntax: regexp
 ^.*/target$
+
+syntax: regexp
+^.*/\.settings$
+
+syntax: regexp
+^target-definition/\.settings$
+syntax: regexp
+^target-definition/build\.properties$
+syntax: regexp
+^target-definition/\.project$
+syntax: regexp
+^target-definition/META-INF$

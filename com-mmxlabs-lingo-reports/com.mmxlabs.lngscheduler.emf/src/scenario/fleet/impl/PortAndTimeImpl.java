@@ -1,9 +1,8 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
  */
+
 package scenario.fleet.impl;
 
 import java.util.Date;

@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.demo.app;
 
 import org.eclipse.jface.resource.ImageDescriptor;

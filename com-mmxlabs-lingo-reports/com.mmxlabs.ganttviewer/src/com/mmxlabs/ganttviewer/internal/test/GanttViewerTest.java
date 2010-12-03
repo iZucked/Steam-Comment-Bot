@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.ganttviewer.internal.test;
 
 import java.util.Calendar;
@@ -20,7 +25,7 @@ import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 
-public class GanttViewerTester {
+public class GanttViewerTest {
 
 	public static class GanttLabelProvider implements ILabelProvider,
 			IGanttChartToolTipProvider, IColorProvider {
@@ -173,8 +178,9 @@ public class GanttViewerTester {
 
 		shell.open();
 		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
+			if (!display.readAndDispatch()) {
 				display.sleep();
+			}
 		}
 		display.dispose();
 	}
