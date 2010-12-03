@@ -6,6 +6,7 @@
 package com.mmxlabs.jobcontroller.core.impl;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -14,28 +15,23 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.progress.IProgressConstants2;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.emf.AnnotatedSolutionExporter;
-import com.mmxlabs.jobcontroller.emf.IncompleteScenarioException;
-import com.mmxlabs.jobcontroller.emf.LNGScenarioTransformer;
-import com.mmxlabs.jobcontroller.emf.ModelEntityMap;
-import com.mmxlabs.jobcontroller.emf.optimisationsettings.OptimisationTransformer;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerExporter;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
 
 //TODO Generate a base class and provide some methods for job creation etc.
 
-public class ScenarioOptimisationJob implements IManagedJob {
+public class OptManagedJob implements IManagedJob {
 
 	private final Set<IManagedJobListener> managedJobListeners = new HashSet<IManagedJobListener>();
 
@@ -50,22 +46,14 @@ public class ScenarioOptimisationJob implements IManagedJob {
 	private boolean paused;
 	private final Object pauseLock = new Object();
 
-	private IOptimisationContext<ISequenceElement> context;
+	private final IOptimisationContext<ISequenceElement> context;
 
 	private IAnnotatedSolution<ISequenceElement> schedule = null;
 
-	private final Scenario scenario;
-	
-	/**
-	 * Map between EMF entities and builder objects.
-	 */
-	private final ModelEntityMap entities = new ModelEntityMap();
-	
-
-	public ScenarioOptimisationJob(final String name, final Scenario scenario) {
+	public OptManagedJob(final String name,
+			final IOptimisationContext<ISequenceElement> context) {
 		this.name = name;
-
-		this.scenario = scenario;
+		this.context = context;
 	}
 
 	@Override
@@ -77,7 +65,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 		state = JobState.INITIALISED;
 
-		// updateSchedule(context.getInitialSequences());
+		updateSchedule(context.getInitialSequences());
 	}
 
 	/**
@@ -93,7 +81,9 @@ public class ScenarioOptimisationJob implements IManagedJob {
 	public void start() {
 
 		if (!(state == JobState.INITIALISED || state == JobState.COMPLETED || state == JobState.ABORTED)) {
+
 			// Already running!
+
 			return;
 		}
 
@@ -106,18 +96,16 @@ public class ScenarioOptimisationJob implements IManagedJob {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 
-			
 				final IOptimiserProgressMonitor<ISequenceElement> optMonitor = new IOptimiserProgressMonitor<ISequenceElement>() {
-					long firstFitness;
+
 					int lastReport = 0;
-					private long startTime;
 
 					@Override
 					public void report(final IOptimiser<ISequenceElement> arg0,
 							final int iteration, final long currentFitness,
 							final long bestFitness,
-							final IAnnotatedSolution<ISequenceElement> currentState,
-							final IAnnotatedSolution<ISequenceElement> bestState) {
+							final ISequences<ISequenceElement> currentState,
+							final ISequences<ISequenceElement> bestState) {
 
 						final int work = iteration - lastReport;
 						monitor.worked(work);
@@ -126,13 +114,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 						fireProgressUpdate(work);
 
 						System.out.println("Iteration: " + iteration
-								+ " Best Fitness: " + bestFitness
-								+ " Current Fitness: " + currentFitness
-								+ " gain: " + 100
-								* (firstFitness - bestFitness)
-								/ (double) firstFitness + "%" + " Wall time : "
-								+ (System.currentTimeMillis() - startTime)
-								/ 1000 + " s");
+								+ " Fitness: " + bestFitness);
 
 						// TODO: We should verify delta fitness is equal to a
 						// whole new fitness
@@ -141,7 +123,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 						// HERE: Process the solution in a runnable and update
 						// getSchedule() output
-						updateSchedule(bestState, iteration);
+						updateSchedule(bestState);
 
 						// paused = true;
 
@@ -182,76 +164,58 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					@Override
 					public void done(final IOptimiser<ISequenceElement> arg0,
 							final long arg1,
-							final IAnnotatedSolution<ISequenceElement> arg2) {
+							final ISequences<ISequenceElement> arg2) {
 
-						updateSchedule(arg2, -1);
+						updateSchedule(arg2);
 
 					}
 
 					@Override
 					public void begin(final IOptimiser<ISequenceElement> arg0,
 							final long arg1,
-							final IAnnotatedSolution<ISequenceElement> arg2) {
-						firstFitness = arg1;
-						updateSchedule(arg2, 0);
-						startTime = System.currentTimeMillis();
+							final ISequences<ISequenceElement> arg2) {
+
+						updateSchedule(arg2);
+
 					}
 				};
 
 				monitor.beginTask("Managed Job", totalProgress);
 				try {
-					monitor.subTask("Pre-process scenario");
 
-					final LNGScenarioTransformer lst = new LNGScenarioTransformer(
-							scenario);
-					final OptimisationTransformer ot = new OptimisationTransformer(
-							lst.getOptimisationSettings());
-					try {
-						final IOptimisationData<ISequenceElement> data = lst
-								.createOptimisationData(entities);
+					monitor.subTask("Prepare optimisation");
+					final ILocalSearchOptimiser<ISequenceElement> optimiser = TestUtils
+							.buildOptimiser(
+									context,
+									new Random(1),
+									totalProgress,
+									5000,
+									optMonitor,
+									SequencesManipulatorUtil
+											.createDefaultSequenceManipulators(context
+													.getOptimisationData()));
 
-						final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
-								.createOptimiserAndContext(data);
+					final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
+							.getFitnessEvaluator();
 
-						monitor.subTask("Prepare optimisation");
+					final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
 
-						context = optAndContext.getFirst();
-						final LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext
-								.getSecond();
+					linearFitnessEvaluator.setOptimisationData(context
+							.getOptimisationData());
+					linearFitnessEvaluator.setInitialSequences(context
+							.getInitialSequences());
 
-						optimiser.setProgressMonitor(optMonitor);
-						optimiser.init();
+					// printSequences(context.getInitialSequences());
 
-//						final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
-//								.getFitnessEvaluator();
+					System.out.println("Initial fitness "
+							+ linearFitnessEvaluator.getBestFitness());
 
-						// monitor.subTask("Evaluate fitness of initial solution");
-						//
-						// final
-						// LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>
-						// linearFitnessEvaluator =
-						// (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>)
-						// fitnessEvaluator;
-						//
-						// linearFitnessEvaluator.setOptimisationData(context
-						// .getOptimisationData());
-						// linearFitnessEvaluator.setInitialSequences(context
-						// .getInitialSequences());
-						//
-						// // printSequences(context.getInitialSequences());
-						//
-						// System.out.println("Initial fitness "
-						// + linearFitnessEvaluator.getBestFitness());
+					monitor.subTask("Run optimisation");
+					optimiser.optimise(context);
 
-						monitor.subTask("Run optimisation");
-						optimiser.optimise(context);
+					System.out.println("Final fitness "
+							+ linearFitnessEvaluator.getBestFitness());
 
-						// System.out.println("Final fitness "
-						// + linearFitnessEvaluator.getBestFitness());
-					} catch (final IncompleteScenarioException ex) {
-						fireJobCancelled();
-						return Status.CANCEL_STATUS; // die
-					}
 				} finally {
 					monitor.done();
 				}
@@ -438,19 +402,9 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 	}
 
-	private void updateSchedule(final IAnnotatedSolution<ISequenceElement> solution, int iterations) {
+	private void updateSchedule(final ISequences<ISequenceElement> bestState) {
+
+		final IAnnotatedSolution<ISequenceElement> solution = CargoSchedulerExporter.exportState(context, bestState);
 		setSchedule(solution);
-		
-		// transform and add
-		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
-		if (iterations < 0) {
-			schedule.setName("finished");
-		} else if (iterations == 0) {
-			schedule.setName("initial");
-		} else {
-			schedule.setName(iterations + " iterations");
-		}
-		scenario.getScheduleModel().getSchedules().add(schedule);
 	}
 }

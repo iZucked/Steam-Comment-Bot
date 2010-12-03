@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+
 package com.mmxlabs.jobcontroller.emf.optimisationsettings;
 
 import java.util.HashMap;
