@@ -118,13 +118,14 @@ public final class Sequences<T> implements ISequences<T> {
 		return sequenceMap.size();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 
 		if (obj instanceof Sequences) {
 			return sequenceMap.equals(((Sequences) obj).sequenceMap);
 		} else if (obj instanceof ISequences) {
-			ISequences seq = (ISequences) obj;
+			final ISequences seq = (ISequences) obj;
 			if (size() != seq.size()) {
 				return false;
 			}
@@ -137,5 +138,10 @@ public final class Sequences<T> implements ISequences<T> {
 		}
 
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return sequenceMap.hashCode();
 	}
 }

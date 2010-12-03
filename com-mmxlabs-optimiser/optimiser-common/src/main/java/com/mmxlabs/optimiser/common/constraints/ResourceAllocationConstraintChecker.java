@@ -33,7 +33,7 @@ public final class ResourceAllocationConstraintChecker<T> implements
 
 	private final String dataProviderKey;
 
-	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
+	private IResourceAllocationConstraintDataComponentProvider<T> resourceAllocationConstraintDataComponentProvider;
 
 	public ResourceAllocationConstraintChecker(final String name,
 			final String dataProviderKey) {
@@ -91,17 +91,18 @@ public final class ResourceAllocationConstraintChecker<T> implements
 	}
 
 	public void setProvider(
-			final IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider) {
+			final IResourceAllocationConstraintDataComponentProvider<T> resourceAllocationConstraintDataComponentProvider) {
 		this.resourceAllocationConstraintDataComponentProvider = resourceAllocationConstraintDataComponentProvider;
 	}
 
-	public IResourceAllocationConstraintDataComponentProvider getProvider() {
+	public IResourceAllocationConstraintDataComponentProvider<T> getProvider() {
 		return resourceAllocationConstraintDataComponentProvider;
 	}
 
 	@Override
 	public void setOptimisationData(final IOptimisationData<T> optimisationData) {
-		final IResourceAllocationConstraintDataComponentProvider provider = optimisationData
+		@SuppressWarnings("unchecked")
+		final IResourceAllocationConstraintDataComponentProvider<T> provider = optimisationData
 				.getDataComponentProvider(
 						dataProviderKey,
 						IResourceAllocationConstraintDataComponentProvider.class);
@@ -114,17 +115,17 @@ public final class ResourceAllocationConstraintChecker<T> implements
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+	public boolean checkPairwiseConstraint(final T first, final T second, final IResource resource) {
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 	
-	private final boolean checkElement(T element, IResource resource) {
+	private final boolean checkElement(final T element, final IResource resource) {
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		return (resources == null || resources.contains(resource));
 	}
 
 	@Override
-	public String explain(T first, T second, IResource resource) {
+	public String explain(final T first, final T second, final IResource resource) {
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(first);
 		return "Resource: " + resource.getName() + ", first in " + resources + ", second in " +
 			resourceAllocationConstraintDataComponentProvider.getAllowedResources(second);

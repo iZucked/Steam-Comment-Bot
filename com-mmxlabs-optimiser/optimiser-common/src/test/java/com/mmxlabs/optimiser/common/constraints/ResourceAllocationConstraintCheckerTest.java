@@ -47,7 +47,7 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT() {
 
-		final IResourceAllocationConstraintDataComponentProviderEditor provider = new ResourceAllocationConstraintProvider(
+		final IResourceAllocationConstraintDataComponentProviderEditor<Object> provider = new ResourceAllocationConstraintProvider<Object>(
 				"key");
 
 		final Object obj1 = new Object();
@@ -85,7 +85,7 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT2() {
 
-		final IResourceAllocationConstraintDataComponentProviderEditor provider = new ResourceAllocationConstraintProvider(
+		final IResourceAllocationConstraintDataComponentProviderEditor<Object> provider = new ResourceAllocationConstraintProvider<Object>(
 				"key");
 
 		final Object obj1 = new Object();
@@ -123,7 +123,7 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString() {
 
-		final IResourceAllocationConstraintDataComponentProviderEditor provider = new ResourceAllocationConstraintProvider(
+		final IResourceAllocationConstraintDataComponentProviderEditor<Object> provider = new ResourceAllocationConstraintProvider<Object>(
 				"key");
 
 		final Object obj1 = new Object();
@@ -165,7 +165,7 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString2() {
 
-		final IResourceAllocationConstraintDataComponentProviderEditor provider = new ResourceAllocationConstraintProvider(
+		final IResourceAllocationConstraintDataComponentProviderEditor<Object> provider = new ResourceAllocationConstraintProvider<Object>(
 				"key");
 
 		final Object obj1 = new Object();
@@ -208,7 +208,8 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testGetSetProvider() {
 
-		final IResourceAllocationConstraintDataComponentProvider provider = context
+		@SuppressWarnings("unchecked")
+		final IResourceAllocationConstraintDataComponentProvider<Object> provider = context
 				.mock(IResourceAllocationConstraintDataComponentProvider.class);
 
 		final ResourceAllocationConstraintChecker<Object> checker = new ResourceAllocationConstraintChecker<Object>(
@@ -226,7 +227,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		// Tell the context to return null, rather than try to create a sample
 		// object of this type as it causes a class cast exception.
 		context.setDefaultResultForType(IDataComponentProvider.class, null);
-		final IOptimisationData data = context.mock(IOptimisationData.class);
+		final IOptimisationData<Object> data = context.mock(IOptimisationData.class);
 
 		final String key = "key";
 

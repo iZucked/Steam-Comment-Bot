@@ -7,10 +7,16 @@ package com.mmxlabs.optimiser.lso.impl.thresholders;
 
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.optimiser.lso.IThresholder;
 
 public class MovingAverageThresholder implements IThresholder {
-	private long[] window;
+	
+	private static final Logger log = LoggerFactory.getLogger(MovingAverageThresholder.class);
+	
+	private final long[] window;
 	private double sum = 0;
 	private int front = 0;
 	private double logAlpha;
@@ -22,7 +28,7 @@ public class MovingAverageThresholder implements IThresholder {
 	private final int epochLength;
 	private double lastT;
 	
-	public MovingAverageThresholder(Random random, double initialAcceptance, double cooling, int epochLength, int window) {
+	public MovingAverageThresholder(final Random random, final double initialAcceptance, final double cooling, final int epochLength, final int window) {
 		this.random = random;
 		this.window = new long[window];
 		this.alpha0 = initialAcceptance;
@@ -37,8 +43,10 @@ public class MovingAverageThresholder implements IThresholder {
 	}
 
 	@Override
-	public boolean accept(long delta) {
-		if (delta <= 0) return true;
+	public boolean accept(final long delta) {
+		if (delta <= 0) {
+			return true;
+		}
 		
 		sum -= window[front];
 		sum += delta;
@@ -61,7 +69,7 @@ public class MovingAverageThresholder implements IThresholder {
 		} else {
 			if (tick == 0) {
 				logAlpha = Math.log(alpha0 * Math.pow(cooling, epoch));
-				System.err.println("Epoch " + epoch + ", alpha = " + alpha0 *Math.pow(cooling, epoch) + " T=" + lastT);
+				log.debug("Epoch " + epoch + ", alpha = " + alpha0 * Math.pow(cooling, epoch) + " T=" + lastT);
 			}
 			tick++;
 		}

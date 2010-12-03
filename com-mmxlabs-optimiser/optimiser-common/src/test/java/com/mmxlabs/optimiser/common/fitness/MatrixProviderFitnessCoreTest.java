@@ -262,7 +262,6 @@ public class MatrixProviderFitnessCoreTest {
 		Assert.assertEquals(12, core.getNewFitness());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetFitnessComponents() {
 		final String componentName = "componentName";

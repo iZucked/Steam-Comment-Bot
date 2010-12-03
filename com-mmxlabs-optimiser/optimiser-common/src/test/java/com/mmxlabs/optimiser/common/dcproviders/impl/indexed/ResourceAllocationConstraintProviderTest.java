@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.optimiser.common.dcproviders.impl;
+package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -20,17 +20,17 @@ public class ResourceAllocationConstraintProviderTest {
 	public void testResourceAllocationConstraintProvider() {
 
 		final String name = "name";
-		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
+		final ResourceAllocationConstraintProvider<MockIndexedObject> provider = new ResourceAllocationConstraintProvider<MockIndexedObject>(
 				name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetAllowedResources() {
-		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
+		final ResourceAllocationConstraintProvider<MockIndexedObject> provider = new ResourceAllocationConstraintProvider<MockIndexedObject>(
 				"name");
 
-		final Object obj1 = new Object();
+		final MockIndexedObject obj1 = new MockIndexedObject(1);
 
 		Assert.assertNull(provider.getAllowedResources(obj1));
 
@@ -45,9 +45,9 @@ public class ResourceAllocationConstraintProviderTest {
 	@Test
 	public void testDispose() {
 
-		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
+		final ResourceAllocationConstraintProvider<MockIndexedObject> provider = new ResourceAllocationConstraintProvider<MockIndexedObject>(
 				"name");
-		final Object obj1 = new Object();
+		final MockIndexedObject obj1 = new MockIndexedObject(1);
 
 		Assert.assertNull(provider.getAllowedResources(obj1));
 

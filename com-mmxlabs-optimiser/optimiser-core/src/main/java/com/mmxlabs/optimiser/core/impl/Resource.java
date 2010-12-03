@@ -37,6 +37,7 @@ public final class Resource extends IndexedObject implements IResource {
 		this.name = name;
 	}
 	
+	@Override
 	public String toString() {
 		return "Resource " + name;
 	}

@@ -41,14 +41,17 @@ public final class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 		return new Iterator<T>() {
 			private final Iterator<? extends T> i = wrapped.iterator();
 
+			@Override
 			public final boolean hasNext() {
 				return i.hasNext();
 			}
 
+			@Override
 			public final T next() {
 				return i.next();
 			}
 
+			@Override
 			public final void remove() {
 				throw new UnsupportedOperationException();
 			}

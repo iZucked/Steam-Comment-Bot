@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.optimiser.common.dcproviders.impl;
+package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,16 +19,16 @@ public class TimeWindowDataComponentProviderTest {
 	@Test
 	public void testTimeWindowDataComponentProvider() {
 		final String name = "name";
-		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
+		final TimeWindowDataComponentProvider<MockIndexedObject> provider = new TimeWindowDataComponentProvider<MockIndexedObject>(
 				name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetTimeWindows() {
-		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
+		final TimeWindowDataComponentProvider<MockIndexedObject> provider = new TimeWindowDataComponentProvider<MockIndexedObject>(
 				"name");
-		final Object obj1 = new Object();
+		final MockIndexedObject obj1 = new MockIndexedObject(1);
 
 		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows);
@@ -37,16 +37,16 @@ public class TimeWindowDataComponentProviderTest {
 		final List<ITimeWindow> windows = new LinkedList<ITimeWindow>();
 		provider.setTimeWindows(obj1, windows);
 
-		List<ITimeWindow> timeWindows2 = provider.getTimeWindows(obj1);
+		final List<ITimeWindow> timeWindows2 = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows2);
 		Assert.assertSame(windows, timeWindows2);
 	}
 
 	@Test
 	public void testDispose() {
-		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
+		final TimeWindowDataComponentProvider<MockIndexedObject> provider = new TimeWindowDataComponentProvider<MockIndexedObject>(
 				"name");
-		final Object obj1 = new Object();
+		final MockIndexedObject obj1 = new MockIndexedObject(1);
 
 		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows);
@@ -55,7 +55,7 @@ public class TimeWindowDataComponentProviderTest {
 		final List<ITimeWindow> windows = new LinkedList<ITimeWindow>();
 		provider.setTimeWindows(obj1, windows);
 
-		List<ITimeWindow> timeWindows2 = provider.getTimeWindows(obj1);
+		final List<ITimeWindow> timeWindows2 = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows2);
 		Assert.assertSame(windows, timeWindows2);
 

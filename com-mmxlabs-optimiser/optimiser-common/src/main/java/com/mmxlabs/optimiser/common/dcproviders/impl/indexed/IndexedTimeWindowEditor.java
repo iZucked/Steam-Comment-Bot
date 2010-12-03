@@ -30,10 +30,11 @@ public class IndexedTimeWindowEditor<T extends IIndexedObject> implements
 	public List<ITimeWindow> getTimeWindows(final T element) {
 		final List<ITimeWindow> windows = timeWindowsByElement
 				.maybeGet(element);
-		if (windows == null)
+		if (windows == null) {
 			return Collections.emptyList();
-		else
+		} else {
 			return windows;
+		}
 	}
 
 	@Override
