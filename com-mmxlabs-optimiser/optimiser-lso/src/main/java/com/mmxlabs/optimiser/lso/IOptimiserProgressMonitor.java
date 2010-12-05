@@ -5,6 +5,7 @@
 
 package com.mmxlabs.optimiser.lso;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.ISequences;
 
@@ -28,7 +29,7 @@ public interface IOptimiserProgressMonitor<T> {
 	 * @param initialState
 	 */
 	void begin(IOptimiser<T> optimiser, long initialFitness,
-			ISequences<T> initialState);
+			IAnnotatedSolution<T> annotatedSolution);
 
 	/**
 	 * Report back the current and best state found at the given iteration
@@ -43,8 +44,8 @@ public interface IOptimiserProgressMonitor<T> {
 	 * @param bestState
 	 */
 	void report(IOptimiser<T> optimiser, int iteration, long currentFitness,
-			long bestFitness, ISequences<T> currentState,
-			ISequences<T> bestState);
+			long bestFitness, IAnnotatedSolution<T> currentSolution,
+			IAnnotatedSolution<T> bestSolution);
 
 	/**
 	 * Notify the optimisation has finished with the given solution as the best
@@ -54,5 +55,5 @@ public interface IOptimiserProgressMonitor<T> {
 	 * @param bestFitness
 	 * @param bestState
 	 */
-	void done(IOptimiser<T> optimiser, long bestFitness, ISequences<T> bestState);
+	void done(IOptimiser<T> optimiser, long bestFitness, IAnnotatedSolution<T> annotatedSolution);
 }

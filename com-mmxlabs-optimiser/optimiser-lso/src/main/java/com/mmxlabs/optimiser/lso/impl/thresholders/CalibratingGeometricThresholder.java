@@ -32,12 +32,15 @@ public class CalibratingGeometricThresholder implements IThresholder {
 	private int samples;
 	private double alpha;
 	private double calibratedTemperature;
+	private double logInitialAcceptance;
+	private double sumSamples;
 
 	public CalibratingGeometricThresholder(Random random, int epochLength, double initialAcceptanceRate, double alpha) {
 		this.random = random;
 		this.epochLength = epochLength;
 		this.initialAcceptanceRate = initialAcceptanceRate;
 		this.alpha = alpha;
+		this.logInitialAcceptance = Math.log(this.initialAcceptanceRate);
 	}
 	
 	@Override
@@ -47,6 +50,7 @@ public class CalibratingGeometricThresholder implements IThresholder {
 		this.calibrated = false;
 		sample = new long[epochLength];
 		samples = 0;
+		sumSamples = 0;
 	}
 
 	@Override
@@ -56,11 +60,14 @@ public class CalibratingGeometricThresholder implements IThresholder {
 		} else {
 			//add this to the calibration infos.
 			sample[samples] = Math.abs(delta);
+			sumSamples+=sample[samples];
 			samples++;
 			if (samples >= epochLength) {
 				calibrate();
 			}
-			return delta < 0;
+			return delta < 0 || 
+				random.nextDouble() <
+					Math.exp(-delta / (-(sumSamples/samples)/logInitialAcceptance));
 		}
 	}
 

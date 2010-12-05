@@ -8,6 +8,7 @@ package com.mmxlabs.optimiser.core.fitness;
 import java.util.Collection;
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -77,4 +78,12 @@ public interface IFitnessCore<T> {
 	 */
 	void dispose();
 
+	/**
+	 * Add annotations of the given sequences to the associated {@link IAnnotatedSolution}.
+	 * Performs a full evaluation, but should <em>not</em> change the fitness stored in the associated components
+	 * 
+	 * @param sequences sequences to evaluate
+	 * @param solution annotated solution for these sequences
+	 */
+	void annotate(final ISequences<T> sequences, final IAnnotatedSolution<T> solution);
 }

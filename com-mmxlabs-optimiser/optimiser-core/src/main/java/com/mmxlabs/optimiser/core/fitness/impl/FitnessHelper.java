@@ -9,11 +9,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -108,5 +111,23 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 		for (final IFitnessCore<T> core : fitnessCores) {
 			core.accepted(sequences, affectedResources);
 		}
+	}
+
+	@Override
+	public IAnnotatedSolution<T> buildAnnotatedSolution(
+			final IOptimisationContext<T> context, final ISequences<T> state,
+			final Collection<IFitnessComponent<T>> fitnessComponents) {
+		
+		final Set<IFitnessCore<T>> cores = getFitnessCores(fitnessComponents);
+		
+		final AnnotatedSolution<T> result = new AnnotatedSolution<T>();
+		result.setSequences(state);
+		result.setContext(context);
+		
+		for (final IFitnessCore<T> core : cores) {
+			core.annotate(state, result);
+		}
+		
+		return result;
 	}
 }

@@ -82,4 +82,9 @@ public final class HashMapMatrixProvider<T, U> implements
 	public U getDefaultValue() {
 		return defaultValue;
 	}
+
+	@Override
+	public boolean has(T x, T y) {
+		return matrix.containsKey(x) && matrix.get(x).containsKey(y);
+	}
 }

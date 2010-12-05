@@ -69,4 +69,9 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 		
 		matrix = newMatrix;
 	}
+
+	@Override
+	public boolean has(T x, T y) {
+		return matrix[x.getIndex()][y.getIndex()] != defaultValue;
+	}
 }

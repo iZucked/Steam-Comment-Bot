@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -72,21 +73,31 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
-		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
-				fitnessEvaluator.getBestSequences());
+		{
+			final IAnnotatedSolution<T> annotatedBestSolution = fitnessEvaluator
+					.getBestAnnotatedSolution(optimiserContext);
+			// fitnessEvaluator.getBestSequences()
+			getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
+					annotatedBestSolution);
 
+		}
 		// Perform the optimisation
 		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
 
 			// Periodically issue a status report to the progress monitor
 			if (iter % getReportInterval() == 0) {
+				final IAnnotatedSolution<T> annotatedBestSolution = 
+					fitnessEvaluator.getBestAnnotatedSolution(optimiserContext);
+				final IAnnotatedSolution<T> annotatedCurrentSolution = 
+					fitnessEvaluator.getCurrentAnnotatedSolution(optimiserContext);
+				// fitnessEvaluator.getBestSequences()
+
 				getProgressMonitor().report(this, iter,
 						fitnessEvaluator.getCurrentFitness(),
 						fitnessEvaluator.getBestFitness(),
-						fitnessEvaluator.getCurrentSequences(),
-						fitnessEvaluator.getBestSequences());
+						annotatedCurrentSolution, annotatedBestSolution);
 			}
-			
+
 			++numberOfMovesTried;
 
 			// Generate a new move
@@ -109,7 +120,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			final IModifiableSequences<T> potentialFullSequences = new ModifiableSequences<T>(
 					potentialRawSequences);
 			manipulator.manipulate(potentialFullSequences);
-			
+
 			// Apply hard constraint checkers
 			for (final IConstraintChecker<T> checker : constraintCheckers) {
 				if (checker.checkConstraints(potentialFullSequences) == false) {
@@ -137,11 +148,11 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 				// Failed, reset state for old sequences
 				updateSequences(currentRawSequences, potentialRawSequences,
 						move.getAffectedResources());
-			}			
+			}
 		}
 
 		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
-				fitnessEvaluator.getBestSequences());
+				fitnessEvaluator.getBestAnnotatedSolution(optimiserContext));
 
 	}
 }

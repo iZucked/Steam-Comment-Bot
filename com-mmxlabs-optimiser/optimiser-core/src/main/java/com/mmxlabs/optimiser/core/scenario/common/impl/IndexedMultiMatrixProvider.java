@@ -19,15 +19,25 @@ public final class IndexedMultiMatrixProvider<T extends IIndexedObject,
 
 	private final IndexedMatrixEditor<T, U> minima = 
 		new IndexedMatrixEditor<T, U>("minimum-values", null);
-	public final void cacheMinimumValues(final Collection<T> elements) {
+	
+	private final IndexedMatrixEditor<T, U> maxima = 
+		new IndexedMatrixEditor<T, U>("maximum-values", null);
+	
+	public final void cacheExtremalValues(final Collection<T> elements) {
 		for (final T x : elements) {
 			for (final T y : elements) {
 				minima.set(x, y, super.getMinimumValue(x, y));
+				maxima.set(x, y, super.getMaximumValue(x, y));
 			}
 		}
 	}
 	@Override
-	public U getMinimumValue(T x, T y) {
+	public U getMinimumValue(final T x, final T y) {
 		return minima.get(x, y);
+	}
+	
+	@Override
+	public U getMaximumValue(final T x, final T y) {
+		return maxima.get(x, y);
 	}
 }

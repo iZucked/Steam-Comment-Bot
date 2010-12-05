@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 
 /**
  * Interface defining multiple two dimensional matrix with a simple value
@@ -22,7 +23,8 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @param <U>
  *            Value type
  */
-public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataComponentProvider {
+public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends
+		IDataComponentProvider {
 
 	/**
 	 * Class representing an entry from a {@link IMatrixProvider}.
@@ -35,7 +37,8 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataC
 	 * @param <U>
 	 *            Value type
 	 */
-	public static final class MatrixEntry<T, U extends Comparable<U>> implements Comparable<MatrixEntry<T, U>> {
+	public static final class MatrixEntry<T, U extends Comparable<U>>
+			implements Comparable<MatrixEntry<T, U>> {
 
 		private final String key;
 
@@ -67,7 +70,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataC
 		public final U getValue() {
 			return value;
 		}
-		
+
 		@Override
 		public final int compareTo(final MatrixEntry<T, U> other) {
 			return value.compareTo(other.value);
@@ -125,6 +128,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataC
 
 	/**
 	 * Returns the {@link MatrixEntry} with minimum cost for points x and y
+	 * 
 	 * @param x
 	 * @param y
 	 * @return
@@ -132,11 +136,34 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataC
 	MatrixEntry<T, U> getMinimum(T x, T y);
 
 	/**
-	 * Returns the cost of the matrix entry returned by {@link IMultiMatrixProvider#getValues(T, T)}.
-	 * This is the shortest distance between these two points in this multimatrix.
+	 * Returns the {@link MatrixEntry} with maximum non-default-value cost for
+	 * points x and y.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	MatrixEntry<T, U> getMaximum(T x, T y);
+
+	/**
+	 * Returns the cost of the matrix entry returned by
+	 * {@link IMultiMatrixProvider#getValues(T, T)}. This is the shortest
+	 * distance between these two points in this multimatrix.
+	 * 
 	 * @param x
 	 * @param y
 	 * @return
 	 */
 	U getMinimumValue(T x, T y);
+
+	/**
+	 * Returns the cost of the matrix entry returned by
+	 * {@link IMultiMatrixProvider#getMaximum}. This is the longest distance
+	 * between these two points which is less than the default value.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	U getMaximumValue(T x, T y);
 }

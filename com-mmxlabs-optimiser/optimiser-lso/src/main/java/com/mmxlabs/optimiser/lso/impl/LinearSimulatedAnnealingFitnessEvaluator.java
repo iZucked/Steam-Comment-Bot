@@ -13,6 +13,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -189,7 +191,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		for (final IFitnessComponent<T> component : fitnessComponents) {
 			bestFitnesses.put(component.getName(), component.getFitness());
 		}
-		
+
 		// Setup initial conditions
 		thresholder.init();
 	}
@@ -279,6 +281,20 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		this.fitnessComponents = null;
 		this.fitnessHelper = null;
 		this.thresholder = null;
+	}
+
+	@Override
+	public IAnnotatedSolution<T> getBestAnnotatedSolution(
+			IOptimisationContext<T> context) {
+		return fitnessHelper.buildAnnotatedSolution(context,
+				getBestSequences(), getFitnessComponents());
+	}
+
+	@Override
+	public IAnnotatedSolution<T> getCurrentAnnotatedSolution(
+			IOptimisationContext<T> context) {
+		return fitnessHelper.buildAnnotatedSolution(context,
+				getCurrentSequences(), getFitnessComponents());
 	}
 
 }
