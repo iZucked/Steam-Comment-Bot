@@ -96,6 +96,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		return false;
 	}
 
+	@Override
 	public int getCargoCVValue() {
 		return cargoCVValue;
 	}
