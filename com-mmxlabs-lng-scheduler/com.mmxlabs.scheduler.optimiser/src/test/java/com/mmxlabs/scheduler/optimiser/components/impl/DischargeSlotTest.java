@@ -13,7 +13,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -64,8 +63,7 @@ public class DischargeSlotTest {
 
 	@Test
 	public void testGetSetSalesPriceCurve() {
-		final int value = 10;
-		final ConstantValueCurve curve = new ConstantValueCurve(value);
+		final ICurve curve = context.mock(ICurve.class);
 		final DischargeSlot slot = new DischargeSlot();
 		Assert.assertNull(slot.getSalesPriceCurve());
 		slot.setSalesPriceCurve(curve);
@@ -75,12 +73,12 @@ public class DischargeSlotTest {
 	@Test
 	public void testGetSetSalesPriceCurveAtTime() {
 		final DischargeSlot slot = new DischargeSlot();
-		
+
 		final ICurve curve = context.mock(ICurve.class);
 		slot.setSalesPriceCurve(curve);
 
 		final int time = 1234;
-		
+
 		context.checking(new Expectations() {
 			{
 				one(curve).getValueAtPoint(time);
