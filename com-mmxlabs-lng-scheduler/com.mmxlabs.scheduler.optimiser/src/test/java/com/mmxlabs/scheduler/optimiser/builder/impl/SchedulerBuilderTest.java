@@ -46,26 +46,26 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateLoadSlot2() {
 
-		SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		IPort port = context.mock(IPort.class);
-		ITimeWindow window = builder.createTimeWindow(0, 0);
+		final IPort port = context.mock(IPort.class);
+		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		ICurve curve = context.mock(ICurve.class);
-		
+		final ICurve curve = context.mock(ICurve.class);
+
 		builder.createLoadSlot("id", port, window, 0, 0, curve, 0, 0);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateLoadSlot3() {
 
-		SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		IPort port = builder.createPort("port");
-		ITimeWindow window = context.mock(ITimeWindow.class);
+		final IPort port = builder.createPort("port");
+		final ITimeWindow window = context.mock(ITimeWindow.class);
 
-		ICurve curve = context.mock(ICurve.class);
-		
+		final ICurve curve = context.mock(ICurve.class);
+
 		builder.createLoadSlot("id", port, window, 0, 0, curve, 0, 0);
 	}
 
@@ -77,25 +77,25 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateDischargeSlot2() {
 
-		SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		IPort port = context.mock(IPort.class);
-		ITimeWindow window = builder.createTimeWindow(0, 0);
+		final IPort port = context.mock(IPort.class);
+		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		ICurve curve = context.mock(ICurve.class);
-		
+		final ICurve curve = context.mock(ICurve.class);
+
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateDischargeSlot3() {
 
-		SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		IPort port = builder.createPort("port");
-		ITimeWindow window = context.mock(ITimeWindow.class);
-		
-		ICurve curve = context.mock(ICurve.class);
+		final IPort port = builder.createPort("port");
+		final ITimeWindow window = context.mock(ITimeWindow.class);
+
+		final ICurve curve = context.mock(ICurve.class);
 
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 	}
@@ -108,17 +108,17 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateCargo2() {
 
-		SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		IPort port = builder.createPort("port");
-		ITimeWindow window = builder.createTimeWindow(0, 0);
+		final IPort port = builder.createPort("port");
+		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		ICurve curve = context.mock(ICurve.class);
-		
-		ILoadSlot loadSlot = context.mock(ILoadSlot.class);
+		final ICurve curve = context.mock(ICurve.class);
 
-		IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port,
-				window, 0, 0, curve, 0);
+		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
+
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id",
+				port, window, 0, 0, curve, 0);
 
 		builder.createCargo("id", loadSlot, dischargeSlot);
 	}
@@ -126,15 +126,15 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateCargo3() {
 
-		SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		IPort port = builder.createPort("port");
-		ITimeWindow window = builder.createTimeWindow(0, 0);
-		ICurve curve = context.mock(ICurve.class);
+		final IPort port = builder.createPort("port");
+		final ITimeWindow window = builder.createTimeWindow(0, 0);
+		final ICurve curve = context.mock(ICurve.class);
 
-		ILoadSlot loadSlot = builder
-				.createLoadSlot("id", port, window, 0, 0, curve, 0, 0);
-		IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
+		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window,
+				0, 0, curve, 0, 0);
+		final IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
 
 		builder.createCargo("id", loadSlot, dischargeSlot);
 	}
@@ -152,12 +152,12 @@ public class SchedulerBuilderTest {
 	@Test
 	public void testCreateTimeWindow() {
 
-		SchedulerBuilder builder = new SchedulerBuilder();
-		ITimeWindow window = builder.createTimeWindow(10, 20);
+		final SchedulerBuilder builder = new SchedulerBuilder();
+		final ITimeWindow window = builder.createTimeWindow(10, 20);
 
 		Assert.assertEquals(10, window.getStart());
 		Assert.assertEquals(20, window.getEnd());
-		
+
 		fail("Not yet implemented - Test internal state");
 	}
 
@@ -189,17 +189,18 @@ public class SchedulerBuilderTest {
 	@Test
 	public void testCreateVesselClass() {
 
-		SchedulerBuilder builder = new SchedulerBuilder();
-		
-		int minSpeed = 1;
-		int maxSpeed = 2;
-		long capacity = 3l;
-		int minHeel = 4;
-		
-		IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 1234);
-//		createVesselClass("name", minSpeed,
-//				maxSpeed, capacity, minHeel, 700;
-		
+		final SchedulerBuilder builder = new SchedulerBuilder();
+
+		final int minSpeed = 1;
+		final int maxSpeed = 2;
+		final long capacity = 3l;
+		final int minHeel = 4;
+
+		final IVesselClass vesselClass = builder.createVesselClass("name",
+				minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 1234);
+		// createVesselClass("name", minSpeed,
+		// maxSpeed, capacity, minHeel, 700;
+
 		Assert.assertEquals(minSpeed, vesselClass.getMinSpeed());
 		Assert.assertEquals(maxSpeed, vesselClass.getMaxSpeed());
 		Assert.assertEquals(capacity, vesselClass.getCargoCapacity());
@@ -218,9 +219,9 @@ public class SchedulerBuilderTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetVesselClassStateParamaters2() {
-		IVesselClass vc = context.mock(IVesselClass.class);
+		final IVesselClass vc = context.mock(IVesselClass.class);
 
-		SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = new SchedulerBuilder();
 
 		builder.setVesselClassStateParamaters(vc, null, 0, 0, 0, null, 0);
 	}
