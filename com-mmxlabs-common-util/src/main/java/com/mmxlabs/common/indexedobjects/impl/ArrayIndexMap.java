@@ -34,7 +34,9 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	}
 	
 	private synchronized void ensure(final int index) {
-		if (index < contents.length) return;
+		if (index < contents.length) {
+			return;
+		}
 		final int newSize = Math.max(index + 1, contents.length * 2);
 		@SuppressWarnings("unchecked")
 		U[] newContents = (U[]) new Object[newSize];
@@ -51,10 +53,11 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	public final U maybeGet(final T key) {
 //		return get(key);
 		final int index = key.getIndex();
-		if (index >= contents.length || !isSet[index]) 
+		if (index >= contents.length || !isSet[index]) { 
 			return null;
-		else	
+		} else {	
 			return contents[index];
+		}
 	}
 
 	@Override
