@@ -63,7 +63,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 	public void setPurchasePriceCurve(final ICurve curve) {
 		this.purchasePriceCurve = curve;
 	}
-	
+
 	@Override
 	public int getPurchasePriceAtTime(final int time) {
 		return (int) purchasePriceCurve.getValueAtPoint(time);
@@ -78,11 +78,11 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 			if (minLoadVolume != slot.minLoadVolume) {
 				return false;
 			}
-			
+
 			if (maxLoadVolume != slot.maxLoadVolume) {
 				return false;
 			}
-			
+
 			if (purchasePriceCurve != slot.purchasePriceCurve) {
 				return false;
 			}
@@ -90,7 +90,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 			if (cargoCVValue != slot.cargoCVValue) {
 				return false;
 			}
-			
+
 			return super.equals(obj);
 		}
 		return false;
