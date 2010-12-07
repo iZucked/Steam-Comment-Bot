@@ -14,6 +14,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -50,7 +51,9 @@ public class SchedulerBuilderTest {
 		IPort port = context.mock(IPort.class);
 		ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		builder.createLoadSlot("id", port, window, 0, 0, 0, 0, 0);
+		ICurve curve = context.mock(ICurve.class);
+		
+		builder.createLoadSlot("id", port, window, 0, 0, curve, 0, 0);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -61,7 +64,9 @@ public class SchedulerBuilderTest {
 		IPort port = builder.createPort("port");
 		ITimeWindow window = context.mock(ITimeWindow.class);
 
-		builder.createLoadSlot("id", port, window, 0, 0, 0, 0, 0);
+		ICurve curve = context.mock(ICurve.class);
+		
+		builder.createLoadSlot("id", port, window, 0, 0, curve, 0, 0);
 	}
 
 	@Test
@@ -77,7 +82,9 @@ public class SchedulerBuilderTest {
 		IPort port = context.mock(IPort.class);
 		ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, 0, 0);
+		ICurve curve = context.mock(ICurve.class);
+		
+		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -87,8 +94,10 @@ public class SchedulerBuilderTest {
 
 		IPort port = builder.createPort("port");
 		ITimeWindow window = context.mock(ITimeWindow.class);
+		
+		ICurve curve = context.mock(ICurve.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, 0, 0);
+		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 	}
 
 	@Test
@@ -104,10 +113,12 @@ public class SchedulerBuilderTest {
 		IPort port = builder.createPort("port");
 		ITimeWindow window = builder.createTimeWindow(0, 0);
 
+		ICurve curve = context.mock(ICurve.class);
+		
 		ILoadSlot loadSlot = context.mock(ILoadSlot.class);
 
 		IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port,
-				window, 0, 0, 0, 0);
+				window, 0, 0, curve, 0);
 
 		builder.createCargo("id", loadSlot, dischargeSlot);
 	}
@@ -119,9 +130,10 @@ public class SchedulerBuilderTest {
 
 		IPort port = builder.createPort("port");
 		ITimeWindow window = builder.createTimeWindow(0, 0);
+		ICurve curve = context.mock(ICurve.class);
 
 		ILoadSlot loadSlot = builder
-				.createLoadSlot("id", port, window, 0, 0, 0, 0, 0);
+				.createLoadSlot("id", port, window, 0, 0, curve, 0, 0);
 		IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
 
 		builder.createCargo("id", loadSlot, dischargeSlot);
