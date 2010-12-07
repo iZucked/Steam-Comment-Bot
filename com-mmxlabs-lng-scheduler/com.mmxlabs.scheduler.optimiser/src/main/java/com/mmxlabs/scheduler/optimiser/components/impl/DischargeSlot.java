@@ -88,4 +88,8 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 	public void setSalesPriceCurve(final ICurve salesPriceCurve) {
 		this.salesPriceCurve = salesPriceCurve;
 	}
+
+	public final ICurve getSalesPriceCurve() {
+		return salesPriceCurve;
+	}
 }
