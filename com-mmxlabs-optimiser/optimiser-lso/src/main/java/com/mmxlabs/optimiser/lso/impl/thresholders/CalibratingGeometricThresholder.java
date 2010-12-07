@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.lso.IThresholder;
  */
 public class CalibratingGeometricThresholder implements IThresholder {
 	
-	private static final Logger log = LoggerFactory.getLogger(CalibratingGeometricThreholderTest.class);
+	private static final Logger log = LoggerFactory.getLogger(CalibratingGeometricThresholder.class);
 	
 	private static final double ACCEPTABLE_ERROR = 0.01;
 	private double initialAcceptanceRate;
