@@ -10,7 +10,7 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CalibratingGeometricThreholderTest {
+public class CalibratingGeometricThresholderTest {
 	@Test
 	public void testCalibration() {
 		//check that the calibration is OK
