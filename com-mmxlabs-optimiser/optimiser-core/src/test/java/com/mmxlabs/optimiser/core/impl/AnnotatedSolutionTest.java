@@ -5,6 +5,8 @@
 
 package com.mmxlabs.optimiser.core.impl;
 
+import java.util.Map;
+
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -12,30 +14,15 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSequence;
+import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 
 @RunWith(JMock.class)
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class AnnotatedSolutionTest {
 
 	Mockery context = new JUnit4Mockery();
-
-	@Test
-	public void testGetSetAnnotatedSequence() {
-
-		final IResource resource = context.mock(IResource.class);
-		final IAnnotatedSequence sequence = context
-				.mock(IAnnotatedSequence.class);
-
-		final AnnotatedSolution solution = new AnnotatedSolution();
-		Assert.assertNull(solution.getAnnotatedSequence(resource));
-		solution.setAnnotatedSequence(resource, sequence);
-		Assert.assertSame(sequence, solution.getAnnotatedSequence(resource));
-	}
 
 	@Test
 	public void testGetSetSequences() {
@@ -57,34 +44,77 @@ public class AnnotatedSolutionTest {
 	}
 
 	@Test
+	public void getSetGeneralAnnotaion() {
+		final Object annotation = new Object();
+		final String key = "key";
+
+		final AnnotatedSolution solution = new AnnotatedSolution();
+
+		final Map<String, Object> generalAnnotations = solution
+				.getGeneralAnnotations();
+
+		Assert.assertNotNull(generalAnnotations);
+		Assert.assertTrue(generalAnnotations.isEmpty());
+
+		solution.setGeneralAnnotation(key, annotation);
+
+		Assert.assertFalse(generalAnnotations.isEmpty());
+		Assert.assertTrue(generalAnnotations.containsKey(key));
+		Assert.assertSame(annotation, generalAnnotations.get(key));
+	}
+
+	@Test
+	public void getElementAnnotations() {
+		final AnnotatedSolution solution = new AnnotatedSolution();
+
+		final IAnnotations elementAnnotations = solution.getElementAnnotations();
+
+		Assert.assertNotNull(elementAnnotations);
+		
+		Assert.fail("How to test this further?");
+	}
+
+	@Test
 	public void testDispose() {
 		final ISequences sequences = context.mock(ISequences.class);
-		final IResource resource = context.mock(IResource.class);
-		final IAnnotatedSequence sequence = context
-				.mock(IAnnotatedSequence.class);
 		final IOptimisationContext optContext = context
 				.mock(IOptimisationContext.class);
 
+		final Object annotation = new Object();
+		final String key = "key";
+
+		
 		final AnnotatedSolution solution = new AnnotatedSolution();
 
 		Assert.assertNull(solution.getSequences());
 		Assert.assertNull(solution.getContext());
-		Assert.assertNull(solution.getAnnotatedSequence(resource));
 
 		solution.setContext(optContext);
 		solution.setSequences(sequences);
-		solution.setAnnotatedSequence(resource, sequence);
 
 		Assert.assertSame(optContext, solution.getContext());
 		Assert.assertSame(sequences, solution.getSequences());
-		Assert.assertSame(sequence, solution.getAnnotatedSequence(resource));
+
+		final Map<String, Object> generalAnnotations = solution
+		.getGeneralAnnotations();
+
+		Assert.assertNotNull(generalAnnotations);
+		Assert.assertTrue(generalAnnotations.isEmpty());
+
+		solution.setGeneralAnnotation(key, annotation);
+
+		Assert.assertFalse(generalAnnotations.isEmpty());
+		Assert.assertTrue(generalAnnotations.containsKey(key));
+		Assert.assertSame(annotation, generalAnnotations.get(key));
 
 		solution.dispose();
 
 		Assert.assertNull(solution.getSequences());
 		Assert.assertNull(solution.getContext());
-		Assert.assertNull(solution.getAnnotatedSequence(resource));
-
+		
+		Assert.assertTrue(generalAnnotations.isEmpty());
+		
+		Assert.fail("Unable to test disposal of ElementAnnotations");
 	}
 
 }
