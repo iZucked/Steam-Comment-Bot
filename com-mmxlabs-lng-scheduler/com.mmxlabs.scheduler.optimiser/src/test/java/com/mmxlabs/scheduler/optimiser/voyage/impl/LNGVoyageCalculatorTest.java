@@ -17,9 +17,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -618,11 +617,14 @@ public class LNGVoyageCalculatorTest {
 		final PortDetails loadDetails = new PortDetails();
 		final PortDetails dischargeDetails = new PortDetails();
 
-		final ILoadSlot loadSlot = new LoadSlot();
-		final IDischargeSlot dischargeSlot = new DischargeSlot();
+		final LoadSlot loadSlot = new LoadSlot();
+		final DischargeSlot dischargeSlot = new DischargeSlot();
 
 		loadDetails.setPortSlot(loadSlot);
 		dischargeDetails.setPortSlot(dischargeSlot);
+		
+		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(-1.0));
+		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(-1.0));
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		final VoyageOptions options = new VoyageOptions();
@@ -640,7 +642,8 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		calc.calculateVoyagePlan(plan, vessel, sequence);
+		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -678,8 +681,8 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setMaxLoadVolume(150000l);
 		dischargeSlot.setMaxDischargeVolume(30000l);
 
-		loadSlot.setPurchasePrice(1000);
-		dischargeSlot.setSalesPrice(1000);
+		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(1000.0));
+		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
 		loadSlot.setCargoCVValue(2000);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
@@ -710,7 +713,8 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		calc.calculateVoyagePlan(plan, vessel, sequence);
+		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -794,7 +798,8 @@ public class LNGVoyageCalculatorTest {
 
 		// Expect to throw a RuntimeException here for a capacity violation
 		fail("Better to return object, recording the error");
-		calc.calculateVoyagePlan(plan, vessel, sequence);
+		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		context.assertIsSatisfied();
 
@@ -827,8 +832,8 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setMaxLoadVolume(150000000l);
 		dischargeSlot.setMaxDischargeVolume(3000000l);
 
-		loadSlot.setPurchasePrice(1000);
-		dischargeSlot.setSalesPrice(1000);
+		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(1000.0));
+		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
 
 		loadSlot.setCargoCVValue(2000);
 
@@ -879,7 +884,8 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		calc.calculateVoyagePlan(plan, vessel, sequence);
+		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -931,8 +937,8 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setMaxLoadVolume(150l);
 		dischargeSlot.setMaxDischargeVolume(30l);
 
-		loadSlot.setPurchasePrice(1000);
-		dischargeSlot.setSalesPrice(1000);
+		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(1000.0));
+		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
 
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();
 		final VoyageOptions options1 = new VoyageOptions();
@@ -953,7 +959,8 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		calc.calculateVoyagePlan(plan, vessel, sequence);
+		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
