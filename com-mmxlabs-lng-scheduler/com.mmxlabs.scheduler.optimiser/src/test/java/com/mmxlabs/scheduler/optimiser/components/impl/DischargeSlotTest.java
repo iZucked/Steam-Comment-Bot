@@ -22,7 +22,7 @@ public class DischargeSlotTest {
 	
 
 	@Test
-	public void testLoadSlot() {
+	public void testDischargeSlot() {
 		final String id = "id";
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow tw = context.mock(ITimeWindow.class);
