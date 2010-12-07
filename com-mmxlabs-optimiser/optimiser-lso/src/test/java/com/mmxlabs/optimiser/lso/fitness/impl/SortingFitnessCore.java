@@ -8,6 +8,7 @@ package com.mmxlabs.optimiser.lso.fitness.impl;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -92,6 +93,11 @@ public final class SortingFitnessCore<T> implements IFitnessCore<T> {
 	
 	@Override
 	public void dispose() {
+		
+	}
+
+	@Override
+	public void annotate(ISequences<T> sequences, IAnnotatedSolution<T> solution) {
 		
 	}
 }
