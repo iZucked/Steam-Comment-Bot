@@ -105,4 +105,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		this.cargoCVValue = cargoCVValue;
 	}
 
+	public final ICurve getPurchasePriceCurve() {
+		return purchasePriceCurve;
+	}
 }
