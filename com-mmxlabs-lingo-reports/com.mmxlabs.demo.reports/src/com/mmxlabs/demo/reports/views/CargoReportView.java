@@ -5,8 +5,7 @@
 
 package com.mmxlabs.demo.reports.views;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Iterator;
 
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -14,6 +13,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -24,18 +25,16 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.demo.reports.Activator;
-import com.mmxlabs.demo.reports.views.CargoContentProvider.RowData;
+import scenario.schedule.CargoAllocation;
+import scenario.schedule.Schedule;
+
 import com.mmxlabs.demo.reports.views.actions.PackTableColumnsAction;
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.ManagedJobListenerNotifier;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -52,7 +51,7 @@ import com.mmxlabs.jobcontroller.core.ManagedJobListenerNotifier;
  * <p>
  */
 
-public class CargoReportView extends ViewPart {
+public class CargoReportView extends ViewPart implements ISelectionListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -61,10 +60,6 @@ public class CargoReportView extends ViewPart {
 
 	private TableViewer viewer;
 
-	private List<IManagedJob> selectedJobs = new LinkedList<IManagedJob>();
-	private IManagedJobListener jobListener;
-	private IJobManagerListener jobManagerListener;
-
 	private PackTableColumnsAction packColumnsAction;
 
 	class ViewLabelProvider extends CellLabelProvider implements
@@ -72,25 +67,25 @@ public class CargoReportView extends ViewPart {
 		@Override
 		public String getColumnText(Object obj, int index) {
 			try {
-				if (obj instanceof RowData) {
-					RowData rd = (RowData) obj;
+				if (obj instanceof CargoAllocation) {
+					CargoAllocation cargo = (CargoAllocation) obj;
 					switch (index) {
 					case 0:
-						return rd.id;
+						return cargo.getLoadSlot().getId();
 					case 1:
-						return rd.vessel;//.getName();
+						return "not implemented!";
 					case 2:
-						return rd.loadSlot.getPort().getName();
+						return cargo.getLoadSlot().getPort().getName();
 					case 3:
-						return rd.dischargeSlot.getPort().getName();
+						return cargo.getDischargeSlot().getPort().getName();
 					case 4:
-						return rd.loadDate.getTime().toLocaleString();
+						return cargo.getLoadDate().toLocaleString();
 					case 5:
-						return rd.dischargeDate.getTime().toLocaleString();
+						return cargo.getDischargeDate().toLocaleString();
 					case 6:
-						return Long.toString(rd.loadVolume);
+						return Long.toString(cargo.getDischargeVolume()+cargo.getFuelVolume());
 					case 7:
-						return Long.toString(rd.dischargeVolume);
+						return Long.toString(cargo.getDischargeVolume());
 					}
 
 				}
@@ -141,7 +136,7 @@ public class CargoReportView extends ViewPart {
 
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLinesVisible(true);
-		
+
 		for (String cname : columns) {
 			TableViewerColumn tvc = new TableViewerColumn(viewer, SWT.None);
 			tvc.getColumn().setText(cname);
@@ -158,62 +153,8 @@ public class CargoReportView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		jobListener = new ManagedJobListenerNotifier() {
-
-			@Override
-			public void jobNotified(IManagedJob job) {
-
-				if (selectedJobs.contains(job)) {
-					setInput(job.getSchedule());
-					refresh();
-				}
-			}
-		};
-
-		jobManagerListener = new IJobManagerListener() {
-
-			@Override
-			public void jobRemoved(IJobManager jobManager, IManagedJob job) {
-				job.removeManagedJobListener(jobListener);
-			}
-
-			@Override
-			public void jobAdded(IJobManager jobManager, IManagedJob job) {
-				job.addManagedJobListener(jobListener);
-			}
-
-			@Override
-			public void jobSelected(IJobManager jobManager, IManagedJob job) {
-				selectedJobs.add(job);
-				if (selectedJobs.isEmpty()) {
-					setInput(null);
-				} else {
-					setInput(selectedJobs.get(0).getSchedule());
-				}
-			}
-
-			@Override
-			public void jobDeselected(IJobManager jobManager, IManagedJob job) {
-				selectedJobs.remove(job);
-				if (selectedJobs.isEmpty()) {
-					setInput(null);
-				} else {
-					setInput(selectedJobs.get(0).getSchedule());
-				}
-
-			}
-		};
-
-		selectedJobs.addAll(Activator.getDefault().getJobManager().getSelectedJobs());
-		if (selectedJobs.isEmpty()) {
-			setInput(null);
-		} else {
-			setInput(selectedJobs.get(0).getSchedule());
-			selectedJobs.get(0).addManagedJobListener(jobListener);
-		}
-		
-		Activator.getDefault().getJobManager()
-				.addJobManagerListener(jobManagerListener);
+		getSite().getWorkbenchWindow().getSelectionService()
+				.addSelectionListener(this);
 	}
 
 	private void hookContextMenu() {
@@ -240,7 +181,7 @@ public class CargoReportView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
-		// Other plug-ins can contribute there actions here
+		// Other plug-ins can contribute their actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
@@ -282,5 +223,23 @@ public class CargoReportView extends ViewPart {
 				}
 			}
 		});
+	}
+
+	@Override
+	public void selectionChanged(final IWorkbenchPart arg0, final ISelection selection) {
+		final IStructuredSelection sel = (IStructuredSelection)selection;
+		if (sel.isEmpty()) {
+			setInput(null);
+		} else {
+			@SuppressWarnings("unchecked")
+			Iterator<Object> iter = sel.iterator();
+			while (iter.hasNext()) {
+				final Object o = iter.next();
+				if (o instanceof Schedule) {
+					setInput((Schedule) o);
+					return;
+				}
+			}
+		}
 	}
 }
