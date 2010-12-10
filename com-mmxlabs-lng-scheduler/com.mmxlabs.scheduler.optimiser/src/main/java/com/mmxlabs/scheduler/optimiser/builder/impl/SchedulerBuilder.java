@@ -561,8 +561,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// If no time requirement is specified then the time window is at the
 		// very start of the job
-		final ITimeWindow startWindow = start.hasTimeRequirement() ? createTimeWindow(
-				start.getTime(), start.getTime()) : createTimeWindow(0, 0);
+		final ITimeWindow startWindow = start.hasTimeRequirement() ? start
+				.getTimeWindow() : createTimeWindow(0, 0);
 
 		final StartPortSlot startSlot = new StartPortSlot();
 		startSlot.setId("start-" + name);
@@ -590,8 +590,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement,
 						endSlot));
 		} else {
-			endSlot.setTimeWindow(createTimeWindow(end.getTime(),
-					end.getTime() + 1));
+			endSlot.setTimeWindow(end.getTimeWindow());
 		}
 
 		timeWindowProvider.setTimeWindows(startElement,
@@ -635,23 +634,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IStartEndRequirement createStartEndRequirement(final IPort fixedPort) {
-		return new StartEndRequirement(fixedPort, true, 0, false);
-	}
-
-	@Override
-	public IStartEndRequirement createStartEndRequirement(final int fixedTime) {
-		return new StartEndRequirement(ANYWHERE, false, fixedTime, true);
+		return new StartEndRequirement(fixedPort, true, null);
 	}
 
 	@Override
 	public IStartEndRequirement createStartEndRequirement(
-			final IPort fixedPort, final int fixedTime) {
-		return new StartEndRequirement(fixedPort, true, fixedTime, true);
+			final ITimeWindow timeWindow) {
+		return new StartEndRequirement(ANYWHERE, false, timeWindow);
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement(
+			final IPort fixedPort, final ITimeWindow timeWindow) {
+		return new StartEndRequirement(fixedPort, true, timeWindow);
 	}
 
 	@Override
 	public IStartEndRequirement createStartEndRequirement() {
-		return new StartEndRequirement(ANYWHERE, false, 0, false);
+		return new StartEndRequirement(ANYWHERE, false, null);
 	}
 
 	@Override

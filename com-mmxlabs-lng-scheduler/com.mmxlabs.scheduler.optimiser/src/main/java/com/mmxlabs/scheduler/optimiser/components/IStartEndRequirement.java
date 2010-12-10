@@ -5,6 +5,8 @@
 
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+
 /**
  * A requirement that a vessel's journey start or end in a particular location at a particular time.
  * 
@@ -22,14 +24,18 @@ public interface IStartEndRequirement {
 	 * @return
 	 */
 	public boolean hasTimeRequirement();
+	
 	/**
-	 * The earliest start time or latest arrival time for this vessel.
+	 * Get the time window for this requirement, if there is one.
 	 * @return
 	 */
-	public int getTime();
+	public ITimeWindow getTimeWindow();
+	
 	/**
 	 * The location from which this vessel must start or to which it must return
 	 * @return
 	 */
 	public IPort getLocation();
+	
+	
 }

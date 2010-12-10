@@ -179,7 +179,7 @@ public interface ISchedulerBuilder {
 	 * @param fixedTime
 	 * @return
 	 */
-	IStartEndRequirement createStartEndRequirement(int fixedTime);
+	IStartEndRequirement createStartEndRequirement(ITimeWindow timeWindow);
 
 	/**
 	 * Create a requirement that the vessel start/end at the given port and time
@@ -189,7 +189,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IStartEndRequirement createStartEndRequirement(IPort fixedPort,
-			int fixedTime);
+			ITimeWindow timeWindow);
 
 	/**
 	 * Create a port with the given name.
