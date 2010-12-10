@@ -22,6 +22,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.Vessel#getClass_ <em>Class</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getStartRequirement <em>Start Requirement</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getEndRequirement <em>End Requirement</em>}</li>
+ *   <li>{@link scenario.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}</li>
  * </ul>
  * </p>
  *
@@ -133,5 +134,31 @@ public interface Vessel extends EObject {
 	 * @generated
 	 */
 	void setEndRequirement(PortAndTime value);
+
+	/**
+	 * Returns the value of the '<em><b>Time Chartered</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Time Chartered</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Time Chartered</em>' attribute.
+	 * @see #setTimeChartered(boolean)
+	 * @see scenario.fleet.FleetPackage#getVessel_TimeChartered()
+	 * @model required="true"
+	 * @generated
+	 */
+	boolean isTimeChartered();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Time Chartered</em>' attribute.
+	 * @see #isTimeChartered()
+	 * @generated
+	 */
+	void setTimeChartered(boolean value);
 
 } // Vessel

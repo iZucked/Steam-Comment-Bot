@@ -153,13 +153,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__END_REQUIREMENT = 3;
 
 	/**
+	 * The feature id for the '<em><b>Time Chartered</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__TIME_CHARTERED = 4;
+
+	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = 4;
+	int VESSEL_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
@@ -624,6 +633,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVessel_EndRequirement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time Chartered</em>'.
+	 * @see scenario.fleet.Vessel#isTimeChartered()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_TimeChartered();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.VesselClass <em>Vessel Class</em>}'.
@@ -1101,6 +1121,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL__END_REQUIREMENT = eINSTANCE.getVessel_EndRequirement();
+
+		/**
+		 * The meta object literal for the '<em><b>Time Chartered</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__TIME_CHARTERED = eINSTANCE.getVessel_TimeChartered();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.

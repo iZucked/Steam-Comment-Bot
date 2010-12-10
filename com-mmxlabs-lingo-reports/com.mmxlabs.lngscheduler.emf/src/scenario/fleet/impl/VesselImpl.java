@@ -28,6 +28,7 @@ import scenario.fleet.VesselClass;
  *   <li>{@link scenario.fleet.impl.VesselImpl#getClass_ <em>Class</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getStartRequirement <em>Start Requirement</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getEndRequirement <em>End Requirement</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselImpl#isTimeChartered <em>Time Chartered</em>}</li>
  * </ul>
  * </p>
  *
@@ -83,6 +84,26 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * @ordered
 	 */
 	protected PortAndTime endRequirement;
+
+	/**
+	 * The default value of the '{@link #isTimeChartered() <em>Time Chartered</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isTimeChartered()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean TIME_CHARTERED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isTimeChartered() <em>Time Chartered</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isTimeChartered()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean timeChartered = TIME_CHARTERED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -257,6 +278,27 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isTimeChartered() {
+		return timeChartered;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTimeChartered(boolean newTimeChartered) {
+		boolean oldTimeChartered = timeChartered;
+		timeChartered = newTimeChartered;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__TIME_CHARTERED, oldTimeChartered, timeChartered));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -285,6 +327,8 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 				return getStartRequirement();
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				return getEndRequirement();
+			case FleetPackage.VESSEL__TIME_CHARTERED:
+				return isTimeChartered();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -310,6 +354,9 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				setEndRequirement((PortAndTime)newValue);
 				return;
+			case FleetPackage.VESSEL__TIME_CHARTERED:
+				setTimeChartered((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -334,6 +381,9 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				setEndRequirement((PortAndTime)null);
 				return;
+			case FleetPackage.VESSEL__TIME_CHARTERED:
+				setTimeChartered(TIME_CHARTERED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -354,6 +404,8 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 				return startRequirement != null;
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				return endRequirement != null;
+			case FleetPackage.VESSEL__TIME_CHARTERED:
+				return timeChartered != TIME_CHARTERED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -370,6 +422,8 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", timeChartered: ");
+		result.append(timeChartered);
 		result.append(')');
 		return result.toString();
 	}

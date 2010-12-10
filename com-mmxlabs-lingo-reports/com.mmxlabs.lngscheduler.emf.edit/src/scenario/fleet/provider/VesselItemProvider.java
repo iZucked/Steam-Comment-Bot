@@ -66,6 +66,7 @@ public class VesselItemProvider
 
 			addNamePropertyDescriptor(object);
 			addClassPropertyDescriptor(object);
+			addTimeCharteredPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -110,6 +111,28 @@ public class VesselItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Time Chartered feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTimeCharteredPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_timeChartered_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_timeChartered_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__TIME_CHARTERED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -183,6 +206,7 @@ public class VesselItemProvider
 
 		switch (notification.getFeatureID(Vessel.class)) {
 			case FleetPackage.VESSEL__NAME:
+			case FleetPackage.VESSEL__TIME_CHARTERED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL__START_REQUIREMENT:
