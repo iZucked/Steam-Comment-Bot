@@ -63,6 +63,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 
@@ -514,6 +515,7 @@ public class LNGScenarioTransformer {
 					portAssociation, eV.getEndRequirement());
 			final IVessel vessel = builder.createVessel(eV.getName(),
 					vesselClassAssociation.lookup(eV.getClass_()),
+					eV.isTimeChartered() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET,
 					startRequirement, endRequirement);
 			vesselAssociation.add(eV, vessel);
 			
