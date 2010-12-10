@@ -125,13 +125,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__CARGO_ALLOCATIONS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Fleet</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__FLEET = 3;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = 3;
+	int SCHEDULE_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -144,31 +153,22 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Fleet Vessel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE__FLEET_VESSEL = 0;
-
-	/**
 	 * The feature id for the '<em><b>Events</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__EVENTS = 1;
+	int SEQUENCE__EVENTS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Charter Vessel Class</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__CHARTER_VESSEL_CLASS = 2;
+	int SEQUENCE__VESSEL = 1;
 
 	/**
 	 * The number of structural features of the '<em>Sequence</em>' class.
@@ -177,7 +177,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE_FEATURE_COUNT = 3;
+	int SEQUENCE_FEATURE_COUNT = 2;
 
 
 	/**
@@ -337,6 +337,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getSchedule_CargoAllocations();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.schedule.Schedule#getFleet <em>Fleet</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fleet</em>'.
+	 * @see scenario.schedule.Schedule#getFleet()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_Fleet();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.Sequence <em>Sequence</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -345,17 +356,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSequence();
-
-	/**
-	 * Returns the meta object for the reference '{@link scenario.schedule.Sequence#getFleetVessel <em>Fleet Vessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Fleet Vessel</em>'.
-	 * @see scenario.schedule.Sequence#getFleetVessel()
-	 * @see #getSequence()
-	 * @generated
-	 */
-	EReference getSequence_FleetVessel();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link scenario.schedule.Sequence#getEvents <em>Events</em>}'.
@@ -369,15 +369,15 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_Events();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.schedule.Sequence#getCharterVesselClass <em>Charter Vessel Class</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.schedule.Sequence#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Charter Vessel Class</em>'.
-	 * @see scenario.schedule.Sequence#getCharterVesselClass()
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see scenario.schedule.Sequence#getVessel()
 	 * @see #getSequence()
 	 * @generated
 	 */
-	EReference getSequence_CharterVesselClass();
+	EReference getSequence_Vessel();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.CargoAllocation <em>Cargo Allocation</em>}'.
@@ -552,6 +552,14 @@ public interface SchedulePackage extends EPackage {
 		EReference SCHEDULE__CARGO_ALLOCATIONS = eINSTANCE.getSchedule_CargoAllocations();
 
 		/**
+		 * The meta object literal for the '<em><b>Fleet</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__FLEET = eINSTANCE.getSchedule_Fleet();
+
+		/**
 		 * The meta object literal for the '{@link scenario.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -562,14 +570,6 @@ public interface SchedulePackage extends EPackage {
 		EClass SEQUENCE = eINSTANCE.getSequence();
 
 		/**
-		 * The meta object literal for the '<em><b>Fleet Vessel</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SEQUENCE__FLEET_VESSEL = eINSTANCE.getSequence_FleetVessel();
-
-		/**
 		 * The meta object literal for the '<em><b>Events</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -578,12 +578,12 @@ public interface SchedulePackage extends EPackage {
 		EReference SEQUENCE__EVENTS = eINSTANCE.getSequence_Events();
 
 		/**
-		 * The meta object literal for the '<em><b>Charter Vessel Class</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SEQUENCE__CHARTER_VESSEL_CLASS = eINSTANCE.getSequence_CharterVesselClass();
+		EReference SEQUENCE__VESSEL = eINSTANCE.getSequence_Vessel();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.impl.CargoAllocationImpl <em>Cargo Allocation</em>}' class.

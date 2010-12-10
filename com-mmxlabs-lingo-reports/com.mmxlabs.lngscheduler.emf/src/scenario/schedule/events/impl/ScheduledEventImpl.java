@@ -229,5 +229,4 @@ public class ScheduledEventImpl extends EObjectImpl implements ScheduledEvent {
 	public int getDuration() {
 		return (int) ((getEndTime().getTime() - getStartTime().getTime()) / Timer.ONE_HOUR); 
 	}
-
 } //ScheduledEventImpl

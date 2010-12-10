@@ -120,6 +120,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
 		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
 		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
+		scenario.schedule.fleet.impl.FleetPackageImpl theFleetPackage_1 = (scenario.schedule.fleet.impl.FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(scenario.schedule.fleet.FleetPackage.eNS_URI) instanceof scenario.schedule.fleet.impl.FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(scenario.schedule.fleet.FleetPackage.eNS_URI) : scenario.schedule.fleet.FleetPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
@@ -132,6 +133,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		theScenarioPackage.createPackageContents();
 		theFleetPackage.createPackageContents();
 		theEventsPackage.createPackageContents();
+		theFleetPackage_1.createPackageContents();
 		thePortPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
@@ -144,6 +146,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		theScenarioPackage.initializePackageContents();
 		theFleetPackage.initializePackageContents();
 		theEventsPackage.initializePackageContents();
+		theFleetPackage_1.initializePackageContents();
 		thePortPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();
@@ -220,6 +223,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSchedule_Fleet() {
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSequence() {
 		return sequenceEClass;
 	}
@@ -229,7 +241,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSequence_FleetVessel() {
+	public EReference getSequence_Events() {
 		return (EReference)sequenceEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -238,17 +250,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSequence_Events() {
+	public EReference getSequence_Vessel() {
 		return (EReference)sequenceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSequence_CharterVesselClass() {
-		return (EReference)sequenceEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -368,11 +371,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(scheduleEClass, SCHEDULE__SEQUENCES);
 		createEAttribute(scheduleEClass, SCHEDULE__NAME);
 		createEReference(scheduleEClass, SCHEDULE__CARGO_ALLOCATIONS);
+		createEReference(scheduleEClass, SCHEDULE__FLEET);
 
 		sequenceEClass = createEClass(SEQUENCE);
-		createEReference(sequenceEClass, SEQUENCE__FLEET_VESSEL);
 		createEReference(sequenceEClass, SEQUENCE__EVENTS);
-		createEReference(sequenceEClass, SEQUENCE__CHARTER_VESSEL_CLASS);
+		createEReference(sequenceEClass, SEQUENCE__VESSEL);
 
 		cargoAllocationEClass = createEClass(CARGO_ALLOCATION);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_SLOT);
@@ -410,11 +413,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Obtain other dependent packages
 		EventsPackage theEventsPackage = (EventsPackage)EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI);
-		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
+		scenario.schedule.fleet.FleetPackage theFleetPackage_1 = (scenario.schedule.fleet.FleetPackage)EPackage.Registry.INSTANCE.getEPackage(scenario.schedule.fleet.FleetPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theEventsPackage);
+		getESubpackages().add(theFleetPackage_1);
 
 		// Create type parameters
 
@@ -430,11 +434,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSchedule_Sequences(), this.getSequence(), null, "sequences", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSchedule_Name(), ecorePackage.getEString(), "name", null, 1, 1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_CargoAllocations(), this.getCargoAllocation(), null, "cargoAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSchedule_Fleet(), theFleetPackage_1.getAllocatedVessel(), null, "fleet", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sequenceEClass, Sequence.class, "Sequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSequence_FleetVessel(), theFleetPackage.getVessel(), null, "fleetVessel", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSequence_Events(), theEventsPackage.getScheduledEvent(), null, "events", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSequence_CharterVesselClass(), theFleetPackage.getVesselClass(), null, "charterVesselClass", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSequence_Vessel(), theFleetPackage_1.getAllocatedVessel(), null, "vessel", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoAllocationEClass, CargoAllocation.class, "CargoAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoAllocation_LoadSlot(), theCargoPackage.getLoadSlot(), null, "loadSlot", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

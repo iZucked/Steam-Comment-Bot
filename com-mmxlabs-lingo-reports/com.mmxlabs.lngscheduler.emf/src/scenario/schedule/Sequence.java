@@ -14,6 +14,7 @@ import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 
 import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.fleet.AllocatedVessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,9 +24,8 @@ import scenario.schedule.events.ScheduledEvent;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.schedule.Sequence#getFleetVessel <em>Fleet Vessel</em>}</li>
  *   <li>{@link scenario.schedule.Sequence#getEvents <em>Events</em>}</li>
- *   <li>{@link scenario.schedule.Sequence#getCharterVesselClass <em>Charter Vessel Class</em>}</li>
+ *   <li>{@link scenario.schedule.Sequence#getVessel <em>Vessel</em>}</li>
  * </ul>
  * </p>
  *
@@ -34,59 +34,6 @@ import scenario.schedule.events.ScheduledEvent;
  * @generated
  */
 public interface Sequence extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Fleet Vessel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Fleet Vessel</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Fleet Vessel</em>' reference.
-	 * @see #isSetFleetVessel()
-	 * @see #unsetFleetVessel()
-	 * @see #setFleetVessel(Vessel)
-	 * @see scenario.schedule.SchedulePackage#getSequence_FleetVessel()
-	 * @model unsettable="true" required="true"
-	 * @generated
-	 */
-	Vessel getFleetVessel();
-
-	/**
-	 * Sets the value of the '{@link scenario.schedule.Sequence#getFleetVessel <em>Fleet Vessel</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Fleet Vessel</em>' reference.
-	 * @see #isSetFleetVessel()
-	 * @see #unsetFleetVessel()
-	 * @see #getFleetVessel()
-	 * @generated
-	 */
-	void setFleetVessel(Vessel value);
-
-	/**
-	 * Unsets the value of the '{@link scenario.schedule.Sequence#getFleetVessel <em>Fleet Vessel</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetFleetVessel()
-	 * @see #getFleetVessel()
-	 * @see #setFleetVessel(Vessel)
-	 * @generated
-	 */
-	void unsetFleetVessel();
-
-	/**
-	 * Returns whether the value of the '{@link scenario.schedule.Sequence#getFleetVessel <em>Fleet Vessel</em>}' reference is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Fleet Vessel</em>' reference is set.
-	 * @see #unsetFleetVessel()
-	 * @see #getFleetVessel()
-	 * @see #setFleetVessel(Vessel)
-	 * @generated
-	 */
-	boolean isSetFleetVessel();
-
 	/**
 	 * Returns the value of the '<em><b>Events</b></em>' containment reference list.
 	 * The list contents are of type {@link scenario.schedule.events.ScheduledEvent}.
@@ -104,56 +51,29 @@ public interface Sequence extends EObject {
 	EList<ScheduledEvent> getEvents();
 
 	/**
-	 * Returns the value of the '<em><b>Charter Vessel Class</b></em>' reference.
+	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Charter Vessel Class</em>' reference isn't clear,
+	 * If the meaning of the '<em>Vessel</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Charter Vessel Class</em>' reference.
-	 * @see #isSetCharterVesselClass()
-	 * @see #unsetCharterVesselClass()
-	 * @see #setCharterVesselClass(VesselClass)
-	 * @see scenario.schedule.SchedulePackage#getSequence_CharterVesselClass()
-	 * @model unsettable="true" required="true"
+	 * @return the value of the '<em>Vessel</em>' reference.
+	 * @see #setVessel(AllocatedVessel)
+	 * @see scenario.schedule.SchedulePackage#getSequence_Vessel()
+	 * @model required="true"
 	 * @generated
 	 */
-	VesselClass getCharterVesselClass();
+	AllocatedVessel getVessel();
 
 	/**
-	 * Sets the value of the '{@link scenario.schedule.Sequence#getCharterVesselClass <em>Charter Vessel Class</em>}' reference.
+	 * Sets the value of the '{@link scenario.schedule.Sequence#getVessel <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Charter Vessel Class</em>' reference.
-	 * @see #isSetCharterVesselClass()
-	 * @see #unsetCharterVesselClass()
-	 * @see #getCharterVesselClass()
+	 * @param value the new value of the '<em>Vessel</em>' reference.
+	 * @see #getVessel()
 	 * @generated
 	 */
-	void setCharterVesselClass(VesselClass value);
-
-	/**
-	 * Unsets the value of the '{@link scenario.schedule.Sequence#getCharterVesselClass <em>Charter Vessel Class</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetCharterVesselClass()
-	 * @see #getCharterVesselClass()
-	 * @see #setCharterVesselClass(VesselClass)
-	 * @generated
-	 */
-	void unsetCharterVesselClass();
-
-	/**
-	 * Returns whether the value of the '{@link scenario.schedule.Sequence#getCharterVesselClass <em>Charter Vessel Class</em>}' reference is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Charter Vessel Class</em>' reference is set.
-	 * @see #unsetCharterVesselClass()
-	 * @see #getCharterVesselClass()
-	 * @see #setCharterVesselClass(VesselClass)
-	 * @generated
-	 */
-	boolean isSetCharterVesselClass();
+	void setVessel(AllocatedVessel value);
 
 } // Sequence

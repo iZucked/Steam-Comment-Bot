@@ -84,5 +84,4 @@ public interface ScheduledEvent extends EObject {
 	 * @return
 	 */
 	int getDuration();
-
 } // ScheduledEvent

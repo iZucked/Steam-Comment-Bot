@@ -51,4 +51,6 @@ public interface PortVisit extends ScheduledEvent {
 	 */
 	void setPort(Port value);
 
+	String getId();
+	String getDisplayTypeName();
 } // PortVisit

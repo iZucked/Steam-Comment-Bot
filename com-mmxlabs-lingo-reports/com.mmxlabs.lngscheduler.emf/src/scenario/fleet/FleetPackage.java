@@ -500,13 +500,22 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__DURATION = 5;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__ID = 6;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_FEATURE_COUNT = 6;
+	int CHARTER_OUT_FEATURE_COUNT = 7;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.
@@ -975,6 +984,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getCharterOut_Duration();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see scenario.fleet.CharterOut#getId()
+	 * @see #getCharterOut()
+	 * @generated
+	 */
+	EAttribute getCharterOut_Id();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.fleet.VesselState <em>Vessel State</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1355,6 +1375,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_OUT__DURATION = eINSTANCE.getCharterOut_Duration();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT__ID = eINSTANCE.getCharterOut_Id();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.

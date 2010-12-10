@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 
 import scenario.schedule.CargoAllocation;
@@ -217,6 +218,16 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 				return cargoAllocation != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	@Override
+	public String getDisplayTypeName() {
+		return getSlot() instanceof LoadSlot ? "Load" : "Discharge";
+	}
+
+	@Override
+	public String getId() {
+		return getSlot().getId();
 	}
 
 } //SlotVisitImpl

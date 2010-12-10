@@ -51,4 +51,5 @@ public interface CharterOutVisit extends PortVisit {
 	 */
 	void setCharterOut(CharterOut value);
 
+	
 } // CharterOutVisit

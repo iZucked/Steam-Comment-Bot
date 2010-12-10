@@ -158,4 +158,13 @@ public class CharterOutVisitImpl extends PortVisitImpl implements CharterOutVisi
 		return super.eIsSet(featureID);
 	}
 
+	@Override
+	public String getDisplayTypeName() {
+		return "Charter Out";
+	}
+
+	@Override
+	public String getId() {
+		return getCharterOut().getId();
+	}
 } //CharterOutVisitImpl

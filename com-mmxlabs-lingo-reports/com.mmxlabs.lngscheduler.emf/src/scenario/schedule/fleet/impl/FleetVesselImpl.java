@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.events.impl;
+package scenario.schedule.fleet.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -13,41 +13,41 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import scenario.port.Port;
+import scenario.fleet.Vessel;
 
-import scenario.schedule.events.EventsPackage;
-import scenario.schedule.events.PortVisit;
+import scenario.schedule.fleet.FleetPackage;
+import scenario.schedule.fleet.FleetVessel;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Port Visit</b></em>'.
+ * An implementation of the model object '<em><b>Vessel</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.schedule.events.impl.PortVisitImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link scenario.schedule.fleet.impl.FleetVesselImpl#getVessel <em>Vessel</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
+public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel {
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPort()
+	 * @see #getVessel()
 	 * @generated
 	 * @ordered
 	 */
-	protected Port port;
+	protected Vessel vessel;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PortVisitImpl() {
+	protected FleetVesselImpl() {
 		super();
 	}
 
@@ -58,7 +58,7 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return EventsPackage.Literals.PORT_VISIT;
+		return FleetPackage.Literals.FLEET_VESSEL;
 	}
 
 	/**
@@ -66,16 +66,16 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port getPort() {
-		if (port != null && port.eIsProxy()) {
-			InternalEObject oldPort = (InternalEObject)port;
-			port = (Port)eResolveProxy(oldPort);
-			if (port != oldPort) {
+	public Vessel getVessel() {
+		if (vessel != null && vessel.eIsProxy()) {
+			InternalEObject oldVessel = (InternalEObject)vessel;
+			vessel = (Vessel)eResolveProxy(oldVessel);
+			if (vessel != oldVessel) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.PORT_VISIT__PORT, oldPort, port));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.FLEET_VESSEL__VESSEL, oldVessel, vessel));
 			}
 		}
-		return port;
+		return vessel;
 	}
 
 	/**
@@ -83,8 +83,8 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port basicGetPort() {
-		return port;
+	public Vessel basicGetVessel() {
+		return vessel;
 	}
 
 	/**
@@ -92,11 +92,11 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPort(Port newPort) {
-		Port oldPort = port;
-		port = newPort;
+	public void setVessel(Vessel newVessel) {
+		Vessel oldVessel = vessel;
+		vessel = newVessel;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.PORT_VISIT__PORT, oldPort, port));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_VESSEL__VESSEL, oldVessel, vessel));
 	}
 
 	/**
@@ -107,9 +107,9 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case EventsPackage.PORT_VISIT__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
+			case FleetPackage.FLEET_VESSEL__VESSEL:
+				if (resolve) return getVessel();
+				return basicGetVessel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -122,8 +122,8 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case EventsPackage.PORT_VISIT__PORT:
-				setPort((Port)newValue);
+			case FleetPackage.FLEET_VESSEL__VESSEL:
+				setVessel((Vessel)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -137,8 +137,8 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case EventsPackage.PORT_VISIT__PORT:
-				setPort((Port)null);
+			case FleetPackage.FLEET_VESSEL__VESSEL:
+				setVessel((Vessel)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -152,19 +152,14 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case EventsPackage.PORT_VISIT__PORT:
-				return port != null;
+			case FleetPackage.FLEET_VESSEL__VESSEL:
+				return vessel != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	@Override
-	public String getDisplayTypeName() {
-		return "Port";
+	public String getName() {
+		return getVessel().getName();
 	}
-
-	@Override
-	public String getId() {
-		return "";
-	}
-} //PortVisitImpl
+} //FleetVesselImpl
