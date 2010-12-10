@@ -555,16 +555,23 @@ public class LNGScenarioTransformer {
 		if (pat == null) {
 			return builder.createStartEndRequirement();
 		}
-		if (pat.isSetPort() && pat.isSetTime()) {
+		
+		if (pat.isSetPort() && pat.isSetStartTime()) {
+			final int startHours = convertTime(pat.getStartTime());
+			final int endHours = pat.isSetEndTime() ? convertTime(pat.getEndTime()) : startHours + 1;
+			final ITimeWindow window = builder.createTimeWindow(startHours, endHours);
 			return builder.createStartEndRequirement(
 					portAssociation.lookup(pat.getPort()),
-					convertTime(pat.getTime()));
+					window);
 		} else if (pat.isSetPort()) {
 			return builder.createStartEndRequirement(portAssociation.lookup(pat
 					.getPort()));
-		} else if (pat.isSetTime()) {
+		} else if (pat.isSetStartTime()) {
+			final int startHours = convertTime(pat.getStartTime());
+			final int endHours = pat.isSetEndTime() ? convertTime(pat.getEndTime()) : startHours + 1;
+			final ITimeWindow window = builder.createTimeWindow(startHours, endHours);
 			return builder
-					.createStartEndRequirement(convertTime(pat.getTime()));
+					.createStartEndRequirement(window);
 		} else {
 			return builder.createStartEndRequirement();
 		}
