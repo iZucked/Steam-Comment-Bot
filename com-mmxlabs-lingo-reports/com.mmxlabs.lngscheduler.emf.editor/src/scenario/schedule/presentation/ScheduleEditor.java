@@ -577,6 +577,7 @@ public class ScheduleEditor
 		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ScheduleItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new EventsItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new scenario.schedule.fleet.provider.FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new CargoItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ContractItemProviderAdapterFactory());

@@ -72,6 +72,7 @@ public class CharterOutItemProvider
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
+			addIdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -209,6 +210,28 @@ public class CharterOutItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Id feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOut_id_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_id_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__ID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CharterOut.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -227,8 +250,7 @@ public class CharterOutItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((CharterOut)object).getStartDate();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((CharterOut)object).getId();
 		return label == null || label.length() == 0 ?
 			getString("_UI_CharterOut_type") :
 			getString("_UI_CharterOut_type") + " " + label;
@@ -249,6 +271,7 @@ public class CharterOutItemProvider
 			case FleetPackage.CHARTER_OUT__START_DATE:
 			case FleetPackage.CHARTER_OUT__END_DATE:
 			case FleetPackage.CHARTER_OUT__DURATION:
+			case FleetPackage.CHARTER_OUT__ID:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

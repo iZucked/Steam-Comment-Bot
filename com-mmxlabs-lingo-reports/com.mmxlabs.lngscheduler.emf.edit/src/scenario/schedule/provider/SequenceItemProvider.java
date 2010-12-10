@@ -69,48 +69,25 @@ public class SequenceItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addFleetVesselPropertyDescriptor(object);
-			addCharterVesselClassPropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Fleet Vessel feature.
+	 * This adds a property descriptor for the Vessel feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addFleetVesselPropertyDescriptor(Object object) {
+	protected void addVesselPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Sequence_fleetVessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_fleetVessel_feature", "_UI_Sequence_type"),
-				 SchedulePackage.Literals.SEQUENCE__FLEET_VESSEL,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Charter Vessel Class feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCharterVesselClassPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Sequence_charterVesselClass_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_charterVesselClass_feature", "_UI_Sequence_type"),
-				 SchedulePackage.Literals.SEQUENCE__CHARTER_VESSEL_CLASS,
+				 getString("_UI_Sequence_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_vessel_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__VESSEL,
 				 true,
 				 false,
 				 true,

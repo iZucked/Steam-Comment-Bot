@@ -33,6 +33,7 @@ import scenario.provider.LngEditPlugin;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFactory;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.fleet.FleetFactory;
 
 /**
  * This is the item provider adapter for a {@link scenario.schedule.Schedule} object.
@@ -110,6 +111,7 @@ public class ScheduleItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FLEET);
 		}
 		return childrenFeatures;
 	}
@@ -169,6 +171,7 @@ public class ScheduleItemProvider
 				return;
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+			case SchedulePackage.SCHEDULE__FLEET:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -195,6 +198,21 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS,
 				 ScheduleFactory.eINSTANCE.createCargoAllocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__FLEET,
+				 FleetFactory.eINSTANCE.createAllocatedVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__FLEET,
+				 FleetFactory.eINSTANCE.createFleetVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__FLEET,
+				 FleetFactory.eINSTANCE.createSpotVessel()));
 	}
 
 	/**

@@ -87,6 +87,7 @@ public final class LngEditorAdvisor extends WorkbenchAdvisor {
 		result.addAll(FleetEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(ScheduleEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(EventsEditor.FILE_EXTENSION_FILTERS);
+		result.addAll(scenario.schedule.fleet.presentation.FleetEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(PortEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(CargoEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(ContractEditor.FILE_EXTENSION_FILTERS);
