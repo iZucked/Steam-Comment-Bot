@@ -372,14 +372,14 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IStartEndRequirement createStartEndRequirement(int fixedTime) {
-		return delegate.createStartEndRequirement(fixedTime);
+	public IStartEndRequirement createStartEndRequirement(ITimeWindow tw) {
+		return delegate.createStartEndRequirement(tw);
 	}
 
 	@Override
 	public IStartEndRequirement createStartEndRequirement(IPort fixedPort,
-			int fixedTime) {
-		return delegate.createStartEndRequirement(fixedPort, fixedTime);
+			ITimeWindow tw) {
+		return delegate.createStartEndRequirement(fixedPort, tw);
 	}
 
 	@Override
