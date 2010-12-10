@@ -126,8 +126,8 @@ public class LNGScenarioTransformer {
 	 * @return
 	 * @throws IncompleteScenarioException
 	 */
-	public IOptimisationData<ISequenceElement> createOptimisationData(final ModelEntityMap entities)
-			throws IncompleteScenarioException {
+	public IOptimisationData<ISequenceElement> createOptimisationData(
+			final ModelEntityMap entities) throws IncompleteScenarioException {
 		/*
 		 * Set reference for hour 0
 		 */
@@ -177,20 +177,21 @@ public class LNGScenarioTransformer {
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
-			
+
 			entities.addModelObject(ePort, port);
 		}
 
 		Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(
 				builder, portAssociation, entities);
-		
+
 		buildDistances(builder, portAssociation, allPorts, portIndices,
 				vesselAssociations.getFirst());
-		
+
 		buildCargoes(builder, portAssociation, marketAssociation, entities);
 
 		buildCharterOuts(builder, portAssociation,
-				vesselAssociations.getFirst(), vesselAssociations.getSecond(), entities);
+				vesselAssociations.getFirst(), vesselAssociations.getSecond(),
+				entities);
 
 		buildTotalVolumeLimits(builder, portAssociation);
 
@@ -223,9 +224,10 @@ public class LNGScenarioTransformer {
 							startTime, startTime + duration);
 					builder.addTotalVolumeConstraint(ports, true, true,
 							tvl.getMaximumVolume(), window);
-					
+
 					startTime += (duration + 1);
-					if (startTime > latestTimeAsInt || tvl.isRepeating() == false)
+					if (startTime > latestTimeAsInt
+							|| tvl.isRepeating() == false)
 						break;
 				}
 			}
@@ -239,7 +241,7 @@ public class LNGScenarioTransformer {
 	 */
 	private void findEarliestAndLatestTimes() {
 		final Pair<Date, Date> mm = EMFUtils.findMinMaxDateAttributes(scenario);
-		
+
 		earliestTime = mm.getFirst();
 		latestTime = mm.getSecond();
 	}
@@ -259,9 +261,9 @@ public class LNGScenarioTransformer {
 																	// measures
 																	// in days
 																	// here.
-			
+
 			entities.addModelObject(charterOut, builderCharterOut);
-			
+
 			for (final Vessel v : charterOut.getVessels()) {
 				builder.addCharterOutVessel(builderCharterOut,
 						vessels.lookup(v));
@@ -281,11 +283,12 @@ public class LNGScenarioTransformer {
 	 *            current builder. should already have ports/distances/vessels
 	 *            built
 	 * @param marketAssociation
-	 * @param entities 
+	 * @param entities
 	 */
 	private void buildCargoes(final SchedulerBuilder builder,
 			final Association<Port, IPort> ports,
-			final Association<Market, ICurve> marketAssociation, final ModelEntityMap entities) {
+			final Association<Market, ICurve> marketAssociation,
+			final ModelEntityMap entities) {
 		for (Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
@@ -326,7 +329,7 @@ public class LNGScenarioTransformer {
 
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);
-			
+
 			builder.createCargo(eCargo.getId(), load, discharge);
 		}
 	}
@@ -441,11 +444,12 @@ public class LNGScenarioTransformer {
 	 * @param portAssociation
 	 *            the Port <-> IPort association to connect EMF Ports with
 	 *            builder IPorts
-	 * @param entities 
+	 * @param entities
 	 * @return
 	 */
 	private Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> buildFleet(
-			SchedulerBuilder builder, Association<Port, IPort> portAssociation, ModelEntityMap entities) {
+			SchedulerBuilder builder, Association<Port, IPort> portAssociation,
+			ModelEntityMap entities) {
 
 		/*
 		 * Build the fleet model - first we must create the vessel classes from
@@ -501,7 +505,7 @@ public class LNGScenarioTransformer {
 			if (inaccessiblePorts.isEmpty() == false) {
 				builder.setVesselClassInaccessiblePorts(vc, inaccessiblePorts);
 			}
-			
+
 			entities.addModelObject(eVc, vc);
 		}
 
@@ -515,10 +519,11 @@ public class LNGScenarioTransformer {
 					portAssociation, eV.getEndRequirement());
 			final IVessel vessel = builder.createVessel(eV.getName(),
 					vesselClassAssociation.lookup(eV.getClass_()),
-					eV.isTimeChartered() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET,
-					startRequirement, endRequirement);
+					eV.isTimeChartered() ? VesselInstanceType.TIME_CHARTER
+							: VesselInstanceType.FLEET, startRequirement,
+					endRequirement);
 			vesselAssociation.add(eV, vessel);
-			
+
 			entities.addModelObject(eV, vessel);
 		}
 
