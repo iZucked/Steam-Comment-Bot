@@ -41,14 +41,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	public String getText(final Object element) {
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
-			if (sequence.isSetFleetVessel()) {
-				return sequence.getFleetVessel().getName();
-			} else if (sequence.isSetCharterVesselClass()) {
-				return sequence.getCharterVesselClass().getName()
-						+ " (charter)";
-			} else {
-				return "Unknown";
-			}
+			return sequence.getVessel().getName();
 		}
 		return null;
 	}
