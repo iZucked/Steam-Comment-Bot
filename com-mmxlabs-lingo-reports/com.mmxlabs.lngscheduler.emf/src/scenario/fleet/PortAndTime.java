@@ -20,7 +20,8 @@ import scenario.port.Port;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.fleet.PortAndTime#getPort <em>Port</em>}</li>
- *   <li>{@link scenario.fleet.PortAndTime#getTime <em>Time</em>}</li>
+ *   <li>{@link scenario.fleet.PortAndTime#getStartTime <em>Start Time</em>}</li>
+ *   <li>{@link scenario.fleet.PortAndTime#getEndTime <em>End Time</em>}</li>
  * </ul>
  * </p>
  *
@@ -83,56 +84,109 @@ public interface PortAndTime extends EObject {
 	boolean isSetPort();
 
 	/**
-	 * Returns the value of the '<em><b>Time</b></em>' attribute.
+	 * Returns the value of the '<em><b>Start Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Time</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Start Time</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Time</em>' attribute.
-	 * @see #isSetTime()
-	 * @see #unsetTime()
-	 * @see #setTime(Date)
-	 * @see scenario.fleet.FleetPackage#getPortAndTime_Time()
-	 * @model unsettable="true"
+	 * @return the value of the '<em>Start Time</em>' attribute.
+	 * @see #isSetStartTime()
+	 * @see #unsetStartTime()
+	 * @see #setStartTime(Date)
+	 * @see scenario.fleet.FleetPackage#getPortAndTime_StartTime()
+	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	Date getTime();
+	Date getStartTime();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.PortAndTime#getTime <em>Time</em>}' attribute.
+	 * Sets the value of the '{@link scenario.fleet.PortAndTime#getStartTime <em>Start Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Time</em>' attribute.
-	 * @see #isSetTime()
-	 * @see #unsetTime()
-	 * @see #getTime()
+	 * @param value the new value of the '<em>Start Time</em>' attribute.
+	 * @see #isSetStartTime()
+	 * @see #unsetStartTime()
+	 * @see #getStartTime()
 	 * @generated
 	 */
-	void setTime(Date value);
+	void setStartTime(Date value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.fleet.PortAndTime#getTime <em>Time</em>}' attribute.
+	 * Unsets the value of the '{@link scenario.fleet.PortAndTime#getStartTime <em>Start Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetTime()
-	 * @see #getTime()
-	 * @see #setTime(Date)
+	 * @see #isSetStartTime()
+	 * @see #getStartTime()
+	 * @see #setStartTime(Date)
 	 * @generated
 	 */
-	void unsetTime();
+	void unsetStartTime();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.fleet.PortAndTime#getTime <em>Time</em>}' attribute is set.
+	 * Returns whether the value of the '{@link scenario.fleet.PortAndTime#getStartTime <em>Start Time</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Time</em>' attribute is set.
-	 * @see #unsetTime()
-	 * @see #getTime()
-	 * @see #setTime(Date)
+	 * @return whether the value of the '<em>Start Time</em>' attribute is set.
+	 * @see #unsetStartTime()
+	 * @see #getStartTime()
+	 * @see #setStartTime(Date)
 	 * @generated
 	 */
-	boolean isSetTime();
+	boolean isSetStartTime();
+
+	/**
+	 * Returns the value of the '<em><b>End Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>End Time</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>End Time</em>' attribute.
+	 * @see #isSetEndTime()
+	 * @see #unsetEndTime()
+	 * @see #setEndTime(Date)
+	 * @see scenario.fleet.FleetPackage#getPortAndTime_EndTime()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	Date getEndTime();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.PortAndTime#getEndTime <em>End Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>End Time</em>' attribute.
+	 * @see #isSetEndTime()
+	 * @see #unsetEndTime()
+	 * @see #getEndTime()
+	 * @generated
+	 */
+	void setEndTime(Date value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.fleet.PortAndTime#getEndTime <em>End Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetEndTime()
+	 * @see #getEndTime()
+	 * @see #setEndTime(Date)
+	 * @generated
+	 */
+	void unsetEndTime();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.fleet.PortAndTime#getEndTime <em>End Time</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>End Time</em>' attribute is set.
+	 * @see #unsetEndTime()
+	 * @see #getEndTime()
+	 * @see #setEndTime(Date)
+	 * @generated
+	 */
+	boolean isSetEndTime();
 
 } // PortAndTime

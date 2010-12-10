@@ -427,13 +427,22 @@ public interface FleetPackage extends EPackage {
 	int PORT_AND_TIME__PORT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Time</b></em>' attribute.
+	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_AND_TIME__TIME = 1;
+	int PORT_AND_TIME__START_TIME = 1;
+
+	/**
+	 * The feature id for the '<em><b>End Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_AND_TIME__END_TIME = 2;
 
 	/**
 	 * The number of structural features of the '<em>Port And Time</em>' class.
@@ -442,7 +451,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_AND_TIME_FEATURE_COUNT = 2;
+	int PORT_AND_TIME_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.CharterOutImpl <em>Charter Out</em>}' class.
@@ -917,15 +926,26 @@ public interface FleetPackage extends EPackage {
 	EReference getPortAndTime_Port();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.PortAndTime#getTime <em>Time</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.fleet.PortAndTime#getStartTime <em>Start Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Time</em>'.
-	 * @see scenario.fleet.PortAndTime#getTime()
+	 * @return the meta object for the attribute '<em>Start Time</em>'.
+	 * @see scenario.fleet.PortAndTime#getStartTime()
 	 * @see #getPortAndTime()
 	 * @generated
 	 */
-	EAttribute getPortAndTime_Time();
+	EAttribute getPortAndTime_StartTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.PortAndTime#getEndTime <em>End Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Time</em>'.
+	 * @see scenario.fleet.PortAndTime#getEndTime()
+	 * @see #getPortAndTime()
+	 * @generated
+	 */
+	EAttribute getPortAndTime_EndTime();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.CharterOut <em>Charter Out</em>}'.
@@ -1339,12 +1359,20 @@ public interface FleetPackage extends EPackage {
 		EReference PORT_AND_TIME__PORT = eINSTANCE.getPortAndTime_Port();
 
 		/**
-		 * The meta object literal for the '<em><b>Time</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Start Time</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute PORT_AND_TIME__TIME = eINSTANCE.getPortAndTime_Time();
+		EAttribute PORT_AND_TIME__START_TIME = eINSTANCE.getPortAndTime_StartTime();
+
+		/**
+		 * The meta object literal for the '<em><b>End Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_AND_TIME__END_TIME = eINSTANCE.getPortAndTime_EndTime();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.CharterOutImpl <em>Charter Out</em>}' class.

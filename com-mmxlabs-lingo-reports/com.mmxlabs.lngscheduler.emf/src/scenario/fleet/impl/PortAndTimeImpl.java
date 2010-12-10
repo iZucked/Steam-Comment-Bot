@@ -28,7 +28,8 @@ import scenario.port.Port;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.fleet.impl.PortAndTimeImpl#getPort <em>Port</em>}</li>
- *   <li>{@link scenario.fleet.impl.PortAndTimeImpl#getTime <em>Time</em>}</li>
+ *   <li>{@link scenario.fleet.impl.PortAndTimeImpl#getStartTime <em>Start Time</em>}</li>
+ *   <li>{@link scenario.fleet.impl.PortAndTimeImpl#getEndTime <em>End Time</em>}</li>
  * </ul>
  * </p>
  *
@@ -55,33 +56,62 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	protected boolean portESet;
 
 	/**
-	 * The default value of the '{@link #getTime() <em>Time</em>}' attribute.
+	 * The default value of the '{@link #getStartTime() <em>Start Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTime()
+	 * @see #getStartTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date TIME_EDEFAULT = null;
+	protected static final Date START_TIME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getTime() <em>Time</em>}' attribute.
+	 * The cached value of the '{@link #getStartTime() <em>Start Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTime()
+	 * @see #getStartTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected Date time = TIME_EDEFAULT;
+	protected Date startTime = START_TIME_EDEFAULT;
 
 	/**
-	 * This is true if the Time attribute has been set.
+	 * This is true if the Start Time attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean timeESet;
+	protected boolean startTimeESet;
+
+	/**
+	 * The default value of the '{@link #getEndTime() <em>End Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Date END_TIME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getEndTime() <em>End Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected Date endTime = END_TIME_EDEFAULT;
+
+	/**
+	 * This is true if the End Time attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean endTimeESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -170,8 +200,8 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getTime() {
-		return time;
+	public Date getStartTime() {
+		return startTime;
 	}
 
 	/**
@@ -179,13 +209,13 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTime(Date newTime) {
-		Date oldTime = time;
-		time = newTime;
-		boolean oldTimeESet = timeESet;
-		timeESet = true;
+	public void setStartTime(Date newStartTime) {
+		Date oldStartTime = startTime;
+		startTime = newStartTime;
+		boolean oldStartTimeESet = startTimeESet;
+		startTimeESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.PORT_AND_TIME__TIME, oldTime, time, !oldTimeESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.PORT_AND_TIME__START_TIME, oldStartTime, startTime, !oldStartTimeESet));
 	}
 
 	/**
@@ -193,13 +223,13 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetTime() {
-		Date oldTime = time;
-		boolean oldTimeESet = timeESet;
-		time = TIME_EDEFAULT;
-		timeESet = false;
+	public void unsetStartTime() {
+		Date oldStartTime = startTime;
+		boolean oldStartTimeESet = startTimeESet;
+		startTime = START_TIME_EDEFAULT;
+		startTimeESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.PORT_AND_TIME__TIME, oldTime, TIME_EDEFAULT, oldTimeESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.PORT_AND_TIME__START_TIME, oldStartTime, START_TIME_EDEFAULT, oldStartTimeESet));
 	}
 
 	/**
@@ -207,8 +237,54 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSetTime() {
-		return timeESet;
+	public boolean isSetStartTime() {
+		return startTimeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEndTime(Date newEndTime) {
+		Date oldEndTime = endTime;
+		endTime = newEndTime;
+		boolean oldEndTimeESet = endTimeESet;
+		endTimeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.PORT_AND_TIME__END_TIME, oldEndTime, endTime, !oldEndTimeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetEndTime() {
+		Date oldEndTime = endTime;
+		boolean oldEndTimeESet = endTimeESet;
+		endTime = END_TIME_EDEFAULT;
+		endTimeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.PORT_AND_TIME__END_TIME, oldEndTime, END_TIME_EDEFAULT, oldEndTimeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetEndTime() {
+		return endTimeESet;
 	}
 
 	/**
@@ -222,8 +298,10 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 			case FleetPackage.PORT_AND_TIME__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
-			case FleetPackage.PORT_AND_TIME__TIME:
-				return getTime();
+			case FleetPackage.PORT_AND_TIME__START_TIME:
+				return getStartTime();
+			case FleetPackage.PORT_AND_TIME__END_TIME:
+				return getEndTime();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -239,8 +317,11 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 			case FleetPackage.PORT_AND_TIME__PORT:
 				setPort((Port)newValue);
 				return;
-			case FleetPackage.PORT_AND_TIME__TIME:
-				setTime((Date)newValue);
+			case FleetPackage.PORT_AND_TIME__START_TIME:
+				setStartTime((Date)newValue);
+				return;
+			case FleetPackage.PORT_AND_TIME__END_TIME:
+				setEndTime((Date)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -257,8 +338,11 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 			case FleetPackage.PORT_AND_TIME__PORT:
 				unsetPort();
 				return;
-			case FleetPackage.PORT_AND_TIME__TIME:
-				unsetTime();
+			case FleetPackage.PORT_AND_TIME__START_TIME:
+				unsetStartTime();
+				return;
+			case FleetPackage.PORT_AND_TIME__END_TIME:
+				unsetEndTime();
 				return;
 		}
 		super.eUnset(featureID);
@@ -274,8 +358,10 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 		switch (featureID) {
 			case FleetPackage.PORT_AND_TIME__PORT:
 				return isSetPort();
-			case FleetPackage.PORT_AND_TIME__TIME:
-				return isSetTime();
+			case FleetPackage.PORT_AND_TIME__START_TIME:
+				return isSetStartTime();
+			case FleetPackage.PORT_AND_TIME__END_TIME:
+				return isSetEndTime();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -290,8 +376,10 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (time: ");
-		if (timeESet) result.append(time); else result.append("<unset>");
+		result.append(" (startTime: ");
+		if (startTimeESet) result.append(startTime); else result.append("<unset>");
+		result.append(", endTime: ");
+		if (endTimeESet) result.append(endTime); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

@@ -67,7 +67,8 @@ public class PortAndTimeItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortPropertyDescriptor(object);
-			addTimePropertyDescriptor(object);
+			addStartTimePropertyDescriptor(object);
+			addEndTimePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,19 +96,41 @@ public class PortAndTimeItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Time feature.
+	 * This adds a property descriptor for the Start Time feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addTimePropertyDescriptor(Object object) {
+	protected void addStartTimePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PortAndTime_time_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortAndTime_time_feature", "_UI_PortAndTime_type"),
-				 FleetPackage.Literals.PORT_AND_TIME__TIME,
+				 getString("_UI_PortAndTime_startTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortAndTime_startTime_feature", "_UI_PortAndTime_type"),
+				 FleetPackage.Literals.PORT_AND_TIME__START_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the End Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEndTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortAndTime_endTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortAndTime_endTime_feature", "_UI_PortAndTime_type"),
+				 FleetPackage.Literals.PORT_AND_TIME__END_TIME,
 				 true,
 				 false,
 				 false,
@@ -135,7 +158,7 @@ public class PortAndTimeItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((PortAndTime)object).getTime();
+		Date labelValue = ((PortAndTime)object).getStartTime();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_PortAndTime_type") :
@@ -154,7 +177,8 @@ public class PortAndTimeItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PortAndTime.class)) {
-			case FleetPackage.PORT_AND_TIME__TIME:
+			case FleetPackage.PORT_AND_TIME__START_TIME:
+			case FleetPackage.PORT_AND_TIME__END_TIME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

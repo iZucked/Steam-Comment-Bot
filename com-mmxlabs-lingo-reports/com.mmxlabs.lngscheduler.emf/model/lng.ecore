@@ -108,8 +108,10 @@
     <eClassifiers xsi:type="ecore:EClass" name="PortAndTime">
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"
           unsettable="true"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
-          unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CharterOut">
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
