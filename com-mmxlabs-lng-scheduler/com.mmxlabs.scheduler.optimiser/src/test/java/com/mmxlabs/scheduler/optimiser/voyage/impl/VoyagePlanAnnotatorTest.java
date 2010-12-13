@@ -5,6 +5,7 @@
 
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -207,20 +208,20 @@ public class VoyagePlanAnnotatorTest {
 
 		final IResource resource = context.mock(IResource.class);
 
-		final AnnotatedSequence<Object> annotatedSequence = new AnnotatedSequence<Object>();
-		annotator.annotateFromVoyagePlan(resource, plans, 0, annotatedSequence);
+		final AnnotatedSolution<Object> annotatedSolution = new AnnotatedSolution<Object>();
+		annotator.annotateFromVoyagePlan(resource, plans, 0, annotatedSolution);
 
 		{
-			final IJourneyEvent<Object> journey = annotatedSequence
-					.getAnnotation(element1, SchedulerConstants.AI_journeyInfo,
+			final IJourneyEvent<Object> journey = annotatedSolution
+					.getElementAnnotations().getAnnotation(element1, SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
 			Assert.assertNull(journey);
 
-			final IIdleEvent<Object> idle = annotatedSequence.getAnnotation(
+			final IIdleEvent<Object> idle = annotatedSolution.getElementAnnotations().getAnnotation(
 					element1, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNull(idle);
 
-			final IPortVisitEvent<Object> portVisit = annotatedSequence
+			final IPortVisitEvent<Object> portVisit = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element1, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(portVisit);
@@ -235,7 +236,7 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(400, loadEvent.getLoadVolume());
 		}
 		{
-			final IJourneyEvent<Object> journey = annotatedSequence
+			final IJourneyEvent<Object> journey = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element2, SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
 			Assert.assertNotNull(journey);
@@ -273,7 +274,7 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Laden, journey.getVesselState());
 
-			final IIdleEvent<Object> idle = annotatedSequence.getAnnotation(
+			final IIdleEvent<Object> idle = annotatedSolution.getElementAnnotations().getAnnotation(
 					element2, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idle);
 
@@ -305,7 +306,7 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(25000l, idle.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(36000l, idle.getFuelCost(FuelComponent.IdleNBO));
 
-			final IPortVisitEvent<Object> portVisit = annotatedSequence
+			final IPortVisitEvent<Object> portVisit = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element2, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(portVisit);
@@ -321,7 +322,7 @@ public class VoyagePlanAnnotatorTest {
 		}
 
 		{
-			final IJourneyEvent<Object> journey = annotatedSequence
+			final IJourneyEvent<Object> journey = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element3, SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
 			Assert.assertNotNull(journey);
@@ -359,7 +360,7 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Ballast, journey.getVesselState());
 
-			final IIdleEvent<Object> idle = annotatedSequence.getAnnotation(
+			final IIdleEvent<Object> idle = annotatedSolution.getElementAnnotations().getAnnotation(
 					element3, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idle);
 
@@ -391,7 +392,7 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(26010l, idle.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(37210l, idle.getFuelCost(FuelComponent.IdleNBO));
 
-			final IPortVisitEvent<Object> portVisit = annotatedSequence
+			final IPortVisitEvent<Object> portVisit = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element3, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(portVisit);
@@ -407,7 +408,7 @@ public class VoyagePlanAnnotatorTest {
 		}
 
 		{
-			final IJourneyEvent<Object> journey = annotatedSequence
+			final IJourneyEvent<Object> journey = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element4, SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
 			Assert.assertNotNull(journey);
@@ -445,7 +446,7 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Laden, journey.getVesselState());
 
-			final IIdleEvent<Object> idle = annotatedSequence.getAnnotation(
+			final IIdleEvent<Object> idle = annotatedSolution.getElementAnnotations().getAnnotation(
 					element4, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idle);
 
@@ -477,7 +478,7 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(27040l, idle.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(38440l, idle.getFuelCost(FuelComponent.IdleNBO));
 
-			final IPortVisitEvent<Object> portVisit = annotatedSequence
+			final IPortVisitEvent<Object> portVisit = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element4, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(portVisit);
