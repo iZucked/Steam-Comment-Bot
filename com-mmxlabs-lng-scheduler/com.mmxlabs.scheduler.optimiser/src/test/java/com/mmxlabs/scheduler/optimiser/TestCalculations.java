@@ -5,6 +5,7 @@
 
 package com.mmxlabs.scheduler.optimiser;
 
+
 import java.util.List;
 import java.util.TreeMap;
 
@@ -12,13 +13,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSequence;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -38,6 +40,8 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
@@ -49,7 +53,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
@@ -120,11 +123,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, 5000, 2000, 1);
+				loadWindow, 0, 150000000, new ConstantValueCurve(5000), 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, 5000, 1);
+				"discharge-1", port3, dischargeWindow, 0, 150000000, new ConstantValueCurve(5000), 1);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
 				dischargeSlot);
@@ -144,7 +147,7 @@ public class TestCalculations {
 		scheduler.setDistanceProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_portDistanceProvider,
 				IMultiMatrixProvider.class));
-		
+
 		final IElementDurationProviderEditor<ISequenceElement> durationsProvider = data
 				.getDataComponentProvider(
 						SchedulerConstants.DCP_elementDurationsProvider,
@@ -173,7 +176,8 @@ public class TestCalculations {
 						IStartEndRequirementProvider.class);
 
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(voyageCalculator);
+		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(
+				voyageCalculator);
 
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
@@ -204,20 +208,21 @@ public class TestCalculations {
 
 		// Schedule sequence
 		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final Pair<Integer, List<VoyagePlan>> plansAndStartTime = scheduler.schedule(resource, sequence, expectedArrivalTimes);
-		
+		final ScheduledSequence plansAndStartTime = scheduler
+				.schedule(resource, sequence, expectedArrivalTimes);
+
 		Assert.assertNotNull(plansAndStartTime);
 
-		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
-		annotator.annotateFromVoyagePlan(resource, plansAndStartTime.getSecond(), plansAndStartTime.getFirst(), annotatedSequence);
+		final AnnotatedSolution<ISequenceElement> annotatedSolution = new AnnotatedSolution<ISequenceElement>();
+		annotator.annotateFromVoyagePlan(plansAndStartTime.getResource(), plansAndStartTime.getVoyagePlans(), plansAndStartTime.getStartTime(), annotatedSolution); 
 
 		// TODO: Start checking results
 		{
-			Assert.assertNull(annotatedSequence.getAnnotation(startElement,
+			Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement,
 					SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
-			Assert.assertNull(annotatedSequence.getAnnotation(startElement,
+			Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement,
 					SchedulerConstants.AI_idleInfo, IIdleEvent.class));
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(startElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -230,8 +235,8 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
-					.getAnnotation(loadElement,
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations().
+					getAnnotation(loadElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
 			Assert.assertNotNull(journeyEvent);
@@ -276,7 +281,7 @@ public class TestCalculations {
 			Assert.assertEquals(0, journeyEvent.getFuelConsumption(
 					FuelComponent.Base, FuelUnit.M3));
 			Assert.assertEquals(500 * 24, journeyEvent.getFuelConsumption(
-					FuelComponent.Base, FuelUnit.MT));
+					FuelComponent.Base, FuelUnit.MT));	
 			Assert.assertEquals(0, journeyEvent.getFuelConsumption(
 					FuelComponent.Base, FuelUnit.MMBTu));
 
@@ -301,7 +306,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(loadElement, SchedulerConstants.AI_idleInfo,
 							IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -364,7 +369,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(loadElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -377,7 +382,7 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
@@ -450,7 +455,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -513,7 +518,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -526,7 +531,7 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
@@ -601,7 +606,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement, SchedulerConstants.AI_idleInfo,
 							IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -664,7 +669,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
@@ -726,11 +731,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, 5000, 2000, 1);
+				loadWindow, 0, 150000000, new ConstantValueCurve(5000), 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, 5000, 1);
+				"discharge-1", port3, dischargeWindow, 0, 150000000, new ConstantValueCurve(5000), 1);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
 				dischargeSlot);
@@ -779,7 +784,8 @@ public class TestCalculations {
 						IStartEndRequirementProvider.class);
 
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(voyageCalculator);
+		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(
+				voyageCalculator);
 
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
@@ -810,18 +816,21 @@ public class TestCalculations {
 
 		// Schedule sequence
 		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final Pair<Integer, List<VoyagePlan>> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes);
+		final ScheduledSequence plansAndStartTime = scheduler.schedule(
+				resource, sequence, expectedArrivalTimes);
 
-		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
-		annotator.annotateFromVoyagePlan(resource, plans.getSecond(), plans.getFirst(), annotatedSequence);
+		Assert.assertNotNull(plansAndStartTime);
 
+		final AnnotatedSolution<ISequenceElement> annotatedSolution = new AnnotatedSolution<ISequenceElement>();
+		annotator.annotateFromVoyagePlan(plansAndStartTime.getResource(), plansAndStartTime.getVoyagePlans(), plansAndStartTime.getStartTime(), annotatedSolution);
+		
 		// TODO: Start checking results
 		{
-			Assert.assertNull(annotatedSequence.getAnnotation(startElement,
+			Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement,
 					SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
-			Assert.assertNull(annotatedSequence.getAnnotation(startElement,
+			Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement,
 					SchedulerConstants.AI_idleInfo, IIdleEvent.class));
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(startElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -834,7 +843,7 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(loadElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
@@ -905,7 +914,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(loadElement, SchedulerConstants.AI_idleInfo,
 							IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -968,7 +977,7 @@ public class TestCalculations {
 			Assert.assertEquals((6l * 400 * baseFuelUnitPrice) / 1000,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(loadElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -981,7 +990,7 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
@@ -1056,7 +1065,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -1120,7 +1129,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -1133,7 +1142,7 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
@@ -1208,7 +1217,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement, SchedulerConstants.AI_idleInfo,
 							IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -1272,7 +1281,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
@@ -1335,11 +1344,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, 5000, 2000, 1);
+				loadWindow, 0, 150000000, new ConstantValueCurve(5000), 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, 200000, 1);
+				"discharge-1", port3, dischargeWindow, 0, 150000000, new ConstantValueCurve(200000), 1);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
 				dischargeSlot);
@@ -1388,7 +1397,8 @@ public class TestCalculations {
 						IStartEndRequirementProvider.class);
 
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(voyageCalculator);
+		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(
+				voyageCalculator);
 
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
@@ -1419,18 +1429,23 @@ public class TestCalculations {
 
 		// Schedule sequence
 		int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final Pair<Integer,List<VoyagePlan>> plans = scheduler.schedule(resource, sequence, expectedArrivalTimes);
+		final ScheduledSequence plansAndStartTime = scheduler.schedule(
+				resource, sequence, expectedArrivalTimes);
 
-		final AnnotatedSequence<ISequenceElement> annotatedSequence = new AnnotatedSequence<ISequenceElement>();
-		annotator.annotateFromVoyagePlan(resource, plans.getSecond(), plans.getFirst(), annotatedSequence);
+
+		Assert.assertNotNull(plansAndStartTime);
+
+		final AnnotatedSolution<ISequenceElement> annotatedSolution = new AnnotatedSolution<ISequenceElement>();
+		annotator.annotateFromVoyagePlan(plansAndStartTime.getResource(), plansAndStartTime.getVoyagePlans(), plansAndStartTime.getStartTime(), annotatedSolution);
+
 
 		// TODO: Start checking results
 		{
-			Assert.assertNull(annotatedSequence.getAnnotation(startElement,
+			Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement,
 					SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
-			Assert.assertNull(annotatedSequence.getAnnotation(startElement,
+			Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement,
 					SchedulerConstants.AI_idleInfo, IIdleEvent.class));
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(startElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -1443,7 +1458,7 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(loadElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
@@ -1514,7 +1529,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(loadElement, SchedulerConstants.AI_idleInfo,
 							IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -1577,7 +1592,7 @@ public class TestCalculations {
 			Assert.assertEquals((6l * 400 * baseFuelUnitPrice) / 1000,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(loadElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -1592,7 +1607,7 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
@@ -1666,7 +1681,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -1730,7 +1745,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(dischargeElement,
 							SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
@@ -1753,7 +1768,7 @@ public class TestCalculations {
 
 		{
 
-			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSequence
+			final IJourneyEvent<ISequenceElement> journeyEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement,
 							SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
@@ -1833,7 +1848,7 @@ public class TestCalculations {
 			Assert.assertEquals(0,
 					journeyEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IIdleEvent<ISequenceElement> idleEvent = annotatedSequence
+			final IIdleEvent<ISequenceElement> idleEvent = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement, SchedulerConstants.AI_idleInfo,
 							IIdleEvent.class);
 			Assert.assertNotNull(idleEvent);
@@ -1896,7 +1911,7 @@ public class TestCalculations {
 			Assert.assertEquals((6 * 400 * baseFuelUnitPrice) / 1000,
 					idleEvent.getFuelCost(FuelComponent.IdleBase));
 
-			final IPortVisitEvent<ISequenceElement> event = annotatedSequence
+			final IPortVisitEvent<ISequenceElement> event = annotatedSolution.getElementAnnotations()
 					.getAnnotation(endElement, SchedulerConstants.AI_visitInfo,
 							IPortVisitEvent.class);
 			Assert.assertNotNull(event);
@@ -1911,8 +1926,7 @@ public class TestCalculations {
 			AbstractSequenceScheduler<T> {
 
 		@Override
-		public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
-				final ISequence<T> sequence) {
+		public ScheduledSequences schedule(ISequences<T> sequences) {
 			throw new UnsupportedOperationException(
 					"Method invocation is not part of the tests!");
 		}
