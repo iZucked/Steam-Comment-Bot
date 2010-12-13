@@ -219,7 +219,7 @@ public class RandomScenarioUtils {
 		randomiseAvailability(scenario,
 				addVessel(scenario, "Methane Mickie Harper", class3));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Unknown", class3));
+				addVessel(scenario, "Methane Patricia Camila", class3));
 
 		addVessel(scenario, "Hilli", class4);
 		addVessel(scenario, "Gimi", class4);
