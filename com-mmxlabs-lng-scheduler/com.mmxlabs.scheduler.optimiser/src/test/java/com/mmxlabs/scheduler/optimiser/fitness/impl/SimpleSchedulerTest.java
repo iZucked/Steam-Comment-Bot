@@ -13,9 +13,12 @@ import java.util.TreeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -81,14 +84,15 @@ public class SimpleSchedulerTest {
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				keypoints);
 
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1",
-				12000, 20000, 150000000, 0, 7000, 10000);
+		final IVesselClass vesselClass1 = builder.createVesselClass(
+				"vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
 				150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor,
 				10 * Calculator.ScaleFactor, consumptionCalculator, 15000);
 		builder.setVesselClassStateParamaters(vesselClass1,
-				VesselState.Ballast, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor,
+				VesselState.Ballast, 150 * Calculator.ScaleFactor,
+				100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor,
 				consumptionCalculator, 15000);
 
 		// TODO: Setup start/end ports correctly
@@ -113,35 +117,45 @@ public class SimpleSchedulerTest {
 
 		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
 
-		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800, 24);
-		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800, 24);
-		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800, 24);
-		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800, 24);
-		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800, 24);
-		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800, 24);
-		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0,
-				150000 * Calculator.ScaleFactor, 5, 22800, 24);
+		final ICurve purchaseCurve = new ConstantValueCurve(5);
+		final ICurve salesCurve = new ConstantValueCurve(200000);
 
-		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1",
-				port2, tw2, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
-		final IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2",
-				port2, tw4, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
-		final IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3",
-				port2, tw6, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
-		final IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4",
-				port6, tw6, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
-		final IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5",
-				port4, tw3, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
-		final IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6",
-				port4, tw5, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
-		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7",
-				port6, tw7, 0, 100000 * Calculator.ScaleFactor, 200000, 24);
+		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0,
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0,
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0,
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0,
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0,
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0,
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0,
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+
+		final IDischargeSlot discharge1 = builder.createDischargeSlot(
+				"discharge1", port2, tw2, 0, 100000 * Calculator.ScaleFactor,
+				salesCurve, 24);
+		final IDischargeSlot discharge2 = builder.createDischargeSlot(
+				"discharge2", port2, tw4, 0, 100000 * Calculator.ScaleFactor,
+				salesCurve, 24);
+		final IDischargeSlot discharge3 = builder.createDischargeSlot(
+				"discharge3", port2, tw6, 0, 100000 * Calculator.ScaleFactor,
+				salesCurve, 24);
+		final IDischargeSlot discharge4 = builder.createDischargeSlot(
+				"discharge4", port6, tw6, 0, 100000 * Calculator.ScaleFactor,
+				salesCurve, 24);
+		final IDischargeSlot discharge5 = builder.createDischargeSlot(
+				"discharge5", port4, tw3, 0, 100000 * Calculator.ScaleFactor,
+				salesCurve, 24);
+		final IDischargeSlot discharge6 = builder.createDischargeSlot(
+				"discharge6", port4, tw5, 0, 100000 * Calculator.ScaleFactor,
+				salesCurve, 24);
+		final IDischargeSlot discharge7 = builder.createDischargeSlot(
+				"discharge7", port6, tw7, 0, 100000 * Calculator.ScaleFactor,
+				salesCurve, 24);
 
 		builder.createCargo("cargo1", load1, discharge1);
 		builder.createCargo("cargo2", load2, discharge2);
@@ -176,8 +190,10 @@ public class SimpleSchedulerTest {
 		final IConstraintCheckerRegistry constraintRegistry = createConstraintRegistry();
 
 		// Generate initial state
-		final IInitialSequenceBuilder<ISequenceElement> sequenceBuilder = new ConstrainedInitialSequenceBuilder<ISequenceElement>(constraintRegistry.getConstraintCheckerFactories());
-		final ISequences<ISequenceElement> initialSequences =  sequenceBuilder.createInitialSequences(data);
+		final IInitialSequenceBuilder<ISequenceElement> sequenceBuilder = new ConstrainedInitialSequenceBuilder<ISequenceElement>(
+				constraintRegistry.getConstraintCheckerFactories());
+		final ISequences<ISequenceElement> initialSequences = sequenceBuilder
+				.createInitialSequences(data);
 
 		final OptimisationContext<ISequenceElement> context = new OptimisationContext<ISequenceElement>(
 				data, initialSequences, new ArrayList<String>(
@@ -186,13 +202,12 @@ public class SimpleSchedulerTest {
 						constraintRegistry.getConstraintCheckerNames()),
 				constraintRegistry);
 
-		
 		final IOptimiserProgressMonitor<ISequenceElement> monitor = new IOptimiserProgressMonitor<ISequenceElement>() {
 
 			@Override
 			public void begin(final IOptimiser<ISequenceElement> optimiser,
 					final long initialFitness,
-					final ISequences<ISequenceElement> initialState) {
+					IAnnotatedSolution<ISequenceElement> initialState) {
 				System.out.println("Initial Fitness: " + initialFitness);
 			}
 
@@ -200,8 +215,8 @@ public class SimpleSchedulerTest {
 			public void report(final IOptimiser<ISequenceElement> optimiser,
 					final int iteration, final long currentFitness,
 					final long bestFitness,
-					final ISequences<ISequenceElement> currentState,
-					final ISequences<ISequenceElement> bestState) {
+					final IAnnotatedSolution<ISequenceElement> currentState,
+					final IAnnotatedSolution<ISequenceElement> bestState) {
 				System.out.println("Iter: " + iteration + " Fitness: "
 						+ bestFitness);
 			}
@@ -209,7 +224,7 @@ public class SimpleSchedulerTest {
 			@Override
 			public void done(final IOptimiser<ISequenceElement> optimiser,
 					final long bestFitness,
-					final ISequences<ISequenceElement> bestState) {
+					final IAnnotatedSolution<ISequenceElement> bestState) {
 				System.out.println("Final Fitness: " + bestFitness);
 			}
 		};
@@ -230,16 +245,14 @@ public class SimpleSchedulerTest {
 		printSequences(context.getInitialSequences());
 
 		final long initialFitness = linearFitnessEvaluator.getBestFitness();
-		System.out.println("Initial fitness "
-				+ initialFitness);
+		System.out.println("Initial fitness " + initialFitness);
 
 		Assert.assertFalse(initialFitness == Long.MAX_VALUE);
-		
+
 		optimiser.optimise(context);
 
 		final long finalFitness = linearFitnessEvaluator.getBestFitness();
-		System.out.println("Final fitness "
-				+ finalFitness);
+		System.out.println("Final fitness " + finalFitness);
 		Assert.assertFalse(finalFitness == Long.MAX_VALUE);
 
 		printSequences(fitnessEvaluator.getBestSequences());
@@ -249,18 +262,20 @@ public class SimpleSchedulerTest {
 
 	private IConstraintCheckerRegistry createConstraintRegistry() {
 		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
-		
+
 		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(
 				SchedulerConstants.DCP_orderedElementsProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
-		
-		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
+
+		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(
+				SchedulerConstants.DCP_resourceAllocationProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
-		
-		final PortTypeConstraintCheckerFactory constraintFactory3 = new  PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, 
+
+		final PortTypeConstraintCheckerFactory constraintFactory3 = new PortTypeConstraintCheckerFactory(
+				SchedulerConstants.DCP_portTypeProvider,
 				SchedulerConstants.DCP_vesselProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory3);
-		
+
 		return constraintRegistry;
 	}
 
