@@ -128,7 +128,7 @@ public final class AbstractSequenceSchedulerTest {
 		final ISequenceElement element4 = new SequenceElement(index, "element4",
 				dischargeSlot2);
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
+		final ITimeWindowDataComponentProviderEditor<ISequenceElement> timeWindowProvider = new TimeWindowDataComponentProvider<ISequenceElement>(
 				SchedulerConstants.DCP_timeWindowProvider);
 
 		timeWindowProvider.setTimeWindows(element1,
@@ -158,7 +158,7 @@ public final class AbstractSequenceSchedulerTest {
 				SchedulerConstants.DCP_elementDurationsProvider);
 		durationsProvider.setDefaultValue(duration);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(
+		final IPortProviderEditor<ISequenceElement> portProvider = new HashMapPortEditor(
 				SchedulerConstants.DCP_portProvider);
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
