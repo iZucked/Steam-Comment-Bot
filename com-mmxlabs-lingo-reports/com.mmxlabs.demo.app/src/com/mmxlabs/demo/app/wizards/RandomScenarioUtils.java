@@ -198,7 +198,10 @@ public class RandomScenarioUtils {
 		// create vessels in each class
 
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Rita Andrea", class1));
+				addVessel(scenario, "Methane Kari Elin", class1));
+		
+		randomiseAvailability(scenario,
+				addVessel(scenario, "Methane Rita Andrea", class2));		
 		randomiseAvailability(scenario,
 				addVessel(scenario, "Methane Jane Elizabeth", class2));
 		randomiseAvailability(scenario,
