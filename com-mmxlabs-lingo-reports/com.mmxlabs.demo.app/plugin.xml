@@ -34,7 +34,7 @@
             name="ShipLiNGO">
          <property
                name="windowImages"
-               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+               value="icons/alt_window_16.gif,icons/alt_window_16.gif">
          </property>
          <property
                name="appName"
@@ -90,26 +90,6 @@
             content="ext.xml"
             configId="com.mmxlabs.demo.app.configId">
       </configExtension>
-   </extension>
-   <extension
-         point="org.eclipse.ui.viewActions">
-      <viewContribution
-            id="com.mmxlabs.demo.app.navigatorOptimiseButton"
-            targetID="org.eclipse.ui.views.ResourceNavigator">
-         <action
-               class="com.mmxlabs.demo.app.actions.OptimiseActionDelegate"
-               enablesFor="+"
-               id="com.mmxlabs.demo.app.optimiseaction"
-               label="Optimise"
-               style="push"
-               toolbarPath="LiNGO"
-               tooltip="Start an optimisation job for the selection">
-            <selection
-                  class="org.eclipse.core.resources.IFile"
-                  name="*.scenario">
-            </selection>
-         </action>
-      </viewContribution>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">

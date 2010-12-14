@@ -916,7 +916,7 @@ public class EventsEditor
 				selectionViewer = (TreeViewer)viewerPane.getViewer();
 				selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
 
-				selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, selectionViewer));
 				selectionViewer.setInput(editingDomain.getResourceSet());
 				selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 				viewerPane.setTitle(editingDomain.getResourceSet());
@@ -950,7 +950,7 @@ public class EventsEditor
 				parentViewer = (TreeViewer)viewerPane.getViewer();
 				parentViewer.setAutoExpandLevel(30);
 				parentViewer.setContentProvider(new ReverseAdapterFactoryContentProvider(adapterFactory));
-				parentViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				parentViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, parentViewer));
 
 				createContextMenuFor(parentViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -975,7 +975,7 @@ public class EventsEditor
 				viewerPane.createControl(getContainer());
 				listViewer = (ListViewer)viewerPane.getViewer();
 				listViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				listViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				listViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, listViewer));
 
 				createContextMenuFor(listViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1000,7 +1000,7 @@ public class EventsEditor
 				viewerPane.createControl(getContainer());
 				treeViewer = (TreeViewer)viewerPane.getViewer();
 				treeViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				treeViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, treeViewer));
 
 				new AdapterFactoryTreeEditor(treeViewer.getTree(), adapterFactory);
 
@@ -1045,7 +1045,7 @@ public class EventsEditor
 
 				tableViewer.setColumnProperties(new String [] {"a", "b"});
 				tableViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				tableViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				tableViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, tableViewer));
 
 				createContextMenuFor(tableViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1088,7 +1088,7 @@ public class EventsEditor
 
 				treeViewerWithColumns.setColumnProperties(new String [] {"a", "b"});
 				treeViewerWithColumns.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				treeViewerWithColumns.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				treeViewerWithColumns.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, treeViewerWithColumns));
 
 				createContextMenuFor(treeViewerWithColumns);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1218,7 +1218,7 @@ public class EventsEditor
 					// Set up the tree viewer.
 					//
 					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, contentOutlineViewer));
 					contentOutlineViewer.setInput(editingDomain.getResourceSet());
 
 					// Make sure our popups work.

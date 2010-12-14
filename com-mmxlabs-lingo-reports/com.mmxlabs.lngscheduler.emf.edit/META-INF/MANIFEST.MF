@@ -17,6 +17,7 @@ Export-Package: scenario.cargo.provider,
  scenario.port.provider,
  scenario.provider,
  scenario.schedule.events.provider,
+ scenario.schedule.fleet.provider,
  scenario.schedule.provider
 Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.lngscheduler.emf;visibility:=reexport,
