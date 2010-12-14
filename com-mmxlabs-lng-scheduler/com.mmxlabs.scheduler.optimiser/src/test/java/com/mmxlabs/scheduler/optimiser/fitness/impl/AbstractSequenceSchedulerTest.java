@@ -18,7 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -31,6 +30,7 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEdito
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -47,6 +47,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -68,7 +70,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @RunWith(JMock.class)
 public final class AbstractSequenceSchedulerTest {
-	
+
 	Mockery context = new JUnit4Mockery();
 
 	/**
@@ -119,14 +121,14 @@ public final class AbstractSequenceSchedulerTest {
 		cargo2.setLoadSlot(loadSlot2);
 		cargo2.setDischargeSlot(dischargeSlot2);
 
-		final ISequenceElement element1 = new SequenceElement(index, "element1",
-				loadSlot1);
-		final ISequenceElement element2 = new SequenceElement(index, "element2",
-				dischargeSlot1);
-		final ISequenceElement element3 = new SequenceElement(index, "element3",
-				loadSlot2);
-		final ISequenceElement element4 = new SequenceElement(index, "element4",
-				dischargeSlot2);
+		final ISequenceElement element1 = new SequenceElement(index,
+				"element1", loadSlot1);
+		final ISequenceElement element2 = new SequenceElement(index,
+				"element2", dischargeSlot1);
+		final ISequenceElement element3 = new SequenceElement(index,
+				"element3", loadSlot2);
+		final ISequenceElement element4 = new SequenceElement(index,
+				"element4", dischargeSlot2);
 
 		final ITimeWindowDataComponentProviderEditor<ISequenceElement> timeWindowProvider = new TimeWindowDataComponentProvider<ISequenceElement>(
 				SchedulerConstants.DCP_timeWindowProvider);
@@ -305,6 +307,14 @@ public final class AbstractSequenceSchedulerTest {
 		testVoyagePlan.setSequence(testSequence);
 
 		context.setDefaultResultForType(VoyagePlan.class, testVoyagePlan);
+		
+		// Final set of arrival times
+		final int[] arrivalTimes = new int[] { 5, 10, 15, 20 };
+		
+		// Expected arrival times per plan
+		final int[] arrivalTimes1 = new int[] { 5, 10, 15 };
+		final int[] arrivalTimes2 = new int[] { 15, 20 };
+		
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		context.checking(new Expectations() {
@@ -352,17 +362,18 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).init();
 				one(voyagePlanOptimiser).optimise();
 				one(voyagePlanOptimiser).reset();
+				
+				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes1))));
+				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes2))));
 			}
 		});
 
-		final int[] arrivalTimes = new int[] { 5, 10, 15, 20 };
-
 		// Schedule sequence
-		final Pair<Integer, List<VoyagePlan>> plans = scheduler.schedule(resource, sequence,
+		final ScheduledSequence plans = scheduler.schedule(resource, sequence,
 				arrivalTimes);
 
 		Assert.assertNotNull(plans);
-		Assert.assertEquals(2, plans.getSecond().size());
+		Assert.assertEquals(2, plans.getVoyagePlans().size());
 
 		context.assertIsSatisfied();
 	}
@@ -402,12 +413,12 @@ public final class AbstractSequenceSchedulerTest {
 		loadSlot2.setPort(port3);
 		loadSlot2.setTimeWindow(timeWindow3);
 
-		final ISequenceElement element1 = new SequenceElement(index, "element1",
-				loadSlot1);
-		final ISequenceElement element2 = new SequenceElement(index, "element2",
-				dischargeSlot1);
-		final ISequenceElement element3 = new SequenceElement(index, "element3",
-				loadSlot2);
+		final ISequenceElement element1 = new SequenceElement(index,
+				"element1", loadSlot1);
+		final ISequenceElement element2 = new SequenceElement(index,
+				"element2", dischargeSlot1);
+		final ISequenceElement element3 = new SequenceElement(index,
+				"element3", loadSlot2);
 
 		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);
@@ -565,6 +576,8 @@ public final class AbstractSequenceSchedulerTest {
 		testVoyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, 100);
 
 		context.setDefaultResultForType(VoyagePlan.class, testVoyagePlan);
+		
+		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		context.checking(new Expectations() {
@@ -599,17 +612,18 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).init();
 				one(voyagePlanOptimiser).optimise();
 				one(voyagePlanOptimiser).reset();
+				
+				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes))));
 			}
 		});
 
-		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 
 		// Schedule sequence
-		final Pair<Integer, List<VoyagePlan>> plansAndTime = scheduler.schedule(resource, sequence,
-				arrivalTimes);
+		final ScheduledSequence plansAndTime = scheduler.schedule(resource,
+				sequence, arrivalTimes);
 
 		Assert.assertNotNull(plansAndTime);
-		final List<VoyagePlan> plans = plansAndTime.getSecond();
+		final List<VoyagePlan> plans = plansAndTime.getVoyagePlans();
 		Assert.assertEquals(1, plans.size());
 
 		// TODO: Check plan details are as expected
@@ -623,20 +637,20 @@ public final class AbstractSequenceSchedulerTest {
 
 		final Object[] outputSequence = testVoyagePlan.getSequence();
 
-//		Assert.assertEquals(5,
-//				((PortDetails) outputSequence[0]).getStartTime());
+		// Assert.assertEquals(5,
+		// ((PortDetails) outputSequence[0]).getStartTime());
 		Assert.assertEquals(1,
 				((PortDetails) outputSequence[0]).getVisitDuration());
 		Assert.assertEquals(6,
 				((VoyageDetails) outputSequence[1]).getStartTime());
-//		Assert.assertEquals(10,
-//				((PortDetails) outputSequence[2]).getStartTime());
+		// Assert.assertEquals(10,
+		// ((PortDetails) outputSequence[2]).getStartTime());
 		Assert.assertEquals(1,
 				((PortDetails) outputSequence[2]).getVisitDuration());
 		Assert.assertEquals(11,
 				((VoyageDetails) outputSequence[3]).getStartTime());
-//		Assert.assertEquals(15,
-//				((PortDetails) outputSequence[4]).getStartTime());
+		// Assert.assertEquals(15,
+		// ((PortDetails) outputSequence[4]).getStartTime());
 		Assert.assertEquals(1,
 				((PortDetails) outputSequence[4]).getVisitDuration());
 
@@ -1027,10 +1041,10 @@ public final class AbstractSequenceSchedulerTest {
 			AbstractSequenceScheduler<T> {
 
 		@Override
-		public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
-				final ISequence<T> sequence) {
+		public ScheduledSequences schedule(ISequences<T> sequences) {
 			throw new UnsupportedOperationException(
 					"Method invocation is not part of the tests!");
+
 		}
 	}
 }
