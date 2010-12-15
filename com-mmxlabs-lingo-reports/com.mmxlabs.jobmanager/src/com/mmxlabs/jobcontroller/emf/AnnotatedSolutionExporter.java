@@ -22,16 +22,18 @@ import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFactory;
+import scenario.schedule.ScheduleFitness;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.fleet.AllocatedVessel;
-import scenario.schedule.fleet.FleetVessel;
-import scenario.schedule.fleet.SpotVessel;
+import scenario.schedule.fleetallocation.AllocatedVessel;
+import scenario.schedule.fleetallocation.FleetVessel;
+import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -100,31 +102,31 @@ public class AnnotatedSolutionExporter {
 			final AllocatedVessel outputVessel;
 			switch (vessel.getVesselInstanceType()) {
 			case FLEET:
-				final FleetVessel fv = scenario.schedule.fleet.FleetPackage.eINSTANCE
-						.getFleetFactory().createFleetVessel();
+				final FleetVessel fv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE
+						.getFleetallocationFactory().createFleetVessel();
 
 				fv.setVessel(entities.getModelObject(vessel, Vessel.class));
 
 				outputVessel = fv;
 				break;
 			case SPOT_CHARTER:
-				final SpotVessel sv = scenario.schedule.fleet.FleetPackage.eINSTANCE
-						.getFleetFactory().createSpotVessel();
+				final SpotVessel sv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE
+						.getFleetallocationFactory().createSpotVessel();
 
 				final AtomicInteger ai = counter.get(vessel.getVesselClass());
 				int ix = 0;
-				
+
 				if (ai == null) {
 					counter.put(vessel.getVesselClass(), new AtomicInteger(ix));
 				} else {
 					ix = ai.incrementAndGet();
 				}
-				
+
 				sv.setVesselClass(entities.getModelObject(
 						vessel.getVesselClass(), VesselClass.class));
-				
+
 				sv.setIndex(ix);
-				
+
 				outputVessel = sv;
 				break;
 			default:
@@ -134,7 +136,7 @@ public class AnnotatedSolutionExporter {
 
 			output.getFleet().add(outputVessel);
 			eSequence.setVessel(outputVessel);
-			
+
 			final EList<ScheduledEvent> events = eSequence.getEvents();
 
 			Comparator<ScheduledEvent> eventComparator = new Comparator<ScheduledEvent>() {
@@ -171,6 +173,36 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
+		final Map<String, Long> fitnesses = annotatedSolution
+				.getGeneralAnnotation(
+						OptimiserConstants.G_AI_fitnessComponents, Map.class);
+
+		final Long runtime = annotatedSolution.getGeneralAnnotation(
+				OptimiserConstants.G_AI_runtime, Long.class);
+		final Integer iterations = annotatedSolution.getGeneralAnnotation(
+				OptimiserConstants.G_AI_iterations, Integer.class);
+
+		final EList<ScheduleFitness> outputFitnesses = output.getFitness();
+		
+		for (final Map.Entry<String, Long> entry : fitnesses.entrySet()) {
+			final ScheduleFitness fitness = factory.createScheduleFitness();
+			fitness.setName(entry.getKey());
+			fitness.setValue(entry.getValue());
+			outputFitnesses.add(fitness);
+		}
+		
+		final ScheduleFitness eRuntime = factory.createScheduleFitness();
+		eRuntime.setName("runtime");
+		eRuntime.setValue(runtime);
+		
+		outputFitnesses.add(eRuntime);
+		
+		final ScheduleFitness eIters = factory.createScheduleFitness();
+		eIters.setName("iterations");
+		eIters.setValue(iterations.longValue());
+		
+		outputFitnesses.add(eIters);
+		
 		return output;
 	}
 }
