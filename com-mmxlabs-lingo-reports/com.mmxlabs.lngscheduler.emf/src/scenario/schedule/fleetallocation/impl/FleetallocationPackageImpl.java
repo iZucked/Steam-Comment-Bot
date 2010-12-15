@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.impl;
+package scenario.schedule.fleetallocation.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -22,6 +22,10 @@ import scenario.cargo.impl.CargoPackageImpl;
 import scenario.contract.ContractPackage;
 
 import scenario.contract.impl.ContractPackageImpl;
+
+import scenario.fleet.FleetPackage;
+
+import scenario.fleet.impl.FleetPackageImpl;
 
 import scenario.impl.ScenarioPackageImpl;
 
@@ -47,11 +51,11 @@ import scenario.schedule.events.EventsPackage;
 
 import scenario.schedule.events.impl.EventsPackageImpl;
 
-import scenario.schedule.fleet.AllocatedVessel;
-import scenario.schedule.fleet.FleetFactory;
-import scenario.schedule.fleet.FleetPackage;
-import scenario.schedule.fleet.FleetVessel;
-import scenario.schedule.fleet.SpotVessel;
+import scenario.schedule.fleetallocation.AllocatedVessel;
+import scenario.schedule.fleetallocation.FleetVessel;
+import scenario.schedule.fleetallocation.FleetallocationFactory;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
+import scenario.schedule.fleetallocation.SpotVessel;
 
 import scenario.schedule.impl.SchedulePackageImpl;
 
@@ -61,7 +65,7 @@ import scenario.schedule.impl.SchedulePackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
+public class FleetallocationPackageImpl extends EPackageImpl implements FleetallocationPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -94,12 +98,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see scenario.schedule.fleet.FleetPackage#eNS_URI
+	 * @see scenario.schedule.fleetallocation.FleetallocationPackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
-	private FleetPackageImpl() {
-		super(eNS_URI, FleetFactory.eINSTANCE);
+	private FleetallocationPackageImpl() {
+		super(eNS_URI, FleetallocationFactory.eINSTANCE);
 	}
 
 	/**
@@ -112,7 +116,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 * 
-	 * <p>This method is used to initialize {@link FleetPackage#eINSTANCE} when that field is accessed.
+	 * <p>This method is used to initialize {@link FleetallocationPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -121,17 +125,17 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
-	public static FleetPackage init() {
-		if (isInited) return (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
+	public static FleetallocationPackage init() {
+		if (isInited) return (FleetallocationPackage)EPackage.Registry.INSTANCE.getEPackage(FleetallocationPackage.eNS_URI);
 
 		// Obtain or create and register package
-		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new FleetPackageImpl());
+		FleetallocationPackageImpl theFleetallocationPackage = (FleetallocationPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof FleetallocationPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new FleetallocationPackageImpl());
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
 		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
-		scenario.fleet.impl.FleetPackageImpl theFleetPackage_1 = (scenario.fleet.impl.FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(scenario.fleet.FleetPackage.eNS_URI) instanceof scenario.fleet.impl.FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(scenario.fleet.FleetPackage.eNS_URI) : scenario.fleet.FleetPackage.eINSTANCE);
+		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
 		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
 		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
@@ -142,9 +146,9 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		LsoPackageImpl theLsoPackage = (LsoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI) instanceof LsoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI) : LsoPackage.eINSTANCE);
 
 		// Create package meta-data objects
-		theFleetPackage.createPackageContents();
+		theFleetallocationPackage.createPackageContents();
 		theScenarioPackage.createPackageContents();
-		theFleetPackage_1.createPackageContents();
+		theFleetPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
 		theEventsPackage.createPackageContents();
 		thePortPackage.createPackageContents();
@@ -155,9 +159,9 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		theLsoPackage.createPackageContents();
 
 		// Initialize created meta-data
-		theFleetPackage.initializePackageContents();
+		theFleetallocationPackage.initializePackageContents();
 		theScenarioPackage.initializePackageContents();
-		theFleetPackage_1.initializePackageContents();
+		theFleetPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
 		theEventsPackage.initializePackageContents();
 		thePortPackage.initializePackageContents();
@@ -168,12 +172,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		theLsoPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
-		theFleetPackage.freeze();
+		theFleetallocationPackage.freeze();
 
   
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(FleetPackage.eNS_URI, theFleetPackage);
-		return theFleetPackage;
+		EPackage.Registry.INSTANCE.put(FleetallocationPackage.eNS_URI, theFleetallocationPackage);
+		return theFleetallocationPackage;
 	}
 
 	/**
@@ -235,8 +239,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetFactory getFleetFactory() {
-		return (FleetFactory)getEFactoryInstance();
+	public FleetallocationFactory getFleetallocationFactory() {
+		return (FleetallocationFactory)getEFactoryInstance();
 	}
 
 	/**
@@ -292,7 +296,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		scenario.fleet.FleetPackage theFleetPackage_1 = (scenario.fleet.FleetPackage)EPackage.Registry.INSTANCE.getEPackage(scenario.fleet.FleetPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -306,11 +310,11 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEClass(allocatedVesselEClass, AllocatedVessel.class, "AllocatedVessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(fleetVesselEClass, FleetVessel.class, "FleetVessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFleetVessel_Vessel(), theFleetPackage_1.getVessel(), null, "vessel", null, 1, 1, FleetVessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFleetVessel_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 1, 1, FleetVessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spotVesselEClass, SpotVessel.class, "SpotVessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpotVessel_Index(), ecorePackage.getEInt(), "index", null, 1, 1, SpotVessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpotVessel_VesselClass(), theFleetPackage_1.getVesselClass(), null, "vesselClass", null, 1, 1, SpotVessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSpotVessel_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, SpotVessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
-} //FleetPackageImpl
+} //FleetallocationPackageImpl

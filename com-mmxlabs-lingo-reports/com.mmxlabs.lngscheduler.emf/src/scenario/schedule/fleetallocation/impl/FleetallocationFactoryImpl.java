@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.impl;
+package scenario.schedule.fleetallocation.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.schedule.fleet.*;
+import scenario.schedule.fleetallocation.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,24 +22,24 @@ import scenario.schedule.fleet.*;
  * <!-- end-user-doc -->
  * @generated
  */
-public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
+public class FleetallocationFactoryImpl extends EFactoryImpl implements FleetallocationFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static FleetFactory init() {
+	public static FleetallocationFactory init() {
 		try {
-			FleetFactory theFleetFactory = (FleetFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/schedule/fleet"); 
-			if (theFleetFactory != null) {
-				return theFleetFactory;
+			FleetallocationFactory theFleetallocationFactory = (FleetallocationFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/schedule/fleetallocation"); 
+			if (theFleetallocationFactory != null) {
+				return theFleetallocationFactory;
 			}
 		}
 		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
-		return new FleetFactoryImpl();
+		return new FleetallocationFactoryImpl();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetFactoryImpl() {
+	public FleetallocationFactoryImpl() {
 		super();
 	}
 
@@ -60,9 +60,9 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case FleetPackage.ALLOCATED_VESSEL: return createAllocatedVessel();
-			case FleetPackage.FLEET_VESSEL: return createFleetVessel();
-			case FleetPackage.SPOT_VESSEL: return createSpotVessel();
+			case FleetallocationPackage.ALLOCATED_VESSEL: return createAllocatedVessel();
+			case FleetallocationPackage.FLEET_VESSEL: return createFleetVessel();
+			case FleetallocationPackage.SPOT_VESSEL: return createSpotVessel();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -103,8 +103,8 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetPackage getFleetPackage() {
-		return (FleetPackage)getEPackage();
+	public FleetallocationPackage getFleetallocationPackage() {
+		return (FleetallocationPackage)getEPackage();
 	}
 
 	/**
@@ -114,8 +114,8 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * @generated
 	 */
 	@Deprecated
-	public static FleetPackage getPackage() {
-		return FleetPackage.eINSTANCE;
+	public static FleetallocationPackage getPackage() {
+		return FleetallocationPackage.eINSTANCE;
 	}
 
-} //FleetFactoryImpl
+} //FleetallocationFactoryImpl

@@ -140,13 +140,15 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocations" upperBound="-1"
           eType="#//schedule/CargoAllocation" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="fleet" upperBound="-1"
-          eType="#//schedule/fleet/AllocatedVessel" containment="true"/>
+          eType="#//schedule/fleetallocation/AllocatedVessel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fitness" upperBound="-1"
+          eType="#//schedule/ScheduleFitness" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Sequence">
       <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
           eType="#//schedule/events/ScheduledEvent" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
-          eType="#//schedule/fleet/AllocatedVessel"/>
+          eType="#//schedule/fleetallocation/AllocatedVessel"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" lowerBound="1"
@@ -165,6 +167,12 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargePriceM3" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ScheduleFitness">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     </eClassifiers>
     <eSubpackages name="events" nsURI="http://com.mmxlabs.lng.emf/schedule/events"
         nsPrefix="com.mmxlabs.lng.emf.schedule.events">
@@ -233,13 +241,14 @@
             eType="#//fleet/CharterOut"/>
       </eClassifiers>
     </eSubpackages>
-    <eSubpackages name="fleet" nsURI="http://com.mmxlabs.lng.emf/schedule/fleet" nsPrefix="com.mmxlabs.lng.emf.schedule.fleet">
+    <eSubpackages name="fleetallocation" nsURI="http://com.mmxlabs.lng.emf/schedule/fleetallocation"
+        nsPrefix="com.mmxlabs.lng.emf.schedule.fleetallocation">
       <eClassifiers xsi:type="ecore:EClass" name="AllocatedVessel"/>
-      <eClassifiers xsi:type="ecore:EClass" name="FleetVessel" eSuperTypes="#//schedule/fleet/AllocatedVessel">
+      <eClassifiers xsi:type="ecore:EClass" name="FleetVessel" eSuperTypes="#//schedule/fleetallocation/AllocatedVessel">
         <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
             eType="#//fleet/Vessel"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="SpotVessel" eSuperTypes="#//schedule/fleet/AllocatedVessel">
+      <eClassifiers xsi:type="ecore:EClass" name="SpotVessel" eSuperTypes="#//schedule/fleetallocation/AllocatedVessel">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" lowerBound="1"
             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"

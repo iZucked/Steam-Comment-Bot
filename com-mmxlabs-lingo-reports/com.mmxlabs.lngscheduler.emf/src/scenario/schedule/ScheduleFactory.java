@@ -61,6 +61,15 @@ public interface ScheduleFactory extends EFactory {
 	CargoAllocation createCargoAllocation();
 
 	/**
+	 * Returns a new object of class '<em>Fitness</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fitness</em>'.
+	 * @generated
+	 */
+	ScheduleFitness createScheduleFitness();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

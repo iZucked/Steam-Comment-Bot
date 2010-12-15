@@ -4,14 +4,14 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.util;
+package scenario.schedule.fleetallocation.util;
 
 import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.schedule.fleet.*;
+import scenario.schedule.fleetallocation.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,17 +23,17 @@ import scenario.schedule.fleet.*;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see scenario.schedule.fleet.FleetPackage
+ * @see scenario.schedule.fleetallocation.FleetallocationPackage
  * @generated
  */
-public class FleetSwitch<T> {
+public class FleetallocationSwitch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static FleetPackage modelPackage;
+	protected static FleetallocationPackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -41,9 +41,9 @@ public class FleetSwitch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetSwitch() {
+	public FleetallocationSwitch() {
 		if (modelPackage == null) {
-			modelPackage = FleetPackage.eINSTANCE;
+			modelPackage = FleetallocationPackage.eINSTANCE;
 		}
 	}
 
@@ -87,20 +87,20 @@ public class FleetSwitch<T> {
 	 */
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case FleetPackage.ALLOCATED_VESSEL: {
+			case FleetallocationPackage.ALLOCATED_VESSEL: {
 				AllocatedVessel allocatedVessel = (AllocatedVessel)theEObject;
 				T result = caseAllocatedVessel(allocatedVessel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case FleetPackage.FLEET_VESSEL: {
+			case FleetallocationPackage.FLEET_VESSEL: {
 				FleetVessel fleetVessel = (FleetVessel)theEObject;
 				T result = caseFleetVessel(fleetVessel);
 				if (result == null) result = caseAllocatedVessel(fleetVessel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case FleetPackage.SPOT_VESSEL: {
+			case FleetallocationPackage.SPOT_VESSEL: {
 				SpotVessel spotVessel = (SpotVessel)theEObject;
 				T result = caseSpotVessel(spotVessel);
 				if (result == null) result = caseAllocatedVessel(spotVessel);
@@ -127,13 +127,13 @@ public class FleetSwitch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Fleet Vessel</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Vessel</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Fleet Vessel</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -171,4 +171,4 @@ public class FleetSwitch<T> {
 		return null;
 	}
 
-} //FleetSwitch
+} //FleetallocationSwitch

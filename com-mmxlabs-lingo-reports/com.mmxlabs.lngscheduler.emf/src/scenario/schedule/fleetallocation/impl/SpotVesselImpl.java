@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.impl;
+package scenario.schedule.fleetallocation.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -15,8 +15,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.VesselClass;
 
-import scenario.schedule.fleet.FleetPackage;
-import scenario.schedule.fleet.SpotVessel;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
+import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,8 +25,8 @@ import scenario.schedule.fleet.SpotVessel;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.schedule.fleet.impl.SpotVesselImpl#getIndex <em>Index</em>}</li>
- *   <li>{@link scenario.schedule.fleet.impl.SpotVesselImpl#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl#getVesselClass <em>Vessel Class</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,7 +79,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return FleetPackage.Literals.SPOT_VESSEL;
+		return FleetallocationPackage.Literals.SPOT_VESSEL;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 		int oldIndex = index;
 		index = newIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.SPOT_VESSEL__INDEX, oldIndex, index));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetallocationPackage.SPOT_VESSEL__INDEX, oldIndex, index));
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 			vesselClass = (VesselClass)eResolveProxy(oldVesselClass);
 			if (vesselClass != oldVesselClass) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.SPOT_VESSEL__VESSEL_CLASS, oldVesselClass, vesselClass));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS, oldVesselClass, vesselClass));
 			}
 		}
 		return vesselClass;
@@ -138,7 +138,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 		VesselClass oldVesselClass = vesselClass;
 		vesselClass = newVesselClass;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.SPOT_VESSEL__VESSEL_CLASS, oldVesselClass, vesselClass));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS, oldVesselClass, vesselClass));
 	}
 
 	/**
@@ -149,9 +149,9 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.SPOT_VESSEL__INDEX:
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
 				return getIndex();
-			case FleetPackage.SPOT_VESSEL__VESSEL_CLASS:
+			case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
 				if (resolve) return getVesselClass();
 				return basicGetVesselClass();
 		}
@@ -166,10 +166,10 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.SPOT_VESSEL__INDEX:
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
 				setIndex((Integer)newValue);
 				return;
-			case FleetPackage.SPOT_VESSEL__VESSEL_CLASS:
+			case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
 				setVesselClass((VesselClass)newValue);
 				return;
 		}
@@ -184,10 +184,10 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.SPOT_VESSEL__INDEX:
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
 				setIndex(INDEX_EDEFAULT);
 				return;
-			case FleetPackage.SPOT_VESSEL__VESSEL_CLASS:
+			case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
 				setVesselClass((VesselClass)null);
 				return;
 		}
@@ -202,9 +202,9 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.SPOT_VESSEL__INDEX:
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
 				return index != INDEX_EDEFAULT;
-			case FleetPackage.SPOT_VESSEL__VESSEL_CLASS:
+			case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
 				return vesselClass != null;
 		}
 		return super.eIsSet(featureID);
@@ -228,6 +228,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	@Override
 	public String getName() {
-		return getVesselClass().getName() + " " + Integer.toString(getIndex());
+		return getVesselClass().getName() +" " + Integer.toString(getIndex());
 	}
+
 } //SpotVesselImpl

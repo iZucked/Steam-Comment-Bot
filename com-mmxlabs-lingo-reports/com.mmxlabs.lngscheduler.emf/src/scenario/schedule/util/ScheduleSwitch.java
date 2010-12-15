@@ -115,6 +115,12 @@ public class ScheduleSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.SCHEDULE_FITNESS: {
+				ScheduleFitness scheduleFitness = (ScheduleFitness)theEObject;
+				T result = caseScheduleFitness(scheduleFitness);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -176,6 +182,21 @@ public class ScheduleSwitch<T> {
 	 * @generated
 	 */
 	public T caseCargoAllocation(CargoAllocation object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fitness</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fitness</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScheduleFitness(ScheduleFitness object) {
 		return null;
 	}
 

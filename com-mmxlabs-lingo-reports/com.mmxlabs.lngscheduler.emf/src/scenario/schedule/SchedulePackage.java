@@ -134,13 +134,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__FLEET = 3;
 
 	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__FITNESS = 4;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = 4;
+	int SCHEDULE_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -273,6 +282,44 @@ public interface SchedulePackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.schedule.impl.ScheduleFitnessImpl <em>Fitness</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.impl.ScheduleFitnessImpl
+	 * @see scenario.schedule.impl.SchedulePackageImpl#getScheduleFitness()
+	 * @generated
+	 */
+	int SCHEDULE_FITNESS = 4;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_FITNESS__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_FITNESS__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Fitness</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_FITNESS_FEATURE_COUNT = 2;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.ScheduleModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -346,6 +393,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_Fleet();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.schedule.Schedule#getFitness <em>Fitness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fitness</em>'.
+	 * @see scenario.schedule.Schedule#getFitness()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_Fitness();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.Sequence <em>Sequence</em>}'.
@@ -478,6 +536,38 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getCargoAllocation_DischargePriceM3();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.schedule.ScheduleFitness <em>Fitness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fitness</em>'.
+	 * @see scenario.schedule.ScheduleFitness
+	 * @generated
+	 */
+	EClass getScheduleFitness();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.schedule.ScheduleFitness#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see scenario.schedule.ScheduleFitness#getName()
+	 * @see #getScheduleFitness()
+	 * @generated
+	 */
+	EAttribute getScheduleFitness_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.schedule.ScheduleFitness#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see scenario.schedule.ScheduleFitness#getValue()
+	 * @see #getScheduleFitness()
+	 * @generated
+	 */
+	EAttribute getScheduleFitness_Value();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -558,6 +648,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__FLEET = eINSTANCE.getSchedule_Fleet();
+
+		/**
+		 * The meta object literal for the '<em><b>Fitness</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__FITNESS = eINSTANCE.getSchedule_Fitness();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -658,6 +756,32 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO_ALLOCATION__DISCHARGE_PRICE_M3 = eINSTANCE.getCargoAllocation_DischargePriceM3();
+
+		/**
+		 * The meta object literal for the '{@link scenario.schedule.impl.ScheduleFitnessImpl <em>Fitness</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.schedule.impl.ScheduleFitnessImpl
+		 * @see scenario.schedule.impl.SchedulePackageImpl#getScheduleFitness()
+		 * @generated
+		 */
+		EClass SCHEDULE_FITNESS = eINSTANCE.getScheduleFitness();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCHEDULE_FITNESS__NAME = eINSTANCE.getScheduleFitness_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCHEDULE_FITNESS__VALUE = eINSTANCE.getScheduleFitness_Value();
 
 	}
 

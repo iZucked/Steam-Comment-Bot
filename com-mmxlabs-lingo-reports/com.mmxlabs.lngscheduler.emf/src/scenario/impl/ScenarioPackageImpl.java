@@ -31,6 +31,8 @@ import scenario.port.impl.PortPackageImpl;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.impl.EventsPackageImpl;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
+import scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl;
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -97,7 +99,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
 		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
 		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
-		scenario.schedule.fleet.impl.FleetPackageImpl theFleetPackage_1 = (scenario.schedule.fleet.impl.FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(scenario.schedule.fleet.FleetPackage.eNS_URI) instanceof scenario.schedule.fleet.impl.FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(scenario.schedule.fleet.FleetPackage.eNS_URI) : scenario.schedule.fleet.FleetPackage.eINSTANCE);
+		FleetallocationPackageImpl theFleetallocationPackage = (FleetallocationPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetallocationPackage.eNS_URI) instanceof FleetallocationPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetallocationPackage.eNS_URI) : FleetallocationPackage.eINSTANCE);
 		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
 		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
 		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
@@ -110,7 +112,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		theFleetPackage.createPackageContents();
 		theSchedulePackage.createPackageContents();
 		theEventsPackage.createPackageContents();
-		theFleetPackage_1.createPackageContents();
+		theFleetallocationPackage.createPackageContents();
 		thePortPackage.createPackageContents();
 		theCargoPackage.createPackageContents();
 		theContractPackage.createPackageContents();
@@ -123,7 +125,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		theFleetPackage.initializePackageContents();
 		theSchedulePackage.initializePackageContents();
 		theEventsPackage.initializePackageContents();
-		theFleetPackage_1.initializePackageContents();
+		theFleetallocationPackage.initializePackageContents();
 		thePortPackage.initializePackageContents();
 		theCargoPackage.initializePackageContents();
 		theContractPackage.initializePackageContents();

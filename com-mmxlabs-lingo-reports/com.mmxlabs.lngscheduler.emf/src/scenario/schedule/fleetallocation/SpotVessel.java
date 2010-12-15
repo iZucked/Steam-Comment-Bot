@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet;
+package scenario.schedule.fleetallocation;
 
 import scenario.fleet.VesselClass;
 
@@ -16,12 +16,12 @@ import scenario.fleet.VesselClass;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.schedule.fleet.SpotVessel#getIndex <em>Index</em>}</li>
- *   <li>{@link scenario.schedule.fleet.SpotVessel#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link scenario.schedule.fleetallocation.SpotVessel#getIndex <em>Index</em>}</li>
+ *   <li>{@link scenario.schedule.fleetallocation.SpotVessel#getVesselClass <em>Vessel Class</em>}</li>
  * </ul>
  * </p>
  *
- * @see scenario.schedule.fleet.FleetPackage#getSpotVessel()
+ * @see scenario.schedule.fleetallocation.FleetallocationPackage#getSpotVessel()
  * @model
  * @generated
  */
@@ -36,14 +36,14 @@ public interface SpotVessel extends AllocatedVessel {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Index</em>' attribute.
 	 * @see #setIndex(int)
-	 * @see scenario.schedule.fleet.FleetPackage#getSpotVessel_Index()
+	 * @see scenario.schedule.fleetallocation.FleetallocationPackage#getSpotVessel_Index()
 	 * @model required="true"
 	 * @generated
 	 */
 	int getIndex();
 
 	/**
-	 * Sets the value of the '{@link scenario.schedule.fleet.SpotVessel#getIndex <em>Index</em>}' attribute.
+	 * Sets the value of the '{@link scenario.schedule.fleetallocation.SpotVessel#getIndex <em>Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Index</em>' attribute.
@@ -62,14 +62,14 @@ public interface SpotVessel extends AllocatedVessel {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessel Class</em>' reference.
 	 * @see #setVesselClass(VesselClass)
-	 * @see scenario.schedule.fleet.FleetPackage#getSpotVessel_VesselClass()
+	 * @see scenario.schedule.fleetallocation.FleetallocationPackage#getSpotVessel_VesselClass()
 	 * @model required="true"
 	 * @generated
 	 */
 	VesselClass getVesselClass();
 
 	/**
-	 * Sets the value of the '{@link scenario.schedule.fleet.SpotVessel#getVesselClass <em>Vessel Class</em>}' reference.
+	 * Sets the value of the '{@link scenario.schedule.fleetallocation.SpotVessel#getVesselClass <em>Vessel Class</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Vessel Class</em>' reference.

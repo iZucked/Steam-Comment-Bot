@@ -29,7 +29,7 @@ import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
 
 import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.fleet.AllocatedVessel;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
  * <!-- begin-user-doc -->

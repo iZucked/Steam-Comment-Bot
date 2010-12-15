@@ -7,9 +7,9 @@
 package scenario.schedule;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
-import scenario.schedule.fleet.AllocatedVessel;
+
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,6 +23,7 @@ import scenario.schedule.fleet.AllocatedVessel;
  *   <li>{@link scenario.schedule.Schedule#getName <em>Name</em>}</li>
  *   <li>{@link scenario.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link scenario.schedule.Schedule#getFleet <em>Fleet</em>}</li>
+ *   <li>{@link scenario.schedule.Schedule#getFitness <em>Fitness</em>}</li>
  * </ul>
  * </p>
  *
@@ -91,7 +92,7 @@ public interface Schedule extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Fleet</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.schedule.fleet.AllocatedVessel}.
+	 * The list contents are of type {@link scenario.schedule.fleetallocation.AllocatedVessel}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Fleet</em>' containment reference list isn't clear,
@@ -104,5 +105,21 @@ public interface Schedule extends EObject {
 	 * @generated
 	 */
 	EList<AllocatedVessel> getFleet();
+
+	/**
+	 * Returns the value of the '<em><b>Fitness</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.schedule.ScheduleFitness}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fitness</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fitness</em>' containment reference list.
+	 * @see scenario.schedule.SchedulePackage#getSchedule_Fitness()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ScheduleFitness> getFitness();
 
 } // Schedule

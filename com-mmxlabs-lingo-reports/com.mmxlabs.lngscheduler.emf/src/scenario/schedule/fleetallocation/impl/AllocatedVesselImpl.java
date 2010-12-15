@@ -4,14 +4,14 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.impl;
+package scenario.schedule.fleetallocation.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import scenario.schedule.fleet.AllocatedVessel;
-import scenario.schedule.fleet.FleetPackage;
+import scenario.schedule.fleetallocation.AllocatedVessel;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,12 +39,13 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return FleetPackage.Literals.ALLOCATED_VESSEL;
+		return FleetallocationPackage.Literals.ALLOCATED_VESSEL;
 	}
 
 	@Override
 	public String getName() {
-		throw new UnsupportedOperationException("This should never be called");
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 } //AllocatedVesselImpl

@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet;
+package scenario.schedule.fleetallocation;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -14,14 +14,11 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- end-user-doc -->
  *
  *
- * @see scenario.schedule.fleet.FleetPackage#getAllocatedVessel()
+ * @see scenario.schedule.fleetallocation.FleetallocationPackage#getAllocatedVessel()
  * @model
  * @generated
  */
 public interface AllocatedVessel extends EObject {
-	/**
-	 * Return the calculated name of this vessel
-	 * @return
-	 */
+
 	String getName();
 } // AllocatedVessel

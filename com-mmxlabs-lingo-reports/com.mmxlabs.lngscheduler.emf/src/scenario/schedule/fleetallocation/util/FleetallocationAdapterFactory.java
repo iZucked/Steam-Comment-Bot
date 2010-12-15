@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.util;
+package scenario.schedule.fleetallocation.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -13,24 +13,24 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.schedule.fleet.*;
+import scenario.schedule.fleetallocation.*;
 
 /**
  * <!-- begin-user-doc -->
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see scenario.schedule.fleet.FleetPackage
+ * @see scenario.schedule.fleetallocation.FleetallocationPackage
  * @generated
  */
-public class FleetAdapterFactory extends AdapterFactoryImpl {
+public class FleetallocationAdapterFactory extends AdapterFactoryImpl {
 	/**
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static FleetPackage modelPackage;
+	protected static FleetallocationPackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -38,9 +38,9 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetAdapterFactory() {
+	public FleetallocationAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = FleetPackage.eINSTANCE;
+			modelPackage = FleetallocationPackage.eINSTANCE;
 		}
 	}
 
@@ -69,8 +69,8 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FleetSwitch<Adapter> modelSwitch =
-		new FleetSwitch<Adapter>() {
+	protected FleetallocationSwitch<Adapter> modelSwitch =
+		new FleetallocationSwitch<Adapter>() {
 			@Override
 			public Adapter caseAllocatedVessel(AllocatedVessel object) {
 				return createAllocatedVesselAdapter();
@@ -104,13 +104,13 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.schedule.fleet.AllocatedVessel <em>Allocated Vessel</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.schedule.fleetallocation.AllocatedVessel <em>Allocated Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.schedule.fleet.AllocatedVessel
+	 * @see scenario.schedule.fleetallocation.AllocatedVessel
 	 * @generated
 	 */
 	public Adapter createAllocatedVesselAdapter() {
@@ -118,13 +118,13 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.schedule.fleet.FleetVessel <em>Vessel</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.schedule.fleetallocation.FleetVessel <em>Fleet Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.schedule.fleet.FleetVessel
+	 * @see scenario.schedule.fleetallocation.FleetVessel
 	 * @generated
 	 */
 	public Adapter createFleetVesselAdapter() {
@@ -132,13 +132,13 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.schedule.fleet.SpotVessel <em>Spot Vessel</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.schedule.fleetallocation.SpotVessel <em>Spot Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.schedule.fleet.SpotVessel
+	 * @see scenario.schedule.fleetallocation.SpotVessel
 	 * @generated
 	 */
 	public Adapter createSpotVesselAdapter() {
@@ -157,4 +157,4 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} //FleetAdapterFactory
+} //FleetallocationAdapterFactory

@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet;
+package scenario.schedule.fleetallocation;
 
 import org.eclipse.emf.ecore.EFactory;
 
@@ -13,17 +13,17 @@ import org.eclipse.emf.ecore.EFactory;
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
  * <!-- end-user-doc -->
- * @see scenario.schedule.fleet.FleetPackage
+ * @see scenario.schedule.fleetallocation.FleetallocationPackage
  * @generated
  */
-public interface FleetFactory extends EFactory {
+public interface FleetallocationFactory extends EFactory {
 	/**
 	 * The singleton instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	FleetFactory eINSTANCE = scenario.schedule.fleet.impl.FleetFactoryImpl.init();
+	FleetallocationFactory eINSTANCE = scenario.schedule.fleetallocation.impl.FleetallocationFactoryImpl.init();
 
 	/**
 	 * Returns a new object of class '<em>Allocated Vessel</em>'.
@@ -35,10 +35,10 @@ public interface FleetFactory extends EFactory {
 	AllocatedVessel createAllocatedVessel();
 
 	/**
-	 * Returns a new object of class '<em>Vessel</em>'.
+	 * Returns a new object of class '<em>Fleet Vessel</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Vessel</em>'.
+	 * @return a new object of class '<em>Fleet Vessel</em>'.
 	 * @generated
 	 */
 	FleetVessel createFleetVessel();
@@ -59,6 +59,6 @@ public interface FleetFactory extends EFactory {
 	 * @return the package supported by this factory.
 	 * @generated
 	 */
-	FleetPackage getFleetPackage();
+	FleetallocationPackage getFleetallocationPackage();
 
-} //FleetFactory
+} //FleetallocationFactory

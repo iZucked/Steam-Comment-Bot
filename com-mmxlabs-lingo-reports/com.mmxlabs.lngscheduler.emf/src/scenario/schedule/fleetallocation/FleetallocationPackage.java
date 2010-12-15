@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet;
+package scenario.schedule.fleetallocation;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -22,18 +22,18 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * @see scenario.schedule.fleet.FleetFactory
+ * @see scenario.schedule.fleetallocation.FleetallocationFactory
  * @model kind="package"
  * @generated
  */
-public interface FleetPackage extends EPackage {
+public interface FleetallocationPackage extends EPackage {
 	/**
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "fleet";
+	String eNAME = "fleetallocation";
 
 	/**
 	 * The package namespace URI.
@@ -41,7 +41,7 @@ public interface FleetPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/schedule/fleet";
+	String eNS_URI = "http://com.mmxlabs.lng.emf/schedule/fleetallocation";
 
 	/**
 	 * The package namespace name.
@@ -49,7 +49,7 @@ public interface FleetPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "com.mmxlabs.lng.emf.schedule.fleet";
+	String eNS_PREFIX = "com.mmxlabs.lng.emf.schedule.fleetallocation";
 
 	/**
 	 * The singleton instance of the package.
@@ -57,14 +57,14 @@ public interface FleetPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	FleetPackage eINSTANCE = scenario.schedule.fleet.impl.FleetPackageImpl.init();
+	FleetallocationPackage eINSTANCE = scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link scenario.schedule.fleet.impl.AllocatedVesselImpl <em>Allocated Vessel</em>}' class.
+	 * The meta object id for the '{@link scenario.schedule.fleetallocation.impl.AllocatedVesselImpl <em>Allocated Vessel</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see scenario.schedule.fleet.impl.AllocatedVesselImpl
-	 * @see scenario.schedule.fleet.impl.FleetPackageImpl#getAllocatedVessel()
+	 * @see scenario.schedule.fleetallocation.impl.AllocatedVesselImpl
+	 * @see scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl#getAllocatedVessel()
 	 * @generated
 	 */
 	int ALLOCATED_VESSEL = 0;
@@ -79,11 +79,11 @@ public interface FleetPackage extends EPackage {
 	int ALLOCATED_VESSEL_FEATURE_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link scenario.schedule.fleet.impl.FleetVesselImpl <em>Vessel</em>}' class.
+	 * The meta object id for the '{@link scenario.schedule.fleetallocation.impl.FleetVesselImpl <em>Fleet Vessel</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see scenario.schedule.fleet.impl.FleetVesselImpl
-	 * @see scenario.schedule.fleet.impl.FleetPackageImpl#getFleetVessel()
+	 * @see scenario.schedule.fleetallocation.impl.FleetVesselImpl
+	 * @see scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl#getFleetVessel()
 	 * @generated
 	 */
 	int FLEET_VESSEL = 1;
@@ -98,7 +98,7 @@ public interface FleetPackage extends EPackage {
 	int FLEET_VESSEL__VESSEL = ALLOCATED_VESSEL_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Vessel</em>' class.
+	 * The number of structural features of the '<em>Fleet Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -107,11 +107,11 @@ public interface FleetPackage extends EPackage {
 	int FLEET_VESSEL_FEATURE_COUNT = ALLOCATED_VESSEL_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link scenario.schedule.fleet.impl.SpotVesselImpl <em>Spot Vessel</em>}' class.
+	 * The meta object id for the '{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl <em>Spot Vessel</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see scenario.schedule.fleet.impl.SpotVesselImpl
-	 * @see scenario.schedule.fleet.impl.FleetPackageImpl#getSpotVessel()
+	 * @see scenario.schedule.fleetallocation.impl.SpotVesselImpl
+	 * @see scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl#getSpotVessel()
 	 * @generated
 	 */
 	int SPOT_VESSEL = 2;
@@ -145,63 +145,63 @@ public interface FleetPackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link scenario.schedule.fleet.AllocatedVessel <em>Allocated Vessel</em>}'.
+	 * Returns the meta object for class '{@link scenario.schedule.fleetallocation.AllocatedVessel <em>Allocated Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Allocated Vessel</em>'.
-	 * @see scenario.schedule.fleet.AllocatedVessel
+	 * @see scenario.schedule.fleetallocation.AllocatedVessel
 	 * @generated
 	 */
 	EClass getAllocatedVessel();
 
 	/**
-	 * Returns the meta object for class '{@link scenario.schedule.fleet.FleetVessel <em>Vessel</em>}'.
+	 * Returns the meta object for class '{@link scenario.schedule.fleetallocation.FleetVessel <em>Fleet Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Vessel</em>'.
-	 * @see scenario.schedule.fleet.FleetVessel
+	 * @return the meta object for class '<em>Fleet Vessel</em>'.
+	 * @see scenario.schedule.fleetallocation.FleetVessel
 	 * @generated
 	 */
 	EClass getFleetVessel();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.schedule.fleet.FleetVessel#getVessel <em>Vessel</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.schedule.fleetallocation.FleetVessel#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Vessel</em>'.
-	 * @see scenario.schedule.fleet.FleetVessel#getVessel()
+	 * @see scenario.schedule.fleetallocation.FleetVessel#getVessel()
 	 * @see #getFleetVessel()
 	 * @generated
 	 */
 	EReference getFleetVessel_Vessel();
 
 	/**
-	 * Returns the meta object for class '{@link scenario.schedule.fleet.SpotVessel <em>Spot Vessel</em>}'.
+	 * Returns the meta object for class '{@link scenario.schedule.fleetallocation.SpotVessel <em>Spot Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Spot Vessel</em>'.
-	 * @see scenario.schedule.fleet.SpotVessel
+	 * @see scenario.schedule.fleetallocation.SpotVessel
 	 * @generated
 	 */
 	EClass getSpotVessel();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.schedule.fleet.SpotVessel#getIndex <em>Index</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.schedule.fleetallocation.SpotVessel#getIndex <em>Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Index</em>'.
-	 * @see scenario.schedule.fleet.SpotVessel#getIndex()
+	 * @see scenario.schedule.fleetallocation.SpotVessel#getIndex()
 	 * @see #getSpotVessel()
 	 * @generated
 	 */
 	EAttribute getSpotVessel_Index();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.schedule.fleet.SpotVessel#getVesselClass <em>Vessel Class</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.schedule.fleetallocation.SpotVessel#getVesselClass <em>Vessel Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Vessel Class</em>'.
-	 * @see scenario.schedule.fleet.SpotVessel#getVesselClass()
+	 * @see scenario.schedule.fleetallocation.SpotVessel#getVesselClass()
 	 * @see #getSpotVessel()
 	 * @generated
 	 */
@@ -214,7 +214,7 @@ public interface FleetPackage extends EPackage {
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
-	FleetFactory getFleetFactory();
+	FleetallocationFactory getFleetallocationFactory();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -230,21 +230,21 @@ public interface FleetPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link scenario.schedule.fleet.impl.AllocatedVesselImpl <em>Allocated Vessel</em>}' class.
+		 * The meta object literal for the '{@link scenario.schedule.fleetallocation.impl.AllocatedVesselImpl <em>Allocated Vessel</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see scenario.schedule.fleet.impl.AllocatedVesselImpl
-		 * @see scenario.schedule.fleet.impl.FleetPackageImpl#getAllocatedVessel()
+		 * @see scenario.schedule.fleetallocation.impl.AllocatedVesselImpl
+		 * @see scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl#getAllocatedVessel()
 		 * @generated
 		 */
 		EClass ALLOCATED_VESSEL = eINSTANCE.getAllocatedVessel();
 
 		/**
-		 * The meta object literal for the '{@link scenario.schedule.fleet.impl.FleetVesselImpl <em>Vessel</em>}' class.
+		 * The meta object literal for the '{@link scenario.schedule.fleetallocation.impl.FleetVesselImpl <em>Fleet Vessel</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see scenario.schedule.fleet.impl.FleetVesselImpl
-		 * @see scenario.schedule.fleet.impl.FleetPackageImpl#getFleetVessel()
+		 * @see scenario.schedule.fleetallocation.impl.FleetVesselImpl
+		 * @see scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl#getFleetVessel()
 		 * @generated
 		 */
 		EClass FLEET_VESSEL = eINSTANCE.getFleetVessel();
@@ -258,11 +258,11 @@ public interface FleetPackage extends EPackage {
 		EReference FLEET_VESSEL__VESSEL = eINSTANCE.getFleetVessel_Vessel();
 
 		/**
-		 * The meta object literal for the '{@link scenario.schedule.fleet.impl.SpotVesselImpl <em>Spot Vessel</em>}' class.
+		 * The meta object literal for the '{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl <em>Spot Vessel</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see scenario.schedule.fleet.impl.SpotVesselImpl
-		 * @see scenario.schedule.fleet.impl.FleetPackageImpl#getSpotVessel()
+		 * @see scenario.schedule.fleetallocation.impl.SpotVesselImpl
+		 * @see scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl#getSpotVessel()
 		 * @generated
 		 */
 		EClass SPOT_VESSEL = eINSTANCE.getSpotVessel();
@@ -285,4 +285,4 @@ public interface FleetPackage extends EPackage {
 
 	}
 
-} //FleetPackage
+} //FleetallocationPackage

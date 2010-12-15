@@ -7,14 +7,10 @@
 package scenario.schedule;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-
 import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.fleet.AllocatedVessel;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
  * <!-- begin-user-doc -->

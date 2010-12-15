@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.impl;
+package scenario.schedule.fleetallocation.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -15,17 +15,17 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.Vessel;
 
-import scenario.schedule.fleet.FleetPackage;
-import scenario.schedule.fleet.FleetVessel;
+import scenario.schedule.fleetallocation.FleetVessel;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Vessel</b></em>'.
+ * An implementation of the model object '<em><b>Fleet Vessel</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.schedule.fleet.impl.FleetVesselImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link scenario.schedule.fleetallocation.impl.FleetVesselImpl#getVessel <em>Vessel</em>}</li>
  * </ul>
  * </p>
  *
@@ -58,7 +58,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return FleetPackage.Literals.FLEET_VESSEL;
+		return FleetallocationPackage.Literals.FLEET_VESSEL;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 			vessel = (Vessel)eResolveProxy(oldVessel);
 			if (vessel != oldVessel) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.FLEET_VESSEL__VESSEL, oldVessel, vessel));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetallocationPackage.FLEET_VESSEL__VESSEL, oldVessel, vessel));
 			}
 		}
 		return vessel;
@@ -96,7 +96,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_VESSEL__VESSEL, oldVessel, vessel));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetallocationPackage.FLEET_VESSEL__VESSEL, oldVessel, vessel));
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.FLEET_VESSEL__VESSEL:
+			case FleetallocationPackage.FLEET_VESSEL__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
 		}
@@ -122,7 +122,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.FLEET_VESSEL__VESSEL:
+			case FleetallocationPackage.FLEET_VESSEL__VESSEL:
 				setVessel((Vessel)newValue);
 				return;
 		}
@@ -137,7 +137,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.FLEET_VESSEL__VESSEL:
+			case FleetallocationPackage.FLEET_VESSEL__VESSEL:
 				setVessel((Vessel)null);
 				return;
 		}
@@ -152,7 +152,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.FLEET_VESSEL__VESSEL:
+			case FleetallocationPackage.FLEET_VESSEL__VESSEL:
 				return vessel != null;
 		}
 		return super.eIsSet(featureID);
@@ -162,4 +162,6 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	public String getName() {
 		return getVessel().getName();
 	}
+
+	
 } //FleetVesselImpl
