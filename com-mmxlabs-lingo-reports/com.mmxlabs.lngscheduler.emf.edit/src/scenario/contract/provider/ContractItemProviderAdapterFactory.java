@@ -72,7 +72,6 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 		supportedTypes.add(ITreeItemContentProvider.class);
 		supportedTypes.add(IItemLabelProvider.class);
 		supportedTypes.add(IItemPropertySource.class);
-		supportedTypes.add(IItemColorProvider.class);
 	}
 
 	/**

@@ -73,7 +73,6 @@ public class OptimiserItemProviderAdapterFactory extends OptimiserAdapterFactory
 		supportedTypes.add(ITreeItemContentProvider.class);
 		supportedTypes.add(IItemLabelProvider.class);
 		supportedTypes.add(IItemPropertySource.class);
-		supportedTypes.add(IItemColorProvider.class);
 	}
 
 	/**

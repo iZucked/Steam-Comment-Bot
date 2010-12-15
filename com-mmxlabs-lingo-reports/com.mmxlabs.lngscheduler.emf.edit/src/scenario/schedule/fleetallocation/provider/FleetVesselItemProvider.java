@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.provider;
+package scenario.schedule.fleetallocation.provider;
 
 
 import java.util.Collection;
@@ -13,36 +13,37 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.ResourceLocator;
-
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
-import scenario.provider.LngEditPlugin;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.fleet.AllocatedVessel} object.
+ * This is the item provider adapter for a {@link scenario.schedule.fleetallocation.FleetVessel} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class AllocatedVesselItemProvider
-	extends ItemProviderAdapter
+public class FleetVesselItemProvider
+	extends AllocatedVesselItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource, IItemColorProvider {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AllocatedVesselItemProvider(AdapterFactory adapterFactory) {
+	public FleetVesselItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -57,19 +58,42 @@ public class AllocatedVesselItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addVesselPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This returns AllocatedVessel.gif.
+	 * This adds a property descriptor for the Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FleetVessel_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetVessel_vessel_feature", "_UI_FleetVessel_type"),
+				 FleetallocationPackage.Literals.FLEET_VESSEL__VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns FleetVessel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AllocatedVessel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/FleetVessel"));
 	}
 
 	/**
@@ -80,7 +104,7 @@ public class AllocatedVesselItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_AllocatedVessel_type");
+		return getString("_UI_FleetVessel_type");
 	}
 
 	/**
@@ -106,17 +130,6 @@ public class AllocatedVesselItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return LngEditPlugin.INSTANCE;
 	}
 
 }

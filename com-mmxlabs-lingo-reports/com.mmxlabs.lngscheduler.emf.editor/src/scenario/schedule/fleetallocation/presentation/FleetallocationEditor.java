@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.presentation;
+package scenario.schedule.fleetallocation.presentation;
 
 
 import java.io.IOException;
@@ -135,7 +135,7 @@ import org.eclipse.emf.edit.ui.util.EditUIUtil;
 
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 
-import scenario.schedule.fleet.provider.FleetItemProviderAdapterFactory;
+import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 
 import org.eclipse.emf.common.ui.URIEditorInput;
 
@@ -144,6 +144,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
+
+import scenario.fleet.provider.FleetItemProviderAdapterFactory;
 
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 
@@ -164,12 +166,12 @@ import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
 
 /**
- * This is an example of a Fleet model editor.
+ * This is an example of a Fleetallocation model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class FleetEditor
+public class FleetallocationEditor
 	extends MultiPageEditorPart
 	implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider {
 	/**
@@ -178,7 +180,7 @@ public class FleetEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions(FleetModelWizard.FILE_EXTENSIONS, "*.");
+	public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions(FleetallocationModelWizard.FILE_EXTENSIONS, "*.");
 	
 	/**
 	 * Returns a new unmodifiable list containing prefixed versions of the extensions in the given list.
@@ -344,18 +346,18 @@ public class FleetEditor
 			public void partActivated(IWorkbenchPart p) {
 				if (p instanceof ContentOutline) {
 					if (((ContentOutline)p).getCurrentPage() == contentOutlinePage) {
-						getActionBarContributor().setActiveEditor(FleetEditor.this);
+						getActionBarContributor().setActiveEditor(FleetallocationEditor.this);
 
 						setCurrentViewer(contentOutlineViewer);
 					}
 				}
 				else if (p instanceof PropertySheet) {
 					if (((PropertySheet)p).getCurrentPage() == propertySheetPage) {
-						getActionBarContributor().setActiveEditor(FleetEditor.this);
+						getActionBarContributor().setActiveEditor(FleetallocationEditor.this);
 						handleActivate();
 					}
 				}
-				else if (p == FleetEditor.this) {
+				else if (p == FleetallocationEditor.this) {
 					handleActivate();
 				}
 			}
@@ -484,7 +486,7 @@ public class FleetEditor
 
 		if (!removedResources.isEmpty()) {
 			if (handleDirtyConflict()) {
-				getSite().getPage().closeEditor(FleetEditor.this, false);
+				getSite().getPage().closeEditor(FleetallocationEditor.this, false);
 			}
 			else {
 				removedResources.clear();
@@ -601,7 +603,7 @@ public class FleetEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetEditor() {
+	public FleetallocationEditor() {
 		super();
 		initializeEditingDomain();
 	}
@@ -619,10 +621,10 @@ public class FleetEditor
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ScenarioItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new scenario.fleet.provider.FleetItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ScheduleItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new EventsItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new FleetallocationItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new CargoItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ContractItemProviderAdapterFactory());
@@ -942,7 +944,7 @@ public class FleetEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), FleetEditor.this) {
+					new ViewerPane(getSite().getPage(), FleetallocationEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							Tree tree = new Tree(composite, SWT.MULTI);
@@ -960,7 +962,7 @@ public class FleetEditor
 				selectionViewer = (TreeViewer)viewerPane.getViewer();
 				selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
 
-				selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, selectionViewer));
+				selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 				selectionViewer.setInput(editingDomain.getResourceSet());
 				selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 				viewerPane.setTitle(editingDomain.getResourceSet());
@@ -976,7 +978,7 @@ public class FleetEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), FleetEditor.this) {
+					new ViewerPane(getSite().getPage(), FleetallocationEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							Tree tree = new Tree(composite, SWT.MULTI);
@@ -994,7 +996,7 @@ public class FleetEditor
 				parentViewer = (TreeViewer)viewerPane.getViewer();
 				parentViewer.setAutoExpandLevel(30);
 				parentViewer.setContentProvider(new ReverseAdapterFactoryContentProvider(adapterFactory));
-				parentViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, parentViewer));
+				parentViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 
 				createContextMenuFor(parentViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1005,7 +1007,7 @@ public class FleetEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), FleetEditor.this) {
+					new ViewerPane(getSite().getPage(), FleetallocationEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							return new ListViewer(composite);
@@ -1019,7 +1021,7 @@ public class FleetEditor
 				viewerPane.createControl(getContainer());
 				listViewer = (ListViewer)viewerPane.getViewer();
 				listViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				listViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, listViewer));
+				listViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 
 				createContextMenuFor(listViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1030,7 +1032,7 @@ public class FleetEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), FleetEditor.this) {
+					new ViewerPane(getSite().getPage(), FleetallocationEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TreeViewer(composite);
@@ -1044,7 +1046,7 @@ public class FleetEditor
 				viewerPane.createControl(getContainer());
 				treeViewer = (TreeViewer)viewerPane.getViewer();
 				treeViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				treeViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, treeViewer));
+				treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 
 				new AdapterFactoryTreeEditor(treeViewer.getTree(), adapterFactory);
 
@@ -1057,7 +1059,7 @@ public class FleetEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), FleetEditor.this) {
+					new ViewerPane(getSite().getPage(), FleetallocationEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TableViewer(composite);
@@ -1089,7 +1091,7 @@ public class FleetEditor
 
 				tableViewer.setColumnProperties(new String [] {"a", "b"});
 				tableViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				tableViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, tableViewer));
+				tableViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 
 				createContextMenuFor(tableViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1100,7 +1102,7 @@ public class FleetEditor
 			//
 			{
 				ViewerPane viewerPane =
-					new ViewerPane(getSite().getPage(), FleetEditor.this) {
+					new ViewerPane(getSite().getPage(), FleetallocationEditor.this) {
 						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TreeViewer(composite);
@@ -1132,7 +1134,7 @@ public class FleetEditor
 
 				treeViewerWithColumns.setColumnProperties(new String [] {"a", "b"});
 				treeViewerWithColumns.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				treeViewerWithColumns.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, treeViewerWithColumns));
+				treeViewerWithColumns.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 
 				createContextMenuFor(treeViewerWithColumns);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1262,7 +1264,7 @@ public class FleetEditor
 					// Set up the tree viewer.
 					//
 					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, contentOutlineViewer));
+					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 					contentOutlineViewer.setInput(editingDomain.getResourceSet());
 
 					// Make sure our popups work.
@@ -1318,8 +1320,8 @@ public class FleetEditor
 				new ExtendedPropertySheetPage(editingDomain) {
 					@Override
 					public void setSelectionToViewer(List<?> selection) {
-						FleetEditor.this.setSelectionToViewer(selection);
-						FleetEditor.this.setFocus();
+						FleetallocationEditor.this.setSelectionToViewer(selection);
+						FleetallocationEditor.this.setFocus();
 					}
 
 					@Override

@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.provider;
+package scenario.schedule.provider;
 
 
 import java.util.Collection;
@@ -13,37 +13,45 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.schedule.fleet.FleetPackage;
-import scenario.schedule.fleet.SpotVessel;
+import scenario.provider.LngEditPlugin;
+
+import scenario.schedule.ScheduleFitness;
+import scenario.schedule.SchedulePackage;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.fleet.SpotVessel} object.
+ * This is the item provider adapter for a {@link scenario.schedule.ScheduleFitness} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SpotVesselItemProvider
-	extends AllocatedVesselItemProvider
+public class ScheduleFitnessItemProvider
+	extends ItemProviderAdapter
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource, IItemColorProvider {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpotVesselItemProvider(AdapterFactory adapterFactory) {
+	public ScheduleFitnessItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -58,26 +66,48 @@ public class SpotVesselItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIndexPropertyDescriptor(object);
-			addVesselClassPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
+			addValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Index feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIndexPropertyDescriptor(Object object) {
+	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SpotVessel_index_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotVessel_index_feature", "_UI_SpotVessel_type"),
-				 FleetPackage.Literals.SPOT_VESSEL__INDEX,
+				 getString("_UI_ScheduleFitness_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ScheduleFitness_name_feature", "_UI_ScheduleFitness_type"),
+				 SchedulePackage.Literals.SCHEDULE_FITNESS__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ScheduleFitness_value_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ScheduleFitness_value_feature", "_UI_ScheduleFitness_type"),
+				 SchedulePackage.Literals.SCHEDULE_FITNESS__VALUE,
 				 true,
 				 false,
 				 false,
@@ -87,36 +117,14 @@ public class SpotVesselItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel Class feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVesselClassPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotVessel_vesselClass_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotVessel_vesselClass_feature", "_UI_SpotVessel_type"),
-				 FleetPackage.Literals.SPOT_VESSEL__VESSEL_CLASS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns SpotVessel.gif.
+	 * This returns ScheduleFitness.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SpotVessel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScheduleFitness"));
 	}
 
 	/**
@@ -127,8 +135,10 @@ public class SpotVesselItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		SpotVessel spotVessel = (SpotVessel)object;
-		return getString("_UI_SpotVessel_type") + " " + spotVessel.getIndex();
+		String label = ((ScheduleFitness)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_ScheduleFitness_type") :
+			getString("_UI_ScheduleFitness_type") + " " + label;
 	}
 
 	/**
@@ -142,8 +152,9 @@ public class SpotVesselItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(SpotVessel.class)) {
-			case FleetPackage.SPOT_VESSEL__INDEX:
+		switch (notification.getFeatureID(ScheduleFitness.class)) {
+			case SchedulePackage.SCHEDULE_FITNESS__NAME:
+			case SchedulePackage.SCHEDULE_FITNESS__VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -160,6 +171,17 @@ public class SpotVesselItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return LngEditPlugin.INSTANCE;
 	}
 
 }

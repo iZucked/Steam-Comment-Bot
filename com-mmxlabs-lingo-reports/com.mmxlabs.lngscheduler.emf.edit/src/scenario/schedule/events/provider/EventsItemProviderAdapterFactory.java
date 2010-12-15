@@ -74,7 +74,6 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 		supportedTypes.add(ITreeItemContentProvider.class);
 		supportedTypes.add(IItemLabelProvider.class);
 		supportedTypes.add(IItemPropertySource.class);
-		supportedTypes.add(IItemColorProvider.class);
 	}
 
 	/**

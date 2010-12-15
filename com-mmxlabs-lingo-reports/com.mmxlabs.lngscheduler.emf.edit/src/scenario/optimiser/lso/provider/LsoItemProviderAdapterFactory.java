@@ -73,7 +73,6 @@ public class LsoItemProviderAdapterFactory extends LsoAdapterFactory implements 
 		supportedTypes.add(ITreeItemContentProvider.class);
 		supportedTypes.add(IItemLabelProvider.class);
 		supportedTypes.add(IItemPropertySource.class);
-		supportedTypes.add(IItemColorProvider.class);
 	}
 
 	/**

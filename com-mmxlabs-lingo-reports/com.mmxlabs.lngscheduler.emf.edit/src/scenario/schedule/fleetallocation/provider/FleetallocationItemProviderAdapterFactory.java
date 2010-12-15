@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.provider;
+package scenario.schedule.fleetallocation.provider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,14 +19,13 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IChangeNotifier;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import scenario.schedule.fleet.util.FleetAdapterFactory;
+import scenario.schedule.fleetallocation.util.FleetallocationAdapterFactory;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -37,7 +36,7 @@ import scenario.schedule.fleet.util.FleetAdapterFactory;
  * <!-- end-user-doc -->
  * @generated
  */
-public class FleetItemProviderAdapterFactory extends FleetAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class FleetallocationItemProviderAdapterFactory extends FleetallocationAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -68,17 +67,16 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetItemProviderAdapterFactory() {
+	public FleetallocationItemProviderAdapterFactory() {
 		supportedTypes.add(IEditingDomainItemProvider.class);
 		supportedTypes.add(IStructuredItemContentProvider.class);
 		supportedTypes.add(ITreeItemContentProvider.class);
 		supportedTypes.add(IItemLabelProvider.class);
 		supportedTypes.add(IItemPropertySource.class);
-		supportedTypes.add(IItemColorProvider.class);
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.fleet.AllocatedVessel} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.fleetallocation.AllocatedVessel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -86,7 +84,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	protected AllocatedVesselItemProvider allocatedVesselItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.schedule.fleet.AllocatedVessel}.
+	 * This creates an adapter for a {@link scenario.schedule.fleetallocation.AllocatedVessel}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -101,7 +99,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.fleet.FleetVessel} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.fleetallocation.FleetVessel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -109,7 +107,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	protected FleetVesselItemProvider fleetVesselItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.schedule.fleet.FleetVessel}.
+	 * This creates an adapter for a {@link scenario.schedule.fleetallocation.FleetVessel}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -124,7 +122,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.fleet.SpotVessel} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.fleetallocation.SpotVessel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -132,7 +130,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	protected SpotVesselItemProvider spotVesselItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.schedule.fleet.SpotVessel}.
+	 * This creates an adapter for a {@link scenario.schedule.fleetallocation.SpotVessel}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated

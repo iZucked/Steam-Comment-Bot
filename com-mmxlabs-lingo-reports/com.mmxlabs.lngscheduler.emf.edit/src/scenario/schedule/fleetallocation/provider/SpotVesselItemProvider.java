@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.provider;
+package scenario.schedule.fleetallocation.provider;
 
 
 import java.util.Collection;
@@ -15,32 +15,38 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.schedule.fleet.FleetPackage;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
+import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.fleet.FleetVessel} object.
+ * This is the item provider adapter for a {@link scenario.schedule.fleetallocation.SpotVessel} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class FleetVesselItemProvider
+public class SpotVesselItemProvider
 	extends AllocatedVesselItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource, IItemColorProvider {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetVesselItemProvider(AdapterFactory adapterFactory) {
+	public SpotVesselItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -55,25 +61,48 @@ public class FleetVesselItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVesselPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
+			addVesselClassPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel feature.
+	 * This adds a property descriptor for the Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselPropertyDescriptor(Object object) {
+	protected void addIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_FleetVessel_vessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FleetVessel_vessel_feature", "_UI_FleetVessel_type"),
-				 FleetPackage.Literals.FLEET_VESSEL__VESSEL,
+				 getString("_UI_SpotVessel_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotVessel_index_feature", "_UI_SpotVessel_type"),
+				 FleetallocationPackage.Literals.SPOT_VESSEL__INDEX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Class feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselClassPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotVessel_vesselClass_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotVessel_vesselClass_feature", "_UI_SpotVessel_type"),
+				 FleetallocationPackage.Literals.SPOT_VESSEL__VESSEL_CLASS,
 				 true,
 				 false,
 				 true,
@@ -83,14 +112,14 @@ public class FleetVesselItemProvider
 	}
 
 	/**
-	 * This returns FleetVessel.gif.
+	 * This returns SpotVessel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FleetVessel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SpotVessel"));
 	}
 
 	/**
@@ -101,7 +130,8 @@ public class FleetVesselItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_FleetVessel_type");
+		SpotVessel spotVessel = (SpotVessel)object;
+		return getString("_UI_SpotVessel_type") + " " + spotVessel.getIndex();
 	}
 
 	/**
@@ -114,6 +144,12 @@ public class FleetVesselItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(SpotVessel.class)) {
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.presentation;
+package scenario.schedule.fleetallocation.presentation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,16 +51,16 @@ import org.eclipse.ui.PartInitException;
 import scenario.presentation.LngEditorPlugin;
 
 /**
- * This is the action bar contributor for the Fleet model editor.
+ * This is the action bar contributor for the Fleetallocation model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class FleetActionBarContributor
+public class FleetallocationActionBarContributor
 	extends EditingDomainActionBarContributor
 	implements ISelectionChangedListener {
 	/**
-	 * Action to create objects from the Fleet model.
+	 * Action to create objects from the Fleetallocation model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -73,7 +73,7 @@ public class FleetActionBarContributor
 		 * @generated
 		 */
 		public void run(IAction action) {
-			FleetModelWizard wizard = new FleetModelWizard();
+			FleetallocationModelWizard wizard = new FleetallocationModelWizard();
 			wizard.init(getWindow().getWorkbench(), StructuredSelection.EMPTY);
 			WizardDialog wizardDialog = new WizardDialog(getWindow().getShell(), wizard);
 			wizardDialog.open();
@@ -180,7 +180,7 @@ public class FleetActionBarContributor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetActionBarContributor() {
+	public FleetallocationActionBarContributor() {
 		super(ADDITIONS_LAST_STYLE);
 		loadResourceAction = new LoadResourceAction();
 		validateAction = new ValidateAction();
@@ -195,8 +195,8 @@ public class FleetActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
-		toolBarManager.add(new Separator("fleet-settings"));
-		toolBarManager.add(new Separator("fleet-additions"));
+		toolBarManager.add(new Separator("fleetallocation-settings"));
+		toolBarManager.add(new Separator("fleetallocation-additions"));
 	}
 
 	/**
@@ -210,7 +210,7 @@ public class FleetActionBarContributor
 	public void contributeToMenu(IMenuManager menuManager) {
 		super.contributeToMenu(menuManager);
 
-		IMenuManager submenuManager = new MenuManager(LngEditorPlugin.INSTANCE.getString("_UI_FleetEditor_menu"), "scenario.schedule.fleetMenuID");
+		IMenuManager submenuManager = new MenuManager(LngEditorPlugin.INSTANCE.getString("_UI_FleetallocationEditor_menu"), "scenario.schedule.fleetallocationMenuID");
 		menuManager.insertAfter("additions", submenuManager);
 		submenuManager.add(new Separator("settings"));
 		submenuManager.add(new Separator("actions"));

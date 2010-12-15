@@ -74,7 +74,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		supportedTypes.add(ITreeItemContentProvider.class);
 		supportedTypes.add(IItemLabelProvider.class);
 		supportedTypes.add(IItemPropertySource.class);
-		supportedTypes.add(IItemColorProvider.class);
 	}
 
 	/**
@@ -167,6 +166,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		}
 
 		return cargoAllocationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.ScheduleFitness} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScheduleFitnessItemProvider scheduleFitnessItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.ScheduleFitness}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScheduleFitnessAdapter() {
+		if (scheduleFitnessItemProvider == null) {
+			scheduleFitnessItemProvider = new ScheduleFitnessItemProvider(this);
+		}
+
+		return scheduleFitnessItemProvider;
 	}
 
 	/**
@@ -272,6 +294,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (scheduleItemProvider != null) scheduleItemProvider.dispose();
 		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
 		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
+		if (scheduleFitnessItemProvider != null) scheduleFitnessItemProvider.dispose();
 	}
 
 }

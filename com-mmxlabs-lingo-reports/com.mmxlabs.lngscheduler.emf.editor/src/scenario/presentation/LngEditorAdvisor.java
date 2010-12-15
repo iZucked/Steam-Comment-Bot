@@ -57,6 +57,7 @@ import scenario.optimiser.lso.presentation.LsoEditor;
 import scenario.optimiser.presentation.OptimiserEditor;
 import scenario.port.presentation.PortEditor;
 import scenario.schedule.events.presentation.EventsEditor;
+import scenario.schedule.fleetallocation.presentation.FleetallocationEditor;
 import scenario.schedule.presentation.ScheduleEditor;
 
 
@@ -87,7 +88,7 @@ public final class LngEditorAdvisor extends WorkbenchAdvisor {
 		result.addAll(FleetEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(ScheduleEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(EventsEditor.FILE_EXTENSION_FILTERS);
-		result.addAll(scenario.schedule.fleet.presentation.FleetEditor.FILE_EXTENSION_FILTERS);
+		result.addAll(FleetallocationEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(PortEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(CargoEditor.FILE_EXTENSION_FILTERS);
 		result.addAll(ContractEditor.FILE_EXTENSION_FILTERS);

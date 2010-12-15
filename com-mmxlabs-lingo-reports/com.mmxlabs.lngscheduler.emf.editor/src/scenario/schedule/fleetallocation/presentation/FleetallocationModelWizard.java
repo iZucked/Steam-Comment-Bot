@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.fleet.presentation;
+package scenario.schedule.fleetallocation.presentation;
 
 
 import java.util.ArrayList;
@@ -57,8 +57,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import scenario.schedule.fleet.FleetFactory;
-import scenario.schedule.fleet.FleetPackage;
+import scenario.schedule.fleetallocation.FleetallocationFactory;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
 import scenario.provider.LngEditPlugin;
 
 
@@ -82,7 +82,7 @@ import scenario.presentation.LngEditorPlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class FleetModelWizard extends Wizard implements INewWizard {
+public class FleetallocationModelWizard extends Wizard implements INewWizard {
 	/**
 	 * The supported extensions for created files.
 	 * <!-- begin-user-doc -->
@@ -90,7 +90,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	 * @generated
 	 */
 	public static final List<String> FILE_EXTENSIONS =
-		Collections.unmodifiableList(Arrays.asList(LngEditorPlugin.INSTANCE.getString("_UI_FleetEditorFilenameExtensions").split("\\s*,\\s*")));
+		Collections.unmodifiableList(Arrays.asList(LngEditorPlugin.INSTANCE.getString("_UI_FleetallocationEditorFilenameExtensions").split("\\s*,\\s*")));
 
 	/**
 	 * A formatted list of supported file extensions, suitable for display.
@@ -99,7 +99,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	 * @generated
 	 */
 	public static final String FORMATTED_FILE_EXTENSIONS =
-		LngEditorPlugin.INSTANCE.getString("_UI_FleetEditorFilenameExtensions").replaceAll("\\s*,\\s*", ", ");
+		LngEditorPlugin.INSTANCE.getString("_UI_FleetallocationEditorFilenameExtensions").replaceAll("\\s*,\\s*", ", ");
 
 	/**
 	 * This caches an instance of the model package.
@@ -107,7 +107,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FleetPackage fleetPackage = FleetPackage.eINSTANCE;
+	protected FleetallocationPackage fleetallocationPackage = FleetallocationPackage.eINSTANCE;
 
 	/**
 	 * This caches an instance of the model factory.
@@ -115,7 +115,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FleetFactory fleetFactory = fleetPackage.getFleetFactory();
+	protected FleetallocationFactory fleetallocationFactory = fleetallocationPackage.getFleetallocationFactory();
 
 	/**
 	 * This is the initial object creation page.
@@ -123,7 +123,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FleetModelWizardInitialObjectCreationPage initialObjectCreationPage;
+	protected FleetallocationModelWizardInitialObjectCreationPage initialObjectCreationPage;
 
 	/**
 	 * Remember the selection during initialization for populating the default container.
@@ -159,7 +159,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 		this.workbench = workbench;
 		this.selection = selection;
 		setWindowTitle(LngEditorPlugin.INSTANCE.getString("_UI_Wizard_label"));
-		setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(LngEditorPlugin.INSTANCE.getImage("full/wizban/NewFleet")));
+		setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(LngEditorPlugin.INSTANCE.getImage("full/wizban/NewFleetallocation")));
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	protected Collection<String> getInitialObjectNames() {
 		if (initialObjectNames == null) {
 			initialObjectNames = new ArrayList<String>();
-			for (EClassifier eClassifier : fleetPackage.getEClassifiers()) {
+			for (EClassifier eClassifier : fleetallocationPackage.getEClassifiers()) {
 				if (eClassifier instanceof EClass) {
 					EClass eClass = (EClass)eClassifier;
 					if (!eClass.isAbstract()) {
@@ -191,8 +191,8 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	 * @generated
 	 */
 	protected EObject createInitialModel() {
-		EClass eClass = (EClass)fleetPackage.getEClassifier(initialObjectCreationPage.getInitialObjectName());
-		EObject rootObject = fleetFactory.create(eClass);
+		EClass eClass = (EClass)fleetallocationPackage.getEClassifier(initialObjectCreationPage.getInitialObjectName());
+		EObject rootObject = fleetallocationFactory.create(eClass);
 		return rootObject;
 	}
 
@@ -269,7 +269,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public class FleetModelWizardInitialObjectCreationPage extends WizardPage {
+	public class FleetallocationModelWizardInitialObjectCreationPage extends WizardPage {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -304,7 +304,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		public FleetModelWizardInitialObjectCreationPage(String pageId) {
+		public FleetallocationModelWizardInitialObjectCreationPage(String pageId) {
 			super(pageId);
 		}
 
@@ -368,7 +368,7 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 				(new SelectionAdapter() {
 					 @Override
 					 public void widgetSelected(SelectionEvent event) {
-						 String[] filters = FleetEditor.FILE_EXTENSION_FILTERS.toArray(new String[FleetEditor.FILE_EXTENSION_FILTERS.size()]);
+						 String[] filters = FleetallocationEditor.FILE_EXTENSION_FILTERS.toArray(new String[FleetallocationEditor.FILE_EXTENSION_FILTERS.size()]);
 						 String[] files = LngEditorAdvisor.openFilePathDialog(getShell(), SWT.SAVE, filters);
 						 if (files.length > 0) {
 							 fileField.setText(files[0]);
@@ -570,8 +570,8 @@ public class FleetModelWizard extends Wizard implements INewWizard {
 	 */
 		@Override
 	public void addPages() {
-		initialObjectCreationPage = new FleetModelWizardInitialObjectCreationPage("Whatever2");
-		initialObjectCreationPage.setTitle(LngEditorPlugin.INSTANCE.getString("_UI_FleetModelWizard_label"));
+		initialObjectCreationPage = new FleetallocationModelWizardInitialObjectCreationPage("Whatever2");
+		initialObjectCreationPage.setTitle(LngEditorPlugin.INSTANCE.getString("_UI_FleetallocationModelWizard_label"));
 		initialObjectCreationPage.setDescription(LngEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description"));
 		addPage(initialObjectCreationPage);
 	}

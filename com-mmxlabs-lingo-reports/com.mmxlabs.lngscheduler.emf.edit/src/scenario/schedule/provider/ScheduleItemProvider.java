@@ -12,14 +12,10 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
@@ -30,11 +26,10 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.provider.LngEditPlugin;
-
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFactory;
 import scenario.schedule.SchedulePackage;
-import scenario.schedule.fleet.FleetFactory;
+import scenario.schedule.fleetallocation.FleetallocationFactory;
 
 /**
  * This is the item provider adapter for a {@link scenario.schedule.Schedule} object.
@@ -45,7 +40,7 @@ import scenario.schedule.fleet.FleetFactory;
 public class ScheduleItemProvider
 	extends ItemProviderAdapter
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource, IItemColorProvider {
+		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -109,6 +104,7 @@ public class ScheduleItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FLEET);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESS);
 		}
 		return childrenFeatures;
 	}
@@ -169,6 +165,7 @@ public class ScheduleItemProvider
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__FLEET:
+			case SchedulePackage.SCHEDULE__FITNESS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -199,17 +196,22 @@ public class ScheduleItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetFactory.eINSTANCE.createAllocatedVessel()));
+				 FleetallocationFactory.eINSTANCE.createAllocatedVessel()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetFactory.eINSTANCE.createFleetVessel()));
+				 FleetallocationFactory.eINSTANCE.createFleetVessel()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetFactory.eINSTANCE.createSpotVessel()));
+				 FleetallocationFactory.eINSTANCE.createSpotVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__FITNESS,
+				 ScheduleFactory.eINSTANCE.createScheduleFitness()));
 	}
 
 	/**
