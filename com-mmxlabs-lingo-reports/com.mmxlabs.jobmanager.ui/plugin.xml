@@ -40,12 +40,21 @@
             id="com.mmxlabs.jobmanager.ui.commands.optimiseScenarios"
             name="Optimise Selected Scenarios">
       </command>
+      <command
+            categoryId="com.mmxlabs.jobmanager.ui.commands.category"
+            id="com.mmxlabs.jobmanager.ui.commands.exportTrace"
+            name="Export Fitness Trace">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="com.mmxlabs.jobmanager.ui.handlers.ScenarioOptimisationHandler"
             commandId="com.mmxlabs.jobmanager.ui.commands.optimiseScenarios">
+      </handler>
+       <handler
+            class="com.mmxlabs.jobmanager.ui.handlers.ScheduleFitnessExportHandler"
+            commandId="com.mmxlabs.jobmanager.ui.commands.exportTrace">
       </handler>
    </extension>
    <extension
@@ -70,8 +79,16 @@
                   id="com.mmxlabs.jobmanager.ui.menus.optimiseScenario"
                   mnemonic="S">
             </command>
+            
+            <command
+                  commandId="com.mmxlabs.jobmanager.ui.commands.exportTrace"
+                  id="com.mmxlabs.jobmanager.ui.menus.exportTrace"
+                  mnemonic="E">
+            </command>
          </menu>
       </menuContribution>
+      
+      
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
