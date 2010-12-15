@@ -66,9 +66,10 @@ public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 	public void setGeneralAnnotation(final String key, final Object value) {
 		generalAnnotations.put(key, value);
 	}
-	
+
+
 	@Override
-	public Map<String, Object> getGeneralAnnotations() {
-		return Collections.unmodifiableMap(generalAnnotations);
+	public <U> U getGeneralAnnotation(String key, Class<U> clz) {
+		return clz.cast(generalAnnotations.get(key));
 	}
 }

@@ -50,17 +50,9 @@ public class AnnotatedSolutionTest {
 
 		final AnnotatedSolution solution = new AnnotatedSolution();
 
-		final Map<String, Object> generalAnnotations = solution
-				.getGeneralAnnotations();
-
-		Assert.assertNotNull(generalAnnotations);
-		Assert.assertTrue(generalAnnotations.isEmpty());
-
 		solution.setGeneralAnnotation(key, annotation);
 
-		Assert.assertFalse(generalAnnotations.isEmpty());
-		Assert.assertTrue(generalAnnotations.containsKey(key));
-		Assert.assertSame(annotation, generalAnnotations.get(key));
+		Assert.assertSame(annotation, solution.getGeneralAnnotation(key, Object.class));
 	}
 
 	@Test
@@ -95,24 +87,15 @@ public class AnnotatedSolutionTest {
 		Assert.assertSame(optContext, solution.getContext());
 		Assert.assertSame(sequences, solution.getSequences());
 
-		final Map<String, Object> generalAnnotations = solution
-		.getGeneralAnnotations();
-
-		Assert.assertNotNull(generalAnnotations);
-		Assert.assertTrue(generalAnnotations.isEmpty());
 
 		solution.setGeneralAnnotation(key, annotation);
-
-		Assert.assertFalse(generalAnnotations.isEmpty());
-		Assert.assertTrue(generalAnnotations.containsKey(key));
-		Assert.assertSame(annotation, generalAnnotations.get(key));
 
 		solution.dispose();
 
 		Assert.assertNull(solution.getSequences());
 		Assert.assertNull(solution.getContext());
 		
-		Assert.assertTrue(generalAnnotations.isEmpty());
+		Assert.assertNull(solution.getGeneralAnnotation(key, Object.class));
 		
 		Assert.fail("Unable to test disposal of ElementAnnotations");
 	}
