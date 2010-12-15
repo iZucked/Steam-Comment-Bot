@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
@@ -41,8 +42,9 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 		IFitnessEvaluator<T> {
 
-	private static final Logger log = LoggerFactory.getLogger(LinearSimulatedAnnealingFitnessEvaluator.class);
-	
+	private static final Logger log = LoggerFactory
+			.getLogger(LinearSimulatedAnnealingFitnessEvaluator.class);
+
 	private IFitnessHelper<T> fitnessHelper = null;
 
 	private List<IFitnessComponent<T>> fitnessComponents = null;
@@ -56,7 +58,8 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	private long bestFitness = Long.MAX_VALUE;
 
 	private final Map<String, Long> bestFitnesses = new HashMap<String, Long>();
-
+	private final Map<String, Long> currentFitnesses = new HashMap<String, Long>();
+	
 	private ISequences<T> currentSequences = null;
 
 	private long currentFitness = Long.MAX_VALUE;
@@ -82,6 +85,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 				// Update fitness functions state
 				fitnessHelper.acceptFromComponents(fitnessComponents,
 						sequences, affectedResources);
+				
+				for (final IFitnessComponent<T> component : fitnessComponents) {
+					currentFitnesses.put(component.getName(), component.getFitness());
+				}
 			}
 		}
 		// Step to the next threshold levels
@@ -275,6 +282,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	@Override
 	public void dispose() {
 		this.bestFitnesses.clear();
+		this.currentFitnesses.clear();
 		this.bestSequences = null;
 		this.currentSequences = null;
 		this.fitnessCombiner = null;
@@ -286,15 +294,27 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 	@Override
 	public IAnnotatedSolution<T> getBestAnnotatedSolution(
 			IOptimisationContext<T> context) {
-		return fitnessHelper.buildAnnotatedSolution(context,
-				getBestSequences(), getFitnessComponents());
+		final IAnnotatedSolution<T> result = fitnessHelper
+				.buildAnnotatedSolution(context, getBestSequences(),
+						getFitnessComponents());
+
+		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents,
+				new HashMap<String, Long>(bestFitnesses));
+
+		return result;
 	}
 
 	@Override
 	public IAnnotatedSolution<T> getCurrentAnnotatedSolution(
 			IOptimisationContext<T> context) {
-		return fitnessHelper.buildAnnotatedSolution(context,
-				getCurrentSequences(), getFitnessComponents());
+		final IAnnotatedSolution<T> result = fitnessHelper
+				.buildAnnotatedSolution(context, getCurrentSequences(),
+						getFitnessComponents());
+
+		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents,
+				new HashMap<String, Long>(currentFitnesses));
+
+		return result;
 	}
 
 }

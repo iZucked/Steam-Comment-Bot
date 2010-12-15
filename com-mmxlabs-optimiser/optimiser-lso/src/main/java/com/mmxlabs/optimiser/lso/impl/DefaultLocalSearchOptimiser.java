@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -77,10 +78,16 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			final IAnnotatedSolution<T> annotatedBestSolution = fitnessEvaluator
 					.getBestAnnotatedSolution(optimiserContext);
 			// fitnessEvaluator.getBestSequences()
+			
+			annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, 0);
+			annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, 0l);
 			getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
 					annotatedBestSolution);
 
 		}
+		
+		final long startTime = System.currentTimeMillis();
+		
 		// Perform the optimisation
 		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
 
@@ -92,6 +99,14 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 					fitnessEvaluator.getCurrentAnnotatedSolution(optimiserContext);
 				// fitnessEvaluator.getBestSequences()
 
+				final long clock = System.currentTimeMillis() - startTime;
+				
+				annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, iter);
+				annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
+
+				annotatedCurrentSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, iter);
+				annotatedCurrentSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
+				
 				getProgressMonitor().report(this, iter,
 						fitnessEvaluator.getCurrentFitness(),
 						fitnessEvaluator.getBestFitness(),
@@ -151,8 +166,15 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			}
 		}
 
+		final IAnnotatedSolution<T> bestSolution = fitnessEvaluator.getBestAnnotatedSolution(optimiserContext); 
+		
+		final long clock = System.currentTimeMillis() - startTime;
+		
+		bestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterations() - 1);
+		bestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
+
 		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
-				fitnessEvaluator.getBestAnnotatedSolution(optimiserContext));
+				bestSolution);
 
 	}
 }
