@@ -76,7 +76,7 @@ public class PortRotationReportView extends ViewPart implements ISelectionListen
 					case 1:
 						return rd.visit.getStartTime().toLocaleString();//.getName();
 					case 2:
-						return rd.visit.getPort().getName();
+						return rd.visit.getPort() != null ? rd.visit.getPort().getName() : "anywhere";
 					case 3:
 						return rd.visit.getDisplayTypeName();
 					case 4:

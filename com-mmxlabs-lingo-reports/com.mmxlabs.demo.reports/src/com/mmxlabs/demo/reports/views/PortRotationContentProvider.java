@@ -12,9 +12,10 @@ import org.eclipse.jface.viewers.Viewer;
 
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
+import scenario.schedule.events.Idle;
 import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.fleet.AllocatedVessel;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -40,7 +41,7 @@ public class PortRotationContentProvider implements IStructuredContentProvider {
 			final LinkedList<Object> result = new LinkedList<Object>();
 			for (final Sequence seq : schedule.getSequences()) {
 				for (final ScheduledEvent evt : seq.getEvents()) {
-					if (evt instanceof PortVisit) {
+					if (evt instanceof PortVisit && !(evt instanceof Idle)) {
 						result.add(new RowData((PortVisit) evt, seq.getVessel()));
 					}
 				}
