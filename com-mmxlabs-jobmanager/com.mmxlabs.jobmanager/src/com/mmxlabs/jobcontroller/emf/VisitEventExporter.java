@@ -106,6 +106,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		final IPortVisitEvent<ISequenceElement> visitEvent = (IPortVisitEvent<ISequenceElement>) annotations
 				.get(SchedulerConstants.AI_visitInfo);
 
+		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
+		
 		portVisit.setStartTime(entities.getDateFromHours(visitEvent
 				.getStartTime()));
 
