@@ -425,9 +425,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				IMultiMatrixProvider.Default_Key, 0);
 
 		// create the return elements to return to this port using the ELSM
-		returnElementProvider.setReturnElement(port, createReturnElement(port));
 
 		return port;
+	}
+
+	/**
+	 * Create the return elements for each port/resource combination
+	 */
+	private void createReturnElements() {
+		for (final IResource resource : resources) {
+			for (final IPort port : ports) {
+				returnElementProvider.setReturnElement(resource, port,
+						createReturnElement(port));
+			}
+		}
 	}
 
 	private ISequenceElement createReturnElement(final IPort port) {
@@ -723,6 +734,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// Create charter out elements
 		buildCharterOuts();
+
+		createReturnElements();
 
 		portDistanceProvider.cacheExtremalValues(ports);
 

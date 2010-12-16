@@ -72,7 +72,7 @@ public final class EndLocationSequenceManipulator<T> implements
 
 	private IPortTypeProvider<T> portTypeProvider;
 	
-	private IPortProvider portProvider;
+	private IPortProvider<T> portProvider;
 		
 	private final Map<IResource, EndLocationRule> ruleMap = 
 		new HashMap<IResource, EndLocationSequenceManipulator.EndLocationRule>();
@@ -155,7 +155,7 @@ public final class EndLocationSequenceManipulator<T> implements
 		/*
 		 * Replace the final sequence element with the dummy
 		 */
-		sequence.set(sequence.size()-1, returnElementProvider.getReturnElement(returnPort));
+		sequence.set(sequence.size()-1, returnElementProvider.getReturnElement(resource, returnPort));
 	}
 	
 	/**

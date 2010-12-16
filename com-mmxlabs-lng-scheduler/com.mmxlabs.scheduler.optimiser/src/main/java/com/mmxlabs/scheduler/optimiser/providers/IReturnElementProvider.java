@@ -5,6 +5,7 @@
 
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulator;
@@ -16,5 +17,5 @@ import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulat
  * @param <T>
  */
 public interface IReturnElementProvider<T> extends IDataComponentProvider {
-	public T getReturnElement(final IPort port);
+	public T getReturnElement(IResource resource, IPort port);
 }

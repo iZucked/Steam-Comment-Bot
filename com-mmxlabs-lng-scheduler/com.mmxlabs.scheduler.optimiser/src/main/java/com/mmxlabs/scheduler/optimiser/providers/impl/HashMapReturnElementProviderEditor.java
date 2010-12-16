@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.HashMap;
 
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 
@@ -19,8 +20,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 public class HashMapReturnElementProviderEditor<T> implements
 		IReturnElementProviderEditor<T> {
 
-	final private HashMap<IPort, T> returnElements = 
-		new HashMap<IPort, T>();
+	final private HashMap<IPort, HashMap<IResource, T>> returnElements = 
+		new HashMap<IPort, HashMap<IResource, T>>();
 	
 	private final String name;
 	
@@ -40,12 +41,18 @@ public class HashMapReturnElementProviderEditor<T> implements
 	}
 
 	@Override
-	public T getReturnElement(IPort port) {
-		return returnElements.get(port);
+	public T getReturnElement(final IResource resource, final IPort port) {
+		final HashMap<IResource, T> byResource = returnElements.get(port);
+		return byResource == null ? null : byResource.get(resource);
 	}
 
 	@Override
-	public void setReturnElement(final IPort port, final T element) {
-		returnElements.put(port, element);
+	public void setReturnElement(final IResource resource, final IPort port, final T element) {
+		HashMap<IResource, T> byResource = returnElements.get(port);
+		if (byResource == null) {
+			byResource = new HashMap<IResource, T>();
+			returnElements.put(port, byResource);
+		}
+		byResource.put(resource, element);
 	}
 }
