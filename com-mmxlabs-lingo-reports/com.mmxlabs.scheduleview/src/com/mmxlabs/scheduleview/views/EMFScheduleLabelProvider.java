@@ -83,7 +83,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 				
 				sb.append("Port: "
 						+ idle.getPort().getName() + "\n");
-				sb.append("Vessel State: " + idle.getVesselState().getName());
+				sb.append("Vessel State: " + idle.getVesselState().getName() + "\n");
 			} else if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
 				sb.append("From: "
@@ -119,12 +119,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	public String getToolTipTitle(final Object element) {
 		if (element instanceof Journey) {
 			return "Journey";
-		} else if (element instanceof PortVisit) {
-			return "Port Visit";
 		} else if (element instanceof Idle) {
 			return "Idle";
 		} else if (element instanceof Sequence) {
 			return getText(element);
+		} else if (element instanceof PortVisit) {
+			return "Port Visit";
 		}
 		return null;
 	}
