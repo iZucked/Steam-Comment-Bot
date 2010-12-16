@@ -42,7 +42,8 @@ public class PortRotationContentProvider implements IStructuredContentProvider {
 			for (final Sequence seq : schedule.getSequences()) {
 				for (final ScheduledEvent evt : seq.getEvents()) {
 					if (evt instanceof PortVisit && !(evt instanceof Idle)) {
-						result.add(new RowData((PortVisit) evt, seq.getVessel()));
+						if (((PortVisit)evt).getPort()!= null) //filter out dummy port
+							result.add(new RowData((PortVisit) evt, seq.getVessel()));
 					}
 				}
 			}

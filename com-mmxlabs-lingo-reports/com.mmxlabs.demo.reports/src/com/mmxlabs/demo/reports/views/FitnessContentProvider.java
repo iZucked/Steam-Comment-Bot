@@ -5,20 +5,14 @@
 
 package com.mmxlabs.demo.reports.views;
 
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
-import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import scenario.schedule.Schedule;
+import scenario.schedule.ScheduleFitness;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -34,15 +28,15 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 			this.fitness = f;
 		}
 
-		public String component;
-		public long fitness;
+		public final String component;
+		public final long fitness;
 	}
 
 	private RowData[] rowData = new RowData[0];
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
-
+		
 		return rowData;
 	}
 
@@ -50,57 +44,26 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput,
 			final Object newInput) {
 
-		IAnnotatedSolution<ISequenceElement> solution = null;
-		if (newInput instanceof IAnnotatedSolution) {
-			solution = (IAnnotatedSolution) newInput;
+		if (newInput instanceof Schedule) {
+			final Schedule schedule = (Schedule) newInput;
+			final List<RowData> rowDataList = new LinkedList<RowData>();
+			long total=0l;
+			for (final ScheduleFitness f : schedule.getFitness()) {
+				rowDataList.add(new RowData(f.getName(), f.getValue()));
+				if (!(f.getName().equals("iterations") || f.getName().equals("runtime")))
+					total += f.getValue();
+			}
+			rowDataList.add(new RowData("Total", total));
+			
+			rowData = rowDataList.toArray(rowData);
+			
+		} else {
+			rowData = new RowData[]{};
 		}
-
-		// Process input dats.
-		if (solution == null) {
-			rowData = new RowData[0];
-			return;
-		}
-
-		IOptimisationContext<ISequenceElement> context = solution.getContext();
-
-		Map<String, Long> result = createFitnessEvaluator(context,
-				solution.getSequences());
-		rowData = new RowData[result.size() + 1];
-
-		int idx = 0;
-		long total = 0;
-		for (final Map.Entry<String, Long> entry : result.entrySet()) {
-
-			rowData[idx++] = new RowData(entry.getKey(), entry.getValue());
-			total += entry.getValue();
-		}
-		rowData[idx] = new RowData("Total", total);
 	}
 
 	@Override
 	public void dispose() {
-
-	}
-
-	<T> Map<String, Long> createFitnessEvaluator(
-			IOptimisationContext<T> context, ISequences<T> state) {
-
-		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
-		final List<IFitnessComponent<T>> fitnessComponents = fitnessComponentInstantiator
-				.instantiateFitnesses(context.getFitnessFunctionRegistry(),
-						context.getFitnessComponents());
-
-		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
-
-		fitnessHelper.initFitnessComponents(fitnessComponents, context.getOptimisationData());
-		
-		fitnessHelper.evaluateSequencesFromComponents(state, fitnessComponents);
-
-		Map<String, Long> result = new HashMap<String, Long>();
-		for (IFitnessComponent<T> c : fitnessComponents) {
-			result.put(c.getName(), c.getFitness());
-		}
-		return result;
 
 	}
 }

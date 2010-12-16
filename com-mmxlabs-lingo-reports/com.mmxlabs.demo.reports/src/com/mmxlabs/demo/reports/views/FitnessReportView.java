@@ -5,8 +5,7 @@
 
 package com.mmxlabs.demo.reports.views;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Iterator;
 
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -14,6 +13,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -23,20 +24,18 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.demo.reports.Activator;
+import scenario.schedule.Schedule;
+
 import com.mmxlabs.demo.reports.views.FitnessContentProvider.RowData;
 import com.mmxlabs.demo.reports.views.actions.PackTableColumnsAction;
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.ManagedJobListenerNotifier;
 
-public class FitnessReportView extends ViewPart {
+public class FitnessReportView extends ViewPart implements ISelectionListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -44,10 +43,6 @@ public class FitnessReportView extends ViewPart {
 	public static final String ID = "com.mmxlabs.demo.reports.views.FitnessReportView";
 
 	private TableViewer viewer;
-
-	private List<IManagedJob> selectedJobs = new LinkedList<IManagedJob>();
-	private IManagedJobListener jobListener;
-	private IJobManagerListener jobManagerListener;
 
 	private PackTableColumnsAction packColumnsAction;
 
@@ -117,62 +112,7 @@ public class FitnessReportView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		jobListener = new ManagedJobListenerNotifier() {
-
-			@Override
-			public void jobNotified(IManagedJob job) {
-
-				if (selectedJobs.contains(job)) {
-					setInput(job.getSchedule());
-					refresh();
-				}
-			}
-		};
-
-		jobManagerListener = new IJobManagerListener() {
-
-			@Override
-			public void jobRemoved(IJobManager jobManager, IManagedJob job) {
-				job.removeManagedJobListener(jobListener);
-			}
-
-			@Override
-			public void jobAdded(IJobManager jobManager, IManagedJob job) {
-				job.addManagedJobListener(jobListener);
-			}
-
-			@Override
-			public void jobSelected(IJobManager jobManager, IManagedJob job) {
-				selectedJobs.add(job);
-				if (selectedJobs.isEmpty()) {
-					setInput(null);
-				} else {
-					setInput(selectedJobs.get(0).getSchedule());
-				}
-			}
-
-			@Override
-			public void jobDeselected(IJobManager jobManager, IManagedJob job) {
-				selectedJobs.remove(job);
-				if (selectedJobs.isEmpty()) {
-					setInput(null);
-				} else {
-					setInput(selectedJobs.get(0).getSchedule());
-				}
-
-			}
-		};
-		
-		selectedJobs.addAll(Activator.getDefault().getJobManager().getSelectedJobs());
-		if (selectedJobs.isEmpty()) {
-			setInput(null);
-		} else {
-			setInput(selectedJobs.get(0).getSchedule());
-			selectedJobs.get(0).addManagedJobListener(jobListener);
-		}
-		
-		Activator.getDefault().getJobManager()
-				.addJobManagerListener(jobManagerListener);
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 	}
 
 	private void hookContextMenu() {
@@ -242,5 +182,23 @@ public class FitnessReportView extends ViewPart {
 				}
 			}
 		});
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart arg0, ISelection selection) {
+		final IStructuredSelection sel = (IStructuredSelection) selection;
+		if (sel.isEmpty()) {
+			setInput(null);
+		} else {
+			@SuppressWarnings("unchecked")
+			Iterator<Object> iter = sel.iterator();
+			while (iter.hasNext()) {
+				final Object o = iter.next();
+				if (o instanceof Schedule) {
+					setInput(o);
+					return;
+				}
+			}
+		}
 	}
 }
