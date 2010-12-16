@@ -168,7 +168,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 				// solution.getElementAnnotations().setAnnotation(element,
 				// SchedulerConstants.AI_journeyInfo, journey);
 				solution.getElementAnnotations().setAnnotation(
-						portSlotProvider.getElement(prevPortSlot),
+						element,
 						SchedulerConstants.AI_journeyInfo, journey);
 				final int idleTime = details.getIdleTime();
 
