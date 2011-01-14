@@ -359,6 +359,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCargoAllocation_Vessel() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getScheduleFitness() {
 		return scheduleFitnessEClass;
 	}
@@ -433,6 +442,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_DATE);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_PRICE_M3);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_PRICE_M3);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__VESSEL);
 
 		scheduleFitnessEClass = createEClass(SCHEDULE_FITNESS);
 		createEAttribute(scheduleFitnessEClass, SCHEDULE_FITNESS__NAME);
@@ -501,6 +511,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getCargoAllocation_DischargeDate(), ecorePackage.getEDate(), "dischargeDate", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_LoadPriceM3(), ecorePackage.getEInt(), "loadPriceM3", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_DischargePriceM3(), ecorePackage.getEInt(), "dischargePriceM3", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_Vessel(), theFleetallocationPackage.getAllocatedVessel(), null, "vessel", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scheduleFitnessEClass, ScheduleFitness.class, "ScheduleFitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScheduleFitness_Name(), ecorePackage.getEString(), "name", null, 1, 1, ScheduleFitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

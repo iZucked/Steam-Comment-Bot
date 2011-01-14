@@ -272,13 +272,22 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__DISCHARGE_PRICE_M3 = 7;
 
 	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__VESSEL = 8;
+
+	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = 8;
+	int CARGO_ALLOCATION_FEATURE_COUNT = 9;
 
 
 	/**
@@ -536,6 +545,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getCargoAllocation_DischargePriceM3();
 
 	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see scenario.schedule.CargoAllocation#getVessel()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_Vessel();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.ScheduleFitness <em>Fitness</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -756,6 +776,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO_ALLOCATION__DISCHARGE_PRICE_M3 = eINSTANCE.getCargoAllocation_DischargePriceM3();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__VESSEL = eINSTANCE.getCargoAllocation_Vessel();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.impl.ScheduleFitnessImpl <em>Fitness</em>}' class.

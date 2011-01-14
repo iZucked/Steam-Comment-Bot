@@ -167,6 +167,8 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargePriceM3" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
+          eType="#//schedule/fleetallocation/AllocatedVessel"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleFitness">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"

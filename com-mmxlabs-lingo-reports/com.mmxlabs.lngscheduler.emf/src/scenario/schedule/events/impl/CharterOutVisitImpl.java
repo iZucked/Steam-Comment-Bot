@@ -165,6 +165,7 @@ public class CharterOutVisitImpl extends PortVisitImpl implements CharterOutVisi
 
 	@Override
 	public String getId() {
+		if (getCharterOut() == null) return "unknown";
 		return getCharterOut().getId();
 	}
 } //CharterOutVisitImpl

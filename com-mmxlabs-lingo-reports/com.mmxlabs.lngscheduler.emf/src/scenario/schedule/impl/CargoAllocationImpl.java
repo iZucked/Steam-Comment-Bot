@@ -21,6 +21,7 @@ import scenario.cargo.Slot;
 
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,6 +38,7 @@ import scenario.schedule.SchedulePackage;
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeDate <em>Discharge Date</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadPriceM3 <em>Load Price M3</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargePriceM3 <em>Discharge Price M3</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getVessel <em>Vessel</em>}</li>
  * </ul>
  * </p>
  *
@@ -182,6 +184,16 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * @ordered
 	 */
 	protected int dischargePriceM3 = DISCHARGE_PRICE_M3_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected AllocatedVessel vessel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -409,6 +421,44 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public AllocatedVessel getVessel() {
+		if (vessel != null && vessel.eIsProxy()) {
+			InternalEObject oldVessel = (InternalEObject)vessel;
+			vessel = (AllocatedVessel)eResolveProxy(oldVessel);
+			if (vessel != oldVessel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__VESSEL, oldVessel, vessel));
+			}
+		}
+		return vessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AllocatedVessel basicGetVessel() {
+		return vessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVessel(AllocatedVessel newVessel) {
+		AllocatedVessel oldVessel = vessel;
+		vessel = newVessel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__VESSEL, oldVessel, vessel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -430,6 +480,9 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return getLoadPriceM3();
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
 				return getDischargePriceM3();
+			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
+				if (resolve) return getVessel();
+				return basicGetVessel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -465,6 +518,9 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
 				setDischargePriceM3((Integer)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
+				setVessel((AllocatedVessel)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -502,6 +558,9 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
 				setDischargePriceM3(DISCHARGE_PRICE_M3_EDEFAULT);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
+				setVessel((AllocatedVessel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -530,6 +589,8 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return loadPriceM3 != LOAD_PRICE_M3_EDEFAULT;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
 				return dischargePriceM3 != DISCHARGE_PRICE_M3_EDEFAULT;
+			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
+				return vessel != null;
 		}
 		return super.eIsSet(featureID);
 	}

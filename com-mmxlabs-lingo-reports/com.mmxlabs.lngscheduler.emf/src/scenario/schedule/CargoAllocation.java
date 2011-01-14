@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +30,7 @@ import scenario.cargo.Slot;
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargeDate <em>Discharge Date</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getLoadPriceM3 <em>Load Price M3</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargePriceM3 <em>Discharge Price M3</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getVessel <em>Vessel</em>}</li>
  * </ul>
  * </p>
  *
@@ -244,5 +246,31 @@ public interface CargoAllocation extends EObject {
 	 * @generated
 	 */
 	void setDischargePriceM3(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel</em>' reference.
+	 * @see #setVessel(AllocatedVessel)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_Vessel()
+	 * @model required="true"
+	 * @generated
+	 */
+	AllocatedVessel getVessel();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getVessel <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel</em>' reference.
+	 * @see #getVessel()
+	 * @generated
+	 */
+	void setVessel(AllocatedVessel value);
 
 } // CargoAllocation
