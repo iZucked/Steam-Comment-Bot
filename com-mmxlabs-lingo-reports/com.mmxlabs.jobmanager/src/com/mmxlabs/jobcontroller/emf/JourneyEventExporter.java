@@ -14,6 +14,7 @@ import scenario.fleet.VesselState;
 import scenario.port.Port;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.Journey;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -33,7 +34,7 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 
 	@Override
 	public Journey export(final ISequenceElement element,
-			final Map<String, Object> annotations) {
+			final Map<String, Object> annotations, final AllocatedVessel v) {
 
 		@SuppressWarnings("unchecked")
 		final IJourneyEvent<ISequenceElement> event = (IJourneyEvent<ISequenceElement>) annotations

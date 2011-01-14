@@ -160,7 +160,7 @@ public class AnnotatedSolutionExporter {
 
 				for (final IAnnotationExporter exporter : exporters) {
 					final ScheduledEvent result = exporter.export(element,
-							annotations);
+							annotations, outputVessel);
 					if (result != null)
 						eventsForElement.add(result);
 				}

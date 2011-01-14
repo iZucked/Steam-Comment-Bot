@@ -15,6 +15,7 @@ import scenario.port.Port;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -34,7 +35,7 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 
 	@Override
 	public ScheduledEvent export(final ISequenceElement element,
-			final Map<String, Object> annotations) {
+			final Map<String, Object> annotations, final AllocatedVessel v) {
 		@SuppressWarnings("unchecked")
 		final IIdleEvent<ISequenceElement> event = (IIdleEvent<ISequenceElement>) annotations
 				.get(SchedulerConstants.AI_idleInfo);
