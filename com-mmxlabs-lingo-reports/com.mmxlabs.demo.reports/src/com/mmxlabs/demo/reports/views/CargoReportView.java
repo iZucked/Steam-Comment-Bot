@@ -73,7 +73,7 @@ public class CargoReportView extends ViewPart implements ISelectionListener {
 					case 0:
 						return cargo.getLoadSlot().getId();
 					case 1:
-						return "not implemented!";
+						return cargo.getVessel().getName();
 					case 2:
 						return cargo.getLoadSlot().getPort().getName();
 					case 3:
