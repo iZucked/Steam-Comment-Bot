@@ -22,24 +22,71 @@ import java.util.Set;
 public final class CollectionsUtil {
 
 	private CollectionsUtil() {
-		
+
+	}
+
+	/**
+	 * A workaround for the horrible effect of autoboxing on collections.
+	 * Convert a collection of Integers to an array of ints.
+	 * 
+	 * @param integers
+	 * @return
+	 */
+	public static final int[] integersToIntArray(
+			final Collection<Integer> integers) {
+		final int[] result = new int[integers.size()];
+		int ix = 0;
+		for (final int x : integers) {
+			result[ix++] = x;
+		}
+		return result;
+	}
+
+	/**
+	 * A workaround for the horrible effect of autoboxing on collections.
+	 * Convert an array of ints to an {@link ArrayList} of {@link Integer}s.
+	 * 
+	 * @param a
+	 * @return
+	 */
+	public static final ArrayList<Integer> toArrayList(final int[] a) {
+		final ArrayList<Integer> list = new ArrayList<Integer>(a.length);
+		for (final int v : a) {
+			list.add(v);
+		}
+		return list;
+	}
+
+	/**
+	 * A workaround for the horrible effect of autoboxing on collections.
+	 * Convert an array of longs to an {@link ArrayList} of {@link Long}s.
+	 * 
+	 * @param a
+	 * @return
+	 */
+	public static final ArrayList<Long> toArrayList(final long[] a) {
+		final ArrayList<Long> list = new ArrayList<Long>(a.length);
+		for (final long v : a) {
+			list.add(v);
+		}
+		return list;
 	}
 	
 	/**
 	 * A workaround for the horrible effect of autoboxing on collections.
-	 * Convert a collection of Integers to an array of ints.
-	 * @param integers
+	 * Convert an array of shorts to an {@link ArrayList} of {@link Short}s.
+	 * 
+	 * @param a
 	 * @return
 	 */
-	public static final int[] integersToIntArray(final Collection<Integer> integers) {
-		final int [] result = new int[integers.size()];
-		int ix = 0;
-		for (int x : integers) {
-			result[ix++]=x;
+	public static final ArrayList<Short> toArrayList(final short[] a) {
+		final ArrayList<Short> list = new ArrayList<Short>(a.length);
+		for (final short v : a) {
+			list.add(v);
 		}
-		return result;
+		return list;
 	}
-	
+
 	/**
 	 * Create a {@link ArrayList} of objects from an unbounded list.
 	 * 
@@ -102,13 +149,14 @@ public final class CollectionsUtil {
 
 	/**
 	 * Create a hash set containing the given elements
+	 * 
 	 * @param <T>
 	 * @param elements
 	 * @return
 	 */
-	public static <T> Set<T> makeHashSet(final T ... elements) {
-		HashSet<T> result = new HashSet<T>();
-		for (int i = 0; i<elements.length; i++) {
+	public static <T> Set<T> makeHashSet(final T... elements) {
+		final HashSet<T> result = new HashSet<T>();
+		for (int i = 0; i < elements.length; i++) {
 			result.add(elements[i]);
 		}
 		return result;
@@ -118,12 +166,11 @@ public final class CollectionsUtil {
 	 * @param initialConstraintValues
 	 * @return
 	 */
-	public static long[] longsToLongArray(
-			ArrayList<Long> longs) {
-		final long [] result = new long[longs.size()];
+	public static long[] longsToLongArray(final ArrayList<Long> longs) {
+		final long[] result = new long[longs.size()];
 		int ix = 0;
-		for (long x : longs) {
-			result[ix++]=x;
+		for (final long x : longs) {
+			result[ix++] = x;
 		}
 		return result;
 	}
