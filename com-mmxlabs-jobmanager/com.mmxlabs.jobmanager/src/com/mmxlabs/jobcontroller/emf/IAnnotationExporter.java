@@ -11,6 +11,7 @@ import java.util.Map;
 import scenario.Scenario;
 import scenario.schedule.Schedule;
 import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -57,5 +58,5 @@ public interface IAnnotationExporter {
 	 * @return
 	 */
 	ScheduledEvent export(final ISequenceElement element,
-			final Map<String, Object> annotations);
+			final Map<String, Object> annotations, final AllocatedVessel vessel);
 }

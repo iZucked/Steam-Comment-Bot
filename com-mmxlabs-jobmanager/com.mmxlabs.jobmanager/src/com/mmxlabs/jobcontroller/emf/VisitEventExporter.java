@@ -17,6 +17,7 @@ import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
+import scenario.schedule.fleetallocation.AllocatedVessel;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -52,7 +53,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 	@Override
 	public ScheduledEvent export(final ISequenceElement element,
-			final Map<String, Object> annotations) {
+			final Map<String, Object> annotations, final AllocatedVessel vessel) {
 
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
 
@@ -86,6 +87,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
 				eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); //yes? no?
 				eAllocation.setDischargeVolume(allocation.getDischargeVolume() / Calculator.ScaleFactor);
+				
+				eAllocation.setVessel(vessel);
 				
 				output.getCargoAllocations().add(eAllocation);
 			}
