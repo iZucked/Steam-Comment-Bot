@@ -71,6 +71,7 @@ public class CargoAllocationItemProvider
 			addDischargeDatePropertyDescriptor(object);
 			addLoadPriceM3PropertyDescriptor(object);
 			addDischargePriceM3PropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -247,6 +248,28 @@ public class CargoAllocationItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_vessel_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
