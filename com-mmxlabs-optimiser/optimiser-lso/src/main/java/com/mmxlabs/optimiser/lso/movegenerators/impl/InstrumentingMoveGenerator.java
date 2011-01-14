@@ -125,7 +125,7 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 			if (hits >= HIT_COUNT) {
 				hits = 0;
 				lastBatchTime = System.currentTimeMillis() - lastBatchTime;
-				log.error(this.toString());
+				log.debug(this.toString());
 			}
 		} else {
 			nulls++;
