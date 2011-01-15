@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
+ */
 package com.mmxlabs.common.delayedactions.impl;
 
 import com.mmxlabs.common.ITransformer;

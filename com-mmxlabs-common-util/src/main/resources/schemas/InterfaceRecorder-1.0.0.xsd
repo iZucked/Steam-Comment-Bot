@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010
+    Copyright (C) Minimax Labs Ltd., 2010 - 2011
     All rights reserved.
 
 -->
-
 <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://www.mmxlabs.com/schemas/InterfaceRecorder-1.0.0"
 	xmlns:ir="http://www.mmxlabs.com/schemas/InterfaceRecorder-1.0.0"
