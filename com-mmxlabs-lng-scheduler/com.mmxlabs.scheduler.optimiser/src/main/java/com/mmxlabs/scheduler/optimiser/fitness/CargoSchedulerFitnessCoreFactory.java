@@ -1,8 +1,7 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-
 package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.Collection;

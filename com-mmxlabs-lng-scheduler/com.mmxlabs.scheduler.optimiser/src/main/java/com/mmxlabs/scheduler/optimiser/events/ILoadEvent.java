@@ -1,8 +1,7 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-
 package com.mmxlabs.scheduler.optimiser.events;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
