@@ -24,6 +24,7 @@ import scenario.port.PortPackage;
  * <ul>
  *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultMarket <em>Default Market</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  * </ul>
  * </p>
  *
@@ -59,6 +60,26 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * @ordered
 	 */
 	protected Market defaultMarket;
+
+	/**
+	 * The default value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTimeZone()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TIME_ZONE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTimeZone()
+	 * @generated
+	 * @ordered
+	 */
+	protected String timeZone = TIME_ZONE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -145,6 +166,27 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTimeZone(String newTimeZone) {
+		String oldTimeZone = timeZone;
+		timeZone = newTimeZone;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__TIME_ZONE, oldTimeZone, timeZone));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -153,6 +195,8 @@ public class PortImpl extends EObjectImpl implements Port {
 			case PortPackage.PORT__DEFAULT_MARKET:
 				if (resolve) return getDefaultMarket();
 				return basicGetDefaultMarket();
+			case PortPackage.PORT__TIME_ZONE:
+				return getTimeZone();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -170,6 +214,9 @@ public class PortImpl extends EObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__DEFAULT_MARKET:
 				setDefaultMarket((Market)newValue);
+				return;
+			case PortPackage.PORT__TIME_ZONE:
+				setTimeZone((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -189,6 +236,9 @@ public class PortImpl extends EObjectImpl implements Port {
 			case PortPackage.PORT__DEFAULT_MARKET:
 				setDefaultMarket((Market)null);
 				return;
+			case PortPackage.PORT__TIME_ZONE:
+				setTimeZone(TIME_ZONE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -205,6 +255,8 @@ public class PortImpl extends EObjectImpl implements Port {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case PortPackage.PORT__DEFAULT_MARKET:
 				return defaultMarket != null;
+			case PortPackage.PORT__TIME_ZONE:
+				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -221,6 +273,8 @@ public class PortImpl extends EObjectImpl implements Port {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", timeZone: ");
+		result.append(timeZone);
 		result.append(')');
 		return result.toString();
 	}

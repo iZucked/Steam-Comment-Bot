@@ -349,15 +349,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVesselClass_LadenAttributes() {
-		return (EReference)vesselClassEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselClass_BallastAttributes() {
 		return (EReference)vesselClassEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -366,8 +357,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselClass_MinHeelVolume() {
-		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(7);
+	public EReference getVesselClass_BallastAttributes() {
+		return (EReference)vesselClassEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -375,7 +366,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselClass_FillCapacity() {
+	public EAttribute getVesselClass_MinHeelVolume() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -384,7 +375,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselClass_DailyCharterPrice() {
+	public EAttribute getVesselClass_FillCapacity() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -393,7 +384,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselClass_SpotCharterCount() {
+	public EAttribute getVesselClass_DailyCharterPrice() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -402,8 +393,17 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselClass_BaseFuelEquivalenceFactor() {
+	public EAttribute getVesselClass_SpotCharterCount() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselClass_BaseFuelEquivalenceFactor() {
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -659,13 +659,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MIN_SPEED);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MAX_SPEED);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__BASE_FUEL_UNIT_PRICE);
+		createEAttribute(vesselClassEClass, VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR);
 		createEReference(vesselClassEClass, VESSEL_CLASS__LADEN_ATTRIBUTES);
 		createEReference(vesselClassEClass, VESSEL_CLASS__BALLAST_ATTRIBUTES);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MIN_HEEL_VOLUME);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__FILL_CAPACITY);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__DAILY_CHARTER_PRICE);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__SPOT_CHARTER_COUNT);
-		createEAttribute(vesselClassEClass, VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR);
 		createEReference(vesselClassEClass, VESSEL_CLASS__INACCESSIBLE_PORTS);
 
 		fuelConsumptionLineEClass = createEClass(FUEL_CONSUMPTION_LINE);
@@ -747,14 +747,14 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVesselClass_Capacity(), ecorePackage.getELong(), "capacity", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MinSpeed(), ecorePackage.getEFloat(), "minSpeed", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MaxSpeed(), ecorePackage.getEFloat(), "maxSpeed", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselClass_BaseFuelUnitPrice(), ecorePackage.getEInt(), "baseFuelUnitPrice", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClass_BaseFuelUnitPrice(), ecorePackage.getEFloat(), "baseFuelUnitPrice", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClass_BaseFuelEquivalenceFactor(), ecorePackage.getEFloat(), "baseFuelEquivalenceFactor", "0.5", 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_LadenAttributes(), this.getVesselStateAttributes(), null, "ladenAttributes", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_BallastAttributes(), this.getVesselStateAttributes(), null, "ballastAttributes", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MinHeelVolume(), ecorePackage.getELong(), "minHeelVolume", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_FillCapacity(), ecorePackage.getEFloat(), "fillCapacity", "0.958", 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_DailyCharterPrice(), ecorePackage.getEInt(), "dailyCharterPrice", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_SpotCharterCount(), ecorePackage.getEInt(), "spotCharterCount", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselClass_BaseFuelEquivalenceFactor(), ecorePackage.getEDouble(), "baseFuelEquivalenceFactor", "0.5", 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_InaccessiblePorts(), thePortPackage.getPort(), null, "inaccessiblePorts", null, 0, -1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelConsumptionLineEClass, FuelConsumptionLine.class, "FuelConsumptionLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
