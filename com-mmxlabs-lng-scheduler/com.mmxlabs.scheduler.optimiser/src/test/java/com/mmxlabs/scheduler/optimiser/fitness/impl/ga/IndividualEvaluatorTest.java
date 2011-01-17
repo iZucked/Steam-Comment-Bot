@@ -9,7 +9,6 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -20,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -31,6 +29,7 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEdito
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
@@ -41,21 +40,21 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @RunWith(JMock.class)
 public class IndividualEvaluatorTest {
 
 	private static final class MockSequenceScheduler extends
 			AbstractSequenceScheduler<Object> {
+		
 		@Override
-		public Pair<Integer,List<VoyagePlan>> schedule(final IResource resource,
-				final ISequence<Object> sequence) {
+		public ScheduledSequences schedule(ISequences<Object> sequences) {
 			throw new UnsupportedOperationException();
 		}
 	}
