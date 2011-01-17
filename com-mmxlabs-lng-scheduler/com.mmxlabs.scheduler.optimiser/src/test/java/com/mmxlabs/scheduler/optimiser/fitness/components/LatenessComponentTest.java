@@ -97,21 +97,23 @@ public class LatenessComponentTest {
 		final IModifiableSequence<Object> sequence = OptimiserTestUtil
 				.makeSequence(obj1, obj2);
 
-		c.prepare();
-
-		c.beginIterating(resource);
-		c.evaluateNextObject(loadDetails, 15);
-		c.evaluateNextObject(dischargeDetails, 20);
-		c.endIterating();
+		Assert.fail("TODO: Fix me");
 		
-		c.evaluateSequence(resource, sequence,
-				CollectionsUtil.makeArrayList(voyagePlan),false,0);
-
-		c.complete();
-
-		// 4 hours lateness * hardcoded weight
-		Assert.assertEquals(4 * 1000000, c.getFitness());
-
-		context.assertIsSatisfied();
+//		c.prepare();
+//
+//		c.beginIterating(resource);
+//		c.evaluateNextObject(loadDetails, 15);
+//		c.evaluateNextObject(dischargeDetails, 20);
+//		c.endIterating();
+//		
+//		c.evaluateSequence(resource, sequence,
+//				CollectionsUtil.makeArrayList(voyagePlan),false,0);
+//
+//		c.complete();
+//
+//		// 4 hours lateness * hardcoded weight
+//		Assert.assertEquals(4 * 1000000, c.getFitness());
+//
+//		context.assertIsSatisfied();
 	}
 }

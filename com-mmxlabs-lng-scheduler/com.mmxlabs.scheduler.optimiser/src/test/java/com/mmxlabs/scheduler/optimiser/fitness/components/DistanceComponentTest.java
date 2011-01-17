@@ -82,16 +82,18 @@ public class DistanceComponentTest {
 		final IModifiableSequence<Object> sequence = OptimiserTestUtil
 				.makeSequence(obj1, obj2);
 
-		c.prepare();
-
-		c.evaluateSequence(resource, sequence,
-				CollectionsUtil.makeArrayList(voyagePlan), false, 0);
-
-		c.complete();
-
-		Assert.fail("Component always returns zero!");
-		Assert.assertEquals(20, c.getFitness());
-
-		context.assertIsSatisfied();
+		Assert.fail("TODO: Fix me");
+		
+//		c.prepare();
+//
+//		c.evaluateSequence(resource, sequence,
+//				CollectionsUtil.makeArrayList(voyagePlan), false, 0);
+//
+//		c.complete();
+//
+//		Assert.fail("Component always returns zero!");
+//		Assert.assertEquals(20, c.getFitness());
+//
+//		context.assertIsSatisfied();
 	}
 }
