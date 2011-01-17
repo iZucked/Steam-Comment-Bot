@@ -164,7 +164,7 @@ public class RandomScenarioUtils {
 		class1.setBallastAttributes(createVesselStateAttributes(
 				VesselState.BALLAST, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f,
 				steam));
-		class1.setBaseFuelEquivalenceFactor(0.5);
+		class1.setBaseFuelEquivalenceFactor(0.5f);
 
 		class2.setLadenAttributes(createVesselStateAttributes(
 				VesselState.LADEN, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f,
@@ -172,7 +172,7 @@ public class RandomScenarioUtils {
 		class2.setBallastAttributes(createVesselStateAttributes(
 				VesselState.BALLAST, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f,
 				steam));
-		class2.setBaseFuelEquivalenceFactor(0.5);
+		class2.setBaseFuelEquivalenceFactor(0.5f);
 
 		class3.setLadenAttributes(createVesselStateAttributes(
 				VesselState.LADEN, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f,
@@ -180,7 +180,7 @@ public class RandomScenarioUtils {
 		class3.setBallastAttributes(createVesselStateAttributes(
 				VesselState.BALLAST, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f,
 				dfde));
-		class3.setBaseFuelEquivalenceFactor(0.5);
+		class3.setBaseFuelEquivalenceFactor(0.5f);
 
 		class4.setLadenAttributes(createVesselStateAttributes(
 				VesselState.LADEN, 1.26f / 24.0f, 1.06f / 24.0f, 1 / 24.0f,
@@ -188,7 +188,7 @@ public class RandomScenarioUtils {
 		class4.setBallastAttributes(createVesselStateAttributes(
 				VesselState.BALLAST, 1.25f / 24.0f, 1.06f / 24.0f, 1 / 24.0f,
 				steam));
-		class4.setBaseFuelEquivalenceFactor(0.5);
+		class4.setBaseFuelEquivalenceFactor(0.5f);
 
 		class1.setSpotCharterCount(spotCount);
 		class2.setSpotCharterCount(spotCount);
