@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.progress.IProgressConstants2;
 
 import scenario.Scenario;
+import scenario.optimiser.lso.LSOSettings;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.common.Pair;
@@ -72,8 +73,6 @@ public class ScenarioOptimisationJob implements IManagedJob {
 	public void init() {
 		progress = NO_PROGRESS;
 		totalProgress = IProgressMonitor.UNKNOWN;
-
-		totalProgress = 2000000;
 
 		state = JobState.INITIALISED;
 
@@ -141,7 +140,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 						// HERE: Process the solution in a runnable and update
 						// getSchedule() output
-						updateSchedule(bestState, iteration);
+//						updateSchedule(bestState, iteration);
 
 						// paused = true;
 
@@ -181,10 +180,18 @@ public class ScenarioOptimisationJob implements IManagedJob {
 
 					@Override
 					public void done(final IOptimiser<ISequenceElement> arg0,
-							final long arg1,
+							final long bestFitness,
 							final IAnnotatedSolution<ISequenceElement> arg2) {
 
+						System.out.println("Done. Best Fitness: " + bestFitness
+								+ " gain: " + 100
+								* (firstFitness - bestFitness)
+								/ (double) firstFitness + "%" + " Wall time : "
+								+ (System.currentTimeMillis() - startTime)
+								/ 1000 + " s");
+						
 						updateSchedule(arg2, -1);
+						
 
 					}
 
@@ -198,12 +205,20 @@ public class ScenarioOptimisationJob implements IManagedJob {
 					}
 				};
 
-				monitor.beginTask("Managed Job", totalProgress);
 				try {
-					monitor.subTask("Pre-process scenario");
-
 					final LNGScenarioTransformer lst = new LNGScenarioTransformer(
 							scenario);
+	
+					// Extract number of steps from settings prior to setting progress monitor
+					if (lst.getOptimisationSettings() instanceof LSOSettings) {
+						totalProgress = ((LSOSettings)lst.getOptimisationSettings()).getNumberOfSteps();
+					}
+					
+					// TODO: If an exception is thrown before we get here - will monitor.done() be a problem?
+					monitor.beginTask("Managed Job", totalProgress);
+					
+					monitor.subTask("Pre-process scenario");
+
 					final OptimisationTransformer ot = new OptimisationTransformer(
 							lst.getOptimisationSettings());
 					try {

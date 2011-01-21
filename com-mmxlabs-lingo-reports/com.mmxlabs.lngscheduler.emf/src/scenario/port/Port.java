@@ -19,6 +19,7 @@ import scenario.market.Market;
  * <ul>
  *   <li>{@link scenario.port.Port#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultMarket <em>Default Market</em>}</li>
+ *   <li>{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}</li>
  * </ul>
  * </p>
  *
@@ -38,7 +39,7 @@ public interface Port extends EObject {
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see scenario.port.PortPackage#getPort_Name()
-	 * @model
+	 * @model id="true" required="true"
 	 * @generated
 	 */
 	String getName();
@@ -78,5 +79,31 @@ public interface Port extends EObject {
 	 * @generated
 	 */
 	void setDefaultMarket(Market value);
+
+	/**
+	 * Returns the value of the '<em><b>Time Zone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Time Zone</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Time Zone</em>' attribute.
+	 * @see #setTimeZone(String)
+	 * @see scenario.port.PortPackage#getPort_TimeZone()
+	 * @model
+	 * @generated
+	 */
+	String getTimeZone();
+
+	/**
+	 * Sets the value of the '{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Time Zone</em>' attribute.
+	 * @see #getTimeZone()
+	 * @generated
+	 */
+	void setTimeZone(String value);
 
 } // Port

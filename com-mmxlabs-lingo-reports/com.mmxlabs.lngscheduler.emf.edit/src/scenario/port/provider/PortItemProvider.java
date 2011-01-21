@@ -61,6 +61,7 @@ public class PortItemProvider
 
 			addNamePropertyDescriptor(object);
 			addDefaultMarketPropertyDescriptor(object);
+			addTimeZonePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -110,6 +111,28 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Time Zone feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTimeZonePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_timeZone_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_timeZone_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__TIME_ZONE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Port.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -147,6 +170,7 @@ public class PortItemProvider
 
 		switch (notification.getFeatureID(Port.class)) {
 			case PortPackage.PORT__NAME:
+			case PortPackage.PORT__TIME_ZONE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

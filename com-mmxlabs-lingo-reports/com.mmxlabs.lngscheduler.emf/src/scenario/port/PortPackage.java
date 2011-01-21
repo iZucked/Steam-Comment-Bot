@@ -115,13 +115,22 @@ public interface PortPackage extends EPackage {
 	int PORT__DEFAULT_MARKET = 1;
 
 	/**
+	 * The feature id for the '<em><b>Time Zone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__TIME_ZONE = 2;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = 2;
+	int PORT_FEATURE_COUNT = 3;
 
 
 	/**
@@ -383,6 +392,17 @@ public interface PortPackage extends EPackage {
 	EReference getPort_DefaultMarket();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time Zone</em>'.
+	 * @see scenario.port.Port#getTimeZone()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_TimeZone();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -629,6 +649,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT__DEFAULT_MARKET = eINSTANCE.getPort_DefaultMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Time Zone</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__TIME_ZONE = eINSTANCE.getPort_TimeZone();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.

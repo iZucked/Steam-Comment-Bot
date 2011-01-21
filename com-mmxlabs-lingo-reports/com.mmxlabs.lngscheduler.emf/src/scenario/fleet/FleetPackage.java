@@ -226,13 +226,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__BASE_FUEL_UNIT_PRICE = 4;
 
 	/**
+	 * The feature id for the '<em><b>Base Fuel Equivalence Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR = 5;
+
+	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__LADEN_ATTRIBUTES = 5;
+	int VESSEL_CLASS__LADEN_ATTRIBUTES = 6;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -241,7 +250,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BALLAST_ATTRIBUTES = 6;
+	int VESSEL_CLASS__BALLAST_ATTRIBUTES = 7;
 
 	/**
 	 * The feature id for the '<em><b>Min Heel Volume</b></em>' attribute.
@@ -250,7 +259,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL_VOLUME = 7;
+	int VESSEL_CLASS__MIN_HEEL_VOLUME = 8;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -259,7 +268,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__FILL_CAPACITY = 8;
+	int VESSEL_CLASS__FILL_CAPACITY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Daily Charter Price</b></em>' attribute.
@@ -268,7 +277,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__DAILY_CHARTER_PRICE = 9;
+	int VESSEL_CLASS__DAILY_CHARTER_PRICE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -277,16 +286,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__SPOT_CHARTER_COUNT = 10;
-
-	/**
-	 * The feature id for the '<em><b>Base Fuel Equivalence Factor</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR = 11;
+	int VESSEL_CLASS__SPOT_CHARTER_COUNT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
