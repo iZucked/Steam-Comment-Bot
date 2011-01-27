@@ -199,7 +199,7 @@
 						</environment>
 						<!-- Currently unable to build for mac (on linux) using eclipse-repository packaging type. -->
 						<!-- See Tycho 520 (https://issues.sonatype.org/browse/TYCHO-520) -->
-						<!-- See Eclipse 331721 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=331721) -->
+						<!-- See Eclipse 313997 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=313997) -->
 <!-- 
 						<environment>
 							<os>macosx</os>
