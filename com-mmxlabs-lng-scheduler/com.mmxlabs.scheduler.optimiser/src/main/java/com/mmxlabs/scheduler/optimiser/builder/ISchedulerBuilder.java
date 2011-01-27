@@ -222,6 +222,16 @@ public interface ISchedulerBuilder {
 			IDischargeSlot dischargeSlot);
 
 	/**
+	 * Restrict the set of vessels which can carry this cargo to those in the second argument.
+	 * 
+	 * If this method is never called, the cargo can be carried by any vessel.
+	 * 
+	 * @param cargo a cargo created by {@link #createCargo()}
+	 * @param vessels a set of vessels on which this cargo may be carried
+	 */
+	void setCargoVesselRestriction(ICargo cargo, Set<IVessel> vessels);
+	
+	/**
 	 * Create a time window with the specified start and end time.
 	 * 
 	 * @param start

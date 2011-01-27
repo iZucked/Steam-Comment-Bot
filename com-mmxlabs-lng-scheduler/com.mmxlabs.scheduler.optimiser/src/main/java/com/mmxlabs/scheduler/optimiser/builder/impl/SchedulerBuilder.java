@@ -6,6 +6,7 @@
 package com.mmxlabs.scheduler.optimiser.builder.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -103,7 +104,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEdi
  * 
  */
 public final class SchedulerBuilder implements ISchedulerBuilder {
-
+	
 	private final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
 
 	private final List<IResource> resources = new ArrayList<IResource>();
@@ -1062,6 +1063,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				limit.addSlotIfWindowsMatch(slot);
 			}
 		}
+	}
+
+	@Override
+	public void setCargoVesselRestriction(ICargo cargo, Set<IVessel> vessels) {
+		final ILoadSlot loadSlot = cargo.getLoadSlot();
+		final IDischargeSlot dischargeSlot = cargo.getDischargeSlot();
+		final Collection<IResource> resources = new HashSet<IResource>();
+		for (final IVessel v : vessels) {
+			resources.add(vesselProvider.getResource(v));
+		}
+		resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(loadSlot), resources);
+		resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(dischargeSlot), resources);
 	}
 
 }
