@@ -197,8 +197,10 @@
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
-						<!-- Currently unable to build for mac (on linux) using eclipse-repository 
-							packaging type.
+						<!-- Currently unable to build for mac (on linux) using eclipse-repository packaging type. -->
+						<!-- See Tycho 520 (https://issues.sonatype.org/browse/TYCHO-520) -->
+						<!-- See Eclipse 331721 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=331721) -->
+<!-- 
 						<environment>
 							<os>macosx</os>
 							<ws>carbon</ws>
@@ -214,7 +216,7 @@
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
 						</environment>
-					 -->
+-->
 					</environments>
 
 				</configuration>
