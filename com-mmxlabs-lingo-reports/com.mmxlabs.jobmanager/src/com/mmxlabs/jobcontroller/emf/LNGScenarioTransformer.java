@@ -55,6 +55,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -187,7 +188,7 @@ public class LNGScenarioTransformer {
 		buildDistances(builder, portAssociation, allPorts, portIndices,
 				vesselAssociations.getFirst());
 
-		buildCargoes(builder, portAssociation, marketAssociation, entities);
+		buildCargoes(builder, portAssociation, marketAssociation, vesselAssociations.getSecond(), entities);
 
 		buildCharterOuts(builder, portAssociation,
 				vesselAssociations.getFirst(), vesselAssociations.getSecond(),
@@ -288,6 +289,7 @@ public class LNGScenarioTransformer {
 	private void buildCargoes(final SchedulerBuilder builder,
 			final Association<Port, IPort> ports,
 			final Association<Market, ICurve> marketAssociation,
+			final Association<Vessel, IVessel> vesselAssociation,
 			final ModelEntityMap entities) {
 		for (Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// not escargot.
@@ -330,7 +332,15 @@ public class LNGScenarioTransformer {
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);
 
-			builder.createCargo(eCargo.getId(), load, discharge);
+			final ICargo cargo = builder.createCargo(eCargo.getId(), load, discharge);
+			
+			if (!eCargo.getAllowedVessels().isEmpty()) {
+				HashSet<IVessel> vesselsForCargo = new HashSet<IVessel>();
+				for (final Vessel v : eCargo.getAllowedVessels()) {
+					vesselsForCargo.add(vesselAssociation.lookup(v));
+				}
+				builder.setCargoVesselRestriction(cargo, vesselsForCargo);
+			}
 		}
 	}
 
