@@ -77,8 +77,9 @@ public abstract class AbstractSequenceScheduler<T> implements
 		for (int i = 0; i<sequences.size(); i++) {
 			final ISequence<T> sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
-			
-			result.add(schedule(resource, sequence, arrivalTimes[i]));
+			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+			if (scheduledSequence == null) return null;
+			result.add(scheduledSequence);
 		}
 		
 		return result;
