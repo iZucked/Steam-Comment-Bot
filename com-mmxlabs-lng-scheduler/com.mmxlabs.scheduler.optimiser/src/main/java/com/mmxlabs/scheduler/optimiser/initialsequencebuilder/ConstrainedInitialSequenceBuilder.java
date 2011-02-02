@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -52,6 +53,11 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class ConstrainedInitialSequenceBuilder<T> implements
 		IInitialSequenceBuilder<T> {
+	/**
+	 * The initial maximum acceptable lateness; every cargo in the solution
+	 * should be feasible on the fastest ship in the fleet with this much slack.
+	 */
+	private static final int INITIAL_MAX_LATENESS = 48;
 	private List<IPairwiseConstraintChecker<T>> pairwiseCheckers;
 	private TravelTimeConstraintChecker<T> travelTimeChecker;
 
@@ -114,8 +120,8 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 			if (checker instanceof IPairwiseConstraintChecker) {
 				pairwiseCheckers.add((IPairwiseConstraintChecker<T>) checker);
 			}
-			if (checker instanceof TravelTimeConstraintChecker){
-				this.travelTimeChecker = (TravelTimeConstraintChecker<T>)checker;
+			if (checker instanceof TravelTimeConstraintChecker) {
+				this.travelTimeChecker = (TravelTimeConstraintChecker<T>) checker;
 			}
 		}
 	}
@@ -126,7 +132,8 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 	}
 
 	@Override
-	public ISequences<T> createInitialSequences(IOptimisationData<T> data) {
+	public ISequences<T> createInitialSequences(
+			final IOptimisationData<T> data, final ISequences<T> suggestion) {
 		@SuppressWarnings("unchecked")
 		final IPortTypeProvider<T> portTypeProvider = data
 				.getDataComponentProvider(
@@ -148,18 +155,17 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(data,
 				pairwiseCheckers);
 
-		final int initialMaxLateness = (travelTimeChecker == null) ? 0 :
-			travelTimeChecker.getMaxLateness();
-		
+		final int initialMaxLateness = (travelTimeChecker == null) ? 0
+				: travelTimeChecker.getMaxLateness();
+
 		if (travelTimeChecker != null)
-			travelTimeChecker.setMaxLateness(0);
-		
-		
+			travelTimeChecker.setMaxLateness(INITIAL_MAX_LATENESS);
+
 		// stick together elements which must be stuck together
 		Map<T, Set<T>> followerCache = new HashMap<T, Set<T>>();
-		Set<T> heads = new LinkedHashSet<T>(); 
+		Set<T> heads = new LinkedHashSet<T>();
 		Set<T> tails = new LinkedHashSet<T>();
-		
+
 		for (T element1 : data.getSequenceElements()) {
 			Set<T> after1 = new HashSet<T>();
 			followerCache.put(element1, after1);
@@ -180,19 +186,20 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				heads.remove(tail);
 			}
 		}
-		
-		/*{
+
+		{
 			System.out.println("Contention information: there are "
 					+ heads.size() + " movable chunks, containing "
 					+ tails.size() + " forced-follow elements");
 			TreeMap<Integer, Integer> histogram = new TreeMap<Integer, Integer>();
 			for (T t : tails) {
 				final Integer sz = followerCache.get(t).size();
-				
-				histogram.put(sz, histogram.containsKey(sz) ? histogram.get(sz) + 1 : 1);
+
+				histogram.put(sz,
+						histogram.containsKey(sz) ? histogram.get(sz) + 1 : 1);
 			}
 			System.out.println("Histogram : " + histogram);
-		}*/
+		}
 
 		// Heads now contains the head of every chunk that has to go together.
 		// We need to pull out all the chunks and sort out their rules
@@ -335,6 +342,8 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 
 		Collections.sort(chunks, comparator);
 
+		System.err.println(chunks);
+
 		final ChunkChecker<T> chunkChecker = new ChunkChecker<T>(checker);
 		Map<IResource, List<SequenceChunk<T>>> sequences = new HashMap<IResource, List<SequenceChunk<T>>>();
 
@@ -362,7 +371,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
-		
+
 		while (!chunks.isEmpty()) {
 			Iterator<SequenceChunk<T>> iterator = chunks.iterator();
 			while (iterator.hasNext()) {
@@ -381,20 +390,23 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 					}
 				}
 			}
-			if (travelTimeChecker == null) break;
-			//relax constraint
+			if (travelTimeChecker == null)
+				break;
+			// relax constraint
 			final int maxLateness = travelTimeChecker.getMaxLateness();
-			if (maxLateness == initialMaxLateness) break;
-			
-			travelTimeChecker.setMaxLateness(maxLateness+1);
-			System.err.println("Allowing lateness " + (maxLateness + 1) + " " + chunks.size() + " left...");
-		}
-		
-		if (chunks.isEmpty() == false) {
-			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSolutionBuilder. " + chunks + " could not be scheduled anywhere.");
-		}
-		
+			if (maxLateness == initialMaxLateness)
+				break;
 
+			travelTimeChecker.setMaxLateness(maxLateness + 1);
+			System.err.println("Allowing lateness " + (maxLateness + 1) + " "
+					+ chunks.size() + " left...");
+		}
+
+		if (chunks.isEmpty() == false) {
+			throw new RuntimeException(
+					"Scenario is too hard for ConstrainedInitialSolutionBuilder. "
+							+ chunks + " could not be scheduled anywhere.");
+		}
 
 		// OK, we have done our best, now build the modifiablesequences
 		// from the intermediate gack
