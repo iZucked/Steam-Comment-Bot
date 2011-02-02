@@ -6,27 +6,47 @@
 package com.mmxlabs.jobcontroller.emf.optimisationsettings;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import scenario.optimiser.Constraint;
-import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimisationSettings;
+import scenario.optimiser.lso.LSOSettings;
+import scenario.schedule.Sequence;
+import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.SlotVisit;
+import scenario.schedule.fleetallocation.AllocatedVessel;
+import scenario.schedule.fleetallocation.FleetVessel;
+import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.jobcontroller.emf.ModelEntityMap;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
@@ -34,12 +54,17 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
- * Utility for taking an OptimisationSettings from the EMF and starting an optimiser accordingly. At the moment, it's pretty much 
- * just what was in TestUtils.
+ * Utility for taking an OptimisationSettings from the EMF and starting an
+ * optimiser accordingly. At the moment, it's pretty much just what was in
+ * TestUtils.
+ * 
  * @author hinton
- *
+ * 
  */
 public class OptimisationTransformer {
 	private OptimisationSettings settings;
@@ -47,53 +72,61 @@ public class OptimisationTransformer {
 	public OptimisationTransformer(OptimisationSettings settings) {
 		this.settings = settings;
 	}
-	
-	public IOptimisationContext<ISequenceElement> createOptimisationContext(IOptimisationData<ISequenceElement> data) {
-		ISequences<ISequenceElement> sequences = createInitialSequences(data);
+
+	public IOptimisationContext<ISequenceElement> createOptimisationContext(
+			final IOptimisationData<ISequenceElement> data,
+			final ModelEntityMap mem) {
+		ISequences<ISequenceElement> sequences = createInitialSequences(data,
+				mem);
 		IConstraintCheckerRegistry checkerRegistry = createConstraintCheckerRegistry();
 		IFitnessFunctionRegistry componentRegistry = createFitnessFunctionRegistry();
 		List<String> checkers = getEnabledConstraintNames();
 		List<String> components = getEnabledFitnessFunctionNames();
-		return new OptimisationContext<ISequenceElement>(data, sequences, components, componentRegistry, checkers, checkerRegistry);
+		return new OptimisationContext<ISequenceElement>(data, sequences,
+				components, componentRegistry, checkers, checkerRegistry);
 	}
 
-	public Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> createOptimiserAndContext(IOptimisationData<ISequenceElement> data) {
-		IOptimisationContext<ISequenceElement> context = createOptimisationContext(data);
-		
-		LSOConstructor lsoConstructor = new LSOConstructor((LSOSettings) settings);
-		
-		return new Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>>
-			(context, lsoConstructor.buildOptimiser(context,
-				SequencesManipulatorUtil.createDefaultSequenceManipulators(data)
-			));
+	public Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> createOptimiserAndContext(
+			IOptimisationData<ISequenceElement> data, final ModelEntityMap mem) {
+		IOptimisationContext<ISequenceElement> context = createOptimisationContext(
+				data, mem);
+
+		LSOConstructor lsoConstructor = new LSOConstructor(
+				(LSOSettings) settings);
+
+		return new Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>>(
+				context, lsoConstructor.buildOptimiser(context,
+						SequencesManipulatorUtil
+								.createDefaultSequenceManipulators(data)));
 	}
-	
+
 	private List<String> getEnabledConstraintNames() {
 		List<String> result = new ArrayList<String>();
-		
+
 		for (Constraint c : settings.getConstraints()) {
 			if (c.isEnabled()) {
 				result.add(c.getName());
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	private List<String> getEnabledFitnessFunctionNames() {
 		List<String> result = new ArrayList<String>();
-		
+
 		for (Objective o : settings.getObjectives()) {
 			if (o.getWeight() > 0) {
 				result.add(o.getName());
 			}
 		}
-		
-		return result;	
+
+		return result;
 	}
 
 	/**
 	 * Creates a fitness function registry
+	 * 
 	 * @param data
 	 * @return
 	 */
@@ -108,6 +141,7 @@ public class OptimisationTransformer {
 
 	/**
 	 * Creates a constraint checker registry
+	 * 
 	 * @param data
 	 * @return
 	 */
@@ -126,37 +160,107 @@ public class OptimisationTransformer {
 					.registerConstraintCheckerFactory(constraintFactory);
 		}
 
-		constraintRegistry.registerConstraintCheckerFactory(
-				new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider,
+		constraintRegistry
+				.registerConstraintCheckerFactory(new PortTypeConstraintCheckerFactory(
+						SchedulerConstants.DCP_portTypeProvider,
 						SchedulerConstants.DCP_vesselProvider));
-		
-		constraintRegistry.registerConstraintCheckerFactory(
-				new TravelTimeConstraintCheckerFactory());
-		
-		constraintRegistry.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory(
-				SchedulerConstants.DCP_portExclusionProvider, 
-				SchedulerConstants.DCP_vesselProvider, 
-				SchedulerConstants.DCP_portProvider));	
-		
+
+		constraintRegistry
+				.registerConstraintCheckerFactory(new TravelTimeConstraintCheckerFactory());
+
+		constraintRegistry
+				.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory(
+						SchedulerConstants.DCP_portExclusionProvider,
+						SchedulerConstants.DCP_vesselProvider,
+						SchedulerConstants.DCP_portProvider));
+
 		return constraintRegistry;
 	}
 
 	/**
-	 * Create initial sequences; currently random, ideally will use the optimisation settings.
+	 * Create initial sequences; currently random, ideally will use the
+	 * optimisation settings.
+	 * 
 	 * @param data
 	 * @return
 	 */
 	public ISequences<ISequenceElement> createInitialSequences(
-			IOptimisationData<ISequenceElement> data) {
-		//Create the sequenced constraint checkers here
-		IConstraintCheckerRegistry registry = createConstraintCheckerRegistry();
-		
-		IInitialSequenceBuilder<ISequenceElement> builder = 
-			new ConstrainedInitialSequenceBuilder<ISequenceElement>(
-				registry.getConstraintCheckerFactories(getEnabledConstraintNames())		
-			);
+			IOptimisationData<ISequenceElement> data, final ModelEntityMap mem) {
+		// Create the sequenced constraint checkers here
 
-		return builder.createInitialSequences(data);
+		if (settings.getInitialSchedule() != null) {
+			final IModifiableSequences<ISequenceElement> sequences = new ModifiableSequences<ISequenceElement>(
+					data.getResources());
+
+			final Map<IVesselClass, Set<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, Set<IVessel>>();
+
+			final IVesselProvider vp = data.getDataComponentProvider(
+					SchedulerConstants.DCP_vesselProvider,
+					IVesselProvider.class);
+
+			final IPortSlotProvider<ISequenceElement> psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+			
+			final IStartEndRequirementProvider<ISequenceElement> serp = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
+			
+			// collect spot vessels
+			for (final IResource resource : data.getResources()) {
+				final IVessel vessel = vp.getVessel(resource);
+				if (vessel.getVesselInstanceType().equals(
+						VesselInstanceType.SPOT_CHARTER)) {
+					if (spotVesselsByClass.containsKey(vessel.getVesselClass())) {
+						spotVesselsByClass.get(vessel.getVesselClass()).add(
+								vessel);
+					} else {
+						spotVesselsByClass.put(vessel.getVesselClass(),
+								new HashSet<IVessel>()).add(vessel);
+					}
+				}
+			}
+
+			
+			
+			for (final Sequence sequence : settings.getInitialSchedule()
+					.getSequences()) {
+
+				final AllocatedVessel av = sequence.getVessel();
+				final IVessel vessel;
+
+				if (av instanceof SpotVessel) {
+					final IVesselClass vesselClass = mem.getOptimiserObject(
+							((SpotVessel) av).getVesselClass(),
+							IVesselClass.class);
+					// match vesselClass with a suitable vessel
+					vessel = spotVesselsByClass.get(vesselClass).iterator()
+							.next();
+					spotVesselsByClass.get(vesselClass).remove(vessel);
+				} else {
+					vessel = mem.getOptimiserObject(
+							((FleetVessel) av).getVessel(), IVessel.class);
+				}
+
+				// get the sequence for the chosen vessel
+				final IModifiableSequence<ISequenceElement> ms = sequences
+						.getModifiableSequence(vp.getResource(vessel));
+				ms.add(serp.getStartElement(vp.getResource(vessel)));
+				for (final ScheduledEvent event : sequence.getEvents()) {
+					if (event instanceof SlotVisit) {
+						final SlotVisit v = (SlotVisit) event;
+						final IPortSlot portSlot = mem.getOptimiserObject(
+								((SlotVisit) event).getSlot(), IPortSlot.class);
+						ms.add(psp.getElement(portSlot));
+					}
+				}
+				ms.add(serp.getEndElement(vp.getResource(vessel)));
+			}
+			
+			return sequences;
+		} else {
+			IConstraintCheckerRegistry registry = createConstraintCheckerRegistry();
+
+			IInitialSequenceBuilder<ISequenceElement> builder = new ConstrainedInitialSequenceBuilder<ISequenceElement>(
+					registry.getConstraintCheckerFactories(getEnabledConstraintNames()));
+
+			return builder.createInitialSequences(data);
+		}
 	}
-	
 }
