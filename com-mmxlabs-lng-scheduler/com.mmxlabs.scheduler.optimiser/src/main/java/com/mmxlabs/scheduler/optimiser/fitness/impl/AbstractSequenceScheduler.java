@@ -10,12 +10,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
