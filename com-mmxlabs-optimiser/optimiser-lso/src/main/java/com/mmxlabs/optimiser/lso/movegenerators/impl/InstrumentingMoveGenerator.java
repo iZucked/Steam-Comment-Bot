@@ -16,7 +16,6 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
-	
 	private static final Logger log = LoggerFactory.getLogger(InstrumentingMoveGenerator.class);
 	
 	private static final int HIT_COUNT = 500;
