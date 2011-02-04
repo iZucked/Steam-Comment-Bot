@@ -226,7 +226,7 @@ public class ScenarioOptimisationJob implements IManagedJob {
 								.createOptimisationData(entities);
 
 						final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
-								.createOptimiserAndContext(data);
+								.createOptimiserAndContext(data, entities);
 
 						monitor.subTask("Prepare optimisation");
 
