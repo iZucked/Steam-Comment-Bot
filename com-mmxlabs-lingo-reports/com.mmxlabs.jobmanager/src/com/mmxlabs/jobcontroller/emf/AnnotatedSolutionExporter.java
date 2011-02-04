@@ -95,12 +95,10 @@ public class AnnotatedSolutionExporter {
 		final Map<IVesselClass, AtomicInteger> counter = new HashMap<IVesselClass, AtomicInteger>();
 
 		for (final IResource resource : resources) {
-			final Sequence eSequence = factory.createSequence();
-			sequences.add(eSequence);
-
 			final IVessel vessel = vesselProvider.getVessel(resource);
 			final AllocatedVessel outputVessel;
 			switch (vessel.getVesselInstanceType()) {
+			case TIME_CHARTER:
 			case FLEET:
 				final FleetVessel fv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE
 						.getFleetallocationFactory().createFleetVessel();
@@ -110,6 +108,7 @@ public class AnnotatedSolutionExporter {
 				outputVessel = fv;
 				break;
 			case SPOT_CHARTER:
+				if (annotatedSolution.getSequences().getSequence(resource).size() < 2) continue;
 				final SpotVessel sv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE
 						.getFleetallocationFactory().createSpotVessel();
 
@@ -134,6 +133,9 @@ public class AnnotatedSolutionExporter {
 				break;
 			}
 
+			final Sequence eSequence = factory.createSequence();
+			sequences.add(eSequence);
+			
 			output.getFleet().add(outputVessel);
 			eSequence.setVessel(outputVessel);
 
