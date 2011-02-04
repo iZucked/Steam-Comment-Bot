@@ -30,6 +30,10 @@ public class ModelEntityMap {
 	private ResourceSet resourceSet;
 	private final Map<Object, URI> uriMap = 
 		new HashMap<Object, URI>();
+	
+	private final Map<URI, Object> reverseMap =
+		new HashMap<URI, Object>();
+	
 	private Date earliestDate;
 
 	/**
@@ -63,5 +67,11 @@ public class ModelEntityMap {
 	public void addModelObject(final EObject modelObject, final Object internalObject) {
 		final URI theURI = EcoreUtil.getURI(modelObject);
 		uriMap.put(internalObject, theURI);
+		reverseMap.put(theURI, internalObject);
+	}
+	
+	public <T> T getOptimiserObject(final EObject modelObject, final Class<? extends T> clz) {
+		final URI theURI = EcoreUtil.getURI(modelObject);
+		return clz.cast(reverseMap.get(theURI));
 	}
 }
