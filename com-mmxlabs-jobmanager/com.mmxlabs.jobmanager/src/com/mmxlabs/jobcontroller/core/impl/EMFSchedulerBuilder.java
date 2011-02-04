@@ -446,6 +446,12 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		delegate.addTotalVolumeConstraint(ports, loads, discharges, maximumTotalVolume, timeWindow);
 		
 	}
+
+	@Override
+	public void setCargoVesselRestriction(ICargo cargo, Set<IVessel> vessels) {
+		delegate.setCargoVesselRestriction(cargo, vessels);
+		
+	}
 	
 	
 }
