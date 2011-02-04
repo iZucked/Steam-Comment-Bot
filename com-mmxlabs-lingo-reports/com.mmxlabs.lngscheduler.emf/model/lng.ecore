@@ -265,8 +265,7 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Port">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-          iD="true"/>
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="defaultMarket" eType="#//market/Market"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
@@ -309,6 +308,8 @@
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="#//cargo/Slot"
           containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1"
+          eType="#//fleet/Vessel"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Slot">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -382,6 +383,7 @@
           eType="#//optimiser/Constraint" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="objectives" upperBound="-1"
           eType="#//optimiser/Objective" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initialSchedule" eType="#//schedule/Schedule"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Optimisation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="allSettings" upperBound="-1"
