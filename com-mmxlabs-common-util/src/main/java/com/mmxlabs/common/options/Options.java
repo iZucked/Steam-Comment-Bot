@@ -58,6 +58,10 @@ public final class Options {
 					} else if (parameters[0].equals(double.class)) {
 						parser = hasValue ? new DoubleParser(value)
 								: new DoubleParser();
+					} else if (parameters[0].equals(boolean.class)) {
+						parser = new NothingParser();
+					} else if (parameters[0].equals(List.class)) {
+						parser = new StringListParser(",", value);
 					} else {
 						throw new InvalidOptionException("Method "
 								+ m.getName() + " has argument type "
