@@ -617,16 +617,16 @@ public class LNGScenarioTransformer {
 
 		for (FuelConsumptionLine line : attrs.getFuelConsumptionCurve()) {
 			keypoints.put(Calculator.scaleToInt(line.getSpeed()),
-					Calculator.scale(line.getConsumption()));
+					Calculator.scale(line.getConsumption()) / 24);
 		}
 
 		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				keypoints);
 
 		builder.setVesselClassStateParamaters(vc, state,
-				Calculator.scaleToInt(attrs.getNboRate()),
-				Calculator.scaleToInt(attrs.getIdleNBORate()),
-				Calculator.scaleToInt(attrs.getIdleConsumptionRate()),
+				Calculator.scaleToInt(attrs.getNboRate()) / 24,
+				Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
+				Calculator.scaleToInt(attrs.getIdleConsumptionRate()) / 24,
 				consumptionCalculator);
 	}
 
