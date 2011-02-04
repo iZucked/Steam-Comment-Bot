@@ -17,12 +17,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
@@ -53,6 +56,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class ConstrainedInitialSequenceBuilder<T> implements
 		IInitialSequenceBuilder<T> {
+
+	private static final Logger log = LoggerFactory
+			.getLogger(ConstrainedInitialSequenceBuilder.class);
+
 	/**
 	 * The initial maximum acceptable lateness; every cargo in the solution
 	 * should be feasible on the fastest ship in the fleet with this much slack.
@@ -72,7 +79,8 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				SequenceChunk<T> chunk2, IResource resource) {
 			final T tail1 = chunk1.last();
 			final T head2 = chunk2.first();
-			return checker.allowSequence(tail1, head2, resource);
+			final boolean ok = checker.allowSequence(tail1, head2, resource);
+			return ok;
 		}
 
 		public boolean canInsert(SequenceChunk<T> before,
@@ -166,7 +174,19 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		Set<T> heads = new LinkedHashSet<T>();
 		Set<T> tails = new LinkedHashSet<T>();
 
-		for (T element1 : data.getSequenceElements()) {
+		final Set<T> unsequencedElements = new LinkedHashSet<T>();
+		unsequencedElements.addAll(data.getSequenceElements());
+		if (suggestion != null) {
+			for (final ISequence<T> seq : suggestion.getSequences().values()) {
+				for (final T element : seq)
+					unsequencedElements.remove(element);
+			}
+		}
+
+		log.info("Sequence elements remaining to be scheduled: "
+				+ unsequencedElements);
+
+		for (T element1 : unsequencedElements) {
 			Set<T> after1 = new HashSet<T>();
 			followerCache.put(element1, after1);
 			for (T element2 : data.getSequenceElements()) {
@@ -185,20 +205,6 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				tails.add(tail);
 				heads.remove(tail);
 			}
-		}
-
-		{
-			System.out.println("Contention information: there are "
-					+ heads.size() + " movable chunks, containing "
-					+ tails.size() + " forced-follow elements");
-			TreeMap<Integer, Integer> histogram = new TreeMap<Integer, Integer>();
-			for (T t : tails) {
-				final Integer sz = followerCache.get(t).size();
-
-				histogram.put(sz,
-						histogram.containsKey(sz) ? histogram.get(sz) + 1 : 1);
-			}
-			System.out.println("Histogram : " + histogram);
 		}
 
 		// Heads now contains the head of every chunk that has to go together.
@@ -342,38 +348,76 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 
 		Collections.sort(chunks, comparator);
 
-		System.err.println(chunks);
-
 		final ChunkChecker<T> chunkChecker = new ChunkChecker<T>(checker);
 		Map<IResource, List<SequenceChunk<T>>> sequences = new HashMap<IResource, List<SequenceChunk<T>>>();
 
-		for (IResource resource : resources) {
-			List<SequenceChunk<T>> sequence = new ArrayList<SequenceChunk<T>>();
-			sequences.put(resource, sequence);
+		if (suggestion == null) {
+			log.info("No suggested start solution - constructing one");
+			for (IResource resource : resources) {
+				List<SequenceChunk<T>> sequence = new ArrayList<SequenceChunk<T>>();
+				sequences.put(resource, sequence);
 
-			// try and schedule chunks
-			// first put in the start element
-			SequenceChunk<T> start = new SequenceChunk<T>();
-			start.add(startEndRequirementProvider.getStartElement(resource));
-			sequence.add(start);
-			// now assign any chunks which we can to follow it
-			Iterator<SequenceChunk<T>> iterator = chunks.iterator();
-			SequenceChunk<T> here = start;
-			while (iterator.hasNext()) {
-				final SequenceChunk<T> there = iterator.next();
-				if (chunkChecker.canFollow(here, there, resource)) {
-					sequence.add(there);
-					here = there;
-					iterator.remove();
+				// try and schedule chunks
+				// first put in the start element
+				SequenceChunk<T> start = new SequenceChunk<T>();
+				start.add(startEndRequirementProvider.getStartElement(resource));
+				sequence.add(start);
+				// now assign any chunks which we can to follow it
+				Iterator<SequenceChunk<T>> iterator = chunks.iterator();
+				SequenceChunk<T> here = start;
+				while (iterator.hasNext()) {
+					final SequenceChunk<T> there = iterator.next();
+					if (chunkChecker.canFollow(here, there, resource)) {
+						sequence.add(there);
+						here = there;
+						iterator.remove();
+					}
+				}
+			}
+		} else {
+			// copy suggestion state into one-element chunks.
+			log.info("Starting with suggested solution");
+			for (final IResource resource : suggestion.getResources()) {
+				List<SequenceChunk<T>> sequence = new ArrayList<SequenceChunk<T>>();
+				sequences.put(resource, sequence);
+
+				final ISequence<T> seq = suggestion.getSequence(resource);
+				for (final T element : seq) {
+					final SequenceChunk<T> chunk = new SequenceChunk<T>();
+					chunk.add(element);
+					sequence.add(chunk);
+				}
+
+				if (sequence.isEmpty()) {
+					// insert a start element (otherwise start element came from
+					// elsewhere)
+					// end element should be handled by the next step,
+					// hopefully.
+					SequenceChunk<T> start = new SequenceChunk<T>();
+					start.add(startEndRequirementProvider
+							.getStartElement(resource));
+					sequence.add(start);
+					//spam in any elements which will fit
+					Iterator<SequenceChunk<T>> iterator = chunks.iterator();
+					SequenceChunk<T> here = start;
+					while (iterator.hasNext()) {
+						final SequenceChunk<T> there = iterator.next();
+						if (chunkChecker.canFollow(here, there, resource)) {
+							sequence.add(there);
+							here = there;
+							iterator.remove();
+						}
+					}
 				}
 			}
 		}
 
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
-
+		log.info("Trying to insert "+chunks.size()+" unscheduled elements into solution ("
+				+ chunks + ")");
 		while (!chunks.isEmpty()) {
-			Iterator<SequenceChunk<T>> iterator = chunks.iterator();
+			final Iterator<SequenceChunk<T>> iterator = chunks.iterator();
 			while (iterator.hasNext()) {
 				final SequenceChunk<T> here = iterator.next();
 				top: for (Map.Entry<IResource, List<SequenceChunk<T>>> entry : sequences
@@ -398,14 +442,18 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				break;
 
 			travelTimeChecker.setMaxLateness(maxLateness + 1);
-			System.err.println("Allowing lateness " + (maxLateness + 1) + " "
-					+ chunks.size() + " left...");
+//			log.info("Lateness constraint relaxed to " + maxLateness + " as "
+//					+ chunks.size() + " elements are unscheduled (" + chunks
+//					+ ")");
 		}
 
 		if (chunks.isEmpty() == false) {
+			log.error("Could not schedule the following " + chunks.size()
+					+ " elements anywhere: " + chunks);
 			throw new RuntimeException(
 					"Scenario is too hard for ConstrainedInitialSolutionBuilder. "
-							+ chunks + " could not be scheduled anywhere.");
+							+ chunks.size() + " chunks "
+							+ "could not be scheduled anywhere: " + chunks);
 		}
 
 		// OK, we have done our best, now build the modifiablesequences
@@ -422,8 +470,6 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				}
 			}
 		}
-
-		System.err.println("Leftover chunks: " + chunks);
 
 		return result;
 	}
