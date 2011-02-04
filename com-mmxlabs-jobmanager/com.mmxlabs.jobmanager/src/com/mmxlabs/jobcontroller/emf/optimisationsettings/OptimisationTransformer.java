@@ -46,7 +46,6 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.StartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
@@ -187,9 +186,9 @@ public class OptimisationTransformer {
 	public ISequences<ISequenceElement> createInitialSequences(
 			IOptimisationData<ISequenceElement> data, final ModelEntityMap mem) {
 		// Create the sequenced constraint checkers here
-
+		final IModifiableSequences<ISequenceElement> advice;
 		if (settings.getInitialSchedule() != null) {
-			final IModifiableSequences<ISequenceElement> sequences = new ModifiableSequences<ISequenceElement>(
+			advice = new ModifiableSequences<ISequenceElement>(
 					data.getResources());
 
 			final Map<IVesselClass, Set<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, Set<IVessel>>();
@@ -198,10 +197,16 @@ public class OptimisationTransformer {
 					SchedulerConstants.DCP_vesselProvider,
 					IVesselProvider.class);
 
-			final IPortSlotProvider<ISequenceElement> psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-			
-			final IStartEndRequirementProvider<ISequenceElement> serp = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-			
+			final IPortSlotProvider<ISequenceElement> psp = data
+					.getDataComponentProvider(
+							SchedulerConstants.DCP_portSlotsProvider,
+							IPortSlotProvider.class);
+
+			final IStartEndRequirementProvider<ISequenceElement> serp = data
+					.getDataComponentProvider(
+							SchedulerConstants.DCP_startEndRequirementProvider,
+							IStartEndRequirementProvider.class);
+
 			// collect spot vessels
 			for (final IResource resource : data.getResources()) {
 				final IVessel vessel = vp.getVessel(resource);
@@ -211,14 +216,13 @@ public class OptimisationTransformer {
 						spotVesselsByClass.get(vessel.getVesselClass()).add(
 								vessel);
 					} else {
-						spotVesselsByClass.put(vessel.getVesselClass(),
-								new HashSet<IVessel>()).add(vessel);
+						final HashSet<IVessel> hs = new HashSet<IVessel>();
+						hs.add(vessel);
+						spotVesselsByClass.put(vessel.getVesselClass(), hs);
 					}
 				}
 			}
 
-			
-			
 			for (final Sequence sequence : settings.getInitialSchedule()
 					.getSequences()) {
 
@@ -239,7 +243,7 @@ public class OptimisationTransformer {
 				}
 
 				// get the sequence for the chosen vessel
-				final IModifiableSequence<ISequenceElement> ms = sequences
+				final IModifiableSequence<ISequenceElement> ms = advice
 						.getModifiableSequence(vp.getResource(vessel));
 				ms.add(serp.getStartElement(vp.getResource(vessel)));
 				for (final ScheduledEvent event : sequence.getEvents()) {
@@ -252,15 +256,15 @@ public class OptimisationTransformer {
 				}
 				ms.add(serp.getEndElement(vp.getResource(vessel)));
 			}
-			
-			return sequences;
 		} else {
-			IConstraintCheckerRegistry registry = createConstraintCheckerRegistry();
-
-			IInitialSequenceBuilder<ISequenceElement> builder = new ConstrainedInitialSequenceBuilder<ISequenceElement>(
-					registry.getConstraintCheckerFactories(getEnabledConstraintNames()));
-
-			return builder.createInitialSequences(data);
+			advice = null;
 		}
+
+		final IConstraintCheckerRegistry registry = createConstraintCheckerRegistry();
+
+		final IInitialSequenceBuilder<ISequenceElement> builder = new ConstrainedInitialSequenceBuilder<ISequenceElement>(
+				registry.getConstraintCheckerFactories(getEnabledConstraintNames()));
+
+		return builder.createInitialSequences(data, advice);
 	}
 }
