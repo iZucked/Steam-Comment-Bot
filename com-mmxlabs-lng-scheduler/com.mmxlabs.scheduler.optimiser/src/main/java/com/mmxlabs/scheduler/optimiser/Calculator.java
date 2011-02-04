@@ -103,4 +103,14 @@ public final class Calculator {
 	public static int scaleToInt(final double d) {
 		return (int) (ScaleFactor * d);
 	}
+
+	/**
+	 * Multiply a long by a double, returning the result as a long, rounded
+	 * @param multiply
+	 * @param d
+	 * @return
+	 */
+	public static long multiply(long multiply, double d) {
+		return (long) Math.round(multiply * d);
+	}
 }
