@@ -83,6 +83,13 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
 		return true;
 	}
 
+	/**
+	 * Subclasses should use this to accumulate the cost associated with this object.
+	 * Return false to indicate an unacceptable solution
+	 * @param object
+	 * @param time
+	 * @return
+	 */
 	protected abstract boolean reallyEvaluateObject(Object object, int time);
 
 	/*
