@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common.delayedactions;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 
@@ -15,22 +15,24 @@ import java.util.List;
  */
 
 public final class DelayedActionsManager {
-
-	private final List<Runnable> actions = new ArrayList<Runnable>(20);
+	/**
+	 * Queue of actions to perform.
+	 */
+	private final Queue<Runnable> actions = new ConcurrentLinkedQueue<Runnable>();
 
 	/**
 	 * Apply all the delayed mappings. This assumes all the required objects
 	 * have been added using {@link #register(Class, String, Object)}. The
 	 * delayed mappings will be cleared once completed.
+	 * 
+	 * Actions can add more actions back to the queue while executing without
+	 * causing problems, but watch out for infinite loops if you do this.
 	 */
 	public final void performActions() {
-		for (final Runnable r : actions) {
+		Runnable r = null;
+		while ( (r = actions.poll()) != null ) {
 			r.run();
 		}
-
-		// Clear actions now they have been executed.
-		// We could also re-write this code to remove as used
-		actions.clear();
 	}
 
 	/**
