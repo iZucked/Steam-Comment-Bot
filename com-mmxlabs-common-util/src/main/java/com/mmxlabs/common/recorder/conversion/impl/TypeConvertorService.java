@@ -10,14 +10,31 @@ import java.util.Map;
 import com.mmxlabs.common.recorder.conversion.ITypeConvertor;
 import com.mmxlabs.common.recorder.conversion.ITypeConvertorService;
 
+/**
+ * Default implementation of {@link ITypeConvertorService}. This implementation
+ * will register {@link ITypeConvertor} for primitive and their Object
+ * counterparts. This can be disabled calling
+ * {@link #TypeConvertorService(boolean)} with false.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public final class TypeConvertorService implements ITypeConvertorService {
 
-	private final Map<String, ITypeConvertor> map = new HashMap<String, ITypeConvertor>();
+	private final Map<String, ITypeConvertor<?>> map = new HashMap<String, ITypeConvertor<?>>();
 
+	/**
+	 * Create instance of {@link TypeConvertorService} registering default set
+	 * of {@link ITypeConvertor} for primitives.
+	 */
 	public TypeConvertorService() {
 		this(true);
 	}
 
+	/**
+	 * Create instance of {@link TypeConvertorService} specifying whether to
+	 * register the default set of {@link ITypeConvertor} for primitives.
+	 */
 	public TypeConvertorService(boolean registerDefault) {
 
 		if (registerDefault) {
@@ -39,13 +56,13 @@ public final class TypeConvertorService implements ITypeConvertorService {
 	}
 
 	@Override
-	public void registerTypeConvertor(final ITypeConvertor convertor) {
+	public void registerTypeConvertor(final ITypeConvertor<?> convertor) {
 		registerTypeConvertor(convertor.getDataType().getCanonicalName(),
 				convertor);
 	}
 
 	public void registerTypeConvertor(final String type,
-			final ITypeConvertor convertor) {
+			final ITypeConvertor<?> convertor) {
 		map.put(type, convertor);
 	}
 
