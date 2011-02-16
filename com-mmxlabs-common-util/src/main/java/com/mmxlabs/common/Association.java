@@ -8,7 +8,8 @@ import java.util.HashMap;
 
 /**
  * A two-way association from one type to another. Internally maintains two
- * {@link HashMap}s for lookup in both directions.
+ * {@link HashMap}s for lookup in both directions. Null values are not
+ * permitted.
  * 
  * @author hinton
  * 
@@ -25,15 +26,33 @@ public final class Association<A, B> {
 		reverse = new HashMap<B, A>();
 	}
 
+	/**
+	 * Add an association between A and B
+	 * 
+	 * @param a
+	 * @param b
+	 */
 	public void add(final A a, final B b) {
 		forwards.put(a, b);
 		reverse.put(b, a);
 	}
 
+	/**
+	 * Lookup the association for A. Returns null is none is found.
+	 * 
+	 * @param a
+	 * @return
+	 */
 	public B lookup(final A a) {
 		return forwards.get(a);
 	}
 
+	/**
+	 * Lookup the reverse association for B. Returns null is none is found.
+	 * 
+	 * @param a
+	 * @return
+	 */
 	public A reverseLookup(final B b) {
 		return reverse.get(b);
 	}
