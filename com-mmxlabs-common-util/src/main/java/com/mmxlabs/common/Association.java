@@ -37,4 +37,12 @@ public class Association<A, B> {
 	public A reverseLookup(final B b) {
 		return reverse.get(b);
 	}
+
+	/**
+	 * Clear any existing associations
+	 */
+	public void clear() {
+		forwards.clear();
+		reverse.clear();
+	}
 }
