@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 /**
  * A two-way association from one type to another. Internally maintains two
- * hashmaps for lookup in both directions.
+ * {@link HashMap}s for lookup in both directions.
  * 
  * @author hinton
  * 
