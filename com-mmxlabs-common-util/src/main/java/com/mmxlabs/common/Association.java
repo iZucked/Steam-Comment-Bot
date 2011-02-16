@@ -15,8 +15,8 @@ import java.util.HashMap;
  * @param <A>
  * @param <B>
  */
-public class Association<A, B> {
-	
+public final class Association<A, B> {
+
 	protected final HashMap<A, B> forwards;
 	protected final HashMap<B, A> reverse;
 
