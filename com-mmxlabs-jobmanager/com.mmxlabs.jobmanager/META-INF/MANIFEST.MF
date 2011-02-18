@@ -13,12 +13,11 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.optimiser.common;bundle-version="1.0.0",
  com.mmxlabs.optimiser.core;bundle-version="1.0.0",
  com.mmxlabs.optimiser.lso;bundle-version="1.0.0",
- com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="1.0.0"
+ com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="1.0.0",
+ com.mmxlabs.lngscheduler.emf-extras;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.jobcontoller,
  com.mmxlabs.jobcontroller.core,
- com.mmxlabs.jobcontroller.core.impl,
- com.mmxlabs.jobcontroller.emf,
- com.mmxlabs.jobcontroller.emf.optimisationsettings
+ com.mmxlabs.jobcontroller.core.impl
 Service-Component: OSGI-INF/*.xml
 Bundle-ActivationPolicy: lazy
