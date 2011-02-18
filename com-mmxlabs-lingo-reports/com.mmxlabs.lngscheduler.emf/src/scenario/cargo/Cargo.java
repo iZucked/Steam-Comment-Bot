@@ -5,7 +5,9 @@
 
 package scenario.cargo;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import scenario.fleet.Vessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link scenario.cargo.Cargo#getId <em>Id</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
  * </p>
  *
@@ -103,5 +106,21 @@ public interface Cargo extends EObject {
 	 * @generated
 	 */
 	void setDischargeSlot(Slot value);
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * The list contents are of type {@link scenario.fleet.Vessel}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Vessels</em>' reference list.
+	 * @see scenario.cargo.CargoPackage#getCargo_AllowedVessels()
+	 * @model
+	 * @generated
+	 */
+	EList<Vessel> getAllowedVessels();
 
 } // Cargo

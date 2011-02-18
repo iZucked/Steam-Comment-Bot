@@ -22,6 +22,7 @@ import scenario.optimiser.Constraint;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimisationSettings;
 import scenario.optimiser.OptimiserPackage;
+import scenario.schedule.Schedule;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,6 +35,7 @@ import scenario.optimiser.OptimiserPackage;
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getRandomSeed <em>Random Seed</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getObjectives <em>Objectives</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getInitialSchedule <em>Initial Schedule</em>}</li>
  * </ul>
  * </p>
  *
@@ -99,6 +101,16 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * @ordered
 	 */
 	protected EList<Objective> objectives;
+
+	/**
+	 * The cached value of the '{@link #getInitialSchedule() <em>Initial Schedule</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInitialSchedule()
+	 * @generated
+	 * @ordered
+	 */
+	protected Schedule initialSchedule;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -190,6 +202,44 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Schedule getInitialSchedule() {
+		if (initialSchedule != null && initialSchedule.eIsProxy()) {
+			InternalEObject oldInitialSchedule = (InternalEObject)initialSchedule;
+			initialSchedule = (Schedule)eResolveProxy(oldInitialSchedule);
+			if (initialSchedule != oldInitialSchedule) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE, oldInitialSchedule, initialSchedule));
+			}
+		}
+		return initialSchedule;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Schedule basicGetInitialSchedule() {
+		return initialSchedule;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setInitialSchedule(Schedule newInitialSchedule) {
+		Schedule oldInitialSchedule = initialSchedule;
+		initialSchedule = newInitialSchedule;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE, oldInitialSchedule, initialSchedule));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -217,6 +267,9 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 				return getConstraints();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
 				return getObjectives();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
+				if (resolve) return getInitialSchedule();
+				return basicGetInitialSchedule();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -244,6 +297,9 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 				getObjectives().clear();
 				getObjectives().addAll((Collection<? extends Objective>)newValue);
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
+				setInitialSchedule((Schedule)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -268,6 +324,9 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
 				getObjectives().clear();
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
+				setInitialSchedule((Schedule)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -288,6 +347,8 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 				return constraints != null && !constraints.isEmpty();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
 				return objectives != null && !objectives.isEmpty();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
+				return initialSchedule != null;
 		}
 		return super.eIsSet(featureID);
 	}

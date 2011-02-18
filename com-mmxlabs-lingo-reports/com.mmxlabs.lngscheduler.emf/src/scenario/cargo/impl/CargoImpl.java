@@ -5,17 +5,21 @@
 
 package scenario.cargo.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.fleet.Vessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,6 +31,7 @@ import scenario.cargo.Slot;
  *   <li>{@link scenario.cargo.impl.CargoImpl#getId <em>Id</em>}</li>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link scenario.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
  * </p>
  *
@@ -72,6 +77,16 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * @ordered
 	 */
 	protected Slot dischargeSlot;
+
+	/**
+	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAllowedVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Vessel> allowedVessels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -206,6 +221,18 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Vessel> getAllowedVessels() {
+		if (allowedVessels == null) {
+			allowedVessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, CargoPackage.CARGO__ALLOWED_VESSELS);
+		}
+		return allowedVessels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -231,6 +258,8 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				return getLoadSlot();
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				return getDischargeSlot();
+			case CargoPackage.CARGO__ALLOWED_VESSELS:
+				return getAllowedVessels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -240,6 +269,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -251,6 +281,10 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((Slot)newValue);
+				return;
+			case CargoPackage.CARGO__ALLOWED_VESSELS:
+				getAllowedVessels().clear();
+				getAllowedVessels().addAll((Collection<? extends Vessel>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -273,6 +307,9 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((Slot)null);
 				return;
+			case CargoPackage.CARGO__ALLOWED_VESSELS:
+				getAllowedVessels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -291,6 +328,8 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				return loadSlot != null;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				return dischargeSlot != null;
+			case CargoPackage.CARGO__ALLOWED_VESSELS:
+				return allowedVessels != null && !allowedVessels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

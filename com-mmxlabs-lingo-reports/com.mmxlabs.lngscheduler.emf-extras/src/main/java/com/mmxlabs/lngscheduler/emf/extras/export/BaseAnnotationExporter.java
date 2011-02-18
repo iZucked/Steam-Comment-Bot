@@ -4,7 +4,7 @@
  * All rights reserved. 
  * 
  */
-package com.mmxlabs.jobcontroller.emf;
+package com.mmxlabs.lngscheduler.emf.extras.export;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +18,7 @@ import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 
+import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;

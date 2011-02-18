@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.jobcontroller.emf.optimisationsettings;
+package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.HashMap;
 import java.util.List;

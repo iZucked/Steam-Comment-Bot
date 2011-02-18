@@ -107,6 +107,15 @@ public interface LsoPackage extends EPackage {
 	int LSO_SETTINGS__OBJECTIVES = OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES;
 
 	/**
+	 * The feature id for the '<em><b>Initial Schedule</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__INITIAL_SCHEDULE = OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE;
+
+	/**
 	 * The feature id for the '<em><b>Number Of Steps</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

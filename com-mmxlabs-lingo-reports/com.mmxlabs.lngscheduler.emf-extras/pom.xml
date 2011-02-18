@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>com.mmxlabs.shiplingo.demo</artifactId>
+		<groupId>com.mmxlabs.shiplingo</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>com.mmxlabs.lngscheduler</groupId>
+	<artifactId>com.mmxlabs.lngscheduler.emf-extras</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>EMF Extra utilities</name>
+	<packaging>eclipse-plugin</packaging>
+	<description>Provides some support clases for manipulating EMF scenarios</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.mmxlabs.common</groupId>
+			<artifactId>common-util</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>ecore</artifactId>
+			<version>2.3.0-v200706262000</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mmxlabs.lngscheduler.emf</groupId>
+			<artifactId>com.mmxlabs.lngscheduler.emf</artifactId>
+			<version>1.0.0</version>
+			<scope>compile</scope>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.core</groupId>
+			<artifactId>org.eclipse.core.resources</artifactId>
+			<version>3.6.0.v20100526-0737</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>ecore-xmi</artifactId>
+			<version>2.2.3</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+	
+</project>

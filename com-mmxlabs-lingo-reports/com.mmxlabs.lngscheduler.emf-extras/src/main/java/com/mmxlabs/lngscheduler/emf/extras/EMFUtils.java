@@ -1,5 +1,9 @@
-package com.mmxlabs.jobcontroller.emf;
+package com.mmxlabs.lngscheduler.emf.extras;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.URI;
@@ -11,9 +15,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
-import com.mmxlabs.common.Pair;
-
 import scenario.ScenarioPackage;
+
+import com.mmxlabs.common.Pair;
 
 /**
  * Utility class for doing things to scenarios.
@@ -22,6 +26,70 @@ import scenario.ScenarioPackage;
  * 
  */
 public class EMFUtils {
+	/**
+	 * Serialize an EObject into a byte array; currently EMF generated models do
+	 * not serialize properly, particularly models with complicated containment
+	 * going on.
+	 * 
+	 * @see #deserialiseEObject(byte[], EClass) - the inverse of this method
+	 * @param object
+	 *            an object to serialize
+	 * @return a byte array containing a serialized form of the object
+	 */
+	public static byte[] serializeEObject(final EObject object) {
+		final ResourceSet set = new ResourceSetImpl();
+		final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
+		set.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put("*", rf);
+
+		set.getPackageRegistry().put(object.eClass().getEPackage().getNsURI(),
+				object.eClass().getEPackage());
+
+		final Resource resource = set.createResource(URI.createGenericURI(
+				"invalid", "invalid", "invalid"));
+
+		resource.getContents().add(object);
+
+		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			resource.save(baos, Collections.emptyMap());
+		} catch (IOException e) {
+		} // byte array cannot produce IO exception
+
+		return baos.toByteArray();
+	}
+
+	/**
+	 * Deserialize a byte array produced by {@link #serializeEObject(EObject)}.
+	 * See the doc for that on why this is necessary.
+	 * 
+	 * @param <T> 
+	 * @param byteArray the serialized form of the object
+	 * @param clazz the EClass of the object
+	 * @return the deserialized object
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T deserialiseEObject(final byte[] byteArray,
+			final EClass clazz) {
+		final ResourceSet set = new ResourceSetImpl();
+		final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
+		set.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put("*", rf);
+
+		set.getPackageRegistry().put(clazz.getEPackage().getNsURI(),
+				clazz.getEPackage());
+
+		final Resource resource = set.createResource(URI.createGenericURI(
+				"invalid", "invalid", "invalid"));
+
+		final ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+		try {
+			resource.load(bais, Collections.emptyMap());
+		} catch (IOException e) {
+		}
+		return (T) clazz.getInstanceClass().cast(resource.getContents().get(0));
+	}
+
 	public static <T> T readObjectFromFile(final String filepath,
 			final Class<? extends T> clazz) {
 		ResourceSet resourceSet = new ResourceSetImpl();

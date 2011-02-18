@@ -4,7 +4,7 @@
  * All rights reserved. 
  * 
  */
-package com.mmxlabs.jobcontroller.emf;
+package com.mmxlabs.lngscheduler.emf.extras.export;
 
 import java.util.Map;
 
@@ -13,6 +13,7 @@ import scenario.schedule.Schedule;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
+import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 

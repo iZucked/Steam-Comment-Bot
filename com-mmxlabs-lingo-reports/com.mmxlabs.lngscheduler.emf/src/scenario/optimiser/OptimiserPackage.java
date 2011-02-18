@@ -105,13 +105,22 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION_SETTINGS__OBJECTIVES = 3;
 
 	/**
+	 * The feature id for the '<em><b>Initial Schedule</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = 4;
+
+	/**
 	 * The number of structural features of the '<em>Optimisation Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS_FEATURE_COUNT = 4;
+	int OPTIMISATION_SETTINGS_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link scenario.optimiser.impl.OptimisationImpl <em>Optimisation</em>}' class.
@@ -280,6 +289,17 @@ public interface OptimiserPackage extends EPackage {
 	EReference getOptimisationSettings_Objectives();
 
 	/**
+	 * Returns the meta object for the reference '{@link scenario.optimiser.OptimisationSettings#getInitialSchedule <em>Initial Schedule</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Initial Schedule</em>'.
+	 * @see scenario.optimiser.OptimisationSettings#getInitialSchedule()
+	 * @see #getOptimisationSettings()
+	 * @generated
+	 */
+	EReference getOptimisationSettings_InitialSchedule();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.Optimisation <em>Optimisation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -438,6 +458,14 @@ public interface OptimiserPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPTIMISATION_SETTINGS__OBJECTIVES = eINSTANCE.getOptimisationSettings_Objectives();
+
+		/**
+		 * The meta object literal for the '<em><b>Initial Schedule</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = eINSTANCE.getOptimisationSettings_InitialSchedule();
 
 		/**
 		 * The meta object literal for the '{@link scenario.optimiser.impl.OptimisationImpl <em>Optimisation</em>}' class.

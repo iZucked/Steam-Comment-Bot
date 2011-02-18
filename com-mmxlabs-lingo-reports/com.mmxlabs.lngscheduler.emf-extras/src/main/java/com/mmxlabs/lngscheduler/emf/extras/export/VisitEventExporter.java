@@ -4,7 +4,7 @@
  * All rights reserved. 
  * 
  */
-package com.mmxlabs.jobcontroller.emf;
+package com.mmxlabs.lngscheduler.emf.extras.export;
 
 import java.util.HashMap;
 import java.util.Map;

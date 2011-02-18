@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.jobcontroller.emf;
+package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.ArrayList;
 import java.util.Calendar;

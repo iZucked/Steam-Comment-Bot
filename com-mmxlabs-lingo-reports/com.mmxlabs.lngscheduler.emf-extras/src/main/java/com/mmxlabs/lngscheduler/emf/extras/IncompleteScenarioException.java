@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.jobcontroller.emf;
+package com.mmxlabs.lngscheduler.emf.extras;
 
 public class IncompleteScenarioException extends Exception {
 

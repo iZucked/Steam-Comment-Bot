@@ -124,13 +124,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO__DISCHARGE_SLOT = 2;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__ALLOWED_VESSELS = 3;
+
+	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = 3;
+	int CARGO_FEATURE_COUNT = 4;
 
 
 	/**
@@ -389,6 +398,17 @@ public interface CargoPackage extends EPackage {
 	EReference getCargo_DischargeSlot();
 
 	/**
+	 * Returns the meta object for the reference list '{@link scenario.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Allowed Vessels</em>'.
+	 * @see scenario.cargo.Cargo#getAllowedVessels()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EReference getCargo_AllowedVessels();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.Slot <em>Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -580,6 +600,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO__DISCHARGE_SLOT = eINSTANCE.getCargo_DischargeSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO__ALLOWED_VESSELS = eINSTANCE.getCargo_AllowedVessels();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.SlotImpl <em>Slot</em>}' class.

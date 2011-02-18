@@ -66,6 +66,7 @@ public class OptimisationSettingsItemProvider
 
 			addNamePropertyDescriptor(object);
 			addRandomSeedPropertyDescriptor(object);
+			addInitialSchedulePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -110,6 +111,28 @@ public class OptimisationSettingsItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Initial Schedule feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInitialSchedulePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimisationSettings_initialSchedule_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_initialSchedule_feature", "_UI_OptimisationSettings_type"),
+				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

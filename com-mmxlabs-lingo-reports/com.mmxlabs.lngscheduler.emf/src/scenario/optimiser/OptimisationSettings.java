@@ -8,6 +8,7 @@ package scenario.optimiser;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import scenario.schedule.Schedule;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link scenario.optimiser.OptimisationSettings#getRandomSeed <em>Random Seed</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getObjectives <em>Objectives</em>}</li>
+ *   <li>{@link scenario.optimiser.OptimisationSettings#getInitialSchedule <em>Initial Schedule</em>}</li>
  * </ul>
  * </p>
  *
@@ -112,5 +114,31 @@ public interface OptimisationSettings extends EObject {
 	 * @generated
 	 */
 	EList<Objective> getObjectives();
+
+	/**
+	 * Returns the value of the '<em><b>Initial Schedule</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Initial Schedule</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Initial Schedule</em>' reference.
+	 * @see #setInitialSchedule(Schedule)
+	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_InitialSchedule()
+	 * @model
+	 * @generated
+	 */
+	Schedule getInitialSchedule();
+
+	/**
+	 * Sets the value of the '{@link scenario.optimiser.OptimisationSettings#getInitialSchedule <em>Initial Schedule</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Initial Schedule</em>' reference.
+	 * @see #getInitialSchedule()
+	 * @generated
+	 */
+	void setInitialSchedule(Schedule value);
 
 } // OptimisationSettings

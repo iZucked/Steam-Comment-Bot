@@ -216,6 +216,15 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getOptimisationSettings_InitialSchedule() {
+		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getOptimisation() {
 		return optimisationEClass;
 	}
@@ -325,6 +334,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		createEAttribute(optimisationSettingsEClass, OPTIMISATION_SETTINGS__RANDOM_SEED);
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__CONSTRAINTS);
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__OBJECTIVES);
+		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__INITIAL_SCHEDULE);
 
 		optimisationEClass = createEClass(OPTIMISATION);
 		createEReference(optimisationEClass, OPTIMISATION__ALL_SETTINGS);
@@ -364,6 +374,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 
 		// Obtain other dependent packages
 		LsoPackage theLsoPackage = (LsoPackage)EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI);
+		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theLsoPackage);
@@ -380,6 +391,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		initEAttribute(getOptimisationSettings_RandomSeed(), ecorePackage.getELong(), "randomSeed", null, 0, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_Constraints(), this.getConstraint(), null, "constraints", null, 0, -1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_Objectives(), this.getObjective(), null, "objectives", null, 0, -1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptimisationSettings_InitialSchedule(), theSchedulePackage.getSchedule(), null, "initialSchedule", null, 0, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optimisationEClass, Optimisation.class, "Optimisation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOptimisation_AllSettings(), this.getOptimisationSettings(), null, "allSettings", null, 0, -1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
