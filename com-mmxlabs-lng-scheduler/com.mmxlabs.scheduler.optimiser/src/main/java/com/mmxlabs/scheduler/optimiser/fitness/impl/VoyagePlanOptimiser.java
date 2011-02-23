@@ -41,13 +41,18 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	private VoyagePlan bestPlan = null;
 
+	/**
+	 * True iff {@link #bestPlan} meets the requirement that every voyage uses
+	 * less than or equal to the available time for that voyage
+	 */
+	private boolean bestPlanFitsInAvailableTime = false;
+
 	private final ILNGVoyageCalculator<T> voyageCalculator;
 
-	
 	public VoyagePlanOptimiser(final ILNGVoyageCalculator<T> voyageCalculator) {
 		this.voyageCalculator = voyageCalculator;
 	}
-	
+
 	/**
 	 * Check internal state is valid (i.e. all setters have been called).
 	 */
@@ -76,6 +81,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		choices.clear();
 		basicSequence = null;
 		bestPlan = null;
+		bestPlanFitsInAvailableTime = false;
 		bestCost = Long.MAX_VALUE;
 		arrivalTimes = null;
 	}
@@ -99,7 +105,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	@Override
 	public VoyagePlan optimise() {
 
-//		nonRecursiveRunLoop();
+		// nonRecursiveRunLoop();
 
 		runLoop(0);
 
@@ -107,17 +113,19 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	private void evaluateVoyagePlan() {
-		final PortDetails endElement = (PortDetails) basicSequence.get(basicSequence.size()-1); 
-		
-		final boolean calculateEndTime = endElement.getPortSlot().getTimeWindow() == null;
-		
+		final PortDetails endElement = (PortDetails) basicSequence
+				.get(basicSequence.size() - 1);
+
+		final boolean calculateEndTime = endElement.getPortSlot()
+				.getTimeWindow() == null;
+
 		evaluateVoyagePlan(calculateEndTime);
 	}
-	
+
 	private void nonRecursiveRunLoop() {
 		for (final IVoyagePlanChoice c : choices) {
 			if (c.reset() == false) {
-				return; //handle error properly.
+				return; // handle error properly.
 			}
 		}
 		final int cc = choices.size();
@@ -128,13 +136,12 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		while (true) {
 			evaluateVoyagePlan();
 			int i;
-			carry:
-				for (i = 0; i< cc ; i++) {
+			carry: for (i = 0; i < cc; i++) {
 				if (choices.get(i).nextChoice() == false) {
 					break carry;
 				}
 			}
-			if (i == cc-1) {
+			if (i == cc - 1) {
 				return;
 			}
 		}
@@ -197,14 +204,14 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			final VoyageOptions options = (VoyageOptions) basicSequence
 					.get(basicSequence.size() - 2);
 			final int originalTime = options.getAvailableTime();
-			
+
 			VoyagePlan bestLastLegPlan = null;
 			long bestLastLegCost = Long.MAX_VALUE;
 			long lastCost = Long.MAX_VALUE;
-			
+
 			for (int i = 0; i < 500; ++i) {
 				options.setAvailableTime(originalTime + i);
-				
+
 				currentPlan = calculateVoyagePlan();
 				if (currentPlan != null) {
 					final long currentCost = evaluatePlan(currentPlan);
@@ -212,16 +219,22 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 						bestLastLegCost = currentCost;
 						bestLastLegPlan = currentPlan;
 					}
-					
+
 					if (currentCost > lastCost) {
-						options.setAvailableTime(originalTime + i - 1); //back out one step. this is ugly.
-						break; //presume minimum.
+						options.setAvailableTime(originalTime + i - 1); // back
+																		// out
+																		// one
+																		// step.
+																		// this
+																		// is
+																		// ugly.
+						break; // presume minimum.
 					} else {
 						lastCost = currentCost;
 					}
 				}
 			}
-			
+
 			cost = bestLastLegCost;
 			currentPlan = bestLastLegPlan;
 		} else {
@@ -231,8 +244,41 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			cost = evaluatePlan(currentPlan);
 		}
 
+		// this way could be cheaper, but we need to add in a sanity check
+		// it may be because of a route choice decision, which could
+		// have made the plan use more than the available time; plans which
+		// use more than the available time are definitely worse than plans
+		// which don't, even if they are cheaper so we do a check here to
+		// determine whether the plan is OK in that respect
+
+		/**
+		 * True iff the current plan ensures that every voyage fits in the
+		 * available time for that voyage.
+		 */
+		boolean currentPlanFitsInAvailableTime = true;
+		for (final Object obj : currentPlan.getSequence()) {
+			if (obj instanceof VoyageDetails) {
+				final VoyageDetails<T> details = (VoyageDetails<T>) obj;
+
+				if ((details.getTravelTime() + details.getIdleTime()) > details
+						.getOptions().getAvailableTime()) {
+					// this plan is bad. If the old plan was not bad, we
+					// should stick with the old plan even though this one
+					// costs less. If the old plan was bad, we might as well
+					// go with it
+					currentPlanFitsInAvailableTime = false;
+					break;
+				}
+			}
+		}
+
 		// Store cheapest cost
-		if (cost < bestCost) {
+		if (
+		// this plan is valid, but the other is not, who cares about cost
+		(currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) ||
+		// this plan is valid, or the other is not, and it's cheaper
+				((currentPlanFitsInAvailableTime || !bestPlanFitsInAvailableTime) && (cost < bestCost))) {
+			bestPlanFitsInAvailableTime = currentPlanFitsInAvailableTime;
 			bestCost = cost;
 			bestPlan = currentPlan;
 
@@ -269,6 +315,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		for (final FuelComponent fuel : FuelComponent.values()) {
 			cost += plan.getTotalFuelCost(fuel);
 		}
+		cost += plan.getTotalRouteCost();
 		return cost;
 	}
 
@@ -308,9 +355,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 		return currentPlan;
 	}
-	
+
 	private List<Integer> arrivalTimes;
-	
+
 	public void setArrivalTimes(final List<Integer> arrivalTimes) {
 		this.arrivalTimes = arrivalTimes;
 	}
