@@ -7,6 +7,9 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -23,7 +26,7 @@ public class DirectRandomSequenceScheduler<T> extends
 		EnumeratingSequenceScheduler<T> {
 	private int seed = 0;
 	private Random random;
-	
+	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);
 	/**
 	 * Below this number of possibilities, enumerate all options
 	 */
@@ -40,14 +43,14 @@ public class DirectRandomSequenceScheduler<T> extends
 	
 	
 	@Override
-	public ScheduledSequences schedule(ISequences<T> sequences) {
+	public ScheduledSequences schedule(final ISequences<T> sequences) {
 		random = new Random(seed);
 		
 		setSequences(sequences);
 		resetBest();
 		final long approximateSpaceSize = prepare(samplingUpperBound);
 		final int sampleCount = (int) Math.min(samplingLowerBound, (long) (sampleProportion * approximateSpaceSize));
-		
+		log.debug("sampling " +sampleCount + " schedules");
 		for (int i = 0; i<sampleCount; i++) {
 			randomise();
 			evaluate();
