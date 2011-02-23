@@ -407,21 +407,6 @@ public class LNGScenarioTransformer {
 		 */
 		if (scenario.getCanalModel() != null) {
 			for (Canal canal : scenario.getCanalModel().getCanals()) {
-				/*
-				 * Each canal contains a list of partial distances to
-				 * enter/leave the canal from/to a particular port, so the
-				 * entryDistances are distances from port to whichever end of
-				 * the canal is closest, and the exitDistances from whichever
-				 * end of the canal is closest to the port.
-				 * 
-				 * There is a small gotcha here about the possibility of
-				 * entering and leaving the port from the same end; because the
-				 * entry/exit distances don't know which end they are, a
-				 * peculiar distance matrix might cause canal edges which don't
-				 * actually involve going through the canal. This can only
-				 * happen when the distance matrix doesn't contain the shortest
-				 * free path between two points.
-				 */
 				final String name = canal.getName();
 				builder.setDefaultRouteCost(name, canal.getDefaultCost());
 
