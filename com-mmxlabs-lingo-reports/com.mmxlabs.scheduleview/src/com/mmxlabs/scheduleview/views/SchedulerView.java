@@ -21,6 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
@@ -46,8 +47,9 @@ public class SchedulerView extends ViewPart {
 	private Action zoomInAction;
 	private Action zoomOutAction;
 
-
 	private Action toggleColourSchemeAction;
+
+	private ISelectionListener selectionListener;
 
 	/**
 	 * The constructor.
@@ -115,30 +117,38 @@ public class SchedulerView extends ViewPart {
 		/*
 		 * Add selection listener. may need tidying up.
 		 */
-		
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(
-				new ISelectionListener() {
-					@Override
-					public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-						//if selection instanceof etc.
-						if (selection instanceof IStructuredSelection) {
-							final IStructuredSelection sel = (IStructuredSelection)selection;
-							if (sel.isEmpty()) {
-								setInput(null);
-							} else {
-								Iterator<Object> iter = sel.iterator();
-								while (iter.hasNext()) {
-									final Object o = iter.next();
-									if (o instanceof Schedule) {
-										setInput((Schedule) o);
-										return;
-									}
+
+		selectionListener = new ISelectionListener() {
+			@Override
+			public void selectionChanged(final IWorkbenchPart part,
+					final ISelection selection) {
+
+				// Filter out non-editor selections - Unfortunately the
+				// addSelectionLister part ID filters do not work with editors
+				if (part instanceof IEditorPart) {
+
+					// if selection instanceof etc.
+					if (selection instanceof IStructuredSelection) {
+						final IStructuredSelection sel = (IStructuredSelection) selection;
+						if (sel.isEmpty()) {
+							setInput(null);
+						} else {
+							final Iterator<?> iter = sel.iterator();
+							while (iter.hasNext()) {
+								final Object o = iter.next();
+								if (o instanceof Schedule) {
+									setInput((Schedule) o);
+									return;
 								}
 							}
 						}
 					}
-				});
-		
+				}
+			}
+		};
+		getSite().getWorkbenchWindow().getSelectionService()
+				.addSelectionListener(selectionListener);
+
 		// getSite().getPage().addSelectionListener(JobManagerView.ID,
 		// new ISelectionListener() {
 		//
@@ -207,6 +217,15 @@ public class SchedulerView extends ViewPart {
 		// Activator.getDefault().getJobManager()
 		// .addJobManagerListener(jobManagerListener);
 
+		getSite().setSelectionProvider(viewer);
+	}
+
+	@Override
+	public void dispose() {
+		getSite().getWorkbenchWindow().getSelectionService()
+				.removeSelectionListener(selectionListener);
+
+		super.dispose();
 	}
 
 	private void hookContextMenu() {
