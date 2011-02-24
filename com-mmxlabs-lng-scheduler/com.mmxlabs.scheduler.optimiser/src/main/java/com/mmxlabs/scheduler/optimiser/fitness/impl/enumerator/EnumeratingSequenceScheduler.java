@@ -41,6 +41,11 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * Tracks the number of evaluations done so far
 	 */
 	protected int count = 0;
+	
+	/**
+	 * Indicates how many evaluations the best value came after
+	 */
+	protected int bestIndex = 0;
 
 	protected int[][] arrivalTimes;
 	/**
@@ -82,6 +87,11 @@ public class EnumeratingSequenceScheduler<T> extends
 	private long bestValue;
 	private ScheduledSequences bestResult;
 
+	/**
+	 * Contains the last valid value calculated by evaluate(). TODO this is ugly.
+	 */
+	private long lastValue;
+
 
 	public EnumeratingSequenceScheduler() {
 		super();
@@ -114,6 +124,7 @@ public class EnumeratingSequenceScheduler<T> extends
 	protected final void resetBest() {
 		this.bestResult = null;
 		this.bestValue = Long.MAX_VALUE;
+		this.lastValue = Long.MAX_VALUE;
 		count = 0;
 	}
 
@@ -330,15 +341,16 @@ public class EnumeratingSequenceScheduler<T> extends
 		
 		if (scheduledSequences == null) return false;
 		
-		final long value = evaluator.evaluateSchedule(scheduledSequences);
+		lastValue = evaluator.evaluateSchedule(scheduledSequences);
 
-		logValue(value);
+		logValue(lastValue);
 
-		if (value < bestValue) {
+		if (lastValue < bestValue) {
+			bestIndex = count;
 			// if (bestValue == Long.MAX_VALUE) {
 			// initialValue = value;
 			// }
-			bestValue = value;
+			bestValue = lastValue;
 			bestResult = scheduledSequences;
 			// System.err.println(String.format("%.2f%% gain at %d (%s)", (100.0
 			// * (initialValue - bestValue))/initialValue, count,
@@ -406,5 +418,9 @@ public class EnumeratingSequenceScheduler<T> extends
 			if (accumulator > maxValue) return maxValue;
 		}
 		return accumulator;
+	}
+
+	public long getLastValue() {
+		return lastValue;
 	}
 }
