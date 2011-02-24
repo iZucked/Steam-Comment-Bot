@@ -27,10 +27,7 @@ public class DirectRandomSequenceScheduler<T> extends
 	private int seed = 0;
 	private Random random;
 	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);
-	/**
-	 * Below this number of possibilities, enumerate all options
-	 */
-	private int samplingLowerBound = 50; 
+
 	/**
 	 * Never do more than this many samples
 	 */
@@ -40,21 +37,21 @@ public class DirectRandomSequenceScheduler<T> extends
 	 */
 	private double sampleProportion = 0.005;
 	
-	
-	
 	@Override
 	public ScheduledSequences schedule(final ISequences<T> sequences) {
 		random = new Random(seed);
 		
 		setSequences(sequences);
 		resetBest();
-		final long approximateSpaceSize = prepare(samplingUpperBound);
-		final int sampleCount = (int) Math.min(samplingLowerBound, (long) (sampleProportion * approximateSpaceSize));
+		final long approximateSpaceSize = prepare(samplingUpperBound*10000);
+		final int sampleCount = (int) Math.min(samplingUpperBound, (int)(sampleProportion * approximateSpaceSize));
 		log.debug("sampling " +sampleCount + " schedules");
 		for (int i = 0; i<sampleCount; i++) {
 			randomise();
 			evaluate();
 		}
+		
+		log.debug("best found after " + bestIndex);
 		
 		return getBestResult();
 	}
@@ -70,14 +67,6 @@ public class DirectRandomSequenceScheduler<T> extends
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
 			}
 		}
-	}
-
-	public int getSamplingLowerBound() {
-		return samplingLowerBound;
-	}
-
-	public void setSamplingLowerBound(final int samplingLowerBound) {
-		this.samplingLowerBound = samplingLowerBound;
 	}
 
 	public int getSamplingUpperBound() {
