@@ -7,6 +7,9 @@ package com.mmxlabs.scheduleview.views;
 
 import java.util.Iterator;
 
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -27,6 +30,8 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import scenario.schedule.Schedule;
 
@@ -346,5 +351,38 @@ public class SchedulerView extends ViewPart {
 				}
 			}
 		});
+	}
+
+	@Override
+	public Object getAdapter(@SuppressWarnings("rawtypes") final Class key) {
+		// Hook up our property sheet page
+		if (key.equals(IPropertySheetPage.class)) {
+			return getPropertySheetPage();
+		} else {
+			return super.getAdapter(key);
+		}
+	}
+
+	/**
+	 * Create a new {@link PropertySheetPage} instance hooked up to the default
+	 * EMF adapter factory.
+	 * 
+	 * @return
+	 */
+	public IPropertySheetPage getPropertySheetPage() {
+		final PropertySheetPage propertySheetPage = new PropertySheetPage();
+
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory();
+
+		// TODO: Add in ScenarioEMF Item Provider
+
+		adapterFactory
+				.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+
+		propertySheetPage
+				.setPropertySourceProvider(new AdapterFactoryContentProvider(
+						adapterFactory));
+
+		return propertySheetPage;
 	}
 }
