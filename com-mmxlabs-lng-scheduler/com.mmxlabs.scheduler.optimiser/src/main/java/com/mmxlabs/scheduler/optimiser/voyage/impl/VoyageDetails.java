@@ -41,10 +41,11 @@ public final class VoyageDetails<T> implements Cloneable {
 		fuelUnitPrices = new EnumMap<FuelComponent, Integer>(
 				FuelComponent.class);
 		for (FuelComponent fuel : FuelComponent.values()) {
-			fuelConsumption.put(fuel, new EnumMap<FuelUnit, Long>(FuelUnit.class));
+			fuelConsumption.put(fuel, new EnumMap<FuelUnit, Long>(
+					FuelUnit.class));
 		}
 	}
-	
+
 	public VoyageDetails(int idleTime2, int travelTime2, int speed2,
 			int startTime2, VoyageOptions options,
 			EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption2,
@@ -59,19 +60,20 @@ public final class VoyageDetails<T> implements Cloneable {
 	}
 
 	public VoyageDetails clone() {
-		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, fuelUnitPrices);
+		return new VoyageDetails(idleTime, travelTime, speed, startTime,
+				new VoyageOptions(options), fuelConsumption, fuelUnitPrices);
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit) {
 
-//		if (fuelConsumption.containsKey(fuel)) {
+		// if (fuelConsumption.containsKey(fuel)) {
 
-			final EnumMap<FuelUnit, Long> map = fuelConsumption.get(fuel);
-			if (map.containsKey(fuelUnit)) {
-				return map.get(fuelUnit);
-			}
-//		}
+		final EnumMap<FuelUnit, Long> map = fuelConsumption.get(fuel);
+		if (map.containsKey(fuelUnit)) {
+			return map.get(fuelUnit);
+		}
+		// }
 		return 0l;
 	}
 
@@ -93,14 +95,14 @@ public final class VoyageDetails<T> implements Cloneable {
 
 	public final void setFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit, final long consumption) {
-//		final EnumMap<FuelUnit, Long> map;
-//		if (fuelConsumption.containsKey(fuel)) {
-//			map = fuelConsumption.get(fuel);
-//		} else {
-//			map = new EnumMap<FuelUnit, Long>(FuelUnit.class);
-//			fuelConsumption.put(fuel, map);
-//		}
-//		map.put(fuelUnit, consumption);
+		// final EnumMap<FuelUnit, Long> map;
+		// if (fuelConsumption.containsKey(fuel)) {
+		// map = fuelConsumption.get(fuel);
+		// } else {
+		// map = new EnumMap<FuelUnit, Long>(FuelUnit.class);
+		// fuelConsumption.put(fuel, map);
+		// }
+		// map.put(fuelUnit, consumption);
 		fuelConsumption.get(fuel).put(fuelUnit, consumption);
 	}
 
@@ -184,6 +186,17 @@ public final class VoyageDetails<T> implements Cloneable {
 		return "VoyageDetails [options=" + options + ", fuelConsumption="
 				+ fuelConsumption + ", fuelUnitPrices=" + fuelUnitPrices
 				+ ", idleTime=" + idleTime + ", travelTime=" + travelTime
-				+ ", speed=" + speed + ", startTime=" + startTime + "]";
+				+ ", speed=" + speed + ", startTime=" + startTime
+				+ ", route cost = " + routeCost + "]";
+	}
+
+	private long routeCost = 0;
+
+	public void setRouteCost(final long price) {
+		routeCost = price;
+	}
+
+	public long getRouteCost() {
+		return routeCost;
 	}
 }
