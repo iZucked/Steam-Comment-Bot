@@ -275,7 +275,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		for (final Sequence seq : schedule.getSequences()) {
 			final AllocatedVessel av = seq.getVessel();
 			for (final ScheduleFitness sf : seq.getFitness()) {
-				if (sf.getName()
+				if (sf.getValue() > 0 && sf.getName()
 						.equals(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME)) {
 					final TreeData thisVessel = new TreeData(av.getName(),
 							sf.getValue());
