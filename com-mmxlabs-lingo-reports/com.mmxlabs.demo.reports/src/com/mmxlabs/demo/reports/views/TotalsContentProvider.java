@@ -93,10 +93,10 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		int idx = 0;
 		for (final Entry<FuelType, Long> entry : totalFuelCosts.entrySet()) {
 			rowData[idx++] = new RowData(entry.getKey().toString(),
-					entry.getValue() / 1000);
+					entry.getValue());
 		}
 		rowData[idx++] = new RowData("Distance", distance);
-		rowData[idx++] = new RowData("Total Cost", totalCost / 1000);
+		rowData[idx++] = new RowData("Total Cost", totalCost);
 	}
 
 	@Override
