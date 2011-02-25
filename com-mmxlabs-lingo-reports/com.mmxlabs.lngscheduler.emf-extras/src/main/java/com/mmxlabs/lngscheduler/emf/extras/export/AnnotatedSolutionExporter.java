@@ -94,6 +94,7 @@ public class AnnotatedSolutionExporter {
 		// Create sequences and run other exporters
 
 		final Map<IVesselClass, AtomicInteger> counter = new HashMap<IVesselClass, AtomicInteger>();
+		@SuppressWarnings("unchecked")
 		final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution
 				.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute,
 						Map.class);
