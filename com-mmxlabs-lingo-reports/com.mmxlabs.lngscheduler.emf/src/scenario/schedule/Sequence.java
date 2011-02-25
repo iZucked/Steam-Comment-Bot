@@ -22,6 +22,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  * <ul>
  *   <li>{@link scenario.schedule.Sequence#getEvents <em>Events</em>}</li>
  *   <li>{@link scenario.schedule.Sequence#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link scenario.schedule.Sequence#getFitness <em>Fitness</em>}</li>
  * </ul>
  * </p>
  *
@@ -71,5 +72,21 @@ public interface Sequence extends EObject {
 	 * @generated
 	 */
 	void setVessel(AllocatedVessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Fitness</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.schedule.ScheduleFitness}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fitness</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fitness</em>' containment reference list.
+	 * @see scenario.schedule.SchedulePackage#getSequence_Fitness()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ScheduleFitness> getFitness();
 
 } // Sequence

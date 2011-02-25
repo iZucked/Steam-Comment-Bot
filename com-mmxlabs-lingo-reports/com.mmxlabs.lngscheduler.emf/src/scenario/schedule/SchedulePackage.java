@@ -180,13 +180,22 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__VESSEL = 1;
 
 	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEQUENCE__FITNESS = 2;
+
+	/**
 	 * The number of structural features of the '<em>Sequence</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE_FEATURE_COUNT = 2;
+	int SEQUENCE_FEATURE_COUNT = 3;
 
 
 	/**
@@ -447,6 +456,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_Vessel();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.schedule.Sequence#getFitness <em>Fitness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fitness</em>'.
+	 * @see scenario.schedule.Sequence#getFitness()
+	 * @see #getSequence()
+	 * @generated
+	 */
+	EReference getSequence_Fitness();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.CargoAllocation <em>Cargo Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -702,6 +722,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SEQUENCE__VESSEL = eINSTANCE.getSequence_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Fitness</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SEQUENCE__FITNESS = eINSTANCE.getSequence_Fitness();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.impl.CargoAllocationImpl <em>Cargo Allocation</em>}' class.

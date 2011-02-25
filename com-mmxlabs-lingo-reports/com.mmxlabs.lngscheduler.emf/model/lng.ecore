@@ -149,6 +149,8 @@
           eType="#//schedule/events/ScheduledEvent" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
           eType="#//schedule/fleetallocation/AllocatedVessel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fitness" upperBound="-1"
+          eType="#//schedule/ScheduleFitness" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" lowerBound="1"

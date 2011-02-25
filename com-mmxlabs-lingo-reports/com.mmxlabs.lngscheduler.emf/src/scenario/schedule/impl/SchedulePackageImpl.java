@@ -278,6 +278,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSequence_Fitness() {
+		return (EReference)sequenceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCargoAllocation() {
 		return cargoAllocationEClass;
 	}
@@ -432,6 +441,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		sequenceEClass = createEClass(SEQUENCE);
 		createEReference(sequenceEClass, SEQUENCE__EVENTS);
 		createEReference(sequenceEClass, SEQUENCE__VESSEL);
+		createEReference(sequenceEClass, SEQUENCE__FITNESS);
 
 		cargoAllocationEClass = createEClass(CARGO_ALLOCATION);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_SLOT);
@@ -501,6 +511,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(sequenceEClass, Sequence.class, "Sequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSequence_Events(), theEventsPackage.getScheduledEvent(), null, "events", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSequence_Vessel(), theFleetallocationPackage.getAllocatedVessel(), null, "vessel", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSequence_Fitness(), this.getScheduleFitness(), null, "fitness", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoAllocationEClass, CargoAllocation.class, "CargoAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoAllocation_LoadSlot(), theCargoPackage.getLoadSlot(), null, "loadSlot", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
