@@ -1,7 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010
  * All rights reserved.
  */
+
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -209,6 +210,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		}
 
 		// TODO: Calculate extras - route specific data etc
+
+		output.setRouteCost(routeCostProvider.getRouteCost(options.getRoute(),
+				vesselClass, vesselState));
 	}
 
 	/**
@@ -304,6 +308,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 						baseFuelPricePerMT);
 				details.setFuelUnitPrice(FuelComponent.IdleBase,
 						baseFuelPricePerMT);
+
 			}
 		}
 
@@ -494,7 +499,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				dischargeVolumeInM3);
 		voyagePlan.setSalesRevenue(salesRevenue);
 
-		voyagePlan.setTotalRouteCost(Calculator.scale(routeCostAccumulator));
+		voyagePlan.setTotalRouteCost(routeCostAccumulator);
 	}
 
 	@Override
