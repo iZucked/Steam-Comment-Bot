@@ -84,6 +84,8 @@ public class SequencesManipulatorUtil {
 					.equals(VesselInstanceType.SPOT_CHARTER)) {
 				startLocationRemover.setShouldRemoveStartLocation(resource, true);
 				endLocationManipulator.setEndLocationRule(resource, EndLocationRule.RETURN_TO_FIRST_LOAD);
+			} else {
+				endLocationManipulator.setEndLocationRule(resource, EndLocationRule.RETURN_TO_LAST_LOAD);
 			}
 		}
 		
