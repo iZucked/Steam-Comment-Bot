@@ -408,7 +408,7 @@ public class LNGScenarioTransformer {
 		if (scenario.getCanalModel() != null) {
 			for (Canal canal : scenario.getCanalModel().getCanals()) {
 				final String name = canal.getName();
-				builder.setDefaultRouteCost(name, canal.getDefaultCost());
+				builder.setDefaultRouteCost(name, Calculator.scale(canal.getDefaultCost()));
 
 				for (final DistanceLine dl : canal.getDistanceModel()
 						.getDistances()) {
