@@ -105,7 +105,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 						sb.append(fq.getQuantity() + " "
 								+ fq.getFuelUnit().getName());
 						sb.append(String.format(", cost $%,.2f\n",
-								fq.getTotalPrice() / (double) Calculator.ScaleFactor)); // TODO wrong
+								(double)fq.getTotalPrice())); 
 					}
 				}
 			}
