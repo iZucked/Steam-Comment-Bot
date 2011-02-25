@@ -114,9 +114,9 @@ public class TestCalculations {
 				ballastConsumptionCalculator);
 
 		final IStartEndRequirement startRequirement = builder
-				.createStartEndRequirement(port1, new TimeWindow(0, 0));
+				.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder
-				.createStartEndRequirement(port4, new TimeWindow(75, 75));
+				.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1,
 				startRequirement, endRequirement);
@@ -722,9 +722,9 @@ public class TestCalculations {
 				ballastConsumptionCalculator);
 
 		final IStartEndRequirement startRequirement = builder
-				.createStartEndRequirement(port1, new TimeWindow(0, 0));
+				.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder
-				.createStartEndRequirement(port4, new TimeWindow(75, 75));
+				.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1,
 				startRequirement, endRequirement);
@@ -1335,9 +1335,9 @@ public class TestCalculations {
 				ballastConsumptionCalculator);
 
 		final IStartEndRequirement startRequirement = builder
-				.createStartEndRequirement(port1, new TimeWindow(0, 0));
+				.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder
-				.createStartEndRequirement(port4, new TimeWindow(75, 75));
+				.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1,
 				startRequirement, endRequirement);

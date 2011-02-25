@@ -45,6 +45,7 @@ public final class CargoSchedulerFitnessCoreFactory implements
 			public ISequenceScheduler createScheduler(IOptimisationData data,
 					Collection components) {
 				return SchedulerUtils.createDirectRandomSequenceScheduler(data, components);
+//				return SchedulerUtils.createRelaxingSequenceScheduler(data, components);
 			}
 	};
 

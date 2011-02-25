@@ -6,6 +6,9 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -22,15 +25,12 @@ public class DirectRandomSequenceScheduler<T> extends
 		EnumeratingSequenceScheduler<T> {
 	private int seed = 0;
 	private Random random;
-	
-	/**
-	 * Below this number of possibilities, enumerate all options
-	 */
-	private int samplingLowerBound = 50; 
+	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);
+
 	/**
 	 * Never do more than this many samples
 	 */
-	private int samplingUpperBound = 500;
+	private int samplingUpperBound = 4;
 	/**
 	 * Sample this proportion of the search space, up to {@code samplingUpperBound}
 	 */
@@ -39,18 +39,20 @@ public class DirectRandomSequenceScheduler<T> extends
 	
 	
 	@Override
-	public ScheduledSequences schedule(ISequences<T> sequences) {
+	public ScheduledSequences schedule(final ISequences<T> sequences) {
 		random = new Random(seed);
 		
 		setSequences(sequences);
 		resetBest();
-		final long approximateSpaceSize = prepare(samplingUpperBound);
-		final int sampleCount = (int) Math.min(samplingLowerBound, (long) (sampleProportion * approximateSpaceSize));
-		
+		final long approximateSpaceSize = prepare(samplingUpperBound*10000);
+		final int sampleCount = (int) Math.min(samplingUpperBound, (int)(sampleProportion * approximateSpaceSize));
+//		log.debug("sampling " +sampleCount + " schedules");
 		for (int i = 0; i<sampleCount; i++) {
 			randomise();
 			evaluate();
 		}
+		
+//		log.debug("best found after " + bestIndex);
 		
 		return getBestResult();
 	}
@@ -66,14 +68,6 @@ public class DirectRandomSequenceScheduler<T> extends
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
 			}
 		}
-	}
-
-	public int getSamplingLowerBound() {
-		return samplingLowerBound;
-	}
-
-	public void setSamplingLowerBound(final int samplingLowerBound) {
-		this.samplingLowerBound = samplingLowerBound;
 	}
 
 	public int getSamplingUpperBound() {

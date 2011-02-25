@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -47,14 +48,22 @@ public interface ILNGVoyageCalculator<T> {
 	 * @param vessel
 	 * @param arrivalTimes
 	 *            an array of arrival times at each slot in the sequence
+	 * 
 	 *            <pre>
 	 *            arrivalTimes[0] <=> sequence[0]
 	 *            arrivalTimes[1] <=> sequence[2]
 	 *            ...
-	 *            </pre>
+	 * </pre>
 	 * @param sequence
 	 */
 	void calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel,
 			int[] arrivalTimes, Object... sequence);
 
+	/**
+	 * Set the route cost DCP ( {@link IRouteCostProvider} ) which is needed to
+	 * determine the influence of canal costs on voyage plan decisions.
+	 * 
+	 * @param provider
+	 */
+	void setRouteCostDataComponentProvider(IRouteCostProvider provider);
 }

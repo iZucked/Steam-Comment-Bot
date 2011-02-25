@@ -11,6 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -24,6 +25,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
  *            Sequence element type.
  */
 public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
+
+	private IRouteCostProvider routeCostProvider;
 
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The
@@ -240,6 +243,11 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		final int baseFuelPricePerMT = vessel.getVesselClass()
 				.getBaseFuelUnitPrice();
 
+		/**
+		 * Accumulates route costs due to canal decisions.
+		 */
+		int routeCostAccumulator = 0;
+
 		for (int i = 0; i < sequence.length; ++i) {
 			if (i % 2 == 0) {
 				// Port Slot
@@ -265,6 +273,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			} else {
 				// Voyage
 				final VoyageDetails<?> details = (VoyageDetails<?>) sequence[i];
+				//add route cost
+				routeCostAccumulator += details.getRouteCost();
 				for (final FuelComponent fc : FuelComponent.values()) {
 					fuelConsumptions[fc.ordinal()] += details
 							.getFuelConsumption(fc, fc.getDefaultFuelUnit());
@@ -323,9 +333,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 			// Store unit prices for later on
 			loadUnitPrice = loadSlot
-					.getPurchasePriceAtTime(arrivalTimes[loadIdx/2]);
+					.getPurchasePriceAtTime(arrivalTimes[loadIdx / 2]);
 			dischargeUnitPrice = dischargeSlot
-					.getSalesPriceAtTime(arrivalTimes[dischargeIdx/2]);
+					.getSalesPriceAtTime(arrivalTimes[dischargeIdx / 2]);
 
 			// Store cargoCVValue
 			cargoCVValue = loadSlot.getCargoCVValue();
@@ -362,7 +372,12 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			if (dischargeVolumeInM3 < 0) {
 				throw new RuntimeException(
 						"Capacity violation: discharge volume = "
-								+ dischargeVolumeInM3);
+								+ dischargeVolumeInM3 + ", but " + lngConsumed
+								+ " LNG used for fuel, max load volume = "
+								+ upperLoadLimit + "(capacity = "
+								+ cargoCapacity + ", slot max load = "
+								+ maxLoadVolume + ") and slot max discharge = "
+								+ maxDischargeVolume);
 			}
 			loadVolumeInM3 = dischargeVolumeInM3 + lngConsumed;
 
@@ -447,14 +462,14 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 						baseFuelPricePerMT));
 
 		/**
-		 * The opportunity cost of burning a unit of LNG for fuel;
-		 * it doesn't cost 1 discharge unit to burn some fuel, it costs
-		 * whatever sales opportunity we lost on this leg.
+		 * The opportunity cost of burning a unit of LNG for fuel; it doesn't
+		 * cost 1 discharge unit to burn some fuel, it costs whatever sales
+		 * opportunity we lost on this leg.
 		 * 
 		 * TODO check this, have restored it to how it was.
 		 */
-//		final int lngM3OpportunityCost = dischargeM3Price - loadM3Price;
-		
+		// final int lngM3OpportunityCost = dischargeM3Price - loadM3Price;
+
 		voyagePlan.setTotalFuelCost(FuelComponent.NBO, Calculator
 				.costFromConsumption(
 						fuelConsumptions[FuelComponent.NBO.ordinal()],
@@ -478,5 +493,13 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		long salesRevenue = Calculator.multiply(dischargeM3Price,
 				dischargeVolumeInM3);
 		voyagePlan.setSalesRevenue(salesRevenue);
+
+		voyagePlan.setTotalRouteCost(Calculator.scale(routeCostAccumulator));
+	}
+
+	@Override
+	public void setRouteCostDataComponentProvider(
+			final IRouteCostProvider provider) {
+		this.routeCostProvider = provider;
 	}
 }

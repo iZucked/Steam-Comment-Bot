@@ -1,0 +1,92 @@
+package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+
+/**
+ * Relaxing sequence scheduler; solution procedure is like this:
+ * 
+ * <ol>
+ * <li>Set every arrival time to its minimum value</li>
+ * <li>Relax each arrival time to the first local minimum for that time</li>
+ * <li>Maybe do another pass, or something?</li>
+ * </ol>
+ * 
+ * @author hinton
+ * 
+ * @param <T>
+ */
+public class RelaxingSequenceScheduler<T> extends
+		EnumeratingSequenceScheduler<T> {
+	private static final Logger log = LoggerFactory
+			.getLogger(RelaxingSequenceScheduler.class);
+
+	final int steps = 2;
+	
+	@Override
+	public ScheduledSequences schedule(final ISequences<T> sequences) {
+		setSequences(sequences);
+		resetBest();
+		prepare();
+		evaluate();
+
+		for (int seq = 0; seq < arrivalTimes.length; seq++) {
+			for (int pos = 0; pos < arrivalTimes[seq].length; pos++) {
+				relax(seq, pos);
+			}
+		}
+		log.debug("relaxed; " + count + " evaluations");
+		return getBestResult();
+	}
+
+	private void relax(final int seq, final int pos) {
+		final int min = arrivalTimes[seq][pos];
+		final int max = getMaxArrivalTime(seq, pos);
+//		log.debug("relax(" + seq + ", " + pos + "), time between " + min
+//				+ ",  " + max);
+		int lastArrivalTime;
+		for (int step = 0; step < steps; step++) {
+			final int i = min + 1 + (step * (max - min+1))/steps;
+			lastArrivalTime = arrivalTimes[seq][pos];
+			arrivalTimes[seq][pos] = i;
+			int next;
+			// push later arrival times in this sequence
+			for (next = pos + 1; next < arrivalTimes[seq].length; next++) {
+				final int mat = getMinArrivalTime(seq, next);
+				if (mat == arrivalTimes[seq][next])
+					break;
+				arrivalTimes[seq][next] = mat;
+			}
+			final long prevValue = getLastValue();
+			evaluate();
+			if (prevValue <= getLastValue() && prevValue != Long.MAX_VALUE) {
+				// roll back change
+				arrivalTimes[seq][pos] = lastArrivalTime;
+				for (int fix = pos; fix < next
+						&& fix < arrivalTimes[seq].length; fix++) {
+					arrivalTimes[seq][fix] = getMinArrivalTime(seq, fix);
+				}
+				evaluate();
+//				log.debug("relaxed to " + (i - 1));
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Prepare and ignore approximate space size; also set arrival times to min
+	 */
+	private final void prepare() {
+		prepare(0);
+
+		for (int seq = 0; seq < arrivalTimes.length; seq++) {
+			for (int pos = 0; pos < arrivalTimes[seq].length; pos++) {
+				arrivalTimes[seq][pos] = getMinArrivalTime(seq, pos);
+			}
+		}
+	}
+
+}

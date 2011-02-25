@@ -159,8 +159,8 @@ public class CargoAllocatingSchedulerComponent<T> extends
 	@Override
 	public long endEvaluationAndGetCost() {
 		allocator.solve();
-
-		return setLastEvaluatedFitness(-allocator.getProfit()); // cost is just
+//-allocator.getProfit()
+		return setLastEvaluatedFitness(0); // cost is just
 																// the p&l.
 	}
 

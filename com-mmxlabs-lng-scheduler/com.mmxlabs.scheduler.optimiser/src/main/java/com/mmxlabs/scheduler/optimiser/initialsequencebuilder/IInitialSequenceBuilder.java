@@ -16,5 +16,12 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * @param <T>
  */
 public interface IInitialSequenceBuilder<T> {
-	public ISequences<T> createInitialSequences(IOptimisationData<T> data);
+	/**
+	 * Create some initial sequences
+	 * 
+	 * @param data the optimisation data
+	 * @param suggestion a suggested (possibly incomplete) start state. May be null.
+	 * @return
+	 */
+	public ISequences<T> createInitialSequences(IOptimisationData<T> data, ISequences<T> suggestion);
 }

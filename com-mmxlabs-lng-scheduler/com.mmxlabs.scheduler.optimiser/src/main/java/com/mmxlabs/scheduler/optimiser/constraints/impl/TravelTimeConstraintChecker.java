@@ -15,7 +15,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -76,13 +75,12 @@ public class TravelTimeConstraintChecker<T> implements
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
-		final IMatrixProvider<IPort, Integer> distanceMatrix = distanceProvider
-				.get(IMultiMatrixProvider.Default_Key);
+		
 		while (iter.hasNext()) {
 			prev = cur;
 			cur = iter.next();
 			if (prev != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed, distanceMatrix))
+				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed))
 					return false;
 			}
 		}
@@ -126,18 +124,17 @@ public class TravelTimeConstraintChecker<T> implements
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
 		return checkPairwiseConstraint(first, second, resource, vessel
-				.getVesselClass().getMaxSpeed(),
-				distanceProvider.get(IMultiMatrixProvider.Default_Key));
+				.getVesselClass().getMaxSpeed());
 	}
 
 	public boolean checkPairwiseConstraint(final T first, final T second,
-			final IResource resource, final int resourceMaxSpeed,
-			final IMatrixProvider<IPort, Integer> distanceMatrix) {
+			final IResource resource, final int resourceMaxSpeed) {
 		
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 
-		final int distance = distanceMatrix.get(slot1.getPort(), slot2.getPort());
+		final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort()); 
+			
 		if (distance == Integer.MAX_VALUE) return false;
 		
 		final int travelTime = Calculator.getTimeFromSpeedDistance(
