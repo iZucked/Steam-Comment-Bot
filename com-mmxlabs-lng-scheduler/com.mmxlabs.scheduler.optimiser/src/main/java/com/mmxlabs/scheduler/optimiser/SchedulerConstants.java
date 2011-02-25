@@ -35,4 +35,9 @@ public final class SchedulerConstants {
 	public static final String AI_volumeAllocationInfo = "info-volume-allocation";
 	
 	public static final String G_AI_allocations = "general-info-all-allocations";
+	/**
+	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}.
+	 * Each element in the map should map fitness function names to fitness values.
+	 */
+	public static final String G_AI_fitnessPerRoute = "general-info-fitness-per-route";
 }
