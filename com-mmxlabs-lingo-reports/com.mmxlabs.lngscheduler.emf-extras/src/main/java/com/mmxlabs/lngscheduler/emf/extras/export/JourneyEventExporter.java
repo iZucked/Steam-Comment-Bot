@@ -63,7 +63,8 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 
 		journey.setDistance(event.getDistance());
 		journey.setRoute(event.getRoute());
-
+		journey.setRouteCost(event.getRouteCost() / Calculator.ScaleFactor);
+		
 		switch (event.getVesselState()) {
 		case Ballast:
 			journey.setVesselState(VesselState.BALLAST);
