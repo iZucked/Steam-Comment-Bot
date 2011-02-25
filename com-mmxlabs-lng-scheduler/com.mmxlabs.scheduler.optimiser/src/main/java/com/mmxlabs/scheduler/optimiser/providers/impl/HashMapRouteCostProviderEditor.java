@@ -39,7 +39,7 @@ public class HashMapRouteCostProviderEditor implements
 			if (byVessel != null) {
 				final EnumMap<VesselState, Integer> byState = byVessel.get(vesselClass);
 				if (byState != null) {
-					final Integer x = byState.get(vesselClass);
+					final Integer x = byState.get(vesselState);
 					if (x != null) {
 						return x;
 					}
