@@ -68,6 +68,7 @@ public class JourneyItemProvider
 			addSpeedPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
 			addFromPortPropertyDescriptor(object);
+			addRouteCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -205,6 +206,28 @@ public class JourneyItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Route Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRouteCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_routeCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_routeCost_feature", "_UI_Journey_type"),
+				 EventsPackage.Literals.JOURNEY__ROUTE_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -276,6 +299,7 @@ public class JourneyItemProvider
 			case EventsPackage.JOURNEY__ROUTE:
 			case EventsPackage.JOURNEY__SPEED:
 			case EventsPackage.JOURNEY__DISTANCE:
+			case EventsPackage.JOURNEY__ROUTE_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case EventsPackage.JOURNEY__FUEL_USAGE:
