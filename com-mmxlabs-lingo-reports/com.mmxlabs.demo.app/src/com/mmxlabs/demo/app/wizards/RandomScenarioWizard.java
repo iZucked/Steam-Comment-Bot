@@ -213,8 +213,10 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 					FileDialog fd = new FileDialog(getShell(), open ? SWT.OPEN
 							: SWT.SAVE);
 					fd.setFilterExtensions(extensions);
-					String sd = fd.open();
-					t.setText(sd);
+					final String sd = fd.open();
+					if (sd != null) {
+						t.setText(sd);
+					}
 				}
 
 				@Override

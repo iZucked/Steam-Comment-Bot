@@ -7,6 +7,9 @@ package com.mmxlabs.scheduleview.views;
 
 import java.util.Iterator;
 
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -21,11 +24,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import scenario.schedule.Schedule;
 
@@ -46,8 +52,9 @@ public class SchedulerView extends ViewPart {
 	private Action zoomInAction;
 	private Action zoomOutAction;
 
-
 	private Action toggleColourSchemeAction;
+
+	private ISelectionListener selectionListener;
 
 	/**
 	 * The constructor.
@@ -60,10 +67,10 @@ public class SchedulerView extends ViewPart {
 	 * it.
 	 */
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 
 		// Gantt Chart settings object
-		ISettings settings = new AbstractSettings() {
+		final ISettings settings = new AbstractSettings() {
 			@Override
 			public boolean enableResizing() {
 				return false;
@@ -92,12 +99,12 @@ public class SchedulerView extends ViewPart {
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.BORDER, settings);
-//		viewer.setContentProvider(new AnnotatedScheduleContentProvider());
-//		viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
+		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
+		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
 		viewer.setContentProvider(new EMFScheduleContentProvider());
 		viewer.setLabelProvider(new EMFScheduleLabelProvider());
-		
+
 		// viewer.setSorter(new NameSorter());
 
 		viewer.setInput(getViewSite());
@@ -115,30 +122,38 @@ public class SchedulerView extends ViewPart {
 		/*
 		 * Add selection listener. may need tidying up.
 		 */
-		
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(
-				new ISelectionListener() {
-					@Override
-					public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-						//if selection instanceof etc.
-						if (selection instanceof IStructuredSelection) {
-							final IStructuredSelection sel = (IStructuredSelection)selection;
-							if (sel.isEmpty()) {
-								setInput(null);
-							} else {
-								Iterator<Object> iter = sel.iterator();
-								while (iter.hasNext()) {
-									final Object o = iter.next();
-									if (o instanceof Schedule) {
-										setInput((Schedule) o);
-										return;
-									}
+
+		selectionListener = new ISelectionListener() {
+			@Override
+			public void selectionChanged(final IWorkbenchPart part,
+					final ISelection selection) {
+
+				// Filter out non-editor selections - Unfortunately the
+				// addSelectionLister part ID filters do not work with editors
+				if (part instanceof IEditorPart) {
+
+					// if selection instanceof etc.
+					if (selection instanceof IStructuredSelection) {
+						final IStructuredSelection sel = (IStructuredSelection) selection;
+						if (sel.isEmpty()) {
+							setInput(null);
+						} else {
+							final Iterator<?> iter = sel.iterator();
+							while (iter.hasNext()) {
+								final Object o = iter.next();
+								if (o instanceof Schedule) {
+									setInput((Schedule) o);
+									return;
 								}
 							}
 						}
 					}
-				});
-		
+				}
+			}
+		};
+		getSite().getWorkbenchWindow().getSelectionService()
+				.addSelectionListener(selectionListener);
+
 		// getSite().getPage().addSelectionListener(JobManagerView.ID,
 		// new ISelectionListener() {
 		//
@@ -158,90 +173,99 @@ public class SchedulerView extends ViewPart {
 		// }
 		// });
 
-//		jobListener = new ManagedJobListenerNotifier() {
-//
-//			@Override
-//			public void jobNotified(IManagedJob job) {
-//
-//				if (selectedJobs.contains(job)) {
-//					setInput(job.getSchedule());
-//					refresh();
-//				}
-//			}
-//		};
-//
-//		jobManagerListener = new IJobManagerListener() {
-//
-//			@Override
-//			public void jobRemoved(IJobManager jobManager, IManagedJob job) {
-//				job.removeManagedJobListener(jobListener);
-//			}
-//
-//			@Override
-//			public void jobAdded(IJobManager jobManager, IManagedJob job) {
-//				job.addManagedJobListener(jobListener);
-//			}
-//
-//			@Override
-//			public void jobSelected(IJobManager jobManager, IManagedJob job) {
-//				selectedJobs.add(job);
-//				if (selectedJobs.isEmpty()) {
-//					setInput(null);
-//				} else {
-//					setInput(selectedJobs.get(0).getSchedule());
-//				}
-//			}
-//
-//			@Override
-//			public void jobDeselected(IJobManager jobManager, IManagedJob job) {
-//				selectedJobs.remove(job);
-//				if (selectedJobs.isEmpty()) {
-//					setInput(null);
-//				} else {
-//					setInput(selectedJobs.get(0).getSchedule());
-//				}
-//
-//			}
-//		};
-//
-//		Activator.getDefault().getJobManager()
-//				.addJobManagerListener(jobManagerListener);
+		// jobListener = new ManagedJobListenerNotifier() {
+		//
+		// @Override
+		// public void jobNotified(IManagedJob job) {
+		//
+		// if (selectedJobs.contains(job)) {
+		// setInput(job.getSchedule());
+		// refresh();
+		// }
+		// }
+		// };
+		//
+		// jobManagerListener = new IJobManagerListener() {
+		//
+		// @Override
+		// public void jobRemoved(IJobManager jobManager, IManagedJob job) {
+		// job.removeManagedJobListener(jobListener);
+		// }
+		//
+		// @Override
+		// public void jobAdded(IJobManager jobManager, IManagedJob job) {
+		// job.addManagedJobListener(jobListener);
+		// }
+		//
+		// @Override
+		// public void jobSelected(IJobManager jobManager, IManagedJob job) {
+		// selectedJobs.add(job);
+		// if (selectedJobs.isEmpty()) {
+		// setInput(null);
+		// } else {
+		// setInput(selectedJobs.get(0).getSchedule());
+		// }
+		// }
+		//
+		// @Override
+		// public void jobDeselected(IJobManager jobManager, IManagedJob job) {
+		// selectedJobs.remove(job);
+		// if (selectedJobs.isEmpty()) {
+		// setInput(null);
+		// } else {
+		// setInput(selectedJobs.get(0).getSchedule());
+		// }
+		//
+		// }
+		// };
+		//
+		// Activator.getDefault().getJobManager()
+		// .addJobManagerListener(jobManagerListener);
 
+		getSite().setSelectionProvider(viewer);
+	}
+
+	@Override
+	public void dispose() {
+		getSite().getWorkbenchWindow().getSelectionService()
+				.removeSelectionListener(selectionListener);
+
+		super.dispose();
 	}
 
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			@Override
-			public void menuAboutToShow(IMenuManager manager) {
+			public void menuAboutToShow(final IMenuManager manager) {
 				SchedulerView.this.fillContextMenu(manager);
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(viewer.getControl());
+		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
 	}
 
 	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
+		final IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
-	private void fillLocalPullDown(IMenuManager manager) {
+	private void fillLocalPullDown(final IMenuManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
 	}
 
-	private void fillContextMenu(IMenuManager manager) {
+	private void fillContextMenu(final IMenuManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
-	private void fillLocalToolBar(IToolBarManager manager) {
+	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
 		manager.add(toggleColourSchemeAction);
@@ -250,28 +274,33 @@ public class SchedulerView extends ViewPart {
 	private void makeActions() {
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
-		zoomInAction.setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomin_nav.gif"));
-		zoomInAction.setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomin_nav.gif"));
+		zoomInAction.setImageDescriptor(Activator
+				.getImageDescriptor("icons/clcl16/zoomin_nav.gif"));
+		zoomInAction.setDisabledImageDescriptor(Activator
+				.getImageDescriptor("icons/dlcl16/zoomin_nav.gif"));
 
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
-		zoomOutAction.setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomout_nav.gif"));
-		zoomOutAction.setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomout_nav.gif"));
-		
-		
+		zoomOutAction.setImageDescriptor(Activator
+				.getImageDescriptor("icons/clcl16/zoomout_nav.gif"));
+		zoomOutAction.setDisabledImageDescriptor(Activator
+				.getImageDescriptor("icons/dlcl16/zoomout_nav.gif"));
+
 		toggleColourSchemeAction = new Action() {
 			EMFScheduleLabelProvider.Mode mode = EMFScheduleLabelProvider.Mode.VesselState;
-			
+
 			public void run() {
-				
-				EMFScheduleLabelProvider lp =(EMFScheduleLabelProvider)(viewer.getLabelProvider());
-				
-				int nextMode = (mode.ordinal() + 1) % Mode.values().length;
+
+				final EMFScheduleLabelProvider lp = (EMFScheduleLabelProvider) (viewer
+						.getLabelProvider());
+
+				final int nextMode = (mode.ordinal() + 1)
+						% Mode.values().length;
 				mode = EMFScheduleLabelProvider.Mode.values()[nextMode];
 				lp.setMode(mode);
-				
+
 				viewer.setInput(viewer.getInput());
-				
-redraw();
+
+				redraw();
 			};
 		};
 		toggleColourSchemeAction.setText("Switch Colour Scheme");
@@ -285,27 +314,27 @@ redraw();
 		viewer.getControl().setFocus();
 	}
 
-	public void 	redraw() {
+	public void redraw() {
 		getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
 				if (!viewer.getControl().isDisposed()) {
-					
+
 					viewer.setInput(viewer.getInput());
 				}
 			}
 		});
 
 	}
-	
+
 	public void refresh() {
 		getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
 				if (!viewer.getControl().isDisposed()) {
-					
+
 					viewer.refresh();
 				}
 			}
@@ -322,5 +351,38 @@ redraw();
 				}
 			}
 		});
+	}
+
+	@Override
+	public Object getAdapter(@SuppressWarnings("rawtypes") final Class key) {
+		// Hook up our property sheet page
+		if (key.equals(IPropertySheetPage.class)) {
+			return getPropertySheetPage();
+		} else {
+			return super.getAdapter(key);
+		}
+	}
+
+	/**
+	 * Create a new {@link PropertySheetPage} instance hooked up to the default
+	 * EMF adapter factory.
+	 * 
+	 * @return
+	 */
+	public IPropertySheetPage getPropertySheetPage() {
+		final PropertySheetPage propertySheetPage = new PropertySheetPage();
+
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory();
+
+		// TODO: Add in ScenarioEMF Item Provider
+
+		adapterFactory
+				.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+
+		propertySheetPage
+				.setPropertySourceProvider(new AdapterFactoryContentProvider(
+						adapterFactory));
+
+		return propertySheetPage;
 	}
 }

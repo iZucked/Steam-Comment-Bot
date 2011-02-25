@@ -175,18 +175,12 @@ public class GanttChartViewer extends StructuredViewer {
 
 		for (final GanttEvent ge : allSelectedEvents) {
 
-			// We might expect this to always be true, but if the viewer updates
-			// during this call, then the map will have changed.
-			// Note: this is also true between containsKey() and get() calls.
-			if (internalReverseMap.containsKey(ge)) {
+				final Object obj = ge.getData();
 
-				final Object obj = internalReverseMap.get(ge);
+				if (obj != null) {
+					selectedObjects.add(obj);
+				}
 
-				selectedObjects.add(obj);
-
-				// TODO Might not need reverse mapping?
-				assert obj == ge.getData();
-			}
 		}
 
 		return selectedObjects;
