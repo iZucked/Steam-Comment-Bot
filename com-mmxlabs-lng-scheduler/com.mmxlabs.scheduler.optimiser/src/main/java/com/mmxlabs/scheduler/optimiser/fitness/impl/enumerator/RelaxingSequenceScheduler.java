@@ -24,7 +24,7 @@ public class RelaxingSequenceScheduler<T> extends
 	private static final Logger log = LoggerFactory
 			.getLogger(RelaxingSequenceScheduler.class);
 
-	final int steps = 2;
+	final int steps = 20;
 	
 	@Override
 	public ScheduledSequences schedule(final ISequences<T> sequences) {
