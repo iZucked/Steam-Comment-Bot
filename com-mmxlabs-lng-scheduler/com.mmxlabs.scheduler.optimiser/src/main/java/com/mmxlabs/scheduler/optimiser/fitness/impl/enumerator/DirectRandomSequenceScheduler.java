@@ -31,7 +31,7 @@ public class DirectRandomSequenceScheduler<T> extends
 	/**
 	 * Never do more than this many samples
 	 */
-	private int samplingUpperBound = 500;
+	private int samplingUpperBound = 4;
 	/**
 	 * Sample this proportion of the search space, up to {@code samplingUpperBound}
 	 */
@@ -45,13 +45,13 @@ public class DirectRandomSequenceScheduler<T> extends
 		resetBest();
 		final long approximateSpaceSize = prepare(samplingUpperBound*10000);
 		final int sampleCount = (int) Math.min(samplingUpperBound, (int)(sampleProportion * approximateSpaceSize));
-		log.debug("sampling " +sampleCount + " schedules");
+//		log.debug("sampling " +sampleCount + " schedules");
 		for (int i = 0; i<sampleCount; i++) {
 			randomise();
 			evaluate();
 		}
 		
-		log.debug("best found after " + bestIndex);
+//		log.debug("best found after " + bestIndex);
 		
 		return getBestResult();
 	}
