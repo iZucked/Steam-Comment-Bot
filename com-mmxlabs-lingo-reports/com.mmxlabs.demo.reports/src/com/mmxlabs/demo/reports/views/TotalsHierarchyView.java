@@ -180,17 +180,37 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		final EnumMap<FuelType, TreeData> spotFuelUsages = new EnumMap<FuelType, TreeData>(
 				FuelType.class);
 
+		final TreeData fleetLNG = new TreeData("Fleet Vessels");
+		final TreeData spotLNG = new TreeData("Spot Vessels");
+		
+		final TreeData lng = new TreeData("LNG");
+		
+		top.addChild(lng);
+		lng.addChild(fleetLNG);
+		lng.addChild(spotLNG);
+		
 		// First do fuel costs
 		for (final FuelType t : FuelType.values()) {
-			final TreeData thisFuel = new TreeData(t.getName());
-			top.addChild(thisFuel);
-			final TreeData fleetUsage = new TreeData("Fleet Vessels");
-			final TreeData spotUsage = new TreeData("Spot Vessels");
-			thisFuel.addChild(fleetUsage);
-			thisFuel.addChild(spotUsage);
+			if (t.equals(FuelType.FBO) || t.equals(FuelType.NBO)) {
+				final TreeData thisFuelFleet = new TreeData(t.getName());
+				final TreeData thisFuelSpot = new TreeData(t.getName());
+				
+				fleetLNG.addChild(thisFuelFleet);
+				spotLNG.addChild(thisFuelSpot);
+				
+				fleetFuelUsages.put(t, thisFuelFleet);
+				spotFuelUsages.put(t, thisFuelSpot);
+			} else {
+				final TreeData thisFuel = new TreeData(t.getName());
+				top.addChild(thisFuel);
+				final TreeData fleetUsage = new TreeData("Fleet Vessels");
+				final TreeData spotUsage = new TreeData("Spot Vessels");
+				thisFuel.addChild(fleetUsage);
+				thisFuel.addChild(spotUsage);
 
-			fleetFuelUsages.put(t, fleetUsage);
-			spotFuelUsages.put(t, spotUsage);
+				fleetFuelUsages.put(t, fleetUsage);
+				spotFuelUsages.put(t, spotUsage);
+			}
 		}
 
 		for (final Sequence seq : schedule.getSequences()) {
