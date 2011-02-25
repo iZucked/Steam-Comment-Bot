@@ -9,6 +9,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
@@ -84,8 +85,9 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
 	}
 
 	/**
-	 * Subclasses should use this to accumulate the cost associated with this object.
-	 * Return false to indicate an unacceptable solution
+	 * Subclasses should use this to accumulate the cost associated with this
+	 * object. Return false to indicate an unacceptable solution
+	 * 
 	 * @param object
 	 * @param time
 	 * @return
@@ -150,5 +152,18 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
 	public void acceptLastEvaluation() {
 		acceptedFitnesses.putAll(evaluatedFitnesses);
 		super.acceptLastEvaluation();
+	}
+
+	/**
+	 * Annotates the given solution with a map indicating the cost of the
+	 * sequence associated with each resource. Key is the fitness function name.
+	 */
+	@Override
+	public void endEvaluationAndAnnotate(final IAnnotatedSolution<T> solution) {
+		super.endEvaluationAndAnnotate(solution);
+		final Map<IResource, Long> fitnessAnnotation = new HashMap<IResource, Long>(
+				evaluatedFitnesses);
+
+		solution.setGeneralAnnotation(super.getName(), fitnessAnnotation);
 	}
 }
