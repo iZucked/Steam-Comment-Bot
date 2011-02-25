@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
@@ -90,6 +91,6 @@ public class RouteCostFitnessComponent<T> extends
 	 */
 	@Override
 	protected long endSequenceAndGetCost() {
-		return accumulator;
+		return accumulator / Calculator.ScaleFactor;
 	}
 }
