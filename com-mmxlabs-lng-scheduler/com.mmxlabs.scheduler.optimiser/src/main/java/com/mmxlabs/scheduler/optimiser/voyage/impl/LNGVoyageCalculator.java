@@ -101,8 +101,16 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		output.setTravelTime(travelTimeInHours);
 		output.setIdleTime(idleTimeInHours);
 
+		/**
+		 * The number of MT of base fuel or MT-equivalent of LNG required per
+		 * hour during this journey
+		 */
 		final long consuptionRateInMTPerHour = speed == 0 ? 0 : vesselClass
 				.getConsumptionRate(vesselState).getRate(speed);
+		/**
+		 * The total number of MT of base fuel OR MT-equivalent of LNG required
+		 * for this journey
+		 */
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(
 				consuptionRateInMTPerHour, travelTimeInHours);
 
@@ -110,9 +118,17 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		if (options.useNBOForTravel()) {
 
 			long nboRateInM3PerHour = vesselClass.getNBORate(vesselState);
+			/**
+			 * The total quantity of LNG inevitably boiled off in this journey,
+			 * in M3
+			 */
 			final long nboProvidedInM3 = Calculator.quantityFromRateTime(
 					nboRateInM3PerHour, travelTimeInHours);
 
+			/**
+			 * The total quantity of LNG inevitably boiled off in this journey,
+			 * in MT. Normally less than the amount boiled off in M3
+			 */
 			final long nboProvidedInMT = Calculator.convertM3ToMT(
 					nboProvidedInM3, equivalenceFactorM3ToMT);
 
@@ -122,6 +138,10 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					nboProvidedInMT);
 
 			if (nboProvidedInMT < requiredConsumptionInMT) {
+				/**
+				 * How many MT of base-fuel-or-equivalent are required after
+				 * the NBO amount has been used
+				 */
 				final long diffInMT = requiredConsumptionInMT - nboProvidedInMT;
 				final long diffInM3 = Calculator.convertMTToM3(diffInMT,
 						equivalenceFactorM3ToMT);
@@ -277,7 +297,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			} else {
 				// Voyage
 				final VoyageDetails<?> details = (VoyageDetails<?>) sequence[i];
-				//add route cost
+				// add route cost
 				routeCostAccumulator += details.getRouteCost();
 				for (final FuelComponent fc : FuelComponent.values()) {
 					fuelConsumptions[fc.ordinal()] += details
