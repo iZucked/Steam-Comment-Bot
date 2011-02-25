@@ -423,9 +423,9 @@ public class LNGScenarioTransformer {
 					final IVesselClass vc = vesselAssociation.lookup(classCost
 							.getVesselClass());
 					builder.setVesselClassRouteCost(name, vc,
-							VesselState.Laden, classCost.getLadenCost());
+							VesselState.Laden, Calculator.scale(classCost.getLadenCost()));
 					builder.setVesselClassRouteCost(name, vc,
-							VesselState.Ballast, classCost.getUnladenCost());
+							VesselState.Ballast, Calculator.scale(classCost.getUnladenCost()));
 				}
 			}
 		}
