@@ -277,10 +277,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 			for (final ScheduleFitness sf : seq.getFitness()) {
 				if (sf.getName()
 						.equals(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME)) {
-					// This value does need dividing by 1000, because it is a
-					// raw fitness rather than a cost.
 					final TreeData thisVessel = new TreeData(av.getName(),
-							sf.getValue() / Calculator.ScaleFactor);
+							sf.getValue());
 					charterCosts.addChild(thisVessel);
 				}
 			}
