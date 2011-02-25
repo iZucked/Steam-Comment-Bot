@@ -30,7 +30,8 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class FitnessHelper<T> implements IFitnessHelper<T> {
 
 	@Override
-	public boolean evaluateSequencesFromComponents(final ISequences<T> sequences,
+	public boolean evaluateSequencesFromComponents(
+			final ISequences<T> sequences,
 			final Collection<IFitnessComponent<T>> fitnessComponents) {
 		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
 
@@ -42,18 +43,22 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 			final Collection<IFitnessCore<T>> fitnessCores) {
 
 		for (final IFitnessCore<T> core : fitnessCores) {
-			if (!core.evaluate(sequences)) return false;
+			if (!core.evaluate(sequences)) {
+				return false;
+			}
 		}
 		return true;
 	}
 
 	@Override
-	public boolean evaluateSequencesFromComponents(final ISequences<T> sequences,
+	public boolean evaluateSequencesFromComponents(
+			final ISequences<T> sequences,
 			final Collection<IFitnessComponent<T>> fitnessComponents,
 			final Collection<IResource> affectedResources) {
 		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
 
-		return evaluateSequencesFromCores(sequences, fitnessCores, affectedResources);
+		return evaluateSequencesFromCores(sequences, fitnessCores,
+				affectedResources);
 
 	}
 
@@ -62,7 +67,8 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 			final Collection<IFitnessCore<T>> fitnessCores,
 			final Collection<IResource> affectedResources) {
 		for (final IFitnessCore<T> core : fitnessCores) {
-			if (!core.evaluate(sequences, affectedResources)) return false;
+			if (!core.evaluate(sequences, affectedResources))
+				return false;
 		}
 		return true;
 	}
@@ -117,17 +123,17 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	public IAnnotatedSolution<T> buildAnnotatedSolution(
 			final IOptimisationContext<T> context, final ISequences<T> state,
 			final Collection<IFitnessComponent<T>> fitnessComponents) {
-		
+
 		final Set<IFitnessCore<T>> cores = getFitnessCores(fitnessComponents);
-		
+
 		final AnnotatedSolution<T> result = new AnnotatedSolution<T>();
 		result.setSequences(state);
 		result.setContext(context);
-		
+
 		for (final IFitnessCore<T> core : cores) {
 			core.annotate(state, result);
 		}
-		
+
 		return result;
 	}
 }
