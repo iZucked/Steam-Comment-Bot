@@ -78,4 +78,10 @@ public interface IJourneyEvent<T> extends IScheduledEvent<T> {
 	 * @return
 	 */
 	String getRoute();
+	
+	/**
+	 * Returns the cost of the route undertaken in this journey
+	 * @return
+	 */
+	long getRouteCost();
 }
