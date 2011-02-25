@@ -33,6 +33,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
 import scenario.schedule.Schedule;
+import scenario.schedule.ScheduleFitness;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
@@ -46,6 +47,8 @@ import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.mmxlabs.demo.reports.views.actions.PackTreeColumnsAction;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 
 /**
  * A view which displays the cost breakdown as a hierarchy, thus
@@ -219,7 +222,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 					}
 					final FuelMixture mix = (FuelMixture) evt;
 					for (final FuelQuantity fq : mix.getFuelUsage()) {
-						if (fq.getTotalPrice() == 0) continue;
+						if (fq.getTotalPrice() == 0)
+							continue;
 						final TreeData eventUsage = new TreeData(name,
 								fq.getTotalPrice());
 						vesselFuelUsage.get(fq.getFuelType()).addChild(
@@ -270,26 +274,15 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		for (final Sequence seq : schedule.getSequences()) {
 			final AllocatedVessel av = seq.getVessel();
-			if (av instanceof SpotVessel) {
-				final TreeData thisVessel = new TreeData(av.getName(), 1
-				// TODO
-				// this
-				// is
-				// wrong,
-				// the
-				// correct
-				// data
-				// are
-				// not
-				// exported
-				// at
-				// this
-				// level
-				// at
-				// the
-				// moment.
-				);
-				charterCosts.addChild(thisVessel);
+			for (final ScheduleFitness sf : seq.getFitness()) {
+				if (sf.getName()
+						.equals(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME)) {
+					// This value does need dividing by 1000, because it is a
+					// raw fitness rather than a cost.
+					final TreeData thisVessel = new TreeData(av.getName(),
+							sf.getValue() / Calculator.ScaleFactor);
+					charterCosts.addChild(thisVessel);
+				}
 			}
 		}
 
@@ -298,30 +291,32 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI
+				| SWT.H_SCROLL | SWT.V_SCROLL);
 
-		// autopack and set alternating colours - disabled because no longer required
-//		viewer.getTree().addListener(SWT.Expand, new Listener() {
-//			@Override
-//			public void handleEvent(final Event e) {
-//				getSite().getShell().getDisplay().asyncExec(new Runnable() {
-//					@Override
-//					public void run() {
-//						final Tree t = (Tree) e.widget;
-//						for (final TreeColumn c : t.getColumns()) {
-//							c.pack();
-//						}
-//						
-////						colour(t.getItem(0), true);
-//					}
-////
-////					private void colour(final TreeItem item, boolean oddness) {
-////						item.setBackground(oddness ? Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_IN)
-////					}
-//				});
-//			}
-//		});
+		// autopack and set alternating colours - disabled because no longer
+		// required
+		// viewer.getTree().addListener(SWT.Expand, new Listener() {
+		// @Override
+		// public void handleEvent(final Event e) {
+		// getSite().getShell().getDisplay().asyncExec(new Runnable() {
+		// @Override
+		// public void run() {
+		// final Tree t = (Tree) e.widget;
+		// for (final TreeColumn c : t.getColumns()) {
+		// c.pack();
+		// }
+		//
+		// // colour(t.getItem(0), true);
+		// }
+		// //
+		// // private void colour(final TreeItem item, boolean oddness) {
+		// // item.setBackground(oddness ?
+		// Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_IN)
+		// // }
+		// });
+		// }
+		// });
 
 		viewer.setContentProvider(new ITreeContentProvider() {
 			@Override
@@ -393,7 +388,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		viewer.getTree().setHeaderVisible(true);
 		viewer.getTree().setLinesVisible(true);
-		
+
 		viewer.setInput(null);
 
 		// add pack columns button
