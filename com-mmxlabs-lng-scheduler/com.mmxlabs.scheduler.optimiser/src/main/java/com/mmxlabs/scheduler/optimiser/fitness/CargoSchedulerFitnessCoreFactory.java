@@ -45,7 +45,8 @@ public final class CargoSchedulerFitnessCoreFactory implements
 			@Override
 			public ISequenceScheduler createScheduler(IOptimisationData data,
 					Collection components) {
-				return SchedulerUtils.createDirectRandomSequenceScheduler(data, components);
+//				return SchedulerUtils.createDirectRandomSequenceScheduler(data, components);
+				return SchedulerUtils.createRelaxingSequenceScheduler(data, components);
 			}
 	};
 
