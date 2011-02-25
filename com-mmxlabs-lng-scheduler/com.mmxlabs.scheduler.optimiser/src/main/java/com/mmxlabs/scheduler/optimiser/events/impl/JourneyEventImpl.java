@@ -42,6 +42,8 @@ public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
 
 	private String route;
 	
+	private long routeCost;
+	
 	@Override
 	public int getDistance() {
 		return distance;
@@ -134,5 +136,14 @@ public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
 
 	public void setRoute(final String route) {
 		this.route = route;
+	}
+
+	@Override
+	public long getRouteCost() {
+		return routeCost;
+	}
+	
+	public void setRouteCost(final long routeCost) {
+		this.routeCost = routeCost;
 	}
 }
