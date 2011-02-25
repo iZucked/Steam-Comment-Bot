@@ -44,6 +44,7 @@ import scenario.schedule.events.Journey;
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getSpeed <em>Speed</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getFromPort <em>From Port</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getRouteCost <em>Route Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -159,6 +160,26 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * @ordered
 	 */
 	protected Port fromPort;
+
+	/**
+	 * The default value of the '{@link #getRouteCost() <em>Route Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long ROUTE_COST_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getRouteCost() <em>Route Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected long routeCost = ROUTE_COST_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -356,6 +377,27 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getRouteCost() {
+		return routeCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRouteCost(long newRouteCost) {
+		long oldRouteCost = routeCost;
+		routeCost = newRouteCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.JOURNEY__ROUTE_COST, oldRouteCost, routeCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -389,6 +431,8 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 			case EventsPackage.JOURNEY__FROM_PORT:
 				if (resolve) return getFromPort();
 				return basicGetFromPort();
+			case EventsPackage.JOURNEY__ROUTE_COST:
+				return getRouteCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -424,6 +468,9 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 			case EventsPackage.JOURNEY__FROM_PORT:
 				setFromPort((Port)newValue);
 				return;
+			case EventsPackage.JOURNEY__ROUTE_COST:
+				setRouteCost((Long)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -457,6 +504,9 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 			case EventsPackage.JOURNEY__FROM_PORT:
 				setFromPort((Port)null);
 				return;
+			case EventsPackage.JOURNEY__ROUTE_COST:
+				setRouteCost(ROUTE_COST_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -483,6 +533,8 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 				return distance != DISTANCE_EDEFAULT;
 			case EventsPackage.JOURNEY__FROM_PORT:
 				return fromPort != null;
+			case EventsPackage.JOURNEY__ROUTE_COST:
+				return routeCost != ROUTE_COST_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -537,6 +589,8 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 		result.append(speed);
 		result.append(", distance: ");
 		result.append(distance);
+		result.append(", routeCost: ");
+		result.append(routeCost);
 		result.append(')');
 		return result.toString();
 	}

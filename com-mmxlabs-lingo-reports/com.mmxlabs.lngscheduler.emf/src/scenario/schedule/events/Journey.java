@@ -24,6 +24,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.schedule.events.Journey#getSpeed <em>Speed</em>}</li>
  *   <li>{@link scenario.schedule.events.Journey#getDistance <em>Distance</em>}</li>
  *   <li>{@link scenario.schedule.events.Journey#getFromPort <em>From Port</em>}</li>
+ *   <li>{@link scenario.schedule.events.Journey#getRouteCost <em>Route Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -190,5 +191,31 @@ public interface Journey extends ScheduledEvent, FuelMixture {
 	 * @generated
 	 */
 	void setFromPort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Route Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Route Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Route Cost</em>' attribute.
+	 * @see #setRouteCost(long)
+	 * @see scenario.schedule.events.EventsPackage#getJourney_RouteCost()
+	 * @model required="true"
+	 * @generated
+	 */
+	long getRouteCost();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.events.Journey#getRouteCost <em>Route Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Route Cost</em>' attribute.
+	 * @see #getRouteCost()
+	 * @generated
+	 */
+	void setRouteCost(long value);
 
 } // Journey

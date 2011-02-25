@@ -420,6 +420,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getJourney_RouteCost() {
+		return (EAttribute)journeyEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortVisit() {
 		return portVisitEClass;
 	}
@@ -548,6 +557,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		createEAttribute(journeyEClass, JOURNEY__SPEED);
 		createEAttribute(journeyEClass, JOURNEY__DISTANCE);
 		createEReference(journeyEClass, JOURNEY__FROM_PORT);
+		createEAttribute(journeyEClass, JOURNEY__ROUTE_COST);
 
 		portVisitEClass = createEClass(PORT_VISIT);
 		createEReference(portVisitEClass, PORT_VISIT__PORT);
@@ -631,6 +641,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		initEAttribute(getJourney_Speed(), ecorePackage.getEDouble(), "speed", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_Distance(), ecorePackage.getEInt(), "distance", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getJourney_FromPort(), thePortPackage.getPort(), null, "fromPort", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_RouteCost(), ecorePackage.getELong(), "routeCost", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortVisit_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

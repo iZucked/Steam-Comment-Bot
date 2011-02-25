@@ -391,13 +391,22 @@ public interface EventsPackage extends EPackage {
 	int JOURNEY__FROM_PORT = SCHEDULED_EVENT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Route Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__ROUTE_COST = SCHEDULED_EVENT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Journey</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY_FEATURE_COUNT = SCHEDULED_EVENT_FEATURE_COUNT + 7;
+	int JOURNEY_FEATURE_COUNT = SCHEDULED_EVENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.SlotVisitImpl <em>Slot Visit</em>}' class.
@@ -755,6 +764,17 @@ public interface EventsPackage extends EPackage {
 	EReference getJourney_FromPort();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.schedule.events.Journey#getRouteCost <em>Route Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Cost</em>'.
+	 * @see scenario.schedule.events.Journey#getRouteCost()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_RouteCost();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.PortVisit <em>Port Visit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1039,6 +1059,14 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference JOURNEY__FROM_PORT = eINSTANCE.getJourney_FromPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__ROUTE_COST = eINSTANCE.getJourney_RouteCost();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.PortVisitImpl <em>Port Visit</em>}' class.
