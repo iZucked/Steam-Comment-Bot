@@ -6,20 +6,27 @@ package com.mmxlabs.common.recorder.conversion.impl;
 
 import com.mmxlabs.common.recorder.conversion.ITypeConvertor;
 
-public class StringTypeConvertor implements ITypeConvertor {
+/**
+ * Implementation of {@link ITypeConvertor} to perform a null conversion for
+ * {@link String} objects.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public class StringTypeConvertor implements ITypeConvertor<String> {
 
 	@Override
-	public Class<?> getDataType() {
+	public Class<String> getDataType() {
 		return String.class;
 	}
 
 	@Override
-	public String toObject(String value) {
+	public String toObject(final String value) {
 		return value;
 	}
 
 	@Override
-	public String toString(Object object) {
-		return (String)object;
+	public String toString(final Object object) {
+		return (String) object;
 	}
 }

@@ -4,11 +4,23 @@
  */
 package com.mmxlabs.common.recorder.conversion;
 
-public interface ITypeConvertor {
+import com.mmxlabs.common.ITransformer;
 
-	Class<?> getDataType();
+/**
+ * Interface defining a two-way conversion mechanism between an object and a
+ * {@link String}. This differs to the {@link ITransformer} interface which only
+ * provides a one-way conversion.
+ * 
+ * @author Simon Goodall
+ * 
+ * @param <T>
+ *            Object data type
+ */
+public interface ITypeConvertor<T> {
 
-	Object toObject(String value);
+	Class<T> getDataType();
+
+	T toObject(String value);
 
 	String toString(Object object);
 }
