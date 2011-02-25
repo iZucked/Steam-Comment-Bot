@@ -31,6 +31,13 @@
       </view>
       <view
             category="com.mmxlabs.demo.reports"
+            class="com.mmxlabs.demo.reports.views.TotalsHierarchyView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.demo.reports.views.TotalsHierarchyView"
+            name="Totals Hierarchy">
+      </view>
+      <view
+            category="com.mmxlabs.demo.reports"
             class="com.mmxlabs.demo.reports.views.TotalsReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.TotalsReportView"
