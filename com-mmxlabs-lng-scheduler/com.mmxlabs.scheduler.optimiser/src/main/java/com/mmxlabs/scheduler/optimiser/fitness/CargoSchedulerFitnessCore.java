@@ -6,7 +6,9 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -169,7 +171,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 						IPortSlotProvider.class);
 
 		annotator.setPortSlotProvider(portSlotProvider);
-		
+
 		for (final ScheduledSequence scheduledSequence : schedule) {
 			final IResource resource = scheduledSequence.getResource();
 			final ISequence<T> sequence = sequences.getSequence(resource);
@@ -180,9 +182,21 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 			}
 		}
 
+		// set up per-route fitness map, which components can put their fitness
+		// in
+		{
+			final Map<IResource, Map<String, Long>> fitnessPerRoute = new HashMap<IResource, Map<String, Long>>();
+			for (final IResource resource : solution.getSequences()
+					.getResources()) {
+				fitnessPerRoute.put(resource, new HashMap<String, Long>());
+			}
+
+			solution.setGeneralAnnotation(
+					SchedulerConstants.G_AI_fitnessPerRoute, fitnessPerRoute);
+		}
+
 		// Allow components to do any extra annotations
 		planIterator
 				.annotateSchedulerComponents(components, schedule, solution);
-
 	}
 }
