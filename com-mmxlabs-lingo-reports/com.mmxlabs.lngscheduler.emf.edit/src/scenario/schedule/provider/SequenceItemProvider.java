@@ -30,6 +30,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.provider.LngEditPlugin;
 
+import scenario.schedule.ScheduleFactory;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
 
@@ -106,6 +107,7 @@ public class SequenceItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.SEQUENCE__EVENTS);
+			childrenFeatures.add(SchedulePackage.Literals.SEQUENCE__FITNESS);
 		}
 		return childrenFeatures;
 	}
@@ -158,6 +160,7 @@ public class SequenceItemProvider
 
 		switch (notification.getFeatureID(Sequence.class)) {
 			case SchedulePackage.SEQUENCE__EVENTS:
+			case SchedulePackage.SEQUENCE__FITNESS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -204,6 +207,11 @@ public class SequenceItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 EventsFactory.eINSTANCE.createCharterOutVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__FITNESS,
+				 ScheduleFactory.eINSTANCE.createScheduleFitness()));
 	}
 
 	/**
