@@ -10,6 +10,7 @@ import java.util.Map;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -153,15 +154,20 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
 	}
 
 	/**
-	 * Annotates the given solution with a map indicating the cost of the
-	 * sequence associated with each resource. Key is the fitness function name.
+	 * Adds the per-route fitness of this objective to the map associated with
+	 * {@link SchedulerConstants#G_AI_fitnessPerRoute}
 	 */
 	@Override
 	public void endEvaluationAndAnnotate(final IAnnotatedSolution<T> solution) {
 		super.endEvaluationAndAnnotate(solution);
-		final Map<IResource, Long> fitnessAnnotation = new HashMap<IResource, Long>(
-				evaluatedFitnesses);
+		@SuppressWarnings("unchecked")
+		final Map<IResource, Map<String, Long>> fitnessByRoute = solution
+				.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute,
+						Map.class);
 
-		solution.setGeneralAnnotation(super.getName(), fitnessAnnotation);
+		for (final Map.Entry<IResource, Long> entry : evaluatedFitnesses
+				.entrySet()) {
+			fitnessByRoute.get(entry.getKey()).put(getName(), entry.getValue());
+		}
 	}
 }
