@@ -78,6 +78,15 @@ public class AnnotatedSolutionExporter {
 		// go through the annotated solution and build stuff for the EMF;
 		entities.setScenario(inputScenario);
 
+		// set up per-route fitness map
+		{
+			final Map<IResource, Map<String, Long>> fitnessPerRoute = new HashMap<IResource, Map<String, Long>>();
+			for (final IResource resource : annotatedSolution.getSequences().getResources()) {
+				fitnessPerRoute.put(resource, new HashMap<String, Long>());
+			}
+			
+			annotatedSolution.setGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, fitnessPerRoute);
+		}
 		// prepare exporters
 		for (final IAnnotationExporter exporter : exporters) {
 			exporter.setOutput(output);
