@@ -78,7 +78,6 @@ public class AnnotatedSolutionExporter {
 		// go through the annotated solution and build stuff for the EMF;
 		entities.setScenario(inputScenario);
 
-		
 		// prepare exporters
 		for (final IAnnotationExporter exporter : exporters) {
 			exporter.setOutput(output);
@@ -95,7 +94,9 @@ public class AnnotatedSolutionExporter {
 		// Create sequences and run other exporters
 
 		final Map<IVesselClass, AtomicInteger> counter = new HashMap<IVesselClass, AtomicInteger>();
-
+		final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution
+				.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute,
+						Map.class);
 		for (final IResource resource : resources) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 			final AllocatedVessel outputVessel;
@@ -110,7 +111,9 @@ public class AnnotatedSolutionExporter {
 				outputVessel = fv;
 				break;
 			case SPOT_CHARTER:
-				if (annotatedSolution.getSequences().getSequence(resource).size() < 2) continue;
+				if (annotatedSolution.getSequences().getSequence(resource)
+						.size() < 2)
+					continue;
 				final SpotVessel sv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE
 						.getFleetallocationFactory().createSpotVessel();
 
@@ -137,7 +140,19 @@ public class AnnotatedSolutionExporter {
 
 			final Sequence eSequence = factory.createSequence();
 			sequences.add(eSequence);
-			
+
+			{
+				// set sequence fitness values
+				final EList<ScheduleFitness> eSequenceFitness = eSequence
+						.getFitness();
+				final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
+				for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
+					final ScheduleFitness sf = ScheduleFactory.eINSTANCE.createScheduleFitness();
+					sf.setName(e.getKey());
+					sf.setValue(e.getValue());
+					eSequenceFitness.add(sf);
+				}
+			}
 			output.getFleet().add(outputVessel);
 			eSequence.setVessel(outputVessel);
 
@@ -177,6 +192,7 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
+		@SuppressWarnings("unchecked")
 		final Map<String, Long> fitnesses = annotatedSolution
 				.getGeneralAnnotation(
 						OptimiserConstants.G_AI_fitnessComponents, Map.class);
@@ -187,26 +203,26 @@ public class AnnotatedSolutionExporter {
 				OptimiserConstants.G_AI_iterations, Integer.class);
 
 		final EList<ScheduleFitness> outputFitnesses = output.getFitness();
-		
+
 		for (final Map.Entry<String, Long> entry : fitnesses.entrySet()) {
 			final ScheduleFitness fitness = factory.createScheduleFitness();
 			fitness.setName(entry.getKey());
 			fitness.setValue(entry.getValue());
 			outputFitnesses.add(fitness);
 		}
-		
+
 		final ScheduleFitness eRuntime = factory.createScheduleFitness();
 		eRuntime.setName("runtime");
 		eRuntime.setValue(runtime);
-		
+
 		outputFitnesses.add(eRuntime);
-		
+
 		final ScheduleFitness eIters = factory.createScheduleFitness();
 		eIters.setName("iterations");
 		eIters.setValue(iterations.longValue());
-		
+
 		outputFitnesses.add(eIters);
-		
+
 		return output;
 	}
 }
