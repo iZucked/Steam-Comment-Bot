@@ -8,7 +8,6 @@ package com.mmxlabs.scheduleview.views;
 import java.util.Iterator;
 
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -40,6 +39,7 @@ import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleModel;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
+import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.scheduleview.Activator;
@@ -59,6 +59,8 @@ public class SchedulerView extends ViewPart {
 	private Action toggleColourSchemeAction;
 
 	private ISelectionListener selectionListener;
+
+	private PackAction packAction;
 
 	/**
 	 * The constructor.
@@ -294,6 +296,7 @@ public class SchedulerView extends ViewPart {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
 		manager.add(toggleColourSchemeAction);
+		manager.add(packAction);
 	}
 
 	private void makeActions() {
@@ -329,6 +332,8 @@ public class SchedulerView extends ViewPart {
 			};
 		};
 		toggleColourSchemeAction.setText("Switch Colour Scheme");
+		
+		packAction = new PackAction(viewer.getGanttChart());
 	}
 
 	/**
