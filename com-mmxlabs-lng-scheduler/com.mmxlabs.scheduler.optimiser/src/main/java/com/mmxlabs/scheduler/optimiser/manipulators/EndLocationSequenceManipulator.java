@@ -7,19 +7,12 @@ package com.mmxlabs.scheduler.optimiser.manipulators;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -148,6 +141,8 @@ public final class EndLocationSequenceManipulator<T> implements
 
 		/*
 		 * Replace the final sequence element with the dummy
+		 * 
+		 * TODO consider merging this with the start-end-requirement stuff
 		 */
 		sequence.set(sequence.size() - 1,
 				returnElementProvider.getReturnElement(resource, returnPort));
