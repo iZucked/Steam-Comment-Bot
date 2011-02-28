@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
