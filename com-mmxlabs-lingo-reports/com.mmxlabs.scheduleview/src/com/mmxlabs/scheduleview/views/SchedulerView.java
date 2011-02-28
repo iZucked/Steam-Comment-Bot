@@ -7,6 +7,8 @@ package com.mmxlabs.scheduleview.views;
 
 import java.util.Iterator;
 
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -33,7 +35,9 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import scenario.Scenario;
 import scenario.schedule.Schedule;
+import scenario.schedule.ScheduleModel;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.ZoomInAction;
@@ -124,6 +128,29 @@ public class SchedulerView extends ViewPart {
 		 */
 
 		selectionListener = new ISelectionListener() {
+			private boolean trySelectObject(final Object o) {
+				if (o instanceof Schedule) {
+					setInput((Schedule) o);
+					return true;
+				} else if (o instanceof Scenario) {
+					final Scenario scenario = (Scenario) o;
+					final ScheduleModel scheduleModel = scenario
+							.getScheduleModel();
+					final int scheduleCount;
+					if (scheduleModel != null
+							&& (scheduleCount = scheduleModel.getSchedules()
+									.size()) > 0) {
+						setInput(scheduleModel.getSchedules().get(
+								scheduleCount - 1));
+						return true;
+					}
+				} else if (o instanceof Resource
+						&& ((Resource) o).getContents().size() > 0) {
+					return trySelectObject(((Resource) o).getContents().get(0));
+				}
+				return false;
+			}
+
 			@Override
 			public void selectionChanged(final IWorkbenchPart part,
 					final ISelection selection) {
@@ -141,10 +168,8 @@ public class SchedulerView extends ViewPart {
 							final Iterator<?> iter = sel.iterator();
 							while (iter.hasNext()) {
 								final Object o = iter.next();
-								if (o instanceof Schedule) {
-									setInput((Schedule) o);
+								if (trySelectObject(o))
 									return;
-								}
 							}
 						}
 					}
