@@ -34,7 +34,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  */
 public class EnumeratingSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
-	private static final int EMPTY_WINDOW_SIZE = 24 * 2;
+	/**
+	 * How long to let empty time windows be. Since these mostly happen at the end of
+	 * sequences we make this zero.
+	 */
+	private static final int EMPTY_WINDOW_SIZE = 0;
 
 	/**
 	 * Tracks the number of evaluations done so far
