@@ -58,7 +58,7 @@ public class GanttChartViewer extends StructuredViewer {
 	private final Map<GanttEvent, Object> internalReverseMap = new HashMap<GanttEvent, Object>();
 
 	private final IGanttEventListener ganttEventListener;
-
+	
 	public GanttChartViewer(final Composite parent) {
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 	}
@@ -75,7 +75,7 @@ public class GanttChartViewer extends StructuredViewer {
 	public GanttChartViewer(final GanttChart ganttChart) {
 		this.ganttChart = ganttChart;
 		hookControl(ganttChart);
-
+		
 		ganttEventListener = new GanttEventListenerAdapter() {
 
 			@Override
