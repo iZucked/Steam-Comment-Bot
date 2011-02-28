@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -105,7 +106,8 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	public VoyagePlan optimise() {
 
 		// nonRecursiveRunLoop();
-
+//		System.err.println("==============Optimising voyage plan=============");
+		
 		runLoop(0);
 
 		return bestPlan;
@@ -117,7 +119,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 		final boolean calculateEndTime = endElement.getPortSlot()
 				.getTimeWindow() == null;
-		
+
 		evaluateVoyagePlan(calculateEndTime);
 	}
 
@@ -182,9 +184,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			VoyagePlan bestLastLegPlan = null;
 			long bestLastLegCost = Long.MAX_VALUE;
 			long lastCost = Long.MAX_VALUE;
-
+			
 			for (int i = 0; i < 500; ++i) {
-				options.setAvailableTime(originalTime + i);
+				options.setAvailableTime(options.getAvailableTime() + 1);
 
 				currentPlan = calculateVoyagePlan();
 				if (currentPlan != null) {
@@ -195,14 +197,27 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 					}
 
 					if (currentCost > lastCost) {
-						options.setAvailableTime(originalTime + i - 1); //back out one step. this is ugly.
-						break; //presume minimum.
+						options.setAvailableTime(options.getAvailableTime() - 1); // back
+																		// out
+																		// one
+																		// step.
+																		// this
+																		// is
+																		// ugly.
+						break; // presume minimum.
 					} else {
 						lastCost = currentCost;
 					}
+					
+					final Object[] sequence = currentPlan.getSequence();
+					
+					final VoyageDetails lastVoyage = (VoyageDetails) sequence[sequence.length-2];
+					if (lastVoyage.getIdleTime() > 0) {
+						options.setAvailableTime(options.getAvailableTime() - lastVoyage.getIdleTime());
+					}
 				}
 			}
-			
+
 			cost = bestLastLegCost;
 			currentPlan = bestLastLegPlan;
 		} else {
@@ -276,6 +291,25 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	public long evaluatePlan(final VoyagePlan plan) {
+//		System.err.println("Evaluating a plan");
+//		for (final Object o : plan.getSequence()) {
+//			if (o instanceof VoyageDetails) {
+//				final VoyageDetails vd = (VoyageDetails) o;
+//				System.err.println("\tvoyage from "
+//						+ vd.getOptions().getFromPortSlot().getPort().getName()
+//						+ " to "
+//						+ vd.getOptions().getToPortSlot().getPort().getName());
+//				System.err.println(vd.getOptions());
+//				System.err.println("idle:"+ vd.getIdleTime() + ", journey" + vd.getTravelTime());
+//				for (final FuelComponent fc : FuelComponent.values()) {
+//					final long consumption = vd.getFuelConsumption(fc,
+//							fc.getDefaultFuelUnit());
+//					final long up = vd.getFuelUnitPrice(fc);
+//					System.err.println("\t\t" + fc + " = " + consumption + ", "
+//							+ Calculator.multiply(consumption, up));
+//				}
+//			}
+//		}
 
 		// long revenue = currentPlan.getSalesRevenue() -
 		// currentPlan.getSalesRevenue();
@@ -283,7 +317,11 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		for (final FuelComponent fuel : FuelComponent.values()) {
 			cost += plan.getTotalFuelCost(fuel);
 		}
-		cost += plan.getTotalRouteCost();
+//		System.err.println("Fuel Cost = " + cost);
+//		cost += plan.getTotalRouteCost();
+//		System.err.println("Total Cost = " + cost);
+//		if (cost < bestCost)
+//			System.err.println("Maybe new best ^^");
 		return cost;
 	}
 
@@ -323,9 +361,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 		return currentPlan;
 	}
-	
+
 	private List<Integer> arrivalTimes;
-	
+
 	public void setArrivalTimes(final List<Integer> arrivalTimes) {
 		this.arrivalTimes = arrivalTimes;
 	}
