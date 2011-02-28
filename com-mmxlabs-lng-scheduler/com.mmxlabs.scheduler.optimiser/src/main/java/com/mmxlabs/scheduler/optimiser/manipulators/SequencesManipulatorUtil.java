@@ -13,44 +13,47 @@ import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulat
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
  * A utility class for setting up the normal sequence manipulators
+ * 
  * @author hinton
- *
+ * 
  */
 public class SequencesManipulatorUtil {
 	/**
 	 * Create the default set of sequence manipulators for the given
 	 * optimisation data
+	 * 
 	 * @return
 	 */
-	public static <T> ChainedSequencesManipulator<T>
-		createDefaultSequenceManipulators(final IOptimisationData<T> data) {
-		
+	public static <T> ChainedSequencesManipulator<T> createDefaultSequenceManipulators(
+			final IOptimisationData<T> data) {
+
 		/**
-		 * A chained manipulator, because we need two sequence manipulators by default
+		 * A chained manipulator, because we need two sequence manipulators by
+		 * default
 		 */
-		final ChainedSequencesManipulator<T> chainedManipulator = 
-			new ChainedSequencesManipulator<T>();
-		
+		final ChainedSequencesManipulator<T> chainedManipulator = new ChainedSequencesManipulator<T>();
+
 		/**
-		 * A start location removing manipulator, to take out spot charter dummy start locations
+		 * A start location removing manipulator, to take out spot charter dummy
+		 * start locations
 		 */
-		final StartLocationRemovingSequenceManipulator<T> startLocationRemover =
-			new StartLocationRemovingSequenceManipulator<T>();
-		
+		final StartLocationRemovingSequenceManipulator<T> startLocationRemover = new StartLocationRemovingSequenceManipulator<T>();
+
 		/**
-		 * An end location sequence manipulator, to return spot charters to their first load port
+		 * An end location sequence manipulator, to return spot charters to
+		 * their first load port
 		 */
-		final EndLocationSequenceManipulator<T> endLocationManipulator = 
-			new EndLocationSequenceManipulator<T>();
-		
+		final EndLocationSequenceManipulator<T> endLocationManipulator = new EndLocationSequenceManipulator<T>();
+
 		/*
-		 * Set the various DCPs. Some of these are editors, which is dodgy,
-		 * but I can see no other simple way to do this. The alternative
-		 * is some significant adjustment of the mechanism.
+		 * Set the various DCPs. Some of these are editors, which is dodgy, but
+		 * I can see no other simple way to do this. The alternative is some
+		 * significant adjustment of the mechanism.
 		 */
 
 		@SuppressWarnings("unchecked")
@@ -58,43 +61,60 @@ public class SequencesManipulatorUtil {
 				.getDataComponentProvider(
 						SchedulerConstants.DCP_portTypeProvider,
 						IPortTypeProvider.class);
-		
-		final IPortProvider portProvider = data
-				.getDataComponentProvider(SchedulerConstants.DCP_portProvider,
-						IPortProvider.class);
-		
+
+		final IPortProvider portProvider = data.getDataComponentProvider(
+				SchedulerConstants.DCP_portProvider, IPortProvider.class);
+
 		@SuppressWarnings("unchecked")
 		final IReturnElementProvider<T> returnElementProvider = data
-		.getDataComponentProvider(SchedulerConstants.DCP_returnElementProvider,
-				IReturnElementProvider.class);
-		
-		
+				.getDataComponentProvider(
+						SchedulerConstants.DCP_returnElementProvider,
+						IReturnElementProvider.class);
+
+		@SuppressWarnings("unchecked")
+		final IStartEndRequirementProvider<T> startEndProvider = data
+				.getDataComponentProvider(
+						SchedulerConstants.DCP_startEndRequirementProvider,
+						IStartEndRequirementProvider.class);
+
 		endLocationManipulator.setPortTypeProvider(portTypeProvider);
 		endLocationManipulator.setReturnElementProvider(returnElementProvider);
 		endLocationManipulator.setPortProvider(portProvider);
-		
+
 		/*
-		 * Set up manipulators for use with spot charter vessels only
+		 * Set end location rules; charter in vessels return to their first load
+		 * port. Fleet vessels return to their last visited load port.
 		 */
-		final IVesselProvider vesselProvider =
-			data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		final IVesselProvider vesselProvider = data.getDataComponentProvider(
+				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 
 		for (final IResource resource : data.getResources()) {
 			if (vesselProvider.getVessel(resource).getVesselInstanceType()
 					.equals(VesselInstanceType.SPOT_CHARTER)) {
-				startLocationRemover.setShouldRemoveStartLocation(resource, true);
-				endLocationManipulator.setEndLocationRule(resource, EndLocationRule.RETURN_TO_FIRST_LOAD);
+				startLocationRemover.setShouldRemoveStartLocation(resource,
+						true);
+				endLocationManipulator.setEndLocationRule(resource,
+						EndLocationRule.RETURN_TO_FIRST_LOAD);
 			} else {
-				endLocationManipulator.setEndLocationRule(resource, EndLocationRule.RETURN_TO_LAST_LOAD);
+				// Some fleet vessels will have an existing end location
+				// requirement;
+				// return to last load does not apply there
+				// however, fleet vessels which do not have an end location requirement
+				// should return to their last load port.
+
+				if (!startEndProvider.getEndRequirement(resource)
+						.hasPortRequirement())
+					endLocationManipulator.setEndLocationRule(resource,
+							EndLocationRule.RETURN_TO_LAST_LOAD);
 			}
 		}
-		
+
 		/*
-		 * Add them to the chained manipulator. 
+		 * Add them to the chained manipulator.
 		 */
 		chainedManipulator.addDelegate(startLocationRemover);
 		chainedManipulator.addDelegate(endLocationManipulator);
-		
+
 		return chainedManipulator;
 	}
 }
