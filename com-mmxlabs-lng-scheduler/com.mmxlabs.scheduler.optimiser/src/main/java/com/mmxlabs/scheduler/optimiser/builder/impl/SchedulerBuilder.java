@@ -436,24 +436,50 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final IResource resource : resources) {
 			for (final IPort port : ports) {
 				returnElementProvider.setReturnElement(resource, port,
-						createReturnElement(port));
+						createReturnElement(resource, port));
 			}
 		}
 	}
 
-	private ISequenceElement createReturnElement(final IPort port) {
+	private ISequenceElement createReturnElement(final IResource resource,
+			final IPort port) {
 		final String name = "return-to-" + port.getName();
 		final EndPortSlot slot = new EndPortSlot(name, port, null);
 		final SequenceElement element = new SequenceElement(indexingContext,
 				"return-to-" + port.getName(), slot);
 
+		// set element duration to 1 hour, just so it's visible on the chart
+		elementDurationsProvider.setElementDuration(element, 1);
+		
 		portProvider.setPortForElement(port, element);
 		portSlotsProvider.setPortSlot(element, slot);
 		// Return elements are always end elements?
 		portTypeProvider.setPortType(element, PortType.End);
-		final List<ITimeWindow> emptyTimeWindowList = Collections.emptyList();
-		timeWindowProvider.setTimeWindows(element, emptyTimeWindowList);
 
+		if (startEndRequirementProvider.getEndRequirement(resource)
+				.getTimeWindow() != null) {
+			// We should set the time window for all end elements for this
+			// resource
+			// to match the end requirement for the resource
+			timeWindowProvider.setTimeWindows(element, Collections
+					.singletonList(startEndRequirementProvider
+							.getEndRequirement(resource).getTimeWindow()));
+		} else {
+			if (vesselProvider.getVessel(resource).getVesselInstanceType()
+					.equals(VesselInstanceType.SPOT_CHARTER)) {
+				// spot charters have no end time window, because their end date
+				// is very flexible.
+				final List<ITimeWindow> noTimeWindows = Collections.emptyList();
+				timeWindowProvider.setTimeWindows(element, noTimeWindows);
+			} else {
+				// this defers setting the time windows to
+				// getOptimisationData(), which will
+				// choose a suitable end date for the optimisation and set all
+				// the elements in
+				// this list to have a time window around that end date
+				endSlots.add(new Pair<ISequenceElement, PortSlot>(element, slot));
+			}
+		}
 		return element;
 	}
 
@@ -593,6 +619,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		sequenceElements.add(startElement);
 		sequenceElements.add(endElement);
+		elementDurationsProvider.setElementDuration(endElement, 1);
+		elementDurationsProvider.setElementDuration(startElement, 1);
 
 		if (end.hasTimeRequirement() == false) {
 			// put end slot into list of slots to patch up later.
@@ -722,6 +750,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IOptimisationData<ISequenceElement> getOptimisationData() {
+		// create return elements before fixing time windows,
+		// because the next bit will have to patch up their time windows
+		createReturnElements();
+		
 		// Patch up end time windows
 		final int latestTime = endOfLatestWindow + 24 * 7;
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
@@ -734,8 +766,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// Create charter out elements
 		buildCharterOuts();
-
-		createReturnElements();
 
 		portDistanceProvider.cacheExtremalValues(ports);
 
@@ -1072,8 +1102,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final IVessel v : vessels) {
 			resources.add(vesselProvider.getResource(v));
 		}
-		resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(loadSlot), resources);
-		resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(dischargeSlot), resources);
+		resourceAllocationProvider.setAllowedResources(
+				portSlotsProvider.getElement(loadSlot), resources);
+		resourceAllocationProvider.setAllowedResources(
+				portSlotsProvider.getElement(dischargeSlot), resources);
 	}
 
 }
