@@ -66,7 +66,7 @@ public class DirectRandomSequenceScheduler<T> extends
 				final int min = getMinArrivalTime(seq, pos);
 				final int max = getMaxArrivalTime(seq, pos);
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
-			}
+			} 	
 		}
 	}
 
