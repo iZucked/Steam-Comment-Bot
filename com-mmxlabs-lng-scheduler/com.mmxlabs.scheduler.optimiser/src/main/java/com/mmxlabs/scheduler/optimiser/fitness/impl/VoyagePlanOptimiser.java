@@ -320,7 +320,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			cost += plan.getTotalFuelCost(fuel);
 		}
 //		System.err.println("Fuel Cost = " + cost);
-//		cost += plan.getTotalRouteCost();
+		cost += plan.getTotalRouteCost();
 //		System.err.println("Total Cost = " + cost);
 //		if (cost < bestCost)
 //			System.err.println("Maybe new best ^^");
