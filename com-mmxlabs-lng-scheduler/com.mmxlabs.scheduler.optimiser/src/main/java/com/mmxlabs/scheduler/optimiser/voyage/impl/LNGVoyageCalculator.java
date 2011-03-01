@@ -65,7 +65,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		/**
 		 * How much of the time given to us by the scheduler has to be spent
-		 * traveling by an alternative route.
+		 * travelling by an alternative route.
 		 */
 		final int additionalRouteTimeInHours = routeCostProvider
 				.getRouteTransitTime(options.getRoute(), vesselClass);
@@ -129,16 +129,17 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				.getConsumptionRate(vesselState).getRate(speed);
 		/**
 		 * The total number of MT of base fuel OR MT-equivalent of LNG required
-		 * for this journey, including the amount needed for any canals
+		 * for this journey, excluding the amount needed for any canals
 		 */
-		final long requiredConsumptionInMT =
-		// this part is the fuel used for traveling on the open ocean
-		Calculator.quantityFromRateTime(consuptionRateInMTPerHour,
-				travelTimeInHours)
-		// and this part is the fuel used for traversing any canal we may have
-		// picked
-				+ routeCostProvider.getRouteFuelUsage(options.getRoute(),
-						vesselClass);
+		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(
+				consuptionRateInMTPerHour, travelTimeInHours);
+
+		// Total additional fuel requirements to be served by the fuel choice (LNG or base fuel).
+		final long routeFuelConsumptionInMT = Calculator.quantityFromRateTime(
+				routeCostProvider.getRouteFuelUsage(options.getRoute(),
+						vesselClass), additionalRouteTimeInHours);
+		final long routeFuelConsumptionInM3 = Calculator.convertMTToM3(
+				routeFuelConsumptionInMT, equivalenceFactorM3ToMT);
 
 		// Calculate fuel requirements
 		if (options.useNBOForTravel()) {
@@ -159,9 +160,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					nboProvidedInM3, equivalenceFactorM3ToMT);
 
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3,
-					nboProvidedInM3);
+					nboProvidedInM3 + routeFuelConsumptionInM3);
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT,
-					nboProvidedInMT);
+					nboProvidedInMT + routeFuelConsumptionInMT);
 
 			if (nboProvidedInMT < requiredConsumptionInMT) {
 				/**
@@ -193,7 +194,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, 0);
 			output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
 			output.setFuelConsumption(FuelComponent.Base, FuelUnit.MT,
-					requiredConsumptionInMT);
+					requiredConsumptionInMT + routeFuelConsumptionInMT);
 		}
 
 		final long idleNBORateInM3PerHour = vesselClass
@@ -254,8 +255,6 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 						idleConsumptionInMT);
 			}
 		}
-
-		// TODO: Calculate extras - route specific data etc
 
 		output.setRouteCost(routeCostProvider.getRouteCost(options.getRoute(),
 				vesselClass, vesselState));
