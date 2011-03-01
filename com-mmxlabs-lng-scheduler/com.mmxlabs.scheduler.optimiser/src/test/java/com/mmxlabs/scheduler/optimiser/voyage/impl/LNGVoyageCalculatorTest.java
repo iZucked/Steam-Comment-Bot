@@ -792,7 +792,7 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + sequence.length / 2];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -869,7 +869,7 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + sequence.length / 2];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -956,7 +956,7 @@ public class LNGVoyageCalculatorTest {
 
 		// Expect to throw a RuntimeException here for a capacity violation
 		fail("Better to return object, recording the error");
-		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + sequence.length / 2];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		context.assertIsSatisfied();
@@ -1048,7 +1048,7 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + sequence.length / 2];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -1129,7 +1129,7 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + sequence.length / 2];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
