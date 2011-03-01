@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 @RunWith(JMock.class)
@@ -55,9 +56,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -111,9 +128,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -168,9 +201,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -224,9 +273,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -282,9 +347,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -340,9 +421,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -395,9 +492,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -451,9 +564,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -568,9 +697,25 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
+						VesselState.Laden);
 			}
 		});
 
@@ -621,7 +766,7 @@ public class LNGVoyageCalculatorTest {
 
 		loadDetails.setPortSlot(loadSlot);
 		dischargeDetails.setPortSlot(dischargeSlot);
-		
+
 		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(-1.0));
 		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(-1.0));
 
@@ -630,6 +775,12 @@ public class LNGVoyageCalculatorTest {
 		details.setOptions(options);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
+
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
 
 		final Object[] sequence = new Object[] { loadDetails, details,
 				dischargeDetails };
@@ -702,6 +853,12 @@ public class LNGVoyageCalculatorTest {
 				FuelComponent.IdleBase.getDefaultFuelUnit(), 60000);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
+
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
 
 		final Object[] sequence = new Object[] { loadDetails, details,
 				dischargeDetails };
@@ -784,6 +941,8 @@ public class LNGVoyageCalculatorTest {
 				FuelComponent.IdleBase.getDefaultFuelUnit(), 60);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
+
+		calc.init();
 
 		final Object[] sequence = new Object[] { loadDetails, details,
 				dischargeDetails };
@@ -874,6 +1033,12 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
+
 		final Object[] sequence = new Object[] { loadDetails, details1,
 				dischargeDetails, details2, otherDetails };
 
@@ -948,6 +1113,12 @@ public class LNGVoyageCalculatorTest {
 		details2.setOptions(options2);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
+
+		final IRouteCostProvider mockRouteCostProvider = context
+				.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		calc.init();
 
 		final Object[] sequence = new Object[] { otherDetails, details1,
 				loadDetails, details2, dischargeDetails };

@@ -29,6 +29,13 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 	private IRouteCostProvider routeCostProvider;
 
+	@Override
+	public final void init() {
+		if (routeCostProvider == null) {
+			throw new IllegalStateException("Route Cost Provider is not set");
+		}
+	}
+
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The
 	 * {@link VoyageOptions} provides the specific choices to evaluate for this

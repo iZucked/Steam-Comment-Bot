@@ -29,6 +29,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface ILNGVoyageCalculator<T> {
 
 	/**
+	 * Method to ensure all required members have been set before use. This
+	 * should be called once object construction has been completed and before
+	 * using calculate* methods.
+	 */
+	void init();
+
+	/**
 	 * Calculate the fuel requirements, speed and times for the port to port
 	 * journey options defined in {@link VoyageOptions} and store the results in
 	 * {@link IVoyageDetails}.

@@ -82,6 +82,8 @@ public final class SchedulerUtils {
 						SchedulerConstants.DCP_routePriceProvider,
 						IRouteCostProvider.class));
 
+		voyageCalculator.init();
+		
 		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>(
 				voyageCalculator);
 		return voyagePlanOptimiser;
@@ -98,6 +100,8 @@ public final class SchedulerUtils {
 						SchedulerConstants.DCP_routePriceProvider,
 						IRouteCostProvider.class));
 
+		voyageCalculator.init();
+		
 		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>(
 				voyageCalculator);
 
