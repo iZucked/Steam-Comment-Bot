@@ -452,6 +452,10 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		delegate.setCargoVesselRestriction(cargo, vessels);
 		
 	}
-	
-	
+
+	@Override
+	public void setVesselClassRouteTimeAndFuel(String name, IVesselClass vc,
+			int time, long fuel) {
+		delegate.setVesselClassRouteTimeAndFuel(name, vc, time, fuel);
+	}
 }
