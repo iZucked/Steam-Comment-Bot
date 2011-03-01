@@ -90,7 +90,7 @@ public class JobManagerView extends ViewPart {
 			.getJobManager();
 
 	public void addJob(IManagedJob theJob) {
-		theJob.init();
+		theJob.prepare();
 		jobManager.addJob(theJob);
 	}
 	
@@ -137,11 +137,11 @@ public class JobManagerView extends ViewPart {
 				final IManagedJob job = (IManagedJob) obj;
 				switch (index) {
 				case 1:
-					return job.getName();
+					return job.getJobName();
 				case 2:
 					return Integer.toString(job.getProgress());
 				case 3:
-					return Integer.toString(job.getTotalProgress());
+					return Integer.toString(100);
 				case 4:
 					return job.getJobState().toString();
 				}
@@ -193,7 +193,7 @@ public class JobManagerView extends ViewPart {
 				JobState state = (JobState) key;
 
 				switch (state) {
-				case ABORTED:
+				case CANCELLED:
 					return getSite().getShell().getDisplay()
 							.getSystemImage(SWT.ICON_ERROR);
 				case COMPLETED:
@@ -260,68 +260,28 @@ public class JobManagerView extends ViewPart {
 	}
 
 	private final IManagedJobListener listener = new IManagedJobListener() {
-
 		@Override
-		public void jobStopped(final IManagedJob job) {
+		public void jobStateChanged(IManagedJob job, JobState oldState,
+				JobState newState) {
 			refresh();
+			switch (newState) {
+			case PAUSED:
+			case RUNNING:
+				refresh();
+				getSite().getShell().getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						updateActionEnablement(viewer.getSelection());
+					}
+				});
+				break;
+				
+			}
 		}
 
 		@Override
-		public void jobStarted(final IManagedJob job) {
-			refresh();
-		}
-
-		@Override
-		public void jobResumed(final IManagedJob job) {
-			refresh();
-			getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					updateActionEnablement(viewer.getSelection());
-
-				}
-			});
-		}
-
-		@Override
-		public void jobResuming(final IManagedJob job) {
-			refresh();
-		}
-
-		@Override
-		public void jobProgressUpdate(final IManagedJob job,
-				final int progressDelta) {
-			refresh();
-		}
-
-		@Override
-		public void jobPaused(final IManagedJob job) {
-			refresh();
-			getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					updateActionEnablement(viewer.getSelection());
-
-				}
-			});
-		}
-
-		@Override
-		public void jobPausing(final IManagedJob job) {
-			refresh();
-		}
-
-		@Override
-		public void jobCompleted(final IManagedJob job) {
-			refresh();
-		}
-
-		@Override
-		public void jobCancelled(final IManagedJob job) {
+		public void jobProgressUpdated(IManagedJob job, int progressDelta) {
 			refresh();
 		}
 	};
@@ -388,14 +348,14 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void jobRemoved(final IJobManager jobManager,
 					final IManagedJob job) {
-				job.removeManagedJobListener(listener);
+				job.removeListener(listener);
 				refresh();
 			}
 
 			@Override
 			public void jobAdded(final IJobManager jobManager,
 					final IManagedJob job) {
-				job.addManagedJobListener(listener);
+				job.addListener(listener);
 				refresh();
 			}
 
@@ -414,7 +374,7 @@ public class JobManagerView extends ViewPart {
 
 		// Register listener on existing jobs
 		for (final IManagedJob job : jobManager.getJobs()) {
-			job.addManagedJobListener(listener);
+			job.addListener(listener);
 			refresh();
 		}
 
@@ -528,9 +488,8 @@ public class JobManagerView extends ViewPart {
 						.getSelection();
 				final Iterator<IManagedJob> itr = selection.iterator();
 				while (itr.hasNext()) {
-					// TODO: Check states
 					final IManagedJob job = itr.next();
-					job.stop();
+					job.cancel();
 				}
 			}
 		};
@@ -550,7 +509,7 @@ public class JobManagerView extends ViewPart {
 				final Iterator<IManagedJob> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final IManagedJob job = itr.next();
-					job.stop();
+					job.cancel();
 					jobManager.removeJob(job);
 				}
 			}
@@ -701,7 +660,7 @@ public class JobManagerView extends ViewPart {
 					final IManagedJob job = itr.next();
 
 					switch (job.getJobState()) {
-					case ABORTED:
+					case CANCELLED:
 						startEnabled = true;
 						toogleDisplayEnabled = true;
 						break;
