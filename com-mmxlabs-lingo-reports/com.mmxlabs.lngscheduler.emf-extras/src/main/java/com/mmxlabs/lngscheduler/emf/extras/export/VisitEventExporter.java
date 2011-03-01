@@ -60,6 +60,11 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		if (slot == null)
 			return null;
 
+		
+		final Port ePort = entities.getModelObject(slot.getPort(), Port.class);
+		if (ePort == null)
+			return null;
+			
 		PortVisit portVisit = null;
 
 		if (slot instanceof IDischargeSlot || slot instanceof ILoadSlot) {
@@ -103,7 +108,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			portVisit = factory.createPortVisit();
 		}
 
-		portVisit.setPort(entities.getModelObject(slot.getPort(), Port.class));
+		portVisit.setPort(ePort);
 
 		@SuppressWarnings("unchecked")
 		final IPortVisitEvent<ISequenceElement> visitEvent = (IPortVisitEvent<ISequenceElement>) annotations

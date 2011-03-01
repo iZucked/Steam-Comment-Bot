@@ -33,6 +33,8 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 	public void init() {
 	}
 
+	private Port lastePort = null;
+	
 	@Override
 	public ScheduledEvent export(final ISequenceElement element,
 			final Map<String, Object> annotations, final AllocatedVessel v) {
@@ -42,10 +44,20 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 
 		if (event == null) return null;
 		
-		final Port ePort = entities.getModelObject(event.getPort(), Port.class);
-
-		if (ePort == null)
-			return null;
+		
+		Port ePort = entities.getModelObject(event.getPort(), Port.class);
+		
+		// TODO this is a bit of a kludge; the ANYWHERE port does not
+		// have an EMF representation, but we do want idle time for it
+		// so we assume if we hit a dubious port it's ANYWHERE and that
+		// we are really where we used to be.
+		if (ePort == null) {
+			ePort = lastePort;
+		} else {
+			lastePort = ePort;
+		}
+//		if (ePort == null)
+//			return null;
 
 		final Idle idle = factory.createIdle();
 
