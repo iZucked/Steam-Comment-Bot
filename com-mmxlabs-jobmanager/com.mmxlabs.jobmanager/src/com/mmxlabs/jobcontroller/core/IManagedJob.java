@@ -5,49 +5,38 @@
 
 package com.mmxlabs.jobcontroller.core;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 
-
-
+/**
+ * A managed job. The lifecycle of a managed job goes
+ * <ol>
+ * <li>prepare()</li>
+ * <li>start()</li>
+ * <li>some amount of pause() and resume()</li>
+ * <li>possible cancel()</li>
+ * </ol>
+ * @author hinton
+ *
+ */
 public interface IManagedJob {
-	
-	String getName();
-	
-	public static int NO_PROGRESS = -1;
-	
 	public enum JobState {
-		UNKNOWN, INITIALISED, RUNNING, PAUSING, PAUSED, RESUMING, COMPLETED, ABORTED
+		UNKNOWN, INITIALISED, RUNNING, PAUSING, PAUSED, RESUMING, COMPLETED, CANCELLED
 	}
 	
 	/**
-	 * Initialise job - ensure {@link #getTotalProgress()} will return a valid
-	 * value. Prepare job prior to a call to {@link #start()}. This is expected
-	 * to be a quickly executed method and any lengthy processing should be
-	 * performed in the {@link #start()} method rather than here.
+	 * @return A descriptive name for this job.
 	 */
-	void init();
-
-	void start();
-
-	void stop();
-
-	void pause();
-
-	void resume();
-
-	/**
-	 * Returns current progress of job. Returns {@link #NO_PROGRESS} when there is no progress to report.
-	 * @return
-	 */
-	int getProgress();
-
-	int getTotalProgress();
-
+	public String getJobName();
 	
-	IAnnotatedSolution getSchedule();
-
-	void addManagedJobListener(IManagedJobListener managedJobListener);
-	void removeManagedJobListener(IManagedJobListener managedJobListener);
+	public void prepare();
+	public void start();
+	public void cancel();
+	public void pause();
+	public void resume();
 	
-	JobState getJobState();
+	public JobState getJobState();
+	
+	public int getProgress();
+	
+	public void addListener(IManagedJobListener listener);
+	public void removeListener(IManagedJobListener listener);
 }
