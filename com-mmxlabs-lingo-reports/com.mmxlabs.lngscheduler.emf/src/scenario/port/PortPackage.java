@@ -330,13 +330,31 @@ public interface PortPackage extends EPackage {
 	int VESSEL_CLASS_COST__UNLADEN_COST = 2;
 
 	/**
+	 * The feature id for the '<em><b>Transit Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST__TRANSIT_TIME = 3;
+
+	/**
+	 * The feature id for the '<em><b>Transit Fuel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST__TRANSIT_FUEL = 4;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class Cost</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_COST_FEATURE_COUNT = 3;
+	int VESSEL_CLASS_COST_FEATURE_COUNT = 5;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.PortModel <em>Model</em>}'.
@@ -585,6 +603,28 @@ public interface PortPackage extends EPackage {
 	EAttribute getVesselClassCost_UnladenCost();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.VesselClassCost#getTransitTime <em>Transit Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Transit Time</em>'.
+	 * @see scenario.port.VesselClassCost#getTransitTime()
+	 * @see #getVesselClassCost()
+	 * @generated
+	 */
+	EAttribute getVesselClassCost_TransitTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.VesselClassCost#getTransitFuel <em>Transit Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Transit Fuel</em>'.
+	 * @see scenario.port.VesselClassCost#getTransitFuel()
+	 * @see #getVesselClassCost()
+	 * @generated
+	 */
+	EAttribute getVesselClassCost_TransitFuel();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -803,6 +843,22 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS_COST__UNLADEN_COST = eINSTANCE.getVesselClassCost_UnladenCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Transit Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_COST__TRANSIT_TIME = eINSTANCE.getVesselClassCost_TransitTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Transit Fuel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_COST__TRANSIT_FUEL = eINSTANCE.getVesselClassCost_TransitFuel();
 
 	}
 

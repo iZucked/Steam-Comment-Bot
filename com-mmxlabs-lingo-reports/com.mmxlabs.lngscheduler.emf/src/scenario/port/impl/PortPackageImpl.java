@@ -402,6 +402,24 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getVesselClassCost_TransitTime() {
+		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselClassCost_TransitFuel() {
+		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}
@@ -454,6 +472,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(vesselClassCostEClass, VESSEL_CLASS_COST__VESSEL_CLASS);
 		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__LADEN_COST);
 		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__UNLADEN_COST);
+		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__TRANSIT_TIME);
+		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__TRANSIT_FUEL);
 	}
 
 	/**
@@ -519,6 +539,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getVesselClassCost_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClassCost_LadenCost(), ecorePackage.getEInt(), "ladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClassCost_UnladenCost(), ecorePackage.getEInt(), "unladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClassCost_TransitTime(), ecorePackage.getEInt(), "transitTime", "24", 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClassCost_TransitFuel(), ecorePackage.getEFloat(), "transitFuel", "50", 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //PortPackageImpl
