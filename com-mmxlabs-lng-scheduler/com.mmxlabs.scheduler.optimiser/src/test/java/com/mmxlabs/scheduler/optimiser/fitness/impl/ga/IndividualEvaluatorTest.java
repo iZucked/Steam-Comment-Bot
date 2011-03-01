@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -48,11 +49,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 
 @RunWith(JMock.class)
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class IndividualEvaluatorTest {
 
 	private static final class MockSequenceScheduler extends
 			AbstractSequenceScheduler<Object> {
-		
+
 		@Override
 		public ScheduledSequences schedule(ISequences<Object> sequences) {
 			throw new UnsupportedOperationException();
@@ -167,12 +169,14 @@ public class IndividualEvaluatorTest {
 				.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
-		@SuppressWarnings("unchecked")
+		final Map<String, Double> fitnessComponentWeights = Collections
+				.emptyMap();
+		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
+
 		final IMultiMatrixProvider<IPort, Integer> distanceProvider = context
 				.mock(IMultiMatrixProvider.class);
 		evaluator.setDistanceProvider(distanceProvider);
 
-		@SuppressWarnings("unchecked")
 		final IElementDurationProvider<Object> durationsProvider = context
 				.mock(IElementDurationProvider.class);
 		evaluator.setDurationsProvider(durationsProvider);
@@ -228,11 +232,17 @@ public class IndividualEvaluatorTest {
 
 	}
 
-	@Test(expected = UnsupportedOperationException.class)
+	@Test()
 	public void testGetSetFitnessComponentWeights() {
 		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
 		Assert.assertNull(evaluator.getFitnessComponentWeights());
-		evaluator.setFitnessComponentWeights(null);
+		final Map<String, Double> fitnessComponentWeights = Collections
+				.emptyMap();
+		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
+		Assert.assertSame(fitnessComponentWeights,
+				evaluator.getFitnessComponentWeights());
+		evaluator.dispose();
+		Assert.assertNull(evaluator.getFitnessComponentWeights());
 
 	}
 
@@ -263,7 +273,6 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testGetSetDistanceProvider() {
 		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
-		@SuppressWarnings("unchecked")
 		final IMultiMatrixProvider<IPort, Integer> value = context
 				.mock(IMultiMatrixProvider.class);
 		Assert.assertNull(evaluator.getDistanceProvider());
@@ -277,7 +286,6 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testGetSetDurationsProvider() {
 		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
-		@SuppressWarnings("unchecked")
 		final IElementDurationProvider<Object> value = context
 				.mock(IElementDurationProvider.class);
 		Assert.assertNull(evaluator.getDurationsProvider());
@@ -351,6 +359,10 @@ public class IndividualEvaluatorTest {
 		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
 				.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
+
+		final Map<String, Double> fitnessComponentWeights = Collections
+				.emptyMap();
+		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
 		evaluator.init();
 
@@ -468,6 +480,10 @@ public class IndividualEvaluatorTest {
 				.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
+		final Map<String, Double> fitnessComponentWeights = Collections
+				.emptyMap();
+		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
+
 		evaluator.init();
 
 		final ISequence<Object> sequence = new ListSequence<Object>(
@@ -581,6 +597,10 @@ public class IndividualEvaluatorTest {
 		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
 				.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
+
+		final Map<String, Double> fitnessComponentWeights = Collections
+				.emptyMap();
+		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
 		evaluator.init();
 
@@ -700,6 +720,10 @@ public class IndividualEvaluatorTest {
 				.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
+		final Map<String, Double> fitnessComponentWeights = Collections
+				.emptyMap();
+		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
+
 		evaluator.init();
 
 		final ISequence<Object> sequence = new ListSequence<Object>(
@@ -813,6 +837,10 @@ public class IndividualEvaluatorTest {
 		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
 				.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
+
+		final Map<String, Double> fitnessComponentWeights = Collections
+				.emptyMap();
+		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
 		evaluator.init();
 

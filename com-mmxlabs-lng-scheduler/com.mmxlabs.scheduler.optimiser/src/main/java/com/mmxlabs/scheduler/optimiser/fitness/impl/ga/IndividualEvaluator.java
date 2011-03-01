@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
@@ -25,7 +24,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * The {@link IndividualEvaluator} evaluates a GA {@link Individual} using the
@@ -52,13 +50,13 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 	private AbstractSequenceScheduler<T> sequenceScheduler;
 
-	private ITimeWindowDataComponentProvider timeWindowProvider;
+	private ITimeWindowDataComponentProvider<T> timeWindowProvider;
 
 	private IElementDurationProvider<T> durationsProvider;
 
 	private IVesselProvider vesselProvider;
 
-	private IPortProvider portProvider;
+	private IPortProvider<T> portProvider;
 
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
@@ -91,7 +89,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	 */
 	private int[] windowStarts;
 
-	VoyagePlanIterator<T> voyagePlanIterator = new VoyagePlanIterator<T>();
+	private VoyagePlanIterator<T> voyagePlanIterator = new VoyagePlanIterator<T>();
 	private ICargoSchedulerFitnessComponent<T>[] iteratingComponents;
 
 	// private List<ICargoSchedulerFitnessComponent<T>> iteratingComponents =
@@ -141,7 +139,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		return totalFitness;
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public final long evaluate(final Individual individual) {
 		// Decode into a set of start times
@@ -469,10 +466,9 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		if (fitnessComponents == null) {
 			throw new IllegalStateException("No fitness components set");
 		}
-		// TODO: Enable once this is set.
-		// if (fitnessComponentWeights == null) {
-		// throw new IllegalStateException("No fitness component weights set");
-		// }
+		if (fitnessComponentWeights == null) {
+			throw new IllegalStateException("No fitness component weights set");
+		}
 		if (timeWindowProvider == null) {
 			throw new IllegalStateException("No time window provider set");
 		}
@@ -499,12 +495,12 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		this.sequenceScheduler = sequenceScheduler;
 	}
 
-	public final ITimeWindowDataComponentProvider getTimeWindowProvider() {
+	public final ITimeWindowDataComponentProvider<T> getTimeWindowProvider() {
 		return timeWindowProvider;
 	}
 
 	public final void setTimeWindowProvider(
-			final ITimeWindowDataComponentProvider timeWindowProvider) {
+			final ITimeWindowDataComponentProvider<T> timeWindowProvider) {
 		this.timeWindowProvider = timeWindowProvider;
 	}
 
@@ -526,11 +522,6 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	public final void setFitnessComponentWeights(
 			final Map<String, Double> fitnessComponentWeights) {
 		this.fitnessComponentWeights = fitnessComponentWeights;
-		// TODO: Currently there is no mechanism to get this data from outside,
-		// so we will assume a weight of 1 internally.
-		// So this ever get set, then throw an exception to complete the API.
-		throw new UnsupportedOperationException(
-				"TODO: Re-enable init() check for this component");
 	}
 
 	@Override
@@ -538,6 +529,10 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 
 		sequenceScheduler = null;
 		timeWindowProvider = null;
+		durationsProvider = null;
+		vesselProvider = null;
+		portProvider = null;
+		distanceProvider = null;
 		fitnessComponents = null;
 		fitnessComponentWeights = null;
 
@@ -558,11 +553,11 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		this.vesselProvider = vesselProvider;
 	}
 
-	public IPortProvider getPortProvider() {
+	public IPortProvider<T> getPortProvider() {
 		return portProvider;
 	}
 
-	public void setPortProvider(final IPortProvider portProvider) {
+	public void setPortProvider(final IPortProvider<T> portProvider) {
 		this.portProvider = portProvider;
 	}
 
@@ -588,7 +583,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		return sequence;
 	}
 
-	public final void setSequence(ISequence<T> sequence) {
+	public final void setSequence(final ISequence<T> sequence) {
 		this.sequence = sequence;
 	}
 
@@ -596,7 +591,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		return resource;
 	}
 
-	public final void setResource(IResource resource) {
+	public final void setResource(final IResource resource) {
 		this.resource = resource;
 	}
 
@@ -604,7 +599,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		return ranges;
 	}
 
-	public final void setRanges(int[] ranges) {
+	public final void setRanges(final int[] ranges) {
 		this.ranges = ranges;
 	}
 
@@ -612,7 +607,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		return travelTimes;
 	}
 
-	public final void setTravelTimes(int[] travelTimes) {
+	public final void setTravelTimes(final int[] travelTimes) {
 		this.travelTimes = travelTimes;
 	}
 
@@ -620,7 +615,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		return multiplier;
 	}
 
-	public final void setMultiplier(int[] multiplier) {
+	public final void setMultiplier(final int[] multiplier) {
 		this.multiplier = multiplier;
 	}
 
@@ -628,7 +623,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 		return windowStarts;
 	}
 
-	public final void setWindowStarts(int[] windowStarts) {
+	public final void setWindowStarts(final int[] windowStarts) {
 		this.windowStarts = windowStarts;
 	}
 }
