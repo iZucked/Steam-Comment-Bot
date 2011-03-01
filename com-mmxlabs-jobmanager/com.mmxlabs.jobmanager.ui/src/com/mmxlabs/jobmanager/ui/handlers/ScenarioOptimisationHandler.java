@@ -13,7 +13,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import scenario.Scenario;
 
-import com.mmxlabs.jobcontroller.core.impl.ScenarioOptimisationJob;
+import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 import com.mmxlabs.jobcontroller.views.JobManagerView;
 
 /**
@@ -38,10 +38,11 @@ public class ScenarioOptimisationHandler extends AbstractScenarioHandler {
 			final JobManagerView jmv = (JobManagerView) window.getWorkbench()
 					.getActiveWorkbenchWindow().getActivePage()
 					.showView(JobManagerView.ID);
-			ScenarioOptimisationJob job = new ScenarioOptimisationJob(filename,
-					scenario);
+			LNGSchedulerJob job = new LNGSchedulerJob(scenario);
+//			ScenarioOptimisationJob job = new ScenarioOptimisationJob(filename,
+//					scenario);
 			jmv.addJob(job);
-			job.start();
+//			job.start();
 		} catch (ExecutionException e) {
 		} catch (PartInitException e) {
 		}
