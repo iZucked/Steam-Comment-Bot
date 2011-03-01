@@ -69,10 +69,9 @@ public class PortDetailsTest {
 		final PortDetails details2 = make(1, slot1, fuel1, 5);
 
 		final PortDetails details3 = make(21,  slot1, fuel1, 5);
-		final PortDetails details4 = make(1, slot1, fuel1, 5);
-		final PortDetails details5 = make(1, slot2, fuel1, 5);
-		final PortDetails details6 = make(1, slot1, fuel2, 5);
-		final PortDetails details7 = make(1, slot1, fuel1, 25);
+		final PortDetails details4 = make(1, slot2, fuel1, 5);
+		final PortDetails details5 = make(1, slot1, fuel2, 5);
+		final PortDetails details6 = make(1, slot1, fuel1, 25);
 
 		Assert.assertTrue(details1.equals(details1));
 		Assert.assertTrue(details1.equals(details2));
@@ -82,13 +81,11 @@ public class PortDetailsTest {
 		Assert.assertFalse(details1.equals(details4));
 		Assert.assertFalse(details1.equals(details5));
 		Assert.assertFalse(details1.equals(details6));
-		Assert.assertFalse(details1.equals(details7));
 
 		Assert.assertFalse(details3.equals(details1));
 		Assert.assertFalse(details4.equals(details1));
 		Assert.assertFalse(details5.equals(details1));
 		Assert.assertFalse(details6.equals(details1));
-		Assert.assertFalse(details7.equals(details1));
 
 		Assert.assertFalse(details1.equals(new Object()));
 	}

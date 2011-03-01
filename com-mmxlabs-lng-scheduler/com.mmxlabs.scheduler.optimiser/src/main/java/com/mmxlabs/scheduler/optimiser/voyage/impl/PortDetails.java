@@ -26,19 +26,15 @@ public final class PortDetails implements Cloneable {
 
 	private IPortSlot portSlot;
 
-	private int startTime;
-
 	public PortDetails() {
 
 	}
 
-	private PortDetails(final int visitDuration2, final IPortSlot portSlot2,
-			final int startTime2,
-			final EnumMap<FuelComponent, Long> fuelConsumption2) {
-		this.visitDuration = visitDuration2;
-		this.portSlot = portSlot2;
-		this.startTime = startTime2;
-		this.fuelConsumption.putAll(fuelConsumption2);
+	private PortDetails(final int visitDuration, final IPortSlot portSlot,
+			final EnumMap<FuelComponent, Long> fuelConsumption) {
+		this.visitDuration = visitDuration;
+		this.portSlot = portSlot;
+		this.fuelConsumption.putAll(fuelConsumption);
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -75,22 +71,12 @@ public final class PortDetails implements Cloneable {
 		this.portSlot = portSlot;
 	}
 
-//	public final int getStartTime() {
-//		return startTime;
-//	}
-//
-//	public final void setStartTime(final int startTime) {
-//		this.startTime = startTime;
-//	}
-
 	@Override
 	public final boolean equals(final Object obj) {
 
 		if (obj instanceof PortDetails) {
 			final PortDetails d = (PortDetails) obj;
-			if (startTime != d.startTime) {
-				return false;
-			}
+
 			if (visitDuration != d.visitDuration) {
 				return false;
 			}
@@ -112,11 +98,10 @@ public final class PortDetails implements Cloneable {
 	public String toString() {
 		return "PortDetails [fuelConsumption=" + fuelConsumption
 				+ ", visitDuration=" + visitDuration + ", portSlot=" + portSlot
-				+ ", startTime=" + startTime + "]";
+				+ "]";
 	}
 
 	public PortDetails clone() {
-		return new PortDetails(visitDuration, portSlot, startTime,
-				fuelConsumption);
+		return new PortDetails(visitDuration, portSlot, fuelConsumption);
 	}
 }
