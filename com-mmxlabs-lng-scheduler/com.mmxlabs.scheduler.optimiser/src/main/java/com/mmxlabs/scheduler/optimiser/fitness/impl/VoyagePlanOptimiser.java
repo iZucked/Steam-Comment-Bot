@@ -7,6 +7,9 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -30,6 +33,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  *            Sequence element type
  */
 public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
+
+	private static final Logger log = LoggerFactory
+			.getLogger(VoyagePlanOptimiser.class);
 
 	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
 
@@ -281,8 +287,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 					try {
 						details.setOptions(options.clone());
 					} catch (final CloneNotSupportedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						// Record error, wrap up and rethrow
+						log.error(e.getMessage(), e);
+						throw new RuntimeException(e);
 					}
 				}
 			}
