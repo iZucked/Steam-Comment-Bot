@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.lso;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
@@ -52,4 +54,11 @@ public interface ILocalSearchOptimiser<T> extends IOptimiser<T> {
 	 * @return
 	 */
 	ISequencesManipulator<T> getSequenceManipulator();
+	
+	IAnnotatedSolution<T> start(IOptimisationContext<T> context);
+	IAnnotatedSolution<T> getBestSolution();
+	IAnnotatedSolution<T> getCurrentSolution();
+	int step(int percentage);
+	
+	boolean isFinished();
 }

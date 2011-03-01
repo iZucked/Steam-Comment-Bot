@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -421,13 +422,28 @@ public class LocalSearchOptimiserTest {
 			super.updateSequences(source, destination, affectedResources);
 		}
 
-		/**
-		 * This is an abstract method and will not be tested here
-		 */
 		@Override
-		public void optimise(final IOptimisationContext<T> optimisationContext) {
-			fail("This is not part of the test!");
+		public IAnnotatedSolution<T> start(IOptimisationContext<T> context) {
+			fail("This is not part of the test.");
+			return null;
 		}
 
+		@Override
+		public IAnnotatedSolution<T> getBestSolution() {
+			fail("This is not part of the test.");
+			return null;
+		}
+
+		@Override
+		public IAnnotatedSolution<T> getCurrentSolution() {
+			fail("This is not part of the test.");
+			return null;
+		}
+
+		@Override
+		public int step(int percentage) {
+			fail("This is not part of the test.");
+			return 0;
+		}
 	}
 }

@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.Collection;
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -14,6 +15,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
@@ -37,6 +39,8 @@ public abstract class LocalSearchOptimiser<T> implements
 
 	private int numberOfIterations;
 
+	private int numberOfIterationsCompleted;
+	
 	private List<IConstraintChecker<T>> constraintCheckers;
 
 	private IFitnessEvaluator<T> fitnessEvaluator;
@@ -46,7 +50,11 @@ public abstract class LocalSearchOptimiser<T> implements
 	private IOptimiserProgressMonitor<T> progressMonitor;
 
 	private int reportInterval = -1;
+	
+	private IOptimisationContext<T> currentContext;
 
+	private long startTime;
+	
 	/**
 	 * Initialise method checking the object has all the correct pieces of data
 	 * to be able to perform the
@@ -84,28 +92,63 @@ public abstract class LocalSearchOptimiser<T> implements
 			throw new IllegalStateException("Report interval is not set");
 		}
 	}
-
+	
 	/**
-	 * Sub-classes of {@link LocalSearchOptimiser} should implement this method
-	 * to perform the actual optimisation.
-	 * 
-	 * 
-	 * // customisable module, default as below:
-	 * 
-	 * <pre>
-	 * ISolutionBuilder solbuilder;
-	 * 		// Convert Sequence to a Solution through the following steps (not necessarily in this order):
-	 * 			// create Solution object
-	 * 			// insert extra points
-	 * 			// check hard constraints for early exit
-	 * 			// loop over fitness functions to calculate fitness values/deltas, check hard constraints
-	 * 			// populate Solution object as appropriate
-	 * 		// evaluate fitnesses
-	 * 		}
-	 * </pre>
+	 * A default optimisation loop, which calls start() and then step() until
+	 * done, and notifies the progress monitor. Subclasses will need to
+	 * implement these.
 	 */
 	@Override
-	public abstract void optimise(IOptimisationContext<T> optimisationContext);
+	public void optimise(final IOptimisationContext<T> optimiserContext) {
+		final IAnnotatedSolution<T> startSolution = start(optimiserContext);
+		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
+				startSolution);
+		final int percentage = (100 * getReportInterval())
+				/ getNumberOfIterations();
+
+		numberOfIterationsCompleted = 0;
+
+		while (getNumberOfIterationsCompleted() < getNumberOfIterations()) {
+			step(percentage);
+			getProgressMonitor().report(this, getNumberOfIterationsCompleted(),
+					fitnessEvaluator.getCurrentFitness(),
+					fitnessEvaluator.getBestFitness(), getCurrentSolution(),
+					getBestSolution());
+		}
+
+		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
+				getBestSolution());
+	}
+	
+	public IAnnotatedSolution<T> getBestSolution() {
+		final IAnnotatedSolution<T> annotatedSolution = fitnessEvaluator
+				.getBestAnnotatedSolution(currentContext);
+		final long clock = System.currentTimeMillis() - getStartTime();
+
+		annotatedSolution.setGeneralAnnotation(
+				OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime,
+				clock);
+
+		return annotatedSolution;
+	}
+
+	public IAnnotatedSolution<T> getCurrentSolution() {
+		final IAnnotatedSolution<T> annotatedSolution = fitnessEvaluator
+				.getCurrentAnnotatedSolution(currentContext);
+		final long clock = System.currentTimeMillis() - getStartTime();
+
+		annotatedSolution.setGeneralAnnotation(
+				OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime,
+				clock);
+
+		return annotatedSolution;
+	}
+	
+	public boolean isFinished() {
+		return getNumberOfIterationsCompleted() >= getNumberOfIterations();
+	}
 
 	/**
 	 * Copy the {@link ISequences} for the specified {@link IResource}s from the
@@ -197,6 +240,30 @@ public abstract class LocalSearchOptimiser<T> implements
 
 	public final void setReportInterval(int reportInterval) {
 		this.reportInterval = reportInterval;
+	}
+	
+	public int getNumberOfIterationsCompleted() {
+		return numberOfIterationsCompleted;
+	}
+
+	public void setNumberOfIterationsCompleted(int numberOfIterationsCompleted) {
+		this.numberOfIterationsCompleted = numberOfIterationsCompleted;
+	}
+	
+	protected IOptimisationContext<T> getCurrentContext() {
+		return currentContext;
+	}
+
+	protected void setCurrentContext(IOptimisationContext<T> currentContext) {
+		this.currentContext = currentContext;
+	}
+
+	protected long getStartTime() {
+		return startTime;
+	}
+
+	protected void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 
 	@Override

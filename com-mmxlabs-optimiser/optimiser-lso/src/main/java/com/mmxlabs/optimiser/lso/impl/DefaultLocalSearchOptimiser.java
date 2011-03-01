@@ -27,33 +27,36 @@ import com.mmxlabs.optimiser.lso.IMove;
  *            Sequence element type
  */
 public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
+	private IOptimisationData<T> data;
 
-	@Override
-	public void optimise(final IOptimisationContext<T> optimiserContext) {
+	IFitnessEvaluator<T> fitnessEvaluator;
 
-		final IOptimisationData<T> data = optimiserContext
-				.getOptimisationData();
+	private List<IConstraintChecker<T>> constraintCheckers;
 
-		final IFitnessEvaluator<T> fitnessEvaluator = getFitnessEvaluator();
+	private ISequencesManipulator<T> manipulator;
 
-		// Get list of hard constraint checkers
-		final List<IConstraintChecker<T>> constraintCheckers = getConstraintCheckers();
+	private int numberOfMovesTried;
 
-		final ISequencesManipulator<T> manipulator = getSequenceManipulator();
+	private int numberOfMovesAccepted;
 
-		// Setup the optimisation process
-		int numberOfMovesTried = 0;
-		int numberOfMovesAccepted = 0;
+	private ModifiableSequences<T> currentRawSequences;
 
-		// Create a modifiable working copy of the initial sequences.
+	private ModifiableSequences<T> potentialRawSequences;
+
+	public IAnnotatedSolution<T> start(
+			final IOptimisationContext<T> optimiserContext) {
+		setCurrentContext(optimiserContext);
+		data = optimiserContext.getOptimisationData();
+		fitnessEvaluator = getFitnessEvaluator();
+		constraintCheckers = getConstraintCheckers();
+		manipulator = getSequenceManipulator();
+		numberOfMovesTried = 0;
+		numberOfMovesAccepted = 0;
+
 		final ISequences<T> initialSequences = optimiserContext
 				.getInitialSequences();
-		final ModifiableSequences<T> currentRawSequences = new ModifiableSequences<T>(
-				initialSequences);
-
-		// Create a copy of the current sequences as the starting point for the
-		// next state
-		final ModifiableSequences<T> potentialRawSequences = new ModifiableSequences<T>(
+		currentRawSequences = new ModifiableSequences<T>(initialSequences);
+		potentialRawSequences = new ModifiableSequences<T>(
 				currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences,
 				currentRawSequences.getResources());
@@ -73,45 +76,27 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
-		{
-			final IAnnotatedSolution<T> annotatedBestSolution = fitnessEvaluator
-					.getBestAnnotatedSolution(optimiserContext);
-			// fitnessEvaluator.getBestSequences()
-			
-			annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, 0);
-			annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, 0l);
-			getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
-					annotatedBestSolution);
+		final IAnnotatedSolution<T> annotatedBestSolution = fitnessEvaluator
+				.getBestAnnotatedSolution(optimiserContext);
+		// fitnessEvaluator.getBestSequences()
 
-		}
-		
-		final long startTime = System.currentTimeMillis();
-		
-		// Perform the optimisation
-		MAIN_LOOP: for (int iter = 0; iter < getNumberOfIterations(); ++iter) {
+		annotatedBestSolution.setGeneralAnnotation(
+				OptimiserConstants.G_AI_iterations, 0);
+		annotatedBestSolution.setGeneralAnnotation(
+				OptimiserConstants.G_AI_runtime, 0l);
 
-			// Periodically issue a status report to the progress monitor
-			if (iter % getReportInterval() == 0) {
-				final IAnnotatedSolution<T> annotatedBestSolution = 
-					fitnessEvaluator.getBestAnnotatedSolution(optimiserContext);
-				final IAnnotatedSolution<T> annotatedCurrentSolution = 
-					fitnessEvaluator.getCurrentAnnotatedSolution(optimiserContext);
-				// fitnessEvaluator.getBestSequences()
+		setStartTime(System.currentTimeMillis());
 
-				final long clock = System.currentTimeMillis() - startTime;
-				
-				annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, iter);
-				annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
+		setNumberOfIterationsCompleted(0);
 
-				annotatedCurrentSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, iter);
-				annotatedCurrentSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
-				
-				getProgressMonitor().report(this, iter,
-						fitnessEvaluator.getCurrentFitness(),
-						fitnessEvaluator.getBestFitness(),
-						annotatedCurrentSolution, annotatedBestSolution);
-			}
+		return annotatedBestSolution;
+	}
 
+	public int step(final int percentage) {
+		final int iterationsThisStep = Math.min(
+				Math.max(1, getNumberOfIterations() * percentage / 100),
+				getNumberOfIterations() - getNumberOfIterationsCompleted());
+		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			++numberOfMovesTried;
 
 			// Generate a new move
@@ -165,15 +150,8 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			}
 		}
 
-		final IAnnotatedSolution<T> bestSolution = fitnessEvaluator.getBestAnnotatedSolution(optimiserContext); 
-		
-		final long clock = System.currentTimeMillis() - startTime;
-		
-		bestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterations() - 1);
-		bestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
+		setNumberOfIterationsCompleted(numberOfMovesTried);
 
-		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
-				bestSolution);
-
+		return iterationsThisStep;
 	}
 }
