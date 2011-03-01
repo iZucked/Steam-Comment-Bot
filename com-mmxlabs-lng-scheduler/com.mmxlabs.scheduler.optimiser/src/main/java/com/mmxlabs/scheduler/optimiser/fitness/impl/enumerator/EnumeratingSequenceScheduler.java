@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -35,8 +34,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 public class EnumeratingSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
 	/**
-	 * How long to let empty time windows be. Since these mostly happen at the end of
-	 * sequences we make this zero.
+	 * How long to let empty time windows be. Since these mostly happen at the
+	 * end of sequences we make this zero.
 	 */
 	private static final int EMPTY_WINDOW_SIZE = 0;
 
@@ -44,7 +43,7 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * Tracks the number of evaluations done so far
 	 */
 	protected int count = 0;
-	
+
 	/**
 	 * Indicates how many evaluations the best value came after
 	 */
@@ -65,6 +64,10 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * its successor. i.e. min travel time + visit time at indexed element.
 	 */
 	private int[][] minTimeToNextElement;
+	/**
+	 * The maximum time to get from the indexed element to its successor. This
+	 * is the maximum travel time + visit time at this element
+	 */
 	private int[][] maxTimeToNextElement;
 
 	/**
@@ -74,27 +77,31 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * from the times chosen up to the point.
 	 * 
 	 * These are the indexes of the sequence elements at the <em>start</em> of
-	 * such legs.
+	 * such legs. TODO this is disabled
 	 */
-	protected final ArrayList<Integer> separationPoints = new ArrayList<Integer>();
+	// protected final ArrayList<Integer> separationPoints = new
+	// ArrayList<Integer>();
 
 	// private ITimeWindowDataComponentProvider timeWindowProvider;
 	// private IElementDurationProvider<T> durationProvider;
 	// private IVesselProvider vesselProvider;
 	// private IMultiMatrixProvider<T, Integer> distanceProvider;
 	//
-	
+
+	/**
+	 * The current sequences
+	 */
 	private ISequences<T> sequences;
-	
+
 	private ScheduleEvaluator<T> evaluator;
 	private long bestValue;
 	private ScheduledSequences bestResult;
 
 	/**
-	 * Contains the last valid value calculated by evaluate(). TODO this is ugly.
+	 * Contains the last valid value calculated by evaluate(). TODO this is
+	 * ugly.
 	 */
 	private long lastValue;
-
 
 	public EnumeratingSequenceScheduler() {
 		super();
@@ -102,13 +109,11 @@ public class EnumeratingSequenceScheduler<T> extends
 		createLog();
 
 	}
-	
+
 	@Override
-	public ScheduledSequences schedule(
-			final ISequences<T> sequences) {
+	public ScheduledSequences schedule(final ISequences<T> sequences) {
 
 		resetBest();
-		
 
 		startLogEntry(1);
 
@@ -134,24 +139,24 @@ public class EnumeratingSequenceScheduler<T> extends
 	protected final void setSequences(final ISequences<T> sequences) {
 		this.sequences = sequences;
 	}
-	
+
 	protected final long prepare(final long limit) {
 		long v = 1;
-		
+
 		final int size = sequences.size();
-		
+
 		arrivalTimes = new int[size][];
 		windowStartTime = new int[size][];
 		windowEndTime = new int[size][];
 		minTimeToNextElement = new int[size][];
 		maxTimeToNextElement = new int[size][];
-		
-		for (int i = 0; i<size; i++) {
+
+		for (int i = 0; i < size; i++) {
 			v *= prepare(i, limit);
 		}
 		return limit;
 	}
-	
+
 	/**
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
@@ -164,21 +169,21 @@ public class EnumeratingSequenceScheduler<T> extends
 	protected final long prepare(final int sequenceIndex, final long maxValue) {
 		final ISequence<T> sequence = sequences.getSequence(sequenceIndex);
 		final IResource resource = sequences.getResources().get(sequenceIndex);
-		
-			final int size = sequence.size();
-//			arrivalTimes[sequenceIndex] = new int[size];
-//			windowStartTime[sequenceIndex] = new int[size];
-//			windowEndTime[sequenceIndex] = new int[size];
-//			minTimeToNextElement[sequenceIndex] = new int[size];
-//			maxTimeToNextElement[sequenceIndex] = new int[size];
-////			separationPoints[index].clear();
-		
+
+		final int size = sequence.size();
+		// arrivalTimes[sequenceIndex] = new int[size];
+		// windowStartTime[sequenceIndex] = new int[size];
+		// windowEndTime[sequenceIndex] = new int[size];
+		// minTimeToNextElement[sequenceIndex] = new int[size];
+		// maxTimeToNextElement[sequenceIndex] = new int[size];
+		// // separationPoints[index].clear();
+
 		final int[] arrivalTimes = this.arrivalTimes[sequenceIndex] = new int[size];
 		final int[] windowStartTime = this.windowStartTime[sequenceIndex] = new int[size];
 		final int[] windowEndTime = this.windowEndTime[sequenceIndex] = new int[size];
 		final int[] minTimeToNextElement = this.minTimeToNextElement[sequenceIndex] = new int[size];
 		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex] = new int[size];
-		
+
 		final IVesselProvider vesselProvider = super.getVesselProvider();
 
 		final ITimeWindowDataComponentProvider timeWindowProvider = super
@@ -278,22 +283,22 @@ public class EnumeratingSequenceScheduler<T> extends
 		}
 
 		// Compute separation points
-
-		for (index = 1; index < arrivalTimes.length; index++) {
-			// if there's an edge where window start > prev. window end + max
-			// travel time,
-			// that edge is separable, and it should be possible to solve from
-			// here independently
-			// of what has gone before
-
-			final int latestArrivalTime = windowEndTime[index - 1]
-					+ maxTimeToNextElement[index - 1];
-			if (latestArrivalTime < windowStartTime[index]) {
-				separationPoints.add(index - 1);
-			}
-		}
-
-		separationPoints.add(arrivalTimes.length - 1);
+		// TODO fix this code for multi-route scheduler
+		// for (index = 1; index < arrivalTimes.length; index++) {
+		// // if there's an edge where window start > prev. window end + max
+		// // travel time,
+		// // that edge is separable, and it should be possible to solve from
+		// // here independently
+		// // of what has gone before
+		//
+		// final int latestArrivalTime = windowEndTime[index - 1]
+		// + maxTimeToNextElement[index - 1];
+		// if (latestArrivalTime < windowStartTime[index]) {
+		// separationPoints.add(index - 1);
+		// }
+		// }
+		//
+		// separationPoints.add(arrivalTimes.length - 1);
 
 		long approximateCombinations = 1;
 		for (index = 0; index < arrivalTimes.length; index++) {
@@ -333,17 +338,20 @@ public class EnumeratingSequenceScheduler<T> extends
 	}
 
 	/**
-	 * Evaluate the current arrival times array, and if it is the best solution
-	 * so far take a copy of the result. This demands some fitness components.
+	 * Use {@link #evaluator} to evaluate the current arrival times array, and
+	 * if it is the best solution so far take a copy of the result.
+	 * 
+	 * @return true if the result is the new best case, false otherwise
 	 */
 	protected boolean evaluate() {
 		count++;
-		
 
-		final ScheduledSequences scheduledSequences = super.schedule(sequences, arrivalTimes);
-		
-		if (scheduledSequences == null) return false;
-		
+		final ScheduledSequences scheduledSequences = super.schedule(sequences,
+				arrivalTimes);
+
+		if (scheduledSequences == null)
+			return false;
+
 		lastValue = evaluator.evaluateSchedule(scheduledSequences);
 
 		logValue(lastValue);
@@ -377,7 +385,8 @@ public class EnumeratingSequenceScheduler<T> extends
 			// whichever is later: previous arrival time + travel, or
 			// window start.
 			return Math.max(arrivalTimes[seq][index - 1]
-					+ minTimeToNextElement[seq][index - 1], windowStartTime[seq][index]);
+					+ minTimeToNextElement[seq][index - 1],
+					windowStartTime[seq][index]);
 		}
 	}
 
@@ -391,10 +400,14 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * @return
 	 */
 	protected final int getMaxArrivalTime(final int seq, final int index) {
-		return Math.max(getMinArrivalTime(seq,index), // the latest we can arrive
-													// here is either window end
-													// time, or if we're late
-													// clamp to the earliest.
+		return Math.max(getMinArrivalTime(seq, index), // the latest we can
+														// arrive
+														// here is either window
+														// end
+														// time, or if we're
+														// late
+														// clamp to the
+														// earliest.
 				windowEndTime[seq][index]);
 	}
 
@@ -405,20 +418,26 @@ public class EnumeratingSequenceScheduler<T> extends
 	public void setScheduleEvaluator(ScheduleEvaluator<T> evaluator) {
 		this.evaluator = evaluator;
 	}
-	
+
 	/**
-	 * Get the approximate number of combinations of arrival times for
-	 * elements from firstIndex to lastIndex inclusive, up to maxValue
-	 * @param firstIndex first index to look at
-	 * @param lastIndex last index to look at
-	 * @param maxValue the maximum return value
+	 * Get the approximate number of combinations of arrival times for elements
+	 * from firstIndex to lastIndex inclusive, up to maxValue
+	 * 
+	 * @param firstIndex
+	 *            first index to look at
+	 * @param lastIndex
+	 *            last index to look at
+	 * @param maxValue
+	 *            the maximum return value
 	 * @return
 	 */
-	protected final long getApproximateCombinations(final int seq, final int firstIndex, final int lastIndex, final long maxValue) {
+	protected final long getApproximateCombinations(final int seq,
+			final int firstIndex, final int lastIndex, final long maxValue) {
 		long accumulator = 1;
-		for (int i = firstIndex; i<=lastIndex; i++) {
+		for (int i = firstIndex; i <= lastIndex; i++) {
 			accumulator *= (windowEndTime[seq][i] - windowStartTime[seq][i] + 1);
-			if (accumulator > maxValue) return maxValue;
+			if (accumulator > maxValue)
+				return maxValue;
 		}
 		return accumulator;
 	}
