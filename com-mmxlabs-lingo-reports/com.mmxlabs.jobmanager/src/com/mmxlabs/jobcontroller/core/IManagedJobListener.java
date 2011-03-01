@@ -5,23 +5,9 @@
 
 package com.mmxlabs.jobcontroller.core;
 
+import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
+
 public interface IManagedJobListener {
-
-	void jobStarted(IManagedJob job);
-	
-	void jobStopped(IManagedJob job);
-	
-	void jobPaused(IManagedJob job);
-	
-	void jobResumed(IManagedJob job);
-	
-	void jobProgressUpdate(IManagedJob job, int progressDelta);
-	
-	void jobCompleted(IManagedJob job);
-
-	void jobCancelled(IManagedJob job);
-
-	void jobPausing(IManagedJob job);
-
-	void jobResuming(IManagedJob job);
+	void jobStateChanged(IManagedJob job, JobState oldState, JobState newState);
+	void jobProgressUpdated(IManagedJob job, int progressDelta);
 }

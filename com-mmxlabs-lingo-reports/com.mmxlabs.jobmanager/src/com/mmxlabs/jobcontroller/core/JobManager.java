@@ -5,6 +5,7 @@
 
 package com.mmxlabs.jobcontroller.core;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +30,7 @@ public final class JobManager implements IJobManager {
 	 */
 	@Override
 	public List<IManagedJob> getJobs() {
-		return jobs;
+		return Collections.unmodifiableList(jobs);
 	}
 
 	/*
