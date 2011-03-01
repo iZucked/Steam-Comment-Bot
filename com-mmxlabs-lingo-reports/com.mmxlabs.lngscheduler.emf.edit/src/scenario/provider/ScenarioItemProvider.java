@@ -67,6 +67,7 @@ public class ScenarioItemProvider
 			super.getPropertyDescriptors(object);
 
 			addVersionPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -89,6 +90,28 @@ public class ScenarioItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Scenario_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Scenario_name_feature", "_UI_Scenario_type"),
+				 ScenarioPackage.Literals.SCENARIO__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -150,8 +173,10 @@ public class ScenarioItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Scenario scenario = (Scenario)object;
-		return getString("_UI_Scenario_type") + " " + scenario.getVersion();
+		String label = ((Scenario)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Scenario_type") :
+			getString("_UI_Scenario_type") + " " + label;
 	}
 
 	/**
@@ -167,6 +192,7 @@ public class ScenarioItemProvider
 
 		switch (notification.getFeatureID(Scenario.class)) {
 			case ScenarioPackage.SCENARIO__VERSION:
+			case ScenarioPackage.SCENARIO__NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ScenarioPackage.SCENARIO__FLEET_MODEL:

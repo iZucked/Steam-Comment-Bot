@@ -24,6 +24,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Default name"/>
   </eClassifiers>
   <eSubpackages name="fleet" nsURI="http://com.mmxlabs.lng.emf/fleet" nsPrefix="com.mmxlabs.lng.emf.fleet">
     <eClassifiers xsi:type="ecore:EClass" name="FleetModel">

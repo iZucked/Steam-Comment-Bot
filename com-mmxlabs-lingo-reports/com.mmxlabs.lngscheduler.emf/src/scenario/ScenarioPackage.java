@@ -155,13 +155,22 @@ public interface ScenarioPackage extends EPackage {
 	int SCENARIO__VERSION = 9;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__NAME = 10;
+
+	/**
 	 * The number of structural features of the '<em>Scenario</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_FEATURE_COUNT = 10;
+	int SCENARIO_FEATURE_COUNT = 11;
 
 
 	/**
@@ -285,6 +294,17 @@ public interface ScenarioPackage extends EPackage {
 	EAttribute getScenario_Version();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.Scenario#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see scenario.Scenario#getName()
+	 * @see #getScenario()
+	 * @generated
+	 */
+	EAttribute getScenario_Name();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -395,6 +415,14 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SCENARIO__VERSION = eINSTANCE.getScenario_Version();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO__NAME = eINSTANCE.getScenario_Name();
 
 	}
 

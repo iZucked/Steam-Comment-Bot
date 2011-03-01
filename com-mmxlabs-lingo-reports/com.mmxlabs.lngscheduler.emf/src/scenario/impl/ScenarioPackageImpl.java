@@ -246,6 +246,15 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getScenario_Name() {
+		return (EAttribute)scenarioEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
 	}
@@ -280,6 +289,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		createEReference(scenarioEClass, SCENARIO__CANAL_MODEL);
 		createEReference(scenarioEClass, SCENARIO__OPTIMISATION);
 		createEAttribute(scenarioEClass, SCENARIO__VERSION);
+		createEAttribute(scenarioEClass, SCENARIO__NAME);
 	}
 
 	/**
@@ -341,6 +351,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		initEReference(getScenario_CanalModel(), thePortPackage.getCanalModel(), null, "canalModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenario_Optimisation(), theOptimiserPackage.getOptimisation(), null, "optimisation", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenario_Version(), ecorePackage.getEInt(), "version", "1", 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenario_Name(), ecorePackage.getEString(), "name", "Default name", 1, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
