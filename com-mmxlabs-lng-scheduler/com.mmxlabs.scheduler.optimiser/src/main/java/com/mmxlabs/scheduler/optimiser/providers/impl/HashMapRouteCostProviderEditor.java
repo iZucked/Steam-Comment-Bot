@@ -28,6 +28,11 @@ public class HashMapRouteCostProviderEditor implements
 	private Map<String, Integer> defaultPrices = new HashMap<String, Integer>();
 	private final String defaultKey;
 	
+	private Map<String, Map<IVesselClass, Integer>> travelTimesByRouteAndClass =
+		new HashMap<String, Map<IVesselClass, Integer>>();
+	private Map<String, Map<IVesselClass, Long>> baseFuelByRouteAndClass = 
+		new HashMap<String, Map<IVesselClass, Long>>();
+	
 	@Override
 	public int getRouteCost(String route, IVesselClass vesselClass,
 			VesselState vesselState) {
@@ -59,11 +64,13 @@ public class HashMapRouteCostProviderEditor implements
 	@Override
 	public void dispose() {
 		pricesByRouteClassAndState.clear();
+		baseFuelByRouteAndClass.clear();
+		travelTimesByRouteAndClass.clear();
 	}
 
 	@Override
-	public void setRouteCost(String route, IVesselClass vesselClass,
-			VesselState vesselState, int price) {
+	public void setRouteCost(final String route, final IVesselClass vesselClass,
+			final VesselState vesselState, final int price) {
 		if (!pricesByRouteClassAndState.containsKey(route)) {
 			EnumMap<VesselState, Integer> single = new EnumMap<VesselState, Integer>(VesselState.class);
 			single.put(vesselState, price);
@@ -83,7 +90,47 @@ public class HashMapRouteCostProviderEditor implements
 	}
 
 	@Override
-	public void setDefaultRouteCost(String route, int price) {
+	public void setDefaultRouteCost(final String route, final int price) {
 		defaultPrices.put(route, price);
+	}
+
+	@Override
+	public void setRouteTimeAndFuel(final String routeName, final IVesselClass vc,
+			final int transitTimeInHours, final long baseFuelInScaledMT) {
+		if (!travelTimesByRouteAndClass.containsKey(routeName)) {
+			travelTimesByRouteAndClass.put(routeName, new HashMap<IVesselClass, Integer>());
+		}
+		travelTimesByRouteAndClass.get(routeName).put(vc, transitTimeInHours);
+		
+		if (!baseFuelByRouteAndClass.containsKey(routeName)) {
+			baseFuelByRouteAndClass.put(routeName, new HashMap<IVesselClass, Long>());
+		}
+		baseFuelByRouteAndClass.get(routeName).put(vc, baseFuelInScaledMT);
+	}
+
+	@Override
+	public long getRouteFuelUsage(final String route, final IVesselClass vesselClass) {
+		if (route == defaultKey) return 0;
+		final Map<IVesselClass, Long> byClass = baseFuelByRouteAndClass.get(route);
+		if (byClass != null) {
+			final Long value = byClass.get(vesselClass);
+			if (value != null) {
+				return value;
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public int getRouteTransitTime(final String route, final IVesselClass vesselClass) {
+		if (route == defaultKey) return 0;
+		final Map<IVesselClass, Integer> byClass = travelTimesByRouteAndClass.get(route);
+		if (byClass != null) {
+			final Integer value = byClass.get(vesselClass);
+			if (value != null) {
+				return value;
+			}
+		}
+		return 0;
 	}
 }

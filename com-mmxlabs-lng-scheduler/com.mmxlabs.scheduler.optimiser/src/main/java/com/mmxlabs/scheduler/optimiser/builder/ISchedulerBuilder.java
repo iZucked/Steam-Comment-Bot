@@ -11,6 +11,7 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
@@ -221,15 +222,18 @@ public interface ISchedulerBuilder {
 			IDischargeSlot dischargeSlot);
 
 	/**
-	 * Restrict the set of vessels which can carry this cargo to those in the second argument.
+	 * Restrict the set of vessels which can carry this cargo to those in the
+	 * second argument.
 	 * 
 	 * If this method is never called, the cargo can be carried by any vessel.
 	 * 
-	 * @param cargo a cargo created by {@link #createCargo()}
-	 * @param vessels a set of vessels on which this cargo may be carried
+	 * @param cargo
+	 *            a cargo created by {@link #createCargo()}
+	 * @param vessels
+	 *            a set of vessels on which this cargo may be carried
 	 */
 	void setCargoVesselRestriction(ICargo cargo, Set<IVessel> vessels);
-	
+
 	/**
 	 * Create a time window with the specified start and end time.
 	 * 
@@ -262,6 +266,30 @@ public interface ISchedulerBuilder {
 			final IVesselClass vesselClass, final VesselState state,
 			final int tollPrice);
 
+	/**
+	 * Set the default toll associated with passing by a given route
+	 * @param route the route name
+	 * @param defaultPrice the associated toll in dollars
+	 */
+	void setDefaultRouteCost(String route, int defaultPrice);
+	
+	/**
+	 * Set the extra time and fuel required for the given vessel class to travel
+	 * by the given route
+	 * 
+	 * @param name
+	 *            the name of the route
+	 * @param vc
+	 *            the vessel class
+	 * @param time
+	 *            the extra transit time required, in hours
+	 * @param fuel
+	 *            the extra base fuel or equivalent required, in up-scaled MT
+	 *            (see {@link Calculator#ScaleFactor})
+	 */
+	void setVesselClassRouteTimeAndFuel(String name, IVesselClass vc, int time,
+			long fuel);
+	
 	/**
 	 * Specify an amount of time a given {@link IResource} must incur if
 	 * assigned to the given {@link ISequenceElement}.
@@ -353,15 +381,20 @@ public interface ISchedulerBuilder {
 	void setVesselClassInaccessiblePorts(IVesselClass vc,
 			Set<IPort> inaccessiblePorts);
 
-	void setDefaultRouteCost(String route, int defaultPrice);
-
 	/**
 	 * Add a global total volume limit
-	 * @param ports The set of ports for which the limit should apply
-	 * @param loads Whether to apply to load slots
-	 * @param discharges Whether to apply to discharge slots
-	 * @param maximumTotalVolume The maximum total quantity which can be allocated to slots in the time window
-	 * @param timeWindow The time window within which the limit applies.
+	 * 
+	 * @param ports
+	 *            The set of ports for which the limit should apply
+	 * @param loads
+	 *            Whether to apply to load slots
+	 * @param discharges
+	 *            Whether to apply to discharge slots
+	 * @param maximumTotalVolume
+	 *            The maximum total quantity which can be allocated to slots in
+	 *            the time window
+	 * @param timeWindow
+	 *            The time window within which the limit applies.
 	 */
 	void addTotalVolumeConstraint(Set<IPort> ports, boolean loads,
 			boolean discharges, long maximumTotalVolume, ITimeWindow timeWindow);

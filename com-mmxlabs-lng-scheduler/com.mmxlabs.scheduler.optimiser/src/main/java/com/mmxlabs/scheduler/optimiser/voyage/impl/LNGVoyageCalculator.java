@@ -63,8 +63,19 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// Get distance
 		final long distance = options.getDistance();
 
-		// Get available time
-		final int availableTimeInHours = options.getAvailableTime();
+		/**
+		 * How much of the time given to us by the scheduler has to be spent
+		 * traveling by an alternative route.
+		 */
+		final int additionalRouteTimeInHours = routeCostProvider
+				.getRouteTransitTime(options.getRoute(), vesselClass);
+
+		/**
+		 * How much time is available to cover the distance, excluding time
+		 * which must be spent traversing any canals
+		 */
+		final int availableTimeInHours = options.getAvailableTime()
+				- additionalRouteTimeInHours;
 
 		// Calculate speed
 		// cast to int as if long is required, then what are we doing?
@@ -105,7 +116,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		final int idleTimeInHours = Math.max(0, availableTimeInHours
 				- travelTimeInHours);
 
-		output.setTravelTime(travelTimeInHours);
+		// We output travel time + canal time, but the calculations
+		// below only need to care about travel time
+		output.setTravelTime(travelTimeInHours + additionalRouteTimeInHours);
 		output.setIdleTime(idleTimeInHours);
 
 		/**
@@ -116,10 +129,16 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				.getConsumptionRate(vesselState).getRate(speed);
 		/**
 		 * The total number of MT of base fuel OR MT-equivalent of LNG required
-		 * for this journey
+		 * for this journey, including the amount needed for any canals
 		 */
-		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(
-				consuptionRateInMTPerHour, travelTimeInHours);
+		final long requiredConsumptionInMT =
+		// this part is the fuel used for traveling on the open ocean
+		Calculator.quantityFromRateTime(consuptionRateInMTPerHour,
+				travelTimeInHours)
+		// and this part is the fuel used for traversing any canal we may have
+		// picked
+				+ routeCostProvider.getRouteFuelUsage(options.getRoute(),
+						vesselClass);
 
 		// Calculate fuel requirements
 		if (options.useNBOForTravel()) {
@@ -146,8 +165,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 			if (nboProvidedInMT < requiredConsumptionInMT) {
 				/**
-				 * How many MT of base-fuel-or-equivalent are required after
-				 * the NBO amount has been used
+				 * How many MT of base-fuel-or-equivalent are required after the
+				 * NBO amount has been used
 				 */
 				final long diffInMT = requiredConsumptionInMT - nboProvidedInMT;
 				final long diffInM3 = Calculator.convertMTToM3(diffInMT,

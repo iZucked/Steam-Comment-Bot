@@ -72,9 +72,11 @@ public class LNGVoyageCalculatorTest {
 
 		context.checking(new Expectations() {
 			{
-				one(options.getVessel()).getVesselClass();
+				allowing(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 			}
 		});
 
@@ -145,6 +147,8 @@ public class LNGVoyageCalculatorTest {
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
 			}
@@ -220,6 +224,9 @@ public class LNGVoyageCalculatorTest {
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
+
 			}
 		});
 
@@ -292,6 +299,9 @@ public class LNGVoyageCalculatorTest {
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
+
 			}
 		});
 
@@ -366,6 +376,9 @@ public class LNGVoyageCalculatorTest {
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
+
 			}
 		});
 
@@ -440,6 +453,9 @@ public class LNGVoyageCalculatorTest {
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
+
 			}
 		});
 
@@ -511,6 +527,9 @@ public class LNGVoyageCalculatorTest {
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
+
 			}
 		});
 
@@ -583,6 +602,9 @@ public class LNGVoyageCalculatorTest {
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
+
 			}
 		});
 
@@ -716,6 +738,9 @@ public class LNGVoyageCalculatorTest {
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass,
 						VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
+
 			}
 		});
 
