@@ -731,14 +731,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselClassRouteCost(String route, IVesselClass vesselClass,
-			VesselState state, int tollPrice) {
+	public void setVesselClassRouteCost(final String route, final IVesselClass vesselClass,
+			final VesselState state, final int tollPrice) {
 		routeCostProvider.setRouteCost(route, vesselClass, state, tollPrice);
 	}
 
 	@Override
-	public void setDefaultRouteCost(String route, int defaultPrice) {
+	public void setDefaultRouteCost(final String route, final int defaultPrice) {
 		routeCostProvider.setDefaultRouteCost(route, defaultPrice);
+	}
+	
+	@Override
+	public void setVesselClassRouteTimeAndFuel(final String name, final IVesselClass vc,
+			final int transitTimeInHours, final long baseFuelInScaledMT) {
+		routeCostProvider.setRouteTimeAndFuel(name, vc, transitTimeInHours, baseFuelInScaledMT);
 	}
 
 	@Override
@@ -1107,5 +1113,4 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		resourceAllocationProvider.setAllowedResources(
 				portSlotsProvider.getElement(dischargeSlot), resources);
 	}
-
 }
