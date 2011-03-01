@@ -190,7 +190,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			VoyagePlan bestLastLegPlan = null;
 			long bestLastLegCost = Long.MAX_VALUE;
 			long lastCost = Long.MAX_VALUE;
-			
+
 			for (int i = 0; i < 500; ++i) {
 				options.setAvailableTime(options.getAvailableTime() + 1);
 
@@ -203,18 +203,13 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 					}
 
 					if (currentCost > lastCost) {
-						options.setAvailableTime(options.getAvailableTime() - 1); // back
-																		// out
-																		// one
-																		// step.
-																		// this
-																		// is
-																		// ugly.
+						// back out one step. this is ugly.
+						options.setAvailableTime(options.getAvailableTime() - 1);
 						break; // presume minimum.
 					} else {
 						lastCost = currentCost;
 					}
-					
+
 					final Object[] sequence = currentPlan.getSequence();
 					
 					final VoyageDetails lastVoyage = (VoyageDetails) sequence[sequence.length-2];
