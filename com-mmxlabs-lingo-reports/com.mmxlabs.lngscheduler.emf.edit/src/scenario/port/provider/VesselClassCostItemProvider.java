@@ -65,6 +65,8 @@ public class VesselClassCostItemProvider
 			addVesselClassPropertyDescriptor(object);
 			addLadenCostPropertyDescriptor(object);
 			addUnladenCostPropertyDescriptor(object);
+			addTransitTimePropertyDescriptor(object);
+			addTransitFuelPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -136,6 +138,50 @@ public class VesselClassCostItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Transit Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTransitTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClassCost_transitTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_transitTime_feature", "_UI_VesselClassCost_type"),
+				 PortPackage.Literals.VESSEL_CLASS_COST__TRANSIT_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Transit Fuel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTransitFuelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClassCost_transitFuel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_transitFuel_feature", "_UI_VesselClassCost_type"),
+				 PortPackage.Literals.VESSEL_CLASS_COST__TRANSIT_FUEL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns VesselClassCost.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -172,6 +218,8 @@ public class VesselClassCostItemProvider
 		switch (notification.getFeatureID(VesselClassCost.class)) {
 			case PortPackage.VESSEL_CLASS_COST__LADEN_COST:
 			case PortPackage.VESSEL_CLASS_COST__UNLADEN_COST:
+			case PortPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
+			case PortPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
