@@ -316,8 +316,8 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		for (final FuelComponent fuel : FuelComponent.values()) {
 			cost += plan.getTotalFuelCost(fuel);
 		}
+		cost += plan.getTotalRouteCost();
 //		System.err.println("Fuel Cost = " + cost);
-//		cost += plan.getTotalRouteCost();
 //		System.err.println("Total Cost = " + cost);
 //		if (cost < bestCost)
 //			System.err.println("Maybe new best ^^");
