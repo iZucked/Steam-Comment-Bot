@@ -108,6 +108,7 @@ import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
+import scenario.market.MarketPackage;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
@@ -987,6 +988,26 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						}
 					}, getEditingDomain(), true);
 
+			final DefaultReferenceEditor marketEditor = new DefaultReferenceEditor(
+					MarketPackage.eINSTANCE.getMarket(),
+					MarketPackage.eINSTANCE.getMarket_Name(),
+					new IReferenceValueProvider() {
+						@Override
+						public Iterable<? extends EObject> getAllowedValues(
+								EObject target, EStructuralFeature field) {
+							while (target != null
+									&& !(target instanceof Scenario)) {
+								target = target.eContainer();
+							}
+							if (target == null) {
+								return Collections.emptyList();
+							} else {
+								return ((Scenario) target).getMarketModel()
+										.getMarkets();
+							}
+						}
+					}, getEditingDomain(), true);
+
 			final DefaultReferenceEditor vesselClassEditor = new DefaultReferenceEditor(
 					FleetPackage.eINSTANCE.getVesselClass(),
 					FleetPackage.eINSTANCE.getVesselClass_Name(),
@@ -1006,7 +1027,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							}
 						}
 					}, getEditingDomain(), true);
-			
+
 			// Create a page for the cargo editor
 			{
 				final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
@@ -1015,6 +1036,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				cargoPane.setFeatureEditorForReferenceType(
 						PortPackage.eINSTANCE.getPort(), portEditor);
+
+				cargoPane.setFeatureEditorForReferenceType(
+						MarketPackage.eINSTANCE.getMarket(), marketEditor);
 
 				final List<EReference> path = new LinkedList<EReference>();
 
@@ -1032,7 +1056,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				int pageIndex = addPage(cargoPane.getControl());
 				setPageText(pageIndex, "Cargoes"); // TODO localize this
-														// string or whatever
+													// string or whatever
 			}
 			// Create a fleet editor pane
 			{
@@ -1063,9 +1087,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				int pageIndex = addPage(fleetPane.getControl());
 				setPageText(pageIndex, "Fleet"); // TODO localize this
-														// string or whatever
+													// string or whatever
 			}
-			
+
 			// Create a vessel class editor pane
 			{
 				final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
