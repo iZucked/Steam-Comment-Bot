@@ -985,7 +985,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 										.getPorts();
 							}
 						}
-					}, getEditingDomain());
+					}, getEditingDomain(), true);
 
 			final DefaultReferenceEditor vesselClassEditor = new DefaultReferenceEditor(
 					FleetPackage.eINSTANCE.getVesselClass(),
@@ -1005,7 +1005,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 										.getVesselClasses();
 							}
 						}
-					}, getEditingDomain());
+					}, getEditingDomain(), true);
 			
 			// Create a page for the cargo editor
 			{
@@ -1064,6 +1064,33 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				int pageIndex = addPage(fleetPane.getControl());
 				setPageText(pageIndex, "Fleet"); // TODO localize this
 														// string or whatever
+			}
+			
+			// Create a vessel class editor pane
+			{
+				final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
+						getSite().getPage(), ScenarioEditor.this);
+				fleetPane.createControl(getContainer());
+
+				fleetPane.setFeatureEditorForReferenceType(
+						PortPackage.eINSTANCE.getPort(), portEditor);
+
+				final List<EReference> path = new LinkedList<EReference>();
+
+				path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
+				path.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
+
+				fleetPane.init(path, adapterFactory);
+
+				fleetPane.getViewer().setInput(
+						editingDomain.getResourceSet().getResources().get(0)
+								.getContents().get(0));
+
+				// TODO should this really be here?
+				createContextMenuFor(fleetPane.getViewer());
+
+				int pageIndex = addPage(fleetPane.getControl());
+				setPageText(pageIndex, "Vessel Classes");
 			}
 			// Other default ViewerPane bits are commented out
 			/*
