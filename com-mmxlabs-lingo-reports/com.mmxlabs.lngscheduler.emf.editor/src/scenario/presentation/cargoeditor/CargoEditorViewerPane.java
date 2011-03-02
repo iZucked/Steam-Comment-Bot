@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
 package scenario.presentation.cargoeditor;
@@ -126,19 +126,23 @@ public class CargoEditorViewerPane extends ViewerPane {
 			suffix = " of " + ref.getName() + suffix;
 		}
 
+		if (containment == false) {
+			if (eClass.getEIDAttribute() != null) {
+				createTableColumn(table, eClass.getEIDAttribute(), references, suffix);
+				return;
+			}
+		}
+		
 		for (final EAttribute attribute : eClass.getEAllAttributes()) {
 			if (containment == false) {
+				// hack - we only display name or id fields 
 				if (attribute.getName().equalsIgnoreCase("name") == false)
 					continue;
 			}
-			final TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setResizable(true);
-			column.setText(attribute.getName() + suffix);
-			column.setData(VALUE_GETTER_KEY, new ValueGetter(references,
-					attribute));
-			column.pack();
+			createTableColumn(table, attribute, references, suffix);
+			if (!containment) return;
 		}
-		if (!containment) //don't chase any more references
+		if (!containment) // don't chase any more references
 			return;
 		for (final EReference reference : eClass.getEAllReferences()) {
 			if (reference.isMany())
@@ -148,6 +152,16 @@ public class CargoEditorViewerPane extends ViewerPane {
 			createTableColumns(reference.getEReferenceType(), table, path,
 					reference.isContainment());
 		}
+	}
+
+	private void createTableColumn(final Table table,
+			final EAttribute attribute, final List<EReference> path,
+			final String suffix) {
+		final TableColumn column = new TableColumn(table, SWT.NONE);
+		column.setResizable(true);
+		column.setText(attribute.getName() + suffix);
+		column.setData(VALUE_GETTER_KEY, new ValueGetter(path, attribute));
+		column.pack();
 	}
 
 	/**

@@ -14,6 +14,7 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,9 @@ import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -61,7 +65,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -70,7 +73,6 @@ import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -81,13 +83,9 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -103,14 +101,21 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import scenario.Scenario;
+import scenario.ScenarioPackage;
+import scenario.cargo.CargoPackage;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
+import scenario.fleet.FleetPackage;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
+import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
-import scenario.presentation.cargoeditor.CargoEditorViewerPane;
+import scenario.presentation.cargoeditor.DefaultReferenceEditor;
+import scenario.presentation.cargoeditor.DefaultReferenceEditor.IReferenceValueProvider;
+import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
@@ -962,13 +967,61 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
 			}
 
+			final DefaultReferenceEditor portEditor = new DefaultReferenceEditor(
+					PortPackage.eINSTANCE.getPort(),
+					PortPackage.eINSTANCE.getPort_Name(),
+					new IReferenceValueProvider() {
+						@Override
+						public Iterable<? extends EObject> getAllowedValues(
+								EObject target, EStructuralFeature field) {
+							while (target != null
+									&& !(target instanceof Scenario)) {
+								target = target.eContainer();
+							}
+							if (target == null) {
+								return Collections.emptyList();
+							} else {
+								return ((Scenario) target).getPortModel()
+										.getPorts();
+							}
+						}
+					}, getEditingDomain());
+
+			final DefaultReferenceEditor vesselClassEditor = new DefaultReferenceEditor(
+					FleetPackage.eINSTANCE.getVesselClass(),
+					FleetPackage.eINSTANCE.getVesselClass_Name(),
+					new IReferenceValueProvider() {
+						@Override
+						public Iterable<? extends EObject> getAllowedValues(
+								EObject target, EStructuralFeature field) {
+							while (target != null
+									&& !(target instanceof Scenario)) {
+								target = target.eContainer();
+							}
+							if (target == null) {
+								return Collections.emptyList();
+							} else {
+								return ((Scenario) target).getFleetModel()
+										.getVesselClasses();
+							}
+						}
+					}, getEditingDomain());
+			
 			// Create a page for the cargo editor
 			{
-				final CargoEditorViewerPane cargoPane = new CargoEditorViewerPane(
+				final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
 						getSite().getPage(), ScenarioEditor.this);
-
 				cargoPane.createControl(getContainer());
-				cargoPane.init(adapterFactory);
+
+				cargoPane.setFeatureEditorForReferenceType(
+						PortPackage.eINSTANCE.getPort(), portEditor);
+
+				final List<EReference> path = new LinkedList<EReference>();
+
+				path.add(ScenarioPackage.eINSTANCE.getScenario_CargoModel());
+				path.add(CargoPackage.eINSTANCE.getCargoModel_Cargoes());
+
+				cargoPane.init(path, adapterFactory);
 
 				cargoPane.getViewer().setInput(
 						editingDomain.getResourceSet().getResources().get(0)
@@ -978,7 +1031,38 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				createContextMenuFor(cargoPane.getViewer());
 
 				int pageIndex = addPage(cargoPane.getControl());
-				setPageText(pageIndex, "Cargo Editor"); // TODO localize this
+				setPageText(pageIndex, "Cargoes"); // TODO localize this
+														// string or whatever
+			}
+			// Create a fleet editor pane
+			{
+				final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
+						getSite().getPage(), ScenarioEditor.this);
+				fleetPane.createControl(getContainer());
+
+				fleetPane.setFeatureEditorForReferenceType(
+						PortPackage.eINSTANCE.getPort(), portEditor);
+
+				fleetPane.setFeatureEditorForReferenceType(
+						FleetPackage.eINSTANCE.getVesselClass(),
+						vesselClassEditor);
+
+				final List<EReference> path = new LinkedList<EReference>();
+
+				path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
+				path.add(FleetPackage.eINSTANCE.getFleetModel_Fleet());
+
+				fleetPane.init(path, adapterFactory);
+
+				fleetPane.getViewer().setInput(
+						editingDomain.getResourceSet().getResources().get(0)
+								.getContents().get(0));
+
+				// TODO should this really be here?
+				createContextMenuFor(fleetPane.getViewer());
+
+				int pageIndex = addPage(fleetPane.getControl());
+				setPageText(pageIndex, "Fleet"); // TODO localize this
 														// string or whatever
 			}
 			// Other default ViewerPane bits are commented out
