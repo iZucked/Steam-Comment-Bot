@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ */
+
 package scenario.presentation.cargoeditor;
 
 import java.util.ArrayList;
@@ -19,11 +23,12 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 public class DefaultReferenceEditor implements IFeatureEditor {
+	protected static final String NULL_NAME = "(none)";
 	private EClass refType;
 	private EAttribute nameAttribute;
-	private ComboBoxCellEditor myEditor;
 	private final IReferenceValueProvider valueProvider;
 	private final EditingDomain editingDomain;
+	private final boolean allowNullValues;
 
 	public interface IReferenceValueProvider {
 		public Iterable<? extends EObject> getAllowedValues(
@@ -33,20 +38,23 @@ public class DefaultReferenceEditor implements IFeatureEditor {
 	public DefaultReferenceEditor(final EClass refType,
 			final EAttribute nameAttribute,
 			final IReferenceValueProvider valueProvider,
-			final EditingDomain editingDomain) {
+			final EditingDomain editingDomain, final boolean allowNullValues) {
 		this.refType = refType;
 		this.nameAttribute = nameAttribute;
 		this.valueProvider = valueProvider;
 		this.editingDomain = editingDomain;
+		this.allowNullValues = allowNullValues;
 	}
 
 	@Override
 	public IFeatureManipulator getFeatureManipulator(
 			final List<EReference> path, final EStructuralFeature field) {
 
+		
 		assert (field.getEType().equals(refType));
 
 		return new IFeatureManipulator() {
+			private ComboBoxCellEditor myEditor = null;
 			private EObject getTarget(EObject modelObject) {
 				if (modelObject == null)
 					return null;
@@ -63,7 +71,7 @@ public class DefaultReferenceEditor implements IFeatureEditor {
 				o = getTarget(o);
 				final EObject entity = (EObject) o.eGet(field);
 				if (entity == null)
-					return "";
+					return NULL_NAME;
 				return entity.eGet(nameAttribute).toString();
 			}
 
@@ -97,7 +105,7 @@ public class DefaultReferenceEditor implements IFeatureEditor {
 						.getAllowedValues(target, field);
 
 				final TreeMap<String, EObject> valueMap = new TreeMap<String, EObject>();
-				valueMap.clear();
+
 				for (final EObject value : values) {
 					String valueName = value.eGet(nameAttribute).toString();
 					if (valueMap.containsKey(valueName)) {
@@ -111,34 +119,43 @@ public class DefaultReferenceEditor implements IFeatureEditor {
 					valueMap.put(valueName, value);
 				}
 
-				final String[] stringValues = valueMap.keySet().toArray(
-						new String[] {});
-
 				valueList.clear();
 				reverseValueList.clear();
+				final String[] names = new String[valueMap.size()
+						+ (allowNullValues ? 1 : 0)];
+
+				int nameIndex = 0;
+				if (allowNullValues) {
+					valueList.add(null);
+					reverseValueList.put(null, 0);
+					names[nameIndex++] = NULL_NAME;
+				}
 
 				for (final Map.Entry<String, EObject> e : valueMap.entrySet()) {
 					reverseValueList.put(e.getValue(), valueList.size());
 					valueList.add(e.getValue());
+					names[nameIndex++] = e.getKey();
 				}
 
-				myEditor.setItems(stringValues);
+				myEditor.setItems(names);
 
 				return true;
 			}
 
 			@Override
 			public CellEditor createCellEditor(Composite parent) {
-				return myEditor = new ComboBoxCellEditor(parent,
+				assert myEditor == null;
+				myEditor = new ComboBoxCellEditor(parent,
 						new String[] {});
+				return myEditor;
 			}
 
 			@Override
 			public Object getEditorValue(final EObject row) {
 				final EObject currentValue = (EObject) getTarget(row).eGet(
 						field);
-
-				return reverseValueList.get(currentValue);
+				Integer result = reverseValueList.get(currentValue);
+				return result;
 			}
 		};
 	}
