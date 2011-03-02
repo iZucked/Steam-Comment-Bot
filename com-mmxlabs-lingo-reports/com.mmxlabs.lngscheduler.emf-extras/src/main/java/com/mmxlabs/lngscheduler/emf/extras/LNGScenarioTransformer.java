@@ -437,7 +437,7 @@ public class LNGScenarioTransformer {
 							vc,
 							classCost.getTransitTime(),
 							Calculator.scale(classCost.getTransitFuel()
-									/ classCost.getTransitTime()));
+									/ 24));
 				}
 			}
 		}
