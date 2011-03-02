@@ -171,4 +171,22 @@ public class VesselClassTest {
 		vesselClass.setBaseFuelConversionFactor(value);
 		Assert.assertEquals(value, vesselClass.getBaseFuelConversionFactor());
 	}
+	
+	@Test
+	public void testGetSetPilotLightRate() {
+		final long value = 100;
+		final VesselClass vesselClass = new VesselClass();
+		Assert.assertEquals(0, vesselClass.getPilotLightRate());
+		vesselClass.setPilotLightRate(value);
+		Assert.assertEquals(value, vesselClass.getPilotLightRate());
+	}
+
+	@Test
+	public void testGetSetIdlePilotLightRate() {
+		final long value = 100;
+		final VesselClass vesselClass = new VesselClass();
+		Assert.assertEquals(0, vesselClass.getIdlePilotLightRate());
+		vesselClass.setIdlePilotLightRate(value);
+		Assert.assertEquals(value, vesselClass.getIdlePilotLightRate());
+	}
 }

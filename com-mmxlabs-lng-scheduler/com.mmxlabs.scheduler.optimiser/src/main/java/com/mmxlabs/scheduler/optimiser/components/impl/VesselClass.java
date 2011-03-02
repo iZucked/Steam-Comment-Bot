@@ -25,6 +25,10 @@ public final class VesselClass implements IVesselClass {
 
 	private int baseFuelConversionFactor;
 
+	private long pilotLightRate;
+
+	private long idlePilotLightRate;
+
 	private final EnumMap<VesselState, Integer> minNBOSpeed = new EnumMap<VesselState, Integer>(
 			VesselState.class);
 
@@ -176,9 +180,27 @@ public final class VesselClass implements IVesselClass {
 	public void setHourlyCharterPrice(int hourlyCharterPrice) {
 		this.hourlyCharterPrice = hourlyCharterPrice;
 	}
-	
+
 	@Override
 	public int getHourlyCharterPrice() {
 		return hourlyCharterPrice;
+	}
+
+	@Override
+	public final long getPilotLightRate() {
+		return pilotLightRate;
+	}
+
+	public final void setPilotLightRate(long pilotLightRate) {
+		this.pilotLightRate = pilotLightRate;
+	}
+
+	@Override
+	public final long getIdlePilotLightRate() {
+		return idlePilotLightRate;
+	}
+
+	public final void setIdlePilotLightRate(long idlePilotLightRate) {
+		this.idlePilotLightRate = idlePilotLightRate;
 	}
 }
