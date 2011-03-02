@@ -60,7 +60,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		final int equivalenceFactorM3ToMT = vesselClass
 				.getBaseFuelConversionFactor();
 
-		// Get distance
+		// Get distance for the route choice
 		final long distance = options.getDistance();
 
 		/**
@@ -78,7 +78,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				- additionalRouteTimeInHours;
 
 		// Calculate speed
-		// cast to int as if long is required, then what are we doing?
+		// cast to int. as if long is required, then what are we doing?
 		int speed = availableTimeInHours == 0 ? 0 : Calculator
 				.speedFromDistanceTime(distance, availableTimeInHours);
 
@@ -134,7 +134,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(
 				consuptionRateInMTPerHour, travelTimeInHours);
 
-		// Total additional fuel requirements to be served by the fuel choice (LNG or base fuel).
+		// Total additional fuel requirements to be served by the fuel choice
+		// (LNG or base fuel).
 		final long routeFuelConsumptionInMT = Calculator.quantityFromRateTime(
 				routeCostProvider.getRouteFuelUsage(options.getRoute(),
 						vesselClass), additionalRouteTimeInHours);
@@ -188,6 +189,15 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 							FuelUnit.MT, diffInMT);
 				}
 			}
+
+			final long pilotLightRateINMTPerHour = vesselClass
+					.getPilotLightRate();
+			final long pilotLightConsumptionInMT = Calculator
+					.quantityFromRateTime(pilotLightRateINMTPerHour,
+							travelTimeInHours + additionalRouteTimeInHours);
+			output.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT,
+					pilotLightConsumptionInMT);
+
 		} else {
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 0);
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT, 0);
@@ -195,10 +205,12 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
 			output.setFuelConsumption(FuelComponent.Base, FuelUnit.MT,
 					requiredConsumptionInMT + routeFuelConsumptionInMT);
+			output.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, 0);
 		}
 
 		final long idleNBORateInM3PerHour = vesselClass
 				.getIdleNBORate(vesselState);
+
 		if (options.useNBOForIdle()) {
 			final long nboProvidedInM3 = Calculator.quantityFromRateTime(
 					idleNBORateInM3PerHour, idleTimeInHours);
@@ -210,12 +222,22 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT,
 					nboProvidedInMT);
 			output.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, 0);
+
+			final long idlePilotLightRateINMTPerHour = vesselClass
+					.getIdlePilotLightRate();
+			final long idlePilotLightConsumptionInMT = Calculator
+					.quantityFromRateTime(idlePilotLightRateINMTPerHour,
+							idleTimeInHours);
+			output.setFuelConsumption(FuelComponent.IdlePilotLight,
+					FuelUnit.MT, idlePilotLightConsumptionInMT);
+
 		} else {
 			final long idleRateInMTPerHour = vesselClass
 					.getIdleConsumptionRate(vesselState);
 
 			long idleConsumptionInMT = Calculator.quantityFromRateTime(
 					idleRateInMTPerHour, idleTimeInHours);
+
 			if (options.useNBOForTravel()) {
 
 				// Run down boil off after travel. On ballast voyages running on
@@ -247,6 +269,18 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 						minHeelInM3);
 				output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT,
 						minHeelInMT);
+
+				final long idlePilotLightRateINMTPerHour = vesselClass
+						.getIdlePilotLightRate();
+				final long idlePilotLightConsumptionInMT = Calculator
+						.quantityFromRateTime(idlePilotLightRateINMTPerHour,
+								deltaTimeInHours);
+				output.setFuelConsumption(FuelComponent.IdlePilotLight,
+						FuelUnit.MT, idlePilotLightConsumptionInMT);
+
+			} else {
+				output.setFuelConsumption(FuelComponent.IdlePilotLight,
+						FuelUnit.MT, 0);
 			}
 
 			if (idleConsumptionInMT > 0) {
@@ -353,6 +387,10 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 						baseFuelPricePerMT);
 				details.setFuelUnitPrice(FuelComponent.IdleBase,
 						baseFuelPricePerMT);
+				details.setFuelUnitPrice(FuelComponent.PilotLight,
+						baseFuelPricePerMT);
+				details.setFuelUnitPrice(FuelComponent.IdlePilotLight,
+						baseFuelPricePerMT);
 
 			}
 		}
@@ -435,6 +473,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			assert (loadVolumeInM3 <= upperLoadLimit);
 			assert (dischargeVolumeInM3 <= maxDischargeVolume);
 
+			// TODO: Make these exceptions more informative!
+
 			// Check the bounds
 			if (loadVolumeInM3 < minLoadVolume) {
 				// problem
@@ -510,6 +550,16 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				.costFromConsumption(
 						fuelConsumptions[FuelComponent.IdleBase.ordinal()],
 						baseFuelPricePerMT));
+		
+		voyagePlan.setTotalFuelCost(FuelComponent.PilotLight, Calculator
+				.costFromConsumption(
+						fuelConsumptions[FuelComponent.PilotLight.ordinal()],
+						baseFuelPricePerMT));
+		voyagePlan.setTotalFuelCost(FuelComponent.IdlePilotLight, Calculator
+				.costFromConsumption(
+						fuelConsumptions[FuelComponent.IdlePilotLight.ordinal()],
+						baseFuelPricePerMT));
+
 
 		/**
 		 * The opportunity cost of burning a unit of LNG for fuel; it doesn't

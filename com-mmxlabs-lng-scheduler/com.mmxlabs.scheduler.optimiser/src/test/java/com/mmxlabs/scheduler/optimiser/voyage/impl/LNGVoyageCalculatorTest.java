@@ -1041,6 +1041,10 @@ public class LNGVoyageCalculatorTest {
 				FuelComponent.IdleNBO.getDefaultFuelUnit(), 50000);
 		details.setFuelConsumption(FuelComponent.IdleBase,
 				FuelComponent.IdleBase.getDefaultFuelUnit(), 60000);
+		details.setFuelConsumption(FuelComponent.PilotLight,
+				FuelComponent.PilotLight.getDefaultFuelUnit(), 70000);
+		details.setFuelConsumption(FuelComponent.IdlePilotLight,
+				FuelComponent.IdlePilotLight.getDefaultFuelUnit(), 80000);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -1071,13 +1075,17 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setFuelConsumption(FuelComponent.FBO, 40000);
 		expectedPlan.setFuelConsumption(FuelComponent.IdleNBO, 50000);
 		expectedPlan.setFuelConsumption(FuelComponent.IdleBase, 60000);
+		expectedPlan.setFuelConsumption(FuelComponent.PilotLight, 70000);
+		expectedPlan.setFuelConsumption(FuelComponent.IdlePilotLight, 80000);
 
 		expectedPlan.setTotalFuelCost(FuelComponent.Base, 20000);
 		expectedPlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 40000);
-		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 120000);
 		expectedPlan.setTotalFuelCost(FuelComponent.NBO, 60000);
 		expectedPlan.setTotalFuelCost(FuelComponent.FBO, 80000);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleNBO, 100000);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 120000);
+		expectedPlan.setTotalFuelCost(FuelComponent.PilotLight, 140000);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdlePilotLight, 160000);
 
 		// TODO: Check
 		expectedPlan.setDischargeVolume(30000l);
@@ -1129,6 +1137,10 @@ public class LNGVoyageCalculatorTest {
 				FuelComponent.IdleNBO.getDefaultFuelUnit(), 50);
 		details.setFuelConsumption(FuelComponent.IdleBase,
 				FuelComponent.IdleBase.getDefaultFuelUnit(), 60);
+		details.setFuelConsumption(FuelComponent.PilotLight,
+				FuelComponent.PilotLight.getDefaultFuelUnit(), 70);
+		details.setFuelConsumption(FuelComponent.IdlePilotLight,
+				FuelComponent.IdlePilotLight.getDefaultFuelUnit(), 80);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -1202,6 +1214,10 @@ public class LNGVoyageCalculatorTest {
 				FuelComponent.IdleNBO.getDefaultFuelUnit(), 50000);
 		details1.setFuelConsumption(FuelComponent.IdleBase,
 				FuelComponent.IdleBase.getDefaultFuelUnit(), 60000);
+		details1.setFuelConsumption(FuelComponent.PilotLight,
+				FuelComponent.PilotLight.getDefaultFuelUnit(), 70000);
+		details1.setFuelConsumption(FuelComponent.IdlePilotLight,
+				FuelComponent.IdlePilotLight.getDefaultFuelUnit(), 80000);
 
 		final VoyageDetails<Object> details2 = new VoyageDetails<Object>();
 		final VoyageOptions options2 = new VoyageOptions();
@@ -1220,6 +1236,10 @@ public class LNGVoyageCalculatorTest {
 				FuelComponent.IdleNBO.getDefaultFuelUnit(), 110000);
 		details2.setFuelConsumption(FuelComponent.IdleBase,
 				FuelComponent.IdleBase.getDefaultFuelUnit(), 120000);
+		details2.setFuelConsumption(FuelComponent.PilotLight,
+				FuelComponent.PilotLight.getDefaultFuelUnit(), 130000);
+		details2.setFuelConsumption(FuelComponent.IdlePilotLight,
+				FuelComponent.IdlePilotLight.getDefaultFuelUnit(), 140000);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
 
@@ -1250,6 +1270,8 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setFuelConsumption(FuelComponent.FBO, 140000);
 		expectedPlan.setFuelConsumption(FuelComponent.IdleNBO, 160000);
 		expectedPlan.setFuelConsumption(FuelComponent.IdleBase, 180000);
+		expectedPlan.setFuelConsumption(FuelComponent.PilotLight, 200000);
+		expectedPlan.setFuelConsumption(FuelComponent.IdlePilotLight, 220000);
 
 		expectedPlan.setTotalFuelCost(FuelComponent.Base, 160000);
 		expectedPlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 200000);
@@ -1257,6 +1279,8 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setTotalFuelCost(FuelComponent.FBO, 280000);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleNBO, 320000);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 360000);
+		expectedPlan.setTotalFuelCost(FuelComponent.PilotLight, 400000);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdlePilotLight, 440000);
 
 		expectedPlan.setDischargeVolume(3000000l);
 		expectedPlan.setLoadVolume(3420000l);
