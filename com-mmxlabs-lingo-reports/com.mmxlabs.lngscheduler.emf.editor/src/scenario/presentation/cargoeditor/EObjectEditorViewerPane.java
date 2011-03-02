@@ -63,82 +63,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	private final Map<EStructuralFeature, IFeatureEditor> featureEditorsByFeature = new HashMap<EStructuralFeature, IFeatureEditor>();
 
 	private final Map<EDataType, IFeatureEditor> featureEditorsByAttributeType = new HashMap<EDataType, IFeatureEditor>();
-	private IFeatureEditor defaultFeatureEditor = new IFeatureEditor() {
-		@Override
-		public IFeatureManipulator getFeatureManipulator(
-				final List<EReference> path, final EStructuralFeature field) {
-
-			final EAttribute attribute = (EAttribute) field;
-			final EDataType fieldType = attribute.getEAttributeType();
-
-			final EFactory factory = fieldType.getEPackage()
-					.getEFactoryInstance();
-
-			return new IFeatureManipulator() {
-				@Override
-				public String getStringValue(EObject o) {
-					if (o == null)
-						return "";
-					for (final EReference ref : path) {
-						o = (EObject) o.eGet(ref);
-						if (o == null)
-							return "";
-					}
-					Object value = o.eGet(field);
-					if (value == null)
-						return "";
-					return value.toString();
-				}
-
-				@Override
-				public void setFromEditorValue(EObject o, final Object value) {
-					assert value instanceof String;
-					final String vString = (String) value;
-
-					for (final EReference ref : path) {
-						o = (EObject) o.eGet(ref);
-						if (o == null)
-							return;
-					}
-					// TODO use EMF edit commands here, because doing this does
-					// not appear to work nicely
-					try {
-						Object eValue = factory.createFromString(fieldType,
-								vString);
-						part.getEditingDomain()
-								.getCommandStack()
-								.execute(
-										part.getEditingDomain().createCommand(
-												SetCommand.class,
-												new CommandParameter(o, field,
-														eValue)));
-					} catch (Exception ex) {
-
-					}
-				}
-
-				@Override
-				public boolean canModify(final EObject row) {
-					return true;
-				}
-
-				@Override
-				public CellEditor createCellEditor(final Composite parent) {
-					return new TextCellEditor(parent);
-				}
-
-				@Override
-				public Object getEditorValue(EObject row) {
-					return getStringValue(row);
-				}
-			};
-		}
-	};
+	private final IFeatureEditor defaultFeatureEditor;
 
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
 			final ScenarioEditor part) {
 		super(page, part);
 		this.part = part;
+		defaultFeatureEditor = new DefaultAttributeEditor(
+				part.getEditingDomain());
 	}
 
 	@Override
@@ -197,7 +129,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				final IFeatureManipulator manipulator = (IFeatureManipulator) col
 						.getData(FEATURE_MANIPULATOR_KEY);
 				return manipulator.getEditorValue((EObject) row);
-
 			}
 
 			@Override
@@ -276,7 +207,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		String suffix = "";
 		for (final EReference ref : path) {
-			suffix = " of " + ref.getName() + suffix;
+			suffix = " of " + unmangle(ref.getName()) + suffix;
 		}
 
 		// Add columns for all attributes
@@ -320,12 +251,31 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		}
 	}
 
+	private String unmangle(final String name) {
+		final StringBuilder sb = new StringBuilder();
+		boolean lastWasLower = true;
+		boolean firstChar = true;
+		for (final char c : name.toCharArray()) {
+			if (firstChar) {
+				sb.append(Character.toUpperCase(c));
+				firstChar = false;
+			} else {
+				if (lastWasLower && Character.isUpperCase(c))
+					sb.append(" ");
+				lastWasLower = Character.isLowerCase(c);
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
 	private void createColumn(final Table table,
 			final LinkedList<EReference> path, final EStructuralFeature field,
 			final IFeatureEditor editor, final String suffix) {
 		final TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setResizable(true);
-		column.setText(field.getName() + suffix);
+		
+		column.setText(unmangle(field.getName()) + suffix);
 
 		tableColumns.put(column.getText(), column);
 
