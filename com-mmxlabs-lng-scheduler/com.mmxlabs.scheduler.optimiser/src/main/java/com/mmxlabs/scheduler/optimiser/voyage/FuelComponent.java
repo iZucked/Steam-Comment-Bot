@@ -41,7 +41,19 @@ public enum FuelComponent {
 	/**
 	 * Idle time base fuel use
 	 */
-	IdleBase(FuelUnit.MT);
+	IdleBase(FuelUnit.MT),
+
+	/**
+	 * Some vessels require a pilot light when running on base fuel only. This
+	 * tracks use during travel times.
+	 */
+	PilotLight(FuelUnit.MT),
+
+	/**
+	 * Some vessels require a pilot light when running on base fuel only. This
+	 * tracks use during idle times.
+	 */
+	IdlePilotLight(FuelUnit.MT);
 
 	private final FuelUnit fuelUnit;
 
