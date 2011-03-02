@@ -188,7 +188,8 @@ public class LNGScenarioTransformer {
 		buildDistances(builder, portAssociation, allPorts, portIndices,
 				vesselAssociations.getFirst());
 
-		buildCargoes(builder, portAssociation, marketAssociation, vesselAssociations.getSecond(), entities);
+		buildCargoes(builder, portAssociation, marketAssociation,
+				vesselAssociations.getSecond(), entities);
 
 		buildCharterOuts(builder, portAssociation,
 				vesselAssociations.getFirst(), vesselAssociations.getSecond(),
@@ -332,8 +333,9 @@ public class LNGScenarioTransformer {
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);
 
-			final ICargo cargo = builder.createCargo(eCargo.getId(), load, discharge);
-			
+			final ICargo cargo = builder.createCargo(eCargo.getId(), load,
+					discharge);
+
 			if (!eCargo.getAllowedVessels().isEmpty()) {
 				HashSet<IVessel> vesselsForCargo = new HashSet<IVessel>();
 				for (final Vessel v : eCargo.getAllowedVessels()) {
@@ -408,7 +410,8 @@ public class LNGScenarioTransformer {
 		if (scenario.getCanalModel() != null) {
 			for (Canal canal : scenario.getCanalModel().getCanals()) {
 				final String name = canal.getName();
-				builder.setDefaultRouteCost(name, Calculator.scale(canal.getDefaultCost()));
+				builder.setDefaultRouteCost(name,
+						Calculator.scale(canal.getDefaultCost()));
 
 				for (final DistanceLine dl : canal.getDistanceModel()
 						.getDistances()) {
@@ -423,12 +426,18 @@ public class LNGScenarioTransformer {
 					final IVesselClass vc = vesselAssociation.lookup(classCost
 							.getVesselClass());
 					builder.setVesselClassRouteCost(name, vc,
-							VesselState.Laden, Calculator.scale(classCost.getLadenCost()));
+							VesselState.Laden,
+							Calculator.scale(classCost.getLadenCost()));
 					builder.setVesselClassRouteCost(name, vc,
-							VesselState.Ballast, Calculator.scale(classCost.getUnladenCost()));
-					
-					builder.setVesselClassRouteTimeAndFuel(name, vc,
-							classCost.getTransitTime(), Calculator.scale(classCost.getTransitFuel()));
+							VesselState.Ballast,
+							Calculator.scale(classCost.getUnladenCost()));
+
+					builder.setVesselClassRouteTimeAndFuel(
+							name,
+							vc,
+							classCost.getTransitTime(),
+							Calculator.scale(classCost.getTransitFuel()
+									/ classCost.getTransitTime()));
 				}
 			}
 		}
@@ -553,23 +562,25 @@ public class LNGScenarioTransformer {
 		if (pat == null) {
 			return builder.createStartEndRequirement();
 		}
-		
+
 		if (pat.isSetPort() && pat.isSetStartTime()) {
 			final int startHours = convertTime(pat.getStartTime());
-			final int endHours = pat.isSetEndTime() ? convertTime(pat.getEndTime()) : startHours + 1;
-			final ITimeWindow window = builder.createTimeWindow(startHours, endHours);
+			final int endHours = pat.isSetEndTime() ? convertTime(pat
+					.getEndTime()) : startHours + 1;
+			final ITimeWindow window = builder.createTimeWindow(startHours,
+					endHours);
 			return builder.createStartEndRequirement(
-					portAssociation.lookup(pat.getPort()),
-					window);
+					portAssociation.lookup(pat.getPort()), window);
 		} else if (pat.isSetPort()) {
 			return builder.createStartEndRequirement(portAssociation.lookup(pat
 					.getPort()));
 		} else if (pat.isSetStartTime()) {
 			final int startHours = convertTime(pat.getStartTime());
-			final int endHours = pat.isSetEndTime() ? convertTime(pat.getEndTime()) : startHours + 1;
-			final ITimeWindow window = builder.createTimeWindow(startHours, endHours);
-			return builder
-					.createStartEndRequirement(window);
+			final int endHours = pat.isSetEndTime() ? convertTime(pat
+					.getEndTime()) : startHours + 1;
+			final ITimeWindow window = builder.createTimeWindow(startHours,
+					endHours);
+			return builder.createStartEndRequirement(window);
 		} else {
 			return builder.createStartEndRequirement();
 		}
