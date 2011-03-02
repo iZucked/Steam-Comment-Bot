@@ -153,7 +153,7 @@ public interface VesselClassCost extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * The amount of base fuel or base fuel equivalent, in metric tonnes (MT), consumed by vessels of this class during their passage through the canal.
+	 * The amount of base fuel or base fuel equivalent, in metric tonnes per day (MT/day), consumed by vessels of this class during their passage through the canal. The total fuel consumption for a journey through the canal is then given by transitTime * (transitFuel / 24).
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Transit Fuel</em>' attribute.
 	 * @see #setTransitFuel(float)

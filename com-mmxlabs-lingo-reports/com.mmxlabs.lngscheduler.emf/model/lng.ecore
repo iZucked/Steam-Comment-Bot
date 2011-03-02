@@ -325,7 +325,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitFuel" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="50">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="The amount of base fuel or base fuel equivalent, in metric tonnes (MT), consumed by vessels of this class during their passage through the canal."/>
+          <details key="documentation" value="The amount of base fuel or base fuel equivalent, in metric tonnes per day (MT/day), consumed by vessels of this class during their passage through the canal. The total fuel consumption for a journey through the canal is then given by transitTime * (transitFuel / 24)."/>
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
