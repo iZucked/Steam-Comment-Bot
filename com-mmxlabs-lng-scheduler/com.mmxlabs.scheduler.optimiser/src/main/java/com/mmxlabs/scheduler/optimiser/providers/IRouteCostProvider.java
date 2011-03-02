@@ -34,8 +34,9 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	/**
 	 * Gets the extra fuel usage, in base-fuel-equivalent scaled MT per hour
 	 * (see {@link Calculator#ScaleFactor}), required for vessels of class
-	 * {@code vesselClass} to travel via {@code route}. The total fuel used is then
-	 * this value multiplied by {@link #getRouteTransitTime(String, IVesselClass)}.
+	 * {@code vesselClass} to travel via {@code route}. The total fuel used is
+	 * then this value multiplied by
+	 * {@link #getRouteTransitTime(String, IVesselClass)}.
 	 * 
 	 * @param route
 	 *            route traveled
