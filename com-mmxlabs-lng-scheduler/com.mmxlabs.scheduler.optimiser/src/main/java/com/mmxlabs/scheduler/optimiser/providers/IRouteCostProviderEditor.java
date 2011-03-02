@@ -53,10 +53,10 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param transitTimeInHours
 	 *            the amount of extra travel time required to get through the
 	 *            canal, in hours.
-	 * @param baseFuelInScaledMT
+	 * @param baseFuelInScaledMTPerHour
 	 *            the amount of base fuel spent while traversing the canal, in
-	 *            scaled MT
+	 *            scaled MT / hour
 	 */
 	void setRouteTimeAndFuel(final String routeName, final IVesselClass vc,
-			final int transitTimeInHours, final long baseFuelInScaledMT);
+			final int transitTimeInHours, final long baseFuelInScaledMTPerHour);
 }
