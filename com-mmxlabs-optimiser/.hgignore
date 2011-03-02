@@ -18,3 +18,5 @@ syntax: regexp
 ^optimiser-core/META-INF$
 syntax: regexp
 ^optimiser-common/META-INF$
+syntax: regexp
+^\.project$
