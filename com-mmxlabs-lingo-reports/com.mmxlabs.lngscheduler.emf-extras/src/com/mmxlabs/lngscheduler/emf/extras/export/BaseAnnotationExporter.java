@@ -95,7 +95,7 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 			final long consumption, final long cost) {
 		final FuelQuantity fq = factory.createFuelQuantity();
 
-		fq.setQuantity(consumption);
+		fq.setQuantity(consumption / Calculator.ScaleFactor);
 		fq.setTotalPrice(cost / Calculator.ScaleFactor);
 		fq.setUnitPrice(consumption == 0 ? 0 : cost / consumption); // TODO
 																	// float?
