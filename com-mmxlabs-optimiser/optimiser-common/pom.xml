@@ -85,7 +85,32 @@
 						</fileset>
 					</filesets>
 				</configuration>
-			</plugin>			
+			</plugin>
+			<!-- Use Tycho to install bundle with P2 metadata into local repo -->
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>tycho-p2-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>p2-metadata</id>
+						<phase>package</phase>
+						<goals>
+							<goal>p2-metadata</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>update-local-index</id>
+						<phase>install</phase>
+						<goals>
+							<goal>update-local-index</goal>
+						</goals>
+					</execution>
+
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
