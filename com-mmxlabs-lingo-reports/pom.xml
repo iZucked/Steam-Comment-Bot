@@ -168,7 +168,7 @@
 							packaging type. -->
 						<!-- See Tycho 520 (https://issues.sonatype.org/browse/TYCHO-520) -->
 						<!-- See Eclipse 313997 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=313997) -->
-<!-- 
+
 						<environment>
 							<os>macosx</os>
 							<ws>carbon</ws>
@@ -184,7 +184,7 @@
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
 						</environment>
--->
+
 					</environments>
 
 				</configuration>
