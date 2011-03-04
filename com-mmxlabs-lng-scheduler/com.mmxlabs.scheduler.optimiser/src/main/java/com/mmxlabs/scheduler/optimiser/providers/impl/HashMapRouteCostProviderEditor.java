@@ -15,27 +15,27 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 public class HashMapRouteCostProviderEditor implements
 		IRouteCostProviderEditor {
 
-	public HashMapRouteCostProviderEditor(String name, String defaultKey) {
+	public HashMapRouteCostProviderEditor(final String name, final String defaultKey) {
 		super();
 		this.name = name;
 		this.defaultKey = defaultKey;
 	}
 
 	final String name;
-	private Map<String, Map<IVesselClass, EnumMap<VesselState, Integer>>>
+	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Integer>>>
 		pricesByRouteClassAndState = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Integer>>>();
 	
-	private Map<String, Integer> defaultPrices = new HashMap<String, Integer>();
+	private final Map<String, Integer> defaultPrices = new HashMap<String, Integer>();
 	private final String defaultKey;
 	
-	private Map<String, Map<IVesselClass, Integer>> travelTimesByRouteAndClass =
+	private final Map<String, Map<IVesselClass, Integer>> travelTimesByRouteAndClass =
 		new HashMap<String, Map<IVesselClass, Integer>>();
-	private Map<String, Map<IVesselClass, Long>> baseFuelByRouteAndClass = 
+	private final Map<String, Map<IVesselClass, Long>> baseFuelByRouteAndClass = 
 		new HashMap<String, Map<IVesselClass, Long>>();
 	
 	@Override
-	public int getRouteCost(String route, IVesselClass vesselClass,
-			VesselState vesselState) {
+	public int getRouteCost(final String route, final IVesselClass vesselClass,
+			final VesselState vesselState) {
 		if (route.equals(defaultKey)) {
 			return 0;
 		}
@@ -72,17 +72,17 @@ public class HashMapRouteCostProviderEditor implements
 	public void setRouteCost(final String route, final IVesselClass vesselClass,
 			final VesselState vesselState, final int price) {
 		if (!pricesByRouteClassAndState.containsKey(route)) {
-			EnumMap<VesselState, Integer> single = new EnumMap<VesselState, Integer>(VesselState.class);
+			final EnumMap<VesselState, Integer> single = new EnumMap<VesselState, Integer>(VesselState.class);
 			single.put(vesselState, price);
-			HashMap<IVesselClass, EnumMap<VesselState, Integer>> byV = new HashMap<IVesselClass, EnumMap<VesselState, Integer>>();
+			final HashMap<IVesselClass, EnumMap<VesselState, Integer>> byV = new HashMap<IVesselClass, EnumMap<VesselState, Integer>>();
 			byV.put(vesselClass, single);
 			pricesByRouteClassAndState.put(route, byV);
 		} else {
-			Map<IVesselClass, EnumMap<VesselState, Integer>> byV = pricesByRouteClassAndState.get(route);
+			final Map<IVesselClass, EnumMap<VesselState, Integer>> byV = pricesByRouteClassAndState.get(route);
 			if (byV.containsKey(vesselClass)) {
 				byV.get(vesselClass).put(vesselState, price);
 			} else {
-				EnumMap<VesselState, Integer> single = new EnumMap<VesselState, Integer>(VesselState.class);
+				final EnumMap<VesselState, Integer> single = new EnumMap<VesselState, Integer>(VesselState.class);
 				single.put(vesselState, price);
 				byV.put(vesselClass, single);	
 			}
