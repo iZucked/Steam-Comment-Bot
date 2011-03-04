@@ -192,7 +192,7 @@ public class SimpleSchedulerTest {
 		final IInitialSequenceBuilder<ISequenceElement> sequenceBuilder = new ConstrainedInitialSequenceBuilder<ISequenceElement>(
 				constraintRegistry.getConstraintCheckerFactories());
 		final ISequences<ISequenceElement> initialSequences = sequenceBuilder
-				.createInitialSequences(data);
+				.createInitialSequences(data, null);
 
 		final OptimisationContext<ISequenceElement> context = new OptimisationContext<ISequenceElement>(
 				data, initialSequences, new ArrayList<String>(
