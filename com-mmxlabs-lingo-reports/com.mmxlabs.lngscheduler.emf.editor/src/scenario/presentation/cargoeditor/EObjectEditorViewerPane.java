@@ -7,9 +7,11 @@ package scenario.presentation.cargoeditor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.ViewerPane;
@@ -17,21 +19,16 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -64,6 +61,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	private final Map<EDataType, IFeatureEditor> featureEditorsByAttributeType = new HashMap<EDataType, IFeatureEditor>();
 	private final IFeatureEditor defaultFeatureEditor;
+	private Map<EClass, IFeatureEditor> multiFeatureEditorsByRefType = new HashMap<EClass, IFeatureEditor>();
+	private final Set<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
 
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
 			final ScenarioEditor part) {
@@ -144,10 +143,11 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 				if (modelObject != null) {
 					formatter.setFromEditorValue(modelObject, newValue);
-					viewer.refresh(modelObject, true, true);
+					// viewer.refresh(modelObject, true, true);
 
 					// TODO this doesn't work, no idea why not.
-					viewer.setSelection(new StructuredSelection(modelObject));
+					// viewer.setSelection(new
+					// StructuredSelection(modelObject));
 				}
 			}
 		});
@@ -228,9 +228,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		// Now handle contained objects
 		for (final EReference reference : eClass.getEAllReferences()) {
-			if (reference.isMany())
-				continue; // TODO handle multiple references.
-			if (reference.isContainment()) {
+			if (!reference.isMany() && reference.isContainment()) {
 				// contained objects get flattened out
 				final LinkedList<EReference> subPath = new LinkedList<EReference>(
 						path);
@@ -238,11 +236,17 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				createTableColumnsForEClassAtPath(table,
 						reference.getEReferenceType(), subPath);
 			} else {
-				// non-contained objects get an editor
 				IFeatureEditor editor = featureEditorsByFeature.get(reference);
+
+				// non-contained objects get an editor
 				if (editor == null) {
-					editor = featureEditorsByRefType.get(reference
-							.getEReferenceType());
+					if (reference.isMany()) {
+						editor = multiFeatureEditorsByRefType.get(reference
+								.getEReferenceType());
+					} else {
+						editor = featureEditorsByRefType.get(reference
+								.getEReferenceType());
+					}
 				}
 				if (editor != null) {
 					createColumn(table, path, reference, editor, suffix);
@@ -272,9 +276,13 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	private void createColumn(final Table table,
 			final LinkedList<EReference> path, final EStructuralFeature field,
 			final IFeatureEditor editor, final String suffix) {
+
+		if (ignoredFeatures.contains(field))
+			return;
+
 		final TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setResizable(true);
-		
+
 		column.setText(unmangle(field.getName()) + suffix);
 
 		tableColumns.put(column.getText(), column);
@@ -306,7 +314,16 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		featureEditorsByFeature.put(feature, editor);
 	}
 
+	public void setFeatureEditorForMultiReferenceType(
+			final EClass referenceType, final IFeatureEditor editor) {
+		multiFeatureEditorsByRefType.put(referenceType, editor);
+	}
+
 	public TableViewer getViewer() {
 		return viewer;
+	}
+
+	public void ignoreStructuralFeature(EStructuralFeature feature) {
+		ignoredFeatures.add(feature);
 	}
 }
