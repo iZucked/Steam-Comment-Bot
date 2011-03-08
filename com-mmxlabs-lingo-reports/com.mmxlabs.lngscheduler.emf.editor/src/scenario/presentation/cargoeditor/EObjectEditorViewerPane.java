@@ -107,7 +107,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		table.addListener(SWT.MeasureItem, new Listener() {
 			@Override
 			public void handleEvent(final Event event) {
-				event.height = 32;
+				event.height = 28;
 			}
 		});
 		
