@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor;
+package scenario.presentation.cargoeditor.widgets;
 
 import java.util.Calendar;
 
@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+
 
 /**
  * A popup composite which contains a date and time.

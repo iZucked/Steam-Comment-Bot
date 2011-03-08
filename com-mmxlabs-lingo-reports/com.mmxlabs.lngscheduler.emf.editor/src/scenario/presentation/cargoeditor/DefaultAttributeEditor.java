@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Text;
 
 import scenario.port.Port;
 import scenario.port.PortPackage;
+import scenario.presentation.cargoeditor.celleditors.DateTimeCellEditor;
 
 public class DefaultAttributeEditor implements IFeatureEditor {
 	private final EditingDomain editingDomain;

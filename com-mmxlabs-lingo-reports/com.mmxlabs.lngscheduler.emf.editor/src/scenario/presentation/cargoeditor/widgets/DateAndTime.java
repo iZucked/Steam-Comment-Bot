@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor;
+package scenario.presentation.cargoeditor.widgets;
 
 import java.util.Calendar;
 import java.util.TimeZone;

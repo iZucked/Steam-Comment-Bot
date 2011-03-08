@@ -1,7 +1,7 @@
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  */
-package scenario.presentation.cargoeditor;
+package scenario.presentation.cargoeditor.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
