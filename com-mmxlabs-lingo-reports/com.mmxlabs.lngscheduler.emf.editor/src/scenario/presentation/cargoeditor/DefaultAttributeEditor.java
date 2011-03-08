@@ -104,12 +104,18 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 			if (fieldType.equals(ecp.getEInt())
 					|| fieldType.equals(ecp.getELong())) {
 				final TextCellEditor result = new TextCellEditor(parent);
-
+				final Text control = (Text) result.getControl();
 				// checks on each keypress that the keypress triggered a number
-				((Text) result.getControl())
+				control
 						.addVerifyListener(new VerifyListener() {
 							public void verifyText(VerifyEvent e) {
-								e.doit = "0123456789".indexOf(e.text) >= 0;
+								final String s = control.getText() + e.text;
+								try {
+									int i = Integer.parseInt(s);
+									e.doit = true;
+								} catch (final NumberFormatException ex) {
+									e.doit = false;
+								}
 							}
 						});
 
@@ -118,6 +124,8 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 				return new TextCellEditor(parent);
 				// TODO add in date dialog editor, for example
 				// TODO how would that fit in with timezones at ports?
+			} else if (fieldType.equals(ecp.getEDate())) {
+				return new DateTimeCellEditor(parent);
 			} else {
 				return new TextCellEditor(parent);
 			}
