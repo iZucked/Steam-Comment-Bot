@@ -32,6 +32,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -101,6 +103,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		table.setLayout(layout);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		
+		table.addListener(SWT.MeasureItem, new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
+				event.height = 32;
+			}
+		});
+		
 		cellEditors.clear();
 		tableColumns.clear();
 		createTableColumns(table, path.get(path.size() - 1).getEReferenceType());
