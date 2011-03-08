@@ -151,11 +151,7 @@ public abstract class PopupComposite extends Composite {
 		for (int i = 0; i < comboEvents.length; i++)
 			this.addListener(comboEvents[i], listener);
 
-		int[] textEvents = { SWT.DefaultSelection, SWT.DragDetect, SWT.KeyDown,
-				SWT.KeyUp, SWT.MenuDetect, SWT.Modify, SWT.MouseDown,
-				SWT.MouseUp, SWT.MouseDoubleClick, SWT.MouseEnter,
-				SWT.MouseExit, SWT.MouseHover, SWT.MouseMove, SWT.MouseWheel,
-				SWT.Traverse, SWT.FocusIn, SWT.Verify };
+		int[] textEvents = { SWT.DefaultSelection, SWT.FocusIn, SWT.Selection };
 		for (int i = 0; i < textEvents.length; i++)
 			inline.addListener(textEvents[i], listener);
 
@@ -175,36 +171,6 @@ public abstract class PopupComposite extends Composite {
 		return SWT.NO_FOCUS | (style & mask);
 	}
 
-	/**
-	 * Adds the listener to the collection of listeners who will be notified
-	 * when the receiver's text is modified, by sending it one of the messages
-	 * defined in the <code>ModifyListener</code> interface.
-	 * 
-	 * @param listener
-	 *            the listener which should be notified
-	 * 
-	 * @exception IllegalArgumentException
-	 *                <ul>
-	 *                <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
-	 *                </ul>
-	 * @exception SWTException
-	 *                <ul>
-	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
-	 *                disposed</li>
-	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
-	 *                thread that created the receiver</li>
-	 *                </ul>
-	 * 
-	 * @see ModifyListener
-	 * @see #removeModifyListener
-	 */
-	public void addModifyListener(ModifyListener listener) {
-		checkWidget();
-		if (listener == null)
-			SWT.error(SWT.ERROR_NULL_ARGUMENT);
-		TypedListener typedListener = new TypedListener(listener);
-		addListener(SWT.Modify, typedListener);
-	}
 
 	/**
 	 * Adds the listener to the collection of listeners who will be notified
@@ -243,39 +209,6 @@ public abstract class PopupComposite extends Composite {
 		TypedListener typedListener = new TypedListener(listener);
 		addListener(SWT.Selection, typedListener);
 		addListener(SWT.DefaultSelection, typedListener);
-	}
-
-	/**
-	 * Adds the listener to the collection of listeners who will be notified
-	 * when the receiver's text is verified, by sending it one of the messages
-	 * defined in the <code>VerifyListener</code> interface.
-	 * 
-	 * @param listener
-	 *            the listener which should be notified
-	 * 
-	 * @exception IllegalArgumentException
-	 *                <ul>
-	 *                <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
-	 *                </ul>
-	 * @exception SWTException
-	 *                <ul>
-	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
-	 *                disposed</li>
-	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
-	 *                thread that created the receiver</li>
-	 *                </ul>
-	 * 
-	 * @see VerifyListener
-	 * @see #removeVerifyListener
-	 * 
-	 * @since 3.3
-	 */
-	public void addVerifyListener(VerifyListener listener) {
-		checkWidget();
-		if (listener == null)
-			SWT.error(SWT.ERROR_NULL_ARGUMENT);
-		TypedListener typedListener = new TypedListener(listener);
-		addListener(SWT.Verify, typedListener);
 	}
 
 	void arrowEvent(Event event) {
@@ -716,12 +649,24 @@ public abstract class PopupComposite extends Composite {
 		return popup.getVisible();
 	}
 
+	private boolean containsFocusControl(final Composite c) {
+		if (c.isFocusControl()) return true;
+		for (final Control ch : c.getChildren()) {
+			if (ch instanceof Composite)  {
+				if (containsFocusControl((Composite) ch)) return true;
+			}
+			else if (ch.isFocusControl()) return true;
+		}
+		return false;
+	}
+	
 	public boolean isFocusControl() {
 		checkWidget();
 		if (inline.isFocusControl() || arrow.isFocusControl()
-				/*|| list.isFocusControl() */ || popup.isFocusControl()) {
+				/*|| list.isFocusControl() */ || containsFocusControl(popup)) {
 			return true;
 		}
+		
 		return super.isFocusControl();
 	}
 
