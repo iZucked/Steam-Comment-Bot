@@ -42,6 +42,7 @@
       <plugin id="com.mmxlabs.jobmanager.ui"/>
       <plugin id="com.mmxlabs.lngscheduler.emf"/>
       <plugin id="com.mmxlabs.lngscheduler.emf.edit"/>
+      <plugin id="com.mmxlabs.lngscheduler.emf-extras"/>
       <plugin id="com.mmxlabs.lngscheduler.emf.editor"/>
       <plugin id="com.mmxlabs.optimiser.common"/>
       <plugin id="com.mmxlabs.optimiser.core"/>
@@ -59,14 +60,14 @@
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.filebuffers"/>
       <plugin id="org.eclipse.core.filesystem"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.macosx" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.macosx" fragment="true" os="macosx" arch="*"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true" os="linux" arch="x86"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true" os="linux" arch="x86_64"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true" os="win32" arch="x86"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true" os="win32" arch="x86_64"/>
       <plugin id="org.eclipse.core.jobs"/>
       <plugin id="org.eclipse.core.resources"/>
-      <plugin id="org.eclipse.core.resources.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.core.resources.win32.x86" fragment="true" os="win32" arch="x86"/>
       <plugin id="org.eclipse.core.runtime"/>
       <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
       <plugin id="org.eclipse.ecf"/>
@@ -85,13 +86,13 @@
       <plugin id="org.eclipse.equinox.common"/>
       <plugin id="org.eclipse.equinox.ds"/>
       <plugin id="org.eclipse.equinox.launcher"/>
-      <plugin id="org.eclipse.equinox.launcher.carbon.macosx" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.cocoa.macosx" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.linux.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.win32.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.win32.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.equinox.launcher.carbon.macosx" fragment="true" os="macosx" ws="carbon" arch="x86"/>
+      <plugin id="org.eclipse.equinox.launcher.cocoa.macosx" fragment="true" os="macosx" ws="cocoa" arch="x86"/>
+      <plugin id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true" os="macosx" ws="cocoa" arch="x86_64"/>
+      <plugin id="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true" os="linux" ws="gtk" arch="x86"/>
+      <plugin id="org.eclipse.equinox.launcher.gtk.linux.x86_64" fragment="true" os="linux" ws="gtk" arch="x86_64"/>
+      <plugin id="org.eclipse.equinox.launcher.win32.win32.x86" fragment="true" os="win32" ws="win32" arch="x86"/>
+      <plugin id="org.eclipse.equinox.launcher.win32.win32.x86_64" fragment="true" os="win32" ws="win32" arch="x86_64"/>
       <plugin id="org.eclipse.equinox.p2.core"/>
       <plugin id="org.eclipse.equinox.p2.engine"/>
       <plugin id="org.eclipse.equinox.p2.metadata"/>
@@ -100,8 +101,8 @@
       <plugin id="org.eclipse.equinox.preferences"/>
       <plugin id="org.eclipse.equinox.registry"/>
       <plugin id="org.eclipse.equinox.security"/>
-      <plugin id="org.eclipse.equinox.security.macosx" fragment="true"/>
-      <plugin id="org.eclipse.equinox.security.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.equinox.security.macosx" fragment="true" os="macosx" arch="*"/>
+      <plugin id="org.eclipse.equinox.security.win32.x86" fragment="true" os="win32" arch="x86"/>
       <plugin id="org.eclipse.equinox.servletbridge.extensionbundle" fragment="true"/>
       <plugin id="org.eclipse.equinox.simpleconfigurator"/>
       <plugin id="org.eclipse.equinox.transforms.hook" fragment="true"/>
@@ -117,18 +118,18 @@
       <plugin id="org.eclipse.osgi"/>
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.swt"/>
-      <plugin id="org.eclipse.swt.carbon.macosx" fragment="true"/>
-      <plugin id="org.eclipse.swt.cocoa.macosx" fragment="true"/>
-      <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.carbon.macosx" fragment="true" os="macosx" ws="carbon" arch="x86"/>
+      <plugin id="org.eclipse.swt.cocoa.macosx" fragment="true" os="macosx" ws="cocoa" arch="x86"/>
+      <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true" os="macosx" ws="cocoa" arch="x86_64"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true" os="linux" ws="gtk" arch="x86"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true" os="linux" ws="gtk" arch="x86_64"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true" os="win32" ws="win32" arch="x86"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true" os="win32" ws="win32" arch="x86_64"/>
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
       <plugin id="org.eclipse.text"/>
       <plugin id="org.eclipse.ui"/>
-      <plugin id="org.eclipse.ui.cocoa" fragment="true"/>
+      <plugin id="org.eclipse.ui.cocoa" fragment="true" os="macosx" ws="cocoa" arch="*"/>
       <plugin id="org.eclipse.ui.editors"/>
       <plugin id="org.eclipse.ui.forms"/>
       <plugin id="org.eclipse.ui.ide"/>

@@ -59,6 +59,7 @@
 		<!-- Proper plugin projects -->
 		<module>com.mmxlabs.demo.app</module>
 		<module>com.mmxlabs.lngscheduler.emf</module>
+		<module>com.mmxlabs.lngscheduler.emf-extras</module>
 		<module>com.mmxlabs.lngscheduler.emf.edit</module>
 		<module>com.mmxlabs.lngscheduler.emf.editor</module>
 		<module>com.mmxlabs.jobmanager</module>
@@ -71,37 +72,18 @@
 	<!-- Pom dependencies to "consider". These need to be OSGi bundles for the 
 		P2 resolver to correctly pick them up. Ideally these would be installed in 
 		a p2 repository which can be specified in the target definition. -->
-        <!-- Tycho-570 (https://issues.sonatype.org/browse/TYCHO-570) means these are not correctly
-                being used. -->
+	<!-- Tycho-570 (https://issues.sonatype.org/browse/TYCHO-570) means these 
+		are not correctly being used. -->
 	<dependencies>
 
+
 		<dependency>
-			<groupId>com.mmxlabs.scheduler</groupId>
-			<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math</artifactId>
+			<version>2.1</version>
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.mmxlabs.optimiser</groupId>
-			<artifactId>optimiser-common</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mmxlabs.optimiser</groupId>
-			<artifactId>optimiser-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mmxlabs.optimiser</groupId>
-			<artifactId>optimiser-lso</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
 
 	</dependencies>
 
@@ -182,10 +164,11 @@
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
-						<!-- Currently unable to build for mac (on linux) using eclipse-repository packaging type. -->
+						<!-- Currently unable to build for mac (on linux) using eclipse-repository 
+							packaging type. -->
 						<!-- See Tycho 520 (https://issues.sonatype.org/browse/TYCHO-520) -->
 						<!-- See Eclipse 313997 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=313997) -->
-<!-- 
+
 						<environment>
 							<os>macosx</os>
 							<ws>carbon</ws>
@@ -201,7 +184,7 @@
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
 						</environment>
--->
+
 					</environments>
 
 				</configuration>
@@ -271,12 +254,6 @@
 			<id>eclipse-3.6</id>
 			<url>http://download.eclipse.org/eclipse/updates/3.6</url>
 			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>springsource-3.5</id>
-			<layout>p2</layout>
-			<url>http://dist.springsource.com/release/TOOLS/update/e3.5</url>
 		</repository>
 
 	</repositories>
