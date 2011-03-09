@@ -45,7 +45,7 @@ public abstract class PopupComposite extends Composite {
 	Font font;
 	Shell _shell;
 
-	static final String PACKAGE_PREFIX = "scenario.presentation.cargoeditor."; //$NON-NLS-1$
+	static final String PACKAGE_PREFIX = "scenario.presentation.cargoeditor.widgets."; //$NON-NLS-1$
 
 	/**
 	 * Constructs a new instance of this class given its parent and a style

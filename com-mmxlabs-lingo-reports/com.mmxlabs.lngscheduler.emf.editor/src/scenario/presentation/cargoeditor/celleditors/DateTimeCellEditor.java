@@ -14,8 +14,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 
 import scenario.presentation.cargoeditor.widgets.DatePopup;
 
@@ -61,12 +59,12 @@ public class DateTimeCellEditor extends CellEditor {
 			selectionListener = new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					markDirty();					
+					markDirty();			
 				}
 
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
-					
+					markDirty();
 				}						
 			};
 		}

@@ -118,6 +118,7 @@ import scenario.presentation.cargoeditor.DefaultMultiReferenceEditor;
 import scenario.presentation.cargoeditor.DefaultReferenceEditor;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
+import scenario.presentation.cargoeditor.SlotVolumesFeatureEditor;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
@@ -1032,6 +1033,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						}
 					}, getEditingDomain(), true);
 
+			final SlotVolumesFeatureEditor slotVolumesEditor = new SlotVolumesFeatureEditor(
+					getEditingDomain());
+
 			// Create a page for the cargo editor
 			{
 				final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
@@ -1047,6 +1051,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				cargoPane.setFeatureEditorForMultiReferenceType(
 						PortPackage.eINSTANCE.getPort(), multiPortEditor);
 
+				// hackishly set the min quantity editor to a hackish slot volume editor
+				cargoPane.setFeatureEditorForFeature(CargoPackage.eINSTANCE.getSlot_MinQuantity(), slotVolumesEditor);
+				// hackishly ignore the max quantity field entirely.
+				cargoPane.ignoreStructuralFeature(CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+				
 				final List<EReference> path = new LinkedList<EReference>();
 
 				path.add(ScenarioPackage.eINSTANCE.getScenario_CargoModel());

@@ -5,15 +5,21 @@
 package scenario.presentation.cargoeditor.widgets;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * A widget which allows the user to select a range by choosing a lower and
@@ -61,31 +67,29 @@ public class Range extends Composite {
 
 	private SelectionListener selectionListener = null;
 
-	private boolean inSelectionListener = false;
-	
 	private SelectionListener getSelectionListener() {
 		if (selectionListener == null) {
 			selectionListener = new SelectionListener() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					inSelectionListener = true;
+
 					if (e.widget == minSpinner) {
 						setLowerValue(minSpinner.getSelection());
 					} else if (e.widget == maxSpinner) {
 						setUpperValue(maxSpinner.getSelection());
 					}
-					inSelectionListener = false;
+
 				}
 
 				@Override
 				public void widgetDefaultSelected(final SelectionEvent e) {
-					inSelectionListener = true;
+
 					if (e.widget == minSpinner) {
 						setLowerValue(minSpinner.getSelection());
 					} else if (e.widget == maxSpinner) {
 						setUpperValue(maxSpinner.getSelection());
 					}
-					inSelectionListener = false;
+
 				}
 			};
 		}
@@ -94,17 +98,81 @@ public class Range extends Composite {
 
 	public Range(Composite parent, int style) {
 		super(parent, style);
-		final RowLayout layout = new RowLayout(SWT.HORIZONTAL);
-		layout.marginBottom = layout.marginTop = layout.marginLeft = layout.marginRight = 0;
+		final FillLayout layout = new FillLayout(SWT.HORIZONTAL);
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		layout.spacing = 1;
+
+		layout.spacing = 1;
+		setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		setLayout(layout);
 		minSpinner = new Spinner(this, style);
 		maxSpinner = new Spinner(this, style);
-//		minSpinner.setSize(32, 16);
-//		minSpinner.setSize(32, 16);
+
 		maxSpinner.addSelectionListener(getSelectionListener());
 		minSpinner.addSelectionListener(getSelectionListener());
-		pack();
+
+		final Listener focusListener = new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
+				if (event.type == SWT.FocusIn) {
+					handleFocus(SWT.FocusIn);
+				}
+			}
+
+		};
+
+		maxSpinner.addListener(SWT.FocusIn, focusListener);
+		minSpinner.addListener(SWT.FocusIn, focusListener);
+
 		setSpinnerLimits();
+	}
+
+	boolean hasFocus = false;
+
+	private Listener filter = new Listener() {
+		public void handleEvent(Event event) {
+			if (((Control) event.widget).getShell() == getShell())
+				handleFocus(SWT.FocusOut);
+		}
+	};
+
+	protected void handleFocus(int type) {
+		if (isDisposed()) return;
+		switch (type) {
+		case SWT.FocusIn: {
+			if (hasFocus)
+				return;
+			hasFocus = true;
+			final Display display = getDisplay();
+			display.removeFilter(SWT.FocusIn, filter);
+			display.addFilter(SWT.FocusIn, filter);
+
+			final Event e = new Event();
+			e.widget = this;
+			notifyListeners(SWT.FocusIn, e);
+		}
+			break;
+		case SWT.FocusOut: {
+			if (!hasFocus)
+				return;
+			final Display display = getDisplay();
+			final Control focus = display.getFocusControl();
+			if (focus == maxSpinner || focus == minSpinner)
+				return;
+			hasFocus = false;
+			display.removeFilter(SWT.FocusIn, filter);
+			final Event e = new Event();
+			e.widget = this;
+			notifyListeners(SWT.FocusOut, e);
+		}
+			break;
+		}
+	}
+
+	@Override
+	public Point computeSize(int wHint, int hHint, boolean changed) {
+		return new Point(wHint, hHint);
 	}
 
 	/**
@@ -139,7 +207,8 @@ public class Range extends Composite {
 		minSpinner.removeSelectionListener(getSelectionListener());
 		maxSpinner.removeSelectionListener(getSelectionListener());
 		this.lowerValue = lowerValue;
-		if (!inSelectionListener) minSpinner.setSelection(lowerValue);
+		if (minSpinner.getSelection() != lowerValue)
+			minSpinner.setSelection(lowerValue);
 
 		// clamp upper value
 		if (upperValue - lowerValue < minimumSeparation) {
@@ -172,7 +241,9 @@ public class Range extends Composite {
 		minSpinner.removeSelectionListener(getSelectionListener());
 		maxSpinner.removeSelectionListener(getSelectionListener());
 		this.upperValue = upperValue;
-		if (!inSelectionListener) maxSpinner.setSelection(upperValue);
+
+		if (maxSpinner.getSelection() != upperValue)
+			maxSpinner.setSelection(upperValue);
 
 		// clamp lower value
 		if (upperValue - lowerValue < minimumSeparation) {
@@ -298,20 +369,36 @@ public class Range extends Composite {
 		public static void main(String[] args) {
 			Display display = new Display();
 			Shell shell = new Shell(display);
-			
+
 			shell.setLayout(new RowLayout(SWT.VERTICAL));
-			
-			Range range = new Range (shell, SWT.BORDER);
-			
-			Button button = new Button(shell, SWT.NONE);
-			
-//			Rectangle clientArea = shell.getClientArea();
-//			range.setLocation(clientArea.x, clientArea.y);
-			range.pack();
+
+			Composite comp = new Composite(shell, SWT.NONE);
+			comp.setLayout(new RowLayout(SWT.HORIZONTAL));
+			Text text = new Text(comp, SWT.NONE);
+			text.setText("text 1");
+			Text text2 = new Text(comp, SWT.NONE);
+			text2.setText("text 1");
+			Text text3 = new Text(shell, SWT.NONE);
+			text3.setText("text 3");
+			final FocusListener fl = new FocusListener() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					System.err.println("got focus : " + e);
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					System.err.println("lost focus : " + e);
+				}
+			};
+			comp.addFocusListener(fl);
+			shell.addFocusListener(fl);
+			text.addFocusListener(fl);
+			text2.addFocusListener(fl);
+			text3.addFocusListener(fl);
 			shell.pack();
 			shell.open();
-			
-			
+
 			while (!shell.isDisposed()) {
 				if (!display.readAndDispatch())
 					display.sleep();
