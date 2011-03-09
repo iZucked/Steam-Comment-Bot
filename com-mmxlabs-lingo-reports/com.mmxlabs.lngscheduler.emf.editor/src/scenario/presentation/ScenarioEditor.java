@@ -114,9 +114,11 @@ import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
+import scenario.presentation.cargoeditor.DefaultMultiReferenceEditor;
 import scenario.presentation.cargoeditor.DefaultReferenceEditor;
-import scenario.presentation.cargoeditor.DefaultReferenceEditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
+import scenario.presentation.cargoeditor.IReferenceValueProvider;
+import scenario.presentation.cargoeditor.SlotVolumesFeatureEditor;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
@@ -926,67 +928,30 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Only creates the other pages if there is something that can be edited
 		//
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
-			// Create a page for the selection tree view.
-			//
-			{
-				ViewerPane viewerPane = new ViewerPane(getSite().getPage(),
-						ScenarioEditor.this) {
-					@Override
-					public Viewer createViewer(Composite composite) {
-						Tree tree = new Tree(composite, SWT.MULTI);
-						TreeViewer newTreeViewer = new TreeViewer(tree);
-						return newTreeViewer;
+			
+
+			final IReferenceValueProvider portProvider = new IReferenceValueProvider() {
+				@Override
+				public Iterable<? extends EObject> getAllowedValues(
+						EObject target, EStructuralFeature field) {
+					while (target != null && !(target instanceof Scenario)) {
+						target = target.eContainer();
 					}
-
-					@Override
-					public void requestActivation() {
-						super.requestActivation();
-						setCurrentViewerPane(this);
+					if (target == null) {
+						return Collections.emptyList();
+					} else {
+						return ((Scenario) target).getPortModel().getPorts();
 					}
-				};
-				viewerPane.createControl(getContainer());
-
-				selectionViewer = (TreeViewer) viewerPane.getViewer();
-				selectionViewer
-						.setContentProvider(new AdapterFactoryContentProvider(
-								adapterFactory));
-
-				selectionViewer
-						.setLabelProvider(new AdapterFactoryLabelProvider(
-								adapterFactory));
-				selectionViewer.setInput(editingDomain.getResourceSet());
-				selectionViewer.setSelection(new StructuredSelection(
-						editingDomain.getResourceSet().getResources().get(0)),
-						true);
-				viewerPane.setTitle(editingDomain.getResourceSet());
-
-				new AdapterFactoryTreeEditor(selectionViewer.getTree(),
-						adapterFactory);
-
-				createContextMenuFor(selectionViewer);
-				int pageIndex = addPage(viewerPane.getControl());
-				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
-			}
+				}
+			};
+			final DefaultMultiReferenceEditor multiPortEditor = new DefaultMultiReferenceEditor(
+					portProvider, PortPackage.eINSTANCE.getPort_Name(),
+					getEditingDomain());
 
 			final DefaultReferenceEditor portEditor = new DefaultReferenceEditor(
 					PortPackage.eINSTANCE.getPort(),
-					PortPackage.eINSTANCE.getPort_Name(),
-					new IReferenceValueProvider() {
-						@Override
-						public Iterable<? extends EObject> getAllowedValues(
-								EObject target, EStructuralFeature field) {
-							while (target != null
-									&& !(target instanceof Scenario)) {
-								target = target.eContainer();
-							}
-							if (target == null) {
-								return Collections.emptyList();
-							} else {
-								return ((Scenario) target).getPortModel()
-										.getPorts();
-							}
-						}
-					}, getEditingDomain(), true);
+					PortPackage.eINSTANCE.getPort_Name(), portProvider,
+					getEditingDomain(), true);
 
 			final DefaultReferenceEditor marketEditor = new DefaultReferenceEditor(
 					MarketPackage.eINSTANCE.getMarket(),
@@ -1028,6 +993,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						}
 					}, getEditingDomain(), true);
 
+			final SlotVolumesFeatureEditor slotVolumesEditor = new SlotVolumesFeatureEditor(
+					getEditingDomain());
+
 			// Create a page for the cargo editor
 			{
 				final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
@@ -1040,6 +1008,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				cargoPane.setFeatureEditorForReferenceType(
 						MarketPackage.eINSTANCE.getMarket(), marketEditor);
 
+				cargoPane.setFeatureEditorForMultiReferenceType(
+						PortPackage.eINSTANCE.getPort(), multiPortEditor);
+
+				// hackishly set the min quantity editor to a hackish slot volume editor
+				cargoPane.setFeatureEditorForFeature(CargoPackage.eINSTANCE.getSlot_MinQuantity(), slotVolumesEditor);
+				// hackishly ignore the max quantity field entirely.
+				cargoPane.ignoreStructuralFeature(CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+				
 				final List<EReference> path = new LinkedList<EReference>();
 
 				path.add(ScenarioPackage.eINSTANCE.getScenario_CargoModel());
@@ -1067,6 +1043,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				fleetPane.setFeatureEditorForReferenceType(
 						PortPackage.eINSTANCE.getPort(), portEditor);
 
+				fleetPane.setFeatureEditorForMultiReferenceType(
+						PortPackage.eINSTANCE.getPort(), multiPortEditor);
+
 				fleetPane.setFeatureEditorForReferenceType(
 						FleetPackage.eINSTANCE.getVesselClass(),
 						vesselClassEditor);
@@ -1092,30 +1071,80 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// Create a vessel class editor pane
 			{
-				final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
+				final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
 						getSite().getPage(), ScenarioEditor.this);
-				fleetPane.createControl(getContainer());
+				vcePane.createControl(getContainer());
 
-				fleetPane.setFeatureEditorForReferenceType(
+				vcePane.setFeatureEditorForReferenceType(
 						PortPackage.eINSTANCE.getPort(), portEditor);
+
+				vcePane.setFeatureEditorForMultiReferenceType(
+						PortPackage.eINSTANCE.getPort(), multiPortEditor);
+
+				vcePane.ignoreStructuralFeature(FleetPackage.eINSTANCE
+						.getVesselStateAttributes_VesselState());
 
 				final List<EReference> path = new LinkedList<EReference>();
 
 				path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
 				path.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
 
-				fleetPane.init(path, adapterFactory);
+				vcePane.init(path, adapterFactory);
 
-				fleetPane.getViewer().setInput(
+				vcePane.getViewer().setInput(
 						editingDomain.getResourceSet().getResources().get(0)
 								.getContents().get(0));
 
 				// TODO should this really be here?
-				createContextMenuFor(fleetPane.getViewer());
+				createContextMenuFor(vcePane.getViewer());
 
-				int pageIndex = addPage(fleetPane.getControl());
+				int pageIndex = addPage(vcePane.getControl());
 				setPageText(pageIndex, "Vessel Classes");
 			}
+			
+			
+			// Create a page for the selection tree view.
+			//
+			{
+				ViewerPane viewerPane = new ViewerPane(getSite().getPage(),
+						ScenarioEditor.this) {
+					@Override
+					public Viewer createViewer(Composite composite) {
+						Tree tree = new Tree(composite, SWT.MULTI);
+						TreeViewer newTreeViewer = new TreeViewer(tree);
+						return newTreeViewer;
+					}
+
+					@Override
+					public void requestActivation() {
+						super.requestActivation();
+						setCurrentViewerPane(this);
+					}
+				};
+				viewerPane.createControl(getContainer());
+
+				selectionViewer = (TreeViewer) viewerPane.getViewer();
+				selectionViewer
+						.setContentProvider(new AdapterFactoryContentProvider(
+								adapterFactory));
+
+				selectionViewer
+						.setLabelProvider(new AdapterFactoryLabelProvider(
+								adapterFactory));
+				selectionViewer.setInput(editingDomain.getResourceSet());
+				selectionViewer.setSelection(new StructuredSelection(
+						editingDomain.getResourceSet().getResources().get(0)),
+						true);
+				viewerPane.setTitle(editingDomain.getResourceSet());
+
+				new AdapterFactoryTreeEditor(selectionViewer.getTree(),
+						adapterFactory);
+
+				createContextMenuFor(selectionViewer);
+				int pageIndex = addPage(viewerPane.getControl());
+				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
+			}
+			
 			// Other default ViewerPane bits are commented out
 			/*
 			 * // Create a page for the parent tree view. // { ViewerPane

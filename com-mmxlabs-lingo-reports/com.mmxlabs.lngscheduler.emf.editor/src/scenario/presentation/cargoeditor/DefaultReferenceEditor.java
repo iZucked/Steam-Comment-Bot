@@ -30,11 +30,6 @@ public class DefaultReferenceEditor implements IFeatureEditor {
 	private final EditingDomain editingDomain;
 	private final boolean allowNullValues;
 
-	public interface IReferenceValueProvider {
-		public Iterable<? extends EObject> getAllowedValues(
-				final EObject target, final EStructuralFeature field);
-	}
-
 	public DefaultReferenceEditor(final EClass refType,
 			final EAttribute nameAttribute,
 			final IReferenceValueProvider valueProvider,
