@@ -44,9 +44,9 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 			final List<EReference> path, final EStructuralFeature field) {
 		final EDataType dataType = (EDataType) field.getEType();
 		if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
-			return new DateFeatureManipulator(path, field);
+			return new DateFeatureManipulator(path, field, editingDomain);
 		} else {
-			return new DefaultFeatureManipulator(path, field);
+			return new DefaultFeatureManipulator(path, field, editingDomain);
 		}
 	}
 
@@ -58,13 +58,12 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 	 * @author hinton
 	 * 
 	 */
-	private class DateFeatureManipulator implements IFeatureManipulator {
+	private class DateFeatureManipulator extends BaseFeatureManipulator {
 		private final EReference portReference;
-		private final EStructuralFeature field;
-		private final List<EReference> path;
 
-		public DateFeatureManipulator(List<EReference> path,
-				final EStructuralFeature field) {
+		public DateFeatureManipulator(final List<EReference> path,
+				final EStructuralFeature field, final EditingDomain editingDomain) {
+			super(path, field, editingDomain);
 			final EClass container = field.getEContainingClass();
 			// check for associated port reference
 			EReference portReference = null;
@@ -78,8 +77,6 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 				}
 			}
 			this.portReference = portReference;
-			this.field = field;
-			this.path = path;
 		}
 
 		private TimeZone getTimeZone(final EObject target) {
@@ -111,14 +108,6 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 			return calendar;
 		}
 
-		private EObject getTarget(EObject o) {
-			final Iterator<EReference> it = path.iterator();
-			while (o != null && it.hasNext()) {
-				o = (EObject) o.eGet(it.next());
-			}
-			return o;
-		}
-
 		@Override
 		public String getStringValue(final EObject o) {
 			final EObject target = getTarget(o);
@@ -143,12 +132,7 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 			calendar.setTimeZone(tz);
 			final Date newValue = calendar.getTime();
 			
-			System.err.println("Updating " + field.getName() + " on " + target);
-			System.err.println("Value is " + target.eGet(field) + ", will become " + newValue);
-			
-			editingDomain.getCommandStack().execute(
-					editingDomain.createCommand(SetCommand.class,
-							new CommandParameter(target, field, newValue)));
+			doSetCommand(target, newValue);
 		}
 
 		@Override
@@ -174,52 +158,31 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 	 * @author hinton
 	 * 
 	 */
-	private class DefaultFeatureManipulator implements IFeatureManipulator {
-		private final List<EReference> path;
-		private final EStructuralFeature field;
+	private class DefaultFeatureManipulator extends BaseFeatureManipulator {
+		
 		private final EDataType fieldType;
 		private final EFactory factory;
 
 		public DefaultFeatureManipulator(final List<EReference> path,
-				final EStructuralFeature field) {
-			this.path = path;
-			this.field = field;
+				final EStructuralFeature field, final EditingDomain editingDomain) {
+			super(path, field, editingDomain);
 			this.fieldType = ((EAttribute) field).getEAttributeType();
 			this.factory = fieldType.getEPackage().getEFactoryInstance();
 		}
 
 		@Override
 		public String getStringValue(EObject o) {
-			if (o == null)
-				return "";
-			for (final EReference ref : path) {
-				o = (EObject) o.eGet(ref);
-				if (o == null)
-					return "";
-			}
-			Object value = o.eGet(field);
-			if (value == null)
-				return "";
-			return value.toString();
+			return getFieldValue(o).toString();
 		}
 
 		@Override
-		public void setFromEditorValue(EObject o, final Object value) {
+		public void setFromEditorValue(final EObject o, final Object value) {
 			assert value instanceof String;
 			final String vString = (String) value;
 
-			for (final EReference ref : path) {
-				o = (EObject) o.eGet(ref);
-				if (o == null)
-					return;
-			}
-			// TODO use EMF edit commands here, because doing this does
-			// not appear to work nicely
 			try {
 				Object eValue = factory.createFromString(fieldType, vString);
-				editingDomain.getCommandStack().execute(
-						editingDomain.createCommand(SetCommand.class,
-								new CommandParameter(o, field, eValue)));
+				doSetCommand(getTarget(o), eValue);
 			} catch (Exception ex) {
 
 			}
@@ -242,7 +205,7 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 					public void verifyText(VerifyEvent e) {
 						final String s = control.getText() + e.text;
 						try {
-							int i = Integer.parseInt(s);
+							Integer.parseInt(s);
 							e.doit = true;
 						} catch (final NumberFormatException ex) {
 							e.doit = false;
