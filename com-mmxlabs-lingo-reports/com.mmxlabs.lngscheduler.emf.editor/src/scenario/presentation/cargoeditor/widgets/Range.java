@@ -8,8 +8,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 
 /**
@@ -28,6 +31,8 @@ import org.eclipse.swt.widgets.Spinner;
  * {@link #setMinimumSeparation(int)}.
  * 
  * By default the range can contain any pair of integers l, u such that l <= u.
+ * 
+ * TODO check this has correct focus behaviour.
  * 
  * @author hinton
  * 
@@ -56,25 +61,31 @@ public class Range extends Composite {
 
 	private SelectionListener selectionListener = null;
 
+	private boolean inSelectionListener = false;
+	
 	private SelectionListener getSelectionListener() {
 		if (selectionListener == null) {
 			selectionListener = new SelectionListener() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
+					inSelectionListener = true;
 					if (e.widget == minSpinner) {
 						setLowerValue(minSpinner.getSelection());
 					} else if (e.widget == maxSpinner) {
 						setUpperValue(maxSpinner.getSelection());
 					}
+					inSelectionListener = false;
 				}
 
 				@Override
 				public void widgetDefaultSelected(final SelectionEvent e) {
+					inSelectionListener = true;
 					if (e.widget == minSpinner) {
 						setLowerValue(minSpinner.getSelection());
 					} else if (e.widget == maxSpinner) {
 						setUpperValue(maxSpinner.getSelection());
 					}
+					inSelectionListener = false;
 				}
 			};
 		}
@@ -86,11 +97,14 @@ public class Range extends Composite {
 		final RowLayout layout = new RowLayout(SWT.HORIZONTAL);
 		layout.marginBottom = layout.marginTop = layout.marginLeft = layout.marginRight = 0;
 		setLayout(layout);
-		minSpinner = new Spinner(parent, style);
-		maxSpinner = new Spinner(parent, style);
-
+		minSpinner = new Spinner(this, style);
+		maxSpinner = new Spinner(this, style);
+//		minSpinner.setSize(32, 16);
+//		minSpinner.setSize(32, 16);
 		maxSpinner.addSelectionListener(getSelectionListener());
 		minSpinner.addSelectionListener(getSelectionListener());
+		pack();
+		setSpinnerLimits();
 	}
 
 	/**
@@ -125,7 +139,7 @@ public class Range extends Composite {
 		minSpinner.removeSelectionListener(getSelectionListener());
 		maxSpinner.removeSelectionListener(getSelectionListener());
 		this.lowerValue = lowerValue;
-		minSpinner.setSelection(lowerValue);
+		if (!inSelectionListener) minSpinner.setSelection(lowerValue);
 
 		// clamp upper value
 		if (upperValue - lowerValue < minimumSeparation) {
@@ -158,7 +172,7 @@ public class Range extends Composite {
 		minSpinner.removeSelectionListener(getSelectionListener());
 		maxSpinner.removeSelectionListener(getSelectionListener());
 		this.upperValue = upperValue;
-		maxSpinner.setSelection(upperValue);
+		if (!inSelectionListener) maxSpinner.setSelection(upperValue);
 
 		// clamp lower value
 		if (upperValue - lowerValue < minimumSeparation) {
@@ -265,5 +279,44 @@ public class Range extends Composite {
 	 */
 	public void setMaximumSeparation(int maximumSeparation) {
 		this.maximumSeparation = maximumSeparation;
+	}
+
+	@Override
+	public boolean setFocus() {
+		return minSpinner.setFocus() || maxSpinner.setFocus();
+	}
+
+	@Override
+	public boolean isFocusControl() {
+		if (minSpinner.isFocusControl() || maxSpinner.isFocusControl())
+			return true;
+		return super.isFocusControl();
+	}
+
+	public static class RangeDisplay {
+
+		public static void main(String[] args) {
+			Display display = new Display();
+			Shell shell = new Shell(display);
+			
+			shell.setLayout(new RowLayout(SWT.VERTICAL));
+			
+			Range range = new Range (shell, SWT.BORDER);
+			
+			Button button = new Button(shell, SWT.NONE);
+			
+//			Rectangle clientArea = shell.getClientArea();
+//			range.setLocation(clientArea.x, clientArea.y);
+			range.pack();
+			shell.pack();
+			shell.open();
+			
+			
+			while (!shell.isDisposed()) {
+				if (!display.readAndDispatch())
+					display.sleep();
+			}
+			display.dispose();
+		}
 	}
 }
