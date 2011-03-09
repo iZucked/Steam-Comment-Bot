@@ -928,47 +928,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Only creates the other pages if there is something that can be edited
 		//
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
-			// Create a page for the selection tree view.
-			//
-			{
-				ViewerPane viewerPane = new ViewerPane(getSite().getPage(),
-						ScenarioEditor.this) {
-					@Override
-					public Viewer createViewer(Composite composite) {
-						Tree tree = new Tree(composite, SWT.MULTI);
-						TreeViewer newTreeViewer = new TreeViewer(tree);
-						return newTreeViewer;
-					}
-
-					@Override
-					public void requestActivation() {
-						super.requestActivation();
-						setCurrentViewerPane(this);
-					}
-				};
-				viewerPane.createControl(getContainer());
-
-				selectionViewer = (TreeViewer) viewerPane.getViewer();
-				selectionViewer
-						.setContentProvider(new AdapterFactoryContentProvider(
-								adapterFactory));
-
-				selectionViewer
-						.setLabelProvider(new AdapterFactoryLabelProvider(
-								adapterFactory));
-				selectionViewer.setInput(editingDomain.getResourceSet());
-				selectionViewer.setSelection(new StructuredSelection(
-						editingDomain.getResourceSet().getResources().get(0)),
-						true);
-				viewerPane.setTitle(editingDomain.getResourceSet());
-
-				new AdapterFactoryTreeEditor(selectionViewer.getTree(),
-						adapterFactory);
-
-				createContextMenuFor(selectionViewer);
-				int pageIndex = addPage(viewerPane.getControl());
-				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
-			}
+			
 
 			final IReferenceValueProvider portProvider = new IReferenceValueProvider() {
 				@Override
@@ -1141,6 +1101,50 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				int pageIndex = addPage(vcePane.getControl());
 				setPageText(pageIndex, "Vessel Classes");
 			}
+			
+			
+			// Create a page for the selection tree view.
+			//
+			{
+				ViewerPane viewerPane = new ViewerPane(getSite().getPage(),
+						ScenarioEditor.this) {
+					@Override
+					public Viewer createViewer(Composite composite) {
+						Tree tree = new Tree(composite, SWT.MULTI);
+						TreeViewer newTreeViewer = new TreeViewer(tree);
+						return newTreeViewer;
+					}
+
+					@Override
+					public void requestActivation() {
+						super.requestActivation();
+						setCurrentViewerPane(this);
+					}
+				};
+				viewerPane.createControl(getContainer());
+
+				selectionViewer = (TreeViewer) viewerPane.getViewer();
+				selectionViewer
+						.setContentProvider(new AdapterFactoryContentProvider(
+								adapterFactory));
+
+				selectionViewer
+						.setLabelProvider(new AdapterFactoryLabelProvider(
+								adapterFactory));
+				selectionViewer.setInput(editingDomain.getResourceSet());
+				selectionViewer.setSelection(new StructuredSelection(
+						editingDomain.getResourceSet().getResources().get(0)),
+						true);
+				viewerPane.setTitle(editingDomain.getResourceSet());
+
+				new AdapterFactoryTreeEditor(selectionViewer.getTree(),
+						adapterFactory);
+
+				createContextMenuFor(selectionViewer);
+				int pageIndex = addPage(viewerPane.getControl());
+				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
+			}
+			
 			// Other default ViewerPane bits are commented out
 			/*
 			 * // Create a page for the parent tree view. // { ViewerPane
