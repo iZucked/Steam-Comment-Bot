@@ -84,6 +84,8 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
@@ -116,8 +118,11 @@ import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.cargoeditor.DefaultMultiReferenceEditor;
 import scenario.presentation.cargoeditor.DefaultReferenceEditor;
+import scenario.presentation.cargoeditor.EObjectDetailView;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
+import scenario.presentation.cargoeditor.MasterDetailView;
+import scenario.presentation.cargoeditor.MasterDetailView.IMasterDetailControlProvider;
 import scenario.presentation.cargoeditor.SlotVolumesFeatureEditor;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
@@ -928,7 +933,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Only creates the other pages if there is something that can be edited
 		//
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
-			
 
 			final IReferenceValueProvider portProvider = new IReferenceValueProvider() {
 				@Override
@@ -998,10 +1002,35 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// Create a page for the cargo editor
 			{
-				final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
+
 				final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
 						getSite().getPage(), ScenarioEditor.this);
-				cargoPane.createControl(getContainer());
+				// cargoPane.createControl(getContainer());
+
+				final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
+
+				final MasterDetailView masterDetail = new MasterDetailView(
+						getContainer(), SWT.NONE,
+						new IMasterDetailControlProvider() {
+							@Override
+							public ViewerPane createMasterViewer(
+									final Composite parent) {
+								cargoPane.createControl(parent);
+								return cargoPane;
+							}
+
+							@Override
+							public Control createDetailView(
+									final Composite parent) {
+								final EObjectDetailView detailView = new EObjectDetailView(
+										parent, SWT.NONE);
+
+								detailView.initForEClass(cargoPackage
+										.getCargo());
+
+								return detailView;
+							}
+						});
 
 				cargoPane.setFeatureEditorForReferenceType(
 						PortPackage.eINSTANCE.getPort(), portEditor);
@@ -1012,11 +1041,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				cargoPane.setFeatureEditorForMultiReferenceType(
 						PortPackage.eINSTANCE.getPort(), multiPortEditor);
 
-				// hackishly set the min quantity editor to a hackish slot volume editor
-				cargoPane.setFeatureEditorForFeature(cargoPackage.getSlot_MinQuantity(), slotVolumesEditor);
+				// hackishly set the min quantity editor to a hackish slot
+				// volume editor
+				cargoPane.setFeatureEditorForFeature(
+						cargoPackage.getSlot_MinQuantity(), slotVolumesEditor);
 				// hackishly ignore the max quantity field entirely.
-				cargoPane.ignoreStructuralFeature(cargoPackage.getSlot_MaxQuantity());
-				
+				cargoPane.ignoreStructuralFeature(cargoPackage
+						.getSlot_MaxQuantity());
+
 				final List<EReference> path = new LinkedList<EReference>();
 
 				path.add(ScenarioPackage.eINSTANCE.getScenario_CargoModel());
@@ -1031,7 +1063,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				// TODO should this really be here?
 				createContextMenuFor(cargoPane.getViewer());
 
-				int pageIndex = addPage(cargoPane.getControl());
+				int pageIndex = addPage(masterDetail);
 				setPageText(pageIndex, "Cargoes"); // TODO localize this
 													// string or whatever
 			}
@@ -1072,9 +1104,28 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// Create a vessel class editor pane
 			{
+
 				final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
 						getSite().getPage(), ScenarioEditor.this);
-				vcePane.createControl(getContainer());
+
+				final MasterDetailView masterDetail = new MasterDetailView(
+						getContainer(), SWT.NONE,
+						new IMasterDetailControlProvider() {
+							@Override
+							public ViewerPane createMasterViewer(
+									final Composite parent) {
+								vcePane.createControl(parent);
+								return vcePane;
+							}
+
+							@Override
+							public Control createDetailView(
+									final Composite parent) {
+								final Label l = new Label(parent, SWT.NONE);
+								l.setText("HELLOOOO");
+								return l;
+							}
+						});
 
 				vcePane.setFeatureEditorForReferenceType(
 						PortPackage.eINSTANCE.getPort(), portEditor);
@@ -1099,11 +1150,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				// TODO should this really be here?
 				createContextMenuFor(vcePane.getViewer());
 
-				int pageIndex = addPage(vcePane.getControl());
+				int pageIndex = addPage(masterDetail);
 				setPageText(pageIndex, "Vessel Classes");
 			}
-			
-			
+
 			// Create a page for the selection tree view.
 			//
 			{
@@ -1145,7 +1195,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				int pageIndex = addPage(viewerPane.getControl());
 				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
 			}
-			
+
 			// Other default ViewerPane bits are commented out
 			/*
 			 * // Create a page for the parent tree view. // { ViewerPane
