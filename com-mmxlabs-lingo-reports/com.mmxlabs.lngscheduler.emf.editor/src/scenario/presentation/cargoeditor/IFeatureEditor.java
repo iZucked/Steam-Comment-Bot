@@ -107,6 +107,16 @@ public interface IFeatureEditor {
 		 * @return
 		 */
 		public Image getImageValue(EObject object, Image columnImage);
+		
+		/**
+		 * Create a {@link Control} for inclusion within an {@link EObjectDetailView}.
+		 * 
+		 * not sure how to hook this up.
+		 * 
+		 * @param parent
+		 * @return
+		 *
+		public Control createDetailsEditor(final Composite parent); */
 	}
 
 	/**

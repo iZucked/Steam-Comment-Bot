@@ -69,6 +69,7 @@ public class EObjectDetailView extends Composite {
 			attributeLabel.setLayoutData(labelData);
 
 			// create editor for this attribute
+			// TODO implement this.
 			final Text attributeEditor = new Text(group, SWT.NONE);
 			final GridData editorData = new GridData(SWT.FILL, SWT.FILL, true,
 					true);
