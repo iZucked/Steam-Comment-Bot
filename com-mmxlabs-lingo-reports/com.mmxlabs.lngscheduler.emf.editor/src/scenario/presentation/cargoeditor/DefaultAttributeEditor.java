@@ -6,7 +6,6 @@ package scenario.presentation.cargoeditor;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -18,14 +17,23 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import scenario.port.Port;
@@ -45,6 +53,8 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 		final EDataType dataType = (EDataType) field.getEType();
 		if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
 			return new DateFeatureManipulator(path, field, editingDomain);
+		} else if (dataType.equals(EcorePackage.eINSTANCE.getEBoolean())) {
+			return new BooleanFeatureManipulator(path, field, editingDomain);
 		} else {
 			return new DefaultFeatureManipulator(path, field, editingDomain);
 		}
@@ -62,7 +72,8 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 		private final EReference portReference;
 
 		public DateFeatureManipulator(final List<EReference> path,
-				final EStructuralFeature field, final EditingDomain editingDomain) {
+				final EStructuralFeature field,
+				final EditingDomain editingDomain) {
 			super(path, field, editingDomain);
 			final EClass container = field.getEContainingClass();
 			// check for associated port reference
@@ -114,14 +125,13 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 			final Calendar calendar = getCalendar(target);
 			if (calendar == null)
 				return "";
-			
-			return String.format("%02d/%02d/%d %02d:%02d %s", 
-					calendar.get(Calendar.DAY_OF_MONTH),
-					calendar.get(Calendar.MONTH),
-					calendar.get(Calendar.YEAR),
-					calendar.get(Calendar.HOUR_OF_DAY),
-					calendar.get(Calendar.MINUTE),
-					calendar.getTimeZone().getDisplayName(false, TimeZone.SHORT));
+
+			return String.format("%02d/%02d/%d %02d:%02d %s", calendar
+					.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.YEAR), calendar
+							.get(Calendar.HOUR_OF_DAY), calendar
+							.get(Calendar.MINUTE), calendar.getTimeZone()
+							.getDisplayName(false, TimeZone.SHORT));
 		}
 
 		@Override
@@ -131,7 +141,7 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 			final Calendar calendar = (Calendar) value;
 			calendar.setTimeZone(tz);
 			final Date newValue = calendar.getTime();
-			
+
 			doSetCommand(target, newValue);
 		}
 
@@ -153,18 +163,129 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 	}
 
 	/**
+	 * Format a boolean as Yes or No, and display a checkbox to edit (TODO could
+	 * be a dropdown instead?)
+	 * 
+	 * @author hinton
+	 * 
+	 */
+	private class BooleanFeatureManipulator extends BaseFeatureManipulator {
+		private static final String CHECKED_KEY = "CHECKED";
+		private static final String UNCHECKED_KEY = "UNCHECKED";
+
+		private Image makeShot(Control control, boolean type) {
+			// Hopefully no platform uses exactly this color
+			// because we'll make it transparent in the image.
+			Color greenScreen = new Color(control.getDisplay(), 222, 223, 224);
+
+			Shell shell = new Shell(control.getShell(), SWT.NO_TRIM);
+
+			// otherwise we have a default gray color
+			shell.setBackground(greenScreen);
+
+			Button button = new Button(shell, SWT.CHECK);
+			button.setBackground(greenScreen);
+			button.setSelection(type);
+
+			// otherwise an image is located in a corner
+			button.setLocation(1, 1);
+			Point bsize = button.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+
+			// otherwise an image is stretched by width
+			bsize.x = Math.max(bsize.x - 1, bsize.y - 1);
+			bsize.y = Math.max(bsize.x - 1, bsize.y - 1);
+			button.setSize(bsize);
+			shell.setSize(bsize);
+
+			shell.open();
+			GC gc = new GC(shell);
+			Image image = new Image(control.getDisplay(), bsize.x, bsize.y);
+			gc.copyArea(image, 0, 0);
+			gc.dispose();
+			shell.close();
+
+			ImageData imageData = image.getImageData();
+			imageData.transparentPixel = imageData.palette.getPixel(greenScreen
+					.getRGB());
+
+			return new Image(control.getDisplay(), imageData);
+		}
+
+		private Image checkedImage;
+		private Image uncheckedImage;
+
+		protected BooleanFeatureManipulator(final List<EReference> path,
+				final EStructuralFeature field,
+				final EditingDomain editingDomain) {
+			super(path, field, editingDomain);
+
+		}
+
+		@Override
+		public String getStringValue(final EObject o) {
+			// final Boolean value = (Boolean) getFieldValue(o);
+			// return value.booleanValue() ? "Yes" : "No";
+			return "";
+		}
+
+		@Override
+		public void setFromEditorValue(final EObject o, final Object value) {
+			doSetCommand(getTarget(o), value);
+		}
+
+		@Override
+		public boolean canModify(final EObject row) {
+			return true;
+		}
+
+		@Override
+		public CellEditor createCellEditor(Composite parent) {
+			if (JFaceResources.getImageRegistry().getDescriptor(CHECKED_KEY) == null) {
+				JFaceResources.getImageRegistry().put(UNCHECKED_KEY,
+						uncheckedImage = makeShot(parent, false));
+				JFaceResources.getImageRegistry().put(CHECKED_KEY,
+						checkedImage = makeShot(parent, true));
+			} else {
+				uncheckedImage = JFaceResources.getImageRegistry().get(UNCHECKED_KEY);
+				checkedImage = JFaceResources.getImageRegistry().get(CHECKED_KEY);
+			}
+			// set images
+
+			return new CheckboxCellEditor(parent);
+		}
+
+		@Override
+		public Object getEditorValue(final EObject row) {
+			return getFieldValue(row);
+		}
+
+		@Override
+		public Image getImageValue(final EObject object, final Image columnImage) {
+			final Boolean value = (Boolean) getFieldValue(object);
+
+			if (value.booleanValue()) {
+				return checkedImage;
+			} else {
+				return uncheckedImage;
+			}
+		}
+
+	}
+
+	/**
 	 * Simple manipulator which should handle the basic EDataTypes
 	 * 
 	 * @author hinton
 	 * 
 	 */
 	private class DefaultFeatureManipulator extends BaseFeatureManipulator {
-		
+
 		private final EDataType fieldType;
 		private final EFactory factory;
 
 		public DefaultFeatureManipulator(final List<EReference> path,
-				final EStructuralFeature field, final EditingDomain editingDomain) {
+				final EStructuralFeature field,
+				final EditingDomain editingDomain) {
 			super(path, field, editingDomain);
 			this.fieldType = ((EAttribute) field).getEAttributeType();
 			this.factory = fieldType.getEPackage().getEFactoryInstance();

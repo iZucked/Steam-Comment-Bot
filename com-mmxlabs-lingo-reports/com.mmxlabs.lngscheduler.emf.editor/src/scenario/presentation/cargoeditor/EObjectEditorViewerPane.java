@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -63,8 +64,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	private final Map<EDataType, IFeatureEditor> featureEditorsByAttributeType = new HashMap<EDataType, IFeatureEditor>();
 	private final IFeatureEditor defaultFeatureEditor;
-	private Map<EClass, IFeatureEditor> multiFeatureEditorsByRefType = new HashMap<EClass, IFeatureEditor>();
+	private final Map<EClass, IFeatureEditor> multiFeatureEditorsByRefType = new HashMap<EClass, IFeatureEditor>();
 	private final Set<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
+	private final Map<EStructuralFeature, String> forcedColumnNames = new HashMap<EStructuralFeature, String>();
 
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
 			final ScenarioEditor part) {
@@ -103,14 +105,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		table.setLayout(layout);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
+
 		table.addListener(SWT.MeasureItem, new Listener() {
 			@Override
 			public void handleEvent(final Event event) {
 				event.height = 18;
 			}
 		});
-		
+
 		cellEditors.clear();
 		tableColumns.clear();
 		createTableColumns(table, path.get(path.size() - 1).getEReferenceType());
@@ -153,7 +155,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 				if (modelObject != null) {
 					formatter.setFromEditorValue(modelObject, newValue);
-					 viewer.refresh(modelObject, true, true);
+					viewer.refresh(modelObject, true, true);
 
 					// TODO this doesn't work, no idea why not.
 					// viewer.setSelection(new
@@ -197,6 +199,17 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					return formatter.getStringValue(e);
 				}
 				return "";
+			}
+
+			@Override
+			public Image getColumnImage(final Object object,
+					final int columnIndex) {
+				final IFeatureManipulator formatter = (IFeatureManipulator) table
+						.getColumn(columnIndex)
+						.getData(FEATURE_MANIPULATOR_KEY);
+
+				return formatter.getImageValue((EObject) object,
+						super.getColumnImage(object, columnIndex));
 			}
 		});
 	}
@@ -293,8 +306,12 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		final TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setResizable(true);
 
-		column.setText(unmangle(field.getName()) + suffix);
-
+		String columnName = forcedColumnNames.get(field);
+		if (columnName == null) {
+			columnName = unmangle(field.getName() + suffix);
+		}
+		
+		column.setText(columnName);
 		tableColumns.put(column.getText(), column);
 
 		final IFeatureManipulator manipulator = editor.getFeatureManipulator(
@@ -333,7 +350,11 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		return viewer;
 	}
 
-	public void ignoreStructuralFeature(EStructuralFeature feature) {
+	public void ignoreStructuralFeature(final EStructuralFeature feature) {
 		ignoredFeatures.add(feature);
+	}
+	
+	public void setColumnName(final EStructuralFeature feature, final String name) {
+		forcedColumnNames .put(feature, name);
 	}
 }

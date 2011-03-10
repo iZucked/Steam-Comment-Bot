@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -18,7 +17,6 @@ import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -42,7 +40,7 @@ public class DefaultMultiReferenceEditor implements IFeatureEditor {
 	@Override
 	public IFeatureManipulator getFeatureManipulator(
 			final List<EReference> path, final EStructuralFeature field) {
-		return new IFeatureManipulator() {
+		return new BaseFeatureManipulator(path, field, editingDomain) {
 			private DialogCellEditor cellEditor = null;
 			private final List<EObject> options = new ArrayList<EObject>();
 
@@ -131,14 +129,6 @@ public class DefaultMultiReferenceEditor implements IFeatureEditor {
 				}
 
 				return true;
-			}
-
-			private EObject getTarget(EObject row) {
-				final Iterator<EReference> refIter = path.iterator();
-				while (row != null && refIter.hasNext()) {
-					row = (EObject) row.eGet(refIter.next());
-				}
-				return row;
 			}
 		};
 	}

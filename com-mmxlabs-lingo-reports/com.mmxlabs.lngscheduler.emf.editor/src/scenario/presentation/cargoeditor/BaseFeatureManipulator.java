@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.swt.graphics.Image;
 
 import scenario.presentation.cargoeditor.IFeatureEditor.IFeatureManipulator;
 
@@ -52,5 +53,10 @@ public abstract class BaseFeatureManipulator implements IFeatureManipulator {
 		editingDomain.getCommandStack().execute(
 				editingDomain.createCommand(SetCommand.class,
 						new CommandParameter(target, field, newValue)));
+	}
+
+	@Override
+	public Image getImageValue(EObject object, Image columnImage) {
+		return null; // no image>
 	}
 }

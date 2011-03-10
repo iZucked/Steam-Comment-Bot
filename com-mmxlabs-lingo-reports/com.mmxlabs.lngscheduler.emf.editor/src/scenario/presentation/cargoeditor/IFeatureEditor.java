@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 public interface IFeatureEditor {
@@ -19,6 +20,7 @@ public interface IFeatureEditor {
 		public boolean canModify(EObject row);
 		public CellEditor createCellEditor(final Composite parent);
 		public Object getEditorValue(EObject row);
+		public Image getImageValue(EObject object, Image columnImage);
 	}
 
 	public IFeatureManipulator getFeatureManipulator(final List<EReference> path,

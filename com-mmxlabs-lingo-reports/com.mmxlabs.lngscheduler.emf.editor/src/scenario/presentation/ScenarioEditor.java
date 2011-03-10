@@ -998,6 +998,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// Create a page for the cargo editor
 			{
+				final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
 				final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
 						getSite().getPage(), ScenarioEditor.this);
 				cargoPane.createControl(getContainer());
@@ -1012,9 +1013,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						PortPackage.eINSTANCE.getPort(), multiPortEditor);
 
 				// hackishly set the min quantity editor to a hackish slot volume editor
-				cargoPane.setFeatureEditorForFeature(CargoPackage.eINSTANCE.getSlot_MinQuantity(), slotVolumesEditor);
+				cargoPane.setFeatureEditorForFeature(cargoPackage.getSlot_MinQuantity(), slotVolumesEditor);
 				// hackishly ignore the max quantity field entirely.
-				cargoPane.ignoreStructuralFeature(CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+				cargoPane.ignoreStructuralFeature(cargoPackage.getSlot_MaxQuantity());
 				
 				final List<EReference> path = new LinkedList<EReference>();
 

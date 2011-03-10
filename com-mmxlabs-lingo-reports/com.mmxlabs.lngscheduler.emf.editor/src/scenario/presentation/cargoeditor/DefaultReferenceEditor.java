@@ -48,18 +48,8 @@ public class DefaultReferenceEditor implements IFeatureEditor {
 		
 		assert (field.getEType().equals(refType));
 
-		return new IFeatureManipulator() {
+		return new BaseFeatureManipulator(path, field, editingDomain) {
 			private ComboBoxCellEditor myEditor = null;
-			private EObject getTarget(EObject modelObject) {
-				if (modelObject == null)
-					return null;
-				for (final EReference ref : path) {
-					modelObject = (EObject) modelObject.eGet(ref);
-					if (modelObject == null)
-						return null;
-				}
-				return modelObject;
-			}
 
 			@Override
 			public String getStringValue(EObject o) {
@@ -84,8 +74,6 @@ public class DefaultReferenceEditor implements IFeatureEditor {
 										new CommandParameter(target, field,
 												modelValue)));
 					}
-				} else {
-					System.err.println("Set to " + value);
 				}
 			}
 
