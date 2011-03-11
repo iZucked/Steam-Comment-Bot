@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Text;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.presentation.cargoeditor.celleditors.DateTimeCellEditor;
+import scenario.presentation.cargoeditor.celleditors.SpinnerCellEditor;
 
 public class DefaultAttributeEditor implements IFeatureEditor {
 	private final EditingDomain editingDomain;
@@ -55,9 +56,60 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 			return new DateFeatureManipulator(path, field, editingDomain);
 		} else if (dataType.equals(EcorePackage.eINSTANCE.getEBoolean())) {
 			return new BooleanFeatureManipulator(path, field, editingDomain);
+		} else if (dataType.equals(EcorePackage.eINSTANCE.getEInt())
+				|| dataType.equals(EcorePackage.eINSTANCE.getEFloat())) {
+			return new NumberFeatureManipulator(path, field, editingDomain);
 		} else {
 			return new DefaultFeatureManipulator(path, field, editingDomain);
 		}
+	}
+
+	private class NumberFeatureManipulator extends BaseFeatureManipulator {
+		protected NumberFeatureManipulator(final List<EReference> path,
+				final EStructuralFeature field,
+				final EditingDomain editingDomain) {
+			super(path, field, editingDomain);
+		}
+
+		@Override
+		public String getStringValue(EObject row) {
+			return getFieldValue(row).toString();
+		}
+
+		@Override
+		public void setFromEditorValue(EObject row, Object value) {
+			doSetCommand(getTarget(row), value);
+		}
+
+		@Override
+		public boolean canModify(EObject row) {
+			return true;
+		}
+
+		@Override
+		public CellEditor createCellEditor(final Composite parent) {
+			final SpinnerCellEditor editor = new SpinnerCellEditor(parent);
+
+			if (!field.getEType().equals(EcorePackage.eINSTANCE.getEInt())) {
+				editor.setDigits(3);
+			} else {
+				editor.setDigits(0);
+			}
+
+			editor.setMinimumValue((Integer) 0);
+			editor.setMaximumValue((Integer) 1000000); // cannot use
+														// Integer.MAX_VALUE
+														// because of how
+														// spinners work.
+
+			return editor;
+		}
+
+		@Override
+		public Object getEditorValue(EObject row) {
+			return getFieldValue(row);
+		}
+
 	}
 
 	/**
@@ -246,8 +298,10 @@ public class DefaultAttributeEditor implements IFeatureEditor {
 				JFaceResources.getImageRegistry().put(CHECKED_KEY,
 						checkedImage = makeShot(parent, true));
 			} else {
-				uncheckedImage = JFaceResources.getImageRegistry().get(UNCHECKED_KEY);
-				checkedImage = JFaceResources.getImageRegistry().get(CHECKED_KEY);
+				uncheckedImage = JFaceResources.getImageRegistry().get(
+						UNCHECKED_KEY);
+				checkedImage = JFaceResources.getImageRegistry().get(
+						CHECKED_KEY);
 			}
 			// set images
 
