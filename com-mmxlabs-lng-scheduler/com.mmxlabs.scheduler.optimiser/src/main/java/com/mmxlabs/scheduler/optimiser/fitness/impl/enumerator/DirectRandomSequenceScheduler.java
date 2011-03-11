@@ -30,7 +30,7 @@ public class DirectRandomSequenceScheduler<T> extends
 	/**
 	 * Never do more than this many samples
 	 */
-	private int samplingUpperBound = 3;
+	private int samplingUpperBound = 2;
 	/**
 	 * Sample this proportion of the search space, up to {@code samplingUpperBound}
 	 */
