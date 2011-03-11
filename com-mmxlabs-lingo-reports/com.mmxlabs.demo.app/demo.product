@@ -43,7 +43,7 @@
       <plugin id="com.mmxlabs.optimiser.lso"/>
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser"/>
       <plugin id="com.mmxlabs.scheduleview"/>
-      <plugin id="org.apache.commons.math"/>
+      <plugin id="org.apache.commons.math" fragment=""/>
       <plugin id="org.eclipse.compare"/>
       <plugin id="org.eclipse.compare.core"/>
       <plugin id="org.eclipse.core.commands"/>
@@ -161,6 +161,7 @@
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.junit"/>
+      <plugin id="org.swtchart"/>
    </plugins>
 
 
