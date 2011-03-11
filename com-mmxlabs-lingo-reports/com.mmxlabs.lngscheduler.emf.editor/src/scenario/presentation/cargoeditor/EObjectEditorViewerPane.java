@@ -252,12 +252,18 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		// Now handle contained objects
 		for (final EReference reference : eClass.getEAllReferences()) {
 			if (!reference.isMany() && reference.isContainment()) {
-				// contained objects get flattened out
-				final LinkedList<EReference> subPath = new LinkedList<EReference>(
-						path);
-				subPath.add(reference);
-				createTableColumnsForEClassAtPath(table,
-						reference.getEReferenceType(), subPath);
+				// contained objects get flattened out, unless they don't
+				final IFeatureEditor editor = featureEditorsByRefType
+						.get(reference.getEReferenceType());
+				if (editor == null) {
+					final LinkedList<EReference> subPath = new LinkedList<EReference>(
+							path);
+					subPath.add(reference);
+					createTableColumnsForEClassAtPath(table,
+							reference.getEReferenceType(), subPath);
+				} else {
+					createColumn(table, path, reference, editor, suffix);
+				}
 			} else {
 				IFeatureEditor editor = featureEditorsByFeature.get(reference);
 
@@ -310,7 +316,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		if (columnName == null) {
 			columnName = unmangle(field.getName() + suffix);
 		}
-		
+
 		column.setText(columnName);
 		tableColumns.put(column.getText(), column);
 
@@ -353,8 +359,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	public void ignoreStructuralFeature(final EStructuralFeature feature) {
 		ignoredFeatures.add(feature);
 	}
-	
-	public void setColumnName(final EStructuralFeature feature, final String name) {
-		forcedColumnNames .put(feature, name);
+
+	public void setColumnName(final EStructuralFeature feature,
+			final String name) {
+		forcedColumnNames.put(feature, name);
 	}
 }
