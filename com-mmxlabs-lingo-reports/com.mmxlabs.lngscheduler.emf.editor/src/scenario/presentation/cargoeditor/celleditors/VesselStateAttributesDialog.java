@@ -268,13 +268,12 @@ public class VesselStateAttributesDialog extends Dialog {
 			}
 
 			protected Object getValue(Object element) {
-				return element == null ? "" : ((FuelConsumptionLine) element)
-						.getSpeed() + "";
+				return element == null ? null : (Float) ((FuelConsumptionLine) element)
+						.getSpeed();
 			}
 
 			protected void setValue(Object element, Object value) {
-				((FuelConsumptionLine) element).setSpeed(Float.parseFloat(value
-						.toString()));
+				((FuelConsumptionLine) element).setSpeed((Float) value);
 				tableViewer.refresh();
 			}
 		});
@@ -310,14 +309,12 @@ public class VesselStateAttributesDialog extends Dialog {
 					}
 
 					protected Object getValue(Object element) {
-						return element == null ? ""
-								: ((FuelConsumptionLine) element)
-										.getConsumption() + "";
+						return element == null ? null : (Float) ((FuelConsumptionLine) element)
+								.getConsumption();
 					}
 
 					protected void setValue(Object element, Object value) {
-						((FuelConsumptionLine) element).setConsumption(Float
-								.parseFloat(value.toString()));
+						((FuelConsumptionLine) element).setConsumption((Float) value);
 						tableViewer.refresh();
 					}
 				});
