@@ -113,7 +113,7 @@ public class DefaultMultiReferenceEditor implements IFeatureEditor {
 					@Override
 					protected boolean dependsOnExternalFocusListener() {
 						return false;
-					}					
+					}
 				};
 
 				return cellEditor;
