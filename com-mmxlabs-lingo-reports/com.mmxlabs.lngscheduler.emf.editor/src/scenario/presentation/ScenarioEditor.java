@@ -78,14 +78,16 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
@@ -124,6 +126,7 @@ import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.MasterDetailView;
 import scenario.presentation.cargoeditor.MasterDetailView.IMasterDetailControlProvider;
 import scenario.presentation.cargoeditor.SlotVolumesFeatureEditor;
+import scenario.presentation.cargoeditor.VesselStateAttributesEditor;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
@@ -1008,29 +1011,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				// cargoPane.createControl(getContainer());
 
 				final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
-
-				final MasterDetailView masterDetail = new MasterDetailView(
-						getContainer(), SWT.NONE,
-						new IMasterDetailControlProvider() {
-							@Override
-							public ViewerPane createMasterViewer(
-									final Composite parent) {
-								cargoPane.createControl(parent);
-								return cargoPane;
-							}
-
-							@Override
-							public Control createDetailView(
-									final Composite parent) {
-								final EObjectDetailView detailView = new EObjectDetailView(
-										parent, SWT.NONE);
-
-								detailView.initForEClass(cargoPackage
-										.getCargo());
-
-								return detailView;
-							}
-						});
+				
+				cargoPane.createControl(getContainer());
 
 				cargoPane.setFeatureEditorForReferenceType(
 						PortPackage.eINSTANCE.getPort(), portEditor);
@@ -1054,6 +1036,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				path.add(ScenarioPackage.eINSTANCE.getScenario_CargoModel());
 				path.add(CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 
+				cargoPane.setTitle("Cargoes", getTitleImage());
+				
 				cargoPane.init(path, adapterFactory);
 
 				cargoPane.getViewer().setInput(
@@ -1063,16 +1047,59 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				// TODO should this really be here?
 				createContextMenuFor(cargoPane.getViewer());
 
-				int pageIndex = addPage(masterDetail);
+				int pageIndex = addPage(cargoPane.getControl());
 				setPageText(pageIndex, "Cargoes"); // TODO localize this
 													// string or whatever
 			}
 			// Create a fleet editor pane
 			{
+//				final Composite fleetComposite = new Composite(getContainer(), SWT.NONE);
+//				fleetComposite.setLayout(new GridLayout(1, false));
+				
+				final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
+
+				final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
+						getSite().getPage(), ScenarioEditor.this);
+				
+				vcePane.createControl(sash);
+//				vcePane.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+				vcePane.setFeatureEditorForReferenceType(
+						PortPackage.eINSTANCE.getPort(), portEditor);
+
+				vcePane.setTitle("Vessel Classes", getTitleImage());
+				
+				vcePane.setFeatureEditorForMultiReferenceType(
+						PortPackage.eINSTANCE.getPort(), multiPortEditor);
+
+				vcePane.ignoreStructuralFeature(FleetPackage.eINSTANCE
+						.getVesselStateAttributes_VesselState());
+
+				vcePane.setFeatureEditorForReferenceType(
+						FleetPackage.eINSTANCE.getVesselStateAttributes(),
+						new VesselStateAttributesEditor(getEditingDomain()));
+
+				final List<EReference> path2 = new LinkedList<EReference>();
+
+				path2.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
+				path2.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
+
+				vcePane.init(path2, adapterFactory);
+
+				vcePane.getViewer().setInput(
+						editingDomain.getResourceSet().getResources().get(0)
+								.getContents().get(0));
+
+				createContextMenuFor(vcePane.getViewer());
+				
+				
+				
 				final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
 						getSite().getPage(), ScenarioEditor.this);
-				fleetPane.createControl(getContainer());
-
+				
+				
+				fleetPane.createControl(sash);
+//				fleetPane.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+				
 				fleetPane.setFeatureEditorForReferenceType(
 						PortPackage.eINSTANCE.getPort(), portEditor);
 
@@ -1090,68 +1117,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				fleetPane.init(path, adapterFactory);
 
+				fleetPane.setTitle("Vessels", getTitleImage());
+				
 				fleetPane.getViewer().setInput(
 						editingDomain.getResourceSet().getResources().get(0)
 								.getContents().get(0));
 
-				// TODO should this really be here?
 				createContextMenuFor(fleetPane.getViewer());
-
-				int pageIndex = addPage(fleetPane.getControl());
+				
+				int pageIndex = addPage(sash);
 				setPageText(pageIndex, "Fleet"); // TODO localize this
 													// string or whatever
-			}
-
-			// Create a vessel class editor pane
-			{
-
-				final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
-						getSite().getPage(), ScenarioEditor.this);
-
-				final MasterDetailView masterDetail = new MasterDetailView(
-						getContainer(), SWT.NONE,
-						new IMasterDetailControlProvider() {
-							@Override
-							public ViewerPane createMasterViewer(
-									final Composite parent) {
-								vcePane.createControl(parent);
-								return vcePane;
-							}
-
-							@Override
-							public Control createDetailView(
-									final Composite parent) {
-								final Label l = new Label(parent, SWT.NONE);
-								l.setText("HELLOOOO");
-								return l;
-							}
-						});
-
-				vcePane.setFeatureEditorForReferenceType(
-						PortPackage.eINSTANCE.getPort(), portEditor);
-
-				vcePane.setFeatureEditorForMultiReferenceType(
-						PortPackage.eINSTANCE.getPort(), multiPortEditor);
-
-				vcePane.ignoreStructuralFeature(FleetPackage.eINSTANCE
-						.getVesselStateAttributes_VesselState());
-
-				final List<EReference> path = new LinkedList<EReference>();
-
-				path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
-				path.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
-
-				vcePane.init(path, adapterFactory);
-
-				vcePane.getViewer().setInput(
-						editingDomain.getResourceSet().getResources().get(0)
-								.getContents().get(0));
-
-				// TODO should this really be here?
-				createContextMenuFor(vcePane.getViewer());
-
-				int pageIndex = addPage(masterDetail);
-				setPageText(pageIndex, "Vessel Classes");
 			}
 
 			// Create a page for the selection tree view.
