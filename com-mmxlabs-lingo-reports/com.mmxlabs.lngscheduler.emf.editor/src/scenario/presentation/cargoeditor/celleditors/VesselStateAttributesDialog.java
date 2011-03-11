@@ -260,7 +260,11 @@ public class VesselStateAttributesDialog extends Dialog {
 			}
 
 			protected CellEditor getCellEditor(Object element) {
-				return new TextCellEditor(tableViewer.getTable());
+				SpinnerCellEditor editor = new SpinnerCellEditor(tableViewer.getTable());
+				editor.setDigits(2);
+				editor.setMinimumValue((Integer)0);
+				editor.setMaximumValue((Integer)100000);
+				return editor;
 			}
 
 			protected Object getValue(Object element) {
@@ -298,7 +302,11 @@ public class VesselStateAttributesDialog extends Dialog {
 					}
 
 					protected CellEditor getCellEditor(Object element) {
-						return new TextCellEditor(tableViewer.getTable());
+						SpinnerCellEditor editor = new SpinnerCellEditor(tableViewer.getTable());
+						editor.setDigits(2);
+						editor.setMinimumValue((Integer)0);
+						editor.setMaximumValue((Integer)100000);
+						return editor;
 					}
 
 					protected Object getValue(Object element) {
