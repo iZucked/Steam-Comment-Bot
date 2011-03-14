@@ -49,6 +49,9 @@ public class DefaultMultiReferenceEditor implements IFeatureEditor {
 				final EObject target = getTarget(o);
 				final CompoundCommand cc = new CompoundCommand(
 						CompoundCommand.LAST_COMMAND_ALL);
+				
+				// TODO: Check equals...
+				
 				cc.append(editingDomain.createCommand(RemoveCommand.class,
 						new CommandParameter(target, field,
 								(Collection<?>) target.eGet(field))));
