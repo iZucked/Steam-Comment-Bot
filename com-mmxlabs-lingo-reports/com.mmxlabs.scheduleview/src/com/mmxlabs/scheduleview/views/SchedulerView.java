@@ -159,7 +159,9 @@ public class SchedulerView extends ViewPart {
 
 				// Filter out non-editor selections - Unfortunately the
 				// addSelectionLister part ID filters do not work with editors
-				if (part instanceof IEditorPart) {
+				if (part instanceof IEditorPart
+						|| part.getSite().getId()
+								.equals("com.mmxlabs.rcp.navigator")) {
 
 					// if selection instanceof etc.
 					if (selection instanceof IStructuredSelection) {
