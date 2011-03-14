@@ -96,7 +96,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	 */
 	@Override
 	protected boolean step() {
-		System.err.println("Done 10% (" + optimiser.step(10) + ")");
+		System.err.println("Done 1% (" + optimiser.step(1) + ")");
 		currentProgress += 10;
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
