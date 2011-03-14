@@ -5,8 +5,11 @@
 
 package com.mmxlabs.demo.reports.views;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+
+import com.mmxlabs.demo.reports.views.TotalsContentProvider.RowData;
 
 import scenario.schedule.Schedule;
 
@@ -19,10 +22,18 @@ import scenario.schedule.Schedule;
 public class CargoContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(final Object object) {
+		Schedule schedule = null;
 		if (object instanceof Schedule) {
-			final Schedule schedule = (Schedule) object;
+			schedule = (Schedule) object;
+		}
+		else if (object instanceof IAdaptable) {
+			schedule = (Schedule) ((IAdaptable) object).getAdapter(Schedule.class);
+		}
+		
+		if (schedule != null) {
 			return schedule.getCargoAllocations().toArray();
 		}
+		
 		return new Object[]{};
 	}
 
