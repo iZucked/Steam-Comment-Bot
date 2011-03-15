@@ -22,18 +22,19 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 public class EMFPath {
 	final Object[] path;
 	final boolean failSilently;
+
 	public EMFPath(boolean failSilently, final Iterable<?> path) {
 		final ArrayList<Object> scratch = new ArrayList<Object>();
-		
+
 		for (final Object o : path) {
 			scratch.add(o);
 		}
-		
+
 		this.path = scratch.toArray();
 		checkPathIsValid();
 		this.failSilently = failSilently;
 	}
-	
+
 	public EMFPath(boolean failSilently, final Object... path) {
 		this.path = path.clone();
 		checkPathIsValid();
@@ -52,7 +53,7 @@ public class EMFPath {
 			try {
 				return actuallyGet(root);
 			} catch (Throwable ex) {
-				return null;	
+				return null;
 			}
 		} else {
 			try {
@@ -64,15 +65,16 @@ public class EMFPath {
 	}
 
 	public EClassifier getTargetType() {
-		if (path.length == 0) return null;
+		if (path.length == 0)
+			return null;
 		final Object el = path[path.length - 1];
 		if (el instanceof EOperation) {
-			return ((EOperation)el).getEType();
+			return ((EOperation) el).getEType();
 		} else {
-			return ((EStructuralFeature)el).getEType();
+			return ((EStructuralFeature) el).getEType();
 		}
 	}
-	
+
 	private Object actuallyGet(EObject root) throws InvocationTargetException {
 		for (int i = 0; i < path.length - 1; i++) {
 			final Object el = path[i];
@@ -85,13 +87,13 @@ public class EMFPath {
 		}
 	}
 
-	private Object chase(final EObject root, final Object el) throws InvocationTargetException {
+	private Object chase(final EObject root, final Object el)
+			throws InvocationTargetException {
 		if (el instanceof EOperation) {
 			return root.eInvoke((EOperation) el, null);
 		} else {
 			return root.eGet((EStructuralFeature) el);
 		}
 	}
-	
-	
+
 }
