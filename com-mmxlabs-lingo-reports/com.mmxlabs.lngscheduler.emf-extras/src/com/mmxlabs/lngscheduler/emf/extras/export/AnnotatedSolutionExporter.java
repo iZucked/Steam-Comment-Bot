@@ -26,6 +26,7 @@ import scenario.schedule.ScheduleFactory;
 import scenario.schedule.ScheduleFitness;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
+import scenario.schedule.events.Idle;
 import scenario.schedule.events.Journey;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
@@ -61,12 +62,10 @@ public class AnnotatedSolutionExporter {
 			.getScheduleFactory();
 
 	
-	private VisitEventExporter visitExporter; 
-	
 	public AnnotatedSolutionExporter() {
 		exporters.add(new IdleEventExporter());
 		exporters.add(new JourneyEventExporter());
-		exporters.add(visitExporter = new VisitEventExporter());
+		exporters.add(new VisitEventExporter());
 	}
 
 	public Schedule exportAnnotatedSolution(final Scenario inputScenario,
@@ -212,6 +211,12 @@ public class AnnotatedSolutionExporter {
 						allocation.setLadenLeg((Journey) event);
 					} else if (allocation.getBallastLeg() == null) {
 						allocation.setBallastLeg((Journey) event);
+					}
+				} else if (event instanceof Idle && allocation != null) {
+					if (allocation.getLadenIdle() == null) {
+						allocation.setLadenIdle((Idle) event);
+					} else if (allocation.getBallastIdle() == null) {
+						allocation.setBallastIdle((Idle) event);
 						allocation = null;
 					}
 				}
