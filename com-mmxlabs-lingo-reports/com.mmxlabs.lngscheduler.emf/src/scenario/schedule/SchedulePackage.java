@@ -8,6 +8,7 @@ package scenario.schedule;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -88,6 +89,15 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE_MODEL_FEATURE_COUNT = 1;
 
 	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_MODEL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.ScheduleImpl <em>Schedule</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -152,6 +162,15 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE_FEATURE_COUNT = 5;
 
 	/**
+	 * The number of operations of the '<em>Schedule</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -197,6 +216,15 @@ public interface SchedulePackage extends EPackage {
 	 */
 	int SEQUENCE_FEATURE_COUNT = 3;
 
+
+	/**
+	 * The number of operations of the '<em>Sequence</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEQUENCE_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.CargoAllocationImpl <em>Cargo Allocation</em>}' class.
@@ -290,14 +318,86 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__VESSEL = 8;
 
 	/**
+	 * The feature id for the '<em><b>Laden Leg</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__LADEN_LEG = 9;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Leg</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__BALLAST_LEG = 10;
+
+	/**
+	 * The feature id for the '<em><b>Laden Idle</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__LADEN_IDLE = 11;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Idle</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__BALLAST_IDLE = 12;
+
+	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = 9;
+	int CARGO_ALLOCATION_FEATURE_COUNT = 13;
 
+
+	/**
+	 * The operation id for the '<em>Get Total Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_TOTAL_COST = 0;
+
+	/**
+	 * The operation id for the '<em>Get Local Load Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_LOCAL_LOAD_DATE = 1;
+
+	/**
+	 * The operation id for the '<em>Get Local Discharge Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE = 2;
+
+	/**
+	 * The number of operations of the '<em>Cargo Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION_OPERATION_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.ScheduleFitnessImpl <em>Fitness</em>}' class.
@@ -335,6 +435,16 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SCHEDULE_FITNESS_FEATURE_COUNT = 2;
+
+
+	/**
+	 * The number of operations of the '<em>Fitness</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_FITNESS_OPERATION_COUNT = 0;
 
 
 	/**
@@ -576,6 +686,80 @@ public interface SchedulePackage extends EPackage {
 	EReference getCargoAllocation_Vessel();
 
 	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Laden Leg</em>'.
+	 * @see scenario.schedule.CargoAllocation#getLadenLeg()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_LadenLeg();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Ballast Leg</em>'.
+	 * @see scenario.schedule.CargoAllocation#getBallastLeg()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_BallastLeg();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Laden Idle</em>'.
+	 * @see scenario.schedule.CargoAllocation#getLadenIdle()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_LadenIdle();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Ballast Idle</em>'.
+	 * @see scenario.schedule.CargoAllocation#getBallastIdle()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_BallastIdle();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.CargoAllocation#getTotalCost() <em>Get Total Cost</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Total Cost</em>' operation.
+	 * @see scenario.schedule.CargoAllocation#getTotalCost()
+	 * @generated
+	 */
+	EOperation getCargoAllocation__GetTotalCost();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.CargoAllocation#getLocalLoadDate() <em>Get Local Load Date</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Load Date</em>' operation.
+	 * @see scenario.schedule.CargoAllocation#getLocalLoadDate()
+	 * @generated
+	 */
+	EOperation getCargoAllocation__GetLocalLoadDate();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.CargoAllocation#getLocalDischargeDate() <em>Get Local Discharge Date</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Discharge Date</em>' operation.
+	 * @see scenario.schedule.CargoAllocation#getLocalDischargeDate()
+	 * @generated
+	 */
+	EOperation getCargoAllocation__GetLocalDischargeDate();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.ScheduleFitness <em>Fitness</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -812,6 +996,62 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_ALLOCATION__VESSEL = eINSTANCE.getCargoAllocation_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Leg</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__LADEN_LEG = eINSTANCE.getCargoAllocation_LadenLeg();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Leg</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__BALLAST_LEG = eINSTANCE.getCargoAllocation_BallastLeg();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Idle</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__LADEN_IDLE = eINSTANCE.getCargoAllocation_LadenIdle();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Idle</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__BALLAST_IDLE = eINSTANCE.getCargoAllocation_BallastIdle();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Total Cost</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_ALLOCATION___GET_TOTAL_COST = eINSTANCE.getCargoAllocation__GetTotalCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Load Date</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_ALLOCATION___GET_LOCAL_LOAD_DATE = eINSTANCE.getCargoAllocation__GetLocalLoadDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Discharge Date</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE = eINSTANCE.getCargoAllocation__GetLocalDischargeDate();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.impl.ScheduleFitnessImpl <em>Fitness</em>}' class.

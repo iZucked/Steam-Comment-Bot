@@ -6,8 +6,10 @@
  */
 package scenario.schedule.fleetallocation.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -104,6 +106,15 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getName() {
+		return getVessel().getName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -158,10 +169,18 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 		return super.eIsSet(featureID);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
-	public String getName() {
-		return getVessel().getName();
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case FleetallocationPackage.FLEET_VESSEL___GET_NAME:
+				return getName();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
-	
 } //FleetVesselImpl

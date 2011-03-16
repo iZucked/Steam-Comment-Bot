@@ -87,6 +87,15 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL_FEATURE_COUNT = 1;
 
 	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.port.impl.PortImpl <em>Port</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -134,6 +143,15 @@ public interface PortPackage extends EPackage {
 
 
 	/**
+	 * The number of operations of the '<em>Port</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -160,6 +178,15 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISTANCE_MODEL_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Distance Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISTANCE_MODEL_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.port.impl.DistanceLineImpl <em>Distance Line</em>}' class.
@@ -207,6 +234,15 @@ public interface PortPackage extends EPackage {
 	 */
 	int DISTANCE_LINE_FEATURE_COUNT = 3;
 
+
+	/**
+	 * The number of operations of the '<em>Distance Line</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISTANCE_LINE_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.port.impl.CanalImpl <em>Canal</em>}' class.
@@ -264,6 +300,15 @@ public interface PortPackage extends EPackage {
 	int CANAL_FEATURE_COUNT = 4;
 
 	/**
+	 * The number of operations of the '<em>Canal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.port.impl.CanalModelImpl <em>Canal Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -291,6 +336,15 @@ public interface PortPackage extends EPackage {
 	 */
 	int CANAL_MODEL_FEATURE_COUNT = 1;
 
+
+	/**
+	 * The number of operations of the '<em>Canal Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_MODEL_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.port.impl.VesselClassCostImpl <em>Vessel Class Cost</em>}' class.
@@ -355,6 +409,15 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int VESSEL_CLASS_COST_FEATURE_COUNT = 5;
+
+	/**
+	 * The number of operations of the '<em>Vessel Class Cost</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST_OPERATION_COUNT = 0;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.PortModel <em>Model</em>}'.

@@ -6,6 +6,7 @@
  */
 package scenario.schedule.events.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -84,6 +85,21 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getTotalFuelCost() {
+		long totalCost = 0;
+		
+		for (final FuelQuantity quantity : getFuelUsage()) {
+			totalCost += quantity.getTotalPrice();
+		}
+		
+		return totalCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -151,6 +167,20 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 				return fuelUsage != null && !fuelUsage.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case EventsPackage.FUEL_MIXTURE___GET_TOTAL_FUEL_COST:
+				return getTotalFuelCost();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //FuelMixtureImpl

@@ -6,10 +6,12 @@
  */
 package scenario.schedule.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -21,6 +23,8 @@ import scenario.cargo.Slot;
 
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.Idle;
+import scenario.schedule.events.Journey;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
@@ -39,6 +43,10 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadPriceM3 <em>Load Price M3</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargePriceM3 <em>Discharge Price M3</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLadenLeg <em>Laden Leg</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getBallastLeg <em>Ballast Leg</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLadenIdle <em>Laden Idle</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getBallastIdle <em>Ballast Idle</em>}</li>
  * </ul>
  * </p>
  *
@@ -194,6 +202,46 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * @ordered
 	 */
 	protected AllocatedVessel vessel;
+
+	/**
+	 * The cached value of the '{@link #getLadenLeg() <em>Laden Leg</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenLeg()
+	 * @generated
+	 * @ordered
+	 */
+	protected Journey ladenLeg;
+
+	/**
+	 * The cached value of the '{@link #getBallastLeg() <em>Ballast Leg</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastLeg()
+	 * @generated
+	 * @ordered
+	 */
+	protected Journey ballastLeg;
+
+	/**
+	 * The cached value of the '{@link #getLadenIdle() <em>Laden Idle</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenIdle()
+	 * @generated
+	 * @ordered
+	 */
+	protected Idle ladenIdle;
+
+	/**
+	 * The cached value of the '{@link #getBallastIdle() <em>Ballast Idle</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastIdle()
+	 * @generated
+	 * @ordered
+	 */
+	protected Idle ballastIdle;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -459,6 +507,194 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Journey getLadenLeg() {
+		if (ladenLeg != null && ladenLeg.eIsProxy()) {
+			InternalEObject oldLadenLeg = (InternalEObject)ladenLeg;
+			ladenLeg = (Journey)eResolveProxy(oldLadenLeg);
+			if (ladenLeg != oldLadenLeg) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LADEN_LEG, oldLadenLeg, ladenLeg));
+			}
+		}
+		return ladenLeg;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey basicGetLadenLeg() {
+		return ladenLeg;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLadenLeg(Journey newLadenLeg) {
+		Journey oldLadenLeg = ladenLeg;
+		ladenLeg = newLadenLeg;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LADEN_LEG, oldLadenLeg, ladenLeg));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey getBallastLeg() {
+		if (ballastLeg != null && ballastLeg.eIsProxy()) {
+			InternalEObject oldBallastLeg = (InternalEObject)ballastLeg;
+			ballastLeg = (Journey)eResolveProxy(oldBallastLeg);
+			if (ballastLeg != oldBallastLeg) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG, oldBallastLeg, ballastLeg));
+			}
+		}
+		return ballastLeg;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey basicGetBallastLeg() {
+		return ballastLeg;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastLeg(Journey newBallastLeg) {
+		Journey oldBallastLeg = ballastLeg;
+		ballastLeg = newBallastLeg;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG, oldBallastLeg, ballastLeg));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Idle getLadenIdle() {
+		if (ladenIdle != null && ladenIdle.eIsProxy()) {
+			InternalEObject oldLadenIdle = (InternalEObject)ladenIdle;
+			ladenIdle = (Idle)eResolveProxy(oldLadenIdle);
+			if (ladenIdle != oldLadenIdle) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE, oldLadenIdle, ladenIdle));
+			}
+		}
+		return ladenIdle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Idle basicGetLadenIdle() {
+		return ladenIdle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLadenIdle(Idle newLadenIdle) {
+		Idle oldLadenIdle = ladenIdle;
+		ladenIdle = newLadenIdle;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE, oldLadenIdle, ladenIdle));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Idle getBallastIdle() {
+		if (ballastIdle != null && ballastIdle.eIsProxy()) {
+			InternalEObject oldBallastIdle = (InternalEObject)ballastIdle;
+			ballastIdle = (Idle)eResolveProxy(oldBallastIdle);
+			if (ballastIdle != oldBallastIdle) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE, oldBallastIdle, ballastIdle));
+			}
+		}
+		return ballastIdle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Idle basicGetBallastIdle() {
+		return ballastIdle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastIdle(Idle newBallastIdle) {
+		Idle oldBallastIdle = ballastIdle;
+		ballastIdle = newBallastIdle;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE, oldBallastIdle, ballastIdle));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public long getTotalCost() {
+		return getLadenLeg().getTotalCost() + getBallastLeg().getTotalCost()
+			+ getLadenIdle().getTotalCost() + getBallastIdle().getTotalCost();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object getLocalLoadDate() {
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getLoadSlot().getPort().getTimeZone())
+		);
+		calendar.setTime(getLoadDate());
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object getLocalDischargeDate() {
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getDischargeSlot().getPort().getTimeZone())
+		);
+		calendar.setTime(getDischargeDate());
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -483,6 +719,18 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
+				if (resolve) return getLadenLeg();
+				return basicGetLadenLeg();
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
+				if (resolve) return getBallastLeg();
+				return basicGetBallastLeg();
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
+				if (resolve) return getLadenIdle();
+				return basicGetLadenIdle();
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
+				if (resolve) return getBallastIdle();
+				return basicGetBallastIdle();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -521,6 +769,18 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
 				setVessel((AllocatedVessel)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
+				setLadenLeg((Journey)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
+				setBallastLeg((Journey)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
+				setLadenIdle((Idle)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
+				setBallastIdle((Idle)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -561,6 +821,18 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
 				setVessel((AllocatedVessel)null);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
+				setLadenLeg((Journey)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
+				setBallastLeg((Journey)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
+				setLadenIdle((Idle)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
+				setBallastIdle((Idle)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -591,8 +863,34 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return dischargePriceM3 != DISCHARGE_PRICE_M3_EDEFAULT;
 			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
 				return vessel != null;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
+				return ladenLeg != null;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
+				return ballastLeg != null;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
+				return ladenIdle != null;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
+				return ballastIdle != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.CARGO_ALLOCATION___GET_TOTAL_COST:
+				return getTotalCost();
+			case SchedulePackage.CARGO_ALLOCATION___GET_LOCAL_LOAD_DATE:
+				return getLocalLoadDate();
+			case SchedulePackage.CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE:
+				return getLocalDischargeDate();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

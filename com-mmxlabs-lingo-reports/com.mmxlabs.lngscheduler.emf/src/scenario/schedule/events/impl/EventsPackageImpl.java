@@ -9,6 +9,7 @@ package scenario.schedule.events.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -258,6 +259,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getFuelMixture__GetTotalFuelCost() {
+		return fuelMixtureEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getFuelQuantity() {
 		return fuelQuantityEClass;
 	}
@@ -339,6 +349,42 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getScheduledEvent__GetEventDuration() {
+		return scheduledEventEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getScheduledEvent__GetHireCost() {
+		return scheduledEventEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getScheduledEvent__GetLocalStartTime() {
+		return scheduledEventEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getScheduledEvent__GetLocalEndTime() {
+		return scheduledEventEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getIdle() {
 		return idleEClass;
 	}
@@ -350,6 +396,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 */
 	public EAttribute getIdle_VesselState() {
 		return (EAttribute)idleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getIdle__GetTotalCost() {
+		return idleEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -429,6 +484,33 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getJourney__GetTotalCost() {
+		return journeyEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getJourney__GetLocalStartTime() {
+		return journeyEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getJourney__GetLocalEndTime() {
+		return journeyEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortVisit() {
 		return portVisitEClass;
 	}
@@ -440,6 +522,24 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 */
 	public EReference getPortVisit_Port() {
 		return (EReference)portVisitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getPortVisit__GetLocalStartTime() {
+		return portVisitEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getPortVisit__GetLocalEndTime() {
+		return portVisitEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -535,6 +635,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		// Create classes and their features
 		fuelMixtureEClass = createEClass(FUEL_MIXTURE);
 		createEReference(fuelMixtureEClass, FUEL_MIXTURE__FUEL_USAGE);
+		createEOperation(fuelMixtureEClass, FUEL_MIXTURE___GET_TOTAL_FUEL_COST);
 
 		fuelQuantityEClass = createEClass(FUEL_QUANTITY);
 		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__FUEL_TYPE);
@@ -546,9 +647,14 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		scheduledEventEClass = createEClass(SCHEDULED_EVENT);
 		createEAttribute(scheduledEventEClass, SCHEDULED_EVENT__START_TIME);
 		createEAttribute(scheduledEventEClass, SCHEDULED_EVENT__END_TIME);
+		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_EVENT_DURATION);
+		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_HIRE_COST);
+		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_LOCAL_START_TIME);
+		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_LOCAL_END_TIME);
 
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__VESSEL_STATE);
+		createEOperation(idleEClass, IDLE___GET_TOTAL_COST);
 
 		journeyEClass = createEClass(JOURNEY);
 		createEReference(journeyEClass, JOURNEY__TO_PORT);
@@ -558,9 +664,14 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		createEAttribute(journeyEClass, JOURNEY__DISTANCE);
 		createEReference(journeyEClass, JOURNEY__FROM_PORT);
 		createEAttribute(journeyEClass, JOURNEY__ROUTE_COST);
+		createEOperation(journeyEClass, JOURNEY___GET_TOTAL_COST);
+		createEOperation(journeyEClass, JOURNEY___GET_LOCAL_START_TIME);
+		createEOperation(journeyEClass, JOURNEY___GET_LOCAL_END_TIME);
 
 		portVisitEClass = createEClass(PORT_VISIT);
 		createEReference(portVisitEClass, PORT_VISIT__PORT);
+		createEOperation(portVisitEClass, PORT_VISIT___GET_LOCAL_START_TIME);
+		createEOperation(portVisitEClass, PORT_VISIT___GET_LOCAL_END_TIME);
 
 		slotVisitEClass = createEClass(SLOT_VISIT);
 		createEReference(slotVisitEClass, SLOT_VISIT__SLOT);
@@ -598,6 +709,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
+		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
@@ -608,6 +720,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		scheduledEventEClass.getESuperTypes().add(theScenarioPackage.getScenarioObject());
 		idleEClass.getESuperTypes().add(this.getPortVisit());
 		idleEClass.getESuperTypes().add(this.getFuelMixture());
 		journeyEClass.getESuperTypes().add(this.getScheduledEvent());
@@ -616,9 +729,11 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		slotVisitEClass.getESuperTypes().add(this.getPortVisit());
 		charterOutVisitEClass.getESuperTypes().add(this.getPortVisit());
 
-		// Initialize classes and features; add operations and parameters
+		// Initialize classes, features, and operations; add parameters
 		initEClass(fuelMixtureEClass, FuelMixture.class, "FuelMixture", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFuelMixture_FuelUsage(), this.getFuelQuantity(), null, "fuelUsage", null, 0, -1, FuelMixture.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getFuelMixture__GetTotalFuelCost(), ecorePackage.getELong(), "getTotalFuelCost", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(fuelQuantityEClass, FuelQuantity.class, "FuelQuantity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFuelQuantity_FuelType(), this.getFuelType(), "fuelType", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -631,8 +746,18 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		initEAttribute(getScheduledEvent_StartTime(), ecorePackage.getEDate(), "startTime", null, 1, 1, ScheduledEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScheduledEvent_EndTime(), ecorePackage.getEDate(), "endTime", null, 1, 1, ScheduledEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEOperation(getScheduledEvent__GetEventDuration(), ecorePackage.getEInt(), "getEventDuration", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getScheduledEvent__GetHireCost(), ecorePackage.getELong(), "getHireCost", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getScheduledEvent__GetLocalStartTime(), ecorePackage.getEJavaObject(), "getLocalStartTime", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getScheduledEvent__GetLocalEndTime(), ecorePackage.getEJavaObject(), "getLocalEndTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_VesselState(), theFleetPackage.getVesselState(), "vesselState", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getIdle__GetTotalCost(), ecorePackage.getELong(), "getTotalCost", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(journeyEClass, Journey.class, "Journey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getJourney_ToPort(), thePortPackage.getPort(), null, "toPort", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -643,8 +768,18 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		initEReference(getJourney_FromPort(), thePortPackage.getPort(), null, "fromPort", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_RouteCost(), ecorePackage.getELong(), "routeCost", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEOperation(getJourney__GetTotalCost(), ecorePackage.getELong(), "getTotalCost", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getJourney__GetLocalStartTime(), ecorePackage.getEJavaObject(), "getLocalStartTime", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getJourney__GetLocalEndTime(), ecorePackage.getEJavaObject(), "getLocalEndTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortVisit_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getPortVisit__GetLocalStartTime(), ecorePackage.getEJavaObject(), "getLocalStartTime", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getPortVisit__GetLocalEndTime(), ecorePackage.getEJavaObject(), "getLocalEndTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(slotVisitEClass, SlotVisit.class, "SlotVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotVisit_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, SlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

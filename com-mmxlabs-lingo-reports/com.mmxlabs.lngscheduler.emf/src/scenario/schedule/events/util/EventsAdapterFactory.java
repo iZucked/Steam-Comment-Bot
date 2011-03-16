@@ -13,6 +13,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.ScenarioObject;
 import scenario.schedule.events.*;
 
 /**
@@ -102,6 +103,10 @@ public class EventsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseCharterOutVisit(CharterOutVisit object) {
 				return createCharterOutVisitAdapter();
+			}
+			@Override
+			public Adapter caseScenarioObject(ScenarioObject object) {
+				return createScenarioObjectAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -232,6 +237,20 @@ public class EventsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCharterOutVisitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.ScenarioObject <em>Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.ScenarioObject
+	 * @generated
+	 */
+	public Adapter createScenarioObjectAdapter() {
 		return null;
 	}
 

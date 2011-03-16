@@ -271,6 +271,15 @@ public interface Slot extends EObject {
 	 */
 	boolean isSetMarket();
 	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getPort().getTimeZone())\n);\ncalendar.setTime(getWindowStart());\nreturn calendar;'"
+	 * @generated
+	 */
+	Object getLocalWindowStart();
+
 	Date getWindowEnd();
 
 } // Slot

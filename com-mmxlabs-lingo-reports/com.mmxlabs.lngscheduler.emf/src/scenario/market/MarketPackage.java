@@ -126,6 +126,15 @@ public interface MarketPackage extends EPackage {
 	int MARKET_FEATURE_COUNT = 2;
 
 	/**
+	 * The number of operations of the '<em>Market</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_OPERATION_COUNT = 0;
+
+	/**
 	 * The feature id for the '<em><b>Markets</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -142,6 +151,15 @@ public interface MarketPackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKET_MODEL_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_MODEL_OPERATION_COUNT = 0;
 
 	/**
 	 * The feature id for the '<em><b>Prices</b></em>' containment reference list.
@@ -171,6 +189,15 @@ public interface MarketPackage extends EPackage {
 	int STEPWISE_PRICE_CURVE_FEATURE_COUNT = 2;
 
 	/**
+	 * The number of operations of the '<em>Stepwise Price Curve</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STEPWISE_PRICE_CURVE_OPERATION_COUNT = 0;
+
+	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -196,6 +223,15 @@ public interface MarketPackage extends EPackage {
 	 * @ordered
 	 */
 	int STEPWISE_PRICE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Stepwise Price</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STEPWISE_PRICE_OPERATION_COUNT = 0;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.market.MarketModel <em>Model</em>}'.

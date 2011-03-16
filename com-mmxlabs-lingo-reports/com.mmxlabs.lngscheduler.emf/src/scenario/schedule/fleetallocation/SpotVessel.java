@@ -78,4 +78,22 @@ public interface SpotVessel extends AllocatedVessel {
 	 */
 	void setVesselClass(VesselClass value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getVesselClass().getDailyCharterPrice() / 24.0;'"
+	 * @generated
+	 */
+	double getHourlyCharterPrice();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getVesselClass().getName() + \" \" + getIndex();'"
+	 * @generated
+	 */
+	String getName();
+
 } // SpotVessel

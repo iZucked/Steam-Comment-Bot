@@ -12,6 +12,8 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.schedule.events.Idle;
+import scenario.schedule.events.Journey;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
@@ -31,6 +33,10 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.CargoAllocation#getLoadPriceM3 <em>Load Price M3</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargePriceM3 <em>Discharge Price M3</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}</li>
  * </ul>
  * </p>
  *
@@ -272,5 +278,136 @@ public interface CargoAllocation extends EObject {
 	 * @generated
 	 */
 	void setVessel(AllocatedVessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Laden Leg</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Laden Leg</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Laden Leg</em>' reference.
+	 * @see #setLadenLeg(Journey)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_LadenLeg()
+	 * @model required="true"
+	 * @generated
+	 */
+	Journey getLadenLeg();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Laden Leg</em>' reference.
+	 * @see #getLadenLeg()
+	 * @generated
+	 */
+	void setLadenLeg(Journey value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Leg</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Leg</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Leg</em>' reference.
+	 * @see #setBallastLeg(Journey)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_BallastLeg()
+	 * @model required="true"
+	 * @generated
+	 */
+	Journey getBallastLeg();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Leg</em>' reference.
+	 * @see #getBallastLeg()
+	 * @generated
+	 */
+	void setBallastLeg(Journey value);
+
+	/**
+	 * Returns the value of the '<em><b>Laden Idle</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Laden Idle</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Laden Idle</em>' reference.
+	 * @see #setLadenIdle(Idle)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_LadenIdle()
+	 * @model required="true"
+	 * @generated
+	 */
+	Idle getLadenIdle();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Laden Idle</em>' reference.
+	 * @see #getLadenIdle()
+	 * @generated
+	 */
+	void setLadenIdle(Idle value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Idle</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Idle</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Idle</em>' reference.
+	 * @see #setBallastIdle(Idle)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_BallastIdle()
+	 * @model required="true"
+	 * @generated
+	 */
+	Idle getBallastIdle();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Idle</em>' reference.
+	 * @see #getBallastIdle()
+	 * @generated
+	 */
+	void setBallastIdle(Idle value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getLadenLeg().getTotalCost() + getBallastLeg().getTotalCost()\n\t+ getLadenIdle().getTotalCost() + getBallastIdle().getTotalCost();'"
+	 * @generated
+	 */
+	long getTotalCost();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getLoadSlot().getPort().getTimeZone())\n);\ncalendar.setTime(getLoadDate());\nreturn calendar;'"
+	 * @generated
+	 */
+	Object getLocalLoadDate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getDischargeSlot().getPort().getTimeZone())\n);\ncalendar.setTime(getDischargeDate());\nreturn calendar;'"
+	 * @generated
+	 */
+	Object getLocalDischargeDate();
 
 } // CargoAllocation

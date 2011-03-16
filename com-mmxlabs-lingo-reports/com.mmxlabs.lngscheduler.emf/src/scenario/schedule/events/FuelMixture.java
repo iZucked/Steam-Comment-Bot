@@ -43,4 +43,13 @@ public interface FuelMixture extends EObject {
 	 */
 	EList<FuelQuantity> getFuelUsage();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='long totalCost = 0;\n\nfor (final FuelQuantity quantity : getFuelUsage()) {\n\ttotalCost += quantity.getTotalPrice();\n}\n\nreturn totalCost;'"
+	 * @generated
+	 */
+	long getTotalFuelCost();
+
 } // FuelMixture

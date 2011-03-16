@@ -6,8 +6,10 @@
  */
 package scenario.schedule.fleetallocation.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -15,6 +17,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.VesselClass;
 
+import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
 import scenario.schedule.fleetallocation.SpotVessel;
 
@@ -146,6 +149,24 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getHourlyCharterPrice() {
+		return getVesselClass().getDailyCharterPrice() / 24.0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getName() {
+		return getVesselClass().getName() + " " + getIndex();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -216,6 +237,39 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * @generated
 	 */
 	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == AllocatedVessel.class) {
+			switch (baseOperationID) {
+				case FleetallocationPackage.ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE: return FleetallocationPackage.SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE;
+				case FleetallocationPackage.ALLOCATED_VESSEL___GET_NAME: return FleetallocationPackage.SPOT_VESSEL___GET_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case FleetallocationPackage.SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE:
+				return getHourlyCharterPrice();
+			case FleetallocationPackage.SPOT_VESSEL___GET_NAME:
+				return getName();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -225,10 +279,4 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 		result.append(')');
 		return result.toString();
 	}
-
-	@Override
-	public String getName() {
-		return getVesselClass().getName() +" " + Integer.toString(getIndex());
-	}
-
 } //SpotVesselImpl

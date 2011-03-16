@@ -9,8 +9,10 @@ package scenario.schedule.events;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -89,6 +91,24 @@ public interface EventsPackage extends EPackage {
 	int FUEL_MIXTURE_FEATURE_COUNT = 1;
 
 	/**
+	 * The operation id for the '<em>Get Total Fuel Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_MIXTURE___GET_TOTAL_FUEL_COST = 0;
+
+	/**
+	 * The number of operations of the '<em>Fuel Mixture</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_MIXTURE_OPERATION_COUNT = 1;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.FuelQuantityImpl <em>Fuel Quantity</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -153,6 +173,15 @@ public interface EventsPackage extends EPackage {
 	int FUEL_QUANTITY_FEATURE_COUNT = 5;
 
 	/**
+	 * The number of operations of the '<em>Fuel Quantity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_QUANTITY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.ScheduledEventImpl <em>Scheduled Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -169,7 +198,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULED_EVENT__START_TIME = 0;
+	int SCHEDULED_EVENT__START_TIME = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>End Time</b></em>' attribute.
@@ -178,7 +207,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULED_EVENT__END_TIME = 1;
+	int SCHEDULED_EVENT__END_TIME = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Scheduled Event</em>' class.
@@ -187,7 +216,61 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULED_EVENT_FEATURE_COUNT = 2;
+	int SCHEDULED_EVENT_FEATURE_COUNT = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT___GET_CONTAINER = ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Event Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT___GET_EVENT_DURATION = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT___GET_HIRE_COST = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Local Start Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT___GET_LOCAL_START_TIME = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Local End Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT___GET_LOCAL_END_TIME = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Scheduled Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.IdleImpl <em>Idle</em>}' class.
@@ -256,6 +339,60 @@ public interface EventsPackage extends EPackage {
 	int PORT_VISIT_FEATURE_COUNT = SCHEDULED_EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_CONTAINER = SCHEDULED_EVENT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Event Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_EVENT_DURATION = SCHEDULED_EVENT___GET_EVENT_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_HIRE_COST = SCHEDULED_EVENT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Local Start Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_LOCAL_START_TIME = SCHEDULED_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Local End Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_LOCAL_END_TIME = SCHEDULED_EVENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Port Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT_OPERATION_COUNT = SCHEDULED_EVENT_OPERATION_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -308,6 +445,78 @@ public interface EventsPackage extends EPackage {
 	 * @ordered
 	 */
 	int IDLE_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE___GET_CONTAINER = PORT_VISIT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Event Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE___GET_EVENT_DURATION = PORT_VISIT___GET_EVENT_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE___GET_HIRE_COST = PORT_VISIT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Local Start Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE___GET_LOCAL_START_TIME = PORT_VISIT___GET_LOCAL_START_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Local End Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE___GET_LOCAL_END_TIME = PORT_VISIT___GET_LOCAL_END_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Total Fuel Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE___GET_TOTAL_FUEL_COST = PORT_VISIT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Total Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE___GET_TOTAL_COST = PORT_VISIT_OPERATION_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Idle</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
@@ -409,6 +618,78 @@ public interface EventsPackage extends EPackage {
 	int JOURNEY_FEATURE_COUNT = SCHEDULED_EVENT_FEATURE_COUNT + 8;
 
 	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_CONTAINER = SCHEDULED_EVENT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Event Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_EVENT_DURATION = SCHEDULED_EVENT___GET_EVENT_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_HIRE_COST = SCHEDULED_EVENT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Total Fuel Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_TOTAL_FUEL_COST = SCHEDULED_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Total Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_TOTAL_COST = SCHEDULED_EVENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Local Start Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_LOCAL_START_TIME = SCHEDULED_EVENT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Local End Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_LOCAL_END_TIME = SCHEDULED_EVENT_OPERATION_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Journey</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY_OPERATION_COUNT = SCHEDULED_EVENT_OPERATION_COUNT + 4;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.SlotVisitImpl <em>Slot Visit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -473,6 +754,60 @@ public interface EventsPackage extends EPackage {
 	int SLOT_VISIT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 2;
 
 	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT___GET_CONTAINER = PORT_VISIT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Event Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT___GET_EVENT_DURATION = PORT_VISIT___GET_EVENT_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT___GET_HIRE_COST = PORT_VISIT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Local Start Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT___GET_LOCAL_START_TIME = PORT_VISIT___GET_LOCAL_START_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Local End Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT___GET_LOCAL_END_TIME = PORT_VISIT___GET_LOCAL_END_TIME;
+
+	/**
+	 * The number of operations of the '<em>Slot Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.CharterOutVisitImpl <em>Charter Out Visit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -528,6 +863,60 @@ public interface EventsPackage extends EPackage {
 	int CHARTER_OUT_VISIT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT___GET_CONTAINER = PORT_VISIT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Event Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT___GET_EVENT_DURATION = PORT_VISIT___GET_EVENT_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT___GET_HIRE_COST = PORT_VISIT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Local Start Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT___GET_LOCAL_START_TIME = PORT_VISIT___GET_LOCAL_START_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Local End Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT___GET_LOCAL_END_TIME = PORT_VISIT___GET_LOCAL_END_TIME;
+
+	/**
+	 * The number of operations of the '<em>Charter Out Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.events.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -568,6 +957,16 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFuelMixture_FuelUsage();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.FuelMixture#getTotalFuelCost() <em>Get Total Fuel Cost</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Total Fuel Cost</em>' operation.
+	 * @see scenario.schedule.events.FuelMixture#getTotalFuelCost()
+	 * @generated
+	 */
+	EOperation getFuelMixture__GetTotalFuelCost();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.FuelQuantity <em>Fuel Quantity</em>}'.
@@ -667,6 +1066,46 @@ public interface EventsPackage extends EPackage {
 	EAttribute getScheduledEvent_EndTime();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.ScheduledEvent#getEventDuration() <em>Get Event Duration</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Event Duration</em>' operation.
+	 * @see scenario.schedule.events.ScheduledEvent#getEventDuration()
+	 * @generated
+	 */
+	EOperation getScheduledEvent__GetEventDuration();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.ScheduledEvent#getHireCost() <em>Get Hire Cost</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Hire Cost</em>' operation.
+	 * @see scenario.schedule.events.ScheduledEvent#getHireCost()
+	 * @generated
+	 */
+	EOperation getScheduledEvent__GetHireCost();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.ScheduledEvent#getLocalStartTime() <em>Get Local Start Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Start Time</em>' operation.
+	 * @see scenario.schedule.events.ScheduledEvent#getLocalStartTime()
+	 * @generated
+	 */
+	EOperation getScheduledEvent__GetLocalStartTime();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.ScheduledEvent#getLocalEndTime() <em>Get Local End Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local End Time</em>' operation.
+	 * @see scenario.schedule.events.ScheduledEvent#getLocalEndTime()
+	 * @generated
+	 */
+	EOperation getScheduledEvent__GetLocalEndTime();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.Idle <em>Idle</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -686,6 +1125,16 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getIdle_VesselState();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.Idle#getTotalCost() <em>Get Total Cost</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Total Cost</em>' operation.
+	 * @see scenario.schedule.events.Idle#getTotalCost()
+	 * @generated
+	 */
+	EOperation getIdle__GetTotalCost();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.Journey <em>Journey</em>}'.
@@ -775,6 +1224,36 @@ public interface EventsPackage extends EPackage {
 	EAttribute getJourney_RouteCost();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.Journey#getTotalCost() <em>Get Total Cost</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Total Cost</em>' operation.
+	 * @see scenario.schedule.events.Journey#getTotalCost()
+	 * @generated
+	 */
+	EOperation getJourney__GetTotalCost();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.Journey#getLocalStartTime() <em>Get Local Start Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Start Time</em>' operation.
+	 * @see scenario.schedule.events.Journey#getLocalStartTime()
+	 * @generated
+	 */
+	EOperation getJourney__GetLocalStartTime();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.Journey#getLocalEndTime() <em>Get Local End Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local End Time</em>' operation.
+	 * @see scenario.schedule.events.Journey#getLocalEndTime()
+	 * @generated
+	 */
+	EOperation getJourney__GetLocalEndTime();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.PortVisit <em>Port Visit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -794,6 +1273,26 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPortVisit_Port();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.PortVisit#getLocalStartTime() <em>Get Local Start Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Start Time</em>' operation.
+	 * @see scenario.schedule.events.PortVisit#getLocalStartTime()
+	 * @generated
+	 */
+	EOperation getPortVisit__GetLocalStartTime();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.PortVisit#getLocalEndTime() <em>Get Local End Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local End Time</em>' operation.
+	 * @see scenario.schedule.events.PortVisit#getLocalEndTime()
+	 * @generated
+	 */
+	EOperation getPortVisit__GetLocalEndTime();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.SlotVisit <em>Slot Visit</em>}'.
@@ -909,6 +1408,14 @@ public interface EventsPackage extends EPackage {
 		EReference FUEL_MIXTURE__FUEL_USAGE = eINSTANCE.getFuelMixture_FuelUsage();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Total Fuel Cost</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation FUEL_MIXTURE___GET_TOTAL_FUEL_COST = eINSTANCE.getFuelMixture__GetTotalFuelCost();
+
+		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.FuelQuantityImpl <em>Fuel Quantity</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -985,6 +1492,38 @@ public interface EventsPackage extends EPackage {
 		EAttribute SCHEDULED_EVENT__END_TIME = eINSTANCE.getScheduledEvent_EndTime();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Event Duration</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCHEDULED_EVENT___GET_EVENT_DURATION = eINSTANCE.getScheduledEvent__GetEventDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Hire Cost</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCHEDULED_EVENT___GET_HIRE_COST = eINSTANCE.getScheduledEvent__GetHireCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Start Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCHEDULED_EVENT___GET_LOCAL_START_TIME = eINSTANCE.getScheduledEvent__GetLocalStartTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local End Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCHEDULED_EVENT___GET_LOCAL_END_TIME = eINSTANCE.getScheduledEvent__GetLocalEndTime();
+
+		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.IdleImpl <em>Idle</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1001,6 +1540,14 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute IDLE__VESSEL_STATE = eINSTANCE.getIdle_VesselState();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Total Cost</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation IDLE___GET_TOTAL_COST = eINSTANCE.getIdle__GetTotalCost();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.JourneyImpl <em>Journey</em>}' class.
@@ -1069,6 +1616,30 @@ public interface EventsPackage extends EPackage {
 		EAttribute JOURNEY__ROUTE_COST = eINSTANCE.getJourney_RouteCost();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Total Cost</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation JOURNEY___GET_TOTAL_COST = eINSTANCE.getJourney__GetTotalCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Start Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation JOURNEY___GET_LOCAL_START_TIME = eINSTANCE.getJourney__GetLocalStartTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local End Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation JOURNEY___GET_LOCAL_END_TIME = eINSTANCE.getJourney__GetLocalEndTime();
+
+		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.PortVisitImpl <em>Port Visit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1085,6 +1656,22 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT_VISIT__PORT = eINSTANCE.getPortVisit_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Start Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PORT_VISIT___GET_LOCAL_START_TIME = eINSTANCE.getPortVisit__GetLocalStartTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local End Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PORT_VISIT___GET_LOCAL_END_TIME = eINSTANCE.getPortVisit__GetLocalEndTime();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.SlotVisitImpl <em>Slot Visit</em>}' class.

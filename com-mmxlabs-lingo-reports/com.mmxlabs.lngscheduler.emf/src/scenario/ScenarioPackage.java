@@ -3,6 +3,7 @@ package scenario;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -174,6 +175,54 @@ public interface ScenarioPackage extends EPackage {
 
 
 	/**
+	 * The number of operations of the '<em>Scenario</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_OPERATION_COUNT = 0;
+
+
+	/**
+	 * The meta object id for the '{@link scenario.impl.ScenarioObjectImpl <em>Object</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.impl.ScenarioObjectImpl
+	 * @see scenario.impl.ScenarioPackageImpl#getScenarioObject()
+	 * @generated
+	 */
+	int SCENARIO_OBJECT = 1;
+
+	/**
+	 * The number of structural features of the '<em>Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_OBJECT_FEATURE_COUNT = 0;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_OBJECT___GET_CONTAINER = 0;
+
+	/**
+	 * The number of operations of the '<em>Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_OBJECT_OPERATION_COUNT = 1;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.Scenario <em>Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -305,6 +354,26 @@ public interface ScenarioPackage extends EPackage {
 	EAttribute getScenario_Name();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.ScenarioObject <em>Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Object</em>'.
+	 * @see scenario.ScenarioObject
+	 * @generated
+	 */
+	EClass getScenarioObject();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.ScenarioObject#getContainer() <em>Get Container</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Container</em>' operation.
+	 * @see scenario.ScenarioObject#getContainer()
+	 * @generated
+	 */
+	EOperation getScenarioObject__GetContainer();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -423,6 +492,24 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SCENARIO__NAME = eINSTANCE.getScenario_Name();
+
+		/**
+		 * The meta object literal for the '{@link scenario.impl.ScenarioObjectImpl <em>Object</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.impl.ScenarioObjectImpl
+		 * @see scenario.impl.ScenarioPackageImpl#getScenarioObject()
+		 * @generated
+		 */
+		EClass SCENARIO_OBJECT = eINSTANCE.getScenarioObject();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Container</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCENARIO_OBJECT___GET_CONTAINER = eINSTANCE.getScenarioObject__GetContainer();
 
 	}
 

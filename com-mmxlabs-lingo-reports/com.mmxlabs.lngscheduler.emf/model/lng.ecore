@@ -27,6 +27,14 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="Default name"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScenarioObject" abstract="true">
+    <eOperations name="getContainer" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return eContainer();"/>
+        <details key="documentation" value="This is a hack to get around the fact that EMF is not including EObject operations in getEAllOperations() for our model, probably because we are not extending the metamodel."/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
   <eSubpackages name="fleet" nsURI="http://com.mmxlabs.lng.emf/fleet" nsPrefix="com.mmxlabs.lng.emf.fleet">
     <eClassifiers xsi:type="ecore:EClass" name="FleetModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="fleet" upperBound="-1"
@@ -155,6 +163,21 @@
           eType="#//schedule/ScheduleFitness" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation">
+      <eOperations name="getTotalCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return getLadenLeg().getTotalCost() + getBallastLeg().getTotalCost()&#xA;&#x9;+ getLadenIdle().getTotalCost() + getBallastIdle().getTotalCost();"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getLocalLoadDate" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getLoadSlot().getPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getLoadDate());&#xA;return calendar;"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getLocalDischargeDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getDischargeSlot().getPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getDischargeDate());&#xA;return calendar;"/>
+        </eAnnotations>
+      </eOperations>
       <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" lowerBound="1"
           eType="#//cargo/LoadSlot"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" lowerBound="1"
@@ -173,6 +196,14 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
           eType="#//schedule/fleetallocation/AllocatedVessel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ladenLeg" lowerBound="1"
+          eType="#//schedule/events/Journey"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ballastLeg" lowerBound="1"
+          eType="#//schedule/events/Journey"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ladenIdle" lowerBound="1"
+          eType="#//schedule/events/Idle"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ballastIdle" lowerBound="1"
+          eType="#//schedule/events/Idle"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleFitness">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
@@ -183,6 +214,11 @@
     <eSubpackages name="events" nsURI="http://com.mmxlabs.lng.emf/schedule/events"
         nsPrefix="com.mmxlabs.lng.emf.schedule.events">
       <eClassifiers xsi:type="ecore:EClass" name="FuelMixture">
+        <eOperations name="getTotalFuelCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="long totalCost = 0;&#xA;&#xA;for (final FuelQuantity quantity : getFuelUsage()) {&#xA;&#x9;totalCost += quantity.getTotalPrice();&#xA;}&#xA;&#xA;return totalCost;"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="fuelUsage" upperBound="-1"
             eType="#//schedule/events/FuelQuantity" containment="true"/>
       </eClassifiers>
@@ -208,17 +244,49 @@
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuelUnit" lowerBound="1"
             eType="#//schedule/events/FuelUnit"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="ScheduledEvent">
+      <eClassifiers xsi:type="ecore:EClass" name="ScheduledEvent" eSuperTypes="#//ScenarioObject">
+        <eOperations name="getEventDuration" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return (int) ((getEndTime().getTime() - getStartTime().getTime()) / javax.management.timer.Timer.ONE_HOUR); "/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getHireCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return (long) (((scenario.schedule.Sequence) eContainer()).getVessel().getHourlyCharterPrice() * getEventDuration());"/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getLocalStartTime" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        <eOperations name="getLocalEndTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" lowerBound="1"
             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime" lowerBound="1"
             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="Idle" eSuperTypes="#//schedule/events/PortVisit #//schedule/events/FuelMixture">
+        <eOperations name="getTotalCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return getTotalFuelCost() + getHireCost();"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselState" lowerBound="1"
             eType="#//fleet/VesselState"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="Journey" eSuperTypes="#//schedule/events/ScheduledEvent #//schedule/events/FuelMixture">
+        <eOperations name="getTotalCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return getRouteCost() + getTotalFuelCost() + getHireCost();"/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getLocalStartTime" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getFromPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getStartTime());&#xA;return calendar;"/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getLocalEndTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getToPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getEndTime());&#xA;return calendar;"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="toPort" lowerBound="1"
             eType="#//port/Port"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselState" lowerBound="1"
@@ -235,6 +303,16 @@
             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//schedule/events/ScheduledEvent">
+        <eOperations name="getLocalStartTime" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getStartTime());&#xA;return calendar;"/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getLocalEndTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getEndTime());&#xA;return calendar;"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
             eType="#//port/Port"/>
       </eClassifiers>
@@ -251,12 +329,34 @@
     </eSubpackages>
     <eSubpackages name="fleetallocation" nsURI="http://com.mmxlabs.lng.emf/schedule/fleetallocation"
         nsPrefix="com.mmxlabs.lng.emf.schedule.fleetallocation">
-      <eClassifiers xsi:type="ecore:EClass" name="AllocatedVessel"/>
+      <eClassifiers xsi:type="ecore:EClass" name="AllocatedVessel">
+        <eOperations name="getHourlyCharterPrice" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return 0;"/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="FleetVessel" eSuperTypes="#//schedule/fleetallocation/AllocatedVessel">
+        <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return getVessel().getName();"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
             eType="#//fleet/Vessel"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="SpotVessel" eSuperTypes="#//schedule/fleetallocation/AllocatedVessel">
+        <eOperations name="getHourlyCharterPrice" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return getVesselClass().getDailyCharterPrice() / 24.0;"/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return getVesselClass().getName() + &quot; &quot; + getIndex();"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" lowerBound="1"
             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
@@ -345,6 +445,11 @@
           eType="#//fleet/Vessel"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Slot">
+      <eOperations name="getLocalWindowStart" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getWindowStart());&#xA;return calendar;"/>
+        </eAnnotations>
+      </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -384,6 +489,12 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="repeating" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Entity">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="taxRate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="market" nsURI="http://com.mmxlabs.lng.emf/market" nsPrefix="com.mmxlabs.lng.emf.market">

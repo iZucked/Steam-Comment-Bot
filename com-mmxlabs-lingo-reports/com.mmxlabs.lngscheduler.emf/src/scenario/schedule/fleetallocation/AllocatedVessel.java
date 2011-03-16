@@ -20,5 +20,20 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface AllocatedVessel extends EObject {
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return 0;'"
+	 * @generated
+	 */
+	double getHourlyCharterPrice();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
 	String getName();
 } // AllocatedVessel

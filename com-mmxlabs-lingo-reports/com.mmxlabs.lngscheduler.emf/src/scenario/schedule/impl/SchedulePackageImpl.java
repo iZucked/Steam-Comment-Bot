@@ -7,6 +7,7 @@ package scenario.schedule.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -377,6 +378,69 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCargoAllocation_LadenLeg() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoAllocation_BallastLeg() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoAllocation_LadenIdle() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoAllocation_BallastIdle() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getCargoAllocation__GetTotalCost() {
+		return cargoAllocationEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getCargoAllocation__GetLocalLoadDate() {
+		return cargoAllocationEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getCargoAllocation__GetLocalDischargeDate() {
+		return cargoAllocationEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getScheduleFitness() {
 		return scheduleFitnessEClass;
 	}
@@ -453,6 +517,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_PRICE_M3);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_PRICE_M3);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__VESSEL);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LADEN_LEG);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_LEG);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LADEN_IDLE);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_IDLE);
+		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_TOTAL_COST);
+		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOCAL_LOAD_DATE);
+		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE);
 
 		scheduleFitnessEClass = createEClass(SCHEDULE_FITNESS);
 		createEAttribute(scheduleFitnessEClass, SCHEDULE_FITNESS__NAME);
@@ -497,7 +568,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Add supertypes to classes
 
-		// Initialize classes and features; add operations and parameters
+		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getScheduleModel_Schedules(), this.getSchedule(), null, "schedules", null, 0, -1, ScheduleModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -523,6 +594,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getCargoAllocation_LoadPriceM3(), ecorePackage.getEInt(), "loadPriceM3", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_DischargePriceM3(), ecorePackage.getEInt(), "dischargePriceM3", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoAllocation_Vessel(), theFleetallocationPackage.getAllocatedVessel(), null, "vessel", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_LadenLeg(), theEventsPackage.getJourney(), null, "ladenLeg", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_BallastLeg(), theEventsPackage.getJourney(), null, "ballastLeg", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_LadenIdle(), theEventsPackage.getIdle(), null, "ladenIdle", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_BallastIdle(), theEventsPackage.getIdle(), null, "ballastIdle", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getCargoAllocation__GetTotalCost(), ecorePackage.getELong(), "getTotalCost", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getCargoAllocation__GetLocalLoadDate(), ecorePackage.getEJavaObject(), "getLocalLoadDate", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getCargoAllocation__GetLocalDischargeDate(), ecorePackage.getEJavaObject(), "getLocalDischargeDate", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(scheduleFitnessEClass, ScheduleFitness.class, "ScheduleFitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScheduleFitness_Name(), ecorePackage.getEString(), "name", null, 1, 1, ScheduleFitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

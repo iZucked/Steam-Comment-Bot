@@ -6,6 +6,8 @@
  */
 package scenario.schedule.fleetallocation.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -42,10 +44,40 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 		return FleetallocationPackage.Literals.ALLOCATED_VESSEL;
 	}
 
-	@Override
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getHourlyCharterPrice() {
+		return 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case FleetallocationPackage.ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE:
+				return getHourlyCharterPrice();
+			case FleetallocationPackage.ALLOCATED_VESSEL___GET_NAME:
+				return getName();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //AllocatedVesselImpl
