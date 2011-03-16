@@ -1,6 +1,7 @@
 package com.mmxlabs.ganttviewer;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.management.timer.Timer;
 
@@ -28,7 +29,7 @@ public class PackAction extends Action {
 		Calendar earliestDate = null;
 		Calendar latestDate = null;
 
-		for (final GanttEvent event : composite.getEvents()) {
+		for (final GanttEvent event : (List<GanttEvent>)composite.getEvents()) {
 			final Calendar startDate = event.getEarliestStartDate();
 			final Calendar endDate = event.getLatestEndDate();
 			if (earliestDate == null || startDate.before(earliestDate)) {
