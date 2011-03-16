@@ -48,8 +48,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final ScenarioEditor part) {
 		super(page, part);
 		this.part = part;
-		new DefaultAttributeEditor(
-				part.getEditingDomain());
 	}
 
 	@Override

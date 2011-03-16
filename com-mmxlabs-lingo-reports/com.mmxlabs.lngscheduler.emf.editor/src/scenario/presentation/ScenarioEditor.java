@@ -85,6 +85,7 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
@@ -108,6 +109,7 @@ import scenario.cargo.CargoPackage;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
+import scenario.fleet.VesselStateAttributes;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
 import scenario.market.MarketPackage;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
@@ -117,14 +119,13 @@ import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
-import scenario.presentation.cargoeditor.DefaultMultiReferenceEditor;
-import scenario.presentation.cargoeditor.DefaultReferenceEditor;
+import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
+import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
-import scenario.presentation.cargoeditor.SlotVolumesFeatureEditor;
-import scenario.presentation.cargoeditor.VesselStateAttributesEditor;
+import scenario.presentation.cargoeditor.celleditors.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.properties.ScenarioPropertySourceProvider;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
@@ -966,58 +967,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				}
 			};
 
-			final DefaultMultiReferenceEditor multiPortEditor = new DefaultMultiReferenceEditor(
-					portProvider, PortPackage.eINSTANCE.getPort_Name(),
-					getEditingDomain());
-
-			final DefaultReferenceEditor portEditor = new DefaultReferenceEditor(
-					PortPackage.eINSTANCE.getPort(),
-					PortPackage.eINSTANCE.getPort_Name(), portProvider,
-					getEditingDomain(), true);
-
-			final DefaultReferenceEditor marketEditor = new DefaultReferenceEditor(
-					MarketPackage.eINSTANCE.getMarket(),
-					MarketPackage.eINSTANCE.getMarket_Name(),
-					new IReferenceValueProvider() {
-						@Override
-						public Iterable<? extends EObject> getAllowedValues(
-								EObject target, EStructuralFeature field) {
-							while (target != null
-									&& !(target instanceof Scenario)) {
-								target = target.eContainer();
-							}
-							if (target == null) {
-								return Collections.emptyList();
-							} else {
-								return ((Scenario) target).getMarketModel()
-										.getMarkets();
-							}
-						}
-					}, getEditingDomain(), true);
-
-			final DefaultReferenceEditor vesselClassEditor = new DefaultReferenceEditor(
-					FleetPackage.eINSTANCE.getVesselClass(),
-					FleetPackage.eINSTANCE.getVesselClass_Name(),
-					new IReferenceValueProvider() {
-						@Override
-						public Iterable<? extends EObject> getAllowedValues(
-								EObject target, EStructuralFeature field) {
-							while (target != null
-									&& !(target instanceof Scenario)) {
-								target = target.eContainer();
-							}
-							if (target == null) {
-								return Collections.emptyList();
-							} else {
-								return ((Scenario) target).getFleetModel()
-										.getVesselClasses();
-							}
-						}
-					}, getEditingDomain(), true);
-
-			final SlotVolumesFeatureEditor slotVolumesEditor = new SlotVolumesFeatureEditor(
-					getEditingDomain());
-
 			// Create a page for the cargo editor
 			{
 
@@ -1128,14 +1077,84 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				vcePane.init(path2, adapterFactory);
 				{
-					final BasicAttributeManipulator name = 
-						new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVesselClass_Name(), getEditingDomain());
+					final BasicAttributeManipulator name = new BasicAttributeManipulator(
+							FleetPackage.eINSTANCE.getVesselClass_Name(),
+							getEditingDomain());
 					vcePane.addColumn("Name", name, name);
 				}
 				{
-					final BasicAttributeManipulator capacity = 
-						new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClass_Capacity(), getEditingDomain());
+					final BasicAttributeManipulator capacity = new NumericAttributeManipulator(
+							FleetPackage.eINSTANCE.getVesselClass_Capacity(),
+							getEditingDomain());
 					vcePane.addColumn("Capacity", capacity, capacity);
+				}
+
+				{
+					final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(
+							FleetPackage.eINSTANCE
+									.getVesselClass_InaccessiblePorts(),
+							getEditingDomain(), portProvider,
+							PortPackage.eINSTANCE.getPort_Name());
+					vcePane.addColumn("Inaccessible Ports", capacity, capacity);
+				}
+
+				{
+					final DialogFeatureManipulator laden = new DialogFeatureManipulator(
+							FleetPackage.eINSTANCE
+									.getVesselClass_LadenAttributes(),
+							getEditingDomain()) {
+						@Override
+						protected String renderValue(Object object) {
+							final VesselStateAttributes a = (VesselStateAttributes) object;
+							return "NBO: " + a.getNboRate() + " Idle NBO: "
+									+ a.getIdleNBORate() + " Idle Base:"
+									+ a.getIdleConsumptionRate();
+						}
+
+						@Override
+						protected Object openDialogBox(
+								Control cellEditorWindow, Object object) {
+							final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
+									cellEditorWindow.getShell(),
+									(SWT.DIALOG_TRIM & ~SWT.CLOSE)
+											| SWT.APPLICATION_MODAL);
+
+							return dlg
+									.open((VesselStateAttributes) getValue(object));
+						}
+
+					};
+					vcePane.addColumn("Laden Fuel Usage", laden, laden);
+				}
+
+				{
+					final DialogFeatureManipulator laden = new DialogFeatureManipulator(
+							FleetPackage.eINSTANCE
+									.getVesselClass_BallastAttributes(),
+							getEditingDomain()) {
+
+						@Override
+						protected Object openDialogBox(
+								Control cellEditorWindow, Object object) {
+							final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
+									cellEditorWindow.getShell(),
+									(SWT.DIALOG_TRIM & ~SWT.CLOSE)
+											| SWT.APPLICATION_MODAL);
+
+							return dlg
+									.open((VesselStateAttributes) getValue(object));
+						}
+
+						@Override
+						protected String renderValue(Object object) {
+							final VesselStateAttributes a = (VesselStateAttributes) object;
+							return "NBO: " + a.getNboRate() + " Idle NBO: "
+									+ a.getIdleNBORate() + " Idle Base:"
+									+ a.getIdleConsumptionRate();
+						}
+
+					};
+					vcePane.addColumn("Ballast Fuel Usage", laden, laden);
 				}
 
 				vcePane.getViewer().setInput(
@@ -1151,7 +1170,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				// fleetPane.getControl().setLayoutData(new GridData(SWT.FILL,
 				// SWT.FILL, true, true));
 
-
 				final List<EReference> path = new LinkedList<EReference>();
 
 				path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
@@ -1159,13 +1177,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				fleetPane.init(path, adapterFactory);
 				{
-					final BasicAttributeManipulator name = 
-						new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Name(), getEditingDomain());
+					final BasicAttributeManipulator name = new BasicAttributeManipulator(
+							FleetPackage.eINSTANCE.getVessel_Name(),
+							getEditingDomain());
 					fleetPane.addColumn("Name", name, name);
 				}
-				
-				//TODO add other desired vessel columns here
-				
+
+				// TODO add other desired vessel columns here
+
 				fleetPane.setTitle("Vessels", getTitleImage());
 
 				fleetPane.getViewer().setInput(
