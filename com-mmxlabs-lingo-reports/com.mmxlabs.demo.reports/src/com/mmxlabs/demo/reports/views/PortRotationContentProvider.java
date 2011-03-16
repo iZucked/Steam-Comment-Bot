@@ -65,8 +65,6 @@ public class PortRotationContentProvider implements IStructuredContentProvider {
 	public Object[] getElements(final Object inputElement) {
 		Schedule schedule = null;
 		if (inputElement instanceof Schedule) {
-			final Schedule schedule = (Schedule) inputElement;
-
 			schedule = (Schedule) inputElement;
 		}
 		
