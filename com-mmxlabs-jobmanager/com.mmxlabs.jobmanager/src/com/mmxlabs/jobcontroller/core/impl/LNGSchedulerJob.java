@@ -5,7 +5,6 @@
 package com.mmxlabs.jobcontroller.core.impl;
 
 import scenario.Scenario;
-import scenario.optimiser.lso.LSOSettings;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.common.Pair;
@@ -27,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
  * 
  */
 public class LNGSchedulerJob extends AbstractManagedJob {
+	private static final int REPORT_PERCENTAGE = 5;
 	private final Scenario scenario;
 	private int currentProgress = 0;
 
@@ -96,8 +96,8 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	 */
 	@Override
 	protected boolean step() {
-		System.err.println("Done 10% (" + optimiser.step(10) + ")");
-		currentProgress += 10;
+		optimiser.step(REPORT_PERCENTAGE);
+		currentProgress += REPORT_PERCENTAGE;
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
