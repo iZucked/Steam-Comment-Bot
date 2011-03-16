@@ -19,6 +19,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.lngscheduler.emf.edit;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.emf.edit.ui;visibility:=reexport,
+ com.mmxlabs.common.util;bundle-version="1.0.0",
  org.swtchart;bundle-version="0.7.0",
  com.ibm.icu
 Bundle-ActivationPolicy: lazy
