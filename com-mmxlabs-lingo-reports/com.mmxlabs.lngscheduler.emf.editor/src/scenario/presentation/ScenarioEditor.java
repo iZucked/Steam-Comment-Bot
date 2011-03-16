@@ -78,16 +78,12 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
@@ -118,15 +114,15 @@ import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
+import scenario.presentation.cargoeditor.BasicAttributeManipulator;
+import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DefaultMultiReferenceEditor;
 import scenario.presentation.cargoeditor.DefaultReferenceEditor;
-import scenario.presentation.cargoeditor.EObjectDetailView;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
-import scenario.presentation.cargoeditor.MasterDetailView;
-import scenario.presentation.cargoeditor.MasterDetailView.IMasterDetailControlProvider;
+import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.SlotVolumesFeatureEditor;
-import scenario.presentation.cargoeditor.VesselStateAttributesEditor;
+import scenario.presentation.cargoeditor.properties.ScenarioPropertySourceProvider;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
@@ -951,6 +947,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				}
 			};
+			final IReferenceValueProvider marketProvider = new IReferenceValueProvider() {
+				@Override
+				public Iterable<? extends EObject> getAllowedValues(
+						EObject target, EStructuralFeature field) {
+					while (target != null && !(target instanceof Scenario)) {
+						target = target.eContainer();
+					}
+					if (target == null) {
+						return Collections.emptyList();
+					} else {
+						return ((Scenario) target).getMarketModel()
+								.getMarkets();
+					}
+				}
+			};
+
 			final DefaultMultiReferenceEditor multiPortEditor = new DefaultMultiReferenceEditor(
 					portProvider, PortPackage.eINSTANCE.getPort_Name(),
 					getEditingDomain());
@@ -1011,25 +1023,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				// cargoPane.createControl(getContainer());
 
 				final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
-				
+
 				cargoPane.createControl(getContainer());
-
-				cargoPane.setFeatureEditorForReferenceType(
-						PortPackage.eINSTANCE.getPort(), portEditor);
-
-				cargoPane.setFeatureEditorForReferenceType(
-						MarketPackage.eINSTANCE.getMarket(), marketEditor);
-
-				cargoPane.setFeatureEditorForMultiReferenceType(
-						PortPackage.eINSTANCE.getPort(), multiPortEditor);
-
-				// hackishly set the min quantity editor to a hackish slot
-				// volume editor
-				cargoPane.setFeatureEditorForFeature(
-						cargoPackage.getSlot_MinQuantity(), slotVolumesEditor);
-				// hackishly ignore the max quantity field entirely.
-				cargoPane.ignoreStructuralFeature(cargoPackage
-						.getSlot_MaxQuantity());
 
 				final List<EReference> path = new LinkedList<EReference>();
 
@@ -1037,8 +1032,67 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				path.add(CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 
 				cargoPane.setTitle("Cargoes", getTitleImage());
-				
+
 				cargoPane.init(path, adapterFactory);
+
+				{
+					final BasicAttributeManipulator id = new BasicAttributeManipulator(
+							cargoPackage.getCargo_Id(), getEditingDomain());
+					cargoPane.addColumn("ID", id, id);
+				}
+
+				{
+					final SingleReferenceManipulator port = new SingleReferenceManipulator(
+							cargoPackage.getSlot_Port(),
+							PortPackage.eINSTANCE.getPort_Name(), false,
+							portProvider, getEditingDomain());
+					cargoPane.addColumn("Load Port", port, port,
+							cargoPackage.getCargo_LoadSlot());
+				}
+
+				{
+					final DateManipulator date = new DateManipulator(
+							cargoPackage.getSlot_WindowStart(),
+							getEditingDomain());
+					cargoPane.addColumn("Load Date", date, date,
+							cargoPackage.getCargo_LoadSlot());
+				}
+
+				{
+					final SingleReferenceManipulator port = new SingleReferenceManipulator(
+							cargoPackage.getSlot_Market(),
+							MarketPackage.eINSTANCE.getMarket_Name(), false,
+							marketProvider, getEditingDomain());
+					cargoPane.addColumn("Load Market", port, port,
+							cargoPackage.getCargo_LoadSlot());
+				}
+
+				{
+					final SingleReferenceManipulator port = new SingleReferenceManipulator(
+							cargoPackage.getSlot_Port(),
+							PortPackage.eINSTANCE.getPort_Name(), false,
+							portProvider, getEditingDomain());
+					cargoPane.addColumn("Discharge Port", port, port,
+							cargoPackage.getCargo_DischargeSlot());
+				}
+				{
+					final DateManipulator date = new DateManipulator(
+							cargoPackage.getSlot_WindowStart(),
+							getEditingDomain());
+					cargoPane.addColumn("Discharge Date", date, date,
+							cargoPackage.getCargo_DischargeSlot());
+				}
+
+				{
+					final SingleReferenceManipulator port = new SingleReferenceManipulator(
+							cargoPackage.getSlot_Market(),
+							MarketPackage.eINSTANCE.getMarket_Name(), false,
+							marketProvider, getEditingDomain());
+					cargoPane.addColumn("Discharge Market", port, port,
+							cargoPackage.getCargo_DischargeSlot());
+				}
+
+				// TODO sort out initial vessel
 
 				cargoPane.getViewer().setInput(
 						editingDomain.getResourceSet().getResources().get(0)
@@ -1052,83 +1106,85 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 													// string or whatever
 			}
 			// Create a fleet editor pane
-			{
-//				final Composite fleetComposite = new Composite(getContainer(), SWT.NONE);
-//				fleetComposite.setLayout(new GridLayout(1, false));
-				
-				final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
-
-				final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
-						getSite().getPage(), ScenarioEditor.this);
-				
-				vcePane.createControl(sash);
-//				vcePane.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-				vcePane.setFeatureEditorForReferenceType(
-						PortPackage.eINSTANCE.getPort(), portEditor);
-
-				vcePane.setTitle("Vessel Classes", getTitleImage());
-				
-				vcePane.setFeatureEditorForMultiReferenceType(
-						PortPackage.eINSTANCE.getPort(), multiPortEditor);
-
-				vcePane.ignoreStructuralFeature(FleetPackage.eINSTANCE
-						.getVesselStateAttributes_VesselState());
-
-				vcePane.setFeatureEditorForReferenceType(
-						FleetPackage.eINSTANCE.getVesselStateAttributes(),
-						new VesselStateAttributesEditor(getEditingDomain()));
-
-				final List<EReference> path2 = new LinkedList<EReference>();
-
-				path2.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
-				path2.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
-
-				vcePane.init(path2, adapterFactory);
-
-				vcePane.getViewer().setInput(
-						editingDomain.getResourceSet().getResources().get(0)
-								.getContents().get(0));
-
-				createContextMenuFor(vcePane.getViewer());
-				
-				
-				
-				final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
-						getSite().getPage(), ScenarioEditor.this);
-				
-				
-				fleetPane.createControl(sash);
-//				fleetPane.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-				
-				fleetPane.setFeatureEditorForReferenceType(
-						PortPackage.eINSTANCE.getPort(), portEditor);
-
-				fleetPane.setFeatureEditorForMultiReferenceType(
-						PortPackage.eINSTANCE.getPort(), multiPortEditor);
-
-				fleetPane.setFeatureEditorForReferenceType(
-						FleetPackage.eINSTANCE.getVesselClass(),
-						vesselClassEditor);
-
-				final List<EReference> path = new LinkedList<EReference>();
-
-				path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
-				path.add(FleetPackage.eINSTANCE.getFleetModel_Fleet());
-
-				fleetPane.init(path, adapterFactory);
-
-				fleetPane.setTitle("Vessels", getTitleImage());
-				
-				fleetPane.getViewer().setInput(
-						editingDomain.getResourceSet().getResources().get(0)
-								.getContents().get(0));
-
-				createContextMenuFor(fleetPane.getViewer());
-				
-				int pageIndex = addPage(sash);
-				setPageText(pageIndex, "Fleet"); // TODO localize this
-													// string or whatever
-			}
+			// {
+			// // final Composite fleetComposite = new
+			// // Composite(getContainer(), SWT.NONE);
+			// // fleetComposite.setLayout(new GridLayout(1, false));
+			//
+			// final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
+			//
+			// final EObjectEditorViewerPane vcePane = new
+			// EObjectEditorViewerPane(
+			// getSite().getPage(), ScenarioEditor.this);
+			//
+			// vcePane.createControl(sash);
+			// // vcePane.getControl().setLayoutData(new GridData(SWT.FILL,
+			// // SWT.FILL, true, true));
+			// vcePane.setFeatureEditorForReferenceType(
+			// PortPackage.eINSTANCE.getPort(), portEditor);
+			//
+			// vcePane.setTitle("Vessel Classes", getTitleImage());
+			//
+			// vcePane.setFeatureEditorForMultiReferenceType(
+			// PortPackage.eINSTANCE.getPort(), multiPortEditor);
+			//
+			// vcePane.ignoreStructuralFeature(FleetPackage.eINSTANCE
+			// .getVesselStateAttributes_VesselState());
+			//
+			// vcePane.setFeatureEditorForReferenceType(
+			// FleetPackage.eINSTANCE.getVesselStateAttributes(),
+			// new VesselStateAttributesEditor(getEditingDomain()));
+			//
+			// final List<EReference> path2 = new LinkedList<EReference>();
+			//
+			// path2.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
+			// path2.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
+			//
+			// vcePane.init(path2, adapterFactory);
+			//
+			// vcePane.getViewer().setInput(
+			// editingDomain.getResourceSet().getResources().get(0)
+			// .getContents().get(0));
+			//
+			// createContextMenuFor(vcePane.getViewer());
+			//
+			// final EObjectEditorViewerPane fleetPane = new
+			// EObjectEditorViewerPane(
+			// getSite().getPage(), ScenarioEditor.this);
+			//
+			// fleetPane.createControl(sash);
+			// // fleetPane.getControl().setLayoutData(new GridData(SWT.FILL,
+			// // SWT.FILL, true, true));
+			//
+			// fleetPane.setFeatureEditorForReferenceType(
+			// PortPackage.eINSTANCE.getPort(), portEditor);
+			//
+			// fleetPane.setFeatureEditorForMultiReferenceType(
+			// PortPackage.eINSTANCE.getPort(), multiPortEditor);
+			//
+			// fleetPane.setFeatureEditorForReferenceType(
+			// FleetPackage.eINSTANCE.getVesselClass(),
+			// vesselClassEditor);
+			//
+			// final List<EReference> path = new LinkedList<EReference>();
+			//
+			// path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
+			// path.add(FleetPackage.eINSTANCE.getFleetModel_Fleet());
+			//
+			// fleetPane.init(path, adapterFactory);
+			//
+			// fleetPane.setTitle("Vessels", getTitleImage());
+			//
+			// fleetPane.getViewer().setInput(
+			// editingDomain.getResourceSet().getResources().get(0)
+			// .getContents().get(0));
+			//
+			// createContextMenuFor(fleetPane.getViewer());
+			//
+			// int pageIndex = addPage(sash);
+			// setPageText(pageIndex, "Fleet"); // TODO localize this
+			// // string or whatever
+			// }
 
 			// Create a page for the selection tree view.
 			//
@@ -1505,8 +1561,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							actionBars);
 				}
 			};
+
+			// we want to set up a fancy provider here.
+
 			propertySheetPage
-					.setPropertySourceProvider(new AdapterFactoryContentProvider(
+					.setPropertySourceProvider(new ScenarioPropertySourceProvider(
 							adapterFactory));
 		}
 
