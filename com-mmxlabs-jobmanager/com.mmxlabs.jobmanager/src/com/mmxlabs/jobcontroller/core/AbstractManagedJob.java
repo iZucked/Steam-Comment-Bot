@@ -125,7 +125,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	@Override
 	public void cancel() {
 		runner.cancel();
-		setJobState(JobState.CANCELLED);
+		setJobState(JobState.CANCELLING);
 	}
 
 	@Override

@@ -196,6 +196,9 @@ public class JobManagerView extends ViewPart {
 				case CANCELLED:
 					return getSite().getShell().getDisplay()
 							.getSystemImage(SWT.ICON_ERROR);
+				case CANCELLING:
+					return getSite().getShell().getDisplay()
+							.getSystemImage(SWT.ICON_ERROR);
 				case COMPLETED:
 					desc = Activator
 							.getImageDescriptor("/icons/elcl16/terminate_co.gif");
