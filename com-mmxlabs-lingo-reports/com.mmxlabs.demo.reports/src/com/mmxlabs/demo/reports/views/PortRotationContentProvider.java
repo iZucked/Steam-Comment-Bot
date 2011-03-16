@@ -7,6 +7,7 @@ package com.mmxlabs.demo.reports.views;
 
 import java.util.LinkedList;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -62,9 +63,17 @@ public class PortRotationContentProvider implements IStructuredContentProvider {
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
+		Schedule schedule = null;
 		if (inputElement instanceof Schedule) {
 			final Schedule schedule = (Schedule) inputElement;
 
+			schedule = (Schedule) inputElement;
+		}
+		
+		else if (inputElement instanceof IAdaptable) {
+			schedule = (Schedule) ((IAdaptable) inputElement).getAdapter(Schedule.class);
+		}
+		if (schedule != null) {
 			final LinkedList<Object> result = new LinkedList<Object>();
 			for (final Sequence seq : schedule.getSequences()) {
 				for (final ScheduledEvent evt : seq.getEvents()) {

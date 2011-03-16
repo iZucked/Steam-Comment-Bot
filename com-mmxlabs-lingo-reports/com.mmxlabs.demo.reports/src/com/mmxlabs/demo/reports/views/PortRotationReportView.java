@@ -8,6 +8,7 @@ package com.mmxlabs.demo.reports.views;
 
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -230,6 +231,9 @@ public class PortRotationReportView extends ViewPart implements ISelectionListen
 				if (o instanceof Schedule) {
 					setInput((Schedule) o);
 					return;
+				}
+				else if (o instanceof IAdaptable) {
+					setInput((Schedule) ((IAdaptable) o).getAdapter(Schedule.class));
 				}
 			}
 		}

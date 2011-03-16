@@ -22,6 +22,8 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.common.Equality;
+
 public class DefaultReferenceEditor implements IFeatureEditor {
 	protected static final String NULL_NAME = "(none)";
 	private EClass refType;
@@ -69,10 +71,13 @@ public class DefaultReferenceEditor implements IFeatureEditor {
 								.get((Integer) value);
 
 						final EObject target = getTarget(o);
-						editingDomain.getCommandStack().execute(
-								editingDomain.createCommand(SetCommand.class,
-										new CommandParameter(target, field,
-												modelValue)));
+						if (!Equality.isEqual(modelValue, target.eGet(field))) {
+						
+							editingDomain.getCommandStack().execute(
+									editingDomain.createCommand(SetCommand.class,
+											new CommandParameter(target, field,
+													modelValue)));
+						}
 					}
 				}
 			}

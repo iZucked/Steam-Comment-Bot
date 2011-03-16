@@ -7,6 +7,7 @@ package com.mmxlabs.scheduleview.views;
 
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -159,7 +160,9 @@ public class SchedulerView extends ViewPart {
 
 				// Filter out non-editor selections - Unfortunately the
 				// addSelectionLister part ID filters do not work with editors
-				if (part instanceof IEditorPart) {
+				if (part instanceof IEditorPart
+						|| part.getSite().getId()
+								.equals("com.mmxlabs.rcp.navigator")) {
 
 					// if selection instanceof etc.
 					if (selection instanceof IStructuredSelection) {
@@ -170,8 +173,15 @@ public class SchedulerView extends ViewPart {
 							final Iterator<?> iter = sel.iterator();
 							while (iter.hasNext()) {
 								final Object o = iter.next();
-								if (trySelectObject(o))
+								if (trySelectObject(o)) {
 									return;
+								} else if (o instanceof IAdaptable) {
+									Object adapter = ((IAdaptable) o)
+											.getAdapter(Schedule.class);
+									if (adapter != null) {
+										setInput(((Schedule) adapter));
+									}
+								}
 							}
 						}
 					}

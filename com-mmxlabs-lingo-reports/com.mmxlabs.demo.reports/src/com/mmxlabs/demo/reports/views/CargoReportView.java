@@ -241,6 +241,9 @@ public class CargoReportView extends ViewPart implements ISelectionListener {
 					setInput((Schedule) o);
 					return;
 				}
+				else if (o instanceof IAdaptable) {
+					setInput((Schedule) ((IAdaptable) o).getAdapter(Schedule.class));
+				}
 			}
 		}
 	}
