@@ -86,6 +86,8 @@ public class CargoReportView extends ViewPart implements ISelectionListener {
 						return Long.toString(cargo.getDischargeVolume()+cargo.getFuelVolume());
 					case 7:
 						return Long.toString(cargo.getDischargeVolume());
+					case 8:
+						return Long.toString(cargo.getTotalCost());
 					}
 
 				}
@@ -132,7 +134,7 @@ public class CargoReportView extends ViewPart implements ISelectionListener {
 
 		String[] columns = new String[] { "ID", "Vessel", "Load Slot",
 				"Discharge Slot", "Load Date", "Discharge Date", "Load Volume",
-				"Discharge Volume" };
+				"Discharge Volume", "Total Cost" };
 
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLinesVisible(true);

@@ -12,6 +12,8 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
  * Reflectively provide labels for model objects based on their
  * {@link TableField} annotations.
  * 
+ * TODO add value transformer
+ * 
  * @author hinton
  * 
  */

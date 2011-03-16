@@ -22,6 +22,14 @@
             class="com.mmxlabs.demo.reports.views.CargoReportView"
             id="com.mmxlabs.demo.reports.views.CargoReportView">
       </view>
+      
+      <view
+            name="Cargo Report 2"
+            icon="icons/cview16/exec_statistic_view.gif"
+            category="com.mmxlabs.demo.reports"
+            class="com.mmxlabs.demo.reports.views.CargoReportView2"
+            id="com.mmxlabs.demo.reports.views.CargoReportView2">
+      </view>
       <view
             category="com.mmxlabs.demo.reports"
             class="com.mmxlabs.demo.reports.views.FitnessReportView"
@@ -49,6 +57,14 @@
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.PortRotationReportView"
             name="Port Rotation Report">
+      </view>
+      
+       <view
+            category="com.mmxlabs.demo.reports"
+            class="com.mmxlabs.demo.reports.views.PortRotationReportView2"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.demo.reports.views.PortRotationReportView2"
+            name="Port Rotation Report 2">
       </view>
    </extension>
    <extension
