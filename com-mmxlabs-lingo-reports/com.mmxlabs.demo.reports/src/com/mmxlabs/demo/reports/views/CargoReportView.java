@@ -2,250 +2,127 @@
  * Copyright (C) Minimax Labs Ltd., 2010
  * All rights reserved.
  */
-
 package com.mmxlabs.demo.reports.views;
 
-import java.util.Iterator;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
 
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.CellLabelProvider;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
-
+import scenario.cargo.CargoPackage;
+import scenario.port.PortPackage;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
+import scenario.schedule.SchedulePackage;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
 
-import com.mmxlabs.demo.reports.views.actions.PackTableColumnsAction;
 
 /**
- * This sample class demonstrates how to plug-in a new workbench view. The view
- * shows data obtained from the model. The sample creates a dummy model on the
- * fly, but a real implementation would connect to the model available either in
- * this or another plug-in (e.g. the workspace). The view is connected to the
- * model using a content provider.
- * <p>
- * The view uses a label provider to define how model objects should be
- * presented in the view. Each view can present the same model objects using
- * different labels and icons, if needed. Alternatively, a single label provider
- * can be shared between views in order to ensure that objects of the same type
- * are presented in the same way everywhere.
- * <p>
+ * 
+ * 
+ * @author hinton
+ * 
  */
-
-public class CargoReportView extends ViewPart implements ISelectionListener {
-
+public class CargoReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.demo.reports.views.CargoReportView";
 
-	private TableViewer viewer;
-
-	private PackTableColumnsAction packColumnsAction;
-
-	class ViewLabelProvider extends CellLabelProvider implements
-			ITableLabelProvider {
-		@Override
-		public String getColumnText(Object obj, int index) {
-			try {
-				if (obj instanceof CargoAllocation) {
-					CargoAllocation cargo = (CargoAllocation) obj;
-					switch (index) {
-					case 0:
-						return cargo.getLoadSlot().getId();
-					case 1:
-						return cargo.getVessel().getName();
-					case 2:
-						return cargo.getLoadSlot().getPort().getName();
-					case 3:
-						return cargo.getDischargeSlot().getPort().getName();
-					case 4:
-						return cargo.getLoadDate().toLocaleString();
-					case 5:
-						return cargo.getDischargeDate().toLocaleString();
-					case 6:
-						return Long.toString(cargo.getDischargeVolume()+cargo.getFuelVolume());
-					case 7:
-						return Long.toString(cargo.getDischargeVolume());
-					case 8:
-						return Long.toString(cargo.getTotalCost());
-					}
-
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-
-			}
-
-			return null;
-		}
-
-		@Override
-		public Image getColumnImage(Object obj, int index) {
-			return null;
-		}
-
-		@Override
-		public void update(ViewerCell cell) {
-			// TODO Auto-generated method stub
-
-		}
-	}
-
-	class NameSorter extends ViewerSorter {
-	}
-
-	/**
-	 * The constructor.
-	 */
 	public CargoReportView() {
-	}
+		final CargoPackage c = CargoPackage.eINSTANCE;
+		final SchedulePackage s = SchedulePackage.eINSTANCE;
+		
+		final PortPackage p = PortPackage.eINSTANCE;
+		addColumn("ID", objectFormatter, s.getCargoAllocation_LoadSlot(),
+				c.getSlot_Id()); // TODO cargo id not slot id.
 
-	/**
-	 * This is a callback that will allow us to create the viewer and initialize
-	 * it.
-	 */
-	@Override
-	public void createPartControl(Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
-		viewer.setContentProvider(new CargoContentProvider());
-		viewer.setInput(getViewSite());
+		addColumn("Vessel", 
+				objectFormatter,
+				s.getCargoAllocation_Vessel(),
+				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
 
-		String[] columns = new String[] { "ID", "Vessel", "Load Slot",
-				"Discharge Slot", "Load Date", "Discharge Date", "Load Volume",
-				"Discharge Volume", "Total Cost" };
+		addColumn("Load Port", objectFormatter,
+				s.getCargoAllocation_LoadSlot(), c.getSlot_Port(),
+				p.getPort_Name());
 
-		viewer.getTable().setHeaderVisible(true);
-		viewer.getTable().setLinesVisible(true);
+		addColumn("Discharge Port", objectFormatter,
+				s.getCargoAllocation_DischargeSlot(), c.getSlot_Port(),
+				p.getPort_Name());
 
-		for (String cname : columns) {
-			TableViewerColumn tvc = new TableViewerColumn(viewer, SWT.None);
-			tvc.getColumn().setText(cname);
-			tvc.getColumn().pack();
-		}
+		addColumn(
+				"Load Date",
+				calendarFormatter,
+				s.getCargoAllocation__GetLocalLoadDate());
+		addColumn(
+				"Discharge Date",
+				calendarFormatter,
+				s.getCargoAllocation__GetLocalDischargeDate());
 
-		viewer.setLabelProvider(new ViewLabelProvider());
-		// Create the help context id for the viewer's control
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.viewer");
-		makeActions();
-		hookContextMenu();
-		contributeToActionBars();
-
-		getSite().getWorkbenchWindow().getSelectionService()
-				.addSelectionListener(this);
-	}
-
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
+		addColumn("Load Volume", new IFormatter() {
 			@Override
-			public void menuAboutToShow(IMenuManager manager) {
-				CargoReportView.this.fillContextMenu(manager);
+			public String format(final Object object) {
+				final CargoAllocation a = (CargoAllocation) object;
+				return a.getDischargeVolume() + a.getFuelVolume() + "";
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(viewer.getControl());
-		viewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, viewer);
-	}
 
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
-		fillLocalToolBar(bars.getToolBarManager());
-	}
+		addColumn("Fuel Volume", integerFormatter, 
+				s.getCargoAllocation_FuelVolume());
+		
+		addColumn("Discharge Volume", integerFormatter,
+				s.getCargoAllocation_DischargeVolume());
 
-	private void fillLocalPullDown(IMenuManager manager) {
-	}
-
-	private void fillContextMenu(IMenuManager manager) {
-		// Other plug-ins can contribute their actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
-
-	private void fillLocalToolBar(IToolBarManager manager) {
-		manager.add(packColumnsAction);
-	}
-
-	private void makeActions() {
-		packColumnsAction = new PackTableColumnsAction(viewer);
-	}
-
-	/**
-	 * Passing the focus request to the viewer's control.
-	 */
-	@Override
-	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
-
-	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
+		addColumn("Laden Cost", new IFormatter() {
 			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.refresh();
-				}
+			public String format(Object object) {
+				final CargoAllocation a = (CargoAllocation) object;
+				return String.format("%,d", a.getLadenIdle().getTotalCost()
+						+ a.getLadenLeg().getTotalCost());
 			}
 		});
-	}
 
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
+		addColumn("Ballast Cost", new IFormatter() {
 			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
+			public String format(Object object) {
+				//TODO this could be an operation on CargoAllocation.
+				final CargoAllocation a = (CargoAllocation) object;
+				return String.format("%,d", a.getBallastIdle().getTotalCost()
+						+ a.getBallastLeg().getTotalCost());
+			}
+		});
+
+		addColumn("Total Cost", new IFormatter() {
+			@Override
+			public String format(Object object) {
+				final CargoAllocation a = (CargoAllocation) object;
+				return String.format("%,d", a.getTotalCost());
 			}
 		});
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart arg0, final ISelection selection) {
-		final IStructuredSelection sel = (IStructuredSelection)selection;
-		if (sel.isEmpty()) {
-			setInput(null);
-		} else {
-			@SuppressWarnings("unchecked")
-			Iterator<Object> iter = sel.iterator();
-			while (iter.hasNext()) {
-				final Object o = iter.next();
-				if (o instanceof Schedule) {
-					setInput((Schedule) o);
-					return;
-				}
-				else if (o instanceof IAdaptable) {
-					setInput((Schedule) ((IAdaptable) o).getAdapter(Schedule.class));
-				}
+	protected IStructuredContentProvider getContentProvider() {
+		return new IStructuredContentProvider() {
+
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput,
+					Object newInput) {
+
 			}
-		}
+
+			@Override
+			public void dispose() {
+
+			}
+
+			@Override
+			public Object[] getElements(Object object) {
+				if (object instanceof Schedule) {
+					final Schedule schedule = (Schedule) object;
+					return schedule.getCargoAllocations().toArray();
+				}
+				return new Object[] {};
+			}
+		};
 	}
+
 }
