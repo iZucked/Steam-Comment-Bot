@@ -12,10 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -215,8 +213,7 @@ public abstract class EMFReportView extends ViewPart implements
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart arg0,
-			final ISelection selection) {
+	public void selectionChanged(IWorkbenchPart arg0, ISelection selection) {
 		final IStructuredSelection sel = (IStructuredSelection) selection;
 		if (sel.isEmpty()) {
 			setInput(null);
@@ -228,6 +225,9 @@ public abstract class EMFReportView extends ViewPart implements
 				if (o instanceof Schedule) {
 					setInput((Schedule) o);
 					return;
+				}
+				else if (o instanceof IAdaptable) {
+					setInput((Schedule) ((IAdaptable) o).getAdapter(Schedule.class));
 				}
 			}
 		}
