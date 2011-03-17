@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
@@ -227,6 +228,9 @@ public abstract class EMFReportView extends ViewPart implements
 				final Object o = iter.next();
 				if (o instanceof Schedule) {
 					setInput((Schedule) o);
+					return;
+				} else if (o instanceof IAdaptable) {
+					setInput(((IAdaptable) o).getAdapter(Schedule.class));
 					return;
 				}
 			}
