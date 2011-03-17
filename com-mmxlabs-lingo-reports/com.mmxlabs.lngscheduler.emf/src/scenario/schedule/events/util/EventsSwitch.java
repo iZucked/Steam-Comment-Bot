@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.ScenarioObject;
 import scenario.schedule.events.*;
 
 /**
@@ -102,6 +103,7 @@ public class EventsSwitch<T> {
 			case EventsPackage.SCHEDULED_EVENT: {
 				ScheduledEvent scheduledEvent = (ScheduledEvent)theEObject;
 				T result = caseScheduledEvent(scheduledEvent);
+				if (result == null) result = caseScenarioObject(scheduledEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -111,6 +113,7 @@ public class EventsSwitch<T> {
 				if (result == null) result = casePortVisit(idle);
 				if (result == null) result = caseFuelMixture(idle);
 				if (result == null) result = caseScheduledEvent(idle);
+				if (result == null) result = caseScenarioObject(idle);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -119,6 +122,7 @@ public class EventsSwitch<T> {
 				T result = caseJourney(journey);
 				if (result == null) result = caseScheduledEvent(journey);
 				if (result == null) result = caseFuelMixture(journey);
+				if (result == null) result = caseScenarioObject(journey);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -126,6 +130,7 @@ public class EventsSwitch<T> {
 				PortVisit portVisit = (PortVisit)theEObject;
 				T result = casePortVisit(portVisit);
 				if (result == null) result = caseScheduledEvent(portVisit);
+				if (result == null) result = caseScenarioObject(portVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -134,6 +139,7 @@ public class EventsSwitch<T> {
 				T result = caseSlotVisit(slotVisit);
 				if (result == null) result = casePortVisit(slotVisit);
 				if (result == null) result = caseScheduledEvent(slotVisit);
+				if (result == null) result = caseScenarioObject(slotVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -142,6 +148,7 @@ public class EventsSwitch<T> {
 				T result = caseCharterOutVisit(charterOutVisit);
 				if (result == null) result = casePortVisit(charterOutVisit);
 				if (result == null) result = caseScheduledEvent(charterOutVisit);
+				if (result == null) result = caseScenarioObject(charterOutVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -266,6 +273,21 @@ public class EventsSwitch<T> {
 	 * @generated
 	 */
 	public T caseCharterOutVisit(CharterOutVisit object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioObject(ScenarioObject object) {
 		return null;
 	}
 

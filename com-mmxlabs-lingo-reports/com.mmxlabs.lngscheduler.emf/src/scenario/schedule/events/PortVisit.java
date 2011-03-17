@@ -51,6 +51,24 @@ public interface PortVisit extends ScheduledEvent {
 	 */
 	void setPort(Port value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getPort().getTimeZone())\n);\ncalendar.setTime(getStartTime());\nreturn calendar;'"
+	 * @generated
+	 */
+	Object getLocalStartTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getPort().getTimeZone())\n);\ncalendar.setTime(getEndTime());\nreturn calendar;'"
+	 * @generated
+	 */
+	Object getLocalEndTime();
+
 	String getId();
 	String getDisplayTypeName();
 } // PortVisit

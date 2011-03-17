@@ -5,12 +5,14 @@
 
 package scenario.cargo.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -444,6 +446,19 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Object getLocalWindowStart() {
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
+		);
+		calendar.setTime(getWindowStart());
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -567,6 +582,20 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return isSetMarket();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.SLOT___GET_LOCAL_WINDOW_START:
+				return getLocalWindowStart();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

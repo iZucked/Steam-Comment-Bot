@@ -107,6 +107,15 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL_FEATURE_COUNT = 3;
 
 	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.VesselImpl <em>Vessel</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -169,6 +178,15 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int VESSEL_FEATURE_COUNT = 5;
+
+	/**
+	 * The number of operations of the '<em>Vessel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
@@ -307,6 +325,15 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS_FEATURE_COUNT = 13;
 
 	/**
+	 * The number of operations of the '<em>Vessel Class</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -342,6 +369,15 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int FUEL_CONSUMPTION_LINE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Fuel Consumption Line</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_CONSUMPTION_LINE_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
@@ -408,6 +444,15 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = 5;
 
 	/**
+	 * The number of operations of the '<em>Vessel State Attributes</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.PortAndTimeImpl <em>Port And Time</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -452,6 +497,15 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_AND_TIME_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Port And Time</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_AND_TIME_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.CharterOutImpl <em>Charter Out</em>}' class.
@@ -534,6 +588,15 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_FEATURE_COUNT = 7;
+
+	/**
+	 * The number of operations of the '<em>Charter Out</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.

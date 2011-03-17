@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.optimiser.common;bundle-version="1.0.0",
  com.mmxlabs.optimiser.core;bundle-version="1.0.0",
  com.mmxlabs.optimiser.lso;bundle-version="1.0.0",
- com.mmxlabs.lngscheduler.emf
+ com.mmxlabs.lngscheduler.emf,
+ com.mmxlabs.lngscheduler.emf-extras;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.demo.reports,

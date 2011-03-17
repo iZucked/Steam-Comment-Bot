@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.Viewer;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.Idle;
+import scenario.schedule.events.Journey;
 import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.AllocatedVessel;
@@ -25,15 +26,41 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  * 
  */
 public class PortRotationContentProvider implements IStructuredContentProvider {
+	/**
+	 * The data model class for this content provider. Holds a journey, an idle
+	 * event, and a portvisit event, which happen in that order.
+	 * 
+	 * @author hinton
+	 * 
+	 */
+	public class JourneyIdleAndVisit {
+		public final AllocatedVessel vessel;
+
+		public final Journey journey;
+		public final Idle idle;
+		public final PortVisit visit;
+
+		public JourneyIdleAndVisit(AllocatedVessel vessel, Journey journey,
+				Idle idle, PortVisit visit) {
+			super();
+			this.vessel = vessel;
+			this.journey = journey;
+			this.idle = idle;
+			this.visit = visit;
+		}
+	}
+
 	public class RowData {
 		public final PortVisit visit;
 		public final AllocatedVessel vessel;
+
 		public RowData(PortVisit visit, AllocatedVessel vessel) {
 			super();
 			this.visit = visit;
 			this.vessel = vessel;
 		}
 	}
+
 	@Override
 	public Object[] getElements(final Object inputElement) {
 		Schedule schedule = null;
@@ -49,14 +76,17 @@ public class PortRotationContentProvider implements IStructuredContentProvider {
 			for (final Sequence seq : schedule.getSequences()) {
 				for (final ScheduledEvent evt : seq.getEvents()) {
 					if (evt instanceof PortVisit && !(evt instanceof Idle)) {
-						if (((PortVisit)evt).getPort()!= null) //filter out dummy port
-							result.add(new RowData((PortVisit) evt, seq.getVessel()));
+						if (((PortVisit) evt).getPort() != null) // filter out
+																	// dummy
+																	// port
+							result.add(new RowData((PortVisit) evt, seq
+									.getVessel()));
 					}
 				}
 			}
 			return result.toArray();
 		}
-		return new Object[]{};
+		return new Object[] {};
 	}
 
 	@Override
@@ -64,7 +94,6 @@ public class PortRotationContentProvider implements IStructuredContentProvider {
 			final Object newInput) {
 
 	}
-
 
 	@Override
 	public void dispose() {

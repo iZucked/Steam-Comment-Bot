@@ -8,6 +8,7 @@ package scenario.schedule.fleetallocation.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -194,6 +195,24 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getAllocatedVessel__GetHourlyCharterPrice() {
+		return allocatedVesselEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getAllocatedVessel__GetName() {
+		return allocatedVesselEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getFleetVessel() {
 		return fleetVesselEClass;
 	}
@@ -205,6 +224,15 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 */
 	public EReference getFleetVessel_Vessel() {
 		return (EReference)fleetVesselEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getFleetVessel__GetName() {
+		return fleetVesselEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -239,6 +267,24 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getSpotVessel__GetHourlyCharterPrice() {
+		return spotVesselEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSpotVessel__GetName() {
+		return spotVesselEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public FleetallocationFactory getFleetallocationFactory() {
 		return (FleetallocationFactory)getEFactoryInstance();
 	}
@@ -263,13 +309,18 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 
 		// Create classes and their features
 		allocatedVesselEClass = createEClass(ALLOCATED_VESSEL);
+		createEOperation(allocatedVesselEClass, ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE);
+		createEOperation(allocatedVesselEClass, ALLOCATED_VESSEL___GET_NAME);
 
 		fleetVesselEClass = createEClass(FLEET_VESSEL);
 		createEReference(fleetVesselEClass, FLEET_VESSEL__VESSEL);
+		createEOperation(fleetVesselEClass, FLEET_VESSEL___GET_NAME);
 
 		spotVesselEClass = createEClass(SPOT_VESSEL);
 		createEAttribute(spotVesselEClass, SPOT_VESSEL__INDEX);
 		createEReference(spotVesselEClass, SPOT_VESSEL__VESSEL_CLASS);
+		createEOperation(spotVesselEClass, SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE);
+		createEOperation(spotVesselEClass, SPOT_VESSEL___GET_NAME);
 	}
 
 	/**
@@ -306,15 +357,25 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 		fleetVesselEClass.getESuperTypes().add(this.getAllocatedVessel());
 		spotVesselEClass.getESuperTypes().add(this.getAllocatedVessel());
 
-		// Initialize classes and features; add operations and parameters
+		// Initialize classes, features, and operations; add parameters
 		initEClass(allocatedVesselEClass, AllocatedVessel.class, "AllocatedVessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEOperation(getAllocatedVessel__GetHourlyCharterPrice(), ecorePackage.getEDouble(), "getHourlyCharterPrice", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getAllocatedVessel__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(fleetVesselEClass, FleetVessel.class, "FleetVessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFleetVessel_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 1, 1, FleetVessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEOperation(getFleetVessel__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(spotVesselEClass, SpotVessel.class, "SpotVessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpotVessel_Index(), ecorePackage.getEInt(), "index", null, 1, 1, SpotVessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotVessel_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, SpotVessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getSpotVessel__GetHourlyCharterPrice(), ecorePackage.getEDouble(), "getHourlyCharterPrice", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSpotVessel__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 	}
 
 } //FleetallocationPackageImpl

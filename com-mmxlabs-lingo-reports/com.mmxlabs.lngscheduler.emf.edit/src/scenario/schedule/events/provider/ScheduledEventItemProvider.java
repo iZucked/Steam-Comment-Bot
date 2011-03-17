@@ -30,6 +30,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.provider.LngEditPlugin;
 
+import scenario.provider.ScenarioObjectItemProvider;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.ScheduledEvent;
 
@@ -40,7 +41,7 @@ import scenario.schedule.events.ScheduledEvent;
  * @generated
  */
 public class ScheduledEventItemProvider
-	extends ItemProviderAdapter
+	extends ScenarioObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**

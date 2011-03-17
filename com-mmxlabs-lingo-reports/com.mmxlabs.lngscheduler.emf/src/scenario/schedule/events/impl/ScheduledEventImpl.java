@@ -6,15 +6,18 @@
  */
 package scenario.schedule.events.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import scenario.impl.ScenarioObjectImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.schedule.events.EventsPackage;
@@ -34,7 +37,7 @@ import scenario.schedule.events.ScheduledEvent;
  *
  * @generated
  */
-public class ScheduledEventImpl extends EObjectImpl implements ScheduledEvent {
+public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledEvent {
 	/**
 	 * The default value of the '{@link #getStartTime() <em>Start Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -141,6 +144,46 @@ public class ScheduledEventImpl extends EObjectImpl implements ScheduledEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getEventDuration() {
+		return (int) ((getEndTime().getTime() - getStartTime().getTime()) / javax.management.timer.Timer.ONE_HOUR); 
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public long getHireCost() {
+		return (long) (((scenario.schedule.Sequence) eContainer()).getVessel().getHourlyCharterPrice() * getEventDuration());
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object getLocalStartTime() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object getLocalEndTime() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -202,6 +245,26 @@ public class ScheduledEventImpl extends EObjectImpl implements ScheduledEvent {
 				return END_TIME_EDEFAULT == null ? endTime != null : !END_TIME_EDEFAULT.equals(endTime);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case EventsPackage.SCHEDULED_EVENT___GET_EVENT_DURATION:
+				return getEventDuration();
+			case EventsPackage.SCHEDULED_EVENT___GET_HIRE_COST:
+				return getHireCost();
+			case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_START_TIME:
+				return getLocalStartTime();
+			case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_END_TIME:
+				return getLocalEndTime();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

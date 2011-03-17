@@ -7,6 +7,7 @@ package scenario.cargo;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -87,6 +88,15 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL_FEATURE_COUNT = 1;
 
 	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.CargoImpl <em>Cargo</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -141,6 +151,15 @@ public interface CargoPackage extends EPackage {
 	 */
 	int CARGO_FEATURE_COUNT = 4;
 
+
+	/**
+	 * The number of operations of the '<em>Cargo</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -232,6 +251,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT_FEATURE_COUNT = 8;
+
+	/**
+	 * The operation id for the '<em>Get Local Window Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_LOCAL_WINDOW_START = 0;
+
+	/**
+	 * The number of operations of the '<em>Slot</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -332,6 +369,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Local Window Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_LOCAL_WINDOW_START = SLOT___GET_LOCAL_WINDOW_START;
+
+	/**
+	 * The number of operations of the '<em>Load Slot</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 0;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.CargoModel <em>Model</em>}'.
@@ -505,6 +560,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSlot_Market();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getLocalWindowStart() <em>Get Local Window Start</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Window Start</em>' operation.
+	 * @see scenario.cargo.Slot#getLocalWindowStart()
+	 * @generated
+	 */
+	EOperation getSlot__GetLocalWindowStart();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -682,6 +747,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT__MARKET = eINSTANCE.getSlot_Market();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Window Start</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_LOCAL_WINDOW_START = eINSTANCE.getSlot__GetLocalWindowStart();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

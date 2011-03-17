@@ -218,4 +218,31 @@ public interface Journey extends ScheduledEvent, FuelMixture {
 	 */
 	void setRouteCost(long value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getRouteCost() + getTotalFuelCost() + getHireCost();'"
+	 * @generated
+	 */
+	long getTotalCost();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getFromPort().getTimeZone())\n);\ncalendar.setTime(getStartTime());\nreturn calendar;'"
+	 * @generated
+	 */
+	Object getLocalStartTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getToPort().getTimeZone())\n);\ncalendar.setTime(getEndTime());\nreturn calendar;'"
+	 * @generated
+	 */
+	Object getLocalEndTime();
+
 } // Journey

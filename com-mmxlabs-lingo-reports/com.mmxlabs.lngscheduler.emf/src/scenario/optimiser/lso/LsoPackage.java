@@ -152,6 +152,15 @@ public interface LsoPackage extends EPackage {
 	int LSO_SETTINGS_FEATURE_COUNT = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 3;
 
 	/**
+	 * The number of operations of the '<em>LSO Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS_OPERATION_COUNT = OptimiserPackage.OPTIMISATION_SETTINGS_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.optimiser.lso.impl.ThresholderSettingsImpl <em>Thresholder Settings</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -199,6 +208,15 @@ public interface LsoPackage extends EPackage {
 
 
 	/**
+	 * The number of operations of the '<em>Thresholder Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THRESHOLDER_SETTINGS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.optimiser.lso.impl.MoveGeneratorSettingsImpl <em>Move Generator Settings</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -216,6 +234,15 @@ public interface LsoPackage extends EPackage {
 	 * @ordered
 	 */
 	int MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Move Generator Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MOVE_GENERATOR_SETTINGS_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.optimiser.lso.impl.RandomMoveGeneratorSettingsImpl <em>Random Move Generator Settings</em>}' class.
@@ -273,6 +300,15 @@ public interface LsoPackage extends EPackage {
 	int RANDOM_MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 4;
 
 	/**
+	 * The number of operations of the '<em>Random Move Generator Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS_OPERATION_COUNT = MOVE_GENERATOR_SETTINGS_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.optimiser.lso.impl.ConstrainedMoveGeneratorSettingsImpl <em>Constrained Move Generator Settings</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -290,6 +326,16 @@ public interface LsoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONSTRAINED_MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 0;
+
+
+	/**
+	 * The number of operations of the '<em>Constrained Move Generator Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINED_MOVE_GENERATOR_SETTINGS_OPERATION_COUNT = MOVE_GENERATOR_SETTINGS_OPERATION_COUNT + 0;
 
 
 	/**

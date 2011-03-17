@@ -59,7 +59,6 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		if (slot == null)
 			return null;
-
 		
 		final Port ePort = entities.getModelObject(slot.getPort(), Port.class);
 		if (ePort == null)

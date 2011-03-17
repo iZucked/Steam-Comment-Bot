@@ -20,12 +20,16 @@ import org.eclipse.emf.common.util.EList;
 import scenario.Scenario;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFactory;
 import scenario.schedule.ScheduleFitness;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
+import scenario.schedule.events.Idle;
+import scenario.schedule.events.Journey;
 import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.SlotVisit;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 import scenario.schedule.fleetallocation.SpotVessel;
@@ -57,6 +61,7 @@ public class AnnotatedSolutionExporter {
 	final ScheduleFactory factory = SchedulePackage.eINSTANCE
 			.getScheduleFactory();
 
+	
 	public AnnotatedSolutionExporter() {
 		exporters.add(new IdleEventExporter());
 		exporters.add(new JourneyEventExporter());
@@ -193,6 +198,31 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
+		
+		// now patch up laden/ballast journey references in the cargos
+		for (final Sequence eSequence : output.getSequences()) {
+			CargoAllocation allocation = null;
+			for (final ScheduledEvent event : eSequence.getEvents()) {
+				if (event instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) event;
+					allocation = visit.getCargoAllocation();
+				} else if (event instanceof Journey && allocation != null) {
+					if (allocation.getLadenLeg() == null) {
+						allocation.setLadenLeg((Journey) event);
+					} else if (allocation.getBallastLeg() == null) {
+						allocation.setBallastLeg((Journey) event);
+					}
+				} else if (event instanceof Idle && allocation != null) {
+					if (allocation.getLadenIdle() == null) {
+						allocation.setLadenIdle((Idle) event);
+					} else if (allocation.getBallastIdle() == null) {
+						allocation.setBallastIdle((Idle) event);
+						allocation = null;
+					}
+				}
+			}
+		}
+		
 		@SuppressWarnings("unchecked")
 		final Map<String, Long> fitnesses = annotatedSolution
 				.getGeneralAnnotation(

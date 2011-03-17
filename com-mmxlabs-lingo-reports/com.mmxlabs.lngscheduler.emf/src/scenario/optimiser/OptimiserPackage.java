@@ -123,6 +123,15 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION_SETTINGS_FEATURE_COUNT = 5;
 
 	/**
+	 * The number of operations of the '<em>Optimisation Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.optimiser.impl.OptimisationImpl <em>Optimisation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -158,6 +167,15 @@ public interface OptimiserPackage extends EPackage {
 	 * @ordered
 	 */
 	int OPTIMISATION_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Optimisation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.optimiser.impl.ConstraintImpl <em>Constraint</em>}' class.
@@ -197,6 +215,15 @@ public interface OptimiserPackage extends EPackage {
 	int CONSTRAINT_FEATURE_COUNT = 2;
 
 	/**
+	 * The number of operations of the '<em>Constraint</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.optimiser.impl.ObjectiveImpl <em>Objective</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -232,6 +259,16 @@ public interface OptimiserPackage extends EPackage {
 	 * @ordered
 	 */
 	int OBJECTIVE_FEATURE_COUNT = 2;
+
+
+	/**
+	 * The number of operations of the '<em>Objective</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECTIVE_OPERATION_COUNT = 0;
 
 
 	/**

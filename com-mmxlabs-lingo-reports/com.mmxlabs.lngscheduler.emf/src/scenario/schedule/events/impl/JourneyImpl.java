@@ -6,6 +6,7 @@
  */
 package scenario.schedule.events.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -29,6 +30,7 @@ import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.Journey;
+import scenario.schedule.events.ScheduledEvent;
 
 /**
  * <!-- begin-user-doc -->
@@ -398,6 +400,56 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getTotalCost() {
+		return getRouteCost() + getTotalFuelCost() + getHireCost();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object getLocalStartTime() {
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getFromPort().getTimeZone())
+		);
+		calendar.setTime(getStartTime());
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object getLocalEndTime() {
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getToPort().getTimeZone())
+		);
+		calendar.setTime(getEndTime());
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public long getTotalFuelCost() {
+		long totalCost = 0;
+		
+		for (final FuelQuantity quantity : getFuelUsage()) {
+			totalCost += quantity.getTotalPrice();
+		}
+		
+		return totalCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -569,6 +621,49 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == ScheduledEvent.class) {
+			switch (baseOperationID) {
+				case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_START_TIME: return EventsPackage.JOURNEY___GET_LOCAL_START_TIME;
+				case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_END_TIME: return EventsPackage.JOURNEY___GET_LOCAL_END_TIME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
+			}
+		}
+		if (baseClass == FuelMixture.class) {
+			switch (baseOperationID) {
+				case EventsPackage.FUEL_MIXTURE___GET_TOTAL_FUEL_COST: return EventsPackage.JOURNEY___GET_TOTAL_FUEL_COST;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case EventsPackage.JOURNEY___GET_TOTAL_COST:
+				return getTotalCost();
+			case EventsPackage.JOURNEY___GET_LOCAL_START_TIME:
+				return getLocalStartTime();
+			case EventsPackage.JOURNEY___GET_LOCAL_END_TIME:
+				return getLocalEndTime();
+			case EventsPackage.JOURNEY___GET_TOTAL_FUEL_COST:
+				return getTotalFuelCost();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

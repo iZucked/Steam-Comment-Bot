@@ -105,6 +105,15 @@ public interface ContractPackage extends EPackage {
 	int CONTRACT_MODEL_FEATURE_COUNT = 3;
 
 	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_MODEL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.contract.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -122,6 +131,15 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -142,6 +160,15 @@ public interface ContractPackage extends EPackage {
 	 */
 	int SALES_CONTRACT_FEATURE_COUNT = 0;
 
+
+	/**
+	 * The number of operations of the '<em>Sales Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.TotalVolumeLimitImpl <em>Total Volume Limit</em>}' class.
@@ -206,6 +233,16 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int TOTAL_VOLUME_LIMIT_FEATURE_COUNT = 5;
+
+
+	/**
+	 * The number of operations of the '<em>Total Volume Limit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOTAL_VOLUME_LIMIT_OPERATION_COUNT = 0;
 
 
 	/**

@@ -6,8 +6,10 @@
  */
 package scenario.schedule.events.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -104,6 +106,32 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Object getLocalStartTime() {
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
+		);
+		calendar.setTime(getStartTime());
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object getLocalEndTime() {
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
+		);
+		calendar.setTime(getEndTime());
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -156,6 +184,22 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 				return port != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case EventsPackage.PORT_VISIT___GET_LOCAL_START_TIME:
+				return getLocalStartTime();
+			case EventsPackage.PORT_VISIT___GET_LOCAL_END_TIME:
+				return getLocalEndTime();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	@Override

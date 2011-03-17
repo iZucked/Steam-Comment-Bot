@@ -393,7 +393,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		randomMoveGeneratorSettingsEClass.getESuperTypes().add(this.getMoveGeneratorSettings());
 		constrainedMoveGeneratorSettingsEClass.getESuperTypes().add(this.getMoveGeneratorSettings());
 
-		// Initialize classes and features; add operations and parameters
+		// Initialize classes, features, and operations; add parameters
 		initEClass(lsoSettingsEClass, LSOSettings.class, "LSOSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLSOSettings_NumberOfSteps(), ecorePackage.getEInt(), "numberOfSteps", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLSOSettings_ThresholderSettings(), this.getThresholderSettings(), null, "thresholderSettings", null, 1, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -1,0 +1,50 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010
+ * All rights reserved.
+ */
+package scenario.presentation.cargoeditor;
+
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.widgets.Composite;
+
+import scenario.presentation.cargoeditor.celleditors.SpinnerCellEditor;
+
+/**
+ * @author hinton
+ *
+ */
+public class NumericAttributeManipulator extends BasicAttributeManipulator {
+	public NumericAttributeManipulator(EStructuralFeature field,
+			EditingDomain editingDomain) {
+		super(field, editingDomain);
+	}
+
+	@Override
+	public String render(Object object) {
+		Object val = getValue(object);
+		if (val instanceof Integer) {
+			return String.format("%,d", (Integer) object);
+		}
+		else
+			return val.toString();
+	}
+
+	@Override
+	public CellEditor getCellEditor(Composite c, Object object) {
+		final SpinnerCellEditor editor = new SpinnerCellEditor(c);
+		
+		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt())
+				|| field.getEType().equals(EcorePackage.eINSTANCE.getELong())
+		) {
+			editor.setDigits(0);
+		} else {
+			editor.setDigits(3);
+		}
+		
+		editor.setMaximumValue(10000000);
+		return editor;
+	}
+}

@@ -8,6 +8,7 @@ package scenario.schedule.fleetallocation;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -79,6 +80,33 @@ public interface FleetallocationPackage extends EPackage {
 	int ALLOCATED_VESSEL_FEATURE_COUNT = 0;
 
 	/**
+	 * The operation id for the '<em>Get Hourly Charter Price</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE = 0;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALLOCATED_VESSEL___GET_NAME = 1;
+
+	/**
+	 * The number of operations of the '<em>Allocated Vessel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALLOCATED_VESSEL_OPERATION_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.fleetallocation.impl.FleetVesselImpl <em>Fleet Vessel</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -105,6 +133,33 @@ public interface FleetallocationPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLEET_VESSEL_FEATURE_COUNT = ALLOCATED_VESSEL_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Hourly Charter Price</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_VESSEL___GET_HOURLY_CHARTER_PRICE = ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_VESSEL___GET_NAME = ALLOCATED_VESSEL_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Fleet Vessel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_VESSEL_OPERATION_COUNT = ALLOCATED_VESSEL_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl <em>Spot Vessel</em>}' class.
@@ -145,6 +200,34 @@ public interface FleetallocationPackage extends EPackage {
 
 
 	/**
+	 * The operation id for the '<em>Get Hourly Charter Price</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE = ALLOCATED_VESSEL_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_VESSEL___GET_NAME = ALLOCATED_VESSEL_OPERATION_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Spot Vessel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_VESSEL_OPERATION_COUNT = ALLOCATED_VESSEL_OPERATION_COUNT + 2;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.fleetallocation.AllocatedVessel <em>Allocated Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -153,6 +236,26 @@ public interface FleetallocationPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAllocatedVessel();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.fleetallocation.AllocatedVessel#getHourlyCharterPrice() <em>Get Hourly Charter Price</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Hourly Charter Price</em>' operation.
+	 * @see scenario.schedule.fleetallocation.AllocatedVessel#getHourlyCharterPrice()
+	 * @generated
+	 */
+	EOperation getAllocatedVessel__GetHourlyCharterPrice();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.fleetallocation.AllocatedVessel#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.fleetallocation.AllocatedVessel#getName()
+	 * @generated
+	 */
+	EOperation getAllocatedVessel__GetName();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.fleetallocation.FleetVessel <em>Fleet Vessel</em>}'.
@@ -174,6 +277,16 @@ public interface FleetallocationPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFleetVessel_Vessel();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.fleetallocation.FleetVessel#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.fleetallocation.FleetVessel#getName()
+	 * @generated
+	 */
+	EOperation getFleetVessel__GetName();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.fleetallocation.SpotVessel <em>Spot Vessel</em>}'.
@@ -208,6 +321,26 @@ public interface FleetallocationPackage extends EPackage {
 	EReference getSpotVessel_VesselClass();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.schedule.fleetallocation.SpotVessel#getHourlyCharterPrice() <em>Get Hourly Charter Price</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Hourly Charter Price</em>' operation.
+	 * @see scenario.schedule.fleetallocation.SpotVessel#getHourlyCharterPrice()
+	 * @generated
+	 */
+	EOperation getSpotVessel__GetHourlyCharterPrice();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.fleetallocation.SpotVessel#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.fleetallocation.SpotVessel#getName()
+	 * @generated
+	 */
+	EOperation getSpotVessel__GetName();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -240,6 +373,22 @@ public interface FleetallocationPackage extends EPackage {
 		EClass ALLOCATED_VESSEL = eINSTANCE.getAllocatedVessel();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Hourly Charter Price</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE = eINSTANCE.getAllocatedVessel__GetHourlyCharterPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ALLOCATED_VESSEL___GET_NAME = eINSTANCE.getAllocatedVessel__GetName();
+
+		/**
 		 * The meta object literal for the '{@link scenario.schedule.fleetallocation.impl.FleetVesselImpl <em>Fleet Vessel</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -256,6 +405,14 @@ public interface FleetallocationPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_VESSEL__VESSEL = eINSTANCE.getFleetVessel_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation FLEET_VESSEL___GET_NAME = eINSTANCE.getFleetVessel__GetName();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl <em>Spot Vessel</em>}' class.
@@ -282,6 +439,22 @@ public interface FleetallocationPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPOT_VESSEL__VESSEL_CLASS = eINSTANCE.getSpotVessel_VesselClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Hourly Charter Price</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE = eINSTANCE.getSpotVessel__GetHourlyCharterPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SPOT_VESSEL___GET_NAME = eINSTANCE.getSpotVessel__GetName();
 
 	}
 

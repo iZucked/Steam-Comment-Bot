@@ -8,6 +8,7 @@ package scenario.schedule.events;
 
 import java.util.Date;
 
+import scenario.ScenarioObject;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -27,7 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface ScheduledEvent extends EObject {
+public interface ScheduledEvent extends ScenarioObject {
 	/**
 	 * Returns the value of the '<em><b>Start Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -81,6 +82,42 @@ public interface ScheduledEvent extends EObject {
 	void setEndTime(Date value);
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (int) ((getEndTime().getTime() - getStartTime().getTime()) / javax.management.timer.Timer.ONE_HOUR); '"
+	 * @generated
+	 */
+	int getEventDuration();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (long) (((scenario.schedule.Sequence) eContainer()).getVessel().getHourlyCharterPrice() * getEventDuration());'"
+	 * @generated
+	 */
+	long getHireCost();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	Object getLocalStartTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	Object getLocalEndTime();
+
+	/**
+	 * The duration of this event in hours
+	 * @generated NO
 	 * @return
 	 */
 	int getDuration();
