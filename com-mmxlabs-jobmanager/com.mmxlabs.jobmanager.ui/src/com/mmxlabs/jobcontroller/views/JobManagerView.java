@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -89,11 +90,11 @@ public class JobManagerView extends ViewPart {
 	private final IJobManager jobManager = Activator.getDefault()
 			.getJobManager();
 
-	public void addJob(IManagedJob theJob) {
+	public void addJob(final IManagedJob theJob, final IResource resource) {
 		theJob.prepare();
-		jobManager.addJob(theJob);
+		jobManager.addJob(theJob, resource);
 	}
-	
+
 	/*
 	 * The content provider class is responsible for providing objects to the
 	 * view. It can wrap existing objects in adapters or simply return objects
@@ -190,7 +191,7 @@ public class JobManagerView extends ViewPart {
 
 			ImageDescriptor desc = null;
 			if (key instanceof JobState) {
-				JobState state = (JobState) key;
+				final JobState state = (JobState) key;
 
 				switch (state) {
 				case CANCELLED:
@@ -264,8 +265,8 @@ public class JobManagerView extends ViewPart {
 
 	private final IManagedJobListener listener = new IManagedJobListener() {
 		@Override
-		public void jobStateChanged(IManagedJob job, JobState oldState,
-				JobState newState) {
+		public void jobStateChanged(final IManagedJob job,
+				final JobState oldState, final JobState newState) {
 			refresh();
 			switch (newState) {
 			case PAUSED:
@@ -279,12 +280,13 @@ public class JobManagerView extends ViewPart {
 					}
 				});
 				break;
-				
+
 			}
 		}
 
 		@Override
-		public void jobProgressUpdated(IManagedJob job, int progressDelta) {
+		public void jobProgressUpdated(final IManagedJob job,
+				final int progressDelta) {
 			refresh();
 		}
 	};
@@ -350,26 +352,28 @@ public class JobManagerView extends ViewPart {
 
 			@Override
 			public void jobRemoved(final IJobManager jobManager,
-					final IManagedJob job) {
+					final IManagedJob job, final IResource resource) {
 				job.removeListener(listener);
 				refresh();
 			}
 
 			@Override
 			public void jobAdded(final IJobManager jobManager,
-					final IManagedJob job) {
+					final IManagedJob job, final IResource resource) {
 				job.addListener(listener);
 				refresh();
 			}
 
 			@Override
-			public void jobSelected(IJobManager jobManager, IManagedJob job) {
+			public void jobSelected(final IJobManager jobManager,
+					final IManagedJob job, final IResource resource) {
 				// TODO Auto-generated method stub
 				refresh();
 			}
 
 			@Override
-			public void jobDeselected(IJobManager jobManager, IManagedJob job) {
+			public void jobDeselected(final IJobManager jobManager,
+					final IManagedJob job, final IResource resource) {
 				// TODO Auto-generated method stub
 				refresh();
 			}
@@ -576,11 +580,11 @@ public class JobManagerView extends ViewPart {
 								.getConstraintCheckerNames()),
 						constraintRegistry);
 
-//				final OptManagedJob job = new OptManagedJob(name, context);
-//
-//				job.init();
-//
-//				jobManager.addJob(job);
+				// final OptManagedJob job = new OptManagedJob(name, context);
+				//
+				// job.init();
+				//
+				// jobManager.addJob(job);
 
 			}
 		};
@@ -594,14 +598,14 @@ public class JobManagerView extends ViewPart {
 
 			@Override
 			public void run() {
-				ISelection selection = viewer.getSelection();
-				Iterator<Object> iter = ((IStructuredSelection) selection)
+				final ISelection selection = viewer.getSelection();
+				final Iterator<Object> iter = ((IStructuredSelection) selection)
 						.iterator();
 				while (iter.hasNext()) {
-					Object obj = iter.next();
-//					if (obj instanceof OptManagedJob) {
-//						jobManager.toggleJobSelection((OptManagedJob) obj);
-//					}
+					final Object obj = iter.next();
+					// if (obj instanceof OptManagedJob) {
+					// jobManager.toggleJobSelection((OptManagedJob) obj);
+					// }
 				}
 
 			}
