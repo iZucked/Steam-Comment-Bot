@@ -76,19 +76,29 @@ public class CargoReportView2 extends EMFReportView {
 		addColumn("Laden Cost", new IFormatter() {
 			@Override
 			public String format(Object object) {
-				final CargoAllocation a = (CargoAllocation) object;
-				return String.format("%,d", a.getLadenIdle().getTotalCost()
-						+ a.getLadenLeg().getTotalCost());
+				if (object instanceof CargoAllocation) {
+					final CargoAllocation a = (CargoAllocation) object;
+					long totalCost = 0;
+					totalCost += (a.getLadenIdle() == null) ? 0 : a.getLadenIdle().getTotalCost();
+					totalCost += (a.getLadenLeg() == null) ? 0 : a.getLadenLeg().getTotalCost();
+					return String.format("%,d", totalCost);
+				}
+				return null;
 			}
 		});
 
 		addColumn("Ballast Cost", new IFormatter() {
 			@Override
 			public String format(Object object) {
+				if (object instanceof CargoAllocation) {
 				//TODO this could be an operation on CargoAllocation.
-				final CargoAllocation a = (CargoAllocation) object;
-				return String.format("%,d", a.getBallastIdle().getTotalCost()
-						+ a.getBallastLeg().getTotalCost());
+					final CargoAllocation a = (CargoAllocation) object;
+					long totalCost = 0;
+					totalCost += (a.getBallastIdle() == null) ? 0 : a.getBallastIdle().getTotalCost();
+					totalCost += (a.getBallastLeg() == null) ? 0 : a.getBallastLeg().getTotalCost();
+					return String.format("%,d", totalCost);
+				}
+				return null;
 			}
 		});
 
