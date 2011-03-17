@@ -87,7 +87,7 @@ public class GanttChartViewer extends StructuredViewer {
 
 			@Override
 			public void eventSelected(final GanttEvent event,
-					final java.util.List<GanttEvent> allSelectedEvents,
+					final java.util.List allSelectedEvents,
 					final org.eclipse.swt.events.MouseEvent me) {
 
 				// Use reverse map to get underlying objects
