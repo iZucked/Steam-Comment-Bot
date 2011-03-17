@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+
 /**
  * Interface representing a particular load slot defined by a port, time window
  * and load volumes.
@@ -34,8 +36,8 @@ public interface ILoadSlot extends IPortSlot {
 	 * 
 	 * @return
 	 */
-	int getPurchasePriceAtTime(int time);
-	
+	// int getPurchasePriceAtTime(int time);
+
 	/**
 	 * Returns the CV of the cargo loaded from this slot. This will be used to
 	 * convert between M3 and MMBTu of LNG.
@@ -43,4 +45,13 @@ public interface ILoadSlot extends IPortSlot {
 	 * @return
 	 */
 	int getCargoCVValue();
+
+	/**
+	 * Returns the
+	 * {@link com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator}
+	 * which should be used to determine the unit cost of LNG at this slot.
+	 * 
+	 * @return
+	 */
+	ILoadPriceCalculator getLoadPriceCalculator();
 }

@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -22,8 +22,10 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	private long maxLoadVolume;
 
-	private ICurve purchasePriceCurve;
+//	private ICurve purchasePriceCurve;
 
+	private ILoadPriceCalculator loadPriceCalculator;
+	
 	private int cargoCVValue;
 
 	public LoadSlot() {
@@ -32,12 +34,12 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	public LoadSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minLoadVolume,
-			final long maxLoadVolume, final ICurve purchasePriceCurve,
+			final long maxLoadVolume, final ILoadPriceCalculator loadPriceCalculator,
 			final int cargoCVValue) {
 		super(id, port, timwWindow);
 		this.minLoadVolume = minLoadVolume;
 		this.maxLoadVolume = maxLoadVolume;
-		this.purchasePriceCurve = purchasePriceCurve;
+		this.loadPriceCalculator = loadPriceCalculator;
 		this.cargoCVValue = cargoCVValue;
 	}
 
@@ -59,14 +61,14 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		this.maxLoadVolume = maxLoadVolume;
 	}
 
-	public void setPurchasePriceCurve(final ICurve curve) {
-		this.purchasePriceCurve = curve;
+	public void setLoadPriceCalculator(final ILoadPriceCalculator loadPriceCalculator) {
+		this.loadPriceCalculator = loadPriceCalculator;
 	}
 
-	@Override
-	public int getPurchasePriceAtTime(final int time) {
-		return (int) purchasePriceCurve.getValueAtPoint(time);
-	}
+//	@Override
+//	public int getPurchasePriceAtTime(final int time) {
+//		return (int) purchasePriceCurve.getValueAtPoint(time);
+//	}
 
 	@Override
 	public boolean equals(final Object obj) {
@@ -82,7 +84,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 				return false;
 			}
 
-			if (purchasePriceCurve != slot.purchasePriceCurve) {
+			if (loadPriceCalculator != slot.loadPriceCalculator) {
 				return false;
 			}
 
@@ -104,7 +106,8 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		this.cargoCVValue = cargoCVValue;
 	}
 
-	public final ICurve getPurchasePriceCurve() {
-		return purchasePriceCurve;
+	@Override
+	public ILoadPriceCalculator getLoadPriceCalculator() {
+		return loadPriceCalculator;
 	}
 }
