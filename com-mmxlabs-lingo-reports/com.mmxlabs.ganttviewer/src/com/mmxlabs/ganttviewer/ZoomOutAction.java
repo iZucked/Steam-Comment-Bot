@@ -38,7 +38,7 @@ public class ZoomOutAction extends Action {
 	@Override
 	public void run() {
 
-		ganttChart.getGanttComposite().zoomOut(true);
+		ganttChart.getGanttComposite().zoomOut();
 		ganttChart.getGanttComposite().setFocus();
 	}
 }

@@ -38,7 +38,7 @@ public class ZoomInAction extends Action {
 	@Override
 	public void run() {
 
-		ganttChart.getGanttComposite().zoomIn(true);
+		ganttChart.getGanttComposite().zoomIn();
 		ganttChart.getGanttComposite().setFocus();
 	}
 }
