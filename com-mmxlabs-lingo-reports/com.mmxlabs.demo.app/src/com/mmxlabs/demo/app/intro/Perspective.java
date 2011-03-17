@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
 
@@ -19,37 +19,39 @@ import com.mmxlabs.scheduleview.views.SchedulerView;
 public class Perspective implements IPerspectiveFactory {
 
 	@Override
-	public void createInitialLayout(IPageLayout layout) {
-		
-		
-		IFolderLayout leftFolder = layout.createFolder("leftFolder", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
-		leftFolder.addView(IPageLayout.ID_RES_NAV);
-		
-		IFolderLayout leftBottomFolder = layout.createFolder("leftBottomFolder", IPageLayout.BOTTOM, 0.5f, "leftFolder");
-		leftBottomFolder.addView(TotalsReportView.ID);
-		leftBottomFolder.addView(FitnessReportView.ID);
-		leftBottomFolder.addView(CargoReportView.ID);
-		leftBottomFolder.addView(PortRotationReportView.ID);
-		
-		
-		
-		
-		layout.addView(SchedulerView.ID, IPageLayout.RIGHT,0.3f, IPageLayout.ID_EDITOR_AREA);
-		
-		
-		
-		IFolderLayout folder1 = layout.createFolder("folder1", IPageLayout.BOTTOM, 0.7f, IPageLayout.ID_EDITOR_AREA);
-		
-		folder1.addView(JobManagerView.ID);
-		folder1.addView("org.eclipse.pde.runtime.LogView");
-		
+	public void createInitialLayout(final IPageLayout layout) {
+
+		final IFolderLayout navFolder = layout.createFolder("navFolder",
+				IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
+		navFolder.addView(IPageLayout.ID_RES_NAV);
+
+		layout.addView(JobManagerView.ID, IPageLayout.BOTTOM, 0.3f, "navFolder");
+
+		final IFolderLayout propertiesFolder = layout.createFolder(
+				"propertiesFolder", IPageLayout.BOTTOM, 0.2f,
+				IPageLayout.ID_EDITOR_AREA);
+		propertiesFolder.addView(IPageLayout.ID_PROP_SHEET);
+
+		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.3f,
+				"propertiesFolder");
+
+		final IFolderLayout reportsFolder = layout.createFolder(
+				"reportsFolder", IPageLayout.BOTTOM, 0.5f, SchedulerView.ID);
+		reportsFolder.addView(TotalsReportView.ID);
+		reportsFolder.addView(FitnessReportView.ID);
+		reportsFolder.addView(CargoReportView.ID);
+		reportsFolder.addView(PortRotationReportView.ID);
+
+		layout.addView("org.eclipse.pde.runtime.LogView", IPageLayout.BOTTOM,
+				0.3f, JobManagerView.ID);
+
 		layout.addShowViewShortcut(SchedulerView.ID);
 		layout.addShowViewShortcut(JobManagerView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
 		layout.addShowViewShortcut(CargoReportView.ID);
 		layout.addShowViewShortcut(FitnessReportView.ID);
 		layout.addShowViewShortcut(PortRotationReportView.ID);
-		
+
 		layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 	}
