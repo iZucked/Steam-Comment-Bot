@@ -951,7 +951,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				}
 			};
-			final IReferenceValueProvider marketProvider = new IReferenceValueProvider() {
+			final IReferenceValueProvider loadContractProvider = new IReferenceValueProvider() {
 				@Override
 				public Iterable<? extends EObject> getAllowedValues(
 						EObject target, EStructuralFeature field) {
@@ -961,8 +961,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					if (target == null) {
 						return Collections.emptyList();
 					} else {
-						return ((Scenario) target).getMarketModel()
-								.getMarkets();
+						return ((Scenario) target).getContractModel().getPurchaseContracts();
+					}
+				}
+			};
+			
+			final IReferenceValueProvider dischargeContractProvider = new IReferenceValueProvider() {
+				@Override
+				public Iterable<? extends EObject> getAllowedValues(
+						EObject target, EStructuralFeature field) {
+					while (target != null && !(target instanceof Scenario)) {
+						target = target.eContainer();
+					}
+					if (target == null) {
+						return Collections.emptyList();
+					} else {
+						return ((Scenario) target).getContractModel().getSalesContracts();
 					}
 				}
 			};
@@ -1012,10 +1026,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				{
 					final SingleReferenceManipulator port = new SingleReferenceManipulator(
-							cargoPackage.getSlot_Market(),
-							MarketPackage.eINSTANCE.getMarket_Name(), false,
-							marketProvider, getEditingDomain());
-					cargoPane.addColumn("Load Market", port, port,
+							cargoPackage.getSlot_Contract(),
+							ScenarioPackage.eINSTANCE.getNamedObject_Name(),
+							false, loadContractProvider, getEditingDomain());
+					cargoPane.addColumn("Load Contract", port, port,
 							cargoPackage.getCargo_LoadSlot());
 				}
 
@@ -1037,10 +1051,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				{
 					final SingleReferenceManipulator port = new SingleReferenceManipulator(
-							cargoPackage.getSlot_Market(),
-							MarketPackage.eINSTANCE.getMarket_Name(), false,
-							marketProvider, getEditingDomain());
-					cargoPane.addColumn("Discharge Market", port, port,
+							cargoPackage.getSlot_Contract(),
+							ScenarioPackage.eINSTANCE.getNamedObject_Name(),
+							false, dischargeContractProvider,
+
+							getEditingDomain());
+					cargoPane.addColumn("Discharge Contract", port, port,
 							cargoPackage.getCargo_DischargeSlot());
 				}
 
