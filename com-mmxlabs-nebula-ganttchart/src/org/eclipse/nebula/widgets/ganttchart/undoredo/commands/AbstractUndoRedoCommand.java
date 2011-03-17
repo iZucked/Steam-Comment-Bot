@@ -9,26 +9,8 @@
  *    emil.crumhorn@gmail.com - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.nebula.widgets.ganttchart;
+package org.eclipse.nebula.widgets.ganttchart.undoredo.commands;
 
-/**
- * A convenience class for creating a GanttScope instead of using the specific constructors on the GanttEvent.
- *  
- */
-public final class GanttScope extends GanttEvent {
+public abstract class AbstractUndoRedoCommand implements IUndoRedoCommand { // NOPMD
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public GanttScope(final GanttChart parent, final String name) {
-		super(parent, null, name);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public GanttScope(final GanttChart parent, final Object data, final String name) {
-		super(parent, data, name);
-	}
-	
 }

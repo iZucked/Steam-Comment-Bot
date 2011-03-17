@@ -9,26 +9,25 @@
  *    emil.crumhorn@gmail.com - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.nebula.widgets.ganttchart;
+package org.eclipse.nebula.widgets.ganttchart.undoredo;
 
-/**
- * A convenience class for creating a GanttScope instead of using the specific constructors on the GanttEvent.
- *  
- */
-public final class GanttScope extends GanttEvent {
+import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.IUndoRedoCommand;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public GanttScope(final GanttChart parent, final String name) {
-		super(parent, null, name);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public GanttScope(final GanttChart parent, final Object data, final String name) {
-		super(parent, data, name);
-	}
-	
+public class UndoRedoListenerAdapter implements IUndoRedoListener {
+
+    public void canRedoChanged(boolean canRedo) {
+    }
+
+    public void canUndoChanged(boolean canUndo) {
+    }
+
+    public void commandRedone(IUndoRedoCommand command) {
+    }
+
+    public void commandUndone(IUndoRedoCommand command) {
+    }
+
+    public void undoableCommandAdded(IUndoRedoCommand command) {
+    }
+
 }

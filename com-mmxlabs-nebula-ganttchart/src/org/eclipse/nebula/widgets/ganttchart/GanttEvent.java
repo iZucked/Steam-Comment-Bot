@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.EventMoveCommand;
+import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.EventResizeCommand;
+import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.IUndoRedoCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -26,7 +29,7 @@ import org.eclipse.swt.widgets.Menu;
 /**
  * One GanttEvent represents one "active" object int the GANTT chart.
  * <p>
- * This object can take many shapes, here is a list:<br>
+ * This object can take many shapes, here is a list of a few:<br>
  * <ul>
  * <li>Normal event
  * <li>Checkpoint event
@@ -66,72 +69,80 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      */
     public static final int FIXED_ROW_HEIGHT_AUTOMATIC = -1;
 
-    private Object          mData;
-    private String          mName;
-    private Calendar        mRevisedStart;
-    private Calendar        mRevisedEnd;
-    private Calendar        mStartDate;
-    private Calendar        mEndDate;
-    private int             mPercentComplete;
-    private boolean         mCheckpoint;
-    private boolean         mScope;
-    private boolean         mLocked;
-    private boolean         mImage;
-    private boolean         mResizable                 = true;
-    private boolean         mMoveable                  = true;
-    private int             x, y, width, height;
-    private int             mEarliestStartX, mLatestEndX, mActualWidth;
-    private Color           mStatusColor;
-    private Color           mGradientStatusColor;
-    private boolean         mShowBoldText;
-    private String          mTextDisplayFormat;
-    private List<GanttEvent>            mScopeEvents;
-    private Image           mPicture;
-    private Menu            mMenu;
-    private GanttChart      mParentChart;
-    private GanttComposite  mParentComposite;
-    private GanttGroup      mGanttGroup;
-    private boolean         mHidden;
-    private int             mWidthWithtText;
+    private Object          _data;
+    private String          _name;
+    private Calendar        _revisedStart;
+    private Calendar        _revisedEnd;
+    private Calendar        _startDate;
+    private Calendar        _endDate;
+    private int             _percentComplete;
+    private boolean         _checkpoint;
+    private boolean         _scope;
+    private boolean         _locked;
+    private boolean         _image;
+    private boolean         _resizable                 = true;
+    private boolean         _moveable                  = true;
+    private int             _x, _y, _width, _height;
+    private int             _earliestStartX, _latestEndX, _actualWidth;
+    private Color           _statusColor;
+    private Color           _gradientStatusColor;
+    private boolean         _showBoldText;
+    private String          _textDisplayFormat;
+    private List            _scopeEvents;
+    private Image           _picture;
+    private Menu            _menu;
+    private GanttChart      _parentChart;
+    private GanttComposite  _parentComposite;
+    private GanttGroup      _ganttGroup;
+    private GanttSection    _ganttSection;
+    private boolean         _hidden;
+    private int             _widthWithtText;
     // TODO: Implement. Less constructors, more user power.
     // private int mEventType = TYPE_EVENT;
-    private AdvancedTooltip mAdvancedTooltip;
-    private int             mVisibility;
-    private boolean         mBoundsHaveBeenSet;
+    private AdvancedTooltip _advancedTooltip;
+    private int             _visibility;
+    private boolean         _boundsHaveBeenSet;
 
-    private int             mFixedRowHeight            = FIXED_ROW_HEIGHT_AUTOMATIC;
-    private int             mVerticalEventAlignment    = SWT.TOP;
+    private int             _fixedRowHeight            = FIXED_ROW_HEIGHT_AUTOMATIC;
+    private int             _verticalEventAlignment    = SWT.TOP;
 
-    private int             mHorizontalLineTopY;
-    private int             mHorizontalLineBottomY;
+    private int             _horizontalLineTopY;
+    private int             _horizontalLineBottomY;
 
-    private Calendar        mNoMoveBeforeDate;
-    private Calendar        mNoMoveAfterDate;
+    private Calendar        _noMoveBeforeDate;
+    private Calendar        _noMoveAfterDate;
 
     // private items
-    private boolean         mNameChanged               = true;
-    private Point           mNameExtent;
-    private String          mParsedString;
+    private boolean         _nameChanged               = true;
+    private Point           _nameExtent;
+    private String          _parsedString;
 
-    private int             mHorizontalTextLocation    = SWT.RIGHT;
-    private int             mVerticalTextLocation      = SWT.CENTER;
+    private int             _horizontalTextLocation    = SWT.RIGHT;
+    private int             _verticalTextLocation      = SWT.CENTER;
 
-    private Font            mTextFont;
+    private Font            _textFont;
 
-    private int             mDaysBetweenStartAndEnd;
+    private int             _daysBetweenStartAndEnd;
 
     // cloned holders used for cancelling a move/resize via ESC
-    private Calendar        mPreMoveDateEstiStart;
-    private Calendar        mPreMoveDateEstiEnd;
-    private Calendar        mPreMoveDateRevisedStart;
-    private Calendar        mPreMoveDateRevisedEnd;
-    private Rectangle       mPreMoveBounds;
-    private boolean         mMoving;
+    private Calendar        _preMoveDateEstiStart;
+    private Calendar        _preMoveDateEstiEnd;
+    private Calendar        _preMoveDateRevisedStart;
+    private Calendar        _preMoveDateRevisedEnd;
+    private Rectangle       _preMoveBounds;
+    private boolean         _moving;
+    private int             _moveType;
+    private int             _preMoveGanttSectionIndex;
+    private int             _preMoveGanttSectionEventLocationIndex;
 
-    private GanttEvent      mScopeParent;
+    private GanttEvent      _scopeParent;
 
-    private int             mDDayStart;
-    private int             mDDayEnd;
+    private int             _dDayStart;
+    private int             _dDayEnd;
+
+    private int             _savedVerticalDragY;
+
+    private Rectangle       _preVerticalDragBounds;
 
     /**
      * Creates a new GanttEvent.
@@ -142,7 +153,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param endDate End date
      * @param percentComplete Percent complete
      */
-    public GanttEvent(GanttChart parent, String name, Calendar startDate, Calendar endDate, int percentComplete) {
+    public GanttEvent(final GanttChart parent, final String name, final Calendar startDate, final Calendar endDate, final int percentComplete) {
         this(parent, null, name, startDate, endDate, percentComplete);
     }
 
@@ -156,15 +167,15 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param endDate End date
      * @param percentComplete Percent complete
      */
-    public GanttEvent(GanttChart parent, Object data, String name, Calendar startDate, Calendar endDate, int percentComplete) {
-        this.mParentChart = parent;
-        this.mParentComposite = mParentChart.getGanttComposite();
-        this.mData = data;
-        this.mName = name;
-        this.mStartDate = startDate;
-        this.mEndDate = endDate;
-        this.mPercentComplete = percentComplete;
-        init();
+    public GanttEvent(final GanttChart parent, final Object data, final String name, final Calendar startDate, final Calendar endDate, final int percentComplete) {
+        this._parentChart = parent;
+        this._parentComposite = _parentChart.getGanttComposite();
+        this._data = data;
+        this._name = name;
+        this._startDate = startDate;
+        this._endDate = endDate;
+        this._percentComplete = percentComplete;
+        init(); // NOPMD
     }
 
     /**
@@ -178,7 +189,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param revisedEnd Revised end
      * @param percentComplete Percent complete
      */
-    public GanttEvent(GanttChart parent, String name, Calendar startDate, Calendar endDate, Calendar revisedStart, Calendar revisedEnd, int percentComplete) {
+    public GanttEvent(final GanttChart parent, final String name, final Calendar startDate, final Calendar endDate, final Calendar revisedStart, final Calendar revisedEnd, final int percentComplete) {
         this(parent, null, name, startDate, endDate, revisedStart, revisedEnd, percentComplete);
     }
 
@@ -194,17 +205,17 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param revisedEnd Revised end date
      * @param percentComplete Percentage complete
      */
-    public GanttEvent(GanttChart parent, Object data, String name, Calendar startDate, Calendar endDate, Calendar revisedStart, Calendar revisedEnd, int percentComplete) {
-        this.mParentChart = parent;
-        this.mParentComposite = mParentChart.getGanttComposite();
-        this.mData = data;
-        this.mName = name;
-        this.mStartDate = startDate;
-        this.mEndDate = endDate;
-        this.mRevisedStart = revisedStart;
-        this.mRevisedEnd = revisedEnd;
-        this.mPercentComplete = percentComplete;
-        init();
+    public GanttEvent(final GanttChart parent, final Object data, final String name, final Calendar startDate, final Calendar endDate, final Calendar revisedStart, final Calendar revisedEnd, final int percentComplete) {
+        this._parentChart = parent;
+        this._parentComposite = _parentChart.getGanttComposite();
+        this._data = data;
+        this._name = name;
+        this._startDate = startDate;
+        this._endDate = endDate;
+        this._revisedStart = revisedStart;
+        this._revisedEnd = revisedEnd;
+        this._percentComplete = percentComplete;
+        init(); // NOPMD
     }
 
     /**
@@ -214,18 +225,18 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param dDayStart D day start value (zero based)
      * @param dDayEnd D day end value (zero based)
      */
-    public GanttEvent(GanttChart parent, int dDayStart, int dDayEnd) {
-        this.mParentChart = parent;
-        this.mParentComposite = mParentChart.getGanttComposite();
-        this.mDDayStart = dDayStart;
-        this.mDDayEnd = dDayEnd;
+    public GanttEvent(final GanttChart parent, final int dDayStart, final int dDayEnd) {
+        this._parentChart = parent;
+        this._parentComposite = _parentChart.getGanttComposite();
+        this._dDayStart = dDayStart;
+        this._dDayEnd = dDayEnd;
 
-        mStartDate = mParentChart.getGanttComposite().getDDayCalendar();
-        mEndDate = mParentChart.getGanttComposite().getDDayCalendar();
-        mStartDate.add(Calendar.DATE, mDDayStart);
-        mEndDate.add(Calendar.DATE, mDDayEnd);
+        _startDate = _parentChart.getGanttComposite().getDDayCalendar();
+        _endDate = _parentChart.getGanttComposite().getDDayCalendar();
+        _startDate.add(Calendar.DATE, _dDayStart);
+        _endDate.add(Calendar.DATE, _dDayEnd);
 
-        init();
+        init(); // NOPMD
     }
 
     /**
@@ -234,7 +245,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param parent Chart parent
      * @param name Name of scope
      */
-    public GanttEvent(GanttChart parent, String name) {
+    public GanttEvent(final GanttChart parent, final String name) {
         this(parent, null, name);
     }
 
@@ -245,16 +256,16 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param data Data object
      * @param name Name of scope
      */
-    public GanttEvent(GanttChart parent, Object data, String name) {
-        this.mParentChart = parent;
-        this.mParentComposite = mParentChart.getGanttComposite();
-        this.mData = data;
-        this.mName = name;
-        this.mScope = true;
+    public GanttEvent(final GanttChart parent, final Object data, final String name) {
+        this._parentChart = parent;
+        this._parentComposite = _parentChart.getGanttComposite();
+        this._data = data;
+        this._name = name;
+        this._scope = true;
         try {
-            init();
+            init(); // NOPMD
         } catch (Exception err) {
-            err.printStackTrace();
+            SWT.error(SWT.ERROR_UNSPECIFIED, err);
         }
     }
 
@@ -265,7 +276,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param name Name of checkpoint
      * @param date Checkpoint start (and end) date
      */
-    public GanttEvent(GanttChart parent, String name, Calendar date) {
+    public GanttEvent(final GanttChart parent, final String name, final Calendar date) {
         this(parent, null, name, date);
     }
 
@@ -277,18 +288,18 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param name Name of checkpoint
      * @param date Start (and end) date
      */
-    public GanttEvent(GanttChart parent, Object data, String name, Calendar date) {
-        this.mParentChart = parent;
-        this.mParentComposite = mParentChart.getGanttComposite();
-        this.mData = data;
-        this.mName = name;
-        this.mStartDate = date;
-        this.mEndDate = date;
-        this.mCheckpoint = true;
+    public GanttEvent(final GanttChart parent, final Object data, final String name, final Calendar date) {
+        this._parentChart = parent;
+        this._parentComposite = _parentChart.getGanttComposite();
+        this._data = data;
+        this._name = name;
+        this._startDate = date;
+        this._endDate = date;
+        this._checkpoint = true;
         try {
-            init();
+            init(); // NOPMD
         } catch (Exception err) {
-            err.printStackTrace();
+            SWT.error(SWT.ERROR_UNSPECIFIED, err);
         }
     }
 
@@ -300,7 +311,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param date Start (and end) date
      * @param picture Image to show
      */
-    public GanttEvent(GanttChart parent, String name, Calendar date, Image picture) {
+    public GanttEvent(final GanttChart parent, final String name, final Calendar date, final Image picture) {
         this(parent, null, name, date, picture);
     }
 
@@ -313,25 +324,25 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param date Start (and end) date
      * @param picture Image to show
      */
-    public GanttEvent(GanttChart parent, Object data, String name, Calendar date, Image picture) {
-        this.mParentChart = parent;
-        this.mParentComposite = mParentChart.getGanttComposite();
-        this.mData = data;
-        this.mName = name;
-        this.mStartDate = date;
-        this.mEndDate = date;
-        this.mPicture = picture;
-        this.mImage = true;
+    public GanttEvent(final GanttChart parent, final Object data, final String name, final Calendar date, final Image picture) {
+        this._parentChart = parent;
+        this._parentComposite = _parentChart.getGanttComposite();
+        this._data = data;
+        this._name = name;
+        this._startDate = date;
+        this._endDate = date;
+        this._picture = picture;
+        this._image = true;
         try {
-            init();
+            init(); // NOPMD
         } catch (Exception err) {
-            err.printStackTrace();
+            SWT.error(SWT.ERROR_UNSPECIFIED, err);
         }
     }
 
-    protected final void init() {
-        mScopeEvents = new ArrayList<GanttEvent>();
-        mParentComposite.addEvent(this, true);
+    private final void init() {
+        _scopeEvents = new ArrayList();
+        _parentComposite.addEvent(this, true);
 
         updateDaysBetweenStartAndEnd();
     }
@@ -342,7 +353,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Data object
      */
     public Object getData() {
-        return mData;
+        return _data;
     }
 
     /**
@@ -350,8 +361,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param data Data object
      */
-    public void setData(Object data) {
-        this.mData = data;
+    public void setData(final Object data) {
+        this._data = data;
     }
 
     /**
@@ -360,7 +371,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Display name
      */
     public String getName() {
-        return this.mName;
+        return this._name;
     }
 
     /**
@@ -368,9 +379,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param name Display name
      */
-    public void setName(String name) {
-        this.mName = name;
-        mNameChanged = true;
+    public void setName(final String name) {
+        this._name = name;
+        _nameChanged = true;
     }
 
     /**
@@ -379,9 +390,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Start date
      */
     public Calendar getStartDate() {
-        if (mStartDate == null) return null;
+        if (_startDate == null) { return null; }
 
-        return (Calendar) mStartDate.clone();
+        return DateHelper.getNewCalendar(_startDate);
     }
 
     /**
@@ -390,8 +401,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Start date or null
      */
     public Calendar getActualStartDate() {
-        Calendar ret = mRevisedStart != null ? mRevisedStart : mStartDate;
-        return ret == null ? null : (Calendar) ret.clone();
+        final Calendar ret = _revisedStart == null ? _startDate : _revisedStart;
+        return ret == null ? null : DateHelper.getNewCalendar(ret);
     }
 
     /**
@@ -400,8 +411,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return End date or null
      */
     public Calendar getActualEndDate() {
-        Calendar ret = mRevisedEnd != null ? mRevisedEnd : mEndDate;
-        return ret == null ? null : (Calendar) ret.clone();
+        final Calendar ret = _revisedEnd == null ? _endDate : _revisedEnd;
+        return ret == null ? null : DateHelper.getNewCalendar(ret);
     }
 
     /**
@@ -411,12 +422,12 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Earliest start date
      */
     public Calendar getEarliestStartDate() {
-        if (mRevisedStart == null && mStartDate == null) { return null; }
+        if (_revisedStart == null && _startDate == null) { return null; }
 
-        if (mRevisedStart == null) { return mStartDate; }
-        if (mStartDate == null) { return mRevisedStart; }
+        if (_revisedStart == null) { return _startDate; }
+        if (_startDate == null) { return _revisedStart; }
 
-        return mStartDate.before(mRevisedStart) ? mStartDate : mRevisedStart;
+        return _startDate.before(_revisedStart) ? _startDate : _revisedStart;
     }
 
     /**
@@ -426,13 +437,13 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Latest end date
      */
     public Calendar getLatestEndDate() {
-        if (mRevisedEnd == null && mEndDate == null) { return null; }
+        if (_revisedEnd == null && _endDate == null) { return null; }
 
-        if (mRevisedEnd == null) {
-            return mEndDate;
-        } else if (mEndDate == null) { return mRevisedEnd; }
+        if (_revisedEnd == null) {
+            return _endDate;
+        } else if (_endDate == null) { return _revisedEnd; }
 
-        return mEndDate.after(mRevisedEnd) ? mEndDate : mRevisedEnd;
+        return _endDate.after(_revisedEnd) ? _endDate : _revisedEnd;
     }
 
     /**
@@ -440,16 +451,23 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param startDate Start date
      */
-    public void setStartDate(Calendar startDate) {
-        if (mNoMoveBeforeDate != null) {
-            if (startDate.before(mNoMoveBeforeDate)) return;
+    public void setStartDate(final Calendar startDate) {
+        if (startDate == null) {
+            _startDate = startDate;
+            updateDaysBetweenStartAndEnd();
+            return;
         }
 
-        if (getActualEndDate() != null) {
-            if (startDate.after(getActualEndDate())) startDate = (Calendar) getActualEndDate().clone();
+        Calendar sDate = DateHelper.getNewCalendar(startDate);
+
+        if (_noMoveBeforeDate != null && startDate.before(_noMoveBeforeDate)) { return; }
+
+        Calendar aEnd = getActualEndDate();
+        if (aEnd != null && startDate.after(aEnd)) {
+            sDate = aEnd;
         }
 
-        this.mStartDate = (Calendar) startDate.clone();
+        this._startDate = sDate;
         updateDaysBetweenStartAndEnd();
     }
 
@@ -459,8 +477,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param redraw if to redraw the chart after notifying of changes.
      */
-    public void update(boolean redraw) {
-        mParentComposite.eventDatesChanged(this, redraw);
+    public void update(final boolean redraw) {
+        _parentComposite.eventDatesChanged(this, redraw);
     }
 
     /**
@@ -469,9 +487,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return End date
      */
     public Calendar getEndDate() {
-        if (mEndDate == null) return null;
+        if (_endDate == null) { return null; }
 
-        return (Calendar) mEndDate.clone();
+        return DateHelper.getNewCalendar(_endDate);
     }
 
     /**
@@ -479,16 +497,23 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param endDate End date
      */
-    public void setEndDate(Calendar endDate) {
-        if (mNoMoveAfterDate != null) {
-            if (endDate.after(mNoMoveAfterDate)) return;
+    public void setEndDate(final Calendar endDate) {
+        if (endDate == null) {
+            _endDate = endDate;
+            updateDaysBetweenStartAndEnd();
+            return;
         }
 
-        if (getActualStartDate() != null) {
-            if (endDate.before(getActualStartDate())) endDate = (Calendar) getActualStartDate().clone();
+        Calendar eDate = DateHelper.getNewCalendar(endDate);
+
+        if (_noMoveAfterDate != null && endDate.after(_noMoveAfterDate)) { return; }
+
+        Calendar aDate = getActualStartDate();
+        if (aDate != null && endDate.before(aDate)) {
+            eDate = aDate;
         }
 
-        this.mEndDate = (Calendar) endDate.clone();
+        this._endDate = eDate;
         updateDaysBetweenStartAndEnd();
     }
 
@@ -498,7 +523,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Percentage complete
      */
     public int getPercentComplete() {
-        return mPercentComplete;
+        return _percentComplete;
     }
 
     /**
@@ -506,8 +531,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param percentComplete Percentage complete
      */
-    public void setPercentComplete(int percentComplete) {
-        this.mPercentComplete = percentComplete;
+    public void setPercentComplete(final int percentComplete) {
+        this._percentComplete = percentComplete;
     }
 
     /**
@@ -520,9 +545,11 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Menu
      */
     public Menu getMenu() {
-        if (mMenu == null) mMenu = new Menu(mParentComposite);
+        if (_menu == null) {
+            _menu = new Menu(_parentComposite);
+        }
 
-        return mMenu;
+        return _menu;
     }
 
     /**
@@ -533,55 +560,61 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param width width of event
      * @param height height of event
      */
-    public void setBounds(int x, int y, int width, int height) {
-        mBoundsHaveBeenSet = true;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    void setBounds(final int x, final int y, final int width, final int height) {
+        _boundsHaveBeenSet = true;
+        this._x = x;
+        this._y = y;
+        this._width = width;
+        this._height = height;
     }
 
-    public void setBounds(Rectangle bounds) {
-        mBoundsHaveBeenSet = true;
-        this.x = bounds.x;
-        this.y = bounds.y;
-        this.width = bounds.width;
-        this.height = bounds.height;
-        if (mName.indexOf("2") > -1)
+    /**
+     * Sets the bounds of the event.
+     * 
+     * @param bounds New bounds
+     */
+    void setBounds(final Rectangle bounds) {
+        _boundsHaveBeenSet = true;
+        this._x = bounds.x;
+        this._y = bounds.y;
+        this._width = bounds.width;
+        this._height = bounds.height;
+        //if (_name.indexOf("2") > -1)
         //System.err.println("Updatebounds " + mName + " " + getBounds());
+
         if (getEarliestStartDate() != null) {
-            setEarliestStartX(mParentComposite.getStartingXfor(getEarliestStartDate()));
+            setEarliestStartX(_parentComposite.getStartingXFor(getEarliestStartDate()));
         }
         if (getLatestEndDate() != null) {
-            setLatestEndX(mParentComposite.getXForDate(getLatestEndDate()) + mParentComposite.getDayWidth());
+            setLatestEndX(_parentComposite.getXForDate(getLatestEndDate()) + _parentComposite.getDayWidth());
         }
     }
 
-    void updateX(int x) {
-        this.x = x;
-        
+    void updateX(final int x) {
+        this._x = x;
+
         updateOtherXs();
     }
 
-    private void updateOtherXs() {        
+    private void updateOtherXs() {
         if (getEarliestStartDate() != null) {
-            setEarliestStartX(mParentComposite.getStartingXfor(getEarliestStartDate()));
+            setEarliestStartX(_parentComposite.getStartingXFor(getEarliestStartDate()));
         }
         if (getLatestEndDate() != null) {
-            setLatestEndX(mParentComposite.getXForDate(getLatestEndDate()) + mParentComposite.getDayWidth());
+            setLatestEndX(_parentComposite.getXForDate(getLatestEndDate()) + _parentComposite.getDayWidth());
         }
     }
 
-    void updateY(int y) {
-        this.y = y;
+    void updateY(final int y) {
+        this._y = y;
     }
 
-    void updateHeight(int height) {
-        this.height = height;
+    void updateHeight(final int height) {
+        this._height = height;
     }
 
-    void updateWidth(int width) {
-        this.width = width;
+    void updateWidth(final int width) {
+        this._width = width;
     }
 
     /**
@@ -590,7 +623,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if this is a checkpoint
      */
     public boolean isCheckpoint() {
-        return mCheckpoint;
+        return _checkpoint;
     }
 
     /**
@@ -598,10 +631,10 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param checkpoint true if the event should be a checkpoint
      */
-    public void setCheckpoint(boolean checkpoint) {
-        this.mScope = false;
-        this.mImage = false;
-        this.mCheckpoint = checkpoint;
+    public void setCheckpoint(final boolean checkpoint) {
+        this._scope = false;
+        this._image = false;
+        this._checkpoint = checkpoint;
     }
 
     /**
@@ -610,7 +643,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return x location
      */
     public int getX() {
-        return x;
+        return _x;
     }
 
     /**
@@ -619,7 +652,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return x end location
      */
     public int getXEnd() {
-        return x + width;
+        return _x + _width;
     }
 
     /**
@@ -628,7 +661,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return y location
      */
     public int getY() {
-        return y;
+        return _y;
     }
 
     /**
@@ -637,7 +670,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return y bottom
      */
     public int getBottomY() {
-        return y + height;
+        return _y + _height;
     }
 
     /**
@@ -646,7 +679,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return width
      */
     public int getWidth() {
-        return width;
+        return _width;
     }
 
     /**
@@ -655,7 +688,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return height
      */
     public int getHeight() {
-        return height;
+        return _height;
     }
 
     /**
@@ -664,9 +697,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Revised date
      */
     public Calendar getRevisedStart() {
-        if (mRevisedStart == null) return null;
+        if (_revisedStart == null) { return null; }
 
-        return (Calendar) mRevisedStart.clone();
+        return DateHelper.getNewCalendar(_revisedStart);
     }
 
     /**
@@ -674,7 +707,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param revisedStart
      */
-    public void setRevisedStart(Calendar revisedStart) {
+    public void setRevisedStart(final Calendar revisedStart) {
         setRevisedDates(revisedStart, null);
     }
 
@@ -684,9 +717,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return revised end date
      */
     public Calendar getRevisedEnd() {
-        if (mRevisedEnd == null) return null;
+        if (_revisedEnd == null) { return null; }
 
-        return (Calendar) mRevisedEnd.clone();
+        return DateHelper.getNewCalendar(_revisedEnd);
     }
 
     /**
@@ -694,7 +727,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param revisedEnd Revised end date
      */
-    public void setRevisedEnd(Calendar revisedEnd) {
+    public void setRevisedEnd(final Calendar revisedEnd) {
         setRevisedDates(null, revisedEnd);
     }
 
@@ -703,9 +736,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param dDayStart d-day start.
      */
-    public void setRevisedStart(int dDayStart) {
-        mRevisedStart = mParentComposite.getDDayCalendar();
-        mRevisedStart.add(Calendar.DATE, dDayStart);
+    public void setRevisedStart(final int dDayStart) {
+        _revisedStart = _parentComposite.getDDayCalendar();
+        _revisedStart.add(Calendar.DATE, dDayStart);
     }
 
     /**
@@ -713,43 +746,45 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param dDayEnd d-day end
      */
-    public void setRevisedEnd(int dDayEnd) {
-        mRevisedEnd = mParentComposite.getDDayCalendar();
-        mRevisedEnd.add(Calendar.DATE, dDayEnd);
+    public void setRevisedEnd(final int dDayEnd) {
+        _revisedEnd = _parentComposite.getDDayCalendar();
+        _revisedEnd.add(Calendar.DATE, dDayEnd);
     }
 
-    /*
-     * Sets new revised dates. This is useful when you need to update two dates that move at the same time (such as manually doing a move via setDates). Normally each setting of a
-     * date would check it against its start date or end date to make sure it doesn't overlap. This does too, but at the same time, thus, no oddity in movement will appear. This is
-     * rather difficult to explain, but if you experience event-length changes when using individual start and end date sets that appear at the same time, you probably want to use
-     * this method instead. <p> Either parameter may be null to set just one, but both may not be null
+    /**
+     * Sets new revised dates. This is useful when you need to update two dates that move at the same time (such as
+     * manually doing a move via setDates). Normally each setting of a date would check it against its start date or end
+     * date to make sure it doesn't overlap. This does too, but at the same time, thus, no oddity in movement will
+     * appear. This is rather difficult to explain, but if you experience event-length changes when using individual
+     * start and end date sets that appear at the same time, you probably want to use this method instead.
+     * <p>
+     * Either parameter may be null to set just one, but both may not be null
      * 
      * @param revisedStart New revised Start date
-     * 
      * @param revisedEnd New revised End date
      */
-    private void setRevisedDates(Calendar revisedStart, Calendar revisedEnd) {
-        if (revisedStart == null && revisedEnd == null) return;
+    private void setRevisedDates(final Calendar revisedStart, final Calendar revisedEnd) {
+        if (revisedStart == null && revisedEnd == null) { return; }
 
-        if (revisedStart != null && getActualEndDate() != null) {
-            if (revisedStart.after(getActualEndDate())) return;
+        if (revisedStart != null && getActualEndDate() != null && revisedStart.after(getActualEndDate())) { return; }
+
+        if (revisedEnd != null && getActualStartDate() != null && revisedEnd.before(getActualStartDate())) { return; }
+
+        if (revisedStart != null) {
+            _revisedStart = DateHelper.getNewCalendar(revisedStart);
         }
 
-        if (revisedEnd != null && getActualStartDate() != null) {
-            if (revisedEnd.before(getActualStartDate())) // || revisedEnd.equals(revisedStart))
-            return;
+        if (revisedEnd != null) {
+            _revisedEnd = DateHelper.getNewCalendar(revisedEnd);
         }
-
-        if (revisedStart != null) mRevisedStart = (Calendar) revisedStart.clone();
-
-        if (revisedEnd != null) mRevisedEnd = (Calendar) revisedEnd.clone();
 
         // check movement constraints
-        if (mNoMoveBeforeDate != null && revisedStart != null) {
-            if (revisedStart.before(mNoMoveBeforeDate)) mRevisedStart = (Calendar) mNoMoveBeforeDate.clone();
+        if (_noMoveBeforeDate != null && revisedStart != null && revisedStart.before(_noMoveBeforeDate)) {
+            _revisedStart = DateHelper.getNewCalendar(_noMoveBeforeDate);
         }
-        if (mNoMoveAfterDate != null && revisedEnd != null) {
-            if (revisedEnd.after(mNoMoveAfterDate)) mRevisedEnd = (Calendar) mNoMoveAfterDate.clone();
+
+        if (_noMoveAfterDate != null && revisedEnd != null && revisedEnd.after(_noMoveAfterDate)) {
+            _revisedEnd = DateHelper.getNewCalendar(_noMoveAfterDate);
         }
 
         updateDaysBetweenStartAndEnd();
@@ -766,10 +801,11 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param revisedStart New revised start date
      * @param validate true if to validate the date as normal, false to just set the date as is.
      */
-    public void setRevisedStart(Calendar revisedStart, boolean validate) {
-        if (validate) setRevisedStart(revisedStart);
-        else {
-            mRevisedStart = (Calendar) revisedStart.clone();
+    public void setRevisedStart(final Calendar revisedStart, final boolean validate) {
+        if (validate) {
+            setRevisedStart(revisedStart);
+        } else {
+            _revisedStart = DateHelper.getNewCalendar(revisedStart);
             updateDaysBetweenStartAndEnd();
         }
     }
@@ -784,10 +820,11 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param revisedStart New revised start date
      * @param validate true if to validate the date as normal, false to just set the date as is.
      */
-    public void setRevisedEnd(Calendar revisedEnd, boolean validate) {
-        if (validate) setRevisedEnd(revisedEnd);
-        else {
-            mRevisedEnd = (Calendar) revisedEnd.clone();
+    public void setRevisedEnd(final Calendar revisedEnd, final boolean validate) {
+        if (validate) {
+            setRevisedEnd(revisedEnd);
+        } else {
+            _revisedEnd = DateHelper.getNewCalendar(revisedEnd);
             updateDaysBetweenStartAndEnd();
         }
     }
@@ -801,7 +838,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param revisedEnd Revised end date
      * @param order <code>SWT.LEFT_TO_RIHT</code> or <code>SWT.RIGHT_TO_LEFT</code>
      */
-    public void setRevisedDates(Calendar revisedStart, Calendar revisedEnd, int order) {
+    public void setRevisedDates(final Calendar revisedStart, final Calendar revisedEnd, final int order) {
         if (order == SWT.LEFT_TO_RIGHT) {
             setRevisedStart(revisedStart);
             setRevisedEnd(revisedEnd);
@@ -819,7 +856,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if event is locked.
      */
     public boolean isLocked() {
-        return mLocked;
+        return _locked;
     }
 
     /**
@@ -827,8 +864,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param locked true if locked
      */
-    public void setLocked(boolean locked) {
-        this.mLocked = locked;
+    public void setLocked(final boolean locked) {
+        this._locked = locked;
     }
 
     /**
@@ -837,7 +874,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Gradient color
      */
     public Color getGradientStatusColor() {
-        return mGradientStatusColor;
+        return _gradientStatusColor;
     }
 
     /**
@@ -845,8 +882,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param gradientStatusColor Gradient color
      */
-    public void setGradientStatusColor(Color gradientStatusColor) {
-        mGradientStatusColor = gradientStatusColor;
+    public void setGradientStatusColor(final Color gradientStatusColor) {
+        _gradientStatusColor = gradientStatusColor;
     }
 
     /**
@@ -855,7 +892,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Status color
      */
     public Color getStatusColor() {
-        return mStatusColor;
+        return _statusColor;
     }
 
     /**
@@ -863,8 +900,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param statusColor Status color
      */
-    public void setStatusColor(Color statusColor) {
-        mStatusColor = statusColor;
+    public void setStatusColor(final Color statusColor) {
+        _statusColor = statusColor;
     }
 
     /**
@@ -873,7 +910,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if to show bold text
      */
     public boolean showBoldText() {
-        return mShowBoldText;
+        return _showBoldText;
     }
 
     /**
@@ -881,8 +918,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param showBoldText Set to true if to show bold text
      */
-    public void setShowBoldText(boolean showBoldText) {
-        mShowBoldText = showBoldText;
+    public void setShowBoldText(final boolean showBoldText) {
+        _showBoldText = showBoldText;
     }
 
     /**
@@ -903,7 +940,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @see ISettings#getTextDisplayFormat()
      */
     public String getTextDisplayFormat() {
-        return mTextDisplayFormat;
+        return _textDisplayFormat;
     }
 
     /**
@@ -911,8 +948,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @see ISettings#getTextDisplayFormat()
      */
-    public void setTextDisplayFormat(String format) {
-        mTextDisplayFormat = format;
+    public void setTextDisplayFormat(final String format) {
+        _textDisplayFormat = format;
     }
 
     /**
@@ -922,16 +959,17 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param scope
      * @see #addScopeEvent(GanttEvent)
      */
-    public void setScope(boolean scope) {
-        mCheckpoint = false;
-        mImage = false;
-        mScope = scope;
+    public void setScope(final boolean scope) {
+        _checkpoint = false;
+        _image = false;
+        _scope = scope;
 
         if (!scope) {
-            for (int i = 0; i < mScopeEvents.size(); i++)
-                ((GanttEvent) mScopeEvents.get(i)).setScopeParent(null);
+            for (int i = 0; i < _scopeEvents.size(); i++) {
+                ((GanttEvent) _scopeEvents.get(i)).setScopeParent(null);
+            }
 
-            mScopeEvents.clear();
+            _scopeEvents.clear();
         }
     }
 
@@ -941,7 +979,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if scope
      */
     public boolean isScope() {
-        return mScope;
+        return _scope;
     }
 
     /**
@@ -949,12 +987,12 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param event GanttEvent to encompass
      */
-    public void addScopeEvent(GanttEvent event) {
-        if (event == this) return;
+    public void addScopeEvent(final GanttEvent event) {
+        if (event == this) { return; }
 
-        if (mScopeEvents.contains(event)) return;
+        if (_scopeEvents.contains(event)) { return; }
 
-        mScopeEvents.add(event);
+        _scopeEvents.add(event);
 
         event.setScopeParent(this);
     }
@@ -964,8 +1002,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param event GanttEvent
      */
-    public void removeScopeEvent(GanttEvent event) {
-        mScopeEvents.remove(event);
+    public void removeScopeEvent(final GanttEvent event) {
+        _scopeEvents.remove(event);
     }
 
     /**
@@ -973,16 +1011,16 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @return List of events
      */
-    public List<GanttEvent> getScopeEvents() {
-        return mScopeEvents;
+    public List getScopeEvents() {
+        return _scopeEvents;
     }
 
-    private GanttEvent getEarliestOrLatestScopeEvent(boolean earliest) {
+    private GanttEvent getEarliestOrLatestScopeEvent(final boolean earliest) {
         Calendar ret = null;
         GanttEvent retEvent = null;
 
-        for (int i = 0; i < mScopeEvents.size(); i++) {
-            GanttEvent ge = (GanttEvent) mScopeEvents.get(i);
+        for (int i = 0; i < _scopeEvents.size(); i++) {
+            final GanttEvent ge = (GanttEvent) _scopeEvents.get(i);
             if (earliest) {
                 if (ret == null) {
                     ret = ge.getActualStartDate();
@@ -1017,7 +1055,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Earliest event or null if none
      */
     public GanttEvent getEarliestScopeEvent() {
-        if (!isScope() || mScopeEvents.size() == 0) return null;
+        if (!isScope() || _scopeEvents.isEmpty()) { return null; }
 
         return getEarliestOrLatestScopeEvent(true);
     }
@@ -1028,7 +1066,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Latest event or null if none
      */
     public GanttEvent getLatestScopeEvent() {
-        if (!isScope() || mScopeEvents.size() == 0) return null;
+        if (!isScope() || _scopeEvents.isEmpty()) { return null; }
 
         return getEarliestOrLatestScopeEvent(false);
     }
@@ -1039,7 +1077,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Picture
      */
     public Image getPicture() {
-        return mPicture;
+        return _picture;
     }
 
     /**
@@ -1047,8 +1085,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param picture Image picture
      */
-    public void setPicture(Image picture) {
-        this.mPicture = picture;
+    public void setPicture(final Image picture) {
+        this._picture = picture;
     }
 
     /**
@@ -1056,11 +1094,11 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param image true if it's an image
      */
-    public void setImage(boolean image) {
-        mCheckpoint = false;
-        mScope = false;
+    public void setImage(final boolean image) {
+        _checkpoint = false;
+        _scope = false;
 
-        this.mImage = image;
+        this._image = image;
     }
 
     /**
@@ -1069,7 +1107,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if this event is an image representation
      */
     public boolean isImage() {
-        return mImage;
+        return _image;
     }
 
     /**
@@ -1078,7 +1116,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return GanttGroup
      */
     public GanttGroup getGanttGroup() {
-        return mGanttGroup;
+        return _ganttGroup;
     }
 
     /**
@@ -1086,8 +1124,26 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param group GanttGroup or null if none
      */
-    public void setGanttGroup(GanttGroup group) {
-        mGanttGroup = group;
+    public void setGanttGroup(final GanttGroup group) {
+        _ganttGroup = group;
+    }
+
+    /**
+     * Returns the {@link GanttSection} that this event belongs to, or null if none.
+     * 
+     * @return Parent {@link GanttSection}
+     */
+    public GanttSection getGanttSection() {
+        return _ganttSection;
+    }
+
+    /**
+     * Sets the GanttSection that this event belongs to
+     * 
+     * @param ganttSection
+     */
+    void setGanttSection(final GanttSection ganttSection) {
+        _ganttSection = ganttSection;
     }
 
     /**
@@ -1097,7 +1153,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @param hidden true to hide event.
      */
     public void setHidden(boolean hidden) {
-        mHidden = hidden;
+        _hidden = hidden;
     }
 
     /**
@@ -1107,14 +1163,14 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if hidden.
      */
     public boolean isHidden() {
-        return mHidden;
+        return _hidden;
     }
 
-    private void internalSetAllChildrenHidden(boolean hidden) {
-        if (mScopeEvents == null) return;
+    private void internalSetAllChildrenHidden(final boolean hidden) {
+        if (_scopeEvents == null) { return; }
 
-        for (int i = 0; i < mScopeEvents.size(); i++) {
-            ((GanttEvent) mScopeEvents.get(i)).setHidden(hidden);
+        for (int i = 0; i < _scopeEvents.size(); i++) {
+            ((GanttEvent) _scopeEvents.get(i)).setHidden(hidden);
         }
     }
 
@@ -1125,10 +1181,10 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      */
     public void hideAllChildren() {
         internalSetAllChildrenHidden(true);
-        mParentComposite.updateHorizontalScrollbar();
-        mParentComposite.updateVerticalScrollBar(false);
+        _parentComposite.updateHorizontalScrollbar();
+        _parentComposite.updateVerticalScrollBar(false);
 
-        mParentComposite.heavyRedraw();
+        _parentComposite.heavyRedraw();
     }
 
     /**
@@ -1138,10 +1194,10 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      */
     public void showAllChildren() {
         internalSetAllChildrenHidden(false);
-        mParentComposite.updateHorizontalScrollbar();
-        mParentComposite.updateVerticalScrollBar(false);
+        _parentComposite.updateHorizontalScrollbar();
+        _parentComposite.updateVerticalScrollBar(false);
 
-        mParentComposite.heavyRedraw();
+        _parentComposite.heavyRedraw();
     }
 
     /**
@@ -1150,10 +1206,10 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if all children are hidden.
      */
     public boolean isChildrenHidden() {
-        if (mScopeEvents == null) return false;
+        if (_scopeEvents == null) { return false; }
 
-        for (int i = 0; i < mScopeEvents.size(); i++) {
-            if (!((GanttEvent) mScopeEvents.get(i)).isHidden()) return false;
+        for (int i = 0; i < _scopeEvents.size(); i++) {
+            if (!((GanttEvent) _scopeEvents.get(i)).isHidden()) { return false; }
         }
 
         return true;
@@ -1165,7 +1221,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return x position
      */
     public int getWidthWithText() {
-        return mWidthWithtText;
+        return _widthWithtText;
     }
 
     /**
@@ -1173,8 +1229,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param width x width
      */
-    public void setWidthWithText(int width) {
-        this.mWidthWithtText = width;
+    public void setWidthWithText(final int width) {
+        this._widthWithtText = width;
     }
 
     /**
@@ -1183,7 +1239,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Advanced tooltip
      */
     public AdvancedTooltip getAdvancedTooltip() {
-        return mAdvancedTooltip;
+        return _advancedTooltip;
     }
 
     /**
@@ -1191,8 +1247,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param advancedTooltip
      */
-    public void setAdvancedTooltip(AdvancedTooltip advancedTooltip) {
-        this.mAdvancedTooltip = advancedTooltip;
+    public void setAdvancedTooltip(final AdvancedTooltip advancedTooltip) {
+        this._advancedTooltip = advancedTooltip;
     }
 
     /**
@@ -1200,9 +1256,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @return Fixed row height
      */
-    @Override
-	public int getFixedRowHeight() {
-        return mFixedRowHeight;
+    public int getFixedRowHeight() {
+        return _fixedRowHeight;
     }
 
     /**
@@ -1210,9 +1265,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param fixedRowHeight Fixed row height
      */
-    @Override
-	public void setFixedRowHeight(int fixedRowHeight) {
-        this.mFixedRowHeight = fixedRowHeight;
+    public void setFixedRowHeight(final int fixedRowHeight) {
+        this._fixedRowHeight = fixedRowHeight;
     }
 
     /**
@@ -1220,16 +1274,14 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @return true if automatic
      */
-    @Override
-	public boolean isAutomaticRowHeight() {
+    public boolean isAutomaticRowHeight() {
         return (getFixedRowHeight() == FIXED_ROW_HEIGHT_AUTOMATIC);
     }
 
     /**
      * Resets the row height to be calculated automatically should the row height have been set to a specific value.
      */
-    @Override
-	public void setAutomaticRowHeight() {
+    public void setAutomaticRowHeight() {
         setFixedRowHeight(FIXED_ROW_HEIGHT_AUTOMATIC);
     }
 
@@ -1240,7 +1292,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      *         <code>SWT.TOP</code>.
      */
     public int getVerticalEventAlignment() {
-        return mVerticalEventAlignment;
+        return _verticalEventAlignment;
     }
 
     /**
@@ -1248,8 +1300,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param verticalEventAlignment one of <code>SWT.TOP</code>, <code>SWT.CENTER</code>, <code>SWT.BOTTOM</code>
      */
-    public void setVerticalEventAlignment(int verticalEventAlignment) {
-        this.mVerticalEventAlignment = verticalEventAlignment;
+    public void setVerticalEventAlignment(final int verticalEventAlignment) {
+        this._verticalEventAlignment = verticalEventAlignment;
     }
 
     /**
@@ -1258,7 +1310,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if resizable. Default is true.
      */
     public boolean isResizable() {
-        return mResizable;
+        return _resizable;
     }
 
     /**
@@ -1266,8 +1318,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param resizable true to make event resizable.
      */
-    public void setResizable(boolean resizable) {
-        mResizable = resizable;
+    public void setResizable(final boolean resizable) {
+        _resizable = resizable;
     }
 
     /**
@@ -1276,7 +1328,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return true if moveable. Default is true.
      */
     public boolean isMoveable() {
-        return mMoveable;
+        return _moveable;
     }
 
     /**
@@ -1284,8 +1336,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param resizable true to make event moveable.
      */
-    public void setMoveable(boolean moveable) {
-        mMoveable = moveable;
+    public void setMoveable(final boolean moveable) {
+        _moveable = moveable;
     }
 
     /**
@@ -1295,7 +1347,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Calendar or null.
      */
     public Calendar getNoMoveBeforeDate() {
-        return mNoMoveBeforeDate;
+        return _noMoveBeforeDate;
     }
 
     /**
@@ -1304,8 +1356,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param noMoveBeforeDate Calendar or null.
      */
-    public void setNoMoveBeforeDate(Calendar noMoveBeforeDate) {
-        mNoMoveBeforeDate = noMoveBeforeDate;
+    public void setNoMoveBeforeDate(final Calendar noMoveBeforeDate) {
+        _noMoveBeforeDate = noMoveBeforeDate;
     }
 
     /**
@@ -1315,7 +1367,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Calendar or null.
      */
     public Calendar getNoMoveAfterDate() {
-        return mNoMoveAfterDate;
+        return _noMoveAfterDate;
     }
 
     /**
@@ -1324,8 +1376,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param noMoveAfterDate Calendar or null.
      */
-    public void setNoMoveAfterDate(Calendar noMoveAfterDate) {
-        mNoMoveAfterDate = noMoveAfterDate;
+    public void setNoMoveAfterDate(final Calendar noMoveAfterDate) {
+        _noMoveAfterDate = noMoveAfterDate;
     }
 
     /**
@@ -1334,7 +1386,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Event text location
      */
     public int getHorizontalTextLocation() {
-        return mHorizontalTextLocation;
+        return _horizontalTextLocation;
     }
 
     /**
@@ -1344,8 +1396,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param textLocation Text location, one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>.
      */
-    public void setHorizontalTextLocation(int textLocation) {
-        mHorizontalTextLocation = textLocation;
+    public void setHorizontalTextLocation(final int textLocation) {
+        _horizontalTextLocation = textLocation;
     }
 
     /**
@@ -1355,7 +1407,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Vertical text location.
      */
     public int getVerticalTextLocation() {
-        return mVerticalTextLocation;
+        return _verticalTextLocation;
     }
 
     /**
@@ -1364,8 +1416,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param verticalTextLocation Vertical text location
      */
-    public void setVerticalTextLocation(int verticalTextLocation) {
-        mVerticalTextLocation = verticalTextLocation;
+    public void setVerticalTextLocation(final int verticalTextLocation) {
+        _verticalTextLocation = verticalTextLocation;
     }
 
     /**
@@ -1374,7 +1426,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Event font
      */
     public Font getTextFont() {
-        return mTextFont;
+        return _textFont;
     }
 
     /**
@@ -1383,23 +1435,23 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param textFont Font or null.
      */
-    public void setTextFont(Font textFont) {
-        mTextFont = textFont;
+    public void setTextFont(final Font textFont) {
+        _textFont = textFont;
     }
 
     /**
      * Removes this item from the chart.
      */
     public void dispose() {
-        mParentComposite.removeEvent(this);
+        _parentComposite.removeEvent(this);
     }
 
     public int getActualDDayStart() {
-        return mRevisedStart == null ? getDDayStart() : getDDayRevisedStart();
+        return _revisedStart == null ? getDDayStart() : getDDayRevisedStart();
     }
 
     public int getActualDDayEnd() {
-        return mRevisedEnd == null ? getDDayEnd() : getDDayRevisedEnd();
+        return _revisedEnd == null ? getDDayEnd() : getDDayRevisedEnd();
     }
 
     /**
@@ -1408,19 +1460,19 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return
      */
     public int getDDayStart() {
-        return mDDayStart;
+        return _dDayStart;
     }
 
     public int getDDayRevisedStart() {
-        if (mRevisedStart == null) return Integer.MAX_VALUE;
+        if (_revisedStart == null) { return Integer.MAX_VALUE; }
 
-        return (int) DateHelper.daysBetween(mParentComposite.getDDayCalendar(), mRevisedStart, mParentChart.getSettings().getDefaultLocale());
+        return (int) DateHelper.daysBetween(_parentComposite.getDDayCalendar(), _revisedStart);
     }
 
     public int getDDayRevisedEnd() {
-        if (mRevisedEnd == null) return Integer.MAX_VALUE;
+        if (_revisedEnd == null) { return Integer.MAX_VALUE; }
 
-        return (int) DateHelper.daysBetween(mParentComposite.getDDayCalendar(), mRevisedEnd, mParentChart.getSettings().getDefaultLocale());
+        return (int) DateHelper.daysBetween(_parentComposite.getDDayCalendar(), _revisedEnd);
     }
 
     /**
@@ -1428,32 +1480,32 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param day
      */
-    public void setDDayStart(int day) {
-        mDDayStart = day;
+    public void setDDayStart(final int day) {
+        _dDayStart = day;
 
-        this.mStartDate = mParentComposite.getDDayCalendar();
-        mStartDate.add(Calendar.DATE, day);
+        this._startDate = _parentComposite.getDDayCalendar();
+        _startDate.add(Calendar.DATE, day);
         updateDaysBetweenStartAndEnd();
     }
 
     public int getDDayEnd() {
-        return mDDayEnd;
+        return _dDayEnd;
     }
 
-    public void setDDayEnd(int day) {
-        mDDayEnd = day;
+    public void setDDayEnd(final int day) {
+        _dDayEnd = day;
 
-        this.mEndDate = mParentComposite.getDDayCalendar();
-        mEndDate.add(Calendar.DATE, day);
+        this._endDate = _parentComposite.getDDayCalendar();
+        _endDate.add(Calendar.DATE, day);
         updateDaysBetweenStartAndEnd();
     }
 
     public int getDDateRange() {
-        return (int) DateHelper.daysBetween(getStartDate(), getEndDate(), mParentChart.getSettings().getDefaultLocale());
+        return (int) DateHelper.daysBetween(getStartDate(), getEndDate());
     }
 
     public int getRevisedDDateRange() {
-        return (int) DateHelper.daysBetween(getActualStartDate(), getActualEndDate(), mParentChart.getSettings().getDefaultLocale());
+        return (int) DateHelper.daysBetween(getActualStartDate(), getActualEndDate()) + 1;
     }
 
     // internal methods
@@ -1471,26 +1523,19 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
         int plannedExtraLeft = 0;
         boolean usePlannedLeft = false;
         boolean usePlannedRight = false;
-        
+
         // if we're showing planned dates, check to see what is further away, the text width or our planned date width
         // we save the values and compare to the bonuses calculated for text widths below
-        if (mParentComposite.isShowingPlannedDates()) {
-            if (getStartDate() != null && getRevisedStart() != null) {
-                if (getStartDate().before(getRevisedStart())) {
-                    // this is a negative value as it's to the left
-                    plannedExtraLeft = getX() - mEarliestStartX;
-                }
-/*                else {
-                    System.err.println(mName + " ----> " + getStartDate().getTime() + " " + getRevisedStart().getTime());
-                }
-*/            }
-/*            else {
-                System.err.println(mName);
+        if (_parentComposite.isShowingPlannedDates()) {
+        	// note to self: we used to have date checks here, but I can't remember what for, as these checks aren't necessarily valid. Revised vs. Planned
+        	// dates can come before one or another, doesn't matter, we still need offsets, so I took them out as it fixes a reported bug as well (no bugzilla)
+        	
+            if (getStartDate() != null && getRevisedStart() != null) { // && getStartDate().before(getRevisedStart())) {
+                // this is a negative value as it's to the left
+                plannedExtraLeft = getX() - _earliestStartX;
             }
-*/            if (getEndDate() != null && getRevisedEnd() != null) {
-                if (getEndDate().after(getRevisedEnd())) {
-                    plannedExtraRight = mLatestEndX - getXEnd() + mParentComposite.getDayWidth();
-                }
+            if (getEndDate() != null && getRevisedEnd() != null) { // && getEndDate().after(getRevisedEnd())) {
+                plannedExtraRight = _latestEndX - getXEnd() + _parentComposite.getDayWidth();
             }
         }
 
@@ -1499,11 +1544,11 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
         int xExtra = 0, yExtra = 0, wExtra = 0, hExtra = 0;
 
         // TODO: this should take connected/not connected into account
-        int textSpacer = mParentChart.getSettings().getTextSpacerConnected();
+        final int textSpacer = _parentChart.getSettings().getTextSpacerConnected();
         if (getNameExtent() != null) {
-            switch (mHorizontalTextLocation) {
+            switch (_horizontalTextLocation) {
                 case SWT.LEFT:
-                    int extra = getNameExtent().x + textSpacer;
+                    final int extra = getNameExtent().x + textSpacer;
                     if (plannedExtraLeft > extra) {
                         usePlannedLeft = true;
                     }
@@ -1512,12 +1557,12 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
                     usePlannedRight = plannedExtraRight > 0;
                     break;
                 case SWT.CENTER:
-                    int start = width / 2;
+                    int start = _width / 2;
                     start += getNameExtent().x + textSpacer;
-                    if (start > (x + width)) {
-                        wExtra += (start - (x + width)); // add on the difference
+                    if (start > (_x + _width)) {
+                        wExtra += (start - (_x + _width)); // add on the difference
                     }
-                    if (plannedExtraRight > wExtra) { 
+                    if (plannedExtraRight > wExtra) {
                         usePlannedRight = true;
                     }
                     usePlannedLeft = plannedExtraLeft > 0;
@@ -1529,16 +1574,18 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
                     }
                     usePlannedLeft = plannedExtraLeft > 0;
                     break;
+                default:
+                    break;
             }
 
-            switch (mVerticalTextLocation) {
+            switch (_verticalTextLocation) {
                 case SWT.TOP:
                     yExtra -= getNameExtent().y;
                     hExtra += getNameExtent().y;
                     break;
                 case SWT.CENTER:
-                    if (getNameExtent().y > height) {
-                        int diff = height - getNameExtent().y;
+                    if (getNameExtent().y > _height) {
+                        final int diff = _height - getNameExtent().y;
                         yExtra -= (diff / 2);
                         hExtra += (diff / 2);
                     }
@@ -1547,28 +1594,27 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
                     hExtra += getNameExtent().y;
                     yExtra -= getNameExtent().y;
                     break;
+                default:
+                    break;
             }
         }
-        
-        if (mParentComposite.isShowingPlannedDates()) {
+
+        if (_parentComposite.isShowingPlannedDates()) {
             //System.err.println(plannedExtraLeft + " " + plannedExtraRight + " " + usePlannedLeft + " " + usePlannedRight);
             if (usePlannedRight && usePlannedLeft) {
                 xExtra -= plannedExtraLeft;
                 wExtra = plannedExtraLeft;
                 wExtra += plannedExtraRight;
-            }
-            else {
+            } else {
                 if (usePlannedRight) {
-                    wExtra = plannedExtraRight + mParentComposite.getDayWidth();                    
-                }
-                else
-                if (usePlannedLeft) {
-                    xExtra = -(plannedExtraLeft + mParentComposite.getDayWidth());
-                    wExtra += Math.abs(plannedExtraLeft) + mParentComposite.getDayWidth();
+                    wExtra = plannedExtraRight + _parentComposite.getDayWidth();
+                } else if (usePlannedLeft) {
+                    xExtra = -(plannedExtraLeft + _parentComposite.getDayWidth());
+                    wExtra += Math.abs(plannedExtraLeft) + _parentComposite.getDayWidth();
                 }
             }
         }
-        
+
         // widths and horizontal
         ret.x += xExtra;
         ret.width += wExtra;
@@ -1587,29 +1633,37 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
 
         float percentage = 0f;
 
-        for (int i = 0; i < mScopeEvents.size(); i++) {
-            GanttEvent event = mScopeEvents.get(i);
+        for (int i = 0; i < _scopeEvents.size(); i++) {
+            final GanttEvent event = (GanttEvent) _scopeEvents.get(i);
 
             if (earliest == null) {
                 earliest = event.getActualStartDate();
             } else {
-                if (event.getActualStartDate().before(earliest)) earliest = event.getActualStartDate();
+                if (event.getActualStartDate().before(earliest)) {
+                    earliest = event.getActualStartDate();
+                }
             }
 
             if (latest == null) {
                 latest = event.getActualEndDate();
             } else {
-                if (event.getActualEndDate().after(latest)) latest = event.getActualEndDate();
+                if (event.getActualEndDate().after(latest)) {
+                    latest = event.getActualEndDate();
+                }
             }
 
             percentage += (float) event.getPercentComplete();
         }
 
-        percentage /= (mScopeEvents.size() > 0 ? mScopeEvents.size() : 1);
+        percentage /= (_scopeEvents.isEmpty() ? 1 : _scopeEvents.size());
 
         // allow start/end dates to override if we have zero events
-        if (earliest == null && mStartDate != null) earliest = mStartDate;
-        if (latest == null && mEndDate != null) latest = mEndDate;
+        if (earliest == null && _startDate != null) {
+            earliest = _startDate;
+        }
+        if (latest == null && _endDate != null) {
+            latest = _endDate;
+        }
 
         setStartDate(earliest);
         setEndDate(latest);
@@ -1619,131 +1673,171 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
     }
 
     boolean hasMovementConstraints() {
-        return (mNoMoveAfterDate != null || mNoMoveBeforeDate != null);
+        return (_noMoveAfterDate != null || _noMoveBeforeDate != null);
     }
 
     // internal
     int getVisibility() {
-        return mVisibility;
+        return _visibility;
     }
 
     // internal
-    void setVisibility(int visibility) {
-        this.mVisibility = visibility;
+    void setVisibility(final int visibility) {
+        this._visibility = visibility;
     }
 
     // internal
     boolean isBoundsSet() {
-        return mBoundsHaveBeenSet;
+        return _boundsHaveBeenSet;
     }
 
-    void setBoundsSet(boolean set) {
-        mBoundsHaveBeenSet = set;
+    void setBoundsSet(final boolean set) {
+        _boundsHaveBeenSet = set;
     }
 
-    void setHorizontalLineTopY(int y) {
-        this.mHorizontalLineTopY = y;
+    void setHorizontalLineTopY(final int y) {
+        this._horizontalLineTopY = y;
     }
 
     int getHorizontalLineTopY() {
-        return mHorizontalLineTopY;
+        return _horizontalLineTopY;
     }
 
     int getHorizontalLineBottomY() {
-        return mHorizontalLineBottomY;
+        return _horizontalLineBottomY;
     }
 
-    void setHorizontalLineBottomY(int y) {
-        this.mHorizontalLineBottomY = y;
+    void setHorizontalLineBottomY(final int y) {
+        this._horizontalLineBottomY = y;
     }
 
-    void setNameChanged(boolean changed) {
-        this.mNameChanged = changed;
+    void setNameChanged(final boolean changed) {
+        this._nameChanged = changed;
     }
 
     boolean isNameChanged() {
-        return mNameChanged;
+        return _nameChanged;
     }
 
     Point getNameExtent() {
-        return mNameExtent;
+        return _nameExtent;
     }
 
-    void setNameExtent(Point extent) {
-        this.mNameExtent = extent;
+    void setNameExtent(final Point extent) {
+        this._nameExtent = extent;
     }
 
     String getParsedString() {
-        return mParsedString;
+        return _parsedString;
     }
 
-    void setParsedString(String parsed) {
-        this.mParsedString = parsed;
+    void setParsedString(final String parsed) {
+        this._parsedString = parsed;
     }
 
     int getDaysBetweenStartAndEnd() {
-        return this.mDaysBetweenStartAndEnd;
+        return this._daysBetweenStartAndEnd;
     }
 
-    void updateDaysBetweenStartAndEnd() {
+    private final void updateDaysBetweenStartAndEnd() {
         if (getActualStartDate() == null || getActualEndDate() == null) {
-            mDaysBetweenStartAndEnd = -1;
+            _daysBetweenStartAndEnd = -1;
             return;
         }
 
-        mDaysBetweenStartAndEnd = (int) DateHelper.daysBetween(getActualStartDate(), getActualEndDate(), mParentChart.getSettings().getDefaultLocale());
+        _daysBetweenStartAndEnd = (int) DateHelper.daysBetween(getActualStartDate(), getActualEndDate());
 
-        if (mParentComposite.getCurrentView() == ISettings.VIEW_D_DAY) {
-            mDDayStart = (int) DateHelper.daysBetween(mParentComposite.getDDayCalendar(), getStartDate(), mParentChart.getSettings().getDefaultLocale());
-            mDDayEnd = (int) DateHelper.daysBetween(mParentComposite.getDDayCalendar(), getEndDate(), mParentChart.getSettings().getDefaultLocale());
-            mDDayStart--;
+        if (_parentComposite.getCurrentView() == ISettings.VIEW_D_DAY) {
+            _dDayStart = (int) DateHelper.daysBetween(_parentComposite.getDDayCalendar(), getStartDate());
+            _dDayEnd = (int) DateHelper.daysBetween(_parentComposite.getDDayCalendar(), getEndDate());
+            _dDayStart--;
         }
 
     }
 
-    void moveStarted() {
-        if (mMoving) return;
+    void moveStarted(final int moveType) {
+        if (_moving) { return; }
 
-        if (mStartDate != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(mStartDate.getTime());
-            mPreMoveDateEstiStart = cal;
+        _moveType = moveType;
+
+        if (_startDate != null) {
+            final Calendar cal = Calendar.getInstance();
+            cal.setTime(_startDate.getTime());
+            _preMoveDateEstiStart = cal;
         }
-        if (mEndDate != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(mEndDate.getTime());
-            mPreMoveDateEstiEnd = cal;
+        if (_endDate != null) {
+            final Calendar cal = Calendar.getInstance();
+            cal.setTime(_endDate.getTime());
+            _preMoveDateEstiEnd = cal;
         }
-        if (mRevisedStart != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(mRevisedStart.getTime());
-            mPreMoveDateRevisedStart = cal;
+        if (_revisedStart != null) {
+            final Calendar cal = Calendar.getInstance();
+            cal.setTime(_revisedStart.getTime());
+            _preMoveDateRevisedStart = cal;
         }
-        if (mRevisedEnd != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(mRevisedEnd.getTime());
-            mPreMoveDateRevisedEnd = cal;
+        if (_revisedEnd != null) {
+            final Calendar cal = Calendar.getInstance();
+            cal.setTime(_revisedEnd.getTime());
+            _preMoveDateRevisedEnd = cal;
         }
 
-        mPreMoveBounds = new Rectangle(x, y, width, height);
+        _preMoveBounds = new Rectangle(_x, _y, _width, _height);
 
-        mMoving = true;
+        _preMoveGanttSectionIndex = _parentComposite.getGanttSections().indexOf(_ganttSection);
+        if (_ganttSection != null) {
+            _preMoveGanttSectionEventLocationIndex = _ganttSection.getEvents().indexOf(this);
+        }
+
+        _moving = true;
+    }
+
+    /**
+     * Call after a move/resize is done to get the command to undo/redo the latest move/resize
+     * 
+     * @return Command or null if none of the given move events matched
+     */
+    IUndoRedoCommand getPostMoveOrResizeUndoCommand() {
+        switch (_moveType) {
+            case Constants.TYPE_MOVE:
+                int indexNow = 0;
+                if (_ganttSection != null) {
+                    indexNow = _ganttSection.getEvents().indexOf(this);
+                }
+
+                GanttSection gs = null;
+                if (_preMoveGanttSectionIndex > -1) {
+                	gs = (GanttSection) _parentComposite.getGanttSections().get(_preMoveGanttSectionIndex);
+                }
+                
+                return new EventMoveCommand(this, _preMoveDateEstiStart, _startDate, _preMoveDateEstiEnd, _endDate, _preMoveDateRevisedStart, _revisedStart, _preMoveDateRevisedEnd, _revisedEnd, gs, _ganttSection,
+                        _preMoveGanttSectionEventLocationIndex, indexNow);
+
+            case Constants.TYPE_RESIZE_LEFT:
+            case Constants.TYPE_RESIZE_RIGHT:
+                return new EventResizeCommand(this, _preMoveDateEstiStart, _startDate, _preMoveDateEstiEnd, _endDate, _preMoveDateRevisedStart, _revisedStart, _preMoveDateRevisedEnd, _revisedEnd);
+            default:
+                break;
+        }
+
+        return null;
     }
 
     void moveCancelled() {
-        mMoving = false;
-        mStartDate = mPreMoveDateEstiStart;
-        mEndDate = mPreMoveDateEstiEnd;
-        mRevisedStart = mPreMoveDateRevisedStart;
-        mRevisedEnd = mPreMoveDateRevisedEnd;
-        x = mPreMoveBounds.x;
-        y = mPreMoveBounds.y;
-        width = mPreMoveBounds.width;
-        height = mPreMoveBounds.height;
+        _moving = false;
+        _startDate = _preMoveDateEstiStart;
+        _endDate = _preMoveDateEstiEnd;
+        _revisedStart = _preMoveDateRevisedStart;
+        _revisedEnd = _preMoveDateRevisedEnd;
+        if (_preMoveBounds != null) {
+            _x = _preMoveBounds.x;
+            _y = _preMoveBounds.y;
+            _width = _preMoveBounds.width;
+            _height = _preMoveBounds.height;
+        }
     }
 
     void moveFinished() {
-        mMoving = false;
+        _moving = false;
     }
 
     /**
@@ -1752,41 +1846,92 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * @return Scope parent
      */
     public GanttEvent getScopeParent() {
-        return mScopeParent;
+        return _scopeParent;
     }
 
     // not external as it's the wrong way to set a scope parent
-    void setScopeParent(GanttEvent parent) {
-        mScopeParent = parent;
+    void setScopeParent(final GanttEvent parent) {
+        _scopeParent = parent;
     }
 
-    void setEarliestStartX(int x) {
-        mEarliestStartX = x;
+    void setEarliestStartX(final int x) {
+        _earliestStartX = x;
     }
 
-    void setLatestEndX(int x) {
-        mLatestEndX = x;
+    void setLatestEndX(final int x) {
+        _latestEndX = x;
     }
 
     int getEarliestStartX() {
-        return mEarliestStartX;
+        return _earliestStartX;
     }
 
     int getLatestEndX() {
-        return mLatestEndX;
+        return _latestEndX;
     }
 
     int getActualWidth() {
-        return mActualWidth;
+        return _actualWidth;
     }
 
     void updateActualWidth() {
-        mActualWidth = Math.abs(Math.abs(mLatestEndX) - Math.abs(mEarliestStartX));
+        _actualWidth = Math.abs(Math.abs(_latestEndX) - Math.abs(_earliestStartX));
     }
 
-    @Override
-	public String toString() {
-        return mName;
+    void flagDragging() {
+        _savedVerticalDragY = _y;
+        _preVerticalDragBounds = new Rectangle(_x, _y, _width, _height);
+    }
+
+    Rectangle getPreVerticalDragBounds() {
+        return _preVerticalDragBounds;
+    }
+
+    void undoVerticalDragging() {
+        _y = _savedVerticalDragY;
+    }
+
+    boolean wasVerticallyMovedUp() {
+        return (_y < _preVerticalDragBounds.y);
+    }
+
+    boolean hasMovedVertically() {
+        return _y != _savedVerticalDragY;
+    }
+
+    /**
+     * Reparents this event from the current {@link GanttSection} to a new {@link GanttSection}
+     * 
+     * @param index index to put event at in new section
+     * @param newSection new section to put event in
+     */
+    public void reparentToNewGanttSection(final int index, final GanttSection newSection) {
+        if (_ganttSection != null) {
+            _ganttSection.removeGanttEvent(this);
+            newSection.addGanttEvent(index, this);
+        }
+    }
+
+    public String toString() {
+        return _name;
+    }
+
+    /**
+     * Returns the parent {@link GanttChart}
+     * 
+     * @return {@link GanttChart}
+     */
+    public GanttChart getParentChart() {
+        return _parentChart;
+    }
+
+    /**
+     * Returns the parent {@link GanttComposite}
+     * 
+     * @return {@link GanttComposite}
+     */
+    public GanttComposite getParentComposite() {
+        return _parentComposite;
     }
 
     /**
@@ -1794,82 +1939,82 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * original except for a possible few internal flags. The clone does not need to be re-added to the chart, but if it
      * needs to exist below a certain parent it will need to be re-added to that parent (such as a scope).
      */
-    @Override
-	public Object clone() {
-        final GanttEvent clone = new GanttEvent(mParentChart, getName());
-        if (mEndDate != null) {
-            clone.mEndDate = (Calendar) mEndDate.clone();
+    public Object clone() throws CloneNotSupportedException { // NOPMD
+        final GanttEvent clone = new GanttEvent(_parentChart, getName());
+        if (_endDate != null) {
+            clone._endDate = (Calendar) _endDate.clone();
         }
-        if (mNoMoveAfterDate != null) {
-            clone.mNoMoveAfterDate = (Calendar) mNoMoveAfterDate.clone();
+        if (_noMoveAfterDate != null) {
+            clone._noMoveAfterDate = (Calendar) _noMoveAfterDate.clone();
         }
-        if (mNoMoveBeforeDate != null) {
-            clone.mNoMoveBeforeDate = (Calendar) mNoMoveBeforeDate.clone();
+        if (_noMoveBeforeDate != null) {
+            clone._noMoveBeforeDate = (Calendar) _noMoveBeforeDate.clone();
         }
-        if (mPreMoveDateEstiStart != null) {
-            clone.mPreMoveDateEstiEnd = (Calendar) mPreMoveDateEstiEnd.clone();
+        if (_preMoveDateEstiStart != null) {
+            clone._preMoveDateEstiEnd = (Calendar) _preMoveDateEstiEnd.clone();
         }
-        if (mPreMoveDateEstiStart != null) {
-            clone.mPreMoveDateEstiStart = (Calendar) mPreMoveDateEstiStart.clone();
+        if (_preMoveDateEstiStart != null) {
+            clone._preMoveDateEstiStart = (Calendar) _preMoveDateEstiStart.clone();
         }
-        if (mPreMoveDateRevisedEnd != null) {
-            clone.mPreMoveDateRevisedEnd = (Calendar) mPreMoveDateRevisedEnd.clone();
+        if (_preMoveDateRevisedEnd != null) {
+            clone._preMoveDateRevisedEnd = (Calendar) _preMoveDateRevisedEnd.clone();
         }
-        if (mPreMoveDateRevisedStart != null) {
-            clone.mPreMoveDateRevisedStart = (Calendar) mPreMoveDateRevisedStart.clone();
+        if (_preMoveDateRevisedStart != null) {
+            clone._preMoveDateRevisedStart = (Calendar) _preMoveDateRevisedStart.clone();
         }
-        if (mRevisedEnd != null) {
-            clone.mRevisedEnd = (Calendar) mRevisedEnd.clone();
+        if (_revisedEnd != null) {
+            clone._revisedEnd = (Calendar) _revisedEnd.clone();
         }
-        if (mRevisedStart != null) {
-            clone.mRevisedStart = (Calendar) mRevisedStart.clone();
+        if (_revisedStart != null) {
+            clone._revisedStart = (Calendar) _revisedStart.clone();
         }
-        clone.mScopeParent = mScopeParent;
-        clone.mScopeEvents = new ArrayList<GanttEvent>(mScopeEvents);
-        if (mStartDate != null) {
-            clone.mStartDate = (Calendar) mStartDate.clone();
+        clone._scopeParent = _scopeParent;
+        clone._scopeEvents = new ArrayList(_scopeEvents);
+        if (_startDate != null) {
+            clone._startDate = (Calendar) _startDate.clone();
         }
-        clone.mAdvancedTooltip = mAdvancedTooltip;
-        clone.mBoundsHaveBeenSet = mBoundsHaveBeenSet;
-        clone.mCheckpoint = mCheckpoint;
-        clone.mData = mData;
-        clone.mDaysBetweenStartAndEnd = mDaysBetweenStartAndEnd;
-        clone.mDDayEnd = mDDayEnd;
-        clone.mDDayStart = mDDayStart;
-        clone.mFixedRowHeight = mFixedRowHeight;
-        clone.mGanttGroup = mGanttGroup;
-        clone.mGradientStatusColor = mGradientStatusColor;
-        clone.mHidden = mHidden;
-        clone.mHorizontalLineBottomY = mHorizontalLineBottomY;
-        clone.mHorizontalLineTopY = mHorizontalLineTopY;
-        clone.mHorizontalTextLocation = mHorizontalTextLocation;
-        clone.mImage = mImage;
-        clone.mLocked = mLocked;
-        clone.mMenu = mMenu;
-        clone.mMoveable = mMoveable;
+        clone._advancedTooltip = _advancedTooltip;
+        clone._boundsHaveBeenSet = _boundsHaveBeenSet;
+        clone._checkpoint = _checkpoint;
+        clone._data = _data;
+        clone._daysBetweenStartAndEnd = _daysBetweenStartAndEnd;
+        clone._dDayEnd = _dDayEnd;
+        clone._dDayStart = _dDayStart;
+        clone._fixedRowHeight = _fixedRowHeight;
+        clone._ganttGroup = _ganttGroup;
+        clone._gradientStatusColor = _gradientStatusColor;
+        clone._hidden = _hidden;
+        clone._horizontalLineBottomY = _horizontalLineBottomY;
+        clone._horizontalLineTopY = _horizontalLineTopY;
+        clone._horizontalTextLocation = _horizontalTextLocation;
+        clone._image = _image;
+        clone._locked = _locked;
+        clone._menu = _menu;
+        clone._moveable = _moveable;
         // it's 100% sure a clone is not being moved, we'd rather not have some funky result of matching this variable
-        clone.mMoving = false;
-        clone.mNameChanged = mNameChanged;
-        clone.mNameExtent = mNameExtent;
-        clone.mParsedString = mParsedString;
-        clone.mPercentComplete = mPercentComplete;
-        clone.mPicture = mPicture;
-        clone.mPreMoveBounds = mPreMoveBounds;
-        clone.mResizable = mResizable;
-        clone.mScope = mScope;
-        clone.mScopeEvents = new ArrayList<GanttEvent>(mScopeEvents);
-        clone.mScopeParent = mScopeParent;
-        clone.mShowBoldText = mShowBoldText;
-        clone.mStatusColor = mStatusColor;
-        clone.mTextDisplayFormat = mTextDisplayFormat;
-        clone.mTextFont = mTextFont;
-        clone.mVerticalEventAlignment = mVerticalEventAlignment;
-        clone.mVerticalTextLocation = mVerticalTextLocation;
-        clone.mVisibility = mVisibility;
-        clone.mWidthWithtText = mWidthWithtText;
-        clone.mLatestEndX = mLatestEndX;
-        clone.mEarliestStartX = mEarliestStartX;
-        clone.mActualWidth = mActualWidth;
+        clone._moving = false;
+        clone._nameChanged = _nameChanged;
+        clone._nameExtent = _nameExtent;
+        clone._parsedString = _parsedString;
+        clone._percentComplete = _percentComplete;
+        clone._picture = _picture;
+        clone._preMoveBounds = _preMoveBounds;
+        clone._resizable = _resizable;
+        clone._scope = _scope;
+        clone._scopeEvents = new ArrayList(_scopeEvents);
+        clone._scopeParent = _scopeParent;
+        clone._showBoldText = _showBoldText;
+        clone._statusColor = _statusColor;
+        clone._textDisplayFormat = _textDisplayFormat;
+        clone._textFont = _textFont;
+        clone._verticalEventAlignment = _verticalEventAlignment;
+        clone._verticalTextLocation = _verticalTextLocation;
+        clone._visibility = _visibility;
+        clone._widthWithtText = _widthWithtText;
+        clone._latestEndX = _latestEndX;
+        clone._earliestStartX = _earliestStartX;
+        clone._actualWidth = _actualWidth;
+        clone._savedVerticalDragY = _savedVerticalDragY;
         return clone;
     }
 

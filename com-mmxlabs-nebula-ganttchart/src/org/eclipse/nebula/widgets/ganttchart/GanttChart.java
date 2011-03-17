@@ -14,6 +14,8 @@ package org.eclipse.nebula.widgets.ganttchart;
 import java.util.Calendar;
 import java.util.Random;
 
+import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
+import org.eclipse.nebula.widgets.ganttchart.undoredo.IUndoRedoListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -72,17 +74,17 @@ import org.eclipse.swt.widgets.ScrollBar;
  * @version 2.0
  * 
  */
-public class GanttChart extends Composite implements IGanttFlags {
+public class GanttChart extends Composite {
 
-	private GanttComposite				mGanttComposite;
-	private int							mStyle;
-	private ISettings					mSettings;
-	private IColorManager				mColorManager;
-	private IPaintManager				mPaintManager;
-	private ILanguageManager			mLanguageManager;
+	private GanttComposite				_ganttComposite;
+	private int							_style;
+	private ISettings					_settings;
+	private IColorManager				_colorManager;
+	private IPaintManager				_paintManager;
+	private ILanguageManager			_languageManager;
 
 	/**
-	 * Constructs a new GANTT chart widget. For styles, please see {@link IGanttFlags}.
+	 * Constructs a new GANTT chart widget. For styles, please see {@link GanttFlags}.
 	 * 
 	 * @param parent Parent composite
 	 * @param style Widget style
@@ -94,12 +96,12 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 *             subclass</li>
 	 *             </ul>
 	 */
-	public GanttChart(Composite parent, int style) {
+	public GanttChart(final Composite parent, final int style) {
 		this(parent, style, null, null, null, null);
 	}
 
 	/**
-	 * Constructs a new GANTT chart widget with custom settings {@link ISettings}. For styles, please see {@link IGanttFlags}.
+	 * Constructs a new GANTT chart widget with custom settings {@link ISettings}. For styles, please see {@link GanttFlags}.
 	 * 
 	 * @param parent Parent composite
 	 * @param style Widget style
@@ -112,12 +114,12 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 *             subclass</li>
 	 *             </ul>
 	 */
-	public GanttChart(Composite parent, int style, ISettings settings) {
+	public GanttChart(final Composite parent, final int style, final ISettings settings) {
 		this(parent, style, settings, null, null, null);
 	}
 
 	/**
-	 * Constructs a new GANTT chart widget with custom settings and a custom color manager {@link IColorManager}. For styles, please see {@link IGanttFlags}.
+	 * Constructs a new GANTT chart widget with custom settings and a custom color manager {@link IColorManager}. For styles, please see {@link GanttFlags}.
 	 * 
 	 * @param parent Parent composite
 	 * @param style Widget style
@@ -131,13 +133,13 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 *             subclass</li>
 	 *             </ul>
 	 */
-	public GanttChart(Composite parent, int style, ISettings settings, IColorManager colorManager) {
+	public GanttChart(final Composite parent, final int style, final ISettings settings, final IColorManager colorManager) {
 		this(parent, style, settings, colorManager, null, null);
 	}
 
 	/**
 	 * Constructs a new GANTT chart widget with custom settings, custom color manager {@link IColorManager}, a custom paint manager {@link IPaintManager} and a custom language
-	 * manager {@link ILanguageManager}. If any of the managers is set to null the default manager using that implementation will be used. For styles, please see {@link IGanttFlags}.
+	 * manager {@link ILanguageManager}. If any of the managers is set to null the default manager using that implementation will be used. For styles, please see {@link GanttFlags}.
 	 * 
 	 * @param parent Parent composite
 	 * @param style Widget style
@@ -152,18 +154,21 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 *             subclass</li>
 	 *             </ul>
 	 */
-	public GanttChart(Composite parent, int style, ISettings settings, IColorManager colorManager, IPaintManager paintManager, ILanguageManager languageManager) {
+	public GanttChart(final Composite parent, final int style, final ISettings settings, final IColorManager colorManager, final IPaintManager paintManager, final ILanguageManager languageManager) {
 		super(parent, SWT.NONE);
 		
-		// if no scrollbar is set, set one
-		if ((style & H_SCROLL_FIXED_RANGE) == 0 && (style & H_SCROLL_NONE) == 0 && (style & H_SCROLL_INFINITE) == 0)
-			style |= H_SCROLL_INFINITE;
+		int styleToUse = style;
 		
-		mStyle = style;
-		mSettings = settings;
-		mColorManager = colorManager;
-		mPaintManager = paintManager;
-		mLanguageManager = languageManager;
+		// if no scrollbar is set, set one
+		if ((style & GanttFlags.H_SCROLL_FIXED_RANGE) == 0 && (style & GanttFlags.H_SCROLL_NONE) == 0 && (style & GanttFlags.H_SCROLL_INFINITE) == 0) {
+		    styleToUse |= GanttFlags.H_SCROLL_INFINITE;
+		}
+		
+		_style = styleToUse;
+		_settings = settings;
+		_colorManager = colorManager;
+		_paintManager = paintManager;
+		_languageManager = languageManager;
 		init();
 	}
 
@@ -172,8 +177,8 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * 
 	 * @param group GanttGroup to add
 	 */
-	public void addGroup(GanttGroup group) {
-		mGanttComposite.addGroup(group);
+	public void addGroup(final GanttGroup group) {
+		_ganttComposite.addGroup(group);
 	}
 
 	/**
@@ -181,36 +186,40 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * 
 	 * @param group GanttGroup to remove
 	 */
-	public void removeGroup(GanttGroup group) {
-		mGanttComposite.removeGroup(group);
+	public void removeGroup(final GanttGroup group) {
+		_ganttComposite.removeGroup(group);
 	}
 
 	private void init() {
-		GridLayout gl = new GridLayout(1, true);
-		gl.marginBottom = 0;
-		gl.marginHeight = 0;
-		gl.marginLeft = 0;
-		gl.marginRight = 0;
-		gl.marginTop = 0;
-		gl.marginWidth = 0;
-		gl.verticalSpacing = 0;
-		gl.horizontalSpacing = 0;
-		setLayout(gl);
+	    final GridLayout layout = new GridLayout(1, true);
+		layout.marginBottom = 0;
+		layout.marginHeight = 0;
+		layout.marginLeft = 0;
+		layout.marginRight = 0;
+		layout.marginTop = 0;
+		layout.marginWidth = 0;
+		layout.verticalSpacing = 0;
+		layout.horizontalSpacing = 0;
+		setLayout(layout);
 
-		if (mSettings == null)
-			mSettings = new DefaultSettings();
+		if (_settings == null) {
+			_settings = new DefaultSettings();
+		}
 
-		if (mColorManager == null)
-			mColorManager = new DefaultColorManager();
+		if (_colorManager == null) {
+			_colorManager = new DefaultColorManager();
+		}
 
-		if (mPaintManager == null)
-			mPaintManager = new DefaultPaintManager();
+		if (_paintManager == null) {
+			_paintManager = new DefaultPaintManager();
+		}
 
-		if (mLanguageManager == null)
-			mLanguageManager = new DefaultLanguageManager();
+		if (_languageManager == null) {
+			_languageManager = new DefaultLanguageManager();
+		}
 
-		mGanttComposite = new GanttComposite(this, mStyle, mSettings, mColorManager, mPaintManager, mLanguageManager);
-		mGanttComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		_ganttComposite = new GanttComposite(this, _style, _settings, _colorManager, _paintManager, _languageManager);
+		_ganttComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	/**
@@ -219,9 +228,9 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * @param source GanttEvent source
 	 * @param target GanttEvent target
 	 */
-	public void addConnection(GanttEvent source, GanttEvent target) {
+	public void addConnection(final GanttEvent source, final GanttEvent target) {
 		checkWidget();
-		mGanttComposite.addDependency(source, target);
+		_ganttComposite.addDependency(source, target);
 	}
 
 	/**
@@ -230,7 +239,7 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * @param source GanttEvent source
 	 * @param target GanttEvent target
 	 */
-	public void addDependency(GanttEvent source, GanttEvent target) {
+	public void addDependency(final GanttEvent source, final GanttEvent target) {
 		checkWidget();
 		addConnection(source, target);
 	}
@@ -240,9 +249,9 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * 
 	 * @param listener IGanttEventListener
 	 */
-	public void addGanttEventListener(IGanttEventListener listener) {
+	public void addGanttEventListener(final IGanttEventListener listener) {
 		checkWidget();
-		mGanttComposite.addGanttEventListener(listener);
+		_ganttComposite.addGanttEventListener(listener);
 	}
 
 	/**
@@ -250,9 +259,9 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * 
 	 * @param listener IGanttEventListener
 	 */
-	public void removeGanttEventListener(IGanttEventListener listener) {
+	public void removeGanttEventListener(final IGanttEventListener listener) {
 		checkWidget();
-		mGanttComposite.removeGanttEventListener(listener);
+		_ganttComposite.removeGanttEventListener(listener);
 	}
 
 	/**
@@ -262,7 +271,7 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 */
 	public GanttComposite getGanttComposite() {
 		checkWidget();
-		return mGanttComposite;
+		return _ganttComposite;
 	}
 
 	/**
@@ -270,17 +279,17 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * 
 	 */
 	public void redrawGanttChart() {
-		mGanttComposite.redraw();
+		_ganttComposite.redraw();
 	}
 
 	/**
 	 * Re-indexes an event to show at a new location.
 	 * 
-	 * @param ge GanttEvent to re-index
+	 * @param event GanttEvent to re-index
 	 * @param newIndex new index position
 	 */
-	public void reindex(GanttEvent ge, int newIndex) {
-		mGanttComposite.reindex(ge, newIndex);
+	public void reindex(final GanttEvent event, final int newIndex) {
+		_ganttComposite.reindex(event, newIndex);
 	}
 
 	/**
@@ -289,7 +298,7 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * @return Settings
 	 */
 	public ISettings getSettings() {
-		return mSettings;
+		return _settings;
 	}
 
 	/**
@@ -298,7 +307,7 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * @return Color manager
 	 */
 	public IColorManager getColorManager() {
-		return mColorManager;
+		return _colorManager;
 	}
 
 	/**
@@ -307,7 +316,7 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * @return Paint manager
 	 */
 	public IPaintManager getPaintManager() {
-		return mPaintManager;
+		return _paintManager;
 	}
 
 	/**
@@ -316,18 +325,44 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * @return Language manager
 	 */
 	public ILanguageManager getLanguageManger() {
-		return mLanguageManager;
+		return _languageManager;
 	}
 
-	@Override
 	public ScrollBar getVerticalBar() {
-		return mGanttComposite.getVerticalBar();
+		return _ganttComposite.getVerticalBar();
 	}
 
-	@Override
 	public ScrollBar getHorizontalBar() {
-		return mGanttComposite.getHorizontalBar();
+		return _ganttComposite.getHorizontalBar();
 	}
+	
+	   /**
+     * Adds a listener to be notified when undo/redo possibilities change
+     * 
+     * @param listener
+     */
+    public void addUndoRedoListener(final IUndoRedoListener listener) {
+        _ganttComposite.getUndoRedoManager().addUndoRedoListener(listener);
+    }
+    
+    /**
+     * Removes a listener from being notified when undo/redo possibilities change
+     * 
+     * @param listener
+     */
+    public void removeUndoRedoListener(final IUndoRedoListener listener) {
+        _ganttComposite.getUndoRedoManager().removeUndoRedoListener(listener);
+    }
+    
+    /**
+     * Returns the Undo/Redo manager
+     * 
+     * @return {@link GanttUndoRedoManager}
+     */
+    public GanttUndoRedoManager getUndoRedoManager() {
+        return _ganttComposite.getUndoRedoManager();
+    }
+    
 	
 	/**
 	 * Returns a random GanttEvent, useful for testing.
@@ -335,15 +370,14 @@ public class GanttChart extends Composite implements IGanttFlags {
 	 * @return GanttEvent
 	 */
 	public GanttEvent getRandomEvent() {
-		Calendar cal = Calendar.getInstance(mSettings.getDefaultLocale());
-		Calendar cal2 = Calendar.getInstance(mSettings.getDefaultLocale());
+	    final Calendar cal = Calendar.getInstance(_settings.getDefaultLocale());
+	    final Calendar cal2 = Calendar.getInstance(_settings.getDefaultLocale());
 		
-		Random r = new Random();
-		cal.add(Calendar.DATE, -r.nextInt(10));
-		cal2.add(Calendar.DATE, r.nextInt(10)+1);
+	    final Random random = new Random();
+		cal.add(Calendar.DATE, -random.nextInt(10));
+		cal2.add(Calendar.DATE, random.nextInt(10)+1);
 	
-		GanttEvent ge = new GanttEvent(this, "Random Event", cal, cal2, r.nextInt(100));
-		return ge;
+		return new GanttEvent(this, "Random Event", cal, cal2, random.nextInt(100));
 	}
 
 }

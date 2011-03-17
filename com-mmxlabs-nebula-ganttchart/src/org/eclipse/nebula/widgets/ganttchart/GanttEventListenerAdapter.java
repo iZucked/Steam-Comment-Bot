@@ -19,72 +19,61 @@ import org.eclipse.swt.graphics.GC;
 
 public class GanttEventListenerAdapter implements IGanttEventListener {
 
-	@Override
 	public void eventDoubleClicked(GanttEvent event, MouseEvent me) {
 	}
 
-	@Override
-	public void eventPropertiesSelected(List<GanttEvent> events) {
+	public void eventPropertiesSelected(List events) {
 	}
 
-	@Override
-	public void eventsDeleteRequest(List<GanttEvent> events, MouseEvent me) {
+	public void eventsDeleteRequest(List events, MouseEvent me) {
 	}
 
-	@Override
-	public void eventSelected(GanttEvent event, List<GanttEvent> allSelectedEvents, MouseEvent me) {
+	public void eventSelected(GanttEvent event, List allSelectedEvents, MouseEvent me) {
 	}
 
-	@Override
-	public void eventsMoved(List<GanttEvent> events, MouseEvent me) {
+	public void eventsMoved(List events, MouseEvent me) {
 	}
 
-	@Override
-	public void eventsResized(List<GanttEvent> events, MouseEvent me) {
+	public void eventsResized(List events, MouseEvent me) {
 	}
 	
-	@Override
-	public void eventsMoveFinished(List<GanttEvent> events, MouseEvent me) {
+	public void eventsMoveFinished(List events, MouseEvent me) {
 	}
 
-	@Override
-	public void eventsResizeFinished(List<GanttEvent> events, MouseEvent me) {
+	public void eventsResizeFinished(List events, MouseEvent me) {
 	}
 
-	@Override
 	public void zoomedIn(int newZoomLevel) {
 	}
 
-	@Override
 	public void zoomedOut(int newZoomLevel) {
 	}
 
-	@Override
 	public void zoomReset() {
 	}
 	
-	@Override
-	public void eventHeaderSelected(Calendar newlySelectedDate, List<Calendar> allSelectedDates) {
+	public void eventHeaderSelected(Calendar newlySelectedDate, List allSelectedDates) {
 	}
 
-	@Override
 	public void lastDraw(GC gc) {
 	}
 
-    @Override
-	public void phaseMoved(GanttPhase phase, MouseEvent me) {
+    public void phaseMoved(GanttPhase phase, MouseEvent me) {
     }
 
-    @Override
-	public void phaseMoveFinished(GanttPhase phase, MouseEvent me) {
+    public void phaseMoveFinished(GanttPhase phase, MouseEvent me) {
     }
 
-    @Override
-	public void phaseResized(GanttPhase phase, MouseEvent me) {
+    public void phaseResized(GanttPhase phase, MouseEvent me) {
     }
 
-    @Override
-	public void phaseResizeFinished(GanttPhase phase, MouseEvent me) {
+    public void phaseResizeFinished(GanttPhase phase, MouseEvent me) {
+    }
+
+    public void eventMovedToNewSection(GanttEvent ge, GanttSection oldSection, GanttSection newSection) {
+    }
+
+    public void eventReordered(GanttEvent ge) {
     }
 
 }

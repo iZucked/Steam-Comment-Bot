@@ -11,24 +11,21 @@
 
 package org.eclipse.nebula.widgets.ganttchart;
 
-/**
- * A convenience class for creating a GanttScope instead of using the specific constructors on the GanttEvent.
- *  
- */
-public final class GanttScope extends GanttEvent {
+public class VerticalDragModes {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public GanttScope(final GanttChart parent, final String name) {
-		super(parent, null, name);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public GanttScope(final GanttChart parent, final Object data, final String name) {
-		super(parent, data, name);
-	}
-	
+    /**
+     * Vertical dragging is disabled
+     */
+    public static final int NO_VERTICAL_DRAG      = 0;
+    
+    /**
+     * Vertical dragging is enabled for any type of chart
+     */
+    public static final int ANY_VERTICAL_DRAG     = 1;
+    
+    /**
+     * Vertical dragging is only enabled between two different {@link GanttSection}s
+     */
+    public static final int CROSS_SECTION_VERTICAL_DRAG = 2;
+
 }

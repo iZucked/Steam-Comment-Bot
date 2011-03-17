@@ -14,44 +14,45 @@ package org.eclipse.nebula.widgets.ganttchart;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class GanttMap {
-	private HashMap<GanttEvent, List<GanttEvent>>	mMap;
+    private final Map _map;
 
-	public GanttMap() {
-		mMap = new HashMap<GanttEvent, List<GanttEvent>>();
-	}
-	
-	public void put(GanttEvent key, List<GanttEvent> connections) {
-		mMap.put(key, connections);
-	}
+    public GanttMap() {
+        _map = new HashMap();
+    }
 
-	public void put(GanttEvent value, GanttEvent key) {
-		if (mMap.containsKey(value)) {
-			List<GanttEvent> v = mMap.get(value);
-			if (!v.contains(key)) {
-				v.add(key);
-			}
+    public void put(final GanttEvent key, final List connections) {
+        _map.put(key, connections);
+    }
 
-			mMap.put(value, v);
-		} else {
-			List<GanttEvent> v = new ArrayList<GanttEvent>();
-			v.add(key);
+    public void put(final GanttEvent value, final GanttEvent key) {
+        if (_map.containsKey(value)) {
+            final List vList = (List) _map.get(value);
+            if (!vList.contains(key)) {
+                vList.add(key);
+            }
 
-			mMap.put(value, v);
-		}
-	}
+            _map.put(value, vList);
+        } else {
+            final List vList = new ArrayList();
+            vList.add(key);
 
-	public void remove(GanttEvent key) {
-		mMap.remove(key);
-	}
-	
-	public List<GanttEvent> get(GanttEvent obj) {
-		return mMap.get(obj);
-	}
+            _map.put(value, vList);
+        }
+    }
 
-	public void clear() {
-		mMap.clear();
-	}
+    public void remove(final GanttEvent key) {
+        _map.remove(key);
+    }
+
+    public List get(final GanttEvent obj) {
+        return (List) _map.get(obj);
+    }
+
+    public void clear() {
+        _map.clear();
+    }
 
 }

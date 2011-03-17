@@ -13,13 +13,14 @@ package org.eclipse.nebula.widgets.ganttchart;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
 
 public class CursorCache {
 
-    private static HashMap<Integer, Cursor> map = new HashMap<Integer, Cursor>();
+    private static Map _cache = new HashMap();
 
     /**
      * Returns a cursor that is also cached as to not create more handles for each time the cursor type is fetched.
@@ -27,14 +28,13 @@ public class CursorCache {
      * @param type Cursor Type to fetch
      * @return Cursor
      */
-    public static Cursor getCursor(int type) {
-        Integer key = Integer.valueOf(type);
-		if (map.get(key) != null) {
-            return map.get(key);
+    public static Cursor getCursor(final int type) {
+        if (_cache.get(new Integer(type)) == null) {
+            final Cursor cursor = new Cursor(Display.getDefault(), type);
+            _cache.put(new Integer(type), cursor); // NOPMD
+            return cursor;
         } else {
-            Cursor c = new Cursor(Display.getDefault(), type);
-            map.put(key, c);
-            return c;
+            return (Cursor) _cache.get(new Integer(type)); // NOPMD
         }
     }
 
@@ -45,13 +45,13 @@ public class CursorCache {
      *
      */
     public static void dispose() {
-        if (map != null && map.keySet() != null) {
-            Iterator<Integer> keys = map.keySet().iterator();
+        if (_cache != null && _cache.keySet() != null) {
+            final Iterator keys = _cache.keySet().iterator();
             while (keys.hasNext()) {
-                Integer key = keys.next();
-                map.get(key).dispose();
+                final Object key = keys.next();
+                ((Cursor) _cache.get(key)).dispose();
             }
         }
-        map = null;
+        _cache.clear();
     }
 }

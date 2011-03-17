@@ -40,7 +40,7 @@ public interface ISettings {
      */
     public static final int CONNECTION_MS_PROJECT_STYLE    = 3;
     /**
-     * Birds flight path is an arrow-head-less line from the one event to another in the straightest line
+     * Birds flight path is an arrow-head-less line from the one event to another in the straightest line, also known as "as the crow flies".
      */
     public static final int CONNECTION_BIRDS_FLIGHT_PATH   = 4;
     public static final int DEFAULT_CONNECTION_ARROW       = CONNECTION_ARROW_RIGHT_TO_LEFT;
@@ -386,17 +386,6 @@ public interface ISettings {
     public boolean showBoldScopeText();
 
     /**
-     * Whether events that are no longer in visible range should "not exist", which means that they aren't counted
-     * vertically. The effect of this will be that visible events might jump around vertically as the chart is scrolled,
-     * as events that are in-between come and go into view.
-     * <p>
-     * This might be useful if there are loads of events, however, it may also be confusing.
-     * 
-     * @return true if to consume events. Default is false.
-     */
-    public boolean consumeEventWhenOutOfRange();
-
-    /**
      * Letters have different width. If turned on, this will try to make all day letters appear centered, whereas if
      * turned off, letter width will be ignored.
      * 
@@ -459,6 +448,16 @@ public interface ISettings {
      * @return true if to allow clear-area drag. Default is true.
      */
     public boolean allowBlankAreaDragAndDropToMoveDates();
+    
+    /**
+     * Relies on {@link #allowBlankAreaDragAndDropToMoveDates()} being true. If so, this will additionally determine if the user
+     * can blank-area drag the chart in a vertical manner to move the chart in that direction as well.
+     * <p />
+     * Holding down the shift key will double the speed of the vertical drag
+     * 
+     * @return true to allow clear-area vertical drag. Default is false (as it can be confusing at first try).
+     */
+    public boolean allowBlankAreaVerticalDragAndDropToMoveChart();
 
     /**
      * If for some reason the drag left vs. drag right directions feel reversed, simply flip this to switch them around.
@@ -998,4 +997,51 @@ public interface ISettings {
      * @return Default is false
      */
     public boolean allowPhaseOverlap();
+    
+    /**
+     * What style of vertical event dragging that is enabled. For the "resistance" before a vertical drag takes
+     * place you can change this with {@link ISettings#getVerticalDragResistance()}.
+     * 
+     * @return One of the options in {@link VerticalDragModes}. Default is {@link VerticalDragModes#NO_VERTICAL_DRAG}
+     */
+    public int getVerticalEventDragging();
+    
+    /**
+     * For events that can be dragged vertically, this is the "resistance" in pixels before the event "lets go"
+     * of it's horizontal location. Once it's let go it will stick to the mouse cursor.
+     * 
+     * @return A pixel range of resistance. Default is 15px.
+     */
+    public int getVerticalDragResistance();
+    
+    /**
+     * Whether an insert marker should be shown for where the dragged event will end up when a vertical drag/drop 
+     * is in progress.
+     * 
+     * @return true to show a marker. Default is true.
+     */
+    public boolean onVerticalDragDropShowInsertMarker();
+
+    // bugzilla feature request #309808
+   /**
+    * Whether to allow an image to exceed the width of one day when zooming in / out.
+    * 
+    * @return true to keep within day width. Default is true.
+    */
+    public boolean scaleImageToDayWidth();
+    
+    /**
+     * Whether arrow keys are enabled to scroll chart left/right/up/down.
+     * 
+     * @return true to allow arrow keys to move the chart. Default is false.
+     */
+    public boolean allowArrowKeysToScrollChart();
+    
+    /**
+     * Normally a day is calculated as day_starts->day_ends, which means that to make an event that starts and ends on the same day count as "anything", +1 is
+     * added by default to make the event actually show up on the chart. Should you for some reason need to override this, change this number to 0 or whatever you may need. 
+     * 
+     * @return Number of days to count for a start and end date that is the same date. Default is 1.
+     */
+    public int getNumberOfDaysToAppendForEndOfDay();
 }

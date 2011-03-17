@@ -9,26 +9,23 @@
  *    emil.crumhorn@gmail.com - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.nebula.widgets.ganttchart;
+package org.eclipse.nebula.widgets.ganttchart.undoredo.commands;
 
-/**
- * A convenience class for creating a GanttScope instead of using the specific constructors on the GanttEvent.
- *  
- */
-public final class GanttScope extends GanttEvent {
+public interface IUndoRedoCommand {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public GanttScope(final GanttChart parent, final String name) {
-		super(parent, null, name);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public GanttScope(final GanttChart parent, final Object data, final String name) {
-		super(parent, data, name);
-	}
-	
+    /**
+     * Undoes the event. This should put the event back to the state it was prior to the event taking place. 
+     */
+    void undo();
+    
+    /**
+     * Redoes the event. This should put the event back to the state it was after the event took plaace.
+     */
+    void redo();
+    
+    /**
+     * Called when the event will be destroyed, if any resources need to be cleaned up do it here.
+     */
+    void dispose();
+    
 }

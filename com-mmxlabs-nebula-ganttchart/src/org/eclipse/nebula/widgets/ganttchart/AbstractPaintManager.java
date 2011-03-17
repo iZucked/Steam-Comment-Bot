@@ -25,582 +25,617 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractPaintManager implements IPaintManager {
-    
-	@Override
-	public void redrawStarting() {
+
+    public void redrawStarting() { // NOPMD        
     }
 
-    @Override
-	public void drawEvent(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean isSelected, boolean threeDee, int dayWidth, int xStart, int y, int eventWidth, Rectangle bounds) {
+    public void drawEvent(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final boolean isSelected, final boolean threeDee, final int dayWidth, final int xStart, final int y, final int eventWidth, final Rectangle bounds) {
 
-		boolean alpha = colorManager.useAlphaDrawing();
-		
-		int x = xStart;
-		
-		// draw the border
-		gc.setForeground(colorManager.getEventBorderColor());
-		
-		if (isSelected && settings.drawSelectionMarkerAroundSelectedEvent()) {
-			gc.setLineStyle(SWT.LINE_DOT);
+        final boolean alpha = colorManager.useAlphaDrawing();
 
-			// this is _extremely_ slow to draw, so we need to check bounds here, which is probably a good idea anyway
-			boolean oobLeft = (x < bounds.x);
-			boolean oobRight = (x + eventWidth > bounds.width);
-			if (oobLeft || oobRight) {
-				if (!oobLeft || !oobRight) {
-					if (oobLeft) {
-						// left side out of bounds
-						gc.drawLine(x, y, x + eventWidth, y);
-						gc.drawLine(x + eventWidth, y, x + eventWidth, y + ge.getHeight());
-						gc.drawLine(x, y + ge.getHeight(), x + eventWidth, y + ge.getHeight());
-					} else {
-						// right side out of bounds
-						gc.drawLine(x, y, bounds.width, y);
-						gc.drawLine(x, y, x, y + ge.getHeight());
-						gc.drawLine(x, y + ge.getHeight(), bounds.width, y + ge.getHeight());
-					}
-				} else {
-					// double out of bounds
-					gc.drawLine(bounds.x, y, bounds.x + bounds.width, y);
-					gc.drawLine(bounds.x, y + ge.getHeight(), bounds.x + bounds.width, y + ge.getHeight());
-				}
-			} else {
-				gc.drawRectangle(x, y, eventWidth, settings.getEventHeight());
-			}
+        int xLoc = xStart;
 
-			gc.setLineStyle(SWT.LINE_SOLID);
-		} else {
-			gc.drawRectangle(x, y, eventWidth, settings.getEventHeight());
-		}
+        // draw the border
+        gc.setForeground(colorManager.getEventBorderColor());
 
-		Color cEvent = ge.getStatusColor();
-		Color gradient = ge.getGradientStatusColor();
+        if (isSelected && settings.drawSelectionMarkerAroundSelectedEvent()) {
+            gc.setLineStyle(SWT.LINE_DOT);
 
-		if (cEvent == null)
-			cEvent = settings.getDefaultEventColor();
-		if (gradient == null)
-			gradient = settings.getDefaultGradientEventColor();
+            // this is _extremely_ slow to draw, so we need to check bounds here, which is probably a good idea anyway
+            final boolean oobLeft = (xLoc < bounds.x);
+            final boolean oobRight = (xLoc + eventWidth > bounds.width);
+            if (oobLeft || oobRight) {
+                if (!oobLeft || !oobRight) { //NOPMD
+                    if (oobLeft) {
+                        // left side out of bounds
+                        gc.drawLine(xLoc, y, xLoc + eventWidth, y);
+                        gc.drawLine(xLoc + eventWidth, y, xLoc + eventWidth, y + event.getHeight());
+                        gc.drawLine(xLoc, y + event.getHeight(), xLoc + eventWidth, y + event.getHeight());
+                    } else {
+                        // right side out of bounds
+                        gc.drawLine(xLoc, y, bounds.width, y);
+                        gc.drawLine(xLoc, y, xLoc, y + event.getHeight());
+                        gc.drawLine(xLoc, y + event.getHeight(), bounds.width, y + event.getHeight());
+                    }
+                } else {
+                    // double out of bounds
+                    gc.drawLine(bounds.x, y, bounds.x + bounds.width, y);
+                    gc.drawLine(bounds.x, y + event.getHeight(), bounds.x + bounds.width, y + event.getHeight());
+                }
+            } else {
+                gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
+            }
 
-		// draw the insides
-		gc.setBackground(cEvent);
+            gc.setLineStyle(SWT.LINE_SOLID);
+        } else {
+            gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
+        }
 
-		if (settings.showGradientEventBars()) {
-			gc.setForeground(gradient);
-			gc.fillGradientRectangle(x + 1, y + 1, eventWidth - 1, settings.getEventHeight() - 1, true);
-			gc.setForeground(colorManager.getEventBorderColor()); // re-set foreground color
-		} else {
-			gc.fillRectangle(x + 1, y + 1, eventWidth - 1, settings.getEventHeight() - 1);
-		}
+        Color cEvent = event.getStatusColor();
+        Color gradient = event.getGradientStatusColor();
 
-		// if 3D effect, draw drop-shadow
-		if (threeDee) {
-			boolean subAlpha = colorManager.useAlphaDrawingOn3DEventDropShadows();
-			if (subAlpha)
-				gc.setAlpha(200);
-			gc.setForeground(colorManager.getFadeOffColor1());
-			// horizontal line.. ends a few pixles right of bottom right corner
-			gc.drawLine(x, y + settings.getEventHeight() + 1, x + eventWidth + 1, y + settings.getEventHeight() + 1);
-			// vertical line at end, starts slightly below top right corner
-			gc.drawLine(x + eventWidth + 1, y + 2, x + eventWidth + 1, y + settings.getEventHeight());
+        if (cEvent == null) {
+            cEvent = settings.getDefaultEventColor();
+        }
+        if (gradient == null) {
+            gradient = settings.getDefaultGradientEventColor();
+        }
 
-			if (subAlpha)
-				gc.setAlpha(100);
-			gc.setForeground(colorManager.getFadeOffColor2());
-			gc.drawLine(x, y + settings.getEventHeight() + 2, x + eventWidth + 1, y + settings.getEventHeight() + 2); // h
+        // draw the insides
+        gc.setBackground(cEvent);
 
-			if (subAlpha)
-				gc.setAlpha(50);
-			gc.setForeground(colorManager.getFadeOffColor1());
-			gc.drawLine(x, y + settings.getEventHeight() + 3, x + eventWidth + 1, y + settings.getEventHeight() + 3); // h
-			// next vertical starts 1 pixel further down and 1 pixel further right and dips 1 pixel below bottom
-			gc.drawLine(x + eventWidth + 2, y + 3, x + eventWidth + 2, y + settings.getEventHeight() + 1); // v
-			if (subAlpha) {
-				gc.setAlpha(255);
-				gc.setAdvanced(false);
-			}
-		}
+        if (settings.showGradientEventBars()) {
+            gc.setForeground(gradient);
+            gc.fillGradientRectangle(xLoc + 1, y + 1, eventWidth - 1, settings.getEventHeight() - 1, true);
+            gc.setForeground(colorManager.getEventBorderColor()); // re-set foreground color
+        } else {
+            gc.fillRectangle(xLoc + 1, y + 1, eventWidth - 1, settings.getEventHeight() - 1);
+        }
 
-		// whacky % completes don't get to play
-		if (ge.getPercentComplete() > 0 && ge.getPercentComplete() <= 100) {
-			int yStart = y + (settings.getEventHeight() / 2) - 1;
+        // if 3D effect, draw drop-shadow
+        if (threeDee) {
+            final boolean subAlpha = colorManager.useAlphaDrawingOn3DEventDropShadows();
+            if (subAlpha) {
+                gc.setAlpha(200);
+            }
+            gc.setForeground(colorManager.getFadeOffColor1());
+            // horizontal line.. ends a few pixles right of bottom right corner
+            gc.drawLine(xLoc, y + settings.getEventHeight() + 1, xLoc + eventWidth + 1, y + settings.getEventHeight() + 1);
+            // vertical line at end, starts slightly below top right corner
+            gc.drawLine(xLoc + eventWidth + 1, y + 2, xLoc + eventWidth + 1, y + settings.getEventHeight());
 
-			// xEnd is how long the event box is
-			// how much of that in % are we showing?
-			float perc = ge.getPercentComplete() / 100f;
-			// and how many pixels is that?
-			float toDraw = eventWidth * perc;
-			// remainder
-			int remainder = eventWidth - (int) toDraw;
+            if (subAlpha) {
+                gc.setAlpha(100);
+            }
+            gc.setForeground(colorManager.getFadeOffColor2());
+            gc.drawLine(xLoc, y + settings.getEventHeight() + 2, xLoc + eventWidth + 1, y + settings.getEventHeight() + 2); // h
 
-			if (alpha)
-				gc.setAlpha(settings.getPercentageBarAlpha());
+            if (subAlpha) {
+                gc.setAlpha(50);
+            }
+            gc.setForeground(colorManager.getFadeOffColor1());
+            gc.drawLine(xLoc, y + settings.getEventHeight() + 3, xLoc + eventWidth + 1, y + settings.getEventHeight() + 3); // h
+            // next vertical starts 1 pixel further down and 1 pixel further right and dips 1 pixel below bottom
+            gc.drawLine(xLoc + eventWidth + 2, y + 3, xLoc + eventWidth + 2, y + settings.getEventHeight() + 1); // v
+            if (subAlpha) {
+                gc.setAlpha(255);
+                gc.setAdvanced(false);
+            }
+        }
 
-			x += 1;
-			toDraw -= 1;
+        // whacky % completes don't get to play
+        if (event.getPercentComplete() > 0 && event.getPercentComplete() <= 100) {
+            final int yStart = y + (settings.getEventHeight() / 2) - 1;
 
-			// draw the inner bar
-			gc.setForeground(colorManager.getPercentageBarColorTop());
-			gc.setBackground(colorManager.getPercentageBarColorBottom());
-			gc.fillGradientRectangle(x, yStart - settings.getEventPercentageBarHeight() / 2 + 1, (int) toDraw, settings.getEventPercentageBarHeight(), true);
+            // xEnd is how long the event box is
+            // how much of that in % are we showing?
+            final float perc = event.getPercentComplete() / 100f;
+            // and how many pixels is that?
+            float toDraw = eventWidth * perc;
+            // remainder
+            final int remainder = eventWidth - (int) toDraw;
 
-			if (settings.drawFullPercentageBar()) {
-				if (alpha)
-					gc.setAlpha(settings.getRemainderPercentageBarAlpha());
+            if (alpha) {
+                gc.setAlpha(settings.getPercentageBarAlpha());
+            }
 
-				gc.setForeground(colorManager.getPercentageBarRemainderColorTop());
-				gc.setBackground(colorManager.getPercentageBarRemainderColorBottom());
-				gc.fillGradientRectangle(x + (int) toDraw, yStart - settings.getEventPercentageBarHeight() / 2 + 1, remainder, settings.getEventPercentageBarHeight(), true);
-			}
+            xLoc += 1;
+            toDraw -= 1;
 
-			if (alpha) {
-				gc.setAlpha(255);
-				gc.setAdvanced(false);
-			}
-		}
-	}
+            // draw the inner bar
+            gc.setForeground(colorManager.getPercentageBarColorTop());
+            gc.setBackground(colorManager.getPercentageBarColorBottom());
+            gc.fillGradientRectangle(xLoc, yStart - settings.getEventPercentageBarHeight() / 2 + 1, (int) toDraw, settings.getEventPercentageBarHeight(), true);
 
-	@Override
-	public void drawCheckpoint(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int dayWidth, int x, int y, Rectangle bounds) {
-		Color cEvent = ge.getStatusColor();
+            if (settings.drawFullPercentageBar()) {
+                if (alpha) {
+                    gc.setAlpha(settings.getRemainderPercentageBarAlpha());
+                }
 
-		if (cEvent == null)
-			cEvent = settings.getDefaultEventColor();
+                gc.setForeground(colorManager.getPercentageBarRemainderColorTop());
+                gc.setBackground(colorManager.getPercentageBarRemainderColorBottom());
+                gc.fillGradientRectangle(xLoc + (int) toDraw, yStart - settings.getEventPercentageBarHeight() / 2 + 1, remainder, settings.getEventPercentageBarHeight(), true);
+            }
 
-		gc.setBackground(cEvent);
+            if (alpha) {
+                gc.setAlpha(255);
+                gc.setAdvanced(false);
+            }
+        }
+    }
 
-		int height = settings.getEventHeight();
+    public void drawCheckpoint(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final boolean threeDee, final int dayWidth, final int x, final int y, final Rectangle bounds) {
+        Color cEvent = event.getStatusColor();
 
-		// draw a special fun thing! (tm)
-		long days = DateHelper.daysBetween(ge.getActualStartDate(), ge.getActualEndDate(), settings.getDefaultLocale());
+        if (cEvent == null) {
+            cEvent = settings.getDefaultEventColor();
+        }
 
-		drawCheckpointMarker(gc, settings, colorManager, ge, threeDee, x, y, dayWidth, height, bounds);
+        gc.setBackground(cEvent);
 
-		// multi day checkpoint
-		if (days != 0) {
-			int width = (int) days * dayWidth;
-			drawCheckpointMarker(gc, settings, colorManager, ge, threeDee, x + width, y, dayWidth, height, bounds);
+        final int height = settings.getEventHeight();
 
-			// draw center
-			int neg = height / 2 - 1;
-			Rectangle rect = new Rectangle(x + dayWidth, y + neg, width - dayWidth, neg);
-			gc.setForeground(colorManager.getBlack());
-			gc.fillRectangle(rect);
-			gc.drawRectangle(rect);
+        // draw a special fun thing! (tm)
+        final long days = DateHelper.daysBetween(event.getActualStartDate(), event.getActualEndDate());
 
-			if (settings.showBarsIn3D()) {
-				boolean alpha = (colorManager.useAlphaDrawing() || colorManager.useAlphaDrawingOn3DEventDropShadows());
-				if (alpha)
-					gc.setAlpha(200);
+        drawCheckpointMarker(gc, settings, colorManager, event, threeDee, x, y, dayWidth, height, bounds);
 
-				gc.setForeground(colorManager.getFadeOffColor1());
-				gc.drawLine(rect.x + 1, rect.y + rect.height + 1, rect.x + rect.width - 1, rect.y + rect.height + 1);
+        // multi day checkpoint
+        if (days != 0) {
+            final int width = (int) days * dayWidth;
+            drawCheckpointMarker(gc, settings, colorManager, event, threeDee, x + width, y, dayWidth, height, bounds);
 
-				if (alpha)
-					gc.setAlpha(100);
+            // draw center
+            final int neg = height / 2 - 1;
+            final Rectangle rect = new Rectangle(x + dayWidth, y + neg, width - dayWidth, neg);
+            gc.setForeground(colorManager.getBlack());
+            gc.fillRectangle(rect);
+            gc.drawRectangle(rect);
 
-				gc.setForeground(colorManager.getFadeOffColor2());
-				gc.drawLine(rect.x + 1, rect.y + rect.height + 2, rect.x + rect.width - 1, rect.y + rect.height + 2);
+            if (settings.showBarsIn3D()) {
+                final boolean alpha = (colorManager.useAlphaDrawing() || colorManager.useAlphaDrawingOn3DEventDropShadows());
+                if (alpha) {
+                    gc.setAlpha(200);
+                }
 
-				if (alpha)
-					gc.setAlpha(50);
+                gc.setForeground(colorManager.getFadeOffColor1());
+                gc.drawLine(rect.x + 1, rect.y + rect.height + 1, rect.x + rect.width - 1, rect.y + rect.height + 1);
 
-				gc.setForeground(colorManager.getFadeOffColor3());
-				gc.drawLine(rect.x + 1, rect.y + rect.height + 3, rect.x + rect.width - 1, rect.y + rect.height + 3);
+                if (alpha) {
+                    gc.setAlpha(100);
+                }
 
-				if (alpha) {
-					gc.setAlpha(255);
-					gc.setAdvanced(false);
-				}
-			}
-		}
-	}
+                gc.setForeground(colorManager.getFadeOffColor2());
+                gc.drawLine(rect.x + 1, rect.y + rect.height + 2, rect.x + rect.width - 1, rect.y + rect.height + 2);
 
-	private void drawCheckpointMarker(GC gc, ISettings settings, IColorManager colorManager, GanttEvent ge, boolean threeDee, int x, int y, int width, int height, Rectangle bounds) {
-		float fHoriSpacer = width * 0.17f;
-		int hSpacer = (int) fHoriSpacer;
+                if (alpha) {
+                    gc.setAlpha(50);
+                }
 
-		float fVertiSpacer = height * 0.23f;
-		int vSpacer = (int) fVertiSpacer;
+                gc.setForeground(colorManager.getFadeOffColor3());
+                gc.drawLine(rect.x + 1, rect.y + rect.height + 3, rect.x + rect.width - 1, rect.y + rect.height + 3);
 
-		Rectangle topToBottom = new Rectangle(x + hSpacer, y, width - (hSpacer * 2), height + vSpacer);
-		Rectangle leftToRight = new Rectangle(x, y + vSpacer, width, height - vSpacer);
-		Rectangle inner = new Rectangle(x + hSpacer, y + vSpacer, width - (hSpacer * 2), height - (vSpacer * 2));
+                if (alpha) {
+                    gc.setAlpha(255);
+                    gc.setAdvanced(false);
+                }
+            }
+        }
+    }
 
-		Color cEvent = ge.getStatusColor();
-		Color gradient = ge.getGradientStatusColor();
+    private void drawCheckpointMarker(final GC gc, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final boolean threeDee, final int x, final int y, final int width, final int height, final Rectangle bounds) {
+        final float fHoriSpacer = width * 0.17f;
+        final int hSpacer = (int) fHoriSpacer;
 
-		if (cEvent == null)
-			cEvent = settings.getDefaultEventColor();
-		if (gradient == null)
-			gradient = settings.getDefaultGradientEventColor();
+        final float fVertiSpacer = height * 0.23f;
+        final int vSpacer = (int) fVertiSpacer;
 
-		gc.setForeground(gradient);
-		gc.setBackground(cEvent);
-		gc.fillRectangle(topToBottom);
-		gc.fillRectangle(leftToRight);
-		gc.fillGradientRectangle(inner.x, inner.y, inner.width, inner.height, true);
+        final Rectangle topToBottom = new Rectangle(x + hSpacer, y, width - (hSpacer * 2), height + vSpacer);
+        final Rectangle leftToRight = new Rectangle(x, y + vSpacer, width, height - vSpacer);
+        final Rectangle inner = new Rectangle(x + hSpacer, y + vSpacer, width - (hSpacer * 2), height - (vSpacer * 2));
 
-		gc.setForeground(colorManager.getBlack());
+        Color cEvent = event.getStatusColor();
+        Color gradient = event.getGradientStatusColor();
 
-		gc.drawRectangle(topToBottom);
-		gc.drawRectangle(leftToRight);
+        if (cEvent == null) {
+            cEvent = settings.getDefaultEventColor();
+        }
+        if (gradient == null) {
+            gradient = settings.getDefaultGradientEventColor();
+        }
 
-		if (threeDee) {
-			boolean alpha = (colorManager.useAlphaDrawing() || colorManager.useAlphaDrawingOn3DEventDropShadows());
-			if (alpha)
-				gc.setAlpha(200);
+        gc.setForeground(gradient);
+        gc.setBackground(cEvent);
+        gc.fillRectangle(topToBottom);
+        gc.fillRectangle(leftToRight);
+        gc.fillGradientRectangle(inner.x, inner.y, inner.width, inner.height, true);
 
-			gc.setForeground(colorManager.getFadeOffColor1());
-			// horizontal line.. ends a few pixles right of bottom right corner
-			gc.drawLine(leftToRight.x, leftToRight.y + leftToRight.height + 1, leftToRight.x + hSpacer - 1, leftToRight.y + leftToRight.height + 1);
-			gc.drawLine(leftToRight.x + hSpacer, leftToRight.y + leftToRight.height + vSpacer + 1, leftToRight.x - hSpacer + leftToRight.width, leftToRight.y + leftToRight.height + vSpacer + 1);
-			gc.drawLine(leftToRight.x + leftToRight.width - hSpacer + 1, leftToRight.y + leftToRight.height + 1, leftToRight.x + leftToRight.width + 1, leftToRight.y + leftToRight.height + 1);
+        gc.setForeground(colorManager.getBlack());
 
-			// vertical line at end, starts slightly below top right corner
-			gc.drawLine(leftToRight.x + leftToRight.width + 1, leftToRight.y + 2, leftToRight.x + leftToRight.width + 1, leftToRight.y + leftToRight.height + 1);
+        gc.drawRectangle(topToBottom);
+        gc.drawRectangle(leftToRight);
 
-			if (alpha)
-				gc.setAlpha(100);
+        if (threeDee) {
+            final boolean alpha = (colorManager.useAlphaDrawing() || colorManager.useAlphaDrawingOn3DEventDropShadows());
+            if (alpha) {
+                gc.setAlpha(200);
+            }
 
-			gc.setForeground(colorManager.getFadeOffColor2());
-			gc.drawLine(leftToRight.x, leftToRight.y + leftToRight.height + 2, leftToRight.x + hSpacer - 1, leftToRight.y + leftToRight.height + 2);
-			gc.drawLine(leftToRight.x + hSpacer, leftToRight.y + leftToRight.height + vSpacer + 2, leftToRight.x - hSpacer + leftToRight.width, leftToRight.y + leftToRight.height + vSpacer + 2);
-			gc.drawLine(leftToRight.x + leftToRight.width - hSpacer + 1, leftToRight.y + leftToRight.height + 2, leftToRight.x + leftToRight.width + 1, leftToRight.y + leftToRight.height + 2);
+            gc.setForeground(colorManager.getFadeOffColor1());
+            // horizontal line.. ends a few pixles right of bottom right corner
+            gc.drawLine(leftToRight.x, leftToRight.y + leftToRight.height + 1, leftToRight.x + hSpacer - 1, leftToRight.y + leftToRight.height + 1);
+            gc.drawLine(leftToRight.x + hSpacer, leftToRight.y + leftToRight.height + vSpacer + 1, leftToRight.x - hSpacer + leftToRight.width, leftToRight.y + leftToRight.height + vSpacer + 1);
+            gc.drawLine(leftToRight.x + leftToRight.width - hSpacer + 1, leftToRight.y + leftToRight.height + 1, leftToRight.x + leftToRight.width + 1, leftToRight.y + leftToRight.height + 1);
 
-			gc.drawLine(leftToRight.x + leftToRight.width + 2, leftToRight.y + 3, leftToRight.x + leftToRight.width + 2, leftToRight.y + leftToRight.height + 1);
+            // vertical line at end, starts slightly below top right corner
+            gc.drawLine(leftToRight.x + leftToRight.width + 1, leftToRight.y + 2, leftToRight.x + leftToRight.width + 1, leftToRight.y + leftToRight.height + 1);
 
-			if (alpha)
-				gc.setAlpha(50);
+            if (alpha) {
+                gc.setAlpha(100);
+            }
 
-			gc.setForeground(colorManager.getFadeOffColor3());
-			gc.drawLine(leftToRight.x, leftToRight.y + leftToRight.height + 3, leftToRight.x + hSpacer - 1, leftToRight.y + leftToRight.height + 3);
-			gc.drawLine(leftToRight.x + hSpacer, leftToRight.y + leftToRight.height + vSpacer + 3, leftToRight.x - hSpacer + leftToRight.width, leftToRight.y + leftToRight.height + vSpacer + 3);
-			gc.drawLine(leftToRight.x + leftToRight.width - hSpacer + 1, leftToRight.y + leftToRight.height + 3, leftToRight.x + leftToRight.width + 1, leftToRight.y + leftToRight.height + 3);
+            gc.setForeground(colorManager.getFadeOffColor2());
+            gc.drawLine(leftToRight.x, leftToRight.y + leftToRight.height + 2, leftToRight.x + hSpacer - 1, leftToRight.y + leftToRight.height + 2);
+            gc.drawLine(leftToRight.x + hSpacer, leftToRight.y + leftToRight.height + vSpacer + 2, leftToRight.x - hSpacer + leftToRight.width, leftToRight.y + leftToRight.height + vSpacer + 2);
+            gc.drawLine(leftToRight.x + leftToRight.width - hSpacer + 1, leftToRight.y + leftToRight.height + 2, leftToRight.x + leftToRight.width + 1, leftToRight.y + leftToRight.height + 2);
 
-			gc.drawLine(leftToRight.x + leftToRight.width + 3, leftToRight.y + 4, leftToRight.x + leftToRight.width + 3, leftToRight.y + leftToRight.height + 1);
+            gc.drawLine(leftToRight.x + leftToRight.width + 2, leftToRight.y + 3, leftToRight.x + leftToRight.width + 2, leftToRight.y + leftToRight.height + 1);
 
-			if (alpha) {
-				gc.setAlpha(255);
-				gc.setAdvanced(false);
-			}
+            if (alpha) {
+                gc.setAlpha(50);
+            }
 
-		}
-	}
+            gc.setForeground(colorManager.getFadeOffColor3());
+            gc.drawLine(leftToRight.x, leftToRight.y + leftToRight.height + 3, leftToRight.x + hSpacer - 1, leftToRight.y + leftToRight.height + 3);
+            gc.drawLine(leftToRight.x + hSpacer, leftToRight.y + leftToRight.height + vSpacer + 3, leftToRight.x - hSpacer + leftToRight.width, leftToRight.y + leftToRight.height + vSpacer + 3);
+            gc.drawLine(leftToRight.x + leftToRight.width - hSpacer + 1, leftToRight.y + leftToRight.height + 3, leftToRight.x + leftToRight.width + 1, leftToRight.y + leftToRight.height + 3);
 
-	@Override
-	public void drawPlannedDates(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int x, int y, int eventWidth, Rectangle bounds) {
+            gc.drawLine(leftToRight.x + leftToRight.width + 3, leftToRight.y + 4, leftToRight.x + leftToRight.width + 3, leftToRight.y + leftToRight.height + 1);
 
-		int spacer = settings.getRevisedLineSpacer();
+            if (alpha) {
+                gc.setAlpha(255);
+                gc.setAdvanced(false);
+            }
 
-		if (ge.isScope())
-			return;
-		
-		if (ge.getStartDate() != null) {
-			int xs = ganttComposite.getStartingXfor(ge.getStartDate());
+        }
+    }
+
+    public void drawPlannedDates(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final boolean threeDee, final int x, final int y, final int eventWidth, final Rectangle bounds) {
+
+        final int spacer = settings.getRevisedLineSpacer();
+
+        if (event.isScope()) {
+            return;
+        }
+
+        if (event.getStartDate() != null) {
+            final int xs = ganttComposite.getStartingXFor(event.getStartDate());
             // commenting this out July 2, 2009, if we draw the marker, draw it regardless if it's same or not
-			// otherwise doesn't make much sense
-			//if (xs != ge.getX()) {				
-				int ys = y - spacer;
-				gc.setForeground(colorManager.getRevisedStartColor());
-				gc.drawLine(xs, ys, x, ys);
-				gc.drawLine(xs, ys - 3, xs, ys + 3);
-				gc.drawLine(x, ys - 3, x, ys + 3);
-			//}
-		}
-		if (ge.getEndDate() != null) {
-			int xe = ganttComposite.getStartingXfor(ge.getEndDate());
-			xe += ganttComposite.getDayWidth();
-			//if (xe != ge.getXEnd()) {
-				int ys = y + settings.getEventHeight() + spacer;
-				gc.setForeground(colorManager.getRevisedEndColor());
-				gc.drawLine(xe, ys, x + eventWidth, ys);
-				gc.drawLine(xe, ys - 3, xe, ys + 3);
-				gc.drawLine(x + eventWidth, ys - 3, x + eventWidth, ys + 3);
-			//}
-		}
-	}
+            // otherwise doesn't make much sense
+            //if (xs != ge.getX()) {				
+            final int ys = y - spacer;
+            gc.setForeground(colorManager.getRevisedStartColor());
+            gc.drawLine(xs, ys, x, ys);
+            gc.drawLine(xs, ys - 3, xs, ys + 3);
+            gc.drawLine(x, ys - 3, x, ys + 3);
+            //}
+        }
+        if (event.getEndDate() != null) {
+            int xe = ganttComposite.getStartingXFor(event.getEndDate());
+            xe += ganttComposite.getDayWidth();
+            //if (xe != ge.getXEnd()) {
+            final int ys = y + settings.getEventHeight() + spacer;
+            gc.setForeground(colorManager.getRevisedEndColor());
+            gc.drawLine(xe, ys, x + eventWidth, ys);
+            gc.drawLine(xe, ys - 3, xe, ys + 3);
+            gc.drawLine(x + eventWidth, ys - 3, x + eventWidth, ys + 3);
+            //}
+        }
+    }
 
-	@Override
-	public void drawDaysOnChart(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int x, int y, int eventWidth, int daysNumber, Rectangle bounds) {
-		if (ge.isImage())
-			return;
+    public void drawDaysOnChart(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final boolean threeDee, final int x, final int y, final int eventWidth, final int daysNumber, final Rectangle bounds) {
+        if (event.isImage()) {
+            return;
+        }
 
-		int top = y - 2;
-		int xE = x + eventWidth;
-		int middle = x + ((xE - x) / 2);
-		int yMiddle = ge.getY() + (ge.getHeight() / 2);
+        final int top = y - 2;
+        final int xE = x + eventWidth;
+        final int middle = x + ((xE - x) / 2);
+        int yMiddle = event.getY() + (event.getHeight() / 2);
 
-		String dayString = ""+daysNumber;
-		
-		Point extent = gc.stringExtent(dayString);
-		Point unmodified = new Point(extent.x, extent.y);
-		extent.x = extent.x + (2 * 2); // 2 pixel spacing on 2 sides, for clarity's sake
+        final StringBuffer buf = new StringBuffer();
+        buf.append(daysNumber);
+        final String dayString = buf.toString();
 
-		Color gradient = ge.getGradientStatusColor();
+        final Point extent = gc.stringExtent(dayString);
+        final Point unmodified = new Point(extent.x, extent.y);
+        extent.x = extent.x + (2 * 2) + 2; // 2 pixel spacing on 2 sides, for clarity's sake
 
-		if (gradient == null)
-			gradient = settings.getDefaultGradientEventColor();
+        Color gradient = event.getGradientStatusColor();
 
-		if ((middle - extent.x) > x) {
-			gc.setBackground(gradient);
-			gc.fillRectangle(middle - extent.x / 2, top, extent.x, settings.getEventHeight() + 4);
-			gc.setForeground(colorManager.getTextColor());
-			gc.drawRectangle(middle - extent.x / 2, top, extent.x, settings.getEventHeight() + 4);
+        if (gradient == null) {
+            gradient = settings.getDefaultGradientEventColor();
+        }
 
-			yMiddle -= unmodified.y / 2;
-			gc.drawString(dayString, middle - unmodified.x + (unmodified.x / 2) + 1, yMiddle, true);
-		}
-	}
+        if ((middle - extent.x) > x) {
+            gc.setBackground(gradient);
+            gc.fillRectangle(middle - extent.x / 2, top, extent.x, settings.getEventHeight() + 4);
+            gc.setForeground(colorManager.getTextColor());
+            gc.drawRectangle(middle - extent.x / 2, top, extent.x, settings.getEventHeight() + 4);
 
-	@Override
-	public void drawEventString(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, String toDraw, boolean threeDee, int x, int y, int eventWidth, Rectangle bounds) {
-		int textEndX = 0;
-		int yTextPos = y + (ge.getHeight() / 2);
+            yMiddle -= unmodified.y / 2;
+            gc.drawString(dayString, middle - unmodified.x + (unmodified.x / 2) + 1, yMiddle, true);
+        }
+    }
 
-		Font oldFont = null;
+    public void drawEventString(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final String toDraw, final boolean threeDee, final int x, final int y, final int eventWidth, final Rectangle bounds) {
+        int textEndX = 0;
+        int yTextPos = y + (event.getHeight() / 2);
 
-		gc.setForeground(colorManager.getTextColor());
-		if (ge.showBoldText()) {
-			oldFont = gc.getFont();
-			FontData[] old = oldFont.getFontData();
-			old[0].setStyle(SWT.BOLD);
-			Font f = new Font(Display.getDefault(), old);
-			gc.setFont(f);
-			// DISPOSE FONT or we'll run out of handles
-			f.dispose();
-		}
-		
-		// font overrides a bold setting
-		if (ge.getTextFont() != null)
-			gc.setFont(ge.getTextFont());
+        Font oldFont = null;
 
-		Point toDrawExtent = ge.getNameExtent();
+        gc.setForeground(colorManager.getTextColor());
+        if (event.showBoldText()) {
+            oldFont = gc.getFont();
+            final FontData[] old = oldFont.getFontData();
+            old[0].setStyle(SWT.BOLD);
+            final Font f = new Font(Display.getDefault(), old);
+            gc.setFont(f);
+            // DISPOSE FONT or we'll run out of handles
+            f.dispose();
+        }
 
-		int textSpacer = ganttComposite.isConnected(ge) ? settings.getTextSpacerConnected() : settings.getTextSpacerNonConnected();
+        // font overrides a bold setting
+        if (event.getTextFont() != null) {
+            gc.setFont(event.getTextFont());
+        }
 
-		int textXStart = 0;
-		
-		// find the horizontal text location
-		switch (ge.getHorizontalTextLocation()) {
-			case SWT.LEFT:
-				textXStart = x - textSpacer - toDrawExtent.x;
-				break;
-			case SWT.CENTER:
-				textXStart = x + (eventWidth/2) - (toDrawExtent.x / 2);
-				break;
-			case SWT.RIGHT:
-				textXStart = x + eventWidth + textSpacer;
-				break;
-		}
-		
-		// find the vertical text location
-		switch (ge.getVerticalTextLocation()) {
-			case SWT.TOP:
-				yTextPos = ge.getY() - toDrawExtent.y;
-				break;
-			case SWT.CENTER:
-				yTextPos -= (toDrawExtent.y / 2) - 1;
-				break;
-			case SWT.BOTTOM:
-				yTextPos = ge.getBottomY();
-				break;
-		}
-		
-		gc.drawString(toDraw, textXStart, yTextPos, true);
-		int extra = textSpacer + toDrawExtent.x;
-		textEndX = x + eventWidth + extra;
+        final Point toDrawExtent = event.getNameExtent();
 
-		// draw lock icon if parent phase is locked
-		if (ge.isLocked()) {
-			Image lockImage = settings.getLockImage();
-			if (textEndX != 0 && lockImage != null) {
-				gc.drawImage(lockImage, textEndX, y);
-				extra += lockImage.getBounds().width;
-			}
-		}
+        final int textSpacer = ganttComposite.isConnected(event) ? settings.getTextSpacerConnected() : settings.getTextSpacerNonConnected();
 
-		// regardless of horizontal alignment, it will still add on, so we can leave this as is
-		ge.setWidthWithText(ge.getWidth() + extra);
+        int textXStart = 0;
 
-		// reset font
-		gc.setFont(oldFont);		
-	}
+        // find the horizontal text location
+        switch (event.getHorizontalTextLocation()) {
+            case SWT.LEFT:
+                textXStart = x - textSpacer - toDrawExtent.x;
+                break;
+            case SWT.CENTER:
+                textXStart = x + (eventWidth / 2) - (toDrawExtent.x / 2);
+                break;
+            case SWT.RIGHT:
+                //textXStart = x + eventWidth + textSpacer;
+            	int eventOrPictureWidth = eventWidth;
 
-	@Override
-	public void drawScope(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int dayWidth, int x, int y, int eventWidth, Rectangle bounds) {
-		List<GanttEvent> scopeEvents = ge.getScopeEvents();
+            	// bugzilla feature request #309808
+            	if (!settings.scaleImageToDayWidth() && event.getPicture() != null) {
+            		// the image is drawn centered, therefore consider only half of its width
+            		eventOrPictureWidth = Math.max(eventOrPictureWidth, event.getPicture().getImageData().width / 2);
+            	}
+            	
+            	textXStart = x + eventOrPictureWidth + textSpacer;
+                break;
+            default:
+                break;
+        }
 
-		// empty scope
-		if (scopeEvents.size() == 0)
-			return;
+        // find the vertical text location
+        switch (event.getVerticalTextLocation()) {
+            case SWT.TOP:
+                yTextPos = event.getY() - toDrawExtent.y;
+                break;
+            case SWT.CENTER:
+                yTextPos -= (toDrawExtent.y / 2) - 1;
+                break;
+            case SWT.BOTTOM:
+                yTextPos = event.getBottomY();
+                break;
+            default:
+                break;
+        }
 
-		gc.setForeground(colorManager.getScopeGradientColorTop());
-		gc.setBackground(colorManager.getScopeGradientColorBottom());
-		
-		gc.fillGradientRectangle(x, y, eventWidth, settings.getEventHeight() - 5, true);
-		gc.setForeground(colorManager.getScopeBorderColor());
-		gc.drawRectangle(new Rectangle(x, y, eventWidth, settings.getEventHeight() - 5));
+        gc.drawString(toDraw, textXStart, yTextPos, true);
+        int extra = textSpacer + toDrawExtent.x;
+        textEndX = x + eventWidth + extra;
 
-		gc.setForeground(colorManager.getScopeGradientColorTop());
-		gc.setBackground(colorManager.getScopeGradientColorBottom());
-		gc.fillGradientRectangle(x, y, dayWidth / 2, settings.getEventHeight(), true);
-		gc.fillGradientRectangle(x + eventWidth + (dayWidth / 2) - dayWidth, y, dayWidth / 2, settings.getEventHeight(), true);
+        // draw lock icon if parent phase is locked
+        if (event.isLocked()) {
+            final Image lockImage = settings.getLockImage();
+            if (textEndX != 0 && lockImage != null) {
+                gc.drawImage(lockImage, textEndX, y);
+                extra += lockImage.getBounds().width;
+            }
+        }
 
-		gc.setForeground(colorManager.getScopeBorderColor());
-		gc.drawRectangle(x, y, dayWidth / 2, settings.getEventHeight());
-		gc.drawRectangle(x + eventWidth + (dayWidth / 2) - dayWidth, y, dayWidth / 2, settings.getEventHeight());
+        // regardless of horizontal alignment, it will still add on, so we can leave this as is
+        event.setWidthWithText(event.getWidth() + extra);
 
-		if (threeDee) {
-			boolean alpha = (colorManager.useAlphaDrawing() || colorManager.useAlphaDrawingOn3DEventDropShadows());
-			if (alpha)
-				gc.setAlpha(200);
+        // reset font
+        gc.setFont(oldFont);
+    }
 
-			gc.setForeground(colorManager.getFadeOffColor1());
-			gc.drawLine(x, y + settings.getEventHeight() + 1, x + dayWidth / 2, y + settings.getEventHeight() + 1);
-			gc.drawLine(x + eventWidth - (dayWidth / 2), y + settings.getEventHeight() + 1, x + eventWidth, y + settings.getEventHeight() + 1);
-			gc.drawLine(x + (dayWidth / 2) + 1, y + settings.getEventHeight() - 4, x + eventWidth - (dayWidth / 2) - 1, y + settings.getEventHeight() - 4);
+    public void drawScope(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final boolean threeDee, final int dayWidth, final int x, final int y, final int eventWidth, final Rectangle bounds) {
+        final List scopeEvents = event.getScopeEvents();
 
-			if (alpha)
-				gc.setAlpha(100);
+        // empty scope
+        if (scopeEvents.isEmpty()) {
+            return;
+        }
 
-			gc.setForeground(colorManager.getFadeOffColor2());
-			gc.drawLine(x, y + settings.getEventHeight() + 2, x + dayWidth / 2, y + settings.getEventHeight() + 2);
-			gc.drawLine(x + eventWidth - (dayWidth / 2), y + settings.getEventHeight() + 2, x + eventWidth, y + settings.getEventHeight() + 2);
-			gc.drawLine(x + (dayWidth / 2) + 1, y + settings.getEventHeight() - 3, x + eventWidth - (dayWidth / 2) - 1, y + settings.getEventHeight() - 3);
+        gc.setForeground(colorManager.getScopeGradientColorTop());
+        gc.setBackground(colorManager.getScopeGradientColorBottom());
 
-			if (alpha)
-				gc.setAlpha(50);
+        gc.fillGradientRectangle(x, y, eventWidth, settings.getEventHeight() - 5, true);
+        gc.setForeground(colorManager.getScopeBorderColor());
+        gc.drawRectangle(new Rectangle(x, y, eventWidth, settings.getEventHeight() - 5));
 
-			gc.setForeground(colorManager.getFadeOffColor3());
-			gc.drawLine(x, y + settings.getEventHeight() + 3, x + dayWidth / 2, y + settings.getEventHeight() + 3);
-			gc.drawLine(x + eventWidth - (dayWidth / 2), y + settings.getEventHeight() + 3, x + eventWidth, y + settings.getEventHeight() + 3);
-			gc.drawLine(x + (dayWidth / 2) + 1, y + settings.getEventHeight() - 2, x + eventWidth - (dayWidth / 2) - 1, y + settings.getEventHeight() - 2);
+        gc.setForeground(colorManager.getScopeGradientColorTop());
+        gc.setBackground(colorManager.getScopeGradientColorBottom());
+        gc.fillGradientRectangle(x, y, dayWidth / 2, settings.getEventHeight(), true);
+        gc.fillGradientRectangle(x + eventWidth + (dayWidth / 2) - dayWidth, y, dayWidth / 2, settings.getEventHeight(), true);
 
-			if (alpha) {
-				gc.setAlpha(255);
-				gc.setAdvanced(false);
-			}
+        gc.setForeground(colorManager.getScopeBorderColor());
+        gc.drawRectangle(x, y, dayWidth / 2, settings.getEventHeight());
+        gc.drawRectangle(x + eventWidth + (dayWidth / 2) - dayWidth, y, dayWidth / 2, settings.getEventHeight());
 
-		}
+        if (threeDee) {
+            final boolean alpha = (colorManager.useAlphaDrawing() || colorManager.useAlphaDrawingOn3DEventDropShadows());
+            if (alpha) {
+                gc.setAlpha(200);
+            }
 
-	}
+            gc.setForeground(colorManager.getFadeOffColor1());
+            gc.drawLine(x, y + settings.getEventHeight() + 1, x + dayWidth / 2, y + settings.getEventHeight() + 1);
+            gc.drawLine(x + eventWidth - (dayWidth / 2), y + settings.getEventHeight() + 1, x + eventWidth, y + settings.getEventHeight() + 1);
+            gc.drawLine(x + (dayWidth / 2) + 1, y + settings.getEventHeight() - 4, x + eventWidth - (dayWidth / 2) - 1, y + settings.getEventHeight() - 4);
 
-	@Override
-	public void drawImage(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, Image image, boolean threeDee, int dayWidth, int x, int yStart, Rectangle fullBounds) {
+            if (alpha) {
+                gc.setAlpha(100);
+            }
 
-		int y = yStart;
-		
-		// draw a cross in a box if image is null
-		if (image == null) {
-			gc.setForeground(colorManager.getBlack());
-			gc.drawRectangle(x, y, dayWidth, settings.getEventHeight());
-			gc.drawLine(x, y, x + dayWidth, y + settings.getEventHeight());
-			gc.drawLine(x + dayWidth, y, x, y + settings.getEventHeight());
-			return;
-		}
+            gc.setForeground(colorManager.getFadeOffColor2());
+            gc.drawLine(x, y + settings.getEventHeight() + 2, x + dayWidth / 2, y + settings.getEventHeight() + 2);
+            gc.drawLine(x + eventWidth - (dayWidth / 2), y + settings.getEventHeight() + 2, x + eventWidth, y + settings.getEventHeight() + 2);
+            gc.drawLine(x + (dayWidth / 2) + 1, y + settings.getEventHeight() - 3, x + eventWidth - (dayWidth / 2) - 1, y + settings.getEventHeight() - 3);
 
-		// can it fit?
-		Rectangle bounds = image.getBounds();
-		if (bounds.width > dayWidth) {
-			// shrink image
-			ImageData id = image.getImageData();
-			int diff = id.width - dayWidth;
-			id.width -= diff;
-			id.height -= diff;
-			Image temp = new Image(Display.getDefault(), id);
+            if (alpha) {
+                gc.setAlpha(50);
+            }
 
-			int negY = (bounds.height - settings.getEventHeight());
-			if (negY > 0)
-				y += negY / 2;
+            gc.setForeground(colorManager.getFadeOffColor3());
+            gc.drawLine(x, y + settings.getEventHeight() + 3, x + dayWidth / 2, y + settings.getEventHeight() + 3);
+            gc.drawLine(x + eventWidth - (dayWidth / 2), y + settings.getEventHeight() + 3, x + eventWidth, y + settings.getEventHeight() + 3);
+            gc.drawLine(x + (dayWidth / 2) + 1, y + settings.getEventHeight() - 2, x + eventWidth - (dayWidth / 2) - 1, y + settings.getEventHeight() - 2);
 
-			gc.drawImage(temp, x, y);
-			temp.dispose();
-			return;
-		} else {
-			// center it x-wise
-			x -= (bounds.width - dayWidth) / 2;
-		}
+            if (alpha) {
+                gc.setAlpha(255);
+                gc.setAdvanced(false);
+            }
 
-		gc.drawImage(image, x, y);
-	}
+        }
 
-	@Override
-	public void drawArrowHead(int x, int y, int face, GC gc) {
-		switch (face) {
-			case SWT.UP:
-				gc.drawLine(x, y + 3, x, y + 3);
-				gc.drawLine(x - 1, y + 4, x + 1, y + 4);
-				gc.drawLine(x - 2, y + 5, x + 2, y + 5);
-				gc.drawLine(x - 3, y + 6, x + 3, y + 6);
-				gc.drawLine(x - 4, y + 7, x + 4, y + 7);
-				break;
-			case SWT.DOWN:
-				gc.drawLine(x, y + 7, x, y + 7);
-				gc.drawLine(x - 1, y + 6, x + 1, y + 6);
-				gc.drawLine(x - 2, y + 5, x + 2, y + 5);
-				gc.drawLine(x - 3, y + 4, x + 3, y + 4);
-				gc.drawLine(x - 4, y + 3, x + 4, y + 3);
-				break;
-			case SWT.RIGHT:
-				// don't need 1 as a line will be on it
-				gc.drawLine(x + 3, y - 4, x + 3, y + 4);
-				gc.drawLine(x + 4, y - 3, x + 4, y + 3);
-				gc.drawLine(x + 5, y - 2, x + 5, y + 2);
-				gc.drawLine(x + 6, y - 1, x + 6, y + 1);
-				break;
-			case SWT.LEFT:
-				// don't need 1 as a line will be on it
-				gc.drawLine(x - 3, y - 4, x - 3, y + 4);
-				gc.drawLine(x - 4, y - 3, x - 4, y + 3);
-				gc.drawLine(x - 5, y - 2, x - 5, y + 2);
-				gc.drawLine(x - 6, y - 1, x - 6, y + 1);
-				break;
-		}		
-	}
+    }
 
-	@Override
-	public void drawLockedDateRangeMarker(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int dayWidth, int y, int start, int end, Rectangle bounds) {		
-		int maxY = settings.getEventHeight();
-		int topY = y - 2;
-		int xEnd = end;
-		
-		gc.setForeground(ColorCache.getColor(188, 188, 188));
-		gc.setLineStyle(SWT.LINE_SOLID);
-		gc.setLineWidth(1);
-		
-		// we don't draw any extras on the hours view, it doesn't behave like the others
-		int extra = dayWidth;
-		if (ganttComposite.getCurrentView() == ISettings.VIEW_DAY)
-			extra = 0;
-		
-		if (start != -1 && xEnd != -1) {
-			// no need to draw beyond what we can see, and it's extremely slow to draw dots anyway, so we need this to be as fast as can be
-			if (start < 0)
-				start = -1;
-			if (xEnd > bounds.width)
-				xEnd = bounds.width + 1;
-			
-			// space it slightly or we'll draw on top of event borders
-			gc.drawRectangle(start-1, topY, xEnd-start+extra+2, maxY+4);
-		}
- 		else {
- 			//gc.setLineStyle(SWT.LINE_SOLID);
- 			if (start != -1) {
- 				gc.drawRectangle(start-4, topY+1, 2, 3+maxY);
- 				gc.drawLine(start-2, topY+1, start+5, topY+1);
- 				gc.drawLine(start-2, topY+4+maxY, start+5, topY+4+maxY);
- 			}
- 			if (xEnd != -1) {
- 				xEnd += extra;
- 				gc.drawRectangle(xEnd+2, topY+1, 2, 3+maxY);
- 				gc.drawLine(xEnd+2, topY+1, xEnd-5, topY+1);
- 				gc.drawLine(xEnd+2, topY+4+maxY, xEnd-5, topY+4+maxY); 				
- 			}
- 		}
-		
-		//gc.setLineWidth(1);
-		//gc.setLineStyle(SWT.LINE_SOLID);
-	}
+    public void drawImage(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final Image image, final boolean threeDee, final int dayWidth, final int xLoc, final int yStart, final Rectangle fullBounds) {
 
-	
+        int y = yStart;
+        int x = xLoc;
+
+        // draw a cross in a box if image is null
+        if (image == null) {
+            gc.setForeground(colorManager.getBlack());
+            gc.drawRectangle(x, y, dayWidth, settings.getEventHeight());
+            gc.drawLine(x, y, x + dayWidth, y + settings.getEventHeight());
+            gc.drawLine(x + dayWidth, y, x, y + settings.getEventHeight());
+            return;
+        }
+
+        // can it fit?
+        final Rectangle bounds = image.getBounds();
+        if (settings.scaleImageToDayWidth() && bounds.width > dayWidth) {
+            // shrink image
+            ImageData id = image.getImageData();
+            final int diff = id.width - dayWidth;
+            id.width -= diff;
+            id.height -= diff;
+            final Image temp = new Image(Display.getDefault(), id);
+
+            final int negY = (bounds.height - settings.getEventHeight());
+            if (negY > 0) {
+                y += negY / 2;
+            }
+
+            gc.drawImage(temp, x, y);
+            temp.dispose();
+            return;
+        } else {
+            // center it x-wise
+            x -= (bounds.width - dayWidth) / 2;
+        }
+
+        gc.drawImage(image, x, y);
+    }
+
+    public void drawArrowHead(final int x, final int y, final int face, final GC gc) {
+        switch (face) {
+            case SWT.UP:
+                gc.drawLine(x, y + 3, x, y + 3);
+                gc.drawLine(x - 1, y + 4, x + 1, y + 4);
+                gc.drawLine(x - 2, y + 5, x + 2, y + 5);
+                gc.drawLine(x - 3, y + 6, x + 3, y + 6);
+                gc.drawLine(x - 4, y + 7, x + 4, y + 7);
+                break;
+            case SWT.DOWN:
+                gc.drawLine(x, y + 7, x, y + 7);
+                gc.drawLine(x - 1, y + 6, x + 1, y + 6);
+                gc.drawLine(x - 2, y + 5, x + 2, y + 5);
+                gc.drawLine(x - 3, y + 4, x + 3, y + 4);
+                gc.drawLine(x - 4, y + 3, x + 4, y + 3);
+                break;
+            case SWT.RIGHT:
+                // don't need 1 as a line will be on it
+                gc.drawLine(x + 3, y - 4, x + 3, y + 4);
+                gc.drawLine(x + 4, y - 3, x + 4, y + 3);
+                gc.drawLine(x + 5, y - 2, x + 5, y + 2);
+                gc.drawLine(x + 6, y - 1, x + 6, y + 1);
+                break;
+            case SWT.LEFT:
+                // don't need 1 as a line will be on it
+                gc.drawLine(x - 3, y - 4, x - 3, y + 4);
+                gc.drawLine(x - 4, y - 3, x - 4, y + 3);
+                gc.drawLine(x - 5, y - 2, x - 5, y + 2);
+                gc.drawLine(x - 6, y - 1, x - 6, y + 1);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void drawLockedDateRangeMarker(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent ge, final GC gc, final boolean threeDee, final int dayWidth, final int y, final int startLoc, final int end, final Rectangle bounds) {
+        int start = startLoc;
+        final int maxY = settings.getEventHeight();
+        final int topY = y - 2;
+        int xEnd = end;
+
+        gc.setForeground(ColorCache.getColor(188, 188, 188));
+        gc.setLineStyle(SWT.LINE_SOLID);
+        gc.setLineWidth(1);
+
+        // we don't draw any extras on the hours view, it doesn't behave like the others
+        int extra = dayWidth;
+        if (ganttComposite.getCurrentView() == ISettings.VIEW_DAY) {
+            extra = 0;
+        }
+
+        if (start != -1 && xEnd != -1) {
+            // no need to draw beyond what we can see, and it's extremely slow to draw dots anyway, so we need this to be as fast as can be
+            if (start < 0) {
+                start = -1;
+            }
+            if (xEnd > bounds.width) {
+                xEnd = bounds.width + 1;
+            }
+
+            // space it slightly or we'll draw on top of event borders
+            gc.drawRectangle(start - 1, topY, xEnd - start + extra + 2, maxY + 4);
+        } else {
+            //gc.setLineStyle(SWT.LINE_SOLID);
+            if (start != -1) {
+                gc.drawRectangle(start - 4, topY + 1, 2, 3 + maxY);
+                gc.drawLine(start - 2, topY + 1, start + 5, topY + 1);
+                gc.drawLine(start - 2, topY + 4 + maxY, start + 5, topY + 4 + maxY);
+            }
+            if (xEnd != -1) {
+                xEnd += extra;
+                gc.drawRectangle(xEnd + 2, topY + 1, 2, 3 + maxY);
+                gc.drawLine(xEnd + 2, topY + 1, xEnd - 5, topY + 1);
+                gc.drawLine(xEnd + 2, topY + 4 + maxY, xEnd - 5, topY + 4 + maxY);
+            }
+        }
+
+        //gc.setLineWidth(1);
+        //gc.setLineStyle(SWT.LINE_SOLID);
+    }
+
 }
