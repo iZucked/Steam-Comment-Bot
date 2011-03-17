@@ -6,18 +6,24 @@
 package com.mmxlabs.jobcontroller.core;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import org.eclipse.core.resources.IResource;
 
 /**
  * @author Simon Goodall
- *
+ * 
  */
 public final class JobManager implements IJobManager {
 
 	private final List<IManagedJob> jobs = new LinkedList<IManagedJob>();
+
+	private final Map<IManagedJob, IResource> jobResourceMap = new HashMap<IManagedJob, IResource>();
 
 	private final List<IManagedJob> selectedJobs = new LinkedList<IManagedJob>();
 
@@ -41,8 +47,12 @@ public final class JobManager implements IJobManager {
 	 * .core.IManagedJob)
 	 */
 	@Override
-	public void addJob(final IManagedJob job) {
+	public void addJob(final IManagedJob job, final IResource resource) {
 		jobs.add(job);
+		IResource oldResource = jobResourceMap.put(job, resource);
+		if (oldResource !=null) {
+			throw new IllegalStateException("Job already exists - state is now inconsistent!");
+		}
 
 		fireJobAdded(job);
 	}
@@ -62,6 +72,7 @@ public final class JobManager implements IJobManager {
 		jobs.remove(job);
 
 		fireJobRemoved(job);
+		jobResourceMap.remove(job);
 	}
 
 	/*
@@ -94,8 +105,10 @@ public final class JobManager implements IJobManager {
 	 * @param job
 	 */
 	private void fireJobAdded(final IManagedJob job) {
+		IResource resource = jobResourceMap.get(job);
+
 		for (final IJobManagerListener l : jobManagerListeners) {
-			l.jobAdded(this, job);
+			l.jobAdded(this, job, resource);
 		}
 	}
 
@@ -103,8 +116,11 @@ public final class JobManager implements IJobManager {
 	 * @param job
 	 */
 	private void fireJobRemoved(final IManagedJob job) {
+
+		IResource resource = jobResourceMap.get(job);
+
 		for (final IJobManagerListener l : jobManagerListeners) {
-			l.jobRemoved(this, job);
+			l.jobRemoved(this, job, resource);
 		}
 	}
 
@@ -112,8 +128,10 @@ public final class JobManager implements IJobManager {
 	 * @param job
 	 */
 	private void fireJobSelected(final IManagedJob job) {
+		IResource resource = jobResourceMap.get(job);
+
 		for (final IJobManagerListener l : jobManagerListeners) {
-			l.jobSelected(this, job);
+			l.jobSelected(this, job, resource);
 		}
 	}
 
@@ -121,12 +139,16 @@ public final class JobManager implements IJobManager {
 	 * @param job
 	 */
 	private void fireJobDeselected(final IManagedJob job) {
+		IResource resource = jobResourceMap.get(job);
+
 		for (final IJobManagerListener l : jobManagerListeners) {
-			l.jobDeselected(this, job);
+			l.jobDeselected(this, job, resource);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.jobcontroller.core.IJobManager#getSelectedJobs()
 	 */
 	@Override
@@ -134,8 +156,12 @@ public final class JobManager implements IJobManager {
 		return selectedJobs;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.jobcontroller.core.IJobManager#toggleJobSelection(com.mmxlabs.jobcontroller.core.IManagedJob)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.mmxlabs.jobcontroller.core.IJobManager#toggleJobSelection(com.mmxlabs
+	 * .jobcontroller.core.IManagedJob)
 	 */
 	@Override
 	public void toggleJobSelection(final IManagedJob job) {
@@ -148,7 +174,7 @@ public final class JobManager implements IJobManager {
 			while (selectedJobs.isEmpty() == false) {
 				deselectJob(selectedJobs.get(0));
 			}
-			
+
 			selectJob(job);
 		}
 	}
@@ -171,5 +197,21 @@ public final class JobManager implements IJobManager {
 	private void deselectJob(final IManagedJob job) {
 		selectedJobs.remove(job);
 		fireJobDeselected(job);
+	}
+
+	@Override
+	public IManagedJob findJobForResource(IResource resource) {
+		for (Map.Entry<IManagedJob, IResource> entry : jobResourceMap
+				.entrySet()) {
+			if (entry.getValue().equals(resource)) {
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public IResource findResourceForJob(IManagedJob job) {
+		return jobResourceMap.get(job);
 	}
 }
