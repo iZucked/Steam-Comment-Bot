@@ -48,7 +48,7 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 		private final List<Object> sequence;
 		private final List<IVoyagePlanChoice> choices;
 		
-		private final int loadPrice, dischargePrice;
+		private final int dischargePrice;
 		
 		protected List<Integer> arrivalTimes;
 
@@ -84,12 +84,13 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 			this.choices = choices;
 			
 			if (loadix != -1 && dischargeix != -1) {
-				loadPrice = 
-					((ILoadSlot) slots[loadix]).getPurchasePriceAtTime(arrivalTimes.get(loadix));
+//				loadPrice = 
+//					((ILoadSlot) slots[loadix]).getPurchasePriceAtTime(arrivalTimes.get(loadix));
 				dischargePrice = 
 					((IDischargeSlot) slots[dischargeix]).getSalesPriceAtTime(arrivalTimes.get(dischargeix));
 			} else {
-				loadPrice = dischargePrice = -1;
+//				loadPrice = 
+				dischargePrice = -1;
 			}
 		}
 
@@ -101,7 +102,7 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 			result = prime * result + Arrays.hashCode(slots);
 			result = prime * result + Arrays.hashCode(times);
 			
-			result = prime * result + loadPrice;
+//			result = prime * result + loadPrice;
 			result = prime * result + dischargePrice;
 			
 			result = prime * result
@@ -128,7 +129,7 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 				Equality.shallowEquals(slots, other.slots) 
 				&&(vessel == other.vessel)&&
 				Arrays.equals(times, other.times) &&
-				loadPrice == other.loadPrice &&
+//				loadPrice == other.loadPrice &&
 				dischargePrice == other.dischargePrice;
 		}
 	}
