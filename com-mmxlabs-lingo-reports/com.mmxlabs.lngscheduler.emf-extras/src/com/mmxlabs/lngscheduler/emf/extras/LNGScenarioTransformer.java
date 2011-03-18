@@ -30,6 +30,11 @@ import scenario.ScenarioPackage;
 import scenario.cargo.Cargo;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.NetbackPurchaseContract;
+import scenario.contract.ProfitSharingPurchaseContract;
+import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.CharterOut;
@@ -67,7 +72,13 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.NetbackContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.ProfitSharingContract;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing
@@ -149,7 +160,8 @@ public class LNGScenarioTransformer {
 			curve.setDefaultValue(curveModel.getDefaultValue());
 			for (final StepwisePrice price : curveModel.getPrices()) {
 				final int hours = convertTime(price.getDate());
-				curve.setValueAfter(hours, price.getPriceFromDate());
+				curve.setValueAfter(hours,
+						Calculator.scaleToInt(price.getPriceFromDate()));
 			}
 
 			marketAssociation.add(market, curve);
@@ -189,8 +201,46 @@ public class LNGScenarioTransformer {
 		buildDistances(builder, portAssociation, allPorts, portIndices,
 				vesselAssociations.getFirst());
 
+		/**
+		 * Next create the contract logic models
+		 */
+
+		final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation = new Association<PurchaseContract, ILoadPriceCalculator>();
+
+		for (final PurchaseContract c : scenario.getContractModel()
+				.getPurchaseContracts()) {
+			final ILoadPriceCalculator calculator;
+			if (c instanceof FixedPricePurchaseContract) {
+				calculator = builder.createFixedPriceContract(Calculator
+						.scaleToInt(((FixedPricePurchaseContract) c)
+								.getUnitPrice()));
+			} else if (c instanceof MarketPricePurchaseContract) {
+				calculator = builder
+						.createMarketPriceContract(marketAssociation
+								.lookup(((MarketPricePurchaseContract) c)
+										.getMarket()));
+			} else if (c instanceof ProfitSharingPurchaseContract) {
+				final ProfitSharingPurchaseContract p = (ProfitSharingPurchaseContract) c;
+				calculator = builder.createProfitSharingContract(
+						marketAssociation.lookup(p.getMarket()),
+						marketAssociation.lookup(p.getReferenceMarket()),
+						Calculator.scaleToInt(p.getAlpha()),
+						Calculator.scaleToInt(p.getBeta()),
+						Calculator.scaleToInt(p.getGamma()));
+			} else if (c instanceof NetbackPurchaseContract) {
+				calculator = builder.createNetbackContract(Calculator
+						.scaleToInt(((NetbackPurchaseContract) c)
+								.getBuyersMargin()));
+			} else {
+				throw new RuntimeException("Unknown class of contract : "
+						+ c.eClass().getName());
+			}
+
+			purchaseContractAssociation.add(c, calculator);
+		}
+
 		buildCargoes(builder, portAssociation, marketAssociation,
-				vesselAssociations.getSecond(), entities);
+				vesselAssociations.getSecond(), entities, purchaseContractAssociation);
 
 		buildCharterOuts(builder, portAssociation,
 				vesselAssociations.getFirst(), vesselAssociations.getSecond(),
@@ -287,12 +337,15 @@ public class LNGScenarioTransformer {
 	 *            built
 	 * @param marketAssociation
 	 * @param entities
+	 * @param purchaseContractAssociation
 	 */
-	private void buildCargoes(final SchedulerBuilder builder,
+	private void buildCargoes(
+			final SchedulerBuilder builder,
 			final Association<Port, IPort> ports,
 			final Association<Market, ICurve> marketAssociation,
 			final Association<Vessel, IVessel> vesselAssociation,
-			final ModelEntityMap entities) {
+			final ModelEntityMap entities,
+			final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation) {
 		for (Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
@@ -309,18 +362,17 @@ public class LNGScenarioTransformer {
 					dischargeStart,
 					dischargeStart + dischargeSlot.getWindowDuration());
 
-			
-			final Market loadMarket = loadSlot.isSetMarket() ? loadSlot
-					.getMarket() : loadSlot.getPort().getDefaultMarket();
+			final Market dischargeMarket = ((SalesContract) dischargeSlot
+					.getContract()).getMarket();
 
-			
-			final Market dischargeMarket = ((SalesContract)dischargeSlot.getContract()).getMarket();
+			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot
+					.getContract());
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(),
 					ports.lookup(loadSlot.getPort()), loadWindow,
 					Calculator.scale(loadSlot.getMinQuantity()),
 					Calculator.scale(loadSlot.getMaxQuantity()),
-					marketAssociation.lookup(loadMarket),
+					purchaseContractAssociation.lookup(purchaseContract),
 					(int) Calculator.scale(loadSlot.getCargoCVvalue()),
 					dischargeSlot.getSlotDuration());
 
