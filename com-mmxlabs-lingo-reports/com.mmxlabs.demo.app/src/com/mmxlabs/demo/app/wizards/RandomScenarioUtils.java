@@ -264,7 +264,7 @@ public class RandomScenarioUtils {
 		int dischargePrice = 5000;
 		final long now = new Date().getTime();
 		dischargeCurve.setDefaultValue(dischargePrice / (float)Calculator.ScaleFactor);
-		loadCurve.setDefaultValue((dischargePrice - 200)/ / (float)Calculator.ScaleFactor);
+		loadCurve.setDefaultValue((dischargePrice - 200) / (float)Calculator.ScaleFactor);
 
 		for (int i = 0; i < scenarioDuration; i += 30) {
 			final Date forwardDate = new Date(now + i * Timer.ONE_DAY);
