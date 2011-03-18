@@ -111,7 +111,6 @@ import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselStateAttributes;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
-import scenario.market.MarketPackage;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
@@ -1060,7 +1059,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							cargoPackage.getCargo_DischargeSlot());
 				}
 
-				// TODO sort out initial vessel
+				// TODO sort out initial vessel column
 
 				cargoPane.getViewer().setInput(
 						editingDomain.getResourceSet().getResources().get(0)
@@ -1075,10 +1074,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 
 			{
-				// final Composite fleetComposite = new
-				// Composite(getContainer(), SWT.NONE);
-				// fleetComposite.setLayout(new GridLayout(1, false));
-
 				final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
 
 				final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
