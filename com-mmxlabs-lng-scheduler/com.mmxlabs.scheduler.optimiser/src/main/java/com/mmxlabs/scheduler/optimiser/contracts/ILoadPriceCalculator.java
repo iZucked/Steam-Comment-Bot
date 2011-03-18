@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 /**
  * Interface for objects which calculate a load price from various parameters
@@ -13,5 +14,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public interface ILoadPriceCalculator {
-	public int calculateLoadUnitPrice(final VoyagePlan voyagePlan);
+	public int calculateLoadUnitPrice(final int loadTime,
+			final long loadVolume, final int dischargeTime,
+			final int actualSalesPrice, final int cvValue,
+			final VoyageDetails ladenLeg, final VoyageDetails ballastLeg,
+			final IVesselClass vesselClass);
 }

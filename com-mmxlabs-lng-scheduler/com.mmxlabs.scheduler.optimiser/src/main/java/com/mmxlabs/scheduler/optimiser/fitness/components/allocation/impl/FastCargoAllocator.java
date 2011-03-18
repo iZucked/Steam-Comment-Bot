@@ -17,7 +17,10 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * A faster than LP cargo allocator. Does a bit of finagling to make it all
@@ -52,11 +55,11 @@ public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
 	}
 
 	@Override
-	public void addCargo(PortDetails loadDetails, PortDetails dischargeDetails,
-			int loadTime, int dischargeTime, long requiredLoadVolume,
-			long vesselCapacity) {
-		super.addCargo(loadDetails, dischargeDetails, loadTime, dischargeTime,
-				requiredLoadVolume, vesselCapacity);
+	public void addCargo(final VoyagePlan plan, PortDetails loadDetails, VoyageDetails ladenLeg,
+			PortDetails dischargeDetails, VoyageDetails ballastLeg, int loadTime, int dischargeTime,
+			long requiredLoadVolume, IVesselClass vesselClass) {
+		super.addCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, loadTime, dischargeTime,
+				requiredLoadVolume, vesselClass);
 
 		cargoConstraints.add(new Pair<Integer, Integer>(volumeConstraintMap
 				.get(loadDetails.getPortSlot()), volumeConstraintMap
@@ -171,15 +174,15 @@ public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
 					Math.min(Math.min(loadSlack, dischargeSlack), slack1),
 					slack2), cargoSlack);
 
-//			System.err.println("Load SV Slack:" + slack1);
-//			System.err.println("Discharge SV Slack:" + slack2);
-//			
-//			System.err.println("Load Slot Slack:" + loadSlack);
-//			System.err.println("Discharge Slot Slack:" + dischargeSlack);
-//			System.err.println("Vessel Slack:" + cargoSlack);
-//			
-//			System.err.println("Allocated: " + allocation);
-			
+			// System.err.println("Load SV Slack:" + slack1);
+			// System.err.println("Discharge SV Slack:" + slack2);
+			//
+			// System.err.println("Load Slot Slack:" + loadSlack);
+			// System.err.println("Discharge Slot Slack:" + dischargeSlack);
+			// System.err.println("Vessel Slack:" + cargoSlack);
+			//
+			// System.err.println("Allocated: " + allocation);
+
 			if (constraintIndices.getFirst() != null)
 				remainders[constraintIndices.getFirst()] -= allocation;
 			if (constraintIndices.getSecond() != null)

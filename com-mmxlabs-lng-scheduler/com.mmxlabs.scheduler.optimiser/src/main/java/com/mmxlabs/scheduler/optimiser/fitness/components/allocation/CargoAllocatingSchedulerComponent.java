@@ -16,11 +16,13 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.fitness.components.AbstractSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.FastCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -92,16 +94,19 @@ public class CargoAllocatingSchedulerComponent<T> extends
 	public void startSequence(final IResource resource,
 			final boolean sequenceHasChanged) {
 		loadDetails = null;
-		vesselCapacity = vesselProvider.getVessel(resource).getVesselClass()
-				.getCargoCapacity();
+		lastVoyagePlan = null;
+		vesselClass = vesselProvider.getVessel(resource).getVesselClass();
 		loadTime = 0;
 	}
 
 	private PortDetails loadDetails = null;
 
-	private long vesselCapacity;
+	private IVesselClass vesselClass;
 	private long capacityUsedForFuel;
 	private int loadTime;
+	private VoyagePlan lastVoyagePlan = null;
+	private VoyageDetails lastVoyage;
+	private VoyageDetails voyageBeforeLast;
 
 	/*
 	 * (non-Javadoc)
@@ -121,12 +126,17 @@ public class CargoAllocatingSchedulerComponent<T> extends
 			} else if (slot instanceof IDischargeSlot) {
 				assert loadDetails != null;
 
-				allocator.addCargo(loadDetails, portDetails, loadTime, time,
-						capacityUsedForFuel, vesselCapacity);
+				//TODO does not handle possible port visits between load and discharge
+				allocator.addCargo(lastVoyagePlan, loadDetails,
+						voyageBeforeLast, portDetails, lastVoyage, loadTime,
+						time, capacityUsedForFuel, vesselClass);
 
 				loadDetails = null;
 				capacityUsedForFuel = 0;
 			}
+		} else if (object instanceof VoyageDetails) {
+			voyageBeforeLast = lastVoyage;
+			lastVoyage = (VoyageDetails) object;
 		}
 		return true;
 	}
@@ -134,6 +144,7 @@ public class CargoAllocatingSchedulerComponent<T> extends
 	@Override
 	public boolean nextVoyagePlan(final VoyagePlan voyagePlan, final int time) {
 		capacityUsedForFuel = voyagePlan.getLNGFuelVolume();
+		lastVoyagePlan = voyagePlan;
 		return true;
 	}
 
@@ -159,9 +170,9 @@ public class CargoAllocatingSchedulerComponent<T> extends
 	@Override
 	public long endEvaluationAndGetCost() {
 		allocator.solve();
-//-allocator.getProfit()
+		// -allocator.getProfit()
 		return setLastEvaluatedFitness(0); // cost is just
-																// the p&l.
+											// the p&l.
 	}
 
 	/**
@@ -169,28 +180,30 @@ public class CargoAllocatingSchedulerComponent<T> extends
 	 */
 	@Override
 	public void endEvaluationAndAnnotate(IAnnotatedSolution<T> solution) {
-		allocator.solve(); //don't store the value
+		allocator.solve(); // don't store the value
 
 		final IAnnotations<T> elementAnnotations = solution
 				.getElementAnnotations();
 
 		final List<IAllocationAnnotation> allocations = new LinkedList<IAllocationAnnotation>();
-		
+
 		// now add some more data for each load slot
-		for (final IAllocationAnnotation annotation : allocator.getAllocations()) {
-			final T loadElement = portSlotProvider
-					.getElement(annotation.getLoadSlot());
-			final T dischargeElement = portSlotProvider
-					.getElement(annotation.getDischargeSlot());
+		for (final IAllocationAnnotation annotation : allocator
+				.getAllocations()) {
+			final T loadElement = portSlotProvider.getElement(annotation
+					.getLoadSlot());
+			final T dischargeElement = portSlotProvider.getElement(annotation
+					.getDischargeSlot());
 
 			allocations.add(annotation);
-			
+
 			elementAnnotations.setAnnotation(loadElement,
 					SchedulerConstants.AI_volumeAllocationInfo, annotation);
 			elementAnnotations.setAnnotation(dischargeElement,
 					SchedulerConstants.AI_volumeAllocationInfo, annotation);
 		}
-		
-		solution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, allocations);
+
+		solution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations,
+				allocations);
 	}
 }

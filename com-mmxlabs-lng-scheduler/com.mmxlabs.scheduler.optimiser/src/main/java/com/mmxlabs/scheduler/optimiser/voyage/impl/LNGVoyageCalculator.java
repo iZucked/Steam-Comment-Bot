@@ -12,6 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -420,8 +421,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					.getPortSlot();
 
 			// Store unit prices for later on
-			loadUnitPrice = loadSlot
-					.getPurchasePriceAtTime(arrivalTimes[loadIdx / 2]);
+			// loadUnitPrice = loadSlot
+			// .getPurchasePriceAtTime(arrivalTimes[loadIdx / 2]);
 			dischargeUnitPrice = dischargeSlot
 					.getSalesPriceAtTime(arrivalTimes[dischargeIdx / 2]);
 
@@ -430,8 +431,6 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 			dischargeM3Price = (int) Calculator.multiply(dischargeUnitPrice,
 					cargoCVValue);
-			loadM3Price = (int) Calculator
-					.multiply(loadUnitPrice, cargoCVValue);
 
 			lngConsumed = fuelConsumptions[FuelComponent.NBO.ordinal()]
 					+ fuelConsumptions[FuelComponent.FBO.ordinal()]
@@ -550,16 +549,16 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				.costFromConsumption(
 						fuelConsumptions[FuelComponent.IdleBase.ordinal()],
 						baseFuelPricePerMT));
-		
+
 		voyagePlan.setTotalFuelCost(FuelComponent.PilotLight, Calculator
 				.costFromConsumption(
 						fuelConsumptions[FuelComponent.PilotLight.ordinal()],
 						baseFuelPricePerMT));
-		voyagePlan.setTotalFuelCost(FuelComponent.IdlePilotLight, Calculator
-				.costFromConsumption(
-						fuelConsumptions[FuelComponent.IdlePilotLight.ordinal()],
-						baseFuelPricePerMT));
-
+		voyagePlan
+				.setTotalFuelCost(FuelComponent.IdlePilotLight, Calculator
+						.costFromConsumption(
+								fuelConsumptions[FuelComponent.IdlePilotLight
+										.ordinal()], baseFuelPricePerMT));
 
 		/**
 		 * The opportunity cost of burning a unit of LNG for fuel; it doesn't
@@ -586,6 +585,24 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		voyagePlan.setLNGFuelVolume(lngConsumed);
 
 		voyagePlan.setLoadVolume(loadVolumeInM3);
+
+		// compute load price after everything else, because it needs to know
+		// about
+		// the previous fields
+		if (loadIdx != -1 && dischargeIdx != -1) {
+			final ILoadPriceCalculator loadPriceCalculator = ((ILoadSlot) ((PortDetails) sequence[loadIdx])
+					.getPortSlot()).getLoadPriceCalculator();
+			loadUnitPrice = loadPriceCalculator.calculateLoadUnitPrice(
+					arrivalTimes[loadIdx / 2], loadVolumeInM3,
+					arrivalTimes[dischargeIdx / 2], dischargeUnitPrice,
+					cargoCVValue, (VoyageDetails) sequence[loadIdx + 1],
+					(VoyageDetails) sequence[dischargeIdx + 1], vesselClass);
+			// .calculateLoadUnitPrice(voyagePlan, arrivalTimes[loadIdx / 2],
+			// arrivalTimes[dischargeIdx / 2]);
+			loadM3Price = (int) Calculator
+					.multiply(loadUnitPrice, cargoCVValue);
+		}
+
 		long purchaseCost = Calculator.multiply(loadM3Price, loadVolumeInM3);
 		voyagePlan.setPurchaseCost(purchaseCost);
 
@@ -595,6 +612,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		voyagePlan.setSalesRevenue(salesRevenue);
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
+
 	}
 
 	@Override

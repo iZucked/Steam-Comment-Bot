@@ -57,8 +57,8 @@ public final class Calculator {
 		return (int) (quantity / rate);
 	}
 
-	public static long costFromConsumption(final long consumption, final int unitPrice) {
-		return (consumption * (long)unitPrice) / ScaleFactor;
+	public static long costFromConsumption(final long consumption, final long notionalFuelCost) {
+		return (consumption * (long)notionalFuelCost) / ScaleFactor;
 	}
 
 	public static long convertM3ToMMBTu(final long m3, final int factor) {

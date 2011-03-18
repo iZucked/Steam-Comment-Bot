@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,10 +13,13 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Base class for allocating load/discharge volumes; doesn't implement the
@@ -62,10 +64,10 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 	 * The discharge slot for each cargo.
 	 */
 	final ArrayList<IDischargeSlot> dischargeSlots = new ArrayList<IDischargeSlot>();
-	
-	final ArrayList<Integer> loadPrices =  new ArrayList<Integer>();
-	final ArrayList<Integer> dischargePrices =  new ArrayList<Integer>();
-	
+
+	final ArrayList<Integer> loadPrices = new ArrayList<Integer>();
+	final ArrayList<Integer> dischargePrices = new ArrayList<Integer>();
+
 	int cargoCount;
 
 	private long[] allocation;
@@ -108,7 +110,7 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		dischargeSlots.clear();
 		vesselCapacity.clear();
 		forcedLoadVolume.clear();
-		
+
 		loadPrices.clear();
 		dischargePrices.clear();
 	}
@@ -123,11 +125,12 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 	 * long)
 	 */
 	@Override
-	public void addCargo(final PortDetails loadDetails,
-			final PortDetails dischargeDetails, final int loadTime,
+	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails,
+			final VoyageDetails ladenLeg, final PortDetails dischargeDetails,
+			final VoyageDetails ballastLeg, final int loadTime,
 			final int dischargeTime, final long requiredLoadVolume,
-			final long vesselCapacity) {
-
+			final IVesselClass vesselClass) {
+		final long vesselCapacity = vesselClass.getCargoCapacity();
 		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
 		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails
 				.getPortSlot();
@@ -137,7 +140,7 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 
 		loadSlots.add(loadSlot);
 		dischargeSlots.add(dischargeSlot);
-		
+
 		// store the current cargo index (variable index in the LP) so that we
 		// can reverse-lookup from slots to LP variables
 		final Integer ci = cargoCount;
@@ -149,15 +152,29 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		this.vesselCapacity.add(vesselCapacity);
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
-		
-		final int loadCVPrice = loadSlot.getPurchasePriceAtTime(loadTime);
-		final int dischargeCVPrice = dischargeSlot.getSalesPriceAtTime(dischargeTime); 
-		
+
+		// compute purchase price from contract
+		// this is not ideal.
+		final int dischargeCVPrice = dischargeSlot
+				.getSalesPriceAtTime(dischargeTime);
+		final long maximumDischargeVolume = Math.min(vesselCapacity
+				- requiredLoadVolume, loadSlot.getMaxLoadVolume()
+				- requiredLoadVolume);
+
+		// TODO this value is incorrect for netback and profit sharing cases
+		// the load CV price is the notional maximum price
+		// if we load less, it might actually be worth less
+
+		final int loadCVPrice = loadSlot.getLoadPriceCalculator()
+				.calculateLoadUnitPrice(loadTime, (int) maximumDischargeVolume,
+						dischargeTime, dischargeCVPrice, cargoCVValue,
+						ladenLeg, ballastLeg, vesselClass);
+
 		final int dischargeM3Price = (int) Calculator.multiply(
 				dischargeCVPrice, cargoCVValue);
-		final int loadM3Price = (int) Calculator.multiply(
-				loadCVPrice, cargoCVValue);
-		
+		final int loadM3Price = (int) Calculator.multiply(loadCVPrice,
+				cargoCVValue);
+
 		loadPrices.add(loadM3Price);
 		dischargePrices.add(dischargeM3Price);
 
@@ -231,19 +248,27 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 					@Override
 					public IAllocationAnnotation next() {
 						final AllocationAnnotation annotation = new AllocationAnnotation();
-						
+
 						final ILoadSlot loadSlot = loadIterator.next();
-						final IDischargeSlot dischargeSlot = dischargeIterator.next();
-						
+						final IDischargeSlot dischargeSlot = dischargeIterator
+								.next();
+
 						annotation.setLoadSlot(loadSlot);
 						annotation.setDischargeSlot(dischargeSlot);
-						annotation.setFuelVolume(forcedLoadVolume.get(allocationIndex));
-						annotation.setLoadM3Price(loadPrices.get(allocationIndex));
-						annotation.setDischargeM3Price(dischargePrices.get(allocationIndex));
+						annotation.setFuelVolume(forcedLoadVolume
+								.get(allocationIndex));
+
+						// TODO recompute load price here; this is not correct.
+						annotation.setLoadM3Price(loadPrices
+								.get(allocationIndex));
+						annotation.setDischargeM3Price(dischargePrices
+								.get(allocationIndex));
 						annotation.setLoadTime(slotTimes.get(loadSlot));
-						annotation.setDischargeTime(slotTimes.get(dischargeSlot));
-						annotation.setDischargeVolume(allocation[allocationIndex++]);
-						
+						annotation.setDischargeTime(slotTimes
+								.get(dischargeSlot));
+						annotation
+								.setDischargeVolume(allocation[allocationIndex++]);
+
 						return annotation;
 					}
 

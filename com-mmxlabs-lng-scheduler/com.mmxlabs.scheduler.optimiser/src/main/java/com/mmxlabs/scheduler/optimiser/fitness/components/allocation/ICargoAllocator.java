@@ -5,14 +5,19 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
  * 
  * @param <T>
  */
-public interface ICargoAllocator<T> {	
+public interface ICargoAllocator<T> {
 	public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider<T> tvlp);
 
 	public abstract void init();
@@ -43,10 +48,13 @@ public interface ICargoAllocator<T> {
 	 *            the capacity of the vessel to which this cargo has been
 	 *            allocated
 	 */
-	public abstract void addCargo(final PortDetails loadDetails,
-			final PortDetails dischargeDetails, final int loadTime,
-			final int dischargeTime, final long requiredLoadVolume,
-			final long vesselCapacity);
+	public abstract void addCargo(final VoyagePlan plan,
+			final PortDetails loadDetails, 
+			final VoyageDetails ladenLeg,
+			final PortDetails dischargeDetails,
+			final VoyageDetails ballastLeg,
+			final int loadTime, final int dischargeTime,
+			final long requiredLoadVolume, final IVesselClass vesselClass);
 
 	public abstract void solve();
 

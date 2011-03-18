@@ -74,6 +74,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.TotalVolumeLimit;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListCargoAllocationEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
@@ -273,7 +274,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolumeInM3,
-			final long maxVolumeInM3, final ICurve pricePerMMBTu,
+			final long maxVolumeInM3, final ILoadPriceCalculator loadContract,
 			final int cargoCVValue, final int durationHours) {
 
 		if (!ports.contains(port)) {
@@ -291,7 +292,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setTimeWindow(window);
 		slot.setMinLoadVolume(minVolumeInM3);
 		slot.setMaxLoadVolume(maxVolumeInM3);
-		slot.setPurchasePriceCurve(pricePerMMBTu);
+//		slot.setPurchasePriceCurve(pricePerMMBTu);
+		slot.setLoadPriceCalculator(loadContract);
 		slot.setCargoCVValue(cargoCVValue);
 
 		loadSlots.add(slot);
