@@ -61,7 +61,7 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int PRICE_FROM_DATE_EDEFAULT = 0;
+	protected static final float PRICE_FROM_DATE_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getPriceFromDate() <em>Price From Date</em>}' attribute.
@@ -71,7 +71,7 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	 * @generated
 	 * @ordered
 	 */
-	protected int priceFromDate = PRICE_FROM_DATE_EDEFAULT;
+	protected float priceFromDate = PRICE_FROM_DATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -118,7 +118,7 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getPriceFromDate() {
+	public float getPriceFromDate() {
 		return priceFromDate;
 	}
 
@@ -127,8 +127,8 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPriceFromDate(int newPriceFromDate) {
-		int oldPriceFromDate = priceFromDate;
+	public void setPriceFromDate(float newPriceFromDate) {
+		float oldPriceFromDate = priceFromDate;
 		priceFromDate = newPriceFromDate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.STEPWISE_PRICE__PRICE_FROM_DATE, oldPriceFromDate, priceFromDate));
@@ -162,7 +162,7 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 				setDate((Date)newValue);
 				return;
 			case MarketPackage.STEPWISE_PRICE__PRICE_FROM_DATE:
-				setPriceFromDate((Integer)newValue);
+				setPriceFromDate((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

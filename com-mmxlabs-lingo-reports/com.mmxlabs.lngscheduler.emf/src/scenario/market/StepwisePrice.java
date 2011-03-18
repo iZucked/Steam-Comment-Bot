@@ -63,12 +63,12 @@ public interface StepwisePrice extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Price From Date</em>' attribute.
-	 * @see #setPriceFromDate(int)
+	 * @see #setPriceFromDate(float)
 	 * @see scenario.market.MarketPackage#getStepwisePrice_PriceFromDate()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getPriceFromDate();
+	float getPriceFromDate();
 
 	/**
 	 * Sets the value of the '{@link scenario.market.StepwisePrice#getPriceFromDate <em>Price From Date</em>}' attribute.
@@ -78,6 +78,6 @@ public interface StepwisePrice extends EObject {
 	 * @see #getPriceFromDate()
 	 * @generated
 	 */
-	void setPriceFromDate(int value);
+	void setPriceFromDate(float value);
 
 } // StepwisePrice

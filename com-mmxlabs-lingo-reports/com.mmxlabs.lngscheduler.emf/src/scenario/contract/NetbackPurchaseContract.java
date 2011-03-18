@@ -16,6 +16,7 @@ package scenario.contract;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.contract.NetbackPurchaseContract#getLowerBound <em>Lower Bound</em>}</li>
+ *   <li>{@link scenario.contract.NetbackPurchaseContract#getBuyersMargin <em>Buyers Margin</em>}</li>
  * </ul>
  * </p>
  *
@@ -49,5 +50,31 @@ public interface NetbackPurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setLowerBound(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Buyers Margin</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Buyers Margin</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Buyers Margin</em>' attribute.
+	 * @see #setBuyersMargin(float)
+	 * @see scenario.contract.ContractPackage#getNetbackPurchaseContract_BuyersMargin()
+	 * @model required="true"
+	 * @generated
+	 */
+	float getBuyersMargin();
+
+	/**
+	 * Sets the value of the '{@link scenario.contract.NetbackPurchaseContract#getBuyersMargin <em>Buyers Margin</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Buyers Margin</em>' attribute.
+	 * @see #getBuyersMargin()
+	 * @generated
+	 */
+	void setBuyersMargin(float value);
 
 } // NetbackPurchaseContract

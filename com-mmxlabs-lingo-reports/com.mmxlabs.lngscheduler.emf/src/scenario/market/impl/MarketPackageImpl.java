@@ -345,7 +345,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 
 		initEClass(stepwisePriceEClass, StepwisePrice.class, "StepwisePrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStepwisePrice_Date(), ecorePackage.getEDate(), "date", null, 1, 1, StepwisePrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getStepwisePrice_PriceFromDate(), ecorePackage.getEInt(), "priceFromDate", null, 1, 1, StepwisePrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStepwisePrice_PriceFromDate(), ecorePackage.getEFloat(), "priceFromDate", null, 1, 1, StepwisePrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //MarketPackageImpl

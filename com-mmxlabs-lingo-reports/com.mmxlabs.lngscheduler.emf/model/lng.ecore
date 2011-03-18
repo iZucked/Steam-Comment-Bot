@@ -523,8 +523,21 @@
     <eClassifiers xsi:type="ecore:EClass" name="NetbackPurchaseContract" eSuperTypes="#//contract/PurchaseContract">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="buyersMargin" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ProfitSharingPurchaseContract" eSuperTypes="#//contract/PurchaseContract"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProfitSharingPurchaseContract" eSuperTypes="#//contract/PurchaseContract">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
+          eType="#//market/Market"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referenceMarket" lowerBound="1"
+          eType="#//market/Market"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="alpha" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="beta" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="gamma" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Contract" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
           eType="#//contract/Entity"/>
@@ -548,7 +561,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceFromDate" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="optimiser" nsURI="http://com.mmxlabs.lng.emf/optimiser" nsPrefix="com.mmxlabs.lng.emf.optimiser">

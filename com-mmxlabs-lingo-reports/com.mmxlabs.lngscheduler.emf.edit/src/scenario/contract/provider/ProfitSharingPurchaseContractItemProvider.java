@@ -13,6 +13,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -20,6 +21,9 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
+import scenario.contract.ContractPackage;
 import scenario.contract.ProfitSharingPurchaseContract;
 
 /**
@@ -57,8 +61,123 @@ public class ProfitSharingPurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addMarketPropertyDescriptor(object);
+			addReferenceMarketPropertyDescriptor(object);
+			addAlphaPropertyDescriptor(object);
+			addBetaPropertyDescriptor(object);
+			addGammaPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Market feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarketPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharingPurchaseContract_market_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_market_feature", "_UI_ProfitSharingPurchaseContract_type"),
+				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__MARKET,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Reference Market feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReferenceMarketPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharingPurchaseContract_referenceMarket_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_referenceMarket_feature", "_UI_ProfitSharingPurchaseContract_type"),
+				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Alpha feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAlphaPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharingPurchaseContract_alpha_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_alpha_feature", "_UI_ProfitSharingPurchaseContract_type"),
+				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Beta feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBetaPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharingPurchaseContract_beta_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_beta_feature", "_UI_ProfitSharingPurchaseContract_type"),
+				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__BETA,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Gamma feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGammaPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharingPurchaseContract_gamma_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_gamma_feature", "_UI_ProfitSharingPurchaseContract_type"),
+				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -96,6 +215,14 @@ public class ProfitSharingPurchaseContractItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(ProfitSharingPurchaseContract.class)) {
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

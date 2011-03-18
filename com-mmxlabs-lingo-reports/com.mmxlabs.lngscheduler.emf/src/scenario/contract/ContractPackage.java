@@ -612,13 +612,22 @@ public interface ContractPackage extends EPackage {
 	int NETBACK_PURCHASE_CONTRACT__LOWER_BOUND = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Buyers Margin</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__BUYERS_MARGIN = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Netback Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NETBACK_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+	int NETBACK_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -667,13 +676,58 @@ public interface ContractPackage extends EPackage {
 	int PROFIT_SHARING_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
 
 	/**
+	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__MARKET = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Reference Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Alpha</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Beta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__BETA = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Gamma</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Profit Sharing Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+	int PROFIT_SHARING_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -951,6 +1005,17 @@ public interface ContractPackage extends EPackage {
 	EAttribute getNetbackPurchaseContract_LowerBound();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.NetbackPurchaseContract#getBuyersMargin <em>Buyers Margin</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Buyers Margin</em>'.
+	 * @see scenario.contract.NetbackPurchaseContract#getBuyersMargin()
+	 * @see #getNetbackPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getNetbackPurchaseContract_BuyersMargin();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.contract.ProfitSharingPurchaseContract <em>Profit Sharing Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -959,6 +1024,61 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getProfitSharingPurchaseContract();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.contract.ProfitSharingPurchaseContract#getMarket <em>Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Market</em>'.
+	 * @see scenario.contract.ProfitSharingPurchaseContract#getMarket()
+	 * @see #getProfitSharingPurchaseContract()
+	 * @generated
+	 */
+	EReference getProfitSharingPurchaseContract_Market();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.contract.ProfitSharingPurchaseContract#getReferenceMarket <em>Reference Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Reference Market</em>'.
+	 * @see scenario.contract.ProfitSharingPurchaseContract#getReferenceMarket()
+	 * @see #getProfitSharingPurchaseContract()
+	 * @generated
+	 */
+	EReference getProfitSharingPurchaseContract_ReferenceMarket();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.ProfitSharingPurchaseContract#getAlpha <em>Alpha</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Alpha</em>'.
+	 * @see scenario.contract.ProfitSharingPurchaseContract#getAlpha()
+	 * @see #getProfitSharingPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getProfitSharingPurchaseContract_Alpha();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.ProfitSharingPurchaseContract#getBeta <em>Beta</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Beta</em>'.
+	 * @see scenario.contract.ProfitSharingPurchaseContract#getBeta()
+	 * @see #getProfitSharingPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getProfitSharingPurchaseContract_Beta();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.ProfitSharingPurchaseContract#getGamma <em>Gamma</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Gamma</em>'.
+	 * @see scenario.contract.ProfitSharingPurchaseContract#getGamma()
+	 * @see #getProfitSharingPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getProfitSharingPurchaseContract_Gamma();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.contract.Contract <em>Contract</em>}'.
@@ -1212,6 +1332,14 @@ public interface ContractPackage extends EPackage {
 		EAttribute NETBACK_PURCHASE_CONTRACT__LOWER_BOUND = eINSTANCE.getNetbackPurchaseContract_LowerBound();
 
 		/**
+		 * The meta object literal for the '<em><b>Buyers Margin</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NETBACK_PURCHASE_CONTRACT__BUYERS_MARGIN = eINSTANCE.getNetbackPurchaseContract_BuyersMargin();
+
+		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl <em>Profit Sharing Purchase Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1220,6 +1348,46 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PROFIT_SHARING_PURCHASE_CONTRACT = eINSTANCE.getProfitSharingPurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_SHARING_PURCHASE_CONTRACT__MARKET = eINSTANCE.getProfitSharingPurchaseContract_Market();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET = eINSTANCE.getProfitSharingPurchaseContract_ReferenceMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Alpha</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA = eINSTANCE.getProfitSharingPurchaseContract_Alpha();
+
+		/**
+		 * The meta object literal for the '<em><b>Beta</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARING_PURCHASE_CONTRACT__BETA = eINSTANCE.getProfitSharingPurchaseContract_Beta();
+
+		/**
+		 * The meta object literal for the '<em><b>Gamma</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA = eINSTANCE.getProfitSharingPurchaseContract_Gamma();
 
 		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.ContractImpl <em>Contract</em>}' class.

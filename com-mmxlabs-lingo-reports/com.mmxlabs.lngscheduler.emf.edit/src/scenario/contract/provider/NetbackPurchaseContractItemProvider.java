@@ -62,6 +62,7 @@ public class NetbackPurchaseContractItemProvider
 			super.getPropertyDescriptors(object);
 
 			addLowerBoundPropertyDescriptor(object);
+			addBuyersMarginPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -84,6 +85,28 @@ public class NetbackPurchaseContractItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Buyers Margin feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBuyersMarginPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NetbackPurchaseContract_buyersMargin_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_buyersMargin_feature", "_UI_NetbackPurchaseContract_type"),
+				 ContractPackage.Literals.NETBACK_PURCHASE_CONTRACT__BUYERS_MARGIN,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -126,6 +149,7 @@ public class NetbackPurchaseContractItemProvider
 
 		switch (notification.getFeatureID(NetbackPurchaseContract.class)) {
 			case ContractPackage.NETBACK_PURCHASE_CONTRACT__LOWER_BOUND:
+			case ContractPackage.NETBACK_PURCHASE_CONTRACT__BUYERS_MARGIN:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
