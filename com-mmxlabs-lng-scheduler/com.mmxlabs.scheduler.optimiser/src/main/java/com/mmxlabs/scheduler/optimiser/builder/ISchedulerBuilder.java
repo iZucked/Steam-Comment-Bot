@@ -399,4 +399,13 @@ public interface ISchedulerBuilder {
 	 */
 	void addTotalVolumeConstraint(Set<IPort> ports, boolean loads,
 			boolean discharges, long maximumTotalVolume, ITimeWindow timeWindow);
+
+	ILoadPriceCalculator createFixedPriceContract(int pricePerMMBTU);
+
+	ILoadPriceCalculator createMarketPriceContract(ICurve index);
+
+	ILoadPriceCalculator createProfitSharingContract(ICurve actualMarket,
+			ICurve referenceMarket, int alpha, int beta, int gamma);
+
+	ILoadPriceCalculator createNetbackContract(int buyersMargin);
 }

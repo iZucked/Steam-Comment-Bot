@@ -75,6 +75,10 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.NetbackContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.ProfitSharingContract;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListCargoAllocationEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
@@ -1114,5 +1118,25 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				portSlotsProvider.getElement(loadSlot), resources);
 		resourceAllocationProvider.setAllowedResources(
 				portSlotsProvider.getElement(dischargeSlot), resources);
+	}
+
+	@Override
+	public ILoadPriceCalculator createFixedPriceContract(int pricePerMMBTU) {
+		return new FixedPriceContract(pricePerMMBTU);
+	}
+
+	@Override
+	public ILoadPriceCalculator createMarketPriceContract(ICurve index) {
+		return new MarketPriceContract(index);
+	}
+
+	@Override
+	public ILoadPriceCalculator createProfitSharingContract(ICurve actualMarket,
+			ICurve referenceMarket, int alpha, int beta, int gamma) {
+		return new ProfitSharingContract(actualMarket, referenceMarket, alpha, beta, gamma);
+	}
+	@Override
+	public ILoadPriceCalculator createNetbackContract(int buyersMargin) {
+		return new NetbackContract(buyersMargin, portDistanceProvider);
 	}
 }
