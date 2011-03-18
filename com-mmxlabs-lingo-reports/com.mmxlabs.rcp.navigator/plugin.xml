@@ -5,9 +5,9 @@
          point="org.eclipse.ui.views">
       <view
             class="com.mmxlabs.rcp.navigator.TheNavigator"
-            icon="icons/sample.gif"
+            icon="icons/eview16/exec_statistic_view.gif"
             id="com.mmxlabs.rcp.navigator"
-            name="My Common Navigator">
+            name="Scenario Navigator">
       </view>
    </extension>
    <extension
