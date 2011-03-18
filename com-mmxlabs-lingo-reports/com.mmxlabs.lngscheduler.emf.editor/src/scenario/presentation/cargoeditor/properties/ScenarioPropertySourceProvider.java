@@ -7,6 +7,7 @@ package scenario.presentation.cargoeditor.properties;
 import java.util.ArrayList;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -20,6 +21,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
+
+import scenario.presentation.cargoeditor.celleditors.SpinnerCellEditor;
 
 import com.mmxlabs.common.Pair;
 
@@ -38,15 +41,39 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 			protected IPropertySource createPropertySource(Object object,
 					IItemPropertySource itemPropertySource) {
 				return new PropertySource(object, itemPropertySource) {
-
+					// TODO really we need to override the
+					// itemPropertyDescriptor to do this properly.
 					@Override
 					protected IPropertyDescriptor createPropertyDescriptor(
-							IItemPropertyDescriptor itemPropertyDescriptor) {
+							final IItemPropertyDescriptor itemPropertyDescriptor) {
 						return new PropertyDescriptor(object,
 								itemPropertyDescriptor) {
-							// TODO we can probably override cell editor
-							// generation in here, as we now have access to the
-							// stuff we need
+							@Override
+							public CellEditor createPropertyEditor(
+									final Composite composite) {
+								return super.createPropertyEditor(composite);
+							}
+
+							@Override
+							protected CellEditor createEDataTypeCellEditor(
+									EDataType eDataType, Composite composite) {
+								if (eDataType.equals(ecorePackage.getEInt())
+										|| eDataType.equals(ecorePackage
+												.getELong())
+										|| eDataType.equals(ecorePackage
+												.getEFloat())) {
+									final SpinnerCellEditor editor = new SpinnerCellEditor(
+											composite);
+									editor.setDigits(eDataType
+											.equals(ecorePackage.getEFloat()) ? 3
+											: 0);
+									editor.setMaximumValue(10000000);
+									return editor;
+								} else {
+									return super.createEDataTypeCellEditor(
+											eDataType, composite);
+								}
+							}
 						};
 					}
 				};
