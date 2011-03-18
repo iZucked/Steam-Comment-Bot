@@ -47,6 +47,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 
 /**
  * Implementation of {@link ISchedulerBuilder}
@@ -87,7 +88,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolume,
-			final long maxVolume, final ICurve unitPrice, int cargoCVValue, final int duration) {
+			final long maxVolume, final ILoadPriceCalculator unitPrice, int cargoCVValue, final int duration) {
 
 		ILoadSlot slot = delegate.createLoadSlot(id, port, window, minVolume,
 				maxVolume, unitPrice, cargoCVValue, duration);
@@ -457,5 +458,28 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	public void setVesselClassRouteTimeAndFuel(String name, IVesselClass vc,
 			int time, long fuel) {
 		delegate.setVesselClassRouteTimeAndFuel(name, vc, time, fuel);
+	}
+
+	@Override
+	public ILoadPriceCalculator createFixedPriceContract(int pricePerMMBTU) {
+		return delegate.createFixedPriceContract(pricePerMMBTU);
+		
+	}
+
+	@Override
+	public ILoadPriceCalculator createMarketPriceContract(ICurve index) {
+		return delegate.createMarketPriceContract(index);
+	}
+
+	@Override
+	public ILoadPriceCalculator createProfitSharingContract(
+			ICurve actualMarket, ICurve referenceMarket, int alpha, int beta,
+			int gamma) {
+		return delegate.createProfitSharingContract(actualMarket, referenceMarket, alpha, beta, gamma);
+	}
+
+	@Override
+	public ILoadPriceCalculator createNetbackContract(int buyersMargin) {
+		return delegate.createNetbackContract(buyersMargin);
 	}
 }
