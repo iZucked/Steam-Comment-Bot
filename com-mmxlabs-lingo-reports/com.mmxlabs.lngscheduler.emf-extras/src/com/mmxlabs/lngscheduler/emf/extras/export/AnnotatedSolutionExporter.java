@@ -35,6 +35,7 @@ import scenario.schedule.fleetallocation.FleetVessel;
 import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
+import com.mmxlabs.lngscheduler.emf.extras.pandl.ProfitAndLossCalculator;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
@@ -254,6 +255,10 @@ public class AnnotatedSolutionExporter {
 
 		outputFitnesses.add(eIters);
 
+		final ProfitAndLossCalculator pAndL = new ProfitAndLossCalculator();
+		
+		pAndL.addProfitAndLoss(inputScenario, output, entities);
+		
 		return output;
 	}
 }
