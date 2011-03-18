@@ -75,7 +75,7 @@ public interface StepwisePriceCurve extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" dateRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return 0;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final EList<StepwisePrice> prices = getPrices();\n\njava.util.Collections.sort(prices,\nnew java.util.Comparator<StepwisePrice>() {\n\tpublic int compare(StepwisePrice a, StepwisePrice b) {\n\t\treturn a.getDate().compareTo(b.getDate());\n\t}\n});\n\nfloat previousPrice = getDefaultValue();\nfor (final StepwisePrice p : prices) {\n\tif (p.getDate().after(date)) {\n\t\treturn previousPrice;\n\t}\n\tpreviousPrice = p.getPriceFromDate();\n}\nreturn previousPrice;'"
 	 * @generated
 	 */
 	float getValueAtDate(Date date);

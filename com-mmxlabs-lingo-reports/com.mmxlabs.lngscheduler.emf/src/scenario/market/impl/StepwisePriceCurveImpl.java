@@ -131,7 +131,23 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * @generated
 	 */
 	public float getValueAtDate(Date date) {
-		return 0;
+		final EList<StepwisePrice> prices = getPrices();
+		
+		java.util.Collections.sort(prices,
+		new java.util.Comparator<StepwisePrice>() {
+			public int compare(StepwisePrice a, StepwisePrice b) {
+				return a.getDate().compareTo(b.getDate());
+			}
+		});
+		
+		float previousPrice = getDefaultValue();
+		for (final StepwisePrice p : prices) {
+			if (p.getDate().after(date)) {
+				return previousPrice;
+			}
+			previousPrice = p.getPriceFromDate();
+		}
+		return previousPrice;
 	}
 
 	/**
