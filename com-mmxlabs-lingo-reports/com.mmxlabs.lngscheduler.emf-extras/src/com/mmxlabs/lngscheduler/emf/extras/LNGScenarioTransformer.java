@@ -30,6 +30,7 @@ import scenario.ScenarioPackage;
 import scenario.cargo.Cargo;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.contract.SalesContract;
 import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.CharterOut;
 import scenario.fleet.FuelConsumptionLine;
@@ -308,11 +309,12 @@ public class LNGScenarioTransformer {
 					dischargeStart,
 					dischargeStart + dischargeSlot.getWindowDuration());
 
+			
 			final Market loadMarket = loadSlot.isSetMarket() ? loadSlot
 					.getMarket() : loadSlot.getPort().getDefaultMarket();
 
-			final Market dischargeMarket = dischargeSlot.isSetMarket() ? dischargeSlot
-					.getMarket() : dischargeSlot.getPort().getDefaultMarket();
+			
+			final Market dischargeMarket = ((SalesContract)dischargeSlot.getContract()).getMarket();
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(),
 					ports.lookup(loadSlot.getPort()), loadWindow,
@@ -432,12 +434,9 @@ public class LNGScenarioTransformer {
 							VesselState.Ballast,
 							Calculator.scale(classCost.getUnladenCost()));
 
-					builder.setVesselClassRouteTimeAndFuel(
-							name,
-							vc,
+					builder.setVesselClassRouteTimeAndFuel(name, vc,
 							classCost.getTransitTime(),
-							Calculator.scale(classCost.getTransitFuel()
-									/ 24));
+							Calculator.scale(classCost.getTransitFuel() / 24));
 				}
 			}
 		}
@@ -462,8 +461,8 @@ public class LNGScenarioTransformer {
 		 * Build the fleet model - first we must create the vessel classes from
 		 * the model
 		 */
-		Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<VesselClass, IVesselClass>();
-		Association<Vessel, IVessel> vesselAssociation = new Association<Vessel, IVessel>();
+		final Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<VesselClass, IVesselClass>();
+		final Association<Vessel, IVessel> vesselAssociation = new Association<Vessel, IVessel>();
 		// TODO: Check that we are mutliplying/dividing correctly to maintain
 		// precision
 
