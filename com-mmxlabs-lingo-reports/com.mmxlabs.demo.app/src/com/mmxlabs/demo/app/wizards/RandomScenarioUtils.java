@@ -148,93 +148,107 @@ public class RandomScenarioUtils {
 
 	public Scenario addDefaultFleet(final Scenario scenario, final int spotCount) {
 		// generate the standard fleet
-		VesselClass class1 = addVesselClass(scenario, "STEAM-138", 12, 20,
-				138000, 200);
-		VesselClass class2 = addVesselClass(scenario, "STEAM-145", 12, 20,
-				145000, 200);
-		VesselClass class3 = addVesselClass(scenario, "DFDE-177", 12, 16,
-				177000, 200); // TODO different from testutils, because the
+		VesselClass steam_138 = addVesselClass(scenario, "STEAM-138", 12, 19.5f,
+				138000, 400);
+		VesselClass steam_145 = addVesselClass(scenario, "STEAM-145", 12, 19.5f,
+				145000, 400);
+		VesselClass dfde_177 = addVesselClass(scenario, "DFDE-177", 12, 19.5f,
+				177000, 600); // TODO different from testutils, because the
 								// curve for DFDE doesn't contain a speed of 20.
-		VesselClass class4 = addVesselClass(scenario, "STEAM-126", 12, 19.5f,
-				138000, 200); // TODO units in the model; should it be a float?
+		VesselClass steam_126 = addVesselClass(scenario, "STEAM-126", 12, 19.5f,
+				138000, 400); // TODO units in the model; should it be a float?
 
-		// TODO 0,0 points are fake, to make boiloff numbers fit in the curve.
-		float[][] steam = new float[][] { { 0, 0 }, { 12, 12 }, { 20, 20 } };
-		float[][] dfde = new float[][] { { 0, 0 }, { 12, 8 }, { 20, 16 } };
-
+		float[][] steamLaden = new float[][] { { 12, 91 }, { 13, 100 }, { 14, 115}, {15, 125},
+				{16, 140}, {17, 150}, {18, 160}, {19, 176}, {19.5f, 190}
+		};
+		float[][] dfdeLaden = new float[][] { 
+				{12, 50}, {13, 65}, {14, 74}, {15, 85}, {16, 100}, {17, 110}, {18, 120}, {19, 133}, {19.5f, 145}
+		};
+		
+		float[][] steamBallast = new float[steamLaden.length][2];
+		for (int i = 0; i<steamLaden.length; i++) {
+			steamBallast[i][0] = steamLaden[i][0];
+			steamBallast[i][1] = 0.94f * steamLaden[i][1]; 
+		}
+		float[][] dfdeBallast = new float[dfdeLaden.length][2];
+		for (int i = 0; i<dfdeBallast.length; i++) {
+			dfdeBallast[i][0] = dfdeLaden[i][0];
+			dfdeBallast[i][1] = 0.94f * dfdeLaden[i][1]; 
+		}
+		
 		// create class parameters; currently model uses containment for curves,
 		// so we need to do duplicates
-		class1.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f,
-				steam));
-		class1.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 1.38f / 24.0f, 1.18f / 24.0f, 1 / 24.0f,
-				steam));
-		class1.setBaseFuelEquivalenceFactor(0.5f);
+		steam_138.setLadenAttributes(createVesselStateAttributes(
+				VesselState.LADEN, 200, 180, 50,
+				steamLaden));
+		steam_138.setBallastAttributes(createVesselStateAttributes(
+				VesselState.BALLAST, 180, 100, 50,
+				steamBallast));
+		steam_138.setBaseFuelEquivalenceFactor(0.5f);
 
-		class2.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f,
-				steam));
-		class2.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 1.45f / 24.0f, 1.25f / 24.0f, 1 / 24.0f,
-				steam));
-		class2.setBaseFuelEquivalenceFactor(0.5f);
+		steam_145.setLadenAttributes(createVesselStateAttributes(
+				VesselState.LADEN, 200,180,50,
+				steamLaden));
+		steam_145.setBallastAttributes(createVesselStateAttributes(
+				VesselState.BALLAST, 180,100,50,
+				steamBallast));
+		steam_145.setBaseFuelEquivalenceFactor(0.5f);
 
-		class3.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f,
-				dfde));
-		class3.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 1.77f / 24.0f, 1.57f / 24.0f, 1 / 24.0f,
-				dfde));
-		class3.setBaseFuelEquivalenceFactor(0.5f);
+		dfde_177.setLadenAttributes(createVesselStateAttributes(
+				VesselState.LADEN, 230,210,50,
+				dfdeLaden));
+		dfde_177.setBallastAttributes(createVesselStateAttributes(
+				VesselState.BALLAST, 180,100,50,
+				dfdeBallast));
+		dfde_177.setBaseFuelEquivalenceFactor(0.5f);
 
-		class4.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 1.26f / 24.0f, 1.06f / 24.0f, 1 / 24.0f,
-				steam));
-		class4.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 1.25f / 24.0f, 1.06f / 24.0f, 1 / 24.0f,
-				steam));
-		class4.setBaseFuelEquivalenceFactor(0.5f);
+		steam_126.setLadenAttributes(createVesselStateAttributes(
+				VesselState.LADEN, 200,180,50,
+				steamLaden));
+		steam_126.setBallastAttributes(createVesselStateAttributes(
+				VesselState.BALLAST, 180,100,50,
+				steamBallast));
+		steam_126.setBaseFuelEquivalenceFactor(0.5f);
 
-		class1.setSpotCharterCount(spotCount);
-		class2.setSpotCharterCount(spotCount);
-		class3.setSpotCharterCount(spotCount);
-		class4.setSpotCharterCount(spotCount);
+		steam_138.setSpotCharterCount(spotCount);
+		steam_145.setSpotCharterCount(spotCount);
+		dfde_177.setSpotCharterCount(spotCount);
+		steam_126.setSpotCharterCount(spotCount);
 
 		// create vessels in each class
 
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Kari Elin", class1));
+				addVessel(scenario, "Methane Kari Elin", steam_138));
 
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Rita Andrea", class2));
+				addVessel(scenario, "Methane Rita Andrea", steam_145));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Jane Elizabeth", class2));
+				addVessel(scenario, "Methane Jane Elizabeth", steam_145));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Lydon Volney", class2));
+				addVessel(scenario, "Methane Lydon Volney", steam_145));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Shirley Elizabeth", class2));
+				addVessel(scenario, "Methane Shirley Elizabeth", steam_145));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Heather Sally", class2));
+				addVessel(scenario, "Methane Heather Sally", steam_145));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Alison Victoria", class2));
+				addVessel(scenario, "Methane Alison Victoria", steam_145));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Nile Eagle", class2));
+				addVessel(scenario, "Methane Nile Eagle", steam_145));
 
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Julia Louise", class3));
+				addVessel(scenario, "Methane Julia Louise", dfde_177));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Becki Anne", class3));
+				addVessel(scenario, "Methane Becki Anne", dfde_177));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Mickie Harper", class3));
+				addVessel(scenario, "Methane Mickie Harper", dfde_177));
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Patricia Camila", class3));
+				addVessel(scenario, "Methane Patricia Camila", dfde_177));
 
-		addVessel(scenario, "Hilli", class4);
-		addVessel(scenario, "Gimi", class4);
-		addVessel(scenario, "Khannur", class4);
-		addVessel(scenario, "Golar Freeze", class4);
-		addVessel(scenario, "Methane Princes", class1);
+		addVessel(scenario, "Hilli", steam_126);
+		addVessel(scenario, "Gimi", steam_126);
+		addVessel(scenario, "Khannur", steam_126);
+		addVessel(scenario, "Golar Freeze", steam_126);
+		addVessel(scenario, "Methane Princes", steam_138);
 		return scenario;
 	}
 
@@ -693,12 +707,12 @@ public class RandomScenarioUtils {
 	}
 
 	private VesselClass addVesselClass(Scenario scenario, String name,
-			int minSpeed, float f, long capacity, int baseFuelUnitPrice) {
+			int minSpeed, float maxSpeed, long capacity, int baseFuelUnitPrice) {
 		VesselClass vc = fleetFactory.createVesselClass();
 
 		vc.setName(name);
 		vc.setMinSpeed(minSpeed);
-		vc.setMaxSpeed(f);
+		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
 		vc.setBaseFuelUnitPrice(baseFuelUnitPrice);
 		vc.setDailyCharterPrice(40000);
