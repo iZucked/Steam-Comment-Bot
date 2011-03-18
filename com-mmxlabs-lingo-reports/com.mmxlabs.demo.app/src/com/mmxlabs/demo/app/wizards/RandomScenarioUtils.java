@@ -30,6 +30,12 @@ import scenario.cargo.CargoFactory;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.contract.ContractFactory;
+import scenario.contract.ContractPackage;
+import scenario.contract.Entity;
+import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.PurchaseContract;
+import scenario.contract.SalesContract;
 import scenario.fleet.CharterOut;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
@@ -199,9 +205,9 @@ public class RandomScenarioUtils {
 
 		randomiseAvailability(scenario,
 				addVessel(scenario, "Methane Kari Elin", class1));
-		
+
 		randomiseAvailability(scenario,
-				addVessel(scenario, "Methane Rita Andrea", class2));		
+				addVessel(scenario, "Methane Rita Andrea", class2));
 		randomiseAvailability(scenario,
 				addVessel(scenario, "Methane Jane Elizabeth", class2));
 		randomiseAvailability(scenario,
@@ -257,8 +263,8 @@ public class RandomScenarioUtils {
 		// though.
 		int dischargePrice = 5000;
 		final long now = new Date().getTime();
-		dischargeCurve.setDefaultValue(dischargePrice);
-		loadCurve.setDefaultValue(dischargePrice - 200);
+		dischargeCurve.setDefaultValue(dischargePrice / (float)Calculator.ScaleFactor);
+		loadCurve.setDefaultValue((dischargePrice - 200)/ / (float)Calculator.ScaleFactor);
 
 		for (int i = 0; i < scenarioDuration; i += 30) {
 			final Date forwardDate = new Date(now + i * Timer.ONE_DAY);
@@ -271,13 +277,13 @@ public class RandomScenarioUtils {
 															// getting cheap.
 
 			price.setDate(forwardDate);
-			price.setPriceFromDate(dischargePrice);
+			price.setPriceFromDate(dischargePrice / (float)Calculator.ScaleFactor);
 
 			dischargeCurve.getPrices().add(price);
 
 			final StepwisePrice loadPrice = marketFactory.createStepwisePrice();
 			loadPrice.setDate(forwardDate);
-			loadPrice.setPriceFromDate(dischargePrice - 200);
+			loadPrice.setPriceFromDate((dischargePrice - 200) / (float)Calculator.ScaleFactor);
 			loadCurve.getPrices().add(loadPrice);
 		}
 
@@ -285,6 +291,41 @@ public class RandomScenarioUtils {
 		scenario.getMarketModel().getMarkets().add(loadMarket);
 		scenario.getMarketModel().getMarkets().add(dischargeMarket);
 
+		
+
+		final ContractFactory contractFactory = ContractPackage.eINSTANCE
+				.getContractFactory();
+		
+		final Entity loadEntity = contractFactory.createEntity();
+		final Entity shipEntity = contractFactory.createEntity();
+		final Entity dischargeEntity = contractFactory.createEntity();
+		
+		loadEntity.setName("load entity");
+		dischargeEntity.setName("discharge entity");
+		shipEntity.setName("shipping entity");
+		
+		scenario.setContractModel(contractFactory.createContractModel());
+		scenario.getContractModel().getEntities().add(loadEntity);
+		scenario.getContractModel().getEntities().add(shipEntity);
+		scenario.getContractModel().getEntities().add(dischargeEntity);
+		
+		scenario.getContractModel().setShippingEntity(shipEntity);
+		
+		final SalesContract dischargeContract = contractFactory.createSalesContract();
+		final MarketPricePurchaseContract loadContract = contractFactory.createMarketPricePurchaseContract();
+
+		dischargeContract.setRegasEfficiency(1);
+		dischargeContract.setEntity(dischargeEntity);
+		dischargeContract.setName("discharge contract");
+		dischargeContract.setMarket(dischargeMarket);
+		
+		loadContract.setEntity(loadEntity);
+		loadContract.setMarket(loadMarket);
+		loadContract.setName("load contract");
+		
+		scenario.getContractModel().getSalesContracts().add(dischargeContract);
+		scenario.getContractModel().getPurchaseContracts().add(loadContract);
+		
 		// dischargeSlot.setUnitPrice(3.70f + random.nextInt(10));
 		// loadSlot.setUnitPrice(dischargeSlot.getUnitPrice() - 0.2f);
 
@@ -356,7 +397,7 @@ public class RandomScenarioUtils {
 					addCargo(scenario, now, choice.getFirst().getFirst(),
 							choice.getFirst().getSecond(), minWindow,
 							maxWindow, minVisit, maxVisit, minSlack, maxSlack,
-							scenarioDuration, loadMarket, dischargeMarket);
+							scenarioDuration, loadContract, dischargeContract);
 					break;
 				}
 				pin -= choice.getSecond();
@@ -397,8 +438,8 @@ public class RandomScenarioUtils {
 	private void addCargo(final Scenario scenario, final long now,
 			final String loadPortName, String dischargePortName, int minWindow,
 			int maxWindow, int minVisit, int maxVisit, int minSlack,
-			int maxSlack, int scenarioDuration, Market loadMarket,
-			Market dischargeMarket) {
+			int maxSlack, int scenarioDuration, PurchaseContract loadContract,
+			SalesContract dischargeContract) {
 
 		final int index = scenario.getCargoModel().getCargoes().size();
 
@@ -468,8 +509,10 @@ public class RandomScenarioUtils {
 		loadSlot.setWindowStart(new Date(now + Timer.ONE_DAY * startDay));
 		dischargeSlot.setWindowStart(new Date(now + Timer.ONE_DAY * endDay));
 
-		dischargeSlot.setMarket(dischargeMarket);
-		loadSlot.setMarket(loadMarket);
+		// dischargeSlot.setMarket(dischargeMarket);
+		// loadSlot.setMarket(loadMarket);
+		dischargeSlot.setContract(dischargeContract);
+		loadSlot.setContract(loadContract);
 
 		loadSlot.setMinQuantity(0);
 		loadSlot.setMaxQuantity(200000);
