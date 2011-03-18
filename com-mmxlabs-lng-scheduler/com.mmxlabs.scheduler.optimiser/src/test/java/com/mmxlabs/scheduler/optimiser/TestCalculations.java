@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.events.IDischargeEvent;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
@@ -123,7 +124,7 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, new ConstantValueCurve(5000), 2000, 1);
+				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
@@ -734,7 +735,7 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, new ConstantValueCurve(5000), 2000, 1);
+				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
@@ -1350,7 +1351,7 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, new ConstantValueCurve(5000), 2000, 1);
+				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(

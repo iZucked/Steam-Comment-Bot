@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 
 @RunWith(JMock.class)
 public class LoadSlotTest {
@@ -29,17 +30,17 @@ public class LoadSlotTest {
 		final long minLoadVolume = 10l;
 		final long maxLoadVolume = 20l;
 		final int cargoCVValue = 40;
-		final ICurve curve = context.mock(ICurve.class);
+		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 
 		final LoadSlot slot = new LoadSlot(id, port, tw, minLoadVolume,
-				maxLoadVolume, curve, cargoCVValue);
+				maxLoadVolume, contract, cargoCVValue);
 		Assert.assertSame(id, slot.getId());
 		Assert.assertSame(port, slot.getPort());
 		Assert.assertSame(tw, slot.getTimeWindow());
 
 		Assert.assertEquals(minLoadVolume, slot.getMinLoadVolume());
 		Assert.assertEquals(maxLoadVolume, slot.getMaxLoadVolume());
-		Assert.assertSame(curve, slot.getPurchasePriceCurve());
+		Assert.assertSame(contract, slot.getLoadPriceCalculator());
 		Assert.assertEquals(cargoCVValue, slot.getCargoCVValue());
 	}
 
@@ -63,31 +64,11 @@ public class LoadSlotTest {
 
 	@Test
 	public void testGetSetPurchasePriceCurve() {
-		final ICurve curve = context.mock(ICurve.class);
+		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 		final LoadSlot slot = new LoadSlot();
-		Assert.assertNull(slot.getPurchasePriceCurve());
-		slot.setPurchasePriceCurve(curve);
-		Assert.assertSame(curve, slot.getPurchasePriceCurve());
-	}
-
-	@Test
-	public void testGetSetPurchasePriceAtTime() {
-		final LoadSlot slot = new LoadSlot();
-
-		final ICurve curve = context.mock(ICurve.class);
-		slot.setPurchasePriceCurve(curve);
-
-		final int time = 1234;
-
-		context.checking(new Expectations() {
-			{
-				one(curve).getValueAtPoint(time);
-			}
-		});
-
-		slot.getPurchasePriceAtTime(time);
-
-		context.assertIsSatisfied();
+		Assert.assertNull(slot.getLoadPriceCalculator());
+		slot.setLoadPriceCalculator(contract);
+		Assert.assertSame(contract, slot.getLoadPriceCalculator());
 	}
 
 	@Test
@@ -109,8 +90,8 @@ public class LoadSlotTest {
 		final ITimeWindow tw1 = context.mock(ITimeWindow.class, "tw1");
 		final ITimeWindow tw2 = context.mock(ITimeWindow.class, "tw2");
 
-		final ICurve curve1 = context.mock(ICurve.class, "curve1");
-		final ICurve curve2 = context.mock(ICurve.class, "curve2");
+		final ILoadPriceCalculator curve1 = context.mock(ILoadPriceCalculator.class, "curve1");
+		final ILoadPriceCalculator curve2 = context.mock(ILoadPriceCalculator.class, "curve2");
 
 		final LoadSlot slot1 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
 				40);

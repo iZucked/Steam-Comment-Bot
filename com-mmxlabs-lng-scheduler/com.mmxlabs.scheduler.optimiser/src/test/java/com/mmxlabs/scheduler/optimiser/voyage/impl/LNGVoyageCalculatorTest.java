@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -957,7 +958,7 @@ public class LNGVoyageCalculatorTest {
 		loadDetails.setPortSlot(loadSlot);
 		dischargeDetails.setPortSlot(dischargeSlot);
 
-		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(-1.0));
+		loadSlot.setLoadPriceCalculator(new FixedPriceContract(-1));
 		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(-1.0));
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
@@ -1021,7 +1022,7 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setMaxLoadVolume(150000l);
 		dischargeSlot.setMaxDischargeVolume(30000l);
 
-		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(1000.0));
+		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
 		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
 		loadSlot.setCargoCVValue(2000);
 
@@ -1192,7 +1193,7 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setMaxLoadVolume(150000000l);
 		dischargeSlot.setMaxDischargeVolume(3000000l);
 
-		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(1000.0));
+		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
 		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
 
 		loadSlot.setCargoCVValue(2000);
@@ -1315,7 +1316,7 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setMaxLoadVolume(150l);
 		dischargeSlot.setMaxDischargeVolume(30l);
 
-		loadSlot.setPurchasePriceCurve(new ConstantValueCurve(1000.0));
+		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
 		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
 
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();

@@ -43,6 +43,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
@@ -116,7 +118,7 @@ public class SimpleSchedulerTest {
 
 		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
 
-		final ICurve purchaseCurve = new ConstantValueCurve(5);
+		final ILoadPriceCalculator purchaseCurve = new FixedPriceContract(5);
 		final ICurve salesCurve = new ConstantValueCurve(200000);
 
 		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0,
