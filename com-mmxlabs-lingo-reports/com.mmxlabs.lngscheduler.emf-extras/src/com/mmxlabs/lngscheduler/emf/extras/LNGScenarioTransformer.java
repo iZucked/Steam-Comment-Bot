@@ -157,7 +157,7 @@ public class LNGScenarioTransformer {
 			final StepwisePriceCurve curveModel = market.getPriceCurve();
 			final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
-			curve.setDefaultValue(curveModel.getDefaultValue());
+			curve.setDefaultValue(Calculator.scaleToInt(curveModel.getDefaultValue()));
 			for (final StepwisePrice price : curveModel.getPrices()) {
 				final int hours = convertTime(price.getDate());
 				curve.setValueAfter(hours,

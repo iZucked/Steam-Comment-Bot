@@ -10,8 +10,11 @@ import scenario.cargo.Slot;
 import scenario.contract.Contract;
 import scenario.contract.Entity;
 import scenario.contract.SalesContract;
+import scenario.schedule.BookedRevenue;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
+import scenario.schedule.ScheduleFactory;
+import scenario.schedule.SchedulePackage;
 
 /**
  * A device which takes a {@link Schedule}, and does some additional computation
@@ -23,18 +26,22 @@ import scenario.schedule.Schedule;
  * 
  */
 public class ProfitAndLossCalculator {
+	final SchedulePackage schedulePackage = SchedulePackage.eINSTANCE;
+	final ScheduleFactory scheduleFactory = schedulePackage
+			.getScheduleFactory();
+
 	public ProfitAndLossCalculator() {
 
 	}
 
 	public void addProfitAndLoss(final Scenario scenario,
 			final Schedule schedule) {
-		for (final CargoAllocation cargo : schedule.getCargoAllocations()) {
-			final LoadSlot load = cargo.getLoadSlot();
-			final Slot discharge = cargo.getDischargeSlot();
+		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
+			final LoadSlot loadSlot = allocation.getLoadSlot();
+			final Slot dischargeSlot = allocation.getDischargeSlot();
 
-			final Contract loadContract = load.getContract();
-			final SalesContract dischargeContract = (SalesContract) discharge
+			final Contract loadContract = loadSlot.getContract();
+			final SalesContract dischargeContract = (SalesContract) dischargeSlot
 					.getContract();
 
 			final Entity loadEntity = loadContract.getEntity();
@@ -43,34 +50,34 @@ public class ProfitAndLossCalculator {
 			final Entity shippingEntity = scenario.getContractModel()
 					.getShippingEntity();
 
-			// now compute P&L values
+			final BookedRevenue dischargeRevenue = scheduleFactory
+					.createBookedRevenue();
+			final BookedRevenue shippingRevenue = scheduleFactory
+					.createBookedRevenue();
+			final BookedRevenue loadRevenue = scheduleFactory
+					.createBookedRevenue();
 
-			final long loadVolume = cargo.getLoadVolume();
-			final long transportCost = cargo.getTotalCost();
+			dischargeRevenue.setEntity(dischargeEntity);
+			shippingRevenue.setEntity(shippingEntity);
+			loadRevenue.setEntity(loadEntity);
 
-			final float salesPriceToMarket = cargo.getDischargePriceM3(); // convert
-																			// to
-																			// CV
-																			// value
+			schedule.getRevenue().add(loadRevenue);
+			schedule.getRevenue().add(shippingRevenue);
+			schedule.getRevenue().add(dischargeRevenue);
 
-			final long dischargeVolume = cargo.getDischargeVolume();
-			// how much is left after regas
-			final long dischargeVolumeSold = (long) (dischargeVolume * dischargeContract
-					.getRegasEfficiency());
-			final float revenueToShippingEntity = cargo.getDischargePriceM3()
-					* cargo.getDischargeVolume();
-			final float revenueToDischargeEntity = dischargeVolumeSold
-					* salesPriceToMarket;
+			// item 1; value of selling LNG
+			final long dischargedM3 = allocation.getDischargeVolume();
+			final long saleableM3 = (long) Math.floor(allocation
+					.getDischargeVolume()
+					* dischargeContract.getRegasEfficiency());
 
-			final float profitToDischargeEntity = revenueToDischargeEntity
-					- revenueToShippingEntity;
+			// divide by CV value to get mmbtu
+			final long saleableMMBTU = (long) Math.floor(saleableM3
+					/ loadSlot.getCargoCVvalue());
 
-			final float purchaseUnitPrice = 0; // calculate load revenue here
-
-			final float revenueToLoadEntity = loadVolume * purchaseUnitPrice;
-			// all load revenue is booked as profit.
-			final float profitToShippingEntity = revenueToShippingEntity
-					- (transportCost + revenueToLoadEntity);
+			// need base date to get sales value.
+			final long salesValue = dischargeContract.getMarket()
+					.getPriceCurve().getValueAtDate(something);
 		}
 	}
 }
