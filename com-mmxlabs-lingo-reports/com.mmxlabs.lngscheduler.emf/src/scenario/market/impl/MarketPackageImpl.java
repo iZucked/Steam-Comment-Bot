@@ -180,17 +180,8 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getMarket_Name() {
-		return (EAttribute)marketEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getMarket_PriceCurve() {
-		return (EReference)marketEClass.getEStructuralFeatures().get(1);
+		return (EReference)marketEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -294,7 +285,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 
 		// Create classes and their features
 		marketEClass = createEClass(MARKET);
-		createEAttribute(marketEClass, MARKET__NAME);
 		createEReference(marketEClass, MARKET__PRICE_CURVE);
 
 		marketModelEClass = createEClass(MARKET_MODEL);
@@ -332,15 +322,18 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		marketEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(marketEClass, Market.class, "Market", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getMarket_Name(), ecorePackage.getEString(), "name", null, 0, 1, Market.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarket_PriceCurve(), this.getStepwisePriceCurve(), null, "priceCurve", null, 1, 1, Market.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketModelEClass, MarketModel.class, "MarketModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

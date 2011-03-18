@@ -441,6 +441,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getCargoAllocation__GetLoadVolume() {
+		return cargoAllocationEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getScheduleFitness() {
 		return scheduleFitnessEClass;
 	}
@@ -524,6 +533,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_TOTAL_COST);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOCAL_LOAD_DATE);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE);
+		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOAD_VOLUME);
 
 		scheduleFitnessEClass = createEClass(SCHEDULE_FITNESS);
 		createEAttribute(scheduleFitnessEClass, SCHEDULE_FITNESS__NAME);
@@ -604,6 +614,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEOperation(getCargoAllocation__GetLocalLoadDate(), ecorePackage.getEJavaObject(), "getLocalLoadDate", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getCargoAllocation__GetLocalDischargeDate(), ecorePackage.getEJavaObject(), "getLocalDischargeDate", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getCargoAllocation__GetLoadVolume(), ecorePackage.getELong(), "getLoadVolume", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(scheduleFitnessEClass, ScheduleFitness.class, "ScheduleFitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScheduleFitness_Name(), ecorePackage.getEString(), "name", null, 1, 1, ScheduleFitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

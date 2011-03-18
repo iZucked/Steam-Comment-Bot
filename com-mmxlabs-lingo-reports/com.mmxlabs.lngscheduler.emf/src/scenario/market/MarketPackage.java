@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -105,7 +106,7 @@ public interface MarketPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET__NAME = 0;
+	int MARKET__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Price Curve</b></em>' containment reference.
@@ -114,7 +115,7 @@ public interface MarketPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET__PRICE_CURVE = 1;
+	int MARKET__PRICE_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Market</em>' class.
@@ -123,7 +124,16 @@ public interface MarketPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_FEATURE_COUNT = 2;
+	int MARKET_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Market</em>' class.
@@ -132,7 +142,7 @@ public interface MarketPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_OPERATION_COUNT = 0;
+	int MARKET_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Markets</b></em>' containment reference list.
@@ -329,17 +339,6 @@ public interface MarketPackage extends EPackage {
 	EClass getMarket();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.market.Market#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see scenario.market.Market#getName()
-	 * @see #getMarket()
-	 * @generated
-	 */
-	EAttribute getMarket_Name();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link scenario.market.Market#getPriceCurve <em>Price Curve</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -451,14 +450,6 @@ public interface MarketPackage extends EPackage {
 		 * @generated
 		 */
 		EClass MARKET = eINSTANCE.getMarket();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKET__NAME = eINSTANCE.getMarket_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Price Curve</b></em>' containment reference feature.

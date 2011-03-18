@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 
+import scenario.contract.Contract;
 import scenario.market.Market;
 import scenario.port.Port;
 
@@ -39,7 +40,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getSlotDuration <em>Slot Duration</em>}</li>
- *   <li>{@link scenario.cargo.impl.SlotImpl#getMarket <em>Market</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -177,23 +178,14 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	protected int slotDuration = SLOT_DURATION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getMarket() <em>Market</em>}' reference.
+	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarket()
+	 * @see #getContract()
 	 * @generated
 	 * @ordered
 	 */
-	protected Market market;
-
-	/**
-	 * This is true if the Market reference has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean marketESet;
+	protected Contract contract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -383,16 +375,16 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Market getMarket() {
-		if (market != null && market.eIsProxy()) {
-			InternalEObject oldMarket = (InternalEObject)market;
-			market = (Market)eResolveProxy(oldMarket);
-			if (market != oldMarket) {
+	public Contract getContract() {
+		if (contract != null && contract.eIsProxy()) {
+			InternalEObject oldContract = (InternalEObject)contract;
+			contract = (Contract)eResolveProxy(oldContract);
+			if (contract != oldContract) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__MARKET, oldMarket, market));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__CONTRACT, oldContract, contract));
 			}
 		}
-		return market;
+		return contract;
 	}
 
 	/**
@@ -400,8 +392,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Market basicGetMarket() {
-		return market;
+	public Contract basicGetContract() {
+		return contract;
 	}
 
 	/**
@@ -409,36 +401,11 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMarket(Market newMarket) {
-		Market oldMarket = market;
-		market = newMarket;
-		boolean oldMarketESet = marketESet;
-		marketESet = true;
+	public void setContract(Contract newContract) {
+		Contract oldContract = contract;
+		contract = newContract;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MARKET, oldMarket, market, !oldMarketESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetMarket() {
-		Market oldMarket = market;
-		boolean oldMarketESet = marketESet;
-		market = null;
-		marketESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__MARKET, oldMarket, null, oldMarketESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetMarket() {
-		return marketESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract));
 	}
 
 	/**
@@ -477,9 +444,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getWindowDuration();
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return getSlotDuration();
-			case CargoPackage.SLOT__MARKET:
-				if (resolve) return getMarket();
-				return basicGetMarket();
+			case CargoPackage.SLOT__CONTRACT:
+				if (resolve) return getContract();
+				return basicGetContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -513,8 +480,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration((Integer)newValue);
 				return;
-			case CargoPackage.SLOT__MARKET:
-				setMarket((Market)newValue);
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -549,8 +516,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration(SLOT_DURATION_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__MARKET:
-				unsetMarket();
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -578,8 +545,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return windowDuration != WINDOW_DURATION_EDEFAULT;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return slotDuration != SLOT_DURATION_EDEFAULT;
-			case CargoPackage.SLOT__MARKET:
-				return isSetMarket();
+			case CargoPackage.SLOT__CONTRACT:
+				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}

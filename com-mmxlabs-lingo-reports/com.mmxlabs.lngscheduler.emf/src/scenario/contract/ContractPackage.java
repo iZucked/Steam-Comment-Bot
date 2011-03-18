@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -96,13 +97,31 @@ public interface ContractPackage extends EPackage {
 	int CONTRACT_MODEL__VOLUME_CONSTRAINTS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Entities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_MODEL__ENTITIES = 3;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Entity</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_MODEL__SHIPPING_ENTITY = 4;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_MODEL_FEATURE_COUNT = 3;
+	int CONTRACT_MODEL_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Model</em>' class.
@@ -112,6 +131,61 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTRACT_MODEL_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.contract.impl.ContractImpl <em>Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.ContractImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getContract()
+	 * @generated
+	 */
+	int CONTRACT = 9;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__ENTITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
@@ -124,13 +198,40 @@ public interface ContractPackage extends EPackage {
 	int PURCHASE_CONTRACT = 1;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__NAME = CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__ENTITY = CONTRACT__ENTITY;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT_FEATURE_COUNT = 0;
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT___GET_CONTAINER = CONTRACT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Purchase Contract</em>' class.
@@ -139,7 +240,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT_OPERATION_COUNT = 0;
+	int PURCHASE_CONTRACT_OPERATION_COUNT = CONTRACT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -152,14 +253,59 @@ public interface ContractPackage extends EPackage {
 	int SALES_CONTRACT = 2;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__NAME = CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__ENTITY = CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MARKET = CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Regas Efficiency</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__REGAS_EFFICIENCY = CONTRACT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT_FEATURE_COUNT = 0;
+	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
 
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT___GET_CONTAINER = CONTRACT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Sales Contract</em>' class.
@@ -168,7 +314,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT_OPERATION_COUNT = 0;
+	int SALES_CONTRACT_OPERATION_COUNT = CONTRACT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.TotalVolumeLimitImpl <em>Total Volume Limit</em>}' class.
@@ -246,6 +392,309 @@ public interface ContractPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.contract.impl.EntityImpl <em>Entity</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.EntityImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getEntity()
+	 * @generated
+	 */
+	int ENTITY = 4;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Tax Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY__TAX_RATE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Entity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Entity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.contract.impl.FixedPricePurchaseContractImpl <em>Fixed Price Purchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.FixedPricePurchaseContractImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getFixedPricePurchaseContract()
+	 * @generated
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT = 5;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT__UNIT_PRICE = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Fixed Price Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Fixed Price Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.contract.impl.MarketPricePurchaseContractImpl <em>Market Price Purchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.MarketPricePurchaseContractImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getMarketPricePurchaseContract()
+	 * @generated
+	 */
+	int MARKET_PRICE_PURCHASE_CONTRACT = 6;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_PRICE_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_PRICE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_PRICE_PURCHASE_CONTRACT__MARKET = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Market Price Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_PRICE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_PRICE_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Market Price Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.contract.impl.NetbackPurchaseContractImpl <em>Netback Purchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.NetbackPurchaseContractImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getNetbackPurchaseContract()
+	 * @generated
+	 */
+	int NETBACK_PURCHASE_CONTRACT = 7;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Lower Bound</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__LOWER_BOUND = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Netback Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Netback Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl <em>Profit Sharing Purchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.ProfitSharingPurchaseContractImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getProfitSharingPurchaseContract()
+	 * @generated
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT = 8;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The number of structural features of the '<em>Profit Sharing Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Profit Sharing Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.contract.ContractModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -289,6 +738,28 @@ public interface ContractPackage extends EPackage {
 	EReference getContractModel_VolumeConstraints();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.contract.ContractModel#getEntities <em>Entities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entities</em>'.
+	 * @see scenario.contract.ContractModel#getEntities()
+	 * @see #getContractModel()
+	 * @generated
+	 */
+	EReference getContractModel_Entities();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link scenario.contract.ContractModel#getShippingEntity <em>Shipping Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Shipping Entity</em>'.
+	 * @see scenario.contract.ContractModel#getShippingEntity()
+	 * @see #getContractModel()
+	 * @generated
+	 */
+	EReference getContractModel_ShippingEntity();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.contract.PurchaseContract <em>Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -307,6 +778,28 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSalesContract();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.contract.SalesContract#getMarket <em>Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Market</em>'.
+	 * @see scenario.contract.SalesContract#getMarket()
+	 * @see #getSalesContract()
+	 * @generated
+	 */
+	EReference getSalesContract_Market();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.SalesContract#getRegasEfficiency <em>Regas Efficiency</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Regas Efficiency</em>'.
+	 * @see scenario.contract.SalesContract#getRegasEfficiency()
+	 * @see #getSalesContract()
+	 * @generated
+	 */
+	EAttribute getSalesContract_RegasEfficiency();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.contract.TotalVolumeLimit <em>Total Volume Limit</em>}'.
@@ -374,6 +867,121 @@ public interface ContractPackage extends EPackage {
 	EAttribute getTotalVolumeLimit_Repeating();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.contract.Entity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Entity</em>'.
+	 * @see scenario.contract.Entity
+	 * @generated
+	 */
+	EClass getEntity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.Entity#getTaxRate <em>Tax Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Tax Rate</em>'.
+	 * @see scenario.contract.Entity#getTaxRate()
+	 * @see #getEntity()
+	 * @generated
+	 */
+	EAttribute getEntity_TaxRate();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.contract.FixedPricePurchaseContract <em>Fixed Price Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fixed Price Purchase Contract</em>'.
+	 * @see scenario.contract.FixedPricePurchaseContract
+	 * @generated
+	 */
+	EClass getFixedPricePurchaseContract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.FixedPricePurchaseContract#getUnitPrice <em>Unit Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unit Price</em>'.
+	 * @see scenario.contract.FixedPricePurchaseContract#getUnitPrice()
+	 * @see #getFixedPricePurchaseContract()
+	 * @generated
+	 */
+	EAttribute getFixedPricePurchaseContract_UnitPrice();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.contract.MarketPricePurchaseContract <em>Market Price Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Market Price Purchase Contract</em>'.
+	 * @see scenario.contract.MarketPricePurchaseContract
+	 * @generated
+	 */
+	EClass getMarketPricePurchaseContract();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.contract.MarketPricePurchaseContract#getMarket <em>Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Market</em>'.
+	 * @see scenario.contract.MarketPricePurchaseContract#getMarket()
+	 * @see #getMarketPricePurchaseContract()
+	 * @generated
+	 */
+	EReference getMarketPricePurchaseContract_Market();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.contract.NetbackPurchaseContract <em>Netback Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Netback Purchase Contract</em>'.
+	 * @see scenario.contract.NetbackPurchaseContract
+	 * @generated
+	 */
+	EClass getNetbackPurchaseContract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.NetbackPurchaseContract#getLowerBound <em>Lower Bound</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lower Bound</em>'.
+	 * @see scenario.contract.NetbackPurchaseContract#getLowerBound()
+	 * @see #getNetbackPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getNetbackPurchaseContract_LowerBound();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.contract.ProfitSharingPurchaseContract <em>Profit Sharing Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Profit Sharing Purchase Contract</em>'.
+	 * @see scenario.contract.ProfitSharingPurchaseContract
+	 * @generated
+	 */
+	EClass getProfitSharingPurchaseContract();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.contract.Contract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Contract</em>'.
+	 * @see scenario.contract.Contract
+	 * @generated
+	 */
+	EClass getContract();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.contract.Contract#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see scenario.contract.Contract#getEntity()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_Entity();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -430,6 +1038,22 @@ public interface ContractPackage extends EPackage {
 		EReference CONTRACT_MODEL__VOLUME_CONSTRAINTS = eINSTANCE.getContractModel_VolumeConstraints();
 
 		/**
+		 * The meta object literal for the '<em><b>Entities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT_MODEL__ENTITIES = eINSTANCE.getContractModel_Entities();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Entity</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT_MODEL__SHIPPING_ENTITY = eINSTANCE.getContractModel_ShippingEntity();
+
+		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -448,6 +1072,22 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SALES_CONTRACT = eINSTANCE.getSalesContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SALES_CONTRACT__MARKET = eINSTANCE.getSalesContract_Market();
+
+		/**
+		 * The meta object literal for the '<em><b>Regas Efficiency</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SALES_CONTRACT__REGAS_EFFICIENCY = eINSTANCE.getSalesContract_RegasEfficiency();
 
 		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.TotalVolumeLimitImpl <em>Total Volume Limit</em>}' class.
@@ -498,6 +1138,106 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TOTAL_VOLUME_LIMIT__REPEATING = eINSTANCE.getTotalVolumeLimit_Repeating();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.EntityImpl <em>Entity</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.EntityImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getEntity()
+		 * @generated
+		 */
+		EClass ENTITY = eINSTANCE.getEntity();
+
+		/**
+		 * The meta object literal for the '<em><b>Tax Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ENTITY__TAX_RATE = eINSTANCE.getEntity_TaxRate();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.FixedPricePurchaseContractImpl <em>Fixed Price Purchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.FixedPricePurchaseContractImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getFixedPricePurchaseContract()
+		 * @generated
+		 */
+		EClass FIXED_PRICE_PURCHASE_CONTRACT = eINSTANCE.getFixedPricePurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FIXED_PRICE_PURCHASE_CONTRACT__UNIT_PRICE = eINSTANCE.getFixedPricePurchaseContract_UnitPrice();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.MarketPricePurchaseContractImpl <em>Market Price Purchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.MarketPricePurchaseContractImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getMarketPricePurchaseContract()
+		 * @generated
+		 */
+		EClass MARKET_PRICE_PURCHASE_CONTRACT = eINSTANCE.getMarketPricePurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKET_PRICE_PURCHASE_CONTRACT__MARKET = eINSTANCE.getMarketPricePurchaseContract_Market();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.NetbackPurchaseContractImpl <em>Netback Purchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.NetbackPurchaseContractImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getNetbackPurchaseContract()
+		 * @generated
+		 */
+		EClass NETBACK_PURCHASE_CONTRACT = eINSTANCE.getNetbackPurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Lower Bound</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NETBACK_PURCHASE_CONTRACT__LOWER_BOUND = eINSTANCE.getNetbackPurchaseContract_LowerBound();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl <em>Profit Sharing Purchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.ProfitSharingPurchaseContractImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getProfitSharingPurchaseContract()
+		 * @generated
+		 */
+		EClass PROFIT_SHARING_PURCHASE_CONTRACT = eINSTANCE.getProfitSharingPurchaseContract();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.ContractImpl <em>Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.ContractImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getContract()
+		 * @generated
+		 */
+		EClass CONTRACT = eINSTANCE.getContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__ENTITY = eINSTANCE.getContract_Entity();
 
 	}
 

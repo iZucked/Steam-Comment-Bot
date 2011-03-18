@@ -235,13 +235,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__SLOT_DURATION = 6;
 
 	/**
-	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MARKET = 7;
+	int SLOT__CONTRACT = 7;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -344,13 +344,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__SLOT_DURATION = SLOT__SLOT_DURATION;
 
 	/**
-	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__MARKET = SLOT__MARKET;
+	int LOAD_SLOT__CONTRACT = SLOT__CONTRACT;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CVvalue</b></em>' attribute.
@@ -551,15 +551,15 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_SlotDuration();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.cargo.Slot#getMarket <em>Market</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.cargo.Slot#getContract <em>Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Market</em>'.
-	 * @see scenario.cargo.Slot#getMarket()
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see scenario.cargo.Slot#getContract()
 	 * @see #getSlot()
 	 * @generated
 	 */
-	EReference getSlot_Market();
+	EReference getSlot_Contract();
 
 	/**
 	 * Returns the meta object for the '{@link scenario.cargo.Slot#getLocalWindowStart() <em>Get Local Window Start</em>}' operation.
@@ -741,12 +741,12 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__SLOT_DURATION = eINSTANCE.getSlot_SlotDuration();
 
 		/**
-		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SLOT__MARKET = eINSTANCE.getSlot_Market();
+		EReference SLOT__CONTRACT = eINSTANCE.getSlot_Contract();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Local Window Start</b></em>' operation.

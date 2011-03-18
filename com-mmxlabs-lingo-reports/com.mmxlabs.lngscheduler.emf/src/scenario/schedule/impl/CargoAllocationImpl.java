@@ -695,6 +695,15 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getLoadVolume() {
+		return getDischargeVolume() + getFuelVolume();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -889,6 +898,8 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return getLocalLoadDate();
 			case SchedulePackage.CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE:
 				return getLocalDischargeDate();
+			case SchedulePackage.CARGO_ALLOCATION___GET_LOAD_VOLUME:
+				return getLoadVolume();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

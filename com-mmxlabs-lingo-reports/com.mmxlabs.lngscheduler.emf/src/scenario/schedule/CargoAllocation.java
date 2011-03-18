@@ -410,4 +410,13 @@ public interface CargoAllocation extends EObject {
 	 */
 	Object getLocalDischargeDate();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getDischargeVolume() + getFuelVolume();'"
+	 * @generated
+	 */
+	long getLoadVolume();
+
 } // CargoAllocation

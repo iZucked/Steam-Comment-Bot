@@ -10,6 +10,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.NamedObject;
+import scenario.ScenarioObject;
 import scenario.market.*;
 
 /**
@@ -89,6 +91,8 @@ public class MarketSwitch<T> {
 			case MarketPackage.MARKET: {
 				Market market = (Market)theEObject;
 				T result = caseMarket(market);
+				if (result == null) result = caseNamedObject(market);
+				if (result == null) result = caseScenarioObject(market);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -156,6 +160,36 @@ public class MarketSwitch<T> {
 	 * @generated
 	 */
 	public T caseStepwisePrice(StepwisePrice object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioObject(ScenarioObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 

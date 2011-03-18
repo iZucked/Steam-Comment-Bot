@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import scenario.impl.NamedObjectImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -29,34 +30,13 @@ import scenario.market.StepwisePriceCurve;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.market.impl.MarketImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.market.impl.MarketImpl#getPriceCurve <em>Price Curve</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class MarketImpl extends EObjectImpl implements Market {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
+public class MarketImpl extends NamedObjectImpl implements Market {
 	/**
 	 * The cached value of the '{@link #getPriceCurve() <em>Price Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -84,29 +64,6 @@ public class MarketImpl extends EObjectImpl implements Market {
 	@Override
 	protected EClass eStaticClass() {
 		return MarketPackage.Literals.MARKET;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.MARKET__NAME, oldName, name));
 	}
 
 	/**
@@ -174,8 +131,6 @@ public class MarketImpl extends EObjectImpl implements Market {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MarketPackage.MARKET__NAME:
-				return getName();
 			case MarketPackage.MARKET__PRICE_CURVE:
 				return getPriceCurve();
 		}
@@ -191,9 +146,6 @@ public class MarketImpl extends EObjectImpl implements Market {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MarketPackage.MARKET__NAME:
-				setName((String)newValue);
-				return;
 			case MarketPackage.MARKET__PRICE_CURVE:
 				setPriceCurve((StepwisePriceCurve)newValue);
 				return;
@@ -209,9 +161,6 @@ public class MarketImpl extends EObjectImpl implements Market {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MarketPackage.MARKET__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case MarketPackage.MARKET__PRICE_CURVE:
 				setPriceCurve((StepwisePriceCurve)null);
 				return;
@@ -227,28 +176,10 @@ public class MarketImpl extends EObjectImpl implements Market {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MarketPackage.MARKET__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MarketPackage.MARKET__PRICE_CURVE:
 				return priceCurve != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } //MarketImpl

@@ -34,15 +34,6 @@ public interface ContractFactory extends EFactory {
 	ContractModel createContractModel();
 
 	/**
-	 * Returns a new object of class '<em>Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Purchase Contract</em>'.
-	 * @generated
-	 */
-	PurchaseContract createPurchaseContract();
-
-	/**
 	 * Returns a new object of class '<em>Sales Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -59,6 +50,60 @@ public interface ContractFactory extends EFactory {
 	 * @generated
 	 */
 	TotalVolumeLimit createTotalVolumeLimit();
+
+	/**
+	 * Returns a new object of class '<em>Entity</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Entity</em>'.
+	 * @generated
+	 */
+	Entity createEntity();
+
+	/**
+	 * Returns a new object of class '<em>Fixed Price Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fixed Price Purchase Contract</em>'.
+	 * @generated
+	 */
+	FixedPricePurchaseContract createFixedPricePurchaseContract();
+
+	/**
+	 * Returns a new object of class '<em>Market Price Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Market Price Purchase Contract</em>'.
+	 * @generated
+	 */
+	MarketPricePurchaseContract createMarketPricePurchaseContract();
+
+	/**
+	 * Returns a new object of class '<em>Netback Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Netback Purchase Contract</em>'.
+	 * @generated
+	 */
+	NetbackPurchaseContract createNetbackPurchaseContract();
+
+	/**
+	 * Returns a new object of class '<em>Profit Sharing Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Profit Sharing Purchase Contract</em>'.
+	 * @generated
+	 */
+	ProfitSharingPurchaseContract createProfitSharingPurchaseContract();
+
+	/**
+	 * Returns a new object of class '<em>Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Contract</em>'.
+	 * @generated
+	 */
+	Contract createContract();
 
 	/**
 	 * Returns the package supported by this factory.

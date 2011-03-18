@@ -391,13 +391,22 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE = 2;
 
 	/**
+	 * The operation id for the '<em>Get Load Volume</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_LOAD_VOLUME = 3;
+
+	/**
 	 * The number of operations of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_OPERATION_COUNT = 3;
+	int CARGO_ALLOCATION_OPERATION_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.ScheduleFitnessImpl <em>Fitness</em>}' class.
@@ -760,6 +769,16 @@ public interface SchedulePackage extends EPackage {
 	EOperation getCargoAllocation__GetLocalDischargeDate();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.schedule.CargoAllocation#getLoadVolume() <em>Get Load Volume</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Load Volume</em>' operation.
+	 * @see scenario.schedule.CargoAllocation#getLoadVolume()
+	 * @generated
+	 */
+	EOperation getCargoAllocation__GetLoadVolume();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.ScheduleFitness <em>Fitness</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1052,6 +1071,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE = eINSTANCE.getCargoAllocation__GetLocalDischargeDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Load Volume</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_ALLOCATION___GET_LOAD_VOLUME = eINSTANCE.getCargoAllocation__GetLoadVolume();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.impl.ScheduleFitnessImpl <em>Fitness</em>}' class.

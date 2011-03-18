@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.contract.Contract;
 import scenario.market.Market;
 import scenario.port.Port;
 
@@ -27,7 +28,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}</li>
- *   <li>{@link scenario.cargo.Slot#getMarket <em>Market</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -219,58 +220,31 @@ public interface Slot extends EObject {
 	void setSlotDuration(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Market</b></em>' reference.
+	 * Returns the value of the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Market</em>' reference isn't clear,
+	 * If the meaning of the '<em>Contract</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Market</em>' reference.
-	 * @see #isSetMarket()
-	 * @see #unsetMarket()
-	 * @see #setMarket(Market)
-	 * @see scenario.cargo.CargoPackage#getSlot_Market()
-	 * @model unsettable="true" required="true"
+	 * @return the value of the '<em>Contract</em>' reference.
+	 * @see #setContract(Contract)
+	 * @see scenario.cargo.CargoPackage#getSlot_Contract()
+	 * @model required="true"
 	 * @generated
 	 */
-	Market getMarket();
+	Contract getContract();
 
 	/**
-	 * Sets the value of the '{@link scenario.cargo.Slot#getMarket <em>Market</em>}' reference.
+	 * Sets the value of the '{@link scenario.cargo.Slot#getContract <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Market</em>' reference.
-	 * @see #isSetMarket()
-	 * @see #unsetMarket()
-	 * @see #getMarket()
+	 * @param value the new value of the '<em>Contract</em>' reference.
+	 * @see #getContract()
 	 * @generated
 	 */
-	void setMarket(Market value);
+	void setContract(Contract value);
 
-	/**
-	 * Unsets the value of the '{@link scenario.cargo.Slot#getMarket <em>Market</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetMarket()
-	 * @see #getMarket()
-	 * @see #setMarket(Market)
-	 * @generated
-	 */
-	void unsetMarket();
-
-	/**
-	 * Returns whether the value of the '{@link scenario.cargo.Slot#getMarket <em>Market</em>}' reference is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Market</em>' reference is set.
-	 * @see #unsetMarket()
-	 * @see #getMarket()
-	 * @see #setMarket(Market)
-	 * @generated
-	 */
-	boolean isSetMarket();
-	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -10,6 +10,8 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.NamedObject;
+import scenario.ScenarioObject;
 import scenario.contract.*;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
@@ -89,6 +91,38 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 				return createTotalVolumeLimitAdapter();
 			}
 			@Override
+			public Adapter caseEntity(Entity object) {
+				return createEntityAdapter();
+			}
+			@Override
+			public Adapter caseFixedPricePurchaseContract(FixedPricePurchaseContract object) {
+				return createFixedPricePurchaseContractAdapter();
+			}
+			@Override
+			public Adapter caseMarketPricePurchaseContract(MarketPricePurchaseContract object) {
+				return createMarketPricePurchaseContractAdapter();
+			}
+			@Override
+			public Adapter caseNetbackPurchaseContract(NetbackPurchaseContract object) {
+				return createNetbackPurchaseContractAdapter();
+			}
+			@Override
+			public Adapter caseProfitSharingPurchaseContract(ProfitSharingPurchaseContract object) {
+				return createProfitSharingPurchaseContractAdapter();
+			}
+			@Override
+			public Adapter caseContract(Contract object) {
+				return createContractAdapter();
+			}
+			@Override
+			public Adapter caseScenarioObject(ScenarioObject object) {
+				return createScenarioObjectAdapter();
+			}
+			@Override
+			public Adapter caseNamedObject(NamedObject object) {
+				return createNamedObjectAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -161,6 +195,118 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTotalVolumeLimitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.contract.Entity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.contract.Entity
+	 * @generated
+	 */
+	public Adapter createEntityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.contract.FixedPricePurchaseContract <em>Fixed Price Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.contract.FixedPricePurchaseContract
+	 * @generated
+	 */
+	public Adapter createFixedPricePurchaseContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.contract.MarketPricePurchaseContract <em>Market Price Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.contract.MarketPricePurchaseContract
+	 * @generated
+	 */
+	public Adapter createMarketPricePurchaseContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.contract.NetbackPurchaseContract <em>Netback Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.contract.NetbackPurchaseContract
+	 * @generated
+	 */
+	public Adapter createNetbackPurchaseContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.contract.ProfitSharingPurchaseContract <em>Profit Sharing Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.contract.ProfitSharingPurchaseContract
+	 * @generated
+	 */
+	public Adapter createProfitSharingPurchaseContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.contract.Contract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.contract.Contract
+	 * @generated
+	 */
+	public Adapter createContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.ScenarioObject <em>Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.ScenarioObject
+	 * @generated
+	 */
+	public Adapter createScenarioObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.NamedObject <em>Named Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.NamedObject
+	 * @generated
+	 */
+	public Adapter createNamedObjectAdapter() {
 		return null;
 	}
 

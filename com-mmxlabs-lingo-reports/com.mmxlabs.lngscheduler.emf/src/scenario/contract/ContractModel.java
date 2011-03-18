@@ -19,6 +19,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link scenario.contract.ContractModel#getPurchaseContracts <em>Purchase Contracts</em>}</li>
  *   <li>{@link scenario.contract.ContractModel#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link scenario.contract.ContractModel#getVolumeConstraints <em>Volume Constraints</em>}</li>
+ *   <li>{@link scenario.contract.ContractModel#getEntities <em>Entities</em>}</li>
+ *   <li>{@link scenario.contract.ContractModel#getShippingEntity <em>Shipping Entity</em>}</li>
  * </ul>
  * </p>
  *
@@ -74,5 +76,47 @@ public interface ContractModel extends EObject {
 	 * @generated
 	 */
 	EList<TotalVolumeLimit> getVolumeConstraints();
+
+	/**
+	 * Returns the value of the '<em><b>Entities</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.contract.Entity}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Entities</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Entities</em>' containment reference list.
+	 * @see scenario.contract.ContractPackage#getContractModel_Entities()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Entity> getEntities();
+
+	/**
+	 * Returns the value of the '<em><b>Shipping Entity</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Shipping Entity</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Shipping Entity</em>' containment reference.
+	 * @see #setShippingEntity(Entity)
+	 * @see scenario.contract.ContractPackage#getContractModel_ShippingEntity()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	Entity getShippingEntity();
+
+	/**
+	 * Sets the value of the '{@link scenario.contract.ContractModel#getShippingEntity <em>Shipping Entity</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Shipping Entity</em>' containment reference.
+	 * @see #getShippingEntity()
+	 * @generated
+	 */
+	void setShippingEntity(Entity value);
 
 } // ContractModel

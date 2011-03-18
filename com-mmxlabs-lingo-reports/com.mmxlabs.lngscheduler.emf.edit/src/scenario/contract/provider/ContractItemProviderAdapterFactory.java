@@ -98,29 +98,6 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.contract.PurchaseContract} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PurchaseContractItemProvider purchaseContractItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.contract.PurchaseContract}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPurchaseContractAdapter() {
-		if (purchaseContractItemProvider == null) {
-			purchaseContractItemProvider = new PurchaseContractItemProvider(this);
-		}
-
-		return purchaseContractItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link scenario.contract.SalesContract} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -164,6 +141,144 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 		}
 
 		return totalVolumeLimitItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.contract.Entity} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EntityItemProvider entityItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.contract.Entity}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEntityAdapter() {
+		if (entityItemProvider == null) {
+			entityItemProvider = new EntityItemProvider(this);
+		}
+
+		return entityItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.contract.FixedPricePurchaseContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FixedPricePurchaseContractItemProvider fixedPricePurchaseContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.contract.FixedPricePurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFixedPricePurchaseContractAdapter() {
+		if (fixedPricePurchaseContractItemProvider == null) {
+			fixedPricePurchaseContractItemProvider = new FixedPricePurchaseContractItemProvider(this);
+		}
+
+		return fixedPricePurchaseContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.contract.MarketPricePurchaseContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketPricePurchaseContractItemProvider marketPricePurchaseContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.contract.MarketPricePurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketPricePurchaseContractAdapter() {
+		if (marketPricePurchaseContractItemProvider == null) {
+			marketPricePurchaseContractItemProvider = new MarketPricePurchaseContractItemProvider(this);
+		}
+
+		return marketPricePurchaseContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.contract.NetbackPurchaseContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NetbackPurchaseContractItemProvider netbackPurchaseContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.contract.NetbackPurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNetbackPurchaseContractAdapter() {
+		if (netbackPurchaseContractItemProvider == null) {
+			netbackPurchaseContractItemProvider = new NetbackPurchaseContractItemProvider(this);
+		}
+
+		return netbackPurchaseContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.contract.ProfitSharingPurchaseContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProfitSharingPurchaseContractItemProvider profitSharingPurchaseContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.contract.ProfitSharingPurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProfitSharingPurchaseContractAdapter() {
+		if (profitSharingPurchaseContractItemProvider == null) {
+			profitSharingPurchaseContractItemProvider = new ProfitSharingPurchaseContractItemProvider(this);
+		}
+
+		return profitSharingPurchaseContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.contract.Contract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ContractItemProvider contractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.contract.Contract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createContractAdapter() {
+		if (contractItemProvider == null) {
+			contractItemProvider = new ContractItemProvider(this);
+		}
+
+		return contractItemProvider;
 	}
 
 	/**
@@ -266,9 +381,14 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 	 */
 	public void dispose() {
 		if (contractModelItemProvider != null) contractModelItemProvider.dispose();
-		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
 		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
 		if (totalVolumeLimitItemProvider != null) totalVolumeLimitItemProvider.dispose();
+		if (entityItemProvider != null) entityItemProvider.dispose();
+		if (fixedPricePurchaseContractItemProvider != null) fixedPricePurchaseContractItemProvider.dispose();
+		if (marketPricePurchaseContractItemProvider != null) marketPricePurchaseContractItemProvider.dispose();
+		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();
+		if (profitSharingPurchaseContractItemProvider != null) profitSharingPurchaseContractItemProvider.dispose();
+		if (contractItemProvider != null) contractItemProvider.dispose();
 	}
 
 }

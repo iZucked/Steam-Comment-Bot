@@ -10,6 +10,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.NamedObject;
+import scenario.ScenarioObject;
 import scenario.contract.*;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
@@ -99,18 +101,80 @@ public class ContractSwitch<T> {
 			case ContractPackage.PURCHASE_CONTRACT: {
 				PurchaseContract purchaseContract = (PurchaseContract)theEObject;
 				T result = casePurchaseContract(purchaseContract);
+				if (result == null) result = caseContract(purchaseContract);
+				if (result == null) result = caseNamedObject(purchaseContract);
+				if (result == null) result = caseScenarioObject(purchaseContract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ContractPackage.SALES_CONTRACT: {
 				SalesContract salesContract = (SalesContract)theEObject;
 				T result = caseSalesContract(salesContract);
+				if (result == null) result = caseContract(salesContract);
+				if (result == null) result = caseNamedObject(salesContract);
+				if (result == null) result = caseScenarioObject(salesContract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ContractPackage.TOTAL_VOLUME_LIMIT: {
 				TotalVolumeLimit totalVolumeLimit = (TotalVolumeLimit)theEObject;
 				T result = caseTotalVolumeLimit(totalVolumeLimit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.ENTITY: {
+				Entity entity = (Entity)theEObject;
+				T result = caseEntity(entity);
+				if (result == null) result = caseNamedObject(entity);
+				if (result == null) result = caseScenarioObject(entity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.FIXED_PRICE_PURCHASE_CONTRACT: {
+				FixedPricePurchaseContract fixedPricePurchaseContract = (FixedPricePurchaseContract)theEObject;
+				T result = caseFixedPricePurchaseContract(fixedPricePurchaseContract);
+				if (result == null) result = casePurchaseContract(fixedPricePurchaseContract);
+				if (result == null) result = caseContract(fixedPricePurchaseContract);
+				if (result == null) result = caseNamedObject(fixedPricePurchaseContract);
+				if (result == null) result = caseScenarioObject(fixedPricePurchaseContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT: {
+				MarketPricePurchaseContract marketPricePurchaseContract = (MarketPricePurchaseContract)theEObject;
+				T result = caseMarketPricePurchaseContract(marketPricePurchaseContract);
+				if (result == null) result = casePurchaseContract(marketPricePurchaseContract);
+				if (result == null) result = caseContract(marketPricePurchaseContract);
+				if (result == null) result = caseNamedObject(marketPricePurchaseContract);
+				if (result == null) result = caseScenarioObject(marketPricePurchaseContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.NETBACK_PURCHASE_CONTRACT: {
+				NetbackPurchaseContract netbackPurchaseContract = (NetbackPurchaseContract)theEObject;
+				T result = caseNetbackPurchaseContract(netbackPurchaseContract);
+				if (result == null) result = casePurchaseContract(netbackPurchaseContract);
+				if (result == null) result = caseContract(netbackPurchaseContract);
+				if (result == null) result = caseNamedObject(netbackPurchaseContract);
+				if (result == null) result = caseScenarioObject(netbackPurchaseContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT: {
+				ProfitSharingPurchaseContract profitSharingPurchaseContract = (ProfitSharingPurchaseContract)theEObject;
+				T result = caseProfitSharingPurchaseContract(profitSharingPurchaseContract);
+				if (result == null) result = casePurchaseContract(profitSharingPurchaseContract);
+				if (result == null) result = caseContract(profitSharingPurchaseContract);
+				if (result == null) result = caseNamedObject(profitSharingPurchaseContract);
+				if (result == null) result = caseScenarioObject(profitSharingPurchaseContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.CONTRACT: {
+				Contract contract = (Contract)theEObject;
+				T result = caseContract(contract);
+				if (result == null) result = caseNamedObject(contract);
+				if (result == null) result = caseScenarioObject(contract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -175,6 +239,126 @@ public class ContractSwitch<T> {
 	 * @generated
 	 */
 	public T caseTotalVolumeLimit(TotalVolumeLimit object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Entity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Entity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEntity(Entity object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fixed Price Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fixed Price Purchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFixedPricePurchaseContract(FixedPricePurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Market Price Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Market Price Purchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarketPricePurchaseContract(MarketPricePurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Netback Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Netback Purchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNetbackPurchaseContract(NetbackPurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Profit Sharing Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Profit Sharing Purchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseProfitSharingPurchaseContract(ProfitSharingPurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseContract(Contract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioObject(ScenarioObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 

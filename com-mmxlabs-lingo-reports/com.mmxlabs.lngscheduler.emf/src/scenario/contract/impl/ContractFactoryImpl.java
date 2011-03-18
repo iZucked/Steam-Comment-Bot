@@ -63,9 +63,14 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ContractPackage.CONTRACT_MODEL: return createContractModel();
-			case ContractPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case ContractPackage.SALES_CONTRACT: return createSalesContract();
 			case ContractPackage.TOTAL_VOLUME_LIMIT: return createTotalVolumeLimit();
+			case ContractPackage.ENTITY: return createEntity();
+			case ContractPackage.FIXED_PRICE_PURCHASE_CONTRACT: return createFixedPricePurchaseContract();
+			case ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT: return createMarketPricePurchaseContract();
+			case ContractPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT: return createProfitSharingPurchaseContract();
+			case ContractPackage.CONTRACT: return createContract();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -88,17 +93,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * @generated
 	 */
 	@Override
-	public PurchaseContract createPurchaseContract() {
-		PurchaseContractImpl purchaseContract = new PurchaseContractImpl();
-		return purchaseContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public SalesContract createSalesContract() {
 		SalesContractImpl salesContract = new SalesContractImpl();
 		return salesContract;
@@ -112,6 +106,66 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	public TotalVolumeLimit createTotalVolumeLimit() {
 		TotalVolumeLimitImpl totalVolumeLimit = new TotalVolumeLimitImpl();
 		return totalVolumeLimit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Entity createEntity() {
+		EntityImpl entity = new EntityImpl();
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FixedPricePurchaseContract createFixedPricePurchaseContract() {
+		FixedPricePurchaseContractImpl fixedPricePurchaseContract = new FixedPricePurchaseContractImpl();
+		return fixedPricePurchaseContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MarketPricePurchaseContract createMarketPricePurchaseContract() {
+		MarketPricePurchaseContractImpl marketPricePurchaseContract = new MarketPricePurchaseContractImpl();
+		return marketPricePurchaseContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NetbackPurchaseContract createNetbackPurchaseContract() {
+		NetbackPurchaseContractImpl netbackPurchaseContract = new NetbackPurchaseContractImpl();
+		return netbackPurchaseContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitSharingPurchaseContract createProfitSharingPurchaseContract() {
+		ProfitSharingPurchaseContractImpl profitSharingPurchaseContract = new ProfitSharingPurchaseContractImpl();
+		return profitSharingPurchaseContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Contract createContract() {
+		ContractImpl contract = new ContractImpl();
+		return contract;
 	}
 
 	/**

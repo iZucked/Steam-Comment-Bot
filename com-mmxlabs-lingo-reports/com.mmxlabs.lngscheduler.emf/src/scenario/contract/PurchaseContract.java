@@ -14,8 +14,8 @@ import org.eclipse.emf.ecore.EObject;
  *
  *
  * @see scenario.contract.ContractPackage#getPurchaseContract()
- * @model
+ * @model abstract="true"
  * @generated
  */
-public interface PurchaseContract extends EObject {
+public interface PurchaseContract extends Contract {
 } // PurchaseContract

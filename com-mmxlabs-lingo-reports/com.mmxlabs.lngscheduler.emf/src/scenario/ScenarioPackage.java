@@ -223,6 +223,53 @@ public interface ScenarioPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.impl.NamedObjectImpl <em>Named Object</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.impl.NamedObjectImpl
+	 * @see scenario.impl.ScenarioPackageImpl#getNamedObject()
+	 * @generated
+	 */
+	int NAMED_OBJECT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT__NAME = SCENARIO_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Named Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT_FEATURE_COUNT = SCENARIO_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___GET_CONTAINER = SCENARIO_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Named Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT_OPERATION_COUNT = SCENARIO_OBJECT_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.Scenario <em>Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -374,6 +421,27 @@ public interface ScenarioPackage extends EPackage {
 	EOperation getScenarioObject__GetContainer();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.NamedObject <em>Named Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Named Object</em>'.
+	 * @see scenario.NamedObject
+	 * @generated
+	 */
+	EClass getNamedObject();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.NamedObject#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see scenario.NamedObject#getName()
+	 * @see #getNamedObject()
+	 * @generated
+	 */
+	EAttribute getNamedObject_Name();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -510,6 +578,24 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SCENARIO_OBJECT___GET_CONTAINER = eINSTANCE.getScenarioObject__GetContainer();
+
+		/**
+		 * The meta object literal for the '{@link scenario.impl.NamedObjectImpl <em>Named Object</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.impl.NamedObjectImpl
+		 * @see scenario.impl.ScenarioPackageImpl#getNamedObject()
+		 * @generated
+		 */
+		EClass NAMED_OBJECT = eINSTANCE.getNamedObject();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NAMED_OBJECT__NAME = eINSTANCE.getNamedObject_Name();
 
 	}
 

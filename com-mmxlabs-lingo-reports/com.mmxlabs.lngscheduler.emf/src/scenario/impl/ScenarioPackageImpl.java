@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import scenario.NamedObject;
 import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.ScenarioObject;
@@ -57,6 +58,13 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	private EClass scenarioObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass namedObjectEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -282,6 +290,24 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getNamedObject() {
+		return namedObjectEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNamedObject_Name() {
+		return (EAttribute)namedObjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
 	}
@@ -320,6 +346,9 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		scenarioObjectEClass = createEClass(SCENARIO_OBJECT);
 		createEOperation(scenarioObjectEClass, SCENARIO_OBJECT___GET_CONTAINER);
+
+		namedObjectEClass = createEClass(NAMED_OBJECT);
+		createEAttribute(namedObjectEClass, NAMED_OBJECT__NAME);
 	}
 
 	/**
@@ -368,6 +397,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		namedObjectEClass.getESuperTypes().add(this.getScenarioObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scenarioEClass, Scenario.class, "Scenario", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -386,6 +416,9 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		initEClass(scenarioObjectEClass, ScenarioObject.class, "ScenarioObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEOperation(getScenarioObject__GetContainer(), ecorePackage.getEObject(), "getContainer", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(namedObjectEClass, NamedObject.class, "NamedObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNamedObject_Name(), ecorePackage.getEString(), "name", null, 1, 1, NamedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

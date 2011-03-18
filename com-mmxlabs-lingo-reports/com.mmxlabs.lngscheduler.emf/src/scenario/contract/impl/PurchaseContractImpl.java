@@ -20,7 +20,7 @@ import scenario.contract.PurchaseContract;
  *
  * @generated
  */
-public class PurchaseContractImpl extends EObjectImpl implements PurchaseContract {
+public abstract class PurchaseContractImpl extends ContractImpl implements PurchaseContract {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

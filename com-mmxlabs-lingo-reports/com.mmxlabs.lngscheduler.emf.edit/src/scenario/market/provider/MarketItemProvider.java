@@ -29,6 +29,7 @@ import scenario.market.Market;
 import scenario.market.MarketFactory;
 import scenario.market.MarketPackage;
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.market.Market} object.
@@ -37,7 +38,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class MarketItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**

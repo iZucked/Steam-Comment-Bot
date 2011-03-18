@@ -79,6 +79,8 @@ public class ContractModelItemProvider
 			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS);
 			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__SALES_CONTRACTS);
 			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
+			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__ENTITIES);
+			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__SHIPPING_ENTITY);
 		}
 		return childrenFeatures;
 	}
@@ -133,6 +135,8 @@ public class ContractModelItemProvider
 			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
 			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
 			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
+			case ContractPackage.CONTRACT_MODEL__ENTITIES:
+			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -153,7 +157,22 @@ public class ContractModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS,
-				 ContractFactory.eINSTANCE.createPurchaseContract()));
+				 ContractFactory.eINSTANCE.createFixedPricePurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS,
+				 ContractFactory.eINSTANCE.createMarketPricePurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS,
+				 ContractFactory.eINSTANCE.createNetbackPurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS,
+				 ContractFactory.eINSTANCE.createProfitSharingPurchaseContract()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -164,6 +183,39 @@ public class ContractModelItemProvider
 			(createChildParameter
 				(ContractPackage.Literals.CONTRACT_MODEL__VOLUME_CONSTRAINTS,
 				 ContractFactory.eINSTANCE.createTotalVolumeLimit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__ENTITIES,
+				 ContractFactory.eINSTANCE.createEntity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__SHIPPING_ENTITY,
+				 ContractFactory.eINSTANCE.createEntity()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == ContractPackage.Literals.CONTRACT_MODEL__ENTITIES ||
+			childFeature == ContractPackage.Literals.CONTRACT_MODEL__SHIPPING_ENTITY;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

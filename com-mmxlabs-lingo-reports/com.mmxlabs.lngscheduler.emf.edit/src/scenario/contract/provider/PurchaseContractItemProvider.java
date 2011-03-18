@@ -19,6 +19,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import scenario.contract.PurchaseContract;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 import scenario.provider.LngEditPlugin;
@@ -30,7 +31,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class PurchaseContractItemProvider
-	extends ItemProviderAdapter
+	extends ContractItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
@@ -77,7 +78,10 @@ public class PurchaseContractItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_PurchaseContract_type");
+		String label = ((PurchaseContract)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_PurchaseContract_type") :
+			getString("_UI_PurchaseContract_type") + " " + label;
 	}
 
 	/**
@@ -103,17 +107,6 @@ public class PurchaseContractItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return LngEditPlugin.INSTANCE;
 	}
 
 }
