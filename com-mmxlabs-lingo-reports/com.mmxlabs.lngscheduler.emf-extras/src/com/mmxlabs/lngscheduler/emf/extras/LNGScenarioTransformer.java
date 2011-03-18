@@ -157,7 +157,8 @@ public class LNGScenarioTransformer {
 			final StepwisePriceCurve curveModel = market.getPriceCurve();
 			final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
-			curve.setDefaultValue(Calculator.scaleToInt(curveModel.getDefaultValue()));
+			curve.setDefaultValue(Calculator.scaleToInt(curveModel
+					.getDefaultValue()));
 			for (final StepwisePrice price : curveModel.getPrices()) {
 				final int hours = convertTime(price.getDate());
 				curve.setValueAfter(hours,
@@ -240,7 +241,8 @@ public class LNGScenarioTransformer {
 		}
 
 		buildCargoes(builder, portAssociation, marketAssociation,
-				vesselAssociations.getSecond(), entities, purchaseContractAssociation);
+				vesselAssociations.getSecond(), entities,
+				purchaseContractAssociation);
 
 		buildCharterOuts(builder, portAssociation,
 				vesselAssociations.getFirst(), vesselAssociations.getSecond(),
@@ -376,12 +378,37 @@ public class LNGScenarioTransformer {
 					(int) Calculator.scale(loadSlot.getCargoCVvalue()),
 					dischargeSlot.getSlotDuration());
 
+			final ICurve dischargeCurve;
+			// create scaled discharge market, incorporating regas losses
+			{
+				final float regasEfficiency = ((SalesContract) dischargeSlot
+						.getContract()).getRegasEfficiency();
+				if (regasEfficiency != 1.0f) {
+					final StepwisePriceCurve curveModel = dischargeMarket
+							.getPriceCurve();
+					final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+
+					curve.setDefaultValue(Calculator.scaleToInt(curveModel
+							.getDefaultValue() * regasEfficiency));
+					for (final StepwisePrice price : curveModel.getPrices()) {
+						final int hours = convertTime(price.getDate());
+						curve.setValueAfter(
+								hours,
+								Calculator.scaleToInt(regasEfficiency
+										* price.getPriceFromDate()));
+					}
+					dischargeCurve = curve;
+				} else {
+					dischargeCurve = marketAssociation.lookup(dischargeMarket);
+				}
+			}
+
 			final IDischargeSlot discharge = builder.createDischargeSlot(
 					dischargeSlot.getId(),
 					ports.lookup(dischargeSlot.getPort()), dischargeWindow,
 					Calculator.scale(dischargeSlot.getMinQuantity()),
 					Calculator.scale(dischargeSlot.getMaxQuantity()),
-					marketAssociation.lookup(dischargeMarket),
+					dischargeCurve,
 					dischargeSlot.getSlotDuration());
 
 			entities.addModelObject(loadSlot, load);
