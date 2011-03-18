@@ -67,6 +67,7 @@
 		<module>com.mmxlabs.demo.reports</module>
 		<module>com.mmxlabs.ganttviewer</module>
 		<module>com.mmxlabs.scheduleview</module>
+		<module>com.mmxlabs.rcp.navigator</module>
 	</modules>
 
 	<!-- Pom dependencies to "consider". These need to be OSGi bundles for the 

@@ -213,7 +213,8 @@ public abstract class EMFReportView extends ViewPart implements
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart arg0, ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart arg0,
+			final ISelection selection) {
 		final IStructuredSelection sel = (IStructuredSelection) selection;
 		if (sel.isEmpty()) {
 			setInput(null);
@@ -225,9 +226,9 @@ public abstract class EMFReportView extends ViewPart implements
 				if (o instanceof Schedule) {
 					setInput((Schedule) o);
 					return;
-				}
-				else if (o instanceof IAdaptable) {
-					setInput((Schedule) ((IAdaptable) o).getAdapter(Schedule.class));
+				} else if (o instanceof IAdaptable) {
+					setInput(((IAdaptable) o).getAdapter(Schedule.class));
+					return;
 				}
 			}
 		}
