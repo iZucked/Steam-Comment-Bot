@@ -8,12 +8,16 @@ package scenario.schedule.provider;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -22,32 +26,36 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.provider.LngEditPlugin;
-import scenario.schedule.Schedule;
+import scenario.provider.ScenarioObjectItemProvider;
+
+import scenario.schedule.BookedRevenue;
 import scenario.schedule.ScheduleFactory;
 import scenario.schedule.SchedulePackage;
-import scenario.schedule.fleetallocation.FleetallocationFactory;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.Schedule} object.
+ * This is the item provider adapter for a {@link scenario.schedule.BookedRevenue} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleItemProvider
-	extends ItemProviderAdapter
+public class BookedRevenueItemProvider
+	extends ScenarioObjectItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScheduleItemProvider(AdapterFactory adapterFactory) {
+	public BookedRevenueItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -62,52 +70,75 @@ public class ScheduleItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
-			addRevenuePropertyDescriptor(object);
+			addEntityPropertyDescriptor(object);
+			addCargoPropertyDescriptor(object);
+			addDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Name feature.
+	 * This adds a property descriptor for the Entity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addNamePropertyDescriptor(Object object) {
+	protected void addEntityPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Schedule_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_name_feature", "_UI_Schedule_type"),
-				 SchedulePackage.Literals.SCHEDULE__NAME,
+				 getString("_UI_BookedRevenue_entity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_entity_feature", "_UI_BookedRevenue_type"),
+				 SchedulePackage.Literals.BOOKED_REVENUE__ENTITY,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Revenue feature.
+	 * This adds a property descriptor for the Cargo feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRevenuePropertyDescriptor(Object object) {
+	protected void addCargoPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Schedule_revenue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_revenue_feature", "_UI_Schedule_type"),
-				 SchedulePackage.Literals.SCHEDULE__REVENUE,
+				 getString("_UI_BookedRevenue_cargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_cargo_feature", "_UI_BookedRevenue_type"),
+				 SchedulePackage.Literals.BOOKED_REVENUE__CARGO,
 				 true,
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BookedRevenue_date_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_date_feature", "_UI_BookedRevenue_type"),
+				 SchedulePackage.Literals.BOOKED_REVENUE__DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -124,10 +155,7 @@ public class ScheduleItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FLEET);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESS);
+			childrenFeatures.add(SchedulePackage.Literals.BOOKED_REVENUE__LINE_ITEMS);
 		}
 		return childrenFeatures;
 	}
@@ -146,14 +174,14 @@ public class ScheduleItemProvider
 	}
 
 	/**
-	 * This returns Schedule.gif.
+	 * This returns BookedRevenue.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Schedule"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BookedRevenue"));
 	}
 
 	/**
@@ -164,10 +192,11 @@ public class ScheduleItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Schedule)object).getName();
+		Date labelValue = ((BookedRevenue)object).getDate();
+		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Schedule_type") :
-			getString("_UI_Schedule_type") + " " + label;
+			getString("_UI_BookedRevenue_type") :
+			getString("_UI_BookedRevenue_type") + " " + label;
 	}
 
 	/**
@@ -181,14 +210,11 @@ public class ScheduleItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Schedule.class)) {
-			case SchedulePackage.SCHEDULE__NAME:
+		switch (notification.getFeatureID(BookedRevenue.class)) {
+			case SchedulePackage.BOOKED_REVENUE__DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.SCHEDULE__SEQUENCES:
-			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
-			case SchedulePackage.SCHEDULE__FLEET:
-			case SchedulePackage.SCHEDULE__FITNESS:
+			case SchedulePackage.BOOKED_REVENUE__LINE_ITEMS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -208,33 +234,8 @@ public class ScheduleItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__SEQUENCES,
-				 ScheduleFactory.eINSTANCE.createSequence()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS,
-				 ScheduleFactory.eINSTANCE.createCargoAllocation()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetallocationFactory.eINSTANCE.createAllocatedVessel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetallocationFactory.eINSTANCE.createFleetVessel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetallocationFactory.eINSTANCE.createSpotVessel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__FITNESS,
-				 ScheduleFactory.eINSTANCE.createScheduleFitness()));
+				(SchedulePackage.Literals.BOOKED_REVENUE__LINE_ITEMS,
+				 ScheduleFactory.eINSTANCE.createLineItem()));
 	}
 
 	/**

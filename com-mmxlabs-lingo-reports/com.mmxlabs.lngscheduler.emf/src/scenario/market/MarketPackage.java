@@ -7,6 +7,7 @@ package scenario.market;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import scenario.ScenarioPackage;
@@ -199,13 +200,22 @@ public interface MarketPackage extends EPackage {
 	int STEPWISE_PRICE_CURVE_FEATURE_COUNT = 2;
 
 	/**
+	 * The operation id for the '<em>Get Value At Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STEPWISE_PRICE_CURVE___GET_VALUE_AT_DATE__DATE = 0;
+
+	/**
 	 * The number of operations of the '<em>Stepwise Price Curve</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STEPWISE_PRICE_CURVE_OPERATION_COUNT = 0;
+	int STEPWISE_PRICE_CURVE_OPERATION_COUNT = 1;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -295,6 +305,16 @@ public interface MarketPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getStepwisePriceCurve_DefaultValue();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.market.StepwisePriceCurve#getValueAtDate(java.util.Date) <em>Get Value At Date</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Value At Date</em>' operation.
+	 * @see scenario.market.StepwisePriceCurve#getValueAtDate(java.util.Date)
+	 * @generated
+	 */
+	EOperation getStepwisePriceCurve__GetValueAtDate__Date();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.market.StepwisePrice <em>Stepwise Price</em>}'.
@@ -414,6 +434,14 @@ public interface MarketPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute STEPWISE_PRICE_CURVE__DEFAULT_VALUE = eINSTANCE.getStepwisePriceCurve_DefaultValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Value At Date</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation STEPWISE_PRICE_CURVE___GET_VALUE_AT_DATE__DATE = eINSTANCE.getStepwisePriceCurve__GetValueAtDate__Date();
 
 		/**
 		 * The meta object literal for the '{@link scenario.market.impl.StepwisePriceImpl <em>Stepwise Price</em>}' class.

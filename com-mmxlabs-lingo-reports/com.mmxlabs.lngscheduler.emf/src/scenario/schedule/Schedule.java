@@ -24,6 +24,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link scenario.schedule.Schedule#getFleet <em>Fleet</em>}</li>
  *   <li>{@link scenario.schedule.Schedule#getFitness <em>Fitness</em>}</li>
+ *   <li>{@link scenario.schedule.Schedule#getRevenue <em>Revenue</em>}</li>
  * </ul>
  * </p>
  *
@@ -121,5 +122,21 @@ public interface Schedule extends EObject {
 	 * @generated
 	 */
 	EList<ScheduleFitness> getFitness();
+
+	/**
+	 * Returns the value of the '<em><b>Revenue</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.schedule.BookedRevenue}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Revenue</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Revenue</em>' containment reference list.
+	 * @see scenario.schedule.SchedulePackage#getSchedule_Revenue()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	EList<BookedRevenue> getRevenue();
 
 } // Schedule

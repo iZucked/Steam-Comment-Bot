@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -153,13 +154,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__FITNESS = 4;
 
 	/**
+	 * The feature id for the '<em><b>Revenue</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__REVENUE = 5;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = 5;
+	int SCHEDULE_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Schedule</em>' class.
@@ -457,6 +467,207 @@ public interface SchedulePackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.schedule.impl.LineItemImpl <em>Line Item</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.impl.LineItemImpl
+	 * @see scenario.schedule.impl.SchedulePackageImpl#getLineItem()
+	 * @generated
+	 */
+	int LINE_ITEM = 5;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINE_ITEM__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINE_ITEM__VALUE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Party</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINE_ITEM__PARTY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Line Item</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINE_ITEM_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINE_ITEM___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Is Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINE_ITEM___IS_COST = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Is Revenue</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINE_ITEM___IS_REVENUE = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Line Item</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINE_ITEM_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link scenario.schedule.impl.BookedRevenueImpl <em>Booked Revenue</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.impl.BookedRevenueImpl
+	 * @see scenario.schedule.impl.SchedulePackageImpl#getBookedRevenue()
+	 * @generated
+	 */
+	int BOOKED_REVENUE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE__ENTITY = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE__CARGO = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE__DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Line Items</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE__LINE_ITEMS = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Booked Revenue</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE_FEATURE_COUNT = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE___GET_CONTAINER = ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE___GET_UNTAXED_VALUE = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Taxed Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE___GET_TAXED_VALUE = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Revenues</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE___GET_UNTAXED_REVENUES = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Costs</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE___GET_UNTAXED_COSTS = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Tax Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE___GET_TAX_COST = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 4;
+
+	/**
+	 * The number of operations of the '<em>Booked Revenue</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 5;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.ScheduleModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -541,6 +752,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_Fitness();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.schedule.Schedule#getRevenue <em>Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Revenue</em>'.
+	 * @see scenario.schedule.Schedule#getRevenue()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_Revenue();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.Sequence <em>Sequence</em>}'.
@@ -811,6 +1033,162 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getScheduleFitness_Value();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.schedule.LineItem <em>Line Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Line Item</em>'.
+	 * @see scenario.schedule.LineItem
+	 * @generated
+	 */
+	EClass getLineItem();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.schedule.LineItem#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see scenario.schedule.LineItem#getValue()
+	 * @see #getLineItem()
+	 * @generated
+	 */
+	EAttribute getLineItem_Value();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.LineItem#getParty <em>Party</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Party</em>'.
+	 * @see scenario.schedule.LineItem#getParty()
+	 * @see #getLineItem()
+	 * @generated
+	 */
+	EReference getLineItem_Party();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.LineItem#isCost() <em>Is Cost</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Cost</em>' operation.
+	 * @see scenario.schedule.LineItem#isCost()
+	 * @generated
+	 */
+	EOperation getLineItem__IsCost();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.LineItem#isRevenue() <em>Is Revenue</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Revenue</em>' operation.
+	 * @see scenario.schedule.LineItem#isRevenue()
+	 * @generated
+	 */
+	EOperation getLineItem__IsRevenue();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.schedule.BookedRevenue <em>Booked Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Booked Revenue</em>'.
+	 * @see scenario.schedule.BookedRevenue
+	 * @generated
+	 */
+	EClass getBookedRevenue();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.BookedRevenue#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see scenario.schedule.BookedRevenue#getEntity()
+	 * @see #getBookedRevenue()
+	 * @generated
+	 */
+	EReference getBookedRevenue_Entity();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.BookedRevenue#getCargo <em>Cargo</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Cargo</em>'.
+	 * @see scenario.schedule.BookedRevenue#getCargo()
+	 * @see #getBookedRevenue()
+	 * @generated
+	 */
+	EReference getBookedRevenue_Cargo();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.schedule.BookedRevenue#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see scenario.schedule.BookedRevenue#getDate()
+	 * @see #getBookedRevenue()
+	 * @generated
+	 */
+	EAttribute getBookedRevenue_Date();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.schedule.BookedRevenue#getLineItems <em>Line Items</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Line Items</em>'.
+	 * @see scenario.schedule.BookedRevenue#getLineItems()
+	 * @see #getBookedRevenue()
+	 * @generated
+	 */
+	EReference getBookedRevenue_LineItems();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.BookedRevenue#getUntaxedValue() <em>Get Untaxed Value</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Untaxed Value</em>' operation.
+	 * @see scenario.schedule.BookedRevenue#getUntaxedValue()
+	 * @generated
+	 */
+	EOperation getBookedRevenue__GetUntaxedValue();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.BookedRevenue#getTaxedValue() <em>Get Taxed Value</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Taxed Value</em>' operation.
+	 * @see scenario.schedule.BookedRevenue#getTaxedValue()
+	 * @generated
+	 */
+	EOperation getBookedRevenue__GetTaxedValue();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.BookedRevenue#getUntaxedRevenues() <em>Get Untaxed Revenues</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Untaxed Revenues</em>' operation.
+	 * @see scenario.schedule.BookedRevenue#getUntaxedRevenues()
+	 * @generated
+	 */
+	EOperation getBookedRevenue__GetUntaxedRevenues();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.BookedRevenue#getUntaxedCosts() <em>Get Untaxed Costs</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Untaxed Costs</em>' operation.
+	 * @see scenario.schedule.BookedRevenue#getUntaxedCosts()
+	 * @generated
+	 */
+	EOperation getBookedRevenue__GetUntaxedCosts();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.BookedRevenue#getTaxCost() <em>Get Tax Cost</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Tax Cost</em>' operation.
+	 * @see scenario.schedule.BookedRevenue#getTaxCost()
+	 * @generated
+	 */
+	EOperation getBookedRevenue__GetTaxCost();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -899,6 +1277,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__FITNESS = eINSTANCE.getSchedule_Fitness();
+
+		/**
+		 * The meta object literal for the '<em><b>Revenue</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__REVENUE = eINSTANCE.getSchedule_Revenue();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -1105,6 +1491,130 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SCHEDULE_FITNESS__VALUE = eINSTANCE.getScheduleFitness_Value();
+
+		/**
+		 * The meta object literal for the '{@link scenario.schedule.impl.LineItemImpl <em>Line Item</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.schedule.impl.LineItemImpl
+		 * @see scenario.schedule.impl.SchedulePackageImpl#getLineItem()
+		 * @generated
+		 */
+		EClass LINE_ITEM = eINSTANCE.getLineItem();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LINE_ITEM__VALUE = eINSTANCE.getLineItem_Value();
+
+		/**
+		 * The meta object literal for the '<em><b>Party</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LINE_ITEM__PARTY = eINSTANCE.getLineItem_Party();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Cost</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LINE_ITEM___IS_COST = eINSTANCE.getLineItem__IsCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Revenue</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LINE_ITEM___IS_REVENUE = eINSTANCE.getLineItem__IsRevenue();
+
+		/**
+		 * The meta object literal for the '{@link scenario.schedule.impl.BookedRevenueImpl <em>Booked Revenue</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.schedule.impl.BookedRevenueImpl
+		 * @see scenario.schedule.impl.SchedulePackageImpl#getBookedRevenue()
+		 * @generated
+		 */
+		EClass BOOKED_REVENUE = eINSTANCE.getBookedRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOOKED_REVENUE__ENTITY = eINSTANCE.getBookedRevenue_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOOKED_REVENUE__CARGO = eINSTANCE.getBookedRevenue_Cargo();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BOOKED_REVENUE__DATE = eINSTANCE.getBookedRevenue_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Line Items</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOOKED_REVENUE__LINE_ITEMS = eINSTANCE.getBookedRevenue_LineItems();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Untaxed Value</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation BOOKED_REVENUE___GET_UNTAXED_VALUE = eINSTANCE.getBookedRevenue__GetUntaxedValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Taxed Value</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation BOOKED_REVENUE___GET_TAXED_VALUE = eINSTANCE.getBookedRevenue__GetTaxedValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Untaxed Revenues</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation BOOKED_REVENUE___GET_UNTAXED_REVENUES = eINSTANCE.getBookedRevenue__GetUntaxedRevenues();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Untaxed Costs</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation BOOKED_REVENUE___GET_UNTAXED_COSTS = eINSTANCE.getBookedRevenue__GetUntaxedCosts();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Tax Cost</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation BOOKED_REVENUE___GET_TAX_COST = eINSTANCE.getBookedRevenue__GetTaxCost();
 
 	}
 

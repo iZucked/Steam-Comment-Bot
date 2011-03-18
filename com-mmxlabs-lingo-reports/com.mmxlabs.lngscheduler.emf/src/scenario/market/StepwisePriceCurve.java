@@ -6,6 +6,7 @@
  */
 package scenario.market;
 
+import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -53,12 +54,12 @@ public interface StepwisePriceCurve extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Default Value</em>' attribute.
-	 * @see #setDefaultValue(int)
+	 * @see #setDefaultValue(float)
 	 * @see scenario.market.MarketPackage#getStepwisePriceCurve_DefaultValue()
 	 * @model
 	 * @generated
 	 */
-	int getDefaultValue();
+	float getDefaultValue();
 
 	/**
 	 * Sets the value of the '{@link scenario.market.StepwisePriceCurve#getDefaultValue <em>Default Value</em>}' attribute.
@@ -68,6 +69,15 @@ public interface StepwisePriceCurve extends EObject {
 	 * @see #getDefaultValue()
 	 * @generated
 	 */
-	void setDefaultValue(int value);
+	void setDefaultValue(float value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" dateRequired="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return 0;'"
+	 * @generated
+	 */
+	float getValueAtDate(Date date);
 
 } // StepwisePriceCurve

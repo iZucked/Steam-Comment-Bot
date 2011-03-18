@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import scenario.schedule.BookedRevenue;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFitness;
@@ -41,6 +42,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.impl.ScheduleImpl#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link scenario.schedule.impl.ScheduleImpl#getFleet <em>Fleet</em>}</li>
  *   <li>{@link scenario.schedule.impl.ScheduleImpl#getFitness <em>Fitness</em>}</li>
+ *   <li>{@link scenario.schedule.impl.ScheduleImpl#getRevenue <em>Revenue</em>}</li>
  * </ul>
  * </p>
  *
@@ -106,6 +108,16 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected EList<ScheduleFitness> fitness;
+
+	/**
+	 * The cached value of the '{@link #getRevenue() <em>Revenue</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<BookedRevenue> revenue;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -200,6 +212,18 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<BookedRevenue> getRevenue() {
+		if (revenue == null) {
+			revenue = new EObjectContainmentEList<BookedRevenue>(BookedRevenue.class, this, SchedulePackage.SCHEDULE__REVENUE);
+		}
+		return revenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -211,6 +235,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 				return ((InternalEList<?>)getFleet()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__FITNESS:
 				return ((InternalEList<?>)getFitness()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__REVENUE:
+				return ((InternalEList<?>)getRevenue()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -233,6 +259,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 				return getFleet();
 			case SchedulePackage.SCHEDULE__FITNESS:
 				return getFitness();
+			case SchedulePackage.SCHEDULE__REVENUE:
+				return getRevenue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -265,6 +293,10 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 				getFitness().clear();
 				getFitness().addAll((Collection<? extends ScheduleFitness>)newValue);
 				return;
+			case SchedulePackage.SCHEDULE__REVENUE:
+				getRevenue().clear();
+				getRevenue().addAll((Collection<? extends BookedRevenue>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -292,6 +324,9 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__FITNESS:
 				getFitness().clear();
 				return;
+			case SchedulePackage.SCHEDULE__REVENUE:
+				getRevenue().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -314,6 +349,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 				return fleet != null && !fleet.isEmpty();
 			case SchedulePackage.SCHEDULE__FITNESS:
 				return fitness != null && !fitness.isEmpty();
+			case SchedulePackage.SCHEDULE__REVENUE:
+				return revenue != null && !revenue.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

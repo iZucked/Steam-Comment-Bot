@@ -6,8 +6,10 @@
  */
 package scenario.market.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+import java.util.Date;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -59,7 +61,7 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int DEFAULT_VALUE_EDEFAULT = 0;
+	protected static final float DEFAULT_VALUE_EDEFAULT = 0.0F;
 
 	/**
 	 * The cached value of the '{@link #getDefaultValue() <em>Default Value</em>}' attribute.
@@ -69,7 +71,7 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * @generated
 	 * @ordered
 	 */
-	protected int defaultValue = DEFAULT_VALUE_EDEFAULT;
+	protected float defaultValue = DEFAULT_VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -107,7 +109,7 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getDefaultValue() {
+	public float getDefaultValue() {
 		return defaultValue;
 	}
 
@@ -116,11 +118,20 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDefaultValue(int newDefaultValue) {
-		int oldDefaultValue = defaultValue;
+	public void setDefaultValue(float newDefaultValue) {
+		float oldDefaultValue = defaultValue;
 		defaultValue = newDefaultValue;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE, oldDefaultValue, defaultValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public float getValueAtDate(Date date) {
+		return 0;
 	}
 
 	/**
@@ -167,7 +178,7 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 				getPrices().addAll((Collection<? extends StepwisePrice>)newValue);
 				return;
 			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
-				setDefaultValue((Integer)newValue);
+				setDefaultValue((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -205,6 +216,20 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 				return defaultValue != DEFAULT_VALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case MarketPackage.STEPWISE_PRICE_CURVE___GET_VALUE_AT_DATE__DATE:
+				return getValueAtDate((Date)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

@@ -8,6 +8,7 @@ package scenario.market.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -234,6 +235,15 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getStepwisePriceCurve__GetValueAtDate__Date() {
+		return stepwisePriceCurveEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getStepwisePrice() {
 		return stepwisePriceEClass;
 	}
@@ -293,6 +303,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		stepwisePriceCurveEClass = createEClass(STEPWISE_PRICE_CURVE);
 		createEReference(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE__PRICES);
 		createEAttribute(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE__DEFAULT_VALUE);
+		createEOperation(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE___GET_VALUE_AT_DATE__DATE);
 
 		stepwisePriceEClass = createEClass(STEPWISE_PRICE);
 		createEAttribute(stepwisePriceEClass, STEPWISE_PRICE__DATE);
@@ -341,7 +352,10 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 
 		initEClass(stepwisePriceCurveEClass, StepwisePriceCurve.class, "StepwisePriceCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getStepwisePriceCurve_Prices(), this.getStepwisePrice(), null, "prices", null, 0, -1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getStepwisePriceCurve_DefaultValue(), ecorePackage.getEInt(), "defaultValue", null, 0, 1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStepwisePriceCurve_DefaultValue(), ecorePackage.getEFloat(), "defaultValue", null, 0, 1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		EOperation op = initEOperation(getStepwisePriceCurve__GetValueAtDate__Date(), ecorePackage.getEFloat(), "getValueAtDate", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEDate(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(stepwisePriceEClass, StepwisePrice.class, "StepwisePrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStepwisePrice_Date(), ecorePackage.getEDate(), "date", null, 1, 1, StepwisePrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
