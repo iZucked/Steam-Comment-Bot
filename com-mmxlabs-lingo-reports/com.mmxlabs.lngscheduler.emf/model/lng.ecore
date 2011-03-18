@@ -554,6 +554,8 @@
           eType="#//market/Market"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="regasEfficiency" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="markup" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="1.05"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="TotalVolumeLimit">
       <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"

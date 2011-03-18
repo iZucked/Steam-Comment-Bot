@@ -309,6 +309,15 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSalesContract_Markup() {
+		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getTotalVolumeLimit() {
 		return totalVolumeLimitEClass;
 	}
@@ -551,6 +560,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		salesContractEClass = createEClass(SALES_CONTRACT);
 		createEReference(salesContractEClass, SALES_CONTRACT__MARKET);
 		createEAttribute(salesContractEClass, SALES_CONTRACT__REGAS_EFFICIENCY);
+		createEAttribute(salesContractEClass, SALES_CONTRACT__MARKUP);
 
 		totalVolumeLimitEClass = createEClass(TOTAL_VOLUME_LIMIT);
 		createEReference(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__PORTS);
@@ -638,6 +648,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSalesContract_Market(), theMarketPackage.getMarket(), null, "market", null, 1, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSalesContract_RegasEfficiency(), ecorePackage.getEFloat(), "regasEfficiency", null, 1, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSalesContract_Markup(), ecorePackage.getEFloat(), "markup", "1.05", 1, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(totalVolumeLimitEClass, TotalVolumeLimit.class, "TotalVolumeLimit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTotalVolumeLimit_Ports(), thePortPackage.getPort(), null, "ports", null, 0, -1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

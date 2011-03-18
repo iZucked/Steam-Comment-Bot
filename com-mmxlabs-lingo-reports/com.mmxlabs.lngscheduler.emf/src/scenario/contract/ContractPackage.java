@@ -289,13 +289,22 @@ public interface ContractPackage extends EPackage {
 	int SALES_CONTRACT__REGAS_EFFICIENCY = CONTRACT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Markup</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MARKUP = CONTRACT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
+	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 3;
 
 
 	/**
@@ -856,6 +865,17 @@ public interface ContractPackage extends EPackage {
 	EAttribute getSalesContract_RegasEfficiency();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.SalesContract#getMarkup <em>Markup</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Markup</em>'.
+	 * @see scenario.contract.SalesContract#getMarkup()
+	 * @see #getSalesContract()
+	 * @generated
+	 */
+	EAttribute getSalesContract_Markup();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.contract.TotalVolumeLimit <em>Total Volume Limit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1208,6 +1228,14 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SALES_CONTRACT__REGAS_EFFICIENCY = eINSTANCE.getSalesContract_RegasEfficiency();
+
+		/**
+		 * The meta object literal for the '<em><b>Markup</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SALES_CONTRACT__MARKUP = eINSTANCE.getSalesContract_Markup();
 
 		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.TotalVolumeLimitImpl <em>Total Volume Limit</em>}' class.

@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link scenario.contract.SalesContract#getMarket <em>Market</em>}</li>
  *   <li>{@link scenario.contract.SalesContract#getRegasEfficiency <em>Regas Efficiency</em>}</li>
+ *   <li>{@link scenario.contract.SalesContract#getMarkup <em>Markup</em>}</li>
  * </ul>
  * </p>
  *
@@ -78,4 +79,31 @@ public interface SalesContract extends Contract {
 	 * @generated
 	 */
 	void setRegasEfficiency(float value);
+
+	/**
+	 * Returns the value of the '<em><b>Markup</b></em>' attribute.
+	 * The default value is <code>"1.05"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Markup</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Markup</em>' attribute.
+	 * @see #setMarkup(float)
+	 * @see scenario.contract.ContractPackage#getSalesContract_Markup()
+	 * @model default="1.05" required="true"
+	 * @generated
+	 */
+	float getMarkup();
+
+	/**
+	 * Sets the value of the '{@link scenario.contract.SalesContract#getMarkup <em>Markup</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Markup</em>' attribute.
+	 * @see #getMarkup()
+	 * @generated
+	 */
+	void setMarkup(float value);
 } // SalesContract
