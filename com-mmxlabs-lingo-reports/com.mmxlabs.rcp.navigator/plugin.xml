@@ -63,7 +63,7 @@
          point="org.eclipse.ui.navigator.navigatorContent">
      
       <actionProvider
-            class="com.mmxlabs.rcp.navigator.OpenScenarioActionProvider"
+            class="com.mmxlabs.rcp.navigator.actions.OpenScenarioActionProvider"
             id="com.mmxlabs.rcp.navigator.CommonActionProvider1">
          <enablement>
             <or>
