@@ -65,6 +65,8 @@ import scenario.port.Port;
 import scenario.port.PortFactory;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
+import scenario.schedule.ScheduleFactory;
+import scenario.schedule.SchedulePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
@@ -93,6 +95,8 @@ public class RandomScenarioUtils {
 			.getCargoFactory();
 	private final MarketFactory marketFactory = MarketPackage.eINSTANCE
 			.getMarketFactory();
+	private final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE
+	.getScheduleFactory();
 
 	private final Random random;
 
@@ -112,6 +116,7 @@ public class RandomScenarioUtils {
 		scenario.setDistanceModel(portFactory.createDistanceModel());
 		scenario.setFleetModel(fleetFactory.createFleetModel());
 		scenario.setPortModel(portFactory.createPortModel());
+		scenario.setScheduleModel(scheduleFactory.createScheduleModel());
 
 		return scenario;
 	}
