@@ -698,8 +698,8 @@ public class RandomScenarioUtils {
 
 		for (float[] point : curve) {
 			FuelConsumptionLine line = fleetFactory.createFuelConsumptionLine();
-			line.setConsumption(point[0]);
-			line.setSpeed(point[1]);
+			line.setSpeed(point[0]);
+			line.setConsumption(point[1]);
 			vsa.getFuelConsumptionCurve().add(line);
 		}
 
