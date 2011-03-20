@@ -24,11 +24,16 @@ public interface IJobManager {
 
 	void toggleJobSelection(IManagedJob job);
 	
-//	void toggleResourceSelection(IResource resource);
+	void toggleResourceSelection(IResource resource);
 
+	void setJobSelection(IManagedJob job, boolean selected);
+	
+	void setResourceSelection(IResource resource, boolean selected);
+
+	
 	List<IManagedJob> getSelectedJobs();
 	
-//	List<IResource> getSelectedResources();
+	List<IResource> getSelectedResources();
 
 	IManagedJob findJobForResource(IResource resource);
 
