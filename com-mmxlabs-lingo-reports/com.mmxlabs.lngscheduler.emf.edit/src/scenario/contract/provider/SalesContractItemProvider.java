@@ -61,6 +61,7 @@ public class SalesContractItemProvider
 
 			addMarketPropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
+			addMarkupPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -110,6 +111,28 @@ public class SalesContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Markup feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarkupPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SalesContract_markup_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SalesContract_markup_feature", "_UI_SalesContract_type"),
+				 ContractPackage.Literals.SALES_CONTRACT__MARKUP,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SalesContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -147,6 +170,7 @@ public class SalesContractItemProvider
 
 		switch (notification.getFeatureID(SalesContract.class)) {
 			case ContractPackage.SALES_CONTRACT__REGAS_EFFICIENCY:
+			case ContractPackage.SALES_CONTRACT__MARKUP:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
