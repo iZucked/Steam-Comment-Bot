@@ -27,6 +27,8 @@ public final class JobManager implements IJobManager {
 
 	private final List<IManagedJob> selectedJobs = new LinkedList<IManagedJob>();
 
+	private final List<IResource> selectedResources = new LinkedList<IResource>();
+
 	private final Set<IJobManagerListener> jobManagerListeners = new HashSet<IJobManagerListener>();
 
 	/*
@@ -49,9 +51,10 @@ public final class JobManager implements IJobManager {
 	@Override
 	public void addJob(final IManagedJob job, final IResource resource) {
 		jobs.add(job);
-		IResource oldResource = jobResourceMap.put(job, resource);
-		if (oldResource !=null) {
-			throw new IllegalStateException("Job already exists - state is now inconsistent!");
+		final IResource oldResource = jobResourceMap.put(job, resource);
+		if (oldResource != null) {
+			throw new IllegalStateException(
+					"Job already exists - state is now inconsistent!");
 		}
 
 		fireJobAdded(job);
@@ -105,7 +108,7 @@ public final class JobManager implements IJobManager {
 	 * @param job
 	 */
 	private void fireJobAdded(final IManagedJob job) {
-		IResource resource = jobResourceMap.get(job);
+		final IResource resource = jobResourceMap.get(job);
 
 		for (final IJobManagerListener l : jobManagerListeners) {
 			l.jobAdded(this, job, resource);
@@ -117,7 +120,7 @@ public final class JobManager implements IJobManager {
 	 */
 	private void fireJobRemoved(final IManagedJob job) {
 
-		IResource resource = jobResourceMap.get(job);
+		final IResource resource = jobResourceMap.get(job);
 
 		for (final IJobManagerListener l : jobManagerListeners) {
 			l.jobRemoved(this, job, resource);
@@ -128,7 +131,7 @@ public final class JobManager implements IJobManager {
 	 * @param job
 	 */
 	private void fireJobSelected(final IManagedJob job) {
-		IResource resource = jobResourceMap.get(job);
+		final IResource resource = jobResourceMap.get(job);
 
 		for (final IJobManagerListener l : jobManagerListeners) {
 			l.jobSelected(this, job, resource);
@@ -139,7 +142,7 @@ public final class JobManager implements IJobManager {
 	 * @param job
 	 */
 	private void fireJobDeselected(final IManagedJob job) {
-		IResource resource = jobResourceMap.get(job);
+		final IResource resource = jobResourceMap.get(job);
 
 		for (final IJobManagerListener l : jobManagerListeners) {
 			l.jobDeselected(this, job, resource);
@@ -186,6 +189,7 @@ public final class JobManager implements IJobManager {
 	 */
 	private void selectJob(final IManagedJob job) {
 		selectedJobs.add(job);
+		selectedResources.add(jobResourceMap.get(job));
 		fireJobSelected(job);
 	}
 
@@ -196,12 +200,37 @@ public final class JobManager implements IJobManager {
 	 */
 	private void deselectJob(final IManagedJob job) {
 		selectedJobs.remove(job);
+		selectedResources.remove(jobResourceMap.get(job));
 		fireJobDeselected(job);
 	}
 
+	/**
+	 * Remove job from the list of selected jobs and fire an event.
+	 * 
+	 * @param job
+	 */
+	private void deselectResource(final IResource resource) {
+		selectedResources.remove(resource);
+		final IManagedJob job = findJobForResource(resource);
+		selectedJobs.remove(job);
+		fireJobDeselected(job);
+	}
+
+	/**
+	 * Add job from the list of selected jobs and fire an event.
+	 * 
+	 * @param resource
+	 */
+	private void selectResource(final IResource resource) {
+		selectedResources.add(resource);
+		final IManagedJob job = findJobForResource(resource);
+		selectedJobs.add(job);
+		fireJobSelected(job);
+	}
+
 	@Override
-	public IManagedJob findJobForResource(IResource resource) {
-		for (Map.Entry<IManagedJob, IResource> entry : jobResourceMap
+	public IManagedJob findJobForResource(final IResource resource) {
+		for (final Map.Entry<IManagedJob, IResource> entry : jobResourceMap
 				.entrySet()) {
 			if (entry.getValue().equals(resource)) {
 				return entry.getKey();
@@ -211,7 +240,56 @@ public final class JobManager implements IJobManager {
 	}
 
 	@Override
-	public IResource findResourceForJob(IManagedJob job) {
+	public IResource findResourceForJob(final IManagedJob job) {
 		return jobResourceMap.get(job);
+	}
+
+	@Override
+	public void toggleResourceSelection(final IResource resource) {
+		if (selectedResources.contains(resource)) {
+			deselectResource(resource);
+		} else {
+			// Ensure only one job is active.
+			// TODO: Fix up various views to handle multiple jobs
+			while (selectedResources.isEmpty() == false) {
+				deselectResource(selectedResources.get(0));
+			}
+
+			selectResource(resource);
+		}
+	}
+
+	@Override
+	public void setJobSelection(final IManagedJob job, final boolean selected) {
+
+		if (selectedJobs.contains(job)) {
+			if (!selected) {
+				deselectJob(job);
+			}
+		} else {
+			if (selected) {
+				selectJob(job);
+			}
+		}
+	}
+
+	@Override
+	public void setResourceSelection(final IResource resource, final boolean selected) {
+
+		if (selectedResources.contains(resource)) {
+			if (!selected) {
+				deselectResource(resource);
+			}
+		} else {
+			if (selected) {
+				selectResource(resource);
+			}
+		}
+
+	}
+
+	@Override
+	public List<IResource> getSelectedResources() {
+		return selectedResources;
 	}
 }
