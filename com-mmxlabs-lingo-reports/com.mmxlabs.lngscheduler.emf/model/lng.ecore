@@ -170,7 +170,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation">
       <eOperations name="getTotalCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="return getLadenLeg().getTotalCost() + getBallastLeg().getTotalCost()&#xA;&#x9;+ getLadenIdle().getTotalCost() + getBallastIdle().getTotalCost();"/>
+          <details key="body" value="long totalCost = 0;&#xA;totalCost += (getLadenIdle() == null) ? 0 : getLadenIdle().getTotalCost();&#xA;totalCost += (getLadenLeg() == null) ? 0 : getLadenLeg().getTotalCost();&#xA;totalCost += (getBallastIdle() == null) ? 0 : getBallastIdle().getTotalCost();&#xA;totalCost += (getBallastLeg() == null) ? 0 : getBallastLeg().getTotalCost();&#xA;return totalCost;"/>
         </eAnnotations>
       </eOperations>
       <eOperations name="getLocalLoadDate" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
