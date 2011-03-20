@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.jobs.MultiRule;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -52,6 +53,7 @@ public class CheckPointHandler extends AbstractHandler {
 				final Object obj = itr.next();
 
 				if (obj instanceof ScenarioTreeNodeClass) {
+					final ScenarioTreeNodeClass node = (ScenarioTreeNodeClass) obj;
 
 					final WorkspaceJob job = new WorkspaceJob("Checkpoint") {
 
@@ -61,7 +63,6 @@ public class CheckPointHandler extends AbstractHandler {
 							
 							monitor.beginTask("Copy Scenario", 3);
 							try {
-								final ScenarioTreeNodeClass node = (ScenarioTreeNodeClass) obj;
 
 								final IContainer container = node.getContainer();
 								final IResource resource = node.getResource();
@@ -91,7 +92,14 @@ public class CheckPointHandler extends AbstractHandler {
 							return Status.OK_STATUS;
 						}
 					};
-					// Run the job as soon as
+					
+					// Block other modifications to container 
+					// TODO: Should this be the resource instead/aswell?
+//					job.setRule(node.getContainer());
+					
+					job.setRule(MultiRule.combine(node.getContainer(), node.getResource()));
+					
+					// Run the job as soon as possible
 					job.schedule();
 
 				}
