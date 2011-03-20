@@ -41,7 +41,7 @@ public class ScenarioOptimisationHandler extends AbstractScenarioHandler {
 			LNGSchedulerJob job = new LNGSchedulerJob(scenario);
 //			ScenarioOptimisationJob job = new ScenarioOptimisationJob(filename,
 //					scenario);
-			jmv.addJob(job);
+			jmv.addJob(job ,null);
 //			job.start();
 		} catch (ExecutionException e) {
 		} catch (PartInitException e) {
