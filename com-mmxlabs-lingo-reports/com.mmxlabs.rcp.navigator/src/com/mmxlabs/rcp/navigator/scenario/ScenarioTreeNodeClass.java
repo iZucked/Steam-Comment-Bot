@@ -3,7 +3,6 @@ package com.mmxlabs.rcp.navigator.scenario;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
@@ -15,8 +14,6 @@ import scenario.schedule.Schedule;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 
 public final class ScenarioTreeNodeClass implements IAdaptable {
-
-	private IContainer container;
 
 	private IResource resource;
 
@@ -32,8 +29,7 @@ public final class ScenarioTreeNodeClass implements IAdaptable {
 		if (Schedule.class.isAssignableFrom(adapter)) {
 			if (scenario != null) {
 				if (scenario.getScheduleModel() != null) {
-					final EList<Schedule> list = scenario.getScheduleModel()
-							.getSchedules();
+					final EList<Schedule> list = scenario.getScheduleModel().getSchedules();
 					if (!list.isEmpty()) {
 						return list.get(list.size() - 1);
 					}
@@ -43,30 +39,11 @@ public final class ScenarioTreeNodeClass implements IAdaptable {
 
 		else if (Scenario.class.isAssignableFrom(adapter)) {
 			return scenario;
-		}
-
-		else if (IContainer.class.isAssignableFrom(adapter)) {
-			return container;
-		}
-
-		else if (IResource.class.isAssignableFrom(adapter)) {
+		} else if (IResource.class.isAssignableFrom(adapter)) {
 			return resource;
 		}
 
 		return Platform.getAdapterManager().getAdapter(this, adapter);
-	}
-
-	public final IContainer getContainer() {
-		return container;
-	}
-
-	public final void setContainer(final IContainer container) {
-
-		final IContainer oldContainer = this.container;
-
-		this.container = container;
-
-		notifyContainerChanged(oldContainer, container);
 	}
 
 	public final Scenario getScenario() {
@@ -109,29 +86,19 @@ public final class ScenarioTreeNodeClass implements IAdaptable {
 		notifyJobChanged(oldJob, job);
 	}
 
-	private void notifyResourceChanged(final IResource oldResource,
-			final IResource newResource) {
+	private void notifyResourceChanged(final IResource oldResource, final IResource newResource) {
 		for (final IScenarioTreeNodeListener l : listeners) {
 			l.resourceChanged(this, oldResource, newResource);
 		}
 	}
 
-	private void notifyContainerChanged(final IContainer oldContainer,
-			final IContainer newContainer) {
-		for (final IScenarioTreeNodeListener l : listeners) {
-			l.containerChanged(this, oldContainer, newContainer);
-		}
-	}
-
-	private void notifyScenarioChanged(final Scenario oldScenario,
-			final Scenario newScenario) {
+	private void notifyScenarioChanged(final Scenario oldScenario, final Scenario newScenario) {
 		for (final IScenarioTreeNodeListener l : listeners) {
 			l.scenarioChanged(this, oldScenario, newScenario);
 		}
 	}
 
-	private void notifyJobChanged(final IManagedJob oldJob,
-			final IManagedJob newJob) {
+	private void notifyJobChanged(final IManagedJob oldJob, final IManagedJob newJob) {
 		for (final IScenarioTreeNodeListener l : listeners) {
 			l.jobChanged(this, oldJob, newJob);
 		}

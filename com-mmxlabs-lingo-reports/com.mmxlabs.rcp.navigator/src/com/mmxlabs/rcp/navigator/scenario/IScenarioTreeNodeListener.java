@@ -1,6 +1,5 @@
 package com.mmxlabs.rcp.navigator.scenario;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 
 import scenario.Scenario;
@@ -23,14 +22,6 @@ public interface IScenarioTreeNodeListener {
 	void resourceChanged(ScenarioTreeNodeClass node, IResource oldResource,
 			IResource newResource);
 
-	/**
-	 * Send notification of a {@link IContainer} change of instance
-	 * 
-	 * @param node
-	 */
-	void containerChanged(ScenarioTreeNodeClass node, IContainer oldContainer,
-			IContainer newContainer);
-	
 	/**
 	 * Send notification of a {@link Scenario} change of instance
 	 * 
