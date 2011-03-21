@@ -109,6 +109,7 @@ import scenario.cargo.CargoPackage;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
+import scenario.fleet.PortAndTime;
 import scenario.fleet.VesselStateAttributes;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
@@ -124,6 +125,7 @@ import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
+import scenario.presentation.cargoeditor.celleditors.PortAndTimeDialog;
 import scenario.presentation.cargoeditor.celleditors.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.properties.ScenarioPropertySourceProvider;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
@@ -935,7 +937,21 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Only creates the other pages if there is something that can be edited
 		//
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
-
+			final IReferenceValueProvider vesselClassProvider = new IReferenceValueProvider() {
+				@Override
+				public Iterable<? extends EObject> getAllowedValues(
+						EObject target, EStructuralFeature field) {
+					while (target != null && !(target instanceof Scenario)) {
+						target = target.eContainer();
+					}
+					if (target == null) {
+						return Collections.emptyList();
+					} else {
+						return ((Scenario) target).getFleetModel()
+								.getVesselClasses();
+					}
+				}
+			};
 			final IReferenceValueProvider portProvider = new IReferenceValueProvider() {
 				@Override
 				public Iterable<? extends EObject> getAllowedValues(
@@ -960,11 +976,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					if (target == null) {
 						return Collections.emptyList();
 					} else {
-						return ((Scenario) target).getContractModel().getPurchaseContracts();
+						return ((Scenario) target).getContractModel()
+								.getPurchaseContracts();
 					}
 				}
 			};
-			
+
 			final IReferenceValueProvider dischargeContractProvider = new IReferenceValueProvider() {
 				@Override
 				public Iterable<? extends EObject> getAllowedValues(
@@ -975,7 +992,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					if (target == null) {
 						return Collections.emptyList();
 					} else {
-						return ((Scenario) target).getContractModel().getSalesContracts();
+						return ((Scenario) target).getContractModel()
+								.getSalesContracts();
 					}
 				}
 			};
@@ -1194,6 +1212,42 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					fleetPane.addColumn("Name", name, name);
 				}
 
+				{
+					final SingleReferenceManipulator vclass = new SingleReferenceManipulator(
+							FleetPackage.eINSTANCE.getVessel_Class(),
+							FleetPackage.eINSTANCE.getVesselClass_Name(),
+							false, vesselClassProvider, getEditingDomain());
+					fleetPane.addColumn("Class", vclass, vclass);
+				}
+
+				{
+					final DialogFeatureManipulator startRequirement = new DialogFeatureManipulator(
+					FleetPackage.eINSTANCE.getVessel_StartRequirement(), getEditingDomain()		
+					) {
+						
+						@Override
+						protected String renderValue(final Object value) {
+							final PortAndTime pat = (PortAndTime) value;
+							if (pat == null)
+								return "No constraint";
+							return (pat.isSetPort() ? pat.getPort().getName() : "Anywhere") + " " + 
+									"from " + (pat.isSetStartTime() ? pat.getStartTime().toString() : "any time") + " " +
+									"to " + (pat.isSetEndTime() ? pat.getEndTime().toString() : "any time");
+						}
+						
+						@Override
+						protected Object openDialogBox(Control cellEditorWindow, Object object) {
+							PortAndTimeDialog patDialog = new PortAndTimeDialog(cellEditorWindow.getShell(),
+									(SWT.DIALOG_TRIM & ~SWT.CLOSE)
+									| SWT.APPLICATION_MODAL);
+							
+							return patDialog.open((PortAndTime) getValue(object));
+						}
+					};
+					
+					fleetPane.addColumn("Start constraint", startRequirement, startRequirement);
+				}
+				
 				// TODO add other desired vessel columns here
 
 				fleetPane.setTitle("Vessels", getTitleImage());
