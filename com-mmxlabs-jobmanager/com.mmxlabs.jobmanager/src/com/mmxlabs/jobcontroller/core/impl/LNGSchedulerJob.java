@@ -26,7 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
  * 
  */
 public class LNGSchedulerJob extends AbstractManagedJob {
-	private static final int REPORT_PERCENTAGE = 5;
+	private static final int REPORT_PERCENTAGE = 1;
 	private final Scenario scenario;
 	private int currentProgress = 0;
 
