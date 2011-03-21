@@ -118,4 +118,17 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	protected void kill() {
 		optimiser.dispose();
 	}
+	
+	@Override
+	public void dispose() {
+		
+		kill();
+		
+		this.entities.dispose();
+		
+		// TODO: this.scenario = null;
+		this.optimiser = null;
+		
+		super.dispose();
+	}
 }
