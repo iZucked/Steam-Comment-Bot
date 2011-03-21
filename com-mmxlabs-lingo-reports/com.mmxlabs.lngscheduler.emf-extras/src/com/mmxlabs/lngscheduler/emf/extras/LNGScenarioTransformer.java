@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.Cargo;
+import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.contract.FixedPricePurchaseContract;
@@ -348,7 +349,10 @@ public class LNGScenarioTransformer {
 			final Association<Vessel, IVessel> vesselAssociation,
 			final ModelEntityMap entities,
 			final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation) {
-		for (Cargo eCargo : scenario.getCargoModel().getCargoes()) {
+		for (final Cargo eCargo : scenario.getCargoModel().getCargoes()) {
+			// ignore all non-fleet cargoes, as far as optimisation goes.
+
+			if (eCargo.getCargoType().equals(CargoType.FLEET) == false) continue;
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
