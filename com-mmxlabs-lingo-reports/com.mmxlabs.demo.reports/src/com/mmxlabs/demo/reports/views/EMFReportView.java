@@ -122,6 +122,17 @@ public abstract class EMFReportView extends ViewPart implements
 			return String.format("%,d", object);
 		}
 	};
+	
+	protected final IFormatter costFormatter = new IFormatter() {
+		@Override
+		public String format(Object object) {
+			if (object == null)
+				return "";
+			final int x = ((Number) object).intValue();
+		
+			return String.format("%,d", -x);
+		}
+	};
 
 	private TableViewer viewer;
 
