@@ -21,6 +21,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -154,9 +155,20 @@ public abstract class EMFReportView extends ViewPart implements
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-
+		
 		getSite().getWorkbenchWindow().getSelectionService()
 				.addSelectionListener(this);
+		
+		// Update view from current selection
+		final ISelectionProvider selectionProvider = getSite().getSelectionProvider();
+		if (selectionProvider != null) {
+			selectionChanged(null, selectionProvider.getSelection());
+		} else {
+			// No current provider? Look at the scenario navigator
+			// TODO: Ensure this is kept in sync
+			ISelection selection = getSite().getWorkbenchWindow().getSelectionService().getSelection("com.mmxlabs.rcp.navigator");
+			selectionChanged(null, selection);
+		}
 	}
 
 	private void hookContextMenu() {
@@ -216,11 +228,10 @@ public abstract class EMFReportView extends ViewPart implements
 	public void selectionChanged(final IWorkbenchPart arg0,
 			final ISelection selection) {
 		final IStructuredSelection sel = (IStructuredSelection) selection;
-		if (sel.isEmpty()) {
+		if (sel == null || sel.isEmpty()) {
 			setInput(null);
 		} else {
-			@SuppressWarnings("unchecked")
-			Iterator<Object> iter = sel.iterator();
+			final Iterator<?> iter = sel.iterator();
 			while (iter.hasNext()) {
 				final Object o = iter.next();
 				if (o instanceof Schedule) {
