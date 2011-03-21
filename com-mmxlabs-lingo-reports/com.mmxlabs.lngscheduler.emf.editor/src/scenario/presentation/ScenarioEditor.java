@@ -105,6 +105,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
+import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
@@ -121,6 +122,7 @@ import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
+import scenario.presentation.cargoeditor.EnumAttributeManipulator;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
@@ -1024,6 +1026,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					cargoPane.addColumn("ID", id, id);
 				}
 
+				{
+					final EnumAttributeManipulator type = new EnumAttributeManipulator(
+							cargoPackage.getCargo_CargoType(), getEditingDomain());
+					cargoPane.addColumn("Type", type, type);
+				}
+				
 				{
 					final SingleReferenceManipulator port = new SingleReferenceManipulator(
 							cargoPackage.getSlot_Port(),
