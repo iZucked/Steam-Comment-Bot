@@ -439,6 +439,33 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCargoAllocation_LoadRevenue() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoAllocation_ShippingRevenue() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoAllocation_DischargeRevenue() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getCargoAllocation__GetTotalCost() {
 		return cargoAllocationEClass.getEOperations().get(0);
 	}
@@ -691,6 +718,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_LEG);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LADEN_IDLE);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_IDLE);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_REVENUE);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SHIPPING_REVENUE);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_REVENUE);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_TOTAL_COST);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOCAL_LOAD_DATE);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE);
@@ -791,6 +821,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getCargoAllocation_BallastLeg(), theEventsPackage.getJourney(), null, "ballastLeg", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoAllocation_LadenIdle(), theEventsPackage.getIdle(), null, "ladenIdle", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoAllocation_BallastIdle(), theEventsPackage.getIdle(), null, "ballastIdle", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_LoadRevenue(), this.getBookedRevenue(), null, "loadRevenue", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_ShippingRevenue(), this.getBookedRevenue(), null, "shippingRevenue", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_DischargeRevenue(), this.getBookedRevenue(), null, "dischargeRevenue", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCargoAllocation__GetTotalCost(), ecorePackage.getELong(), "getTotalCost", 1, 1, IS_UNIQUE, IS_ORDERED);
 

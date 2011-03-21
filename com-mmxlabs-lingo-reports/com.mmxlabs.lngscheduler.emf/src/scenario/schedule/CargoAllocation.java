@@ -37,6 +37,9 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getLoadRevenue <em>Load Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getShippingRevenue <em>Shipping Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getDischargeRevenue <em>Discharge Revenue</em>}</li>
  * </ul>
  * </p>
  *
@@ -384,10 +387,88 @@ public interface CargoAllocation extends EObject {
 	void setBallastIdle(Idle value);
 
 	/**
+	 * Returns the value of the '<em><b>Load Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Load Revenue</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Load Revenue</em>' reference.
+	 * @see #setLoadRevenue(BookedRevenue)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_LoadRevenue()
+	 * @model required="true"
+	 * @generated
+	 */
+	BookedRevenue getLoadRevenue();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getLoadRevenue <em>Load Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Load Revenue</em>' reference.
+	 * @see #getLoadRevenue()
+	 * @generated
+	 */
+	void setLoadRevenue(BookedRevenue value);
+
+	/**
+	 * Returns the value of the '<em><b>Shipping Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Shipping Revenue</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Shipping Revenue</em>' reference.
+	 * @see #setShippingRevenue(BookedRevenue)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_ShippingRevenue()
+	 * @model required="true"
+	 * @generated
+	 */
+	BookedRevenue getShippingRevenue();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getShippingRevenue <em>Shipping Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Shipping Revenue</em>' reference.
+	 * @see #getShippingRevenue()
+	 * @generated
+	 */
+	void setShippingRevenue(BookedRevenue value);
+
+	/**
+	 * Returns the value of the '<em><b>Discharge Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Discharge Revenue</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Discharge Revenue</em>' reference.
+	 * @see #setDischargeRevenue(BookedRevenue)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_DischargeRevenue()
+	 * @model required="true"
+	 * @generated
+	 */
+	BookedRevenue getDischargeRevenue();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getDischargeRevenue <em>Discharge Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Discharge Revenue</em>' reference.
+	 * @see #getDischargeRevenue()
+	 * @generated
+	 */
+	void setDischargeRevenue(BookedRevenue value);
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getLadenLeg().getTotalCost() + getBallastLeg().getTotalCost()\n\t+ getLadenIdle().getTotalCost() + getBallastIdle().getTotalCost();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='long totalCost = 0;\ntotalCost += (getLadenIdle() == null) ? 0 : getLadenIdle().getTotalCost();\ntotalCost += (getLadenLeg() == null) ? 0 : getLadenLeg().getTotalCost();\ntotalCost += (getBallastIdle() == null) ? 0 : getBallastIdle().getTotalCost();\ntotalCost += (getBallastLeg() == null) ? 0 : getBallastLeg().getTotalCost();\nreturn totalCost;'"
 	 * @generated
 	 */
 	long getTotalCost();

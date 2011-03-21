@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -120,6 +121,17 @@ public abstract class EMFReportView extends ViewPart implements
 			if (object == null)
 				return "";
 			return String.format("%,d", object);
+		}
+	};
+	
+	protected final IFormatter costFormatter = new IFormatter() {
+		@Override
+		public String format(Object object) {
+			if (object == null)
+				return "";
+			final int x = ((Number) object).intValue();
+		
+			return String.format("%,d", -x);
 		}
 	};
 

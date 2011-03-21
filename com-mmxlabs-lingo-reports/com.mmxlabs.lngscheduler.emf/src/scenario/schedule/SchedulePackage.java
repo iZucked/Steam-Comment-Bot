@@ -364,13 +364,40 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__BALLAST_IDLE = 12;
 
 	/**
+	 * The feature id for the '<em><b>Load Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__LOAD_REVENUE = 13;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__SHIPPING_REVENUE = 14;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__DISCHARGE_REVENUE = 15;
+
+	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = 13;
+	int CARGO_ALLOCATION_FEATURE_COUNT = 16;
 
 
 	/**
@@ -961,6 +988,39 @@ public interface SchedulePackage extends EPackage {
 	EReference getCargoAllocation_BallastIdle();
 
 	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getLoadRevenue <em>Load Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Load Revenue</em>'.
+	 * @see scenario.schedule.CargoAllocation#getLoadRevenue()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_LoadRevenue();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getShippingRevenue <em>Shipping Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Shipping Revenue</em>'.
+	 * @see scenario.schedule.CargoAllocation#getShippingRevenue()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_ShippingRevenue();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getDischargeRevenue <em>Discharge Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Discharge Revenue</em>'.
+	 * @see scenario.schedule.CargoAllocation#getDischargeRevenue()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_DischargeRevenue();
+
+	/**
 	 * Returns the meta object for the '{@link scenario.schedule.CargoAllocation#getTotalCost() <em>Get Total Cost</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1433,6 +1493,30 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_ALLOCATION__BALLAST_IDLE = eINSTANCE.getCargoAllocation_BallastIdle();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Revenue</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__LOAD_REVENUE = eINSTANCE.getCargoAllocation_LoadRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Revenue</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__SHIPPING_REVENUE = eINSTANCE.getCargoAllocation_ShippingRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Revenue</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__DISCHARGE_REVENUE = eINSTANCE.getCargoAllocation_DischargeRevenue();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Total Cost</b></em>' operation.

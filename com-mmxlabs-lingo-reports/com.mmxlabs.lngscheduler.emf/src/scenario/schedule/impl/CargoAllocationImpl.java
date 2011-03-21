@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 
+import scenario.schedule.BookedRevenue;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.Idle;
@@ -47,6 +48,9 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getBallastLeg <em>Ballast Leg</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLadenIdle <em>Laden Idle</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getBallastIdle <em>Ballast Idle</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadRevenue <em>Load Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getShippingRevenue <em>Shipping Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeRevenue <em>Discharge Revenue</em>}</li>
  * </ul>
  * </p>
  *
@@ -242,6 +246,36 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * @ordered
 	 */
 	protected Idle ballastIdle;
+
+	/**
+	 * The cached value of the '{@link #getLoadRevenue() <em>Load Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLoadRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected BookedRevenue loadRevenue;
+
+	/**
+	 * The cached value of the '{@link #getShippingRevenue() <em>Shipping Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected BookedRevenue shippingRevenue;
+
+	/**
+	 * The cached value of the '{@link #getDischargeRevenue() <em>Discharge Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDischargeRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected BookedRevenue dischargeRevenue;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -659,9 +693,127 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public BookedRevenue getLoadRevenue() {
+		if (loadRevenue != null && loadRevenue.eIsProxy()) {
+			InternalEObject oldLoadRevenue = (InternalEObject)loadRevenue;
+			loadRevenue = (BookedRevenue)eResolveProxy(oldLoadRevenue);
+			if (loadRevenue != oldLoadRevenue) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE, oldLoadRevenue, loadRevenue));
+			}
+		}
+		return loadRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BookedRevenue basicGetLoadRevenue() {
+		return loadRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLoadRevenue(BookedRevenue newLoadRevenue) {
+		BookedRevenue oldLoadRevenue = loadRevenue;
+		loadRevenue = newLoadRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE, oldLoadRevenue, loadRevenue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BookedRevenue getShippingRevenue() {
+		if (shippingRevenue != null && shippingRevenue.eIsProxy()) {
+			InternalEObject oldShippingRevenue = (InternalEObject)shippingRevenue;
+			shippingRevenue = (BookedRevenue)eResolveProxy(oldShippingRevenue);
+			if (shippingRevenue != oldShippingRevenue) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE, oldShippingRevenue, shippingRevenue));
+			}
+		}
+		return shippingRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BookedRevenue basicGetShippingRevenue() {
+		return shippingRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShippingRevenue(BookedRevenue newShippingRevenue) {
+		BookedRevenue oldShippingRevenue = shippingRevenue;
+		shippingRevenue = newShippingRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE, oldShippingRevenue, shippingRevenue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BookedRevenue getDischargeRevenue() {
+		if (dischargeRevenue != null && dischargeRevenue.eIsProxy()) {
+			InternalEObject oldDischargeRevenue = (InternalEObject)dischargeRevenue;
+			dischargeRevenue = (BookedRevenue)eResolveProxy(oldDischargeRevenue);
+			if (dischargeRevenue != oldDischargeRevenue) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE, oldDischargeRevenue, dischargeRevenue));
+			}
+		}
+		return dischargeRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BookedRevenue basicGetDischargeRevenue() {
+		return dischargeRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDischargeRevenue(BookedRevenue newDischargeRevenue) {
+		BookedRevenue oldDischargeRevenue = dischargeRevenue;
+		dischargeRevenue = newDischargeRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE, oldDischargeRevenue, dischargeRevenue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public long getTotalCost() {
-		return getLadenLeg().getTotalCost() + getBallastLeg().getTotalCost()
-			+ getLadenIdle().getTotalCost() + getBallastIdle().getTotalCost();
+		long totalCost = 0;
+		totalCost += (getLadenIdle() == null) ? 0 : getLadenIdle().getTotalCost();
+		totalCost += (getLadenLeg() == null) ? 0 : getLadenLeg().getTotalCost();
+		totalCost += (getBallastIdle() == null) ? 0 : getBallastIdle().getTotalCost();
+		totalCost += (getBallastLeg() == null) ? 0 : getBallastLeg().getTotalCost();
+		return totalCost;
 	}
 
 	/**
@@ -740,6 +892,15 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
 				if (resolve) return getBallastIdle();
 				return basicGetBallastIdle();
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
+				if (resolve) return getLoadRevenue();
+				return basicGetLoadRevenue();
+			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
+				if (resolve) return getShippingRevenue();
+				return basicGetShippingRevenue();
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
+				if (resolve) return getDischargeRevenue();
+				return basicGetDischargeRevenue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -790,6 +951,15 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
 				setBallastIdle((Idle)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
+				setLoadRevenue((BookedRevenue)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
+				setShippingRevenue((BookedRevenue)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
+				setDischargeRevenue((BookedRevenue)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -842,6 +1012,15 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
 				setBallastIdle((Idle)null);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
+				setLoadRevenue((BookedRevenue)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
+				setShippingRevenue((BookedRevenue)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
+				setDischargeRevenue((BookedRevenue)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -880,6 +1059,12 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return ladenIdle != null;
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
 				return ballastIdle != null;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
+				return loadRevenue != null;
+			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
+				return shippingRevenue != null;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
+				return dischargeRevenue != null;
 		}
 		return super.eIsSet(featureID);
 	}

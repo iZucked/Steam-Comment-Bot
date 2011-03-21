@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 
 public class PortAndTimeDialog extends Dialog {
 	
@@ -47,6 +49,16 @@ public class PortAndTimeDialog extends Dialog {
 		createContents();
 		shlVesselLocationConstraint.open();
 		shlVesselLocationConstraint.layout();
+		
+		// center in parent window
+		final Rectangle shellBounds = getParent().getBounds();
+		final Point dialogSize = shlVesselLocationConstraint.getSize();
+
+		shlVesselLocationConstraint.setLocation(shellBounds.x
+				+ (shellBounds.width - dialogSize.x) / 2, shellBounds.y
+				+ (shellBounds.height - dialogSize.y) / 2);
+
+		
 		Display display = getParent().getDisplay();
 		while (!shlVesselLocationConstraint.isDisposed()) {
 			if (!display.readAndDispatch()) {

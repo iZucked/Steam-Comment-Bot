@@ -4,16 +4,17 @@
  */
 package com.mmxlabs.demo.reports.views;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.port.PortPackage;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
-
 
 /**
  * 
@@ -30,14 +31,14 @@ public class CargoReportView extends EMFReportView {
 	public CargoReportView() {
 		final CargoPackage c = CargoPackage.eINSTANCE;
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
-		
+
+		final EAttribute name = ScenarioPackage.eINSTANCE.getNamedObject_Name();
+
 		final PortPackage p = PortPackage.eINSTANCE;
 		addColumn("ID", objectFormatter, s.getCargoAllocation_LoadSlot(),
 				c.getSlot_Id()); // TODO cargo id not slot id.
 
-		addColumn("Vessel", 
-				objectFormatter,
-				s.getCargoAllocation_Vessel(),
+		addColumn("Vessel", objectFormatter, s.getCargoAllocation_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
 
 		addColumn("Load Port", objectFormatter,
@@ -48,13 +49,9 @@ public class CargoReportView extends EMFReportView {
 				s.getCargoAllocation_DischargeSlot(), c.getSlot_Port(),
 				p.getPort_Name());
 
-		addColumn(
-				"Load Date",
-				calendarFormatter,
+		addColumn("Load Date", calendarFormatter,
 				s.getCargoAllocation__GetLocalLoadDate());
-		addColumn(
-				"Discharge Date",
-				calendarFormatter,
+		addColumn("Discharge Date", calendarFormatter,
 				s.getCargoAllocation__GetLocalDischargeDate());
 
 		addColumn("Load Volume", new IFormatter() {
@@ -65,9 +62,9 @@ public class CargoReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Fuel Volume", integerFormatter, 
+		addColumn("Fuel Volume", integerFormatter,
 				s.getCargoAllocation_FuelVolume());
-		
+
 		addColumn("Discharge Volume", integerFormatter,
 				s.getCargoAllocation_DischargeVolume());
 
@@ -83,7 +80,7 @@ public class CargoReportView extends EMFReportView {
 		addColumn("Ballast Cost", new IFormatter() {
 			@Override
 			public String format(Object object) {
-				//TODO this could be an operation on CargoAllocation.
+				// TODO this could be an operation on CargoAllocation.
 				final CargoAllocation a = (CargoAllocation) object;
 				return String.format("%,d", a.getBallastIdle().getTotalCost()
 						+ a.getBallastLeg().getTotalCost());
@@ -97,6 +94,32 @@ public class CargoReportView extends EMFReportView {
 				return String.format("%,d", a.getTotalCost());
 			}
 		});
+
+		addColumn("Load Entity", objectFormatter,
+				s.getCargoAllocation_LoadRevenue(),
+				s.getBookedRevenue_Entity(), name);
+
+		addColumn("Discharge Entity", objectFormatter,
+				s.getCargoAllocation_DischargeRevenue(),
+				s.getBookedRevenue_Entity(), name);
+
+		Object[][] fields = { { s.getCargoAllocation_LoadRevenue(), "Load" },
+				{ s.getCargoAllocation_ShippingRevenue(), "Shipping" },
+				{ s.getCargoAllocation_DischargeRevenue(), "Discharge" } };
+
+		for (final Object[] f : fields) {
+			addColumn(f[1] + " Revenue", integerFormatter, f[0],
+					s.getBookedRevenue__GetUntaxedRevenues());
+
+			addColumn(f[1] + " Costs", costFormatter, f[0],
+					s.getBookedRevenue__GetUntaxedCosts());
+
+			addColumn(f[1] + " untaxed value", integerFormatter, f[0],
+					s.getBookedRevenue__GetUntaxedValue());
+
+			addColumn(f[1] + " taxed value", integerFormatter, f[0],
+					s.getBookedRevenue__GetTaxedValue());
+		}
 	}
 
 	@Override
