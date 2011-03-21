@@ -51,10 +51,9 @@ public final class JobManager implements IJobManager {
 	@Override
 	public void addJob(final IManagedJob job, final IResource resource) {
 		jobs.add(job);
-		final IResource oldResource = jobResourceMap.put(job, resource);
-		if (oldResource != null) {
-			throw new IllegalStateException(
-					"Job already exists - state is now inconsistent!");
+		IResource oldResource = jobResourceMap.put(job, resource);
+		if (oldResource !=null) {
+			throw new IllegalStateException("Job already exists - state is now inconsistent!");
 		}
 
 		fireJobAdded(job);
