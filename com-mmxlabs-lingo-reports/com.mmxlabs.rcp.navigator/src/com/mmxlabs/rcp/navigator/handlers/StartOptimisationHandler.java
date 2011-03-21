@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -14,6 +15,7 @@ import scenario.Scenario;
 
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
+import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
@@ -59,9 +61,19 @@ public class StartOptimisationHandler extends AbstractHandler {
 						final ScenarioTreeNodeClass node = (ScenarioTreeNodeClass) obj;
 						IManagedJob job = node.getJob();
 
+						if (job != null && (job.getJobState() == JobState.CANCELLED || job.getJobState() == JobState.COMPLETED)) {
+							// Remove from job handler -- this should trigger the listener registered on creation;
+							jmv.removeJob(job);
+							
+							// Remove this reference
+							job = null;
+						}
+						
+						// Check for useable pre-existing job?
 						if (job == null) {
 							job = createOptimisationJob(jmv, node);
 						}
+						
 						if (job.getJobState() == JobState.PAUSED) {
 							job.resume();
 						} else {
@@ -81,13 +93,48 @@ public class StartOptimisationHandler extends AbstractHandler {
 			final ScenarioTreeNodeClass node) {
 
 		final Scenario scenario = node.getScenario();
-		final LNGSchedulerJob job = new LNGSchedulerJob(scenario);
-		jmv.addJob(job, node.getResource());
+		final LNGSchedulerJob newJob = new LNGSchedulerJob(scenario);
+		jmv.addJob(newJob, node.getResource());
+
+		// Hook in a listener to automatically dispose the job once it is no longer needed
+		jmv.addJobManagerListener(new IJobManagerListener() {
+			
+			@Override
+			public void jobSelected(IJobManager jobManager, IManagedJob job,
+					IResource resource) {
+				
+			}
+			
+			@Override
+			public void jobRemoved(IJobManager jobManager, IManagedJob job,
+					IResource resource) {
+				
+				// If this is the job being removed, then dispose and remove references to it
+				if (job == newJob){ 
+					newJob.dispose();
+					jobManager.removeJobManagerListener(this);
+					node.setJob(null);
+				}
+			}
+			
+			@Override
+			public void jobDeselected(IJobManager jobManager, IManagedJob job,
+					IResource resource) {
+				
+			}
+			
+			@Override
+			public void jobAdded(IJobManager jobManager, IManagedJob job,
+					IResource resource) {
+				
+			}
+		});
 
 		// TODO: The UI will freeze at this point -- perhaps a Runnable here?
-		job.prepare();
+		newJob.prepare();
 
-		return job;
+		
+		return newJob;
 	}
 
 	@Override
