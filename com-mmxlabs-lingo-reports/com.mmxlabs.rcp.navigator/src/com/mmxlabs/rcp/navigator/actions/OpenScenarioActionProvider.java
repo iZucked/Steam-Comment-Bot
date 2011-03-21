@@ -1,4 +1,4 @@
-package com.mmxlabs.rcp.navigator;
+package com.mmxlabs.rcp.navigator.actions;
 
 import java.util.Iterator;
 import java.util.List;
