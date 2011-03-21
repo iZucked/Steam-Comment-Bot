@@ -110,7 +110,12 @@ public final class JobManager implements IJobManager {
 	private void fireJobAdded(final IManagedJob job) {
 		final IResource resource = jobResourceMap.get(job);
 
-		for (final IJobManagerListener l : jobManagerListeners) {
+		// Take a copy of the set before iterating over it as it is possible
+		// that the listeners may be changed as a results of the event
+		final Set<IJobManagerListener> local_jobManagerListeners = new HashSet<IJobManagerListener>(
+				jobManagerListeners);
+
+		for (final IJobManagerListener l : local_jobManagerListeners) {
 			l.jobAdded(this, job, resource);
 		}
 	}
@@ -122,7 +127,12 @@ public final class JobManager implements IJobManager {
 
 		final IResource resource = jobResourceMap.get(job);
 
-		for (final IJobManagerListener l : jobManagerListeners) {
+		// Take a copy of the set before iterating over it as it is possible
+		// that the listeners may be changed as a results of the event
+		final Set<IJobManagerListener> local_jobManagerListeners = new HashSet<IJobManagerListener>(
+				jobManagerListeners);
+
+		for (final IJobManagerListener l : local_jobManagerListeners) {
 			l.jobRemoved(this, job, resource);
 		}
 	}
@@ -133,7 +143,12 @@ public final class JobManager implements IJobManager {
 	private void fireJobSelected(final IManagedJob job) {
 		final IResource resource = jobResourceMap.get(job);
 
-		for (final IJobManagerListener l : jobManagerListeners) {
+		// Take a copy of the set before iterating over it as it is possible
+		// that the listeners may be changed as a results of the event
+		final Set<IJobManagerListener> local_jobManagerListeners = new HashSet<IJobManagerListener>(
+				jobManagerListeners);
+
+		for (final IJobManagerListener l : local_jobManagerListeners) {
 			l.jobSelected(this, job, resource);
 		}
 	}
@@ -144,7 +159,12 @@ public final class JobManager implements IJobManager {
 	private void fireJobDeselected(final IManagedJob job) {
 		final IResource resource = jobResourceMap.get(job);
 
-		for (final IJobManagerListener l : jobManagerListeners) {
+		// Take a copy of the set before iterating over it as it is possible
+		// that the listeners may be changed as a results of the event
+		final Set<IJobManagerListener> local_jobManagerListeners = new HashSet<IJobManagerListener>(
+				jobManagerListeners);
+
+		for (final IJobManagerListener l : local_jobManagerListeners) {
 			l.jobDeselected(this, job, resource);
 		}
 	}
@@ -274,7 +294,8 @@ public final class JobManager implements IJobManager {
 	}
 
 	@Override
-	public void setResourceSelection(final IResource resource, final boolean selected) {
+	public void setResourceSelection(final IResource resource,
+			final boolean selected) {
 
 		if (selectedResources.contains(resource)) {
 			if (!selected) {
