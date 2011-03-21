@@ -21,6 +21,7 @@ import scenario.fleet.Vessel;
  *   <li>{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -122,5 +123,35 @@ public interface Cargo extends EObject {
 	 * @generated
 	 */
 	EList<Vessel> getAllowedVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Cargo Type</b></em>' attribute.
+	 * The default value is <code>"Fleet"</code>.
+	 * The literals are from the enumeration {@link scenario.cargo.CargoType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo Type</em>' attribute.
+	 * @see scenario.cargo.CargoType
+	 * @see #setCargoType(CargoType)
+	 * @see scenario.cargo.CargoPackage#getCargo_CargoType()
+	 * @model default="Fleet" required="true"
+	 * @generated
+	 */
+	CargoType getCargoType();
+
+	/**
+	 * Sets the value of the '{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo Type</em>' attribute.
+	 * @see scenario.cargo.CargoType
+	 * @see #getCargoType()
+	 * @generated
+	 */
+	void setCargoType(CargoType value);
 
 } // Cargo

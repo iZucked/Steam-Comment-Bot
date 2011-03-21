@@ -506,6 +506,10 @@
     <eClassifiers xsi:type="ecore:EClass" name="CargoModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="cargoes" upperBound="-1"
           eType="#//cargo/Cargo" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="spareDischargeSlots"
+          upperBound="-1" eType="#//cargo/Slot" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="spareLoadSlots" upperBound="-1"
+          eType="#//cargo/LoadSlot" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Cargo">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -515,6 +519,8 @@
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1"
           eType="#//fleet/Vessel"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoType" lowerBound="1"
+          eType="#//cargo/CargoType" defaultValueLiteral="Fleet"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Slot">
       <eOperations name="getLocalWindowStart" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
@@ -538,6 +544,11 @@
           <details key="documentation" value="The energy content conversion factor for this cargo; because LNG is priced by MMBTU but measured by volume, we need to know both the energy content and volume. This value lets us derive the former from the latter."/>
         </eAnnotations>
       </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="CargoType">
+      <eLiterals name="Fleet" literal="FLEET"/>
+      <eLiterals name="FOB" value="1" literal="FOB"/>
+      <eLiterals name="DES" value="2" literal="DES"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="contract" nsURI="http://com.mmxlabs.lng.emf/contract" nsPrefix="com.mmxlabs.lng.emf.contract">
