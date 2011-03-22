@@ -171,6 +171,15 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		}
 	}
 
+	@Override
+	public void dispose() {
+		
+		runner.cancel();
+		// TODO: this.runner = null;
+		this.currentState = JobState.UNKNOWN;
+		this.listeners.clear();
+	}
+	
 	/**
 	 * This method should prepare the job for execution
 	 */

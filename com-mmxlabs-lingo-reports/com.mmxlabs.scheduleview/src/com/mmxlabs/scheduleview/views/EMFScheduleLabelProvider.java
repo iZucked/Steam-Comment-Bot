@@ -24,7 +24,6 @@ import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
  * @author hinton

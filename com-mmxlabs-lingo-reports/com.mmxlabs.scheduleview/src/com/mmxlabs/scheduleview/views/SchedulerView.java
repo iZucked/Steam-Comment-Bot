@@ -19,6 +19,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
@@ -162,8 +163,8 @@ public class SchedulerView extends ViewPart {
 				// Filter out non-editor selections - Unfortunately the
 				// addSelectionLister part ID filters do not work with editors
 				if (part instanceof IEditorPart
-						|| part.getSite().getId()
-								.equals("com.mmxlabs.rcp.navigator")) {
+						|| (part!= null && part.getSite().getId()
+								.equals("com.mmxlabs.rcp.navigator"))) {
 
 					// if selection instanceof etc.
 					if (selection instanceof IStructuredSelection) {
@@ -177,7 +178,7 @@ public class SchedulerView extends ViewPart {
 								if (trySelectObject(o)) {
 									return;
 								} else if (o instanceof IAdaptable) {
-									Object adapter = ((IAdaptable) o)
+									final Object adapter = ((IAdaptable) o)
 											.getAdapter(Schedule.class);
 									if (adapter != null) {
 										setInput(((Schedule) adapter));
@@ -261,6 +262,17 @@ public class SchedulerView extends ViewPart {
 		// .addJobManagerListener(jobManagerListener);
 
 		getSite().setSelectionProvider(viewer);
+
+		// Update view from current selection
+		final ISelectionProvider selectionProvider = getSite().getSelectionProvider();
+		if (selectionProvider != null) {
+			selectionListener.selectionChanged(null, selectionProvider.getSelection());
+		} else {
+			// No current provider? Look at the scenario navigator
+			// TODO: Ensure this is kept in sync
+			final ISelection selection = getSite().getWorkbenchWindow().getSelectionService().getSelection("com.mmxlabs.rcp.navigator");
+			selectionListener.selectionChanged(null, selection);
+		}
 	}
 
 	@Override

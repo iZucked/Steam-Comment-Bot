@@ -118,8 +118,8 @@ public class CargoReportView extends EMFReportView {
 //					f[0],
 //					s.getBookedRevenue__GetUntaxedValue());
 //			
-			addColumn(f[1] + " taxed value", integerFormatter,
-					f[0],
+
+			addColumn(f[1] + " taxed value", integerFormatter, f[0],
 					s.getBookedRevenue__GetTaxedValue());
 		}
 	}

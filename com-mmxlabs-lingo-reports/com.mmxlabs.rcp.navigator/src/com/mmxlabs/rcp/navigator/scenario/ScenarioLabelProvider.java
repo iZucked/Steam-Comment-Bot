@@ -137,7 +137,7 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 		if (columnIndex == 0) {
 
 			if (element instanceof ScenarioTreeNodeClass) {
-				return ((ScenarioTreeNodeClass) element).getContainer().getName();
+				return ((ScenarioTreeNodeClass) element).getResource().getName();
 			}
 			return getText(element);
 		}

@@ -26,17 +26,24 @@ public interface IManagedJob {
 	 * @return A descriptive name for this job.
 	 */
 	public String getJobName();
-	
-	public void prepare();
-	public void start();
-	public void cancel();
-	public void pause();
-	public void resume();
-	
-	public JobState getJobState();
-	
-	public int getProgress();
-	
-	public void addListener(IManagedJobListener listener);
-	public void removeListener(IManagedJobListener listener);
+
+	void prepare();
+
+	void start();
+
+	void cancel();
+
+	void pause();
+
+	void resume();
+
+	JobState getJobState();
+
+	int getProgress();
+
+	void addListener(IManagedJobListener listener);
+
+	void removeListener(IManagedJobListener listener);
+
+	void dispose();
 }

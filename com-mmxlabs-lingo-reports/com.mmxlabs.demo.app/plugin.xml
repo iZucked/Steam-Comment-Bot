@@ -21,9 +21,16 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="Scheduling"
-            class="com.mmxlabs.demo.app.intro.Perspective"
-            id="com.mmxlabs.demo.app.perspective">
+            class="com.mmxlabs.demo.app.intro.OptimisationPerspective"
+            icon="icons/launchtrace_wiz.gif"
+            id="com.mmxlabs.demo.app.perspective.optimisation"
+            name="Optimisation">
+      </perspective>
+      <perspective
+            class="com.mmxlabs.demo.app.intro.EditingPerspective"
+            icon="icons/exec_statistic_view.gif"
+            id="com.mmxlabs.demo.app.perspective.editing"
+            name="Editing">
       </perspective>
    </extension>
    <extension
@@ -34,7 +41,7 @@
             name="ShipLiNGO">
          <property
                name="windowImages"
-               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+               value="icons/alt_window_16.gif,icons/alt_window_16.gif">
          </property>
          <property
                name="appName"
