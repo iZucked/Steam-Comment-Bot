@@ -1053,7 +1053,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					final SingleReferenceManipulator port = new SingleReferenceManipulator(
 							cargoPackage.getSlot_Contract(),
 							ScenarioPackage.eINSTANCE.getNamedObject_Name(),
-							false, loadContractProvider, getEditingDomain());
+							true, loadContractProvider, getEditingDomain());
 					cargoPane.addColumn("Load Contract", port, port,
 							cargoPackage.getCargo_LoadSlot());
 				}
@@ -1078,7 +1078,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					final SingleReferenceManipulator port = new SingleReferenceManipulator(
 							cargoPackage.getSlot_Contract(),
 							ScenarioPackage.eINSTANCE.getNamedObject_Name(),
-							false, dischargeContractProvider,
+							true, dischargeContractProvider,
 
 							getEditingDomain());
 					cargoPane.addColumn("Discharge Contract", port, port,
