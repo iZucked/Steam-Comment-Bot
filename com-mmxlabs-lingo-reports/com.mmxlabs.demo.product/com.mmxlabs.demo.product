@@ -8,6 +8,7 @@
 
    <launcherArgs>
       <vmArgs>-ea</vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/com.mmxlabs.demo.app/icons/alt_window_16.gif" i32="/com.mmxlabs.demo.app/icons/alt_window_16.gif"/>
@@ -41,15 +42,17 @@
       <plugin id="com.mmxlabs.jobmanager"/>
       <plugin id="com.mmxlabs.jobmanager.ui"/>
       <plugin id="com.mmxlabs.lngscheduler.emf"/>
-      <plugin id="com.mmxlabs.lngscheduler.emf.edit"/>
       <plugin id="com.mmxlabs.lngscheduler.emf-extras"/>
+      <plugin id="com.mmxlabs.lngscheduler.emf.edit"/>
       <plugin id="com.mmxlabs.lngscheduler.emf.editor"/>
       <plugin id="com.mmxlabs.optimiser.common"/>
       <plugin id="com.mmxlabs.optimiser.core"/>
       <plugin id="com.mmxlabs.optimiser.lso"/>
+      <plugin id="com.mmxlabs.rcp.navigator"/>
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser"/>
       <plugin id="com.mmxlabs.scheduleview"/>
       <plugin id="javax.transaction" fragment="true"/>
+      <plugin id="org.apache.commons.math"/>
       <plugin id="org.eclipse.compare"/>
       <plugin id="org.eclipse.compare.core"/>
       <plugin id="org.eclipse.core.commands"/>
@@ -66,6 +69,8 @@
       <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true" os="win32" arch="x86"/>
       <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true" os="win32" arch="x86_64"/>
       <plugin id="org.eclipse.core.jobs"/>
+      <plugin id="org.eclipse.core.net"/>
+      <plugin id="org.eclipse.core.net.win32.x86_64" fragment="true" os="win32" arch="x86_64"/>
       <plugin id="org.eclipse.core.resources"/>
       <plugin id="org.eclipse.core.resources.win32.x86" fragment="true" os="win32" arch="x86"/>
       <plugin id="org.eclipse.core.runtime"/>
@@ -85,6 +90,7 @@
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
       <plugin id="org.eclipse.equinox.ds"/>
+      <plugin id="org.eclipse.equinox.event"/>
       <plugin id="org.eclipse.equinox.launcher"/>
       <plugin id="org.eclipse.equinox.launcher.carbon.macosx" fragment="true" os="macosx" ws="carbon" arch="x86"/>
       <plugin id="org.eclipse.equinox.launcher.cocoa.macosx" fragment="true" os="macosx" ws="cocoa" arch="x86"/>
@@ -133,17 +139,20 @@
       <plugin id="org.eclipse.ui.editors"/>
       <plugin id="org.eclipse.ui.forms"/>
       <plugin id="org.eclipse.ui.ide"/>
+      <plugin id="org.eclipse.ui.ide.application"/>
       <plugin id="org.eclipse.ui.intro"/>
       <plugin id="org.eclipse.ui.navigator"/>
       <plugin id="org.eclipse.ui.navigator.resources"/>
       <plugin id="org.eclipse.ui.views"/>
       <plugin id="org.eclipse.ui.views.log"/>
       <plugin id="org.eclipse.ui.views.properties.tabbed"/>
+      <plugin id="org.eclipse.ui.win32" fragment="true"/>
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.junit"/>
       <plugin id="org.slf4j.api"/>
+      <plugin id="org.swtchart"/>
    </plugins>
 
    <configurations>
