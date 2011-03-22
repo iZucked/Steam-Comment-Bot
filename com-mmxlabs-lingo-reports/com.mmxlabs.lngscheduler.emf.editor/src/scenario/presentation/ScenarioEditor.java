@@ -105,13 +105,16 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
+import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
+import scenario.cargo.Slot;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.VesselStateAttributes;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
+import scenario.market.MarketPackage;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
@@ -121,6 +124,7 @@ import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
+import scenario.presentation.cargoeditor.EnumAttributeManipulator;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
@@ -998,271 +1002,51 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				}
 			};
 
-			// Create a page for the cargo editor
-			{
-
-				final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
-						getSite().getPage(), ScenarioEditor.this);
-				// cargoPane.createControl(getContainer());
-
-				final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
-
-				cargoPane.createControl(getContainer());
-
-				final List<EReference> path = new LinkedList<EReference>();
-
-				path.add(ScenarioPackage.eINSTANCE.getScenario_CargoModel());
-				path.add(CargoPackage.eINSTANCE.getCargoModel_Cargoes());
-
-				cargoPane.setTitle("Cargoes", getTitleImage());
-
-				cargoPane.init(path, adapterFactory);
-
-				{
-					final BasicAttributeManipulator id = new BasicAttributeManipulator(
-							cargoPackage.getCargo_Id(), getEditingDomain());
-					cargoPane.addColumn("ID", id, id);
+			final IReferenceValueProvider everyContractProvider = new IReferenceValueProvider() {
+				@Override
+				public Iterable<? extends EObject> getAllowedValues(
+						EObject target, EStructuralFeature field) {
+					while (target != null && !(target instanceof Scenario)) {
+						target = target.eContainer();
+					}
+					if (target == null) {
+						return Collections.emptyList();
+					} else {
+						final ArrayList<EObject> stuff = new ArrayList<EObject>();
+						stuff.addAll(((Scenario) target).getContractModel()
+								.getSalesContracts());
+						stuff.addAll(((Scenario) target).getContractModel()
+								.getPurchaseContracts());
+						return stuff;
+					}
 				}
+			};
 
-				{
-					final SingleReferenceManipulator port = new SingleReferenceManipulator(
-							cargoPackage.getSlot_Port(),
-							PortPackage.eINSTANCE.getPort_Name(), false,
-							portProvider, getEditingDomain());
-					cargoPane.addColumn("Load Port", port, port,
-							cargoPackage.getCargo_LoadSlot());
+			final IReferenceValueProvider marketProvider = new IReferenceValueProvider() {
+				@Override
+				public Iterable<? extends EObject> getAllowedValues(
+						EObject target, EStructuralFeature field) {
+					while (target != null && !(target instanceof Scenario)) {
+						target = target.eContainer();
+					}
+					if (target == null) {
+						return Collections.emptyList();
+					} else {
+						return ((Scenario) target).getMarketModel()
+								.getMarkets();
+					}
 				}
+			};
 
-				{
-					final DateManipulator date = new DateManipulator(
-							cargoPackage.getSlot_WindowStart(),
-							getEditingDomain());
-					cargoPane.addColumn("Load Date", date, date,
-							cargoPackage.getCargo_LoadSlot());
-				}
+			createCargoEditor(portProvider, loadContractProvider,
+					dischargeContractProvider);
 
-				{
-					final SingleReferenceManipulator port = new SingleReferenceManipulator(
-							cargoPackage.getSlot_Contract(),
-							ScenarioPackage.eINSTANCE.getNamedObject_Name(),
-							false, loadContractProvider, getEditingDomain());
-					cargoPane.addColumn("Load Contract", port, port,
-							cargoPackage.getCargo_LoadSlot());
-				}
+			createFleetEditor(vesselClassProvider, portProvider);
 
-				{
-					final SingleReferenceManipulator port = new SingleReferenceManipulator(
-							cargoPackage.getSlot_Port(),
-							PortPackage.eINSTANCE.getPort_Name(), false,
-							portProvider, getEditingDomain());
-					cargoPane.addColumn("Discharge Port", port, port,
-							cargoPackage.getCargo_DischargeSlot());
-				}
-				{
-					final DateManipulator date = new DateManipulator(
-							cargoPackage.getSlot_WindowStart(),
-							getEditingDomain());
-					cargoPane.addColumn("Discharge Date", date, date,
-							cargoPackage.getCargo_DischargeSlot());
-				}
+			createPortEditor(everyContractProvider, marketProvider);
 
-				{
-					final SingleReferenceManipulator port = new SingleReferenceManipulator(
-							cargoPackage.getSlot_Contract(),
-							ScenarioPackage.eINSTANCE.getNamedObject_Name(),
-							false, dischargeContractProvider,
-
-							getEditingDomain());
-					cargoPane.addColumn("Discharge Contract", port, port,
-							cargoPackage.getCargo_DischargeSlot());
-				}
-
-				// TODO sort out initial vessel column
-
-				cargoPane.getViewer().setInput(
-						editingDomain.getResourceSet().getResources().get(0)
-								.getContents().get(0));
-
-				// TODO should this really be here?
-				createContextMenuFor(cargoPane.getViewer());
-
-				int pageIndex = addPage(cargoPane.getControl());
-				setPageText(pageIndex, "Cargoes"); // TODO localize this
-													// string or whatever
-			}
-
-			{
-				final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
-
-				final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
-						getSite().getPage(), ScenarioEditor.this);
-
-				vcePane.createControl(sash);
-
-				final List<EReference> path2 = new LinkedList<EReference>();
-
-				path2.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
-				path2.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
-
-				vcePane.init(path2, adapterFactory);
-				{
-					final BasicAttributeManipulator name = new BasicAttributeManipulator(
-							FleetPackage.eINSTANCE.getVesselClass_Name(),
-							getEditingDomain());
-					vcePane.addColumn("Name", name, name);
-				}
-				{
-					final BasicAttributeManipulator capacity = new NumericAttributeManipulator(
-							FleetPackage.eINSTANCE.getVesselClass_Capacity(),
-							getEditingDomain());
-					vcePane.addColumn("Capacity", capacity, capacity);
-				}
-
-				{
-					final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(
-							FleetPackage.eINSTANCE
-									.getVesselClass_InaccessiblePorts(),
-							getEditingDomain(), portProvider,
-							PortPackage.eINSTANCE.getPort_Name());
-					vcePane.addColumn("Inaccessible Ports", capacity, capacity);
-				}
-
-				{
-					final DialogFeatureManipulator laden = new DialogFeatureManipulator(
-							FleetPackage.eINSTANCE
-									.getVesselClass_LadenAttributes(),
-							getEditingDomain()) {
-						@Override
-						protected String renderValue(Object object) {
-							final VesselStateAttributes a = (VesselStateAttributes) object;
-							return "NBO: " + a.getNboRate() + " Idle NBO: "
-									+ a.getIdleNBORate() + " Idle Base:"
-									+ a.getIdleConsumptionRate();
-						}
-
-						@Override
-						protected Object openDialogBox(
-								Control cellEditorWindow, Object object) {
-							final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
-									cellEditorWindow.getShell(),
-									(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-											| SWT.APPLICATION_MODAL);
-
-							return dlg
-									.open((VesselStateAttributes) getValue(object));
-						}
-
-					};
-					vcePane.addColumn("Laden Fuel Usage", laden, laden);
-				}
-
-				{
-					final DialogFeatureManipulator laden = new DialogFeatureManipulator(
-							FleetPackage.eINSTANCE
-									.getVesselClass_BallastAttributes(),
-							getEditingDomain()) {
-
-						@Override
-						protected Object openDialogBox(
-								Control cellEditorWindow, Object object) {
-							final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
-									cellEditorWindow.getShell(),
-									(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-											| SWT.APPLICATION_MODAL);
-
-							return dlg
-									.open((VesselStateAttributes) getValue(object));
-						}
-
-						@Override
-						protected String renderValue(Object object) {
-							final VesselStateAttributes a = (VesselStateAttributes) object;
-							return "NBO: " + a.getNboRate() + " Idle NBO: "
-									+ a.getIdleNBORate() + " Idle Base:"
-									+ a.getIdleConsumptionRate();
-						}
-
-					};
-					vcePane.addColumn("Ballast Fuel Usage", laden, laden);
-				}
-
-				vcePane.getViewer().setInput(
-						editingDomain.getResourceSet().getResources().get(0)
-								.getContents().get(0));
-
-				createContextMenuFor(vcePane.getViewer());
-
-				final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
-						getSite().getPage(), ScenarioEditor.this);
-
-				fleetPane.createControl(sash);
-				// fleetPane.getControl().setLayoutData(new GridData(SWT.FILL,
-				// SWT.FILL, true, true));
-
-				final List<EReference> path = new LinkedList<EReference>();
-
-				path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
-				path.add(FleetPackage.eINSTANCE.getFleetModel_Fleet());
-
-				fleetPane.init(path, adapterFactory);
-				{
-					final BasicAttributeManipulator name = new BasicAttributeManipulator(
-							FleetPackage.eINSTANCE.getVessel_Name(),
-							getEditingDomain());
-					fleetPane.addColumn("Name", name, name);
-				}
-
-				{
-					final SingleReferenceManipulator vclass = new SingleReferenceManipulator(
-							FleetPackage.eINSTANCE.getVessel_Class(),
-							FleetPackage.eINSTANCE.getVesselClass_Name(),
-							false, vesselClassProvider, getEditingDomain());
-					fleetPane.addColumn("Class", vclass, vclass);
-				}
-
-				{
-					final DialogFeatureManipulator startRequirement = new DialogFeatureManipulator(
-					FleetPackage.eINSTANCE.getVessel_StartRequirement(), getEditingDomain()		
-					) {
-						
-						@Override
-						protected String renderValue(final Object value) {
-							final PortAndTime pat = (PortAndTime) value;
-							if (pat == null)
-								return "No constraint";
-							return (pat.isSetPort() ? pat.getPort().getName() : "Anywhere") + " " + 
-									"from " + (pat.isSetStartTime() ? pat.getStartTime().toString() : "any time") + " " +
-									"to " + (pat.isSetEndTime() ? pat.getEndTime().toString() : "any time");
-						}
-						
-						@Override
-						protected Object openDialogBox(Control cellEditorWindow, Object object) {
-							PortAndTimeDialog patDialog = new PortAndTimeDialog(cellEditorWindow.getShell(),
-									(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-									| SWT.APPLICATION_MODAL);
-							
-							return patDialog.open((PortAndTime) getValue(object));
-						}
-					};
-					
-					fleetPane.addColumn("Start constraint", startRequirement, startRequirement);
-				}
-				
-				// TODO add other desired vessel columns here
-
-				fleetPane.setTitle("Vessels", getTitleImage());
-
-				fleetPane.getViewer().setInput(
-						editingDomain.getResourceSet().getResources().get(0)
-								.getContents().get(0));
-
-				createContextMenuFor(fleetPane.getViewer());
-
-				int pageIndex = addPage(sash);
-				setPageText(pageIndex, "Fleet"); // TODO localize this
-				// string or whatever
-			}
-
+			createMarketEditor();
+			
 			// Create a page for the selection tree view.
 			//
 			{
@@ -1470,6 +1254,384 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				updateProblemIndication();
 			}
 		});
+	}
+
+	private void createMarketEditor() {
+		// TODO Add a market editor pane
+		
+	}
+
+	private void createCargoEditor(final IReferenceValueProvider portProvider,
+			final IReferenceValueProvider loadContractProvider,
+			final IReferenceValueProvider dischargeContractProvider) {
+		// Create a page for the cargo editor
+		{
+
+			final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
+					getSite().getPage(), ScenarioEditor.this);
+			// cargoPane.createControl(getContainer());
+
+			final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
+
+			cargoPane.createControl(getContainer());
+
+			final List<EReference> path = new LinkedList<EReference>();
+
+			path.add(ScenarioPackage.eINSTANCE.getScenario_CargoModel());
+			path.add(CargoPackage.eINSTANCE.getCargoModel_Cargoes());
+
+			cargoPane.setTitle("Cargoes", getTitleImage());
+
+			cargoPane.init(path, adapterFactory);
+
+			{
+				final BasicAttributeManipulator id = new BasicAttributeManipulator(
+						cargoPackage.getCargo_Id(), getEditingDomain());
+				cargoPane.addColumn("ID", id, id);
+			}
+
+			{
+				final EnumAttributeManipulator type = new EnumAttributeManipulator(
+						cargoPackage.getCargo_CargoType(), getEditingDomain());
+				cargoPane.addColumn("Type", type, type);
+			}
+
+			{
+				final SingleReferenceManipulator port = new SingleReferenceManipulator(
+						cargoPackage.getSlot_Port(),
+						PortPackage.eINSTANCE.getPort_Name(), false,
+						portProvider, getEditingDomain());
+				cargoPane.addColumn("Load Port", port, port,
+						cargoPackage.getCargo_LoadSlot());
+			}
+
+			{
+				final DateManipulator date = new DateManipulator(
+						cargoPackage.getSlot_WindowStart(), getEditingDomain());
+				cargoPane.addColumn("Load Date", date, date,
+						cargoPackage.getCargo_LoadSlot());
+			}
+
+			{
+				final SingleReferenceManipulator port = new SingleReferenceManipulator(
+						cargoPackage.getSlot_Contract(),
+						ScenarioPackage.eINSTANCE.getNamedObject_Name(), true,
+						loadContractProvider, getEditingDomain()) {
+					
+					private void setNullValue(final Object object) {
+						NULL_STRING = 
+							((Slot) object).getPort().getDefaultContract().getName() + " [from " +
+							((Slot) object).getPort().getName() + "]";
+					}
+					
+					@Override
+					public String render(final Object object) {
+						setNullValue(object);
+						return super.render(object);
+					}
+					@Override
+					public boolean canEdit(Object object) {
+						setNullValue(object);
+						return super.canEdit(object);
+					}
+				};
+				cargoPane.addColumn("Load Contract", port, port,
+						cargoPackage.getCargo_LoadSlot());
+			}
+
+			{
+				final SingleReferenceManipulator port = new SingleReferenceManipulator(
+						cargoPackage.getSlot_Port(),
+						PortPackage.eINSTANCE.getPort_Name(), false,
+						portProvider, getEditingDomain());
+				cargoPane.addColumn("Discharge Port", port, port,
+						cargoPackage.getCargo_DischargeSlot());
+			}
+			{
+				final DateManipulator date = new DateManipulator(
+						cargoPackage.getSlot_WindowStart(), getEditingDomain());
+				cargoPane.addColumn("Discharge Date", date, date,
+						cargoPackage.getCargo_DischargeSlot());
+			}
+
+			{
+				final SingleReferenceManipulator port = new SingleReferenceManipulator(
+						cargoPackage.getSlot_Contract(),
+						ScenarioPackage.eINSTANCE.getNamedObject_Name(), true,
+						loadContractProvider, getEditingDomain()) {
+					
+					private void setNullValue(final Object object) {
+						NULL_STRING = 
+							((Slot) object).getPort().getDefaultContract().getName() + " [from " +
+							((Slot) object).getPort().getName() + "]";
+					}
+					
+					@Override
+					public String render(final Object object) {
+						setNullValue(object);
+						return super.render(object);
+					}
+					@Override
+					public boolean canEdit(Object object) {
+						setNullValue(object);
+						return super.canEdit(object);
+					}
+				};
+				cargoPane.addColumn("Discharge Contract", port, port,
+						cargoPackage.getCargo_DischargeSlot());
+			}
+
+			// TODO sort out initial vessel column
+
+			cargoPane.getViewer().setInput(
+					editingDomain.getResourceSet().getResources().get(0)
+							.getContents().get(0));
+
+			// TODO should this really be here?
+			createContextMenuFor(cargoPane.getViewer());
+
+			int pageIndex = addPage(cargoPane.getControl());
+			setPageText(pageIndex, "Cargoes"); // TODO localize this
+												// string or whatever
+		}
+	}
+
+	private void createPortEditor(
+			final IReferenceValueProvider everyContractProvider,
+			IReferenceValueProvider marketProvider) {
+		final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
+				getSite().getPage(), ScenarioEditor.this);
+		// cargoPane.createControl(getContainer());
+
+		cargoPane.createControl(getContainer());
+
+		final List<EReference> path = new LinkedList<EReference>();
+
+		path.add(ScenarioPackage.eINSTANCE.getScenario_PortModel());
+		path.add(PortPackage.eINSTANCE.getPortModel_Ports());
+
+		cargoPane.setTitle("Ports", getTitleImage());
+
+		cargoPane.init(path, adapterFactory);
+		final PortPackage pp = PortPackage.eINSTANCE;
+		{
+			BasicAttributeManipulator manipulator = new BasicAttributeManipulator(
+					pp.getPort_Name(), getEditingDomain());
+			cargoPane.addColumn("Name", manipulator, manipulator);
+			manipulator = new BasicAttributeManipulator(pp.getPort_TimeZone(),
+					getEditingDomain());
+			cargoPane.addColumn("Timezone", manipulator, manipulator);
+
+			final SingleReferenceManipulator mm = new SingleReferenceManipulator(
+					pp.getPort_DefaultMarket(),
+					ScenarioPackage.eINSTANCE.getNamedObject_Name(), true,
+					marketProvider, getEditingDomain());
+
+			cargoPane.addColumn("Default Market", mm, mm);
+
+			final SingleReferenceManipulator cm = new SingleReferenceManipulator(
+					pp.getPort_DefaultContract(),
+					ScenarioPackage.eINSTANCE.getNamedObject_Name(), true,
+					everyContractProvider, getEditingDomain());
+
+			cargoPane.addColumn("Default Contract", cm, cm);
+		}
+
+		cargoPane.getViewer().setInput(
+				editingDomain.getResourceSet().getResources().get(0)
+						.getContents().get(0));
+
+		createContextMenuFor(cargoPane.getViewer());
+
+		int pageIndex = addPage(cargoPane.getControl());
+		setPageText(pageIndex, "Ports"); // TODO localize this
+											// string or whatever
+
+	}
+
+	private void createFleetEditor(
+			final IReferenceValueProvider vesselClassProvider,
+			final IReferenceValueProvider portProvider) {
+		{
+			final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
+
+			final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
+					getSite().getPage(), ScenarioEditor.this);
+
+			vcePane.createControl(sash);
+
+			final List<EReference> path2 = new LinkedList<EReference>();
+
+			path2.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
+			path2.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
+
+			vcePane.init(path2, adapterFactory);
+			{
+				final BasicAttributeManipulator name = new BasicAttributeManipulator(
+						FleetPackage.eINSTANCE.getVesselClass_Name(),
+						getEditingDomain());
+				vcePane.addColumn("Name", name, name);
+			}
+			{
+				final BasicAttributeManipulator capacity = new NumericAttributeManipulator(
+						FleetPackage.eINSTANCE.getVesselClass_Capacity(),
+						getEditingDomain());
+				vcePane.addColumn("Capacity", capacity, capacity);
+			}
+
+			{
+				final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(
+						FleetPackage.eINSTANCE
+								.getVesselClass_InaccessiblePorts(),
+						getEditingDomain(), portProvider, PortPackage.eINSTANCE
+								.getPort_Name());
+				vcePane.addColumn("Inaccessible Ports", capacity, capacity);
+			}
+
+			{
+				final DialogFeatureManipulator laden = new DialogFeatureManipulator(
+						FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(),
+						getEditingDomain()) {
+					@Override
+					protected String renderValue(Object object) {
+						final VesselStateAttributes a = (VesselStateAttributes) object;
+						return "NBO: " + a.getNboRate() + " Idle NBO: "
+								+ a.getIdleNBORate() + " Idle Base:"
+								+ a.getIdleConsumptionRate();
+					}
+
+					@Override
+					protected Object openDialogBox(Control cellEditorWindow,
+							Object object) {
+						final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
+								cellEditorWindow.getShell(),
+								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
+										| SWT.APPLICATION_MODAL);
+
+						return dlg
+								.open((VesselStateAttributes) getValue(object));
+					}
+
+				};
+				vcePane.addColumn("Laden Fuel Usage", laden, laden);
+			}
+
+			{
+				final DialogFeatureManipulator laden = new DialogFeatureManipulator(
+						FleetPackage.eINSTANCE
+								.getVesselClass_BallastAttributes(),
+						getEditingDomain()) {
+
+					@Override
+					protected Object openDialogBox(Control cellEditorWindow,
+							Object object) {
+						final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
+								cellEditorWindow.getShell(),
+								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
+										| SWT.APPLICATION_MODAL);
+
+						return dlg
+								.open((VesselStateAttributes) getValue(object));
+					}
+
+					@Override
+					protected String renderValue(Object object) {
+						final VesselStateAttributes a = (VesselStateAttributes) object;
+						return "NBO: " + a.getNboRate() + " Idle NBO: "
+								+ a.getIdleNBORate() + " Idle Base:"
+								+ a.getIdleConsumptionRate();
+					}
+
+				};
+				vcePane.addColumn("Ballast Fuel Usage", laden, laden);
+			}
+
+			vcePane.getViewer().setInput(
+					editingDomain.getResourceSet().getResources().get(0)
+							.getContents().get(0));
+
+			createContextMenuFor(vcePane.getViewer());
+
+			final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
+					getSite().getPage(), ScenarioEditor.this);
+
+			fleetPane.createControl(sash);
+			// fleetPane.getControl().setLayoutData(new GridData(SWT.FILL,
+			// SWT.FILL, true, true));
+
+			final List<EReference> path = new LinkedList<EReference>();
+
+			path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
+			path.add(FleetPackage.eINSTANCE.getFleetModel_Fleet());
+
+			fleetPane.init(path, adapterFactory);
+			{
+				final BasicAttributeManipulator name = new BasicAttributeManipulator(
+						FleetPackage.eINSTANCE.getVessel_Name(),
+						getEditingDomain());
+				fleetPane.addColumn("Name", name, name);
+			}
+
+			{
+				final SingleReferenceManipulator vclass = new SingleReferenceManipulator(
+						FleetPackage.eINSTANCE.getVessel_Class(),
+						FleetPackage.eINSTANCE.getVesselClass_Name(), false,
+						vesselClassProvider, getEditingDomain());
+				fleetPane.addColumn("Class", vclass, vclass);
+			}
+
+			{
+				final DialogFeatureManipulator startRequirement = new DialogFeatureManipulator(
+						FleetPackage.eINSTANCE.getVessel_StartRequirement(),
+						getEditingDomain()) {
+
+					@Override
+					protected String renderValue(final Object value) {
+						final PortAndTime pat = (PortAndTime) value;
+						if (pat == null)
+							return "No constraint";
+						return (pat.isSetPort() ? pat.getPort().getName()
+								: "Anywhere")
+								+ " "
+								+ "from "
+								+ (pat.isSetStartTime() ? pat.getStartTime()
+										.toString() : "any time")
+								+ " "
+								+ "to "
+								+ (pat.isSetEndTime() ? pat.getEndTime()
+										.toString() : "any time");
+					}
+
+					@Override
+					protected Object openDialogBox(Control cellEditorWindow,
+							Object object) {
+						PortAndTimeDialog patDialog = new PortAndTimeDialog(
+								cellEditorWindow.getShell(),
+								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
+										| SWT.APPLICATION_MODAL);
+
+						return patDialog.open((PortAndTime) getValue(object));
+					}
+				};
+
+				fleetPane.addColumn("Start constraint", startRequirement,
+						startRequirement);
+			}
+
+			// TODO add other desired vessel columns here
+
+			fleetPane.setTitle("Vessels", getTitleImage());
+
+			fleetPane.getViewer().setInput(
+					editingDomain.getResourceSet().getResources().get(0)
+							.getContents().get(0));
+
+			createContextMenuFor(fleetPane.getViewer());
+
+			int pageIndex = addPage(sash);
+			setPageText(pageIndex, "Fleet"); // TODO localize this
+			// string or whatever
+		}
 	}
 
 	/**

@@ -254,6 +254,15 @@ public interface Slot extends EObject {
 	 */
 	Object getLocalWindowStart();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getContract() != null)\n\treturn getContract();\nelse if (getPort() != null)\n\treturn getPort().getDefaultContract();\nelse\n\treturn null;'"
+	 * @generated
+	 */
+	Contract getSlotOrPortContract();
+
 	Date getWindowEnd();
 
 } // Slot

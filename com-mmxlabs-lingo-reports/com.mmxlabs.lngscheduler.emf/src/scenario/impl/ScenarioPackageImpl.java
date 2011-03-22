@@ -272,6 +272,24 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getScenario__GetOrCreateFleetModel() {
+		return scenarioEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getScenario__GetOrCreateScheduleModel() {
+		return scenarioEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getScenarioObject() {
 		return scenarioObjectEClass;
 	}
@@ -343,6 +361,8 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		createEReference(scenarioEClass, SCENARIO__OPTIMISATION);
 		createEAttribute(scenarioEClass, SCENARIO__VERSION);
 		createEAttribute(scenarioEClass, SCENARIO__NAME);
+		createEOperation(scenarioEClass, SCENARIO___GET_OR_CREATE_FLEET_MODEL);
+		createEOperation(scenarioEClass, SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL);
 
 		scenarioObjectEClass = createEClass(SCENARIO_OBJECT);
 		createEOperation(scenarioObjectEClass, SCENARIO_OBJECT___GET_CONTAINER);
@@ -412,6 +432,10 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		initEReference(getScenario_Optimisation(), theOptimiserPackage.getOptimisation(), null, "optimisation", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenario_Version(), ecorePackage.getEInt(), "version", "1", 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenario_Name(), ecorePackage.getEString(), "name", "Default name", 1, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getScenario__GetOrCreateFleetModel(), theFleetPackage.getFleetModel(), "getOrCreateFleetModel", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getScenario__GetOrCreateScheduleModel(), theSchedulePackage.getScheduleModel(), "getOrCreateScheduleModel", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(scenarioObjectEClass, ScenarioObject.class, "ScenarioObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

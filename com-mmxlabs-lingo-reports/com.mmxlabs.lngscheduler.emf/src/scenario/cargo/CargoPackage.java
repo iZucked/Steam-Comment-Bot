@@ -7,6 +7,7 @@ package scenario.cargo;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -79,13 +80,31 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__CARGOES = 0;
 
 	/**
+	 * The feature id for the '<em><b>Spare Discharge Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__SPARE_DISCHARGE_SLOTS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Spare Load Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__SPARE_LOAD_SLOTS = 2;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = 1;
+	int CARGO_MODEL_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Model</em>' class.
@@ -143,13 +162,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO__ALLOWED_VESSELS = 3;
 
 	/**
+	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__CARGO_TYPE = 4;
+
+	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = 4;
+	int CARGO_FEATURE_COUNT = 5;
 
 
 	/**
@@ -262,13 +290,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_LOCAL_WINDOW_START = 0;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_PORT_CONTRACT = 1;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = 1;
+	int SLOT_OPERATION_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -380,6 +417,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_LOCAL_WINDOW_START = SLOT___GET_LOCAL_WINDOW_START;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT = SLOT___GET_SLOT_OR_PORT_CONTRACT;
+
+	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -387,6 +433,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.cargo.CargoType <em>Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.cargo.CargoType
+	 * @see scenario.cargo.impl.CargoPackageImpl#getCargoType()
+	 * @generated
+	 */
+	int CARGO_TYPE = 4;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.CargoModel <em>Model</em>}'.
@@ -408,6 +464,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargoModel_Cargoes();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.cargo.CargoModel#getSpareDischargeSlots <em>Spare Discharge Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Spare Discharge Slots</em>'.
+	 * @see scenario.cargo.CargoModel#getSpareDischargeSlots()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_SpareDischargeSlots();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.cargo.CargoModel#getSpareLoadSlots <em>Spare Load Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Spare Load Slots</em>'.
+	 * @see scenario.cargo.CargoModel#getSpareLoadSlots()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_SpareLoadSlots();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.Cargo <em>Cargo</em>}'.
@@ -462,6 +540,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargo_AllowedVessels();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo Type</em>'.
+	 * @see scenario.cargo.Cargo#getCargoType()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EAttribute getCargo_CargoType();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.Slot <em>Slot</em>}'.
@@ -572,6 +661,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetLocalWindowStart();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrPortContract() <em>Get Slot Or Port Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * @see scenario.cargo.Slot#getSlotOrPortContract()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrPortContract();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -591,6 +690,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getLoadSlot_CargoCVvalue();
+
+	/**
+	 * Returns the meta object for enum '{@link scenario.cargo.CargoType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Type</em>'.
+	 * @see scenario.cargo.CargoType
+	 * @generated
+	 */
+	EEnum getCargoType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -633,6 +742,22 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_MODEL__CARGOES = eINSTANCE.getCargoModel_Cargoes();
 
 		/**
+		 * The meta object literal for the '<em><b>Spare Discharge Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__SPARE_DISCHARGE_SLOTS = eINSTANCE.getCargoModel_SpareDischargeSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Spare Load Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__SPARE_LOAD_SLOTS = eINSTANCE.getCargoModel_SpareLoadSlots();
+
+		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.CargoImpl <em>Cargo</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -673,6 +798,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO__ALLOWED_VESSELS = eINSTANCE.getCargo_AllowedVessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO__CARGO_TYPE = eINSTANCE.getCargo_CargoType();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -757,6 +890,14 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_LOCAL_WINDOW_START = eINSTANCE.getSlot__GetLocalWindowStart();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Port Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_PORT_CONTRACT = eINSTANCE.getSlot__GetSlotOrPortContract();
+
+		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -773,6 +914,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOAD_SLOT__CARGO_CVVALUE = eINSTANCE.getLoadSlot_CargoCVvalue();
+
+		/**
+		 * The meta object literal for the '{@link scenario.cargo.CargoType <em>Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.cargo.CargoType
+		 * @see scenario.cargo.impl.CargoPackageImpl#getCargoType()
+		 * @generated
+		 */
+		EEnum CARGO_TYPE = eINSTANCE.getCargoType();
 
 	}
 

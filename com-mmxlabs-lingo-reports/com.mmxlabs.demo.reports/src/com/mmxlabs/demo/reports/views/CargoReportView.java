@@ -95,27 +95,29 @@ public class CargoReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Load Entity", objectFormatter,
-				s.getCargoAllocation_LoadRevenue(),
-				s.getBookedRevenue_Entity(), name);
-
-		addColumn("Discharge Entity", objectFormatter,
-				s.getCargoAllocation_DischargeRevenue(),
-				s.getBookedRevenue_Entity(), name);
-
+		addColumn("Load Entity", objectFormatter, 
+				s.getCargoAllocation_LoadRevenue(),s.getBookedRevenue_Entity(),name);
+		
+		addColumn("Discharge Entity", objectFormatter, 
+				s.getCargoAllocation_DischargeRevenue(),s.getBookedRevenue_Entity(),name);
+		
 		Object[][] fields = { { s.getCargoAllocation_LoadRevenue(), "Load" },
 				{ s.getCargoAllocation_ShippingRevenue(), "Shipping" },
 				{ s.getCargoAllocation_DischargeRevenue(), "Discharge" } };
 
 		for (final Object[] f : fields) {
-			addColumn(f[1] + " Revenue", integerFormatter, f[0],
-					s.getBookedRevenue__GetUntaxedRevenues());
-
-			addColumn(f[1] + " Costs", costFormatter, f[0],
-					s.getBookedRevenue__GetUntaxedCosts());
-
-			addColumn(f[1] + " untaxed value", integerFormatter, f[0],
-					s.getBookedRevenue__GetUntaxedValue());
+//			addColumn(f[1] + " Revenue", integerFormatter,
+//					f[0],
+//					s.getBookedRevenue__GetUntaxedRevenues());
+//			
+//			addColumn(f[1] + " Costs", costFormatter,
+//					f[0],
+//					s.getBookedRevenue__GetUntaxedCosts());
+//			
+//			addColumn(f[1] + " untaxed value", integerFormatter,
+//					f[0],
+//					s.getBookedRevenue__GetUntaxedValue());
+//			
 
 			addColumn(f[1] + " taxed value", integerFormatter, f[0],
 					s.getBookedRevenue__GetTaxedValue());

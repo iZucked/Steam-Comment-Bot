@@ -175,13 +175,31 @@ public interface ScenarioPackage extends EPackage {
 
 
 	/**
+	 * The operation id for the '<em>Get Or Create Fleet Model</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO___GET_OR_CREATE_FLEET_MODEL = 0;
+
+	/**
+	 * The operation id for the '<em>Get Or Create Schedule Model</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL = 1;
+
+	/**
 	 * The number of operations of the '<em>Scenario</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_OPERATION_COUNT = 0;
+	int SCENARIO_OPERATION_COUNT = 2;
 
 
 	/**
@@ -401,6 +419,26 @@ public interface ScenarioPackage extends EPackage {
 	EAttribute getScenario_Name();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.Scenario#getOrCreateFleetModel() <em>Get Or Create Fleet Model</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Or Create Fleet Model</em>' operation.
+	 * @see scenario.Scenario#getOrCreateFleetModel()
+	 * @generated
+	 */
+	EOperation getScenario__GetOrCreateFleetModel();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.Scenario#getOrCreateScheduleModel() <em>Get Or Create Schedule Model</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Or Create Schedule Model</em>' operation.
+	 * @see scenario.Scenario#getOrCreateScheduleModel()
+	 * @generated
+	 */
+	EOperation getScenario__GetOrCreateScheduleModel();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.ScenarioObject <em>Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -560,6 +598,22 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SCENARIO__NAME = eINSTANCE.getScenario_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Or Create Fleet Model</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCENARIO___GET_OR_CREATE_FLEET_MODEL = eINSTANCE.getScenario__GetOrCreateFleetModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Or Create Schedule Model</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL = eINSTANCE.getScenario__GetOrCreateScheduleModel();
 
 		/**
 		 * The meta object literal for the '{@link scenario.impl.ScenarioObjectImpl <em>Object</em>}' class.

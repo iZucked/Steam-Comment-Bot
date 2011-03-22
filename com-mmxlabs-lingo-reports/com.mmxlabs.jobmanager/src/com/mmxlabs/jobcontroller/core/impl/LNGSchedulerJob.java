@@ -85,8 +85,8 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 				entities, solution);
 
 		schedule.setName(scenario.getName() + " " + name);
-
-		scenario.getScheduleModel().getSchedules().add(schedule);
+		
+		scenario.getOrCreateScheduleModel().getSchedules().add(schedule);
 	}
 
 	/*
@@ -98,7 +98,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	protected boolean step() {
 		optimiser.step(REPORT_PERCENTAGE);
 		currentProgress += REPORT_PERCENTAGE;
-		
+
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
@@ -118,17 +118,17 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	protected void kill() {
 		optimiser.dispose();
 	}
-	
+
 	@Override
 	public void dispose() {
-		
+
 		kill();
-		
+
 		this.entities.dispose();
-		
+
 		// TODO: this.scenario = null;
 		this.optimiser = null;
-		
+
 		super.dispose();
 	}
 }
