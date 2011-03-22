@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Composite;
  * 
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {
-	private static final String NULL_STRING = "empty";
+	protected String NULL_STRING = "empty";
 	
 	final EAttribute nameAttribute;
 	final boolean allowNullValues;
