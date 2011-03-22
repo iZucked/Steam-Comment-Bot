@@ -107,6 +107,7 @@ import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
+import scenario.cargo.Slot;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
@@ -1020,18 +1021,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				}
 			};
-			
+
 			final IReferenceValueProvider marketProvider = new IReferenceValueProvider() {
 				@Override
-				public Iterable<? extends EObject> getAllowedValues(EObject target,
-						EStructuralFeature field) {
+				public Iterable<? extends EObject> getAllowedValues(
+						EObject target, EStructuralFeature field) {
 					while (target != null && !(target instanceof Scenario)) {
 						target = target.eContainer();
 					}
 					if (target == null) {
 						return Collections.emptyList();
 					} else {
-						return ((Scenario) target).getMarketModel().getMarkets();
+						return ((Scenario) target).getMarketModel()
+								.getMarkets();
 					}
 				}
 			};
@@ -1307,7 +1309,25 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final SingleReferenceManipulator port = new SingleReferenceManipulator(
 						cargoPackage.getSlot_Contract(),
 						ScenarioPackage.eINSTANCE.getNamedObject_Name(), true,
-						loadContractProvider, getEditingDomain());
+						loadContractProvider, getEditingDomain()) {
+					
+					private void setNullValue(final Object object) {
+						NULL_STRING = 
+							((Slot) object).getPort().getDefaultContract().getName() + " [from " +
+							((Slot) object).getPort().getName() + "]";
+					}
+					
+					@Override
+					public String render(final Object object) {
+						setNullValue(object);
+						return super.render(object);
+					}
+					@Override
+					public boolean canEdit(Object object) {
+						setNullValue(object);
+						return super.canEdit(object);
+					}
+				};
 				cargoPane.addColumn("Load Contract", port, port,
 						cargoPackage.getCargo_LoadSlot());
 			}
@@ -1331,9 +1351,25 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final SingleReferenceManipulator port = new SingleReferenceManipulator(
 						cargoPackage.getSlot_Contract(),
 						ScenarioPackage.eINSTANCE.getNamedObject_Name(), true,
-						dischargeContractProvider,
-
-						getEditingDomain());
+						loadContractProvider, getEditingDomain()) {
+					
+					private void setNullValue(final Object object) {
+						NULL_STRING = 
+							((Slot) object).getPort().getDefaultContract().getName() + " [from " +
+							((Slot) object).getPort().getName() + "]";
+					}
+					
+					@Override
+					public String render(final Object object) {
+						setNullValue(object);
+						return super.render(object);
+					}
+					@Override
+					public boolean canEdit(Object object) {
+						setNullValue(object);
+						return super.canEdit(object);
+					}
+				};
 				cargoPane.addColumn("Discharge Contract", port, port,
 						cargoPackage.getCargo_DischargeSlot());
 			}
@@ -1385,12 +1421,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					marketProvider, getEditingDomain());
 
 			cargoPane.addColumn("Default Market", mm, mm);
-			
+
 			final SingleReferenceManipulator cm = new SingleReferenceManipulator(
 					pp.getPort_DefaultContract(),
 					ScenarioPackage.eINSTANCE.getNamedObject_Name(), true,
 					everyContractProvider, getEditingDomain());
-			
+
 			cargoPane.addColumn("Default Contract", cm, cm);
 		}
 
