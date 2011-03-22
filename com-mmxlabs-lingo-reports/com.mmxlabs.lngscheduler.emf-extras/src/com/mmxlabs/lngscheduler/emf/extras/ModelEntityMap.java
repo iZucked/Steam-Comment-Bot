@@ -74,4 +74,11 @@ public class ModelEntityMap {
 		final URI theURI = EcoreUtil.getURI(modelObject);
 		return clz.cast(reverseMap.get(theURI));
 	}
+	
+	public void dispose() {
+		this.resourceSet = null;
+		this.earliestDate = null;
+		this.uriMap.clear();
+		this.reverseMap.clear();
+	}
 }

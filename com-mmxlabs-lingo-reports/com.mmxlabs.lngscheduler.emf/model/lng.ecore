@@ -4,6 +4,16 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="scenario"
     nsURI="http://com.mmxlabs.lng.emf" nsPrefix="com.mmxlabs.lng.emf">
   <eClassifiers xsi:type="ecore:EClass" name="Scenario">
+    <eOperations name="getOrCreateFleetModel" lowerBound="1" eType="#//fleet/FleetModel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (getFleetModel() == null)&#xA;&#x9;&#x9;&#x9;setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;return getFleetModel();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOrCreateScheduleModel" lowerBound="1" eType="#//schedule/ScheduleModel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (getScheduleModel() == null)&#xA;&#x9;&#x9;&#x9;setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());&#xA;&#x9;&#x9;return getScheduleModel();"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fleetModel" eType="#//fleet/FleetModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portModel" eType="#//port/PortModel"
@@ -214,6 +224,12 @@
           eType="#//schedule/events/Idle"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="ballastIdle" lowerBound="1"
           eType="#//schedule/events/Idle"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loadRevenue" lowerBound="1"
+          eType="#//schedule/BookedRevenue"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="shippingRevenue" lowerBound="1"
+          eType="#//schedule/BookedRevenue"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeRevenue" lowerBound="1"
+          eType="#//schedule/BookedRevenue"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleFitness">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
@@ -440,6 +456,8 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="defaultMarket" eType="#//market/Market"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultContract" lowerBound="1"
+          eType="#//contract/Contract"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DistanceModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="distances" upperBound="-1"
@@ -500,6 +518,10 @@
     <eClassifiers xsi:type="ecore:EClass" name="CargoModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="cargoes" upperBound="-1"
           eType="#//cargo/Cargo" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="spareDischargeSlots"
+          upperBound="-1" eType="#//cargo/Slot" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="spareLoadSlots" upperBound="-1"
+          eType="#//cargo/LoadSlot" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Cargo">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -509,11 +531,18 @@
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1"
           eType="#//fleet/Vessel"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoType" lowerBound="1"
+          eType="#//cargo/CargoType" defaultValueLiteral="Fleet"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Slot">
       <eOperations name="getLocalWindowStart" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getWindowStart());&#xA;return calendar;"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getSlotOrPortContract" lowerBound="1" eType="#//contract/Contract">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (getContract() != null)&#xA;&#x9;return getContract();&#xA;else if (getPort() != null)&#xA;&#x9;return getPort().getDefaultContract();&#xA;else&#xA;&#x9;return null;"/>
         </eAnnotations>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -532,6 +561,11 @@
           <details key="documentation" value="The energy content conversion factor for this cargo; because LNG is priced by MMBTU but measured by volume, we need to know both the energy content and volume. This value lets us derive the former from the latter."/>
         </eAnnotations>
       </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="CargoType">
+      <eLiterals name="Fleet" literal="FLEET"/>
+      <eLiterals name="FOB" value="1" literal="FOB"/>
+      <eLiterals name="DES" value="2" literal="DES"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="contract" nsURI="http://com.mmxlabs.lng.emf/contract" nsPrefix="com.mmxlabs.lng.emf.contract">

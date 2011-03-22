@@ -77,10 +77,18 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 				// class called {@link HeadlessScenarioGenerator} which exposes these parameters
 				
 				utils.addRandomCargoes(scenario, matrixPath, slotsPath, details.getCargoCount(), 
-						6, 6, 24, 24, 1, 15, 0, 365);
+						6, 6, 24, 24, 
+						
+						1
+						
+						, 15, 
+						
+						details.getLocality(),///locality
+						
+						365);
+				utils.addCharterOuts(scenario, 1, 25, 35, 365);
 			}
 			
-			utils.addCharterOuts(scenario, 1, 25, 35, 365);
 			utils.addDefaultSettings(scenario);
 			
 		} catch (FileNotFoundException e1) {
@@ -142,9 +150,14 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			return cargoSpinner.getSelection();
 		}
 
+		public double getLocality() {
+			return localitySpinner.getSelection() / Math.pow(10, localitySpinner.getDigits());
+		}
+		
 		protected Text fileField;
 		protected Text matrixField;
 		private Spinner cargoSpinner;
+		private Spinner localitySpinner;
 		protected Button vesselClasses;
 		private Text slotsField;
 
@@ -177,6 +190,14 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			cargoSpinner.setMaximum(1000);
 			cargoSpinner.setMinimum(10);
 			cargoSpinner.setSelection(200);
+			label = new Label(row, SWT.NONE);
+			label.setText("Locality:");
+			localitySpinner = new Spinner(row, SWT.NONE);
+			localitySpinner.setMaximum(100);
+			localitySpinner.setMinimum(0);
+			localitySpinner.setDigits(1);
+
+			localitySpinner.setSelection(60);
 			setControl(myContents);
 		}
 

@@ -76,6 +76,9 @@ public class CargoAllocationItemProvider
 			addBallastLegPropertyDescriptor(object);
 			addLadenIdlePropertyDescriptor(object);
 			addBallastIdlePropertyDescriptor(object);
+			addLoadRevenuePropertyDescriptor(object);
+			addShippingRevenuePropertyDescriptor(object);
+			addDischargeRevenuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -358,6 +361,72 @@ public class CargoAllocationItemProvider
 				 getString("_UI_CargoAllocation_ballastIdle_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ballastIdle_feature", "_UI_CargoAllocation_type"),
 				 SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_IDLE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Load Revenue feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLoadRevenuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_loadRevenue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadRevenue_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_REVENUE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Shipping Revenue feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShippingRevenuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_shippingRevenue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_shippingRevenue_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__SHIPPING_REVENUE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Discharge Revenue feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDischargeRevenuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_dischargeRevenue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeRevenue_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_REVENUE,
 				 true,
 				 false,
 				 true,

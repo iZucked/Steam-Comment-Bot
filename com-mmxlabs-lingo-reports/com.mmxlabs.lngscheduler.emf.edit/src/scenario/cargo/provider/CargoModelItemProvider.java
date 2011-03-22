@@ -76,6 +76,8 @@ public class CargoModelItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGOES);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__SPARE_DISCHARGE_SLOTS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__SPARE_LOAD_SLOTS);
 		}
 		return childrenFeatures;
 	}
@@ -128,6 +130,8 @@ public class CargoModelItemProvider
 
 		switch (notification.getFeatureID(CargoModel.class)) {
 			case CargoPackage.CARGO_MODEL__CARGOES:
+			case CargoPackage.CARGO_MODEL__SPARE_DISCHARGE_SLOTS:
+			case CargoPackage.CARGO_MODEL__SPARE_LOAD_SLOTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -149,6 +153,44 @@ public class CargoModelItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__CARGOES,
 				 CargoFactory.eINSTANCE.createCargo()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__SPARE_DISCHARGE_SLOTS,
+				 CargoFactory.eINSTANCE.createSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__SPARE_DISCHARGE_SLOTS,
+				 CargoFactory.eINSTANCE.createLoadSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__SPARE_LOAD_SLOTS,
+				 CargoFactory.eINSTANCE.createLoadSlot()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == CargoPackage.Literals.CARGO_MODEL__SPARE_DISCHARGE_SLOTS ||
+			childFeature == CargoPackage.Literals.CARGO_MODEL__SPARE_LOAD_SLOTS;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

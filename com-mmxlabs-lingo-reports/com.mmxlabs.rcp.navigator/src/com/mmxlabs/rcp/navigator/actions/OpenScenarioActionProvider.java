@@ -1,10 +1,18 @@
 package com.mmxlabs.rcp.navigator.actions;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.mapping.ResourceMapping;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.OpenFileAction;
 import org.eclipse.ui.actions.OpenWithMenu;
 import org.eclipse.ui.internal.navigator.AdaptabilityUtility;
 import org.eclipse.ui.internal.navigator.resources.plugin.WorkbenchNavigatorMessages;
@@ -14,6 +22,7 @@ import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 
+import com.mmxlabs.rcp.navigator.actions.OpenScenarioAction;
 import com.mmxlabs.rcp.navigator.scenario.ScenarioTreeNodeClass;
 
 public class OpenScenarioActionProvider extends CommonActionProvider {
@@ -24,7 +33,6 @@ public class OpenScenarioActionProvider extends CommonActionProvider {
 
 	private boolean contribute = false;
 
-	@Override
 	public void init(ICommonActionExtensionSite aConfig) {
 		if (aConfig.getViewSite() instanceof ICommonViewerWorkbenchSite) {
 			viewSite = (ICommonViewerWorkbenchSite) aConfig.getViewSite();
@@ -33,7 +41,6 @@ public class OpenScenarioActionProvider extends CommonActionProvider {
 		}
 	}
 
-	@Override
 	public void fillContextMenu(IMenuManager aMenu) {
 		if (!contribute || getContext().getSelection().isEmpty()) {
 			return;
@@ -49,7 +56,6 @@ public class OpenScenarioActionProvider extends CommonActionProvider {
 		addOpenWithMenu(aMenu);
 	}
 
-	@Override
 	public void fillActionBars(IActionBars theActionBars) {
 		if (!contribute) {
 			return;

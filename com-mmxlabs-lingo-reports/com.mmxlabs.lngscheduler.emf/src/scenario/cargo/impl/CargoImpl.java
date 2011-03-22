@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
+import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.fleet.Vessel;
@@ -32,6 +33,7 @@ import scenario.fleet.Vessel;
  *   <li>{@link scenario.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link scenario.cargo.impl.CargoImpl#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -87,6 +89,26 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * @ordered
 	 */
 	protected EList<Vessel> allowedVessels;
+
+	/**
+	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CargoType CARGO_TYPE_EDEFAULT = CargoType.FLEET;
+
+	/**
+	 * The cached value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoType()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -233,6 +255,27 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CargoType getCargoType() {
+		return cargoType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargoType(CargoType newCargoType) {
+		CargoType oldCargoType = cargoType;
+		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__CARGO_TYPE, oldCargoType, cargoType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -260,6 +303,8 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				return getDischargeSlot();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return getAllowedVessels();
+			case CargoPackage.CARGO__CARGO_TYPE:
+				return getCargoType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -286,6 +331,9 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				getAllowedVessels().clear();
 				getAllowedVessels().addAll((Collection<? extends Vessel>)newValue);
 				return;
+			case CargoPackage.CARGO__CARGO_TYPE:
+				setCargoType((CargoType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -310,6 +358,9 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
 				return;
+			case CargoPackage.CARGO__CARGO_TYPE:
+				setCargoType(CARGO_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -330,6 +381,8 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 				return dischargeSlot != null;
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
+			case CargoPackage.CARGO__CARGO_TYPE:
+				return cargoType != CARGO_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -346,6 +399,8 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (id: ");
 		result.append(id);
+		result.append(", cargoType: ");
+		result.append(cargoType);
 		result.append(')');
 		return result.toString();
 	}

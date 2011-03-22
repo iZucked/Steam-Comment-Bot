@@ -63,7 +63,6 @@ public class ScheduleItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addRevenuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -91,28 +90,6 @@ public class ScheduleItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Revenue feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRevenuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Schedule_revenue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_revenue_feature", "_UI_Schedule_type"),
-				 SchedulePackage.Literals.SCHEDULE__REVENUE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -128,6 +105,7 @@ public class ScheduleItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FLEET);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESS);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__REVENUE);
 		}
 		return childrenFeatures;
 	}
@@ -189,6 +167,7 @@ public class ScheduleItemProvider
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__FLEET:
 			case SchedulePackage.SCHEDULE__FITNESS:
+			case SchedulePackage.SCHEDULE__REVENUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -235,6 +214,11 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__FITNESS,
 				 ScheduleFactory.eINSTANCE.createScheduleFitness()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__REVENUE,
+				 ScheduleFactory.eINSTANCE.createBookedRevenue()));
 	}
 
 	/**

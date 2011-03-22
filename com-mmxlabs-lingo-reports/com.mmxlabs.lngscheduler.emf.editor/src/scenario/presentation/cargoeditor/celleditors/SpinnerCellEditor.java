@@ -6,6 +6,12 @@ package scenario.presentation.cargoeditor.celleditors;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
@@ -66,7 +72,59 @@ public class SpinnerCellEditor extends CellEditor {
 	@Override
 	protected Control createControl(final Composite parent) {
 		control = new Spinner(parent, SWT.NONE);
+		
+		control.addKeyListener(new KeyAdapter() {
+			{
+				final KeyAdapter ka = this;
+				control.addDisposeListener(
+						new DisposeListener() {
+
+							@Override
+							public void widgetDisposed(DisposeEvent e) {
+								control.removeKeyListener(ka);
+							}
+						});
+			}
+			
+            // hook key pressed - see PR 14201  
+            public void keyPressed(final KeyEvent e) {
+                keyReleaseOccured(e);
+
+                // as a result of processing the above call, clients may have
+                // disposed this cell editor
+                if ((getControl() == null) || getControl().isDisposed()) {
+					return;
+				}
+            }
+		}
+		);
+		
+		
+		control.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				handleDefaultSelection(e);
+			}
+			
+		});
+		
 		return control;
+	}
+
+	
+	
+	@Override
+	protected void keyReleaseOccured(KeyEvent keyEvent) {
+		if (keyEvent.character == '\r') { // Return key
+			return;
+		}
+		super.keyReleaseOccured(keyEvent);
 	}
 
 	/* (non-Javadoc)
@@ -100,4 +158,18 @@ public class SpinnerCellEditor extends CellEditor {
 		
 		control.setSelection(numberToSelection(number));
 	}
+	
+	   /**
+     * Handles a default selection event from the text control by applying the editor
+     * value and deactivating this cell editor.
+     * 
+     * @param event the selection event
+     * 
+     * @since 3.0
+     */
+    protected void handleDefaultSelection(SelectionEvent event) {
+        // same with enter-key handling code in keyReleaseOccured(e);
+        fireApplyEditorValue();
+        deactivate();
+    }
 }

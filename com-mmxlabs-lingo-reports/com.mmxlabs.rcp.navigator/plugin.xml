@@ -5,9 +5,9 @@
          point="org.eclipse.ui.views">
       <view
             class="com.mmxlabs.rcp.navigator.TheNavigator"
-            icon="icons/eview16/exec_statistic_view.gif"
+            icon="icons/sample.gif"
             id="com.mmxlabs.rcp.navigator"
-            name="Scenario Navigator">
+            name="My Common Navigator">
       </view>
    </extension>
    <extension
@@ -63,7 +63,7 @@
          point="org.eclipse.ui.navigator.navigatorContent">
      
       <actionProvider
-            class="com.mmxlabs.rcp.navigator.actions.OpenScenarioActionProvider"
+            class="com.mmxlabs.rcp.navigator.OpenScenarioActionProvider"
             id="com.mmxlabs.rcp.navigator.CommonActionProvider1">
          <enablement>
             <or>

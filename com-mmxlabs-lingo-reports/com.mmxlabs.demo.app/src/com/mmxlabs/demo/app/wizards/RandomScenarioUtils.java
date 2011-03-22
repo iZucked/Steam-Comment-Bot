@@ -65,6 +65,8 @@ import scenario.port.Port;
 import scenario.port.PortFactory;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
+import scenario.schedule.ScheduleFactory;
+import scenario.schedule.SchedulePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
@@ -93,6 +95,8 @@ public class RandomScenarioUtils {
 			.getCargoFactory();
 	private final MarketFactory marketFactory = MarketPackage.eINSTANCE
 			.getMarketFactory();
+	private final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE
+			.getScheduleFactory();
 
 	private final Random random;
 
@@ -112,6 +116,7 @@ public class RandomScenarioUtils {
 		scenario.setDistanceModel(portFactory.createDistanceModel());
 		scenario.setFleetModel(fleetFactory.createFleetModel());
 		scenario.setPortModel(portFactory.createPortModel());
+		scenario.setScheduleModel(scheduleFactory.createScheduleModel());
 
 		return scenario;
 	}
@@ -148,66 +153,59 @@ public class RandomScenarioUtils {
 
 	public Scenario addDefaultFleet(final Scenario scenario, final int spotCount) {
 		// generate the standard fleet
-		VesselClass steam_138 = addVesselClass(scenario, "STEAM-138", 12, 19.5f,
-				138000, 400);
-		VesselClass steam_145 = addVesselClass(scenario, "STEAM-145", 12, 19.5f,
-				145000, 400);
+		VesselClass steam_138 = addVesselClass(scenario, "STEAM-138", 12,
+				19.5f, 138000, 400);
+		VesselClass steam_145 = addVesselClass(scenario, "STEAM-145", 12,
+				19.5f, 145000, 400);
 		VesselClass dfde_177 = addVesselClass(scenario, "DFDE-177", 12, 19.5f,
 				177000, 600); // TODO different from testutils, because the
 								// curve for DFDE doesn't contain a speed of 20.
-		VesselClass steam_126 = addVesselClass(scenario, "STEAM-126", 12, 19.5f,
-				138000, 400); // TODO units in the model; should it be a float?
+		VesselClass steam_126 = addVesselClass(scenario, "STEAM-126", 12,
+				19.5f, 138000, 400); // TODO units in the model; should it be a
+										// float?
 
-		float[][] steamLaden = new float[][] { { 12, 91 }, { 13, 100 }, { 14, 115}, {15, 125},
-				{16, 140}, {17, 150}, {18, 160}, {19, 176}, {19.5f, 190}
-		};
-		float[][] dfdeLaden = new float[][] { 
-				{12, 50}, {13, 65}, {14, 74}, {15, 85}, {16, 100}, {17, 110}, {18, 120}, {19, 133}, {19.5f, 145}
-		};
-		
+		float[][] steamLaden = new float[][] { { 12, 91 }, { 13, 100 },
+				{ 14, 115 }, { 15, 125 }, { 16, 140 }, { 17, 150 },
+				{ 18, 160 }, { 19, 176 }, { 19.5f, 190 } };
+		float[][] dfdeLaden = new float[][] { { 12, 50 }, { 13, 65 },
+				{ 14, 74 }, { 15, 85 }, { 16, 100 }, { 17, 110 }, { 18, 120 },
+				{ 19, 133 }, { 19.5f, 145 } };
+
 		float[][] steamBallast = new float[steamLaden.length][2];
-		for (int i = 0; i<steamLaden.length; i++) {
+		for (int i = 0; i < steamLaden.length; i++) {
 			steamBallast[i][0] = steamLaden[i][0];
-			steamBallast[i][1] = 0.94f * steamLaden[i][1]; 
+			steamBallast[i][1] = 0.94f * steamLaden[i][1];
 		}
 		float[][] dfdeBallast = new float[dfdeLaden.length][2];
-		for (int i = 0; i<dfdeBallast.length; i++) {
+		for (int i = 0; i < dfdeBallast.length; i++) {
 			dfdeBallast[i][0] = dfdeLaden[i][0];
-			dfdeBallast[i][1] = 0.94f * dfdeLaden[i][1]; 
+			dfdeBallast[i][1] = 0.94f * dfdeLaden[i][1];
 		}
-		
+
 		// create class parameters; currently model uses containment for curves,
 		// so we need to do duplicates
 		steam_138.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 200, 180, 50,
-				steamLaden));
+				VesselState.LADEN, 200, 180, 50, steamLaden));
 		steam_138.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 180, 100, 50,
-				steamBallast));
+				VesselState.BALLAST, 180, 100, 50, steamBallast));
 		steam_138.setBaseFuelEquivalenceFactor(0.5f);
 
 		steam_145.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 200,180,50,
-				steamLaden));
+				VesselState.LADEN, 200, 180, 50, steamLaden));
 		steam_145.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 180,100,50,
-				steamBallast));
+				VesselState.BALLAST, 180, 100, 50, steamBallast));
 		steam_145.setBaseFuelEquivalenceFactor(0.5f);
 
 		dfde_177.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 230,210,50,
-				dfdeLaden));
+				VesselState.LADEN, 230, 210, 50, dfdeLaden));
 		dfde_177.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 180,100,50,
-				dfdeBallast));
+				VesselState.BALLAST, 180, 100, 50, dfdeBallast));
 		dfde_177.setBaseFuelEquivalenceFactor(0.5f);
 
 		steam_126.setLadenAttributes(createVesselStateAttributes(
-				VesselState.LADEN, 200,180,50,
-				steamLaden));
+				VesselState.LADEN, 200, 180, 50, steamLaden));
 		steam_126.setBallastAttributes(createVesselStateAttributes(
-				VesselState.BALLAST, 180,100,50,
-				steamBallast));
+				VesselState.BALLAST, 180, 100, 50, steamBallast));
 		steam_126.setBaseFuelEquivalenceFactor(0.5f);
 
 		steam_138.setSpotCharterCount(spotCount);
@@ -277,8 +275,10 @@ public class RandomScenarioUtils {
 		// though.
 		int dischargePrice = 5000;
 		final long now = new Date().getTime();
-		dischargeCurve.setDefaultValue(dischargePrice / (float)Calculator.ScaleFactor);
-		loadCurve.setDefaultValue((dischargePrice - 200) / (float)Calculator.ScaleFactor);
+		dischargeCurve.setDefaultValue(dischargePrice
+				/ (float) Calculator.ScaleFactor);
+		loadCurve.setDefaultValue((dischargePrice - 200)
+				/ (float) Calculator.ScaleFactor);
 
 		for (int i = 0; i < scenarioDuration; i += 30) {
 			final Date forwardDate = new Date(now + i * Timer.ONE_DAY);
@@ -291,13 +291,15 @@ public class RandomScenarioUtils {
 															// getting cheap.
 
 			price.setDate(forwardDate);
-			price.setPriceFromDate(dischargePrice / (float)Calculator.ScaleFactor);
+			price.setPriceFromDate(dischargePrice
+					/ (float) Calculator.ScaleFactor);
 
 			dischargeCurve.getPrices().add(price);
 
 			final StepwisePrice loadPrice = marketFactory.createStepwisePrice();
 			loadPrice.setDate(forwardDate);
-			loadPrice.setPriceFromDate((dischargePrice - 200) / (float)Calculator.ScaleFactor);
+			loadPrice.setPriceFromDate((dischargePrice - 200)
+					/ (float) Calculator.ScaleFactor);
 			loadCurve.getPrices().add(loadPrice);
 		}
 
@@ -305,41 +307,41 @@ public class RandomScenarioUtils {
 		scenario.getMarketModel().getMarkets().add(loadMarket);
 		scenario.getMarketModel().getMarkets().add(dischargeMarket);
 
-		
-
 		final ContractFactory contractFactory = ContractPackage.eINSTANCE
 				.getContractFactory();
-		
+
 		final Entity loadEntity = contractFactory.createEntity();
 		final Entity shipEntity = contractFactory.createEntity();
 		final Entity dischargeEntity = contractFactory.createEntity();
-		
+
 		loadEntity.setName("load entity");
 		dischargeEntity.setName("discharge entity");
 		shipEntity.setName("shipping entity");
-		
+
 		scenario.setContractModel(contractFactory.createContractModel());
 		scenario.getContractModel().getEntities().add(loadEntity);
 		scenario.getContractModel().getEntities().add(shipEntity);
 		scenario.getContractModel().getEntities().add(dischargeEntity);
-		
+
 		scenario.getContractModel().setShippingEntity(shipEntity);
-		
-		final SalesContract dischargeContract = contractFactory.createSalesContract();
-		final MarketPricePurchaseContract loadContract = contractFactory.createMarketPricePurchaseContract();
+
+		final SalesContract dischargeContract = contractFactory
+				.createSalesContract();
+		final MarketPricePurchaseContract loadContract = contractFactory
+				.createMarketPricePurchaseContract();
 
 		dischargeContract.setRegasEfficiency(1);
 		dischargeContract.setEntity(dischargeEntity);
 		dischargeContract.setName("discharge contract");
 		dischargeContract.setMarket(dischargeMarket);
-		
+
 		loadContract.setEntity(loadEntity);
 		loadContract.setMarket(loadMarket);
 		loadContract.setName("load contract");
-		
+
 		scenario.getContractModel().getSalesContracts().add(dischargeContract);
 		scenario.getContractModel().getPurchaseContracts().add(loadContract);
-		
+
 		// dischargeSlot.setUnitPrice(3.70f + random.nextInt(10));
 		// loadSlot.setUnitPrice(dischargeSlot.getUnitPrice() - 0.2f);
 
@@ -356,13 +358,13 @@ public class RandomScenarioUtils {
 		int totalDischarges = 0;
 		while ((line = br.readLine()) != null) {
 			String[] parts = line.split(",");
-			String pn = parts[0];
+			String pn = parts[0].replace("\"", "");
 			int loadDischargeCount = Integer.parseInt(parts[2]);
-			if (parts[1].equals("L")) {
-				loadSlots.put(parts[0], loadDischargeCount);
+			if (parts[1].contains("L")) {
+				loadSlots.put(pn, loadDischargeCount);
 				totalLoads += loadDischargeCount;
 			} else {
-				dischargeSlots.put(parts[0], loadDischargeCount);
+				dischargeSlots.put(pn, loadDischargeCount);
 				totalDischarges += loadDischargeCount;
 			}
 		}
@@ -381,6 +383,22 @@ public class RandomScenarioUtils {
 		final DistanceImporter di = new DistanceImporter(distanceMatrix);
 		final List<Pair<Pair<String, String>, Double>> wheel = new ArrayList<Pair<Pair<String, String>, Double>>();
 
+		int maxDistance = 0;
+		int minDistance = Integer.MAX_VALUE;
+
+		for (final String s : di.getKeys()) {
+			for (final String s2 : di.getKeys()) {
+				final int distance = di.getDistance(s, s2);
+				if (distance == Integer.MAX_VALUE)
+					continue;
+
+				if (distance < minDistance)
+					minDistance = distance;
+				if (distance > maxDistance)
+					maxDistance = distance;
+			}
+		}
+
 		double totalp = 0;
 
 		for (final Map.Entry<String, Integer> load : loadSlots.entrySet()) {
@@ -394,8 +412,18 @@ public class RandomScenarioUtils {
 				final Pair<String, String> slot = new Pair<String, String>(
 						load.getKey(), discharge.getKey());
 
-				final double p = (load.getValue() / (double) totalLoads)
-						* (discharge.getValue() / (double) totalDischarges);
+				final double dprop = 1 - (distance - minDistance)
+						/ (double) (maxDistance - minDistance);
+				final double loadFactor = ((load.getValue() / (double) totalLoads) * (discharge
+						.getValue() / (double) totalDischarges));
+				final double dFactor = Math.exp(locality * dprop) - 1;
+				final double p = 
+					loadFactor + dFactor
+
+				;
+
+				System.err.println(load.getKey() + " to " + discharge.getKey()
+						+ " distance factor = " + dFactor + " loadFactor = " + loadFactor);
 				wheel.add(new Pair<Pair<String, String>, Double>(slot, p));
 
 				totalp += p;
@@ -698,8 +726,8 @@ public class RandomScenarioUtils {
 
 		for (float[] point : curve) {
 			FuelConsumptionLine line = fleetFactory.createFuelConsumptionLine();
-			line.setConsumption(point[0]);
-			line.setSpeed(point[1]);
+			line.setSpeed(point[0]);
+			line.setConsumption(point[1]);
 			vsa.getFuelConsumptionCurve().add(line);
 		}
 

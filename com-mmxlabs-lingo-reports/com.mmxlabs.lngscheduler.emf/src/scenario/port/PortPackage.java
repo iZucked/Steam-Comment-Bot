@@ -133,13 +133,22 @@ public interface PortPackage extends EPackage {
 	int PORT__TIME_ZONE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Default Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_CONTRACT = 3;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = 3;
+	int PORT_FEATURE_COUNT = 4;
 
 
 	/**
@@ -484,6 +493,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_TimeZone();
 
 	/**
+	 * Returns the meta object for the reference '{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Default Contract</em>'.
+	 * @see scenario.port.Port#getDefaultContract()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EReference getPort_DefaultContract();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -760,6 +780,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__TIME_ZONE = eINSTANCE.getPort_TimeZone();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT__DEFAULT_CONTRACT = eINSTANCE.getPort_DefaultContract();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.

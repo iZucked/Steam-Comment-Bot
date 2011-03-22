@@ -16,37 +16,41 @@ import com.mmxlabs.demo.reports.views.TotalsReportView;
 import com.mmxlabs.jobcontroller.views.JobManagerView;
 import com.mmxlabs.scheduleview.views.SchedulerView;
 
-public class Perspective implements IPerspectiveFactory {
+public class OptimisationPerspective implements IPerspectiveFactory {
 
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
 
+		layout.setEditorAreaVisible(false);
+		
 		final IFolderLayout navFolder = layout.createFolder("navFolder",
 				IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
+		navFolder.addView("com.mmxlabs.rcp.navigator");
 		navFolder.addView(IPageLayout.ID_RES_NAV);
 
-		layout.addView(JobManagerView.ID, IPageLayout.BOTTOM, 0.3f, "navFolder");
+//		layout.addView(JobManagerView.ID, IPageLayout.BOTTOM, 0.3f, "navFolder");
 
-		final IFolderLayout propertiesFolder = layout.createFolder(
-				"propertiesFolder", IPageLayout.BOTTOM, 0.2f,
-				IPageLayout.ID_EDITOR_AREA);
-		propertiesFolder.addView(IPageLayout.ID_PROP_SHEET);
+//		final IFolderLayout propertiesFolder = layout.createFolder(
+//				"propertiesFolder", IPageLayout.BOTTOM, 0.2f,
+//				IPageLayout.ID_EDITOR_AREA);
 
 		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.3f,
-				"propertiesFolder");
+				IPageLayout.ID_EDITOR_AREA);
 
 		final IFolderLayout reportsFolder = layout.createFolder(
 				"reportsFolder", IPageLayout.BOTTOM, 0.5f, SchedulerView.ID);
+		
 		reportsFolder.addView(TotalsReportView.ID);
 		reportsFolder.addView(FitnessReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
 		reportsFolder.addView(PortRotationReportView.ID);
+		reportsFolder.addView(IPageLayout.ID_PROP_SHEET);
 
 		layout.addView("org.eclipse.pde.runtime.LogView", IPageLayout.BOTTOM,
-				0.3f, JobManagerView.ID);
+				0.3f, "navFolder");
 
 		layout.addShowViewShortcut(SchedulerView.ID);
-		layout.addShowViewShortcut(JobManagerView.ID);
+//		layout.addShowViewShortcut(JobManagerView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
 		layout.addShowViewShortcut(CargoReportView.ID);
 		layout.addShowViewShortcut(FitnessReportView.ID);

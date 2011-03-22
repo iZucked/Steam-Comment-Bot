@@ -332,4 +332,22 @@ public interface Scenario extends EObject {
 	 */
 	void setName(String value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getFleetModel() == null)\n\tsetFleetModel(FleetFactory.eINSTANCE.createFleetModel());\n\nreturn getFleetModel();'"
+	 * @generated
+	 */
+	FleetModel getOrCreateFleetModel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getScheduleModel() == null)\n\tsetScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());\nreturn getScheduleModel();'"
+	 * @generated
+	 */
+	ScheduleModel getOrCreateScheduleModel();
+
 } // Scenario

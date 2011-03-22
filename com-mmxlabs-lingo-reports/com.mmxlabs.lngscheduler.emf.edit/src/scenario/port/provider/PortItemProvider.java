@@ -62,6 +62,7 @@ public class PortItemProvider
 			addNamePropertyDescriptor(object);
 			addDefaultMarketPropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
+			addDefaultContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -128,6 +129,28 @@ public class PortItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default Contract feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultContractPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_defaultContract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultContract_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_CONTRACT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

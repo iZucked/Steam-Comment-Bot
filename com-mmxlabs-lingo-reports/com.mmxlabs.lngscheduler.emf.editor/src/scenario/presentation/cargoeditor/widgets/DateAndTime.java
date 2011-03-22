@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.RowLayout;
@@ -46,17 +48,43 @@ public class DateAndTime extends Composite {
 		final SelectionListener listener = new SelectionListener() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				notifyNewSelection();
+				notifyNewSelection(false);
 			}
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
-				notifyNewSelection();
+				notifyNewSelection(true);
 			}
 		};
 
 		date.addSelectionListener(listener);
 		time.addSelectionListener(listener);
+		
+		final KeyListener kl = new KeyListener() {
+			private Event toEvent(KeyEvent e) {
+				Event e2 = new Event();
+				e2.widget = DateAndTime.this;
+				e2.character = e.character;
+				e2.data = e.data;
+				e2.keyCode = e.keyCode;
+				e2.keyLocation = e.keyLocation;
+				e2.stateMask = e.stateMask;
+				e2.display = e.display;
+				return e2;
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				notifyListeners(SWT.KeyDown, toEvent(e));
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				notifyListeners(SWT.KeyUp, toEvent(e));
+			}
+		};
+		
+		time.addKeyListener(kl);
+		date.addKeyListener(kl);
 	}
 
 	private TimeZone timeZone;
@@ -72,12 +100,13 @@ public class DateAndTime extends Composite {
 		return c;
 	}
 
-	private void notifyNewSelection() {
+	private void notifyNewSelection(boolean isDefault) {
 		if (settingValue)
 			return;
 		final Event changeEvent = new Event();
 		changeEvent.widget = this;
-		notifyListeners(SWT.Selection, changeEvent);
+		
+		notifyListeners(isDefault ? SWT.DefaultSelection : SWT.Selection, changeEvent);
 	}
 
 	public synchronized void setValue(final Calendar newValue) {
@@ -93,7 +122,7 @@ public class DateAndTime extends Composite {
 		time.setMinutes(newValue.get(Calendar.MINUTE));
 
 		settingValue = false;
-		notifyNewSelection();
+		notifyNewSelection(false);
 	}
 
 	@Override

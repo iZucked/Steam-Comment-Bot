@@ -21,6 +21,7 @@ import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
  * A device which takes a {@link Schedule}, and does some additional computation
@@ -46,9 +47,9 @@ public class ProfitAndLossCalculator {
 			final LoadSlot loadSlot = allocation.getLoadSlot();
 			final Slot dischargeSlot = allocation.getDischargeSlot();
 
-			final Contract loadContract = loadSlot.getContract();
+			final Contract loadContract = loadSlot.getSlotOrPortContract();
 			final SalesContract dischargeContract = (SalesContract) dischargeSlot
-					.getContract();
+					.getSlotOrPortContract();
 
 			final Entity loadEntity = loadContract.getEntity();
 			final Entity dischargeEntity = dischargeContract.getEntity();
@@ -67,10 +68,6 @@ public class ProfitAndLossCalculator {
 			shippingRevenue.setEntity(shippingEntity);
 			loadRevenue.setEntity(loadEntity);
 
-			schedule.getRevenue().add(loadRevenue);
-			schedule.getRevenue().add(shippingRevenue);
-			schedule.getRevenue().add(dischargeRevenue);
-
 			// item 1; value of selling LNG
 			final long dischargedM3 = allocation.getDischargeVolume();
 			final long saleableM3 = (long) Math.floor(allocation
@@ -79,8 +76,8 @@ public class ProfitAndLossCalculator {
 
 			// divide by CV value to get mmbtu
 			final long saleableMMBTU = (long) Math.floor(saleableM3
-					/ loadSlot.getCargoCVvalue());
-			final long lostMMBTU = (long) (dischargedM3 / loadSlot
+					* loadSlot.getCargoCVvalue());
+			final long lostMMBTU = (long) (dischargedM3 * loadSlot
 					.getCargoCVvalue()) - saleableMMBTU;
 
 			// lookup the final market sales price
@@ -158,9 +155,10 @@ public class ProfitAndLossCalculator {
 
 			// now do load-side stuff
 			{
+				//TODO convert to floats in VisitEventExporter rather than un-scaling here
 
-				final int loadValue = (int) (allocation.getLoadPriceM3() * allocation
-						.getLoadVolume());
+				final int loadValue = (int)( (allocation.getLoadPriceM3() * allocation
+						.getLoadVolume()) / Calculator.ScaleFactor);
 				loadRevenue.getLineItems().add(
 						createLineItem("Sales to shipping", shippingEntity,
 								loadValue));
@@ -179,6 +177,10 @@ public class ProfitAndLossCalculator {
 			loadRevenue.setCargo(allocation);
 			dischargeRevenue.setCargo(allocation);
 
+			allocation.setLoadRevenue(loadRevenue);
+			allocation.setShippingRevenue(shippingRevenue);
+			allocation.setDischargeRevenue(dischargeRevenue);
+			
 			// put revenue in book
 			schedule.getRevenue().add(loadRevenue);
 			schedule.getRevenue().add(shippingRevenue);

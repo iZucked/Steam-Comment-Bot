@@ -26,7 +26,7 @@ import com.mmxlabs.demo.app.Activator;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
-	private static final String PERSPECTIVE_ID = "com.mmxlabs.demo.app.perspective";
+	private static final String PERSPECTIVE_ID = "com.mmxlabs.demo.app.perspective.editing";
 
 	@Override
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(
