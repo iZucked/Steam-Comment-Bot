@@ -5,8 +5,10 @@
 
 package scenario.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -642,6 +644,29 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public FleetModel getOrCreateFleetModel() {
+		if (getFleetModel() == null)
+			setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());
+		
+		return getFleetModel();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScheduleModel getOrCreateScheduleModel() {
+		if (getScheduleModel() == null)
+			setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());
+		return getScheduleModel();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -823,6 +848,22 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ScenarioPackage.SCENARIO___GET_OR_CREATE_FLEET_MODEL:
+				return getOrCreateFleetModel();
+			case ScenarioPackage.SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL:
+				return getOrCreateScheduleModel();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

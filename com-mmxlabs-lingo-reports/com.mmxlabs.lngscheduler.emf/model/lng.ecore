@@ -4,6 +4,16 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="scenario"
     nsURI="http://com.mmxlabs.lng.emf" nsPrefix="com.mmxlabs.lng.emf">
   <eClassifiers xsi:type="ecore:EClass" name="Scenario">
+    <eOperations name="getOrCreateFleetModel" lowerBound="1" eType="#//fleet/FleetModel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (getFleetModel() == null)&#xA;&#x9;&#x9;&#x9;setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;return getFleetModel();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOrCreateScheduleModel" lowerBound="1" eType="#//schedule/ScheduleModel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (getScheduleModel() == null)&#xA;&#x9;&#x9;&#x9;setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());&#xA;&#x9;&#x9;return getScheduleModel();"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fleetModel" eType="#//fleet/FleetModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portModel" eType="#//port/PortModel"
