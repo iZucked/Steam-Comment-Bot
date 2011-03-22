@@ -6,6 +6,7 @@ package com.mmxlabs.jobcontroller.core.impl;
 
 import scenario.Scenario;
 import scenario.schedule.Schedule;
+import scenario.schedule.SchedulePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobcontroller.core.AbstractManagedJob;
@@ -85,7 +86,10 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 				entities, solution);
 
 		schedule.setName(scenario.getName() + " " + name);
-
+		if (scenario.getScheduleModel() == null) {
+			scenario.setScheduleModel(SchedulePackage.eINSTANCE
+					.getScheduleFactory().createScheduleModel());
+		}
 		scenario.getScheduleModel().getSchedules().add(schedule);
 	}
 
@@ -98,7 +102,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	protected boolean step() {
 		optimiser.step(REPORT_PERCENTAGE);
 		currentProgress += REPORT_PERCENTAGE;
-		
+
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
@@ -118,17 +122,17 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	protected void kill() {
 		optimiser.dispose();
 	}
-	
+
 	@Override
 	public void dispose() {
-		
+
 		kill();
-		
+
 		this.entities.dispose();
-		
+
 		// TODO: this.scenario = null;
 		this.optimiser = null;
-		
+
 		super.dispose();
 	}
 }
