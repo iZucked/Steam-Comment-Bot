@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -65,6 +66,16 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 	private IVoyagePlanOptimiser<T> voyagePlanOptimiser;
 
+	protected IRouteCostProvider routeCostProvider;
+
+	public IRouteCostProvider getRouteCostProvider() {
+		return routeCostProvider;
+	}
+
+	public void setRouteCostProvider(IRouteCostProvider routeCostProvider) {
+		this.routeCostProvider = routeCostProvider;
+	}
+	
 	public ScheduledSequences schedule(
 			final ISequences<T> sequences, final int[][] arrivalTimes) {
 		final ScheduledSequences result = new ScheduledSequences();
@@ -370,7 +381,9 @@ public abstract class AbstractSequenceScheduler<T> implements
 	public void init() {
 
 		// Verify that everything is in place
-
+		if (routeCostProvider == null) {
+			throw new IllegalStateException("No route cost provider set");
+		}
 		if (portProvider == null) {
 			throw new IllegalStateException("No port provider set");
 		}

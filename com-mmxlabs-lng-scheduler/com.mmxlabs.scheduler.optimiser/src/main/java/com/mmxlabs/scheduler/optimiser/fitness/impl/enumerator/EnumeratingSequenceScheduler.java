@@ -13,11 +13,13 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -217,17 +219,23 @@ public class EnumeratingSequenceScheduler<T> extends
 						.getPortForElement(lastElement);
 				final IPort port = portProvider.getPortForElement(element);
 
-				final int minDistance = distanceProvider.getMinimumValue(
-						lastPort, port);
+				final MatrixEntry<IPort, Integer> minDistance = distanceProvider
+						.getMinimum(lastPort, port);
 
-				final int maxDistance = distanceProvider.getMaximumValue(
-						lastPort, port);
+				final MatrixEntry<IPort, Integer> maxDistance = distanceProvider
+						.getMaximum(lastPort, port);
 
 				final int minTravelTime = Calculator.getTimeFromSpeedDistance(
-						maxSpeed, minDistance);
+						maxSpeed, minDistance.getValue())
+						+ routeCostProvider.getRouteTransitTime(minDistance
+								.getKey(), vesselProvider.getVessel(resource)
+								.getVesselClass());
 
 				final int maxTravelTime = Calculator.getTimeFromRateQuantity(
-						minSpeed, maxDistance);
+						minSpeed, maxDistance.getValue())
+						+ routeCostProvider.getRouteTransitTime(minDistance
+								.getKey(), vesselProvider.getVessel(resource)
+								.getVesselClass());
 
 				minTimeToNextElement[index - 1] += minTravelTime;
 				maxTimeToNextElement[index - 1] += maxTravelTime;

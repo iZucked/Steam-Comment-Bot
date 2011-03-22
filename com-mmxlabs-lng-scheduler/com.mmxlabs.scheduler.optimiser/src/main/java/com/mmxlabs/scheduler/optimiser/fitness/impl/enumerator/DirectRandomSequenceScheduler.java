@@ -46,10 +46,21 @@ public class DirectRandomSequenceScheduler<T> extends
 		resetBest();
 		final long approximateSpaceSize = prepare(samplingUpperBound*10000);
 		final int sampleCount = (int) Math.min(samplingUpperBound, (int)(sampleProportion * approximateSpaceSize));
+		
+		int failures = 0;
+		
 //		log.debug("sampling " +sampleCount + " schedules");
 		for (int i = 0; i<sampleCount; i++) {
 			randomise();
 			evaluate();
+			if (getBestResult() == null) {
+				failures++;
+				i = 0;
+				if (failures > 10 * sampleCount) {
+					log.error("Sequences have not had a feasible solution in " + sampleCount * 10 + " samples");
+					return null;
+				}
+			}
 		}
 		
 //		log.debug("best found after " + bestIndex);

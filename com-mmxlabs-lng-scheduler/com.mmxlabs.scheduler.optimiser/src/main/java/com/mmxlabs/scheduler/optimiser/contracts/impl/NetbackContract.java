@@ -91,6 +91,8 @@ public class NetbackContract implements ILoadPriceCalculator {
 				notionalTransportCosts + totalRealTransportCosts,
 				Calculator.multiply(cvValue, loadVolume));
 
-		return (int) (actualSalesPrice - transportCostPerMMBTU - marginScaled);
+		int result = (int) (actualSalesPrice - transportCostPerMMBTU - marginScaled);
+//		System.err.println("netback cost " + actualSalesPrice + " => " + result);
+		return result;
 	}
 }
