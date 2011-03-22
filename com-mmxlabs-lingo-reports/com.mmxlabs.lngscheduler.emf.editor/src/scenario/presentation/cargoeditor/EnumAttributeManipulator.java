@@ -3,7 +3,6 @@
  */
 package scenario.presentation.cargoeditor;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
