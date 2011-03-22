@@ -30,7 +30,11 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 			final String path = ((IFile) parentElement).getFullPath()
 					.toString();
 			final URI uri = URI.createPlatformResourceURI(path, true);
-			parentElement = resourceSet.getResource(uri, true);
+			if (uri != null) {
+				parentElement = resourceSet.getResource(uri, true);
+			} else {
+				int i = 0;
+			}
 		}
 		return super.getChildren(parentElement);
 	}

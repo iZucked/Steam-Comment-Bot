@@ -119,9 +119,8 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 		}
 
 		if (columnIndex == 1) {
-			if (element instanceof ScenarioTreeNodeClass) {
-				final IManagedJob job = ((ScenarioTreeNodeClass) element)
-						.getJob();
+			if (element instanceof IResource) {
+				final IManagedJob job = com.mmxlabs.jobcontoller.Activator.getDefault().getJobManager().findJobForResource((IResource) element);
 
 				if (job != null) {
 					return getCachedImage(job.getJobState());
@@ -136,18 +135,16 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 	public String getColumnText(Object element, int columnIndex) {
 		if (columnIndex == 0) {
 
-			if (element instanceof ScenarioTreeNodeClass) {
-				return ((ScenarioTreeNodeClass) element).getResource().getName();
+			
+			if (element instanceof IResource) {
+				return ((IResource) element).getName();
 			}
 			return getText(element);
 		}
 
 		if (columnIndex == 1) {
-			if (element instanceof ScenarioTreeNodeClass) {
-				ScenarioTreeNodeClass node = (ScenarioTreeNodeClass) element;
-				IResource resource = node.getResource();
-
-				IManagedJob job = node.getJob();
+			if (element instanceof IResource) {
+				final IManagedJob job = com.mmxlabs.jobcontoller.Activator.getDefault().getJobManager().findJobForResource((IResource) element);
 				if (job != null) {
 					return job.getJobState().toString();
 				}
@@ -159,11 +156,11 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 			return "" + ((Scenario) element).getVersion();
 		} else if (element instanceof Schedule) {
 			return ((Schedule) element).getName();
-		} else if (element instanceof ScenarioTreeNodeClass) {
-			Scenario scenario = ((ScenarioTreeNodeClass) element).getScenario();
-			if (scenario != null) {
-				return scenario.getName();
-			}
+//		} else if (element instanceof ScenarioTreeNodeClass) {
+//			Scenario scenario = ((ScenarioTreeNodeClass) element).getScenario();
+//			if (scenario != null) {
+//				return scenario.getName();
+//			}
 		}
 		// TODO Auto-generated method stub
 		return "";// + columnIndex;
