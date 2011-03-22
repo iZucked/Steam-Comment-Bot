@@ -6,7 +6,6 @@ package com.mmxlabs.jobcontroller.core.impl;
 
 import scenario.Scenario;
 import scenario.schedule.Schedule;
-import scenario.schedule.SchedulePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobcontroller.core.AbstractManagedJob;
