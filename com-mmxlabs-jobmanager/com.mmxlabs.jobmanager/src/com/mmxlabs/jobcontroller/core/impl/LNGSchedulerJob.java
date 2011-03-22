@@ -86,11 +86,8 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 				entities, solution);
 
 		schedule.setName(scenario.getName() + " " + name);
-		if (scenario.getScheduleModel() == null) {
-			scenario.setScheduleModel(SchedulePackage.eINSTANCE
-					.getScheduleFactory().createScheduleModel());
-		}
-		scenario.getScheduleModel().getSchedules().add(schedule);
+		
+		scenario.getOrCreateScheduleModel().getSchedules().add(schedule);
 	}
 
 	/*
