@@ -386,7 +386,7 @@ public class LNGScenarioTransformer {
 			// create scaled discharge market, incorporating regas losses
 			{
 				final float regasEfficiency = ((SalesContract) dischargeSlot
-						.getContract()).getRegasEfficiency();
+						.getSlotOrPortContract()).getRegasEfficiency();
 				if (regasEfficiency != 1.0f) {
 					final StepwisePriceCurve curveModel = dischargeMarket
 							.getPriceCurve();
