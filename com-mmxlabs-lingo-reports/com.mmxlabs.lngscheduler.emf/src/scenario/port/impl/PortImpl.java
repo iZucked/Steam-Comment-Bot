@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import scenario.contract.Contract;
 import scenario.market.Market;
 import scenario.port.Port;
 import scenario.port.PortPackage;
@@ -25,6 +26,7 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultMarket <em>Default Market</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultContract <em>Default Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,6 +82,16 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * @ordered
 	 */
 	protected String timeZone = TIME_ZONE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getDefaultContract() <em>Default Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected Contract defaultContract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -187,6 +199,44 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Contract getDefaultContract() {
+		if (defaultContract != null && defaultContract.eIsProxy()) {
+			InternalEObject oldDefaultContract = (InternalEObject)defaultContract;
+			defaultContract = (Contract)eResolveProxy(oldDefaultContract);
+			if (defaultContract != oldDefaultContract) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.PORT__DEFAULT_CONTRACT, oldDefaultContract, defaultContract));
+			}
+		}
+		return defaultContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Contract basicGetDefaultContract() {
+		return defaultContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefaultContract(Contract newDefaultContract) {
+		Contract oldDefaultContract = defaultContract;
+		defaultContract = newDefaultContract;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_CONTRACT, oldDefaultContract, defaultContract));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -197,6 +247,9 @@ public class PortImpl extends EObjectImpl implements Port {
 				return basicGetDefaultMarket();
 			case PortPackage.PORT__TIME_ZONE:
 				return getTimeZone();
+			case PortPackage.PORT__DEFAULT_CONTRACT:
+				if (resolve) return getDefaultContract();
+				return basicGetDefaultContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -217,6 +270,9 @@ public class PortImpl extends EObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__TIME_ZONE:
 				setTimeZone((String)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_CONTRACT:
+				setDefaultContract((Contract)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -239,6 +295,9 @@ public class PortImpl extends EObjectImpl implements Port {
 			case PortPackage.PORT__TIME_ZONE:
 				setTimeZone(TIME_ZONE_EDEFAULT);
 				return;
+			case PortPackage.PORT__DEFAULT_CONTRACT:
+				setDefaultContract((Contract)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -257,6 +316,8 @@ public class PortImpl extends EObjectImpl implements Port {
 				return defaultMarket != null;
 			case PortPackage.PORT__TIME_ZONE:
 				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
+			case PortPackage.PORT__DEFAULT_CONTRACT:
+				return defaultContract != null;
 		}
 		return super.eIsSet(featureID);
 	}

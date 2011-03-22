@@ -7,6 +7,7 @@ package scenario.port;
 
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.contract.Contract;
 import scenario.market.Market;
 
 /**
@@ -20,6 +21,7 @@ import scenario.market.Market;
  *   <li>{@link scenario.port.Port#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultMarket <em>Default Market</em>}</li>
  *   <li>{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -105,5 +107,31 @@ public interface Port extends EObject {
 	 * @generated
 	 */
 	void setTimeZone(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Contract</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Contract</em>' reference.
+	 * @see #setDefaultContract(Contract)
+	 * @see scenario.port.PortPackage#getPort_DefaultContract()
+	 * @model required="true"
+	 * @generated
+	 */
+	Contract getDefaultContract();
+
+	/**
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default Contract</em>' reference.
+	 * @see #getDefaultContract()
+	 * @generated
+	 */
+	void setDefaultContract(Contract value);
 
 } // Port

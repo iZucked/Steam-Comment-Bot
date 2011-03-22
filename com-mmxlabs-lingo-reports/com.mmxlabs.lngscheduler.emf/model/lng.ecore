@@ -446,6 +446,8 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="defaultMarket" eType="#//market/Market"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultContract" lowerBound="1"
+          eType="#//contract/Contract"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DistanceModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="distances" upperBound="-1"
@@ -526,6 +528,11 @@
       <eOperations name="getLocalWindowStart" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getWindowStart());&#xA;return calendar;"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getSlotOrPortContract" lowerBound="1" eType="#//contract/Contract">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (getContract() != null)&#xA;&#x9;return getContract();&#xA;else if (getPort() != null)&#xA;&#x9;return getPort().getDefaultContract();&#xA;else&#xA;&#x9;return null;"/>
         </eAnnotations>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

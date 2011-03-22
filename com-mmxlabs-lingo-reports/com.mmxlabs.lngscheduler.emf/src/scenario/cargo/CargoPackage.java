@@ -290,13 +290,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_LOCAL_WINDOW_START = 0;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_PORT_CONTRACT = 1;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = 1;
+	int SLOT_OPERATION_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -406,6 +415,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_LOCAL_WINDOW_START = SLOT___GET_LOCAL_WINDOW_START;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT = SLOT___GET_SLOT_OR_PORT_CONTRACT;
 
 	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
@@ -643,6 +661,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetLocalWindowStart();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrPortContract() <em>Get Slot Or Port Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * @see scenario.cargo.Slot#getSlotOrPortContract()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrPortContract();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -860,6 +888,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_LOCAL_WINDOW_START = eINSTANCE.getSlot__GetLocalWindowStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Port Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_PORT_CONTRACT = eINSTANCE.getSlot__GetSlotOrPortContract();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

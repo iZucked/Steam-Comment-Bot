@@ -426,6 +426,20 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Contract getSlotOrPortContract() {
+		if (getContract() != null)
+			return getContract();
+		else if (getPort() != null)
+			return getPort().getDefaultContract();
+		else
+			return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -561,6 +575,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		switch (operationID) {
 			case CargoPackage.SLOT___GET_LOCAL_WINDOW_START:
 				return getLocalWindowStart();
+			case CargoPackage.SLOT___GET_SLOT_OR_PORT_CONTRACT:
+				return getSlotOrPortContract();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

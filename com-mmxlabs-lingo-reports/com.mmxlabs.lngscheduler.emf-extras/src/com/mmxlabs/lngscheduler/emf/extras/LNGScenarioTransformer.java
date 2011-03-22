@@ -369,10 +369,10 @@ public class LNGScenarioTransformer {
 					dischargeStart + dischargeSlot.getWindowDuration());
 
 			final Market dischargeMarket = ((SalesContract) dischargeSlot
-					.getContract()).getMarket();
+					.getSlotOrPortContract()).getMarket();
 
 			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot
-					.getContract());
+					.getSlotOrPortContract());
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(),
 					ports.lookup(loadSlot.getPort()), loadWindow,
