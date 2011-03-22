@@ -24,7 +24,7 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	@Override
 	public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider<T> tvlp) {
 		fastAllocator.setTotalVolumeLimitProvider(tvlp);
-		simplexAllocator.setTotalVolumeLimitProvider(tvlp);
+//		simplexAllocator.setTotalVolumeLimitProvider(tvlp);
 	}
 
 	/*
@@ -37,7 +37,7 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	@Override
 	public void init() {
 		fastAllocator.init();
-		simplexAllocator.init();
+//		simplexAllocator.init();
 	}
 
 	/*
@@ -50,7 +50,7 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	@Override
 	public void reset() {
 		fastAllocator.reset();
-		simplexAllocator.reset();
+//		simplexAllocator.reset();
 	}
 
 	/*
@@ -68,8 +68,8 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 			long requiredLoadVolume, IVesselClass vesselClass) {
 		fastAllocator.addCargo(plan, loadDetails,ladenLeg, dischargeDetails, ballastLeg,loadTime,
 				dischargeTime, requiredLoadVolume, vesselClass);
-		simplexAllocator.addCargo(plan, loadDetails,ladenLeg, dischargeDetails,ballastLeg, loadTime,
-				dischargeTime, requiredLoadVolume, vesselClass);
+//		simplexAllocator.addCargo(plan, loadDetails,ladenLeg, dischargeDetails,ballastLeg, loadTime,
+//				dischargeTime, requiredLoadVolume, vesselClass);
 	}
 
 	/*
@@ -81,7 +81,7 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	 */
 	@Override
 	public void solve() {
-		simplexAllocator.solve();
+//		simplexAllocator.solve();
 		fastAllocator.solve();
 	}
 
@@ -94,17 +94,17 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	 */
 	@Override
 	public long getProfit() {
-		final long simplexResult = simplexAllocator.getProfit();
+//		final long simplexResult = simplexAllocator.getProfit();
 		final long fastResult = fastAllocator.getProfit();
-		System.err.println("simplex = " + simplexResult + " fast = "
-				+ fastResult);
-		if (fastResult > simplexResult) {
-			System.err.println("Fast wins");
-		} else if (simplexResult > fastResult) {
-			System.err.println("Simplex wins");
-		} else {
-			System.err.println("Simplex = Fast");
-		}
+//		System.err.println("simplex = " + simplexResult + " fast = "
+//				+ fastResult);
+//		if (fastResult > simplexResult) {
+//			System.err.println("Fast wins");
+//		} else if (simplexResult > fastResult) {
+//			System.err.println("Simplex wins");
+//		} else {
+//			System.err.println("Simplex = Fast");
+//		}
 		return fastResult;
 	}
 
