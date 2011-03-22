@@ -1045,6 +1045,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			createPortEditor(everyContractProvider, marketProvider);
 
+			createMarketEditor();
+			
 			// Create a page for the selection tree view.
 			//
 			{
@@ -1252,6 +1254,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				updateProblemIndication();
 			}
 		});
+	}
+
+	private void createMarketEditor() {
+		// TODO Add a market editor pane
+		
 	}
 
 	private void createCargoEditor(final IReferenceValueProvider portProvider,
