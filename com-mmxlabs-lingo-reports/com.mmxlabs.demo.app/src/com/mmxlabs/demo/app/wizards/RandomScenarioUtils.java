@@ -386,6 +386,21 @@ public class RandomScenarioUtils {
 		final DistanceImporter di = new DistanceImporter(distanceMatrix);
 		final List<Pair<Pair<String, String>, Double>> wheel = new ArrayList<Pair<Pair<String, String>, Double>>();
 
+		int maxDistance = 0;
+		int minDistance = Integer.MAX_VALUE;
+		
+		for (final String s : di.getKeys()) {
+			for (final String s2 : di.getKeys()) {
+				final int distance = di.getDistance(s, s2);
+				if (distance == Integer.MAX_VALUE) continue;
+				
+				if (distance < minDistance)
+					minDistance = distance;
+				if (distance > maxDistance)
+					maxDistance = distance;
+			}
+		}
+		
 		double totalp = 0;
 
 		for (final Map.Entry<String, Integer> load : loadSlots.entrySet()) {
@@ -399,8 +414,15 @@ public class RandomScenarioUtils {
 				final Pair<String, String> slot = new Pair<String, String>(
 						load.getKey(), discharge.getKey());
 
-				final double p = (load.getValue() / (double) totalLoads)
-						* (discharge.getValue() / (double) totalDischarges);
+				final double dfactor = 
+					1 - (distance - minDistance) / (double)(maxDistance-minDistance);
+				
+				final double p =
+					((load.getValue() / (double) totalLoads)
+						* (discharge.getValue() / (double) totalDischarges)) +
+					Math.exp( locality * dfactor ) - 1;
+					
+					;
 				wheel.add(new Pair<Pair<String, String>, Double>(slot, p));
 
 				totalp += p;
