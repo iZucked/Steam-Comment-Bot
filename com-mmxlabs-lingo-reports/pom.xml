@@ -257,5 +257,12 @@
 			<layout>p2</layout>
 		</repository>
 
+		<repository>
+			<id>mmxlabs-thirdparty</id>
+			<!-- Dummy URL -->
+			<url>http://localhost/</url>
+			<layout>p2</layout>
+		</repository>
+
 	</repositories>
 </project>
