@@ -28,7 +28,7 @@
       </perspective>
       <perspective
             class="com.mmxlabs.demo.app.intro.EditingPerspective"
-            icon="icons/exec_statistic_view.gif"
+            icon="icons/editor_area.gif"
             id="com.mmxlabs.demo.app.perspective.editing"
             name="Editing">
       </perspective>
