@@ -48,7 +48,6 @@
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser"/>
       <plugin id="com.mmxlabs.scheduleview"/>
       <plugin id="javax.transaction" fragment="true"/>
-      <plugin id="org.apache.commons.math" fragment=""/>
       <plugin id="org.eclipse.compare"/>
       <plugin id="org.eclipse.compare.core"/>
       <plugin id="org.eclipse.core.commands"/>
