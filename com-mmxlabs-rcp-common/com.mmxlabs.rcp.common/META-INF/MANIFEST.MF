@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Common
+Bundle-SymbolicName: com.mmxlabs.rcp.common
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.mmxlabs.rcp.common.Activator
+Bundle-Vendor: MMXLABS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.rcp.common.actions
