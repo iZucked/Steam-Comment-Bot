@@ -21,7 +21,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -41,8 +40,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import scenario.schedule.Schedule;
 
-import com.mmxlabs.demo.reports.views.actions.PackTableColumnsAction;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
  * @author hinton

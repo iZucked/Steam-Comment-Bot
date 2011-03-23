@@ -3,18 +3,21 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.demo.reports.views.actions;
+package com.mmxlabs.rcp.common.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.TreeColumn;
 
+import com.mmxlabs.rcp.common.Activator;
+
 public class PackTreeColumnsAction extends Action {
 
-	private TreeViewer viewer;
+	private final TreeViewer viewer;
 
-	public PackTreeColumnsAction(TreeViewer viewer) {
+	public PackTreeColumnsAction(final TreeViewer viewer) {
 		super("Pack Columns");
+		setImageDescriptor(Activator.getImageDescriptor("pack.gif"));
 		this.viewer = viewer;
 	}
 

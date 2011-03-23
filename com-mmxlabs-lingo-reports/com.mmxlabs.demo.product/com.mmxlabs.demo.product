@@ -48,6 +48,7 @@
       <plugin id="com.mmxlabs.optimiser.common"/>
       <plugin id="com.mmxlabs.optimiser.core"/>
       <plugin id="com.mmxlabs.optimiser.lso"/>
+      <plugin id="com.mmxlabs.rcp.common"/>
       <plugin id="com.mmxlabs.rcp.navigator"/>
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser"/>
       <plugin id="com.mmxlabs.scheduleview"/>

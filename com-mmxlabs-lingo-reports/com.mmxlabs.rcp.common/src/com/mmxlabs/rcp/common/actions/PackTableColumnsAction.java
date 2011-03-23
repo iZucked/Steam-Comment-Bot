@@ -1,13 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
 
-package com.mmxlabs.demo.reports.views.actions;
+package com.mmxlabs.rcp.common.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.TableColumn;
+
+import com.mmxlabs.rcp.common.Activator;
 
 public class PackTableColumnsAction extends Action {
 
@@ -15,6 +17,7 @@ public class PackTableColumnsAction extends Action {
 
 	public PackTableColumnsAction(TableViewer viewer) {
 		super("Pack Columns");
+		setImageDescriptor(Activator.getImageDescriptor("/icons/pack.gif"));
 		this.viewer = viewer;
 	}
 

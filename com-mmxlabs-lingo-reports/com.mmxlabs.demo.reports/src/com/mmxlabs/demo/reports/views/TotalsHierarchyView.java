@@ -35,7 +35,7 @@ import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 
-import com.mmxlabs.demo.reports.views.actions.PackTreeColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
 /**

@@ -34,7 +34,7 @@ import org.eclipse.ui.part.ViewPart;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.views.FitnessContentProvider.RowData;
-import com.mmxlabs.demo.reports.views.actions.PackTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 public class FitnessReportView extends ViewPart implements ISelectionListener {
 
