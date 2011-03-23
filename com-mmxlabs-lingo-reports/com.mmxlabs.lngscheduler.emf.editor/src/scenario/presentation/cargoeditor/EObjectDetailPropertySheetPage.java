@@ -1,0 +1,154 @@
+/**
+ * 
+ */
+package scenario.presentation.cargoeditor;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+
+import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+
+import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
+import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
+import scenario.presentation.cargoeditor.detailview.LocalDateInlineEditor;
+import scenario.presentation.cargoeditor.detailview.NumberInlineEditor;
+import scenario.presentation.cargoeditor.detailview.TextInlineEditor;
+
+/**
+ * @author Tom Hinton
+ *
+ */
+public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
+	private Composite control;
+	
+	private final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
+	private final HashMap<EClass, EObjectDetailView> detailViewsByClass = new HashMap<EClass, EObjectDetailView>();
+	private final EditingDomain editingDomain;
+	
+	public EObjectDetailPropertySheetPage(final EditingDomain editingDomain) {
+		this.editingDomain = editingDomain;
+		
+		editorFactories.put(EcorePackage.eINSTANCE.getEString(), 
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
+						return new TextInlineEditor(path, feature, editingDomain);
+					}
+				});
+		
+		final IInlineEditorFactory numberEditorFactory = new
+			IInlineEditorFactory() {
+				@Override
+				public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
+					return new NumberInlineEditor(path, feature, editingDomain);
+				}
+			};
+		
+		editorFactories.put(EcorePackage.eINSTANCE.getEInt(), numberEditorFactory);
+		editorFactories.put(EcorePackage.eINSTANCE.getELong(), numberEditorFactory);
+		editorFactories.put(EcorePackage.eINSTANCE.getEFloat(), numberEditorFactory);
+		editorFactories.put(EcorePackage.eINSTANCE.getEDouble(), numberEditorFactory);
+		editorFactories.put(EcorePackage.eINSTANCE.getEDate(),
+				new IInlineEditorFactory() {					
+					@Override
+					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
+						return new LocalDateInlineEditor(path, feature, editingDomain);
+					}
+				}
+				);
+	}
+	
+	private EObjectDetailView getDetailView(final EClass eClass) {
+		if (detailViewsByClass.containsKey(eClass)) {
+			return detailViewsByClass.get(eClass);
+		} else {
+			final EObjectDetailView eodv = new EObjectDetailView(control, SWT.NONE, editingDomain);
+			
+			for (final Map.Entry<EClassifier, IInlineEditorFactory> entry : editorFactories.entrySet()) {
+				eodv.setEditorFactoryForClassifier(entry.getKey(), entry.getValue());
+			}
+			
+			eodv.initForEClass(eClass);
+			eodv.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			detailViewsByClass.put(eClass, eodv);
+			return eodv;
+		}
+	}
+	
+	@Override
+	public void createControl(final Composite parent) {
+		control = new Composite(parent, SWT.NONE);
+		control.setLayout(new GridLayout(1, false));
+	}
+
+
+	@Override
+	public void dispose() {
+		control.dispose();
+	}
+
+
+	@Override
+	public Control getControl() {
+		return control;
+	}
+
+
+	@Override
+	public void setActionBars(IActionBars actionBars) {
+
+	}
+
+
+	@Override
+	public void setFocus() {
+		control.setFocus(); //TODO set focus to child entry
+	}
+
+	private EClass currentEClass = null;
+	
+	@Override
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		if (selection instanceof IStructuredSelection) {
+			final Object object = ((IStructuredSelection)selection).getFirstElement();
+			if (object instanceof EObject) {
+				if (currentEClass == ((EObject)object).eClass()) {
+					final EObjectDetailView eodv = getDetailView(((EObject) object).eClass());
+					eodv.setInput((EObject) object);
+					return;
+				}
+			}
+			for (final Control c : control.getChildren()) {
+				((GridData)c.getLayoutData()).exclude = true;
+				c.setVisible(false);
+			}
+			if (object instanceof EObject) {
+				final EObjectDetailView eodv = getDetailView(((EObject) object).eClass());
+				((GridData)eodv.getLayoutData()).exclude = false;
+				eodv.setVisible(true);
+				eodv.setInput((EObject)object);
+				currentEClass = ((EObject) object).eClass();
+			} else {
+				currentEClass = null;
+			}
+			control.layout(true);
+		}
+	}
+}

@@ -123,6 +123,7 @@ import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
+import scenario.presentation.cargoeditor.EObjectDetailPropertySheetPage;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.EnumAttributeManipulator;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
@@ -1785,30 +1786,32 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		if (propertySheetPage == null) {
-			propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
-				@Override
-				public void setSelectionToViewer(List<?> selection) {
-					ScenarioEditor.this.setSelectionToViewer(selection);
-					ScenarioEditor.this.setFocus();
-				}
-
-				@Override
-				public void setActionBars(IActionBars actionBars) {
-					super.setActionBars(actionBars);
-					getActionBarContributor().shareGlobalActions(this,
-							actionBars);
-				}
-			};
-
-			// we want to set up a fancy provider here.
-
-			propertySheetPage
-					.setPropertySourceProvider(new ScenarioPropertySourceProvider(
-							adapterFactory));
-		}
-
-		return propertySheetPage;
+//		if (propertySheetPage == null) {
+//			propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
+//				@Override
+//				public void setSelectionToViewer(List<?> selection) {
+//					ScenarioEditor.this.setSelectionToViewer(selection);
+//					ScenarioEditor.this.setFocus();
+//				}
+//
+//				@Override
+//				public void setActionBars(IActionBars actionBars) {
+//					super.setActionBars(actionBars);
+//					getActionBarContributor().shareGlobalActions(this,
+//							actionBars);
+//				}
+//			};
+//
+//			// we want to set up a fancy provider here.
+//
+//			propertySheetPage
+//					.setPropertySourceProvider(new ScenarioPropertySourceProvider(
+//							adapterFactory));
+//		}
+//
+//		return propertySheetPage;
+		//TODO add adapter factory stuff?
+		return new EObjectDetailPropertySheetPage(getEditingDomain());
 	}
 
 	/**
