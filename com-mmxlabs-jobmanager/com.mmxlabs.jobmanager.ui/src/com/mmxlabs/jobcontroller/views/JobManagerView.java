@@ -87,6 +87,41 @@ public class JobManagerView extends ViewPart {
 
 	private Action doubleClickAction;
 
+	private final IJobManagerListener jobManagerListener = new IJobManagerListener() {
+
+		@Override
+		public void jobRemoved(final IJobManager jobManager,
+				final IManagedJob job, final IResource resource) {
+
+			job.removeListener(jobListener);
+
+			JobManagerView.this.refresh();
+		}
+
+		@Override
+		public void jobAdded(final IJobManager jobManager,
+				final IManagedJob job, final IResource resource) {
+
+			job.addListener(jobListener);
+
+			JobManagerView.this.refresh();
+		}
+
+		@Override
+		public void jobSelected(final IJobManager jobManager,
+				final IManagedJob job, final IResource resource) {
+
+			JobManagerView.this.refresh();
+		}
+
+		@Override
+		public void jobDeselected(final IJobManager jobManager,
+				final IManagedJob job, final IResource resource) {
+
+			JobManagerView.this.refresh();
+		}
+	};
+
 	private final IJobManager jobManager = Activator.getDefault()
 			.getJobManager();
 
@@ -263,15 +298,15 @@ public class JobManagerView extends ViewPart {
 
 	}
 
-	private final IManagedJobListener listener = new IManagedJobListener() {
+	private final IManagedJobListener jobListener = new IManagedJobListener() {
 		@Override
 		public void jobStateChanged(final IManagedJob job,
 				final JobState oldState, final JobState newState) {
-			refresh();
+			JobManagerView.this.refresh();
 			switch (newState) {
 			case PAUSED:
 			case RUNNING:
-				refresh();
+				JobManagerView.this.refresh();
 				getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
 					@Override
@@ -287,12 +322,12 @@ public class JobManagerView extends ViewPart {
 		@Override
 		public void jobProgressUpdated(final IManagedJob job,
 				final int progressDelta) {
-			refresh();
+			JobManagerView.this.refresh();
 		}
 	};
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize
+	 * This is a callback that will allow us to create the viewer and initialise
 	 * it.
 	 */
 	@Override
@@ -348,42 +383,14 @@ public class JobManagerView extends ViewPart {
 			}
 		});
 
-		jobManager.addJobManagerListener(new IJobManagerListener() {
-
-			@Override
-			public void jobRemoved(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-				job.removeListener(listener);
-				refresh();
-			}
-
-			@Override
-			public void jobAdded(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-				job.addListener(listener);
-				refresh();
-			}
-
-			@Override
-			public void jobSelected(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-				// TODO Auto-generated method stub
-				refresh();
-			}
-
-			@Override
-			public void jobDeselected(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-				// TODO Auto-generated method stub
-				refresh();
-			}
-		});
+		jobManager.addJobManagerListener(jobManagerListener);
 
 		// Register listener on existing jobs
 		for (final IManagedJob job : jobManager.getJobs()) {
-			job.addListener(listener);
-			refresh();
+			job.addListener(jobListener);
 		}
+		// TODO: Is this required here?
+		refresh();
 
 		// update button state
 		updateActionEnablement((IStructuredSelection) viewer.getSelection());
@@ -711,6 +718,19 @@ public class JobManagerView extends ViewPart {
 
 			removeAction.setEnabled(true);
 		}
+	}
+
+	@Override
+	public void dispose() {
+
+		jobManager.removeJobManagerListener(jobManagerListener);
+
+		// Register listener on existing jobs
+		for (final IManagedJob job : jobManager.getJobs()) {
+			job.removeListener(jobListener);
+		}
+
+		super.dispose();
 	}
 
 }
