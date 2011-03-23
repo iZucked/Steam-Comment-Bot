@@ -11,6 +11,8 @@ import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
+import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
+import com.mmxlabs.jobcontroller.core.impl.ManagedJobListener;
 
 /**
  * Base {@link IHandler} implementation to cause enabled state to be refreshed
@@ -25,7 +27,7 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 	 * {@link IManagedJobListener} to trigger event handler enabled state
 	 * refresh
 	 */
-	private final IManagedJobListener jobListener = new IManagedJobListener() {
+	private final IManagedJobListener jobListener = new ManagedJobListener() {
 
 		@Override
 		public void jobStateChanged(final IManagedJob job,
@@ -36,13 +38,7 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 					AbstractOptimisationHandler.this, true, false);
 
 			// Fire the event
-			fireHandlerChanged(event);
-		}
-
-		@Override
-		public void jobProgressUpdated(final IManagedJob job,
-				final int progressDelta) {
-
+			AbstractOptimisationHandler.this.fireHandlerChanged(event);
 		}
 	};
 
@@ -50,7 +46,7 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 	 * {@link IJobManagerListener} to hook up our {@link #jobListener} to any
 	 * jobs added to the manager, and remove the listener as the job is removed.
 	 */
-	final IJobManagerListener jobManagerListener = new IJobManagerListener() {
+	final IJobManagerListener jobManagerListener = new JobManagerListener() {
 
 		@Override
 		public void jobAdded(final IJobManager jobManager,
@@ -64,19 +60,6 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 
 			job.removeListener(jobListener);
 		}
-
-		@Override
-		public void jobSelected(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
-
-		}
-
-		@Override
-		public void jobDeselected(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
-
-		}
-
 	};
 
 	/**
