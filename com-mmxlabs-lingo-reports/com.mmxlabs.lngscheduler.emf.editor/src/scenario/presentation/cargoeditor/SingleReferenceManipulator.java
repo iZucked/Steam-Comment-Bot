@@ -40,6 +40,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
+		canEdit(object);
 		final EObject value = (EObject) super.getValue(object);
 
 		int x = valueList.indexOf(value);
@@ -89,13 +90,12 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 			valueList.add(value.getSecond());
 		}
 
-		
-
 		setEditorNames();
 		return valueList.size() > 0;
 	}
 
 	void setEditorNames() {
+		if (editor == null) return;
 		editor.setItems(names.toArray(new String[] {}));
 	}
 
