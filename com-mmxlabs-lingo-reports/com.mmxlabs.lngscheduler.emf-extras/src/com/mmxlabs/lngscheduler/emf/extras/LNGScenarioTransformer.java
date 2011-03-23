@@ -162,6 +162,7 @@ public class LNGScenarioTransformer {
 					.getDefaultValue()));
 			for (final StepwisePrice price : curveModel.getPrices()) {
 				final int hours = convertTime(price.getDate());
+				if (hours < 0) continue;
 				curve.setValueAfter(hours,
 						Calculator.scaleToInt(price.getPriceFromDate()));
 			}
@@ -296,7 +297,8 @@ public class LNGScenarioTransformer {
 	 * which return a date.
 	 */
 	private void findEarliestAndLatestTimes() {
-		final Pair<Date, Date> mm = EMFUtils.findMinMaxDateAttributes(scenario);
+		// search only within the cargo model, because we only care about the cargoes.
+		final Pair<Date, Date> mm = EMFUtils.findMinMaxDateAttributes(scenario.getCargoModel());
 
 		earliestTime = mm.getFirst();
 		latestTime = mm.getSecond();
@@ -396,6 +398,7 @@ public class LNGScenarioTransformer {
 							.getDefaultValue() * regasEfficiency));
 					for (final StepwisePrice price : curveModel.getPrices()) {
 						final int hours = convertTime(price.getDate());
+						if (hours < 0) continue;
 						curve.setValueAfter(
 								hours,
 								Calculator.scaleToInt(regasEfficiency
