@@ -33,138 +33,151 @@ import scenario.presentation.cargoeditor.detailview.TextInlineEditor;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 	private Composite control;
-	
+
 	private final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
 	private final HashMap<EClass, EObjectDetailView> detailViewsByClass = new HashMap<EClass, EObjectDetailView>();
 	private final EditingDomain editingDomain;
-	
+
 	public void setEditorFactoryForClassifier(final EClassifier classifier,
 			final IInlineEditorFactory factory) {
 		editorFactories.put(classifier, factory);
 	}
-	
+
 	public EObjectDetailPropertySheetPage(final EditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
-		
-		editorFactories.put(EcorePackage.eINSTANCE.getEString(), 
+
+		editorFactories.put(EcorePackage.eINSTANCE.getEString(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
-						return new TextInlineEditor(path, feature, editingDomain);
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new TextInlineEditor(path, feature,
+								editingDomain);
 					}
 				});
-		
-		final IInlineEditorFactory numberEditorFactory = new
-			IInlineEditorFactory() {
-				@Override
-				public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
-					return new NumberInlineEditor(path, feature, editingDomain);
-				}
-			};
-		
-		editorFactories.put(EcorePackage.eINSTANCE.getEInt(), numberEditorFactory);
-		editorFactories.put(EcorePackage.eINSTANCE.getELong(), numberEditorFactory);
-		editorFactories.put(EcorePackage.eINSTANCE.getEFloat(), numberEditorFactory);
-		editorFactories.put(EcorePackage.eINSTANCE.getEDouble(), numberEditorFactory);
+
+		final IInlineEditorFactory numberEditorFactory = new IInlineEditorFactory() {
+			@Override
+			public IInlineEditor createEditor(EMFPath path,
+					EStructuralFeature feature) {
+				return new NumberInlineEditor(path, feature, editingDomain);
+			}
+		};
+
+		editorFactories.put(EcorePackage.eINSTANCE.getEInt(),
+				numberEditorFactory);
+		editorFactories.put(EcorePackage.eINSTANCE.getELong(),
+				numberEditorFactory);
+		editorFactories.put(EcorePackage.eINSTANCE.getEFloat(),
+				numberEditorFactory);
+		editorFactories.put(EcorePackage.eINSTANCE.getEDouble(),
+				numberEditorFactory);
 		editorFactories.put(EcorePackage.eINSTANCE.getEDate(),
-				new IInlineEditorFactory() {					
+				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
-						return new LocalDateInlineEditor(path, feature, editingDomain);
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new LocalDateInlineEditor(path, feature,
+								editingDomain);
 					}
-				}
-				);
+				});
 	}
-	
+
 	private EObjectDetailView getDetailView(final EClass eClass) {
 		if (detailViewsByClass.containsKey(eClass)) {
 			return detailViewsByClass.get(eClass);
 		} else {
-			final EObjectDetailView eodv = new EObjectDetailView(control, SWT.NONE, editingDomain);
-			
-			for (final Map.Entry<EClassifier, IInlineEditorFactory> entry : editorFactories.entrySet()) {
-				eodv.setEditorFactoryForClassifier(entry.getKey(), entry.getValue());
+			final EObjectDetailView eodv = new EObjectDetailView(control,
+					SWT.NONE, editingDomain);
+
+			for (final Map.Entry<EClassifier, IInlineEditorFactory> entry : editorFactories
+					.entrySet()) {
+				eodv.setEditorFactoryForClassifier(entry.getKey(),
+						entry.getValue());
 			}
-			
+
 			eodv.initForEClass(eClass);
 			eodv.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			detailViewsByClass.put(eClass, eodv);
 			return eodv;
 		}
 	}
-	
+
 	@Override
 	public void createControl(final Composite parent) {
 		control = new Composite(parent, SWT.NONE);
 		control.setLayout(new GridLayout(1, false));
 	}
 
-
 	@Override
 	public void dispose() {
 		control.dispose();
 	}
-
 
 	@Override
 	public Control getControl() {
 		return control;
 	}
 
-
 	@Override
 	public void setActionBars(IActionBars actionBars) {
 
 	}
 
-
 	@Override
 	public void setFocus() {
-		control.setFocus(); //TODO set focus to child entry
+		control.setFocus(); // TODO set focus to child entry
 	}
 
 	private EObjectDetailView activeDetailView = null;
 	private boolean selectionChanging = false;
+
 	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part,
+			final ISelection selection) {
 		// watch out of re-entry
 		if (selectionChanging) {
 			System.err.println("re-entrant selection?");
 			return;
 		}
 		selectionChanging = true;
-		if (selection instanceof IStructuredSelection) {
-			final Object object = ((IStructuredSelection)selection).getFirstElement();
-			
-			if (object instanceof EObject) {
-				final EObjectDetailView eodv = getDetailView(((EObject) object).eClass());
-				if (eodv != activeDetailView) {
-					// make view visible
+		try {
+			if (selection instanceof IStructuredSelection) {
+				final Object object = ((IStructuredSelection) selection)
+						.getFirstElement();
+
+				if (object instanceof EObject) {
+					final EObjectDetailView eodv = getDetailView(((EObject) object)
+							.eClass());
+					if (eodv != activeDetailView) {
+						// make view visible
+						if (activeDetailView != null) {
+							((GridData) activeDetailView.getLayoutData()).exclude = true;
+							activeDetailView.setVisible(false);
+							activeDetailView.setInput(null);
+						}
+						activeDetailView = eodv;
+						((GridData) activeDetailView.getLayoutData()).exclude = false;
+						activeDetailView.setVisible(true);
+					}
+					eodv.setInput((EObject) object);
+				} else {
 					if (activeDetailView != null) {
-						((GridData)activeDetailView.getLayoutData()).exclude = true;
+						((GridData) activeDetailView.getLayoutData()).exclude = true;
 						activeDetailView.setVisible(false);
 						activeDetailView.setInput(null);
 					}
-					activeDetailView = eodv;
-					((GridData)activeDetailView.getLayoutData()).exclude = false;
-					activeDetailView.setVisible(true);
+					activeDetailView = null;
 				}
-				eodv.setInput((EObject) object);
-			} else {
-				if (activeDetailView != null) {
-					((GridData)activeDetailView.getLayoutData()).exclude = true;
-					activeDetailView.setVisible(false);
-					activeDetailView.setInput(null);
-				}
-				activeDetailView = null;
+
+				control.layout(true);
 			}
-			
-			control.layout(true);
+		} finally {
+			selectionChanging = false;
 		}
-		selectionChanging = false;
 	}
 }
