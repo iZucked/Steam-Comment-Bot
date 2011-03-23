@@ -24,7 +24,6 @@ import scenario.schedule.fleetallocation.FleetVessel;
 import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
