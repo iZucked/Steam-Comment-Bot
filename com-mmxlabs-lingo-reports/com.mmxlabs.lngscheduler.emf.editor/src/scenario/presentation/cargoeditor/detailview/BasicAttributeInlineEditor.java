@@ -44,8 +44,10 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 			input.eAdapters().remove(this);
 		}
 		input = object;
-		input.eAdapters().add(this);
-		updateDisplay(getValue());
+		if (input != null) {
+			input.eAdapters().add(this);
+			updateDisplay(getValue());
+		}
 	}
 
 	@Override

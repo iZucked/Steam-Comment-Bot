@@ -122,33 +122,44 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 		control.setFocus(); //TODO set focus to child entry
 	}
 
-	private EClass currentEClass = null;
-	
+	private EObjectDetailView activeDetailView = null;
+	private boolean selectionChanging = false;
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		// watch out of re-entry
+		if (selectionChanging) {
+			System.err.println("re-entrant selection?");
+			return;
+		}
+		selectionChanging = true;
 		if (selection instanceof IStructuredSelection) {
 			final Object object = ((IStructuredSelection)selection).getFirstElement();
-			if (object instanceof EObject) {
-				if (currentEClass == ((EObject)object).eClass()) {
-					final EObjectDetailView eodv = getDetailView(((EObject) object).eClass());
-					eodv.setInput((EObject) object);
-					return;
-				}
-			}
-			for (final Control c : control.getChildren()) {
-				((GridData)c.getLayoutData()).exclude = true;
-				c.setVisible(false);
-			}
+			
 			if (object instanceof EObject) {
 				final EObjectDetailView eodv = getDetailView(((EObject) object).eClass());
-				((GridData)eodv.getLayoutData()).exclude = false;
-				eodv.setVisible(true);
-				eodv.setInput((EObject)object);
-				currentEClass = ((EObject) object).eClass();
+				if (eodv != activeDetailView) {
+					// make view visible
+					if (activeDetailView != null) {
+						((GridData)activeDetailView.getLayoutData()).exclude = true;
+						activeDetailView.setVisible(false);
+						activeDetailView.setInput(null);
+					}
+					activeDetailView = eodv;
+					((GridData)activeDetailView.getLayoutData()).exclude = false;
+					activeDetailView.setVisible(true);
+				}
+				eodv.setInput((EObject) object);
 			} else {
-				currentEClass = null;
+				if (activeDetailView != null) {
+					((GridData)activeDetailView.getLayoutData()).exclude = true;
+					activeDetailView.setVisible(false);
+					activeDetailView.setInput(null);
+				}
+				activeDetailView = null;
 			}
+			
 			control.layout(true);
 		}
+		selectionChanging = false;
 	}
 }

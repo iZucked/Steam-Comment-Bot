@@ -27,6 +27,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import scenario.NamedObject;
+import scenario.presentation.cargoeditor.detailview.BasicAttributeInlineEditor;
+
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
@@ -63,6 +66,27 @@ public class EObjectDetailView extends Composite {
 		public Control createControl(final Composite parent);
 	}
 
+	private class NonEditableEditor extends BasicAttributeInlineEditor {
+		private Label label;
+		public NonEditableEditor(EMFPath path, EStructuralFeature feature) {
+			super(path, feature, null);
+		}
+
+		@Override
+		public Control createControl(Composite parent) {
+			return (label = new Label(parent, SWT.NONE));
+		}
+
+		@Override
+		protected void updateDisplay(Object value) {
+			if (value instanceof NamedObject) {
+				label.setText(((NamedObject)value).getName());
+			} else {
+				label.setText(value == null ? "" : value.toString());
+			}
+		}
+	}
+	
 	public void setEditorFactoryForClassifier(final EClassifier classifier,
 			final IInlineEditorFactory factory) {
 		editorFactories.put(classifier, factory);
@@ -128,9 +152,9 @@ public class EObjectDetailView extends Composite {
 			// attribute, editingDomain);
 			final Control attributeControl;
 			if (attributeEditorFactory == null) {
-				attributeControl = new Label(controls, SWT.NONE);
-				((Label) attributeControl).setText("No editor for "
-						+ attributeType.getName());
+				NonEditableEditor blank = new NonEditableEditor(path, attribute);
+				editors.add(blank);
+				attributeControl = blank.createControl(controls);
 			} else {
 				final IInlineEditor attributeEditor = attributeEditorFactory
 						.createEditor(path, attribute);
