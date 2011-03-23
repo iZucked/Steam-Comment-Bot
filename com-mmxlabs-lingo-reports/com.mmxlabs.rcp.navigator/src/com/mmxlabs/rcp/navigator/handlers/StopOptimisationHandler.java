@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -16,8 +17,6 @@ import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
-import com.mmxlabs.rcp.navigator.scenario.ScenarioTreeNodeClass;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -54,10 +53,10 @@ public class StopOptimisationHandler extends AbstractHandler {
 				final Iterator<?> itr = strucSelection.iterator();
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
-					if (obj instanceof ScenarioTreeNodeClass) {
+					if (obj instanceof IResource) {
+						IResource resource = (IResource)obj;
+						IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
 
-						final ScenarioTreeNodeClass node = (ScenarioTreeNodeClass) obj;
-						IManagedJob job = node.getJob();
 
 						if (job != null) {
 							final JobState jobState = job.getJobState();
@@ -101,11 +100,15 @@ public class StopOptimisationHandler extends AbstractHandler {
 			final Iterator<?> itr = strucSelection.iterator();
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
-				if (obj instanceof ScenarioTreeNodeClass) {
-
-					final ScenarioTreeNodeClass node = (ScenarioTreeNodeClass) obj;
-					final IManagedJob job = node.getJob();
-
+				if (obj instanceof IResource) {
+					IResource resource = (IResource)obj;
+					Scenario s = (Scenario)resource.getAdapter(Scenario.class);
+					if (s == null) {
+						return false;
+					}
+					
+					IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
+					
 					if (job == null) {
 						return false;
 					}

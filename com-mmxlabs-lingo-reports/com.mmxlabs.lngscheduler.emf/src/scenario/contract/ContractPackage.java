@@ -429,13 +429,22 @@ public interface ContractPackage extends EPackage {
 	int ENTITY__TAX_RATE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Ownership</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY__OWNERSHIP = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+	int ENTITY_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -962,6 +971,17 @@ public interface ContractPackage extends EPackage {
 	EAttribute getEntity_TaxRate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.Entity#getOwnership <em>Ownership</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ownership</em>'.
+	 * @see scenario.contract.Entity#getOwnership()
+	 * @see #getEntity()
+	 * @generated
+	 */
+	EAttribute getEntity_Ownership();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.contract.FixedPricePurchaseContract <em>Fixed Price Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1304,6 +1324,14 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ENTITY__TAX_RATE = eINSTANCE.getEntity_TaxRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Ownership</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ENTITY__OWNERSHIP = eINSTANCE.getEntity_Ownership();
 
 		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.FixedPricePurchaseContractImpl <em>Fixed Price Purchase Contract</em>}' class.

@@ -67,6 +67,7 @@ public class EntityItemProvider
 			super.getPropertyDescriptors(object);
 
 			addTaxRatePropertyDescriptor(object);
+			addOwnershipPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -85,6 +86,28 @@ public class EntityItemProvider
 				 getString("_UI_Entity_taxRate_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Entity_taxRate_feature", "_UI_Entity_type"),
 				 ContractPackage.Literals.ENTITY__TAX_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ownership feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOwnershipPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Entity_ownership_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Entity_ownership_feature", "_UI_Entity_type"),
+				 ContractPackage.Literals.ENTITY__OWNERSHIP,
 				 true,
 				 false,
 				 false,
@@ -131,6 +154,7 @@ public class EntityItemProvider
 
 		switch (notification.getFeatureID(Entity.class)) {
 			case ContractPackage.ENTITY__TAX_RATE:
+			case ContractPackage.ENTITY__OWNERSHIP:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

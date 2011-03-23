@@ -243,17 +243,17 @@ public class AnnotatedSolutionExporter {
 			outputFitnesses.add(fitness);
 		}
 
-		final ScheduleFitness eRuntime = factory.createScheduleFitness();
-		eRuntime.setName("runtime");
-		eRuntime.setValue(runtime);
-
-		outputFitnesses.add(eRuntime);
-
-		final ScheduleFitness eIters = factory.createScheduleFitness();
-		eIters.setName("iterations");
-		eIters.setValue(iterations.longValue());
-
-		outputFitnesses.add(eIters);
+//		final ScheduleFitness eRuntime = factory.createScheduleFitness();
+//		eRuntime.setName("runtime");
+//		eRuntime.setValue(runtime);
+//
+//		outputFitnesses.add(eRuntime);
+//
+//		final ScheduleFitness eIters = factory.createScheduleFitness();
+//		eIters.setName("iterations");
+//		eIters.setValue(iterations.longValue());
+//
+//		outputFitnesses.add(eIters);
 
 		final ProfitAndLossCalculator pAndL = new ProfitAndLossCalculator();
 		

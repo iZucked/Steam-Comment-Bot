@@ -16,7 +16,6 @@ import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.rcp.navigator.scenario.ScenarioTreeNodeClass;
 
 public class TheNavigator extends CommonNavigator {
 
@@ -62,12 +61,12 @@ public class TheNavigator extends CommonNavigator {
 
 			@Override
 			public void handleEvent(final Event event) {
-				if (event.item instanceof Button && event.item.getData() instanceof ScenarioTreeNodeClass) {
-					final ScenarioTreeNodeClass node = (ScenarioTreeNodeClass) event.item.getData();
+				if (event.item instanceof Button && event.item.getData() instanceof IResource) {
+					final IResource resource = (IResource) event.item.getData();
 					final Button button = (Button) event.item;
 
 					// Set selection status
-					Activator.getDefault().getJobManager().setResourceSelection(node.getResource(), button.getSelection());
+					Activator.getDefault().getJobManager().setResourceSelection(resource, button.getSelection());
 				}
 			}
 		});
@@ -76,9 +75,9 @@ public class TheNavigator extends CommonNavigator {
 
 			void checkItems(final TreeItem item, final IResource res, final boolean check) {
 
-				if (item.getData() instanceof ScenarioTreeNodeClass) {
-					final ScenarioTreeNodeClass node = (ScenarioTreeNodeClass) item.getData();
-					if (node.getResource() == res) {
+				if (item.getData() instanceof IResource) {
+					final IResource resource = (IResource) item.getData();
+					if (resource == res) {
 						item.setChecked(check);
 					}
 				}

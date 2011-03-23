@@ -5,9 +5,9 @@
          point="org.eclipse.ui.views">
       <view
             class="com.mmxlabs.rcp.navigator.TheNavigator"
-            icon="icons/sample.gif"
+            icon="icons/eview16/exec_statistic_view.gif"
             id="com.mmxlabs.rcp.navigator"
-            name="My Common Navigator">
+            name="Scenario Navigator">
       </view>
    </extension>
    <extension
@@ -27,7 +27,7 @@
             viewerId="com.mmxlabs.rcp.navigator">
          <includes>
             <contentExtension
-                  pattern="off-org.eclipse.ui.navigator.resourceContent">
+                  pattern="org.eclipse.ui.navigator.resourceContent">
             </contentExtension>
             <contentExtension
                   pattern="org.eclipse.ui.navigator.resources.filters.*">
@@ -62,17 +62,6 @@
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
      
-      <actionProvider
-            class="com.mmxlabs.rcp.navigator.OpenScenarioActionProvider"
-            id="com.mmxlabs.rcp.navigator.CommonActionProvider1">
-         <enablement>
-            <or>
-               <adapt
-                     type="scenario.Scenario">
-               </adapt>
-            </or>
-         </enablement>
-      </actionProvider>
        <navigatorContent
             activeByDefault="true"
             contentProvider="com.mmxlabs.rcp.navigator.scenario.ScenarioContentProvider"
@@ -82,11 +71,13 @@
             priority="highest">
          <triggerPoints>
             <or>
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.core.resources.extension"
+                     value="scenario">
+               </test>
                <instanceof
                      value="org.eclipse.core.resources.IResource">
-               </instanceof>
-               <instanceof
-                     value="com.mmxlabs.rcp.navigator.scenario.ScenarioTreeNodeClass">
                </instanceof>
             </or></triggerPoints>
          <possibleChildren>
@@ -156,6 +147,11 @@
                id="com.mmxlabs.rcp.navigator.commands.optimisation.terminate"
                name="Terminate Optimisation">
          </command>
+         <command
+               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.save"
+               name="Save Optimisation">
+         </command>
          <category
                id="com.mmxlabs.rcp.navigator.commands.category.scenario"
                name="Scenario Commands">
@@ -177,9 +173,11 @@
                         ifEmpty="false"
                         operator="or">
                      <and>
-                        <adapt
-                              type="scenario.Scenario">
-                        </adapt></and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test></and>
                   </iterate>
                </or>
             </enabledWhen>
@@ -214,9 +212,11 @@
                         ifEmpty="false"
                         operator="or">
                      <and>
-                        <adapt
-                              type="scenario.Scenario">
-                        </adapt>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
                      </and>
                   </iterate>
                </or>
@@ -231,9 +231,11 @@
                         ifEmpty="false"
                         operator="or">
                      <and>
-                        <adapt
-                              type="scenario.Scenario">
-                        </adapt>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
                      </and>
                   </iterate>
                </or>
@@ -248,9 +250,30 @@
                         ifEmpty="false"
                         operator="or">
                      <and>
-                        <adapt
-                              type="scenario.Scenario">
-                        </adapt>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
+                     </and>
+                  </iterate>
+               </or>
+            </enabledWhen>
+         </handler>
+         <handler
+               class="com.mmxlabs.rcp.navigator.handlers.SaveOptimisationHandler"
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save">
+            <enabledWhen>
+               <or>
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
                      </and>
                   </iterate>
                </or>
@@ -288,6 +311,15 @@
                      style="push"
                      tooltip="Terminate optimisations">
                </command>
+               <command
+                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save"
+                     disabledIcon="icons/dtool16/saveas_edit.gif"
+                     icon="icons/etool16/saveas_edit.gif"
+                     id="com.mmxlabs.rcp.navigator.toolbars.optimisation.save"
+                     label="Save Optimisation"
+                     style="push"
+                     tooltip="Save optimisations">
+               </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
@@ -306,10 +338,13 @@
       <extension
             point="org.eclipse.core.runtime.adapters">
          <factory
-               adaptableType="com.mmxlabs.rcp.navigator.scenario.ScenarioTreeNodeClass"
+               adaptableType="org.eclipse.core.resources.IResource"
                class="com.mmxlabs.rcp.navigator.scenario.ScenarioTreeNodeClassAdapterFactory">
             <adapter
                   type="scenario.Scenario">
+            </adapter>
+            <adapter
+                  type="scenario.schedule.Schedule">
             </adapter>
             <!--
             <adapter

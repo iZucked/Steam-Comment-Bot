@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -21,6 +21,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -30,6 +31,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -69,7 +71,7 @@ public abstract class EMFReportView extends ViewPart implements
 			column.getColumn().setText(title);
 			column.setLabelProvider(new ColumnLabelProvider() {
 				@Override
-				public String getText(Object element) {
+				public String getText(final Object element) {
 					return formatter.format(path.get((EObject) element));
 				}
 			});
@@ -83,7 +85,7 @@ public abstract class EMFReportView extends ViewPart implements
 
 	protected final IFormatter objectFormatter = new IFormatter() {
 		@Override
-		public String format(Object object) {
+		public String format(final Object object) {
 			if (object == null)
 				return "";
 			return object.toString();
@@ -98,8 +100,8 @@ public abstract class EMFReportView extends ViewPart implements
 		calendar.setTime(date);
 		return String.format("%02d/%02d/%d %02d:%02d %s", calendar
 				.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.YEAR), calendar
-						.get(Calendar.HOUR_OF_DAY), calendar
+				calendar.get(Calendar.YEAR),
+				calendar.get(Calendar.HOUR_OF_DAY), calendar
 						.get(Calendar.MINUTE), calendar.getTimeZone()
 						.getDisplayName(false, TimeZone.SHORT));
 	}
@@ -107,30 +109,34 @@ public abstract class EMFReportView extends ViewPart implements
 	protected final IFormatter calendarFormatter = new IFormatter() {
 		@Override
 		public String format(final Object object) {
-			if (object == null) return "";
+			if (object == null)
+				return "";
 			final Calendar cal = (Calendar) object;
-			final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+			final DateFormat df = DateFormat.getDateTimeInstance(
+					DateFormat.SHORT, DateFormat.SHORT);
 			df.setCalendar(cal);
-			return df.format(cal.getTime()) + " (" + cal.getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")";
+			return df.format(cal.getTime()) + " ("
+					+ cal.getTimeZone().getDisplayName(false, TimeZone.SHORT)
+					+ ")";
 		}
 	};
-	
+
 	protected final IFormatter integerFormatter = new IFormatter() {
 		@Override
-		public String format(Object object) {
+		public String format(final Object object) {
 			if (object == null)
 				return "";
 			return String.format("%,d", object);
 		}
 	};
-	
+
 	protected final IFormatter costFormatter = new IFormatter() {
 		@Override
-		public String format(Object object) {
+		public String format(final Object object) {
 			if (object == null)
 				return "";
 			final int x = ((Number) object).intValue();
-		
+
 			return String.format("%,d", -x);
 		}
 	};
@@ -143,13 +149,18 @@ public abstract class EMFReportView extends ViewPart implements
 
 	protected void addColumn(final String title, final IFormatter formatter,
 			final Object... path) {
-		handlers.add(new ColumnHandler(formatter, path, title));
+		final ColumnHandler handler = new ColumnHandler(formatter, path, title);
+		handlers.add(handler);
+		
+		if (viewer != null) {
+			handler.createColumn(viewer).getColumn().pack();
+		}
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+				| SWT.V_SCROLL | SWT.FULL_SELECTION);
 
 		viewer.setContentProvider(getContentProvider());
 
@@ -167,51 +178,54 @@ public abstract class EMFReportView extends ViewPart implements
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-		
+
 		getSite().getWorkbenchWindow().getSelectionService()
 				.addSelectionListener(this);
-		
+
 		// Update view from current selection
-		final ISelectionProvider selectionProvider = getSite().getSelectionProvider();
+		final ISelectionProvider selectionProvider = getSite()
+				.getSelectionProvider();
 		if (selectionProvider != null) {
 			selectionChanged(null, selectionProvider.getSelection());
 		} else {
 			// No current provider? Look at the scenario navigator
 			// TODO: Ensure this is kept in sync
-			ISelection selection = getSite().getWorkbenchWindow().getSelectionService().getSelection("com.mmxlabs.rcp.navigator");
+			final ISelection selection = getSite().getWorkbenchWindow()
+					.getSelectionService()
+					.getSelection("com.mmxlabs.rcp.navigator");
 			selectionChanged(null, selection);
 		}
 	}
 
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			@Override
-			public void menuAboutToShow(IMenuManager manager) {
+			public void menuAboutToShow(final IMenuManager manager) {
 				EMFReportView.this.fillContextMenu(manager);
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(viewer.getControl());
+		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
 	}
 
 	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
+		final IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
-	private void fillLocalPullDown(IMenuManager manager) {
+	private void fillLocalPullDown(final IMenuManager manager) {
 	}
 
-	private void fillContextMenu(IMenuManager manager) {
+	private void fillContextMenu(final IMenuManager manager) {
 		// Other plug-ins can contribute their actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
-	private void fillLocalToolBar(IToolBarManager manager) {
+	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packColumnsAction);
 	}
 
@@ -250,10 +264,32 @@ public abstract class EMFReportView extends ViewPart implements
 					setInput((Schedule) o);
 					return;
 				} else if (o instanceof IAdaptable) {
-					setInput(((IAdaptable) o).getAdapter(Schedule.class));
-					return;
+					Object adapter = ((IAdaptable) o)
+							.getAdapter(Schedule.class);
+					if (adapter == null) {
+						adapter = Platform.getAdapterManager().loadAdapter(o,
+								Schedule.class.getCanonicalName());
+					}
+					if (adapter != null) {
+						setInput(((Schedule) adapter));
+						return;
+					}
 				}
 			}
 		}
+	}
+
+	public void removeColumn(String title) {
+		for (final ColumnHandler h : handlers) {
+			if (h.title.equals(title)) {
+				handlers.remove(h);
+				break;
+			}
+		}
+		for (final TableColumn column  : viewer.getTable().getColumns()) {
+			if (column.getText().equals(title))
+				column.dispose(); //TODO this might be pretty wrong.
+		}
+		viewer.getTable().pack(true);
 	}
 }

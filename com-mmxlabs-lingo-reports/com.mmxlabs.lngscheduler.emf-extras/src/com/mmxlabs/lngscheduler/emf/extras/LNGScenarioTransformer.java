@@ -155,16 +155,7 @@ public class LNGScenarioTransformer {
 		final Association<Market, ICurve> marketAssociation = new Association<Market, ICurve>();
 
 		for (final Market market : scenario.getMarketModel().getMarkets()) {
-			final StepwisePriceCurve curveModel = market.getPriceCurve();
-			final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-
-			curve.setDefaultValue(Calculator.scaleToInt(curveModel
-					.getDefaultValue()));
-			for (final StepwisePrice price : curveModel.getPrices()) {
-				final int hours = convertTime(price.getDate());
-				curve.setValueAfter(hours,
-						Calculator.scaleToInt(price.getPriceFromDate()));
-			}
+			final StepwiseIntegerCurve curve = createCurveForMarket(market, 1.0f);
 
 			marketAssociation.add(market, curve);
 		}
@@ -254,6 +245,25 @@ public class LNGScenarioTransformer {
 		return builder.getOptimisationData();
 	}
 
+	private StepwiseIntegerCurve createCurveForMarket(final Market market, float scale) {
+		final StepwisePriceCurve curveModel = market.getPriceCurve();
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+
+		curve.setDefaultValue(Calculator.scaleToInt(scale * curveModel
+				.getDefaultValue()));
+		boolean gotOneEarlyDate = false;
+		for (final StepwisePrice price : curveModel.getPrices()) {
+			final int hours = convertTime(price.getDate());
+			if (hours < 0) {
+				if (gotOneEarlyDate) continue;
+				gotOneEarlyDate = true;
+			}
+			curve.setValueAfter(hours,
+					Calculator.scaleToInt(scale * price.getPriceFromDate()));
+		}
+		return curve;
+	}
+
 	/**
 	 * Set up the total volume limits, if there are any
 	 * 
@@ -296,7 +306,8 @@ public class LNGScenarioTransformer {
 	 * which return a date.
 	 */
 	private void findEarliestAndLatestTimes() {
-		final Pair<Date, Date> mm = EMFUtils.findMinMaxDateAttributes(scenario);
+		// search only within the cargo model, because we only care about the cargoes.
+		final Pair<Date, Date> mm = EMFUtils.findMinMaxDateAttributes(scenario.getCargoModel());
 
 		earliestTime = mm.getFirst();
 		latestTime = mm.getSecond();
@@ -388,20 +399,7 @@ public class LNGScenarioTransformer {
 				final float regasEfficiency = ((SalesContract) dischargeSlot
 						.getSlotOrPortContract()).getRegasEfficiency();
 				if (regasEfficiency != 1.0f) {
-					final StepwisePriceCurve curveModel = dischargeMarket
-							.getPriceCurve();
-					final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-
-					curve.setDefaultValue(Calculator.scaleToInt(curveModel
-							.getDefaultValue() * regasEfficiency));
-					for (final StepwisePrice price : curveModel.getPrices()) {
-						final int hours = convertTime(price.getDate());
-						curve.setValueAfter(
-								hours,
-								Calculator.scaleToInt(regasEfficiency
-										* price.getPriceFromDate()));
-					}
-					dischargeCurve = curve;
+					dischargeCurve = createCurveForMarket(dischargeMarket, regasEfficiency);
 				} else {
 					dischargeCurve = marketAssociation.lookup(dischargeMarket);
 				}
