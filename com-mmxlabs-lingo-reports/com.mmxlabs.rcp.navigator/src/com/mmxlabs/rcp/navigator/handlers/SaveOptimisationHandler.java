@@ -10,11 +10,15 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -24,6 +28,7 @@ import scenario.Scenario;
 
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -47,56 +52,76 @@ public class SaveOptimisationHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final String id = event.getCommand().getId();
-
 		final ISelection selection = HandlerUtil
 				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
+
 		if (selection != null & selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
-			if (id.equals("com.mmxlabs.rcp.navigator.commands.optimisation.save")) {
+			final Iterator<?> itr = strucSelection.iterator();
+			while (itr.hasNext()) {
+				final Object obj = itr.next();
+				if (obj instanceof IResource) {
+					final IResource resource = (IResource) obj;
 
-				final Iterator<?> itr = strucSelection.iterator();
-				while (itr.hasNext()) {
-					final Object obj = itr.next();
-					if (obj instanceof IResource) {
-						IResource resource = (IResource)obj;
-						Scenario s = (Scenario)resource.getAdapter(Scenario.class);
-						if (s == null) {
-							return false;
-						}
-						
-						IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
+					final IManagedJob job = Activator.getDefault()
+							.getJobManager().findJobForResource(resource);
 
-						ResourceSetImpl resourceSet = new ResourceSetImpl();
+					if (job instanceof LNGSchedulerJob) {
 
-						String fileExtension = resource
-								.getFileExtension();
-						String newPath = resource.getLocation()
-								.removeFileExtension().toString()
-								+ "-"
-								+ new Date().getTime()
-								+ "."
-								+ fileExtension;
-						URI uri = URI.createFileURI(newPath);
+						final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
 
-						Resource nResource = resourceSet.createResource(uri);
-						nResource.getContents().add(s);
+							@Override
+							public void run(final IProgressMonitor monitor)
+									throws CoreException {
+								monitor.beginTask("Save Scenario", 2);
 
-						Map<?, ?> options = Collections.emptyMap();
+								try {
+									// Take copy of scenario
+									final Scenario scenario = EcoreUtil
+											.copy(((LNGSchedulerJob) job)
+													.getScenario());
+
+									// Create resource set to save into
+									final ResourceSetImpl resourceSet = new ResourceSetImpl();
+
+									final String fileExtension = resource
+											.getFileExtension();
+									// Create a new filename with timestamp
+									final String newPath = resource
+											.getLocation()
+											.removeFileExtension().toString()
+											+ "-"
+											+ new Date().getTime()
+											+ "."
+											+ fileExtension;
+									final URI uri = URI.createFileURI(newPath);
+
+									final Resource nResource = resourceSet
+											.createResource(uri);
+
+									// Add copied scenario to this resource
+									nResource.getContents().add(scenario);
+
+									final Map<?, ?> options = Collections
+											.emptyMap();
+									try {
+										nResource.save(options);
+									} catch (final IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									resource.getParent().refreshLocal(
+											IResource.DEPTH_ONE,
+											new SubProgressMonitor(monitor, 1));
+								} finally {
+									monitor.done();
+								}
+							}
+						};
 						try {
-							nResource.save(options);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						// TODO; Really a workspace op
-						try {
-							resource
-									.getParent()
-									.refreshLocal(IResource.DEPTH_ONE,
-											new NullProgressMonitor());
-						} catch (CoreException e) {
+							ResourcesPlugin.getWorkspace().run(runnable, null);
+						} catch (final CoreException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -132,14 +157,15 @@ public class SaveOptimisationHandler extends AbstractHandler {
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof IResource) {
-					IResource resource = (IResource)obj;
-					Scenario s = (Scenario)resource.getAdapter(Scenario.class);
-					return s != null;
+					final IResource resource = (IResource) obj;
+					final IManagedJob job = Activator.getDefault()
+							.getJobManager().findJobForResource(resource);
+					return job != null;
+
 				}
 			}
 		}
 
-		System.out.println("isEnabled: False");
 		return false;
 	}
 }
