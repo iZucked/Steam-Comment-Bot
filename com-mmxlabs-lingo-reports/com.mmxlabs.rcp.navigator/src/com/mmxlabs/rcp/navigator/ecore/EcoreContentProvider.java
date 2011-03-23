@@ -25,41 +25,45 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 				IResourceChangeEvent.POST_CHANGE);
 	}
 
+	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof IFile) {
-			final String path = ((IFile) parentElement).getFullPath()
-					.toString();
-			final URI uri = URI.createPlatformResourceURI(path, true);
-			if (uri != null) {
+			final IFile file = (IFile) parentElement;
+			if (file.getFileExtension().equals("scenario")) {
+				final String path = file.getFullPath().toString();
+				final URI uri = URI.createPlatformResourceURI(path, true);
 				parentElement = resourceSet.getResource(uri, true);
-			} else {
-				int i = 0;
 			}
 		}
 		return super.getChildren(parentElement);
 	}
 
+	@Override
 	public Object getParent(final Object element) {
 		if (element instanceof IFile)
 			return ((IResource) element).getParent();
 		return super.getParent(element);
 	}
 
+	@Override
 	public boolean hasChildren(final Object element) {
 		if (element instanceof IFile)
 			return true;
 		return super.hasChildren(element);
 	}
 
+	@Override
 	public Object[] getElements(final Object inputElement) {
 		return getChildren(inputElement);
 	}
 
+	@Override
 	public void dispose() {
 		super.dispose();
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 	}
 
+	@Override
 	public void resourceChanged(final IResourceChangeEvent event) {
 		try {
 			final IResourceDelta delta = event.getDelta();
@@ -69,6 +73,7 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 		}
 	}
 
+	@Override
 	public boolean visit(final IResourceDelta delta) throws CoreException {
 		final IResource changedResource = delta.getResource();
 		if (changedResource.getType() == IResource.FILE
