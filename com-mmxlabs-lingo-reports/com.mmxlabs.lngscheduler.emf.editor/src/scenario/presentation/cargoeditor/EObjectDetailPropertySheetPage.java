@@ -42,6 +42,11 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 	private final HashMap<EClass, EObjectDetailView> detailViewsByClass = new HashMap<EClass, EObjectDetailView>();
 	private final EditingDomain editingDomain;
 	
+	public void setEditorFactoryForClassifier(final EClassifier classifier,
+			final IInlineEditorFactory factory) {
+		editorFactories.put(classifier, factory);
+	}
+	
 	public EObjectDetailPropertySheetPage(final EditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
 		
