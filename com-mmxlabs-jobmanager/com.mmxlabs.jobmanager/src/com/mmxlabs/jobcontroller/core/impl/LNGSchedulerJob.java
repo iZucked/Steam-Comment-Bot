@@ -131,4 +131,10 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 
 		super.dispose();
 	}
+	
+	
+	public final Scenario getScenario() {
+		return scenario;
+	}
+
 }
