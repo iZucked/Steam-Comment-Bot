@@ -4,9 +4,9 @@
  */
 package scenario.presentation.cargoeditor;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
@@ -22,13 +22,15 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.ListSelectionDialog;
 
+import com.mmxlabs.common.Pair;
+
 /**
  * @author hinton
  * 
  */
 public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 	private final IReferenceValueProvider valueProvider;
-	private final EAttribute nameAttribute;
+	private EAttribute nameAttribute;
 
 	public MultipleReferenceManipulator(final EStructuralFeature field,
 			final EditingDomain editingDomain,
@@ -41,12 +43,13 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	@Override
 	protected String renderValue(Object value) {
+		
 		EList<? extends EObject> selectedValues = (EList<? extends EObject>) value;
 		final StringBuilder sb = new StringBuilder();
 		for (final EObject obj : selectedValues) {
 			if (sb.length() > 0)
 				sb.append(", ");
-			sb.append(obj.eGet(nameAttribute).toString());
+			sb.append(obj.eGet(nameAttribute));
 		}
 		return sb.toString();
 	}
@@ -70,22 +73,18 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow, Object object) {
-		Iterable<? extends EObject> values = valueProvider.getAllowedValues(
-				(EObject) object, field);
-
-		ArrayList<EObject> options = new ArrayList<EObject>();
-		for (final EObject v : values)
-			options.add(v);
-
+		List<Pair<String, EObject>> options = valueProvider.getAlloweValues((EObject)object, field);
+		
+		if (options.size() > 0 && options.get(0).getSecond() == null)
+			options.remove(0);
+		
 		ListSelectionDialog dlg = new ListSelectionDialog(
 				cellEditorWindow.getShell(), options.toArray(),
 				new ArrayContentProvider(), new LabelProvider() {
 
 					@Override
 					public String getText(Object element) {
-						return ((EObject) element).eGet(nameAttribute)
-								.toString();
-
+						return ((Pair<String, ?> )element).getFirst();
 					}
 				}, "Select values:");
 		dlg.setTitle("Value Selection");
@@ -98,5 +97,4 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		else
 			return Arrays.asList(result);
 	}
-
 }

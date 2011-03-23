@@ -25,6 +25,7 @@ import scenario.impl.NamedObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.contract.impl.EntityImpl#getTaxRate <em>Tax Rate</em>}</li>
+ *   <li>{@link scenario.contract.impl.EntityImpl#getOwnership <em>Ownership</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,6 +51,26 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * @ordered
 	 */
 	protected float taxRate = TAX_RATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getOwnership() <em>Ownership</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOwnership()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final float OWNERSHIP_EDEFAULT = 1.0F;
+
+	/**
+	 * The cached value of the '{@link #getOwnership() <em>Ownership</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOwnership()
+	 * @generated
+	 * @ordered
+	 */
+	protected float ownership = OWNERSHIP_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -96,11 +117,34 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public float getOwnership() {
+		return ownership;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOwnership(float newOwnership) {
+		float oldOwnership = ownership;
+		ownership = newOwnership;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.ENTITY__OWNERSHIP, oldOwnership, ownership));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ContractPackage.ENTITY__TAX_RATE:
 				return getTaxRate();
+			case ContractPackage.ENTITY__OWNERSHIP:
+				return getOwnership();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -115,6 +159,9 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 		switch (featureID) {
 			case ContractPackage.ENTITY__TAX_RATE:
 				setTaxRate((Float)newValue);
+				return;
+			case ContractPackage.ENTITY__OWNERSHIP:
+				setOwnership((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -131,6 +178,9 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 			case ContractPackage.ENTITY__TAX_RATE:
 				setTaxRate(TAX_RATE_EDEFAULT);
 				return;
+			case ContractPackage.ENTITY__OWNERSHIP:
+				setOwnership(OWNERSHIP_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -145,6 +195,8 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 		switch (featureID) {
 			case ContractPackage.ENTITY__TAX_RATE:
 				return taxRate != TAX_RATE_EDEFAULT;
+			case ContractPackage.ENTITY__OWNERSHIP:
+				return ownership != OWNERSHIP_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -161,6 +213,8 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (taxRate: ");
 		result.append(taxRate);
+		result.append(", ownership: ");
+		result.append(ownership);
 		result.append(')');
 		return result.toString();
 	}

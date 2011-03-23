@@ -15,45 +15,45 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
+import org.w3c.dom.NameList;
+
+import com.mmxlabs.common.Pair;
 
 /**
  * @author hinton
  * 
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {
-	protected String NULL_STRING = "empty";
-	
-	final EAttribute nameAttribute;
-	final boolean allowNullValues;
 	final IReferenceValueProvider valueProvider;
 	final EditingDomain editingDomain;
 
 	private ComboBoxCellEditor editor;
 
 	public SingleReferenceManipulator(final EReference field,
-			final EAttribute nameAttribute, final boolean allowNullValues,
 			final IReferenceValueProvider valueProvider,
 			final EditingDomain editingDomain) {
 		super(field, editingDomain);
-		
-		this.nameAttribute = nameAttribute;
-		this.allowNullValues = allowNullValues;
+
 		this.valueProvider = valueProvider;
 		this.editingDomain = editingDomain;
 	}
 
 	@Override
 	public String render(final Object object) {
+		canEdit(object);
 		final EObject value = (EObject) super.getValue(object);
-		if (value == null)
-			return NULL_STRING;
+
+		int x = valueList.indexOf(value);
+		if (x == -1)
+			return "empty";
 		else
-			return value.eGet(nameAttribute).toString();
+			return names.get(x);
+
 	}
 
 	@Override
 	public void setValue(final Object object, final Object value) {
-		final EObject newValue = valueList.get((Integer)value);
+		final EObject newValue = valueList.get((Integer) value);
 		super.setValue(object, newValue);
 	}
 
@@ -63,49 +63,40 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 		setEditorNames();
 		return editor;
 	}
+
 	final ArrayList<EObject> valueList = new ArrayList<EObject>();
+	final ArrayList<String> names = new ArrayList<String>();
+
 	@Override
 	public Object getValue(final Object object) {
-		return (Integer) valueList.indexOf(super.getValue(object));
+		int x = valueList.indexOf(super.getValue(object));
+		if (x == -1) {
+			System.err.println("index of " + object + ", "
+					+ super.getValue(object) + " is -1!");
+		}
+		return x;
 	}
 
 	@Override
 	public boolean canEdit(final Object object) {
 		// get legal item list
-		final Iterable<? extends EObject> values = valueProvider.getAllowedValues(
-				(EObject) object, field);
-		
+		final Iterable<Pair<String, EObject>> values = valueProvider
+				.getAlloweValues((EObject) object, field);
+
 		valueList.clear();
-		for (final EObject value : values) {
-			valueList.add(value);
+		names.clear();
+		for (final Pair<String, EObject> value : values) {
+			names.add(value.getFirst());
+			valueList.add(value.getSecond());
 		}
-		
-		if (allowNullValues)
-			valueList.add(null);
-		
-		Collections.sort(valueList,
-				new Comparator<EObject>() {
-					@Override
-					public int compare(EObject arg0, EObject arg1) {
-						if (arg0 == null) return -1;
-						else if (arg1 == null) return 1;
-						
-						return arg0.eGet(nameAttribute).toString().compareTo(
-								arg1.eGet(nameAttribute).toString());
-					}
-		});
+
 		setEditorNames();
 		return valueList.size() > 0;
 	}
-	
+
 	void setEditorNames() {
 		if (editor == null) return;
-		final ArrayList<String> names = new ArrayList<String>();
-		for (final EObject value : valueList) {
-			names.add(value == null ? NULL_STRING : value.eGet(nameAttribute).toString());
-		}
-		
-		editor.setItems(names.toArray(new String[]{}));
+		editor.setItems(names.toArray(new String[] {}));
 	}
 
 }

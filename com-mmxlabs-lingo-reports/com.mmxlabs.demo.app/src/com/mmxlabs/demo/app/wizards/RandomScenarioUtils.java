@@ -383,11 +383,15 @@ public class RandomScenarioUtils {
 		final DistanceImporter di = new DistanceImporter(distanceMatrix);
 		final List<Pair<Pair<String, String>, Double>> wheel = new ArrayList<Pair<Pair<String, String>, Double>>();
 
-		int maxDistance = 0;
-		int minDistance = Integer.MAX_VALUE;
+		
 
-		for (final String s : di.getKeys()) {
-			for (final String s2 : di.getKeys()) {
+		final Map<String, Integer> minDistanceFrom = new HashMap<String, Integer>();
+		final Map<String, Integer> maxDistanceFrom = new HashMap<String, Integer>();
+		
+		for (final String s : loadSlots.keySet()) {
+			int maxDistance = 0;
+			int minDistance = Integer.MAX_VALUE;
+			for (final String s2 : dischargeSlots.keySet()) {
 				final int distance = di.getDistance(s, s2);
 				if (distance == Integer.MAX_VALUE)
 					continue;
@@ -397,11 +401,15 @@ public class RandomScenarioUtils {
 				if (distance > maxDistance)
 					maxDistance = distance;
 			}
+			minDistanceFrom.put(s, minDistance);
+			maxDistanceFrom.put(s, maxDistance);
 		}
 
 		double totalp = 0;
 
 		for (final Map.Entry<String, Integer> load : loadSlots.entrySet()) {
+			final int minDistance = minDistanceFrom.get(load.getKey());
+			final int maxDistance = maxDistanceFrom.get(load.getKey());
 			for (final Map.Entry<String, Integer> discharge : dischargeSlots
 					.entrySet()) {
 				final int distance = di.getDistance(load.getKey(),
@@ -411,19 +419,19 @@ public class RandomScenarioUtils {
 				// need to implement suitable bias-o-factor here
 				final Pair<String, String> slot = new Pair<String, String>(
 						load.getKey(), discharge.getKey());
-
+				
 				final double dprop = 1 - (distance - minDistance)
 						/ (double) (maxDistance - minDistance);
-				final double loadFactor = ((load.getValue() / (double) totalLoads) * (discharge
-						.getValue() / (double) totalDischarges));
-				final double dFactor = Math.exp(locality * dprop) - 1;
-				final double p = 
-					loadFactor + dFactor
+				final double loadFactor = dprop*(load.getValue()  * discharge
+						.getValue());
+				final double dFactor = Math.exp(locality * dprop);
+				final double p = loadFactor * dFactor;
+//					loadFactor ;+ dFactor
 
 				;
 
 				System.err.println(load.getKey() + " to " + discharge.getKey()
-						+ " distance factor = " + dFactor + " loadFactor = " + loadFactor);
+					 + " loadFactor = " + loadFactor);
 				wheel.add(new Pair<Pair<String, String>, Double>(slot, p));
 
 				totalp += p;

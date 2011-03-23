@@ -605,6 +605,8 @@
     <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="taxRate" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ownership" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="1"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FixedPricePurchaseContract" eSuperTypes="#//contract/PurchaseContract">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitPrice" lowerBound="1"

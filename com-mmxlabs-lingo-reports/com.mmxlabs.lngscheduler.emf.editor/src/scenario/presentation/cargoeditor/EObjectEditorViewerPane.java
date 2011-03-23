@@ -12,6 +12,7 @@ import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
@@ -52,7 +53,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public Viewer createViewer(final Composite parent) {
-		viewer = new TableViewer(parent);
+		viewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		return viewer;
 	}
 
@@ -134,9 +135,12 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		});
 
 		
+		//TODO somewhere inside this, we need to make ourselves listen
+		// for deep changes. not sure how
+		
 		viewer.setContentProvider(new AdapterFactoryContentProvider(
 				adapterFactory) {
-
+			
 			@SuppressWarnings("rawtypes")
 			@Override
 			public Object[] getElements(Object object) {

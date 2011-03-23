@@ -5,12 +5,17 @@
 package com.mmxlabs.demo.reports.views;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
+import scenario.cargo.LoadSlot;
+import scenario.contract.Entity;
 import scenario.port.PortPackage;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
@@ -178,8 +183,14 @@ public class PortRotationReportView extends EMFReportView {
 				return String.format("%,d", total);
 			}
 		});
+		
+		
 	}
 
+	private List<String> entityColumnNames = new ArrayList<String>();
+	
+	
+	
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
@@ -187,19 +198,30 @@ public class PortRotationReportView extends EMFReportView {
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput,
 					Object newInput) {
-				// TODO Auto-generated method stub
-
+				if (newInput instanceof Schedule) {
+					// find all referenced entities
+					for (final String s : entityColumnNames) {
+						removeColumn(s);
+					}
+					entityColumnNames.clear();
+					final ArrayList<Entity> entities = new ArrayList<Entity>();
+					EObject o = (EObject) newInput;
+					while (o != null && !(o instanceof Scenario)) {
+						 o = o.eContainer();
+					}
+					if (o != null) {
+						addEntityColumns((Scenario)o);
+					}
+				}
 			}
 
 			@Override
 			public void dispose() {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public Object[] getElements(Object object) {
-
 				if (object instanceof Schedule) {
 					final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
 					final Schedule schedule = (Schedule) object;
@@ -213,4 +235,41 @@ public class PortRotationReportView extends EMFReportView {
 		};
 	}
 
+	protected void addEntityColumns(final Scenario o) {
+		for (final Entity e : o.getContractModel().getEntities()) {
+			addEntityColumn(e);
+		}
+		addEntityColumn(o.getContractModel().getShippingEntity());
+	}
+
+	private void addEntityColumn(final Entity entity) {
+		if (entity == null || entity.getOwnership() == 0) return;
+		final String title = "Profit to " + entity.getName();
+		entityColumnNames.add(title);
+		addColumn(title, 
+				new IFormatter() {
+					@Override
+					public String format(final Object object) {
+						if (object instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) object;
+							if (slotVisit.getSlot() instanceof LoadSlot) {
+								// display P&L
+								int value = 0;
+								final CargoAllocation allocation = slotVisit.getCargoAllocation();
+								if (allocation.getLoadRevenue().getEntity().equals(entity)) {
+									value += allocation.getLoadRevenue().getTaxedValue();
+								}
+								if (allocation.getShippingRevenue().getEntity().equals(entity)) {
+									value += allocation.getShippingRevenue().getTaxedValue();
+								}
+								if (allocation.getDischargeRevenue().getEntity().equals(entity)) {
+									value += allocation.getDischargeRevenue().getTaxedValue();
+								}
+								return integerFormatter.format((Integer)value);
+							}
+						}
+						return "";
+					}
+				});
+	}
 }

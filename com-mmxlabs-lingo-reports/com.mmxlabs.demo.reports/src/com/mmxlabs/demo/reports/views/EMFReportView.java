@@ -14,7 +14,6 @@ import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -22,6 +21,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -148,13 +149,18 @@ public abstract class EMFReportView extends ViewPart implements
 
 	protected void addColumn(final String title, final IFormatter formatter,
 			final Object... path) {
-		handlers.add(new ColumnHandler(formatter, path, title));
+		final ColumnHandler handler = new ColumnHandler(formatter, path, title);
+		handlers.add(handler);
+		
+		if (viewer != null) {
+			handler.createColumn(viewer).getColumn().pack();
+		}
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+				| SWT.V_SCROLL | SWT.FULL_SELECTION);
 
 		viewer.setContentProvider(getContentProvider());
 
@@ -271,5 +277,19 @@ public abstract class EMFReportView extends ViewPart implements
 				}
 			}
 		}
+	}
+
+	public void removeColumn(String title) {
+		for (final ColumnHandler h : handlers) {
+			if (h.title.equals(title)) {
+				handlers.remove(h);
+				break;
+			}
+		}
+		for (final TableColumn column  : viewer.getTable().getColumns()) {
+			if (column.getText().equals(title))
+				column.dispose(); //TODO this might be pretty wrong.
+		}
+		viewer.getTable().pack(true);
 	}
 }
