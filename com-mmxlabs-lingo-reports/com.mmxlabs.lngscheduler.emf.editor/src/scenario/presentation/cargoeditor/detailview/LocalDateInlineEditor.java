@@ -9,8 +9,12 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
 import scenario.port.Port;
 import scenario.port.PortPackage;
@@ -43,6 +47,25 @@ public class LocalDateInlineEditor extends BasicAttributeInlineEditor {
 	public Control createControl(Composite parent) {
 		final DateAndTime dateAndTime = new DateAndTime(parent, SWT.NONE, false);
 		this.dateAndTime = dateAndTime;
+		
+		final Listener listener = new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
+				doSetValue(dateAndTime.getValue().getTime());
+			}
+		};
+		
+		dateAndTime.addListener(SWT.Selection, listener);
+		dateAndTime.addListener(SWT.DefaultSelection, listener);
+		
+		dateAndTime.addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				dateAndTime.removeListener(SWT.Selection, listener);
+				dateAndTime.removeListener(SWT.DefaultSelection, listener);
+			}
+		});
+		
 		return dateAndTime;
 	}
 	

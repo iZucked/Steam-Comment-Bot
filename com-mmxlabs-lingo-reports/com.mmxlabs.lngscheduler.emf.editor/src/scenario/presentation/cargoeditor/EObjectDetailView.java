@@ -114,7 +114,7 @@ public class EObjectDetailView extends Composite {
 			// create label for this attribute
 			final Label attributeLabel = new Label(controls, SWT.RIGHT);
 			attributeLabel.setText(unmangle(attribute.getName()) + ": ");
-			final GridData labelData = new GridData(SWT.RIGHT, SWT.FILL, false,
+			final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER, false,
 					false);
 			attributeLabel.setLayoutData(labelData);
 
