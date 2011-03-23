@@ -56,7 +56,7 @@ public class IndividualEvaluatorTest {
 			AbstractSequenceScheduler<Object> {
 
 		@Override
-		public ScheduledSequences schedule(ISequences<Object> sequences) {
+		public ScheduledSequences schedule(ISequences<Object> sequences, boolean b) {
 			throw new UnsupportedOperationException();
 		}
 	}

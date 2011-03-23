@@ -113,7 +113,7 @@ public class EnumeratingSequenceScheduler<T> extends
 	}
 
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences) {
+	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
 
 		resetBest();
 

@@ -27,7 +27,7 @@ public class RelaxingSequenceScheduler<T> extends
 	final int steps = 20;
 	
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences) {
+	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
 		setSequences(sequences);
 		resetBest();
 		prepare();

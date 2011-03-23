@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 public final class SimpleSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
 
-	public ScheduledSequences schedule(final ISequences<T> sequences) {
+	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
 		final ScheduledSequences answer = new ScheduledSequences();
 		
 		for (Map.Entry<IResource, ISequence<T>> entry : sequences.getSequences().entrySet()) {

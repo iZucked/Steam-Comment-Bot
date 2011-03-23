@@ -1040,7 +1040,7 @@ public final class AbstractSequenceSchedulerTest {
 			AbstractSequenceScheduler<T> {
 
 		@Override
-		public ScheduledSequences schedule(ISequences<T> sequences) {
+		public ScheduledSequences schedule(ISequences<T> sequences, boolean b) {
 			throw new UnsupportedOperationException(
 					"Method invocation is not part of the tests!");
 

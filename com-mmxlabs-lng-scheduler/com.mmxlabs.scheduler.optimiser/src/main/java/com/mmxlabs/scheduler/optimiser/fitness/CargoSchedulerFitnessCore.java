@@ -106,7 +106,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public boolean evaluate(final ISequences<T> sequences) {
 		return planIterator.iterateSchedulerComponents(components,
-				scheduler.schedule(sequences));
+				scheduler.schedule(sequences, false));
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 		// components can have global effects, we really need to have a
 		// cooperation with the scheduler here to make this any use.
 		return planIterator.iterateSchedulerComponents(components,
-				scheduler.schedule(sequences));
+				scheduler.schedule(sequences, false));
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void annotate(final ISequences<T> sequences,
 			final IAnnotatedSolution<T> solution) {
-		final ScheduledSequences schedule = scheduler.schedule(sequences);
+		final ScheduledSequences schedule = scheduler.schedule(sequences, true);
 		// Do basic voyageplan annotation
 		final VoyagePlanAnnotator<T> annotator = new VoyagePlanAnnotator<T>();
 

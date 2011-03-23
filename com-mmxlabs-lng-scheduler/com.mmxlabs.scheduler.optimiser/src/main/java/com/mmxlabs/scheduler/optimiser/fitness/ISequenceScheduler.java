@@ -24,7 +24,7 @@ public interface ISequenceScheduler<T> {
 	 * @return
 	 */
 	ScheduledSequences schedule(
-			ISequences<T> sequences);
+			ISequences<T> sequences, boolean forExport);
 
 	/**
 	 * Release resources.

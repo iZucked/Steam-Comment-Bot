@@ -26,6 +26,11 @@ public class DirectRandomSequenceScheduler<T> extends
 	private int seed = 0;
 	private Random random;
 	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);
+	/**
+	 * Do this many times the usual number of samples for an exported solution.
+	 * Slightly improves the quality of the exported schedule.
+	 */
+	private static final int EXPORT_INTENSITY = 50; 
 
 	/**
 	 * Never do more than this many samples
@@ -39,13 +44,14 @@ public class DirectRandomSequenceScheduler<T> extends
 	
 	
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences) {
+	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
 		random = new Random(seed);
 		
 		setSequences(sequences);
 		resetBest();
 		final long approximateSpaceSize = prepare(samplingUpperBound*10000);
-		final int sampleCount = (int) Math.min(samplingUpperBound, (int)(sampleProportion * approximateSpaceSize));
+		final int sampleCount = ((int) Math.min(samplingUpperBound, (int)(sampleProportion * approximateSpaceSize)))
+			* (forExport ? EXPORT_INTENSITY : 1);
 		
 		int failures = 0;
 		
