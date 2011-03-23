@@ -105,6 +105,11 @@ public class SchedulerView extends ViewPart {
 			public int getMinimumSectionHeight() {
 				return 10;
 			}
+
+			@Override
+			public int getNumberOfDaysToAppendForEndOfDay() {
+				return 0;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
@@ -274,13 +279,17 @@ public class SchedulerView extends ViewPart {
 		getSite().setSelectionProvider(viewer);
 
 		// Update view from current selection
-		final ISelectionProvider selectionProvider = getSite().getSelectionProvider();
+		final ISelectionProvider selectionProvider = getSite()
+				.getSelectionProvider();
 		if (selectionProvider != null) {
-			selectionListener.selectionChanged(null, selectionProvider.getSelection());
+			selectionListener.selectionChanged(null,
+					selectionProvider.getSelection());
 		} else {
 			// No current provider? Look at the scenario navigator
 			// TODO: Ensure this is kept in sync
-			final ISelection selection = getSite().getWorkbenchWindow().getSelectionService().getSelection("com.mmxlabs.rcp.navigator");
+			final ISelection selection = getSite().getWorkbenchWindow()
+					.getSelectionService()
+					.getSelection("com.mmxlabs.rcp.navigator");
 			selectionListener.selectionChanged(null, selection);
 		}
 	}
