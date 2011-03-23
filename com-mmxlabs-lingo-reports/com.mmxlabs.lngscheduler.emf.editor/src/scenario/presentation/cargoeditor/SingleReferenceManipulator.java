@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.NameList;
 
@@ -40,7 +41,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-		canEdit(object);
+		if (valueList.size() == 0) canEdit(object);
 		final EObject value = (EObject) super.getValue(object);
 
 		int x = valueList.indexOf(value);
@@ -59,7 +60,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public CellEditor getCellEditor(final Composite c, final Object object) {
-		editor = new ComboBoxCellEditor(c, new String[0]);
+		editor = new ComboBoxCellEditor(c, new String[0], SWT.READ_ONLY);
 		setEditorNames();
 		return editor;
 	}
