@@ -13,6 +13,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -44,6 +48,28 @@ public class ReferenceInlineEditor extends BasicAttributeInlineEditor {
 	public Control createControl(final Composite parent) {
 		final Combo combo = new Combo(parent, SWT.READ_ONLY);
 		this.combo = combo;
+		
+		combo.addSelectionListener(new SelectionListener() {
+			{
+				final SelectionListener sl = this;
+				combo.addDisposeListener(new DisposeListener() {
+					@Override
+					public void widgetDisposed(DisposeEvent e) {
+						combo.removeSelectionListener(sl);
+					}
+				});
+			}
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				doSetValue(valueList.get(nameList.indexOf(combo.getText())));
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+		});
+		
 		return combo;
 	}
 

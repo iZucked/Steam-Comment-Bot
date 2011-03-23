@@ -104,7 +104,7 @@ public class EObjectDetailView extends Composite {
 			groupCount++;
 		}
 
-		this.setLayout(new GridLayout(groupCount, false));
+		this.setLayout(new GridLayout(groupCount, true));
 	}
 
 	private void addGroupForEClass(final EClass objectClass,

@@ -1822,6 +1822,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								contractProvider);
 					}
 				});
+		
+		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getMarket(), 
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature, editingDomain,
+								marketProvider);
+					}
+				});
+		
 		return page;
 	}
 
