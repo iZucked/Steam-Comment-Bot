@@ -46,18 +46,24 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		input = object;
 		if (input != null) {
 			input.eAdapters().add(this);
-			updateDisplay(getValue());
+			doUpdateDisplayWithValue();
 		}
 	}
 
+	private synchronized void doUpdateDisplayWithValue() {
+		if (currentlySettingValue) return;
+		currentlySettingValue = true;
+		updateDisplay(getValue());
+		currentlySettingValue = false;
+	}
+	
 	@Override
 	public void notifyChanged(final Notification msg) {
 		super.notifyChanged(msg);
 		// check if msg is relevant
 		if (msg.getFeature() != null && msg.getFeature().equals(feature)) {
 			// it is a change to our feature
-			if (!currentlySettingValue)
-				updateDisplay(getValue());
+			doUpdateDisplayWithValue();
 		}
 	}
 
@@ -70,11 +76,12 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	 * Subclasses should call this method when their value has been changed.
 	 * @param value
 	 */
-	protected void doSetValue(final Object value) {
+	protected synchronized void doSetValue(final Object value) {
 		if (currentlySettingValue) return; //avoid re-entering
 		currentlySettingValue = true;
 		final Object currentValue = getValue();
-		if (!((currentValue == null && value == null) || ((currentValue != null && value != null) && currentValue
+		if (!((currentValue == null && value == null) || 
+				((currentValue != null && value != null) && currentValue
 				.equals(value)))) {
 			final Command command = createSetCommand(value);
 			editingDomain.getCommandStack().execute(command);
