@@ -52,7 +52,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public Viewer createViewer(final Composite parent) {
-		viewer = new TableViewer(parent);
+		viewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		return viewer;
 	}
 
