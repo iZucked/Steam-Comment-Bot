@@ -1319,11 +1319,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						loadContractProvider, getEditingDomain()) {
 					
 					private void setNullValue(final Object object) {
-						NULL_STRING = 
-							((Slot) object).getPort().getDefaultContract().getName() + " [from " +
-							((Slot) object).getPort().getName() + "]";
+						if ( ((Slot) object).getPort().getDefaultContract() == null) {
+							NULL_STRING = "empty";
+						} else {
+							NULL_STRING = ((Slot) object).getPort()
+									.getDefaultContract().getName()
+									+ " [from "
+									+ ((Slot) object).getPort().getName() + "]";
+						}
 					}
-					
+
 					@Override
 					public String render(final Object object) {
 						setNullValue(object);
@@ -1361,9 +1366,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						loadContractProvider, getEditingDomain()) {
 					
 					private void setNullValue(final Object object) {
-						NULL_STRING = 
-							((Slot) object).getPort().getDefaultContract().getName() + " [from " +
-							((Slot) object).getPort().getName() + "]";
+						if ( ((Slot) object).getPort().getDefaultContract() == null) {
+							NULL_STRING = "empty";
+						} else {
+							NULL_STRING = ((Slot) object).getPort()
+									.getDefaultContract().getName()
+									+ " [from "
+									+ ((Slot) object).getPort().getName() + "]";
+						}
 					}
 					
 					@Override

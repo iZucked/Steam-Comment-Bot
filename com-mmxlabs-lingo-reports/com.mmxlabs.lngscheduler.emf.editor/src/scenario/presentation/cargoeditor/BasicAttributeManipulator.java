@@ -35,7 +35,9 @@ public class BasicAttributeManipulator implements ICellManipulator,
 
 	@Override
 	public String render(final Object object) {
-		return getValue(object).toString();
+		final Object value = getValue(object);
+		if (value == null) return "null";
+		else return value.toString();
 	}
 
 	@Override

@@ -66,7 +66,11 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	final ArrayList<EObject> valueList = new ArrayList<EObject>();
 	@Override
 	public Object getValue(final Object object) {
-		return (Integer) valueList.indexOf(super.getValue(object));
+		int x = valueList.indexOf(super.getValue(object));
+		if (x == -1) {
+			System.err.println("index of " + object + ", " + super.getValue(object) + " is -1!");
+		}
+		return x;
 	}
 
 	@Override
