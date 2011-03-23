@@ -12,7 +12,6 @@ import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
@@ -33,6 +32,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import scenario.presentation.ScenarioEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
  * A viewerpane which displays a list of EObjects in a table and lets you edit
@@ -54,6 +54,11 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	@Override
 	public Viewer createViewer(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.FULL_SELECTION);
+
+		Action a = new PackTableColumnsAction(viewer);
+		getToolBarManager().add(a);
+
+		getToolBarManager().update(true);
 		return viewer;
 	}
 
@@ -92,7 +97,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				final CellEditor result = manipulator.getCellEditor(viewer.getTable(), path.get((EObject) element));
+				final CellEditor result = manipulator.getCellEditor(
+						viewer.getTable(), path.get((EObject) element));
 				return result;
 			}
 
@@ -134,13 +140,12 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 		});
 
-		
-		//TODO somewhere inside this, we need to make ourselves listen
+		// TODO somewhere inside this, we need to make ourselves listen
 		// for deep changes. not sure how
-		
+
 		viewer.setContentProvider(new AdapterFactoryContentProvider(
 				adapterFactory) {
-			
+
 			@SuppressWarnings("rawtypes")
 			@Override
 			public Object[] getElements(Object object) {
