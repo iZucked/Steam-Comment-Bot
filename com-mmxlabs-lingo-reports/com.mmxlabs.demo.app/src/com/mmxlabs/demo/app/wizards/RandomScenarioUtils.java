@@ -427,7 +427,6 @@ public class RandomScenarioUtils {
 				final double dFactor = Math.exp(locality * dprop);
 				final double p = loadFactor * dFactor;
 //					loadFactor ;+ dFactor
-
 				;
 
 				System.err.println(load.getKey() + " to " + discharge.getKey()
