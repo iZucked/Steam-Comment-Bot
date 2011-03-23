@@ -18,6 +18,10 @@ import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
+ * 
+ * TODO sometimes field B should be refreshed when field A changes; currently
+ * 		only field A knows about changes because they happen in here.
+ * 
  * @author Tom Hinton
  * 
  */
