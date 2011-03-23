@@ -8,6 +8,7 @@ package com.mmxlabs.scheduleview.views;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -163,7 +164,7 @@ public class SchedulerView extends ViewPart {
 				// Filter out non-editor selections - Unfortunately the
 				// addSelectionLister part ID filters do not work with editors
 				if (part instanceof IEditorPart
-						|| (part!= null && part.getSite().getId()
+						|| (part != null && part.getSite().getId()
 								.equals("com.mmxlabs.rcp.navigator"))) {
 
 					// if selection instanceof etc.
@@ -178,10 +179,19 @@ public class SchedulerView extends ViewPart {
 								if (trySelectObject(o)) {
 									return;
 								} else if (o instanceof IAdaptable) {
-									final Object adapter = ((IAdaptable) o)
+									Object adapter = ((IAdaptable) o)
 											.getAdapter(Schedule.class);
+									if (adapter == null) {
+										adapter = Platform
+												.getAdapterManager()
+												.loadAdapter(
+														o,
+														Schedule.class
+																.getCanonicalName());
+									}
 									if (adapter != null) {
 										setInput(((Schedule) adapter));
+										return;
 									}
 								}
 							}
@@ -355,7 +365,7 @@ public class SchedulerView extends ViewPart {
 			};
 		};
 		toggleColourSchemeAction.setText("Switch Colour Scheme");
-		
+
 		packAction = new PackAction(viewer.getGanttChart());
 	}
 
