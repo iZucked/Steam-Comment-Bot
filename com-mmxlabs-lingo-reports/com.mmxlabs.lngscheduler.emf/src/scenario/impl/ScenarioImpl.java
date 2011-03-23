@@ -646,9 +646,9 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 */
 	public FleetModel getOrCreateFleetModel() {
 		if (getFleetModel() == null)
-			setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());
-		
-		return getFleetModel();
+					setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());
+				
+				return getFleetModel();
 	}
 
 	/**
@@ -658,8 +658,8 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 */
 	public ScheduleModel getOrCreateScheduleModel() {
 		if (getScheduleModel() == null)
-			setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());
-		return getScheduleModel();
+					setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());
+				return getScheduleModel();
 	}
 
 	/**

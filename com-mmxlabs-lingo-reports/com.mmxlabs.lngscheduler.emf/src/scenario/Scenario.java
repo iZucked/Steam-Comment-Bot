@@ -336,7 +336,7 @@ public interface Scenario extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getFleetModel() == null)\n\tsetFleetModel(FleetFactory.eINSTANCE.createFleetModel());\n\nreturn getFleetModel();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getFleetModel() == null)\n\t\t\tsetFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());\n\t\t\n\t\treturn getFleetModel();'"
 	 * @generated
 	 */
 	FleetModel getOrCreateFleetModel();
@@ -345,7 +345,7 @@ public interface Scenario extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getScheduleModel() == null)\n\tsetScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());\nreturn getScheduleModel();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getScheduleModel() == null)\n\t\t\tsetScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());\n\t\treturn getScheduleModel();'"
 	 * @generated
 	 */
 	ScheduleModel getOrCreateScheduleModel();
