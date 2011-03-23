@@ -2,7 +2,6 @@ package com.mmxlabs.rcp.navigator.handlers;
 
 import java.util.Iterator;
 
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
@@ -14,7 +13,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import scenario.Scenario;
 
 import com.mmxlabs.jobcontoller.Activator;
-import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 
@@ -24,7 +22,7 @@ import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-public class StopOptimisationHandler extends AbstractHandler {
+public class StopOptimisationHandler extends AbstractOptimisationHandler {
 
 	/**
 	 * The constructor.
@@ -39,31 +37,26 @@ public class StopOptimisationHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final String id = event.getCommand().getId();
-
-		final IJobManager jmv = Activator.getDefault().getJobManager();
-
 		final ISelection selection = HandlerUtil
 				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (selection != null & selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
-			if (id.equals("com.mmxlabs.rcp.navigator.commands.optimisation.terminate")) {
+			final Iterator<?> itr = strucSelection.iterator();
+			while (itr.hasNext()) {
+				final Object obj = itr.next();
+				if (obj instanceof IResource) {
+					final IResource resource = (IResource) obj;
+					final IManagedJob job = Activator.getDefault()
+							.getJobManager().findJobForResource(resource);
 
-				final Iterator<?> itr = strucSelection.iterator();
-				while (itr.hasNext()) {
-					final Object obj = itr.next();
-					if (obj instanceof IResource) {
-						IResource resource = (IResource)obj;
-						IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
+					if (job != null) {
+						final JobState jobState = job.getJobState();
 
-
-						if (job != null) {
-							final JobState jobState = job.getJobState();
-							if (!(jobState == JobState.CANCELLED
-									|| jobState == JobState.CANCELLING || jobState == JobState.COMPLETED)) {
-								job.cancel();
-							}
+						// Can job still be cancelled?
+						if (!(jobState == JobState.CANCELLED
+								|| jobState == JobState.CANCELLING || jobState == JobState.COMPLETED)) {
+							job.cancel();
 						}
 					}
 				}
@@ -101,14 +94,16 @@ public class StopOptimisationHandler extends AbstractHandler {
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof IResource) {
-					IResource resource = (IResource)obj;
-					Scenario s = (Scenario)resource.getAdapter(Scenario.class);
+					final IResource resource = (IResource) obj;
+					final Scenario s = (Scenario) resource
+							.getAdapter(Scenario.class);
 					if (s == null) {
 						return false;
 					}
-					
-					IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
-					
+
+					final IManagedJob job = Activator.getDefault()
+							.getJobManager().findJobForResource(resource);
+
 					if (job == null) {
 						return false;
 					}

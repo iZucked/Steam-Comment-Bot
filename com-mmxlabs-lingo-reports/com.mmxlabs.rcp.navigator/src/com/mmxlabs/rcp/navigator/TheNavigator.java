@@ -16,12 +16,66 @@ import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
 
 public class TheNavigator extends CommonNavigator {
 
+	final IJobManagerListener jobManagerListener = new JobManagerListener() {
+
+		/**
+		 * Update the checked status of items in the tree
+		 * 
+		 * @param item
+		 * @param res
+		 * @param check
+		 */
+		private void checkItems(final TreeItem item, final IResource res,
+				final boolean check) {
+
+			// See if we have a match
+			if (item.getData() instanceof IResource) {
+				final IResource resource = (IResource) item.getData();
+				if (resource == res) {
+					item.setChecked(check);
+					// TODO: Break out of recursive loop?
+				}
+			}
+			// Recurse down the tree...
+			for (final TreeItem i : item.getItems()) {
+				checkItems(i, res, check);
+			}
+		}
+
+		@Override
+		public void jobSelected(final IJobManager jobManager,
+				final IManagedJob job, final IResource resource) {
+
+			// TODO: Update Check status of widget
+
+			final TreeItem[] items = TheNavigator.this.getCommonViewer()
+					.getTree().getItems();
+			for (final TreeItem i : items) {
+				checkItems(i, resource, true);
+			}
+			// No need to redraw?
+			// TheNavigator.this.getCommonViewer().getTree().redraw();
+		}
+
+		@Override
+		public void jobDeselected(final IJobManager jobManager,
+				final IManagedJob job, final IResource resource) {
+			final TreeItem[] items = TheNavigator.this.getCommonViewer()
+					.getTree().getItems();
+			for (final TreeItem i : items) {
+				checkItems(i, resource, false);
+			}
+		}
+	};
+
 	@Override
 	protected CommonViewer createCommonViewerObject(final Composite aParent) {
-		return new CommonViewer(getViewSite().getId(), aParent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
+		return new CommonViewer(getViewSite().getId(), aParent, SWT.MULTI
+				| SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
 	}
 
 	@Override
@@ -61,64 +115,33 @@ public class TheNavigator extends CommonNavigator {
 
 			@Override
 			public void handleEvent(final Event event) {
-				if (event.item instanceof Button && event.item.getData() instanceof IResource) {
+				if (event.item instanceof Button
+						&& event.item.getData() instanceof IResource) {
 					final IResource resource = (IResource) event.item.getData();
 					final Button button = (Button) event.item;
 
 					// Set selection status
-					Activator.getDefault().getJobManager().setResourceSelection(resource, button.getSelection());
+					Activator
+							.getDefault()
+							.getJobManager()
+							.setResourceSelection(resource,
+									button.getSelection());
 				}
 			}
 		});
 
-		final IJobManagerListener jobManagerListener = new IJobManagerListener() {
-
-			void checkItems(final TreeItem item, final IResource res, final boolean check) {
-
-				if (item.getData() instanceof IResource) {
-					final IResource resource = (IResource) item.getData();
-					if (resource == res) {
-						item.setChecked(check);
-					}
-				}
-				for (final TreeItem i : item.getItems()) {
-					checkItems(i, res, check);
-				}
-			}
-
-			@Override
-			public void jobSelected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
-
-				// TODO: Update Check status of widget
-
-				final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
-				for (final TreeItem i : items) {
-					checkItems(i, resource, true);
-				}
-				TheNavigator.this.getCommonViewer().getTree().redraw();
-			}
-
-			@Override
-			public void jobRemoved(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void jobDeselected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
-				final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
-				for (final TreeItem i : items) {
-					checkItems(i, resource, false);
-				}
-			}
-
-			@Override
-			public void jobAdded(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
-
-			}
-		};
-		Activator.getDefault().getJobManager().addJobManagerListener(jobManagerListener);
+		Activator.getDefault().getJobManager()
+				.addJobManagerListener(jobManagerListener);
 
 		return aViewer;
+	}
+
+	@Override
+	public void dispose() {
+
+		Activator.getDefault().getJobManager()
+				.removeJobManagerListener(jobManagerListener);
+
+		super.dispose();
 	}
 }
