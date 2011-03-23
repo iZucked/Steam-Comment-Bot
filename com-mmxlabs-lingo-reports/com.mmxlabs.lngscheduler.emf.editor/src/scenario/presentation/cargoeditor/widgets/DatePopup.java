@@ -30,7 +30,6 @@ public class DatePopup extends PopupComposite {
 	
 	public DatePopup(Composite parent, int style) {
 		super(parent, style);
-		
 	}
 
 	private Listener getListener() {
@@ -75,13 +74,6 @@ public class DatePopup extends PopupComposite {
 	protected Composite createSmallWidget(final Composite parent, int style) {
 		dateAndTime = new DateAndTime(parent, style, false);
 		dateAndTime.addListener(SWT.Selection, getListener());
-		
-		Listener forward = new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				
-			}
-		};
 		
 		dateAndTime.addListener(SWT.KeyDown, new Forward(SWT.KeyDown));
 		dateAndTime.addListener(SWT.KeyUp, new Forward(SWT.KeyUp));

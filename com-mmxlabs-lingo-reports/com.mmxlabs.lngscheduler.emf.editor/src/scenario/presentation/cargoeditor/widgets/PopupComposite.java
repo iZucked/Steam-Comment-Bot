@@ -385,14 +385,7 @@ public abstract class PopupComposite extends Composite {
 	void createPopup() {
 		// create shell and list
 		popup = new Shell(getShell(), SWT.NO_TRIM | SWT.ON_TOP);
-		int style = getStyle();
-		int listStyle = SWT.SINGLE | SWT.V_SCROLL;
-		if ((style & SWT.FLAT) != 0)
-			listStyle |= SWT.FLAT;
-		if ((style & SWT.RIGHT_TO_LEFT) != 0)
-			listStyle |= SWT.RIGHT_TO_LEFT;
-		if ((style & SWT.LEFT_TO_RIGHT) != 0)
-			listStyle |= SWT.LEFT_TO_RIGHT;
+		
 //		list = new List(popup, listStyle);
 //		if (font != null)
 //			list.setFont(font);
@@ -451,8 +444,8 @@ public abstract class PopupComposite extends Composite {
 			}
 			return;
 		}
-		if (!isVisible())
-			return;
+//		if (!isVisible())
+//			return;
 		if (getShell() != popup.getParent()) {
 //			String[] items = list.getItems();
 //			int selectionIndex = list.getSelectionIndex();
@@ -489,9 +482,12 @@ public abstract class PopupComposite extends Composite {
 			x = displayRect.x + displayRect.width - listRect.width;
 		popup.setBounds(x, y, width, height);
 		popup.setVisible(true);
-//		if (isFocusControl())
-//			list.setFocus();
+		if (isFocusControl())
+			popup.getChildren()[0].setFocus();
 
+		popup.open();
+		
+		
 		/*
 		 * Add a filter to listen to scrolling of the parent composite, when the
 		 * drop-down is visible. Remove the filter when drop-down is not
