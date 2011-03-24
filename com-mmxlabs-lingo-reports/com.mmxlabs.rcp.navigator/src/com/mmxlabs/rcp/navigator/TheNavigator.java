@@ -74,7 +74,10 @@ public class TheNavigator extends CommonNavigator {
 	@Override
 	protected CommonViewer createCommonViewerObject(final Composite aParent) {
 		return new CommonViewer(getViewSite().getId(), aParent, SWT.MULTI
-				| SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
+				| SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL /*
+																	 * |
+																	 * SWT.CHECK
+																	 */);
 	}
 
 	@Override
