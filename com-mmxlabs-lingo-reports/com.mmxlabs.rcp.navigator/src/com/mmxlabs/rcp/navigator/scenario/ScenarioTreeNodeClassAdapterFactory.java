@@ -15,6 +15,9 @@ import com.mmxlabs.rcp.navigator.ecore.EcoreContentProvider;
 /**
  * Needed to make Eclipse Core Expressions resolve the adapt method for
  * arbitrary objects
+
+ * 
+ * TODO: This is no longer used for it's original purpose and should be renamed
  * 
  * @author Simon Goodall
  * 
