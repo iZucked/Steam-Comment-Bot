@@ -136,5 +136,10 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	public final Scenario getScenario() {
 		return scenario;
 	}
+	
+	@Override
+	public int getTotalProgress() {
+		return optimiser == null ? -1 : optimiser.getNumberOfIterations();
+	}
 
 }
