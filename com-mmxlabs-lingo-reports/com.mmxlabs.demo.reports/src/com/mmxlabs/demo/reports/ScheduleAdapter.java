@@ -41,55 +41,48 @@ public class ScheduleAdapter {
 
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
-			if (sel.isEmpty()) {
-				return Collections.emptyList();
-			} else {
-				final Iterator<?> iter = sel.iterator();
-				while (iter.hasNext()) {
-					final Object o = iter.next();
-					// Try direct instanceof checks
-					if (o instanceof Schedule) {
-						schedules.add((Schedule) o);
-					} else if (o instanceof Scenario) {
-						Schedule schedule = getLastScheduleFromScenario((Scenario) o);
-						if (schedule != null) {
-							schedules.add(schedule);
-						}
-					} else {
-						// Try IAdaptable
-						if (o instanceof IAdaptable) {
-							Object adapted = ((IAdaptable) o)
-									.getAdapter(Schedule.class);
+			final Iterator<?> iter = sel.iterator();
+			while (iter.hasNext()) {
+				final Object o = iter.next();
+				// Try direct instanceof checks
+				if (o instanceof Schedule) {
+					schedules.add((Schedule) o);
+				} else if (o instanceof Scenario) {
+					Schedule schedule = getLastScheduleFromScenario((Scenario) o);
+					if (schedule != null) {
+						schedules.add(schedule);
+					}
+				} else {
+					// Try IAdaptable
+					if (o instanceof IAdaptable) {
+						Object adapted = ((IAdaptable) o)
+								.getAdapter(Schedule.class);
+						if (adapted != null) {
+							schedules.add((Schedule) adapted);
+						} else {
+							adapted = ((IAdaptable) o)
+									.getAdapter(Scenario.class);
 							if (adapted != null) {
-								schedules.add((Schedule) adapted);
-							} else {
-								adapted = ((IAdaptable) o)
-										.getAdapter(Scenario.class);
-								if (adapted != null) {
-									Schedule schedule = getLastScheduleFromScenario((Scenario) adapted);
-									if (schedule != null) {
-										schedules.add(schedule);
-									}
+								Schedule schedule = getLastScheduleFromScenario((Scenario) adapted);
+								if (schedule != null) {
+									schedules.add(schedule);
 								}
 							}
+						}
+					} else {
+						// Finally try the platform adapter manager
+						Object adapted = Platform.getAdapterManager()
+								.loadAdapter(o,
+										Schedule.class.getCanonicalName());
+						if (adapted != null) {
+							schedules.add((Schedule) adapted);
 						} else {
-							// Finally try the platform adapter manager
-							Object adapted = Platform.getAdapterManager()
-									.loadAdapter(o,
-											Schedule.class.getCanonicalName());
+							adapted = Platform.getAdapterManager().loadAdapter(
+									o, Scenario.class.getCanonicalName());
 							if (adapted != null) {
-								schedules.add((Schedule) adapted);
-							} else {
-								adapted = Platform.getAdapterManager()
-										.loadAdapter(
-												o,
-												Scenario.class
-														.getCanonicalName());
-								if (adapted != null) {
-									Schedule schedule = getLastScheduleFromScenario((Scenario) adapted);
-									if (schedule != null) {
-										schedules.add(schedule);
-									}
+								Schedule schedule = getLastScheduleFromScenario((Scenario) adapted);
+								if (schedule != null) {
+									schedules.add(schedule);
 								}
 							}
 						}
