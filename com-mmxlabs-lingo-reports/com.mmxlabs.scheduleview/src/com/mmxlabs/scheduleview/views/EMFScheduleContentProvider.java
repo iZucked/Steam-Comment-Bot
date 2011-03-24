@@ -6,8 +6,11 @@
  */
 package com.mmxlabs.scheduleview.views;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
@@ -36,7 +39,18 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public Object[] getChildren(final Object parent) {
-		if (parent instanceof Schedule) {
+		
+		if (parent instanceof Collection<?>) {
+			List<Object> children = new ArrayList<Object>();
+
+			for (Object o : (Collection)parent) {
+				if (o instanceof Schedule) {
+					children.addAll(((Schedule) o).getSequences());
+				}
+			}
+			
+			return children.toArray();
+		} else if (parent instanceof Schedule) {
 			final Schedule schedule = (Schedule) parent;
 
 			final EList<Sequence> sequences = schedule.getSequences();
