@@ -157,6 +157,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		final Listener mouseDownListener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
+				//alernatively, check here whether click lies in the selected row.
 				setShouldEdit(false);
 			}			
 		};
@@ -225,6 +226,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						while ((source = source.eContainer()) != null) {
 							if (currentElements.contains(source)) {
 								viewer.update(source, null);
+								// this seems to clear the selection
 								return;
 							}
 						}
