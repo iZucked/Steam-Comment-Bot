@@ -65,6 +65,10 @@ public class SchedulerView extends ViewPart {
 	private ISelectionListener selectionListener;
 
 	private PackAction packAction;
+	
+	private Action sortModeAction;
+
+	ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
 
 	/**
 	 * The constructor.
@@ -120,7 +124,11 @@ public class SchedulerView extends ViewPart {
 		viewer.setContentProvider(new EMFScheduleContentProvider());
 		viewer.setLabelProvider(new EMFScheduleLabelProvider());
 
-		// viewer.setSorter(new NameSorter());
+		// TODO: Hook up action to alter sort behaviour
+		// Then refresh
+		// E.g. mode?
+		// Move into separate class
+		viewer.setComparator(viewerComparator);
 
 		viewer.setInput(getViewSite());
 
@@ -338,6 +346,7 @@ public class SchedulerView extends ViewPart {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
 		manager.add(toggleColourSchemeAction);
+		manager.add(sortModeAction);
 		manager.add(packAction);
 	}
 
@@ -358,6 +367,7 @@ public class SchedulerView extends ViewPart {
 		toggleColourSchemeAction = new Action() {
 			EMFScheduleLabelProvider.Mode mode = EMFScheduleLabelProvider.Mode.VesselState;
 
+			@Override
 			public void run() {
 
 				final EMFScheduleLabelProvider lp = (EMFScheduleLabelProvider) (viewer
@@ -376,6 +386,27 @@ public class SchedulerView extends ViewPart {
 		toggleColourSchemeAction.setText("Switch Colour Scheme");
 
 		packAction = new PackAction(viewer.getGanttChart());
+		packAction.setImageDescriptor(Activator
+				.getImageDescriptor("/icons/pack.gif"));
+		
+		sortModeAction = new Action() {
+
+			@Override
+			public void run() {
+
+				ScenarioViewerComparator.Mode mode = viewerComparator.getMode();
+				final int nextMode = (mode.ordinal() + 1)
+						% ScenarioViewerComparator.Mode.values().length;
+				mode = ScenarioViewerComparator.Mode.values()[nextMode];
+				viewerComparator.setMode(mode);
+
+				viewer.setInput(viewer.getInput());
+
+//				viewer.
+			};
+		};
+		sortModeAction.setText("Switch Sort Mode");
+
 	}
 
 	/**
