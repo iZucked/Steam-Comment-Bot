@@ -146,7 +146,9 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 			if (element instanceof IResource) {
 				final IManagedJob job = com.mmxlabs.jobcontoller.Activator.getDefault().getJobManager().findJobForResource((IResource) element);
 				if (job != null) {
-					return job.getJobState().toString();
+					float progress = (int)((float)job.getProgress() / (float)job.getTotalProgress() * 100.0f);
+					
+					return job.getJobState().toString() + String.format(" - %.02f %%", progress);
 				}
 				return "";
 			}

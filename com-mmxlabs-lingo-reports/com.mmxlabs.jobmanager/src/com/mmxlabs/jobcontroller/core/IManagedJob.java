@@ -40,6 +40,8 @@ public interface IManagedJob {
 	JobState getJobState();
 
 	int getProgress();
+	
+	int getTotalProgress();
 
 	void addListener(IManagedJobListener listener);
 
