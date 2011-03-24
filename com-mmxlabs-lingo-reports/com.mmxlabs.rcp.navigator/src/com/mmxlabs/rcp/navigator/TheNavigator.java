@@ -107,7 +107,7 @@ public class TheNavigator extends CommonNavigator {
 		column2.setWidth(150);
 		// column2.setWidth(cols[1]);
 		// column2.addSelectionListener(getHeaderListener(1));
-
+		
 		initListeners(aViewer);
 		aViewer.getNavigatorContentService().restoreState(memento);
 

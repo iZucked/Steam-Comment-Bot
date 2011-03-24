@@ -5,6 +5,10 @@ import java.util.Iterator;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -139,7 +143,19 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		});
 
 		// TODO: The UI will freeze at this point -- perhaps a Runnable here?
-		newJob.prepare();
+		
+		final Job eclipseJob = new Job("Evaluate initial state of " + scenario.getName()) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				newJob.prepare();
+				return Status.OK_STATUS;
+			}
+		};
+		
+		eclipseJob.setPriority(Job.SHORT);
+		eclipseJob.schedule();
+		
+//		newJob.prepare();
 
 		return newJob;
 	}

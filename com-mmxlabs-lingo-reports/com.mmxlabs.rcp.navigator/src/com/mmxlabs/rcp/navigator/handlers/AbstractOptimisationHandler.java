@@ -30,7 +30,7 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 	private final IManagedJobListener jobListener = new ManagedJobListener() {
 
 		@Override
-		public void jobStateChanged(final IManagedJob job,
+		public boolean jobStateChanged(final IManagedJob job,
 				final JobState oldState, final JobState newState) {
 
 			// Create Event to trigger enabled state update
@@ -39,6 +39,7 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 
 			// Fire the event
 			AbstractOptimisationHandler.this.fireHandlerChanged(event);
+			return true;
 		}
 	};
 

@@ -2,8 +2,6 @@ package com.mmxlabs.rcp.navigator.scenario;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
@@ -15,10 +13,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionContentProvider;
-
-import scenario.Scenario;
 
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
@@ -62,7 +57,7 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 	//
 	// }
 	//
-	// @Override
+	// @OverrideS
 	// public void resourceChanged(final ScenarioTreeNodeClass node, final
 	// IResource oldResource, final IResource newResource) {
 	//
@@ -165,7 +160,7 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 	IManagedJobListener listener = new IManagedJobListener() {
 
 		@Override
-		public void jobStateChanged(final IManagedJob job,
+		public boolean jobStateChanged(final IManagedJob job,
 				final JobState oldState, final JobState newState) {
 
 			// RE_SELECT SELECTIOB
@@ -182,10 +177,11 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 				}
 			});
 			// }
+			return true;
 		}
 
 		@Override
-		public void jobProgressUpdated(final IManagedJob job,
+		public boolean jobProgressUpdated(final IManagedJob job,
 				final int progressDelta) {
 
 			final TreeViewer tv = (TreeViewer) viewer;
@@ -198,9 +194,10 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 				public void run() {
 					final TreeItem[] current = tv.getTree().getSelection();
 					tv.getTree().setSelection(current);
+					tv.refresh(jobManager.findResourceForJob(job), true);
 				}
 			});
-
+			return true;
 		}
 	};
 
