@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.widgets.ganttchart.AdvancedTooltip;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
@@ -226,9 +226,6 @@ public class GanttChartViewer extends StructuredViewer {
 
 		// TODO: Extract into separate method
 
-		// TODO: Include sorter
-		ViewerSorter sorter = getSorter();
-
 		// Clear existing data
 		ganttChart.getGanttComposite().clearChart();
 		internalMap.clear();
@@ -249,6 +246,12 @@ public class GanttChartViewer extends StructuredViewer {
 				return;
 			}
 
+			// Sort resources using the ViewerComparator if set
+			final ViewerComparator comparator = getComparator();
+			if (comparator != null) {
+				comparator.sort(this, resources);
+			}
+			
 			int layer = 0;
 			// Each resource to map to a GanntSection
 			try {
