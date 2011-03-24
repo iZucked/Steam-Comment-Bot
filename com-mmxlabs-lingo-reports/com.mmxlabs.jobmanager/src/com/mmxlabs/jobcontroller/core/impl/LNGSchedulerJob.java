@@ -136,5 +136,4 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	public final Scenario getScenario() {
 		return scenario;
 	}
-
 }

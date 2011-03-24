@@ -192,6 +192,9 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 
 				@Override
 				public void run() {
+					final IResource resource = jobManager.findResourceForJob(job);
+					((TreeViewer) viewer).refresh(resource, true);
+
 					final TreeItem[] current = tv.getTree().getSelection();
 					tv.getTree().setSelection(current);
 					tv.refresh(jobManager.findResourceForJob(job), true);
@@ -273,9 +276,9 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 	@Override
 	public boolean hasChildren(final Object element) {
 
-//		if (element instanceof ScenarioTreeNodeClass) {
-//			// No?
-//		}
+		// if (element instanceof ScenarioTreeNodeClass) {
+		// // No?
+		// }
 
 		return super.hasChildren(element);
 	}

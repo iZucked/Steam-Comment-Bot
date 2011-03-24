@@ -1,6 +1,7 @@
 package com.mmxlabs.rcp.navigator;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -9,6 +10,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 
@@ -17,6 +19,7 @@ import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
+import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 
 public class TheNavigator extends CommonNavigator {
 
@@ -50,15 +53,11 @@ public class TheNavigator extends CommonNavigator {
 		public void jobSelected(final IJobManager jobManager,
 				final IManagedJob job, final IResource resource) {
 
-			// TODO: Update Check status of widget
-
 			final TreeItem[] items = TheNavigator.this.getCommonViewer()
 					.getTree().getItems();
 			for (final TreeItem i : items) {
 				checkItems(i, resource, true);
 			}
-			// No need to redraw?
-			// TheNavigator.this.getCommonViewer().getTree().redraw();
 		}
 
 		@Override
@@ -75,7 +74,10 @@ public class TheNavigator extends CommonNavigator {
 	@Override
 	protected CommonViewer createCommonViewerObject(final Composite aParent) {
 		return new CommonViewer(getViewSite().getId(), aParent, SWT.MULTI
-				| SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
+				| SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL /*
+																	 * |
+																	 * SWT.CHECK
+																	 */);
 	}
 
 	@Override
@@ -132,6 +134,12 @@ public class TheNavigator extends CommonNavigator {
 
 		Activator.getDefault().getJobManager()
 				.addJobManagerListener(jobManagerListener);
+
+		final Action a = new PackTreeColumnsAction(aViewer);
+		final IActionBars bars = getViewSite().getActionBars();
+		bars.getToolBarManager().add(a);
+
+		bars.getToolBarManager().update(true);
 
 		return aViewer;
 	}

@@ -5,7 +5,6 @@
 
 package com.mmxlabs.jobcontroller.core;
 
-
 /**
  * A managed job. The lifecycle of a managed job goes
  * <ol>
@@ -14,14 +13,15 @@ package com.mmxlabs.jobcontroller.core;
  * <li>some amount of pause() and resume()</li>
  * <li>possible cancel()</li>
  * </ol>
+ * 
  * @author hinton
- *
+ * 
  */
 public interface IManagedJob {
 	public enum JobState {
 		UNKNOWN, INITIALISED, RUNNING, PAUSING, PAUSED, RESUMING, COMPLETED, CANCELLING, CANCELLED, INITIALISING
 	}
-	
+
 	/**
 	 * @return A descriptive name for this job.
 	 */
@@ -39,6 +39,11 @@ public interface IManagedJob {
 
 	JobState getJobState();
 
+	/**
+	 * Returns progress as percentage
+	 * 
+	 * @return
+	 */
 	int getProgress();
 
 	void addListener(IManagedJobListener listener);

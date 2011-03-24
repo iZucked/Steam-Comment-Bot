@@ -5,10 +5,8 @@
 
 package com.mmxlabs.scheduleview.views;
 
-import java.util.Iterator;
+import java.util.List;
 
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -21,7 +19,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
@@ -42,6 +39,7 @@ import scenario.Scenario;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleModel;
 
+import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
@@ -65,6 +63,10 @@ public class SchedulerView extends ViewPart {
 	private ISelectionListener selectionListener;
 
 	private PackAction packAction;
+	
+	private Action sortModeAction;
+
+	ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
 
 	/**
 	 * The constructor.
@@ -120,7 +122,11 @@ public class SchedulerView extends ViewPart {
 		viewer.setContentProvider(new EMFScheduleContentProvider());
 		viewer.setLabelProvider(new EMFScheduleLabelProvider());
 
-		// viewer.setSorter(new NameSorter());
+		// TODO: Hook up action to alter sort behaviour
+		// Then refresh
+		// E.g. mode?
+		// Move into separate class
+		viewer.setComparator(viewerComparator);
 
 		viewer.setInput(getViewSite());
 
@@ -139,28 +145,6 @@ public class SchedulerView extends ViewPart {
 		 */
 
 		selectionListener = new ISelectionListener() {
-			private boolean trySelectObject(final Object o) {
-				if (o instanceof Schedule) {
-					setInput((Schedule) o);
-					return true;
-				} else if (o instanceof Scenario) {
-					final Scenario scenario = (Scenario) o;
-					final ScheduleModel scheduleModel = scenario
-							.getScheduleModel();
-					final int scheduleCount;
-					if (scheduleModel != null
-							&& (scheduleCount = scheduleModel.getSchedules()
-									.size()) > 0) {
-						setInput(scheduleModel.getSchedules().get(
-								scheduleCount - 1));
-						return true;
-					}
-				} else if (o instanceof Resource
-						&& ((Resource) o).getContents().size() > 0) {
-					return trySelectObject(((Resource) o).getContents().get(0));
-				}
-				return false;
-			}
 
 			@Override
 			public void selectionChanged(final IWorkbenchPart part,
@@ -172,35 +156,10 @@ public class SchedulerView extends ViewPart {
 						|| (part != null && part.getSite().getId()
 								.equals("com.mmxlabs.rcp.navigator"))) {
 
-					// if selection instanceof etc.
-					if (selection instanceof IStructuredSelection) {
-						final IStructuredSelection sel = (IStructuredSelection) selection;
-						if (sel.isEmpty()) {
-							setInput(null);
-						} else {
-							final Iterator<?> iter = sel.iterator();
-							while (iter.hasNext()) {
-								final Object o = iter.next();
-								if (trySelectObject(o)) {
-									return;
-								} else if (o instanceof IAdaptable) {
-									Object adapter = ((IAdaptable) o)
-											.getAdapter(Schedule.class);
-									if (adapter == null) {
-										adapter = Platform
-												.getAdapterManager()
-												.loadAdapter(
-														o,
-														Schedule.class
-																.getCanonicalName());
-									}
-									if (adapter != null) {
-										setInput(((Schedule) adapter));
-										return;
-									}
-								}
-							}
-						}
+					final List<Schedule> schedules = ScheduleAdapter
+							.getSchedules(selection);
+					if (schedules.isEmpty() == false) {
+						setInput(schedules);
 					}
 				}
 			}
@@ -338,6 +297,7 @@ public class SchedulerView extends ViewPart {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
 		manager.add(toggleColourSchemeAction);
+		manager.add(sortModeAction);
 		manager.add(packAction);
 	}
 
@@ -358,6 +318,7 @@ public class SchedulerView extends ViewPart {
 		toggleColourSchemeAction = new Action() {
 			EMFScheduleLabelProvider.Mode mode = EMFScheduleLabelProvider.Mode.VesselState;
 
+			@Override
 			public void run() {
 
 				final EMFScheduleLabelProvider lp = (EMFScheduleLabelProvider) (viewer
@@ -376,6 +337,27 @@ public class SchedulerView extends ViewPart {
 		toggleColourSchemeAction.setText("Switch Colour Scheme");
 
 		packAction = new PackAction(viewer.getGanttChart());
+		packAction.setImageDescriptor(Activator
+				.getImageDescriptor("/icons/pack.gif"));
+		
+		sortModeAction = new Action() {
+
+			@Override
+			public void run() {
+
+				ScenarioViewerComparator.Mode mode = viewerComparator.getMode();
+				final int nextMode = (mode.ordinal() + 1)
+						% ScenarioViewerComparator.Mode.values().length;
+				mode = ScenarioViewerComparator.Mode.values()[nextMode];
+				viewerComparator.setMode(mode);
+
+				viewer.setInput(viewer.getInput());
+
+//				viewer.
+			};
+		};
+		sortModeAction.setText("Switch Sort Mode");
+
 	}
 
 	/**
