@@ -300,7 +300,7 @@ public class JobManagerView extends ViewPart {
 
 	private final IManagedJobListener jobListener = new IManagedJobListener() {
 		@Override
-		public void jobStateChanged(final IManagedJob job,
+		public boolean jobStateChanged(final IManagedJob job,
 				final JobState oldState, final JobState newState) {
 			JobManagerView.this.refresh();
 			switch (newState) {
@@ -317,12 +317,14 @@ public class JobManagerView extends ViewPart {
 				break;
 
 			}
+			return true;
 		}
 
 		@Override
-		public void jobProgressUpdated(final IManagedJob job,
+		public boolean jobProgressUpdated(final IManagedJob job,
 				final int progressDelta) {
 			JobManagerView.this.refresh();
+			return true;
 		}
 	};
 
