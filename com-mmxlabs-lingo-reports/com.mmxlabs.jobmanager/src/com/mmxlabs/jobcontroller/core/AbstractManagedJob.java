@@ -5,6 +5,7 @@
 
 package com.mmxlabs.jobcontroller.core;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -101,11 +102,14 @@ public abstract class AbstractManagedJob implements IManagedJob {
 
 	private synchronized void setJobState(final JobState newState) {
 		final JobState oldState = currentState;
-		currentState = newState;
-		if (oldState != currentState) {
+		if (oldState != newState) {
 			synchronized (listeners) {
-				for (final IManagedJobListener mjl : listeners) {
-					mjl.jobStateChanged(this, oldState, newState);
+				currentState = newState;
+				final Iterator<IManagedJobListener> iterator = listeners.iterator();
+				while (iterator.hasNext()) {
+					final IManagedJobListener mjl = iterator.next();
+					if (!mjl.jobStateChanged(this, oldState, newState))
+						iterator.remove();
 				}
 			}
 		}
@@ -113,13 +117,34 @@ public abstract class AbstractManagedJob implements IManagedJob {
 
 	@Override
 	public void prepare() {
+		setJobState(JobState.INITIALISING);
 		reallyPrepare();
 		setJobState(JobState.INITIALISED);
 	}
 
 	@Override
-	public void start() {
-		runner.schedule();
+	public synchronized void start() {
+		if (currentState != JobState.INITIALISED) {
+			// we are probably preparing, so add a listener which waits
+			this.addListener(new IManagedJobListener() {
+				@Override
+				public boolean jobStateChanged(IManagedJob job, JobState oldState,
+						JobState newState) {
+					if (newState == JobState.INITIALISED) {
+						runner.schedule();
+						return false; // return false to avoid getting any more events
+					}
+					return true;
+				}
+				
+				@Override
+				public boolean jobProgressUpdated(IManagedJob job, int progressDelta) {
+					return false;
+				}
+			});
+		} else {
+			runner.schedule();
+		}
 	}
 
 	@Override
@@ -168,6 +193,12 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		progress = newProgress;
 		for (final IManagedJobListener x : listeners) {
 			x.jobProgressUpdated(this, delta);
+		}
+		final Iterator<IManagedJobListener> iterator = listeners.iterator();
+		while (iterator.hasNext()) {
+			final IManagedJobListener mjl = iterator.next();
+			if (!mjl.jobProgressUpdated(this, delta))
+				iterator.remove();
 		}
 	}
 
