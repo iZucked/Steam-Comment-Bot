@@ -70,7 +70,7 @@ public class LocalDateInlineEditor extends BasicAttributeInlineEditor {
 	}
 	
 	private Calendar getCalendar(final Date utcDate) {
-		final Port port = (Port) input.eGet(portReference);
+		final Port port = (Port) (portReference == null ? null : input.eGet(portReference));
 		final TimeZone zone = TimeZone.getTimeZone(portReference == null
 				|| port == null || port.getTimeZone() == null ? "UTC" : port
 				.getTimeZone());
@@ -88,4 +88,11 @@ public class LocalDateInlineEditor extends BasicAttributeInlineEditor {
 		dateAndTime.setValue(getCalendar(utcDate));
 	}
 
+	@Override
+	protected boolean updateOnChangeToFeature(Object changedFeature) {
+		return super.updateOnChangeToFeature(changedFeature) ||
+			changedFeature.equals(portReference); //update if port changes
+	}
+
+	
 }

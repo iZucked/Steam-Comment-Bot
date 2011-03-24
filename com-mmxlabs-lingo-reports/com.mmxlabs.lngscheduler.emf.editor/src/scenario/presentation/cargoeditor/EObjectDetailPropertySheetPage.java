@@ -9,8 +9,10 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -29,6 +31,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
+import scenario.presentation.cargoeditor.detailview.BooleanInlineEditor;
 import scenario.presentation.cargoeditor.detailview.LocalDateInlineEditor;
 import scenario.presentation.cargoeditor.detailview.NumberInlineEditor;
 import scenario.presentation.cargoeditor.detailview.TextInlineEditor;
@@ -42,6 +45,8 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 	private ScrolledComposite sc;
 	
 	private final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
+	private final Map<EStructuralFeature, IInlineEditorFactory> editorFactoriesByFeature = new HashMap<EStructuralFeature, IInlineEditorFactory>();
+	
 	private final HashMap<EClass, EObjectDetailView> detailViewsByClass = new HashMap<EClass, EObjectDetailView>();
 	private final EditingDomain editingDomain;
 
@@ -50,6 +55,12 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 		editorFactories.put(classifier, factory);
 	}
 
+	public void setEditorFactoryForFeature(
+			final EStructuralFeature feature,
+			final IInlineEditorFactory iInlineEditorFactory) {
+		editorFactoriesByFeature.put(feature, iInlineEditorFactory);
+	}
+	
 	public EObjectDetailPropertySheetPage(final EditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
 
@@ -88,6 +99,14 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 								editingDomain);
 					}
 				});
+		
+		editorFactories.put(EcorePackage.eINSTANCE.getEBoolean(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
+						return new BooleanInlineEditor(path, feature, editingDomain);
+					}
+				});
 	}
 
 	private EObjectDetailView getDetailView(final EClass eClass) {
@@ -103,6 +122,12 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 						entry.getValue());
 			}
 
+			for (final Map.Entry<EStructuralFeature, IInlineEditorFactory> entry : editorFactoriesByFeature
+					.entrySet()) {
+				eodv.setEditorFactoryForFeature(entry.getKey(),
+						entry.getValue());
+			}
+			
 			eodv.initForEClass(eClass);
 			eodv.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			detailViewsByClass.put(eClass, eodv);
@@ -192,4 +217,6 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 			selectionChanging = false;
 		}
 	}
+
+	
 }

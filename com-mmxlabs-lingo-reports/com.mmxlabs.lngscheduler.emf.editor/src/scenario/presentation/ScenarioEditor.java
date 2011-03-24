@@ -120,6 +120,7 @@ import scenario.contract.Contract;
 import scenario.contract.ContractPackage;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
+import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.VesselStateAttributes;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
@@ -143,6 +144,8 @@ import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.celleditors.PortAndTimeDialog;
 import scenario.presentation.cargoeditor.celleditors.VesselStateAttributesDialog;
+import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
+import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
 import scenario.presentation.cargoeditor.properties.ScenarioPropertySourceProvider;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
@@ -159,14 +162,14 @@ import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 public class ScenarioEditor extends MultiPageEditorPart implements
 		IEditingDomainProvider, ISelectionProvider, IMenuListener,
 		IViewerProvider {
-	private abstract class ScenarioRVP implements IReferenceValueProvider {		
+	private abstract class ScenarioRVP implements IReferenceValueProvider {
 		protected Scenario getEnclosingScenario(EObject target) {
 			while (target != null && !(target instanceof Scenario)) {
 				target = target.eContainer();
 			}
 			return (Scenario) target;
 		}
-		
+
 		protected ArrayList<Pair<String, EObject>> getSortedNames(
 				final EList<? extends EObject> objects,
 				final EAttribute nameAttribute) {
@@ -197,6 +200,18 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getFleetModel().getVesselClasses(),
 					FleetPackage.eINSTANCE.getVesselClass_Name());
+			return result;
+		}
+	};
+	
+	final ScenarioRVP entityProvider = new ScenarioRVP() {
+		@Override
+		public List<Pair<String, EObject>> getAlloweValues(EObject target,
+				EStructuralFeature field) {
+			final Scenario scenario = getEnclosingScenario(target);
+			final List<Pair<String, EObject>> result = getSortedNames(scenario
+					.getContractModel().getEntities(),
+					ScenarioPackage.eINSTANCE.getNamedObject_Name());
 			return result;
 		}
 	};
@@ -260,11 +275,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 
 			result.add(0, new Pair<String, EObject>(nullValueName, null));
-			
+
 			return result;
 		}
 	};
-
 
 	final ScenarioRVP marketProvider = new ScenarioRVP() {
 		@Override
@@ -277,7 +291,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			return result;
 		}
 	};
-	
+
 	/**
 	 * The filters for file extensions supported by the editor. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -1074,8 +1088,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		//
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
 
-			createCargoEditor(portProvider, contractProvider,
-					contractProvider);
+			createCargoEditor(portProvider, contractProvider, contractProvider);
 
 			createFleetEditor(vesselClassProvider, portProvider);
 
@@ -1334,8 +1347,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			{
 				final SingleReferenceManipulator port = new SingleReferenceManipulator(
-						cargoPackage.getSlot_Port(),
-						portProvider, getEditingDomain());
+						cargoPackage.getSlot_Port(), portProvider,
+						getEditingDomain());
 				cargoPane.addColumn("Load Port", port, port,
 						cargoPackage.getCargo_LoadSlot());
 			}
@@ -1349,8 +1362,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			{
 				final SingleReferenceManipulator port = new SingleReferenceManipulator(
-						cargoPackage.getSlot_Contract(),
-						loadContractProvider, getEditingDomain());
+						cargoPackage.getSlot_Contract(), loadContractProvider,
+						getEditingDomain());
 
 				cargoPane.addColumn("Load Contract", port, port,
 						cargoPackage.getCargo_LoadSlot());
@@ -1358,8 +1371,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			{
 				final SingleReferenceManipulator port = new SingleReferenceManipulator(
-						cargoPackage.getSlot_Port(),
-						portProvider, getEditingDomain());
+						cargoPackage.getSlot_Port(), portProvider,
+						getEditingDomain());
 				cargoPane.addColumn("Discharge Port", port, port,
 						cargoPackage.getCargo_DischargeSlot());
 			}
@@ -1372,8 +1385,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			{
 				final SingleReferenceManipulator port = new SingleReferenceManipulator(
-						cargoPackage.getSlot_Contract(),
-						loadContractProvider, getEditingDomain());
+						cargoPackage.getSlot_Contract(), loadContractProvider,
+						getEditingDomain());
 				cargoPane.addColumn("Discharge Contract", port, port,
 						cargoPackage.getCargo_DischargeSlot());
 			}
@@ -1420,14 +1433,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			cargoPane.addColumn("Timezone", manipulator, manipulator);
 
 			final SingleReferenceManipulator mm = new SingleReferenceManipulator(
-					pp.getPort_DefaultMarket(),
-					marketProvider, getEditingDomain());
+					pp.getPort_DefaultMarket(), marketProvider,
+					getEditingDomain());
 
 			cargoPane.addColumn("Default Market", mm, mm);
 
 			final SingleReferenceManipulator cm = new SingleReferenceManipulator(
-					pp.getPort_DefaultContract(),
-					everyContractProvider, getEditingDomain());
+					pp.getPort_DefaultContract(), everyContractProvider,
+					getEditingDomain());
 
 			cargoPane.addColumn("Default Contract", cm, cm);
 		}
@@ -1779,59 +1792,102 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-//		if (propertySheetPage == null) {
-//			propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
-//				@Override
-//				public void setSelectionToViewer(List<?> selection) {
-//					ScenarioEditor.this.setSelectionToViewer(selection);
-//					ScenarioEditor.this.setFocus();
-//				}
-//
-//				@Override
-//				public void setActionBars(IActionBars actionBars) {
-//					super.setActionBars(actionBars);
-//					getActionBarContributor().shareGlobalActions(this,
-//							actionBars);
-//				}
-//			};
-//
-//			// we want to set up a fancy provider here.
-//
-//			propertySheetPage
-//					.setPropertySourceProvider(new ScenarioPropertySourceProvider(
-//							adapterFactory));
-//		}
-//
-//		return propertySheetPage;
-		//TODO add adapter factory stuff?
-		final EObjectDetailPropertySheetPage page = new EObjectDetailPropertySheetPage(getEditingDomain());
-		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(), 
+		// if (propertySheetPage == null) {
+		// propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
+		// @Override
+		// public void setSelectionToViewer(List<?> selection) {
+		// ScenarioEditor.this.setSelectionToViewer(selection);
+		// ScenarioEditor.this.setFocus();
+		// }
+		//
+		// @Override
+		// public void setActionBars(IActionBars actionBars) {
+		// super.setActionBars(actionBars);
+		// getActionBarContributor().shareGlobalActions(this,
+		// actionBars);
+		// }
+		// };
+		//
+		// // we want to set up a fancy provider here.
+		//
+		// propertySheetPage
+		// .setPropertySourceProvider(new ScenarioPropertySourceProvider(
+		// adapterFactory));
+		// }
+		//
+		// return propertySheetPage;
+		// TODO add adapter factory stuff?
+		final EObjectDetailPropertySheetPage page = new EObjectDetailPropertySheetPage(
+				getEditingDomain());
+		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, portProvider);
+					}
+				});
+
+		page.setEditorFactoryForClassifier(
+				ContractPackage.eINSTANCE.getContract(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, contractProvider) {
+							@Override
+							protected boolean updateOnChangeToFeature(
+									Object changedFeature) {
+								// update contract display when port is changed
+								// on a load slot.
+								return super
+										.updateOnChangeToFeature(changedFeature)
+										|| ((changedFeature instanceof EReference) && ((EReference) changedFeature)
+												.getEReferenceType().equals(
+														PortPackage.eINSTANCE
+																.getPort()));
+							}
+						};
+					}
+				});
+
+		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getMarket(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, marketProvider);
+					}
+				});
+
+		page.setEditorFactoryForClassifier(CargoPackage.eINSTANCE.getCargoType(), 
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
-						return new ReferenceInlineEditor(path, feature, editingDomain,
-								portProvider);
+						return new EENumInlineEditor(path, (EAttribute)feature, editingDomain);
 					}
 				});
 		
-		page.setEditorFactoryForClassifier(ContractPackage.eINSTANCE.getContract(), 
+		page.setEditorFactoryForClassifier(ContractPackage.eINSTANCE.getEntity(), 
+				new IInlineEditorFactory() {					
+					@Override
+					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature, editingDomain, entityProvider);
+					}
+				});
+		
+		page.setEditorFactoryForFeature(FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumptionCurve(), 
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
-						return new ReferenceInlineEditor(path, feature, editingDomain,
-								contractProvider);
+						return new FuelCurveEditor(path, feature, editingDomain);
 					}
-				});
-		
-		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getMarket(), 
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
-						return new ReferenceInlineEditor(path, feature, editingDomain,
-								marketProvider);
-					}
-				});
-		
+				}
+		);
+
 		return page;
 	}
 

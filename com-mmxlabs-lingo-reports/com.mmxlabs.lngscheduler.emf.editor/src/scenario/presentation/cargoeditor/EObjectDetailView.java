@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import scenario.NamedObject;
+import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.detailview.BasicAttributeInlineEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
@@ -117,27 +118,28 @@ public class EObjectDetailView extends Composite {
 
 		group.setLayoutData(groupLayoutData);
 
-//		group.setLayout(new FillLayout());
-//		final ScrolledComposite sc = new ScrolledComposite(group, SWT.V_SCROLL);
-//		sc.setLayout(new FillLayout());
-//		final Composite controls = new Composite(sc, SWT.NONE);
-//		sc.setContent(controls);
-//		sc.setExpandHorizontal(true);
-//		sc.setExpandVertical(false);
-		
+		// group.setLayout(new FillLayout());
+		// final ScrolledComposite sc = new ScrolledComposite(group,
+		// SWT.V_SCROLL);
+		// sc.setLayout(new FillLayout());
+		// final Composite controls = new Composite(sc, SWT.NONE);
+		// sc.setContent(controls);
+		// sc.setExpandHorizontal(true);
+		// sc.setExpandVertical(false);
+
 		final Composite controls = group;
 		final GridLayout groupLayout = new GridLayout(2, false);
 		controls.setLayout(groupLayout);
-		
+
 		for (final EStructuralFeature attribute : objectClass
 				.getEAllStructuralFeatures()) {
 
 			if (attribute instanceof EReference) {
 				final EReference reference = (EReference) attribute;
-				if (reference.isContainment())
+				if (reference.isContainment() && !(editorFactoriesByFeature.containsKey(reference)))
 					continue;
-				if (reference.isMany())
-					continue; // do something
+				if (reference.isMany() && !(editorFactoriesByFeature.containsKey(reference)))
+					continue; // skip
 			}
 
 			// create label for this attribute
@@ -151,8 +153,9 @@ public class EObjectDetailView extends Composite {
 			// TODO implement this.
 			final EClassifier attributeType = attribute.getEType();
 
-			final IInlineEditorFactory attributeEditorFactory = editorFactories
-					.get(attributeType);
+			final IInlineEditorFactory attributeEditorFactory = editorFactoriesByFeature
+					.containsKey(attribute) ? editorFactoriesByFeature
+					.get(attribute) : editorFactories.get(attributeType);
 			// final IInlineEditor attributeEditor = new TextInlineEditor(path,
 			// attribute, editingDomain);
 			final Control attributeControl;
@@ -196,7 +199,19 @@ public class EObjectDetailView extends Composite {
 	public void setInput(final EObject object) {
 		// release any reference to old input and handle new input
 		for (final IInlineEditor editor : editors) {
-			editor.setInput(object);
+			try {
+				editor.setInput(object);
+			} catch (final Exception ex) {
+				System.err.println("Error setting input on " + editor);
+				ex.printStackTrace();
+			}
 		}
+	}
+
+	private final Map<EStructuralFeature, IInlineEditorFactory> editorFactoriesByFeature = new HashMap<EStructuralFeature, IInlineEditorFactory>();
+
+	public void setEditorFactoryForFeature(final EStructuralFeature feature,
+			final IInlineEditorFactory factory) {
+		editorFactoriesByFeature.put(feature, factory);
 	}
 }

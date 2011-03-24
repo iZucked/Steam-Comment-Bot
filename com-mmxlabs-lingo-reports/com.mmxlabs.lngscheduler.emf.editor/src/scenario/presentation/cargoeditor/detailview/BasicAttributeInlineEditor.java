@@ -61,10 +61,22 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		currentlySettingValue = false;
 	}
 	
+	/**
+	 * Subclasses can override this to trigger a redisplay when other fields change
+	 * @param changedFeature
+	 * @return
+	 */
+	protected boolean updateOnChangeToFeature(final Object changedFeature) {
+		return feature.equals(changedFeature);
+	}
+	
 	@Override
 	public void notifyChanged(final Notification msg) {
 		super.notifyChanged(msg);
 		// check if msg is relevant
+		if (msg.getFeature() != null && updateOnChangeToFeature(msg.getFeature())) {
+			doUpdateDisplayWithValue();
+		}
 		if (msg.getFeature() != null && msg.getFeature().equals(feature)) {
 			// it is a change to our feature
 			doUpdateDisplayWithValue();

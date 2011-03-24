@@ -73,14 +73,18 @@ public class VesselStateAttributesDialog extends Dialog {
 		setText("SWT Dialog");
 	}
 
+	public VesselStateAttributes open(final VesselStateAttributes attributes) {
+		return this.open(attributes, false);
+	}
+	
 	/**
 	 * Open the dialog.
 	 * 
 	 * @return the result
 	 */
-	public VesselStateAttributes open(final VesselStateAttributes attributes) {
+	public VesselStateAttributes open(final VesselStateAttributes attributes, final boolean hidingTopPart) {
 		this.attributes = EcoreUtil.copy(attributes);
-		createContents();
+		createContents(hidingTopPart);
 		shlFuelCurve.open();
 		shlFuelCurve.layout();
 		Display display = getParent().getDisplay();
@@ -103,18 +107,28 @@ public class VesselStateAttributesDialog extends Dialog {
 
 	/**
 	 * Create contents of the dialog.
+	 * @param hidingTopPart 
 	 */
-	private void createContents() {
+	private void createContents(boolean hidingTopPart) {
 		shlFuelCurve = new Shell(getParent(), getStyle());
 		shlFuelCurve.setSize(382, 507);
 		shlFuelCurve.setText(attributes.getVesselState().getName()
-				+ " Vessel State Attributes");
+				+ 
+		(hidingTopPart ? " Fuel Curve":		
+		" Vessel State Attributes")
+				
+		);
 		shlFuelCurve.setLayout(new GridLayout(1, false));
 
 		Group grpIdleBoiloff = new Group(shlFuelCurve, SWT.NONE);
 		grpIdleBoiloff.setLayout(new GridLayout(3, false));
 		grpIdleBoiloff.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				false, 1, 1));
+		
+		if (hidingTopPart) {
+			grpIdleBoiloff.setVisible(false);
+			((GridData) grpIdleBoiloff.getLayoutData()).exclude = true;
+		}
 		grpIdleBoiloff.setText("Idle Consumption and NBO");
 
 		Label lblActiveNboRate = new Label(grpIdleBoiloff, SWT.NONE);

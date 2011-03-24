@@ -5,28 +5,35 @@
 
 package scenario.presentation.cargoeditor;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.presentation.ScenarioEditor;
@@ -62,6 +69,19 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		return viewer;
 	}
 
+	private boolean shouldEditCell = false;
+	/**
+	 * A hack to prevent single click editing, which is really annoying and silly.
+	 * @return
+	 */
+	protected boolean getShouldEditCell() {
+		return shouldEditCell;
+	}
+	
+	protected void setShouldEdit(boolean b) {
+		shouldEditCell = b;
+	}
+	
 	public void addColumn(final String columnName,
 			final ICellRenderer renderer, final ICellManipulator manipulator,
 			final Object... pathObjects) {
@@ -104,7 +124,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			@Override
 			protected boolean canEdit(final Object element) {
-				return manipulator.canEdit(path.get((EObject) element));
+				// intercept mouse listener here
+				return getShouldEditCell() && manipulator.canEdit(path.get((EObject) element));
 			}
 		});
 	}
@@ -133,40 +154,116 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
-		table.addListener(SWT.MeasureItem, new Listener() {
+		final Listener mouseDownListener = new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				setShouldEdit(false);
+			}			
+		};
+		
+		final Listener measureListener = 
+			 new Listener() {
 			@Override
 			public void handleEvent(final Event event) {
 				event.height = 18;
 			}
-		});
+		};
+		
+		final Listener doubleClickListener = 
+			new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				setShouldEdit(true);
+				TableItem[] selection = table.getSelection();
 
+				if (selection.length != 1) {
+					return;
+				}
+
+				TableItem item = table.getSelection()[0];
+
+				for (int i = 0; i < table.getColumnCount(); i++) {
+					if (item.getBounds(i).contains(event.x, event.y)) {
+						viewer.editElement(item.getData(), i);
+						setShouldEdit(false);
+						break;
+					}
+				}
+			}
+		};
+		
+		table.addListener(SWT.MouseDown, mouseDownListener);
+		table.addListener(SWT.MeasureItem, measureListener);
+		table.addListener(SWT.MouseDoubleClick, doubleClickListener);
+		
+		table.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				table.removeListener(SWT.MouseDown, mouseDownListener);
+				table.removeListener(SWT.MeasureItem, measureListener);
+				table.removeListener(SWT.MouseDoubleClick, doubleClickListener);
+			}
+			
+		});
+		
+		final HashSet<EObject> currentElements = new HashSet<EObject>();
+		
 		// TODO somewhere inside this, we need to make ourselves listen
 		// for deep changes. not sure how
-
+		final EContentAdapter adapter = new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				
+					if (notification.isTouch() == false) {
+						// this is a change, so we have to refresh.
+						// ideally we just want to update the changed object, but we get the notification from
+						// somewhere below, so we need to go up
+						EObject source = (EObject) notification.getNotifier();
+						if (currentElements.contains(source)) return;
+						while ((source = source.eContainer()) != null) {
+							if (currentElements.contains(source)) {
+								viewer.update(source, null);
+								return;
+							}
+						}
+					}
+				}
+			
+		};
 		viewer.setContentProvider(new AdapterFactoryContentProvider(
 				adapterFactory) {
 
 			@SuppressWarnings("rawtypes")
 			@Override
 			public Object[] getElements(Object object) {
+				adapter.unsetTarget(adapter.getTarget()); // remove adapter from
+															// old input
+				currentElements.clear();
 				if (object instanceof EObject) {
 					EObject o = (EObject) object;
 					for (final EReference ref : path) {
 						object = o.eGet(ref);
 						if (object instanceof EList) {
+							for (final EObject e : (EList<EObject>) object) {
+								e.eAdapters().add(adapter);
+								currentElements.add(e);
+							}
 							return ((EList) object).toArray();
 						}
 						if (object instanceof EObject) {
 							o = (EObject) object;
 						}
 					}
-
+					currentElements.add(o);
 					return new Object[] { o };
 				}
 				return new Object[] {};
 			}
 		});
 	}
+
 
 	@Override
 	protected void requestActivation() {
