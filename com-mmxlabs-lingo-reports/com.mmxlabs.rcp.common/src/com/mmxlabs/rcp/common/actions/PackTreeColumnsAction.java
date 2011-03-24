@@ -17,7 +17,7 @@ public class PackTreeColumnsAction extends Action {
 
 	public PackTreeColumnsAction(final TreeViewer viewer) {
 		super("Pack Columns");
-		setImageDescriptor(Activator.getImageDescriptor("pack.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("/icons/pack.gif"));
 		this.viewer = viewer;
 	}
 
