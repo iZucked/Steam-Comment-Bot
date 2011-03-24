@@ -157,8 +157,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 
 	@Override
 	public void annotate(final ISequences<T> sequences,
-			final IAnnotatedSolution<T> solution) {
-		final ScheduledSequences schedule = scheduler.schedule(sequences, true);
+			final IAnnotatedSolution<T> solution, final boolean forExport) {
+		final ScheduledSequences schedule = scheduler.schedule(sequences, forExport);
 		// Do basic voyageplan annotation
 		final VoyagePlanAnnotator<T> annotator = new VoyagePlanAnnotator<T>();
 
