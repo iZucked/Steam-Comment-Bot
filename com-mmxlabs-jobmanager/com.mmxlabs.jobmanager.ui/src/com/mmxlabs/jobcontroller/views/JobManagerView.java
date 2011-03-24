@@ -177,7 +177,7 @@ public class JobManagerView extends ViewPart {
 				case 2:
 					return Integer.toString(job.getProgress());
 				case 3:
-					return Integer.toString(100);
+					return Integer.toString(job.getTotalProgress());
 				case 4:
 					return job.getJobState().toString();
 				}
