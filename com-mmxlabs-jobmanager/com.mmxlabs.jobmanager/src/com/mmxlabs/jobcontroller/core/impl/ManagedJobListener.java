@@ -13,14 +13,14 @@ import com.mmxlabs.jobcontroller.core.IManagedJobListener;
 public class ManagedJobListener implements IManagedJobListener {
 
 	@Override
-	public void jobStateChanged(final IManagedJob job, final JobState oldState,
+	public boolean jobStateChanged(final IManagedJob job, final JobState oldState,
 			final JobState newState) {
-
+		return true;
 	}
 
 	@Override
-	public void jobProgressUpdated(final IManagedJob job,
+	public boolean jobProgressUpdated(final IManagedJob job,
 			final int progressDelta) {
-
+		return true;
 	}
 }
