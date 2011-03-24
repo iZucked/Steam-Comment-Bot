@@ -9,10 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -68,6 +66,7 @@ public class EObjectDetailView extends Composite {
 
 	private class NonEditableEditor extends BasicAttributeInlineEditor {
 		private Label label;
+
 		public NonEditableEditor(EMFPath path, EStructuralFeature feature) {
 			super(path, feature, null);
 		}
@@ -80,13 +79,13 @@ public class EObjectDetailView extends Composite {
 		@Override
 		protected void updateDisplay(Object value) {
 			if (value instanceof NamedObject) {
-				label.setText(((NamedObject)value).getName());
+				label.setText(((NamedObject) value).getName());
 			} else {
 				label.setText(value == null ? "" : value.toString());
 			}
 		}
 	}
-	
+
 	public void setEditorFactoryForClassifier(final EClassifier classifier,
 			final IInlineEditorFactory factory) {
 		editorFactories.put(classifier, factory);
@@ -118,28 +117,34 @@ public class EObjectDetailView extends Composite {
 
 		group.setLayoutData(groupLayoutData);
 
-		group.setLayout(new FillLayout());
-		final ScrolledComposite sc = new ScrolledComposite(group, SWT.V_SCROLL);
-		sc.setLayout(new FillLayout());
-		final Composite controls = new Composite(sc, SWT.NONE);
-		sc.setContent(controls);
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(false);
+//		group.setLayout(new FillLayout());
+//		final ScrolledComposite sc = new ScrolledComposite(group, SWT.V_SCROLL);
+//		sc.setLayout(new FillLayout());
+//		final Composite controls = new Composite(sc, SWT.NONE);
+//		sc.setContent(controls);
+//		sc.setExpandHorizontal(true);
+//		sc.setExpandVertical(false);
+		
+		final Composite controls = group;
 		final GridLayout groupLayout = new GridLayout(2, false);
 		controls.setLayout(groupLayout);
-		for (final EStructuralFeature attribute : objectClass.getEAllStructuralFeatures()) {
-			
+		
+		for (final EStructuralFeature attribute : objectClass
+				.getEAllStructuralFeatures()) {
+
 			if (attribute instanceof EReference) {
-				final EReference reference = (EReference)attribute;
-				if (reference.isContainment()) continue;
-				if (reference.isMany()) continue; // do something
+				final EReference reference = (EReference) attribute;
+				if (reference.isContainment())
+					continue;
+				if (reference.isMany())
+					continue; // do something
 			}
-			
+
 			// create label for this attribute
 			final Label attributeLabel = new Label(controls, SWT.RIGHT);
 			attributeLabel.setText(unmangle(attribute.getName()) + ": ");
-			final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER, false,
-					false);
+			final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER,
+					false, false);
 			attributeLabel.setLayoutData(labelData);
 
 			// create editor for this attribute

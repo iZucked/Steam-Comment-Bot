@@ -15,6 +15,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -36,8 +38,9 @@ import scenario.presentation.cargoeditor.detailview.TextInlineEditor;
  * 
  */
 public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
-	private Composite control;
-
+	private Composite control;//, top;
+	private ScrolledComposite sc;
+	
 	private final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
 	private final HashMap<EClass, EObjectDetailView> detailViewsByClass = new HashMap<EClass, EObjectDetailView>();
 	private final EditingDomain editingDomain;
@@ -109,7 +112,14 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 
 	@Override
 	public void createControl(final Composite parent) {
-		control = new Composite(parent, SWT.NONE);
+		
+		sc = new ScrolledComposite(parent, SWT.V_SCROLL);
+		sc.setLayout(new FillLayout());
+		control = new Composite(sc, SWT.NONE);
+		sc.setContent(control);
+		
+		sc.setExpandHorizontal(true);
+//		sc.setExpandVertical(false);
 		control.setLayout(new GridLayout(1, false));
 	}
 
@@ -120,7 +130,7 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 
 	@Override
 	public Control getControl() {
-		return control;
+		return sc;
 	}
 
 	@Override
@@ -173,8 +183,10 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 					}
 					activeDetailView = null;
 				}
-
 				control.layout(true);
+				control.setSize(control.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+//				sc.setContent(null);
+//				sc.setContent(control);
 			}
 		} finally {
 			selectionChanging = false;
