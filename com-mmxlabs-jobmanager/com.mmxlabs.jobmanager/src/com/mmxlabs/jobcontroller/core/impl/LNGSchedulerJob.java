@@ -102,7 +102,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
-			saveSolution("optimised", optimiser.getBestSolution());
+			saveSolution("optimised", optimiser.getBestSolution(true));
 			return false;
 		} else {
 			return true;
