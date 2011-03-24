@@ -56,8 +56,8 @@ public interface ILocalSearchOptimiser<T> extends IOptimiser<T> {
 	ISequencesManipulator<T> getSequenceManipulator();
 	
 	IAnnotatedSolution<T> start(IOptimisationContext<T> context);
-	IAnnotatedSolution<T> getBestSolution();
-	IAnnotatedSolution<T> getCurrentSolution();
+	IAnnotatedSolution<T> getBestSolution(final boolean b);
+	IAnnotatedSolution<T> getCurrentSolution(final boolean b);
 	int step(int percentage);
 	
 	boolean isFinished();

@@ -197,7 +197,7 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 
 	@Override
 	public void annotate(final ISequences<T> sequences,
-			final IAnnotatedSolution<T> solution) {
+			final IAnnotatedSolution<T> solution, final boolean forExport) {
 		evaluate(sequences);
 		// Would annotate here
 	}

@@ -429,13 +429,13 @@ public class LocalSearchOptimiserTest {
 		}
 
 		@Override
-		public IAnnotatedSolution<T> getBestSolution() {
+		public IAnnotatedSolution<T> getBestSolution(boolean b) {
 			fail("This is not part of the test.");
 			return null;
 		}
 
 		@Override
-		public IAnnotatedSolution<T> getCurrentSolution() {
+		public IAnnotatedSolution<T> getCurrentSolution(boolean b) {
 			fail("This is not part of the test.");
 			return null;
 		}

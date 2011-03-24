@@ -84,5 +84,5 @@ public interface IFitnessCore<T> {
 	 * @param sequences sequences to evaluate
 	 * @param solution annotated solution for these sequences
 	 */
-	void annotate(final ISequences<T> sequences, final IAnnotatedSolution<T> solution);
+	void annotate(final ISequences<T> sequences, final IAnnotatedSolution<T> solution, final boolean forExport);
 }

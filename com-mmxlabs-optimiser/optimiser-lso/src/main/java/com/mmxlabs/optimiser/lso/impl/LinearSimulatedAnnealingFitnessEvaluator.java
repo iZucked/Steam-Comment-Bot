@@ -292,10 +292,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 	@Override
 	public IAnnotatedSolution<T> getBestAnnotatedSolution(
-			IOptimisationContext<T> context) {
+			IOptimisationContext<T> context, final boolean forExport) {
 		final IAnnotatedSolution<T> result = fitnessHelper
 				.buildAnnotatedSolution(context, getBestSequences(),
-						getFitnessComponents());
+						getFitnessComponents(), forExport);
 
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents,
 				new HashMap<String, Long>(bestFitnesses));
@@ -305,10 +305,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator<T> implements
 
 	@Override
 	public IAnnotatedSolution<T> getCurrentAnnotatedSolution(
-			IOptimisationContext<T> context) {
+			IOptimisationContext<T> context, final boolean forExport) {
 		final IAnnotatedSolution<T> result = fitnessHelper
 				.buildAnnotatedSolution(context, getCurrentSequences(),
-						getFitnessComponents());
+						getFitnessComponents(), forExport);
 
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents,
 				new HashMap<String, Long>(currentFitnesses));

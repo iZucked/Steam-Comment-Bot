@@ -121,7 +121,8 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	@Override
 	public IAnnotatedSolution<T> buildAnnotatedSolution(
 			final IOptimisationContext<T> context, final ISequences<T> state,
-			final Collection<IFitnessComponent<T>> fitnessComponents) {
+			final Collection<IFitnessComponent<T>> fitnessComponents,
+			final boolean forExport) {
 
 		final Set<IFitnessCore<T>> cores = getFitnessCores(fitnessComponents);
 
@@ -130,7 +131,7 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 		result.setContext(context);
 
 		for (final IFitnessCore<T> core : cores) {
-			core.annotate(state, result);
+			core.annotate(state, result, forExport);
 		}
 
 		return result;

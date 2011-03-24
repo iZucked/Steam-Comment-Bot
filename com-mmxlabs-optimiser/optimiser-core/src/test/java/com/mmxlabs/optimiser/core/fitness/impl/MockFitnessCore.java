@@ -55,7 +55,7 @@ public final class MockFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public void annotate(ISequences<T> sequences, IAnnotatedSolution<T> solution) {
+	public void annotate(ISequences<T> sequences, IAnnotatedSolution<T> solution, final boolean forExport) {
 		
 	}
 }

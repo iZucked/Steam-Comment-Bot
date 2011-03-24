@@ -141,11 +141,11 @@ public interface IFitnessEvaluator<T> {
 	 * @param context
 	 * @return
 	 */
-	IAnnotatedSolution<T> getBestAnnotatedSolution(final IOptimisationContext<T> context);
+	IAnnotatedSolution<T> getBestAnnotatedSolution(final IOptimisationContext<T> context, final boolean forExport);
 	/**
 	 * Returns an annotated solution for the current sequences.
 	 * @param context
 	 * @return
 	 */
-	IAnnotatedSolution<T> getCurrentAnnotatedSolution(final IOptimisationContext<T> context);
+	IAnnotatedSolution<T> getCurrentAnnotatedSolution(final IOptimisationContext<T> context, final boolean forExport);
 }

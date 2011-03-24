@@ -77,7 +77,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		getMoveGenerator().setSequences(potentialRawSequences);
 
 		final IAnnotatedSolution<T> annotatedBestSolution = fitnessEvaluator
-				.getBestAnnotatedSolution(optimiserContext);
+				.getBestAnnotatedSolution(optimiserContext, false);
 		// fitnessEvaluator.getBestSequences()
 
 		annotatedBestSolution.setGeneralAnnotation(

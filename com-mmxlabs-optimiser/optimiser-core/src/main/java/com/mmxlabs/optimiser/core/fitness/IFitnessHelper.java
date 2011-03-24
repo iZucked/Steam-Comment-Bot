@@ -110,7 +110,7 @@ public interface IFitnessHelper<T> {
 	void acceptFromCores(Collection<IFitnessCore<T>> fitnessCores,
 			ISequences<T> sequences, Collection<IResource> affectedResources);
 
-	/**
+/**
 	 * The {@link #accept(ISequences, Collection)} method is to be invoked when
 	 * a {@link ISequences} object is accepted as the new state. The
 	 * {@link ISequences} object must have been passed to the
@@ -140,8 +140,8 @@ public interface IFitnessHelper<T> {
 			Collection<IFitnessComponent<T>> fitnessComponents);
 
 	/**
-	 * Construct an annotated solution for the given state. Performs an evaluation
-	 * with the given components as well, so watch out for that.
+	 * Construct an annotated solution for the given state. Performs an
+	 * evaluation with the given components as well, so watch out for that.
 	 * 
 	 * @param context
 	 * @param state
@@ -150,5 +150,6 @@ public interface IFitnessHelper<T> {
 	 */
 	public IAnnotatedSolution<T> buildAnnotatedSolution(
 			IOptimisationContext<T> context, ISequences<T> state,
-			Collection<IFitnessComponent<T>> fitnessComponents);
+			Collection<IFitnessComponent<T>> fitnessComponents,
+			final boolean forExport);
 }

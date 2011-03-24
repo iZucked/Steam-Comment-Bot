@@ -112,17 +112,17 @@ public abstract class LocalSearchOptimiser<T> implements
 			step(percentage);
 			getProgressMonitor().report(this, getNumberOfIterationsCompleted(),
 					fitnessEvaluator.getCurrentFitness(),
-					fitnessEvaluator.getBestFitness(), getCurrentSolution(),
-					getBestSolution());
+					fitnessEvaluator.getBestFitness(), getCurrentSolution(false),
+					getBestSolution(false));
 		}
 
 		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
-				getBestSolution());
+				getBestSolution(true));
 	}
 	
-	public IAnnotatedSolution<T> getBestSolution() {
+	public IAnnotatedSolution<T> getBestSolution(final boolean forExport) {
 		final IAnnotatedSolution<T> annotatedSolution = fitnessEvaluator
-				.getBestAnnotatedSolution(currentContext);
+				.getBestAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
 
 		annotatedSolution.setGeneralAnnotation(
@@ -133,9 +133,9 @@ public abstract class LocalSearchOptimiser<T> implements
 		return annotatedSolution;
 	}
 
-	public IAnnotatedSolution<T> getCurrentSolution() {
+	public IAnnotatedSolution<T> getCurrentSolution(final boolean forExport) {
 		final IAnnotatedSolution<T> annotatedSolution = fitnessEvaluator
-				.getCurrentAnnotatedSolution(currentContext);
+				.getCurrentAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
 
 		annotatedSolution.setGeneralAnnotation(
