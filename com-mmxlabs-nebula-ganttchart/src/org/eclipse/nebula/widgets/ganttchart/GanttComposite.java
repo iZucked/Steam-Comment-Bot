@@ -1638,7 +1638,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             Point extent = null;
             if (gs.needsNameUpdate() || gs.getNameExtent() == null) {
-                extent = gc.stringExtent(gs.getName());
+                extent = gc.textExtent(gs.getName(), SWT.DRAW_DELIMITER);
                 gs.setNameExtent(extent);
                 gs.setNeedsNameUpdate(false);
             } else {
@@ -1861,7 +1861,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             if (gs.getTextOrientation() == SWT.HORIZONTAL) {
                 Point p = null;
                 if (gs.needsNameUpdate() || gs.getNameExtent() == null) {
-                    p = gc.stringExtent(gs.getName());
+                	p = gc.textExtent(gs.getName(), SWT.DRAW_DELIMITER);
                     gs.setNameExtent(p);
                     gs.setNeedsNameUpdate(false);
                 } else {
@@ -1940,7 +1940,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
                         Point extent = null;
                         if (gs.needsNameUpdate() || gs.getNameExtent() == null) {
-                            extent = gc.stringExtent(gs.getName());
+                            extent = gc.textExtent(gs.getName(), SWT.DRAW_DELIMITER);
                             gs.setNameExtent(extent);
                             gs.setNeedsNameUpdate(false);
                         } else {
@@ -1963,7 +1963,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                         }
                         gcTemp.fillGradientRectangle(0, 0, extent.x, xMax - 2, true);
                         gcTemp.setForeground(_textColor);
-                        gcTemp.drawString(gs.getName(), 0, 0, true);
+                        gcTemp.drawText(gs.getName(), 0, 0, true);
                         gcTemp.dispose();
 
                         final ImageData id = textImage.getImageData();
@@ -1978,7 +1978,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
                     gc.drawImage(image, x + xStart - 1, yStart + textLocY);
                 } else if (gs.getTextOrientation() == SWT.HORIZONTAL) {
-                    gc.drawString(gs.getName(), horiSpacer, yStart + (gsHeight / 2) - (gs.getNameExtent().y / 2), true);
+                    gc.drawText(gs.getName(), horiSpacer, yStart + (gsHeight / 2) - (gs.getNameExtent().y / 2), true);
                 }
 
                 yStart += gsHeight - 1;
