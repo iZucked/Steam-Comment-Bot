@@ -53,15 +53,11 @@ public class TheNavigator extends CommonNavigator {
 		public void jobSelected(final IJobManager jobManager,
 				final IManagedJob job, final IResource resource) {
 
-			// TODO: Update Check status of widget
-
 			final TreeItem[] items = TheNavigator.this.getCommonViewer()
 					.getTree().getItems();
 			for (final TreeItem i : items) {
 				checkItems(i, resource, true);
 			}
-			// No need to redraw?
-			// TheNavigator.this.getCommonViewer().getTree().redraw();
 		}
 
 		@Override
