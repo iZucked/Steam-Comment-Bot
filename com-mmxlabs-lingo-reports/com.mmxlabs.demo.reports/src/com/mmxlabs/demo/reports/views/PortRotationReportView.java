@@ -45,6 +45,9 @@ public class PortRotationReportView extends EMFReportView {
 		final EventsPackage ep = EventsPackage.eINSTANCE;
 		final CargoPackage cp = CargoPackage.eINSTANCE;
 		final PortPackage pp = PortPackage.eINSTANCE;
+		
+		addColumn("Schedule", containingScheduleFormatter);
+		
 		addColumn("Vessel", objectFormatter,
 				ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(),
 				sp.getSequence_Vessel(),
@@ -57,7 +60,6 @@ public class PortRotationReportView extends EMFReportView {
 			}
 		});
 		
-		addColumn("Schedule", containingScheduleFormatter);
 		
 		addColumn("ID", objectFormatter, ep.getSlotVisit_Slot(),
 				cp.getSlot_Id());
