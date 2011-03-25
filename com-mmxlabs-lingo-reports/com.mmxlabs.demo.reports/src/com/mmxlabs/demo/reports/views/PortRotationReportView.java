@@ -49,7 +49,7 @@ public class PortRotationReportView extends EMFReportView {
 				ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(),
 				sp.getSequence_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
-		addColumn("Type", new IFormatter() {
+		addColumn("Type", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				final ScheduledEvent se = (ScheduledEvent) object;
@@ -62,13 +62,19 @@ public class PortRotationReportView extends EMFReportView {
 				ep.getScheduledEvent__GetLocalStartTime());
 		addColumn("End Date", calendarFormatter,
 				ep.getScheduledEvent__GetLocalEndTime());
-		addColumn("Duration (DD:HH)", new IFormatter() {
+		addColumn("Duration (DD:HH)", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				final ScheduledEvent se = (ScheduledEvent) object;
 				final int duration = se.getEventDuration();
 				return String.format("%02d:%02d", duration / 24, duration % 24);
 			}
+
+			@Override
+			public Comparable getComparable(Object object) {
+				return ((ScheduledEvent) object).getEventDuration();
+			}
+			
 		});
 		addColumn("Speed", objectFormatter, ep.getJourney_Speed());
 		addColumn("From Port", objectFormatter, ep.getJourney_FromPort(),
@@ -79,99 +85,97 @@ public class PortRotationReportView extends EMFReportView {
 				pp.getPort_Name());
 		addColumn("Route", objectFormatter, ep.getJourney_Route());
 
-		addColumn("Load Volume", new IFormatter() {
+		addColumn("Load Volume", new IntegerFormatter() {
 			@Override
-			public String format(final Object object) {
+			public Integer getIntValue(final Object object) {
 				if (object instanceof SlotVisit) {
 					final SlotVisit sv = (SlotVisit) object;
 					final CargoAllocation ca = sv.getCargoAllocation();
 
 					if (ca.getLoadSlot().equals(sv.getSlot())) {
-						//TODO add operation for this
-						return String.format("%,d",
-								ca.getFuelVolume() + ca.getDischargeVolume());
+						return (int) ca.getLoadVolume();
 					}
 				}
-				return "";
+				return null;
 			}
 		});
 
-		addColumn("Discharge Volume", new IFormatter() {
+		addColumn("Discharge Volume", new IntegerFormatter() {
 			@Override
-			public String format(final Object object) {
+			public Integer getIntValue(final Object object) {
 				if (object instanceof SlotVisit) {
 					final SlotVisit sv = (SlotVisit) object;
 					final CargoAllocation ca = sv.getCargoAllocation();
 
 					if (ca.getDischargeSlot().equals(sv.getSlot())) {
-						return String.format("%,d", ca.getDischargeVolume());
+						return (int)ca.getDischargeVolume();
 					}
 				}
-				return "";
+				return null;
 			}
 		});
 
 		for (final FuelType ft : FuelType.values()) {
-			addColumn(ft.getName(), new IFormatter() {
+			addColumn(ft.getName(), new IntegerFormatter() {
 				@Override
-				public String format(final Object object) {
+				public Integer getIntValue(final Object object) {
 
 					if (object instanceof FuelMixture) {
 						final FuelMixture mix = (FuelMixture) object;
 						for (final FuelQuantity q : mix.getFuelUsage()) {
 							if (q.getFuelType().equals(ft)) {
-								return String.format("%,d", q.getQuantity());
+								return (int) q.getQuantity();
 							}
 						}
 
-						return "0";
+						return 0;
 					} else {
-						return "";
+						return null;
 					}
 				}
 			});
-			addColumn(ft.getName() + " Cost", new IFormatter() {
+			addColumn(ft.getName() + " Cost", new IntegerFormatter() {
 				@Override
-				public String format(final Object object) {
+				public Integer getIntValue(final Object object) {
 
 					if (object instanceof FuelMixture) {
 						final FuelMixture mix = (FuelMixture) object;
 						for (final FuelQuantity q : mix.getFuelUsage()) {
 							if (q.getFuelType().equals(ft)) {
-								return String.format("%,d", q.getTotalPrice());
+								return (int) q.getTotalPrice();
 							}
 						}
-						return "0";
+						return 0;
 					} else {
-						return "";
+						return null;
 					}
 				}
 			});
 		}
 
-		addColumn("Fuel Cost", new IFormatter() {
+		addColumn("Fuel Cost", new IntegerFormatter() {
 			@Override
-			public String format(final Object object) {
+			public Integer getIntValue(final Object object) {
 				if (object instanceof FuelMixture) {
 					final FuelMixture mix = (FuelMixture) object;
-					return String.format("%,d", mix.getTotalFuelCost());
+					return (int)mix.getTotalFuelCost();
 				} else {
-					return "";
+					return null;
 				}
 			}
 		});
-		addColumn("Charter Cost", new IFormatter() {
+		addColumn("Charter Cost", new IntegerFormatter() {
 			@Override
-			public String format(final Object object) {
-				return String.format("%,d",
-						((ScheduledEvent) object).getHireCost());
+			public Integer getIntValue(final Object object) {
+				return (int)
+						((ScheduledEvent) object).getHireCost();
 			}
 		});
 
 		addColumn("Canal Cost", integerFormatter, ep.getJourney_RouteCost());
-		addColumn("Total Cost", new IFormatter() {
+		addColumn("Total Cost", new IntegerFormatter() {
 			@Override
-			public String format(final Object object) {
+			public Integer getIntValue(final Object object) {
 				long total = 0;
 				if (object instanceof FuelMixture)
 					total += ((FuelMixture) object).getTotalFuelCost();
@@ -180,7 +184,7 @@ public class PortRotationReportView extends EMFReportView {
 				if (object instanceof Journey)
 					total += ((Journey) object).getRouteCost();
 
-				return String.format("%,d", total);
+				return (int) total;
 			}
 		});
 		
@@ -247,28 +251,28 @@ public class PortRotationReportView extends EMFReportView {
 		final String title = "Profit to " + entity.getName();
 		entityColumnNames.add(title);
 		addColumn(title, 
-				new IFormatter() {
+				new IntegerFormatter() {
 					@Override
-					public String format(final Object object) {
+					public Integer getIntValue(final Object object) {
 						if (object instanceof SlotVisit) {
 							final SlotVisit slotVisit = (SlotVisit) object;
 							if (slotVisit.getSlot() instanceof LoadSlot) {
 								// display P&L
 								int value = 0;
 								final CargoAllocation allocation = slotVisit.getCargoAllocation();
-								if (allocation.getLoadRevenue().getEntity().equals(entity)) {
+								if (entity.equals(allocation.getLoadRevenue().getEntity())) {
 									value += allocation.getLoadRevenue().getTaxedValue();
 								}
-								if (allocation.getShippingRevenue().getEntity().equals(entity)) {
+								if (entity.equals(allocation.getShippingRevenue().getEntity())) {
 									value += allocation.getShippingRevenue().getTaxedValue();
 								}
-								if (allocation.getDischargeRevenue().getEntity().equals(entity)) {
+								if (entity.equals(allocation.getDischargeRevenue().getEntity())) {
 									value += allocation.getDischargeRevenue().getTaxedValue();
 								}
-								return integerFormatter.format((Integer)value);
+								 return value;
 							}
 						}
-						return "";
+						return null;
 					}
 				});
 	}

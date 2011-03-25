@@ -5,10 +5,10 @@
 package com.mmxlabs.demo.reports.views;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -27,7 +27,14 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
@@ -49,9 +56,10 @@ import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
  */
 public abstract class EMFReportView extends ViewPart implements
 		ISelectionListener {
-	private final List<ColumnHandler> handlers = new LinkedList<ColumnHandler>();
-
+	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
+	boolean sortDescending = false;
 	private class ColumnHandler {
+		private static final String COLUMN_HANDLER = "COLUMN_HANDLER";
 		private final IFormatter formatter;
 		private final EMFPath path;
 		private final String title;
@@ -74,38 +82,100 @@ public abstract class EMFReportView extends ViewPart implements
 					return formatter.format(path.get((EObject) element));
 				}
 			});
+			
+			final TableColumn tc = column.getColumn();
+			tc.setData(COLUMN_HANDLER, this);
+			tc.addSelectionListener(
+					new SelectionAdapter() {
+						{
+							final SelectionListener sl = this;
+							tc.addDisposeListener(
+									new DisposeListener() {
+										@Override
+										public void widgetDisposed(
+												final DisposeEvent e) {
+											tc.removeSelectionListener(sl);
+										}
+										
+									});
+						}
+						@Override
+						public void widgetSelected(final SelectionEvent e) {
+							// update sort order
+							makeSortColumn((ColumnHandler) tc.getData(COLUMN_HANDLER));
+							viewer.getTable().setSortColumn(tc);
+							viewer.getTable().setSortDirection(sortDescending ? SWT.DOWN : SWT.UP);
+						}
+					}
+					);
+			
 			return column;
 		}
+		
+		public int compare(final EObject one, final EObject two) {
+			final Comparable c1 = formatter.getComparable(path.get(one));
+			final Comparable c2 = formatter.getComparable(path.get(two));
+			return c1.compareTo(c2);
+		}
 	}
 
+	private void makeSortColumn(final ColumnHandler handler) {
+		if (handlers.get(0).equals(handler)) {
+			sortDescending = !sortDescending;
+		} else {
+			sortDescending = false;
+			handlers.remove(handler);
+			handlers.add(0, handler);
+		}
+		viewer.refresh();
+	}
+	
 	protected interface IFormatter {
 		public String format(final Object object);
+		public Comparable getComparable(final Object object);
 	}
 
-	protected final IFormatter objectFormatter = new IFormatter() {
+	protected final IFormatter objectFormatter = new BaseFormatter();
+
+	public class BaseFormatter implements IFormatter {
 		@Override
-		public String format(final Object object) {
+		public String format(Object object) {
+			if (object == null) {
+				return "";
+			} else {
+				return object.toString();
+			}
+		}
+
+		@Override
+		public Comparable getComparable(Object object) {
+			return format(object);
+		}
+		
+	}
+	
+	public class IntegerFormatter implements IFormatter {
+		public Integer getIntValue(Object object) {
+			if (object == null) return null;
+			return ((Number)object).intValue();
+		}
+		
+		public String format(Object object) {
 			if (object == null)
 				return "";
-			return object.toString();
+			Integer x = getIntValue(object);
+			if (x == null)
+				return "";
+			return String.format("%,d", x);
 		}
-	};
-
-	protected static String localizeDate(final Date date, final String tzname) {
-		final TimeZone tz = TimeZone
-				.getTimeZone((String) (tzname == null ? "UTC" : tzname));
-
-		final Calendar calendar = Calendar.getInstance(tz);
-		calendar.setTime(date);
-		return String.format("%02d/%02d/%d %02d:%02d %s", calendar
-				.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.HOUR_OF_DAY), calendar
-						.get(Calendar.MINUTE), calendar.getTimeZone()
-						.getDisplayName(false, TimeZone.SHORT));
+		public Comparable getComparable(Object object) {
+			final Integer x = getIntValue(object);
+			if (x == null) return -Integer.MAX_VALUE;
+			return x;
+		}
 	}
-
-	protected final IFormatter calendarFormatter = new IFormatter() {
+	
+	protected final IFormatter calendarFormatter = new BaseFormatter() {
 		@Override
 		public String format(final Object object) {
 			if (object == null)
@@ -118,25 +188,21 @@ public abstract class EMFReportView extends ViewPart implements
 					+ cal.getTimeZone().getDisplayName(false, TimeZone.SHORT)
 					+ ")";
 		}
-	};
-
-	protected final IFormatter integerFormatter = new IFormatter() {
-		@Override
-		public String format(final Object object) {
-			if (object == null)
-				return "";
-			return String.format("%,d", object);
+		public Comparable getComparable(Object object) {
+			if (object == null) return new Date(-Long.MAX_VALUE);
+			return ((Calendar) object).getTime();
 		}
 	};
 
-	protected final IFormatter costFormatter = new IFormatter() {
-		@Override
-		public String format(final Object object) {
-			if (object == null)
-				return "";
-			final int x = ((Number) object).intValue();
+	protected final IntegerFormatter integerFormatter = new IntegerFormatter();
 
-			return String.format("%,d", -x);
+	
+	protected final IFormatter costFormatter = new IntegerFormatter() {
+		@Override
+		public Integer getIntValue(Object object) {
+			if (object == null)
+				return null;
+			return - super.getIntValue(object);
 		}
 	};
 
@@ -155,7 +221,7 @@ public abstract class EMFReportView extends ViewPart implements
 			handler.createColumn(viewer).getColumn().pack();
 		}
 	}
-
+	
 	@Override
 	public void createPartControl(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
@@ -166,6 +232,19 @@ public abstract class EMFReportView extends ViewPart implements
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLinesVisible(true);
 
+		viewer.setComparator(
+				new ViewerComparator() {
+					@Override
+					public int compare(Viewer viewer, Object e1, Object e2) {
+						final Iterator<ColumnHandler> iterator = handlers.iterator();
+						int comparison = 0;
+						while (iterator.hasNext() && comparison == 0) {
+							comparison = iterator.next().compare((EObject) e1, (EObject)e2);
+						}
+						return sortDescending ? -comparison : comparison;
+					}
+				});
+		
 		for (final ColumnHandler handler : handlers) {
 			handler.createColumn(viewer).getColumn().pack();
 		}
