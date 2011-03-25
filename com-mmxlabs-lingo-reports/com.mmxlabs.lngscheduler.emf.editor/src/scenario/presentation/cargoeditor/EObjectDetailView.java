@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -58,27 +59,27 @@ public class EObjectDetailView extends Composite {
 		public Control createControl(final Composite parent);
 	}
 
-	private class NonEditableEditor extends BasicAttributeInlineEditor {
-		private Label label;
-
-		public NonEditableEditor(EMFPath path, EStructuralFeature feature) {
-			super(path, feature, null);
-		}
-
-		@Override
-		public Control createControl(Composite parent) {
-			return (label = new Label(parent, SWT.NONE));
-		}
-
-		@Override
-		protected void updateDisplay(Object value) {
-			if (value instanceof NamedObject) {
-				label.setText(((NamedObject) value).getName());
-			} else {
-				label.setText(value == null ? "" : value.toString());
-			}
-		}
-	}
+	// private class NonEditableEditor extends BasicAttributeInlineEditor {
+	// private Label label;
+	//
+	// public NonEditableEditor(EMFPath path, EStructuralFeature feature) {
+	// super(path, feature, null);
+	// }
+	//
+	// @Override
+	// public Control createControl(Composite parent) {
+	// return (label = new Label(parent, SWT.NONE));
+	// }
+	//
+	// @Override
+	// protected void updateDisplay(Object value) {
+	// if (value instanceof NamedObject) {
+	// label.setText(((NamedObject) value).getName());
+	// } else {
+	// label.setText(value == null ? "" : value.toString());
+	// }
+	// }
+	// }
 
 	public void setEditorFactoryForClassifier(final EClassifier classifier,
 			final IInlineEditorFactory factory) {
@@ -86,6 +87,7 @@ public class EObjectDetailView extends Composite {
 	}
 
 	public void initForEClass(final EClass objectClass) {
+		System.err.println("Make detail view for " + objectClass.getName());
 		int groupCount = 1;
 		addGroupForEClass(objectClass, unmangle(objectClass.getName()),
 				new EMFPath(true));
@@ -95,9 +97,9 @@ public class EObjectDetailView extends Composite {
 			String groupName = nameByFeature.get(reference);
 			if (groupName == null)
 				groupName = unmangle(reference.getName());
-			
-			addGroupForEClass(reference.getEReferenceType(),
-					groupName, new EMFPath(true, reference));
+
+			addGroupForEClass(reference.getEReferenceType(), groupName,
+					new EMFPath(true, reference));
 			groupCount++;
 		}
 
@@ -133,9 +135,11 @@ public class EObjectDetailView extends Composite {
 
 			if (attribute instanceof EReference) {
 				final EReference reference = (EReference) attribute;
-				if (reference.isContainment() && !(editorFactoriesByFeature.containsKey(reference)))
+				if (reference.isContainment()
+						&& !(editorFactoriesByFeature.containsKey(reference)))
 					continue;
-				if (reference.isMany() && !(editorFactoriesByFeature.containsKey(reference)))
+				if (reference.isMany()
+						&& !(editorFactoriesByFeature.containsKey(reference)))
 					continue; // skip
 			}
 
@@ -152,13 +156,15 @@ public class EObjectDetailView extends Composite {
 			if (attributeEditorFactory == null) {
 				continue;
 				// skip over non-editable fields
-//				NonEditableEditor blank = new NonEditableEditor(path, attribute);
-//				editors.add(blank);
-//				attributeControl = blank.createControl(controls);
+				// NonEditableEditor blank = new NonEditableEditor(path,
+				// attribute);
+				// editors.add(blank);
+				// attributeControl = blank.createControl(controls);
 			} else {
 				final IInlineEditor attributeEditor = attributeEditorFactory
 						.createEditor(path, attribute);
 				// create label for this attribute
+
 				final Label attributeLabel = new Label(controls, SWT.RIGHT);
 				String attributeName = nameByFeature.get(attribute);
 				if (attributeName == null)
@@ -218,6 +224,7 @@ public class EObjectDetailView extends Composite {
 	}
 
 	private final Map<EStructuralFeature, String> nameByFeature = new HashMap<EStructuralFeature, String>();
+
 	public void setNameForFeature(EStructuralFeature key, String value) {
 		nameByFeature.put(key, value);
 	}

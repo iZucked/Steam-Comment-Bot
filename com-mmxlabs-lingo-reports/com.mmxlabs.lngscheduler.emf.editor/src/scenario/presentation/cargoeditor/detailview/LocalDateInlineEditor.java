@@ -22,7 +22,7 @@ import scenario.presentation.cargoeditor.widgets.DateAndTime;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
-public class LocalDateInlineEditor extends BasicAttributeInlineEditor {
+public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	private DateAndTime dateAndTime;
 	private final EReference portReference;
 
@@ -44,7 +44,7 @@ public class LocalDateInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public Control createControl(Composite parent) {
+	protected Control createValueControl(Composite parent) {
 		final DateAndTime dateAndTime = new DateAndTime(parent, SWT.NONE, false);
 		this.dateAndTime = dateAndTime;
 		
@@ -69,19 +69,30 @@ public class LocalDateInlineEditor extends BasicAttributeInlineEditor {
 		return dateAndTime;
 	}
 	
-	private Calendar getCalendar(final Date utcDate) {
+	private TimeZone getTimeZone() {
 		final Port port = (Port) (portReference == null ? null : input.eGet(portReference));
 		final TimeZone zone = TimeZone.getTimeZone(portReference == null
 				|| port == null || port.getTimeZone() == null ? "UTC" : port
 				.getTimeZone());
-		
-		final Calendar cal = Calendar.getInstance(zone);
+		return zone;
+	}
+	 
+	private Calendar getCalendar(final Date utcDate) {
+		final Calendar cal = Calendar.getInstance(getTimeZone());
 		cal.setTime(utcDate);
 		return cal;
 	}
 
+	
 	@Override
-	protected void updateDisplay(final Object value) {
+	protected void updateControl() {
+		if (input != null && portReference != null && input.eGet(portReference) != null) {
+			dateAndTime.setTimeZone(getTimeZone()); 
+		}
+	}
+
+	@Override
+	protected void updateValueDisplay(final Object value) {
 		// Value will be a Date, so we need to find a port and localize the
 		// date. Same as in the other date editors.
 		final Date utcDate = (Date) value;

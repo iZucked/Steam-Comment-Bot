@@ -4,11 +4,8 @@
 package scenario.presentation.cargoeditor.detailview;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -30,7 +27,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
  * @author hinton
  * 
  */
-public class ReferenceInlineEditor extends BasicAttributeInlineEditor {
+public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	private Combo combo;
 	private IReferenceValueProvider valueProvider;
 
@@ -45,10 +42,10 @@ public class ReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public Control createControl(final Composite parent) {
+	public Control createValueControl(final Composite parent) {
 		final Combo combo = new Combo(parent, SWT.READ_ONLY);
 		this.combo = combo;
-		
+
 		combo.addSelectionListener(new SelectionListener() {
 			{
 				final SelectionListener sl = this;
@@ -59,22 +56,27 @@ public class ReferenceInlineEditor extends BasicAttributeInlineEditor {
 					}
 				});
 			}
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				doSetValue(valueList.get(nameList.indexOf(combo.getText())));
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
+
 			}
 		});
-		
+
 		return combo;
 	}
 
 	@Override
-	protected void updateDisplay(final Object value) {
+	public void setInput(EObject source) {
+		super.setInput(source);
+	}
+
+	protected void updateControl() {
 		final List<Pair<String, EObject>> values = valueProvider
 				.getAlloweValues(input, feature);
 		// update combo contents
@@ -82,12 +84,15 @@ public class ReferenceInlineEditor extends BasicAttributeInlineEditor {
 		nameList.clear();
 		valueList.clear();
 
-		for (final Pair<String,EObject> object : values) {
+		for (final Pair<String, EObject> object : values) {
 			valueList.add(object.getSecond());
 			nameList.add(object.getFirst());
 			combo.add(object.getFirst());
 		}
+	}
 
+	@Override
+	protected void updateValueDisplay(final Object value) {
 		combo.setText(nameList.get(valueList.indexOf(value)));
 	}
 }

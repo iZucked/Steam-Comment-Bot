@@ -219,6 +219,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		@Override
 		public List<Pair<String, EObject>> getAlloweValues(EObject target,
 				EStructuralFeature field) {
+			if (target == null) return Collections.emptyList();
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getPortModel().getPorts(),
@@ -1626,9 +1627,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 
 			{
-				final DialogFeatureManipulator startRequirement = new DialogFeatureManipulator(
-						FleetPackage.eINSTANCE.getVessel_StartRequirement(),
-						getEditingDomain()) {
+				class RequirementFeatureManipulator extends
+						DialogFeatureManipulator {
+
+					public RequirementFeatureManipulator(
+							EStructuralFeature field,
+							EditingDomain editingDomain) {
+						super(field, editingDomain);
+					}
 
 					@Override
 					protected String renderValue(final Object value) {
@@ -1657,10 +1663,20 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 						return patDialog.open((PortAndTime) getValue(object));
 					}
-				};
+				}
+				final DialogFeatureManipulator startRequirement = new RequirementFeatureManipulator(
+						FleetPackage.eINSTANCE.getVessel_StartRequirement(),
+						getEditingDomain());
 
 				fleetPane.addColumn("Start constraint", startRequirement,
 						startRequirement);
+				
+				final DialogFeatureManipulator endRequirement = new RequirementFeatureManipulator(
+						FleetPackage.eINSTANCE.getVessel_EndRequirement(),
+						getEditingDomain());
+
+				fleetPane.addColumn("Start constraint", endRequirement,
+						endRequirement);
 			}
 
 			// TODO add other desired vessel columns here

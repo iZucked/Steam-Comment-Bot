@@ -283,8 +283,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					// get the notification from
 					// somewhere below, so we need to go up
 					EObject source = (EObject) notification.getNotifier();
-					if (currentElements.contains(source))
-						return;
+//					if (currentElements.contains(source))
+//						return;
 					while (!(currentElements.contains(source))
 							&& ((source = source.eContainer()) != null)) {
 

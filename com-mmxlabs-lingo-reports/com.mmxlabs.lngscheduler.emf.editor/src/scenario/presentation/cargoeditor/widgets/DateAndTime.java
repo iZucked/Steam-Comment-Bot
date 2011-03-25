@@ -89,8 +89,14 @@ public class DateAndTime extends Composite {
 
 	private TimeZone timeZone;
 	
+	public void setTimeZone(final TimeZone timeZone) {
+		this.timeZone = timeZone;
+	}
+	
 	public Calendar getValue() {
 		final Calendar c = Calendar.getInstance(timeZone); //TODO this is a bit dodgy
+		
+		// TODO causes a bug if you getvalue without having previously set a value. grar.
 
 		c.clear();
 

@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
-public class TextInlineEditor extends BasicAttributeInlineEditor {
+public class TextInlineEditor extends UnsettableInlineEditor {
 	private Text text;
 	public TextInlineEditor(EMFPath path, EStructuralFeature feature,
 			EditingDomain editingDomain) {
@@ -21,7 +21,7 @@ public class TextInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public Control createControl(Composite parent) {
+	public Control createValueControl(Composite parent) {
 		final Text text = new Text(parent, SWT.NONE);
 		
 		text.addModifyListener(
@@ -48,7 +48,7 @@ public class TextInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	protected void updateDisplay(final Object value) {
+	protected void updateValueDisplay(final Object value) {
 		text.setText(value == null ? "null" : value.toString());
 	}
 }
