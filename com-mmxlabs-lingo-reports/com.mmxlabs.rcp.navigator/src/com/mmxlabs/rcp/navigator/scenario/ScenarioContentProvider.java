@@ -3,6 +3,7 @@ package com.mmxlabs.rcp.navigator.scenario;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -72,7 +73,6 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 		}
 	};
 
-
 	/**
 	 * {@link IManagedJobListener} implementation to cause the viewer to refresh
 	 * on job updates
@@ -112,31 +112,38 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 
 					// Trigger a refresh of the tree
 					((TreeViewer) viewer).refresh(resource, true);
+					
+					// Ensure object is selected before triggering an update
+					if (((IStructuredSelection) viewer.getSelection()).toList()
+							.contains(resource)) {
 
-					// Trigger a re-selection event to force updates out to
-					// reports
 
-					// Skip TreeViewer as it filters out identical selections,
-					// but talk direct to Tree and re-select current items.
+						// Trigger a re-selection event to force updates out to
+						// reports
 
-					// TODO: Should check selected items are the correct
-					// resources!
+						// Skip TreeViewer as it filters out identical
+						// selections,
+						// but talk direct to Tree and re-select current items.
 
-					// TODO: Ensure reports do no filter out identical selection
-					// events
+						// TODO: Should check selected items are the correct
+						// resources!
 
-					final TreeItem[] current = tv.getTree().getSelection();
-					tv.getTree().setSelection(current);
+						// TODO: Ensure reports do no filter out identical
+						// selection
+						// events
+
+						final TreeItem[] current = tv.getTree().getSelection();
+						tv.getTree().setSelection(current);
+					}
 				}
 			});
 			return true;
 		}
 	};
 
-	
 	public ScenarioContentProvider() {
 		jobManager.addJobManagerListener(jobManagerListener);
-		
+
 		for (final IManagedJob job : jobManager.getJobs()) {
 			job.addListener(listener);
 		}
@@ -157,7 +164,7 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 		this.viewer = viewer;
 	}
 
-		@Override
+	@Override
 	public void dispose() {
 
 		// Clean up listeners
