@@ -141,8 +141,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 			}
 		});
-
-		// TODO: The UI will freeze at this point -- perhaps a Runnable here?
 		
 		final Job eclipseJob = new Job("Evaluate initial state of " + scenario.getName()) {
 			@Override
