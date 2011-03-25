@@ -46,7 +46,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import scenario.Scenario;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
