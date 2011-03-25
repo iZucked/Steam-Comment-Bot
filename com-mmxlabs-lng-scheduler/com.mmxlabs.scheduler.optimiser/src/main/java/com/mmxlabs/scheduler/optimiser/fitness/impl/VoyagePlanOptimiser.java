@@ -115,9 +115,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		
 		runLoop(0);
 
-		if (!bestPlanFitsInAvailableTime) {
-			System.err.println("Impossible situation!");
-		}
+//		if (!bestPlanFitsInAvailableTime) {
+//			System.err.println("Impossible situation!");
+//		}
 		
 		return bestPlan;
 	}
