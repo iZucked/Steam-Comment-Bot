@@ -249,5 +249,8 @@
             contributorClass="scenario.market.presentation.MarketActionBarContributor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+   </extension>
 
 </plugin>

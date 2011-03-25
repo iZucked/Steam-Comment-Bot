@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -58,7 +59,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
-import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -68,6 +69,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -106,12 +108,8 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
-
 import scenario.Scenario;
 import scenario.ScenarioPackage;
-import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
@@ -120,7 +118,6 @@ import scenario.contract.Contract;
 import scenario.contract.ContractPackage;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
-import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.VesselStateAttributes;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
@@ -134,6 +131,7 @@ import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.EObjectDetailPropertySheetPage;
+import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.EnumAttributeManipulator;
@@ -141,17 +139,20 @@ import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.celleditors.PortAndTimeDialog;
 import scenario.presentation.cargoeditor.celleditors.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
-import scenario.presentation.cargoeditor.properties.ScenarioPropertySourceProvider;
+import scenario.presentation.cargoeditor.handlers.SwapDischargeHandler;
+import scenario.provider.LngEditPlugin;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
+
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
  * This is an example of a Scenario model editor. <!-- begin-user-doc --> <!--
@@ -203,7 +204,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			return result;
 		}
 	};
-	
+
 	final ScenarioRVP entityProvider = new ScenarioRVP() {
 		@Override
 		public List<Pair<String, EObject>> getAlloweValues(EObject target,
@@ -1317,7 +1318,44 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		{
 
 			final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this);
+					getSite().getPage(), ScenarioEditor.this) {
+
+				@Override
+				public Viewer createViewer(Composite parent) {
+					final Viewer v = super.createViewer(parent);
+
+					// TODO hook this up declaratively. No idea what extension point to use 
+					// for buttons in the cargo editor (if there even is one)
+					final SwapDischargeHandler handler = new SwapDischargeHandler();
+
+				
+					getToolBarManager().add(new Action() {
+						{
+							setImageDescriptor(
+							LngEditorPlugin.Implementation.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin().getSymbolicName(), "/icons/swap.gif")
+									);
+						}
+						@Override
+						public boolean isEnabled() {
+//							System.err.println("isenabled?");
+							return true;
+						}
+
+						@Override
+						public void run() {
+							try {
+								handler.execute(null);
+							} catch (ExecutionException e) {
+								// display exception
+							}
+						}
+					});
+
+					getToolBarManager().update(true);
+					return v;
+				}
+
+			};
 			// cargoPane.createControl(getContainer());
 
 			final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
@@ -1863,30 +1901,37 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				});
 
-		page.setEditorFactoryForClassifier(CargoPackage.eINSTANCE.getCargoType(), 
+		page.setEditorFactoryForClassifier(
+				CargoPackage.eINSTANCE.getCargoType(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
-						return new EENumInlineEditor(path, (EAttribute)feature, editingDomain);
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new EENumInlineEditor(path,
+								(EAttribute) feature, editingDomain);
 					}
 				});
-		
-		page.setEditorFactoryForClassifier(ContractPackage.eINSTANCE.getEntity(), 
-				new IInlineEditorFactory() {					
-					@Override
-					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
-						return new ReferenceInlineEditor(path, feature, editingDomain, entityProvider);
-					}
-				});
-		
-		page.setEditorFactoryForFeature(FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumptionCurve(), 
+
+		page.setEditorFactoryForClassifier(
+				ContractPackage.eINSTANCE.getEntity(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path, EStructuralFeature feature) {
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, entityProvider);
+					}
+				});
+
+		page.setEditorFactoryForFeature(FleetPackage.eINSTANCE
+				.getVesselStateAttributes_FuelConsumptionCurve(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
 						return new FuelCurveEditor(path, feature, editingDomain);
 					}
-				}
-		);
+				});
 
 		return page;
 	}

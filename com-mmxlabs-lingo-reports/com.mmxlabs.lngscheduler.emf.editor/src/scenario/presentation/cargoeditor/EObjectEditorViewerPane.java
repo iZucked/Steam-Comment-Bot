@@ -20,7 +20,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -60,7 +59,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public Viewer createViewer(final Composite parent) {
-		viewer = new TableViewer(parent, SWT.FULL_SELECTION);
+		viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI);
 
 		Action a = new PackTableColumnsAction(viewer);
 		getToolBarManager().add(a);
