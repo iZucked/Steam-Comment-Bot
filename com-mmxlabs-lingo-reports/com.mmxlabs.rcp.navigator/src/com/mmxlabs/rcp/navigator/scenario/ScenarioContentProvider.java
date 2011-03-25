@@ -1,13 +1,9 @@
 package com.mmxlabs.rcp.navigator.scenario;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -21,7 +17,7 @@ import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.rcp.navigator.ecore.EcoreContentProvider;
+import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
 
 /**
  * {@link IContentProvider} implementation providing
@@ -35,57 +31,16 @@ import com.mmxlabs.rcp.navigator.ecore.EcoreContentProvider;
 public class ScenarioContentProvider extends ResourceExtensionContentProvider
 		implements ITreeContentProvider {
 
-	EcoreContentProvider scp = new EcoreContentProvider();
+	private final IJobManager jobManager = Activator.getDefault()
+			.getJobManager();
 
-	Viewer viewer;
+	private Viewer viewer;
 
-	IJobManager jobManager = Activator.getDefault().getJobManager();
-	//
-	// /**
-	// * Mapping between {@link IResource} and current
-	// * {@link ScenarioTreeNodeClass} representation
-	// */
-	// final Map<IResource, ScenarioTreeNodeClass> nodeMap = new
-	// WeakHashMap<IResource, ScenarioTreeNodeClass>();
-
-	// IScenarioTreeNodeListener scenarioTreeNodeListener = new
-	// IScenarioTreeNodeListener() {
-	//
-	// @Override
-	// public void scenarioChanged(final ScenarioTreeNodeClass node, final
-	// Scenario oldScenario, final Scenario newScenario) {
-	//
-	// }
-	//
-	// @OverrideS
-	// public void resourceChanged(final ScenarioTreeNodeClass node, final
-	// IResource oldResource, final IResource newResource) {
-	//
-	// }
-	//
-	// @Override
-	// public void jobChanged(final ScenarioTreeNodeClass node, final
-	// IManagedJob oldJob, final IManagedJob newJob) {
-	//
-	// if (node != null) {
-	// Display.getDefault().asyncExec(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// ((TreeViewer) viewer).refresh(node, true);
-	// }
-	// });
-	// }
-	// }
-	// };
-
-	IJobManagerListener jobManagerListener = new IJobManagerListener() {
-
-		@Override
-		public void jobSelected(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
-
-		}
+	/**
+	 * {@link IJobManagerListener} implementation to cause the viewer to refresh
+	 * on job addition/removal
+	 */
+	private final IJobManagerListener jobManagerListener = new JobManagerListener() {
 
 		@Override
 		public void jobRemoved(final IJobManager jobManager,
@@ -93,12 +48,6 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 
 			job.removeListener(listener);
 
-			// final ScenarioTreeNodeClass node = nodeMap.get(resource);
-
-			// if (node != null) {
-
-			// node.setJob(null);
-
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override
@@ -106,24 +55,13 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 					((TreeViewer) viewer).refresh(resource, true);
 				}
 			});
-			// }
-		}
-
-		@Override
-		public void jobDeselected(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
-
 		}
 
 		@Override
 		public void jobAdded(final IJobManager jobManager,
 				final IManagedJob job, final IResource resource) {
 
-			// final ScenarioTreeNodeClass node = nodeMap.get(resource);
-			//
-			// if (node != null) {
 			job.addListener(listener);
-			// node.setJob(job);
 
 			Display.getDefault().asyncExec(new Runnable() {
 
@@ -132,12 +70,83 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 					((TreeViewer) viewer).refresh(resource, true);
 				}
 			});
-			// }
+		}
+	};
+
+	/**
+	 * {@link IManagedJobListener} implementation to cause the viewer to refresh
+	 * on job updates
+	 */
+	private final IManagedJobListener listener = new IManagedJobListener() {
+
+		@Override
+		public boolean jobStateChanged(final IManagedJob job,
+				final JobState oldState, final JobState newState) {
+
+			// Find the resource for the job
+			final IResource resource = jobManager.findResourceForJob(job);
+
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					((TreeViewer) viewer).refresh(resource, true);
+				}
+			});
+
+			return true;
+		}
+
+		@Override
+		public boolean jobProgressUpdated(final IManagedJob job,
+				final int progressDelta) {
+
+			final TreeViewer tv = (TreeViewer) viewer;
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					// Find the resource for the job
+					final IResource resource = jobManager
+							.findResourceForJob(job);
+
+					// Trigger a refresh of the tree
+					((TreeViewer) viewer).refresh(resource, true);
+					
+					// Ensure object is selected before triggering an update
+					if (((IStructuredSelection) viewer.getSelection()).toList()
+							.contains(resource)) {
+
+
+						// Trigger a re-selection event to force updates out to
+						// reports
+
+						// Skip TreeViewer as it filters out identical
+						// selections,
+						// but talk direct to Tree and re-select current items.
+
+						// TODO: Should check selected items are the correct
+						// resources!
+
+						// TODO: Ensure reports do no filter out identical
+						// selection
+						// events
+
+						final TreeItem[] current = tv.getTree().getSelection();
+						tv.getTree().setSelection(current);
+					}
+				}
+			});
+			return true;
 		}
 	};
 
 	public ScenarioContentProvider() {
 		jobManager.addJobManagerListener(jobManagerListener);
+
+		for (final IManagedJob job : jobManager.getJobs()) {
+			job.addListener(listener);
+		}
 	}
 
 	/*
@@ -155,145 +164,10 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 		this.viewer = viewer;
 	}
 
-	// TODO: Weak -> Weak?
-
-	IManagedJobListener listener = new IManagedJobListener() {
-
-		@Override
-		public boolean jobStateChanged(final IManagedJob job,
-				final JobState oldState, final JobState newState) {
-
-			// RE_SELECT SELECTIOB
-
-			final IResource resource = jobManager.findResourceForJob(job);
-			//
-			// final ScenarioTreeNodeClass node = nodeMap.get(resource);
-			// if (node != null) {
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					((TreeViewer) viewer).refresh(resource, true);
-				}
-			});
-			// }
-			return true;
-		}
-
-		@Override
-		public boolean jobProgressUpdated(final IManagedJob job,
-				final int progressDelta) {
-
-			final TreeViewer tv = (TreeViewer) viewer;
-			// Skip TreeViewer as it filters out identical selections, but talk
-			// direct to Tree and re-select current items.
-			// TODO: Should check selected items are the correct resources!
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					final IResource resource = jobManager.findResourceForJob(job);
-					((TreeViewer) viewer).refresh(resource, true);
-
-					final TreeItem[] current = tv.getTree().getSelection();
-					tv.getTree().setSelection(current);
-					tv.refresh(jobManager.findResourceForJob(job), true);
-				}
-			});
-			return true;
-		}
-	};
-
-	@Override
-	public Object[] getChildren(final Object element) {
-
-		// >> Better idea - forget derived, just hide .scenario and replace
-		// folders with the RandomTreeNode object
-
-		// Generate proper hierarchy/.
-
-		// TODO: Wrong scenario/schedule selected?
-
-		// Remember to add ion/out to plugin.xml
-
-		if (element instanceof IContainer) {
-			IContainer container = (IContainer) element;
-
-			final List<Object> children = new ArrayList<Object>();
-			try {
-				for (final IResource member : container.members()) {
-					if (member.isAccessible()) {
-
-						if (member.getType() == IResource.FILE
-								&& member.getFileExtension().equals("scenario")) {
-
-							// // Create and link
-							// final ScenarioTreeNodeClass node = new
-							// ScenarioTreeNodeClass();
-							//
-							// node.setResource(member);
-							// node.addListener(scenarioTreeNodeListener);
-							//
-							// nodeMap.put(member, node);
-
-							final IManagedJob job = jobManager
-									.findJobForResource(member);
-							if (job != null) {
-								// node.setJob(job);
-								job.addListener(listener);
-							}
-
-							// final Object[] scenarioObjects =
-							// scp.getChildren(member);
-							//
-							// if (scenarioObjects != null) {
-							// for (final Object o : scenarioObjects) {
-							// if (o instanceof Scenario) {
-							// node.setScenario((Scenario) o);
-							// // Assuming one scenario
-							// continue;
-							// }
-							// }
-							// }
-
-							children.add(member);
-						} else {
-							children.add(member);
-						}
-					}
-				}
-			} catch (final CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			return children.toArray();
-		}
-
-		return super.getChildren(element);
-	}
-
-	@Override
-	public boolean hasChildren(final Object element) {
-
-		// if (element instanceof ScenarioTreeNodeClass) {
-		// // No?
-		// }
-
-		return super.hasChildren(element);
-	}
-
-	@Override
-	protected void processDelta(final IResourceDelta delta) {
-
-		// TODO: Check the Delta and do stuff if needed
-
-		super.processDelta(delta);
-	}
-
 	@Override
 	public void dispose() {
 
+		// Clean up listeners
 		jobManager.removeJobManagerListener(jobManagerListener);
 
 		for (final IManagedJob job : jobManager.getJobs()) {

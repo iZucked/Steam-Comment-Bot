@@ -4,6 +4,10 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.HandlerEvent;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
@@ -39,6 +43,7 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 
 			// Fire the event
 			AbstractOptimisationHandler.this.fireHandlerChanged(event);
+
 			return true;
 		}
 	};
@@ -63,6 +68,20 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 		}
 	};
 
+	private final ISelectionListener selectionListener = new ISelectionListener() {
+
+		@Override
+		public void selectionChanged(final IWorkbenchPart part,
+				final ISelection selection) {
+			// Create Event to trigger enabled state update
+			final HandlerEvent handlerEvent = new HandlerEvent(
+					AbstractOptimisationHandler.this, true, false);
+
+			// Fire the event
+			AbstractOptimisationHandler.this.fireHandlerChanged(handlerEvent);
+		}
+	};
+
 	/**
 	 * The constructor.
 	 */
@@ -76,10 +95,18 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 		for (final IManagedJob j : jmv.getJobs()) {
 			j.addListener(jobListener);
 		}
+
+		// Track user selection changes and cause enabled state to change
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getSelectionService().addSelectionListener(selectionListener);
 	}
 
 	@Override
 	public void dispose() {
+
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getSelectionService()
+				.removeSelectionListener(selectionListener);
 
 		final IJobManager jmv = Activator.getDefault().getJobManager();
 
@@ -90,4 +117,5 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 		}
 		super.dispose();
 	}
+
 }
