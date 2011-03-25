@@ -4,11 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
@@ -17,20 +14,16 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonLabelProvider;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.rcp.navigator.Activator;
-import com.mmxlabs.rcp.navigator.ecore.EcoreLabelProvider;
 
 public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 		ICommonLabelProvider, ITableLabelProvider {
 
 	private final Map<Object, Image> imageCache = new HashMap<Object, Image>();
 
-	Image getCachedImage(final Object key) {
+	private Image getCachedImage(final Object key) {
 
 		if (imageCache.containsKey(key)) {
 			return imageCache.get(key);
@@ -38,7 +31,7 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 
 		ImageDescriptor desc = null;
 		if (key instanceof JobState) {
-			JobState state = (JobState) key;
+			final JobState state = (JobState) key;
 
 			switch (state) {
 			case CANCELLED:
@@ -101,26 +94,14 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 		super.dispose();
 	}
 
-	EcoreLabelProvider ecoreLabelProvider = new EcoreLabelProvider();
-
 	@Override
-	public Image getColumnImage(Object element, int columnIndex) {
-		if (columnIndex == 0) {
-
-			if (element instanceof IAdaptable) {
-				Object scenario = ((IAdaptable) element)
-						.getAdapter(Scenario.class);
-				if (scenario != null) {
-					return ecoreLabelProvider.getImage(scenario);
-				}
-			}
-
-			return getImage(element);
-		}
+	public Image getColumnImage(final Object element, final int columnIndex) {
 
 		if (columnIndex == 1) {
 			if (element instanceof IResource) {
-				final IManagedJob job = com.mmxlabs.jobcontoller.Activator.getDefault().getJobManager().findJobForResource((IResource) element);
+				final IManagedJob job = com.mmxlabs.jobcontoller.Activator
+						.getDefault().getJobManager()
+						.findJobForResource((IResource) element);
 
 				if (job != null) {
 					return getCachedImage(job.getJobState());
@@ -128,15 +109,14 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 			}
 
 		}
-		
+
 		return null;
 	}
 
 	@Override
-	public String getColumnText(Object element, int columnIndex) {
+	public String getColumnText(final Object element, final int columnIndex) {
 		if (columnIndex == 0) {
 
-			
 			if (element instanceof IResource) {
 				return ((IResource) element).getName();
 			}
@@ -145,70 +125,50 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 
 		if (columnIndex == 1) {
 			if (element instanceof IResource) {
-				final IManagedJob job = com.mmxlabs.jobcontoller.Activator.getDefault().getJobManager().findJobForResource((IResource) element);
+				final IManagedJob job = com.mmxlabs.jobcontoller.Activator
+						.getDefault().getJobManager()
+						.findJobForResource((IResource) element);
 				if (job != null) {
-					return job.getJobState().toString() + " (" + job.getProgress() + "%)";
+					final JobState jobState = job.getJobState();
+					if (jobState == JobState.RUNNING
+							|| jobState == JobState.PAUSED
+							|| jobState == JobState.PAUSING) {
+						return jobState.toString() + " (" + job.getProgress()
+								+ "%)";
+					} else {
+						return jobState.toString();
+					}
 				}
-				return "";
 			}
+			// Needs to be none-empty string to avoid other label providers
+			// kicking in!
+			return " ";
 		}
 
-		else if (element instanceof Scenario) {
-			return "" + ((Scenario) element).getVersion();
-		} else if (element instanceof Schedule) {
-			return ((Schedule) element).getName();
-//		} else if (element instanceof ScenarioTreeNodeClass) {
-//			Scenario scenario = ((ScenarioTreeNodeClass) element).getScenario();
-//			if (scenario != null) {
-//				return scenario.getName();
-//			}
-		}
-		// TODO Auto-generated method stub
-		return "";// + columnIndex;
+		return "";
 	}
 
 	@Override
-	public void restoreState(IMemento aMemento) {
-		// TODO Auto-generated method stub
+	public void init(final ICommonContentExtensionSite aConfig) {
 
 	}
 
 	@Override
-	public void saveState(IMemento aMemento) {
-		// TODO Auto-generated method stub
+	public void restoreState(final IMemento aMemento) {
 
 	}
 
 	@Override
-	public String getDescription(Object anElement) {
+	public void saveState(final IMemento aMemento) {
+
+	}
+
+	@Override
+	public String getDescription(final Object anElement) {
 		if (anElement instanceof IResource) {
 			return ((IResource) anElement).getFullPath().makeRelative()
 					.toString();
 		}
 		return null;
-	}
-
-	@Override
-	public void init(ICommonContentExtensionSite aConfig) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-		// TODO Auto-generated method stub
-		return super.isLabelProperty(element, property);
-	}
-
-	@Override
-	public void addListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-		super.addListener(listener);
-	}
-
-	@Override
-	protected void fireLabelProviderChanged(LabelProviderChangedEvent event) {
-		// TODO Auto-generated method stub
-		super.fireLabelProviderChanged(event);
 	}
 }
