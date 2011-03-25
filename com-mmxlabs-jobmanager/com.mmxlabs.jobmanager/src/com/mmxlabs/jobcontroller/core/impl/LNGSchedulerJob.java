@@ -99,6 +99,10 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		optimiser.step(REPORT_PERCENTAGE);
 		currentProgress += REPORT_PERCENTAGE;
 
+		if ((currentProgress % 5) == 0) {
+			saveSolution(currentProgress + "%", optimiser.getBestSolution(false));
+		}
+		
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
