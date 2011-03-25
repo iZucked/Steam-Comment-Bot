@@ -1934,7 +1934,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				});
 
 		page.setEditorFactoryForClassifier(
-				FleetPackage.eINSTANCE.getVesselState(),
+				FleetPackage.eINSTANCE.getVesselClass(),
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(EMFPath path,
