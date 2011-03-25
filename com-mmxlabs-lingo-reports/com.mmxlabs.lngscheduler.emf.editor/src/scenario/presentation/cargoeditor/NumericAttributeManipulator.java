@@ -47,4 +47,9 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		editor.setMaximumValue(10000000);
 		return editor;
 	}
+
+	@Override
+	public Comparable getComparable(Object object) {
+		return (Comparable) super.getValue(object);
+	}
 }

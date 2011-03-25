@@ -15,4 +15,11 @@ public interface ICellRenderer {
 	 * @return string rep. of object
 	 */
 	String render(Object object);
+	
+	/**
+	 * Get a comparable representation of the object, for sorting
+	 * @param object
+	 * @return
+	 */
+	Comparable getComparable(Object object);
 }

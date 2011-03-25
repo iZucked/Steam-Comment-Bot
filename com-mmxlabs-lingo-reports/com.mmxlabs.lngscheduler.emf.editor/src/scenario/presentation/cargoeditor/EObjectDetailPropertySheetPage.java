@@ -114,7 +114,7 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 			return detailViewsByClass.get(eClass);
 		} else {
 			final EObjectDetailView eodv = new EObjectDetailView(control,
-					SWT.NONE, editingDomain);
+					SWT.NONE);
 
 			for (final Map.Entry<EClassifier, IInlineEditorFactory> entry : editorFactories
 					.entrySet()) {
@@ -126,6 +126,10 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 					.entrySet()) {
 				eodv.setEditorFactoryForFeature(entry.getKey(),
 						entry.getValue());
+			}
+			
+			for (final Map.Entry<EStructuralFeature, String> entry : nameByFeature.entrySet()) {
+				eodv.setNameForFeature(entry.getKey(), entry.getValue());
 			}
 			
 			eodv.initForEClass(eClass);
@@ -216,6 +220,13 @@ public class EObjectDetailPropertySheetPage implements IPropertySheetPage {
 		} finally {
 			selectionChanging = false;
 		}
+	}
+
+	private Map<EStructuralFeature, String> nameByFeature = 
+		new HashMap<EStructuralFeature,String>();
+	public void setNameForFeature(final EStructuralFeature feature,
+			final String string) {
+		nameByFeature.put(feature, string);
 	}
 
 	

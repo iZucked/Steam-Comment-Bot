@@ -86,4 +86,9 @@ public class DateManipulator extends BasicAttributeManipulator {
 		cal.setTime(date);
 		return cal;
 	}
+
+	@Override
+	public Comparable getComparable(Object object) {
+		return (Date) super.getValue(object);
+	}
 }

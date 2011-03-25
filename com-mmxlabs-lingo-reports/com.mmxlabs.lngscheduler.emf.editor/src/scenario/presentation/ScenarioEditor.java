@@ -69,7 +69,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -145,7 +144,6 @@ import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeHandler;
-import scenario.provider.LngEditPlugin;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
@@ -1324,20 +1322,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				public Viewer createViewer(Composite parent) {
 					final Viewer v = super.createViewer(parent);
 
-					// TODO hook this up declaratively. No idea what extension point to use 
+					// TODO hook this up declaratively. No idea what extension
+					// point to use
 					// for buttons in the cargo editor (if there even is one)
 					final SwapDischargeHandler handler = new SwapDischargeHandler();
 
-				
 					getToolBarManager().add(new Action() {
 						{
-							setImageDescriptor(
-							LngEditorPlugin.Implementation.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin().getSymbolicName(), "/icons/swap.gif")
-									);
+							setImageDescriptor(LngEditorPlugin.Implementation
+									.imageDescriptorFromPlugin(LngEditorPlugin
+											.getPlugin().getSymbolicName(),
+											"/icons/swap.gif"));
 						}
+
 						@Override
 						public boolean isEnabled() {
-//							System.err.println("isenabled?");
+							// System.err.println("isenabled?");
 							return true;
 						}
 
@@ -1933,6 +1933,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				});
 
+		page.setEditorFactoryForClassifier(
+				FleetPackage.eINSTANCE.getVesselState(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, vesselClassProvider);
+					}
+				});
 		return page;
 	}
 

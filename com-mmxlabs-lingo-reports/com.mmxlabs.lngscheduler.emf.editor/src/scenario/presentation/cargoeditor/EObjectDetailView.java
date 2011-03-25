@@ -14,10 +14,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -26,7 +23,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import scenario.NamedObject;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.detailview.BasicAttributeInlineEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
@@ -46,12 +42,9 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 public class EObjectDetailView extends Composite {
 	private final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
 	private final List<IInlineEditor> editors = new ArrayList<IInlineEditor>();
-	private final EditingDomain editingDomain;
 
-	public EObjectDetailView(final Composite parent, int style,
-			final EditingDomain editingDomain) {
+	public EObjectDetailView(final Composite parent, int style) {
 		super(parent, style);
-		this.editingDomain = editingDomain;
 	}
 
 	public interface IInlineEditorFactory {
@@ -99,8 +92,12 @@ public class EObjectDetailView extends Composite {
 		for (final EReference reference : objectClass.getEAllContainments()) {
 			if (reference.isMany())
 				continue;
+			String groupName = nameByFeature.get(reference);
+			if (groupName == null)
+				groupName = unmangle(reference.getName());
+			
 			addGroupForEClass(reference.getEReferenceType(),
-					unmangle(reference.getName()), new EMFPath(true, reference));
+					groupName, new EMFPath(true, reference));
 			groupCount++;
 		}
 
@@ -111,7 +108,7 @@ public class EObjectDetailView extends Composite {
 			final String groupName, final EMFPath path) {
 		final Group group = new Group(this, SWT.NONE);
 
-		group.setText(groupName + " Properties:");
+		group.setText(groupName);
 
 		final GridData groupLayoutData = new GridData(SWT.FILL, SWT.FILL, true,
 				true);
@@ -144,7 +141,10 @@ public class EObjectDetailView extends Composite {
 
 			// create label for this attribute
 			final Label attributeLabel = new Label(controls, SWT.RIGHT);
-			attributeLabel.setText(unmangle(attribute.getName()) + ": ");
+			String attributeName = nameByFeature.get(attribute);
+			if (attributeName == null)
+				attributeName = unmangle(attribute.getName()) + ": ";
+			attributeLabel.setText(attributeName);
 			final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER,
 					false, false);
 			attributeLabel.setLayoutData(labelData);
@@ -160,9 +160,11 @@ public class EObjectDetailView extends Composite {
 			// attribute, editingDomain);
 			final Control attributeControl;
 			if (attributeEditorFactory == null) {
-				NonEditableEditor blank = new NonEditableEditor(path, attribute);
-				editors.add(blank);
-				attributeControl = blank.createControl(controls);
+				continue;
+				// skip over non-editable fields
+//				NonEditableEditor blank = new NonEditableEditor(path, attribute);
+//				editors.add(blank);
+//				attributeControl = blank.createControl(controls);
 			} else {
 				final IInlineEditor attributeEditor = attributeEditorFactory
 						.createEditor(path, attribute);
@@ -213,5 +215,10 @@ public class EObjectDetailView extends Composite {
 	public void setEditorFactoryForFeature(final EStructuralFeature feature,
 			final IInlineEditorFactory factory) {
 		editorFactoriesByFeature.put(feature, factory);
+	}
+
+	private final Map<EStructuralFeature, String> nameByFeature = new HashMap<EStructuralFeature, String>();
+	public void setNameForFeature(EStructuralFeature key, String value) {
+		nameByFeature.put(key, value);
 	}
 }

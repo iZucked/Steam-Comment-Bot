@@ -71,4 +71,10 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	public boolean canEdit(Object object) {
 		return true;
 	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Comparable getComparable(Object object) {
+		return render(object);
+	}
 }
