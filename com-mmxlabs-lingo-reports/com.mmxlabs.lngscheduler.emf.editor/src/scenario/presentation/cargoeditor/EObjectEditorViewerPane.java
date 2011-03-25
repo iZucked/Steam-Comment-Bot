@@ -276,7 +276,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			@Override
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
-
+//				System.err.println(notification);
 				if (notification.isTouch() == false) {
 					// this is a change, so we have to refresh.
 					// ideally we just want to update the changed object, but we
@@ -286,12 +286,11 @@ public class EObjectEditorViewerPane extends ViewerPane {
 //					if (currentElements.contains(source))
 //						return;
 					while (!(currentElements.contains(source))
-							&& ((source = source.eContainer()) != null)) {
-
+							&& ((source = source.eContainer()) != null));
+					if (source != null) {
 							viewer.update(source, null);
 							// this seems to clear the selection
 							return;
-						
 					}
 				}
 			}
