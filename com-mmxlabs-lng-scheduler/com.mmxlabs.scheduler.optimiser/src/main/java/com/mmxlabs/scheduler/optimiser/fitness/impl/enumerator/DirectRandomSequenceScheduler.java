@@ -30,7 +30,7 @@ public class DirectRandomSequenceScheduler<T> extends
 	 * Do this many times the usual number of samples for an exported solution.
 	 * Slightly improves the quality of the exported schedule.
 	 */
-	private static final int EXPORT_INTENSITY = 100; 
+	private static final int EXPORT_INTENSITY = 200; 
 
 	/**
 	 * Never do more than this many samples
