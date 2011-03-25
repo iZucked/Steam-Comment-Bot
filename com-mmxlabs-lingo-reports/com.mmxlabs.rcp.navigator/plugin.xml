@@ -105,11 +105,6 @@
                id="com.mmxlabs.rcp.navigator.commands.category.scenario"
                name="Scenario Commands">
          </category>
-         <command
-               categoryId="com.mmxlabs.rcp.navigator.commands.category.scenario"
-               id="com.mmxlabs.rcp.navigator.commands.scenario.checkpoint"
-               name="Scenario Check Point">
-         </command>
       </extension>
       <extension
             point="org.eclipse.ui.handlers">
@@ -191,25 +186,6 @@
             </enabledWhen>
          </handler>
          <handler
-               class="com.mmxlabs.rcp.navigator.handlers.CheckPointHandler"
-               commandId="com.mmxlabs.rcp.navigator.commands.scenario.checkpoint">
-            <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scenario">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </enabledWhen>
-         </handler>
-         <handler
                class="com.mmxlabs.rcp.navigator.handlers.SaveOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save">
             <enabledWhen>
@@ -269,19 +245,6 @@
                      style="push"
                      tooltip="Save optimisations">
                </command>
-         </menuContribution>
-         <menuContribution
-               allPopups="false"
-               locationURI="toolbar:com.mmxlabs.rcp.navigator">
-            <command
-                  commandId="com.mmxlabs.rcp.navigator.commands.scenario.checkpoint"
-                  disabledIcon="icons/dlcl16/newstream_wiz.gif"
-                  icon="icons/elcl16/newstream_wiz.gif"
-                  id="com.mmxlabs.rcp.navigator.toolbars.scenario.checkpoint"
-                  label="Scenario Checkpoint"
-                  style="push"
-                  tooltip="Create a duplciate scenario from the selected scenario">
-            </command>
          </menuContribution>
       </extension>
       <extension
