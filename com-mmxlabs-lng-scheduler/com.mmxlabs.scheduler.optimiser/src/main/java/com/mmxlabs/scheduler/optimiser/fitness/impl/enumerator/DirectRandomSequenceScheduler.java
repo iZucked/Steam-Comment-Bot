@@ -30,12 +30,12 @@ public class DirectRandomSequenceScheduler<T> extends
 	 * Do this many times the usual number of samples for an exported solution.
 	 * Slightly improves the quality of the exported schedule.
 	 */
-	private static final int EXPORT_INTENSITY = 50; 
+	private static final int EXPORT_INTENSITY = 100; 
 
 	/**
 	 * Never do more than this many samples
 	 */
-	private int samplingUpperBound = 2;
+	private int samplingUpperBound = 1;
 	/**
 	 * Sample this proportion of the search space, up to {@code samplingUpperBound}
 	 */
@@ -62,8 +62,8 @@ public class DirectRandomSequenceScheduler<T> extends
 			if (getBestResult() == null) {
 				failures++;
 				i = 0;
-				if (failures > 10 * sampleCount) {
-					log.error("Sequences have not had a feasible solution in " + sampleCount * 10 + " samples");
+				if (failures > 5 * sampleCount) {
+					log.error("Sequences have not had a feasible solution in " + sampleCount * 5 + " samples");
 					return null;
 				}
 			}
