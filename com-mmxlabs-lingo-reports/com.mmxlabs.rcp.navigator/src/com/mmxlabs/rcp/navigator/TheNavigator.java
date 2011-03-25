@@ -109,7 +109,7 @@ public class TheNavigator extends CommonNavigator {
 		column2.setWidth(150);
 		// column2.setWidth(cols[1]);
 		// column2.addSelectionListener(getHeaderListener(1));
-		
+
 		initListeners(aViewer);
 		aViewer.getNavigatorContentService().restoreState(memento);
 
@@ -135,12 +135,13 @@ public class TheNavigator extends CommonNavigator {
 		Activator.getDefault().getJobManager()
 				.addJobManagerListener(jobManagerListener);
 
-		final Action a = new PackTreeColumnsAction(aViewer);
 		final IActionBars bars = getViewSite().getActionBars();
-		bars.getToolBarManager().add(a);
-
-		bars.getToolBarManager().update(true);
-
+		// Add pack columns action
+		{
+			final Action a = new PackTreeColumnsAction(aViewer);
+			bars.getToolBarManager().add(a);
+			bars.getToolBarManager().update(true);
+		}
 		return aViewer;
 	}
 
