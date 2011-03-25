@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -45,12 +46,14 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import scenario.Scenario;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
+ * Base class for views which show things from the EMF output model.
  * @author hinton
  * 
  */
@@ -135,6 +138,23 @@ public abstract class EMFReportView extends ViewPart implements
 		public Comparable getComparable(final Object object);
 	}
 
+	protected final IFormatter containingScheduleFormatter = 
+		new BaseFormatter() {
+			@Override
+			public String format(Object object) {
+				while (object != null && !(object instanceof Schedule)) {
+					if (object instanceof EObject) {
+						object = ((EObject) object).eContainer();
+					}
+				}
+				if (object instanceof Schedule) {
+					return ((Schedule) object).getName();
+				} else {
+					return "";
+				}
+			}
+		
+	};
 	protected final IFormatter objectFormatter = new BaseFormatter();
 
 	public class BaseFormatter implements IFormatter {
@@ -336,11 +356,11 @@ public abstract class EMFReportView extends ViewPart implements
 			setInput(null);
 		} else {
 			final Iterator<?> iter = sel.iterator();
+			final LinkedList<Schedule> schedules = new LinkedList<Schedule>();
 			while (iter.hasNext()) {
 				final Object o = iter.next();
 				if (o instanceof Schedule) {
-					setInput((Schedule) o);
-					return;
+					schedules.add((Schedule) o);
 				} else if (o instanceof IAdaptable) {
 					Object adapter = ((IAdaptable) o)
 							.getAdapter(Schedule.class);
@@ -349,11 +369,11 @@ public abstract class EMFReportView extends ViewPart implements
 								Schedule.class.getCanonicalName());
 					}
 					if (adapter != null) {
-						setInput(((Schedule) adapter));
-						return;
+						schedules.add((Schedule) adapter);
 					}
 				}
 			}
+			setInput(schedules);
 		}
 	}
 

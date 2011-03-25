@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.demo.reports.views;
 
+import java.util.ArrayList;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -35,6 +37,7 @@ public class CargoReportView extends EMFReportView {
 		final EAttribute name = ScenarioPackage.eINSTANCE.getNamedObject_Name();
 
 		final PortPackage p = PortPackage.eINSTANCE;
+		addColumn("Schedule", containingScheduleFormatter);
 		addColumn("ID", objectFormatter, s.getCargoAllocation_LoadSlot(),
 				c.getSlot_Id()); // TODO cargo id not slot id.
 
@@ -118,7 +121,6 @@ public class CargoReportView extends EMFReportView {
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
-
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput,
 					Object newInput) {
@@ -132,11 +134,17 @@ public class CargoReportView extends EMFReportView {
 
 			@Override
 			public Object[] getElements(Object object) {
-				if (object instanceof Schedule) {
-					final Schedule schedule = (Schedule) object;
-					return schedule.getCargoAllocations().toArray();
+				final ArrayList<CargoAllocation> allocations = 
+					new ArrayList<CargoAllocation>();
+				if (object instanceof Iterable) {
+					for (final Object o : (Iterable) object) {
+						if (o instanceof Schedule) {
+							// collect allocations from object
+							allocations.addAll(((Schedule) o).getCargoAllocations());
+						}
+					}
 				}
-				return new Object[] {};
+				return allocations.toArray();
 			}
 		};
 	}

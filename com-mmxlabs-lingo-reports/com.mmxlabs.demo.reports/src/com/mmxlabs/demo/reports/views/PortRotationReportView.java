@@ -56,6 +56,9 @@ public class PortRotationReportView extends EMFReportView {
 				return se.eClass().getName();
 			}
 		});
+		
+		addColumn("Schedule", containingScheduleFormatter);
+		
 		addColumn("ID", objectFormatter, ep.getSlotVisit_Slot(),
 				cp.getSlot_Id());
 		addColumn("Start Date", calendarFormatter,
@@ -226,15 +229,17 @@ public class PortRotationReportView extends EMFReportView {
 
 			@Override
 			public Object[] getElements(Object object) {
-				if (object instanceof Schedule) {
-					final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
-					final Schedule schedule = (Schedule) object;
-					for (final Sequence seq : schedule.getSequences()) {
-						allEvents.addAll(seq.getEvents());
+				final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
+				if (object instanceof Iterable) {
+					for (final Object o : ((Iterable) object)) {
+						if (o instanceof Schedule) {
+							for (final Sequence seq : ((Schedule) o).getSequences()) {
+								allEvents.addAll(seq.getEvents());
+							}
+						}
 					}
-					return allEvents.toArray();
 				}
-				return new Object[] {};
+				return allEvents.toArray();
 			}
 		};
 	}
