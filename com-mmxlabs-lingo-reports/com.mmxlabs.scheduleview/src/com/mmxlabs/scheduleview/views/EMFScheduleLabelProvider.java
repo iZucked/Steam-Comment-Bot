@@ -46,7 +46,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	}
 
 	public enum Mode {
-		VesselState, FuelChoice
+		VesselState, FuelChoice, Canal
 		/* , Lateness */
 	}
 
@@ -140,8 +140,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 
 	@Override
 	public Color getBackground(final Object element) {
-
-		if (mode == Mode.VesselState) {
+		switch (mode) {
+		case VesselState:
 			if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
 				if (journey.getVesselState().equals(scenario.fleet.VesselState.LADEN)) {
@@ -150,7 +150,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 					return ColorCache.getColor(0, 0, 255);
 				}
 			}
-		} else if (mode == Mode.FuelChoice) {
+			break;
+		case FuelChoice:
 			if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
 
@@ -176,7 +177,16 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 				
 				return ColorCache.getColor(r, g, b);
 			}
+			break;
+		case Canal:
+			if (element instanceof Journey) {
+				if (((Journey) element).getRouteCost() > 0) {
+					return ColorCache.getColor(0,0,255);
+				}
+			}
+			break;
 		}
+
 		// else if (mode == Mode.Lateness) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
