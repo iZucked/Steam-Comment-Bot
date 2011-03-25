@@ -45,18 +45,6 @@
       </viewerContentBinding>
    </extension>
    <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="com.mmxlabs.demo.app.perspective">
-         <view
-               id="com.mmxlabs.rcp.navigator"
-               ratio="0.5"
-               relationship="stack"
-               relative="org.eclipse.ui.navigator.ProjectExplorer">
-         </view>
-      </perspectiveExtension>
-   </extension>
-   <extension
          point="org.eclipse.ui.navigator.navigatorContent">
      
        <navigatorContent
