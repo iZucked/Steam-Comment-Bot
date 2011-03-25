@@ -61,9 +61,6 @@
                      property="org.eclipse.core.resources.extension"
                      value="scenario">
                </test>
-               <instanceof
-                     value="org.eclipse.core.resources.IResource">
-               </instanceof>
             </or></triggerPoints>
          <possibleChildren>
             <or>
@@ -242,6 +239,7 @@
                      icon="icons/etool16/saveas_edit.gif"
                      id="com.mmxlabs.rcp.navigator.toolbars.optimisation.save"
                      label="Save Optimisation"
+                     mnemonic="S"
                      style="push"
                      tooltip="Save optimisations">
                </command>
