@@ -48,7 +48,7 @@ public class EENumInlineEditor extends BasicAttributeInlineEditor {
 					}
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						doSetValue(eenum.getEEnumLiteral(combo.getText()));
+						doSetValue(eenum.getEEnumLiteral(combo.getText()).getInstance());
 					}
 					
 					@Override

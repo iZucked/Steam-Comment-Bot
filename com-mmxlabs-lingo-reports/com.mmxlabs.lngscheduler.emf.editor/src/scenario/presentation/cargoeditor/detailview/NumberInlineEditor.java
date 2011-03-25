@@ -1,5 +1,6 @@
 package scenario.presentation.cargoeditor.detailview;
 
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -15,6 +16,7 @@ import org.eclipse.swt.widgets.Spinner;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class NumberInlineEditor extends BasicAttributeInlineEditor {
+	private EDataType type;
 	public NumberInlineEditor(EMFPath path, EStructuralFeature feature,
 			EditingDomain editingDomain) {
 		super(path, feature, editingDomain);
@@ -58,16 +60,27 @@ public class NumberInlineEditor extends BasicAttributeInlineEditor {
 			spinner.setMinimum(0);
 		}
 		
+		type = (EDataType) feature.getEType();
+		
 		this.spinner = spinner;
 		return spinner;
 	}
 	
 	private Number getSpinnerValue() {
 		if (spinner.getDigits() == 0) {
-			return (Integer) spinner.getSelection();
+			if (type.equals(EcorePackage.eINSTANCE.getELong())) {
+				return Long.valueOf(spinner.getSelection());
+			} else {
+				return Integer.valueOf(spinner.getSelection());
+			}
 		} else {
-			return (Float) ((float)
-					(spinner.getSelection() * Math.pow(10, -spinner.getDigits())));
+			if (type.equals(EcorePackage.eINSTANCE.getEFloat())) {
+				return (Float) ((float)
+						(spinner.getSelection() * Math.pow(10, -spinner.getDigits())));
+			} else {
+				return (Double) (
+						(spinner.getSelection() * Math.pow(10, -spinner.getDigits())));
+			}
 		}
 	}
 	

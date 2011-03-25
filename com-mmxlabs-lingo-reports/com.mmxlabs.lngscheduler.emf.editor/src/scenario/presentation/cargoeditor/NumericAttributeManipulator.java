@@ -47,6 +47,22 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		editor.setMaximumValue(10000000);
 		return editor;
 	}
+	
+	
+
+	@Override
+	public void setValue(Object object, Object value) {
+		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt())) {
+			value = Integer.valueOf(((Number)value).intValue());
+		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
+			value = Long.valueOf(((Number)value).longValue());
+		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEFloat())) {
+			value = Float.valueOf(((Number)value).floatValue());
+		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEDouble())) {
+			value = Double.valueOf(((Number)value).doubleValue());
+		}
+		super.setValue(object, value);
+	}
 
 	@Override
 	public Comparable getComparable(Object object) {

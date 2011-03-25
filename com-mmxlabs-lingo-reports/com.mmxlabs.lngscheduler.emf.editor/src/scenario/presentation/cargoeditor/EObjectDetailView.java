@@ -139,18 +139,8 @@ public class EObjectDetailView extends Composite {
 					continue; // skip
 			}
 
-			// create label for this attribute
-			final Label attributeLabel = new Label(controls, SWT.RIGHT);
-			String attributeName = nameByFeature.get(attribute);
-			if (attributeName == null)
-				attributeName = unmangle(attribute.getName()) + ": ";
-			attributeLabel.setText(attributeName);
-			final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER,
-					false, false);
-			attributeLabel.setLayoutData(labelData);
-
 			// create editor for this attribute
-			// TODO implement this.
+
 			final EClassifier attributeType = attribute.getEType();
 
 			final IInlineEditorFactory attributeEditorFactory = editorFactoriesByFeature
@@ -168,6 +158,16 @@ public class EObjectDetailView extends Composite {
 			} else {
 				final IInlineEditor attributeEditor = attributeEditorFactory
 						.createEditor(path, attribute);
+				// create label for this attribute
+				final Label attributeLabel = new Label(controls, SWT.RIGHT);
+				String attributeName = nameByFeature.get(attribute);
+				if (attributeName == null)
+					attributeName = unmangle(attribute.getName()) + ": ";
+				attributeLabel.setText(attributeName);
+				final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER,
+						false, false);
+				attributeLabel.setLayoutData(labelData);
+				
 				editors.add(attributeEditor);
 				attributeControl = attributeEditor.createControl(controls);
 			}

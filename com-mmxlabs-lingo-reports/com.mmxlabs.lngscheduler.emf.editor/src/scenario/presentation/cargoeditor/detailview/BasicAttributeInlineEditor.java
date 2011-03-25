@@ -93,6 +93,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	 * @param value
 	 */
 	protected synchronized void doSetValue(final Object value) {
+		System.err.println("setvalue on " + feature.getName() + " to " + value + " (" + currentlySettingValue + ")");
 		if (currentlySettingValue) return; //avoid re-entering
 		currentlySettingValue = true;
 		final Object currentValue = getValue();
@@ -108,10 +109,15 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	}
 
 	protected Command createSetCommand(final Object value) {
+		System.err.println("Creating set command (" + input + "." + feature.getName() + " <- " + value + ")");
 		final Command command = editingDomain.createCommand(SetCommand.class,
 				new CommandParameter(input, feature, value));
 		((SetCommand) command).setLabel("Set " + feature.getName() + " to "
 				+ value == null ? "null " : value.toString());
+		System.err.println(command.canExecute() ? " can execute " : "cannot execute");
+		if (command.canExecute() == false) {
+			command.canExecute();
+		}
 		editingDomain.getCommandStack().execute(command);
 		return command;
 	}

@@ -60,7 +60,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	private ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
 	private boolean sortDescending = false;
-	
+
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
 			final ScenarioEditor part) {
 		super(page, part);
@@ -112,7 +112,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		tColumn.setData(COLUMN_PATH, path);
 
 		columnSortOrder.add(tColumn);
-		
+
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -148,28 +148,27 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						&& manipulator.canEdit(path.get((EObject) element));
 			}
 		});
-		
-		column.getColumn().addSelectionListener(
-				new SelectionListener() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						if (columnSortOrder.get(0) == tColumn) {
-							sortDescending = !sortDescending;
-						} else {
-							sortDescending = false;
-							columnSortOrder.remove(tColumn);
-							columnSortOrder.add(0, tColumn);
-						}
-						viewer.getTable().setSortColumn(tColumn); 
-						viewer.getTable().setSortDirection(
-								sortDescending ? SWT.DOWN : SWT.UP);
-						viewer.refresh(false);
-					}
-					
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {}
+
+		column.getColumn().addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (columnSortOrder.get(0) == tColumn) {
+					sortDescending = !sortDescending;
+				} else {
+					sortDescending = false;
+					columnSortOrder.remove(tColumn);
+					columnSortOrder.add(0, tColumn);
 				}
-				);
+				viewer.getTable().setSortColumn(tColumn);
+				viewer.getTable().setSortDirection(
+						sortDescending ? SWT.DOWN : SWT.UP);
+				viewer.refresh(false);
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
 	}
 
 	public void init(final List<EReference> path,
@@ -284,14 +283,15 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					// get the notification from
 					// somewhere below, so we need to go up
 					EObject source = (EObject) notification.getNotifier();
-					if (currentElements.contains(source))
-						return;
-					while ((source = source.eContainer()) != null) {
-						if (currentElements.contains(source)) {
+//					if (currentElements.contains(source))
+//						return;
+					while (!(currentElements.contains(source))
+							&& ((source = source.eContainer()) != null)) {
+
 							viewer.update(source, null);
 							// this seems to clear the selection
 							return;
-						}
+						
 					}
 				}
 			}
