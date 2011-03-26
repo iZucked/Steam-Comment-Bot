@@ -56,6 +56,10 @@
 		<!-- Product file project -->
 		<module>com.mmxlabs.demo.product</module>
 
+		<!-- Features -->
+		<module>com.mmxlabs.demo.feature</module>
+		<module>com.mmxlabs.platform.feature</module>
+
 		<!-- Proper plugin projects -->
 		<module>com.mmxlabs.demo.app</module>
 		<module>com.mmxlabs.lngscheduler.emf</module>
