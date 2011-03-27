@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common.impl;
 
+import java.util.Arrays;
+
 /**
  * A two-dimensional EnumxEnum to long map implementation. See
  * {@link LongFastEnumMap} for more details.
@@ -12,8 +14,10 @@ package com.mmxlabs.common.impl;
  * 
  * @See {@link LongFastEnumMap}
  * 
- * @param <K> Key type 1
- * @param <L> Key type 2
+ * @param <K>
+ *            Key type 1
+ * @param <L>
+ *            Key type 2
  */
 public final class LongFastEnumEnumMap<K extends Enum<K>, L extends Enum<L>> {
 
@@ -34,4 +38,26 @@ public final class LongFastEnumEnumMap<K extends Enum<K>, L extends Enum<L>> {
 		values[key1.ordinal()][key2.ordinal()] = value;
 	}
 
+	@Override
+	public final boolean equals(final Object obj) {
+		if (obj instanceof LongFastEnumEnumMap) {
+
+			final long[][] values2 = ((LongFastEnumEnumMap<?, ?>) obj).values;
+			if (values.length == values2.length) {
+				for (int i = 0; i < values.length; ++i) {
+					if (!Arrays.equals(values[i], values2[i])) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public final int hashCode() {
+		// TODO: Is this correct for 2-D case?
+		return Arrays.hashCode(values);
+	}
 }
