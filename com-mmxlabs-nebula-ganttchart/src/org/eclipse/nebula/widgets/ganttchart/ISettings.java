@@ -21,7 +21,15 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * This class lets you define various settings for the GanttChart.
+ * This interface lets you define various settings for the GanttChart. It's highly advisable that for implementation, {@link AbstractSettings} is extended 
+ * and methods needed to be changed from their defaults are overridden and changed. It would be quite a hassle to implement a full ISettings interface from scratch.
+ * <pre>
+ * public class MySettings extends AbstractSettings {
+ * 	// override your methods here
+ * }
+ * </pre>
+ * <p />
+ * Once you've overridden the settings you wish to change, simply pass an instance of your implementation class to the constructor of GanttChart: {@link GanttChart#GanttChart(org.eclipse.swt.widgets.Composite, int, ISettings)}
  *  
  * @author Emil Crumhorn
  *
@@ -32,17 +40,30 @@ public interface ISettings {
     // --|              ---|
     //   |  <-- type 1  |--|  <-- type 2 .. "type 3" is a mix of 1 and 2 with rounded corners, Project style
     //   V              |->
+	/**
+	 * A connecting line that starts at the right of an event and goes to the top of the connecting event
+	 */
     public static final int CONNECTION_ARROW_RIGHT_TO_TOP  = 1;                             // TODO: Fix flawed drawing
+    
+    /**
+     * A connecting line that starts at the right of an event and goes to the left of the connecting event
+     */
     public static final int CONNECTION_ARROW_RIGHT_TO_LEFT = 2;
+    
     /**
      * A MS Project style connection uses rounded corners and quite a bit of logic to make the line as nice as possible,
      * and also supports reverse connection coloring. This is the suggested style and is also the default.
      */
     public static final int CONNECTION_MS_PROJECT_STYLE    = 3;
+    
     /**
-     * Birds flight path is an arrow-head-less line from the one event to another in the straightest line, also known as "as the crow flies".
+     * Birds flight path is an arrow-head-less line from the one event to another in the straightest line, also known as "how the crow flies".
      */
     public static final int CONNECTION_BIRDS_FLIGHT_PATH   = 4;
+    
+    /**
+     * The default connection which is {@link #CONNECTION_ARROW_RIGHT_TO_LEFT}
+     */
     public static final int DEFAULT_CONNECTION_ARROW       = CONNECTION_ARROW_RIGHT_TO_LEFT;
 
     // gantt view mode
@@ -68,6 +89,8 @@ public interface ISettings {
     public static final int ZOOM_YEAR_NORMAL               = 11;
     public static final int ZOOM_YEAR_SMALL                = 12;
     public static final int ZOOM_YEAR_VERY_SMALL           = 13;
+    //public static final int ZOOM_YEAR_SMALLER              = 14;
+    //public static final int ZOOM_YEAR_SMALLEST             = 15;
     public static final int MAX_ZOOM_LEVEL                 = 13;
 
     /**
@@ -970,7 +993,9 @@ public interface ISettings {
      * the chart. This is forced to true on *NIX machines (not Mac).
      * 
      * @return true to force the mousewheel to scroll the chart. Default is false.
-     */
+     * @deprecated By default mousewheel now scrolls chart vertically on all platforms. To turn off, flag scrollChartVerticallyOnMouseWheel()
+     * @see #scrollChartVerticallyOnMouseWheel() 
+     */    
     public boolean forceMouseWheelVerticalScroll();
 
     /**
@@ -1044,4 +1069,11 @@ public interface ISettings {
      * @return Number of days to count for a start and end date that is the same date. Default is 1.
      */
     public int getNumberOfDaysToAppendForEndOfDay();
+    
+    /**
+     * Whether the chart should scroll vertically when the mouse wheel is used. If you notice excessive scrolling on SWT versions earlier than 3.5, you may want to turn this off
+     * 
+     * @return true to scroll chart vertically. Default is true.
+     */
+    public boolean scrollChartVerticallyOnMouseWheel();
 }

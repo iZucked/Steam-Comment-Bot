@@ -27,7 +27,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Menu;
 
 /**
- * One GanttEvent represents one "active" object int the GANTT chart.
+ * One GanttEvent represents one "active" object in the GANTT chart.
  * <p>
  * This object can take many shapes, here is a list of a few:<br>
  * <ul>
@@ -35,9 +35,10 @@ import org.eclipse.swt.widgets.Menu;
  * <li>Checkpoint event
  * <li>Scope event
  * <li>Image event
+ * <li>And so on...
  * </ul>
- * The event may also take revised start and end dates, and can be modified individually to be locked, unmoveable,
- * unresizable and much more.
+ * The event may also take revised start and end dates, and can be modified individually to be locked, non-movable,
+ * non-resizable and much more.
  * <p>
  * Events <b>may be</b> modified on the fly to become a different object type from the above list. Please do ensure that
  * the ALL parameters are set for it to become the new object before you do so.
@@ -52,13 +53,12 @@ import org.eclipse.swt.widgets.Menu;
  * Calendar cEndDate = Calendar.getInstance(Locale.getDefault());<br>
  * cEndDate.add(Calendar.DATE, 10);
  * <br><br>
- * // the first parameter is the data object, as this is an example, we'll leave it null<br>
- * // we're also setting the percentage complete to 50%<br>
+ * // we're setting the percentage complete to 50%<br>
  * GanttEvent ganttEvent = new GanttEvent(ganttChart, "Event Name", cStartDate, cEndDate, 50);
  * <br><br>
  * </code> <br>
  * <br>
- * This class may not be subclassed.
+ * This class should not be subclassed, do so at your own risk.
  * 
  * @author Emil Crumhorn <a href="mailto:emil.crumhorn@gmail.com">emil.crumhorn@gmail.com</a>
  */
@@ -1787,6 +1787,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
         if (_ganttSection != null) {
             _preMoveGanttSectionEventLocationIndex = _ganttSection.getEvents().indexOf(this);
         }
+        else {
+        	_preMoveGanttSectionEventLocationIndex = _parentComposite.getEvents().indexOf(this);
+        }
 
         _moving = true;
     }
@@ -1802,6 +1805,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
                 int indexNow = 0;
                 if (_ganttSection != null) {
                     indexNow = _ganttSection.getEvents().indexOf(this);
+                }
+                else {
+                	indexNow = _parentComposite.getEvents().indexOf(this);
                 }
 
                 GanttSection gs = null;
@@ -1892,6 +1898,9 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
     }
 
     boolean wasVerticallyMovedUp() {
+    	if (_preVerticalDragBounds == null) {
+    		return false;
+    	}
         return (_y < _preVerticalDragBounds.y);
     }
 
@@ -1911,7 +1920,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
             newSection.addGanttEvent(index, this);
         }
     }
-
+    
     public String toString() {
         return _name;
     }
