@@ -7,7 +7,7 @@
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-ea</vmArgs>
+      <vmArgs>-ea -server</vmArgs>
    </launcherArgs>
 
    <windowImages i16="/com.mmxlabs.demo.app/icons/alt_window_16.gif" i32="/com.mmxlabs.demo.app/icons/alt_window_16.gif"/>
@@ -29,7 +29,8 @@
    <vm>
    </vm>
 
-   <plugins/>
+   <plugins>
+   </plugins>
 
    <features>
       <feature id="com.mmxlabs.demo.feature" version="1.0.0.qualifier"/>
