@@ -120,20 +120,7 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 
 						// Trigger a re-selection event to force updates out to
 						// reports
-
-						// Skip TreeViewer as it filters out identical
-						// selections,
-						// but talk direct to Tree and re-select current items.
-
-						// TODO: Should check selected items are the correct
-						// resources!
-
-						// TODO: Ensure reports do no filter out identical
-						// selection
-						// events
-
-						final TreeItem[] current = tv.getTree().getSelection();
-						tv.getTree().setSelection(current);
+						viewer.setSelection(viewer.getSelection());
 					}
 				}
 			});
