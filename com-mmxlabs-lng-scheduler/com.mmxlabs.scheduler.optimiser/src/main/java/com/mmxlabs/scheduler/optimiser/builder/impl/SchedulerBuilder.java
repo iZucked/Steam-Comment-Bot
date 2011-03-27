@@ -949,7 +949,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final int nboRateInM3PerHour,
 			final int idleNBORateInM3PerHour,
 			final int idleConsumptionRateInMTPerHour,
-			final InterpolatingConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
+			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
 
 		// Convert rate to MT equivalent per hour
 		final int nboRateInMTPerHour = (int) Calculator.convertM3ToMT(
