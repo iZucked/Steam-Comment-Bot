@@ -74,6 +74,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
+import com.mmxlabs.scheduler.optimiser.components.impl.CachingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
@@ -702,11 +703,13 @@ public class LNGScenarioTransformer {
 		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				keypoints);
 
+		CachingConsumptionRateCalculator cc = new CachingConsumptionRateCalculator(consumptionCalculator);
+		
 		builder.setVesselClassStateParamaters(vc, state,
 				Calculator.scaleToInt(attrs.getNboRate()) / 24,
 				Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
 				Calculator.scaleToInt(attrs.getIdleConsumptionRate()) / 24,
-				consumptionCalculator);
+				cc);
 	}
 
 	/**
