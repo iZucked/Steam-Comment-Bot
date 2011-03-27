@@ -482,11 +482,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                         zoomOut(true, new Point(event.x, event.y));
                     }
                 } else {
-                    // Linux doesn't honor scrollwheel vs. scrollbar in the same way that OS X / Windows does
-                    // so we actually need to force it manually. I have no idea why, but it works fine this way.
-                    if (_osType == Constants.OS_LINUX || _settings.forceMouseWheelVerticalScroll()) {
-                        vScroll(event);
-                    }
+                	// note to self: on SWT 3.5+ it seems we just force it, older versions may need to turn this off
+                	if (_settings.scrollChartVerticallyOnMouseWheel()) {                	
+                		vScroll(event);
+                	}
                 }
             }
         };
@@ -5795,10 +5794,12 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             int index = 0;
 
-            // event was moved nowhere vertically, same place
-            if (ge.getY() == ge.getPreVerticalDragBounds().y) {
-                continue;
-            }
+			// event was moved nowhere vertically, same place
+			if (ge.getPreVerticalDragBounds() != null) {
+				if (ge.getY() == ge.getPreVerticalDragBounds().y) {
+					continue;
+				}
+			}
 
             if (hasGanttSections()) {
                 final GanttSection fromSection = ge.getGanttSection();
@@ -7041,15 +7042,15 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
      * Handles the actual moving of an event.
      */
     private void handleMove(MouseEvent me, GanttEvent event, int type, boolean showToolTip) {
-        if (event.isLocked()) { return; }
+        if (event == null) { return; }
+
+    	if (event.isLocked()) { return; }
 
         if (!_settings.enableDragAndDrop() && type == Constants.TYPE_MOVE) { return; }
 
         if (!_settings.enableResizing() && (type == Constants.TYPE_RESIZE_LEFT || type == Constants.TYPE_RESIZE_RIGHT)) { return; }
 
         if (!_mouseIsDown) { return; }
-
-        if (event == null) { return; }
 
         if (type == Constants.TYPE_MOVE && !event.isMoveable()) { return; }
 
@@ -7257,7 +7258,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     // moves one event on the canvas. If SHIFT is held and linked events is true,
     // it moves all events linked to the moved event.
     private void moveEvent(GanttEvent ge, int diff, int stateMask, MouseEvent me, int type) {
-        if (diff == 0) { return; }
+    	
+    	// diff only applies to horizontal drags, if user is dragging vertically we can't say "return" here, we must assume it's being moved
+        if (diff == 0 && !_freeDragging) { return; }
 
         if (ge.isLocked()) { return; }
 
@@ -7343,6 +7346,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             cal2.setTime(event.getActualEndDate().getTime());
 
             if (type == Constants.TYPE_MOVE) {
+                // flag first or dates won't be cloned before they changed
+                event.moveStarted(type);
                 cal1.add(calMark, diff);
                 cal2.add(calMark, diff);
 
@@ -7351,8 +7356,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                     // for start dates we need to actually set the date or we'll be 1 day short as we did the diff already
                     // if we didn't have this code, a fast move would never move the event to the end date as it would be beyond already
                     if (cal1.before(event.getNoMoveBeforeDate())) {
-                        // flag first or dates won't be cloned before they changed
-                        event.moveStarted(type);
 
                         long millis = event.getNoMoveBeforeDate().getTimeInMillis();
                         long milliDiff = Math.abs(event.getActualStartDate().getTimeInMillis() - millis);
@@ -7370,8 +7373,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                 // remember, we check the start calendar on both occasions, as that's the mark that counts
                 if (event.getNoMoveAfterDate() != null) {
                     if (cal2.after(event.getNoMoveAfterDate())) {
-                        // flag first or dates won't be cloned before they changed
-                        event.moveStarted(type);
 
                         // same deal for end date as for start date
                         long millis = event.getNoMoveAfterDate().getTimeInMillis();
@@ -7386,8 +7387,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                         continue;
                     }
                 }
-
-                event.moveStarted(type);
 
                 // we already validated dates here, so we can just set them (Besides, dual validation is bad, as one date will be validated
                 // before the next one is set, which can cause serious issues when we do drag and drops

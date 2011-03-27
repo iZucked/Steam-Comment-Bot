@@ -17,7 +17,7 @@ import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 
 /**
- * Represents one GanttEvent DND action
+ * Represents one GanttEvent DND action that can be undone/redone.
  * 
  * @author cre
  */
@@ -108,6 +108,10 @@ public class EventMoveCommand extends AbstractUndoRedoCommand {
         if (_sectionAfter != -1 && _indexAfter > -1) {
             _event.reparentToNewGanttSection(_indexAfter, (GanttSection)_event.getParentComposite().getGanttSections().get(_sectionAfter));
         }
+        
+        if (_event.getGanttSection() == null && _indexAfter != -1) {
+        	_event.getParentChart().reindex(_event, _indexAfter);
+        }
     }
 
     public void undo() {
@@ -121,6 +125,12 @@ public class EventMoveCommand extends AbstractUndoRedoCommand {
         if (_sectionBefore != -1 && _indexBefore > -1) {            
             _event.reparentToNewGanttSection(_indexBefore, (GanttSection)_event.getParentComposite().getGanttSections().get(_sectionBefore));
         }
+        
+        // reparent in chart itself as there are no sections
+        if (_event.getGanttSection() == null && _indexBefore != -1) {
+        	_event.getParentChart().reindex(_event, _indexBefore);
+        }
+        
     }
 
     public GanttEvent getEvent() {
