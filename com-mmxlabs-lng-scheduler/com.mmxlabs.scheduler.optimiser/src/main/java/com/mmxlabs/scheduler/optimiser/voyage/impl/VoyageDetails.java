@@ -58,8 +58,9 @@ public final class VoyageDetails<T> implements Cloneable {
 		this.fuelUnitPrices = fuelUnitPrices2;
 	}
 
-	public VoyageDetails clone() {
-		return new VoyageDetails(idleTime, travelTime, speed, startTime,
+	@Override
+	public VoyageDetails<T> clone() {
+		return new VoyageDetails<T>(idleTime, travelTime, speed, startTime,
 				new VoyageOptions(options), fuelConsumption, fuelUnitPrices);
 	}
 
