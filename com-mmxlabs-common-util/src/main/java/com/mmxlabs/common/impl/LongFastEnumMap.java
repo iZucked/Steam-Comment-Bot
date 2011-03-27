@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.common.impl;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 
 /**
@@ -35,4 +36,16 @@ public final class LongFastEnumMap<K extends Enum<K>> {
 		values[key.ordinal()] = value;
 	}
 
+	@Override
+	public final boolean equals(final Object obj) {
+		if (obj instanceof LongFastEnumMap) {
+			return Arrays.equals(values, ((LongFastEnumMap<?>) obj).values);
+		}
+		return false;
+	}
+
+	@Override
+	public final int hashCode() {
+		return Arrays.hashCode(values);
+	}
 }
