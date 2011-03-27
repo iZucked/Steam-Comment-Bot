@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
@@ -70,9 +71,19 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
 
-		final List<Schedule> schedules = ScheduleAdapter.getSchedules(selection);
-		if (!schedules.isEmpty()) {
-			setSelectedSchedule(schedules.get(0));
+		// Filter out non-editor selections - Unfortunately the
+		// addSelectionLister part ID filters do not work with editors
+		if (part instanceof IEditorPart
+				|| (part != null && part.getSite().getId()
+						.equals("com.mmxlabs.rcp.navigator"))) {
+
+			final List<Schedule> schedules = ScheduleAdapter
+					.getSchedules(selection);
+			if (!schedules.isEmpty()) {
+				setSelectedSchedule(schedules.get(0));
+			} else {
+				setSelectedSchedule(null);
+			}
 		}
 	}
 
@@ -156,22 +167,22 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		final TreeData fleetLNG = new TreeData("Fleet Vessels");
 		final TreeData spotLNG = new TreeData("Spot Vessels");
-		
+
 		final TreeData lng = new TreeData("LNG");
-		
+
 		top.addChild(lng);
 		lng.addChild(fleetLNG);
 		lng.addChild(spotLNG);
-		
+
 		// First do fuel costs
 		for (final FuelType t : FuelType.values()) {
 			if (t.equals(FuelType.FBO) || t.equals(FuelType.NBO)) {
 				final TreeData thisFuelFleet = new TreeData(t.getName());
 				final TreeData thisFuelSpot = new TreeData(t.getName());
-				
+
 				fleetLNG.addChild(thisFuelFleet);
 				spotLNG.addChild(thisFuelSpot);
-				
+
 				fleetFuelUsages.put(t, thisFuelFleet);
 				spotFuelUsages.put(t, thisFuelSpot);
 			} else {
@@ -269,8 +280,9 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		for (final Sequence seq : schedule.getSequences()) {
 			final AllocatedVessel av = seq.getVessel();
 			for (final ScheduleFitness sf : seq.getFitness()) {
-				if (sf.getValue() > 0 && sf.getName()
-						.equals(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME)) {
+				if (sf.getValue() > 0
+						&& sf.getName()
+								.equals(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME)) {
 					final TreeData thisVessel = new TreeData(av.getName(),
 							sf.getValue());
 					charterCosts.addChild(thisVessel);
@@ -312,7 +324,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		viewer.setContentProvider(new ITreeContentProvider() {
 			@Override
-			public void inputChanged(final Viewer arg0, final Object arg1, final Object arg2) {
+			public void inputChanged(final Viewer arg0, final Object arg1,
+					final Object arg2) {
 
 			}
 
