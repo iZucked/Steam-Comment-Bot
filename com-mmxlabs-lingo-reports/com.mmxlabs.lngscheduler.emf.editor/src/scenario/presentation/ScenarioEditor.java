@@ -1334,6 +1334,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 									.imageDescriptorFromPlugin(LngEditorPlugin
 											.getPlugin().getSymbolicName(),
 											"/icons/swap.gif"));
+							setToolTipText("Swap discharge slots");
+							setText("Swap discharge slots");
 						}
 
 						@Override
