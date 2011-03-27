@@ -1,0 +1,37 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
+ */
+package com.mmxlabs.common.impl;
+
+/**
+ * A two-dimensional EnumxEnum to long map implementation. See
+ * {@link LongFastEnumMap} for more details.
+ * 
+ * @author Simon Goodall
+ * 
+ * @See {@link LongFastEnumMap}
+ * 
+ * @param <K> Key type 1
+ * @param <L> Key type 2
+ */
+public final class LongFastEnumEnumMap<K extends Enum<K>, L extends Enum<L>> {
+
+	private final long[][] values;
+
+	public LongFastEnumEnumMap(final int size1, final int size2) {
+		values = new long[size1][];
+		for (int i = 0; i < size1; ++i) {
+			values[i] = new long[size2];
+		}
+	}
+
+	public final long get(final K key1, final L key2) {
+		return values[key1.ordinal()][key2.ordinal()];
+	}
+
+	public final void put(final K key1, final L key2, final long value) {
+		values[key1.ordinal()][key2.ordinal()] = value;
+	}
+
+}
