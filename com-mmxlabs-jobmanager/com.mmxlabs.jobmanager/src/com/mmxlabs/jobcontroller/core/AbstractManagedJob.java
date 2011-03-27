@@ -175,7 +175,6 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
-
 	}
 
 	@Override
@@ -191,9 +190,6 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	protected void setProgress(final int newProgress) {
 		final int delta = newProgress - progress;
 		progress = newProgress;
-		for (final IManagedJobListener x : listeners) {
-			x.jobProgressUpdated(this, delta);
-		}
 		final Iterator<IManagedJobListener> iterator = listeners.iterator();
 		while (iterator.hasNext()) {
 			final IManagedJobListener mjl = iterator.next();
