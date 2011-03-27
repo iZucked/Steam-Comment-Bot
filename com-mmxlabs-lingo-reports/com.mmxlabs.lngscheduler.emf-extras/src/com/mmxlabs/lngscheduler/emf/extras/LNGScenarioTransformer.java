@@ -73,14 +73,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-
-import com.mmxlabs.scheduler.optimiser.components.impl.CachingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.NetbackContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.ProfitSharingContract;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing
@@ -703,7 +698,7 @@ public class LNGScenarioTransformer {
 		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				keypoints);
 
-		CachingConsumptionRateCalculator cc = new CachingConsumptionRateCalculator(consumptionCalculator);
+		LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
 		
 		builder.setVesselClassStateParamaters(vc, state,
 				Calculator.scaleToInt(attrs.getNboRate()) / 24,
