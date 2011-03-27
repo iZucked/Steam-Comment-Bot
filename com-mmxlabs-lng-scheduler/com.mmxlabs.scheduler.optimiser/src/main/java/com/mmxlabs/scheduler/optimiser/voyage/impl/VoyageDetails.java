@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-import java.util.EnumMap;
-
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.impl.LongFastEnumEnumMap;
+import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
@@ -22,9 +22,9 @@ public final class VoyageDetails<T> implements Cloneable {
 
 	private VoyageOptions options;
 
-	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption;
+	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption;
 
-	private final EnumMap<FuelComponent, Integer> fuelUnitPrices;
+	private final LongFastEnumMap<FuelComponent> fuelUnitPrices;
 
 	private int idleTime;
 
@@ -35,20 +35,20 @@ public final class VoyageDetails<T> implements Cloneable {
 	private int startTime;
 
 	public VoyageDetails() {
-		fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(
-				FuelComponent.class);
-		fuelUnitPrices = new EnumMap<FuelComponent, Integer>(
-				FuelComponent.class);
-		for (FuelComponent fuel : FuelComponent.values()) {
-			fuelConsumption.put(fuel, new EnumMap<FuelUnit, Long>(
-					FuelUnit.class));
-		}
+		fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(
+				FuelComponent.values().length, FuelUnit.values().length);
+		fuelUnitPrices = new LongFastEnumMap<FuelComponent>(
+				FuelComponent.values().length);
 	}
 
-	public VoyageDetails(int idleTime2, int travelTime2, int speed2,
-			int startTime2, VoyageOptions options,
-			EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption2,
-			EnumMap<FuelComponent, Integer> fuelUnitPrices2) {
+	public VoyageDetails(
+			final int idleTime2,
+			final int travelTime2,
+			final int speed2,
+			final int startTime2,
+			final VoyageOptions options,
+			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2,
+			final LongFastEnumMap<FuelComponent> fuelUnitPrices2) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
@@ -66,14 +66,7 @@ public final class VoyageDetails<T> implements Cloneable {
 	public final long getFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit) {
 
-		// if (fuelConsumption.containsKey(fuel)) {
-
-		final EnumMap<FuelUnit, Long> map = fuelConsumption.get(fuel);
-		if (map.containsKey(fuelUnit)) {
-			return map.get(fuelUnit);
-		}
-		// }
-		return 0l;
+		return fuelConsumption.get(fuel, fuelUnit);
 	}
 
 	public final int getIdleTime() {
@@ -94,15 +87,7 @@ public final class VoyageDetails<T> implements Cloneable {
 
 	public final void setFuelConsumption(final FuelComponent fuel,
 			final FuelUnit fuelUnit, final long consumption) {
-		// final EnumMap<FuelUnit, Long> map;
-		// if (fuelConsumption.containsKey(fuel)) {
-		// map = fuelConsumption.get(fuel);
-		// } else {
-		// map = new EnumMap<FuelUnit, Long>(FuelUnit.class);
-		// fuelConsumption.put(fuel, map);
-		// }
-		// map.put(fuelUnit, consumption);
-		fuelConsumption.get(fuel).put(fuelUnit, consumption);
+		fuelConsumption.put(fuel, fuelUnit, consumption);
 	}
 
 	public final void setIdleTime(final int idleTime) {
@@ -131,11 +116,11 @@ public final class VoyageDetails<T> implements Cloneable {
 
 	public final int getFuelUnitPrice(final FuelComponent fuel) {
 
-		if (fuelUnitPrices.containsKey(fuel)) {
-			return fuelUnitPrices.get(fuel);
-		} else {
-			return 0;
-		}
+		// if (fuelUnitPrices.containsKey(fuel)) {
+		return (int) fuelUnitPrices.get(fuel);
+		// } else {
+		// return 0;
+		// }
 	}
 
 	public final void setFuelUnitPrice(final FuelComponent fuel,

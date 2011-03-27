@@ -5,9 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.Arrays;
-import java.util.EnumMap;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
@@ -24,21 +24,22 @@ public final class VoyagePlan implements Cloneable {
 	private long salesRevenue;
 	private long purchaseCost;
 
-	private final EnumMap<FuelComponent, Long> fuelConsumptions;
-	private final EnumMap<FuelComponent, Long> fuelCosts;
+	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
+	private final LongFastEnumMap<FuelComponent> fuelCosts;
 	private long lngFuelVolume;
 
 	public VoyagePlan() {
-		fuelConsumptions = new EnumMap<FuelComponent, Long>(FuelComponent.class);
-		fuelCosts = new EnumMap<FuelComponent, Long>(FuelComponent.class);
+		fuelConsumptions = new LongFastEnumMap<FuelComponent>(
+				FuelComponent.values().length);
+		fuelCosts = new LongFastEnumMap<FuelComponent>(
+				FuelComponent.values().length);
 	}
 
-	
-	
-	protected VoyagePlan(Object[] sequence, long dischargeVolume, long loadVolume,
-			long salesRevenue, long purchaseCost,
-			EnumMap<FuelComponent, Long> fuelConsumptions,
-			EnumMap<FuelComponent, Long> fuelCosts) {
+	protected VoyagePlan(final Object[] sequence, final long dischargeVolume,
+			final long loadVolume, final long salesRevenue,
+			final long purchaseCost,
+			final LongFastEnumMap<FuelComponent> fuelConsumptions,
+			final LongFastEnumMap<FuelComponent> fuelCosts) {
 		super();
 		this.sequence = sequence;
 		this.dischargeVolume = dischargeVolume;
@@ -49,13 +50,8 @@ public final class VoyagePlan implements Cloneable {
 		this.fuelCosts = fuelCosts;
 	}
 
-
-
 	public final long getFuelConsumption(final FuelComponent fuel) {
-		if (fuelConsumptions.containsKey(fuel)) {
-			return fuelConsumptions.get(fuel);
-		}
-		return 0;
+		return fuelConsumptions.get(fuel);
 	}
 
 	public final void setFuelConsumption(final FuelComponent fuel,
@@ -64,10 +60,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public final long getTotalFuelCost(final FuelComponent fuel) {
-		if (fuelCosts.containsKey(fuel)) {
-			return fuelCosts.get(fuel);
-		}
-		return 0;
+		return fuelCosts.get(fuel);
 	}
 
 	public final void setTotalFuelCost(final FuelComponent fuel, final long cost) {
@@ -161,28 +154,28 @@ public final class VoyagePlan implements Cloneable {
 	public final VoyagePlan clone() {
 		final Object[] clonedSequence = new Object[sequence.length];
 		int k = 0;
-		for (Object o : sequence) {
+		for (final Object o : sequence) {
 			if (o instanceof VoyageDetails) {
-				clonedSequence[k++] = ((VoyageDetails) o).clone();
+				clonedSequence[k++] = ((VoyageDetails<?>) o).clone();
 			} else if (o instanceof PortDetails) {
 				clonedSequence[k++] = ((PortDetails) o).clone();
 			} else {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, dischargeVolume, loadVolume, salesRevenue, 
-				purchaseCost, fuelConsumptions, fuelCosts);
+		return new VoyagePlan(clonedSequence, dischargeVolume, loadVolume,
+				salesRevenue, purchaseCost, fuelConsumptions, fuelCosts);
 	}
-
 
 	/**
 	 * Set the total quantity of LNG used for fuel in this voyageplan
+	 * 
 	 * @param lngConsumed
 	 */
 	public void setLNGFuelVolume(final long lngConsumed) {
 		this.lngFuelVolume = lngConsumed;
 	}
-	
+
 	/**
 	 * @return the total quantity of LNG used for fuel in this plan.
 	 */
@@ -191,9 +184,11 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	private int totalRouteCost;
-	public void setTotalRouteCost(int routeCost) {
+
+	public void setTotalRouteCost(final int routeCost) {
 		totalRouteCost = routeCost;
 	}
+
 	public int getTotalRouteCost() {
 		return totalRouteCost;
 	}
