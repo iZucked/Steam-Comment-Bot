@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.jobcontoller.Activator;
@@ -104,9 +105,12 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 	@Override
 	public void dispose() {
 
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getSelectionService()
-				.removeSelectionListener(selectionListener);
+		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI
+				.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			activeWorkbenchWindow.getSelectionService()
+					.removeSelectionListener(selectionListener);
+		}
 
 		final IJobManager jmv = Activator.getDefault().getJobManager();
 
