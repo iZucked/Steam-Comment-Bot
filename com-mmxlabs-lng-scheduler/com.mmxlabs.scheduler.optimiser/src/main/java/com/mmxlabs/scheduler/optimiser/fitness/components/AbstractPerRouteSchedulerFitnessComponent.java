@@ -160,6 +160,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
 	@Override
 	public void endEvaluationAndAnnotate(final IAnnotatedSolution<T> solution) {
 		super.endEvaluationAndAnnotate(solution);
+		setLastEvaluatedFitness(accumulator);
 		@SuppressWarnings("unchecked")
 		final Map<IResource, Map<String, Long>> fitnessByRoute = solution
 				.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute,

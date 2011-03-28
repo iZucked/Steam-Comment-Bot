@@ -258,7 +258,7 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 						annotation.setFuelVolume(forcedLoadVolume
 								.get(allocationIndex));
 
-						// TODO recompute load price here; this is not correct.
+						// TODO recompute load price here; this is not necessarily right
 						annotation.setLoadM3Price(loadPrices
 								.get(allocationIndex));
 						annotation.setDischargeM3Price(dischargePrices
