@@ -52,6 +52,7 @@ public class DateManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
+		if (object == null) return "";
 		final Calendar calendar = (Calendar) getValue(object);
 		final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT,
 				DateFormat.SHORT);
@@ -74,8 +75,9 @@ public class DateManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public Object getValue(Object object) {
+		if (object == null) return null;
 		final Date date = (Date) super.getValue(object);
-		// do calendar stuff
+	
 		final EObject obj = (EObject) object;
 		final Port port = (Port) obj.eGet(portReference);
 		final TimeZone zone = TimeZone.getTimeZone(portReference == null
