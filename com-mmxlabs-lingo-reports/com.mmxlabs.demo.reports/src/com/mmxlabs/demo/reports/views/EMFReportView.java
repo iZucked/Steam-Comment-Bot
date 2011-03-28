@@ -346,8 +346,11 @@ public abstract class EMFReportView extends ViewPart implements
 
 		final List<Schedule> schedules = ScheduleAdapter
 				.getSchedules(selection);
-
-		setInput(schedules);
+		if (schedules.isEmpty()) {
+			setInput(null);
+		} else {
+			setInput(schedules);
+		}
 	}
 
 	public void removeColumn(final String title) {

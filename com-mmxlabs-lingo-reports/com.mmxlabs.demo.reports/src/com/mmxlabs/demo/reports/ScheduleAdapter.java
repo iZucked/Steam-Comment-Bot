@@ -31,7 +31,7 @@ public class ScheduleAdapter {
 	 * @return
 	 */
 	public static List<Schedule> getSchedules(final ISelection selection) {
-		if (selection.isEmpty()) {
+		if (selection == null || selection.isEmpty()) {
 			return Collections.emptyList();
 		}
 
