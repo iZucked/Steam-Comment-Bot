@@ -25,14 +25,6 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 		final IFolderLayout navFolder = layout.createFolder("navFolder",
 				IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
 		navFolder.addView("com.mmxlabs.rcp.navigator");
-		navFolder.addView(IPageLayout.ID_RES_NAV);
-
-		// layout.addView(JobManagerView.ID, IPageLayout.BOTTOM, 0.3f,
-		// "navFolder");
-
-		// final IFolderLayout propertiesFolder = layout.createFolder(
-		// "propertiesFolder", IPageLayout.BOTTOM, 0.2f,
-		// IPageLayout.ID_EDITOR_AREA);
 
 		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.3f,
 				IPageLayout.ID_EDITOR_AREA);
@@ -56,7 +48,6 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(PortRotationReportView.ID);
 
 		layout.addShowViewShortcut("com.mmxlabs.rcp.navigator");
-		layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
 		layout.addPerspectiveShortcut("com.mmxlabs.demo.app.perspective.editing");
