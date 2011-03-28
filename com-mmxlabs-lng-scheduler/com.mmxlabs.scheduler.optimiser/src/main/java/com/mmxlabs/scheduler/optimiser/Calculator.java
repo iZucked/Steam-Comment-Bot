@@ -14,7 +14,8 @@ package com.mmxlabs.scheduler.optimiser;
  * 
  */
 public final class Calculator {
-
+	// If you change this, you will need to change the getHourlyCharterPrice operator
+	// on AllocatedVessel in the ECore model.
 	public static final int ScaleFactor = 1000;
 
 	/**
