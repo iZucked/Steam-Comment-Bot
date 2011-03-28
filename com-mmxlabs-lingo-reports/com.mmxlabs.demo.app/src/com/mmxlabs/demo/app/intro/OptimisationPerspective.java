@@ -33,6 +33,8 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 				"reportsFolder", IPageLayout.BOTTOM, 0.5f, SchedulerView.ID);
 
 		reportsFolder.addView(TotalsReportView.ID);
+		reportsFolder
+				.addView("com.mmxlabs.demo.reports.views.TotalsHierarchyView");
 		reportsFolder.addView(FitnessReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
 		reportsFolder.addView(PortRotationReportView.ID);
@@ -43,6 +45,7 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 
 		layout.addShowViewShortcut(SchedulerView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
+		layout.addShowViewShortcut("com.mmxlabs.demo.reports.views.TotalsHierarchyView");
 		layout.addShowViewShortcut(CargoReportView.ID);
 		layout.addShowViewShortcut(FitnessReportView.ID);
 		layout.addShowViewShortcut(PortRotationReportView.ID);
