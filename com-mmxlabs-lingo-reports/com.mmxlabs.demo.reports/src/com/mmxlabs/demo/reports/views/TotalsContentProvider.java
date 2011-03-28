@@ -75,9 +75,13 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 
 		long distance = 0l;
 		long totalCost = 0l;
+		long canals = 0;
+		long hire = 0;
 
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final ScheduledEvent evt : seq.getEvents()) {
+				hire += evt.getHireCost();
+				totalCost += evt.getHireCost();
 				if (evt instanceof FuelMixture) {
 					final FuelMixture mix = (FuelMixture) evt;
 					// add up fuel components from mixture
@@ -92,19 +96,25 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 				if (evt instanceof Journey) {
 					final Journey journey = (Journey) evt;
 					distance += journey.getDistance();
-				}
+					canals += journey.getRouteCost();
+					totalCost += journey.getRouteCost();
+				}	
 			}
 		}
 
-		rowData = new RowData[totalFuelCosts.size() + 2];
+		rowData = new RowData[totalFuelCosts.size() + 4];
 
 		int idx = 0;
 		for (final Entry<FuelType, Long> entry : totalFuelCosts.entrySet()) {
 			rowData[idx++] = new RowData(entry.getKey().toString(),
 					entry.getValue());
 		}
+		rowData[idx++] = new RowData("Canal Fees", canals);
+		rowData[idx++] = new RowData("Charter Fees", hire);
 		rowData[idx++] = new RowData("Distance", distance);
+		
 		rowData[idx++] = new RowData("Total Cost", totalCost);
+		
 	}
 
 	@Override
