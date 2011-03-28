@@ -5,9 +5,8 @@
 
 package com.mmxlabs.demo.reports.views;
 
-import java.util.Iterator;
+import java.util.List;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -15,7 +14,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -33,6 +31,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import scenario.schedule.Schedule;
 
+import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.demo.reports.views.FitnessContentProvider.RowData;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
@@ -81,7 +80,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	}
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize
+	 * This is a callback that will allow us to create the viewer and initialise
 	 * it.
 	 */
 	@Override
@@ -113,7 +112,15 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 		hookContextMenu();
 		contributeToActionBars();
 
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
+		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+				this);
+
+		// Trigger initial view state
+		final ISelection selection = getSite().getWorkbenchWindow()
+				.getSelectionService()
+				.getSelection("com.mmxlabs.rcp.navigator");
+
+		selectionChanged(null, selection);
 	}
 
 	private void hookContextMenu() {
@@ -186,23 +193,22 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart arg0, ISelection selection) {
-		final IStructuredSelection sel = (IStructuredSelection) selection;
-		if (sel.isEmpty()) {
-			setInput(null);
+	public void selectionChanged(final IWorkbenchPart arg0, final ISelection selection) {
+
+		final List<Schedule> schedules = ScheduleAdapter
+				.getSchedules(selection);
+		if (!schedules.isEmpty()) {
+			setInput(schedules.get(0));
 		} else {
-			@SuppressWarnings("unchecked")
-			Iterator<Object> iter = sel.iterator();
-			while (iter.hasNext()) {
-				final Object o = iter.next();
-				if (o instanceof Schedule) {
-					setInput(o);
-					return;
-				}
-				else if (o instanceof IAdaptable) {
-					setInput((Schedule) ((IAdaptable) o).getAdapter(Schedule.class));
-				}
-			}
+			setInput(null);
 		}
+	}
+
+	@Override
+	public void dispose() {
+		getSite().getPage().removeSelectionListener(
+				"com.mmxlabs.rcp.navigator", this);
+
+		super.dispose();
 	}
 }
