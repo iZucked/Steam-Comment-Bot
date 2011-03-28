@@ -20,7 +20,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -36,7 +35,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
@@ -209,6 +207,7 @@ public abstract class EMFReportView extends ViewPart implements
 					+ ")";
 		}
 
+		@Override
 		public Comparable getComparable(final Object object) {
 			if (object == null)
 				return new Date(-Long.MAX_VALUE);
@@ -255,7 +254,8 @@ public abstract class EMFReportView extends ViewPart implements
 
 		viewer.setComparator(new ViewerComparator() {
 			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+			public int compare(final Viewer viewer, final Object e1,
+					final Object e2) {
 				final Iterator<ColumnHandler> iterator = handlers.iterator();
 				int comparison = 0;
 				while (iterator.hasNext() && comparison == 0) {
@@ -279,21 +279,12 @@ public abstract class EMFReportView extends ViewPart implements
 		contributeToActionBars();
 
 		getSite().getWorkbenchWindow().getSelectionService()
-				.addSelectionListener(this);
+				.addSelectionListener("com.mmxlabs.rcp.navigator", this);
 
-		// Update view from current selection
-		final ISelectionProvider selectionProvider = getSite()
-				.getSelectionProvider();
-		if (selectionProvider != null) {
-			selectionChanged(null, selectionProvider.getSelection());
-		} else {
-			// No current provider? Look at the scenario navigator
-			// TODO: Ensure this is kept in sync
-			final ISelection selection = getSite().getWorkbenchWindow()
-					.getSelectionService()
-					.getSelection("com.mmxlabs.rcp.navigator");
-			selectionChanged(null, selection);
-		}
+		final ISelection selection = getSite().getWorkbenchWindow()
+				.getSelectionService()
+				.getSelection("com.mmxlabs.rcp.navigator");
+		selectionChanged(null, selection);
 	}
 
 	private void hookContextMenu() {
@@ -353,15 +344,10 @@ public abstract class EMFReportView extends ViewPart implements
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
 
-		// Filter out non-editor selections - Unfortunately the
-		// addSelectionLister part ID filters do not work with editors
-		if (part instanceof IEditorPart
-				|| (part != null && part.getSite().getId()
-						.equals("com.mmxlabs.rcp.navigator"))) {
-			final List<Schedule> schedules = ScheduleAdapter.getSchedules(selection);
+		final List<Schedule> schedules = ScheduleAdapter
+				.getSchedules(selection);
 
-			setInput(schedules);
-		}
+		setInput(schedules);
 	}
 
 	public void removeColumn(final String title) {
@@ -375,8 +361,16 @@ public abstract class EMFReportView extends ViewPart implements
 			if (column.getText().equals(title))
 				// TODO this might be pretty wrong.
 				// TODO: This is how I usually do it - SG
-				column.dispose(); 
+				column.dispose();
 		}
 		viewer.getTable().pack(true);
+	}
+
+	@Override
+	public void dispose() {
+		getSite().getPage().removeSelectionListener(
+				"com.mmxlabs.rcp.navigator", this);
+
+		super.dispose();
 	}
 }

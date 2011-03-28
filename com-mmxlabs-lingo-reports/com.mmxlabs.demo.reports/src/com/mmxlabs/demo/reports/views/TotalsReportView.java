@@ -5,9 +5,8 @@
 
 package com.mmxlabs.demo.reports.views;
 
-import java.util.Iterator;
+import java.util.List;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -15,7 +14,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -33,6 +31,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import scenario.schedule.Schedule;
 
+import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.demo.reports.views.TotalsContentProvider.RowData;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
@@ -50,10 +49,10 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	class ViewLabelProvider extends CellLabelProvider implements
 			ITableLabelProvider {
 		@Override
-		public String getColumnText(Object obj, int index) {
+		public String getColumnText(final Object obj, final int index) {
 
 			if (obj instanceof RowData) {
-				RowData d = (RowData) obj;
+				final RowData d = (RowData) obj;
 				if (index == 0) {
 					return d.component;
 				} else {
@@ -64,12 +63,12 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 		}
 
 		@Override
-		public Image getColumnImage(Object obj, int index) {
+		public Image getColumnImage(final Object obj, final int index) {
 			return null;
 		}
 
 		@Override
-		public void update(ViewerCell cell) {
+		public void update(final ViewerCell cell) {
 
 		}
 	}
@@ -85,17 +84,17 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	 * it.
 	 */
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL);
 		viewer.setContentProvider(new TotalsContentProvider());
 		viewer.setInput(getViewSite());
 
-		TableViewerColumn tvc1 = new TableViewerColumn(viewer, SWT.NONE);
+		final TableViewerColumn tvc1 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc1.getColumn().setText("Component");
 		tvc1.getColumn().pack();
 
-		TableViewerColumn tvc2 = new TableViewerColumn(viewer, SWT.NONE);
+		final TableViewerColumn tvc2 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc2.getColumn().setText("Total");
 		tvc2.getColumn().pack();
 
@@ -113,39 +112,46 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 		hookContextMenu();
 		contributeToActionBars();
 
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
+		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+				this);
+
+		final ISelection selection = getSite().getWorkbenchWindow()
+				.getSelectionService()
+				.getSelection("com.mmxlabs.rcp.navigator");
+
+		selectionChanged(null, selection);
 	}
 
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			@Override
-			public void menuAboutToShow(IMenuManager manager) {
+			public void menuAboutToShow(final IMenuManager manager) {
 				TotalsReportView.this.fillContextMenu(manager);
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(viewer.getControl());
+		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
 	}
 
 	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
+		final IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
-	private void fillLocalPullDown(IMenuManager manager) {
+	private void fillLocalPullDown(final IMenuManager manager) {
 		manager.add(new Separator());
 	}
 
-	private void fillContextMenu(IMenuManager manager) {
+	private void fillContextMenu(final IMenuManager manager) {
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
-	private void fillLocalToolBar(IToolBarManager manager) {
+	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packColumnsAction);
 	}
 
@@ -186,25 +192,22 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart arg0, ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-		final IStructuredSelection sel = (IStructuredSelection) selection;
-			if (sel.isEmpty()) {
-				setInput(null);
-			} else {
-				@SuppressWarnings("unchecked")
-				Iterator<Object> iter = sel.iterator();
-				while (iter.hasNext()) {
-					final Object o = iter.next();
-					if (o instanceof Schedule) {
-						setInput((Schedule) o);
-						return;
-					}
-					else if (o instanceof IAdaptable) {
-						setInput((Schedule) ((IAdaptable) o).getAdapter(Schedule.class));
-					}
-				}
-			}
+	public void selectionChanged(final IWorkbenchPart arg0,
+			final ISelection selection) {
+
+		final List<Schedule> schedules = ScheduleAdapter
+				.getSchedules(selection);
+		if (!schedules.isEmpty()) {
+			setInput(schedules.get(0));
+		} else {
+			setInput(null);
 		}
+	}
+
+	@Override
+	public void dispose() {
+		getSite().getPage().removeSelectionListener(
+				"com.mmxlabs.rcp.navigator", this);
+		super.dispose();
 	}
 }

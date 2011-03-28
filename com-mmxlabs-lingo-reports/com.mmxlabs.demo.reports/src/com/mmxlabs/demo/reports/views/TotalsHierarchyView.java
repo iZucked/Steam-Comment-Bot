@@ -17,7 +17,6 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
@@ -71,19 +70,12 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
 
-		// Filter out non-editor selections - Unfortunately the
-		// addSelectionLister part ID filters do not work with editors
-		if (part instanceof IEditorPart
-				|| (part != null && part.getSite().getId()
-						.equals("com.mmxlabs.rcp.navigator"))) {
-
-			final List<Schedule> schedules = ScheduleAdapter
-					.getSchedules(selection);
-			if (!schedules.isEmpty()) {
-				setSelectedSchedule(schedules.get(0));
-			} else {
-				setSelectedSchedule(null);
-			}
+		final List<Schedule> schedules = ScheduleAdapter
+				.getSchedules(selection);
+		if (!schedules.isEmpty()) {
+			setSelectedSchedule(schedules.get(0));
+		} else {
+			setSelectedSchedule(null);
 		}
 	}
 
@@ -400,12 +392,27 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		getViewSite().getActionBars().getToolBarManager()
 				.add(new PackTreeColumnsAction(viewer));
 
-		getSite().getWorkbenchWindow().getSelectionService()
-				.addSelectionListener(this);
+		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+				this);
+
+		final ISelection selection = getSite().getWorkbenchWindow()
+				.getSelectionService()
+				.getSelection("com.mmxlabs.rcp.navigator");
+		
+		selectionChanged(null, selection);
 	}
 
 	@Override
 	public void setFocus() {
 
+	}
+
+	@Override
+	public void dispose() {
+
+		getSite().getPage().removeSelectionListener(
+				"com.mmxlabs.rcp.navigator", this);
+
+		super.dispose();
 	}
 }
