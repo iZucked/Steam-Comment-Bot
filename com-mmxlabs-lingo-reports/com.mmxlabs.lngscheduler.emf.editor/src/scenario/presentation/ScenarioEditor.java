@@ -145,6 +145,7 @@ import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeHandler;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
+import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
@@ -191,6 +192,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	}
 
+	final ScenarioRVP scheduleProvider = new ScenarioRVP() {
+		@Override
+		public List<Pair<String, EObject>> getAlloweValues(EObject target,
+				EStructuralFeature field) {
+			final Scenario scenario = getEnclosingScenario(target);
+			final List<Pair<String, EObject>> result = getSortedNames(scenario
+					.getScheduleModel().getSchedules(),
+					SchedulePackage.eINSTANCE.getSchedule_Name());
+			result.add(0, new Pair<String, EObject>("none", null));
+			return result;
+		}
+	};
+	
 	final ScenarioRVP vesselClassProvider = new ScenarioRVP() {
 		@Override
 		public List<Pair<String, EObject>> getAlloweValues(EObject target,
@@ -1959,6 +1973,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							EStructuralFeature feature) {
 						return new ReferenceInlineEditor(path, feature,
 								editingDomain, vesselClassProvider);
+					}
+				});
+		
+		page.setEditorFactoryForClassifier(
+				SchedulePackage.eINSTANCE.getSchedule(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, scheduleProvider);
 					}
 				});
 		return page;

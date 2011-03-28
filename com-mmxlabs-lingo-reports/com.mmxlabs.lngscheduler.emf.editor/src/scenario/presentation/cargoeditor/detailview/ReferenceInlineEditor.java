@@ -93,6 +93,8 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		combo.setText(nameList.get(valueList.indexOf(value)));
+		final int curIndex = valueList.indexOf(value);
+		if (curIndex == -1) combo.setText(""); 
+		else combo.setText(nameList.get(curIndex));
 	}
 }

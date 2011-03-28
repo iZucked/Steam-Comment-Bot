@@ -64,6 +64,7 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	}
 	
 	private Object reallyGetValue(Object object) {
+		if (object == null) return null;
 		return ((EObject) object).eGet(field);
 	}
 

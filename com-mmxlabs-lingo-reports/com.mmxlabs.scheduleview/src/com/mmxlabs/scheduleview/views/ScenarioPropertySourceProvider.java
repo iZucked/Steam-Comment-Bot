@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor.properties;
+package com.mmxlabs.scheduleview.views;
 
 import java.util.ArrayList;
 
@@ -21,8 +21,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
-
-import scenario.presentation.cargoeditor.celleditors.SpinnerCellEditor;
 
 import com.mmxlabs.common.Pair;
 
@@ -57,22 +55,24 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 							@Override
 							protected CellEditor createEDataTypeCellEditor(
 									EDataType eDataType, Composite composite) {
-								if (eDataType.equals(ecorePackage.getEInt())
-										|| eDataType.equals(ecorePackage
-												.getELong())
-										|| eDataType.equals(ecorePackage
-												.getEFloat())) {
-									final SpinnerCellEditor editor = new SpinnerCellEditor(
-											composite);
-									editor.setDigits(eDataType
-											.equals(ecorePackage.getEFloat()) ? 3
-											: 0);
-									editor.setMaximumValue(10000000);
-									return editor;
-								} else {
-									return super.createEDataTypeCellEditor(
-											eDataType, composite);
-								}
+								// if (eDataType.equals(ecorePackage.getEInt())
+								// || eDataType.equals(ecorePackage
+								// .getELong())
+								// || eDataType.equals(ecorePackage
+								// .getEFloat())) {
+								// final SpinnerCellEditor editor = new
+								// SpinnerCellEditor(
+								// composite);
+								// editor.setDigits(eDataType
+								// .equals(ecorePackage.getEFloat()) ? 3
+								// : 0);
+								// editor.setMaximumValue(10000000);
+								// return editor;
+								// } else {
+								// return super.createEDataTypeCellEditor(
+								// eDataType, composite);
+								// }
+								return null;
 							}
 						};
 					}
@@ -97,15 +97,25 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 			topName = ((EObject) object).eClass().getName();
 			for (final EReference reference : eObject.eClass()
 					.getEAllContainments()) {
-				if (reference.isMany())
-					continue;
-
+				// if (reference.isMany())
+				// continue;
+				final Object value = eObject.eGet(reference);
 				// get a source for the contained object
-				final IPropertySource subSource = getPropertySource(eObject
-						.eGet(reference));
+				
+				if (reference.isMany()) {
+					for (final Object o : ((Iterable) value)) {
+						final IPropertySource subSource = getPropertySource(o);
 
-				subSources.add(new Pair<EReference, IPropertySource>(reference,
-						subSource));
+						subSources.add(new Pair<EReference, IPropertySource>(reference,
+								subSource));
+					}
+				} else {
+					final IPropertySource subSource = getPropertySource(value);
+
+					subSources.add(new Pair<EReference, IPropertySource>(reference,
+							subSource));
+				}
+				
 			}
 		} else {
 			topName = "";

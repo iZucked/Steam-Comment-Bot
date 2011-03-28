@@ -82,7 +82,7 @@ public interface SpotVessel extends AllocatedVessel {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getVesselClass().getDailyCharterPrice() / 24.0;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return \r\n((getVesselClass().getDailyCharterPrice() * 1000) / 24) / 1000.0;'"
 	 * @generated
 	 */
 	double getHourlyCharterPrice();

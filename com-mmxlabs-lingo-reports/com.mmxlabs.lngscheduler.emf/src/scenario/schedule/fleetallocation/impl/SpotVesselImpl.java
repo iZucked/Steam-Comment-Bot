@@ -150,7 +150,8 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * @generated
 	 */
 	public double getHourlyCharterPrice() {
-		return getVesselClass().getDailyCharterPrice() / 24.0;
+		return 
+		((getVesselClass().getDailyCharterPrice() * 1000) / 24) / 1000.0;
 	}
 
 	/**
