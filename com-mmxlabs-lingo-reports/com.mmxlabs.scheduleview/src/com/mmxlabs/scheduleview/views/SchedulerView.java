@@ -259,12 +259,10 @@ public class SchedulerView extends ViewPart {
 				redraw();
 			};
 		};
-		toggleColourSchemeAction.setText("Switch Colour Scheme");
+		toggleColourSchemeAction.setText("Colour Scheme");
+		toggleColourSchemeAction.setImageDescriptor(Activator
+				.getImageDescriptor("/icons/colour_scheme.gif"));
 
-		packAction = new PackAction(viewer.getGanttChart());
-		packAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/pack.gif"));
-		
 		sortModeAction = new Action() {
 
 			@Override
@@ -277,12 +275,15 @@ public class SchedulerView extends ViewPart {
 				viewerComparator.setMode(mode);
 
 				viewer.setInput(viewer.getInput());
-
-//				viewer.
 			};
 		};
-		sortModeAction.setText("Switch Sort Mode");
+		sortModeAction.setText("Sort");
+		sortModeAction.setImageDescriptor(Activator
+				.getImageDescriptor("/icons/alphab_sort_co.gif"));
 
+		packAction = new PackAction(viewer.getGanttChart());
+		packAction.setImageDescriptor(Activator
+				.getImageDescriptor("/icons/pack.gif"));
 	}
 
 	/**
