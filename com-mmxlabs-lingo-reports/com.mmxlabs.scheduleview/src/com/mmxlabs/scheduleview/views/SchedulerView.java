@@ -7,7 +7,6 @@ package com.mmxlabs.scheduleview.views;
 
 import java.util.List;
 
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -35,9 +34,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
-import scenario.Scenario;
 import scenario.schedule.Schedule;
-import scenario.schedule.ScheduleModel;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -426,16 +423,8 @@ public class SchedulerView extends ViewPart {
 	public IPropertySheetPage getPropertySheetPage() {
 		final PropertySheetPage propertySheetPage = new PropertySheetPage();
 
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory();
-
-		// TODO: Add in ScenarioEMF Item Provider
-
-		adapterFactory
-				.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-
 		propertySheetPage
-				.setPropertySourceProvider(new AdapterFactoryContentProvider(
-						adapterFactory));
+				.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
 
 		return propertySheetPage;
 	}
