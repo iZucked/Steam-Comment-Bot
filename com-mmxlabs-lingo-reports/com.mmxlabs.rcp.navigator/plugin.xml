@@ -39,25 +39,10 @@
                   pattern="org.eclipse.ui.navigator.resources.workingSets">
             </contentExtension>
             <contentExtension
-                  pattern="com.mmxlabs.rcp.navigator.navigatorContent1">
-            </contentExtension>
-            <contentExtension
-                  pattern="com.mmxlabs.rcp.navigator.ecore.EcoreModelContent">
+                  pattern="com.mmxlabs.rcp.navigator.scenario.ScenarioContent">
             </contentExtension>
          </includes>
       </viewerContentBinding>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="com.mmxlabs.demo.app.perspective">
-         <view
-               id="com.mmxlabs.rcp.navigator"
-               ratio="0.5"
-               relationship="stack"
-               relative="org.eclipse.ui.navigator.ProjectExplorer">
-         </view>
-      </perspectiveExtension>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
@@ -65,7 +50,7 @@
        <navigatorContent
             activeByDefault="true"
             contentProvider="com.mmxlabs.rcp.navigator.scenario.ScenarioContentProvider"
-            id="com.mmxlabs.rcp.navigator.navigatorContent1"
+            id="com.mmxlabs.rcp.navigator.scenario.ScenarioContent"
             labelProvider="com.mmxlabs.rcp.navigator.scenario.ScenarioLabelProvider"
             name="Scenario Content Provider"
             priority="highest">
@@ -76,15 +61,9 @@
                      property="org.eclipse.core.resources.extension"
                      value="scenario">
                </test>
-               <instanceof
-                     value="org.eclipse.core.resources.IResource">
-               </instanceof>
             </or></triggerPoints>
          <possibleChildren>
             <or>
-               <instanceof
-                     value="com.mmxlabs.rcp.navigator.scenario.ScenarioTreeNodeClass">
-               </instanceof>
                <instanceof
                      value="org.eclipse.core.resources.IResource">
                </instanceof>
@@ -93,39 +72,6 @@
       </navigatorContent>ent>
    </extension>
    
-      <extension
-         point="org.eclipse.ui.navigator.navigatorContent">
-      <navigatorContent
-            activeByDefault="true"
-            contentProvider="com.mmxlabs.rcp.navigator.scenario.ScenarioContentProvider"
-            id="com.mmxlabs.rcp.navigator.ecore.EcoreModelContent"
-            labelProvider="com.mmxlabs.rcp.navigator.ecore.EcoreLabelProvider"
-            name="EMF Model Content"
-            priority="normal">
-            <triggerPoints> 
-            	<or>
-				<and> 
-					<instanceof value="org.eclipse.core.resources.IResource"/> 
-					<test 
-						forcePluginActivation="true" 
-						property="org.eclipse.core.resources.extension" 
-						value="scenario"/> 
-				</and>
-    <and>
-       <adapt
-             type="scenario.Scenario">
-       </adapt>
-    </and> 
-				</or>
-			</triggerPoints> 
-			<possibleChildren> 
-				<or> 
-					<instanceof value="org.eclipse.emf.ecore.resource.Resource"/>
-					<instanceof value="org.eclipse.emf.ecore.EObject"/>  
-				</or> 
-			</possibleChildren>
-		</navigatorContent>
-   </extension>
       <extension
             point="org.eclipse.ui.commands">
          <category
@@ -156,11 +102,6 @@
                id="com.mmxlabs.rcp.navigator.commands.category.scenario"
                name="Scenario Commands">
          </category>
-         <command
-               categoryId="com.mmxlabs.rcp.navigator.commands.category.scenario"
-               id="com.mmxlabs.rcp.navigator.commands.scenario.checkpoint"
-               name="Scenario Check Point">
-         </command>
       </extension>
       <extension
             point="org.eclipse.ui.handlers">
@@ -242,25 +183,6 @@
             </enabledWhen>
          </handler>
          <handler
-               class="com.mmxlabs.rcp.navigator.handlers.CheckPointHandler"
-               commandId="com.mmxlabs.rcp.navigator.commands.scenario.checkpoint">
-            <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scenario">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </enabledWhen>
-         </handler>
-         <handler
                class="com.mmxlabs.rcp.navigator.handlers.SaveOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save">
             <enabledWhen>
@@ -317,22 +239,10 @@
                      icon="icons/etool16/saveas_edit.gif"
                      id="com.mmxlabs.rcp.navigator.toolbars.optimisation.save"
                      label="Save Optimisation"
+                     mnemonic="S"
                      style="push"
                      tooltip="Save optimisations">
                </command>
-         </menuContribution>
-         <menuContribution
-               allPopups="false"
-               locationURI="toolbar:com.mmxlabs.rcp.navigator">
-            <command
-                  commandId="com.mmxlabs.rcp.navigator.commands.scenario.checkpoint"
-                  disabledIcon="icons/dlcl16/newstream_wiz.gif"
-                  icon="icons/elcl16/newstream_wiz.gif"
-                  id="com.mmxlabs.rcp.navigator.toolbars.scenario.checkpoint"
-                  label="Scenario Checkpoint"
-                  style="push"
-                  tooltip="Create a duplciate scenario from the selected scenario">
-            </command>
          </menuContribution>
       </extension>
       <extension

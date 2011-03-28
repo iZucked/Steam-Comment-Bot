@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.mmxlabs.shiplingo</groupId>
-	<artifactId>com.mmxlabs.demo</artifactId>
+	<artifactId>com.mmxlabs.demo.product</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
 	<!-- p2 repo is disabled as it cannot find the pom deps -->

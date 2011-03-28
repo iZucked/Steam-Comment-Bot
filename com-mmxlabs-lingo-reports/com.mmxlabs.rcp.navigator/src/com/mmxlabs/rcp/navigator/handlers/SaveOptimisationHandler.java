@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
@@ -36,7 +35,7 @@ import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-public class SaveOptimisationHandler extends AbstractHandler {
+public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 
 	/**
 	 * The constructor.

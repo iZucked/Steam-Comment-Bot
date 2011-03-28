@@ -7,12 +7,10 @@ package com.mmxlabs.demo.reports.views;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -35,6 +33,7 @@ import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 
+import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
@@ -71,22 +70,12 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
 
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection selection2 = (IStructuredSelection) selection;
-
-			if (selection2.isEmpty()) {
-				setSelectedSchedule(null);
-			} else {
-				@SuppressWarnings("unchecked")
-				Iterator<Object> iter = selection2.iterator();
-				while (iter.hasNext()) {
-					final Object o = iter.next();
-					if (o instanceof Schedule) {
-						setSelectedSchedule((Schedule) o);
-						return;
-					}
-				}
-			}
+		final List<Schedule> schedules = ScheduleAdapter
+				.getSchedules(selection);
+		if (!schedules.isEmpty()) {
+			setSelectedSchedule(schedules.get(0));
+		} else {
+			setSelectedSchedule(null);
 		}
 	}
 
@@ -126,7 +115,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 			return children.size();
 		}
 
-		public TreeData getChild(int index) {
+		public TreeData getChild(final int index) {
 			return children.get(index);
 		}
 
@@ -170,22 +159,22 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		final TreeData fleetLNG = new TreeData("Fleet Vessels");
 		final TreeData spotLNG = new TreeData("Spot Vessels");
-		
+
 		final TreeData lng = new TreeData("LNG");
-		
+
 		top.addChild(lng);
 		lng.addChild(fleetLNG);
 		lng.addChild(spotLNG);
-		
+
 		// First do fuel costs
 		for (final FuelType t : FuelType.values()) {
 			if (t.equals(FuelType.FBO) || t.equals(FuelType.NBO)) {
 				final TreeData thisFuelFleet = new TreeData(t.getName());
 				final TreeData thisFuelSpot = new TreeData(t.getName());
-				
+
 				fleetLNG.addChild(thisFuelFleet);
 				spotLNG.addChild(thisFuelSpot);
-				
+
 				fleetFuelUsages.put(t, thisFuelFleet);
 				spotFuelUsages.put(t, thisFuelSpot);
 			} else {
@@ -283,8 +272,9 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		for (final Sequence seq : schedule.getSequences()) {
 			final AllocatedVessel av = seq.getVessel();
 			for (final ScheduleFitness sf : seq.getFitness()) {
-				if (sf.getValue() > 0 && sf.getName()
-						.equals(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME)) {
+				if (sf.getValue() > 0
+						&& sf.getName()
+								.equals(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME)) {
 					final TreeData thisVessel = new TreeData(av.getName(),
 							sf.getValue());
 					charterCosts.addChild(thisVessel);
@@ -326,7 +316,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		viewer.setContentProvider(new ITreeContentProvider() {
 			@Override
-			public void inputChanged(Viewer arg0, Object arg1, Object arg2) {
+			public void inputChanged(final Viewer arg0, final Object arg1,
+					final Object arg2) {
 
 			}
 
@@ -401,12 +392,27 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		getViewSite().getActionBars().getToolBarManager()
 				.add(new PackTreeColumnsAction(viewer));
 
-		getSite().getWorkbenchWindow().getSelectionService()
-				.addSelectionListener(this);
+		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+				this);
+
+		final ISelection selection = getSite().getWorkbenchWindow()
+				.getSelectionService()
+				.getSelection("com.mmxlabs.rcp.navigator");
+		
+		selectionChanged(null, selection);
 	}
 
 	@Override
 	public void setFocus() {
 
+	}
+
+	@Override
+	public void dispose() {
+
+		getSite().getPage().removeSelectionListener(
+				"com.mmxlabs.rcp.navigator", this);
+
+		super.dispose();
 	}
 }
