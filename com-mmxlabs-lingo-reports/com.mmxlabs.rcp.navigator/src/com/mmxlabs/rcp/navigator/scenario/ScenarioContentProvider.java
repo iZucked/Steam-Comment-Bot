@@ -9,10 +9,10 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionContentProvider;
 
 import com.mmxlabs.jobcontoller.Activator;
@@ -195,9 +195,11 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 					final IResource resource = jobManager.findResourceForJob(job);
 					((TreeViewer) viewer).refresh(resource, true);
 
-					final TreeItem[] current = tv.getTree().getSelection();
-					tv.getTree().setSelection(current);
+//					final TreeItem[] current = tv.getTree().getSelection();
+//					tv.getTree().setSelection(current);
 					tv.refresh(jobManager.findResourceForJob(job), true);
+					viewer.setSelection(new StructuredSelection(resource));
+//					navigator.selectReveal(new StructuredSelection(resource));//maybe
 				}
 			});
 			return true;
