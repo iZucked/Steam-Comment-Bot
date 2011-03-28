@@ -7,7 +7,6 @@ package com.mmxlabs.scheduleview.views;
 
 import java.util.List;
 
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -18,15 +17,14 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
@@ -35,9 +33,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
-import scenario.Scenario;
 import scenario.schedule.Schedule;
-import scenario.schedule.ScheduleModel;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -63,7 +59,7 @@ public class SchedulerView extends ViewPart {
 	private ISelectionListener selectionListener;
 
 	private PackAction packAction;
-	
+
 	private Action sortModeAction;
 
 	ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
@@ -150,113 +146,42 @@ public class SchedulerView extends ViewPart {
 			public void selectionChanged(final IWorkbenchPart part,
 					final ISelection selection) {
 
-				// Filter out non-editor selections - Unfortunately the
-				// addSelectionLister part ID filters do not work with editors
-				if (part instanceof IEditorPart
-						|| (part != null && part.getSite().getId()
-								.equals("com.mmxlabs.rcp.navigator"))) {
+				final List<Schedule> schedules = ScheduleAdapter
+						.getSchedules(selection);
+				if (!schedules.isEmpty()) {
+					boolean needFit = viewer.getInput() == null;
+					setInput(schedules);
+					if (needFit) {
+						Display.getDefault().asyncExec(new Runnable() {
 
-					final List<Schedule> schedules = ScheduleAdapter
-							.getSchedules(selection);
-					if (schedules.isEmpty() == false) {
-						setInput(schedules);
+							@Override
+							public void run() {
+								packAction.run();
+							}
+						});
 					}
+				} else {
+					setInput(null);
 				}
 			}
 		};
-		getSite().getWorkbenchWindow().getSelectionService()
-				.addSelectionListener(selectionListener);
 
-		// getSite().getPage().addSelectionListener(JobManagerView.ID,
-		// new ISelectionListener() {
-		//
-		// @Override
-		// public void selectionChanged(IWorkbenchPart part,
-		// ISelection selection) {
-		//
-		// selectedJob = null;
-		// IStructuredSelection ss = (IStructuredSelection) selection;
-		// if (ss.isEmpty() == false) {
-		// selectedJob = (IManagedJob) ss.iterator().next();
-		// setInput(selectedJob.getSchedule());
-		// } else {
-		// setInput(null);
-		// }
-		// refresh();
-		// }
-		// });
-
-		// jobListener = new ManagedJobListenerNotifier() {
-		//
-		// @Override
-		// public void jobNotified(IManagedJob job) {
-		//
-		// if (selectedJobs.contains(job)) {
-		// setInput(job.getSchedule());
-		// refresh();
-		// }
-		// }
-		// };
-		//
-		// jobManagerListener = new IJobManagerListener() {
-		//
-		// @Override
-		// public void jobRemoved(IJobManager jobManager, IManagedJob job) {
-		// job.removeManagedJobListener(jobListener);
-		// }
-		//
-		// @Override
-		// public void jobAdded(IJobManager jobManager, IManagedJob job) {
-		// job.addManagedJobListener(jobListener);
-		// }
-		//
-		// @Override
-		// public void jobSelected(IJobManager jobManager, IManagedJob job) {
-		// selectedJobs.add(job);
-		// if (selectedJobs.isEmpty()) {
-		// setInput(null);
-		// } else {
-		// setInput(selectedJobs.get(0).getSchedule());
-		// }
-		// }
-		//
-		// @Override
-		// public void jobDeselected(IJobManager jobManager, IManagedJob job) {
-		// selectedJobs.remove(job);
-		// if (selectedJobs.isEmpty()) {
-		// setInput(null);
-		// } else {
-		// setInput(selectedJobs.get(0).getSchedule());
-		// }
-		//
-		// }
-		// };
-		//
-		// Activator.getDefault().getJobManager()
-		// .addJobManagerListener(jobManagerListener);
+		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+				selectionListener);
 
 		getSite().setSelectionProvider(viewer);
 
 		// Update view from current selection
-		final ISelectionProvider selectionProvider = getSite()
-				.getSelectionProvider();
-		if (selectionProvider != null) {
-			selectionListener.selectionChanged(null,
-					selectionProvider.getSelection());
-		} else {
-			// No current provider? Look at the scenario navigator
-			// TODO: Ensure this is kept in sync
-			final ISelection selection = getSite().getWorkbenchWindow()
-					.getSelectionService()
-					.getSelection("com.mmxlabs.rcp.navigator");
-			selectionListener.selectionChanged(null, selection);
-		}
+		final ISelection selection = getSite().getWorkbenchWindow()
+				.getSelectionService()
+				.getSelection("com.mmxlabs.rcp.navigator");
+		selectionListener.selectionChanged(null, selection);
 	}
 
 	@Override
 	public void dispose() {
-		getSite().getWorkbenchWindow().getSelectionService()
-				.removeSelectionListener(selectionListener);
+		getSite().getPage().removeSelectionListener(
+				"com.mmxlabs.rcp.navigator", selectionListener);
 
 		super.dispose();
 	}
