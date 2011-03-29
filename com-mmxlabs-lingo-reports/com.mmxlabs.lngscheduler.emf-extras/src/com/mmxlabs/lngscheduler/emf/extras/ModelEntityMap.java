@@ -41,7 +41,7 @@ public class ModelEntityMap {
 	 */
 	public void setScenario(final Scenario scenario) {
 		this.resourceSet = scenario.eResource().getResourceSet();
-		earliestDate = EMFUtils.findMinMaxDateAttributes(scenario).getFirst();
+		earliestDate = EMFUtils.findEarliestAndLatestEvents(scenario).getFirst();
 	}
 	
 	public Date getDateFromHours(final long hours) {

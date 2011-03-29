@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -15,7 +16,11 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
+import scenario.Scenario;
 import scenario.ScenarioPackage;
+import scenario.cargo.Slot;
+import scenario.fleet.CharterOut;
+import scenario.fleet.PortAndTime;
 
 import com.mmxlabs.common.Pair;
 
@@ -123,11 +128,42 @@ public class EMFUtils {
 		final Pair<Date, Date> result = new Pair<Date, Date>();
 
 		findMinMaxDateAttributes(object, result);
-
+		System.err.println(result);
 		return result;
 
 	}
 
+	private static void updateMinMax(Pair<Date, Date> pair, Date date) {
+		if (date == null) return;
+		if (pair.getFirst() == null || date.before(pair.getFirst()))
+			pair.setFirst(date);
+		if (pair.getSecond() == null || date.after(pair.getSecond()))
+			pair.setSecond(date);
+		
+	}
+	
+	public static Pair<Date, Date> findEarliestAndLatestEvents(final Scenario scenario) {
+		final Pair<Date, Date> result = new Pair<Date, Date>(null, null);
+		
+		final TreeIterator<EObject> iterator = scenario.eAllContents();
+		while (iterator.hasNext()) {
+			final EObject o = iterator.next();
+			if (o instanceof PortAndTime) {
+				final PortAndTime pat = (PortAndTime) o;
+				updateMinMax(result, pat.getStartTime());
+				updateMinMax(result, pat.getEndTime());
+			} else if (o instanceof Slot) {
+				final Slot slot = (Slot) o;
+				updateMinMax(result, slot.getWindowStart());
+				updateMinMax(result, slot.getWindowEnd());
+			} else if (o instanceof CharterOut) {
+				updateMinMax(result, ((CharterOut) o).getStartDate());
+				updateMinMax(result, ((CharterOut) o).getEndDate());
+			}
+		}
+		
+		return result;
+	}
 	/**
 	 * Find min/max dates and place them in the given pair, by reference.
 	 * 
@@ -136,25 +172,26 @@ public class EMFUtils {
 	 */
 	private static void findMinMaxDateAttributes(final EObject object,
 			final Pair<Date, Date> mm) {
-		final EClass eClass = object.eClass();
+		
+		final TreeIterator<EObject> iter = object.eAllContents();
+		while (iter.hasNext()) {
+			final EObject sub = iter.next();
+			final EClass eClass = sub.eClass();
+			
+			for (final EAttribute attribute : eClass.getEAllAttributes()) {
+				if (sub.eIsSet(attribute)) {
+					if (Date.class.isAssignableFrom(attribute.getEAttributeType()
+							.getInstanceClass())) {
+						final Date dt = (Date) sub.eGet(attribute);
 
-		for (final EAttribute attribute : eClass.getEAllAttributes()) {
-			if (object.eIsSet(attribute)) {
-				if (Date.class.isAssignableFrom(attribute.getEAttributeType()
-						.getInstanceClass())) {
-					final Date dt = (Date) object.eGet(attribute);
+						if (mm.getFirst() == null || dt.before(mm.getFirst()))
+							mm.setFirst(dt);
 
-					if (mm.getFirst() == null || dt.before(mm.getFirst()))
-						mm.setFirst(dt);
-
-					if (mm.getSecond() == null || dt.after(mm.getSecond()))
-						mm.setSecond(dt);
+						if (mm.getSecond() == null || dt.after(mm.getSecond()))
+							mm.setSecond(dt);
+					}
 				}
 			}
-		}
-
-		for (final EObject child : object.eContents()) {
-			findMinMaxDateAttributes(child, mm);
 		}
 	}
 }

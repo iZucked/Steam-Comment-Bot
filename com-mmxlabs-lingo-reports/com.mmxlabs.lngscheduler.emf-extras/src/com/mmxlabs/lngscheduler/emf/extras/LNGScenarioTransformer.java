@@ -18,6 +18,7 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -302,13 +303,11 @@ public class LNGScenarioTransformer {
 	 * which return a date.
 	 */
 	private void findEarliestAndLatestTimes() {
-		// search only within the cargo model, because we only care about the cargoes.
-		final Pair<Date, Date> mm = EMFUtils.findMinMaxDateAttributes(scenario.getCargoModel());
-
-		earliestTime = mm.getFirst();
-		latestTime = mm.getSecond();
+		Pair<Date, Date> a = EMFUtils.findEarliestAndLatestEvents(scenario);
+		earliestTime = a.getFirst();
+		latestTime = a.getSecond();
 	}
-
+	
 	private void buildCharterOuts(SchedulerBuilder builder,
 			Association<Port, IPort> portAssociation,
 			Association<VesselClass, IVesselClass> classes,
