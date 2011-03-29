@@ -59,7 +59,7 @@ public class ScheduledEventPropertySourceProvider implements
 			if (element instanceof Integer || element instanceof Long) {
 				return String.format("%,d", element);
 			} else if (element instanceof Float || element instanceof Double) {
-				return String.format("%f", element);
+				return String.format("%.1f", element);
 			} else if (element instanceof Port) {
 				return ((Port) element).getName();
 			} else if (element instanceof Calendar) {
