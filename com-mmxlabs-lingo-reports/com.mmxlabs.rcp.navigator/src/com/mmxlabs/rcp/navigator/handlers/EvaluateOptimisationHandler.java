@@ -1,14 +1,18 @@
 package com.mmxlabs.rcp.navigator.handlers;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -17,10 +21,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import scenario.Scenario;
 
 import com.mmxlabs.jobcontoller.Activator;
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 
 /**
@@ -45,8 +46,6 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final IJobManager jmv = Activator.getDefault().getJobManager();
-
 		final ISelection selection = HandlerUtil
 				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (selection != null & selection instanceof IStructuredSelection) {
@@ -58,97 +57,58 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
-					final Scenario s = (Scenario) resource
+					final Scenario scenario = (Scenario) resource
 							.getAdapter(Scenario.class);
 
-					if (s == null) {
+					if (scenario == null) {
 						return false;
 					}
 
-					// Find pre-existing job
-					IManagedJob job = Activator.getDefault().getJobManager()
-							.findJobForResource(resource);
+					final WorkspaceJob job = new WorkspaceJob(
+							"Evaluate Scenario") {
 
-					// If there is a job, but it is terminated, then we need to
-					// create a new one
-					if (job != null
-							&& (job.getJobState() == JobState.CANCELLED || job
-									.getJobState() == JobState.COMPLETED)) {
+						@Override
+						public IStatus runInWorkspace(
+								final IProgressMonitor monitor)
+								throws CoreException {
 
-						// Remove from job handler -- this should trigger
-						// the listener registered on creation;
-						jmv.removeJob(job);
+							monitor.beginTask("Evaluate Scenario", 5);
+							LNGSchedulerJob newJob = null;
+							try {
+								newJob = new LNGSchedulerJob(scenario);
+								newJob.prepare();
 
-						// Remove this reference
-						job = null;
-					}
+								try {
+									scenario.eResource().save(
+											Collections.emptyMap());
 
-					// Check for useable pre-existing job?
-					if (job == null) {
-						job = createOptimisationJob(jmv, resource, s);
-						job.prepare();
-					}
+									monitor.worked(4);
+								} catch (final IOException e) {
+									e.printStackTrace();
+								}
+
+								resource.refreshLocal(IResource.DEPTH_ONE,
+										new SubProgressMonitor(monitor, 1));
+							} finally {
+								monitor.done();
+								if (newJob != null) {
+									newJob.dispose();
+								}
+							}
+
+							return Status.OK_STATUS;
+						}
+					};
+
+					job.setUser(true);
+					job.setRule(resource);
+					job.schedule();
+
 				}
 			}
 		}
 
 		return null;
-	}
-
-	private IManagedJob createOptimisationJob(final IJobManager jmv,
-			final IResource resource, final Scenario scenario) {
-
-		final LNGSchedulerJob newJob = new LNGSchedulerJob(scenario);
-		jmv.addJob(newJob, resource);
-
-		// Hook in a listener to automatically dispose the job once it is no
-		// longer needed
-		jmv.addJobManagerListener(new IJobManagerListener() {
-
-			@Override
-			public void jobSelected(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-			}
-
-			@Override
-			public void jobRemoved(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-				// If this is the job being removed, then dispose and remove
-				// references to it
-				if (job == newJob) {
-					jobManager.removeJobManagerListener(this);
-					newJob.dispose();
-				}
-			}
-
-			@Override
-			public void jobDeselected(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-			}
-
-			@Override
-			public void jobAdded(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-			}
-		});
-
-		final Job eclipseJob = new Job("Evaluate initial state of "
-				+ scenario.getName()) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				newJob.prepare();
-				return Status.OK_STATUS;
-			}
-		};
-
-		eclipseJob.setPriority(Job.SHORT);
-		eclipseJob.schedule();
-
-		return newJob;
 	}
 
 	@Override
