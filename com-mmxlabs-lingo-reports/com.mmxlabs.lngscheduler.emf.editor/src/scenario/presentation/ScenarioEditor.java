@@ -144,6 +144,7 @@ import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeHandler;
+import scenario.presentation.cargoeditor.widgets.DateAndTime;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
@@ -204,6 +205,18 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			return result;
 		}
 	};
+
+	final ScenarioRVP vesselProvider = new ScenarioRVP() {
+		@Override
+		public List<Pair<String, EObject>> getAlloweValues(EObject target,
+				EStructuralFeature field) {
+			final Scenario scenario = getEnclosingScenario(target);
+			final List<Pair<String, EObject>> result = getSortedNames(scenario
+					.getFleetModel().getFleet(),
+					FleetPackage.eINSTANCE.getVessel_Name());
+			return result;
+		}
+	};
 	
 	final ScenarioRVP vesselClassProvider = new ScenarioRVP() {
 		@Override
@@ -233,7 +246,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		@Override
 		public List<Pair<String, EObject>> getAlloweValues(EObject target,
 				EStructuralFeature field) {
-			if (target == null) return Collections.emptyList();
+			if (target == null)
+				return Collections.emptyList();
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getPortModel().getPorts(),
@@ -1110,6 +1124,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			createMarketEditor();
 
+			createEventsEditor();
+
 			// Create a page for the selection tree view.
 			//
 			{
@@ -1319,8 +1335,68 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		});
 	}
 
+	private void createEventsEditor() {
+		final EObjectEditorViewerPane eventsPane = new EObjectEditorViewerPane(
+				getSite().getPage(), ScenarioEditor.this);
+
+		eventsPane.createControl(getContainer());
+
+		final List<EReference> path = new LinkedList<EReference>();
+
+		path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
+		path.add(FleetPackage.eINSTANCE.getFleetModel_CharterOuts());
+
+		eventsPane.setTitle("Events", getTitleImage());
+
+		eventsPane.init(path, adapterFactory);
+
+		final FleetPackage fp = FleetPackage.eINSTANCE;
+
+		final BasicAttributeManipulator id = new BasicAttributeManipulator(
+				fp.getCharterOut_Id(), getEditingDomain());
+
+		eventsPane.addColumn("ID", id, id);
+
+		final DateManipulator start = new DateManipulator(
+				fp.getCharterOut_StartDate(), editingDomain);
+		eventsPane.addColumn("Start Date", start, start);
+
+		final DateManipulator end = new DateManipulator(
+				fp.getCharterOut_EndDate(), editingDomain);
+		eventsPane.addColumn("End Date", end, end);
+
+		final NumericAttributeManipulator duration = new NumericAttributeManipulator(
+				fp.getCharterOut_Duration(), editingDomain);
+		eventsPane.addColumn("Duration (days)", duration, duration);
+
+		final SingleReferenceManipulator port = new SingleReferenceManipulator(
+				fp.getCharterOut_Port(), portProvider, editingDomain);
+		eventsPane.addColumn("Port", port, port);
+
+		final MultipleReferenceManipulator vessels = new MultipleReferenceManipulator(
+				fp.getCharterOut_Vessels(), editingDomain, vesselProvider,
+				fp.getVessel_Name());
+		
+		eventsPane.addColumn("Vessels", vessels, vessels);
+		
+		final MultipleReferenceManipulator classes = new MultipleReferenceManipulator(
+				fp.getCharterOut_VesselClasses(), editingDomain, vesselClassProvider,
+				fp.getVesselClass_Name());
+		
+		eventsPane.addColumn("Classes", classes, classes);
+		
+		eventsPane.getViewer().setInput(
+				editingDomain.getResourceSet().getResources().get(0)
+						.getContents().get(0));
+
+		// TODO should this really be here?
+		createContextMenuFor(eventsPane.getViewer());
+
+		int pageIndex = addPage(eventsPane.getControl());
+		setPageText(pageIndex, "Events"); 
+	}
+
 	private void createMarketEditor() {
-		// TODO Add a market editor pane
 
 	}
 
@@ -1686,7 +1762,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				fleetPane.addColumn("Start constraint", startRequirement,
 						startRequirement);
-				
+
 				final DialogFeatureManipulator endRequirement = new RequirementFeatureManipulator(
 						FleetPackage.eINSTANCE.getVessel_EndRequirement(),
 						getEditingDomain());
@@ -1975,7 +2051,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								editingDomain, vesselClassProvider);
 					}
 				});
-		
+
 		page.setEditorFactoryForClassifier(
 				SchedulePackage.eINSTANCE.getSchedule(),
 				new IInlineEditorFactory() {

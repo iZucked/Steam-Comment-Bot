@@ -79,6 +79,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	 
 	private Calendar getCalendar(final Date utcDate) {
 		final Calendar cal = Calendar.getInstance(getTimeZone());
+		if (utcDate == null) return null;
 		cal.setTime(utcDate);
 		return cal;
 	}

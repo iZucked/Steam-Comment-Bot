@@ -4,12 +4,12 @@
  */
 package scenario.presentation.cargoeditor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -43,8 +43,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	@Override
 	protected String renderValue(Object value) {
-		
-		EList<? extends EObject> selectedValues = (EList<? extends EObject>) value;
+		List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		final StringBuilder sb = new StringBuilder();
 		for (final EObject obj : selectedValues) {
 			if (sb.length() > 0)
@@ -71,6 +70,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		editingDomain.getCommandStack().execute(cc);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow, Object object) {
 		List<Pair<String, EObject>> options = valueProvider.getAlloweValues((EObject)object, field);
@@ -94,7 +94,12 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		Object[] result = dlg.getResult();
 		if (result == null)
 			return null;
-		else
-			return Arrays.asList(result);
+		else {
+			final ArrayList<EObject> resultList = new ArrayList<EObject>();
+			for (final Object o : result) {
+				resultList.add(((Pair<String, EObject>) o).getSecond());
+			}
+			return resultList;
+		}
 	}
 }

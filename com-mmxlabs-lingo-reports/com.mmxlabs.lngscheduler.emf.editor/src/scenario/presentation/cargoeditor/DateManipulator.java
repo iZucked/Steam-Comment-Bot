@@ -57,6 +57,7 @@ public class DateManipulator extends BasicAttributeManipulator {
 		final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT,
 				DateFormat.SHORT);
 		df.setCalendar(calendar);
+		if (calendar == null) return "";
 		return df.format(calendar.getTime()) + " ("
 				+ calendar.getTimeZone().getDisplayName(false, TimeZone.SHORT)
 				+ ")";
@@ -65,7 +66,10 @@ public class DateManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public void setValue(Object object, Object value) {
-		super.setValue(object, ((Calendar) value).getTime());
+		if (value == null)
+			super.setValue(object, null);
+		else
+			super.setValue(object, ((Calendar) value).getTime());
 	}
 
 	@Override
@@ -78,6 +82,8 @@ public class DateManipulator extends BasicAttributeManipulator {
 		if (object == null) return null;
 		final Date date = (Date) super.getValue(object);
 	
+		if (date == null) return null;
+		
 		final EObject obj = (EObject) object;
 		final Port port = (Port) obj.eGet(portReference);
 		final TimeZone zone = TimeZone.getTimeZone(portReference == null

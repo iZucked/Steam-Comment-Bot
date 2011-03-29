@@ -25,8 +25,9 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	@Override
 	public String render(Object object) {
 		Object val = getValue(object);
+		if (val == null) return "";
 		if (val instanceof Integer) {
-			return String.format("%,d", (Integer) object);
+			return String.format("%,d", (Integer) val);
 		}
 		else
 			return val.toString();

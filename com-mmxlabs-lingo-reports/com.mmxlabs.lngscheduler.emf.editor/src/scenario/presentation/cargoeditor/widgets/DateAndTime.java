@@ -59,7 +59,7 @@ public class DateAndTime extends Composite {
 
 		date.addSelectionListener(listener);
 		time.addSelectionListener(listener);
-		
+
 		final KeyListener kl = new KeyListener() {
 			private Event toEvent(KeyEvent e) {
 				Event e2 = new Event();
@@ -72,6 +72,7 @@ public class DateAndTime extends Composite {
 				e2.display = e.display;
 				return e2;
 			}
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				notifyListeners(SWT.KeyDown, toEvent(e));
@@ -82,21 +83,23 @@ public class DateAndTime extends Composite {
 				notifyListeners(SWT.KeyUp, toEvent(e));
 			}
 		};
-		
+
 		time.addKeyListener(kl);
 		date.addKeyListener(kl);
 	}
 
-	private TimeZone timeZone;
-	
+	private TimeZone timeZone = TimeZone.getDefault();
+
 	public void setTimeZone(final TimeZone timeZone) {
 		this.timeZone = timeZone;
 	}
-	
+
 	public Calendar getValue() {
-		final Calendar c = Calendar.getInstance(timeZone); //TODO this is a bit dodgy
-		
-		// TODO causes a bug if you getvalue without having previously set a value. grar.
+		final Calendar c = Calendar.getInstance(timeZone); // TODO this is a bit
+															// dodgy
+
+		// TODO causes a bug if you getvalue without having previously set a
+		// value. grar.
 
 		c.clear();
 
@@ -111,29 +114,32 @@ public class DateAndTime extends Composite {
 			return;
 		final Event changeEvent = new Event();
 		changeEvent.widget = this;
-		
-		notifyListeners(isDefault ? SWT.DefaultSelection : SWT.Selection, changeEvent);
+
+		notifyListeners(isDefault ? SWT.DefaultSelection : SWT.Selection,
+				changeEvent);
 	}
 
 	public synchronized void setValue(final Calendar newValue) {
 		settingValue = true;
 
-		timeZone = newValue.getTimeZone();
-		
-		date.setYear(newValue.get(Calendar.YEAR));
-		date.setMonth(newValue.get(Calendar.MONTH));
-		date.setDay(newValue.get(Calendar.DAY_OF_MONTH));
+		if (newValue != null) {
+			timeZone = newValue.getTimeZone();
 
-		time.setHours(newValue.get(Calendar.HOUR_OF_DAY));
-		time.setMinutes(newValue.get(Calendar.MINUTE));
+			date.setYear(newValue.get(Calendar.YEAR));
+			date.setMonth(newValue.get(Calendar.MONTH));
+			date.setDay(newValue.get(Calendar.DAY_OF_MONTH));
 
+			time.setHours(newValue.get(Calendar.HOUR_OF_DAY));
+			time.setMinutes(newValue.get(Calendar.MINUTE));
+		}
 		settingValue = false;
 		notifyNewSelection(false);
 	}
 
 	@Override
 	public boolean isFocusControl() {
-		if (date.isFocusControl() || time.isFocusControl()) return true;
+		if (date.isFocusControl() || time.isFocusControl())
+			return true;
 		return super.isFocusControl();
 	}
 
