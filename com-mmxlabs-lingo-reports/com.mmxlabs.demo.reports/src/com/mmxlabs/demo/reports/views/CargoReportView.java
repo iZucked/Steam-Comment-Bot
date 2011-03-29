@@ -47,6 +47,8 @@ public class CargoReportView extends EMFReportView {
 		addColumn("ID", objectFormatter, s.getCargoAllocation_LoadSlot(),
 				c.getSlot_Id()); // TODO cargo id not slot id.
 
+		addColumn("Type", objectFormatter, s.getCargoAllocation_CargoType());
+		
 		addColumn("Vessel", objectFormatter, s.getCargoAllocation_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
 
