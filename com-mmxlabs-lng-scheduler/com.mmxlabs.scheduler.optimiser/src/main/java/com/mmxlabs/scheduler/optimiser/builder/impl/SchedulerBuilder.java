@@ -1014,7 +1014,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			CharterOutPortSlot slot = new CharterOutPortSlot(
 					"charter-out-" + i, charterOut.getPort(),
-					charterOut.getTimeWindow());
+					charterOut.getTimeWindow(), charterOut);
 
 			final SequenceElement element = new SequenceElement(
 					indexingContext, "charter-out-" + i, slot);
