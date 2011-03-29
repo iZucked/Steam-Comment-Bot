@@ -5,6 +5,8 @@
 
 package com.mmxlabs.demo.reports.views;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.IMenuListener;
@@ -17,11 +19,18 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -36,7 +45,9 @@ import com.mmxlabs.demo.reports.views.TotalsContentProvider.RowData;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 public class TotalsReportView extends ViewPart implements ISelectionListener {
+	private ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
 
+	private boolean inverseSort = false;
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -59,7 +70,7 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 				case 1:
 					return d.component;
 				case 2:
-					return d.isCost ? "Cost": "Revenue";
+					return d.isCost ? "Cost": "Profit";
 				case 3:
 					return String.format("%,d", d.fitness);
 				}
@@ -84,6 +95,41 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	public TotalsReportView() {
 	}
 
+	private void addSortSelectionListener(final TableColumn column, final int value) {
+		column.addSelectionListener(
+				new SelectionAdapter() {
+					{
+						final SelectionAdapter self = this;
+						column.addDisposeListener(new DisposeListener() {							
+							@Override
+							public void widgetDisposed(final DisposeEvent e) {
+								column.removeSelectionListener(self);
+							}
+						});
+					}
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						setSortColumn(column, value);
+					}
+				});
+	}
+	
+	protected void setSortColumn(final TableColumn column, int value) {
+		if (sortColumns.get(0) == value) {
+			inverseSort = !inverseSort;
+		} else {
+			inverseSort = false;
+			sortColumns.remove((Object) value);
+			sortColumns.add(0, value);
+		}
+		
+		viewer.getTable().setSortColumn(column);
+		viewer.getTable().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
+		
+		viewer.refresh();
+	}
+
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
@@ -94,29 +140,75 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 				| SWT.V_SCROLL | SWT.FULL_SELECTION);
 		viewer.setContentProvider(new TotalsContentProvider());
 		viewer.setInput(getViewSite());
-
+	
 		final TableViewerColumn tvc0 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc0.getColumn().setText("Schedule");
 		tvc0.getColumn().pack();
+		addSortSelectionListener(tvc0.getColumn(), 0);
 		
 		final TableViewerColumn tvc1 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc1.getColumn().setText("Component");
 		tvc1.getColumn().pack();
+		addSortSelectionListener(tvc1.getColumn(), 1);
 		
 		final TableViewerColumn tvc3 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc3.getColumn().setText("Type");
 		tvc3.getColumn().pack();
-
+		addSortSelectionListener(tvc3.getColumn(), 2);
 
 		final TableViewerColumn tvc2 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc2.getColumn().setText("Total");
 		tvc2.getColumn().pack();
-
+		addSortSelectionListener(tvc2.getColumn(), 3);
+		
 		viewer.setLabelProvider(new ViewLabelProvider());
 
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);
 
+		
+		sortColumns.add(0);
+		sortColumns.add(2);
+		sortColumns.add(3);
+		sortColumns.add(1);
+		
+		viewer.getTable().setSortColumn(tvc0.getColumn());
+		viewer.getTable().setSortDirection(SWT.UP);
+		
+		viewer.setComparator(
+				new ViewerComparator() {
+					@Override
+					public int compare(Viewer viewer, Object e1, Object e2) {
+						final RowData r1 = (RowData) e1;
+						final RowData r2 = (RowData) e2;
+						
+						final int d = inverseSort ? -1 : 1;
+						int sort = 0;
+						final Iterator<Integer> iterator = sortColumns.iterator();
+						while (iterator.hasNext() && sort == 0) {
+							switch (iterator.next()) {
+							case 0:
+								sort = r1.scheduleName.compareTo(r1.scheduleName);
+								break;
+							case 1:
+								sort = r1.component.compareTo(r2.component);
+								break;
+							case 2:
+								if (r1.isCost == r2.isCost) sort= 0;
+								else if (r1.isCost) sort = -1;
+								else sort = 1;
+								break;
+							case 3:
+								sort = ((Long) r1.fitness).compareTo((Long) r2.fitness);
+								break;
+							}
+						}
+						
+						return d * sort;
+//						return super.compare(viewer, e1, e2);
+					}
+				});
+		
 		// Create the help context id for the viewer's control
 		PlatformUI
 				.getWorkbench()

@@ -14,18 +14,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.demo.reports.views.EMFReportView.IntegerFormatter;
-
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
-import scenario.cargo.LoadSlot;
 import scenario.contract.Entity;
 import scenario.port.PortPackage;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
-import scenario.schedule.events.SlotVisit;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
 
 /**
