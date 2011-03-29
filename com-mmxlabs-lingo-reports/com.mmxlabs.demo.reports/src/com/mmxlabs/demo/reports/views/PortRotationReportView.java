@@ -207,20 +207,25 @@ public class PortRotationReportView extends EMFReportView {
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput,
 					Object newInput) {
-				if (newInput instanceof Schedule) {
-					// find all referenced entities
-					for (final String s : entityColumnNames) {
-						removeColumn(s);
+				if (newInput instanceof Iterable) {
+					for (final Object element : ((Iterable) newInput)) {
+						if (element instanceof Schedule) {
+							// find all referenced entities
+							for (final String s : entityColumnNames) {
+								removeColumn(s);
+							}
+							entityColumnNames.clear();
+
+							EObject o = (EObject) element;
+							while (o != null && !(o instanceof Scenario)) {
+								 o = o.eContainer();
+							}
+							if (o != null) {
+								addEntityColumns((Scenario)o);
+							}
+						}
 					}
-					entityColumnNames.clear();
-					final ArrayList<Entity> entities = new ArrayList<Entity>();
-					EObject o = (EObject) newInput;
-					while (o != null && !(o instanceof Scenario)) {
-						 o = o.eContainer();
-					}
-					if (o != null) {
-						addEntityColumns((Scenario)o);
-					}
+					
 				}
 			}
 
