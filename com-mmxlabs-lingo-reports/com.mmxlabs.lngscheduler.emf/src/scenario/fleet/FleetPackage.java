@@ -518,31 +518,13 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT = 6;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__PORT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT__VESSELS = 1;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Classes</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT__VESSEL_CLASSES = 2;
+	int CHARTER_OUT__ID = 0;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -551,7 +533,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__START_DATE = 3;
+	int CHARTER_OUT__START_DATE = 1;
 
 	/**
 	 * The feature id for the '<em><b>End Date</b></em>' attribute.
@@ -560,7 +542,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__END_DATE = 4;
+	int CHARTER_OUT__END_DATE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -569,16 +551,34 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__DURATION = 5;
+	int CHARTER_OUT__DURATION = 3;
 
 	/**
-	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__ID = 6;
+	int CHARTER_OUT__PORT = 4;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__VESSELS = 5;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Classes</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__VESSEL_CLASSES = 6;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.

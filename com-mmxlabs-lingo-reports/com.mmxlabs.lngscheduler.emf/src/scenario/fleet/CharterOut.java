@@ -21,13 +21,13 @@ import scenario.port.Port;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.fleet.CharterOut#getPort <em>Port</em>}</li>
- *   <li>{@link scenario.fleet.CharterOut#getVessels <em>Vessels</em>}</li>
- *   <li>{@link scenario.fleet.CharterOut#getVesselClasses <em>Vessel Classes</em>}</li>
+ *   <li>{@link scenario.fleet.CharterOut#getId <em>Id</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getEndDate <em>End Date</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getDuration <em>Duration</em>}</li>
- *   <li>{@link scenario.fleet.CharterOut#getId <em>Id</em>}</li>
+ *   <li>{@link scenario.fleet.CharterOut#getPort <em>Port</em>}</li>
+ *   <li>{@link scenario.fleet.CharterOut#getVessels <em>Vessels</em>}</li>
+ *   <li>{@link scenario.fleet.CharterOut#getVesselClasses <em>Vessel Classes</em>}</li>
  * </ul>
  * </p>
  *

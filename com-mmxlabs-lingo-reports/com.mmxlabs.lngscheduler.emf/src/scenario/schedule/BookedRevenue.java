@@ -23,7 +23,6 @@ import scenario.contract.Entity;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.schedule.BookedRevenue#getEntity <em>Entity</em>}</li>
- *   <li>{@link scenario.schedule.BookedRevenue#getCargo <em>Cargo</em>}</li>
  *   <li>{@link scenario.schedule.BookedRevenue#getDate <em>Date</em>}</li>
  *   <li>{@link scenario.schedule.BookedRevenue#getLineItems <em>Line Items</em>}</li>
  * </ul>
@@ -59,32 +58,6 @@ public interface BookedRevenue extends ScenarioObject {
 	 * @generated
 	 */
 	void setEntity(Entity value);
-
-	/**
-	 * Returns the value of the '<em><b>Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cargo</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cargo</em>' reference.
-	 * @see #setCargo(CargoAllocation)
-	 * @see scenario.schedule.SchedulePackage#getBookedRevenue_Cargo()
-	 * @model required="true"
-	 * @generated
-	 */
-	CargoAllocation getCargo();
-
-	/**
-	 * Sets the value of the '{@link scenario.schedule.BookedRevenue#getCargo <em>Cargo</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cargo</em>' reference.
-	 * @see #getCargo()
-	 * @generated
-	 */
-	void setCargo(CargoAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>Date</b></em>' attribute.
@@ -190,5 +163,13 @@ public interface BookedRevenue extends ScenarioObject {
 	 * @generated
 	 */
 	int getTaxCost();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	String getName();
 
 } // BookedRevenue

@@ -219,6 +219,16 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__REVENUE,
 				 ScheduleFactory.eINSTANCE.createBookedRevenue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__REVENUE,
+				 ScheduleFactory.eINSTANCE.createCargoRevenue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__REVENUE,
+				 ScheduleFactory.eINSTANCE.createCharterOutRevenue()));
 	}
 
 	/**

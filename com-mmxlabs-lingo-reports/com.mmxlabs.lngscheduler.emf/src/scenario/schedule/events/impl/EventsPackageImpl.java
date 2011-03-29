@@ -592,6 +592,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCharterOutVisit_Revenue() {
+		return (EReference)charterOutVisitEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -679,6 +688,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 
 		charterOutVisitEClass = createEClass(CHARTER_OUT_VISIT);
 		createEReference(charterOutVisitEClass, CHARTER_OUT_VISIT__CHARTER_OUT);
+		createEReference(charterOutVisitEClass, CHARTER_OUT_VISIT__REVENUE);
 
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
@@ -787,6 +797,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 
 		initEClass(charterOutVisitEClass, CharterOutVisit.class, "CharterOutVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterOutVisit_CharterOut(), theFleetPackage.getCharterOut(), null, "charterOut", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterOutVisit_Revenue(), theSchedulePackage.getCharterOutRevenue(), null, "revenue", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");

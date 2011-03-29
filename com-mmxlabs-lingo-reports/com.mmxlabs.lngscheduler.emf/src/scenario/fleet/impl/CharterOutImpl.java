@@ -34,13 +34,13 @@ import scenario.port.Port;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.CharterOutImpl#getPort <em>Port</em>}</li>
- *   <li>{@link scenario.fleet.impl.CharterOutImpl#getVessels <em>Vessels</em>}</li>
- *   <li>{@link scenario.fleet.impl.CharterOutImpl#getVesselClasses <em>Vessel Classes</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getId <em>Id</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getEndDate <em>End Date</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getDuration <em>Duration</em>}</li>
- *   <li>{@link scenario.fleet.impl.CharterOutImpl#getId <em>Id</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getVessels <em>Vessels</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getVesselClasses <em>Vessel Classes</em>}</li>
  * </ul>
  * </p>
  *
@@ -48,34 +48,24 @@ import scenario.port.Port;
  */
 public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPort()
+	 * @see #getId()
 	 * @generated
 	 * @ordered
 	 */
-	protected Port port;
+	protected static final String ID_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVessels()
+	 * @see #getId()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Vessel> vessels;
-
-	/**
-	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselClasses()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<VesselClass> vesselClasses;
+	protected String id = ID_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
@@ -138,24 +128,34 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	protected int duration = DURATION_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getId()
+	 * @see #getPort()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String ID_EDEFAULT = null;
+	protected Port port;
 
 	/**
-	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getId()
+	 * @see #getVessels()
 	 * @generated
 	 * @ordered
 	 */
-	protected String id = ID_EDEFAULT;
+	protected EList<Vessel> vessels;
+
+	/**
+	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselClasses()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselClass> vesselClasses;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -330,6 +330,14 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case FleetPackage.CHARTER_OUT__ID:
+				return getId();
+			case FleetPackage.CHARTER_OUT__START_DATE:
+				return getStartDate();
+			case FleetPackage.CHARTER_OUT__END_DATE:
+				return getEndDate();
+			case FleetPackage.CHARTER_OUT__DURATION:
+				return getDuration();
 			case FleetPackage.CHARTER_OUT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
@@ -337,14 +345,6 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 				return getVessels();
 			case FleetPackage.CHARTER_OUT__VESSEL_CLASSES:
 				return getVesselClasses();
-			case FleetPackage.CHARTER_OUT__START_DATE:
-				return getStartDate();
-			case FleetPackage.CHARTER_OUT__END_DATE:
-				return getEndDate();
-			case FleetPackage.CHARTER_OUT__DURATION:
-				return getDuration();
-			case FleetPackage.CHARTER_OUT__ID:
-				return getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -358,16 +358,8 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__PORT:
-				setPort((Port)newValue);
-				return;
-			case FleetPackage.CHARTER_OUT__VESSELS:
-				getVessels().clear();
-				getVessels().addAll((Collection<? extends Vessel>)newValue);
-				return;
-			case FleetPackage.CHARTER_OUT__VESSEL_CLASSES:
-				getVesselClasses().clear();
-				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
+			case FleetPackage.CHARTER_OUT__ID:
+				setId((String)newValue);
 				return;
 			case FleetPackage.CHARTER_OUT__START_DATE:
 				setStartDate((Date)newValue);
@@ -378,8 +370,16 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 			case FleetPackage.CHARTER_OUT__DURATION:
 				setDuration((Integer)newValue);
 				return;
-			case FleetPackage.CHARTER_OUT__ID:
-				setId((String)newValue);
+			case FleetPackage.CHARTER_OUT__PORT:
+				setPort((Port)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT__VESSELS:
+				getVessels().clear();
+				getVessels().addAll((Collection<? extends Vessel>)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT__VESSEL_CLASSES:
+				getVesselClasses().clear();
+				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -393,14 +393,8 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__PORT:
-				setPort((Port)null);
-				return;
-			case FleetPackage.CHARTER_OUT__VESSELS:
-				getVessels().clear();
-				return;
-			case FleetPackage.CHARTER_OUT__VESSEL_CLASSES:
-				getVesselClasses().clear();
+			case FleetPackage.CHARTER_OUT__ID:
+				setId(ID_EDEFAULT);
 				return;
 			case FleetPackage.CHARTER_OUT__START_DATE:
 				setStartDate(START_DATE_EDEFAULT);
@@ -411,8 +405,14 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 			case FleetPackage.CHARTER_OUT__DURATION:
 				setDuration(DURATION_EDEFAULT);
 				return;
-			case FleetPackage.CHARTER_OUT__ID:
-				setId(ID_EDEFAULT);
+			case FleetPackage.CHARTER_OUT__PORT:
+				setPort((Port)null);
+				return;
+			case FleetPackage.CHARTER_OUT__VESSELS:
+				getVessels().clear();
+				return;
+			case FleetPackage.CHARTER_OUT__VESSEL_CLASSES:
+				getVesselClasses().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -426,20 +426,20 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__PORT:
-				return port != null;
-			case FleetPackage.CHARTER_OUT__VESSELS:
-				return vessels != null && !vessels.isEmpty();
-			case FleetPackage.CHARTER_OUT__VESSEL_CLASSES:
-				return vesselClasses != null && !vesselClasses.isEmpty();
+			case FleetPackage.CHARTER_OUT__ID:
+				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 			case FleetPackage.CHARTER_OUT__START_DATE:
 				return START_DATE_EDEFAULT == null ? startDate != null : !START_DATE_EDEFAULT.equals(startDate);
 			case FleetPackage.CHARTER_OUT__END_DATE:
 				return END_DATE_EDEFAULT == null ? endDate != null : !END_DATE_EDEFAULT.equals(endDate);
 			case FleetPackage.CHARTER_OUT__DURATION:
 				return duration != DURATION_EDEFAULT;
-			case FleetPackage.CHARTER_OUT__ID:
-				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+			case FleetPackage.CHARTER_OUT__PORT:
+				return port != null;
+			case FleetPackage.CHARTER_OUT__VESSELS:
+				return vessels != null && !vessels.isEmpty();
+			case FleetPackage.CHARTER_OUT__VESSEL_CLASSES:
+				return vesselClasses != null && !vesselClasses.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -454,14 +454,14 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (startDate: ");
+		result.append(" (id: ");
+		result.append(id);
+		result.append(", startDate: ");
 		result.append(startDate);
 		result.append(", endDate: ");
 		result.append(endDate);
 		result.append(", duration: ");
 		result.append(duration);
-		result.append(", id: ");
-		result.append(id);
 		result.append(')');
 		return result.toString();
 	}

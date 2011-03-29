@@ -138,6 +138,22 @@ public class ScheduleSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.CARGO_REVENUE: {
+				CargoRevenue cargoRevenue = (CargoRevenue)theEObject;
+				T result = caseCargoRevenue(cargoRevenue);
+				if (result == null) result = caseBookedRevenue(cargoRevenue);
+				if (result == null) result = caseScenarioObject(cargoRevenue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.CHARTER_OUT_REVENUE: {
+				CharterOutRevenue charterOutRevenue = (CharterOutRevenue)theEObject;
+				T result = caseCharterOutRevenue(charterOutRevenue);
+				if (result == null) result = caseBookedRevenue(charterOutRevenue);
+				if (result == null) result = caseScenarioObject(charterOutRevenue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -244,6 +260,36 @@ public class ScheduleSwitch<T> {
 	 * @generated
 	 */
 	public T caseBookedRevenue(BookedRevenue object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Cargo Revenue</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Cargo Revenue</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCargoRevenue(CargoRevenue object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Revenue</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Out Revenue</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterOutRevenue(CharterOutRevenue object) {
 		return null;
 	}
 

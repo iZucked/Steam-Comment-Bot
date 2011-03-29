@@ -12,6 +12,7 @@ import java.util.Map;
 import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+import scenario.fleet.CharterOut;
 import scenario.port.Port;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.events.CharterOutVisit;
@@ -105,7 +106,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 //			final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
 			final CharterOutVisit cov = factory.createCharterOutVisit();
 			portVisit = cov;
-			// TODO set charterout - needs adding to entity map.
+
+			cov.setCharterOut(entities.getModelObject(((ICharterOutPortSlot) slot).getCharterOut(), CharterOut.class));
 		} else {
 			portVisit = factory.createPortVisit();
 		}

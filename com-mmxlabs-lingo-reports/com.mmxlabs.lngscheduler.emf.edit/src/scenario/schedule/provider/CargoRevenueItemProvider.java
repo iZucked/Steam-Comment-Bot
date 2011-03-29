@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.events.provider;
+package scenario.schedule.provider;
 
 
 import java.util.Collection;
@@ -16,33 +16,36 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import scenario.schedule.events.CharterOutVisit;
-import scenario.schedule.events.EventsPackage;
+import scenario.schedule.CargoRevenue;
+import scenario.schedule.SchedulePackage;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.events.CharterOutVisit} object.
+ * This is the item provider adapter for a {@link scenario.schedule.CargoRevenue} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CharterOutVisitItemProvider
-	extends PortVisitItemProvider
+public class CargoRevenueItemProvider
+	extends BookedRevenueItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterOutVisitItemProvider(AdapterFactory adapterFactory) {
+	public CargoRevenueItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -57,26 +60,25 @@ public class CharterOutVisitItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addCharterOutPropertyDescriptor(object);
-			addRevenuePropertyDescriptor(object);
+			addCargoPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Charter Out feature.
+	 * This adds a property descriptor for the Cargo feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCharterOutPropertyDescriptor(Object object) {
+	protected void addCargoPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterOutVisit_charterOut_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutVisit_charterOut_feature", "_UI_CharterOutVisit_type"),
-				 EventsPackage.Literals.CHARTER_OUT_VISIT__CHARTER_OUT,
+				 getString("_UI_CargoRevenue_cargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoRevenue_cargo_feature", "_UI_CargoRevenue_type"),
+				 SchedulePackage.Literals.CARGO_REVENUE__CARGO,
 				 true,
 				 false,
 				 true,
@@ -86,36 +88,14 @@ public class CharterOutVisitItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Revenue feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRevenuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterOutVisit_revenue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutVisit_revenue_feature", "_UI_CharterOutVisit_type"),
-				 EventsPackage.Literals.CHARTER_OUT_VISIT__REVENUE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns CharterOutVisit.gif.
+	 * This returns CargoRevenue.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CharterOutVisit"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CargoRevenue"));
 	}
 
 	/**
@@ -126,11 +106,11 @@ public class CharterOutVisitItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((CharterOutVisit)object).getStartTime();
+		Date labelValue = ((CargoRevenue)object).getDate();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CharterOutVisit_type") :
-			getString("_UI_CharterOutVisit_type") + " " + label;
+			getString("_UI_CargoRevenue_type") :
+			getString("_UI_CargoRevenue_type") + " " + label;
 	}
 
 	/**

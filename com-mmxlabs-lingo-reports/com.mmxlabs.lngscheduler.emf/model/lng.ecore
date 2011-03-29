@@ -137,17 +137,17 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CharterOut">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
           eType="#//port/Port"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
           eType="#//fleet/Vessel"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
           eType="#//fleet/VesselClass"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-          iD="true"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
@@ -286,14 +286,31 @@
           <details key="documentation" value="Returns the total amount of tax paid on this revenue"/>
         </eAnnotations>
       </eOperations>
+      <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
           eType="#//contract/Entity"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" lowerBound="1"
-          eType="#//schedule/CargoAllocation"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="lineItems" upperBound="-1"
           eType="#//schedule/LineItem" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CargoRevenue" eSuperTypes="#//schedule/BookedRevenue">
+      <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return getCargo().getLoadSlot().getId() + &quot; - &quot; + getCargo().getDischargeSlot().getId();"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" lowerBound="1"
+          eType="#//schedule/CargoAllocation"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CharterOutRevenue" eSuperTypes="#//schedule/BookedRevenue">
+      <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return getCharterOut().getCharterOut().getId();"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="charterOut" lowerBound="1"
+          eType="#//schedule/events/CharterOutVisit"/>
     </eClassifiers>
     <eSubpackages name="events" nsURI="http://com.mmxlabs.lng.emf/schedule/events"
         nsPrefix="com.mmxlabs.lng.emf.schedule.events">
@@ -409,6 +426,8 @@
       <eClassifiers xsi:type="ecore:EClass" name="CharterOutVisit" eSuperTypes="#//schedule/events/PortVisit">
         <eStructuralFeatures xsi:type="ecore:EReference" name="charterOut" lowerBound="1"
             eType="#//fleet/CharterOut"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="revenue" lowerBound="1"
+            eType="#//schedule/CharterOutRevenue"/>
       </eClassifiers>
     </eSubpackages>
     <eSubpackages name="fleetallocation" nsURI="http://com.mmxlabs.lng.emf/schedule/fleetallocation"

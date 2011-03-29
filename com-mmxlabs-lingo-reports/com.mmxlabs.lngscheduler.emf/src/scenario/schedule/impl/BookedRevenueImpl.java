@@ -41,7 +41,6 @@ import scenario.schedule.SchedulePackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.schedule.impl.BookedRevenueImpl#getEntity <em>Entity</em>}</li>
- *   <li>{@link scenario.schedule.impl.BookedRevenueImpl#getCargo <em>Cargo</em>}</li>
  *   <li>{@link scenario.schedule.impl.BookedRevenueImpl#getDate <em>Date</em>}</li>
  *   <li>{@link scenario.schedule.impl.BookedRevenueImpl#getLineItems <em>Line Items</em>}</li>
  * </ul>
@@ -59,16 +58,6 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * @ordered
 	 */
 	protected Entity entity;
-
-	/**
-	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCargo()
-	 * @generated
-	 * @ordered
-	 */
-	protected CargoAllocation cargo;
 
 	/**
 	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
@@ -155,44 +144,6 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 		entity = newEntity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BOOKED_REVENUE__ENTITY, oldEntity, entity));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CargoAllocation getCargo() {
-		if (cargo != null && cargo.eIsProxy()) {
-			InternalEObject oldCargo = (InternalEObject)cargo;
-			cargo = (CargoAllocation)eResolveProxy(oldCargo);
-			if (cargo != oldCargo) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.BOOKED_REVENUE__CARGO, oldCargo, cargo));
-			}
-		}
-		return cargo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CargoAllocation basicGetCargo() {
-		return cargo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCargo(CargoAllocation newCargo) {
-		CargoAllocation oldCargo = cargo;
-		cargo = newCargo;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BOOKED_REVENUE__CARGO, oldCargo, cargo));
 	}
 
 	/**
@@ -304,6 +255,17 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getName() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -324,9 +286,6 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 			case SchedulePackage.BOOKED_REVENUE__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
-			case SchedulePackage.BOOKED_REVENUE__CARGO:
-				if (resolve) return getCargo();
-				return basicGetCargo();
 			case SchedulePackage.BOOKED_REVENUE__DATE:
 				return getDate();
 			case SchedulePackage.BOOKED_REVENUE__LINE_ITEMS:
@@ -346,9 +305,6 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 		switch (featureID) {
 			case SchedulePackage.BOOKED_REVENUE__ENTITY:
 				setEntity((Entity)newValue);
-				return;
-			case SchedulePackage.BOOKED_REVENUE__CARGO:
-				setCargo((CargoAllocation)newValue);
 				return;
 			case SchedulePackage.BOOKED_REVENUE__DATE:
 				setDate((Date)newValue);
@@ -372,9 +328,6 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 			case SchedulePackage.BOOKED_REVENUE__ENTITY:
 				setEntity((Entity)null);
 				return;
-			case SchedulePackage.BOOKED_REVENUE__CARGO:
-				setCargo((CargoAllocation)null);
-				return;
 			case SchedulePackage.BOOKED_REVENUE__DATE:
 				setDate(DATE_EDEFAULT);
 				return;
@@ -395,8 +348,6 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 		switch (featureID) {
 			case SchedulePackage.BOOKED_REVENUE__ENTITY:
 				return entity != null;
-			case SchedulePackage.BOOKED_REVENUE__CARGO:
-				return cargo != null;
 			case SchedulePackage.BOOKED_REVENUE__DATE:
 				return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
 			case SchedulePackage.BOOKED_REVENUE__LINE_ITEMS:
@@ -423,6 +374,8 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 				return getUntaxedCosts();
 			case SchedulePackage.BOOKED_REVENUE___GET_TAX_COST:
 				return getTaxCost();
+			case SchedulePackage.BOOKED_REVENUE___GET_NAME:
+				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

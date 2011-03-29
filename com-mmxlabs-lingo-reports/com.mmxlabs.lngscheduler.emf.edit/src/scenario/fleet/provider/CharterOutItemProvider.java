@@ -63,13 +63,13 @@ public class CharterOutItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortPropertyDescriptor(object);
-			addVesselsPropertyDescriptor(object);
-			addVesselClassesPropertyDescriptor(object);
+			addIdPropertyDescriptor(object);
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
-			addIdPropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
+			addVesselsPropertyDescriptor(object);
+			addVesselClassesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -265,10 +265,10 @@ public class CharterOutItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CharterOut.class)) {
+			case FleetPackage.CHARTER_OUT__ID:
 			case FleetPackage.CHARTER_OUT__START_DATE:
 			case FleetPackage.CHARTER_OUT__END_DATE:
 			case FleetPackage.CHARTER_OUT__DURATION:
-			case FleetPackage.CHARTER_OUT__ID:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

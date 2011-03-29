@@ -88,6 +88,24 @@ public interface ScheduleFactory extends EFactory {
 	BookedRevenue createBookedRevenue();
 
 	/**
+	 * Returns a new object of class '<em>Cargo Revenue</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cargo Revenue</em>'.
+	 * @generated
+	 */
+	CargoRevenue createCargoRevenue();
+
+	/**
+	 * Returns a new object of class '<em>Charter Out Revenue</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Out Revenue</em>'.
+	 * @generated
+	 */
+	CharterOutRevenue createCharterOutRevenue();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

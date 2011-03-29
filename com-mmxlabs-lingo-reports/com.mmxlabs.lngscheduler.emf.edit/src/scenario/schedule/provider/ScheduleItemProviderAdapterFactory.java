@@ -238,6 +238,52 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.CargoRevenue} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CargoRevenueItemProvider cargoRevenueItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.CargoRevenue}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCargoRevenueAdapter() {
+		if (cargoRevenueItemProvider == null) {
+			cargoRevenueItemProvider = new CargoRevenueItemProvider(this);
+		}
+
+		return cargoRevenueItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.CharterOutRevenue} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutRevenueItemProvider charterOutRevenueItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.CharterOutRevenue}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutRevenueAdapter() {
+		if (charterOutRevenueItemProvider == null) {
+			charterOutRevenueItemProvider = new CharterOutRevenueItemProvider(this);
+		}
+
+		return charterOutRevenueItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -343,6 +389,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (scheduleFitnessItemProvider != null) scheduleFitnessItemProvider.dispose();
 		if (lineItemItemProvider != null) lineItemItemProvider.dispose();
 		if (bookedRevenueItemProvider != null) bookedRevenueItemProvider.dispose();
+		if (cargoRevenueItemProvider != null) cargoRevenueItemProvider.dispose();
+		if (charterOutRevenueItemProvider != null) charterOutRevenueItemProvider.dispose();
 	}
 
 }

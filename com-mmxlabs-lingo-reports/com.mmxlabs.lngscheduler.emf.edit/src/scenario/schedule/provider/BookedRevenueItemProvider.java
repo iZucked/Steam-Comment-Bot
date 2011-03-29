@@ -71,7 +71,6 @@ public class BookedRevenueItemProvider
 			super.getPropertyDescriptors(object);
 
 			addEntityPropertyDescriptor(object);
-			addCargoPropertyDescriptor(object);
 			addDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -91,28 +90,6 @@ public class BookedRevenueItemProvider
 				 getString("_UI_BookedRevenue_entity_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_entity_feature", "_UI_BookedRevenue_type"),
 				 SchedulePackage.Literals.BOOKED_REVENUE__ENTITY,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Cargo feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCargoPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BookedRevenue_cargo_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_cargo_feature", "_UI_BookedRevenue_type"),
-				 SchedulePackage.Literals.BOOKED_REVENUE__CARGO,
 				 true,
 				 false,
 				 true,

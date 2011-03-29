@@ -604,22 +604,13 @@ public interface SchedulePackage extends EPackage {
 	int BOOKED_REVENUE__ENTITY = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOKED_REVENUE__CARGO = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BOOKED_REVENUE__DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
+	int BOOKED_REVENUE__DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Line Items</b></em>' containment reference list.
@@ -628,7 +619,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BOOKED_REVENUE__LINE_ITEMS = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 3;
+	int BOOKED_REVENUE__LINE_ITEMS = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Booked Revenue</em>' class.
@@ -637,7 +628,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BOOKED_REVENUE_FEATURE_COUNT = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 4;
+	int BOOKED_REVENUE_FEATURE_COUNT = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -694,13 +685,277 @@ public interface SchedulePackage extends EPackage {
 	int BOOKED_REVENUE___GET_TAX_COST = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 4;
 
 	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE___GET_NAME = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 5;
+
+	/**
 	 * The number of operations of the '<em>Booked Revenue</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BOOKED_REVENUE_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 5;
+	int BOOKED_REVENUE_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 6;
+
+
+	/**
+	 * The meta object id for the '{@link scenario.schedule.impl.CargoRevenueImpl <em>Cargo Revenue</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.impl.CargoRevenueImpl
+	 * @see scenario.schedule.impl.SchedulePackageImpl#getCargoRevenue()
+	 * @generated
+	 */
+	int CARGO_REVENUE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE__ENTITY = BOOKED_REVENUE__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE__DATE = BOOKED_REVENUE__DATE;
+
+	/**
+	 * The feature id for the '<em><b>Line Items</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE__LINE_ITEMS = BOOKED_REVENUE__LINE_ITEMS;
+
+	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE__CARGO = BOOKED_REVENUE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Cargo Revenue</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE_FEATURE_COUNT = BOOKED_REVENUE_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE___GET_CONTAINER = BOOKED_REVENUE___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE___GET_UNTAXED_VALUE = BOOKED_REVENUE___GET_UNTAXED_VALUE;
+
+	/**
+	 * The operation id for the '<em>Get Taxed Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE___GET_TAXED_VALUE = BOOKED_REVENUE___GET_TAXED_VALUE;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Revenues</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE___GET_UNTAXED_REVENUES = BOOKED_REVENUE___GET_UNTAXED_REVENUES;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Costs</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE___GET_UNTAXED_COSTS = BOOKED_REVENUE___GET_UNTAXED_COSTS;
+
+	/**
+	 * The operation id for the '<em>Get Tax Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE___GET_TAX_COST = BOOKED_REVENUE___GET_TAX_COST;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE___GET_NAME = BOOKED_REVENUE_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Cargo Revenue</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE_OPERATION_COUNT = BOOKED_REVENUE_OPERATION_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link scenario.schedule.impl.CharterOutRevenueImpl <em>Charter Out Revenue</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.impl.CharterOutRevenueImpl
+	 * @see scenario.schedule.impl.SchedulePackageImpl#getCharterOutRevenue()
+	 * @generated
+	 */
+	int CHARTER_OUT_REVENUE = 8;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE__ENTITY = BOOKED_REVENUE__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE__DATE = BOOKED_REVENUE__DATE;
+
+	/**
+	 * The feature id for the '<em><b>Line Items</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE__LINE_ITEMS = BOOKED_REVENUE__LINE_ITEMS;
+
+	/**
+	 * The feature id for the '<em><b>Charter Out</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE__CHARTER_OUT = BOOKED_REVENUE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Charter Out Revenue</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE_FEATURE_COUNT = BOOKED_REVENUE_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE___GET_CONTAINER = BOOKED_REVENUE___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE___GET_UNTAXED_VALUE = BOOKED_REVENUE___GET_UNTAXED_VALUE;
+
+	/**
+	 * The operation id for the '<em>Get Taxed Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE___GET_TAXED_VALUE = BOOKED_REVENUE___GET_TAXED_VALUE;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Revenues</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE___GET_UNTAXED_REVENUES = BOOKED_REVENUE___GET_UNTAXED_REVENUES;
+
+	/**
+	 * The operation id for the '<em>Get Untaxed Costs</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE___GET_UNTAXED_COSTS = BOOKED_REVENUE___GET_UNTAXED_COSTS;
+
+	/**
+	 * The operation id for the '<em>Get Tax Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE___GET_TAX_COST = BOOKED_REVENUE___GET_TAX_COST;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE___GET_NAME = BOOKED_REVENUE_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Charter Out Revenue</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE_OPERATION_COUNT = BOOKED_REVENUE_OPERATION_COUNT + 1;
 
 
 	/**
@@ -1186,17 +1441,6 @@ public interface SchedulePackage extends EPackage {
 	EReference getBookedRevenue_Entity();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.schedule.BookedRevenue#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cargo</em>'.
-	 * @see scenario.schedule.BookedRevenue#getCargo()
-	 * @see #getBookedRevenue()
-	 * @generated
-	 */
-	EReference getBookedRevenue_Cargo();
-
-	/**
 	 * Returns the meta object for the attribute '{@link scenario.schedule.BookedRevenue#getDate <em>Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1267,6 +1511,78 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getBookedRevenue__GetTaxCost();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.BookedRevenue#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.BookedRevenue#getName()
+	 * @generated
+	 */
+	EOperation getBookedRevenue__GetName();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.schedule.CargoRevenue <em>Cargo Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Cargo Revenue</em>'.
+	 * @see scenario.schedule.CargoRevenue
+	 * @generated
+	 */
+	EClass getCargoRevenue();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoRevenue#getCargo <em>Cargo</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Cargo</em>'.
+	 * @see scenario.schedule.CargoRevenue#getCargo()
+	 * @see #getCargoRevenue()
+	 * @generated
+	 */
+	EReference getCargoRevenue_Cargo();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.CargoRevenue#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.CargoRevenue#getName()
+	 * @generated
+	 */
+	EOperation getCargoRevenue__GetName();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.schedule.CharterOutRevenue <em>Charter Out Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Charter Out Revenue</em>'.
+	 * @see scenario.schedule.CharterOutRevenue
+	 * @generated
+	 */
+	EClass getCharterOutRevenue();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CharterOutRevenue#getCharterOut <em>Charter Out</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Charter Out</em>'.
+	 * @see scenario.schedule.CharterOutRevenue#getCharterOut()
+	 * @see #getCharterOutRevenue()
+	 * @generated
+	 */
+	EReference getCharterOutRevenue_CharterOut();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.CharterOutRevenue#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.CharterOutRevenue#getName()
+	 * @generated
+	 */
+	EOperation getCharterOutRevenue__GetName();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1665,14 +1981,6 @@ public interface SchedulePackage extends EPackage {
 		EReference BOOKED_REVENUE__ENTITY = eINSTANCE.getBookedRevenue_Entity();
 
 		/**
-		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference BOOKED_REVENUE__CARGO = eINSTANCE.getBookedRevenue_Cargo();
-
-		/**
 		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1727,6 +2035,66 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation BOOKED_REVENUE___GET_TAX_COST = eINSTANCE.getBookedRevenue__GetTaxCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation BOOKED_REVENUE___GET_NAME = eINSTANCE.getBookedRevenue__GetName();
+
+		/**
+		 * The meta object literal for the '{@link scenario.schedule.impl.CargoRevenueImpl <em>Cargo Revenue</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.schedule.impl.CargoRevenueImpl
+		 * @see scenario.schedule.impl.SchedulePackageImpl#getCargoRevenue()
+		 * @generated
+		 */
+		EClass CARGO_REVENUE = eINSTANCE.getCargoRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_REVENUE__CARGO = eINSTANCE.getCargoRevenue_Cargo();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_REVENUE___GET_NAME = eINSTANCE.getCargoRevenue__GetName();
+
+		/**
+		 * The meta object literal for the '{@link scenario.schedule.impl.CharterOutRevenueImpl <em>Charter Out Revenue</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.schedule.impl.CharterOutRevenueImpl
+		 * @see scenario.schedule.impl.SchedulePackageImpl#getCharterOutRevenue()
+		 * @generated
+		 */
+		EClass CHARTER_OUT_REVENUE = eINSTANCE.getCharterOutRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Out</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_OUT_REVENUE__CHARTER_OUT = eINSTANCE.getCharterOutRevenue_CharterOut();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHARTER_OUT_REVENUE___GET_NAME = eINSTANCE.getCharterOutRevenue__GetName();
 
 	}
 

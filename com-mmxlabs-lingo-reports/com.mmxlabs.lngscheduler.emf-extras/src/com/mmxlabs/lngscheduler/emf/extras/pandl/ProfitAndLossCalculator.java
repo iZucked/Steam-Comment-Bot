@@ -13,13 +13,21 @@ import scenario.contract.Entity;
 import scenario.contract.SalesContract;
 import scenario.schedule.BookedRevenue;
 import scenario.schedule.CargoAllocation;
+import scenario.schedule.CargoRevenue;
+import scenario.schedule.CharterOutRevenue;
 import scenario.schedule.LineItem;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFactory;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.Sequence;
+import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
+import scenario.schedule.events.Idle;
+import scenario.schedule.events.Journey;
+import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.fleetallocation.FleetVessel;
 
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -44,6 +52,59 @@ public class ProfitAndLossCalculator {
 
 	public void addProfitAndLoss(final Scenario scenario,
 			final Schedule schedule, final ModelEntityMap entities) {
+		for (final Sequence seq : schedule.getSequences()) {
+			boolean getNextLeg = false;
+			BookedRevenue lastRevenue = null;
+			for (final ScheduledEvent evt : seq.getEvents()) {
+				if (evt instanceof CharterOutVisit) {
+					final CharterOutVisit visit = (CharterOutVisit) evt;
+
+					// add revenue for charter out
+					final CharterOutRevenue revenue = scheduleFactory
+							.createCharterOutRevenue();
+					
+					visit.setRevenue(revenue);
+					
+					revenue.setCharterOut(visit);
+					
+					revenue.setEntity(scenario.getContractModel()
+							.getShippingEntity());
+					revenue.setDate(visit.getEndTime());
+					
+					final LineItem li = scheduleFactory.createLineItem();
+					li.setName("Charter out revenue");
+					li.setParty(null);
+					li.setValue((evt.getDuration()
+							* ((FleetVessel) seq.getVessel()).getVessel()
+									.getClass_().getDailyCharterPrice())/24);
+					
+					// TODO onward ballast leg costs - we pay or renter pays?
+					// at the moment I'm saying we pay.
+					revenue.getLineItems().add(li);
+					
+					schedule.getRevenue().add(revenue);
+					
+					getNextLeg = true;
+					lastRevenue = revenue;
+				} else if (getNextLeg && evt instanceof Journey) {
+					final Journey journey = (Journey) evt;
+					final LineItem li = scheduleFactory.createLineItem();
+					li.setName("Onward journey cost");
+					li.setParty(null);
+					li.setValue(- (int) journey.getTotalCost());
+					lastRevenue.getLineItems().add(li);
+				} else if (getNextLeg && evt instanceof Idle) {
+					final Idle idle = (Idle) evt;
+					final LineItem li = scheduleFactory.createLineItem();
+					li.setName("Onward idle cost");
+					li.setParty(null);
+					li.setValue(- (int) idle.getTotalCost());
+					lastRevenue.getLineItems().add(li);
+					getNextLeg = false;
+				}
+			}
+		}
+
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
 			final LoadSlot loadSlot = allocation.getLoadSlot();
 			final Slot dischargeSlot = allocation.getDischargeSlot();
@@ -58,12 +119,12 @@ public class ProfitAndLossCalculator {
 			final Entity shippingEntity = scenario.getContractModel()
 					.getShippingEntity();
 
-			final BookedRevenue dischargeRevenue = scheduleFactory
-					.createBookedRevenue();
-			final BookedRevenue shippingRevenue = scheduleFactory
-					.createBookedRevenue();
-			final BookedRevenue loadRevenue = scheduleFactory
-					.createBookedRevenue();
+			final CargoRevenue dischargeRevenue = scheduleFactory
+					.createCargoRevenue();
+			final CargoRevenue shippingRevenue = scheduleFactory
+					.createCargoRevenue();
+			final CargoRevenue loadRevenue = scheduleFactory
+					.createCargoRevenue();
 
 			dischargeRevenue.setEntity(dischargeEntity);
 			shippingRevenue.setEntity(shippingEntity);
@@ -109,12 +170,11 @@ public class ProfitAndLossCalculator {
 						createLineItem("Purchase from shipping",
 								shippingEntity, -salesRevenueToShippingEntity));
 
-					shippingRevenue.getLineItems().add(
-							createLineItem("Value of discharged cargo",
-									dischargeEntity,
-									salesRevenueToShippingEntity
-											+ regasLossesToShippingEntity));
-					
+				shippingRevenue.getLineItems().add(
+						createLineItem("Value of discharged cargo",
+								dischargeEntity, salesRevenueToShippingEntity
+										+ regasLossesToShippingEntity));
+
 				if (CargoType.FLEET.equals(allocation.getCargoType())) {
 					shippingRevenue.getLineItems().add(
 							createLineItem("Regas losses", dischargeEntity,

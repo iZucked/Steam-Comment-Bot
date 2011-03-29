@@ -854,13 +854,22 @@ public interface EventsPackage extends EPackage {
 	int CHARTER_OUT_VISIT__CHARTER_OUT = PORT_VISIT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT__REVENUE = PORT_VISIT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 1;
+	int CHARTER_OUT_VISIT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -1348,6 +1357,17 @@ public interface EventsPackage extends EPackage {
 	EReference getCharterOutVisit_CharterOut();
 
 	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.events.CharterOutVisit#getRevenue <em>Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Revenue</em>'.
+	 * @see scenario.schedule.events.CharterOutVisit#getRevenue()
+	 * @see #getCharterOutVisit()
+	 * @generated
+	 */
+	EReference getCharterOutVisit_Revenue();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.schedule.events.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1716,6 +1736,14 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_OUT_VISIT__CHARTER_OUT = eINSTANCE.getCharterOutVisit_CharterOut();
+
+		/**
+		 * The meta object literal for the '<em><b>Revenue</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_OUT_VISIT__REVENUE = eINSTANCE.getCharterOutVisit_Revenue();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.FuelUnit <em>Fuel Unit</em>}' enum.
