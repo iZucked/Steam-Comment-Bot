@@ -121,7 +121,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			if (revenue.getEntity().getOwnership() == 0)
 				continue;
 			final Long l = totalRevenue.get(revenue.getEntity());
-			totalRevenue.put(revenue.getEntity(), l == null ? 0 : l.longValue()
+			totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue())
 					+ revenue.getTaxedValue());
 		}
 

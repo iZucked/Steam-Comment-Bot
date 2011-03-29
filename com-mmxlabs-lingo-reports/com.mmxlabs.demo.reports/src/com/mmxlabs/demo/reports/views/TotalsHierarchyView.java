@@ -7,7 +7,9 @@ package com.mmxlabs.demo.reports.views;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -21,6 +23,9 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
+import scenario.contract.Entity;
+import scenario.schedule.BookedRevenue;
+import scenario.schedule.LineItem;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFitness;
 import scenario.schedule.Sequence;
@@ -75,20 +80,32 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		setSelectedSchedules(schedules);
 	}
 
+	static final DecimalFormat myFormat = new DecimalFormat("$###,###,###");
+
 	private class TreeData {
+
 		final String name;
+		final boolean nonValued;
 		final long cost;
 		final List<TreeData> children = new ArrayList<TreeData>();
 		private TreeData parent;
 
+		public TreeData(final String name, final boolean nonValued) {
+			this.name = name;
+			this.nonValued = nonValued;
+			this.cost = 0;
+		}
+
 		public TreeData(final String name) {
 			this.name = name;
+			nonValued = false;
 			cost = 0;
 		}
 
 		public TreeData(final String name, final long cost) {
 			this.name = name;
 			this.cost = cost;
+			nonValued = false;
 		}
 
 		public String getName() {
@@ -96,6 +113,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		}
 
 		public long getCost() {
+			if (nonValued) return 0;
 			long accumulator = cost;
 			for (final TreeData d : children)
 				accumulator += d.getCost();
@@ -111,16 +129,18 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 			return children.size();
 		}
 
-		public TreeData getChild(final int index) {
-			return children.get(index);
-		}
-
 		public TreeData getParent() {
 			return parent;
 		}
 
 		public void setParent(final TreeData d) {
 			parent = d;
+		}
+
+		public String renderCost() {
+			if (nonValued)
+				return "";
+			return myFormat.format(getCost());
 		}
 	}
 
@@ -138,7 +158,9 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		} else {
 			for (final Schedule schedule : schedules) {
 				final String scheduleName = schedule.getName();
-				final TreeData group = new TreeData(scheduleName);
+				// don't sum costs and profits, because it's meaningless
+				// (profits already include costs)
+				final TreeData group = new TreeData(scheduleName, true);
 				group.addChild(createCostsTreeData(schedule));
 				group.addChild(createProfitTreeData(schedule));
 				dummy.addChild(group);
@@ -147,8 +169,36 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		viewer.setInput(dummy);
 	}
 
-	private TreeData createProfitTreeData(Schedule schedule) {
+	private TreeData createProfitTreeData(final Schedule schedule) {
 		final TreeData top = new TreeData("Total Profit");
+		final Map<Entity, TreeData> byEntity = new HashMap<Entity, TreeData>();
+		if (schedule != null) {
+			for (final BookedRevenue revenue : schedule.getRevenue()) {
+				final Entity e = revenue.getEntity();
+				if (e == null || e.getOwnership() == 0) continue;
+				
+				TreeData td = byEntity.get(e);
+				if (td == null) {
+					td = new TreeData(e.getName());
+					top.addChild(td);
+					byEntity.put(e,td);
+				}
+				
+				final TreeData rd = new TreeData(revenue.getCargo().getLoadSlot().getId() + " to " +
+						revenue.getCargo().getDischargeSlot().getId());
+				
+				td.addChild(rd);
+				
+				for (final LineItem item : revenue.getLineItems()) {
+					final TreeData li = new TreeData(item.getName(), item.getValue());
+					rd.addChild(li);
+				}
+				
+				rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
+				assert(rd.getCost() == revenue.getTaxedValue());
+				//TODO this does not take account of ownership proportion
+			}
+		}
 		return top;
 	}
 
@@ -384,11 +434,11 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		final TreeViewerColumn costColumn = new TreeViewerColumn(viewer, 0);
 		costColumn.setLabelProvider(new ColumnLabelProvider() {
-			final DecimalFormat myFormat = new DecimalFormat("$###,###,###");
 
 			@Override
 			public String getText(final Object element) {
-				return myFormat.format(((TreeData) element).getCost());
+				return ((TreeData) element).renderCost();
+
 			}
 		});
 
