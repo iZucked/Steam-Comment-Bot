@@ -82,9 +82,12 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 				final String path = ((IFile) changedResource).getFullPath()
 						.toString();
 				final URI uri = URI.createPlatformResourceURI(path, true);
-				final Resource res = resourceSet.getResource(uri, true);
+				final Resource res = resourceSet.getResource(uri, false);
 				res.unload();
-				res.load(resourceSet.getLoadOptions());
+				// Only load resource if not removed 
+				if ((delta.getKind() & IResourceDelta.REMOVED) == 0) {
+					res.load(resourceSet.getLoadOptions());
+				}
 			} catch (final IOException ie) {
 				System.err.println("Error reloading resource - "
 						+ ie.toString());

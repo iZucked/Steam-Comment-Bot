@@ -17,7 +17,7 @@
       </category>
       <view
             name="Scheduler View"
-            icon="icons/sample.gif"
+            icon="icons/schedule_view.gif"
             category="com.mmxlabs.scheduleview"
             class="com.mmxlabs.scheduleview.views.SchedulerView"
             id="com.mmxlabs.scheduleview.views.SchedulerView">
