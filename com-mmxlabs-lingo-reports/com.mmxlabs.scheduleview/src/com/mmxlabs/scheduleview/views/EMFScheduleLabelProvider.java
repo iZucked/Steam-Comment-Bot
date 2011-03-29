@@ -15,6 +15,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import scenario.schedule.Sequence;
+import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.Idle;
@@ -69,15 +70,18 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 			sb.append("End Time: " + event.getEndTime() + "\n");
 			sb.append("Duration: " + event.getDuration() + " hours\n");
 
-			if (element instanceof SlotVisit) {
-				final SlotVisit visit = (SlotVisit) element;
+			if (element instanceof PortVisit) {
+				final PortVisit visit = (PortVisit) element;
 				
 				sb.append("Port: "
 						+ visit.getPort().getName() + "\n");
-				sb.append("Window Start Time: "
-						+ visit.getSlot().getWindowStart() + "\n");
-				sb.append("Window End Time: "
-						+ visit.getSlot().getWindowEnd() + "\n");
+				if (element instanceof SlotVisit) {
+					final SlotVisit svisit = (SlotVisit) element;
+					sb.append("Window Start Time: "
+							+ svisit.getSlot().getWindowStart() + "\n");
+					sb.append("Window End Time: "
+							+ svisit.getSlot().getWindowEnd() + "\n");
+				}
 			} else if (element instanceof Idle) {
 				final Idle idle = (Idle) element;
 				
@@ -150,6 +154,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 				} else {					
 					return ColorCache.getColor(0, 0, 255);
 				}
+			} else if (element instanceof CharterOutVisit) {
+				return ColorCache.getColor(223, 115, 255);
 			}
 			break;
 		case FuelChoice:
