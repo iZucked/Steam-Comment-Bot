@@ -53,13 +53,18 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 
 			if (obj instanceof RowData) {
 				final RowData d = (RowData) obj;
-				if (index == 0) {
+				switch (index) {
+				case 0:
+					return d.scheduleName;
+				case 1:
 					return d.component;
-				} else {
+				case 2:
+					return d.isCost ? "Cost": "Revenue";
+				case 3:
 					return String.format("%,d", d.fitness);
 				}
 			}
-			return null;
+			return "";
 		}
 
 		@Override
@@ -86,13 +91,22 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	@Override
 	public void createPartControl(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+				| SWT.V_SCROLL | SWT.FULL_SELECTION);
 		viewer.setContentProvider(new TotalsContentProvider());
 		viewer.setInput(getViewSite());
 
+		final TableViewerColumn tvc0 = new TableViewerColumn(viewer, SWT.NONE);
+		tvc0.getColumn().setText("Schedule");
+		tvc0.getColumn().pack();
+		
 		final TableViewerColumn tvc1 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc1.getColumn().setText("Component");
 		tvc1.getColumn().pack();
+		
+		final TableViewerColumn tvc3 = new TableViewerColumn(viewer, SWT.NONE);
+		tvc3.getColumn().setText("Type");
+		tvc3.getColumn().pack();
+
 
 		final TableViewerColumn tvc2 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc2.getColumn().setText("Total");
@@ -198,7 +212,7 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 		final List<Schedule> schedules = ScheduleAdapter
 				.getSchedules(selection);
 		if (!schedules.isEmpty()) {
-			setInput(schedules.get(0));
+			setInput(schedules);
 		} else {
 			setInput(null);
 		}
