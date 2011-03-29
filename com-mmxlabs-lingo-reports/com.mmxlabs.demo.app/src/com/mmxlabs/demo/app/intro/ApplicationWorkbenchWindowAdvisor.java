@@ -10,6 +10,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.internal.ide.WorkbenchActionBuilder;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -19,7 +20,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
     @Override
 	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
-        return new ApplicationActionBarAdvisor(configurer);
+    	return new WorkbenchActionBuilder(configurer);
+//        return new ApplicationActionBarAdvisor(configurer);
     }
     
     @Override
