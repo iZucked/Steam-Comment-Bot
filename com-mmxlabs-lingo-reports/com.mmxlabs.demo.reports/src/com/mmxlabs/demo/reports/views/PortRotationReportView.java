@@ -23,6 +23,7 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
+import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
@@ -291,6 +292,11 @@ public class PortRotationReportView extends EMFReportView {
 									.getTaxedValue();
 						}
 						return value;
+					}
+				} else if (object instanceof CharterOutVisit) {
+					final CharterOutVisit cov = (CharterOutVisit) object;
+					if (entity.equals(cov.getRevenue().getEntity())) {
+						return cov.getRevenue().getTaxedValue();
 					}
 				}
 				return null;

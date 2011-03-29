@@ -203,19 +203,18 @@ public class CargoReportView extends EMFReportView {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof CargoAllocation) {
-
 					// display P&L
 					int value = 0;
 					final CargoAllocation allocation = (CargoAllocation) object;
-					if (entity.equals(allocation.getLoadRevenue().getEntity())) {
+					if (allocation.getLoadRevenue() != null && entity.equals(allocation.getLoadRevenue().getEntity())) {
 						value += allocation.getLoadRevenue().getTaxedValue();
 					}
-					if (entity.equals(allocation.getShippingRevenue()
+					if (allocation.getShippingRevenue() != null && entity.equals(allocation.getShippingRevenue()
 							.getEntity())) {
 						value += allocation.getShippingRevenue()
 								.getTaxedValue();
 					}
-					if (entity.equals(allocation.getDischargeRevenue()
+					if (allocation.getDischargeRevenue() != null && entity.equals(allocation.getDischargeRevenue()
 							.getEntity())) {
 						value += allocation.getDischargeRevenue()
 								.getTaxedValue();

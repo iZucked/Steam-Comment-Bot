@@ -184,8 +184,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 					byEntity.put(e,td);
 				}
 				
-				final TreeData rd = new TreeData(revenue.getCargo().getLoadSlot().getId() + " to " +
-						revenue.getCargo().getDischargeSlot().getId());
+				final TreeData rd = new TreeData(revenue.getName());
 				
 				td.addChild(rd);
 				
