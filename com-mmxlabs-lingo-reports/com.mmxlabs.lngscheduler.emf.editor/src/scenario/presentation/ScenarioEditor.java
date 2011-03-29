@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -59,7 +58,6 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -143,7 +141,7 @@ import scenario.presentation.cargoeditor.celleditors.VesselStateAttributesDialog
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
-import scenario.presentation.cargoeditor.handlers.SwapDischargeHandler;
+import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
@@ -183,7 +181,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			Collections.sort(result, new Comparator<Pair<String, ?>>() {
 
 				@Override
-				public int compare(Pair<String, ?> o1, Pair<String, ?> o2) {
+				public int compare(final Pair<String, ?> o1, final Pair<String, ?> o2) {
 					return o1.getFirst().compareTo(o2.getFirst());
 				}
 			});
@@ -194,8 +192,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP scheduleProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(EObject target,
-				EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
+				final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getScheduleModel().getSchedules(),
@@ -204,11 +202,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			return result;
 		}
 	};
-	
+
 	final ScenarioRVP vesselClassProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(EObject target,
-				EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
+				final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getFleetModel().getVesselClasses(),
@@ -219,8 +217,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP entityProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(EObject target,
-				EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
+				final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getContractModel().getEntities(),
@@ -231,9 +229,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP portProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(EObject target,
-				EStructuralFeature field) {
-			if (target == null) return Collections.emptyList();
+		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
+				final EStructuralFeature field) {
+			if (target == null)
+				return Collections.emptyList();
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getPortModel().getPorts(),
@@ -244,8 +243,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP contractProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(EObject target,
-				EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
+				final EStructuralFeature field) {
 			final String nullValueName;
 			final List<Pair<String, EObject>> result;
 			final Scenario scenario = getEnclosingScenario(target);
@@ -296,8 +295,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP marketProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(EObject target,
-				EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
+				final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getMarketModel().getMarkets(),
@@ -322,10 +321,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	private static List<String> prefixExtensions(List<String> extensions,
-			String prefix) {
-		List<String> result = new ArrayList<String>();
-		for (String extension : extensions) {
+	private static List<String> prefixExtensions(final List<String> extensions,
+			final String prefix) {
+		final List<String> result = new ArrayList<String>();
+		for (final String extension : extensions) {
 			result.add(prefix + extension);
 		}
 		return Collections.unmodifiableList(result);
@@ -476,7 +475,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	protected IPartListener partListener = new IPartListener() {
-		public void partActivated(IWorkbenchPart p) {
+		public void partActivated(final IWorkbenchPart p) {
 			if (p instanceof ContentOutline) {
 				if (((ContentOutline) p).getCurrentPage() == contentOutlinePage) {
 					getActionBarContributor().setActiveEditor(
@@ -495,19 +494,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 		}
 
-		public void partBroughtToTop(IWorkbenchPart p) {
+		public void partBroughtToTop(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
-		public void partClosed(IWorkbenchPart p) {
+		public void partClosed(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
-		public void partDeactivated(IWorkbenchPart p) {
+		public void partDeactivated(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
-		public void partOpened(IWorkbenchPart p) {
+		public void partOpened(final IWorkbenchPart p) {
 			// Ignore.
 		}
 	};
@@ -560,14 +559,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	protected EContentAdapter problemIndicationAdapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if (notification.getNotifier() instanceof Resource) {
 				switch (notification.getFeatureID(Resource.class)) {
 				case Resource.RESOURCE__IS_LOADED:
 				case Resource.RESOURCE__ERRORS:
 				case Resource.RESOURCE__WARNINGS: {
-					Resource resource = (Resource) notification.getNotifier();
-					Diagnostic diagnostic = analyzeResourceProblems(resource,
+					final Resource resource = (Resource) notification.getNotifier();
+					final Diagnostic diagnostic = analyzeResourceProblems(resource,
 							null);
 					if (diagnostic.getSeverity() != Diagnostic.OK) {
 						resourceToDiagnosticMap.put(resource, diagnostic);
@@ -592,12 +591,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 
 		@Override
-		protected void setTarget(Resource target) {
+		protected void setTarget(final Resource target) {
 			basicSetTarget(target);
 		}
 
 		@Override
-		protected void unsetTarget(Resource target) {
+		protected void unsetTarget(final Resource target) {
 			basicUnsetTarget(target);
 		}
 	};
@@ -651,12 +650,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			editingDomain.getCommandStack().flush();
 
 			updateProblemIndication = false;
-			for (Resource resource : changedResources) {
+			for (final Resource resource : changedResources) {
 				if (resource.isLoaded()) {
 					resource.unload();
 					try {
 						resource.load(Collections.EMPTY_MAP);
-					} catch (IOException exception) {
+					} catch (final IOException exception) {
 						if (!resourceToDiagnosticMap.containsKey(resource)) {
 							resourceToDiagnosticMap
 									.put(resource,
@@ -684,10 +683,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	protected void updateProblemIndication() {
 		if (updateProblemIndication) {
-			BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK,
+			final BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK,
 					"com.mmxlabs.lngscheduler.emf.editor", 0, null,
 					new Object[] { editingDomain.getResourceSet() });
-			for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
+			for (final Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
 				if (childDiagnostic.getSeverity() != Diagnostic.OK) {
 					diagnostic.add(childDiagnostic);
 				}
@@ -702,7 +701,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					setActivePage(lastEditorPage);
 				}
 			} else if (diagnostic.getSeverity() != Diagnostic.OK) {
-				ProblemEditorPart problemEditorPart = new ProblemEditorPart();
+				final ProblemEditorPart problemEditorPart = new ProblemEditorPart();
 				problemEditorPart.setDiagnostic(diagnostic);
 				try {
 					addPage(++lastEditorPage, problemEditorPart,
@@ -710,7 +709,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					setPageText(lastEditorPage, problemEditorPart.getPartName());
 					setActivePage(lastEditorPage);
 					showTabs();
-				} catch (PartInitException exception) {
+				} catch (final PartInitException exception) {
 					LngEditorPlugin.INSTANCE.log(exception);
 				}
 			}
@@ -778,7 +777,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Create the command stack that will notify this editor as commands are
 		// executed.
 		//
-		BasicCommandStack commandStack = new BasicCommandStack();
+		final BasicCommandStack commandStack = new BasicCommandStack();
 
 		// Add a listener to set the most recent command's affected objects to
 		// be the selection of the viewer with focus.
@@ -791,7 +790,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 						// Try to select the affected objects.
 						//
-						Command mostRecentCommand = ((CommandStack) event
+						final Command mostRecentCommand = ((CommandStack) event
 								.getSource()).getMostRecentCommand();
 						if (mostRecentCommand != null) {
 							setSelectionToViewer(mostRecentCommand
@@ -819,7 +818,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	@Override
-	protected void firePropertyChange(int action) {
+	protected void firePropertyChange(final int action) {
 		super.firePropertyChange(action);
 	}
 
@@ -829,12 +828,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void setSelectionToViewer(Collection<?> collection) {
+	public void setSelectionToViewer(final Collection<?> collection) {
 		final Collection<?> theSelection = collection;
 		// Make sure it's okay.
 		//
 		if (theSelection != null && !theSelection.isEmpty()) {
-			Runnable runnable = new Runnable() {
+			final Runnable runnable = new Runnable() {
 				public void run() {
 					// Try to select the items in the current content viewer of
 					// the editor.
@@ -875,7 +874,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		 * @generated
 		 */
 		public ReverseAdapterFactoryContentProvider(
-				AdapterFactory adapterFactory) {
+				final AdapterFactory adapterFactory) {
 			super(adapterFactory);
 		}
 
@@ -885,8 +884,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		 * @generated
 		 */
 		@Override
-		public Object[] getElements(Object object) {
-			Object parent = super.getParent(object);
+		public Object[] getElements(final Object object) {
+			final Object parent = super.getParent(object);
 			return (parent == null ? Collections.EMPTY_SET : Collections
 					.singleton(parent)).toArray();
 		}
@@ -897,8 +896,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		 * @generated
 		 */
 		@Override
-		public Object[] getChildren(Object object) {
-			Object parent = super.getParent(object);
+		public Object[] getChildren(final Object object) {
+			final Object parent = super.getParent(object);
 			return (parent == null ? Collections.EMPTY_SET : Collections
 					.singleton(parent)).toArray();
 		}
@@ -909,8 +908,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		 * @generated
 		 */
 		@Override
-		public boolean hasChildren(Object object) {
-			Object parent = super.getParent(object);
+		public boolean hasChildren(final Object object) {
+			final Object parent = super.getParent(object);
 			return parent != null;
 		}
 
@@ -920,7 +919,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		 * @generated
 		 */
 		@Override
-		public Object getParent(Object object) {
+		public Object getParent(final Object object) {
 			return null;
 		}
 	}
@@ -930,7 +929,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void setCurrentViewerPane(ViewerPane viewerPane) {
+	public void setCurrentViewerPane(final ViewerPane viewerPane) {
 		if (currentViewerPane != viewerPane) {
 			if (currentViewerPane != null) {
 				currentViewerPane.showFocus(false);
@@ -947,7 +946,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void setCurrentViewer(Viewer viewer) {
+	public void setCurrentViewer(final Viewer viewer) {
 		// If it is changing...
 		//
 		if (currentViewer != viewer) {
@@ -959,7 +958,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					// section.
 					//
 					public void selectionChanged(
-							SelectionChangedEvent selectionChangedEvent) {
+							final SelectionChangedEvent selectionChangedEvent) {
 						setSelection(selectionChangedEvent.getSelection());
 					}
 				};
@@ -1007,18 +1006,18 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	protected void createContextMenuFor(StructuredViewer viewer) {
-		MenuManager contextMenu = new MenuManager("#PopUp");
+	protected void createContextMenuFor(final StructuredViewer viewer) {
+		final MenuManager contextMenu = new MenuManager("#PopUp");
 		contextMenu.add(new Separator("additions"));
 		contextMenu.setRemoveAllWhenShown(true);
 		contextMenu.addMenuListener(this);
-		Menu menu = contextMenu.createContextMenu(viewer.getControl());
+		final Menu menu = contextMenu.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(contextMenu,
 				new UnwrappingSelectionProvider(viewer));
 
-		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-		Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance() };
+		final int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+		final Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance() };
 		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(
 				viewer));
 		viewer.addDropSupport(dndOperations, transfers,
@@ -1033,7 +1032,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	public void createModel() {
-		URI resourceURI = EditUIUtil.getURI(getEditorInput());
+		final URI resourceURI = EditUIUtil.getURI(getEditorInput());
 		Exception exception = null;
 		Resource resource = null;
 		try {
@@ -1041,13 +1040,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			//
 			resource = editingDomain.getResourceSet().getResource(resourceURI,
 					true);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			exception = e;
 			resource = editingDomain.getResourceSet().getResource(resourceURI,
 					false);
 		}
 
-		Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
+		final Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
 		if (diagnostic.getSeverity() != Diagnostic.OK) {
 			resourceToDiagnosticMap.put(resource,
 					analyzeResourceProblems(resource, exception));
@@ -1063,11 +1062,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public Diagnostic analyzeResourceProblems(Resource resource,
-			Exception exception) {
+	public Diagnostic analyzeResourceProblems(final Resource resource,
+			final Exception exception) {
 		if (!resource.getErrors().isEmpty()
 				|| !resource.getWarnings().isEmpty()) {
-			BasicDiagnostic basicDiagnostic = new BasicDiagnostic(
+			final BasicDiagnostic basicDiagnostic = new BasicDiagnostic(
 					Diagnostic.ERROR,
 					"com.mmxlabs.lngscheduler.emf.editor",
 					0,
@@ -1113,12 +1112,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			// Create a page for the selection tree view.
 			//
 			{
-				ViewerPane viewerPane = new ViewerPane(getSite().getPage(),
+				final ViewerPane viewerPane = new ViewerPane(getSite().getPage(),
 						ScenarioEditor.this) {
 					@Override
-					public Viewer createViewer(Composite composite) {
-						Tree tree = new Tree(composite, SWT.MULTI);
-						TreeViewer newTreeViewer = new TreeViewer(tree);
+					public Viewer createViewer(final Composite composite) {
+						final Tree tree = new Tree(composite, SWT.MULTI);
+						final TreeViewer newTreeViewer = new TreeViewer(tree);
 						return newTreeViewer;
 					}
 
@@ -1148,7 +1147,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						adapterFactory);
 
 				createContextMenuFor(selectionViewer);
-				int pageIndex = addPage(viewerPane.getControl());
+				final int pageIndex = addPage(viewerPane.getControl());
 				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
 			}
 
@@ -1303,7 +1302,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			boolean guard = false;
 
 			@Override
-			public void controlResized(ControlEvent event) {
+			public void controlResized(final ControlEvent event) {
 				if (!guard) {
 					guard = true;
 					hideTabs();
@@ -1333,43 +1332,26 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
 					getSite().getPage(), ScenarioEditor.this) {
 
+				final SwapDischargeSlotsAction swapAction = new SwapDischargeSlotsAction();
+
 				@Override
-				public Viewer createViewer(Composite parent) {
+				public Viewer createViewer(final Composite parent) {
 					final Viewer v = super.createViewer(parent);
 
-					// TODO hook this up declaratively. No idea what extension
-					// point to use
-					// for buttons in the cargo editor (if there even is one)
-					final SwapDischargeHandler handler = new SwapDischargeHandler();
-
-					getToolBarManager().add(new Action() {
-						{
-							setImageDescriptor(LngEditorPlugin.Implementation
-									.imageDescriptorFromPlugin(LngEditorPlugin
-											.getPlugin().getSymbolicName(),
-											"/icons/swap.gif"));
-							setToolTipText("Swap discharge slots");
-							setText("Swap discharge slots");
-						}
-
-						@Override
-						public boolean isEnabled() {
-							// System.err.println("isenabled?");
-							return true;
-						}
-
-						@Override
-						public void run() {
-							try {
-								handler.execute(null);
-							} catch (ExecutionException e) {
-								// display exception
-							}
-						}
-					});
-
+					getToolBarManager().add(swapAction);
 					getToolBarManager().update(true);
+
+					v.addSelectionChangedListener(swapAction);
+
 					return v;
+				}
+
+				@Override
+				public void dispose() {
+
+					getViewer().removeSelectionChangedListener(swapAction);
+				
+					super.dispose();
 				}
 
 			};
@@ -1455,7 +1437,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			// TODO should this really be here?
 			createContextMenuFor(cargoPane.getViewer());
 
-			int pageIndex = addPage(cargoPane.getControl());
+			final int pageIndex = addPage(cargoPane.getControl());
 			setPageText(pageIndex, "Cargoes"); // TODO localize this
 												// string or whatever
 		}
@@ -1463,7 +1445,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	private void createPortEditor(
 			final IReferenceValueProvider everyContractProvider,
-			IReferenceValueProvider marketProvider) {
+			final IReferenceValueProvider marketProvider) {
 		final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
 				getSite().getPage(), ScenarioEditor.this);
 		// cargoPane.createControl(getContainer());
@@ -1506,7 +1488,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		createContextMenuFor(cargoPane.getViewer());
 
-		int pageIndex = addPage(cargoPane.getControl());
+		final int pageIndex = addPage(cargoPane.getControl());
 		setPageText(pageIndex, "Ports"); // TODO localize this
 											// string or whatever
 
@@ -1556,7 +1538,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(),
 						getEditingDomain()) {
 					@Override
-					protected String renderValue(Object object) {
+					protected String renderValue(final Object object) {
 						final VesselStateAttributes a = (VesselStateAttributes) object;
 						return "NBO: " + a.getNboRate() + " Idle NBO: "
 								+ a.getIdleNBORate() + " Idle Base:"
@@ -1564,8 +1546,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 
 					@Override
-					protected Object openDialogBox(Control cellEditorWindow,
-							Object object) {
+					protected Object openDialogBox(final Control cellEditorWindow,
+							final Object object) {
 						final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
 								cellEditorWindow.getShell(),
 								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
@@ -1586,8 +1568,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						getEditingDomain()) {
 
 					@Override
-					protected Object openDialogBox(Control cellEditorWindow,
-							Object object) {
+					protected Object openDialogBox(final Control cellEditorWindow,
+							final Object object) {
 						final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
 								cellEditorWindow.getShell(),
 								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
@@ -1598,7 +1580,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 
 					@Override
-					protected String renderValue(Object object) {
+					protected String renderValue(final Object object) {
 						final VesselStateAttributes a = (VesselStateAttributes) object;
 						return "NBO: " + a.getNboRate() + " Idle NBO: "
 								+ a.getIdleNBORate() + " Idle Base:"
@@ -1647,8 +1629,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						DialogFeatureManipulator {
 
 					public RequirementFeatureManipulator(
-							EStructuralFeature field,
-							EditingDomain editingDomain) {
+							final EStructuralFeature field,
+							final EditingDomain editingDomain) {
 						super(field, editingDomain);
 					}
 
@@ -1670,9 +1652,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 
 					@Override
-					protected Object openDialogBox(Control cellEditorWindow,
-							Object object) {
-						PortAndTimeDialog patDialog = new PortAndTimeDialog(
+					protected Object openDialogBox(final Control cellEditorWindow,
+							final Object object) {
+						final PortAndTimeDialog patDialog = new PortAndTimeDialog(
 								cellEditorWindow.getShell(),
 								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
 										| SWT.APPLICATION_MODAL);
@@ -1686,7 +1668,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 				fleetPane.addColumn("Start constraint", startRequirement,
 						startRequirement);
-				
+
 				final DialogFeatureManipulator endRequirement = new RequirementFeatureManipulator(
 						FleetPackage.eINSTANCE.getVessel_EndRequirement(),
 						getEditingDomain());
@@ -1705,7 +1687,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			createContextMenuFor(fleetPane.getViewer());
 
-			int pageIndex = addPage(sash);
+			final int pageIndex = addPage(sash);
 			setPageText(pageIndex, "Fleet"); // TODO localize this
 			// string or whatever
 		}
@@ -1722,7 +1704,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			setPageText(0, "");
 			if (getContainer() instanceof CTabFolder) {
 				((CTabFolder) getContainer()).setTabHeight(1);
-				Point point = getContainer().getSize();
+				final Point point = getContainer().getSize();
 				getContainer().setSize(point.x, point.y + 6);
 			}
 		}
@@ -1739,7 +1721,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			setPageText(0, getString("_UI_SelectionPage_label"));
 			if (getContainer() instanceof CTabFolder) {
 				((CTabFolder) getContainer()).setTabHeight(SWT.DEFAULT);
-				Point point = getContainer().getSize();
+				final Point point = getContainer().getSize();
 				getContainer().setSize(point.x, point.y - 6);
 			}
 		}
@@ -1752,7 +1734,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	@Override
-	protected void pageChange(int pageIndex) {
+	protected void pageChange(final int pageIndex) {
 		super.pageChange(pageIndex);
 
 		if (contentOutlinePage != null) {
@@ -1768,7 +1750,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(Class key) {
+	public Object getAdapter(final Class key) {
 		if (key.equals(IContentOutlinePage.class)) {
 			return showOutlineView() ? getContentOutlinePage() : null;
 		} else if (key.equals(IPropertySheetPage.class)) {
@@ -1790,7 +1772,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			//
 			class MyContentOutlinePage extends ContentOutlinePage {
 				@Override
-				public void createControl(Composite parent) {
+				public void createControl(final Composite parent) {
 					super.createControl(parent);
 					contentOutlineViewer = getTreeViewer();
 					contentOutlineViewer.addSelectionChangedListener(this);
@@ -1822,16 +1804,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				}
 
 				@Override
-				public void makeContributions(IMenuManager menuManager,
-						IToolBarManager toolBarManager,
-						IStatusLineManager statusLineManager) {
+				public void makeContributions(final IMenuManager menuManager,
+						final IToolBarManager toolBarManager,
+						final IStatusLineManager statusLineManager) {
 					super.makeContributions(menuManager, toolBarManager,
 							statusLineManager);
 					contentOutlineStatusLineManager = statusLineManager;
 				}
 
 				@Override
-				public void setActionBars(IActionBars actionBars) {
+				public void setActionBars(final IActionBars actionBars) {
 					super.setActionBars(actionBars);
 					getActionBarContributor().shareGlobalActions(this,
 							actionBars);
@@ -1846,7 +1828,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					.addSelectionChangedListener(new ISelectionChangedListener() {
 						// This ensures that we handle selections correctly.
 						//
-						public void selectionChanged(SelectionChangedEvent event) {
+						public void selectionChanged(final SelectionChangedEvent event) {
 							handleContentOutlineSelection(event.getSelection());
 						}
 					});
@@ -1892,8 +1874,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature) {
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
 						return new ReferenceInlineEditor(path, feature,
 								editingDomain, portProvider);
 					}
@@ -1903,13 +1885,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				ContractPackage.eINSTANCE.getContract(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature) {
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
 						return new ReferenceInlineEditor(path, feature,
 								editingDomain, contractProvider) {
 							@Override
 							protected boolean updateOnChangeToFeature(
-									Object changedFeature) {
+									final Object changedFeature) {
 								// update contract display when port is changed
 								// on a load slot.
 								return super
@@ -1926,8 +1908,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getMarket(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature) {
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
 						return new ReferenceInlineEditor(path, feature,
 								editingDomain, marketProvider);
 					}
@@ -1937,8 +1919,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				CargoPackage.eINSTANCE.getCargoType(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature) {
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
 						return new EENumInlineEditor(path,
 								(EAttribute) feature, editingDomain);
 					}
@@ -1948,8 +1930,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				ContractPackage.eINSTANCE.getEntity(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature) {
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
 						return new ReferenceInlineEditor(path, feature,
 								editingDomain, entityProvider);
 					}
@@ -1959,8 +1941,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				.getVesselStateAttributes_FuelConsumptionCurve(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature) {
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
 						return new FuelCurveEditor(path, feature, editingDomain);
 					}
 				});
@@ -1969,19 +1951,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				FleetPackage.eINSTANCE.getVesselClass(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature) {
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
 						return new ReferenceInlineEditor(path, feature,
 								editingDomain, vesselClassProvider);
 					}
 				});
-		
+
 		page.setEditorFactoryForClassifier(
 				SchedulePackage.eINSTANCE.getSchedule(),
 				new IInlineEditorFactory() {
 					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature) {
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
 						return new ReferenceInlineEditor(path, feature,
 								editingDomain, scheduleProvider);
 					}
@@ -1995,21 +1977,21 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void handleContentOutlineSelection(ISelection selection) {
+	public void handleContentOutlineSelection(final ISelection selection) {
 		if (currentViewerPane != null && !selection.isEmpty()
 				&& selection instanceof IStructuredSelection) {
-			Iterator<?> selectedElements = ((IStructuredSelection) selection)
+			final Iterator<?> selectedElements = ((IStructuredSelection) selection)
 					.iterator();
 			if (selectedElements.hasNext()) {
 				// Get the first selected element.
 				//
-				Object selectedElement = selectedElements.next();
+				final Object selectedElement = selectedElements.next();
 
 				// If it's the selection viewer, then we want it to select the
 				// same selection as this selection.
 				//
 				if (currentViewerPane.getViewer() == selectionViewer) {
-					ArrayList<Object> selectionList = new ArrayList<Object>();
+					final ArrayList<Object> selectionList = new ArrayList<Object>();
 					selectionList.add(selectedElement);
 					while (selectedElements.hasNext()) {
 						selectionList.add(selectedElements.next());
@@ -2050,7 +2032,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	@Override
-	public void doSave(IProgressMonitor progressMonitor) {
+	public void doSave(final IProgressMonitor progressMonitor) {
 		// Save only resources that have actually changed.
 		//
 		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
@@ -2060,24 +2042,24 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Do the work within an operation because this is a long running
 		// activity that modifies the workbench.
 		//
-		IRunnableWithProgress operation = new IRunnableWithProgress() {
+		final IRunnableWithProgress operation = new IRunnableWithProgress() {
 			// This is the method that gets invoked when the operation runs.
 			//
-			public void run(IProgressMonitor monitor) {
+			public void run(final IProgressMonitor monitor) {
 				// Save the resources to the file system.
 				//
 				boolean first = true;
-				for (Resource resource : editingDomain.getResourceSet()
+				for (final Resource resource : editingDomain.getResourceSet()
 						.getResources()) {
 					if ((first || !resource.getContents().isEmpty() || isPersisted(resource))
 							&& !editingDomain.isReadOnly(resource)) {
 						try {
-							long timeStamp = resource.getTimeStamp();
+							final long timeStamp = resource.getTimeStamp();
 							resource.save(saveOptions);
 							if (resource.getTimeStamp() != timeStamp) {
 								savedResources.add(resource);
 							}
-						} catch (Exception exception) {
+						} catch (final Exception exception) {
 							resourceToDiagnosticMap
 									.put(resource,
 											analyzeResourceProblems(resource,
@@ -2100,7 +2082,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			//
 			((BasicCommandStack) editingDomain.getCommandStack()).saveIsDone();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-		} catch (Exception exception) {
+		} catch (final Exception exception) {
 			// Something went wrong that shouldn't.
 			//
 			LngEditorPlugin.INSTANCE.log(exception);
@@ -2117,16 +2099,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	protected boolean isPersisted(Resource resource) {
+	protected boolean isPersisted(final Resource resource) {
 		boolean result = false;
 		try {
-			InputStream stream = editingDomain.getResourceSet()
+			final InputStream stream = editingDomain.getResourceSet()
 					.getURIConverter().createInputStream(resource.getURI());
 			if (stream != null) {
 				result = true;
 				stream.close();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// Ignore
 		}
 		return result;
@@ -2151,12 +2133,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	@Override
 	public void doSaveAs() {
-		String[] filters = FILE_EXTENSION_FILTERS
+		final String[] filters = FILE_EXTENSION_FILTERS
 				.toArray(new String[FILE_EXTENSION_FILTERS.size()]);
-		String[] files = LngEditorAdvisor.openFilePathDialog(getSite()
+		final String[] files = LngEditorAdvisor.openFilePathDialog(getSite()
 				.getShell(), SWT.SAVE, filters);
 		if (files.length > 0) {
-			URI uri = URI.createFileURI(files[0]);
+			final URI uri = URI.createFileURI(files[0]);
 			doSaveAs(uri, new URIEditorInput(uri));
 		}
 	}
@@ -2166,11 +2148,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	protected void doSaveAs(URI uri, IEditorInput editorInput) {
+	protected void doSaveAs(final URI uri, final IEditorInput editorInput) {
 		(editingDomain.getResourceSet().getResources().get(0)).setURI(uri);
 		setInputWithNotify(editorInput);
 		setPartName(editorInput.getName());
-		IProgressMonitor progressMonitor = getActionBars()
+		final IProgressMonitor progressMonitor = getActionBars()
 				.getStatusLineManager() != null ? getActionBars()
 				.getStatusLineManager().getProgressMonitor()
 				: new NullProgressMonitor();
@@ -2184,7 +2166,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	@Override
-	public void init(IEditorSite site, IEditorInput editorInput) {
+	public void init(final IEditorSite site, final IEditorInput editorInput) {
 		setSite(site);
 		setInputWithNotify(editorInput);
 		setPartName(editorInput.getName());
@@ -2212,7 +2194,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
 
@@ -2223,7 +2205,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	public void removeSelectionChangedListener(
-			ISelectionChangedListener listener) {
+			final ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);
 	}
 
@@ -2245,10 +2227,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void setSelection(ISelection selection) {
+	public void setSelection(final ISelection selection) {
 		editorSelection = selection;
 
-		for (ISelectionChangedListener listener : selectionChangedListeners) {
+		for (final ISelectionChangedListener listener : selectionChangedListeners) {
 			listener.selectionChanged(new SelectionChangedEvent(this, selection));
 		}
 		setStatusLineManager(selection);
@@ -2259,14 +2241,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void setStatusLineManager(ISelection selection) {
-		IStatusLineManager statusLineManager = currentViewer != null
+	public void setStatusLineManager(final ISelection selection) {
+		final IStatusLineManager statusLineManager = currentViewer != null
 				&& currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager
 				: getActionBars().getStatusLineManager();
 
 		if (statusLineManager != null) {
 			if (selection instanceof IStructuredSelection) {
-				Collection<?> collection = ((IStructuredSelection) selection)
+				final Collection<?> collection = ((IStructuredSelection) selection)
 						.toList();
 				switch (collection.size()) {
 				case 0: {
@@ -2275,7 +2257,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					break;
 				}
 				case 1: {
-					String text = new AdapterFactoryItemDelegator(
+					final String text = new AdapterFactoryItemDelegator(
 							adapterFactory).getText(collection.iterator()
 							.next());
 					statusLineManager.setMessage(getString(
@@ -2301,7 +2283,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	private static String getString(String key) {
+	private static String getString(final String key) {
 		return LngEditorPlugin.INSTANCE.getString(key);
 	}
 
@@ -2311,7 +2293,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	private static String getString(String key, Object s1) {
+	private static String getString(final String key, final Object s1) {
 		return LngEditorPlugin.INSTANCE.getString(key, new Object[] { s1 });
 	}
 
@@ -2322,7 +2304,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void menuAboutToShow(IMenuManager menuManager) {
+	public void menuAboutToShow(final IMenuManager menuManager) {
 		((IMenuListener) getEditorSite().getActionBarContributor())
 				.menuAboutToShow(menuManager);
 	}
