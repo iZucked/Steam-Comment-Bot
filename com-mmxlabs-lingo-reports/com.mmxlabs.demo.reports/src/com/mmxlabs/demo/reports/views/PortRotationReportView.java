@@ -256,6 +256,7 @@ public class PortRotationReportView extends EMFReportView {
 	private void addEntityColumn(final Entity entity) {
 		if (entity == null || entity.getOwnership() == 0) return;
 		final String title = "Profit to " + entity.getName();
+		System.err.println("Create column " + title);
 		entityColumnNames.add(title);
 		addColumn(title, 
 				new IntegerFormatter() {
