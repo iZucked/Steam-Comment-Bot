@@ -358,7 +358,6 @@ public class LNGScenarioTransformer {
 			final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation) {
 		for (final Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// ignore all non-fleet cargoes, as far as optimisation goes.
-
 			if (eCargo.getCargoType().equals(CargoType.FLEET) == false) continue;
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();

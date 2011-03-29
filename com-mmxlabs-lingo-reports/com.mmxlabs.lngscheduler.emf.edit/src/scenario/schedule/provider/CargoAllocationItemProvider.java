@@ -79,6 +79,7 @@ public class CargoAllocationItemProvider
 			addLoadRevenuePropertyDescriptor(object);
 			addShippingRevenuePropertyDescriptor(object);
 			addDischargeRevenuePropertyDescriptor(object);
+			addCargoTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -436,6 +437,28 @@ public class CargoAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cargo Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_cargoType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_cargoType_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__CARGO_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CargoAllocation.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -476,6 +499,7 @@ public class CargoAllocationItemProvider
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_DATE:
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_PRICE_M3:
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

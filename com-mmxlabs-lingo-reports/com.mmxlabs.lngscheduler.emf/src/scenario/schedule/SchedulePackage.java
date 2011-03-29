@@ -391,13 +391,22 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__DISCHARGE_REVENUE = 15;
 
 	/**
+	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__CARGO_TYPE = 16;
+
+	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = 16;
+	int CARGO_ALLOCATION_FEATURE_COUNT = 17;
 
 
 	/**
@@ -1021,6 +1030,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getCargoAllocation_DischargeRevenue();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo Type</em>'.
+	 * @see scenario.schedule.CargoAllocation#getCargoType()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EAttribute getCargoAllocation_CargoType();
+
+	/**
 	 * Returns the meta object for the '{@link scenario.schedule.CargoAllocation#getTotalCost() <em>Get Total Cost</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1517,6 +1537,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_ALLOCATION__DISCHARGE_REVENUE = eINSTANCE.getCargoAllocation_DischargeRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO_ALLOCATION__CARGO_TYPE = eINSTANCE.getCargoAllocation_CargoType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Total Cost</b></em>' operation.

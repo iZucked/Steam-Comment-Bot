@@ -250,6 +250,10 @@ public class OptimisationTransformer {
 						final SlotVisit v = (SlotVisit) event;
 						final IPortSlot portSlot = mem.getOptimiserObject(
 								((SlotVisit) event).getSlot(), IPortSlot.class);
+						if (portSlot == null) {
+							System.err.println("Slot " + v.getSlot().getId() + " is missing from the optimisation - perhaps you changed its cargo type but didn't delete it from the initial solution");
+							continue;
+						}
 						ms.add(psp.getElement(portSlot));
 					}
 				}

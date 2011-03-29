@@ -18,6 +18,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.Scenario;
+import scenario.cargo.Cargo;
+import scenario.cargo.CargoType;
+import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.PurchaseContract;
+import scenario.contract.SalesContract;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.schedule.CargoAllocation;
@@ -41,6 +47,7 @@ import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -62,7 +69,6 @@ public class AnnotatedSolutionExporter {
 	final ScheduleFactory factory = SchedulePackage.eINSTANCE
 			.getScheduleFactory();
 
-	
 	public AnnotatedSolutionExporter() {
 		exporters.add(new IdleEventExporter());
 		exporters.add(new JourneyEventExporter());
@@ -152,9 +158,12 @@ public class AnnotatedSolutionExporter {
 				// set sequence fitness values
 				final EList<ScheduleFitness> eSequenceFitness = eSequence
 						.getFitness();
-				final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
-				for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
-					final ScheduleFitness sf = ScheduleFactory.eINSTANCE.createScheduleFitness();
+				final Map<String, Long> sequenceFitness = sequenceFitnesses
+						.get(resource);
+				for (final Map.Entry<String, Long> e : sequenceFitness
+						.entrySet()) {
+					final ScheduleFitness sf = ScheduleFactory.eINSTANCE
+							.createScheduleFitness();
 					sf.setName(e.getKey());
 					sf.setValue(e.getValue());
 					eSequenceFitness.add(sf);
@@ -199,7 +208,6 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
-		
 		// now patch up laden/ballast journey references in the cargos
 		for (final Sequence eSequence : output.getSequences()) {
 			CargoAllocation allocation = null;
@@ -223,7 +231,7 @@ public class AnnotatedSolutionExporter {
 				}
 			}
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		final Map<String, Long> fitnesses = annotatedSolution
 				.getGeneralAnnotation(
@@ -243,22 +251,80 @@ public class AnnotatedSolutionExporter {
 			outputFitnesses.add(fitness);
 		}
 
-//		final ScheduleFitness eRuntime = factory.createScheduleFitness();
-//		eRuntime.setName("runtime");
-//		eRuntime.setValue(runtime);
-//
-//		outputFitnesses.add(eRuntime);
-//
-//		final ScheduleFitness eIters = factory.createScheduleFitness();
-//		eIters.setName("iterations");
-//		eIters.setValue(iterations.longValue());
-//
-//		outputFitnesses.add(eIters);
+		// final ScheduleFitness eRuntime = factory.createScheduleFitness();
+		// eRuntime.setName("runtime");
+		// eRuntime.setValue(runtime);
+		//
+		// outputFitnesses.add(eRuntime);
+		//
+		// final ScheduleFitness eIters = factory.createScheduleFitness();
+		// eIters.setName("iterations");
+		// eIters.setValue(iterations.longValue());
+		//
+		// outputFitnesses.add(eIters);
+
+		// Process DES cargoes from the input side
+
+		for (final Cargo cargo : inputScenario.getCargoModel().getCargoes()) {
+			if (CargoType.DES.equals(cargo.getCargoType())) {
+				// we can create a dummy cargo allocation
+				// for the P&L calculator to work on
+
+				final CargoAllocation allocation = ScheduleFactory.eINSTANCE
+						.createCargoAllocation();
+
+				allocation.setCargoType(CargoType.DES);
+
+				allocation.setLoadSlot(cargo.getLoadSlot());
+				allocation.setDischargeSlot(cargo.getDischargeSlot());
+				allocation.setDischargeDate(cargo.getDischargeSlot()
+						.getWindowStart());
+				// TODO check this makes sense
+				allocation.setDischargeVolume(cargo.getDischargeSlot()
+						.getMaxQuantity());
+				// find discharge price per mmbtu
+				final SalesContract dischargeContract = (SalesContract) cargo
+						.getDischargeSlot().getSlotOrPortContract();
+				final float salesPricePerMMBTU = dischargeContract.getMarket()
+						.getPriceCurve()
+						.getValueAtDate(allocation.getDischargeDate());
+//						* dischargeContract.getRegasEfficiency();
+
+				final PurchaseContract purchaseContract = (PurchaseContract) cargo
+						.getLoadSlot().getSlotOrPortContract();
+				final float purchasePricePerMMBTU;
+				if (purchaseContract instanceof FixedPricePurchaseContract) {
+					purchasePricePerMMBTU = ((FixedPricePurchaseContract) purchaseContract)
+							.getUnitPrice();
+				} else if (purchaseContract instanceof MarketPricePurchaseContract) {
+					purchasePricePerMMBTU = ((MarketPricePurchaseContract) purchaseContract)
+							.getMarket().getPriceCurve()
+							.getValueAtDate(allocation.getDischargeDate());
+				} else {
+					System.err
+							.println("A DES load slot should not have a "
+									+ purchaseContract.eClass().getName()
+									+ " contract");
+					continue;
+				}
+				
+				// get MMBTU / M3 (this has to be a notional value to make any sense)
+				// TODO this may not be a sensible way of doing a DES cargo
+				
+				final float salesPricePerM3 = salesPricePerMMBTU / cargo.getLoadSlot().getCargoCVvalue();
+				final float purchasePricePerM3 = purchasePricePerMMBTU / cargo.getLoadSlot().getCargoCVvalue();
+				
+				allocation.setDischargePriceM3(Calculator.scaleToInt(salesPricePerM3));
+				allocation.setLoadPriceM3(Calculator.scaleToInt(purchasePricePerM3));
+				
+				output.getCargoAllocations().add(allocation);
+			}
+		}
 
 		final ProfitAndLossCalculator pAndL = new ProfitAndLossCalculator();
-		
+
 		pAndL.addProfitAndLoss(inputScenario, output, entities);
-		
+
 		return output;
 	}
 }

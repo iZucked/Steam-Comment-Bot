@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 
@@ -51,6 +52,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadRevenue <em>Load Revenue</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getShippingRevenue <em>Shipping Revenue</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeRevenue <em>Discharge Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -276,6 +278,26 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * @ordered
 	 */
 	protected BookedRevenue dischargeRevenue;
+
+	/**
+	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CargoType CARGO_TYPE_EDEFAULT = CargoType.FLEET;
+
+	/**
+	 * The cached value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoType()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -807,6 +829,27 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CargoType getCargoType() {
+		return cargoType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargoType(CargoType newCargoType) {
+		CargoType oldCargoType = cargoType;
+		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE, oldCargoType, cargoType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public long getTotalCost() {
 		long totalCost = 0;
 		totalCost += (getLadenIdle() == null) ? 0 : getLadenIdle().getTotalCost();
@@ -901,6 +944,8 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
 				if (resolve) return getDischargeRevenue();
 				return basicGetDischargeRevenue();
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				return getCargoType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -960,6 +1005,9 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
 				setDischargeRevenue((BookedRevenue)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				setCargoType((CargoType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1021,6 +1069,9 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
 				setDischargeRevenue((BookedRevenue)null);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				setCargoType(CARGO_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1065,6 +1116,8 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return shippingRevenue != null;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
 				return dischargeRevenue != null;
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				return cargoType != CARGO_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1111,6 +1164,8 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 		result.append(loadPriceM3);
 		result.append(", dischargePriceM3: ");
 		result.append(dischargePriceM3);
+		result.append(", cargoType: ");
+		result.append(cargoType);
 		result.append(')');
 		return result.toString();
 	}

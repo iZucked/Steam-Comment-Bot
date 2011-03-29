@@ -230,6 +230,8 @@
           eType="#//schedule/BookedRevenue"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeRevenue" lowerBound="1"
           eType="#//schedule/BookedRevenue"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoType" lowerBound="1"
+          eType="#//cargo/CargoType" defaultValueLiteral="Fleet"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleFitness">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"

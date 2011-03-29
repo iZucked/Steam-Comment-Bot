@@ -10,6 +10,7 @@ import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.schedule.events.Idle;
@@ -40,6 +41,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.CargoAllocation#getLoadRevenue <em>Load Revenue</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getShippingRevenue <em>Shipping Revenue</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargeRevenue <em>Discharge Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -463,6 +465,36 @@ public interface CargoAllocation extends EObject {
 	 * @generated
 	 */
 	void setDischargeRevenue(BookedRevenue value);
+
+	/**
+	 * Returns the value of the '<em><b>Cargo Type</b></em>' attribute.
+	 * The default value is <code>"Fleet"</code>.
+	 * The literals are from the enumeration {@link scenario.cargo.CargoType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo Type</em>' attribute.
+	 * @see scenario.cargo.CargoType
+	 * @see #setCargoType(CargoType)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_CargoType()
+	 * @model default="Fleet" required="true"
+	 * @generated
+	 */
+	CargoType getCargoType();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo Type</em>' attribute.
+	 * @see scenario.cargo.CargoType
+	 * @see #getCargoType()
+	 * @generated
+	 */
+	void setCargoType(CargoType value);
 
 	/**
 	 * <!-- begin-user-doc -->

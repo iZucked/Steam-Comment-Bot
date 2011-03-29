@@ -5,6 +5,7 @@
 package com.mmxlabs.lngscheduler.emf.extras.pandl;
 
 import scenario.Scenario;
+import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.contract.Contract;
@@ -108,18 +109,21 @@ public class ProfitAndLossCalculator {
 						createLineItem("Purchase from shipping",
 								shippingEntity, -salesRevenueToShippingEntity));
 
-				shippingRevenue.getLineItems().add(
-						createLineItem("Value of discharged cargo",
-								dischargeEntity, salesRevenueToShippingEntity
-										+ regasLossesToShippingEntity));
-
-				shippingRevenue.getLineItems().add(
-						createLineItem("Regas losses", dischargeEntity,
-								-regasLossesToShippingEntity));
+					shippingRevenue.getLineItems().add(
+							createLineItem("Value of discharged cargo",
+									dischargeEntity,
+									salesRevenueToShippingEntity
+											+ regasLossesToShippingEntity));
+					
+				if (CargoType.FLEET.equals(allocation.getCargoType())) {
+					shippingRevenue.getLineItems().add(
+							createLineItem("Regas losses", dischargeEntity,
+									-regasLossesToShippingEntity));
+				}
 			}
 
 			// now add transport costs to shipping revenue
-			{
+			if (CargoType.FLEET.equals(allocation.getCargoType())) {
 				// TODO here I am taking laden & ballast costs - should it be
 				// laden costs only, and ballast costs are booked at a later
 				// date (not associated with a cargo?)
@@ -155,15 +159,17 @@ public class ProfitAndLossCalculator {
 
 			// now do load-side stuff
 			{
-				//TODO convert to floats in VisitEventExporter rather than un-scaling here
+				// TODO convert to floats in VisitEventExporter rather than
+				// un-scaling here
 
-				final int loadValue = (int)( (allocation.getLoadPriceM3() * allocation
+				final int loadValue = (int) ((allocation.getLoadPriceM3() * allocation
 						.getLoadVolume()) / Calculator.ScaleFactor);
 				loadRevenue.getLineItems().add(
 						createLineItem("Sales to shipping", shippingEntity,
 								loadValue));
 				shippingRevenue.getLineItems().add(
-						createLineItem("Purchase of cargo", loadEntity, -loadValue));
+						createLineItem("Purchase of cargo", loadEntity,
+								-loadValue));
 			}
 
 			// don't forget to set the dates at which revenue is booked,
@@ -180,7 +186,7 @@ public class ProfitAndLossCalculator {
 			allocation.setLoadRevenue(loadRevenue);
 			allocation.setShippingRevenue(shippingRevenue);
 			allocation.setDischargeRevenue(dischargeRevenue);
-			
+
 			// put revenue in book
 			schedule.getRevenue().add(loadRevenue);
 			schedule.getRevenue().add(shippingRevenue);

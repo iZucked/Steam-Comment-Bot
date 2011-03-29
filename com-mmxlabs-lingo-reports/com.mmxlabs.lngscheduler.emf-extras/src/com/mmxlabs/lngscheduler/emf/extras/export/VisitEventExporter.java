@@ -9,6 +9,7 @@ package com.mmxlabs.lngscheduler.emf.extras.export;
 import java.util.HashMap;
 import java.util.Map;
 
+import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.port.Port;
@@ -80,6 +81,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				eAllocation = scheduleFactory.createCargoAllocation();
 				allocations.put(allocation.getLoadSlot(), eAllocation);
 				allocations.put(allocation.getDischargeSlot(), eAllocation);
+				
+				eAllocation.setCargoType(CargoType.FLEET);
 				
 				eAllocation.setLoadSlot(entities.getModelObject(allocation.getLoadSlot(), LoadSlot.class));
 				eAllocation.setDischargeSlot(entities.getModelObject(allocation.getDischargeSlot(), Slot.class));
