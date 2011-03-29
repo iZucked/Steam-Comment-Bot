@@ -5,7 +5,9 @@
 package com.mmxlabs.demo.reports.views;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -45,9 +47,9 @@ public class PortRotationReportView extends EMFReportView {
 		final EventsPackage ep = EventsPackage.eINSTANCE;
 		final CargoPackage cp = CargoPackage.eINSTANCE;
 		final PortPackage pp = PortPackage.eINSTANCE;
-		
+
 		addColumn("Schedule", containingScheduleFormatter);
-		
+
 		addColumn("Vessel", objectFormatter,
 				ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(),
 				sp.getSequence_Vessel(),
@@ -59,8 +61,7 @@ public class PortRotationReportView extends EMFReportView {
 				return se.eClass().getName();
 			}
 		});
-		
-		
+
 		addColumn("ID", objectFormatter, ep.getSlotVisit_Slot(),
 				cp.getSlot_Id());
 		addColumn("Start Date", calendarFormatter,
@@ -79,7 +80,7 @@ public class PortRotationReportView extends EMFReportView {
 			public Comparable getComparable(Object object) {
 				return ((ScheduledEvent) object).getEventDuration();
 			}
-			
+
 		});
 		addColumn("Speed", objectFormatter, ep.getJourney_Speed());
 		addColumn("From Port", objectFormatter, ep.getJourney_FromPort(),
@@ -113,7 +114,7 @@ public class PortRotationReportView extends EMFReportView {
 					final CargoAllocation ca = sv.getCargoAllocation();
 
 					if (ca.getDischargeSlot().equals(sv.getSlot())) {
-						return (int)ca.getDischargeVolume();
+						return (int) ca.getDischargeVolume();
 					}
 				}
 				return null;
@@ -163,7 +164,7 @@ public class PortRotationReportView extends EMFReportView {
 			public Integer getIntValue(final Object object) {
 				if (object instanceof FuelMixture) {
 					final FuelMixture mix = (FuelMixture) object;
-					return (int)mix.getTotalFuelCost();
+					return (int) mix.getTotalFuelCost();
 				} else {
 					return null;
 				}
@@ -172,8 +173,7 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("Charter Cost", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
-				return (int)
-						((ScheduledEvent) object).getHireCost();
+				return (int) ((ScheduledEvent) object).getHireCost();
 			}
 		});
 
@@ -192,14 +192,11 @@ public class PortRotationReportView extends EMFReportView {
 				return (int) total;
 			}
 		});
-		
-		
+
 	}
 
 	private List<String> entityColumnNames = new ArrayList<String>();
-	
-	
-	
+
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
@@ -207,6 +204,7 @@ public class PortRotationReportView extends EMFReportView {
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput,
 					Object newInput) {
+				final Set<Scenario> scenarios = new HashSet<Scenario>();
 				if (newInput instanceof Iterable) {
 					for (final Object element : ((Iterable) newInput)) {
 						if (element instanceof Schedule) {
@@ -218,14 +216,17 @@ public class PortRotationReportView extends EMFReportView {
 
 							EObject o = (EObject) element;
 							while (o != null && !(o instanceof Scenario)) {
-								 o = o.eContainer();
+								o = o.eContainer();
 							}
-							if (o != null) {
-								addEntityColumns((Scenario)o);
-							}
+
+							if (o != null)
+								scenarios.add((Scenario) o);
 						}
 					}
-					
+
+				}
+				for (final Scenario scenario : scenarios) {
+					addEntityColumns(scenario);
 				}
 			}
 
@@ -240,7 +241,8 @@ public class PortRotationReportView extends EMFReportView {
 				if (object instanceof Iterable) {
 					for (final Object o : ((Iterable) object)) {
 						if (o instanceof Schedule) {
-							for (final Sequence seq : ((Schedule) o).getSequences()) {
+							for (final Sequence seq : ((Schedule) o)
+									.getSequences()) {
 								allEvents.addAll(seq.getEvents());
 							}
 						}
@@ -259,33 +261,40 @@ public class PortRotationReportView extends EMFReportView {
 	}
 
 	private void addEntityColumn(final Entity entity) {
-		if (entity == null || entity.getOwnership() == 0) return;
+		if (entity == null || entity.getOwnership() == 0)
+			return;
 		final String title = "Profit to " + entity.getName();
 		entityColumnNames.add(title);
-		addColumn(title, 
-				new IntegerFormatter() {
-					@Override
-					public Integer getIntValue(final Object object) {
-						if (object instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) object;
-							if (slotVisit.getSlot() instanceof LoadSlot) {
-								// display P&L
-								int value = 0;
-								final CargoAllocation allocation = slotVisit.getCargoAllocation();
-								if (entity.equals(allocation.getLoadRevenue().getEntity())) {
-									value += allocation.getLoadRevenue().getTaxedValue();
-								}
-								if (entity.equals(allocation.getShippingRevenue().getEntity())) {
-									value += allocation.getShippingRevenue().getTaxedValue();
-								}
-								if (entity.equals(allocation.getDischargeRevenue().getEntity())) {
-									value += allocation.getDischargeRevenue().getTaxedValue();
-								}
-								 return value;
-							}
+		addColumn(title, new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					if (slotVisit.getSlot() instanceof LoadSlot) {
+						// display P&L
+						int value = 0;
+						final CargoAllocation allocation = slotVisit
+								.getCargoAllocation();
+						if (entity.equals(allocation.getLoadRevenue()
+								.getEntity())) {
+							value += allocation.getLoadRevenue()
+									.getTaxedValue();
 						}
-						return null;
+						if (entity.equals(allocation.getShippingRevenue()
+								.getEntity())) {
+							value += allocation.getShippingRevenue()
+									.getTaxedValue();
+						}
+						if (entity.equals(allocation.getDischargeRevenue()
+								.getEntity())) {
+							value += allocation.getDischargeRevenue()
+									.getTaxedValue();
+						}
+						return value;
 					}
-				});
+				}
+				return null;
+			}
+		});
 	}
 }
