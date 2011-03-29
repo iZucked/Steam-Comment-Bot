@@ -76,8 +76,11 @@ public class CargoReportView extends EMFReportView {
 			@Override
 			public Integer getIntValue(Object object) {
 				final CargoAllocation a = (CargoAllocation) object;
+				if (a == null || a.getLadenIdle() == null || a.getLadenLeg() == null)
+					return null;
 				return (int) (a.getLadenIdle().getTotalCost() + a.getLadenLeg()
 						.getTotalCost());
+
 			}
 		});
 
@@ -85,6 +88,8 @@ public class CargoReportView extends EMFReportView {
 			@Override
 			public Integer getIntValue(Object object) {
 				final CargoAllocation a = (CargoAllocation) object;
+				if (a == null || a.getBallastIdle() == null || a.getBallastLeg() == null)
+					return null;
 				return (int) (a.getBallastIdle().getTotalCost() + a
 						.getBallastLeg().getTotalCost());
 			}
