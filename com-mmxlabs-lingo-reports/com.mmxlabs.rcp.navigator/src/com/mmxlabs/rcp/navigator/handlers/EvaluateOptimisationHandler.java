@@ -100,8 +100,11 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 						}
 					};
 
+					// Trigger UI for progress monitor
 					job.setUser(true);
+					// Block other changes to this resource
 					job.setRule(resource);
+					// Schedule job for launching
 					job.schedule();
 
 				}
