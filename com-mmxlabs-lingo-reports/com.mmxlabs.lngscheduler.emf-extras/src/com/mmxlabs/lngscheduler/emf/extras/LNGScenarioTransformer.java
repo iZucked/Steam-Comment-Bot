@@ -18,7 +18,6 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -80,7 +79,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing
- * utility methods to convert it into an optimization job. Typical usage is to
+ * utility methods to coSnvert it into an optimization job. Typical usage is to
  * construct an LNGScenarioTransformer with a given Scenario, and then call the
  * {@link createOptimisationData} method
  * 
