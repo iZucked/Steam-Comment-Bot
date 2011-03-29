@@ -72,11 +72,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		final List<Schedule> schedules = ScheduleAdapter
 				.getSchedules(selection);
-		if (!schedules.isEmpty()) {
-			setSelectedSchedule(schedules.get(0));
-		} else {
-			setSelectedSchedule(null);
-		}
+		setSelectedSchedules(schedules);
 	}
 
 	private class TreeData {
@@ -133,11 +129,27 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	 * 
 	 * @param schedule
 	 */
-	private void setSelectedSchedule(final Schedule schedule) {
-		System.err.println("Set schedule " + schedule);
+	private void setSelectedSchedules(final List<Schedule> schedules) {
 		final TreeData dummy = new TreeData("");
-		dummy.addChild(createTreeData(schedule));
+		if (schedules.size() == 1) {
+			final Schedule schedule = schedules.get(0);
+			dummy.addChild(createCostsTreeData(schedule));
+			dummy.addChild(createProfitTreeData(schedule));
+		} else {
+			for (final Schedule schedule : schedules) {
+				final String scheduleName = schedule.getName();
+				final TreeData group = new TreeData(scheduleName);
+				group.addChild(createCostsTreeData(schedule));
+				group.addChild(createProfitTreeData(schedule));
+				dummy.addChild(group);
+			}
+		}
 		viewer.setInput(dummy);
+	}
+
+	private TreeData createProfitTreeData(Schedule schedule) {
+		final TreeData top = new TreeData("Total Profit");
+		return top;
 	}
 
 	/**
@@ -146,8 +158,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	 * @param schedule
 	 * @return
 	 */
-	private TreeData createTreeData(final Schedule schedule) {
-		final TreeData top = new TreeData("Total");
+	private TreeData createCostsTreeData(final Schedule schedule) {
+		final TreeData top = new TreeData("Total Costs");
 
 		if (schedule == null)
 			return top;
@@ -398,7 +410,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		final ISelection selection = getSite().getWorkbenchWindow()
 				.getSelectionService()
 				.getSelection("com.mmxlabs.rcp.navigator");
-		
+
 		selectionChanged(null, selection);
 	}
 
