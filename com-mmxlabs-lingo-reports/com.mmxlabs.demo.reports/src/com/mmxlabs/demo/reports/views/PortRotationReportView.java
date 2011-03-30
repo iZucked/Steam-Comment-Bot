@@ -100,7 +100,7 @@ public class PortRotationReportView extends EMFReportView {
 				if (object instanceof SlotVisit) {
 					final SlotVisit sv = (SlotVisit) object;
 					final CargoAllocation ca = sv.getCargoAllocation();
-
+					if (ca == null) return null;
 					if (ca.getLoadSlot().equals(sv.getSlot())) {
 						return (int) ca.getLoadVolume();
 					}
@@ -115,7 +115,7 @@ public class PortRotationReportView extends EMFReportView {
 				if (object instanceof SlotVisit) {
 					final SlotVisit sv = (SlotVisit) object;
 					final CargoAllocation ca = sv.getCargoAllocation();
-
+					if (ca == null) return null;
 					if (ca.getDischargeSlot().equals(sv.getSlot())) {
 						return (int) ca.getDischargeVolume();
 					}
