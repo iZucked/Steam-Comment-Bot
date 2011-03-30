@@ -37,6 +37,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -86,10 +87,11 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
@@ -106,9 +108,6 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-import org.swtchart.Chart;
-import org.swtchart.ISeries;
-import org.swtchart.ISeries.SeriesType;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
@@ -118,6 +117,10 @@ import scenario.cargo.Slot;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.Contract;
 import scenario.contract.ContractPackage;
+import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.NetbackPurchaseContract;
+import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
@@ -142,6 +145,7 @@ import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.EnumAttributeManipulator;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
+import scenario.presentation.cargoeditor.NonEditableColumn;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.celleditors.PortAndTimeDialog;
@@ -150,13 +154,13 @@ import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
-import scenario.presentation.cargoeditor.widgets.DateAndTime;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
@@ -190,7 +194,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			Collections.sort(result, new Comparator<Pair<String, ?>>() {
 
 				@Override
-				public int compare(final Pair<String, ?> o1, final Pair<String, ?> o2) {
+				public int compare(final Pair<String, ?> o1,
+						final Pair<String, ?> o2) {
 					return o1.getFirst().compareTo(o2.getFirst());
 				}
 			});
@@ -201,8 +206,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP scheduleProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
-				final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(
+				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getScheduleModel().getSchedules(),
@@ -226,8 +231,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP vesselClassProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
-				final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(
+				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getFleetModel().getVesselClasses(),
@@ -238,8 +243,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP entityProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
-				final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(
+				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getContractModel().getEntities(),
@@ -250,8 +255,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP portProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
-				final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(
+				final EObject target, final EStructuralFeature field) {
 			if (target == null)
 				return Collections.emptyList();
 			final Scenario scenario = getEnclosingScenario(target);
@@ -264,8 +269,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP contractProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
-				final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(
+				final EObject target, final EStructuralFeature field) {
 			final String nullValueName;
 			final List<Pair<String, EObject>> result;
 			final Scenario scenario = getEnclosingScenario(target);
@@ -316,8 +321,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP marketProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAlloweValues(final EObject target,
-				final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAlloweValues(
+				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getMarketModel().getMarkets(),
@@ -586,9 +591,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				case Resource.RESOURCE__IS_LOADED:
 				case Resource.RESOURCE__ERRORS:
 				case Resource.RESOURCE__WARNINGS: {
-					final Resource resource = (Resource) notification.getNotifier();
-					final Diagnostic diagnostic = analyzeResourceProblems(resource,
-							null);
+					final Resource resource = (Resource) notification
+							.getNotifier();
+					final Diagnostic diagnostic = analyzeResourceProblems(
+							resource, null);
 					if (diagnostic.getSeverity() != Diagnostic.OK) {
 						resourceToDiagnosticMap.put(resource, diagnostic);
 					} else {
@@ -704,10 +710,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	protected void updateProblemIndication() {
 		if (updateProblemIndication) {
-			final BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK,
-					"com.mmxlabs.lngscheduler.emf.editor", 0, null,
-					new Object[] { editingDomain.getResourceSet() });
-			for (final Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
+			final BasicDiagnostic diagnostic = new BasicDiagnostic(
+					Diagnostic.OK, "com.mmxlabs.lngscheduler.emf.editor", 0,
+					null, new Object[] { editingDomain.getResourceSet() });
+			for (final Diagnostic childDiagnostic : resourceToDiagnosticMap
+					.values()) {
 				if (childDiagnostic.getSeverity() != Diagnostic.OK) {
 					diagnostic.add(childDiagnostic);
 				}
@@ -1038,7 +1045,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new UnwrappingSelectionProvider(viewer));
 
 		final int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-		final Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance() };
+		final Transfer[] transfers = new Transfer[] { LocalTransfer
+				.getInstance() };
 		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(
 				viewer));
 		viewer.addDropSupport(dndOperations, transfers,
@@ -1067,7 +1075,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					false);
 		}
 
-		final Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
+		final Diagnostic diagnostic = analyzeResourceProblems(resource,
+				exception);
 		if (diagnostic.getSeverity() != Diagnostic.OK) {
 			resourceToDiagnosticMap.put(resource,
 					analyzeResourceProblems(resource, exception));
@@ -1126,17 +1135,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			createFleetEditor(vesselClassProvider, portProvider);
 
+			createEventsEditor();
+
 			createPortEditor(contractProvider, marketProvider);
 
 			createMarketEditor();
 
-			createEventsEditor();
+			createContractEditor();
 
 			// Create a page for the selection tree view.
 			//
 			{
-				final ViewerPane viewerPane = new ViewerPane(getSite().getPage(),
-						ScenarioEditor.this) {
+				final ViewerPane viewerPane = new ViewerPane(getSite()
+						.getPage(), ScenarioEditor.this) {
 					@Override
 					public Viewer createViewer(final Composite composite) {
 						final Tree tree = new Tree(composite, SWT.MULTI);
@@ -1341,6 +1352,130 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		});
 	}
 
+	private void createContractEditor() {
+		final Object input = editingDomain.getResourceSet().getResources()
+				.get(0).getContents().get(0);
+
+		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
+		{
+			final EObjectEditorViewerPane entitiesPane = new EObjectEditorViewerPane(
+					getSite().getPage(), ScenarioEditor.this);
+
+			entitiesPane.createControl(sash);
+			entitiesPane.init(CollectionsUtil.makeArrayList(
+					ScenarioPackage.eINSTANCE.getScenario_ContractModel(),
+					ContractPackage.eINSTANCE.getContractModel_Entities()),
+					getAdapterFactory());
+
+			entitiesPane.addTypicalColumn(
+					"Name",
+					new BasicAttributeManipulator(ScenarioPackage.eINSTANCE
+							.getNamedObject_Name(), getEditingDomain()));
+
+			entitiesPane.addTypicalColumn(
+					"Tax Rate",
+					new NumericAttributeManipulator(ContractPackage.eINSTANCE
+							.getEntity_TaxRate(), getEditingDomain()));
+
+			entitiesPane.addTypicalColumn(
+					"Ownership",
+					new NumericAttributeManipulator(ContractPackage.eINSTANCE
+							.getEntity_Ownership(), getEditingDomain()));
+
+			entitiesPane.setTitle("Entities", getTitleImage());
+			entitiesPane.getViewer().setInput(input);
+		}
+		{
+			final EObjectEditorViewerPane salesPane = new EObjectEditorViewerPane(
+					getSite().getPage(), ScenarioEditor.this);
+
+			salesPane.createControl(sash);
+
+			salesPane.init(
+					CollectionsUtil.makeArrayList(ScenarioPackage.eINSTANCE
+							.getScenario_ContractModel(),
+							ContractPackage.eINSTANCE
+									.getContractModel_SalesContracts()),
+					getAdapterFactory());
+
+			salesPane.addTypicalColumn("Name", new BasicAttributeManipulator(
+					ScenarioPackage.eINSTANCE.getNamedObject_Name(),
+					getEditingDomain()));
+
+			salesPane.addTypicalColumn(
+					"Entity",
+					new SingleReferenceManipulator(ContractPackage.eINSTANCE
+							.getContract_Entity(), entityProvider,
+							getEditingDomain()));
+
+			salesPane.addTypicalColumn(
+					"Market",
+					new SingleReferenceManipulator(ContractPackage.eINSTANCE
+							.getSalesContract_Market(), marketProvider,
+							getEditingDomain()));
+
+			salesPane.addTypicalColumn(
+					"Regas Efficiency",
+					new NumericAttributeManipulator(ContractPackage.eINSTANCE
+							.getSalesContract_RegasEfficiency(),
+							getEditingDomain()));
+			
+			salesPane.addTypicalColumn(
+					"Sales Mark-up",
+					new NumericAttributeManipulator(ContractPackage.eINSTANCE
+							.getSalesContract_Markup(),
+							getEditingDomain()));
+			
+			salesPane.setTitle("Sales Contracts", getTitleImage());
+			salesPane.getViewer().setInput(input);
+		}
+		{
+			final EObjectEditorViewerPane purchasePane = new EObjectEditorViewerPane(
+					getSite().getPage(), ScenarioEditor.this);
+
+			purchasePane.createControl(sash);
+
+			purchasePane.init(CollectionsUtil.makeArrayList(
+					ScenarioPackage.eINSTANCE.getScenario_ContractModel(),
+					ContractPackage.eINSTANCE
+							.getContractModel_PurchaseContracts()),
+					getAdapterFactory());
+
+			purchasePane.addTypicalColumn("Type", new NonEditableColumn() {
+				@Override
+				public String render(Object object) {
+					if (object instanceof MarketPricePurchaseContract) {
+						return "Market Price";
+					} else if (object instanceof FixedPricePurchaseContract) {
+						return "Fixed Price";
+					} else if (object instanceof NetbackPurchaseContract) {
+						return "Netback";
+					} else if (object instanceof ProfitSharingPurchaseContract) {
+						return "Profit-sharing";
+					} else {
+						return object.getClass().getSimpleName();
+					}
+				}
+			}
+			);
+			
+			purchasePane.addTypicalColumn("Name", new BasicAttributeManipulator(
+					ScenarioPackage.eINSTANCE.getNamedObject_Name(),
+					getEditingDomain()));
+
+			purchasePane.addTypicalColumn(
+					"Entity",
+					new SingleReferenceManipulator(ContractPackage.eINSTANCE
+							.getContract_Entity(), entityProvider,
+							getEditingDomain()));
+			
+			purchasePane.setTitle("Purchase Contracts", getTitleImage());
+			purchasePane.getViewer().setInput(input);
+		}
+
+		setPageText(addPage(sash), "Contracts / Entities");
+	}
+
 	private void createEventsEditor() {
 		final EObjectEditorViewerPane eventsPane = new EObjectEditorViewerPane(
 				getSite().getPage(), ScenarioEditor.this);
@@ -1405,61 +1540,113 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	private void createMarketEditor() {
 		// price curves only for now
 		// split view, chart at the bottom editor at the top
-		
-		final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
-		
-		final Label temp = new Label(sash, SWT.NONE);
-		temp.setText("Top half");
+
+		final SashForm sash = new SashForm(getContainer(), SWT.SMOOTH
+				| SWT.HORIZONTAL);
+
+		final EObjectEditorViewerPane markets = new EObjectEditorViewerPane(
+				getSite().getPage(), this);
+
+		markets.createControl(sash);
+		markets.setTitle("Markets", getTitleImage());
+
+		final List<EReference> path2 = new LinkedList<EReference>();
+
+		path2.add(ScenarioPackage.eINSTANCE.getScenario_MarketModel());
+		path2.add(MarketPackage.eINSTANCE.getMarketModel_Markets());
+
+		markets.init(path2, getAdapterFactory());
+
+		final BasicAttributeManipulator name = new BasicAttributeManipulator(
+				ScenarioPackage.eINSTANCE.getNamedObject_Name(),
+				getEditingDomain());
+
+		markets.addColumn("Name", name, name);
+
+		final NumericAttributeManipulator defaultValue = new NumericAttributeManipulator(
+				MarketPackage.eINSTANCE.getStepwisePriceCurve_DefaultValue(),
+				getEditingDomain());
+
+		markets.addColumn("Default Value", defaultValue, defaultValue,
+				MarketPackage.eINSTANCE.getMarket_PriceCurve());
+
+		markets.getViewer().setInput(
+				editingDomain.getResourceSet().getResources().get(0)
+						.getContents().get(0));
+
+		// TODO add csv import button? make editor dialog?
 
 		final ChartViewer chart = new ChartViewer(sash);
-		
-		final MarketModel mm = ((Scenario)(editingDomain.getResourceSet().getResources().get(0).getContents().get(0))).getMarketModel();
-		
-		chart.setContentProvider(
-				new IChartContentProvider() {
+
+		// TODO this is a hack
+		final MarketModel mm = ((Scenario) (editingDomain.getResourceSet()
+				.getResources().get(0).getContents().get(0))).getMarketModel();
+
+		mm.eAdapters().add(new EContentAdapter() {
+			{
+				final EContentAdapter eca = this;
+				getContainer().addDisposeListener(new DisposeListener() {
 					@Override
-					public boolean isDateSeries(int i) {
-						return true;
-					}
-					
-					@Override
-					public double[] getYSeries(int i) {
-						StepwisePriceCurve curve = mm.getMarkets().get(i).getPriceCurve();
-						double[] answer = new double[curve.getPrices().size() * 2 - 1];
-						for (int j = 0; j<answer.length ;j++) {
-							answer[j] = curve.getPrices().get(j/2).getPriceFromDate();
-						}
-						return answer;
-					}
-					
-					@Override
-					public double[] getXSeries(int i) {
-						return null;
-					}
-					
-					@Override
-					public String getSeriesName(int i) {
-						return mm.getMarkets().get(i).getName();
-					}
-					
-					@Override
-					public int getSeriesCount() {
-						return mm.getMarkets().size();
-					}
-					
-					@Override
-					public Date[] getDateXSeries(int i) {
-						StepwisePriceCurve curve = mm.getMarkets().get(i).getPriceCurve();
-						Date[] answer = new Date[curve.getPrices().size() * 2];
-						Date before = curve.getPrices().get(0).getDate();
-						for (int j = 0; j<curve.getPrices().size() ;j++) {
-							answer[2*j] = before;
-							answer[2*j+1] = (before = curve.getPrices().get(j).getDate());
-						}
-						return answer;
+					public void widgetDisposed(DisposeEvent e) {
+						mm.eAdapters().remove(eca);
 					}
 				});
-		
+			}
+
+			@Override
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				if (notification.isTouch() == false)
+					chart.refresh();
+			}
+		});
+
+		chart.setContentProvider(new IChartContentProvider() {
+			@Override
+			public boolean isDateSeries(int i) {
+				return true;
+			}
+
+			@Override
+			public double[] getYSeries(int i) {
+				StepwisePriceCurve curve = mm.getMarkets().get(i)
+						.getPriceCurve();
+				double[] answer = new double[curve.getPrices().size()];
+				for (int j = 0; j < answer.length; j++) {
+					answer[j] = curve.getPrices().get(j).getPriceFromDate();
+				}
+				return answer;
+			}
+
+			@Override
+			public double[] getXSeries(int i) {
+				return null;
+			}
+
+			@Override
+			public String getSeriesName(int i) {
+				return mm.getMarkets().get(i).getName();
+			}
+
+			@Override
+			public int getSeriesCount() {
+				// return 1;
+				return mm.getMarkets().size();
+			}
+
+			@Override
+			public Date[] getDateXSeries(int i) {
+				StepwisePriceCurve curve = mm.getMarkets().get(i)
+						.getPriceCurve();
+				Date[] answer = new Date[curve.getPrices().size()];
+				for (int j = 0; j < curve.getPrices().size(); j++) {
+					answer[j] = curve.getPrices().get(j).getDate();
+				}
+
+				return answer;
+			}
+		});
+
 		setPageText(addPage(sash), "Price Curves");
 	}
 
@@ -1490,7 +1677,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				public void dispose() {
 
 					getViewer().removeSelectionChangedListener(swapAction);
-				
+
 					super.dispose();
 				}
 
@@ -1686,8 +1873,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 
 					@Override
-					protected Object openDialogBox(final Control cellEditorWindow,
-							final Object object) {
+					protected Object openDialogBox(
+							final Control cellEditorWindow, final Object object) {
 						final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
 								cellEditorWindow.getShell(),
 								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
@@ -1708,8 +1895,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						getEditingDomain()) {
 
 					@Override
-					protected Object openDialogBox(final Control cellEditorWindow,
-							final Object object) {
+					protected Object openDialogBox(
+							final Control cellEditorWindow, final Object object) {
 						final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
 								cellEditorWindow.getShell(),
 								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
@@ -1792,8 +1979,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 
 					@Override
-					protected Object openDialogBox(final Control cellEditorWindow,
-							final Object object) {
+					protected Object openDialogBox(
+							final Control cellEditorWindow, final Object object) {
 						final PortAndTimeDialog patDialog = new PortAndTimeDialog(
 								cellEditorWindow.getShell(),
 								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
@@ -1968,7 +2155,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					.addSelectionChangedListener(new ISelectionChangedListener() {
 						// This ensures that we handle selections correctly.
 						//
-						public void selectionChanged(final SelectionChangedEvent event) {
+						public void selectionChanged(
+								final SelectionChangedEvent event) {
 							handleContentOutlineSelection(event.getSelection());
 						}
 					});
@@ -2334,7 +2522,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
+	public void addSelectionChangedListener(
+			final ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
 

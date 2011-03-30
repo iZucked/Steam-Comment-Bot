@@ -337,4 +337,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	public TableViewer getViewer() {
 		return viewer;
 	}
+
+	public <T extends ICellManipulator&ICellRenderer>void addTypicalColumn(final String columnName,
+			 final T manipulatorAndRenderer, final Object...path) {
+		this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
+	}
 }
