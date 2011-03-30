@@ -289,6 +289,8 @@ public abstract class EMFReportView extends ViewPart implements
 		final ISelection selection = getSite().getWorkbenchWindow()
 				.getSelectionService()
 				.getSelection("com.mmxlabs.rcp.navigator");
+		
+		// Trigger initial view selection
 		selectionChanged(null, selection);
 	}
 
