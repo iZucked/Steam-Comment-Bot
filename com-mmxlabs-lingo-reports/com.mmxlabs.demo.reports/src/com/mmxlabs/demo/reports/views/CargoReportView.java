@@ -44,8 +44,9 @@ public class CargoReportView extends EMFReportView {
 
 		final PortPackage p = PortPackage.eINSTANCE;
 		addColumn("Schedule", containingScheduleFormatter);
-		addColumn("ID", objectFormatter, s.getCargoAllocation_LoadSlot(),
-				c.getSlot_Id()); // TODO cargo id not slot id.
+		addColumn("ID", objectFormatter, 
+				s.getCargoAllocation__GetName()		
+		); // TODO cargo id not slot id.
 
 		addColumn("Type", objectFormatter, s.getCargoAllocation_CargoType());
 		
