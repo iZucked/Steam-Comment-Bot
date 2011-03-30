@@ -2312,6 +2312,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								editingDomain, scheduleProvider);
 					}
 				});
+		
+		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_LoadSlot(), "Load");
+		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_DischargeSlot(), "Discharge");
+		page.setNameForFeature(CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
 		return page;
 	}
 
