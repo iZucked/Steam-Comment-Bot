@@ -197,6 +197,11 @@
           <details key="body" value="return getDischargeVolume() + getFuelVolume();"/>
         </eAnnotations>
       </eOperations>
+      <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return ((scenario.cargo.Cargo) (getLoadSlot().eContainer())).getId();"/>
+        </eAnnotations>
+      </eOperations>
       <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" lowerBound="1"
           eType="#//cargo/LoadSlot"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" lowerBound="1"
@@ -296,7 +301,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="CargoRevenue" eSuperTypes="#//schedule/BookedRevenue">
       <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="return getCargo().getLoadSlot().getId() + &quot; - &quot; + getCargo().getDischargeSlot().getId();"/>
+          <details key="body" value="return getCargo().getName();"/>
         </eAnnotations>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" lowerBound="1"
