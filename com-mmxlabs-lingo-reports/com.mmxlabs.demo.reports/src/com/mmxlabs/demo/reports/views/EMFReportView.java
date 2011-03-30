@@ -332,7 +332,9 @@ public abstract class EMFReportView extends ViewPart implements
 
 	@Override
 	public void setFocus() {
-		viewer.getTable().setFocus();
+		if (!viewer.getTable().isDisposed()) {
+			viewer.getTable().setFocus();
+		}
 	}
 
 	public void setInput(final Object input) {
