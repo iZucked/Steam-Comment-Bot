@@ -899,6 +899,15 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getName() {
+		return ((scenario.cargo.Cargo) (getLoadSlot().eContainer())).getId();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -1138,6 +1147,8 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return getLocalDischargeDate();
 			case SchedulePackage.CARGO_ALLOCATION___GET_LOAD_VOLUME:
 				return getLoadVolume();
+			case SchedulePackage.CARGO_ALLOCATION___GET_NAME:
+				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

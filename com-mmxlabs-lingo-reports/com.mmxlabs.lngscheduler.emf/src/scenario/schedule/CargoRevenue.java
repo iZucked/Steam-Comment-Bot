@@ -54,7 +54,7 @@ public interface CargoRevenue extends BookedRevenue {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getCargo().getLoadSlot().getId() + \" - \" + getCargo().getDischargeSlot().getId();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getCargo().getName();'"
 	 * @generated
 	 */
 	String getName();

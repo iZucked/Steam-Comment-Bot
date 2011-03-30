@@ -108,7 +108,7 @@ public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue 
 	 * @generated
 	 */
 	public String getName() {
-		return getCargo().getLoadSlot().getId() + " - " + getCargo().getDischargeSlot().getId();
+		return getCargo().getName();
 	}
 
 	/**

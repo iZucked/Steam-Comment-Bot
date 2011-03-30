@@ -532,4 +532,13 @@ public interface CargoAllocation extends EObject {
 	 */
 	long getLoadVolume();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return ((scenario.cargo.Cargo) (getLoadSlot().eContainer())).getId();'"
+	 * @generated
+	 */
+	String getName();
+
 } // CargoAllocation
