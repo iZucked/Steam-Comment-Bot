@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -90,6 +91,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
@@ -106,6 +108,9 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
+import org.swtchart.Chart;
+import org.swtchart.ISeries;
+import org.swtchart.ISeries.SeriesType;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
@@ -120,12 +125,15 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.VesselStateAttributes;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
+import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
+import scenario.market.StepwisePriceCurve;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
+import scenario.presentation.ChartViewer.IChartContentProvider;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
@@ -217,7 +225,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			return result;
 		}
 	};
-	
+
 	final ScenarioRVP vesselClassProvider = new ScenarioRVP() {
 		@Override
 		public List<Pair<String, EObject>> getAlloweValues(EObject target,
@@ -1376,15 +1384,15 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		final MultipleReferenceManipulator vessels = new MultipleReferenceManipulator(
 				fp.getCharterOut_Vessels(), editingDomain, vesselProvider,
 				fp.getVessel_Name());
-		
+
 		eventsPane.addColumn("Vessels", vessels, vessels);
-		
+
 		final MultipleReferenceManipulator classes = new MultipleReferenceManipulator(
-				fp.getCharterOut_VesselClasses(), editingDomain, vesselClassProvider,
-				fp.getVesselClass_Name());
-		
+				fp.getCharterOut_VesselClasses(), editingDomain,
+				vesselClassProvider, fp.getVesselClass_Name());
+
 		eventsPane.addColumn("Classes", classes, classes);
-		
+
 		eventsPane.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
@@ -1393,11 +1401,68 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		createContextMenuFor(eventsPane.getViewer());
 
 		int pageIndex = addPage(eventsPane.getControl());
-		setPageText(pageIndex, "Events"); 
+		setPageText(pageIndex, "Events");
 	}
 
 	private void createMarketEditor() {
+		// price curves only for now
+		// split view, chart at the bottom editor at the top
+		
+		final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
+		
+		final Label temp = new Label(sash, SWT.NONE);
+		temp.setText("Top half");
 
+		final ChartViewer chart = new ChartViewer(sash);
+		
+		final MarketModel mm = ((Scenario)(editingDomain.getResourceSet().getResources().get(0).getContents().get(0))).getMarketModel();
+		
+		chart.setContentProvider(
+				new IChartContentProvider() {
+					@Override
+					public boolean isDateSeries(int i) {
+						return true;
+					}
+					
+					@Override
+					public double[] getYSeries(int i) {
+						StepwisePriceCurve curve = mm.getMarkets().get(i).getPriceCurve();
+						double[] answer = new double[curve.getPrices().size() * 2 - 1];
+						for (int j = 0; j<answer.length ;j++) {
+							answer[j] = curve.getPrices().get(j/2).getPriceFromDate();
+						}
+						return answer;
+					}
+					
+					@Override
+					public double[] getXSeries(int i) {
+						return null;
+					}
+					
+					@Override
+					public String getSeriesName(int i) {
+						return mm.getMarkets().get(i).getName();
+					}
+					
+					@Override
+					public int getSeriesCount() {
+						return mm.getMarkets().size();
+					}
+					
+					@Override
+					public Date[] getDateXSeries(int i) {
+						StepwisePriceCurve curve = mm.getMarkets().get(i).getPriceCurve();
+						Date[] answer = new Date[curve.getPrices().size() * 2];
+						Date before = curve.getPrices().get(0).getDate();
+						for (int j = 0; j<curve.getPrices().size() ;j++) {
+							answer[2*j] = before;
+							answer[2*j+1] = (before = curve.getPrices().get(j).getDate());
+						}
+						return answer;
+					}
+				});
+		
+		setPageText(addPage(sash), "Price Curves");
 	}
 
 	private void createCargoEditor(final IReferenceValueProvider portProvider,
