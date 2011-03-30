@@ -278,6 +278,9 @@ public class PortRotationReportView extends EMFReportView {
 						int value = 0;
 						final CargoAllocation allocation = slotVisit
 								.getCargoAllocation();
+						
+						if (allocation == null) return null;
+						
 						if (entity.equals(allocation.getLoadRevenue()
 								.getEntity())) {
 							value += allocation.getLoadRevenue()
@@ -297,6 +300,7 @@ public class PortRotationReportView extends EMFReportView {
 					}
 				} else if (object instanceof CharterOutVisit) {
 					final CharterOutVisit cov = (CharterOutVisit) object;
+					if (cov.getRevenue() == null) return null;
 					if (entity.equals(cov.getRevenue().getEntity())) {
 						return cov.getRevenue().getTaxedValue();
 					}
