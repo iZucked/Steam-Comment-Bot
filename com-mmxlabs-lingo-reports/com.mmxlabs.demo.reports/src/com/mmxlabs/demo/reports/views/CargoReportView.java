@@ -101,9 +101,7 @@ public class CargoReportView extends EMFReportView {
 		addColumn("Total Cost", integerFormatter,
 				s.getCargoAllocation__GetTotalCost());
 
-		addColumn("Load Entity", objectFormatter,
-				s.getCargoAllocation_LoadRevenue(),
-				s.getBookedRevenue_Entity(), name);
+		
 
 //		addColumn("Discharge Entity", objectFormatter,
 //				s.getCargoAllocation_DischargeRevenue(),
