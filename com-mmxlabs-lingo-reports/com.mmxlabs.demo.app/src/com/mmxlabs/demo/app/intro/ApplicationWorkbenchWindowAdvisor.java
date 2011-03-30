@@ -31,6 +31,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowCoolBar(true);
 		configurer.setShowStatusLine(true);
 		configurer.setShowPerspectiveBar(true);
-		configurer.setTitle("Ship LiNGO");
+		configurer.setTitle("ShipLiNGO");
 	}
 }
