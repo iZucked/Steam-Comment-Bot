@@ -88,7 +88,16 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 					}
 				}, "Select values:");
 		dlg.setTitle("Value Selection");
-		dlg.setInitialSelections(((Collection<?>) getValue(object)).toArray());
+		
+		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
+		final Collection<EObject> sel = (Collection<EObject>) getValue(object);
+		for (final Pair<String, EObject> p : options) {
+			if (sel.contains(p.getSecond())) {
+				selectedOptions.add(p);
+			}
+		}
+		
+		dlg.setInitialSelections(selectedOptions.toArray());
 		dlg.setBlockOnOpen(true);
 		dlg.open();
 		Object[] result = dlg.getResult();
