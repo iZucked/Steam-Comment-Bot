@@ -114,11 +114,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 				new CommandParameter(input, feature, value));
 		((SetCommand) command).setLabel("Set " + feature.getName() + " to "
 				+ value == null ? "null " : value.toString());
-//		System.err.println(command.canExecute() ? " can execute " : "cannot execute");
-		if (command.canExecute() == false) {
-			command.canExecute();
-		}
-		editingDomain.getCommandStack().execute(command);
+		
 		return command;
 	}
 

@@ -49,7 +49,7 @@ public class BasicAttributeManipulator implements ICellManipulator,
 		final Command command = editingDomain.createCommand(SetCommand.class,
 				new CommandParameter((EObject) object, field, value));
 		((SetCommand) command).setLabel("Set " + field.getName() + " to "
-				+ value == null ? "null " : value.toString());
+				+ (value == null ? "null" : value.toString()));
 		editingDomain.getCommandStack().execute(command);
 	}
 

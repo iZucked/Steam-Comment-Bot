@@ -41,7 +41,8 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-		if (valueList.size() == 0) canEdit(object);
+//		if (valueList.size() == 0) 
+			canEdit(object);
 		final EObject value = (EObject) super.getValue(object);
 
 		int x = valueList.indexOf(value);

@@ -168,8 +168,8 @@ public class EObjectDetailView extends Composite {
 				final Label attributeLabel = new Label(controls, SWT.RIGHT);
 				String attributeName = nameByFeature.get(attribute);
 				if (attributeName == null)
-					attributeName = unmangle(attribute.getName()) + ": ";
-				attributeLabel.setText(attributeName);
+					attributeName = unmangle(attribute.getName()) ;
+				attributeLabel.setText(attributeName+ ": ");
 				final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER,
 						false, false);
 				attributeLabel.setLayoutData(labelData);
