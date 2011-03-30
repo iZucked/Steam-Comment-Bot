@@ -183,7 +183,7 @@ public interface CharterOut extends EObject {
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see scenario.fleet.FleetPackage#getCharterOut_Id()
-	 * @model id="true" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
 	String getId();
