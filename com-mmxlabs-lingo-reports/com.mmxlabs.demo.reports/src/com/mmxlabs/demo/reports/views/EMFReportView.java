@@ -31,6 +31,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
@@ -244,7 +245,11 @@ public abstract class EMFReportView extends ViewPart implements
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
+		
+		final Composite c = new Composite(parent, SWT.None);
+		c.setLayout(new FillLayout());
+		
+		viewer = new TableViewer(c, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.FULL_SELECTION);
 
 		viewer.setContentProvider(getContentProvider());
