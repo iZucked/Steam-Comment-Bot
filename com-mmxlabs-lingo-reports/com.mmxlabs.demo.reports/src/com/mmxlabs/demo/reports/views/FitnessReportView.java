@@ -5,6 +5,8 @@
 
 package com.mmxlabs.demo.reports.views;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.IMenuListener;
@@ -17,11 +19,18 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -36,6 +45,44 @@ import com.mmxlabs.demo.reports.views.FitnessContentProvider.RowData;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 public class FitnessReportView extends ViewPart implements ISelectionListener {
+	private ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
+
+	private boolean inverseSort = false;
+
+	protected void setSortColumn(final TableColumn column, int value) {
+		if (sortColumns.get(0) == value) {
+			inverseSort = !inverseSort;
+		} else {
+			inverseSort = false;
+			sortColumns.remove((Object) value);
+			sortColumns.add(0, value);
+		}
+
+		viewer.getTable().setSortColumn(column);
+		viewer.getTable().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
+
+		viewer.refresh();
+	}
+
+	private void addSortSelectionListener(final TableColumn column,
+			final int value) {
+		column.addSelectionListener(new SelectionAdapter() {
+			{
+				final SelectionAdapter self = this;
+				column.addDisposeListener(new DisposeListener() {
+					@Override
+					public void widgetDisposed(final DisposeEvent e) {
+						column.removeSelectionListener(self);
+					}
+				});
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setSortColumn(column, value);
+			}
+		});
+	}
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -54,6 +101,8 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 			if (obj instanceof RowData) {
 				final RowData d = (RowData) obj;
 				if (index == 0) {
+					return d.scenario;
+				} else if (index == 1) {
 					return d.component;
 				} else {
 					return String.format("%,d", d.fitness);
@@ -90,18 +139,57 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 		viewer.setContentProvider(new FitnessContentProvider());
 		viewer.setInput(getViewSite());
 
+		final TableViewerColumn tvc0 = new TableViewerColumn(viewer, SWT.NONE);
+		tvc0.getColumn().setText("Schedule");
+		tvc0.getColumn().pack();
+		addSortSelectionListener(tvc0.getColumn(), 0);
+
 		final TableViewerColumn tvc1 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc1.getColumn().setText("Component");
 		tvc1.getColumn().pack();
+		addSortSelectionListener(tvc1.getColumn(), 1);
 
 		final TableViewerColumn tvc2 = new TableViewerColumn(viewer, SWT.NONE);
 		tvc2.getColumn().setText("Fitness");
 		tvc2.getColumn().pack();
+		addSortSelectionListener(tvc2.getColumn(), 2);
 
 		viewer.setLabelProvider(new ViewLabelProvider());
 
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);
+
+		sortColumns.add(0);
+		sortColumns.add(1);
+		sortColumns.add(2);
+
+		viewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+				final RowData r1 = (RowData) e1;
+				final RowData r2 = (RowData) e2;
+
+				final int d = inverseSort ? -1 : 1;
+				int sort = 0;
+				final Iterator<Integer> iterator = sortColumns.iterator();
+				while (iterator.hasNext() && sort == 0) {
+					switch (iterator.next()) {
+					case 0:
+						sort = r1.scenario.compareTo(r1.scenario);
+						break;
+					case 1:
+						sort = r1.component.compareTo(r2.component);
+						break;
+					case 2:
+						sort = ((Long) r1.fitness).compareTo((Long) r2.fitness);
+						break;
+					}
+				}
+
+				return d * sort;
+				// return super.compare(viewer, e1, e2);
+			}
+		});
 
 		// Create the help context id for the viewer's control
 		PlatformUI
@@ -193,15 +281,16 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart arg0, final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart arg0,
+			final ISelection selection) {
 
 		final List<Schedule> schedules = ScheduleAdapter
 				.getSchedules(selection);
-		if (!schedules.isEmpty()) {
-			setInput(schedules.get(0));
-		} else {
-			setInput(null);
-		}
+		// if (!schedules.isEmpty()) {
+		setInput(schedules);
+		// } else {
+		// setInput(null);
+		// }
 	}
 
 	@Override

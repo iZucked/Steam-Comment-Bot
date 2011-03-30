@@ -23,11 +23,14 @@ import scenario.schedule.ScheduleFitness;
 public class FitnessContentProvider implements IStructuredContentProvider {
 
 	public class RowData {
-		RowData(String c, long f) {
-			this.component = c;
-			this.fitness = f;
+		public RowData(String scenario, String component, long fitness) {
+			super();
+			this.scenario = scenario;
+			this.component = component;
+			this.fitness = fitness;
 		}
 
+		public final String scenario;
 		public final String component;
 		public final long fitness;
 	}
@@ -36,29 +39,33 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		
+
 		return rowData;
 	}
 
 	@Override
-	public synchronized void inputChanged(final Viewer viewer, final Object oldInput,
-			final Object newInput) {
+	public synchronized void inputChanged(final Viewer viewer,
+			final Object oldInput, final Object newInput) {
 
-		if (newInput instanceof Schedule) {
-			final Schedule schedule = (Schedule) newInput;
+		if (newInput instanceof Iterable) {
 			final List<RowData> rowDataList = new LinkedList<RowData>();
-			long total=0l;
-			for (final ScheduleFitness f : schedule.getFitness()) {
-				rowDataList.add(new RowData(f.getName(), f.getValue()));
-				if (!(f.getName().equals("iterations") || f.getName().equals("runtime")))
-					total += f.getValue();
+			for (final Object o : ((Iterable) newInput)) {
+				if (o instanceof Schedule) {
+					final Schedule schedule = (Schedule) o;
+					long total = 0l;
+					for (final ScheduleFitness f : schedule.getFitness()) {
+						rowDataList.add(new RowData(schedule.getName(), f.getName(), f.getValue()));
+						if (!(f.getName().equals("iterations") || f.getName()
+								.equals("runtime")))
+							total += f.getValue();
+					}
+					rowDataList.add(new RowData(schedule.getName(), "Total", total));
+
+				}
 			}
-			rowDataList.add(new RowData("Total", total));
-			
 			rowData = rowDataList.toArray(rowData);
-			
 		} else {
-			rowData = new RowData[]{};
+			rowData = new RowData[] {};
 		}
 	}
 
