@@ -34,6 +34,7 @@ import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.Journey;
+import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 import scenario.schedule.fleetallocation.AllocatedVessel;
@@ -182,6 +183,18 @@ public class AnnotatedSolutionExporter {
 					} else if (arg0.getStartTime().after(arg1.getStartTime())) {
 						return 1;
 					}
+
+					// idle must come after journey
+					if (arg0 instanceof PortVisit)
+						return (arg1 instanceof PortVisit) ? 0 : -1;
+					if (arg1 instanceof PortVisit)
+						return 1;
+
+					if (arg0 instanceof Journey)
+						return (arg1 instanceof Journey) ? 0 : -1;
+					if (arg1 instanceof Journey)
+						return 1;
+
 					return 0;
 				}
 			};
@@ -226,9 +239,13 @@ public class AnnotatedSolutionExporter {
 						allocation.setLadenIdle((Idle) event);
 					} else if (allocation.getBallastIdle() == null) {
 						allocation.setBallastIdle((Idle) event);
-						allocation = null;
 					}
 				}
+				if (allocation != null && allocation.getBallastLeg() != null
+						&& allocation.getLadenLeg() != null
+						&& allocation.getLadenIdle() != null
+						&& allocation.getBallastIdle() != null)
+					allocation = null;
 			}
 		}
 
@@ -288,7 +305,7 @@ public class AnnotatedSolutionExporter {
 				final float salesPricePerMMBTU = dischargeContract.getMarket()
 						.getPriceCurve()
 						.getValueAtDate(allocation.getDischargeDate());
-//						* dischargeContract.getRegasEfficiency();
+				// * dischargeContract.getRegasEfficiency();
 
 				final PurchaseContract purchaseContract = (PurchaseContract) cargo
 						.getLoadSlot().getSlotOrPortContract();
@@ -307,16 +324,21 @@ public class AnnotatedSolutionExporter {
 									+ " contract");
 					continue;
 				}
-				
-				// get MMBTU / M3 (this has to be a notional value to make any sense)
+
+				// get MMBTU / M3 (this has to be a notional value to make any
+				// sense)
 				// TODO this may not be a sensible way of doing a DES cargo
-				
-				final float salesPricePerM3 = salesPricePerMMBTU / cargo.getLoadSlot().getCargoCVvalue();
-				final float purchasePricePerM3 = purchasePricePerMMBTU / cargo.getLoadSlot().getCargoCVvalue();
-				
-				allocation.setDischargePriceM3(Calculator.scaleToInt(salesPricePerM3));
-				allocation.setLoadPriceM3(Calculator.scaleToInt(purchasePricePerM3));
-				
+
+				final float salesPricePerM3 = salesPricePerMMBTU
+						/ cargo.getLoadSlot().getCargoCVvalue();
+				final float purchasePricePerM3 = purchasePricePerMMBTU
+						/ cargo.getLoadSlot().getCargoCVvalue();
+
+				allocation.setDischargePriceM3(Calculator
+						.scaleToInt(salesPricePerM3));
+				allocation.setLoadPriceM3(Calculator
+						.scaleToInt(purchasePricePerM3));
+
 				output.getCargoAllocations().add(allocation);
 			}
 		}
