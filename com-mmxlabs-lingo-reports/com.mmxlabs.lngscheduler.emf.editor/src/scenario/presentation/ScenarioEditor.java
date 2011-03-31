@@ -2313,6 +2313,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				});
 		
+		// Disable/Hide Slot ID editors
+		page.setEditorFactoryForFeature(CargoPackage.eINSTANCE.getSlot_Id(), null);
+		
 		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_LoadSlot(), "Load");
 		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_DischargeSlot(), "Discharge");
 		page.setNameForFeature(CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");

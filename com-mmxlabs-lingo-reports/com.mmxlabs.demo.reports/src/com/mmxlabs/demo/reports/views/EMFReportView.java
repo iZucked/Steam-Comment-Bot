@@ -31,6 +31,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
@@ -284,6 +285,8 @@ public abstract class EMFReportView extends ViewPart implements
 		final ISelection selection = getSite().getWorkbenchWindow()
 				.getSelectionService()
 				.getSelection("com.mmxlabs.rcp.navigator");
+		
+		// Trigger initial view selection
 		selectionChanged(null, selection);
 	}
 
@@ -325,7 +328,9 @@ public abstract class EMFReportView extends ViewPart implements
 
 	@Override
 	public void setFocus() {
-		viewer.getTable().setFocus();
+		if (!viewer.getTable().isDisposed()) {
+			viewer.getTable().setFocus();
+		}
 	}
 
 	public void setInput(final Object input) {
