@@ -366,7 +366,7 @@ public abstract class EMFReportView extends ViewPart implements
 				// TODO: This is how I usually do it - SG
 				column.dispose();
 		}
-		viewer.getTable().pack(true);
+//		viewer.getTable().pack(true);
 	}
 
 	@Override

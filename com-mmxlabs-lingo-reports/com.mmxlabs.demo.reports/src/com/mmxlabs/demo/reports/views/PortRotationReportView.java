@@ -199,7 +199,7 @@ public class PortRotationReportView extends EMFReportView {
 	}
 
 	private List<String> entityColumnNames = new ArrayList<String>();
-
+	
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
@@ -231,6 +231,7 @@ public class PortRotationReportView extends EMFReportView {
 				for (final Scenario scenario : scenarios) {
 					addEntityColumns(scenario);
 				}
+				viewer.refresh();
 			}
 
 			@Override
