@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
+import com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
@@ -882,7 +883,7 @@ public class IndividualEvaluatorTest {
 
 		int[] arrivalTimes = new int[4];
 		byte[] bytes = new byte[numBytes];
-		Individual individual = new Individual(bytes);
+		ByteArrayIndividual individual = new ByteArrayIndividual(bytes);
 		{
 			Arrays.fill(arrivalTimes, 0);
 			Arrays.fill(bytes, (byte) 0);

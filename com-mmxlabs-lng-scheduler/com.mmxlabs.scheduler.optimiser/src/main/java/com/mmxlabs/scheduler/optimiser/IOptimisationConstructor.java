@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 
 /**
  * {@link IOptimisationConstructor} build an {@link IOptimisationConstructor}
