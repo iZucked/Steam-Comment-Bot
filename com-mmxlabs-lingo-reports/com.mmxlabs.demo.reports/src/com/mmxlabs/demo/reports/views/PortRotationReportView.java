@@ -12,6 +12,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
@@ -198,41 +199,50 @@ public class PortRotationReportView extends EMFReportView {
 
 	}
 
-	private List<String> entityColumnNames = new ArrayList<String>();
+	private final List<String> entityColumnNames = new ArrayList<String>();
 	
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
 
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput,
-					Object newInput) {
-				final Set<Scenario> scenarios = new HashSet<Scenario>();
-				if (newInput instanceof Iterable) {
-					for (final Object element : ((Iterable) newInput)) {
-						if (element instanceof Schedule) {
-							// find all referenced entities
-							for (final String s : entityColumnNames) {
-								removeColumn(s);
+			public void inputChanged(final Viewer viewer, Object oldInput,
+					final Object newInput) {
+				Display.getCurrent().asyncExec(
+						new Runnable() {
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								if (viewer.getControl().isDisposed()) return;
+								final Set<Scenario> scenarios = new HashSet<Scenario>();
+								if (newInput instanceof Iterable) {
+									for (final Object element : ((Iterable) newInput)) {
+										if (element instanceof Schedule) {
+											// find all referenced entities
+											for (final String s : entityColumnNames) {
+												removeColumn(s);
+											}
+											entityColumnNames.clear();
+
+											EObject o = (EObject) element;
+											while (o != null && !(o instanceof Scenario)) {
+												o = o.eContainer();
+											}
+
+											if (o != null)
+												scenarios.add((Scenario) o);
+										}
+									}
+
+								}
+								for (final Scenario scenario : scenarios) {
+									addEntityColumns(scenario);
+								}
+								viewer.refresh();
 							}
-							entityColumnNames.clear();
-
-							EObject o = (EObject) element;
-							while (o != null && !(o instanceof Scenario)) {
-								o = o.eContainer();
-							}
-
-							if (o != null)
-								scenarios.add((Scenario) o);
-						}
-					}
-
-				}
-				for (final Scenario scenario : scenarios) {
-					addEntityColumns(scenario);
-				}
-				viewer.refresh();
-				viewer.getControl().getParent().layout();
+							
+						});
+				
 			}
 
 			@Override
