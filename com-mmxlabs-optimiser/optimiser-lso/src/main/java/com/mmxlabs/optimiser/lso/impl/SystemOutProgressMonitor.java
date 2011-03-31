@@ -6,8 +6,7 @@ package com.mmxlabs.optimiser.lso.impl;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimiser;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
+import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 
 /**
  * Simple {@link IOptimiserProgressMonitor} implementation using

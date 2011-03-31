@@ -2,11 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.optimiser.lso;
-
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IOptimiser;
-import com.mmxlabs.optimiser.core.ISequences;
+package com.mmxlabs.optimiser.core;
 
 /**
  * A callback interface to monitor progress of an optimisation. An
@@ -54,5 +50,6 @@ public interface IOptimiserProgressMonitor<T> {
 	 * @param bestFitness
 	 * @param bestState
 	 */
-	void done(IOptimiser<T> optimiser, long bestFitness, IAnnotatedSolution<T> annotatedSolution);
+	void done(IOptimiser<T> optimiser, long bestFitness,
+			IAnnotatedSolution<T> annotatedSolution);
 }
