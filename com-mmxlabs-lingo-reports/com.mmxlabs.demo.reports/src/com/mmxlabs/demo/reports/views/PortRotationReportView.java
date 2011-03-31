@@ -232,6 +232,7 @@ public class PortRotationReportView extends EMFReportView {
 					addEntityColumns(scenario);
 				}
 				viewer.refresh();
+				viewer.getControl().getParent().layout();
 			}
 
 			@Override
