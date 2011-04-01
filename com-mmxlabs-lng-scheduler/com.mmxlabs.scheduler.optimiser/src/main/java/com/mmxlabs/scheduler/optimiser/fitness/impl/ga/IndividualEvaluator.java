@@ -16,6 +16,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
+import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
+import com.mmxlabs.optimiser.ga.Individual;
+import com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -46,7 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @param <T>
  *            Sequence element type.
  */
-public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
+public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteArrayIndividual> {
 
 	private AbstractSequenceScheduler<T> sequenceScheduler;
 
@@ -140,7 +143,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	}
 
 	@Override
-	public final long evaluate(final Individual individual) {
+	public final long evaluate(final ByteArrayIndividual individual) {
 		// Decode into a set of start times
 		final int[] arrivalTimes = new int[ranges.length];
 		decode(individual, arrivalTimes);
@@ -155,7 +158,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<T> {
 	 * @param individual
 	 * @param arrivalTimes
 	 */
-	public final void decode(final Individual individual,
+	public final void decode(final ByteArrayIndividual individual,
 			final int[] arrivalTimes) {
 
 		// TODO: Currently the byte array can be under utilised. E.g. a 6 hour

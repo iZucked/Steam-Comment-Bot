@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
 public final class SchedulerUtils {
-	private final static int DEFAULT_VPO_CACHE_SIZE = 100000;
+	private final static int DEFAULT_VPO_CACHE_SIZE = 400000;
 
 	private SchedulerUtils() {
 
