@@ -103,6 +103,9 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 			saveSolution(currentProgress + "%", optimiser.getBestSolution(false));
 		}
 		
+		System.err.println("current fitness " + optimiser.getFitnessEvaluator().getCurrentFitness() + ", best " +
+				optimiser.getFitnessEvaluator().getBestFitness());
+		
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
