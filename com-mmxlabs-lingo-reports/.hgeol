@@ -1,0 +1,12 @@
+[patterns]
+**.java = native
+**.txt = native
+**.ini = native
+**.product = native
+pom.xml = native
+plugin.xml = native
+feature.xml = native
+MANIFEST.MF = native
+
+[repository]
+native = CRLF
