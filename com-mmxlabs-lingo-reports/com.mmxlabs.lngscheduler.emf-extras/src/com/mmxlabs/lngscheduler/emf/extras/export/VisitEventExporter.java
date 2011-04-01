@@ -107,7 +107,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			final CharterOutVisit cov = factory.createCharterOutVisit();
 			portVisit = cov;
 
-			cov.setCharterOut(entities.getModelObject(((ICharterOutPortSlot) slot).getCharterOut(), CharterOut.class));
+			cov.setCharterOut(entities.getModelObject(slot, CharterOut.class));
 		} else {
 			portVisit = factory.createPortVisit();
 		}

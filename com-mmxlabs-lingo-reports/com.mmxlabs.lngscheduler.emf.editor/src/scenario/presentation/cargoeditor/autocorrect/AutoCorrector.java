@@ -2,7 +2,6 @@ package scenario.presentation.cargoeditor.autocorrect;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
@@ -39,7 +38,7 @@ public class AutoCorrector extends EContentAdapter {
 			if (correcting)
 				return;
 			correcting = true;
-			final Object feature = notification.getFeature();
+			
 			for (final ICorrector corrector : correctors) {
 				final Pair<String, Command> correction = corrector.correct(
 						notification, editingDomain);

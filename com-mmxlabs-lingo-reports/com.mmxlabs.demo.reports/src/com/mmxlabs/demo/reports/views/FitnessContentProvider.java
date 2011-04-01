@@ -46,7 +46,7 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 	@Override
 	public synchronized void inputChanged(final Viewer viewer,
 			final Object oldInput, final Object newInput) {
-
+		rowData = new RowData[0];
 		if (newInput instanceof Iterable) {
 			final List<RowData> rowDataList = new LinkedList<RowData>();
 			for (final Object o : ((Iterable) newInput)) {
@@ -64,8 +64,6 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 				}
 			}
 			rowData = rowDataList.toArray(rowData);
-		} else {
-			rowData = new RowData[] {};
 		}
 	}
 

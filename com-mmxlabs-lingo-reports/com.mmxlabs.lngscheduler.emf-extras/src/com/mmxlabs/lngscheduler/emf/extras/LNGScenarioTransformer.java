@@ -63,7 +63,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -317,7 +317,7 @@ public class LNGScenarioTransformer {
 					convertTime(charterOut.getEndDate()));
 			final IPort port = portAssociation.lookup(charterOut.getPort());
 
-			final ICharterOut builderCharterOut = builder.createCharterOut(
+			final ICharterOutPortSlot builderCharterOut = builder.createCharterOut(
 					window, port, charterOut.getDuration() * 24); // EMF
 																	// measures
 																	// in days
