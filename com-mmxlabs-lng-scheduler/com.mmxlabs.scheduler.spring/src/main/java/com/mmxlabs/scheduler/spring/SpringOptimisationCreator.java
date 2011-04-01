@@ -13,9 +13,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.IOptimiserProgressMonitor;
 
 /**
  * Class to construct an {@link IOptimisationContext} and
