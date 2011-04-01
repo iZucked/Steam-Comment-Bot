@@ -12,11 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import scenario.fleet.CharterOut;
 import scenario.optimiser.Constraint;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimisationSettings;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.schedule.Sequence;
+import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 import scenario.schedule.fleetallocation.AllocatedVessel;
@@ -40,6 +42,8 @@ import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -255,6 +259,10 @@ public class OptimisationTransformer {
 							continue;
 						}
 						ms.add(psp.getElement(portSlot));
+					} else if (event instanceof CharterOutVisit) {
+						final CharterOut co = ((CharterOutVisit)event).getCharterOut();
+						final ICharterOutPortSlot coSlot = mem.getOptimiserObject(co, ICharterOutPortSlot.class);
+						ms.add(psp.getElement(coSlot));
 					}
 				}
 				ms.add(serp.getEndElement(vp.getResource(vessel)));
