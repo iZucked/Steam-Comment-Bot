@@ -123,40 +123,6 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 		evaluate(N, population, good, bad);
 	}
 
-	/**
-	 * Class to combined an {@link Individual} with it's fitness for use in a
-	 * {@link TreeSet} ordered by fitness.
-	 * 
-	 */
-	private static final class Tuple<I> implements Comparable<Tuple<I>> {
-		public final I i;
-		public final int idx;
-		public final long f;
-
-		public Tuple(final I i, final int idx, final long f) {
-			this.i = i;
-			this.idx = idx;
-			this.f = f;
-		}
-
-		@Override
-		public final int compareTo(final Tuple<I> o) {
-			final long c = f - o.f;
-			// Sort on fitness
-			if (c < 0) {
-				return -1;
-			} else if (c > 0) {
-				return -1;
-			} else {
-				// Then sort of original position. As this will be used in a
-				// TreeSet we never want to return 0 as this will overwrite the
-				// entry instead.
-				assert idx != o.idx;
-				return idx - o.idx;
-			}
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -184,12 +150,12 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 			// Fill up the TreeSet until we have N entries..
 			if (topN.size() < N) {
 				topN.add(new Tuple<I>(individual, idx, f));
-				worstFitness = topN.first().f;
+				worstFitness = topN.last().f;
 
 				// .. then process the rest populating the bad array
 			} else if (f < worstFitness) {
 				// remove lowest entry..
-				final Tuple<I> lowest = topN.pollFirst();
+				final Tuple<I> lowest = topN.pollLast();
 
 				// .. and add it to the bad array as it is no longer a top N
 				// entry
@@ -199,21 +165,21 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 				topN.add(new Tuple<I>(individual, idx, f));
 
 				// Record new worst fitness
-				worstFitness = topN.first().f;
+				worstFitness = topN.last().f;
 			} else {
 				// If event worse
 				bad[badIdx++] = individual;
 			}
 		}
 
-		// Update the good array with
+		// Update the good array with top N individuals
 		int goodIdx = 0;
 		for (final Tuple<I> t : topN) {
 			good[goodIdx++] = t.i;
 		}
 
 		// Record best entry;
-		final Tuple<I> t = topN.last();
+		final Tuple<I> t = topN.first();
 		if (t.f < bestFitness) {
 			bestIndividual = t.i;
 			bestFitness = t.f;

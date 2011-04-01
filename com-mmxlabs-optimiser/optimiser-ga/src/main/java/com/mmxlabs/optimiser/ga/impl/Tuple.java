@@ -1,0 +1,39 @@
+package com.mmxlabs.optimiser.ga.impl;
+
+import java.util.TreeSet;
+
+import com.mmxlabs.optimiser.ga.Individual;
+
+/**
+ * Class to combined an {@link Individual} with it's fitness for use in a
+ * {@link TreeSet} ordered by fitness.
+ * 
+ */
+public final class Tuple<I> implements Comparable<Tuple<I>> {
+	public final I i;
+	public final int idx;
+	public final long f;
+
+	public Tuple(final I i, final int idx, final long f) {
+		this.i = i;
+		this.idx = idx;
+		this.f = f;
+	}
+
+	@Override
+	public final int compareTo(final Tuple<I> o) {
+		final long c = f - o.f;
+		// Sort on fitness
+		if (c < 0) {
+			return -1;
+		} else if (c > 0) {
+			return 1;
+		} else {
+			// Then sort of original position. As this will be used in a
+			// TreeSet we never want to return 0 as this will overwrite the
+			// entry instead.
+			assert idx != o.idx;
+			return idx - o.idx;
+		}
+	}
+}
