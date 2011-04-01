@@ -64,9 +64,9 @@ public class CalibratingGeometricThresholder implements IThresholder {
 			if (samples >= epochLength) {
 				calibrate();
 			}
-			return delta < 0 || 
+			return delta < 0 /*|| 
 				random.nextDouble() <
-					Math.exp(-delta / (-(sumSamples/samples)/logInitialAcceptance));
+					Math.exp(-delta / (-(sumSamples/samples)/logInitialAcceptance))*/;
 		}
 	}
 

@@ -18,6 +18,7 @@
 		<module>optimiser-core</module>
 		<module>optimiser-lso</module>
 		<module>optimiser-common</module>
+		<module>optimiser-ga</module>
 	</modules>
 
 	<description>Parent maven project for core optimisation projects</description>
