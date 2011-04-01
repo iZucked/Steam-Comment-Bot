@@ -317,13 +317,13 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 				}
 
 				// check number of resources for each chunk
-				final int rc1 = chunk1.getResourceCount();
-				final int rc2 = chunk2.getResourceCount();
+//				final int rc1 = chunk1.getResourceCount();
+//				final int rc2 = chunk2.getResourceCount();
 
-				if (rc1 < rc2)
-					return -1;
-				else if (rc1 > rc2)
-					return 1;
+//				if (rc1 < rc2)
+//					return -1;
+//				else if (rc1 > rc2)
+//					return 1;
 
 				final T o1 = chunk1.get(0);
 				final T o2 = chunk2.get(0);
@@ -352,6 +352,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 		if (suggestion == null) {
 			log.info("No suggested start solution - constructing one");
 			for (IResource resource : resources) {
+				log.info("Scheduling elements for resource " + resource);
 				List<SequenceChunk<T>> sequence = new ArrayList<SequenceChunk<T>>();
 				sequences.put(resource, sequence);
 
@@ -367,6 +368,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 					final SequenceChunk<T> there = iterator.next();
 					if (chunkChecker.canFollow(here, there, resource)) {
 						sequence.add(there);
+						log.info("Adding chunk " + there);
 						here = there;
 						iterator.remove();
 					}

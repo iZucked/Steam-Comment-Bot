@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -169,10 +170,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IPortExclusionProviderEditor portExclusionProvider;
 
-	private final Set<ICharterOut> charterOuts = new HashSet<ICharterOut>();
-	private final Map<ICharterOut, Set<IVessel>> vesselCharterOuts = new HashMap<ICharterOut, Set<IVessel>>();
+	private final Set<CharterOutPortSlot> charterOuts = new HashSet<CharterOutPortSlot>();
+	private final Map<CharterOutPortSlot, Set<IVessel>> vesselCharterOuts = new HashMap<CharterOutPortSlot, Set<IVessel>>();
 
-	private final Map<ICharterOut, Set<IVesselClass>> vesselClassCharterOuts = new HashMap<ICharterOut, Set<IVesselClass>>();
+	private final Map<CharterOutPortSlot, Set<IVesselClass>> vesselClassCharterOuts = new HashMap<CharterOutPortSlot, Set<IVesselClass>>();
 
 	private final IReturnElementProviderEditor<ISequenceElement> returnElementProvider;
 
@@ -970,17 +971,21 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ICharterOut createCharterOut(final ITimeWindow arrival,
+	public ICharterOutPortSlot createCharterOut(final ITimeWindow arrival,
 			final IPort port, final int durationHours) {
-		final ICharterOut result = new CharterOut(arrival, durationHours, port);
-		charterOuts.add(result);
-		vesselCharterOuts.put(result, new HashSet<IVessel>());
-		vesselClassCharterOuts.put(result, new HashSet<IVesselClass>());
-		return result;
+		final CharterOut co = new CharterOut(arrival, durationHours, port);
+		final CharterOutPortSlot slot = new CharterOutPortSlot(
+				"charter-out-" + charterOuts.size(), co.getPort(),
+				co.getTimeWindow(), co);
+		
+		charterOuts.add(slot);
+		vesselCharterOuts.put(slot, new HashSet<IVessel>());
+		vesselClassCharterOuts.put(slot, new HashSet<IVesselClass>());
+		return slot;
 	}
 
 	@Override
-	public void addCharterOutVessel(final ICharterOut charterOut,
+	public void addCharterOutVessel(final ICharterOutPortSlot charterOut,
 			final IVessel vessel) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException(
@@ -994,7 +999,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void addCharterOutVesselClass(final ICharterOut charterOut,
+	public void addCharterOutVesselClass(final ICharterOutPortSlot charterOut,
 			final IVesselClass vesselClass) {
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException(
@@ -1010,12 +1015,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	protected void buildCharterOuts() {
 		int i = 0;
 
-		for (final ICharterOut charterOut : charterOuts) {
-
-			CharterOutPortSlot slot = new CharterOutPortSlot(
-					"charter-out-" + i, charterOut.getPort(),
-					charterOut.getTimeWindow(), charterOut);
-
+		for (final ICharterOutPortSlot slot : charterOuts) {
+			final ICharterOut charterOut = slot.getCharterOut();
+			
 			final SequenceElement element = new SequenceElement(
 					indexingContext, "charter-out-" + i, slot);
 
@@ -1036,9 +1038,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			final Set<IResource> resources = new HashSet<IResource>();
 			final Set<IVessel> supportedVessels = vesselCharterOuts
-					.get(charterOut);
+					.get(slot);
 			final Set<IVesselClass> supportedClasses = vesselClassCharterOuts
-					.get(charterOut);
+					.get(slot);
 			for (final IVessel vessel : vessels) {
 				if (vessel.getVesselInstanceType() != VesselInstanceType.SPOT_CHARTER
 						&& (supportedClasses.contains(vessel.getVesselClass()) || supportedVessels

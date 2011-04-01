@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -27,10 +28,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  *
  */
 public class LegalSequencingChecker<T> {
-private IPortSlotProvider<T> portSlotProvider;
-	private IElementDurationProvider<T> elementDurationProvider;
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
-	private IVesselProvider vesselProvider;
 	private List<IPairwiseConstraintChecker<T>> pairwiseCheckers;
 	private List<IResource> resources;
 	
@@ -66,10 +63,6 @@ private IPortSlotProvider<T> portSlotProvider;
 		for (IPairwiseConstraintChecker<T> pairwiseChecker : pairwiseCheckers) {
 			pairwiseChecker.setOptimisationData(data);
 		}
-		this.portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		this.elementDurationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class);
-		this.distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
-		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		this.resources = data.getResources();
 	}
 
@@ -107,5 +100,15 @@ private IPortSlotProvider<T> portSlotProvider;
 			if (allowSequence(e1, e2, r)) return true;
 		}
 		return false;
+	}
+	
+	// TODO quick hack to try something
+	public void disallowLateness() {
+		for (final IPairwiseConstraintChecker<T> checker : pairwiseCheckers) {
+			if (checker instanceof TravelTimeConstraintChecker) {
+				final TravelTimeConstraintChecker<T> tt = (TravelTimeConstraintChecker<T>) checker;
+				tt.setMaxLateness(0);
+			}
+		}
 	}
 }

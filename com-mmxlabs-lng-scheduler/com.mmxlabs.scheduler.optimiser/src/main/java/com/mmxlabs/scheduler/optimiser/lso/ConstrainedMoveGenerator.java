@@ -241,6 +241,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	public ConstrainedMoveGenerator(final IOptimisationContext<T> context) {
 		// this.context = context;
 		this.checker = new LegalSequencingChecker<T>(context);
+		checker.disallowLateness();
 		final IOptimisationData<T> data = context.getOptimisationData();
 
 		@SuppressWarnings("unchecked")
