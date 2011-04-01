@@ -9,14 +9,7 @@ syntax: regexp
 ^optimiser-.*/\.classpath$
 syntax: regexp
 ^optimiser-.*/\.project$
-
 syntax: regexp
-^optimiser-bundle/META-INF/MANIFEST\.MF$
-syntax: regexp
-^optimiser-lso/META-INF$
-syntax: regexp
-^optimiser-core/META-INF$
-syntax: regexp
-^optimiser-common/META-INF$
+^optimiser-.*/META-INF$
 syntax: regexp
 ^\.project$
