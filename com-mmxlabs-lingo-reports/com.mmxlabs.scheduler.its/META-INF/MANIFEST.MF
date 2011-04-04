@@ -4,7 +4,7 @@ Bundle-Name: Its
 Bundle-SymbolicName: com.mmxlabs.scheduler.its
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: MMXLABS
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.lngscheduler.emf;bundle-version="1.0.0",
  com.mmxlabs.jobmanager;bundle-version="1.0.0",
