@@ -1,4 +1,8 @@
 /**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
+ */
+/**
  * 
  */
 package scenario.presentation.cargoeditor.detailview;

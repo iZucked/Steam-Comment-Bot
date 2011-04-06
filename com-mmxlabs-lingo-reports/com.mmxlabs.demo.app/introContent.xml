@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010
+    Copyright (C) Minimax Labs Ltd., 2010 - 2011
     All rights reserved.
 
 -->
-
 <introContent>
     <page id="root" content="content/root.xhtml"/>
     <page id="concept1" content="content/concept1.xhtml"/>

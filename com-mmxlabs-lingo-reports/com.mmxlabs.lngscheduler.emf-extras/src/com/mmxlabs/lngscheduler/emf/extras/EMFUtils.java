@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
+ */
 package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.io.ByteArrayInputStream;

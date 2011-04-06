@@ -1,8 +1,6 @@
 /**
- *
- * Copyright (C) Minimax Labs Ltd., 2010 
- * All rights reserved. 
- * 
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
  */
 package com.mmxlabs.scheduleview.views;
 
