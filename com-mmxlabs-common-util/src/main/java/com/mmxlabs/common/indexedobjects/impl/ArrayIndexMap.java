@@ -97,6 +97,9 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 
 					@Override
 					public U next() {
+						if (!(index < isSet.length && isSet[index])) {
+							throw new NoSuchElementException();
+						}
 						return contents[index];
 					}
 
