@@ -110,23 +110,36 @@ public class DistanceMatrixCreator {
 		// loslog.close();
 
 		{
-			BufferedWriter coast = new BufferedWriter(new FileWriter(
-					"./coast.txt"));
-			calculator.writeCoastalPoints(coast);
-			coast.close();
+			BufferedWriter coast = null;
+			try {
+				coast = new BufferedWriter(new FileWriter(
+						"./coast.txt"));
+				calculator.writeCoastalPoints(coast);
+			} finally {
+				if (coast != null) {
+					coast.close();
+				}
+			}
 			log.info("Coastal points written to coast.txt (cartesian)");
 		}
 
-		final BufferedReader portReader = new BufferedReader(new FileReader(
-				getCoordinatesFilePath()));
+		BufferedReader portReader = null;
 		final List<Pair<String, Pair<Double, Double>>> ports = new ArrayList<Pair<String, Pair<Double, Double>>>();
-
-		String line;
-		while ((line = portReader.readLine()) != null) {
-			String[] parts = line.split(",");
-			ports.add(new Pair<String, Pair<Double, Double>>(parts[0],
-					new Pair<Double, Double>(Double.parseDouble(parts[1]),
-							Double.parseDouble(parts[2]))));
+		try {
+			portReader = new BufferedReader(new FileReader(
+					getCoordinatesFilePath()));
+	
+			String line;
+			while ((line = portReader.readLine()) != null) {
+				String[] parts = line.split(",");
+				ports.add(new Pair<String, Pair<Double, Double>>(parts[0],
+						new Pair<Double, Double>(Double.parseDouble(parts[1]),
+								Double.parseDouble(parts[2]))));
+			}
+		} finally {
+			if (portReader != null) {
+				portReader.close();
+			}
 		}
 
 		Collections.sort(ports,
@@ -158,37 +171,53 @@ public class DistanceMatrixCreator {
 		}
 
 		{
-			BufferedWriter snap = new BufferedWriter(new FileWriter(
+			BufferedWriter snap = null;
+			BufferedWriter real = null;
+			try {
+				snap = new BufferedWriter(new FileWriter(
+			
 					"./snapports.txt"));
-			BufferedWriter real = new BufferedWriter(new FileWriter(
-					"./realports.txt"));
-			calculator.writeSnappedPoints(snap, real, otherPorts);
-
-			snap.close();
-			real.close();
+				 real = new BufferedWriter(new FileWriter(
+						"./realports.txt"));
+				
+				calculator.writeSnappedPoints(snap, real, otherPorts);
+			} finally {
+				if (snap != null) {
+					snap.close();
+				}
+				if (real != null) {
+					real.close();
+				}
+			}
 			log.info("Ports written to realports.txt and snapports.txt");
 		}
 
 		// write matrix out
-		final BufferedWriter distanceWriter = new BufferedWriter(
-				new FileWriter(getOutputFilePath()));
-		for (final Pair<String, Pair<Double, Double>> x : ports) {
-			distanceWriter.write(",");
-			distanceWriter.write(x.getFirst());
-		}
-		for (int i = 0; i < matrix.length; i++) {
-			distanceWriter.write("\n");
-			distanceWriter.write(ports.get(i).getFirst());
-			distanceWriter.write(",");
-			for (int j = 0; j < matrix[i].length; j++) {
-				if (j != 0)
-					distanceWriter.write(",");
-				if (matrix[i][j] != Integer.MAX_VALUE)
-					distanceWriter.write(Integer.toString(matrix[i][j]));
+		BufferedWriter distanceWriter = null;
+		try {
+			distanceWriter = new BufferedWriter(
+					new FileWriter(getOutputFilePath()));
+			for (final Pair<String, Pair<Double, Double>> x : ports) {
+				distanceWriter.write(",");
+				distanceWriter.write(x.getFirst());
+			}
+			for (int i = 0; i < matrix.length; i++) {
+				distanceWriter.write("\n");
+				distanceWriter.write(ports.get(i).getFirst());
+				distanceWriter.write(",");
+				for (int j = 0; j < matrix[i].length; j++) {
+					if (j != 0)
+						distanceWriter.write(",");
+					if (matrix[i][j] != Integer.MAX_VALUE)
+						distanceWriter.write(Integer.toString(matrix[i][j]));
+				}
+			}
+			distanceWriter.flush();
+		} finally {
+			if (distanceWriter != null) {
+				distanceWriter.close();
 			}
 		}
-		distanceWriter.flush();
-		distanceWriter.close();
 		log.info("Distance matrix written to " + getOutputFilePath());
 		// plot all paths;
 
