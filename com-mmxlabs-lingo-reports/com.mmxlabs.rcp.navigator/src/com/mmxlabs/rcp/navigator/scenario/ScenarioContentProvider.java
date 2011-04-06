@@ -101,7 +101,6 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider
 		public boolean jobProgressUpdated(final IManagedJob job,
 				final int progressDelta) {
 
-			final TreeViewer tv = (TreeViewer) viewer;
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override
