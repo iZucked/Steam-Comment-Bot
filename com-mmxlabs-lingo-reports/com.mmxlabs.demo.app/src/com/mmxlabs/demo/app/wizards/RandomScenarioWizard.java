@@ -119,7 +119,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 		return LngEditorAdvisor.openEditor(workbench, fileURI);
 	}
 
-	class DetailsPage extends WizardPage {
+	static class DetailsPage extends WizardPage {
 		protected DetailsPage(String pageName) {
 			super(pageName);
 		}
