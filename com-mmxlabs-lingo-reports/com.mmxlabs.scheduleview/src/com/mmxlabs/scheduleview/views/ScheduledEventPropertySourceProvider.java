@@ -49,7 +49,7 @@ public class ScheduledEventPropertySourceProvider implements
 		return sb.toString();
 	}
 	
-	private class SimpleLabelProvider extends ColumnLabelProvider {
+	private static class SimpleLabelProvider extends ColumnLabelProvider {
 		public SimpleLabelProvider() {
 
 		}
