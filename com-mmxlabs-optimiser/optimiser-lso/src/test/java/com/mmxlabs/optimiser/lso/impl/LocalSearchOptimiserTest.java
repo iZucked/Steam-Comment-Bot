@@ -410,7 +410,7 @@ public class LocalSearchOptimiserTest {
 
 	}
 
-	private class TestLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
+	private static class TestLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 
 		/**
 		 * Make public rather than protected for the tests
