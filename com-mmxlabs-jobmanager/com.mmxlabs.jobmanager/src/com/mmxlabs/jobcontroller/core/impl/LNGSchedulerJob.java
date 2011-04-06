@@ -56,7 +56,8 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		try {
 			data = lst.createOptimisationData(entities);
 		} catch (IncompleteScenarioException e) {
-			return;
+			// Wrap up exception
+			throw new RuntimeException(e);
 		}
 
 		final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
