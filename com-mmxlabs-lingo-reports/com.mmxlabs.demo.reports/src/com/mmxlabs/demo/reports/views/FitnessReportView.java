@@ -175,7 +175,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 				while (iterator.hasNext() && sort == 0) {
 					switch (iterator.next()) {
 					case 0:
-						sort = r1.scenario.compareTo(r1.scenario);
+						sort = r1.scenario.compareTo(r2.scenario);
 						break;
 					case 1:
 						sort = r1.component.compareTo(r2.component);

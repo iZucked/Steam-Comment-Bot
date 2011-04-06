@@ -188,7 +188,7 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 						while (iterator.hasNext() && sort == 0) {
 							switch (iterator.next()) {
 							case 0:
-								sort = r1.scheduleName.compareTo(r1.scheduleName);
+								sort = r1.scheduleName.compareTo(r2.scheduleName);
 								break;
 							case 1:
 								sort = r1.component.compareTo(r2.component);
