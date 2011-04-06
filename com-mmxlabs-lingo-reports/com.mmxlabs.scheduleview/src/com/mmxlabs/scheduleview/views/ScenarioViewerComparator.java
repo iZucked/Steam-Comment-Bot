@@ -5,7 +5,19 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
 import scenario.schedule.Sequence;
+import scenario.schedule.fleetallocation.SpotVessel;
 
+/**
+ * {@link ViewerComparator} to sort the {@link SchedulerView} contents.
+ * Implementation sort vessels alphabetically grouped into fleet and spot
+ * vessels. There are currently two sort modes on top of this;
+ * {@link Mode#STACK} will show multiple scenarios in sequence.
+ * {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios
+ * side-by-side.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class ScenarioViewerComparator extends ViewerComparator {
 
 	public enum Mode {
@@ -18,7 +30,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		return mode;
 	}
 
-	protected final void setMode(Mode mode) {
+	protected final void setMode(final Mode mode) {
 		this.mode = mode;
 	}
 
@@ -29,7 +41,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		if (element instanceof EObject) {
 			return ((EObject) element).eContainer().hashCode();
 		}
-		// TODO Auto-generated method stub
+
 		return super.category(element);
 	}
 
@@ -45,18 +57,23 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				return cat1 - cat2;
 			}
 
-			// Then order by element order
-			if (e1 instanceof Sequence && e2 instanceof Sequence) {
-				final Sequence s1 = (Sequence) e1;
-				final Sequence s2 = (Sequence) e2;
+			final Sequence s1 = (Sequence) e1;
+			final Sequence s2 = (Sequence) e2;
 
-				int c = s1.eContainer().eContents().indexOf(s1)
-						- s2.eContainer().eContents().indexOf(s2);
-				if (c != 0) {
-					return c;
-				}
+			// Group by fleet/spot
+			final boolean s1Spot = s1.getVessel() instanceof SpotVessel;
+			final boolean s2Spot = s2.getVessel() instanceof SpotVessel;
+
+			if (s1Spot != s2Spot) {
+				return s1Spot ? 1 : -1;
 			}
-			// Otherwise fallback to default behaviour
+
+			// Sort by name
+			final int c = s1.getVessel().getName()
+					.compareTo(s2.getVessel().getName());
+			if (c != 0) {
+				return c;
+			}
 		} else if (mode == Mode.INTERLEAVE) {
 
 			// Then order by element order
@@ -64,8 +81,17 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				final Sequence s1 = (Sequence) e1;
 				final Sequence s2 = (Sequence) e2;
 
-				int c = s1.eContainer().eContents().indexOf(s1)
-						- s2.eContainer().eContents().indexOf(s2);
+				// Group by fleet/spot
+				final boolean s1Spot = s1.getVessel() instanceof SpotVessel;
+				final boolean s2Spot = s2.getVessel() instanceof SpotVessel;
+
+				if (s1Spot != s2Spot) {
+					return s1Spot ? 1 : -1;
+				}
+
+				// Sort by name
+				final int c = s1.getVessel().getName()
+						.compareTo(s2.getVessel().getName());
 				if (c != 0) {
 					return c;
 				}
@@ -79,17 +105,5 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		}
 		// Otherwise fallback to default behaviour
 		return super.compare(viewer, e1, e2);
-	}
-
-	@Override
-	public void sort(final Viewer viewer, final Object[] elements) {
-		// TODO Auto-generated method stub
-		super.sort(viewer, elements);
-	}
-
-	@Override
-	public boolean isSorterProperty(final Object element, final String property) {
-		// TODO Auto-generated method stub
-		return super.isSorterProperty(element, property);
 	}
 }
