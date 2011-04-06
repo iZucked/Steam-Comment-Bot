@@ -84,8 +84,9 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 		return new Iterable<U>() {
 			@Override
 			public Iterator<U> iterator() {
-				return new Iterator<U> () {
-					int index = 0;
+				return new Iterator<U>() {
+					private int index = 0;
+
 					@Override
 					public boolean hasNext() {
 						while (index < isSet.length && !isSet[index]) {
