@@ -59,7 +59,7 @@ public class SchedulerView extends ViewPart {
 
 	private Action sortModeAction;
 
-	ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
+	private final ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
 
 	/**
 	 * The constructor.
