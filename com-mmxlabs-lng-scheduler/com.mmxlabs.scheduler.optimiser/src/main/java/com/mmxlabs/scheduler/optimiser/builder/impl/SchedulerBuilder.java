@@ -184,7 +184,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * For debug & timing purposes. Switches the indexing DCPs on or off.
 	 */
-	private final boolean USE_INDEXED_DCPS = true;
+	private static final boolean USE_INDEXED_DCPS = true;
 
 	private final Map<IPort, List<TotalVolumeLimit>> loadLimits = new HashMap<IPort, List<TotalVolumeLimit>>();
 
