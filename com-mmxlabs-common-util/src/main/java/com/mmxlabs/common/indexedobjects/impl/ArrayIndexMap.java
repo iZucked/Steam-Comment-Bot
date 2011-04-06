@@ -38,9 +38,9 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 		}
 		final int newSize = Math.max(index + 1, contents.length * 2);
 		@SuppressWarnings("unchecked")
-		U[] newContents = (U[]) new Object[newSize];
-		boolean[] newIsSet = new boolean[newSize];
-		
+		final U[] newContents = (U[]) new Object[newSize];
+		final boolean[] newIsSet = new boolean[newSize];
+
 		System.arraycopy(contents, 0, newContents, 0, contents.length);
 		System.arraycopy(isSet, 0, newIsSet, 0, isSet.length);
 		
@@ -72,7 +72,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	}
 
 	@Override
-	public void set(final T key, U value) {
+	public void set(final T key, final U value) {
 		final int index = key.getIndex();
 		ensure(index);
 		contents[index] = value;
