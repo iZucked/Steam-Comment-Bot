@@ -81,7 +81,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 
 	@Override
 	public Iterable<U> getValues() {
-		return new Iterable<U> () {
+		return new Iterable<U>() {
 			@Override
 			public Iterator<U> iterator() {
 				return new Iterator<U> () {
