@@ -2,6 +2,7 @@ package com.mmxlabs.optimiser.ga.impl;
 
 import java.util.TreeSet;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.ga.Individual;
 
 /**
@@ -35,5 +36,25 @@ public final class Tuple<I> implements Comparable<Tuple<I>> {
 			assert idx != o.idx;
 			return idx - o.idx;
 		}
+	}
+	
+	@Override
+	public boolean equals(final Object obj) {
+		
+		if (obj instanceof Tuple) {
+			final Tuple<?> t = (Tuple<?>)obj;
+			if (t.f != f) {
+				return false;
+			}
+			if (t.i != i) {
+				return false;
+			}
+			
+			if (!Equality.isEqual(t.i, i)) {
+				return false;
+			}
+			return true;
+		}
+		return false;
 	}
 }
