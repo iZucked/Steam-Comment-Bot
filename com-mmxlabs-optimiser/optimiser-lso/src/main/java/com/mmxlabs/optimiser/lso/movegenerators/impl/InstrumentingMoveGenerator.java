@@ -76,7 +76,6 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 
 		@Override
 		public String toString() {
-			StringBuilder sb = new StringBuilder();
 			return String
 					.format("%s : %d generated, %d accepted, %d bad accepted, %.2f%% feasible, %.2f%% accepted. %.2f%% improving, %.2f%% detrimental",
 							moveClass.getSimpleName(), generatedCount,
