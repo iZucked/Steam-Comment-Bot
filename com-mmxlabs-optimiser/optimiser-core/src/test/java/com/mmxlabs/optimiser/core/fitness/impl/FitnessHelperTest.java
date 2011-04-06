@@ -29,7 +29,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 @SuppressWarnings("unchecked")
 public class FitnessHelperTest {
 
-	class CoreWrapper<T> implements IFitnessComponent<T> {
+	static class CoreWrapper<T> implements IFitnessComponent<T> {
 
 		private final IFitnessCore<T> core;
 
