@@ -158,16 +158,16 @@ public class GanttViewerTest {
 		viewer.setLabelProvider(new GanttLabelProvider());
 
 		TreeNode resources[] = new TreeNode[2];
-		resources[0] = new TreeNode(new String("resource1"));
-		resources[1] = new TreeNode(new String("resource2"));
+		resources[0] = new TreeNode("resource1");
+		resources[1] = new TreeNode("resource2");
 
 		TreeNode[] children1 = new TreeNode[2];
-		children1[0] = new TreeNode(new String("child1"));
-		children1[1] = new TreeNode(new String("child2"));
+		children1[0] = new TreeNode("child1");
+		children1[1] = new TreeNode("child2");
 
 		TreeNode[] children2 = new TreeNode[2];
-		children2[0] = new TreeNode(new String("child3"));
-		children2[1] = new TreeNode(new String("child4"));
+		children2[0] = new TreeNode("child3");
+		children2[1] = new TreeNode("child4");
 
 		resources[0].setChildren(children1);
 		resources[1].setChildren(children2);
