@@ -1,8 +1,8 @@
 package com.mmxlabs.rcp.navigator.handlers;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -54,7 +55,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 		final ISelection selection = HandlerUtil
 				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 
-		if (selection != null & selection instanceof IStructuredSelection) {
+		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();
@@ -102,8 +103,8 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 									// Add copied scenario to this resource
 									nResource.getContents().add(scenario);
 
-									final Map<?, ?> options = Collections
-											.emptyMap();
+									final Map<String, String> options = new HashMap<String, String>();
+									options.put(XMLResource.OPTION_ENCODING, "UTF-8");
 									try {
 										nResource.save(options);
 									} catch (final IOException e) {
@@ -149,7 +150,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 				.getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();
 
-		if (selection != null & selection instanceof IStructuredSelection) {
+		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();

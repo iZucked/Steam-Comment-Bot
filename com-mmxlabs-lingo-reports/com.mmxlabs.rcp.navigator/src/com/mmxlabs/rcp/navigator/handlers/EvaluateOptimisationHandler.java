@@ -48,7 +48,8 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = HandlerUtil
 				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-		if (selection != null & selection instanceof IStructuredSelection) {
+		
+		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();
@@ -129,7 +130,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 				.getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();
 
-		if (selection != null & selection instanceof IStructuredSelection) {
+		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			// if

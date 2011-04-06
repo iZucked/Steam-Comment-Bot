@@ -60,7 +60,7 @@ public class SwapDischargeHandler extends AbstractHandler implements IHandler {
 				.getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();
 
-		if (selection != null & selection instanceof IStructuredSelection) {
+		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 
 			final Object[] selectedObjects = structuredSelection.toArray();
@@ -109,7 +109,7 @@ public class SwapDischargeHandler extends AbstractHandler implements IHandler {
 				.getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();
 
-		if (selection != null & selection instanceof IStructuredSelection) {
+		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			final Object[] selectedObjects = structuredSelection.toArray();
 
