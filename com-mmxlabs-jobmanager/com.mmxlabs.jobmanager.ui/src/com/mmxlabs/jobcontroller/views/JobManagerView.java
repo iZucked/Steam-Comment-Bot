@@ -5,7 +5,6 @@
 
 package com.mmxlabs.jobcontroller.views;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -46,14 +45,7 @@ import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.impl.TestUtils;
 import com.mmxlabs.jobmanager.ui.Activator;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.impl.OptimisationContext;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -83,7 +75,6 @@ public class JobManagerView extends ViewPart {
 	private Action stopAction;
 	private Action removeAction;
 	private Action toggleDisplayAction;
-	private Action createDummyJobAction;
 
 	private Action doubleClickAction;
 
@@ -138,7 +129,7 @@ public class JobManagerView extends ViewPart {
 	 * example).
 	 */
 
-	class ViewContentProvider implements IStructuredContentProvider {
+	static class ViewContentProvider implements IStructuredContentProvider {
 		@Override
 		public void inputChanged(final Viewer v, final Object oldInput,
 				final Object newInput) {
@@ -434,7 +425,7 @@ public class JobManagerView extends ViewPart {
 		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
-		manager.add(createDummyJobAction);
+//		manager.add(createDummyJobAction);
 		manager.add(toggleDisplayAction);
 
 		// Other plug-ins can contribute there actions here
@@ -555,51 +546,6 @@ public class JobManagerView extends ViewPart {
 				.setToolTipText("Toggle whether or not a job is linked to views");
 		toggleDisplayAction.setImageDescriptor(Activator
 				.getImageDescriptor("/icons/console_view.gif"));
-
-		createDummyJobAction = new Action() {
-
-			int counter = 0;
-
-			@Override
-			public void run() {
-				// ISelection selection = viewer.getSelection();
-				// Object obj = ((IStructuredSelection) selection)
-				// .getFirstElement();
-				// showMessage("Double-click detected on " + obj.toString());
-				final String name = "Job " + counter++;
-				final long seed = 1;
-
-				// Build opt data
-				final IOptimisationData<ISequenceElement> data = TestUtils
-						.createProblem();
-				// Generate initial state
-				final ISequences<ISequenceElement> initialSequences = TestUtils
-						.createInitialSequences(data, seed);
-
-				final IFitnessFunctionRegistry fitnessRegistry = TestUtils
-						.createFitnessRegistry();
-				final IConstraintCheckerRegistry constraintRegistry = TestUtils
-						.createConstraintRegistry();
-
-				final OptimisationContext<ISequenceElement> context = new OptimisationContext<ISequenceElement>(
-						data, initialSequences, new ArrayList<String>(
-								fitnessRegistry.getFitnessComponentNames()),
-						fitnessRegistry,
-						new ArrayList<String>(constraintRegistry
-								.getConstraintCheckerNames()),
-						constraintRegistry);
-
-				// final OptManagedJob job = new OptManagedJob(name, context);
-				//
-				// job.init();
-				//
-				// jobManager.addJob(job);
-
-			}
-		};
-		createDummyJobAction.setText("Create dummy job");
-		createDummyJobAction.setImageDescriptor(Activator
-				.getImageDescriptor("icons/ctool16/launchtrace_wiz.gif"));
 
 		doubleClickAction = new Action() {
 
