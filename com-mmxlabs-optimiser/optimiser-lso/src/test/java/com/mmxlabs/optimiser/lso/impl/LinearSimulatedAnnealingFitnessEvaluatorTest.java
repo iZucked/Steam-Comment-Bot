@@ -283,7 +283,6 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		Assert.assertNotSame(current, evaluator.getCurrentSequences());
 		Assert.assertSame(best, evaluator.getBestSequences());
-		current = evaluator.getCurrentSequences();
 
 		Assert.fail("This test will fail as we need the thresholder to return false, but the helper to return true!"); 
 		context.setDefaultResultForType(boolean.class, false);
