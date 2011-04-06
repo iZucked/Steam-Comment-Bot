@@ -9,7 +9,6 @@ package scenario.schedule.events;
 import java.util.Date;
 
 import scenario.ScenarioObject;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

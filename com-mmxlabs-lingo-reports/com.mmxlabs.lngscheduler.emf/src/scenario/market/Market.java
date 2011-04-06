@@ -6,8 +6,6 @@
 package scenario.market;
 
 import scenario.NamedObject;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -3,15 +3,10 @@ package scenario.presentation.cargoeditor.autocorrect;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
-import scenario.presentation.cargoeditor.autocorrect.AutoCorrector.ICorrector;
-
 import com.mmxlabs.common.Pair;
 
 public class SlotVolumeCorrector extends BaseCorrector {

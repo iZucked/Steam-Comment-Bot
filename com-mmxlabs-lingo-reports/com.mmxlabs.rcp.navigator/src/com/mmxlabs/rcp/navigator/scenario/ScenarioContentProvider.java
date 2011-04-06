@@ -8,7 +8,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionContentProvider;
 
 import com.mmxlabs.jobcontoller.Activator;

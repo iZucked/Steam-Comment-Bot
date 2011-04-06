@@ -7,14 +7,11 @@ package scenario.schedule.util;
 
 import java.util.List;
 
-import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-import scenario.cargo.Slot;
-import scenario.fleet.Vessel;
 import scenario.schedule.*;
 import scenario.schedule.ScheduleModel;
 import scenario.schedule.SchedulePackage;

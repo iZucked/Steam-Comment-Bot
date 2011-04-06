@@ -23,9 +23,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.port.Canal;
 import scenario.port.DistanceModel;
-import scenario.port.PartialDistance;
-import scenario.port.DistanceLine;
-import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.port.VesselClassCost;
 

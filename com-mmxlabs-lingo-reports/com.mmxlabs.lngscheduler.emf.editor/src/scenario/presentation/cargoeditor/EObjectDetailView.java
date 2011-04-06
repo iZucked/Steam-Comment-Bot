@@ -17,14 +17,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-
-import scenario.NamedObject;
-import scenario.presentation.cargoeditor.detailview.BasicAttributeInlineEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 

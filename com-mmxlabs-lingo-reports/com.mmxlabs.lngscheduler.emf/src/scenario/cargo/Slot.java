@@ -10,7 +10,6 @@ import java.util.Date;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.contract.Contract;
-import scenario.market.Market;
 import scenario.port.Port;
 
 /**

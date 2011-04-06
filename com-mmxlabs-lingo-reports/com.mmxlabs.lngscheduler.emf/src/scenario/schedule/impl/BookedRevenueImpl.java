@@ -29,7 +29,6 @@ import scenario.contract.Entity;
 import scenario.impl.ScenarioObjectImpl;
 
 import scenario.schedule.BookedRevenue;
-import scenario.schedule.CargoAllocation;
 import scenario.schedule.LineItem;
 import scenario.schedule.SchedulePackage;
 

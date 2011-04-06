@@ -15,7 +15,6 @@ import scenario.contract.*;
 import scenario.contract.ContractFactory;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
-import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 
 /**

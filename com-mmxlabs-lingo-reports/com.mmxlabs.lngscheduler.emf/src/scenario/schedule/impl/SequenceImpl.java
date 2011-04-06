@@ -23,9 +23,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.schedule.ScheduleFitness;
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
 

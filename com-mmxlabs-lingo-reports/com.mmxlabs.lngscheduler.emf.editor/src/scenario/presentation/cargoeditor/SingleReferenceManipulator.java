@@ -5,10 +5,6 @@
 package scenario.presentation.cargoeditor;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -16,8 +12,6 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.w3c.dom.NameList;
-
 import com.mmxlabs.common.Pair;
 
 /**

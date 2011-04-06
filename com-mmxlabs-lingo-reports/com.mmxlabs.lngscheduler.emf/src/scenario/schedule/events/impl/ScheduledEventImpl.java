@@ -18,8 +18,6 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import scenario.impl.ScenarioObjectImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.ScheduledEvent;
 

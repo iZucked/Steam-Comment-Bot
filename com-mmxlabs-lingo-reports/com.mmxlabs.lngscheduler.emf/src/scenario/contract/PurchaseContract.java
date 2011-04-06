@@ -5,8 +5,6 @@
 
 package scenario.contract;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Purchase Contract</b></em>'.
