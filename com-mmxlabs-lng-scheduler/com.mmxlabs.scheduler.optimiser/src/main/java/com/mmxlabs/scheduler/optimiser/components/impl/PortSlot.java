@@ -80,7 +80,7 @@ public abstract class PortSlot implements IPortSlot {
 		return false;
 	}
 	
-
+	@Override
 	public PortType getPortType() {
 		return portType;
 	}
@@ -89,6 +89,7 @@ public abstract class PortSlot implements IPortSlot {
 		this.portType = portType;
 	}
 
+	@Override
 	public String toString() {
 		return id + (timeWindow == null ? " <any>" : " <" + timeWindow.getStart() + ", " + timeWindow.getEnd()
 				+ ">");
