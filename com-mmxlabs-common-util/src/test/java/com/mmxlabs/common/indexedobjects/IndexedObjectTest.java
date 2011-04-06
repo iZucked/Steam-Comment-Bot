@@ -33,13 +33,13 @@ public class IndexedObjectTest {
 		Assert.assertFalse(a.getIndex() == a1.getIndex());
 	}
 	
-	class A extends IndexedObject {
+	static class A extends IndexedObject {
 		public A(IIndexingContext provider) {
 			super(provider);
 		}		
 	}
 	
-	class B extends IndexedObject {
+	static class B extends IndexedObject {
 		public B(IIndexingContext provider) {
 			super(provider);
 		}
