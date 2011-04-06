@@ -23,7 +23,7 @@ public final class LHMCache<K, V> extends AbstractCache<K, V> {
 			@Override
 			protected boolean removeEldestEntry(
 					Entry<K, Reference<V>> eldest) {
-				return size() > intendedSize;
+				return this.size() > intendedSize;
 			}
 		};
 	}
