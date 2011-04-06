@@ -68,6 +68,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -94,6 +95,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -106,6 +108,7 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return getVessel().getName();
 	}

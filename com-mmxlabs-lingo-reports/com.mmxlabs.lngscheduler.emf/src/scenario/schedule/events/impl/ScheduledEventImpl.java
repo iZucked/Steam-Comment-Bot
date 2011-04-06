@@ -102,6 +102,7 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getStartTime() {
 		return startTime;
 	}
@@ -111,6 +112,7 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartTime(Date newStartTime) {
 		Date oldStartTime = startTime;
 		startTime = newStartTime;
@@ -123,6 +125,7 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getEndTime() {
 		return endTime;
 	}
@@ -132,6 +135,7 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndTime(Date newEndTime) {
 		Date oldEndTime = endTime;
 		endTime = newEndTime;
@@ -144,6 +148,7 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getEventDuration() {
 		return (int) ((getEndTime().getTime() - getStartTime().getTime()) / javax.management.timer.Timer.ONE_HOUR); 
 	}
@@ -153,6 +158,7 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getHireCost() {
 		return (long) (((scenario.schedule.Sequence) eContainer()).getVessel().getHourlyCharterPrice() * getEventDuration());
 	}
@@ -162,6 +168,7 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getLocalStartTime() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -173,6 +180,7 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getLocalEndTime() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT

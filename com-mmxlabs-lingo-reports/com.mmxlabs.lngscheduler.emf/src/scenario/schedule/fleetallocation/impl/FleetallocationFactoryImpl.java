@@ -73,6 +73,7 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AllocatedVessel createAllocatedVessel() {
 		AllocatedVesselImpl allocatedVessel = new AllocatedVesselImpl();
 		return allocatedVessel;
@@ -83,6 +84,7 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetVessel createFleetVessel() {
 		FleetVesselImpl fleetVessel = new FleetVesselImpl();
 		return fleetVessel;
@@ -93,6 +95,7 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SpotVessel createSpotVessel() {
 		SpotVesselImpl spotVessel = new SpotVesselImpl();
 		return spotVessel;
@@ -103,6 +106,7 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetallocationPackage getFleetallocationPackage() {
 		return (FleetallocationPackage)getEPackage();
 	}

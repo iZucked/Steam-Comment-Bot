@@ -72,6 +72,7 @@ public class FleetallocationActionBarContributor
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public void run(IAction action) {
 			FleetallocationModelWizard wizard = new FleetallocationModelWizard();
 			wizard.init(getWindow().getWorkbench(), StructuredSelection.EMPTY);
@@ -231,7 +232,8 @@ public class FleetallocationActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
-				 public void menuAboutToShow(IMenuManager menuManager) {
+				 @Override
+				public void menuAboutToShow(IMenuManager menuManager) {
 					 menuManager.updateAll(true);
 				 }
 			 });
@@ -278,6 +280,7 @@ public class FleetallocationActionBarContributor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		// Remove any menu items for old selection.
 		//

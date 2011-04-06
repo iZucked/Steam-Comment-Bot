@@ -66,6 +66,7 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Schedule> getSchedules() {
 		if (schedules == null) {
 			schedules = new EObjectContainmentEList<Schedule>(Schedule.class, this, SchedulePackage.SCHEDULE_MODEL__SCHEDULES);

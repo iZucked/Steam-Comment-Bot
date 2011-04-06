@@ -323,6 +323,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LoadSlot getLoadSlot() {
 		if (loadSlot != null && loadSlot.eIsProxy()) {
 			InternalEObject oldLoadSlot = (InternalEObject)loadSlot;
@@ -349,6 +350,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadSlot(LoadSlot newLoadSlot) {
 		LoadSlot oldLoadSlot = loadSlot;
 		loadSlot = newLoadSlot;
@@ -361,6 +363,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getDischargeSlot() {
 		if (dischargeSlot != null && dischargeSlot.eIsProxy()) {
 			InternalEObject oldDischargeSlot = (InternalEObject)dischargeSlot;
@@ -387,6 +390,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeSlot(Slot newDischargeSlot) {
 		Slot oldDischargeSlot = dischargeSlot;
 		dischargeSlot = newDischargeSlot;
@@ -399,6 +403,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getFuelVolume() {
 		return fuelVolume;
 	}
@@ -408,6 +413,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFuelVolume(long newFuelVolume) {
 		long oldFuelVolume = fuelVolume;
 		fuelVolume = newFuelVolume;
@@ -420,6 +426,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getDischargeVolume() {
 		return dischargeVolume;
 	}
@@ -429,6 +436,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeVolume(long newDischargeVolume) {
 		long oldDischargeVolume = dischargeVolume;
 		dischargeVolume = newDischargeVolume;
@@ -441,6 +449,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getLoadDate() {
 		return loadDate;
 	}
@@ -450,6 +459,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadDate(Date newLoadDate) {
 		Date oldLoadDate = loadDate;
 		loadDate = newLoadDate;
@@ -462,6 +472,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getDischargeDate() {
 		return dischargeDate;
 	}
@@ -471,6 +482,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeDate(Date newDischargeDate) {
 		Date oldDischargeDate = dischargeDate;
 		dischargeDate = newDischargeDate;
@@ -483,6 +495,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLoadPriceM3() {
 		return loadPriceM3;
 	}
@@ -492,6 +505,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadPriceM3(int newLoadPriceM3) {
 		int oldLoadPriceM3 = loadPriceM3;
 		loadPriceM3 = newLoadPriceM3;
@@ -504,6 +518,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDischargePriceM3() {
 		return dischargePriceM3;
 	}
@@ -513,6 +528,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargePriceM3(int newDischargePriceM3) {
 		int oldDischargePriceM3 = dischargePriceM3;
 		dischargePriceM3 = newDischargePriceM3;
@@ -525,6 +541,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AllocatedVessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -551,6 +568,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(AllocatedVessel newVessel) {
 		AllocatedVessel oldVessel = vessel;
 		vessel = newVessel;
@@ -563,6 +581,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Journey getLadenLeg() {
 		if (ladenLeg != null && ladenLeg.eIsProxy()) {
 			InternalEObject oldLadenLeg = (InternalEObject)ladenLeg;
@@ -589,6 +608,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenLeg(Journey newLadenLeg) {
 		Journey oldLadenLeg = ladenLeg;
 		ladenLeg = newLadenLeg;
@@ -601,6 +621,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Journey getBallastLeg() {
 		if (ballastLeg != null && ballastLeg.eIsProxy()) {
 			InternalEObject oldBallastLeg = (InternalEObject)ballastLeg;
@@ -627,6 +648,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastLeg(Journey newBallastLeg) {
 		Journey oldBallastLeg = ballastLeg;
 		ballastLeg = newBallastLeg;
@@ -639,6 +661,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Idle getLadenIdle() {
 		if (ladenIdle != null && ladenIdle.eIsProxy()) {
 			InternalEObject oldLadenIdle = (InternalEObject)ladenIdle;
@@ -665,6 +688,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenIdle(Idle newLadenIdle) {
 		Idle oldLadenIdle = ladenIdle;
 		ladenIdle = newLadenIdle;
@@ -677,6 +701,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Idle getBallastIdle() {
 		if (ballastIdle != null && ballastIdle.eIsProxy()) {
 			InternalEObject oldBallastIdle = (InternalEObject)ballastIdle;
@@ -703,6 +728,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastIdle(Idle newBallastIdle) {
 		Idle oldBallastIdle = ballastIdle;
 		ballastIdle = newBallastIdle;
@@ -715,6 +741,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BookedRevenue getLoadRevenue() {
 		if (loadRevenue != null && loadRevenue.eIsProxy()) {
 			InternalEObject oldLoadRevenue = (InternalEObject)loadRevenue;
@@ -741,6 +768,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadRevenue(BookedRevenue newLoadRevenue) {
 		BookedRevenue oldLoadRevenue = loadRevenue;
 		loadRevenue = newLoadRevenue;
@@ -753,6 +781,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BookedRevenue getShippingRevenue() {
 		if (shippingRevenue != null && shippingRevenue.eIsProxy()) {
 			InternalEObject oldShippingRevenue = (InternalEObject)shippingRevenue;
@@ -779,6 +808,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingRevenue(BookedRevenue newShippingRevenue) {
 		BookedRevenue oldShippingRevenue = shippingRevenue;
 		shippingRevenue = newShippingRevenue;
@@ -791,6 +821,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BookedRevenue getDischargeRevenue() {
 		if (dischargeRevenue != null && dischargeRevenue.eIsProxy()) {
 			InternalEObject oldDischargeRevenue = (InternalEObject)dischargeRevenue;
@@ -817,6 +848,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeRevenue(BookedRevenue newDischargeRevenue) {
 		BookedRevenue oldDischargeRevenue = dischargeRevenue;
 		dischargeRevenue = newDischargeRevenue;
@@ -829,6 +861,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoType getCargoType() {
 		return cargoType;
 	}
@@ -838,6 +871,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoType(CargoType newCargoType) {
 		CargoType oldCargoType = cargoType;
 		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;
@@ -850,6 +884,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getTotalCost() {
 		long totalCost = 0;
 		totalCost += (getLadenIdle() == null) ? 0 : getLadenIdle().getTotalCost();
@@ -864,6 +899,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getLocalLoadDate() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getLoadSlot().getPort().getTimeZone())
@@ -877,6 +913,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getLocalDischargeDate() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getDischargeSlot().getPort().getTimeZone())
@@ -890,6 +927,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getLoadVolume() {
 		return getDischargeVolume() + getFuelVolume();
 	}
@@ -899,6 +937,7 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return ((scenario.cargo.Cargo) (getLoadSlot().eContainer())).getId();
 	}

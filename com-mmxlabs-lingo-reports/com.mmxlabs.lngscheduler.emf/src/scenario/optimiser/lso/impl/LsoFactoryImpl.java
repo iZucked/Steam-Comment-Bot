@@ -74,6 +74,7 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LSOSettings createLSOSettings() {
 		LSOSettingsImpl lsoSettings = new LSOSettingsImpl();
 		return lsoSettings;
@@ -84,6 +85,7 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ThresholderSettings createThresholderSettings() {
 		ThresholderSettingsImpl thresholderSettings = new ThresholderSettingsImpl();
 		return thresholderSettings;
@@ -94,6 +96,7 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MoveGeneratorSettings createMoveGeneratorSettings() {
 		MoveGeneratorSettingsImpl moveGeneratorSettings = new MoveGeneratorSettingsImpl();
 		return moveGeneratorSettings;
@@ -104,6 +107,7 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RandomMoveGeneratorSettings createRandomMoveGeneratorSettings() {
 		RandomMoveGeneratorSettingsImpl randomMoveGeneratorSettings = new RandomMoveGeneratorSettingsImpl();
 		return randomMoveGeneratorSettings;
@@ -114,6 +118,7 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ConstrainedMoveGeneratorSettings createConstrainedMoveGeneratorSettings() {
 		ConstrainedMoveGeneratorSettingsImpl constrainedMoveGeneratorSettings = new ConstrainedMoveGeneratorSettingsImpl();
 		return constrainedMoveGeneratorSettings;
@@ -124,6 +129,7 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LsoPackage getLsoPackage() {
 		return (LsoPackage)getEPackage();
 	}

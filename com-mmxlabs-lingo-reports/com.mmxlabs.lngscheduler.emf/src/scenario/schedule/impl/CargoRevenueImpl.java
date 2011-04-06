@@ -69,6 +69,7 @@ public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoAllocation getCargo() {
 		if (cargo != null && cargo.eIsProxy()) {
 			InternalEObject oldCargo = (InternalEObject)cargo;
@@ -95,6 +96,7 @@ public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargo(CargoAllocation newCargo) {
 		CargoAllocation oldCargo = cargo;
 		cargo = newCargo;
@@ -107,6 +109,7 @@ public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return getCargo().getName();
 	}

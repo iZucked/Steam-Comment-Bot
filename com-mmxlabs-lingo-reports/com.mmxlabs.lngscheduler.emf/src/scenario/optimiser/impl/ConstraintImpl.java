@@ -94,6 +94,7 @@ public class ConstraintImpl extends EObjectImpl implements Constraint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -103,6 +104,7 @@ public class ConstraintImpl extends EObjectImpl implements Constraint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -115,6 +117,7 @@ public class ConstraintImpl extends EObjectImpl implements Constraint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -124,6 +127,7 @@ public class ConstraintImpl extends EObjectImpl implements Constraint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEnabled(boolean newEnabled) {
 		boolean oldEnabled = enabled;
 		enabled = newEnabled;

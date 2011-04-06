@@ -131,6 +131,7 @@ public final class LngEditorAdvisor extends WorkbenchAdvisor {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public Object start(IApplicationContext context) throws Exception {
 			WorkbenchAdvisor workbenchAdvisor = new LngEditorAdvisor();
 			Display display = PlatformUI.createDisplay();
@@ -154,6 +155,7 @@ public final class LngEditorAdvisor extends WorkbenchAdvisor {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public void stop() {
 			// Do nothing.
 		}
@@ -180,6 +182,7 @@ public final class LngEditorAdvisor extends WorkbenchAdvisor {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public void createInitialLayout(IPageLayout layout) {
 			layout.setEditorAreaVisible(true);
 			layout.addPerspectiveShortcut(ID_PERSPECTIVE);
@@ -392,6 +395,7 @@ public final class LngEditorAdvisor extends WorkbenchAdvisor {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public void run(IAction action) {
 			MessageDialog.openInformation(getWindow().getShell(), getString("_UI_About_title"),
 			getString("_UI_About_text"));
@@ -411,6 +415,7 @@ public final class LngEditorAdvisor extends WorkbenchAdvisor {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public void run(IAction action) {
 			String[] filePaths = openFilePathDialog(getWindow().getShell(), SWT.OPEN, null);
 			if (filePaths.length > 0) {
@@ -432,6 +437,7 @@ public final class LngEditorAdvisor extends WorkbenchAdvisor {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public void run(IAction action) {
 			LoadResourceAction.LoadResourceDialog loadResourceDialog = new LoadResourceAction.LoadResourceDialog(getWindow().getShell());
 			if (Window.OK == loadResourceDialog.open()) {

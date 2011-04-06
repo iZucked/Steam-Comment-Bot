@@ -71,6 +71,7 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public StepwisePriceCurve getPriceCurve() {
 		return priceCurve;
 	}
@@ -95,6 +96,7 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceCurve(StepwisePriceCurve newPriceCurve) {
 		if (newPriceCurve != priceCurve) {
 			NotificationChain msgs = null;

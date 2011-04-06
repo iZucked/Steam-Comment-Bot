@@ -140,6 +140,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Market getDefaultMarket() {
 		if (defaultMarket != null && defaultMarket.eIsProxy()) {
 			InternalEObject oldDefaultMarket = (InternalEObject)defaultMarket;
@@ -166,6 +167,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultMarket(Market newDefaultMarket) {
 		Market oldDefaultMarket = defaultMarket;
 		defaultMarket = newDefaultMarket;
@@ -178,6 +180,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getTimeZone() {
 		return timeZone;
 	}
@@ -187,6 +190,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTimeZone(String newTimeZone) {
 		String oldTimeZone = timeZone;
 		timeZone = newTimeZone;
@@ -199,6 +203,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Contract getDefaultContract() {
 		if (defaultContract != null && defaultContract.eIsProxy()) {
 			InternalEObject oldDefaultContract = (InternalEObject)defaultContract;
@@ -225,6 +230,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultContract(Contract newDefaultContract) {
 		Contract oldDefaultContract = defaultContract;
 		defaultContract = newDefaultContract;

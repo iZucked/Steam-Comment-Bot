@@ -297,6 +297,7 @@ public class ContractEditor
 	 */
 	protected IPartListener partListener =
 		new IPartListener() {
+			@Override
 			public void partActivated(IWorkbenchPart p) {
 				if (p instanceof ContentOutline) {
 					if (((ContentOutline)p).getCurrentPage() == contentOutlinePage) {
@@ -315,15 +316,19 @@ public class ContractEditor
 					handleActivate();
 				}
 			}
+			@Override
 			public void partBroughtToTop(IWorkbenchPart p) {
 				// Ignore.
 			}
+			@Override
 			public void partClosed(IWorkbenchPart p) {
 				// Ignore.
 			}
+			@Override
 			public void partDeactivated(IWorkbenchPart p) {
 				// Ignore.
 			}
+			@Override
 			public void partOpened(IWorkbenchPart p) {
 				// Ignore.
 			}
@@ -396,7 +401,8 @@ public class ContractEditor
 							if (updateProblemIndication) {
 								getSite().getShell().getDisplay().asyncExec
 									(new Runnable() {
-										 public void run() {
+										 @Override
+										public void run() {
 											 updateProblemIndication();
 										 }
 									 });
@@ -595,10 +601,12 @@ public class ContractEditor
 		//
 		commandStack.addCommandStackListener
 			(new CommandStackListener() {
-				 public void commandStackChanged(final EventObject event) {
+				 @Override
+				public void commandStackChanged(final EventObject event) {
 					 getContainer().getDisplay().asyncExec
 						 (new Runnable() {
-							  public void run() {
+							  @Override
+							public void run() {
 								  firePropertyChange(IEditorPart.PROP_DIRTY);
 
 								  // Try to select the affected objects.
@@ -644,6 +652,7 @@ public class ContractEditor
 		if (theSelection != null && !theSelection.isEmpty()) {
 			Runnable runnable =
 				new Runnable() {
+					@Override
 					public void run() {
 						// Try to select the items in the current content viewer of the editor.
 						//
@@ -664,6 +673,7 @@ public class ContractEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EditingDomain getEditingDomain() {
 		return editingDomain;
 	}
@@ -760,6 +770,7 @@ public class ContractEditor
 					new ISelectionChangedListener() {
 						// This just notifies those things that are affected by the section.
 						//
+						@Override
 						public void selectionChanged(SelectionChangedEvent selectionChangedEvent) {
 							setSelection(selectionChangedEvent.getSelection());
 						}
@@ -794,6 +805,7 @@ public class ContractEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Viewer getViewer() {
 		return currentViewer;
 	}
@@ -1097,7 +1109,8 @@ public class ContractEditor
 
 			getSite().getShell().getDisplay().asyncExec
 				(new Runnable() {
-					 public void run() {
+					 @Override
+					public void run() {
 						 setActivePage(0);
 					 }
 				 });
@@ -1121,7 +1134,8 @@ public class ContractEditor
 
 		getSite().getShell().getDisplay().asyncExec
 			(new Runnable() {
-				 public void run() {
+				 @Override
+				public void run() {
 					 updateProblemIndication();
 				 }
 			 });
@@ -1253,7 +1267,8 @@ public class ContractEditor
 				(new ISelectionChangedListener() {
 					 // This ensures that we handle selections correctly.
 					 //
-					 public void selectionChanged(SelectionChangedEvent event) {
+					 @Override
+					public void selectionChanged(SelectionChangedEvent event) {
 						 handleContentOutlineSelection(event.getSelection());
 					 }
 				 });
@@ -1359,6 +1374,7 @@ public class ContractEditor
 			new IRunnableWithProgress() {
 				// This is the method that gets invoked when the operation runs.
 				//
+				@Override
 				public void run(IProgressMonitor monitor) {
 					// Save the resources to the file system.
 					//
@@ -1502,6 +1518,7 @@ public class ContractEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
@@ -1512,6 +1529,7 @@ public class ContractEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);
 	}
@@ -1522,6 +1540,7 @@ public class ContractEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ISelection getSelection() {
 		return editorSelection;
 	}
@@ -1533,6 +1552,7 @@ public class ContractEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSelection(ISelection selection) {
 		editorSelection = selection;
 
@@ -1602,6 +1622,7 @@ public class ContractEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void menuAboutToShow(IMenuManager menuManager) {
 		((IMenuListener)getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);
 	}

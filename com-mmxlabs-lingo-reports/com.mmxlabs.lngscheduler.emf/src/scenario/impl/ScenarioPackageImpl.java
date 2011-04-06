@@ -164,6 +164,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getScenario() {
 		return scenarioEClass;
 	}
@@ -173,6 +174,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_FleetModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(0);
 	}
@@ -182,6 +184,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_PortModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(1);
 	}
@@ -191,6 +194,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_CargoModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(2);
 	}
@@ -200,6 +204,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_ContractModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(3);
 	}
@@ -209,6 +214,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_ScheduleModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(4);
 	}
@@ -218,6 +224,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_MarketModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(5);
 	}
@@ -227,6 +234,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_DistanceModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(6);
 	}
@@ -236,6 +244,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_CanalModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(7);
 	}
@@ -245,6 +254,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenario_Optimisation() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(8);
 	}
@@ -254,6 +264,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenario_Version() {
 		return (EAttribute)scenarioEClass.getEStructuralFeatures().get(9);
 	}
@@ -263,6 +274,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenario_Name() {
 		return (EAttribute)scenarioEClass.getEStructuralFeatures().get(10);
 	}
@@ -272,6 +284,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getScenario__GetOrCreateFleetModel() {
 		return scenarioEClass.getEOperations().get(0);
 	}
@@ -281,6 +294,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getScenario__GetOrCreateScheduleModel() {
 		return scenarioEClass.getEOperations().get(1);
 	}
@@ -290,6 +304,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getScenarioObject() {
 		return scenarioObjectEClass;
 	}
@@ -299,6 +314,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getScenarioObject__GetContainer() {
 		return scenarioObjectEClass.getEOperations().get(0);
 	}
@@ -308,6 +324,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNamedObject() {
 		return namedObjectEClass;
 	}
@@ -317,6 +334,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNamedObject_Name() {
 		return (EAttribute)namedObjectEClass.getEStructuralFeatures().get(0);
 	}
@@ -326,6 +344,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
 	}

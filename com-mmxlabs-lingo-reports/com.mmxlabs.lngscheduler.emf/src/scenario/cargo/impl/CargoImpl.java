@@ -157,6 +157,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LoadSlot getLoadSlot() {
 		return loadSlot;
 	}
@@ -181,6 +182,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadSlot(LoadSlot newLoadSlot) {
 		if (newLoadSlot != loadSlot) {
 			NotificationChain msgs = null;
@@ -200,6 +202,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getDischargeSlot() {
 		return dischargeSlot;
 	}
@@ -224,6 +227,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeSlot(Slot newDischargeSlot) {
 		if (newDischargeSlot != dischargeSlot) {
 			NotificationChain msgs = null;
@@ -243,6 +247,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Vessel> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, CargoPackage.CARGO__ALLOWED_VESSELS);
@@ -255,6 +260,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoType getCargoType() {
 		return cargoType;
 	}
@@ -264,6 +270,7 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoType(CargoType newCargoType) {
 		CargoType oldCargoType = cargoType;
 		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;

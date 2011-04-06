@@ -266,14 +266,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         // listener for the "close editors automatically"
         // preference change
         propPrefListener = new IPropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent event) {
+            @Override
+			public void propertyChange(PropertyChangeEvent event) {
                 if (event.getProperty().equals(
 						IPreferenceConstants.REUSE_EDITORS_BOOLEAN)) {
                     if (window.getShell() != null
                             && !window.getShell().isDisposed()) {
                         // this property change notification could be from a non-ui thread
                         window.getShell().getDisplay().syncExec(new Runnable() {
-                            public void run() {
+                            @Override
+							public void run() {
                                 updatePinActionToolbar();
                             }
                         });
@@ -323,7 +325,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     /**
      * Fills the coolbar with the workbench actions.
      */
-    protected void fillCoolBar(ICoolBarManager coolBar) {
+    @Override
+	protected void fillCoolBar(ICoolBarManager coolBar) {
 
     	IActionBarConfigurer2 actionBarConfigurer = (IActionBarConfigurer2) getActionBarConfigurer();
         { // Set up the context Menu
@@ -401,7 +404,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     /**
      * Fills the menu bar with the workbench actions.
      */
-    protected void fillMenuBar(IMenuManager menuBar) {
+    @Override
+	protected void fillMenuBar(IMenuManager menuBar) {
         menuBar.add(createFileMenu());
         menuBar.add(createEditMenu());
 //        menuBar.add(createNavigateMenu());
@@ -745,7 +749,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
      * Disposes any resources and unhooks any listeners that are no longer needed.
      * Called when the window is closed.
      */
-    public void dispose() {
+    @Override
+	public void dispose() {
         if (isDisposed) {
 			return;
 		}
@@ -857,7 +862,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
      * be considered as an OLE container menu. Container menus
      * are preserved in OLE menu merging.
      */
-    public boolean isApplicationMenu(String menuId) {
+    @Override
+	public boolean isApplicationMenu(String menuId) {
         if (menuId.equals(IWorkbenchActionConstants.M_FILE)) {
 			return true;
 		}
@@ -884,14 +890,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     /**
      * Fills the status line with the workbench contribution items.
      */
-    protected void fillStatusLine(IStatusLineManager statusLine) {
+    @Override
+	protected void fillStatusLine(IStatusLineManager statusLine) {
         statusLine.add(statusLineItem);
     }
 
     /**
      * Creates actions (and contribution items) for the menu bar, toolbar and status line.
      */
-    protected void makeActions(final IWorkbenchWindow window) {
+    @Override
+	protected void makeActions(final IWorkbenchWindow window) {
         // @issue should obtain from ConfigurationItemFactory
         statusLineItem = new StatusLineContributionItem("ModeContributionItem"); //$NON-NLS-1$
 

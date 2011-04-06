@@ -128,6 +128,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot createSlot() {
 		SlotImpl slot = new SlotImpl();
 		return slot;
@@ -138,6 +139,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LoadSlot createLoadSlot() {
 		LoadSlotImpl loadSlot = new LoadSlotImpl();
 		return loadSlot;

@@ -192,6 +192,7 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortAndTime getStartRequirement() {
 		return startRequirement;
 	}
@@ -216,6 +217,7 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartRequirement(PortAndTime newStartRequirement) {
 		if (newStartRequirement != startRequirement) {
 			NotificationChain msgs = null;
@@ -235,6 +237,7 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortAndTime getEndRequirement() {
 		return endRequirement;
 	}
@@ -259,6 +262,7 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndRequirement(PortAndTime newEndRequirement) {
 		if (newEndRequirement != endRequirement) {
 			NotificationChain msgs = null;
@@ -278,6 +282,7 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isTimeChartered() {
 		return timeChartered;
 	}
@@ -287,6 +292,7 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTimeChartered(boolean newTimeChartered) {
 		boolean oldTimeChartered = timeChartered;
 		timeChartered = newTimeChartered;

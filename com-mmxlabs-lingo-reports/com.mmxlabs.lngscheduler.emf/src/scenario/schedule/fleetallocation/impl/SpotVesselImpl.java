@@ -90,6 +90,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIndex() {
 		return index;
 	}
@@ -99,6 +100,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIndex(int newIndex) {
 		int oldIndex = index;
 		index = newIndex;
@@ -111,6 +113,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselClass getVesselClass() {
 		if (vesselClass != null && vesselClass.eIsProxy()) {
 			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
@@ -137,6 +140,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselClass(VesselClass newVesselClass) {
 		VesselClass oldVesselClass = vesselClass;
 		vesselClass = newVesselClass;
@@ -149,6 +153,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getHourlyCharterPrice() {
 		return 
 		((getVesselClass().getDailyCharterPrice() * 1000) / 24) / 1000.0;
@@ -159,6 +164,7 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return getVesselClass().getName() + " " + getIndex();
 	}

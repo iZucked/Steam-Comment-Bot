@@ -96,6 +96,7 @@ public abstract class PopupComposite extends Composite {
 		arrow = new Button(this, arrowStyle);
 
 		listener = new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				if (isDisposed())
 					return;
@@ -121,6 +122,7 @@ public abstract class PopupComposite extends Composite {
 				}
 				if (getShell() == event.widget) {
 					getDisplay().asyncExec(new Runnable() {
+						@Override
 						public void run() {
 							if (isDisposed())
 								return;
@@ -131,6 +133,7 @@ public abstract class PopupComposite extends Composite {
 			}
 		};
 		filter = new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				if (isDisposed())
 					return;
@@ -268,6 +271,7 @@ public abstract class PopupComposite extends Composite {
 		}
 	}
 
+	@Override
 	protected void checkSubclass() {
 		String name = getClass().getName();
 		int index = name.lastIndexOf('.');
@@ -339,6 +343,7 @@ public abstract class PopupComposite extends Composite {
 		}
 	}
 
+	@Override
 	public Point computeSize(int wHint, int hHint, boolean changed) {
 		checkWidget();
 		int width = 0, height = 0;
@@ -518,6 +523,7 @@ public abstract class PopupComposite extends Composite {
 		return null;
 	}
 
+	@Override
 	public Control[] getChildren() {
 		checkWidget();
 		return new Control[0];
@@ -571,10 +577,12 @@ public abstract class PopupComposite extends Composite {
 		return isDropped();
 	}
 
+	@Override
 	public Menu getMenu() {
 		return inline.getMenu();
 	}
 
+	@Override
 	public Shell getShell() {
 		checkWidget();
 		Shell shell = super.getShell();
@@ -587,6 +595,7 @@ public abstract class PopupComposite extends Composite {
 		return _shell;
 	}
 
+	@Override
 	public int getStyle() {
 		int style = super.getStyle();
 //		style &= ~SWT.READ_ONLY;
@@ -656,6 +665,7 @@ public abstract class PopupComposite extends Composite {
 		return false;
 	}
 	
+	@Override
 	public boolean isFocusControl() {
 		checkWidget();
 		if (inline.isFocusControl() || arrow.isFocusControl()
@@ -725,6 +735,7 @@ public abstract class PopupComposite extends Composite {
 		}
 	}
 
+	@Override
 	public void redraw() {
 		super.redraw();
 		inline.redraw();
@@ -733,6 +744,7 @@ public abstract class PopupComposite extends Composite {
 //			list.redraw();
 	}
 
+	@Override
 	public void redraw(int x, int y, int width, int height, boolean all) {
 		super.redraw(x, y, width, height, true);
 	}
@@ -827,6 +839,7 @@ public abstract class PopupComposite extends Composite {
 		removeListener(SWT.Verify, listener);
 	}
 
+	@Override
 	public void setBackground(Color color) {
 		super.setBackground(color);
 		background = color;
@@ -838,6 +851,7 @@ public abstract class PopupComposite extends Composite {
 			arrow.setBackground(color);
 	}
 
+	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		if (popup != null)
@@ -848,6 +862,7 @@ public abstract class PopupComposite extends Composite {
 			arrow.setEnabled(enabled);
 	}
 
+	@Override
 	public boolean setFocus() {
 		checkWidget();
 		if (!isEnabled() || !isVisible())
@@ -857,6 +872,7 @@ public abstract class PopupComposite extends Composite {
 		return inline.setFocus();
 	}
 
+	@Override
 	public void setFont(Font font) {
 		super.setFont(font);
 		this.font = font;
@@ -865,6 +881,7 @@ public abstract class PopupComposite extends Composite {
 		internalLayout(true);
 	}
 
+	@Override
 	public void setForeground(Color color) {
 		super.setForeground(color);
 		foreground = color;
@@ -895,15 +912,18 @@ public abstract class PopupComposite extends Composite {
 	 *                thread that created the receiver</li>
 	 *                </ul>
 	 */
+	@Override
 	public void setLayout(Layout layout) {
 		checkWidget();
 		return;
 	}
 
+	@Override
 	public void setMenu(Menu menu) {
 		inline.setMenu(menu);
 	}
 
+	@Override
 	public void setToolTipText(String string) {
 		checkWidget();
 		super.setToolTipText(string);
@@ -911,6 +931,7 @@ public abstract class PopupComposite extends Composite {
 		inline.setToolTipText(string);
 	}
 
+	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		/*
@@ -1180,6 +1201,7 @@ public abstract class PopupComposite extends Composite {
 //		}
 //	}
 
+	@Override
 	public boolean traverse(int event) {
 		/*
 		 * When the traverse event is sent to the CCombo, it will create a list

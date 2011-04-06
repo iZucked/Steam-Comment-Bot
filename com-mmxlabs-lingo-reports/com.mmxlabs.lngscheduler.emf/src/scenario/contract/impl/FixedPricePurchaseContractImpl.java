@@ -73,6 +73,7 @@ public class FixedPricePurchaseContractImpl extends PurchaseContractImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getUnitPrice() {
 		return unitPrice;
 	}
@@ -82,6 +83,7 @@ public class FixedPricePurchaseContractImpl extends PurchaseContractImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnitPrice(float newUnitPrice) {
 		float oldUnitPrice = unitPrice;
 		unitPrice = newUnitPrice;

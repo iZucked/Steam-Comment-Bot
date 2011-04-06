@@ -73,6 +73,7 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelQuantity> getFuelUsage() {
 		if (fuelUsage == null) {
 			fuelUsage = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, EventsPackage.FUEL_MIXTURE__FUEL_USAGE);
@@ -85,6 +86,7 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getTotalFuelCost() {
 		long totalCost = 0;
 		

@@ -76,6 +76,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		super.setInput(source);
 	}
 
+	@Override
 	protected void updateControl() {
 		final List<Pair<String, EObject>> values = valueProvider
 				.getAlloweValues(input, feature);

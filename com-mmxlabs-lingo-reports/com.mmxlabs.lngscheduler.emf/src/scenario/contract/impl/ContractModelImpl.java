@@ -143,6 +143,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<TotalVolumeLimit> getVolumeConstraints() {
 		if (volumeConstraints == null) {
 			volumeConstraints = new EObjectContainmentEList<TotalVolumeLimit>(TotalVolumeLimit.class, this, ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
@@ -155,6 +156,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Entity> getEntities() {
 		if (entities == null) {
 			entities = new EObjectContainmentEList<Entity>(Entity.class, this, ContractPackage.CONTRACT_MODEL__ENTITIES);
@@ -167,6 +169,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Entity getShippingEntity() {
 		return shippingEntity;
 	}
@@ -191,6 +194,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingEntity(Entity newShippingEntity) {
 		if (newShippingEntity != shippingEntity) {
 			NotificationChain msgs = null;

@@ -177,6 +177,7 @@ public abstract class EMFReportView extends ViewPart implements
 			return ((Number) object).intValue();
 		}
 
+		@Override
 		public String format(final Object object) {
 			if (object == null)
 				return "";
@@ -186,6 +187,7 @@ public abstract class EMFReportView extends ViewPart implements
 			return String.format("%,d", x);
 		}
 
+		@Override
 		public Comparable getComparable(final Object object) {
 			final Integer x = getIntValue(object);
 			if (x == null)

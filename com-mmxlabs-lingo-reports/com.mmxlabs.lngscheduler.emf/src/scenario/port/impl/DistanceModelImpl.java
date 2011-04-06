@@ -67,6 +67,7 @@ public class DistanceModelImpl extends EObjectImpl implements DistanceModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<DistanceLine> getDistances() {
 		if (distances == null) {
 			distances = new EObjectContainmentEList<DistanceLine>(DistanceLine.class, this, PortPackage.DISTANCE_MODEL__DISTANCES);

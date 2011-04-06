@@ -130,6 +130,7 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -139,6 +140,7 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -151,6 +153,7 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselClassCost> getClassCosts() {
 		if (classCosts == null) {
 			classCosts = new EObjectContainmentEList<VesselClassCost>(VesselClassCost.class, this, PortPackage.CANAL__CLASS_COSTS);
@@ -163,6 +166,7 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDefaultCost() {
 		return defaultCost;
 	}
@@ -172,6 +176,7 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultCost(int newDefaultCost) {
 		int oldDefaultCost = defaultCost;
 		defaultCost = newDefaultCost;
@@ -184,6 +189,7 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DistanceModel getDistanceModel() {
 		return distanceModel;
 	}
@@ -208,6 +214,7 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistanceModel(DistanceModel newDistanceModel) {
 		if (newDistanceModel != distanceModel) {
 			NotificationChain msgs = null;

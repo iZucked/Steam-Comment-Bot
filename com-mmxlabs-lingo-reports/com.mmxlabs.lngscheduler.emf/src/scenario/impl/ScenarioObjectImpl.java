@@ -52,6 +52,7 @@ public abstract class ScenarioObjectImpl extends EObjectImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getContainer() {
 		return eContainer();
 	}

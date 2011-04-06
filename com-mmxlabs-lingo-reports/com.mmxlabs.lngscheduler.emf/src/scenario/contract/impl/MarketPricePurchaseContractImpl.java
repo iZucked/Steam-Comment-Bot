@@ -66,6 +66,7 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Market getMarket() {
 		if (market != null && market.eIsProxy()) {
 			InternalEObject oldMarket = (InternalEObject)market;
@@ -92,6 +93,7 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarket(Market newMarket) {
 		Market oldMarket = market;
 		market = newMarket;

@@ -90,6 +90,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Schedule createSchedule() {
 		ScheduleImpl schedule = new ScheduleImpl();
 		return schedule;
@@ -100,6 +101,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Sequence createSequence() {
 		SequenceImpl sequence = new SequenceImpl();
 		return sequence;
@@ -110,6 +112,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoAllocation createCargoAllocation() {
 		CargoAllocationImpl cargoAllocation = new CargoAllocationImpl();
 		return cargoAllocation;
@@ -120,6 +123,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleFitness createScheduleFitness() {
 		ScheduleFitnessImpl scheduleFitness = new ScheduleFitnessImpl();
 		return scheduleFitness;
@@ -130,6 +134,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LineItem createLineItem() {
 		LineItemImpl lineItem = new LineItemImpl();
 		return lineItem;
@@ -140,6 +145,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BookedRevenue createBookedRevenue() {
 		BookedRevenueImpl bookedRevenue = new BookedRevenueImpl();
 		return bookedRevenue;
@@ -150,6 +156,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoRevenue createCargoRevenue() {
 		CargoRevenueImpl cargoRevenue = new CargoRevenueImpl();
 		return cargoRevenue;
@@ -160,6 +167,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterOutRevenue createCharterOutRevenue() {
 		CharterOutRevenueImpl charterOutRevenue = new CharterOutRevenueImpl();
 		return charterOutRevenue;

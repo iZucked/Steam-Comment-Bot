@@ -334,6 +334,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		part.setCurrentViewerPane(this);
 	}
 
+	@Override
 	public TableViewer getViewer() {
 		return viewer;
 	}

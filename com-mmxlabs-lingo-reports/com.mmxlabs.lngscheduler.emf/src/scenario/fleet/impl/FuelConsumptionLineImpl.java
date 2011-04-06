@@ -102,6 +102,7 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpeed(float newSpeed) {
 		float oldSpeed = speed;
 		speed = newSpeed;
@@ -124,6 +125,7 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConsumption(float newConsumption) {
 		float oldConsumption = consumption;
 		consumption = newConsumption;

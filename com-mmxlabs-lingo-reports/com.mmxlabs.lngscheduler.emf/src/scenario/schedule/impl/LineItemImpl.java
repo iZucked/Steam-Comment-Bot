@@ -93,6 +93,7 @@ public class LineItemImpl extends NamedObjectImpl implements LineItem {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getValue() {
 		return value;
 	}
@@ -102,6 +103,7 @@ public class LineItemImpl extends NamedObjectImpl implements LineItem {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(int newValue) {
 		int oldValue = value;
 		value = newValue;
@@ -114,6 +116,7 @@ public class LineItemImpl extends NamedObjectImpl implements LineItem {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Entity getParty() {
 		if (party != null && party.eIsProxy()) {
 			InternalEObject oldParty = (InternalEObject)party;
@@ -140,6 +143,7 @@ public class LineItemImpl extends NamedObjectImpl implements LineItem {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setParty(Entity newParty) {
 		Entity oldParty = party;
 		party = newParty;
@@ -152,6 +156,7 @@ public class LineItemImpl extends NamedObjectImpl implements LineItem {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isCost() {
 		return getValue() < 0;
 	}
@@ -161,6 +166,7 @@ public class LineItemImpl extends NamedObjectImpl implements LineItem {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isRevenue() {
 		return !isCost();
 	}

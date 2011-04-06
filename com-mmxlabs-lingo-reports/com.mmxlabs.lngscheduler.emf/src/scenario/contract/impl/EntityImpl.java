@@ -96,6 +96,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getTaxRate() {
 		return taxRate;
 	}
@@ -105,6 +106,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTaxRate(float newTaxRate) {
 		float oldTaxRate = taxRate;
 		taxRate = newTaxRate;
@@ -117,6 +119,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getOwnership() {
 		return ownership;
 	}
@@ -126,6 +129,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOwnership(float newOwnership) {
 		float oldOwnership = ownership;
 		ownership = newOwnership;

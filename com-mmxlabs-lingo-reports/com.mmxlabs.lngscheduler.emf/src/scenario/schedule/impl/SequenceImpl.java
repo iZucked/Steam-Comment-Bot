@@ -102,6 +102,7 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ScheduledEvent> getEvents() {
 		if (events == null) {
 			events = new EObjectContainmentEList<ScheduledEvent>(ScheduledEvent.class, this, SchedulePackage.SEQUENCE__EVENTS);
@@ -114,6 +115,7 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AllocatedVessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -140,6 +142,7 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(AllocatedVessel newVessel) {
 		AllocatedVessel oldVessel = vessel;
 		vessel = newVessel;
@@ -152,6 +155,7 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ScheduleFitness> getFitness() {
 		if (fitness == null) {
 			fitness = new EObjectContainmentEList<ScheduleFitness>(ScheduleFitness.class, this, SchedulePackage.SEQUENCE__FITNESS);

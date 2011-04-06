@@ -73,6 +73,7 @@ public abstract class NamedObjectImpl extends ScenarioObjectImpl implements Name
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -82,6 +83,7 @@ public abstract class NamedObjectImpl extends ScenarioObjectImpl implements Name
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;

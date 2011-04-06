@@ -171,6 +171,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOptimisationSettings() {
 		return optimisationSettingsEClass;
 	}
@@ -180,6 +181,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOptimisationSettings_Name() {
 		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -189,6 +191,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOptimisationSettings_RandomSeed() {
 		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -198,6 +201,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimisationSettings_Constraints() {
 		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -207,6 +211,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimisationSettings_Objectives() {
 		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(3);
 	}
@@ -216,6 +221,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimisationSettings_InitialSchedule() {
 		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(4);
 	}
@@ -225,6 +231,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOptimisation() {
 		return optimisationEClass;
 	}
@@ -234,6 +241,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimisation_AllSettings() {
 		return (EReference)optimisationEClass.getEStructuralFeatures().get(0);
 	}
@@ -243,6 +251,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimisation_CurrentSettings() {
 		return (EReference)optimisationEClass.getEStructuralFeatures().get(1);
 	}
@@ -252,6 +261,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getConstraint() {
 		return constraintEClass;
 	}
@@ -261,6 +271,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getConstraint_Name() {
 		return (EAttribute)constraintEClass.getEStructuralFeatures().get(0);
 	}
@@ -270,6 +281,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getConstraint_Enabled() {
 		return (EAttribute)constraintEClass.getEStructuralFeatures().get(1);
 	}
@@ -279,6 +291,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getObjective() {
 		return objectiveEClass;
 	}
@@ -288,6 +301,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getObjective_Name() {
 		return (EAttribute)objectiveEClass.getEStructuralFeatures().get(0);
 	}
@@ -297,6 +311,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getObjective_Weight() {
 		return (EAttribute)objectiveEClass.getEStructuralFeatures().get(1);
 	}
@@ -306,6 +321,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OptimiserFactory getOptimiserFactory() {
 		return (OptimiserFactory)getEFactoryInstance();
 	}

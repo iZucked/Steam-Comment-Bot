@@ -49,6 +49,7 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getHourlyCharterPrice() {
 		return 0;
 	}
@@ -58,6 +59,7 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT

@@ -79,6 +79,7 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -105,6 +106,7 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(Slot newSlot) {
 		Slot oldSlot = slot;
 		slot = newSlot;
@@ -117,6 +119,7 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoAllocation getCargoAllocation() {
 		if (cargoAllocation != null && cargoAllocation.eIsProxy()) {
 			InternalEObject oldCargoAllocation = (InternalEObject)cargoAllocation;
@@ -143,6 +146,7 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
 		CargoAllocation oldCargoAllocation = cargoAllocation;
 		cargoAllocation = newCargoAllocation;

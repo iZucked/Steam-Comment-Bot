@@ -103,6 +103,7 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Slot> getSpareDischargeSlots() {
 		if (spareDischargeSlots == null) {
 			spareDischargeSlots = new EObjectContainmentEList<Slot>(Slot.class, this, CargoPackage.CARGO_MODEL__SPARE_DISCHARGE_SLOTS);
@@ -115,6 +116,7 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<LoadSlot> getSpareLoadSlots() {
 		if (spareLoadSlots == null) {
 			spareLoadSlots = new EObjectContainmentEList<LoadSlot>(LoadSlot.class, this, CargoPackage.CARGO_MODEL__SPARE_LOAD_SLOTS);

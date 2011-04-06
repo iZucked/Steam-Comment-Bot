@@ -95,6 +95,7 @@ public class ScheduleFitnessImpl extends EObjectImpl implements ScheduleFitness 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -104,6 +105,7 @@ public class ScheduleFitnessImpl extends EObjectImpl implements ScheduleFitness 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -116,6 +118,7 @@ public class ScheduleFitnessImpl extends EObjectImpl implements ScheduleFitness 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getValue() {
 		return value;
 	}
@@ -125,6 +128,7 @@ public class ScheduleFitnessImpl extends EObjectImpl implements ScheduleFitness 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(long newValue) {
 		long oldValue = value;
 		value = newValue;

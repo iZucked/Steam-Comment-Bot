@@ -157,6 +157,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Port> getPorts() {
 		if (ports == null) {
 			ports = new EObjectResolvingEList<Port>(Port.class, this, ContractPackage.TOTAL_VOLUME_LIMIT__PORTS);
@@ -169,6 +170,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getMaximumVolume() {
 		return maximumVolume;
 	}
@@ -178,6 +180,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaximumVolume(long newMaximumVolume) {
 		long oldMaximumVolume = maximumVolume;
 		maximumVolume = newMaximumVolume;
@@ -190,6 +193,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -199,6 +203,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartDate(Date newStartDate) {
 		Date oldStartDate = startDate;
 		startDate = newStartDate;
@@ -211,6 +216,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDuration() {
 		return duration;
 	}
@@ -220,6 +226,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDuration(int newDuration) {
 		int oldDuration = duration;
 		duration = newDuration;
@@ -232,6 +239,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isRepeating() {
 		return repeating;
 	}
@@ -241,6 +249,7 @@ public class TotalVolumeLimitImpl extends EObjectImpl implements TotalVolumeLimi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRepeating(boolean newRepeating) {
 		boolean oldRepeating = repeating;
 		repeating = newRepeating;

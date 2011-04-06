@@ -135,6 +135,7 @@ public class RandomMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isUsing2over2() {
 		return using2over2;
 	}
@@ -144,6 +145,7 @@ public class RandomMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUsing2over2(boolean newUsing2over2) {
 		boolean oldUsing2over2 = using2over2;
 		using2over2 = newUsing2over2;
@@ -156,6 +158,7 @@ public class RandomMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isUsing3over2() {
 		return using3over2;
 	}
@@ -165,6 +168,7 @@ public class RandomMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUsing3over2(boolean newUsing3over2) {
 		boolean oldUsing3over2 = using3over2;
 		using3over2 = newUsing3over2;
@@ -177,6 +181,7 @@ public class RandomMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isUsing4over1() {
 		return using4over1;
 	}
@@ -186,6 +191,7 @@ public class RandomMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUsing4over1(boolean newUsing4over1) {
 		boolean oldUsing4over1 = using4over1;
 		using4over1 = newUsing4over1;
@@ -198,6 +204,7 @@ public class RandomMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isUsing4over2() {
 		return using4over2;
 	}
@@ -207,6 +214,7 @@ public class RandomMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUsing4over2(boolean newUsing4over2) {
 		boolean oldUsing4over2 = using4over2;
 		using4over2 = newUsing4over2;

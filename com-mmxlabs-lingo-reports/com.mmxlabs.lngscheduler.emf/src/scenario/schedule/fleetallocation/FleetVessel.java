@@ -58,6 +58,7 @@ public interface FleetVessel extends AllocatedVessel {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getVessel().getName();'"
 	 * @generated
 	 */
+	@Override
 	String getName();
 
 } // FleetVessel

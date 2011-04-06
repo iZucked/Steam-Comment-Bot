@@ -179,6 +179,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getLSOSettings() {
 		return lsoSettingsEClass;
 	}
@@ -188,6 +189,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLSOSettings_NumberOfSteps() {
 		return (EAttribute)lsoSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -197,6 +199,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLSOSettings_ThresholderSettings() {
 		return (EReference)lsoSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -206,6 +209,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLSOSettings_MoveGeneratorSettings() {
 		return (EReference)lsoSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -215,6 +219,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getThresholderSettings() {
 		return thresholderSettingsEClass;
 	}
@@ -224,6 +229,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getThresholderSettings_Alpha() {
 		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -233,6 +239,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getThresholderSettings_InitialAcceptanceRate() {
 		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -242,6 +249,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getThresholderSettings_EpochLength() {
 		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -251,6 +259,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMoveGeneratorSettings() {
 		return moveGeneratorSettingsEClass;
 	}
@@ -260,6 +269,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getRandomMoveGeneratorSettings() {
 		return randomMoveGeneratorSettingsEClass;
 	}
@@ -269,6 +279,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRandomMoveGeneratorSettings_Using2over2() {
 		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -278,6 +289,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRandomMoveGeneratorSettings_Using3over2() {
 		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -287,6 +299,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRandomMoveGeneratorSettings_Using4over1() {
 		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -296,6 +309,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRandomMoveGeneratorSettings_Using4over2() {
 		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(3);
 	}
@@ -305,6 +319,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getConstrainedMoveGeneratorSettings() {
 		return constrainedMoveGeneratorSettingsEClass;
 	}
@@ -314,6 +329,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LsoFactory getLsoFactory() {
 		return (LsoFactory)getEFactoryInstance();
 	}

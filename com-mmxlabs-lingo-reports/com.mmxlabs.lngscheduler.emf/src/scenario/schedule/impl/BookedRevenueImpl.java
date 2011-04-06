@@ -113,6 +113,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Entity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -139,6 +140,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(Entity newEntity) {
 		Entity oldEntity = entity;
 		entity = newEntity;
@@ -151,6 +153,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getDate() {
 		return date;
 	}
@@ -160,6 +163,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(Date newDate) {
 		Date oldDate = date;
 		date = newDate;
@@ -172,6 +176,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<LineItem> getLineItems() {
 		if (lineItems == null) {
 			lineItems = new EObjectContainmentEList<LineItem>(LineItem.class, this, SchedulePackage.BOOKED_REVENUE__LINE_ITEMS);
@@ -184,6 +189,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getUntaxedValue() {
 		int untaxedRevenue = 0;
 		
@@ -199,6 +205,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTaxedValue() {
 		final int untaxedRevenue = getUntaxedValue();
 		
@@ -214,6 +221,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getUntaxedRevenues() {
 		int untaxedRevenue = 0;
 		
@@ -230,6 +238,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getUntaxedCosts() {
 		int untaxedRevenue = 0;
 		
@@ -246,6 +255,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTaxCost() {
 		return getUntaxedValue() - getTaxedValue();
 	}
@@ -255,6 +265,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT

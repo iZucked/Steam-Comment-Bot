@@ -504,6 +504,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	protected IPartListener partListener = new IPartListener() {
+		@Override
 		public void partActivated(final IWorkbenchPart p) {
 			if (p instanceof ContentOutline) {
 				if (((ContentOutline) p).getCurrentPage() == contentOutlinePage) {
@@ -523,18 +524,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 		}
 
+		@Override
 		public void partBroughtToTop(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
+		@Override
 		public void partClosed(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
+		@Override
 		public void partDeactivated(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
+		@Override
 		public void partOpened(final IWorkbenchPart p) {
 			// Ignore.
 		}
@@ -607,6 +612,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					if (updateProblemIndication) {
 						getSite().getShell().getDisplay()
 								.asyncExec(new Runnable() {
+									@Override
 									public void run() {
 										updateProblemIndication();
 									}
@@ -814,8 +820,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// be the selection of the viewer with focus.
 		//
 		commandStack.addCommandStackListener(new CommandStackListener() {
+			@Override
 			public void commandStackChanged(final EventObject event) {
 				getContainer().getDisplay().asyncExec(new Runnable() {
+					@Override
 					public void run() {
 						firePropertyChange(IEditorPart.PROP_DIRTY);
 
@@ -865,6 +873,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		//
 		if (theSelection != null && !theSelection.isEmpty()) {
 			final Runnable runnable = new Runnable() {
+				@Override
 				public void run() {
 					// Try to select the items in the current content viewer of
 					// the editor.
@@ -888,6 +897,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
+	@Override
 	public EditingDomain getEditingDomain() {
 		return editingDomain;
 	}
@@ -988,6 +998,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					// This just notifies those things that are affected by the
 					// section.
 					//
+					@Override
 					public void selectionChanged(
 							final SelectionChangedEvent selectionChangedEvent) {
 						setSelection(selectionChangedEvent.getSelection());
@@ -1026,6 +1037,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
+	@Override
 	public Viewer getViewer() {
 		return currentViewer;
 	}
@@ -1339,6 +1351,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			 */
 
 			getSite().getShell().getDisplay().asyncExec(new Runnable() {
+				@Override
 				public void run() {
 					setActivePage(0);
 				}
@@ -1362,6 +1375,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		});
 
 		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+			@Override
 			public void run() {
 				updateProblemIndication();
 			}
@@ -2171,6 +2185,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					.addSelectionChangedListener(new ISelectionChangedListener() {
 						// This ensures that we handle selections correctly.
 						//
+						@Override
 						public void selectionChanged(
 								final SelectionChangedEvent event) {
 							handleContentOutlineSelection(event.getSelection());
@@ -2396,6 +2411,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		final IRunnableWithProgress operation = new IRunnableWithProgress() {
 			// This is the method that gets invoked when the operation runs.
 			//
+			@Override
 			public void run(final IProgressMonitor monitor) {
 				// Save the resources to the file system.
 				//
@@ -2545,6 +2561,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
+	@Override
 	public void addSelectionChangedListener(
 			final ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
@@ -2556,6 +2573,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
+	@Override
 	public void removeSelectionChangedListener(
 			final ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);
@@ -2568,6 +2586,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
+	@Override
 	public ISelection getSelection() {
 		return editorSelection;
 	}
@@ -2579,6 +2598,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
+	@Override
 	public void setSelection(final ISelection selection) {
 		editorSelection = selection;
 
@@ -2656,6 +2676,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
+	@Override
 	public void menuAboutToShow(final IMenuManager menuManager) {
 		((IMenuListener) getEditorSite().getActionBarContributor())
 				.menuAboutToShow(menuManager);

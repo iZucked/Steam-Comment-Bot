@@ -102,6 +102,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DistanceModel createDistanceModel() {
 		DistanceModelImpl distanceModel = new DistanceModelImpl();
 		return distanceModel;
@@ -112,6 +113,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DistanceLine createDistanceLine() {
 		DistanceLineImpl distanceLine = new DistanceLineImpl();
 		return distanceLine;
@@ -122,6 +124,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Canal createCanal() {
 		CanalImpl canal = new CanalImpl();
 		return canal;
@@ -132,6 +135,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalModel createCanalModel() {
 		CanalModelImpl canalModel = new CanalModelImpl();
 		return canalModel;
@@ -142,6 +146,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselClassCost createVesselClassCost() {
 		VesselClassCostImpl vesselClassCost = new VesselClassCostImpl();
 		return vesselClassCost;

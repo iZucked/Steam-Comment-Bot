@@ -136,6 +136,7 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -145,6 +146,7 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -157,6 +159,7 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getRandomSeed() {
 		return randomSeed;
 	}
@@ -166,6 +169,7 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRandomSeed(long newRandomSeed) {
 		long oldRandomSeed = randomSeed;
 		randomSeed = newRandomSeed;
@@ -178,6 +182,7 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Constraint> getConstraints() {
 		if (constraints == null) {
 			constraints = new EObjectContainmentEList<Constraint>(Constraint.class, this, OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS);
@@ -190,6 +195,7 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Objective> getObjectives() {
 		if (objectives == null) {
 			objectives = new EObjectContainmentEList<Objective>(Objective.class, this, OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES);
@@ -202,6 +208,7 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Schedule getInitialSchedule() {
 		if (initialSchedule != null && initialSchedule.eIsProxy()) {
 			InternalEObject oldInitialSchedule = (InternalEObject)initialSchedule;
@@ -228,6 +235,7 @@ public class OptimisationSettingsImpl extends EObjectImpl implements Optimisatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInitialSchedule(Schedule newInitialSchedule) {
 		Schedule oldInitialSchedule = initialSchedule;
 		initialSchedule = newInitialSchedule;

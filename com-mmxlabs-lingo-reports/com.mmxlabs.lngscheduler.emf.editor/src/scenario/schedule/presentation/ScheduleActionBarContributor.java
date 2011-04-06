@@ -64,6 +64,7 @@ public class ScheduleActionBarContributor
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public void run(IAction action) {
 			ScheduleModelWizard wizard = new ScheduleModelWizard();
 			wizard.init(getWindow().getWorkbench(), StructuredSelection.EMPTY);
@@ -223,7 +224,8 @@ public class ScheduleActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
-				 public void menuAboutToShow(IMenuManager menuManager) {
+				 @Override
+				public void menuAboutToShow(IMenuManager menuManager) {
 					 menuManager.updateAll(true);
 				 }
 			 });
@@ -270,6 +272,7 @@ public class ScheduleActionBarContributor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		// Remove any menu items for old selection.
 		//

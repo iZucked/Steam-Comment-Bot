@@ -58,6 +58,7 @@ public interface PortVisit extends ScheduledEvent {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getPort().getTimeZone())\n);\ncalendar.setTime(getStartTime());\nreturn calendar;'"
 	 * @generated
 	 */
+	@Override
 	Object getLocalStartTime();
 
 	/**
@@ -67,6 +68,7 @@ public interface PortVisit extends ScheduledEvent {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getPort().getTimeZone())\n);\ncalendar.setTime(getEndTime());\nreturn calendar;'"
 	 * @generated
 	 */
+	@Override
 	Object getLocalEndTime();
 
 	String getId();

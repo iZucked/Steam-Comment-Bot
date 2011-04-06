@@ -71,6 +71,7 @@ public class CanalModelImpl extends EObjectImpl implements CanalModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Canal> getCanals() {
 		if (canals == null) {
 			canals = new EObjectContainmentEList<Canal>(Canal.class, this, PortPackage.CANAL_MODEL__CANALS);

@@ -87,7 +87,8 @@ public class SpinnerCellEditor extends CellEditor {
 			}
 			
             // hook key pressed - see PR 14201  
-            public void keyPressed(final KeyEvent e) {
+            @Override
+			public void keyPressed(final KeyEvent e) {
                 keyReleaseOccured(e);
 
                 // as a result of processing the above call, clients may have

@@ -409,6 +409,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScheduleModel(ScheduleModel newScheduleModel) {
 		if (newScheduleModel != scheduleModel) {
 			NotificationChain msgs = null;
@@ -473,6 +474,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DistanceModel getDistanceModel() {
 		return distanceModel;
 	}
@@ -497,6 +499,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistanceModel(DistanceModel newDistanceModel) {
 		if (newDistanceModel != distanceModel) {
 			NotificationChain msgs = null;
@@ -516,6 +519,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalModel getCanalModel() {
 		return canalModel;
 	}
@@ -540,6 +544,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalModel(CanalModel newCanalModel) {
 		if (newCanalModel != canalModel) {
 			NotificationChain msgs = null;
@@ -559,6 +564,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Optimisation getOptimisation() {
 		return optimisation;
 	}
@@ -583,6 +589,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOptimisation(Optimisation newOptimisation) {
 		if (newOptimisation != optimisation) {
 			NotificationChain msgs = null;
@@ -602,6 +609,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVersion() {
 		return version;
 	}
@@ -611,6 +619,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(int newVersion) {
 		int oldVersion = version;
 		version = newVersion;
@@ -623,6 +632,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -632,6 +642,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -644,6 +655,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetModel getOrCreateFleetModel() {
 		if (getFleetModel() == null)
 					setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());
@@ -656,6 +668,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleModel getOrCreateScheduleModel() {
 		if (getScheduleModel() == null)
 					setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());

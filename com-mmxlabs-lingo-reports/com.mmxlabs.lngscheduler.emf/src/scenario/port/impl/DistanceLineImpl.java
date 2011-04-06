@@ -95,6 +95,7 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getFromPort() {
 		if (fromPort != null && fromPort.eIsProxy()) {
 			InternalEObject oldFromPort = (InternalEObject)fromPort;
@@ -121,6 +122,7 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFromPort(Port newFromPort) {
 		Port oldFromPort = fromPort;
 		fromPort = newFromPort;
@@ -133,6 +135,7 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getToPort() {
 		if (toPort != null && toPort.eIsProxy()) {
 			InternalEObject oldToPort = (InternalEObject)toPort;
@@ -159,6 +162,7 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setToPort(Port newToPort) {
 		Port oldToPort = toPort;
 		toPort = newToPort;
@@ -171,6 +175,7 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDistance() {
 		return distance;
 	}
@@ -180,6 +185,7 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistance(int newDistance) {
 		int oldDistance = distance;
 		distance = newDistance;

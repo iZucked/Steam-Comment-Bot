@@ -131,6 +131,7 @@ public class Range extends Composite {
 	boolean hasFocus = false;
 
 	private Listener filter = new Listener() {
+		@Override
 		public void handleEvent(Event event) {
 			if (((Control) event.widget).getShell() == getShell())
 				handleFocus(SWT.FocusOut);

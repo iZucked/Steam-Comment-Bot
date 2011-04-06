@@ -121,6 +121,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 		final IContainer root = ResourcesPlugin.getWorkspace().getRoot();
 		Job job = new WorkspaceJob(IDEWorkbenchMessages.Workspace_refreshing) {
+			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor)
 					throws CoreException {
 				root.refreshLocal(IResource.DEPTH_INFINITE, monitor);

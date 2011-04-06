@@ -97,6 +97,7 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getDate() {
 		return date;
 	}
@@ -106,6 +107,7 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(Date newDate) {
 		Date oldDate = date;
 		date = newDate;
@@ -118,6 +120,7 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getPriceFromDate() {
 		return priceFromDate;
 	}
@@ -127,6 +130,7 @@ public class StepwisePriceImpl extends EObjectImpl implements StepwisePrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPriceFromDate(float newPriceFromDate) {
 		float oldPriceFromDate = priceFromDate;
 		priceFromDate = newPriceFromDate;

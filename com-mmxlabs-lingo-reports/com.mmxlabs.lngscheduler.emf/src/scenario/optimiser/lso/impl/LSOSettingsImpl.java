@@ -100,6 +100,7 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getNumberOfSteps() {
 		return numberOfSteps;
 	}
@@ -109,6 +110,7 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNumberOfSteps(int newNumberOfSteps) {
 		int oldNumberOfSteps = numberOfSteps;
 		numberOfSteps = newNumberOfSteps;
@@ -121,6 +123,7 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ThresholderSettings getThresholderSettings() {
 		return thresholderSettings;
 	}
@@ -145,6 +148,7 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setThresholderSettings(ThresholderSettings newThresholderSettings) {
 		if (newThresholderSettings != thresholderSettings) {
 			NotificationChain msgs = null;
@@ -164,6 +168,7 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MoveGeneratorSettings getMoveGeneratorSettings() {
 		return moveGeneratorSettings;
 	}
@@ -188,6 +193,7 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMoveGeneratorSettings(MoveGeneratorSettings newMoveGeneratorSettings) {
 		if (newMoveGeneratorSettings != moveGeneratorSettings) {
 			NotificationChain msgs = null;

@@ -113,6 +113,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FuelMixture createFuelMixture() {
 		FuelMixtureImpl fuelMixture = new FuelMixtureImpl();
 		return fuelMixture;
@@ -123,6 +124,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FuelQuantity createFuelQuantity() {
 		FuelQuantityImpl fuelQuantity = new FuelQuantityImpl();
 		return fuelQuantity;
@@ -133,6 +135,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduledEvent createScheduledEvent() {
 		ScheduledEventImpl scheduledEvent = new ScheduledEventImpl();
 		return scheduledEvent;
@@ -143,6 +146,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Idle createIdle() {
 		IdleImpl idle = new IdleImpl();
 		return idle;
@@ -153,6 +157,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Journey createJourney() {
 		JourneyImpl journey = new JourneyImpl();
 		return journey;
@@ -163,6 +168,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortVisit createPortVisit() {
 		PortVisitImpl portVisit = new PortVisitImpl();
 		return portVisit;
@@ -173,6 +179,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotVisit createSlotVisit() {
 		SlotVisitImpl slotVisit = new SlotVisitImpl();
 		return slotVisit;
@@ -183,6 +190,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterOutVisit createCharterOutVisit() {
 		CharterOutVisitImpl charterOutVisit = new CharterOutVisitImpl();
 		return charterOutVisit;
@@ -233,6 +241,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EventsPackage getEventsPackage() {
 		return (EventsPackage)getEPackage();
 	}

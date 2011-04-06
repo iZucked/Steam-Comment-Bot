@@ -223,6 +223,7 @@ public class VesselStateAttributesDialog extends Dialog {
 				grpSpeedconsumptionCurve, SWT.BORDER | SWT.FULL_SELECTION);
 		tableViewer
 				.addPostSelectionChangedListener(new ISelectionChangedListener() {
+					@Override
 					public void selectionChanged(SelectionChangedEvent event) {
 						btnRemoveLine.setEnabled(!event.getSelection()
 								.isEmpty());
@@ -269,10 +270,12 @@ public class VesselStateAttributesDialog extends Dialog {
 		TableViewerColumn speedColumn = new TableViewerColumn(tableViewer,
 				SWT.NONE);
 		speedColumn.setEditingSupport(new EditingSupport(tableViewer) {
+			@Override
 			protected boolean canEdit(Object element) {
 				return true;
 			}
 
+			@Override
 			protected CellEditor getCellEditor(Object element) {
 				SpinnerCellEditor editor = new SpinnerCellEditor(tableViewer.getTable());
 				editor.setDigits(2);
@@ -281,21 +284,25 @@ public class VesselStateAttributesDialog extends Dialog {
 				return editor;
 			}
 
+			@Override
 			protected Object getValue(Object element) {
 				return element == null ? null : (Float) ((FuelConsumptionLine) element)
 						.getSpeed();
 			}
 
+			@Override
 			protected void setValue(Object element, Object value) {
 				((FuelConsumptionLine) element).setSpeed((Float) value);
 				tableViewer.refresh();
 			}
 		});
 		speedColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
 			public Image getImage(Object element) {
 				return null;
 			}
 
+			@Override
 			public String getText(Object element) {
 				return element == null ? "" : ((FuelConsumptionLine) element)
 						.getSpeed() + "";
@@ -310,10 +317,12 @@ public class VesselStateAttributesDialog extends Dialog {
 				tableViewer, SWT.NONE);
 		fuelConsumptionColumn
 				.setEditingSupport(new EditingSupport(tableViewer) {
+					@Override
 					protected boolean canEdit(Object element) {
 						return true;
 					}
 
+					@Override
 					protected CellEditor getCellEditor(Object element) {
 						SpinnerCellEditor editor = new SpinnerCellEditor(tableViewer.getTable());
 						editor.setDigits(2);
@@ -322,21 +331,25 @@ public class VesselStateAttributesDialog extends Dialog {
 						return editor;
 					}
 
+					@Override
 					protected Object getValue(Object element) {
 						return element == null ? null : (Float) ((FuelConsumptionLine) element)
 								.getConsumption();
 					}
 
+					@Override
 					protected void setValue(Object element, Object value) {
 						((FuelConsumptionLine) element).setConsumption((Float) value);
 						tableViewer.refresh();
 					}
 				});
 		fuelConsumptionColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
 			public Image getImage(Object element) {
 				return null;
 			}
 
+			@Override
 			public String getText(Object element) {
 				return element == null ? "" : ((FuelConsumptionLine) element)
 						.getConsumption() + "";

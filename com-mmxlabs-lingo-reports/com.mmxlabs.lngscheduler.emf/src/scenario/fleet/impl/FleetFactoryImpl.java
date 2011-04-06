@@ -157,6 +157,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselStateAttributes createVesselStateAttributes() {
 		VesselStateAttributesImpl vesselStateAttributes = new VesselStateAttributesImpl();
 		return vesselStateAttributes;
@@ -167,6 +168,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortAndTime createPortAndTime() {
 		PortAndTimeImpl portAndTime = new PortAndTimeImpl();
 		return portAndTime;
@@ -177,6 +179,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterOut createCharterOut() {
 		CharterOutImpl charterOut = new CharterOutImpl();
 		return charterOut;

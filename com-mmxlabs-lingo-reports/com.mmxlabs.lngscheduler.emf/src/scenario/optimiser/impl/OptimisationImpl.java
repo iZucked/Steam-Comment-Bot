@@ -81,6 +81,7 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<OptimisationSettings> getAllSettings() {
 		if (allSettings == null) {
 			allSettings = new EObjectContainmentEList<OptimisationSettings>(OptimisationSettings.class, this, OptimiserPackage.OPTIMISATION__ALL_SETTINGS);
@@ -93,6 +94,7 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OptimisationSettings getCurrentSettings() {
 		if (currentSettings != null && currentSettings.eIsProxy()) {
 			InternalEObject oldCurrentSettings = (InternalEObject)currentSettings;
@@ -119,6 +121,7 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrentSettings(OptimisationSettings newCurrentSettings) {
 		OptimisationSettings oldCurrentSettings = currentSettings;
 		currentSettings = newCurrentSettings;

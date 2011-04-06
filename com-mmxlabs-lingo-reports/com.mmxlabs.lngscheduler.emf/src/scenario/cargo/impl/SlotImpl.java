@@ -211,6 +211,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -220,6 +221,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		String oldId = id;
 		id = newId;
@@ -232,6 +234,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinQuantity() {
 		return minQuantity;
 	}
@@ -241,6 +244,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinQuantity(int newMinQuantity) {
 		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
@@ -253,6 +257,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaxQuantity() {
 		return maxQuantity;
 	}
@@ -262,6 +267,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxQuantity(int newMaxQuantity) {
 		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
@@ -274,6 +280,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -300,6 +307,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -312,6 +320,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getWindowStart() {
 		return windowStart;
 	}
@@ -321,6 +330,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowStart(Date newWindowStart) {
 		Date oldWindowStart = windowStart;
 		windowStart = newWindowStart;
@@ -333,6 +343,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWindowDuration() {
 		return windowDuration;
 	}
@@ -342,6 +353,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWindowDuration(int newWindowDuration) {
 		int oldWindowDuration = windowDuration;
 		windowDuration = newWindowDuration;
@@ -354,6 +366,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSlotDuration() {
 		return slotDuration;
 	}
@@ -363,6 +376,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlotDuration(int newSlotDuration) {
 		int oldSlotDuration = slotDuration;
 		slotDuration = newSlotDuration;
@@ -375,6 +389,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Contract getContract() {
 		if (contract != null && contract.eIsProxy()) {
 			InternalEObject oldContract = (InternalEObject)contract;
@@ -401,6 +416,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContract(Contract newContract) {
 		Contract oldContract = contract;
 		contract = newContract;
@@ -413,6 +429,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getLocalWindowStart() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
@@ -426,6 +443,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Contract getSlotOrPortContract() {
 		if (getContract() != null)
 			return getContract();

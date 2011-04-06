@@ -143,6 +143,7 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Sequence> getSequences() {
 		if (sequences == null) {
 			sequences = new EObjectContainmentEList<Sequence>(Sequence.class, this, SchedulePackage.SCHEDULE__SEQUENCES);
@@ -155,6 +156,7 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -164,6 +166,7 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -176,6 +179,7 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CargoAllocation> getCargoAllocations() {
 		if (cargoAllocations == null) {
 			cargoAllocations = new EObjectContainmentEList<CargoAllocation>(CargoAllocation.class, this, SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS);
@@ -188,6 +192,7 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AllocatedVessel> getFleet() {
 		if (fleet == null) {
 			fleet = new EObjectContainmentEList<AllocatedVessel>(AllocatedVessel.class, this, SchedulePackage.SCHEDULE__FLEET);
@@ -200,6 +205,7 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ScheduleFitness> getFitness() {
 		if (fitness == null) {
 			fitness = new EObjectContainmentEList<ScheduleFitness>(ScheduleFitness.class, this, SchedulePackage.SCHEDULE__FITNESS);
@@ -212,6 +218,7 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<BookedRevenue> getRevenue() {
 		if (revenue == null) {
 			revenue = new EObjectContainmentEList<BookedRevenue>(BookedRevenue.class, this, SchedulePackage.SCHEDULE__REVENUE);

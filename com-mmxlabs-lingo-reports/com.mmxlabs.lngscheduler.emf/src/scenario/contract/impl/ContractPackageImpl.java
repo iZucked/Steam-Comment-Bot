@@ -219,6 +219,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getContractModel() {
 		return contractModelEClass;
 	}
@@ -228,6 +229,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContractModel_PurchaseContracts() {
 		return (EReference)contractModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -237,6 +239,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContractModel_SalesContracts() {
 		return (EReference)contractModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -246,6 +249,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContractModel_VolumeConstraints() {
 		return (EReference)contractModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -255,6 +259,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContractModel_Entities() {
 		return (EReference)contractModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -264,6 +269,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContractModel_ShippingEntity() {
 		return (EReference)contractModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -273,6 +279,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPurchaseContract() {
 		return purchaseContractEClass;
 	}
@@ -282,6 +289,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSalesContract() {
 		return salesContractEClass;
 	}
@@ -291,6 +299,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSalesContract_Market() {
 		return (EReference)salesContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -300,6 +309,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSalesContract_RegasEfficiency() {
 		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(1);
 	}
@@ -309,6 +319,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSalesContract_Markup() {
 		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(2);
 	}
@@ -318,6 +329,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getTotalVolumeLimit() {
 		return totalVolumeLimitEClass;
 	}
@@ -327,6 +339,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTotalVolumeLimit_Ports() {
 		return (EReference)totalVolumeLimitEClass.getEStructuralFeatures().get(0);
 	}
@@ -336,6 +349,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTotalVolumeLimit_MaximumVolume() {
 		return (EAttribute)totalVolumeLimitEClass.getEStructuralFeatures().get(1);
 	}
@@ -345,6 +359,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTotalVolumeLimit_StartDate() {
 		return (EAttribute)totalVolumeLimitEClass.getEStructuralFeatures().get(2);
 	}
@@ -354,6 +369,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTotalVolumeLimit_Duration() {
 		return (EAttribute)totalVolumeLimitEClass.getEStructuralFeatures().get(3);
 	}
@@ -363,6 +379,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTotalVolumeLimit_Repeating() {
 		return (EAttribute)totalVolumeLimitEClass.getEStructuralFeatures().get(4);
 	}
@@ -372,6 +389,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getEntity() {
 		return entityEClass;
 	}
@@ -381,6 +399,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEntity_TaxRate() {
 		return (EAttribute)entityEClass.getEStructuralFeatures().get(0);
 	}
@@ -390,6 +409,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEntity_Ownership() {
 		return (EAttribute)entityEClass.getEStructuralFeatures().get(1);
 	}
@@ -399,6 +419,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFixedPricePurchaseContract() {
 		return fixedPricePurchaseContractEClass;
 	}
@@ -408,6 +429,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFixedPricePurchaseContract_UnitPrice() {
 		return (EAttribute)fixedPricePurchaseContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -417,6 +439,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMarketPricePurchaseContract() {
 		return marketPricePurchaseContractEClass;
 	}
@@ -426,6 +449,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMarketPricePurchaseContract_Market() {
 		return (EReference)marketPricePurchaseContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -435,6 +459,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNetbackPurchaseContract() {
 		return netbackPurchaseContractEClass;
 	}
@@ -444,6 +469,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNetbackPurchaseContract_LowerBound() {
 		return (EAttribute)netbackPurchaseContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -453,6 +479,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNetbackPurchaseContract_BuyersMargin() {
 		return (EAttribute)netbackPurchaseContractEClass.getEStructuralFeatures().get(1);
 	}
@@ -462,6 +489,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProfitSharingPurchaseContract() {
 		return profitSharingPurchaseContractEClass;
 	}
@@ -471,6 +499,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getProfitSharingPurchaseContract_Market() {
 		return (EReference)profitSharingPurchaseContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -480,6 +509,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getProfitSharingPurchaseContract_ReferenceMarket() {
 		return (EReference)profitSharingPurchaseContractEClass.getEStructuralFeatures().get(1);
 	}
@@ -489,6 +519,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProfitSharingPurchaseContract_Alpha() {
 		return (EAttribute)profitSharingPurchaseContractEClass.getEStructuralFeatures().get(2);
 	}
@@ -498,6 +529,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProfitSharingPurchaseContract_Beta() {
 		return (EAttribute)profitSharingPurchaseContractEClass.getEStructuralFeatures().get(3);
 	}
@@ -507,6 +539,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProfitSharingPurchaseContract_Gamma() {
 		return (EAttribute)profitSharingPurchaseContractEClass.getEStructuralFeatures().get(4);
 	}
@@ -516,6 +549,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getContract() {
 		return contractEClass;
 	}
@@ -525,6 +559,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContract_Entity() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(0);
 	}
@@ -534,6 +569,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ContractFactory getContractFactory() {
 		return (ContractFactory)getEFactoryInstance();
 	}

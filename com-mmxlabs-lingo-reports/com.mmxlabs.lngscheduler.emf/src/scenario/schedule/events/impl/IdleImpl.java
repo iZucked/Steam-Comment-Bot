@@ -93,6 +93,7 @@ public class IdleImpl extends PortVisitImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelQuantity> getFuelUsage() {
 		if (fuelUsage == null) {
 			fuelUsage = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, EventsPackage.IDLE__FUEL_USAGE);
@@ -105,6 +106,7 @@ public class IdleImpl extends PortVisitImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselState getVesselState() {
 		return vesselState;
 	}
@@ -114,6 +116,7 @@ public class IdleImpl extends PortVisitImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselState(VesselState newVesselState) {
 		VesselState oldVesselState = vesselState;
 		vesselState = newVesselState == null ? VESSEL_STATE_EDEFAULT : newVesselState;
@@ -126,6 +129,7 @@ public class IdleImpl extends PortVisitImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getTotalCost() {
 		return getTotalFuelCost() + getHireCost();
 	}
@@ -135,6 +139,7 @@ public class IdleImpl extends PortVisitImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getTotalFuelCost() {
 		long totalCost = 0;
 		

@@ -57,6 +57,7 @@ public interface CargoRevenue extends BookedRevenue {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getCargo().getName();'"
 	 * @generated
 	 */
+	@Override
 	String getName();
 
 } // CargoRevenue

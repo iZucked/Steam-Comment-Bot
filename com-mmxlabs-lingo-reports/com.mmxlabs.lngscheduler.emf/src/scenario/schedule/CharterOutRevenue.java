@@ -58,6 +58,7 @@ public interface CharterOutRevenue extends BookedRevenue {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getCharterOut().getCharterOut().getId();'"
 	 * @generated
 	 */
+	@Override
 	String getName();
 
 } // CharterOutRevenue

@@ -67,6 +67,7 @@ public class ContractImpl extends NamedObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Entity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -93,6 +94,7 @@ public class ContractImpl extends NamedObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntity(Entity newEntity) {
 		Entity oldEntity = entity;
 		entity = newEntity;

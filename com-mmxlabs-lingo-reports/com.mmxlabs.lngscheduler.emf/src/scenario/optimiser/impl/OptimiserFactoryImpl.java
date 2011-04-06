@@ -73,6 +73,7 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OptimisationSettings createOptimisationSettings() {
 		OptimisationSettingsImpl optimisationSettings = new OptimisationSettingsImpl();
 		return optimisationSettings;
@@ -83,6 +84,7 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Optimisation createOptimisation() {
 		OptimisationImpl optimisation = new OptimisationImpl();
 		return optimisation;
@@ -93,6 +95,7 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Constraint createConstraint() {
 		ConstraintImpl constraint = new ConstraintImpl();
 		return constraint;
@@ -103,6 +106,7 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Objective createObjective() {
 		ObjectiveImpl objective = new ObjectiveImpl();
 		return objective;
@@ -113,6 +117,7 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OptimiserPackage getOptimiserPackage() {
 		return (OptimiserPackage)getEPackage();
 	}

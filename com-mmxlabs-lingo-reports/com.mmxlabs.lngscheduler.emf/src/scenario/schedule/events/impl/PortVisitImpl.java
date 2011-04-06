@@ -68,6 +68,7 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -94,6 +95,7 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -106,6 +108,7 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getLocalStartTime() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
@@ -119,6 +122,7 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getLocalEndTime() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getPort().getTimeZone())

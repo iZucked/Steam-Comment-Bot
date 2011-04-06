@@ -94,6 +94,7 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -103,6 +104,7 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -115,6 +117,7 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getWeight() {
 		return weight;
 	}
@@ -124,6 +127,7 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWeight(double newWeight) {
 		double oldWeight = weight;
 		weight = newWeight;

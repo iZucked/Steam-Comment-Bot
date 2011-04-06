@@ -97,6 +97,7 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<StepwisePrice> getPrices() {
 		if (prices == null) {
 			prices = new EObjectContainmentEList<StepwisePrice>(StepwisePrice.class, this, MarketPackage.STEPWISE_PRICE_CURVE__PRICES);
@@ -109,6 +110,7 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getDefaultValue() {
 		return defaultValue;
 	}
@@ -118,6 +120,7 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDefaultValue(float newDefaultValue) {
 		float oldDefaultValue = defaultValue;
 		defaultValue = newDefaultValue;
@@ -130,11 +133,13 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getValueAtDate(Date date) {
 		final EList<StepwisePrice> prices = getPrices();
 		
 		java.util.Collections.sort(prices,
 		new java.util.Comparator<StepwisePrice>() {
+			@Override
 			public int compare(StepwisePrice a, StepwisePrice b) {
 				return a.getDate().compareTo(b.getDate());
 			}

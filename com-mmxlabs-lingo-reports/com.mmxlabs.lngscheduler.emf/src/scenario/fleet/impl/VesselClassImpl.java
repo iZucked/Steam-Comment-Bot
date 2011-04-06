@@ -334,6 +334,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCapacity(long newCapacity) {
 		long oldCapacity = capacity;
 		capacity = newCapacity;
@@ -346,6 +347,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getMinSpeed() {
 		return minSpeed;
 	}
@@ -355,6 +357,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinSpeed(float newMinSpeed) {
 		float oldMinSpeed = minSpeed;
 		minSpeed = newMinSpeed;
@@ -367,6 +370,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getMaxSpeed() {
 		return maxSpeed;
 	}
@@ -376,6 +380,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaxSpeed(float newMaxSpeed) {
 		float oldMaxSpeed = maxSpeed;
 		maxSpeed = newMaxSpeed;
@@ -388,6 +393,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getBaseFuelUnitPrice() {
 		return baseFuelUnitPrice;
 	}
@@ -397,6 +403,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseFuelUnitPrice(float newBaseFuelUnitPrice) {
 		float oldBaseFuelUnitPrice = baseFuelUnitPrice;
 		baseFuelUnitPrice = newBaseFuelUnitPrice;
@@ -409,6 +416,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselStateAttributes getLadenAttributes() {
 		return ladenAttributes;
 	}
@@ -433,6 +441,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenAttributes(VesselStateAttributes newLadenAttributes) {
 		if (newLadenAttributes != ladenAttributes) {
 			NotificationChain msgs = null;
@@ -452,6 +461,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselStateAttributes getBallastAttributes() {
 		return ballastAttributes;
 	}
@@ -476,6 +486,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastAttributes(VesselStateAttributes newBallastAttributes) {
 		if (newBallastAttributes != ballastAttributes) {
 			NotificationChain msgs = null;
@@ -495,6 +506,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getMinHeelVolume() {
 		return minHeelVolume;
 	}
@@ -504,6 +516,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinHeelVolume(long newMinHeelVolume) {
 		long oldMinHeelVolume = minHeelVolume;
 		minHeelVolume = newMinHeelVolume;
@@ -516,6 +529,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getFillCapacity() {
 		return fillCapacity;
 	}
@@ -525,6 +539,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFillCapacity(float newFillCapacity) {
 		float oldFillCapacity = fillCapacity;
 		fillCapacity = newFillCapacity;
@@ -537,6 +552,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDailyCharterPrice() {
 		return dailyCharterPrice;
 	}
@@ -546,6 +562,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDailyCharterPrice(int newDailyCharterPrice) {
 		int oldDailyCharterPrice = dailyCharterPrice;
 		dailyCharterPrice = newDailyCharterPrice;
@@ -558,6 +575,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotCharterCount() {
 		return spotCharterCount;
 	}
@@ -567,6 +585,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotCharterCount(int newSpotCharterCount) {
 		int oldSpotCharterCount = spotCharterCount;
 		spotCharterCount = newSpotCharterCount;
@@ -579,6 +598,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getBaseFuelEquivalenceFactor() {
 		return baseFuelEquivalenceFactor;
 	}
@@ -588,6 +608,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseFuelEquivalenceFactor(float newBaseFuelEquivalenceFactor) {
 		float oldBaseFuelEquivalenceFactor = baseFuelEquivalenceFactor;
 		baseFuelEquivalenceFactor = newBaseFuelEquivalenceFactor;
@@ -600,6 +621,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Port> getInaccessiblePorts() {
 		if (inaccessiblePorts == null) {
 			inaccessiblePorts = new EObjectResolvingEList<Port>(Port.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS);

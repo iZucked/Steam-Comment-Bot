@@ -172,6 +172,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMarket() {
 		return marketEClass;
 	}
@@ -181,6 +182,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMarket_PriceCurve() {
 		return (EReference)marketEClass.getEStructuralFeatures().get(0);
 	}
@@ -190,6 +192,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMarketModel() {
 		return marketModelEClass;
 	}
@@ -199,6 +202,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMarketModel_Markets() {
 		return (EReference)marketModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -208,6 +212,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getStepwisePriceCurve() {
 		return stepwisePriceCurveEClass;
 	}
@@ -217,6 +222,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getStepwisePriceCurve_Prices() {
 		return (EReference)stepwisePriceCurveEClass.getEStructuralFeatures().get(0);
 	}
@@ -226,6 +232,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getStepwisePriceCurve_DefaultValue() {
 		return (EAttribute)stepwisePriceCurveEClass.getEStructuralFeatures().get(1);
 	}
@@ -235,6 +242,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getStepwisePriceCurve__GetValueAtDate__Date() {
 		return stepwisePriceCurveEClass.getEOperations().get(0);
 	}
@@ -244,6 +252,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getStepwisePrice() {
 		return stepwisePriceEClass;
 	}
@@ -253,6 +262,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getStepwisePrice_Date() {
 		return (EAttribute)stepwisePriceEClass.getEStructuralFeatures().get(0);
 	}
@@ -262,6 +272,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getStepwisePrice_PriceFromDate() {
 		return (EAttribute)stepwisePriceEClass.getEStructuralFeatures().get(1);
 	}
@@ -271,6 +282,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MarketFactory getMarketFactory() {
 		return (MarketFactory)getEFactoryInstance();
 	}

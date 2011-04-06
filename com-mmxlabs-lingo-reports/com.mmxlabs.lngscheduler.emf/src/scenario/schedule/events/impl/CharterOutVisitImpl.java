@@ -78,6 +78,7 @@ public class CharterOutVisitImpl extends PortVisitImpl implements CharterOutVisi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterOut getCharterOut() {
 		if (charterOut != null && charterOut.eIsProxy()) {
 			InternalEObject oldCharterOut = (InternalEObject)charterOut;
@@ -104,6 +105,7 @@ public class CharterOutVisitImpl extends PortVisitImpl implements CharterOutVisi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterOut(CharterOut newCharterOut) {
 		CharterOut oldCharterOut = charterOut;
 		charterOut = newCharterOut;
@@ -116,6 +118,7 @@ public class CharterOutVisitImpl extends PortVisitImpl implements CharterOutVisi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterOutRevenue getRevenue() {
 		if (revenue != null && revenue.eIsProxy()) {
 			InternalEObject oldRevenue = (InternalEObject)revenue;
@@ -142,6 +145,7 @@ public class CharterOutVisitImpl extends PortVisitImpl implements CharterOutVisi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRevenue(CharterOutRevenue newRevenue) {
 		CharterOutRevenue oldRevenue = revenue;
 		revenue = newRevenue;

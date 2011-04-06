@@ -130,6 +130,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Market getMarket() {
 		if (market != null && market.eIsProxy()) {
 			InternalEObject oldMarket = (InternalEObject)market;
@@ -156,6 +157,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarket(Market newMarket) {
 		Market oldMarket = market;
 		market = newMarket;
@@ -168,6 +170,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Market getReferenceMarket() {
 		if (referenceMarket != null && referenceMarket.eIsProxy()) {
 			InternalEObject oldReferenceMarket = (InternalEObject)referenceMarket;
@@ -194,6 +197,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReferenceMarket(Market newReferenceMarket) {
 		Market oldReferenceMarket = referenceMarket;
 		referenceMarket = newReferenceMarket;
@@ -206,6 +210,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getAlpha() {
 		return alpha;
 	}
@@ -215,6 +220,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAlpha(float newAlpha) {
 		float oldAlpha = alpha;
 		alpha = newAlpha;
@@ -227,6 +233,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getBeta() {
 		return beta;
 	}
@@ -236,6 +243,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBeta(float newBeta) {
 		float oldBeta = beta;
 		beta = newBeta;
@@ -248,6 +256,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getGamma() {
 		return gamma;
 	}
@@ -257,6 +266,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGamma(float newGamma) {
 		float oldGamma = gamma;
 		gamma = newGamma;

@@ -103,6 +103,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TotalVolumeLimit createTotalVolumeLimit() {
 		TotalVolumeLimitImpl totalVolumeLimit = new TotalVolumeLimitImpl();
 		return totalVolumeLimit;
@@ -113,6 +114,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Entity createEntity() {
 		EntityImpl entity = new EntityImpl();
 		return entity;
@@ -123,6 +125,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FixedPricePurchaseContract createFixedPricePurchaseContract() {
 		FixedPricePurchaseContractImpl fixedPricePurchaseContract = new FixedPricePurchaseContractImpl();
 		return fixedPricePurchaseContract;
@@ -133,6 +136,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MarketPricePurchaseContract createMarketPricePurchaseContract() {
 		MarketPricePurchaseContractImpl marketPricePurchaseContract = new MarketPricePurchaseContractImpl();
 		return marketPricePurchaseContract;
@@ -143,6 +147,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public NetbackPurchaseContract createNetbackPurchaseContract() {
 		NetbackPurchaseContractImpl netbackPurchaseContract = new NetbackPurchaseContractImpl();
 		return netbackPurchaseContract;
@@ -153,6 +158,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ProfitSharingPurchaseContract createProfitSharingPurchaseContract() {
 		ProfitSharingPurchaseContractImpl profitSharingPurchaseContract = new ProfitSharingPurchaseContractImpl();
 		return profitSharingPurchaseContract;
@@ -163,6 +169,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Contract createContract() {
 		ContractImpl contract = new ContractImpl();
 		return contract;

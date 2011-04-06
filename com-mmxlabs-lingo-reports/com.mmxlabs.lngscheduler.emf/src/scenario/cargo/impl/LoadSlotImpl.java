@@ -75,6 +75,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getCargoCVvalue() {
 		return cargoCVvalue;
 	}
@@ -84,6 +85,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoCVvalue(float newCargoCVvalue) {
 		float oldCargoCVvalue = cargoCVvalue;
 		cargoCVvalue = newCargoCVvalue;

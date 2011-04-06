@@ -117,6 +117,7 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CharterOut> getCharterOuts() {
 		if (charterOuts == null) {
 			charterOuts = new EObjectContainmentEList<CharterOut>(CharterOut.class, this, FleetPackage.FLEET_MODEL__CHARTER_OUTS);

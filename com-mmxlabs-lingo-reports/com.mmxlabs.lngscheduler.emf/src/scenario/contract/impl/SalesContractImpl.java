@@ -102,6 +102,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Market getMarket() {
 		if (market != null && market.eIsProxy()) {
 			InternalEObject oldMarket = (InternalEObject)market;
@@ -128,6 +129,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarket(Market newMarket) {
 		Market oldMarket = market;
 		market = newMarket;
@@ -140,6 +142,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getRegasEfficiency() {
 		return regasEfficiency;
 	}
@@ -149,6 +152,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRegasEfficiency(float newRegasEfficiency) {
 		float oldRegasEfficiency = regasEfficiency;
 		regasEfficiency = newRegasEfficiency;
@@ -161,6 +165,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getMarkup() {
 		return markup;
 	}
@@ -170,6 +175,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarkup(float newMarkup) {
 		float oldMarkup = markup;
 		markup = newMarkup;

@@ -241,6 +241,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFuelMixture() {
 		return fuelMixtureEClass;
 	}
@@ -250,6 +251,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFuelMixture_FuelUsage() {
 		return (EReference)fuelMixtureEClass.getEStructuralFeatures().get(0);
 	}
@@ -259,6 +261,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getFuelMixture__GetTotalFuelCost() {
 		return fuelMixtureEClass.getEOperations().get(0);
 	}
@@ -268,6 +271,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFuelQuantity() {
 		return fuelQuantityEClass;
 	}
@@ -277,6 +281,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelQuantity_FuelType() {
 		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(0);
 	}
@@ -286,6 +291,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelQuantity_Quantity() {
 		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(1);
 	}
@@ -295,6 +301,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelQuantity_UnitPrice() {
 		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(2);
 	}
@@ -304,6 +311,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelQuantity_TotalPrice() {
 		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(3);
 	}
@@ -313,6 +321,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelQuantity_FuelUnit() {
 		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(4);
 	}
@@ -322,6 +331,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getScheduledEvent() {
 		return scheduledEventEClass;
 	}
@@ -331,6 +341,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScheduledEvent_StartTime() {
 		return (EAttribute)scheduledEventEClass.getEStructuralFeatures().get(0);
 	}
@@ -340,6 +351,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScheduledEvent_EndTime() {
 		return (EAttribute)scheduledEventEClass.getEStructuralFeatures().get(1);
 	}
@@ -349,6 +361,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getScheduledEvent__GetEventDuration() {
 		return scheduledEventEClass.getEOperations().get(0);
 	}
@@ -358,6 +371,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getScheduledEvent__GetHireCost() {
 		return scheduledEventEClass.getEOperations().get(1);
 	}
@@ -367,6 +381,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getScheduledEvent__GetLocalStartTime() {
 		return scheduledEventEClass.getEOperations().get(2);
 	}
@@ -376,6 +391,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getScheduledEvent__GetLocalEndTime() {
 		return scheduledEventEClass.getEOperations().get(3);
 	}
@@ -385,6 +401,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIdle() {
 		return idleEClass;
 	}
@@ -394,6 +411,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIdle_VesselState() {
 		return (EAttribute)idleEClass.getEStructuralFeatures().get(0);
 	}
@@ -403,6 +421,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getIdle__GetTotalCost() {
 		return idleEClass.getEOperations().get(0);
 	}
@@ -412,6 +431,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getJourney() {
 		return journeyEClass;
 	}
@@ -421,6 +441,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getJourney_ToPort() {
 		return (EReference)journeyEClass.getEStructuralFeatures().get(0);
 	}
@@ -430,6 +451,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_VesselState() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(1);
 	}
@@ -439,6 +461,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_Route() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(2);
 	}
@@ -448,6 +471,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_Speed() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(3);
 	}
@@ -457,6 +481,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_Distance() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(4);
 	}
@@ -466,6 +491,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getJourney_FromPort() {
 		return (EReference)journeyEClass.getEStructuralFeatures().get(5);
 	}
@@ -475,6 +501,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getJourney_RouteCost() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(6);
 	}
@@ -484,6 +511,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getJourney__GetTotalCost() {
 		return journeyEClass.getEOperations().get(0);
 	}
@@ -493,6 +521,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getJourney__GetLocalStartTime() {
 		return journeyEClass.getEOperations().get(1);
 	}
@@ -502,6 +531,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getJourney__GetLocalEndTime() {
 		return journeyEClass.getEOperations().get(2);
 	}
@@ -511,6 +541,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortVisit() {
 		return portVisitEClass;
 	}
@@ -520,6 +551,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortVisit_Port() {
 		return (EReference)portVisitEClass.getEStructuralFeatures().get(0);
 	}
@@ -529,6 +561,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getPortVisit__GetLocalStartTime() {
 		return portVisitEClass.getEOperations().get(0);
 	}
@@ -538,6 +571,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getPortVisit__GetLocalEndTime() {
 		return portVisitEClass.getEOperations().get(1);
 	}
@@ -547,6 +581,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSlotVisit() {
 		return slotVisitEClass;
 	}
@@ -556,6 +591,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotVisit_Slot() {
 		return (EReference)slotVisitEClass.getEStructuralFeatures().get(0);
 	}
@@ -565,6 +601,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotVisit_CargoAllocation() {
 		return (EReference)slotVisitEClass.getEStructuralFeatures().get(1);
 	}
@@ -574,6 +611,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCharterOutVisit() {
 		return charterOutVisitEClass;
 	}
@@ -583,6 +621,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCharterOutVisit_CharterOut() {
 		return (EReference)charterOutVisitEClass.getEStructuralFeatures().get(0);
 	}
@@ -592,6 +631,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCharterOutVisit_Revenue() {
 		return (EReference)charterOutVisitEClass.getEStructuralFeatures().get(1);
 	}
@@ -601,6 +641,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -610,6 +651,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getFuelType() {
 		return fuelTypeEEnum;
 	}
@@ -619,6 +661,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EventsFactory getEventsFactory() {
 		return (EventsFactory)getEFactoryInstance();
 	}

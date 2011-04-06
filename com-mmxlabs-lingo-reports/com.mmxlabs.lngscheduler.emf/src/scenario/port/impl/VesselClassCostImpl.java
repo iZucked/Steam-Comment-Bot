@@ -150,6 +150,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselClass getVesselClass() {
 		if (vesselClass != null && vesselClass.eIsProxy()) {
 			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
@@ -176,6 +177,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselClass(VesselClass newVesselClass) {
 		VesselClass oldVesselClass = vesselClass;
 		vesselClass = newVesselClass;
@@ -188,6 +190,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLadenCost() {
 		return ladenCost;
 	}
@@ -197,6 +200,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenCost(int newLadenCost) {
 		int oldLadenCost = ladenCost;
 		ladenCost = newLadenCost;
@@ -209,6 +213,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getUnladenCost() {
 		return unladenCost;
 	}
@@ -218,6 +223,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnladenCost(int newUnladenCost) {
 		int oldUnladenCost = unladenCost;
 		unladenCost = newUnladenCost;
@@ -230,6 +236,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTransitTime() {
 		return transitTime;
 	}
@@ -239,6 +246,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTransitTime(int newTransitTime) {
 		int oldTransitTime = transitTime;
 		transitTime = newTransitTime;
@@ -251,6 +259,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getTransitFuel() {
 		return transitFuel;
 	}
@@ -260,6 +269,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTransitFuel(float newTransitFuel) {
 		float oldTransitFuel = transitFuel;
 		transitFuel = newTransitFuel;

@@ -131,6 +131,7 @@ public class ScenarioModelWizard extends Wizard implements INewWizard {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
 		this.selection = selection;
@@ -197,6 +198,7 @@ public class ScenarioModelWizard extends Wizard implements INewWizard {
 			// Do the work within an operation.
 			//
 			IRunnableWithProgress operation = new IRunnableWithProgress() {
+				@Override
 				public void run(IProgressMonitor progressMonitor) {
 						try {
 							// Create a resource set
@@ -289,6 +291,7 @@ public class ScenarioModelWizard extends Wizard implements INewWizard {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public void createControl(Composite parent) {
 			Composite composite = new Composite(parent, SWT.NONE); {
 				GridLayout layout = new GridLayout();
@@ -411,6 +414,7 @@ public class ScenarioModelWizard extends Wizard implements INewWizard {
 		 */
 		protected ModifyListener validator =
 			new ModifyListener() {
+				@Override
 				public void modifyText(ModifyEvent e) {
 					setPageComplete(validatePage());
 				}

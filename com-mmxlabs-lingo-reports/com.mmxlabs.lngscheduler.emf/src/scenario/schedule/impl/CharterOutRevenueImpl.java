@@ -70,6 +70,7 @@ public class CharterOutRevenueImpl extends BookedRevenueImpl implements CharterO
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CharterOutVisit getCharterOut() {
 		if (charterOut != null && charterOut.eIsProxy()) {
 			InternalEObject oldCharterOut = (InternalEObject)charterOut;
@@ -96,6 +97,7 @@ public class CharterOutRevenueImpl extends BookedRevenueImpl implements CharterO
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterOut(CharterOutVisit newCharterOut) {
 		CharterOutVisit oldCharterOut = charterOut;
 		charterOut = newCharterOut;
@@ -108,6 +110,7 @@ public class CharterOutRevenueImpl extends BookedRevenueImpl implements CharterO
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return getCharterOut().getCharterOut().getId();
 	}

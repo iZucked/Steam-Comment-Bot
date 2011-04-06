@@ -181,6 +181,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -207,6 +208,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -219,6 +221,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Vessel> getVessels() {
 		if (vessels == null) {
 			vessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, FleetPackage.CHARTER_OUT__VESSELS);
@@ -231,6 +234,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VesselClass> getVesselClasses() {
 		if (vesselClasses == null) {
 			vesselClasses = new EObjectResolvingEList<VesselClass>(VesselClass.class, this, FleetPackage.CHARTER_OUT__VESSEL_CLASSES);
@@ -243,6 +247,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -252,6 +257,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartDate(Date newStartDate) {
 		Date oldStartDate = startDate;
 		startDate = newStartDate;
@@ -264,6 +270,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getEndDate() {
 		return endDate;
 	}
@@ -273,6 +280,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndDate(Date newEndDate) {
 		Date oldEndDate = endDate;
 		endDate = newEndDate;
@@ -285,6 +293,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDuration() {
 		return duration;
 	}
@@ -294,6 +303,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDuration(int newDuration) {
 		int oldDuration = duration;
 		duration = newDuration;
@@ -306,6 +316,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -315,6 +326,7 @@ public class CharterOutImpl extends EObjectImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		String oldId = id;
 		id = newId;

@@ -87,6 +87,7 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public StepwisePriceCurve createStepwisePriceCurve() {
 		StepwisePriceCurveImpl stepwisePriceCurve = new StepwisePriceCurveImpl();
 		return stepwisePriceCurve;
@@ -97,6 +98,7 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public StepwisePrice createStepwisePrice() {
 		StepwisePriceImpl stepwisePrice = new StepwisePriceImpl();
 		return stepwisePrice;

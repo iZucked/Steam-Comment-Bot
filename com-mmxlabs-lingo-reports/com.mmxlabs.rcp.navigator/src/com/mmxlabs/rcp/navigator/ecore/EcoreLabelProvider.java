@@ -9,11 +9,13 @@ public class EcoreLabelProvider extends AdapterFactoryLabelProvider {
 		super(EcoreComposedAdapterFactory.getAdapterFactory());
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return super.getImage(element);
 	}
 
+	@Override
 	public String getText(Object element) {
 		return super.getText(element);
 	}

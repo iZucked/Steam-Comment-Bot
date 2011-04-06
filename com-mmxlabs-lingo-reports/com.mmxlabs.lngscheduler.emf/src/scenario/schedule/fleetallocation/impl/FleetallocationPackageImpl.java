@@ -186,6 +186,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getAllocatedVessel() {
 		return allocatedVesselEClass;
 	}
@@ -195,6 +196,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getAllocatedVessel__GetHourlyCharterPrice() {
 		return allocatedVesselEClass.getEOperations().get(0);
 	}
@@ -204,6 +206,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getAllocatedVessel__GetName() {
 		return allocatedVesselEClass.getEOperations().get(1);
 	}
@@ -213,6 +216,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFleetVessel() {
 		return fleetVesselEClass;
 	}
@@ -222,6 +226,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFleetVessel_Vessel() {
 		return (EReference)fleetVesselEClass.getEStructuralFeatures().get(0);
 	}
@@ -231,6 +236,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getFleetVessel__GetName() {
 		return fleetVesselEClass.getEOperations().get(0);
 	}
@@ -240,6 +246,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSpotVessel() {
 		return spotVesselEClass;
 	}
@@ -249,6 +256,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSpotVessel_Index() {
 		return (EAttribute)spotVesselEClass.getEStructuralFeatures().get(0);
 	}
@@ -258,6 +266,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSpotVessel_VesselClass() {
 		return (EReference)spotVesselEClass.getEStructuralFeatures().get(1);
 	}
@@ -267,6 +276,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSpotVessel__GetHourlyCharterPrice() {
 		return spotVesselEClass.getEOperations().get(0);
 	}
@@ -276,6 +286,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getSpotVessel__GetName() {
 		return spotVesselEClass.getEOperations().get(1);
 	}
@@ -285,6 +296,7 @@ public class FleetallocationPackageImpl extends EPackageImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetallocationFactory getFleetallocationFactory() {
 		return (FleetallocationFactory)getEFactoryInstance();
 	}
