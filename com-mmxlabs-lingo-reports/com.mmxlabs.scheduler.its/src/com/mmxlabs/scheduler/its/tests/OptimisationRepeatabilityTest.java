@@ -22,27 +22,36 @@ import org.junit.Test;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 
+import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
+
 /**
  * Run a test scenario several times to try and see if it varies.
  * 
  * @author Simon Goodall
  * 
  */
-public class TestScenario1 {
+public class OptimisationRepeatabilityTest {
 
 	@BeforeClass
 	public static void registerEMF() {
 
+		// Load up the Scenario Package 
 		@SuppressWarnings("unused")
 		final ScenarioPackage einstance = ScenarioPackage.eINSTANCE;
 	}
 
 	@Test
-	public void testScenario() throws IOException, InterruptedException {
-
-		final int numScenarioRunners = 5;
+	public void testScenario() throws IOException, InterruptedException,
+			IncompleteScenarioException {
 
 		final URL url = getClass().getResource("/hand-tweaked.scenario");
+
+		testScenario(url, 5);
+	}
+
+	private void testScenario(final URL url, final int numTries)
+			throws IOException, InterruptedException,
+			IncompleteScenarioException {
 
 		final Resource resource = new XMIResourceImpl(URI.createURI(url
 				.toString()));
@@ -54,8 +63,8 @@ public class TestScenario1 {
 		final Scenario originalScenario = (Scenario) (resource.getAllContents()
 				.next());
 
-		final RunScenario[] scenarioRunners = new RunScenario[numScenarioRunners];
-		for (int i = 0; i < numScenarioRunners; ++i) {
+		final ScenarioRunner[] scenarioRunners = new ScenarioRunner[numTries];
+		for (int i = 0; i < numTries; ++i) {
 
 			final Scenario copy = EcoreUtil.copy(originalScenario);
 
@@ -64,7 +73,7 @@ public class TestScenario1 {
 			final ResourceSetImpl cpyResourceSet = new ResourceSetImpl();
 			cpyResourceSet.getResources().add(cpyResource);
 
-			scenarioRunners[i] = new RunScenario(copy);
+			scenarioRunners[i] = new ScenarioRunner(copy);
 			scenarioRunners[i].init();
 
 			if (i > 0) {
@@ -84,7 +93,7 @@ public class TestScenario1 {
 		}
 
 		// Run all the optimisations
-		for (int i = 0; i < numScenarioRunners; ++i) {
+		for (int i = 0; i < numTries; ++i) {
 			scenarioRunners[i].run();
 			if (i > 0) {
 				// Ensure same final schedules
@@ -104,7 +113,7 @@ public class TestScenario1 {
 		}
 
 		// Ensure source model is unchanged
-		for (int i = 0; i < numScenarioRunners; ++i) {
+		for (int i = 0; i < numTries; ++i) {
 			final MatchModel match = MatchService.doMatch(originalScenario,
 					scenarioRunners[i].getScenario(), null);
 			final DiffModel diff = DiffService.doDiff(match);
