@@ -512,7 +512,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			// assert FuelComponent.FBO.getDefaultFuelUnit() == FuelUnit.M3;
 			// assert FuelComponent.IdleNBO.getDefaultFuelUnit() == FuelUnit.M3;
 			for (int i = 0; i < sequence.length; ++i) {
-				if (i % 2 == 1) {
+				if ((i & 1) == 1) {
 					assert sequence[i] instanceof VoyageDetails;
 
 					final VoyageDetails<?> details = (VoyageDetails<?>) sequence[i];
