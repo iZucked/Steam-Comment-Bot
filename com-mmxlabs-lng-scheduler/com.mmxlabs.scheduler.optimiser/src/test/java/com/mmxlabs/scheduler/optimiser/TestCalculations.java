@@ -176,8 +176,11 @@ public class TestCalculations {
 						SchedulerConstants.DCP_startEndRequirementProvider,
 						IStartEndRequirementProvider.class);
 
+		
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		voyageCalculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
+		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
+		scheduler.setRouteCostProvider(routeCostProvider);
+		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
 		voyageCalculator.init();
 		
 		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(
@@ -788,7 +791,9 @@ public class TestCalculations {
 						IStartEndRequirementProvider.class);
 
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		voyageCalculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
+		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
+		scheduler.setRouteCostProvider(routeCostProvider);
+		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
 		voyageCalculator.init();
 		
 		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(
@@ -1404,7 +1409,9 @@ public class TestCalculations {
 						IStartEndRequirementProvider.class);
 
 		final LNGVoyageCalculator<ISequenceElement> voyageCalculator = new LNGVoyageCalculator<ISequenceElement>();
-		voyageCalculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
+		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
+		scheduler.setRouteCostProvider(routeCostProvider);
+		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
 		voyageCalculator.init();
 		
 		final VoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = new VoyagePlanOptimiser<ISequenceElement>(
