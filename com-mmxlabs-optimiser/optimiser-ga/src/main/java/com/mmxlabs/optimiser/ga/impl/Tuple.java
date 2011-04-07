@@ -41,19 +41,19 @@ public final class Tuple<I> implements Comparable<Tuple<I>> {
 			return idx - o.idx;
 		}
 	}
-	
+
 	@Override
 	public boolean equals(final Object obj) {
-		
+
 		if (obj instanceof Tuple) {
-			final Tuple<?> t = (Tuple<?>)obj;
+			final Tuple<?> t = (Tuple<?>) obj;
 			if (t.f != f) {
 				return false;
 			}
 			if (t.i != i) {
 				return false;
 			}
-			
+
 			if (!Equality.isEqual(t.i, i)) {
 				return false;
 			}
