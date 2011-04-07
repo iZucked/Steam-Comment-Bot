@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import org.slf4j.Logger;
