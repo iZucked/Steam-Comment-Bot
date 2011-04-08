@@ -77,7 +77,8 @@ public class XmlStreamReader<T> {
 					methodName = startElement.getAttributeByName(
 							qname_methodName).getValue();
 
-					startElement.getAttributeByName(qname_methodReturnedRef);
+					returnedRef = startElement.getAttributeByName(
+							qname_methodReturnedRef).getValue();
 
 				} else if (XmlRecordingConstants.ELEMENT_ARGUMENT
 						.equals(startElement.getName().getLocalPart())) {
