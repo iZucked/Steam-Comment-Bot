@@ -82,7 +82,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 	static final DecimalFormat myFormat = new DecimalFormat("$###,###,###");
 
-	private class TreeData {
+	private static class TreeData {
 
 		final String name;
 		final boolean nonValued;
