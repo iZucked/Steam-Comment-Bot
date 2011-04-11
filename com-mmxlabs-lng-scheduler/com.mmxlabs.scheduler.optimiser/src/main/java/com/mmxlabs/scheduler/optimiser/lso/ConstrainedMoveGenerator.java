@@ -102,7 +102,6 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		 * @return
 		 */
 		public int size() {
-			// TODO Auto-generated method stub
 			return backingList.size();
 		}
 		/**
@@ -110,7 +109,6 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		 * @return
 		 */
 		public Q get(int nextInt) {
-			// TODO Auto-generated method stub
 			return backingList.get(nextInt);
 		}
 		/**
@@ -118,7 +116,6 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		 * @return
 		 */
 		public boolean contains(Q firstElementInSegment) {
-			// TODO Auto-generated method stub
 			return containsSet.contains(firstElementInSegment);
 		}
 
