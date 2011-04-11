@@ -5,8 +5,9 @@
 package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -192,7 +193,7 @@ public class OptimisationTransformer {
 			advice = new ModifiableSequences<ISequenceElement>(
 					data.getResources());
 
-			final Map<IVesselClass, Set<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, Set<IVessel>>();
+			final Map<IVesselClass, Set<IVessel>> spotVesselsByClass = new LinkedHashMap<IVesselClass, Set<IVessel>>();
 
 			final IVesselProvider vp = data.getDataComponentProvider(
 					SchedulerConstants.DCP_vesselProvider,
@@ -217,7 +218,7 @@ public class OptimisationTransformer {
 						spotVesselsByClass.get(vessel.getVesselClass()).add(
 								vessel);
 					} else {
-						final HashSet<IVessel> hs = new HashSet<IVessel>();
+						final HashSet<IVessel> hs = new LinkedHashSet<IVessel>();
 						hs.add(vessel);
 						spotVesselsByClass.put(vessel.getVesselClass(), hs);
 					}
