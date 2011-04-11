@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.lso.movegenerators.impl;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +37,8 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 
 	private long lastBatchTime;
 
+	private final BufferedWriter output;
+	
 	class Stats {
 		private Class<? extends IMove> moveClass;
 
@@ -97,10 +102,23 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	public InstrumentingMoveGenerator(IMoveGenerator<T> delegate,
-			boolean collectStats) {
+			boolean collectStats, boolean logToFile) {
 		super();
 		this.collectStats = collectStats;
 		this.delegate = delegate;
+		if (logToFile) {
+			BufferedWriter output2 = null;
+			try {
+				final String s =System.currentTimeMillis() + "-moves.log";
+				log.debug("logging moves to " + s);
+				output2 = new BufferedWriter(new FileWriter(s));
+			} catch (IOException e) {
+				output2 = null;
+			}
+			output = output2;
+		} else {
+			output = null;
+		}
 	}
 
 	@Override
@@ -127,6 +145,12 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		} else {
 			nulls++;
 		}
+		if (output != null) {
+			try {
+				output.write("MOVE: " +  (move == null ? "null" : move.toString()) + "\n");
+			} catch (IOException e) {
+			}
+		}
 		return move;
 	}
 
@@ -149,6 +173,13 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 			} else {
 				stats.put(lastMoveClass,
 						new Stats(lastMoveClass, delta, answer));
+			}
+		}
+		
+		if (output != null) {
+			try {
+				output.write("RESULT: " + delta + ", " + answer + "\n");
+			} catch (IOException e) {
 			}
 		}
 	}
