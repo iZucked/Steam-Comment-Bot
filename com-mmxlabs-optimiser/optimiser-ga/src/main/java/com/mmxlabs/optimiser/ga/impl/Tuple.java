@@ -34,10 +34,7 @@ public final class Tuple<I> implements Comparable<Tuple<I>> {
 		} else if (c > 0) {
 			return 1;
 		} else {
-			// Then sort of original position. As this will be used in a
-			// TreeSet we never want to return 0 as this will overwrite the
-			// entry instead.
-			assert idx != o.idx;
+			// Then sort of original position.
 			return idx - o.idx;
 		}
 	}
