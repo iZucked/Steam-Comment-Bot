@@ -10,7 +10,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -56,113 +58,11 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	/**
-	 * A quick hack to enable random selection from a set by having a backing
-	 * list as well.
-	 * 
-	 * @author hinton
-	 * 
-	 * @param <T>
-	 */
-	private static class IndexedSet<T> implements Set<T> {
-		private final List<T> listDelegate = new ArrayList<T>();
-		private final Set<T> setDelegate = new HashSet<T>();
-
-		public IndexedSet() {
-
-		}
-
-		@Override
-		public int size() {
-			return setDelegate.size();
-		}
-
-		@Override
-		public boolean isEmpty() {
-			return setDelegate.isEmpty();
-		}
-
-		@Override
-		public boolean contains(final Object o) {
-			return setDelegate.contains(o);
-		}
-
-		@Override
-		public Iterator<T> iterator() {
-			return setDelegate.iterator();
-		}
-
-		@Override
-		public Object[] toArray() {
-			return setDelegate.toArray();
-		}
-
-		@Override
-		public <U> U[] toArray(final U[] a) {
-			return setDelegate.toArray(a);
-		}
-
-		@Override
-		public boolean add(final T e) {
-			listDelegate.add(e);
-			return setDelegate.add(e);
-		}
-
-		@Override
-		public boolean remove(final Object o) {
-			listDelegate.remove(o);
-			return setDelegate.remove(o);
-		}
-
-		@Override
-		public boolean containsAll(final Collection<?> c) {
-			return setDelegate.containsAll(c);
-		}
-
-		@Override
-		public boolean addAll(final Collection<? extends T> c) {
-			listDelegate.addAll(c);
-			return setDelegate.addAll(c);
-		}
-
-		@Override
-		public boolean retainAll(final Collection<?> c) {
-			listDelegate.retainAll(c);
-			return setDelegate.retainAll(c);
-		}
-
-		@Override
-		public boolean removeAll(final Collection<?> c) {
-			listDelegate.removeAll(c);
-			return setDelegate.removeAll(c);
-		}
-
-		@Override
-		public void clear() {
-			listDelegate.clear();
-			setDelegate.clear();
-		}
-
-		@Override
-		public boolean equals(final Object o) {
-			return setDelegate.equals(o);
-		}
-
-		@Override
-		public int hashCode() {
-			return setDelegate.hashCode();
-		}
-
-		public T get(final int index) {
-			return listDelegate.get(index);
-		}
-	}
-
-	/**
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If
 	 * an element x is in the set mapped to by key y, x can legally follow y
 	 * under some circumstance
 	 */
-	private final Map<T, IndexedSet<T>> validFollowers = new HashMap<T, IndexedSet<T>>();
+	private final Map<T, Followers<T>> validFollowers = new HashMap<T, Followers<T>>();
 
 	/**
 	 * A reverse lookup table from elements to positions
@@ -182,7 +82,51 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	int breakpointCount = 0;
 	// private IOptimisationContext<T> context;
 
+	/**
+	 * A list containing all the valid edges which could exist in a solution, expressed as pairs
+	 * whose first element is the start of the edge and second the end.
+	 */
 	final private ArrayList<Pair<T, T>> validBreaks = new ArrayList<Pair<T, T>>();
+	
+	final private class Followers<Q> implements Iterable<Q> {
+		/**
+		 * @param followers
+		 */
+		public Followers(final Collection<Q> followers) {
+			backingList.addAll(followers);
+			containsSet.addAll(followers);
+		}
+		private final List<Q> backingList = new ArrayList<Q>();
+		private final Set<Q> containsSet = new HashSet<Q>();
+		/**
+		 * @return
+		 */
+		public int size() {
+			// TODO Auto-generated method stub
+			return backingList.size();
+		}
+		/**
+		 * @param nextInt
+		 * @return
+		 */
+		public Q get(int nextInt) {
+			// TODO Auto-generated method stub
+			return backingList.get(nextInt);
+		}
+		/**
+		 * @param firstElementInSegment
+		 * @return
+		 */
+		public boolean contains(Q firstElementInSegment) {
+			// TODO Auto-generated method stub
+			return containsSet.contains(firstElementInSegment);
+		}
+
+		@Override
+		public Iterator<Q> iterator() {
+			return backingList.iterator();
+		}
+	}
 
 	class Move2over2A extends Move2over2<T> {
 
@@ -260,9 +204,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 
 			reverseLookup.put(e1, new Pair<Integer, Integer>(0, 0));
 
-			final IndexedSet<T> followers = new IndexedSet<T>();
-
-			validFollowers.put(e1, followers);
+			final LinkedHashSet<T> followers = new LinkedHashSet<T>();
 
 			for (final T e2 : data.getSequenceElements()) {
 				if (e1 == e2)
@@ -278,6 +220,8 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 					}
 				}
 			}
+			
+			validFollowers.put(e1, new Followers<T>(followers));
 		}
 	}
 
@@ -312,7 +256,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			final T firstElementInSegment = sequence.get(beforeFirstCut + 1);
 			final T lastElementInSegment = sequence.get(beforeSecondCut);
 
-			final IndexedSet<T> followers = validFollowers
+			final Followers<T> followers = validFollowers
 					.get(lastElementInSegment);
 
 			// pick a follower and do a reverse-lookup
@@ -399,7 +343,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				 * any of them can precede anything in S1 after or including A.
 				 */
 
-				final Set<T> followersOfSecondElementsPredecessor = validFollowers
+				final Followers<T> followersOfSecondElementsPredecessor = validFollowers
 						.get(seq2.get(position2 - 1));
 
 				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
