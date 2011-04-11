@@ -5,20 +5,11 @@
 package com.mmxlabs.optimiser.ga.impl;
 
 import java.util.Collection;
-import java.util.List;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.ISequencesOptimiser;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.AbstractSequencesOptimiser;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.ga.IGeneticAlgorithm;
 import com.mmxlabs.optimiser.ga.IGeneticAlgorithmOptimiser;
 
@@ -45,6 +36,8 @@ public class GeneticAlgorithmOptimiser<T> extends AbstractSequencesOptimiser<T>
 		// TODO: Implement
 
 		super.init();
+		
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
@@ -52,6 +45,8 @@ public class GeneticAlgorithmOptimiser<T> extends AbstractSequencesOptimiser<T>
 		// TODO: Implement
 
 		super.dispose();
+		
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
