@@ -79,6 +79,7 @@ public class LSOConstructor {
 		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator = instrumenting ? new InstrumentingMoveGenerator<T>(
 				moveGenerator, false // profile moves (true) or just rate
 										// (false)
+				,false //don't log moves to file
 		)
 				: null;
 
