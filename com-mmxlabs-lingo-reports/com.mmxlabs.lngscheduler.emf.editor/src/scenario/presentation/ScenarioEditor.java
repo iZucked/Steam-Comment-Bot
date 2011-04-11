@@ -275,45 +275,51 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final String nullValueName;
 			final List<Pair<String, EObject>> result;
 			final Scenario scenario = getEnclosingScenario(target);
-			if (target instanceof LoadSlot) {
-				// load slots have load contracts
-				result = getSortedNames(scenario.getContractModel()
-						.getPurchaseContracts(),
-						ScenarioPackage.eINSTANCE.getNamedObject_Name());
 
-				final Contract portContract = ((Slot) target).getPort()
-						.getDefaultContract();
-				if (portContract == null) {
-					nullValueName = "empty";
-				} else {
-					nullValueName = portContract.getName() + " [from "
-							+ ((Slot) target).getPort().getName() + "]";
-				}
-			} else if (target instanceof Slot) {
-				// discharge slots have discharge contracts
-				result = getSortedNames(scenario.getContractModel()
-						.getSalesContracts(),
-						ScenarioPackage.eINSTANCE.getNamedObject_Name());
+			if (scenario != null) {
 
-				final Contract portContract = ((Slot) target).getPort()
-						.getDefaultContract();
-				if (portContract == null) {
-					nullValueName = "empty";
+				if (target instanceof LoadSlot) {
+					// load slots have load contracts
+					result = getSortedNames(scenario.getContractModel()
+							.getPurchaseContracts(),
+							ScenarioPackage.eINSTANCE.getNamedObject_Name());
+
+					final Contract portContract = ((Slot) target).getPort()
+							.getDefaultContract();
+					if (portContract == null) {
+						nullValueName = "empty";
+					} else {
+						nullValueName = portContract.getName() + " [from "
+								+ ((Slot) target).getPort().getName() + "]";
+					}
+				} else if (target instanceof Slot) {
+					// discharge slots have discharge contracts
+					result = getSortedNames(scenario.getContractModel()
+							.getSalesContracts(),
+							ScenarioPackage.eINSTANCE.getNamedObject_Name());
+
+					final Contract portContract = ((Slot) target).getPort()
+							.getDefaultContract();
+					if (portContract == null) {
+						nullValueName = "empty";
+					} else {
+						nullValueName = portContract.getName() + " [from "
+								+ ((Slot) target).getPort().getName() + "]";
+					}
 				} else {
-					nullValueName = portContract.getName() + " [from "
-							+ ((Slot) target).getPort().getName() + "]";
+					// other things have all kinds of contract
+					result = getSortedNames(scenario.getContractModel()
+							.getSalesContracts(),
+							ScenarioPackage.eINSTANCE.getNamedObject_Name());
+					result.addAll(getSortedNames(scenario.getContractModel()
+							.getPurchaseContracts(), ScenarioPackage.eINSTANCE
+							.getNamedObject_Name()));
+					nullValueName = "empty";
 				}
 			} else {
-				// other things have all kinds of contract
-				result = getSortedNames(scenario.getContractModel()
-						.getSalesContracts(),
-						ScenarioPackage.eINSTANCE.getNamedObject_Name());
-				result.addAll(getSortedNames(scenario.getContractModel()
-						.getPurchaseContracts(), ScenarioPackage.eINSTANCE
-						.getNamedObject_Name()));
+				result = new LinkedList<Pair<String, EObject>>();
 				nullValueName = "empty";
 			}
-
 			result.add(0, new Pair<String, EObject>(nullValueName, null));
 
 			return result;
@@ -1157,18 +1163,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			createContractEditor();
 
 			// add autocorrector
-			
-			final AutoCorrector autoCorrector = new AutoCorrector(getEditingDomain());
+
+			final AutoCorrector autoCorrector = new AutoCorrector(
+					getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
 			autoCorrector.addCorrector(new DateLocalisingCorrector());
-			
-			
+
 			final Scenario s = ((Scenario) (editingDomain.getResourceSet()
 					.getResources().get(0).getContents().get(0)));
-			
+
 			s.eAdapters().add(autoCorrector); // TODO dispose listener
-			
-			
+
 			// Create a page for the selection tree view.
 			//
 			{
@@ -1447,13 +1452,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					new NumericAttributeManipulator(ContractPackage.eINSTANCE
 							.getSalesContract_RegasEfficiency(),
 							getEditingDomain()));
-			
+
 			salesPane.addTypicalColumn(
 					"Sales Mark-up",
 					new NumericAttributeManipulator(ContractPackage.eINSTANCE
-							.getSalesContract_Markup(),
-							getEditingDomain()));
-			
+							.getSalesContract_Markup(), getEditingDomain()));
+
 			salesPane.setTitle("Sales Contracts", getTitleImage());
 			salesPane.getViewer().setInput(input);
 		}
@@ -1484,19 +1488,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						return object.getClass().getSimpleName();
 					}
 				}
-			}
-			);
-			
-			purchasePane.addTypicalColumn("Name", new BasicAttributeManipulator(
-					ScenarioPackage.eINSTANCE.getNamedObject_Name(),
-					getEditingDomain()));
+			});
+
+			purchasePane.addTypicalColumn(
+					"Name",
+					new BasicAttributeManipulator(ScenarioPackage.eINSTANCE
+							.getNamedObject_Name(), getEditingDomain()));
 
 			purchasePane.addTypicalColumn(
 					"Entity",
 					new SingleReferenceManipulator(ContractPackage.eINSTANCE
 							.getContract_Entity(), entityProvider,
 							getEditingDomain()));
-			
+
 			purchasePane.setTitle("Purchase Contracts", getTitleImage());
 			purchasePane.getViewer().setInput(input);
 		}
@@ -2325,13 +2329,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								editingDomain, scheduleProvider);
 					}
 				});
-		
+
 		// Disable/Hide Slot ID editors
-		page.setEditorFactoryForFeature(CargoPackage.eINSTANCE.getSlot_Id(), null);
-		
-		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_LoadSlot(), "Load");
-		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_DischargeSlot(), "Discharge");
-		page.setNameForFeature(CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
+		page.setEditorFactoryForFeature(CargoPackage.eINSTANCE.getSlot_Id(),
+				null);
+
+		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_LoadSlot(),
+				"Load");
+		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
+				"Discharge");
+		page.setNameForFeature(
+				CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
 		return page;
 	}
 
