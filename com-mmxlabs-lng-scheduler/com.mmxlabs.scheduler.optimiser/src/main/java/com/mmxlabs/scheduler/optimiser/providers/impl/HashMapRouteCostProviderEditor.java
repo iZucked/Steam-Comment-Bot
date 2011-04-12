@@ -110,7 +110,9 @@ public class HashMapRouteCostProviderEditor implements
 
 	@Override
 	public long getRouteFuelUsage(final String route, final IVesselClass vesselClass) {
-		if (route == defaultKey) return 0;
+		if (defaultKey.equals(route)) {
+			return 0;
+		}
 		final Map<IVesselClass, Long> byClass = baseFuelByRouteAndClass.get(route);
 		if (byClass != null) {
 			final Long value = byClass.get(vesselClass);
@@ -123,7 +125,9 @@ public class HashMapRouteCostProviderEditor implements
 
 	@Override
 	public int getRouteTransitTime(final String route, final IVesselClass vesselClass) {
-		if (route == defaultKey) return 0;
+		if (defaultKey.equals(route)) {
+			return 0;
+		}
 		final Map<IVesselClass, Integer> byClass = travelTimesByRouteAndClass.get(route);
 		if (byClass != null) {
 			final Integer value = byClass.get(vesselClass);
