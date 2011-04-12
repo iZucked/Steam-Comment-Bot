@@ -170,7 +170,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IPortExclusionProviderEditor portExclusionProvider;
 
-	private final Set<CharterOutPortSlot> charterOuts = new HashSet<CharterOutPortSlot>();
+	private final List<CharterOutPortSlot> charterOuts = new LinkedList<CharterOutPortSlot>();
 	private final Map<CharterOutPortSlot, Set<IVessel>> vesselCharterOuts = new HashMap<CharterOutPortSlot, Set<IVessel>>();
 
 	private final Map<CharterOutPortSlot, Set<IVesselClass>> vesselClassCharterOuts = new HashMap<CharterOutPortSlot, Set<IVesselClass>>();
