@@ -91,8 +91,8 @@ public class OptimisationRepeatabilityTest {
 				for (final DiffElement d : differences) {
 					System.err.println(d.toString());
 				}
-
-				Assert.assertTrue(differences.isEmpty());
+								
+				Assert.assertTrue("initial solution 0 and " + i + " should be the same", differences.isEmpty());
 			}
 		}
 
@@ -127,7 +127,7 @@ public class OptimisationRepeatabilityTest {
 				System.err.println(d.toString());
 			}
 
-			Assert.assertTrue(differences.isEmpty());
+			Assert.assertTrue("final solution 0 and " + i + " should be the same", differences.isEmpty());
 		}
 	}
 }
