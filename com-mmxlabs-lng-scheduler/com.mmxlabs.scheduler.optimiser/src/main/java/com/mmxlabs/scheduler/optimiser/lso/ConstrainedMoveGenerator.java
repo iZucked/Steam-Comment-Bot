@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -221,7 +220,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			validFollowers.put(e1, new Followers<T>(followers));
 		}
 	}
-
+	
 	@Override
 	public IMove<T> generateMove() {
 		final Pair<T, T> newPair = RandomHelper.chooseElementFrom(random,
