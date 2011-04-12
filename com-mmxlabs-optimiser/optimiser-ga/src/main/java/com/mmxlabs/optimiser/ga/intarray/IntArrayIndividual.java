@@ -64,4 +64,8 @@ public final class IntArrayIndividual implements Individual<IntArrayIndividual> 
 		return (hash ^ (hash >> 31)) - (hash >> 31);
 	}
 
+	@Override
+	public final String toString() {
+		return Arrays.toString(ints);
+	}
 }
