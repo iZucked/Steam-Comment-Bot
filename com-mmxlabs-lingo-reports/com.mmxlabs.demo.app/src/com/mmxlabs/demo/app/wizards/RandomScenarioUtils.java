@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -274,13 +275,14 @@ public class RandomScenarioUtils {
 		// though.
 		int dischargePrice = 5000;
 		final long now = new Date().getTime();
+		
 		dischargeCurve.setDefaultValue(dischargePrice
 				/ (float) Calculator.ScaleFactor);
 		loadCurve.setDefaultValue((dischargePrice - 200)
 				/ (float) Calculator.ScaleFactor);
 
 		for (int i = 0; i < scenarioDuration; i += 30) {
-			final Date forwardDate = new Date(now + i * Timer.ONE_DAY);
+			final Date forwardDate = createHourlyDate(now + i * Timer.ONE_DAY);
 			final StepwisePrice price = marketFactory.createStepwisePrice();
 
 			dischargePrice += (random.nextInt(80) - 40);
@@ -554,8 +556,8 @@ public class RandomScenarioUtils {
 		loadSlot.setWindowDuration(loadWindow);
 		dischargeSlot.setWindowDuration(dischargeWindow);
 
-		loadSlot.setWindowStart(new Date(now + Timer.ONE_DAY * startDay));
-		dischargeSlot.setWindowStart(new Date(now + Timer.ONE_DAY * endDay));
+		loadSlot.setWindowStart(createHourlyDate(now + Timer.ONE_DAY * startDay));
+		dischargeSlot.setWindowStart(createHourlyDate(now + Timer.ONE_DAY * endDay));
 
 		// dischargeSlot.setMarket(dischargeMarket);
 		// loadSlot.setMarket(loadMarket);
@@ -773,8 +775,8 @@ public class RandomScenarioUtils {
 		final long now = (new Date()).getTime();
 		final int size = random.nextInt(maxSize - minSize) + minSize;
 		final int startDay = random.nextInt(scenarioLength - size);
-		co.setStartDate(new Date(now + startDay * Timer.ONE_DAY));
-		co.setEndDate(new Date(now + startDay * Timer.ONE_DAY + 6
+		co.setStartDate(createHourlyDate(now + startDay * Timer.ONE_DAY));
+		co.setEndDate(createHourlyDate(now + startDay * Timer.ONE_DAY + 6
 				* Timer.ONE_HOUR));
 		co.setDuration(size);
 		co.getVesselClasses().add(
@@ -802,5 +804,20 @@ public class RandomScenarioUtils {
 		PortAndTime start = fleetFactory.createPortAndTime();
 		EList<Port> ports = scenario.getPortModel().getPorts();
 		start.setPort(ports.get(random.nextInt(ports.size())));
+	}
+	
+	/**
+	 * Creates a date object rounded down to the nearest hour.
+	 * @param time
+	 * @return
+	 */
+	private Date createHourlyDate(final long time) {
+		final Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(time);
+		c.set(Calendar.MILLISECOND, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MINUTE, 0);
+		
+		return c.getTime();
 	}
 }

@@ -92,7 +92,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 
 	private PackTableColumnsAction packColumnsAction;
 
-	class ViewLabelProvider extends CellLabelProvider implements
+	static class ViewLabelProvider extends CellLabelProvider implements
 			ITableLabelProvider {
 		@Override
 		public String getColumnText(final Object obj, final int index) {

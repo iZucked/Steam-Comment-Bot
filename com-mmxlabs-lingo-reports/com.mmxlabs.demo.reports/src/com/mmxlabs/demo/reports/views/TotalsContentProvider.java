@@ -32,7 +32,7 @@ import scenario.schedule.events.ScheduledEvent;
  */
 public class TotalsContentProvider implements IStructuredContentProvider {
 
-	public class RowData {
+	public static class RowData {
 		public RowData(String scheduleName, String component, boolean isCost,
 				long fitness) {
 			super();

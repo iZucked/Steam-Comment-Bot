@@ -21,7 +21,7 @@ import scenario.schedule.ScheduleFitness;
  */
 public class FitnessContentProvider implements IStructuredContentProvider {
 
-	public class RowData {
+	public static class RowData {
 		public RowData(String scenario, String component, long fitness) {
 			super();
 			this.scenario = scenario;
