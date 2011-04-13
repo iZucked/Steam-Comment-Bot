@@ -331,7 +331,7 @@ public class RandomScenarioUtils {
 		final MarketPricePurchaseContract loadContract = contractFactory
 				.createMarketPricePurchaseContract();
 
-		dischargeContract.setRegasEfficiency(1);
+//		dischargeContract.setRegasEfficiency(1);
 		dischargeContract.setEntity(dischargeEntity);
 		dischargeContract.setName("discharge contract");
 		dischargeContract.setMarket(dischargeMarket);
@@ -788,7 +788,7 @@ public class RandomScenarioUtils {
 						scenario.getCargoModel().getCargoes()).getLoadSlot()
 				.getPort());
 
-		scenario.getFleetModel().getCharterOuts().add(co);
+		scenario.getFleetModel().getVesselEvents().add(co);
 	}
 
 	/**
