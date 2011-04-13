@@ -45,8 +45,8 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.ICharterOut;
-import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -60,8 +60,8 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
-import com.mmxlabs.scheduler.optimiser.components.impl.CharterOut;
-import com.mmxlabs.scheduler.optimiser.components.impl.CharterOutPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
+import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
@@ -170,10 +170,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IPortExclusionProviderEditor portExclusionProvider;
 
-	private final List<CharterOutPortSlot> charterOuts = new LinkedList<CharterOutPortSlot>();
-	private final Map<CharterOutPortSlot, Set<IVessel>> vesselCharterOuts = new HashMap<CharterOutPortSlot, Set<IVessel>>();
+	private final List<VesselEventPortSlot> charterOuts = new LinkedList<VesselEventPortSlot>();
+	private final Map<VesselEventPortSlot, Set<IVessel>> vesselCharterOuts = new HashMap<VesselEventPortSlot, Set<IVessel>>();
 
-	private final Map<CharterOutPortSlot, Set<IVesselClass>> vesselClassCharterOuts = new HashMap<CharterOutPortSlot, Set<IVesselClass>>();
+	private final Map<VesselEventPortSlot, Set<IVesselClass>> vesselClassCharterOuts = new HashMap<VesselEventPortSlot, Set<IVesselClass>>();
 
 	private final IReturnElementProviderEditor<ISequenceElement> returnElementProvider;
 
@@ -971,10 +971,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ICharterOutPortSlot createCharterOut(final ITimeWindow arrival,
+	public IVesselEventPortSlot createCharterOut(final ITimeWindow arrival,
 			final IPort port, final int durationHours) {
-		final CharterOut co = new CharterOut(arrival, durationHours, port);
-		final CharterOutPortSlot slot = new CharterOutPortSlot(
+		final VesselEvent co = new VesselEvent(arrival, durationHours, port);
+		final VesselEventPortSlot slot = new VesselEventPortSlot(
 				"charter-out-" + charterOuts.size(), co.getPort(),
 				co.getTimeWindow(), co);
 		
@@ -985,7 +985,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void addCharterOutVessel(final ICharterOutPortSlot charterOut,
+	public void addCharterOutVessel(final IVesselEventPortSlot charterOut,
 			final IVessel vessel) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException(
@@ -999,7 +999,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void addCharterOutVesselClass(final ICharterOutPortSlot charterOut,
+	public void addCharterOutVesselClass(final IVesselEventPortSlot charterOut,
 			final IVesselClass vesselClass) {
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException(
@@ -1015,8 +1015,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	protected void buildCharterOuts() {
 		int i = 0;
 
-		for (final ICharterOutPortSlot slot : charterOuts) {
-			final ICharterOut charterOut = slot.getCharterOut();
+		for (final IVesselEventPortSlot slot : charterOuts) {
+			final IVesselEvent charterOut = slot.getVesselEvent();
 			
 			final SequenceElement element = new SequenceElement(
 					indexingContext, "charter-out-" + i, slot);

@@ -13,7 +13,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -124,12 +124,12 @@ public interface ISchedulerBuilder {
 	 * @param durationHours
 	 * @return
 	 */
-	ICharterOutPortSlot createCharterOut(ITimeWindow arrivalTimeWindow, IPort port,
+	IVesselEventPortSlot createCharterOut(ITimeWindow arrivalTimeWindow, IPort port,
 			int durationHours);
 
-	void addCharterOutVessel(ICharterOutPortSlot charterOut, IVessel vessel);
+	void addCharterOutVessel(IVesselEventPortSlot charterOut, IVessel vessel);
 
-	void addCharterOutVesselClass(ICharterOutPortSlot charterOut,
+	void addCharterOutVesselClass(IVesselEventPortSlot charterOut,
 			IVesselClass vesselClass);
 
 	/**

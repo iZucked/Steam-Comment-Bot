@@ -6,7 +6,12 @@ package com.mmxlabs.scheduler.optimiser.components;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
-public interface ICharterOut {
+/**
+ * Represents a vessel event such as a charter out or dry-dock visit
+ * @author Tom Hinton
+ *
+ */
+public interface IVesselEvent {
 	public ITimeWindow getTimeWindow();
 	public int getDurationHours();
 	public IPort getPort();
