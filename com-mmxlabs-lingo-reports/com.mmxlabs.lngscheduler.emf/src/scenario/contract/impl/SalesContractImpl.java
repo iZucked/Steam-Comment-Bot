@@ -20,7 +20,6 @@ import scenario.market.Market;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.contract.impl.SalesContractImpl#getMarket <em>Market</em>}</li>
- *   <li>{@link scenario.contract.impl.SalesContractImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.contract.impl.SalesContractImpl#getMarkup <em>Markup</em>}</li>
  * </ul>
  * </p>
@@ -37,25 +36,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * @ordered
 	 */
 	protected Market market;
-	/**
-	 * The default value of the '{@link #getRegasEfficiency() <em>Regas Efficiency</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRegasEfficiency()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final float REGAS_EFFICIENCY_EDEFAULT = 0.0F;
-	/**
-	 * The cached value of the '{@link #getRegasEfficiency() <em>Regas Efficiency</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRegasEfficiency()
-	 * @generated
-	 * @ordered
-	 */
-	protected float regasEfficiency = REGAS_EFFICIENCY_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getMarkup() <em>Markup</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -140,29 +120,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * @generated
 	 */
 	@Override
-	public float getRegasEfficiency() {
-		return regasEfficiency;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRegasEfficiency(float newRegasEfficiency) {
-		float oldRegasEfficiency = regasEfficiency;
-		regasEfficiency = newRegasEfficiency;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.SALES_CONTRACT__REGAS_EFFICIENCY, oldRegasEfficiency, regasEfficiency));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public float getMarkup() {
 		return markup;
 	}
@@ -191,8 +148,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 			case ContractPackage.SALES_CONTRACT__MARKET:
 				if (resolve) return getMarket();
 				return basicGetMarket();
-			case ContractPackage.SALES_CONTRACT__REGAS_EFFICIENCY:
-				return getRegasEfficiency();
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				return getMarkup();
 		}
@@ -209,9 +164,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 		switch (featureID) {
 			case ContractPackage.SALES_CONTRACT__MARKET:
 				setMarket((Market)newValue);
-				return;
-			case ContractPackage.SALES_CONTRACT__REGAS_EFFICIENCY:
-				setRegasEfficiency((Float)newValue);
 				return;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				setMarkup((Float)newValue);
@@ -231,9 +183,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 			case ContractPackage.SALES_CONTRACT__MARKET:
 				setMarket((Market)null);
 				return;
-			case ContractPackage.SALES_CONTRACT__REGAS_EFFICIENCY:
-				setRegasEfficiency(REGAS_EFFICIENCY_EDEFAULT);
-				return;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				setMarkup(MARKUP_EDEFAULT);
 				return;
@@ -251,8 +200,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 		switch (featureID) {
 			case ContractPackage.SALES_CONTRACT__MARKET:
 				return market != null;
-			case ContractPackage.SALES_CONTRACT__REGAS_EFFICIENCY:
-				return regasEfficiency != REGAS_EFFICIENCY_EDEFAULT;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				return markup != MARKUP_EDEFAULT;
 		}
@@ -269,9 +216,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (regasEfficiency: ");
-		result.append(regasEfficiency);
-		result.append(", markup: ");
+		result.append(" (markup: ");
 		result.append(markup);
 		result.append(')');
 		return result.toString();

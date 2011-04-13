@@ -26,6 +26,7 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultMarket <em>Default Market</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultContract <em>Default Contract</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  * </ul>
  * </p>
  *
@@ -91,6 +92,26 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * @ordered
 	 */
 	protected Contract defaultContract;
+
+	/**
+	 * The default value of the '{@link #getRegasEfficiency() <em>Regas Efficiency</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRegasEfficiency()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final float REGAS_EFFICIENCY_EDEFAULT = 1.0F;
+
+	/**
+	 * The cached value of the '{@link #getRegasEfficiency() <em>Regas Efficiency</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRegasEfficiency()
+	 * @generated
+	 * @ordered
+	 */
+	protected float regasEfficiency = REGAS_EFFICIENCY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -242,6 +263,27 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public float getRegasEfficiency() {
+		return regasEfficiency;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRegasEfficiency(float newRegasEfficiency) {
+		float oldRegasEfficiency = regasEfficiency;
+		regasEfficiency = newRegasEfficiency;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__REGAS_EFFICIENCY, oldRegasEfficiency, regasEfficiency));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -255,6 +297,8 @@ public class PortImpl extends EObjectImpl implements Port {
 			case PortPackage.PORT__DEFAULT_CONTRACT:
 				if (resolve) return getDefaultContract();
 				return basicGetDefaultContract();
+			case PortPackage.PORT__REGAS_EFFICIENCY:
+				return getRegasEfficiency();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -278,6 +322,9 @@ public class PortImpl extends EObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__DEFAULT_CONTRACT:
 				setDefaultContract((Contract)newValue);
+				return;
+			case PortPackage.PORT__REGAS_EFFICIENCY:
+				setRegasEfficiency((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -303,6 +350,9 @@ public class PortImpl extends EObjectImpl implements Port {
 			case PortPackage.PORT__DEFAULT_CONTRACT:
 				setDefaultContract((Contract)null);
 				return;
+			case PortPackage.PORT__REGAS_EFFICIENCY:
+				setRegasEfficiency(REGAS_EFFICIENCY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -323,6 +373,8 @@ public class PortImpl extends EObjectImpl implements Port {
 				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
 			case PortPackage.PORT__DEFAULT_CONTRACT:
 				return defaultContract != null;
+			case PortPackage.PORT__REGAS_EFFICIENCY:
+				return regasEfficiency != REGAS_EFFICIENCY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -341,6 +393,8 @@ public class PortImpl extends EObjectImpl implements Port {
 		result.append(name);
 		result.append(", timeZone: ");
 		result.append(timeZone);
+		result.append(", regasEfficiency: ");
+		result.append(regasEfficiency);
 		result.append(')');
 		return result.toString();
 	}

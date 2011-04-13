@@ -137,7 +137,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 		
 		java.util.Collections.sort(prices,
 		new java.util.Comparator<StepwisePrice>() {
-			@Override
 			public int compare(StepwisePrice a, StepwisePrice b) {
 				return a.getDate().compareTo(b.getDate());
 			}

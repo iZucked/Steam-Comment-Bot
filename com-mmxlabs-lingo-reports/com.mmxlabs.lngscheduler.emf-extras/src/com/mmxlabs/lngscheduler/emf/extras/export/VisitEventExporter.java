@@ -21,7 +21,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -100,7 +100,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			}
 			
 			sv.setCargoAllocation(eAllocation);
-		} else if (slot instanceof ICharterOutPortSlot) {
+		} else if (slot instanceof IVesselEventPortSlot) {
 //			final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
 			final CharterOutVisit cov = factory.createCharterOutVisit();
 			portVisit = cov;

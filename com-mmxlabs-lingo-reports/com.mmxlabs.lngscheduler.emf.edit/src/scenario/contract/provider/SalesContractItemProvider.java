@@ -54,7 +54,6 @@ public class SalesContractItemProvider
 			super.getPropertyDescriptors(object);
 
 			addMarketPropertyDescriptor(object);
-			addRegasEfficiencyPropertyDescriptor(object);
 			addMarkupPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -78,28 +77,6 @@ public class SalesContractItemProvider
 				 false,
 				 true,
 				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Regas Efficiency feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRegasEfficiencyPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SalesContract_regasEfficiency_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SalesContract_regasEfficiency_feature", "_UI_SalesContract_type"),
-				 ContractPackage.Literals.SALES_CONTRACT__REGAS_EFFICIENCY,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -163,7 +140,6 @@ public class SalesContractItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SalesContract.class)) {
-			case ContractPackage.SALES_CONTRACT__REGAS_EFFICIENCY:
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

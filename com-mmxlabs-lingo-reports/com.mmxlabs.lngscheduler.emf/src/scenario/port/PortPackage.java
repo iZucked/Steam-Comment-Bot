@@ -141,13 +141,22 @@ public interface PortPackage extends EPackage {
 	int PORT__DEFAULT_CONTRACT = 3;
 
 	/**
+	 * The feature id for the '<em><b>Regas Efficiency</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__REGAS_EFFICIENCY = 4;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = 4;
+	int PORT_FEATURE_COUNT = 5;
 
 
 	/**
@@ -503,6 +512,17 @@ public interface PortPackage extends EPackage {
 	EReference getPort_DefaultContract();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Regas Efficiency</em>'.
+	 * @see scenario.port.Port#getRegasEfficiency()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_RegasEfficiency();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -787,6 +807,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT__DEFAULT_CONTRACT = eINSTANCE.getPort_DefaultContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Regas Efficiency</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__REGAS_EFFICIENCY = eINSTANCE.getPort_RegasEfficiency();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.

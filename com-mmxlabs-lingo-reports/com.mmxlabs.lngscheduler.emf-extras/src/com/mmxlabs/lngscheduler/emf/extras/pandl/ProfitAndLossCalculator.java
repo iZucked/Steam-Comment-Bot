@@ -134,7 +134,7 @@ public class ProfitAndLossCalculator {
 			final long dischargedM3 = allocation.getDischargeVolume();
 			final long saleableM3 = (long) Math.floor(allocation
 					.getDischargeVolume()
-					* dischargeContract.getRegasEfficiency());
+					* dischargeSlot.getPort().getRegasEfficiency());
 
 			// divide by CV value to get mmbtu
 			final long saleableMMBTU = (long) Math.floor(saleableM3

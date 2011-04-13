@@ -279,22 +279,13 @@ public interface ContractPackage extends EPackage {
 	int SALES_CONTRACT__MARKET = CONTRACT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Regas Efficiency</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__REGAS_EFFICIENCY = CONTRACT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Markup</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT__MARKUP = CONTRACT_FEATURE_COUNT + 2;
+	int SALES_CONTRACT__MARKUP = CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
@@ -303,7 +294,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 3;
+	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
 
 
 	/**
@@ -862,17 +853,6 @@ public interface ContractPackage extends EPackage {
 	EReference getSalesContract_Market();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.contract.SalesContract#getRegasEfficiency <em>Regas Efficiency</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Regas Efficiency</em>'.
-	 * @see scenario.contract.SalesContract#getRegasEfficiency()
-	 * @see #getSalesContract()
-	 * @generated
-	 */
-	EAttribute getSalesContract_RegasEfficiency();
-
-	/**
 	 * Returns the meta object for the attribute '{@link scenario.contract.SalesContract#getMarkup <em>Markup</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1239,14 +1219,6 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SALES_CONTRACT__MARKET = eINSTANCE.getSalesContract_Market();
-
-		/**
-		 * The meta object literal for the '<em><b>Regas Efficiency</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SALES_CONTRACT__REGAS_EFFICIENCY = eINSTANCE.getSalesContract_RegasEfficiency();
 
 		/**
 		 * The meta object literal for the '<em><b>Markup</b></em>' attribute feature.

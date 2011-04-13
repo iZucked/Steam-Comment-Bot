@@ -15,7 +15,6 @@ import scenario.market.Market;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.contract.SalesContract#getMarket <em>Market</em>}</li>
- *   <li>{@link scenario.contract.SalesContract#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.contract.SalesContract#getMarkup <em>Markup</em>}</li>
  * </ul>
  * </p>
@@ -51,32 +50,6 @@ public interface SalesContract extends Contract {
 	 * @generated
 	 */
 	void setMarket(Market value);
-
-	/**
-	 * Returns the value of the '<em><b>Regas Efficiency</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Regas Efficiency</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Regas Efficiency</em>' attribute.
-	 * @see #setRegasEfficiency(float)
-	 * @see scenario.contract.ContractPackage#getSalesContract_RegasEfficiency()
-	 * @model required="true"
-	 * @generated
-	 */
-	float getRegasEfficiency();
-
-	/**
-	 * Sets the value of the '{@link scenario.contract.SalesContract#getRegasEfficiency <em>Regas Efficiency</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Regas Efficiency</em>' attribute.
-	 * @see #getRegasEfficiency()
-	 * @generated
-	 */
-	void setRegasEfficiency(float value);
 
 	/**
 	 * Returns the value of the '<em><b>Markup</b></em>' attribute.

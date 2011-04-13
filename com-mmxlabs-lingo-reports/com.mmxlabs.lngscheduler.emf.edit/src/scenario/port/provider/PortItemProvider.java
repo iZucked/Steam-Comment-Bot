@@ -61,6 +61,7 @@ public class PortItemProvider
 			addDefaultMarketPropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
 			addDefaultContractPropertyDescriptor(object);
+			addRegasEfficiencyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -154,6 +155,28 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Regas Efficiency feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRegasEfficiencyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_regasEfficiency_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_regasEfficiency_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__REGAS_EFFICIENCY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Port.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -192,6 +215,7 @@ public class PortItemProvider
 		switch (notification.getFeatureID(Port.class)) {
 			case PortPackage.PORT__NAME:
 			case PortPackage.PORT__TIME_ZONE:
+			case PortPackage.PORT__REGAS_EFFICIENCY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

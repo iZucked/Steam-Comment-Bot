@@ -309,18 +309,8 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSalesContract_RegasEfficiency() {
-		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getSalesContract_Markup() {
-		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -603,7 +593,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
 		createEReference(salesContractEClass, SALES_CONTRACT__MARKET);
-		createEAttribute(salesContractEClass, SALES_CONTRACT__REGAS_EFFICIENCY);
 		createEAttribute(salesContractEClass, SALES_CONTRACT__MARKUP);
 
 		totalVolumeLimitEClass = createEClass(TOTAL_VOLUME_LIMIT);
@@ -692,7 +681,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSalesContract_Market(), theMarketPackage.getMarket(), null, "market", null, 1, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSalesContract_RegasEfficiency(), ecorePackage.getEFloat(), "regasEfficiency", null, 1, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSalesContract_Markup(), ecorePackage.getEFloat(), "markup", "1.05", 1, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(totalVolumeLimitEClass, TotalVolumeLimit.class, "TotalVolumeLimit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

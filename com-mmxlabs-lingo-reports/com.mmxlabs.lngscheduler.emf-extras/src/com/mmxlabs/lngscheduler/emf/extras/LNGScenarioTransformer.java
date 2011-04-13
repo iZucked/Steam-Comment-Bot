@@ -62,7 +62,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -316,7 +316,7 @@ public class LNGScenarioTransformer {
 					convertTime(charterOut.getEndDate()));
 			final IPort port = portAssociation.lookup(charterOut.getPort());
 
-			final ICharterOutPortSlot builderCharterOut = builder.createCharterOut(
+			final IVesselEventPortSlot builderCharterOut = builder.createCharterOut(
 					window, port, charterOut.getDuration() * 24); // EMF
 																	// measures
 																	// in days
@@ -388,8 +388,8 @@ public class LNGScenarioTransformer {
 			final ICurve dischargeCurve;
 			// create scaled discharge market, incorporating regas losses
 			{
-				final float regasEfficiency = ((SalesContract) dischargeSlot
-						.getSlotOrPortContract()).getRegasEfficiency();
+				final float regasEfficiency = (dischargeSlot
+						.getPort()).getRegasEfficiency();
 				if (regasEfficiency != 1.0f) {
 					dischargeCurve = createCurveForMarket(dischargeMarket, regasEfficiency);
 				} else {

@@ -42,7 +42,7 @@ import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.ICharterOutPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -260,7 +260,7 @@ public class OptimisationTransformer {
 						ms.add(psp.getElement(portSlot));
 					} else if (event instanceof CharterOutVisit) {
 						final CharterOut co = ((CharterOutVisit)event).getCharterOut();
-						final ICharterOutPortSlot coSlot = mem.getOptimiserObject(co, ICharterOutPortSlot.class);
+						final IVesselEventPortSlot coSlot = mem.getOptimiserObject(co, IVesselEventPortSlot.class);
 						ms.add(psp.getElement(coSlot));
 					}
 				}
