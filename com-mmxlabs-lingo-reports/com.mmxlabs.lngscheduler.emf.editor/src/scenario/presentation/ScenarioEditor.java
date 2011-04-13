@@ -1473,6 +1473,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		final FleetPackage fp = FleetPackage.eINSTANCE;
 
+		final NonEditableColumn type = new NonEditableColumn() {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof EObject) {
+					return ((EObject) object).eClass().getName();
+				} else {
+					return object.getClass().getSimpleName();
+				}
+			}
+		};
+		
+		eventsPane.addTypicalColumn("Event Type", type);
+		
 		final BasicAttributeManipulator id = new BasicAttributeManipulator(
 				fp.getVesselEvent_Id(), getEditingDomain());
 
