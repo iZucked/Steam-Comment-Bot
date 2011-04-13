@@ -98,8 +98,16 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createPortAndTimeAdapter();
 			}
 			@Override
+			public Adapter caseVesselEvent(VesselEvent object) {
+				return createVesselEventAdapter();
+			}
+			@Override
 			public Adapter caseCharterOut(CharterOut object) {
 				return createCharterOutAdapter();
+			}
+			@Override
+			public Adapter caseDrydock(Drydock object) {
+				return createDrydockAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -206,6 +214,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.VesselEvent <em>Vessel Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.VesselEvent
+	 * @generated
+	 */
+	public Adapter createVesselEventAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link scenario.fleet.CharterOut <em>Charter Out</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -216,6 +238,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCharterOutAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.Drydock <em>Drydock</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.Drydock
+	 * @generated
+	 */
+	public Adapter createDrydockAdapter() {
 		return null;
 	}
 

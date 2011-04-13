@@ -88,13 +88,13 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__VESSEL_CLASSES = 1;
 
 	/**
-	 * The feature id for the '<em><b>Charter Outs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__CHARTER_OUTS = 2;
+	int FLEET_MODEL__VESSEL_EVENTS = 2;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -507,14 +507,14 @@ public interface FleetPackage extends EPackage {
 	int PORT_AND_TIME_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link scenario.fleet.impl.CharterOutImpl <em>Charter Out</em>}' class.
+	 * The meta object id for the '{@link scenario.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see scenario.fleet.impl.CharterOutImpl
-	 * @see scenario.fleet.impl.FleetPackageImpl#getCharterOut()
+	 * @see scenario.fleet.impl.VesselEventImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselEvent()
 	 * @generated
 	 */
-	int CHARTER_OUT = 6;
+	int VESSEL_EVENT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -523,7 +523,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__ID = 0;
+	int VESSEL_EVENT__ID = 0;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -532,7 +532,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__START_DATE = 1;
+	int VESSEL_EVENT__START_DATE = 1;
 
 	/**
 	 * The feature id for the '<em><b>End Date</b></em>' attribute.
@@ -541,7 +541,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__END_DATE = 2;
+	int VESSEL_EVENT__END_DATE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -550,7 +550,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__DURATION = 3;
+	int VESSEL_EVENT__DURATION = 3;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -559,7 +559,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__PORT = 4;
+	int VESSEL_EVENT__PORT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
@@ -568,7 +568,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__VESSELS = 5;
+	int VESSEL_EVENT__VESSELS = 5;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Classes</b></em>' reference list.
@@ -577,7 +577,98 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__VESSEL_CLASSES = 6;
+	int VESSEL_EVENT__VESSEL_CLASSES = 6;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_FEATURE_COUNT = 7;
+
+	/**
+	 * The number of operations of the '<em>Vessel Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.fleet.impl.CharterOutImpl <em>Charter Out</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.fleet.impl.CharterOutImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getCharterOut()
+	 * @generated
+	 */
+	int CHARTER_OUT = 7;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__ID = VESSEL_EVENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__START_DATE = VESSEL_EVENT__START_DATE;
+
+	/**
+	 * The feature id for the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__END_DATE = VESSEL_EVENT__END_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__DURATION = VESSEL_EVENT__DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__VESSELS = VESSEL_EVENT__VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Classes</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__VESSEL_CLASSES = VESSEL_EVENT__VESSEL_CLASSES;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
@@ -586,7 +677,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_FEATURE_COUNT = 7;
+	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Charter Out</em>' class.
@@ -595,7 +686,98 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_OPERATION_COUNT = 0;
+	int CHARTER_OUT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.fleet.impl.DrydockImpl <em>Drydock</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.fleet.impl.DrydockImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getDrydock()
+	 * @generated
+	 */
+	int DRYDOCK = 8;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__ID = VESSEL_EVENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__START_DATE = VESSEL_EVENT__START_DATE;
+
+	/**
+	 * The feature id for the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__END_DATE = VESSEL_EVENT__END_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__DURATION = VESSEL_EVENT__DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__VESSELS = VESSEL_EVENT__VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Classes</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__VESSEL_CLASSES = VESSEL_EVENT__VESSEL_CLASSES;
+
+	/**
+	 * The number of structural features of the '<em>Drydock</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Drydock</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.
@@ -605,7 +787,7 @@ public interface FleetPackage extends EPackage {
 	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselState()
 	 * @generated
 	 */
-	int VESSEL_STATE = 7;
+	int VESSEL_STATE = 9;
 
 
 	/**
@@ -641,15 +823,15 @@ public interface FleetPackage extends EPackage {
 	EReference getFleetModel_VesselClasses();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.fleet.FleetModel#getCharterOuts <em>Charter Outs</em>}'.
+	 * Returns the meta object for the containment reference list '{@link scenario.fleet.FleetModel#getVesselEvents <em>Vessel Events</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Charter Outs</em>'.
-	 * @see scenario.fleet.FleetModel#getCharterOuts()
+	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
+	 * @see scenario.fleet.FleetModel#getVesselEvents()
 	 * @see #getFleetModel()
 	 * @generated
 	 */
-	EReference getFleetModel_CharterOuts();
+	EReference getFleetModel_VesselEvents();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.Vessel <em>Vessel</em>}'.
@@ -1010,6 +1192,93 @@ public interface FleetPackage extends EPackage {
 	EAttribute getPortAndTime_EndTime();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.fleet.VesselEvent <em>Vessel Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Event</em>'.
+	 * @see scenario.fleet.VesselEvent
+	 * @generated
+	 */
+	EClass getVesselEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselEvent#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see scenario.fleet.VesselEvent#getId()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_Id();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselEvent#getStartDate <em>Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Date</em>'.
+	 * @see scenario.fleet.VesselEvent#getStartDate()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_StartDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselEvent#getEndDate <em>End Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Date</em>'.
+	 * @see scenario.fleet.VesselEvent#getEndDate()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_EndDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselEvent#getDuration <em>Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Duration</em>'.
+	 * @see scenario.fleet.VesselEvent#getDuration()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_Duration();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.fleet.VesselEvent#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see scenario.fleet.VesselEvent#getPort()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EReference getVesselEvent_Port();
+
+	/**
+	 * Returns the meta object for the reference list '{@link scenario.fleet.VesselEvent#getVessels <em>Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessels</em>'.
+	 * @see scenario.fleet.VesselEvent#getVessels()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EReference getVesselEvent_Vessels();
+
+	/**
+	 * Returns the meta object for the reference list '{@link scenario.fleet.VesselEvent#getVesselClasses <em>Vessel Classes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessel Classes</em>'.
+	 * @see scenario.fleet.VesselEvent#getVesselClasses()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EReference getVesselEvent_VesselClasses();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.fleet.CharterOut <em>Charter Out</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1020,81 +1289,14 @@ public interface FleetPackage extends EPackage {
 	EClass getCharterOut();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.fleet.CharterOut#getPort <em>Port</em>}'.
+	 * Returns the meta object for class '{@link scenario.fleet.Drydock <em>Drydock</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see scenario.fleet.CharterOut#getPort()
-	 * @see #getCharterOut()
+	 * @return the meta object for class '<em>Drydock</em>'.
+	 * @see scenario.fleet.Drydock
 	 * @generated
 	 */
-	EReference getCharterOut_Port();
-
-	/**
-	 * Returns the meta object for the reference list '{@link scenario.fleet.CharterOut#getVessels <em>Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Vessels</em>'.
-	 * @see scenario.fleet.CharterOut#getVessels()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EReference getCharterOut_Vessels();
-
-	/**
-	 * Returns the meta object for the reference list '{@link scenario.fleet.CharterOut#getVesselClasses <em>Vessel Classes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Vessel Classes</em>'.
-	 * @see scenario.fleet.CharterOut#getVesselClasses()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EReference getCharterOut_VesselClasses();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getStartDate <em>Start Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start Date</em>'.
-	 * @see scenario.fleet.CharterOut#getStartDate()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EAttribute getCharterOut_StartDate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getEndDate <em>End Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>End Date</em>'.
-	 * @see scenario.fleet.CharterOut#getEndDate()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EAttribute getCharterOut_EndDate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getDuration <em>Duration</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Duration</em>'.
-	 * @see scenario.fleet.CharterOut#getDuration()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EAttribute getCharterOut_Duration();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getId <em>Id</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Id</em>'.
-	 * @see scenario.fleet.CharterOut#getId()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EAttribute getCharterOut_Id();
+	EClass getDrydock();
 
 	/**
 	 * Returns the meta object for enum '{@link scenario.fleet.VesselState <em>Vessel State</em>}'.
@@ -1155,12 +1357,12 @@ public interface FleetPackage extends EPackage {
 		EReference FLEET_MODEL__VESSEL_CLASSES = eINSTANCE.getFleetModel_VesselClasses();
 
 		/**
-		 * The meta object literal for the '<em><b>Charter Outs</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference FLEET_MODEL__CHARTER_OUTS = eINSTANCE.getFleetModel_CharterOuts();
+		EReference FLEET_MODEL__VESSEL_EVENTS = eINSTANCE.getFleetModel_VesselEvents();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.VesselImpl <em>Vessel</em>}' class.
@@ -1437,6 +1639,72 @@ public interface FleetPackage extends EPackage {
 		EAttribute PORT_AND_TIME__END_TIME = eINSTANCE.getPortAndTime_EndTime();
 
 		/**
+		 * The meta object literal for the '{@link scenario.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.fleet.impl.VesselEventImpl
+		 * @see scenario.fleet.impl.FleetPackageImpl#getVesselEvent()
+		 * @generated
+		 */
+		EClass VESSEL_EVENT = eINSTANCE.getVesselEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__ID = eINSTANCE.getVesselEvent_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__START_DATE = eINSTANCE.getVesselEvent_StartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__END_DATE = eINSTANCE.getVesselEvent_EndDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__DURATION = eINSTANCE.getVesselEvent_Duration();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT__PORT = eINSTANCE.getVesselEvent_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT__VESSELS = eINSTANCE.getVesselEvent_Vessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Classes</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT__VESSEL_CLASSES = eINSTANCE.getVesselEvent_VesselClasses();
+
+		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.CharterOutImpl <em>Charter Out</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1447,60 +1715,14 @@ public interface FleetPackage extends EPackage {
 		EClass CHARTER_OUT = eINSTANCE.getCharterOut();
 
 		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * The meta object literal for the '{@link scenario.fleet.impl.DrydockImpl <em>Drydock</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see scenario.fleet.impl.DrydockImpl
+		 * @see scenario.fleet.impl.FleetPackageImpl#getDrydock()
 		 * @generated
 		 */
-		EReference CHARTER_OUT__PORT = eINSTANCE.getCharterOut_Port();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHARTER_OUT__VESSELS = eINSTANCE.getCharterOut_Vessels();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Classes</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHARTER_OUT__VESSEL_CLASSES = eINSTANCE.getCharterOut_VesselClasses();
-
-		/**
-		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT__START_DATE = eINSTANCE.getCharterOut_StartDate();
-
-		/**
-		 * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT__END_DATE = eINSTANCE.getCharterOut_EndDate();
-
-		/**
-		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT__DURATION = eINSTANCE.getCharterOut_Duration();
-
-		/**
-		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT__ID = eINSTANCE.getCharterOut_Id();
+		EClass DRYDOCK = eINSTANCE.getDrydock();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.

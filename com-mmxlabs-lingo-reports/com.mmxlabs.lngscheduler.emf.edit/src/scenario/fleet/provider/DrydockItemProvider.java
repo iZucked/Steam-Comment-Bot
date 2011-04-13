@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.provider;
 
@@ -11,41 +13,36 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.fleet.CharterOut;
-import scenario.fleet.FleetPackage;
-
-import scenario.provider.LngEditPlugin;
+import scenario.fleet.Drydock;
 
 /**
- * This is the item provider adapter for a {@link scenario.fleet.CharterOut} object.
+ * This is the item provider adapter for a {@link scenario.fleet.Drydock} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CharterOutItemProvider
+public class DrydockItemProvider
 	extends VesselEventItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterOutItemProvider(AdapterFactory adapterFactory) {
+	public DrydockItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -65,14 +62,14 @@ public class CharterOutItemProvider
 	}
 
 	/**
-	 * This returns CharterOut.gif.
+	 * This returns Drydock.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CharterOut"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Drydock"));
 	}
 
 	/**
@@ -83,10 +80,10 @@ public class CharterOutItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((CharterOut)object).getId();
+		String label = ((Drydock)object).getId();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CharterOut_type") :
-			getString("_UI_CharterOut_type") + " " + label;
+			getString("_UI_Drydock_type") :
+			getString("_UI_Drydock_type") + " " + label;
 	}
 
 	/**

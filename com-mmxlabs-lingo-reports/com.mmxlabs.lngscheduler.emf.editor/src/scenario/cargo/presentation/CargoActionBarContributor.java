@@ -223,8 +223,7 @@ public class CargoActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
-				 @Override
-				public void menuAboutToShow(IMenuManager menuManager) {
+				 public void menuAboutToShow(IMenuManager menuManager) {
 					 menuManager.updateAll(true);
 				 }
 			 });

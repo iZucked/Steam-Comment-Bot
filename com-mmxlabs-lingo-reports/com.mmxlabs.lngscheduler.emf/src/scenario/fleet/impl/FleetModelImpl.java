@@ -19,6 +19,7 @@ import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselEvent;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +30,7 @@ import scenario.fleet.VesselClass;
  * <ul>
  *   <li>{@link scenario.fleet.impl.FleetModelImpl#getFleet <em>Fleet</em>}</li>
  *   <li>{@link scenario.fleet.impl.FleetModelImpl#getVesselClasses <em>Vessel Classes</em>}</li>
- *   <li>{@link scenario.fleet.impl.FleetModelImpl#getCharterOuts <em>Charter Outs</em>}</li>
+ *   <li>{@link scenario.fleet.impl.FleetModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
  * </ul>
  * </p>
  *
@@ -57,14 +58,14 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	protected EList<VesselClass> vesselClasses;
 
 	/**
-	 * The cached value of the '{@link #getCharterOuts() <em>Charter Outs</em>}' containment reference list.
+	 * The cached value of the '{@link #getVesselEvents() <em>Vessel Events</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCharterOuts()
+	 * @see #getVesselEvents()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<CharterOut> charterOuts;
+	protected EList<VesselEvent> vesselEvents;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -116,12 +117,11 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EList<CharterOut> getCharterOuts() {
-		if (charterOuts == null) {
-			charterOuts = new EObjectContainmentEList<CharterOut>(CharterOut.class, this, FleetPackage.FLEET_MODEL__CHARTER_OUTS);
+	public EList<VesselEvent> getVesselEvents() {
+		if (vesselEvents == null) {
+			vesselEvents = new EObjectContainmentEList<VesselEvent>(VesselEvent.class, this, FleetPackage.FLEET_MODEL__VESSEL_EVENTS);
 		}
-		return charterOuts;
+		return vesselEvents;
 	}
 
 	/**
@@ -136,8 +136,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 				return ((InternalEList<?>)getFleet()).basicRemove(otherEnd, msgs);
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				return ((InternalEList<?>)getVesselClasses()).basicRemove(otherEnd, msgs);
-			case FleetPackage.FLEET_MODEL__CHARTER_OUTS:
-				return ((InternalEList<?>)getCharterOuts()).basicRemove(otherEnd, msgs);
+			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -154,8 +154,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 				return getFleet();
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				return getVesselClasses();
-			case FleetPackage.FLEET_MODEL__CHARTER_OUTS:
-				return getCharterOuts();
+			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+				return getVesselEvents();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -177,9 +177,9 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 				getVesselClasses().clear();
 				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
 				return;
-			case FleetPackage.FLEET_MODEL__CHARTER_OUTS:
-				getCharterOuts().clear();
-				getCharterOuts().addAll((Collection<? extends CharterOut>)newValue);
+			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+				getVesselEvents().clear();
+				getVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -199,8 +199,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				getVesselClasses().clear();
 				return;
-			case FleetPackage.FLEET_MODEL__CHARTER_OUTS:
-				getCharterOuts().clear();
+			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+				getVesselEvents().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -218,8 +218,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 				return fleet != null && !fleet.isEmpty();
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				return vesselClasses != null && !vesselClasses.isEmpty();
-			case FleetPackage.FLEET_MODEL__CHARTER_OUTS:
-				return charterOuts != null && !charterOuts.isEmpty();
+			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+				return vesselEvents != null && !vesselEvents.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

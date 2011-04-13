@@ -127,9 +127,23 @@ public class FleetSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FleetPackage.VESSEL_EVENT: {
+				VesselEvent vesselEvent = (VesselEvent)theEObject;
+				T result = caseVesselEvent(vesselEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case FleetPackage.CHARTER_OUT: {
 				CharterOut charterOut = (CharterOut)theEObject;
 				T result = caseCharterOut(charterOut);
+				if (result == null) result = caseVesselEvent(charterOut);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.DRYDOCK: {
+				Drydock drydock = (Drydock)theEObject;
+				T result = caseDrydock(drydock);
+				if (result == null) result = caseVesselEvent(drydock);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -228,6 +242,21 @@ public class FleetSwitch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselEvent(VesselEvent object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Charter Out</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -239,6 +268,21 @@ public class FleetSwitch<T> {
 	 * @generated
 	 */
 	public T caseCharterOut(CharterOut object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Drydock</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Drydock</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDrydock(Drydock object) {
 		return null;
 	}
 

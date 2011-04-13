@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link scenario.fleet.FleetModel#getFleet <em>Fleet</em>}</li>
  *   <li>{@link scenario.fleet.FleetModel#getVesselClasses <em>Vessel Classes</em>}</li>
- *   <li>{@link scenario.fleet.FleetModel#getCharterOuts <em>Charter Outs</em>}</li>
+ *   <li>{@link scenario.fleet.FleetModel#getVesselEvents <em>Vessel Events</em>}</li>
  * </ul>
  * </p>
  *
@@ -59,19 +59,19 @@ public interface FleetModel extends EObject {
 	EList<VesselClass> getVesselClasses();
 
 	/**
-	 * Returns the value of the '<em><b>Charter Outs</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.fleet.CharterOut}.
+	 * Returns the value of the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.fleet.VesselEvent}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Charter Outs</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Vessel Events</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Charter Outs</em>' containment reference list.
-	 * @see scenario.fleet.FleetPackage#getFleetModel_CharterOuts()
+	 * @return the value of the '<em>Vessel Events</em>' containment reference list.
+	 * @see scenario.fleet.FleetPackage#getFleetModel_VesselEvents()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<CharterOut> getCharterOuts();
+	EList<VesselEvent> getVesselEvents();
 
 } // FleetModel

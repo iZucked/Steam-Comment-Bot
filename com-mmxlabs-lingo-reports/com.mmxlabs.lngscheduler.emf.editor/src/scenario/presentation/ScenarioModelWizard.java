@@ -197,7 +197,6 @@ public class ScenarioModelWizard extends Wizard implements INewWizard {
 			// Do the work within an operation.
 			//
 			IRunnableWithProgress operation = new IRunnableWithProgress() {
-				@Override
 				public void run(IProgressMonitor progressMonitor) {
 						try {
 							// Create a resource set
@@ -413,7 +412,6 @@ public class ScenarioModelWizard extends Wizard implements INewWizard {
 		 */
 		protected ModifyListener validator =
 			new ModifyListener() {
-				@Override
 				public void modifyText(ModifyEvent e) {
 					setPageComplete(validatePage());
 				}

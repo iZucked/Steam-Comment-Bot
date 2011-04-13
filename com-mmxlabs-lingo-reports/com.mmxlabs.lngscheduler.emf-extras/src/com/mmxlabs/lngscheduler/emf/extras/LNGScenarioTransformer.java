@@ -42,6 +42,7 @@ import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselEvent;
 import scenario.fleet.VesselStateAttributes;
 import scenario.market.Market;
 import scenario.market.StepwisePrice;
@@ -62,7 +63,6 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -70,6 +70,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
@@ -150,7 +151,8 @@ public class LNGScenarioTransformer {
 		final Association<Market, ICurve> marketAssociation = new Association<Market, ICurve>();
 
 		for (final Market market : scenario.getMarketModel().getMarkets()) {
-			final StepwiseIntegerCurve curve = createCurveForMarket(market, 1.0f);
+			final StepwiseIntegerCurve curve = createCurveForMarket(market,
+					1.0f);
 
 			marketAssociation.add(market, curve);
 		}
@@ -240,17 +242,19 @@ public class LNGScenarioTransformer {
 		return builder.getOptimisationData();
 	}
 
-	private StepwiseIntegerCurve createCurveForMarket(final Market market, float scale) {
+	private StepwiseIntegerCurve createCurveForMarket(final Market market,
+			float scale) {
 		final StepwisePriceCurve curveModel = market.getPriceCurve();
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
-		curve.setDefaultValue(Calculator.scaleToInt(scale * curveModel
-				.getDefaultValue()));
+		curve.setDefaultValue(Calculator.scaleToInt(scale
+				* curveModel.getDefaultValue()));
 		boolean gotOneEarlyDate = false;
 		for (final StepwisePrice price : curveModel.getPrices()) {
 			final int hours = convertTime(price.getDate());
 			if (hours < 0) {
-				if (gotOneEarlyDate) continue;
+				if (gotOneEarlyDate)
+					continue;
 				gotOneEarlyDate = true;
 			}
 			curve.setValueAfter(hours,
@@ -305,33 +309,38 @@ public class LNGScenarioTransformer {
 		earliestTime = a.getFirst();
 		latestTime = a.getSecond();
 	}
-	
+
 	private void buildCharterOuts(SchedulerBuilder builder,
 			Association<Port, IPort> portAssociation,
 			Association<VesselClass, IVesselClass> classes,
 			Association<Vessel, IVessel> vessels, ModelEntityMap entities) {
-		for (CharterOut charterOut : scenario.getFleetModel().getCharterOuts()) {
-			final ITimeWindow window = builder.createTimeWindow(
-					convertTime(charterOut.getStartDate()),
-					convertTime(charterOut.getEndDate()));
-			final IPort port = portAssociation.lookup(charterOut.getPort());
+		for (final VesselEvent event : scenario.getFleetModel()
+				.getVesselEvents()) {
+			if (event instanceof CharterOut) {
+				final CharterOut charterOut = (CharterOut) event;
+				final ITimeWindow window = builder.createTimeWindow(
+						convertTime(charterOut.getStartDate()),
+						convertTime(charterOut.getEndDate()));
+				final IPort port = portAssociation.lookup(charterOut.getPort());
 
-			final IVesselEventPortSlot builderCharterOut = builder.createCharterOut(
-					window, port, charterOut.getDuration() * 24); // EMF
-																	// measures
-																	// in days
-																	// here.
+				final IVesselEventPortSlot builderCharterOut = builder
+						.createCharterOut(window, port,
+								charterOut.getDuration() * 24); // EMF
+																// measures
+																// in days
+																// here.
 
-			entities.addModelObject(charterOut, builderCharterOut);
+				entities.addModelObject(charterOut, builderCharterOut);
 
-			for (final Vessel v : charterOut.getVessels()) {
-				builder.addCharterOutVessel(builderCharterOut,
-						vessels.lookup(v));
-			}
+				for (final Vessel v : charterOut.getVessels()) {
+					builder.addCharterOutVessel(builderCharterOut,
+							vessels.lookup(v));
+				}
 
-			for (final VesselClass vc : charterOut.getVesselClasses()) {
-				builder.addCharterOutVesselClass(builderCharterOut,
-						classes.lookup(vc));
+				for (final VesselClass vc : charterOut.getVesselClasses()) {
+					builder.addCharterOutVesselClass(builderCharterOut,
+							classes.lookup(vc));
+				}
 			}
 		}
 	}
@@ -355,7 +364,8 @@ public class LNGScenarioTransformer {
 			final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation) {
 		for (final Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// ignore all non-fleet cargoes, as far as optimisation goes.
-			if (eCargo.getCargoType().equals(CargoType.FLEET) == false) continue;
+			if (eCargo.getCargoType().equals(CargoType.FLEET) == false)
+				continue;
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
@@ -388,10 +398,11 @@ public class LNGScenarioTransformer {
 			final ICurve dischargeCurve;
 			// create scaled discharge market, incorporating regas losses
 			{
-				final float regasEfficiency = (dischargeSlot
-						.getPort()).getRegasEfficiency();
+				final float regasEfficiency = (dischargeSlot.getPort())
+						.getRegasEfficiency();
 				if (regasEfficiency != 1.0f) {
-					dischargeCurve = createCurveForMarket(dischargeMarket, regasEfficiency);
+					dischargeCurve = createCurveForMarket(dischargeMarket,
+							regasEfficiency);
 				} else {
 					dischargeCurve = marketAssociation.lookup(dischargeMarket);
 				}
@@ -402,8 +413,7 @@ public class LNGScenarioTransformer {
 					ports.lookup(dischargeSlot.getPort()), dischargeWindow,
 					Calculator.scale(dischargeSlot.getMinQuantity()),
 					Calculator.scale(dischargeSlot.getMaxQuantity()),
-					dischargeCurve,
-					dischargeSlot.getSlotDuration());
+					dischargeCurve, dischargeSlot.getSlotDuration());
 
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);
@@ -694,13 +704,13 @@ public class LNGScenarioTransformer {
 		InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				keypoints);
 
-		LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
-		
+		LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(
+				vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
+
 		builder.setVesselClassStateParamaters(vc, state,
 				Calculator.scaleToInt(attrs.getNboRate()) / 24,
 				Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
-				Calculator.scaleToInt(attrs.getIdleConsumptionRate()) / 24,
-				cc);
+				Calculator.scaleToInt(attrs.getIdleConsumptionRate()) / 24, cc);
 	}
 
 	/**

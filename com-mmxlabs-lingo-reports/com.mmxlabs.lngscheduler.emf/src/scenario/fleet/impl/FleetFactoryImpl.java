@@ -72,6 +72,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
 			case FleetPackage.PORT_AND_TIME: return createPortAndTime();
 			case FleetPackage.CHARTER_OUT: return createCharterOut();
+			case FleetPackage.DRYDOCK: return createDrydock();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -182,6 +183,16 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public CharterOut createCharterOut() {
 		CharterOutImpl charterOut = new CharterOutImpl();
 		return charterOut;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Drydock createDrydock() {
+		DrydockImpl drydock = new DrydockImpl();
+		return drydock;
 	}
 
 	/**

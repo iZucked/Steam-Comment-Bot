@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import scenario.fleet.VesselEvent;
 import scenario.fleet.CharterOut;
 
 import scenario.schedule.CharterOutRevenue;
@@ -103,7 +104,6 @@ public class CharterOutVisitImpl extends PortVisitImpl implements CharterOutVisi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setCharterOut(CharterOut newCharterOut) {
 		CharterOut oldCharterOut = charterOut;
 		charterOut = newCharterOut;

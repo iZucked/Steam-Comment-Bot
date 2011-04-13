@@ -54,8 +54,8 @@
           eType="#//fleet/Vessel" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
           eType="#//fleet/VesselClass" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="charterOuts" upperBound="-1"
-          eType="#//fleet/CharterOut" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvents" upperBound="-1"
+          eType="#//fleet/VesselEvent" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Vessel">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -136,7 +136,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="CharterOut">
+    <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
@@ -148,6 +148,8 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
           eType="#//fleet/VesselClass"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CharterOut" eSuperTypes="#//fleet/VesselEvent"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Drydock" eSuperTypes="#//fleet/VesselEvent"/>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel">

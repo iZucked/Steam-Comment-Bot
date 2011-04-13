@@ -234,6 +234,29 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.fleet.Drydock} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DrydockItemProvider drydockItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.fleet.Drydock}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDrydockAdapter() {
+		if (drydockItemProvider == null) {
+			drydockItemProvider = new DrydockItemProvider(this);
+		}
+
+		return drydockItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -345,6 +368,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
 		if (portAndTimeItemProvider != null) portAndTimeItemProvider.dispose();
 		if (charterOutItemProvider != null) charterOutItemProvider.dispose();
+		if (drydockItemProvider != null) drydockItemProvider.dispose();
 	}
 
 }
