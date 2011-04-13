@@ -1447,11 +1447,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							.getSalesContract_Market(), marketProvider,
 							getEditingDomain()));
 
-			salesPane.addTypicalColumn(
-					"Regas Efficiency",
-					new NumericAttributeManipulator(ContractPackage.eINSTANCE
-							.getSalesContract_RegasEfficiency(),
-							getEditingDomain()));
+//			salesPane.addTypicalColumn(
+//					"Regas Efficiency",
+//					new NumericAttributeManipulator(ContractPackage.eINSTANCE
+//							.getSalesContract_RegasEfficiency(),
+//							getEditingDomain()));
 
 			salesPane.addTypicalColumn(
 					"Sales Mark-up",
@@ -1805,49 +1805,54 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	private void createPortEditor(
 			final IReferenceValueProvider everyContractProvider,
 			final IReferenceValueProvider marketProvider) {
-		final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
+		final EObjectEditorViewerPane portsPane = new EObjectEditorViewerPane(
 				getSite().getPage(), ScenarioEditor.this);
 		// cargoPane.createControl(getContainer());
 
-		cargoPane.createControl(getContainer());
+		portsPane.createControl(getContainer());
 
 		final List<EReference> path = new LinkedList<EReference>();
 
 		path.add(ScenarioPackage.eINSTANCE.getScenario_PortModel());
 		path.add(PortPackage.eINSTANCE.getPortModel_Ports());
 
-		cargoPane.setTitle("Ports", getTitleImage());
+		portsPane.setTitle("Ports", getTitleImage());
 
-		cargoPane.init(path, adapterFactory);
+		portsPane.init(path, adapterFactory);
 		final PortPackage pp = PortPackage.eINSTANCE;
 		{
 			BasicAttributeManipulator manipulator = new BasicAttributeManipulator(
 					pp.getPort_Name(), getEditingDomain());
-			cargoPane.addColumn("Name", manipulator, manipulator);
+			portsPane.addColumn("Name", manipulator, manipulator);
 			manipulator = new BasicAttributeManipulator(pp.getPort_TimeZone(),
 					getEditingDomain());
-			cargoPane.addColumn("Timezone", manipulator, manipulator);
+			portsPane.addColumn("Timezone", manipulator, manipulator);
 
 			final SingleReferenceManipulator mm = new SingleReferenceManipulator(
 					pp.getPort_DefaultMarket(), marketProvider,
 					getEditingDomain());
 
-			cargoPane.addColumn("Default Market", mm, mm);
+			portsPane.addColumn("Default Market", mm, mm);
 
 			final SingleReferenceManipulator cm = new SingleReferenceManipulator(
 					pp.getPort_DefaultContract(), everyContractProvider,
 					getEditingDomain());
 
-			cargoPane.addColumn("Default Contract", cm, cm);
+			portsPane.addColumn("Default Contract", cm, cm);
+			
+			portsPane.addTypicalColumn(
+			"Regas Efficiency",
+			new NumericAttributeManipulator(PortPackage.eINSTANCE.getPort_RegasEfficiency(),
+					getEditingDomain()));
 		}
 
-		cargoPane.getViewer().setInput(
+		portsPane.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
-		createContextMenuFor(cargoPane.getViewer());
+		createContextMenuFor(portsPane.getViewer());
 
-		final int pageIndex = addPage(cargoPane.getControl());
+		final int pageIndex = addPage(portsPane.getControl());
 		setPageText(pageIndex, "Ports"); // TODO localize this
 											// string or whatever
 
