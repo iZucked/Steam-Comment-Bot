@@ -22,9 +22,9 @@ import org.eclipse.swt.widgets.Listener;
 
 import scenario.port.Port;
 import scenario.port.PortPackage;
-import scenario.presentation.cargoeditor.widgets.DateAndTime;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.rcp.common.controls.DateAndTime;
 
 public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	private DateAndTime dateAndTime;

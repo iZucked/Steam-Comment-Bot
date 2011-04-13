@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor.celleditors;
+package scenario.presentation.cargoeditor.dialogs;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -49,6 +49,8 @@ import org.swtchart.Chart;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.Range;
+
+import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
 
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;

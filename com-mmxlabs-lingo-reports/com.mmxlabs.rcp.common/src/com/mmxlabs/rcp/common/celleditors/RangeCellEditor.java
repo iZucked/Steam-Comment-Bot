@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor.celleditors;
+package com.mmxlabs.rcp.common.celleditors;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
@@ -13,7 +13,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-import scenario.presentation.cargoeditor.widgets.Range;
+import com.mmxlabs.rcp.common.controls.Range;
+
 
 /**
  * A celleditor which displays a Range widget

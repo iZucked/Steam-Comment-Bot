@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor.celleditors;
+package com.mmxlabs.rcp.common.celleditors;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;

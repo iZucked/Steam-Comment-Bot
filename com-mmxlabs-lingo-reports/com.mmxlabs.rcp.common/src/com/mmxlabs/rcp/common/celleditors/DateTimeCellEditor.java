@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor.celleditors;
+package com.mmxlabs.rcp.common.celleditors;
 
 import java.util.Calendar;
 
@@ -20,7 +20,8 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import scenario.presentation.cargoeditor.widgets.DatePopup;
+import com.mmxlabs.rcp.common.controls.DatePopup;
+
 
 /**
  * A CellEditor which displays a date & time picker control.

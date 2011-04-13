@@ -10,7 +10,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 
-import scenario.presentation.cargoeditor.celleditors.SpinnerCellEditor;
+import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
+
 
 /**
  * @author hinton

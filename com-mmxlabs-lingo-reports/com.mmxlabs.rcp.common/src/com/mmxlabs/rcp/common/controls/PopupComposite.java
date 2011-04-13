@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor.widgets;
+package com.mmxlabs.rcp.common.controls;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
