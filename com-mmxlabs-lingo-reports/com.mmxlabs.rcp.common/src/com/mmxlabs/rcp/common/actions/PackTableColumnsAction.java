@@ -13,9 +13,9 @@ import com.mmxlabs.rcp.common.Activator;
 
 public class PackTableColumnsAction extends Action {
 
-	private TableViewer viewer;
+	private final TableViewer viewer;
 
-	public PackTableColumnsAction(TableViewer viewer) {
+	public PackTableColumnsAction(final TableViewer viewer) {
 		super("Pack Columns");
 		setImageDescriptor(Activator.getImageDescriptor("/icons/pack.gif"));
 		this.viewer = viewer;
@@ -25,8 +25,8 @@ public class PackTableColumnsAction extends Action {
 	public void run() {
 
 		if (!viewer.getControl().isDisposed()) {
-			TableColumn[] columns = viewer.getTable().getColumns();
-			for (TableColumn c : columns) {
+			final TableColumn[] columns = viewer.getTable().getColumns();
+			for (final TableColumn c : columns) {
 				c.pack();
 			}
 		}
