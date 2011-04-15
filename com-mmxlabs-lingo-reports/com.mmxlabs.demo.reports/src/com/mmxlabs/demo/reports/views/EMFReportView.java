@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -45,6 +46,7 @@ import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
@@ -230,7 +232,9 @@ public abstract class EMFReportView extends ViewPart implements
 
 	private TableViewer viewer;
 
-	private PackTableColumnsAction packColumnsAction;
+	private Action packColumnsAction;
+	
+	private Action copyTableAction;
 
 	protected abstract IStructuredContentProvider getContentProvider();
 
@@ -321,10 +325,12 @@ public abstract class EMFReportView extends ViewPart implements
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packColumnsAction);
+		manager.add(copyTableAction);
 	}
 
 	private void makeActions() {
 		packColumnsAction = new PackTableColumnsAction(viewer);
+		copyTableAction = new CopyTableToClipboardAction(viewer.getTable());
 	}
 
 	@Override

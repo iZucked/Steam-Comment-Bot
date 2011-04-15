@@ -11,6 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -19,8 +25,12 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import scenario.contract.Entity;
@@ -39,6 +49,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
+import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
@@ -70,6 +81,10 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	protected static final String TREE_DATA_KEY = "THVTreeData";
 
 	private TreeViewer viewer;
+
+	private Action packColumnsAction;
+
+	private Action copyTreeAction;
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part,
@@ -449,9 +464,14 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		viewer.setInput(null);
 
-		// add pack columns button
-		getViewSite().getActionBars().getToolBarManager()
-				.add(new PackTreeColumnsAction(viewer));
+		// Create the help context id for the viewer's control
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.viewer");
+		makeActions();
+		hookContextMenu();
+		contributeToActionBars();
 
 		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
 				this);
@@ -465,7 +485,46 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 	@Override
 	public void setFocus() {
+		viewer.getControl().setFocus();
+	}
 
+	private void hookContextMenu() {
+		final MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			@Override
+			public void menuAboutToShow(final IMenuManager manager) {
+				TotalsHierarchyView.this.fillContextMenu(manager);
+			}
+		});
+		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
+		viewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, viewer);
+	}
+
+	private void contributeToActionBars() {
+		final IActionBars bars = getViewSite().getActionBars();
+		fillLocalPullDown(bars.getMenuManager());
+		fillLocalToolBar(bars.getToolBarManager());
+	}
+
+	private void fillLocalPullDown(final IMenuManager manager) {
+		manager.add(new Separator());
+	}
+
+	private void fillContextMenu(final IMenuManager manager) {
+		// Other plug-ins can contribute there actions here
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	}
+
+	private void fillLocalToolBar(final IToolBarManager manager) {
+		manager.add(packColumnsAction);
+		manager.add(copyTreeAction);
+	}
+
+	private void makeActions() {
+		packColumnsAction = new PackTreeColumnsAction(viewer);
+		copyTreeAction = new CopyTreeToClipboardAction(viewer.getTree());
 	}
 
 	@Override

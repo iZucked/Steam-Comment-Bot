@@ -43,6 +43,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import scenario.presentation.ScenarioEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
@@ -71,8 +72,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	public Viewer createViewer(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI);
 
-		Action a = new PackTableColumnsAction(viewer);
-		getToolBarManager().add(a);
+		{
+			final Action a = new PackTableColumnsAction(viewer);
+			getToolBarManager().add(a);
+		}
+		{
+			final Action a = new CopyTableToClipboardAction(viewer.getTable());
+			getToolBarManager().add(a);
+		}
 
 		getToolBarManager().update(true);
 		return viewer;

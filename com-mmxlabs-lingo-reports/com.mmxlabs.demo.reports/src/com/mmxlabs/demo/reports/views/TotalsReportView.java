@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -41,6 +42,7 @@ import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.demo.reports.views.TotalsContentProvider.RowData;
+import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 public class TotalsReportView extends ViewPart implements ISelectionListener {
@@ -54,7 +56,9 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 
 	private TableViewer viewer;
 
-	private PackTableColumnsAction packColumnsAction;
+	private Action packColumnsAction;
+	
+	private Action copyTableAction;
 
 	static class ViewLabelProvider extends CellLabelProvider implements
 			ITableLabelProvider {
@@ -258,10 +262,12 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packColumnsAction);
+		manager.add(copyTableAction);
 	}
 
 	private void makeActions() {
 		packColumnsAction = new PackTableColumnsAction(viewer);
+		copyTableAction = new CopyTableToClipboardAction(viewer.getTable());
 	}
 
 	/**
