@@ -59,7 +59,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	private final ScenarioEditor part;
 	private TableViewer viewer;
 
-	private ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
+	private final ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
 	private boolean sortDescending = false;
 
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
@@ -97,7 +97,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		return shouldEditCell;
 	}
 
-	protected void setShouldEdit(boolean b) {
+	protected void setShouldEdit(final boolean b) {
 		shouldEditCell = b;
 	}
 
@@ -158,7 +158,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		column.getColumn().addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				if (columnSortOrder.get(0) == tColumn) {
 					sortDescending = !sortDescending;
 				} else {
@@ -173,7 +173,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 			}
 		});
 	}
@@ -189,7 +189,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				if (!viewer.getControl().isDisposed()) {
 					final TableColumn[] columns = viewer.getTable()
 							.getColumns();
-					for (TableColumn c : columns) {
+					for (final TableColumn c : columns) {
 						c.pack();
 					}
 				}
@@ -201,7 +201,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		table.setLayout(layout);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
+
 		viewer.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(final Viewer viewer, final Object e1,
@@ -224,7 +224,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		final Listener mouseDownListener = new Listener() {
 			@Override
-			public void handleEvent(Event event) {
+			public void handleEvent(final Event event) {
 				// alernatively, check here whether click lies in the selected
 				// row.
 				setShouldEdit(false);
@@ -240,15 +240,15 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		final Listener doubleClickListener = new Listener() {
 			@Override
-			public void handleEvent(Event event) {
+			public void handleEvent(final Event event) {
 				setShouldEdit(true);
-				TableItem[] selection = table.getSelection();
+				final TableItem[] selection = table.getSelection();
 
 				if (selection.length != 1) {
 					return;
 				}
 
-				TableItem item = table.getSelection()[0];
+				final TableItem item = table.getSelection()[0];
 
 				for (int i = 0; i < table.getColumnCount(); i++) {
 					if (item.getBounds(i).contains(event.x, event.y)) {
@@ -267,7 +267,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		table.addDisposeListener(new DisposeListener() {
 
 			@Override
-			public void widgetDisposed(DisposeEvent e) {
+			public void widgetDisposed(final DisposeEvent e) {
 				table.removeListener(SWT.MouseDown, mouseDownListener);
 				table.removeListener(SWT.MeasureItem, measureListener);
 				table.removeListener(SWT.MouseDoubleClick, doubleClickListener);
@@ -281,7 +281,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		// for deep changes. not sure how
 		final EContentAdapter adapter = new EContentAdapter() {
 			@Override
-			public void notifyChanged(Notification notification) {
+			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 //				System.err.println(notification);
 				if (notification.isTouch() == false) {
