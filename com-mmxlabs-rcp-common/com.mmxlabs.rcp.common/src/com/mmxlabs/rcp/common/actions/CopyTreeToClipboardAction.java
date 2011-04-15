@@ -13,8 +13,8 @@ import com.mmxlabs.rcp.common.Activator;
 
 /**
  * Copies "rendered" tree contents to the clipboard. This will maintain the
- * column order, sort order and label provider output. Child entries not visible
- * (parent is not expanded) will not be copied by this action.
+ * column order, sort order and label provider output. Child entries not yet
+ * visible (parent is not expanded) will not be copied by this action.
  * 
  * @author Simon Goodall
  * 
