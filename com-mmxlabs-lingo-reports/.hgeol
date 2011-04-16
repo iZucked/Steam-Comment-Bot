@@ -7,6 +7,9 @@ pom.xml = native
 plugin.xml = native
 feature.xml = native
 MANIFEST.MF = native
+.classpath = native
+.project = native
+build.properites = native
 
 [repository]
 native = CRLF
