@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.mmxlabs.optimiser.ga.IGeneticAlgorithm;
 import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
+import com.mmxlabs.optimiser.ga.IIndividualFactory;
 import com.mmxlabs.optimiser.ga.impl.AbstractGAAlgorithm;
 
 /**
@@ -20,26 +21,14 @@ public final class ByteArrayGAAlgorithm extends
 		AbstractGAAlgorithm<ByteArrayIndividual> implements
 		IGeneticAlgorithm<ByteArrayIndividual> {
 
-	/**
-	 * Number of bytes in each individual.
-	 */
-	private final int numBytes;
-
 	public ByteArrayGAAlgorithm(
 			final Random random,
 			final IIndividualEvaluator<ByteArrayIndividual> individualEvaluator,
-			final float mutateThreshold, final int numElements, final int topN,
-			final int numBytes) {
+			final IIndividualFactory<ByteArrayIndividual> individualFactory,
+			final float mutateThreshold, final int numElements, final int topN) {
 
-		super(random, individualEvaluator, mutateThreshold, numElements, topN);
-		this.numBytes = numBytes;
-	}
-
-	@Override
-	public ByteArrayIndividual createNewIndividual() {
-		final byte[] bytes = new byte[numBytes];
-		getRandom().nextBytes(bytes);
-		return new ByteArrayIndividual(bytes);
+		super(random, individualEvaluator, individualFactory, mutateThreshold,
+				numElements, topN);
 	}
 
 	/*
@@ -170,9 +159,5 @@ public final class ByteArrayGAAlgorithm extends
 				newBytes[i] = bytes1[i];
 			}
 		}
-	}
-
-	public final int getNumBytes() {
-		return numBytes;
 	}
 }

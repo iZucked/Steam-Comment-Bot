@@ -52,13 +52,6 @@ public interface IGeneticAlgorithm<I extends Individual<I>> {
 			final I[] bad);
 
 	/**
-	 * Create a random new individual
-	 * 
-	 * @return
-	 */
-	I createNewIndividual();
-
-	/**
 	 * Returns the change of a mutation occurring
 	 * 
 	 * @return
@@ -72,6 +65,20 @@ public interface IGeneticAlgorithm<I extends Individual<I>> {
 	 */
 	Random getRandom();
 
+	/**
+	 * Returns the {@link IIndividualFactory} used to generate new
+	 * {@link Individual}s.
+	 * 
+	 * @return
+	 */
+	IIndividualFactory<I> getIndividualFactory();
+
+	/**
+	 * Returns the {@link IIndividualEvaluator} used to evaluate the fitness of
+	 * {@link Individual}s
+	 * 
+	 * @return
+	 */
 	IIndividualEvaluator<I> getIndividualEvaluator();
 
 	/**

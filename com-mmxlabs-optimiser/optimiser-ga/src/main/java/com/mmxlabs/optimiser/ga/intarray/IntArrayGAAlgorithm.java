@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.mmxlabs.optimiser.ga.IGeneticAlgorithm;
 import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
+import com.mmxlabs.optimiser.ga.IIndividualFactory;
 import com.mmxlabs.optimiser.ga.impl.AbstractGAAlgorithm;
 
 /**
@@ -34,22 +35,14 @@ public final class IntArrayGAAlgorithm extends
 
 	public IntArrayGAAlgorithm(final Random random,
 			final IIndividualEvaluator<IntArrayIndividual> individualEvaluator,
+			final IIndividualFactory<IntArrayIndividual> individualFactory,
 			final float mutateThreshold, final int numElements, final int topN,
 			final int numInts, final int maxValue) {
 
-		super(random, individualEvaluator, mutateThreshold, numElements, topN);
+		super(random, individualEvaluator, individualFactory, mutateThreshold,
+				numElements, topN);
 		this.numInts = numInts;
 		this.maxValue = maxValue;
-	}
-
-	@Override
-	public IntArrayIndividual createNewIndividual() {
-		final int[] ints = new int[numInts];
-		final Random random = getRandom();
-		for (int i = 0; i < numInts; ++i) {
-			ints[i] = random.nextInt(maxValue);
-		}
-		return new IntArrayIndividual(ints);
 	}
 
 	/*

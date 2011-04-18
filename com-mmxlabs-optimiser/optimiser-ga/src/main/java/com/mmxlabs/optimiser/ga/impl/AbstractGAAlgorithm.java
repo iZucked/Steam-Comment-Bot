@@ -9,12 +9,15 @@ import java.util.TreeSet;
 
 import com.mmxlabs.optimiser.ga.IGeneticAlgorithm;
 import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
+import com.mmxlabs.optimiser.ga.IIndividualFactory;
 import com.mmxlabs.optimiser.ga.Individual;
 
 public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 		IGeneticAlgorithm<I> {
 
 	private final IIndividualEvaluator<I> individualEvaluator;
+
+	private final IIndividualFactory<I> individualFactory;
 
 	/**
 	 * Top n individuals to keep between evolutions of the population.
@@ -63,9 +66,11 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	@SuppressWarnings("unchecked")
 	public AbstractGAAlgorithm(final Random random,
 			final IIndividualEvaluator<I> individualEvaluator,
+			final IIndividualFactory<I> individualFactory,
 			final float mutateThreshold, final int numElements, final int topN) {
 		this.random = random;
 		this.individualEvaluator = individualEvaluator;
+		this.individualFactory = individualFactory;
 		this.mutateThreshold = mutateThreshold;
 		this.N = topN;
 		this.population = (I[]) new Individual[numElements];
@@ -102,7 +107,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	public final void initPopulation() {
 		// Randomly init the population
 		for (int i = 0; i < population.length; ++i) {
-			population[i] = createNewIndividual();
+			population[i] = individualFactory.createIndividual();
 		}
 	}
 
@@ -299,4 +304,9 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 		}
 	}
 
+	@Override
+	public IIndividualFactory<I> getIndividualFactory() {
+
+		return individualFactory;
+	}
 }
