@@ -24,3 +24,6 @@ syntax: regexp
 ^target-definition/\.project$
 syntax: regexp
 ^target-definition/META-INF$
+
+syntax: regexp
+^com\.mmxlabs\.rcp\.common\.tests/screenshots$
