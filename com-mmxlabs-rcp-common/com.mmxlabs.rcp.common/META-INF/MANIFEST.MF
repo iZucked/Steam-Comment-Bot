@@ -9,4 +9,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.rcp.common.actions
+Export-Package: com.mmxlabs.rcp.common.actions,
+ com.mmxlabs.rcp.common.celleditors,
+ com.mmxlabs.rcp.common.controls
