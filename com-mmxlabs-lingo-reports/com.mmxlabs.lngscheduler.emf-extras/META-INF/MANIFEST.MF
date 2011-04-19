@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EMF Extras
-Bundle-SymbolicName: com.mmxlabs.lngscheduler.emf-extras
+Bundle-SymbolicName: com.mmxlabs.lngscheduler.emf-extras;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: MMXLABS
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -11,6 +11,8 @@ Require-Bundle: com.mmxlabs.lngscheduler.emf;bundle-version="1.0.0",
  com.mmxlabs.optimiser.core;bundle-version="1.0.0",
  com.mmxlabs.optimiser.common;bundle-version="1.0.0",
  com.mmxlabs.optimiser.lso;bundle-version="1.0.0",
- org.eclipse.emf.ecore.xmi;bundle-version="2.5.0"
+ org.eclipse.emf.ecore.xmi;bundle-version="2.5.0",
+ org.eclipse.emf.validation;bundle-version="1.4.0",
+ org.eclipse.core.runtime;bundle-version="3.6.0"
 Export-Package: com.mmxlabs.lngscheduler.emf.extras,
  com.mmxlabs.lngscheduler.emf.extras.export

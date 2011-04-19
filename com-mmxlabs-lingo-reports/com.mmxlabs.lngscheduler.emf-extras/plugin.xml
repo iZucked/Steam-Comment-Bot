@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.emf.validation.constraintProviders">
+      <category
+            id="com.mmxlabs.lngscheduler.emf-extras.constraints"
+            mandatory="true"
+            name="Scenario Constraints">
+      </category>
+      <constraintProvider
+            cache="true"
+            mode="Batch">
+         <package
+               namespaceUri="http:///org/eclipse/emf/metamodel/example/pde/library.ecore/1.0.0">
+         </package>
+         <constraints
+               categories="com.mmxlabs.lngscheduler.emf-extras.constraints">
+            <constraint
+                  class="com.mmxlabs.lngscheduler.emf.extras.validation.SlotVolumeConstraint"
+                  id="com.mmxlabs.lngscheduler.emf-extras.constraints.slot_volumes"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Slot Volumes"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  A slot has invalid minimum and maximum load volumes.
+               </message>
+               <description>
+                  Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
+               </description>
+               <target
+                     class="Slot">
+               </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
+   </extension>
+   <extension
+         point="org.eclipse.emf.validation.constraintBindings">
+      <clientContext
+            default="false"
+            id="com.mmxlabs.lngscheduler.emf-extras.scenarioContext">
+         <selector
+               class="com.mmxlabs.lngscheduler.emf.extras.validation.ScenarioClientSelector">
+         </selector>
+      </clientContext>
+      <binding
+            category="com.mmxlabs.lngscheduler.emf-extras.constraints"
+            context="com.mmxlabs.lngscheduler.emf-extras.scenarioContext">
+      </binding>
+   </extension>
+
+</plugin>
