@@ -20,7 +20,6 @@ import scenario.cargo.Slot;
  * 
  */
 public class SlotVolumeConstraint extends AbstractModelConstraint {
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -31,6 +30,7 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
+		System.err.println("Validating " + object);
 		if (object instanceof Slot) {
 			final EMFEventType eventType = ctx.getEventType();
 			if (eventType == EMFEventType.NULL) {

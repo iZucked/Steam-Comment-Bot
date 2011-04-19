@@ -5,21 +5,17 @@
          point="org.eclipse.emf.validation.constraintProviders">
       <category
             id="com.mmxlabs.lngscheduler.emf-extras.constraints"
-            mandatory="true"
             name="Scenario Constraints">
       </category>
       <constraintProvider
-            cache="true"
-            mode="Batch">
+            cache="true">
          <package
-               namespaceUri="http:///org/eclipse/emf/metamodel/example/pde/library.ecore/1.0.0">
-         </package>
+               namespaceUri="http://com.mmxlabs.lng.emf" />
          <constraints
                categories="com.mmxlabs.lngscheduler.emf-extras.constraints">
             <constraint
                   class="com.mmxlabs.lngscheduler.emf.extras.validation.SlotVolumeConstraint"
                   id="com.mmxlabs.lngscheduler.emf-extras.constraints.slot_volumes"
-                  isEnabledByDefault="true"
                   lang="Java"
                   mode="Batch"
                   name="Slot Volumes"
@@ -31,9 +27,9 @@
                <description>
                   Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
                </description>
+               <target class="cargo.Slot" />
                <target
-                     class="Slot">
-               </target>
+                     class="EObject" />
             </constraint>
          </constraints>
       </constraintProvider>
@@ -52,5 +48,30 @@
             context="com.mmxlabs.lngscheduler.emf-extras.scenarioContext">
       </binding>
    </extension>
-
+   <extension
+         point="org.eclipse.emf.validation.ui.UIRegisteredClientContext">
+      <clientContext id="com.mmxlabs.lngscheduler.emf-extras.scenarioContext"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.eclipse.emf.validation.examples.general.viewerContribution"
+            targetID="scenario.presentation.ScenarioEditorID">
+         <menu
+               id="org.eclipse.emf.validationMenuID"
+               label="Validation"
+               path="additions">
+            <separator
+                  name="additions">
+            </separator>
+         </menu>
+         <action
+               class="com.mmxlabs.lngscheduler.emf.extras.actions.BatchValidationDelegate"
+               icon="$nl$/icons/elcl16/validate_co.gif"
+               id="org.eclipse.emf.validation.pde.example.general.ui.validateAction"
+               label="Validate Elements"
+               menubarPath="org.eclipse.emf.validationMenuID/additions">
+         </action>
+      </viewerContribution>
+   </extension> 
 </plugin>
