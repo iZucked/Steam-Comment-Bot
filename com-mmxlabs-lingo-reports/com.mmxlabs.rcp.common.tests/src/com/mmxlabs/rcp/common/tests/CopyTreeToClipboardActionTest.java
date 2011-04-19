@@ -21,7 +21,12 @@ public class CopyTreeToClipboardActionTest {
 
 	@BeforeClass
 	public static void initialise() {
-		display = new Display();
+		// Try getting a default display...
+		display = Display.getDefault();
+		if (display == null) {
+			// Otherwise create a new one
+			display = new Display();
+		}
 		shell = new Shell(display);
 	}
 
