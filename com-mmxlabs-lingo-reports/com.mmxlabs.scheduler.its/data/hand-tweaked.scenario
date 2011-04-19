@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<com.mmxlabs.lng.emf:Scenario xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.mmxlabs.lng.emf="http://com.mmxlabs.lng.emf" xmlns:com.mmxlabs.lng.emf.contract="http://com.mmxlabs.lng.emf/contract" xmlns:com.mmxlabs.lng.emf.optimiser.lso="http://com.mmxlabs.lng.emf/optimiser/lso" xmlns:com.mmxlabs.lng.emf.schedule="http://com.mmxlabs.lng.emf/schedule" xmlns:com.mmxlabs.lng.emf.schedule.events="http://com.mmxlabs.lng.emf/schedule/events" xmlns:com.mmxlabs.lng.emf.schedule.fleetallocation="http://com.mmxlabs.lng.emf/schedule/fleetallocation" name="Demo scenario v3">
+<com.mmxlabs.lng.emf:Scenario xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.mmxlabs.lng.emf="http://com.mmxlabs.lng.emf" xmlns:com.mmxlabs.lng.emf.fleet="http://com.mmxlabs.lng.emf/fleet" xmlns:com.mmxlabs.lng.emf.contract="http://com.mmxlabs.lng.emf/contract" xmlns:com.mmxlabs.lng.emf.optimiser.lso="http://com.mmxlabs.lng.emf/optimiser/lso" xmlns:com.mmxlabs.lng.emf.schedule="http://com.mmxlabs.lng.emf/schedule" xmlns:com.mmxlabs.lng.emf.schedule.events="http://com.mmxlabs.lng.emf/schedule/events" xmlns:com.mmxlabs.lng.emf.schedule.fleetallocation="http://com.mmxlabs.lng.emf/schedule/fleetallocation" name="Demo scenario v3">
   <fleetModel>
     <fleet name="Methane Kari Elin" class="//@fleetModel/@vesselClasses.0">
       <startRequirement/>
@@ -181,10 +181,11 @@
         <fuelConsumptionCurve speed="19.5" consumption="178.6"/>
       </ballastAttributes>
     </vesselClasses>
-    <charterOuts id="Charter out 1" startDate="2009-06-01T16:16:00.000+0100" endDate="2009-06-28T16:20:00.000+0100" duration="90" port="//@portModel/@ports.32" vessels="//@fleetModel/@fleet.5 //@fleetModel/@fleet.2"/>
-    <charterOuts id="Charter out 2" startDate="2009-10-01T15:16:00.287+0100" endDate="2009-10-18T16:20:00.000+0100" duration="90" port="//@portModel/@ports.7" vesselClasses="//@fleetModel/@vesselClasses.2 //@fleetModel/@vesselClasses.3"/>
-    <charterOuts id="Charter out 3" startDate="2009-10-06T14:16:00.535+0100" endDate="2009-10-24T15:39:00.000+0100" duration="80" port="//@portModel/@ports.19" vesselClasses="//@fleetModel/@vesselClasses.0 //@fleetModel/@vesselClasses.1"/>
-  </fleetModel>
+     <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 1" startDate="2009-06-01T16:16:00.000+0100" endDate="2009-06-28T16:20:00.000+0100" duration="90" port="//@portModel/@ports.32" vessels="//@fleetModel/@fleet.5 //@fleetModel/@fleet.2"/>
+     <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 2" startDate="2009-10-01T15:16:00.287+0100" endDate="2009-10-18T16:20:00.000+0100" duration="90" port="//@portModel/@ports.7" vesselClasses="//@fleetModel/@vesselClasses.2 //@fleetModel/@vesselClasses.3"/>
+     <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 3" startDate="2009-10-06T14:16:00.535+0100" endDate="2009-10-24T15:39:00.000+0100" duration="80" port="//@portModel/@ports.19" vesselClasses="//@fleetModel/@vesselClasses.0 //@fleetModel/@vesselClasses.1"/>
+    
+     </fleetModel>
   <portModel>
     <ports name="Ras Laffan" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Qatar" defaultContract="//@contractModel/@purchaseContracts.0"/>
     <ports name="Yemen LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Aden" defaultContract="//@contractModel/@purchaseContracts.0"/>
@@ -1041,10 +1042,10 @@
     <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:MarketPricePurchaseContract" name="NBP Spot Purchase" entity="//@contractModel/@entities.3" market="//@marketModel/@markets.3"/>
     <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:MarketPricePurchaseContract" name="JCC Spot Purchase" entity="//@contractModel/@entities.3" market="//@marketModel/@markets.2"/>
     <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:MarketPricePurchaseContract" name="TTF Spot Purchase" entity="//@contractModel/@entities.3" market="//@marketModel/@markets.1"/>
-    <salesContracts name="HH Sales" entity="//@contractModel/@entities.1" market="//@marketModel/@markets.0" regasEfficiency="0.95"/>
-    <salesContracts name="NBP Sales" entity="//@contractModel/@entities.0" market="//@marketModel/@markets.3" regasEfficiency="0.95"/>
-    <salesContracts name="TTF Sales" entity="//@contractModel/@entities.0" market="//@marketModel/@markets.1" regasEfficiency="0.95"/>
-    <salesContracts name="JCC Sales" entity="//@contractModel/@entities.2" market="//@marketModel/@markets.2" regasEfficiency="0.95"/>
+    <salesContracts name="HH Sales" entity="//@contractModel/@entities.1" market="//@marketModel/@markets.0"/>
+    <salesContracts name="NBP Sales" entity="//@contractModel/@entities.0" market="//@marketModel/@markets.3"/>
+    <salesContracts name="TTF Sales" entity="//@contractModel/@entities.0" market="//@marketModel/@markets.1"/>
+    <salesContracts name="JCC Sales" entity="//@contractModel/@entities.2" market="//@marketModel/@markets.2"/>
     <entities name="BG Europe" taxRate="0.26"/>
     <entities name="BG US" taxRate="0.38"/>
     <entities name="BG Asia" taxRate="0.05"/>
@@ -1691,7 +1692,7 @@
           <fuelUsage fuelType="BaseFuel" quantity="129" unitPrice="600" totalPrice="77487"/>
           <fuelUsage fuelType="NBO" fuelUnit="M3"/>
         </events>
-        <events xsi:type="com.mmxlabs.lng.emf.schedule.events:CharterOutVisit" startTime="2009-10-04T07:44:00.000+0100" endTime="2010-01-02T06:44:00.000+0000" port="//@portModel/@ports.7" charterOut="//@fleetModel/@charterOuts.1" revenue="//@scheduleModel/@schedules.0/@revenue.0"/>
+        <events xsi:type="com.mmxlabs.lng.emf.schedule.events:CharterOutVisit" startTime="2009-10-04T07:44:00.000+0100" endTime="2010-01-02T06:44:00.000+0000" port="//@portModel/@ports.7" charterOut="//@fleetModel/@vesselEvents.1" revenue="//@scheduleModel/@schedules.0/@revenue.0"/>
         <events xsi:type="com.mmxlabs.lng.emf.schedule.events:Journey" startTime="2010-01-02T06:44:00.000+0000" endTime="2010-01-17T15:44:00.000+0000" toPort="//@portModel/@ports.19" vesselState="Ballast" route="default" speed="12.0" distance="4434" fromPort="//@portModel/@ports.7">
           <fuelUsage fuelType="BaseFuel" quantity="722" unitPrice="600" totalPrice="433501"/>
           <fuelUsage fuelType="NBO" fuelUnit="M3"/>
@@ -4471,7 +4472,7 @@
           <fuelUsage fuelType="BaseFuel"/>
           <fuelUsage fuelType="NBO" quantity="8" unitPrice="108" totalPrice="905" fuelUnit="M3"/>
         </events>
-        <events xsi:type="com.mmxlabs.lng.emf.schedule.events:CharterOutVisit" startTime="2009-06-27T23:44:00.000+0100" endTime="2009-09-25T23:44:00.000+0100" port="//@portModel/@ports.32" charterOut="//@fleetModel/@charterOuts.0" revenue="//@scheduleModel/@schedules.0/@revenue.1"/>
+        <events xsi:type="com.mmxlabs.lng.emf.schedule.events:CharterOutVisit" startTime="2009-06-27T23:44:00.000+0100" endTime="2009-09-25T23:44:00.000+0100" port="//@portModel/@ports.32" charterOut="//@fleetModel/@vesselEvents.0" revenue="//@scheduleModel/@schedules.0/@revenue.1"/>
         <events xsi:type="com.mmxlabs.lng.emf.schedule.events:Journey" startTime="2009-09-25T23:44:00.000+0100" endTime="2009-10-01T01:44:00.000+0100" toPort="//@portModel/@ports.19" vesselState="Ballast" route="default" speed="12.0" distance="1470" fromPort="//@portModel/@ports.32">
           <fuelUsage fuelType="BaseFuel" quantity="434" unitPrice="400" totalPrice="173923"/>
           <fuelUsage fuelType="NBO" fuelUnit="M3"/>
@@ -4482,7 +4483,7 @@
           <fuelUsage fuelType="BaseFuel" quantity="281" unitPrice="400" totalPrice="112482"/>
           <fuelUsage fuelType="NBO" fuelUnit="M3"/>
         </events>
-        <events xsi:type="com.mmxlabs.lng.emf.schedule.events:CharterOutVisit" startTime="2009-10-06T16:44:00.000+0100" endTime="2009-12-25T15:44:00.000+0000" port="//@portModel/@ports.19" charterOut="//@fleetModel/@charterOuts.2" revenue="//@scheduleModel/@schedules.0/@revenue.2"/>
+        <events xsi:type="com.mmxlabs.lng.emf.schedule.events:CharterOutVisit" startTime="2009-10-06T16:44:00.000+0100" endTime="2009-12-25T15:44:00.000+0000" port="//@portModel/@ports.19" charterOut="//@fleetModel/@vesselEvents.2" revenue="//@scheduleModel/@schedules.0/@revenue.2"/>
         <events xsi:type="com.mmxlabs.lng.emf.schedule.events:Idle" startTime="2009-12-25T15:44:00.000+0000" endTime="2009-12-26T20:44:00.000+0000" port="//@portModel/@ports.19" vesselState="Ballast">
           <fuelUsage fuelType="BaseFuel" quantity="60" unitPrice="400" totalPrice="24162"/>
           <fuelUsage fuelType="NBO" fuelUnit="M3"/>
