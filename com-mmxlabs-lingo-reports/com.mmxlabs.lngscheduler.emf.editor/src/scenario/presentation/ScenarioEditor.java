@@ -339,7 +339,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getMarketModel().getMarkets(),
+					.getMarketModel()
+					.getMarkets(),
 					ScenarioPackage.eINSTANCE.getNamedObject_Name());
 			return result;
 		}
