@@ -2156,28 +2156,120 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * This accesses a cached version of the property sheet.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		if (propertySheetPage == null) {
-			propertySheetPage =
-				new ExtendedPropertySheetPage(editingDomain) {
+		final EObjectDetailPropertySheetPage page = new EObjectDetailPropertySheetPage(
+				getEditingDomain());
+		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
+				new IInlineEditorFactory() {
 					@Override
-					public void setSelectionToViewer(List<?> selection) {
-						ScenarioEditor.this.setSelectionToViewer(selection);
-						ScenarioEditor.this.setFocus();
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, portProvider);
 					}
+				});
 
+		page.setEditorFactoryForClassifier(
+				ContractPackage.eINSTANCE.getContract(),
+				new IInlineEditorFactory() {
 					@Override
-					public void setActionBars(IActionBars actionBars) {
-						super.setActionBars(actionBars);
-						getActionBarContributor().shareGlobalActions(this, actionBars);
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, contractProvider) {
+							@Override
+							protected boolean updateOnChangeToFeature(
+									final Object changedFeature) {
+								// update contract display when port is changed
+								// on a load slot.
+								return super
+										.updateOnChangeToFeature(changedFeature)
+										|| ((changedFeature instanceof EReference) && ((EReference) changedFeature)
+												.getEReferenceType().equals(
+														PortPackage.eINSTANCE
+																.getPort()));
+							}
+						};
 					}
-				};
-			propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
-		}
+				});
 
-		return propertySheetPage;
+		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getMarket(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, marketProvider);
+					}
+				});
+
+		page.setEditorFactoryForClassifier(
+				CargoPackage.eINSTANCE.getCargoType(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
+						return new EENumInlineEditor(path,
+								(EAttribute) feature, editingDomain);
+					}
+				});
+
+		page.setEditorFactoryForClassifier(
+				ContractPackage.eINSTANCE.getEntity(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, entityProvider);
+					}
+				});
+
+		page.setEditorFactoryForFeature(FleetPackage.eINSTANCE
+				.getVesselStateAttributes_FuelConsumptionCurve(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
+						return new FuelCurveEditor(path, feature, editingDomain);
+					}
+				});
+
+		page.setEditorFactoryForClassifier(
+				FleetPackage.eINSTANCE.getVesselClass(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, vesselClassProvider);
+					}
+				});
+
+		page.setEditorFactoryForClassifier(
+				SchedulePackage.eINSTANCE.getSchedule(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, scheduleProvider);
+					}
+				});
+
+		// Disable/Hide Slot ID editors
+		page.setEditorFactoryForFeature(CargoPackage.eINSTANCE.getSlot_Id(),
+				null);
+
+		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_LoadSlot(),
+				"Load");
+		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
+				"Discharge");
+		page.setNameForFeature(
+				CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
+		return page;
 	}
 
 	/**
