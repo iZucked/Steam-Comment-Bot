@@ -228,7 +228,7 @@ public interface Slot extends EObject {
 	 * @return the value of the '<em>Contract</em>' reference.
 	 * @see #setContract(Contract)
 	 * @see scenario.cargo.CargoPackage#getSlot_Contract()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
 	Contract getContract();
