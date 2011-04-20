@@ -72,7 +72,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow, Object object) {
-		List<Pair<String, EObject>> options = valueProvider.getAlloweValues((EObject)object, field);
+		List<Pair<String, EObject>> options = valueProvider.getAllowedValues((EObject)object, field);
 		
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);

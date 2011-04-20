@@ -77,7 +77,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	public boolean canEdit(final Object object) {
 		// get legal item list
 		final Iterable<Pair<String, EObject>> values = valueProvider
-				.getAlloweValues((EObject) object, field);
+				.getAllowedValues((EObject) object, field);
 
 		valueList.clear();
 		names.clear();

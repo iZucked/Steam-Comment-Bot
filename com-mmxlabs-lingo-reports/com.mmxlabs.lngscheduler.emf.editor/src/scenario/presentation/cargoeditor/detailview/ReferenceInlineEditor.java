@@ -83,7 +83,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected void updateControl() {
 		final List<Pair<String, EObject>> values = valueProvider
-				.getAlloweValues(input, feature);
+				.getAllowedValues(input, feature);
 		// update combo contents
 		combo.removeAll();
 		nameList.clear();

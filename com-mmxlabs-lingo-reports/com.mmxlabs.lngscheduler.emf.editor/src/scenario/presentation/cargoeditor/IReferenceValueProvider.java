@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import com.mmxlabs.common.Pair;
 
 public interface IReferenceValueProvider {
-	public List<Pair<String, EObject>> getAlloweValues(
+	public List<Pair<String, EObject>> getAllowedValues(
 			final EObject target, final EStructuralFeature field);
 //	public String getName(final EObject target);
 }
