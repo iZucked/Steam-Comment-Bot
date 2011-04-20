@@ -85,6 +85,23 @@
                </description>
                <target class="Scenario" />
             </constraint>
+            <constraint
+                  class="com.mmxlabs.lngscheduler.emf.extras.validation.CargoDateSanityConstraint"
+                  id="com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_date_sanity"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cargo Date Sanity"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  Cargo {0} has a gap of {1} days between load and discharge slots - more than {2} seems excessive.
+               </message>
+               <description>
+                  Cargos with a really long time between load and discharge date may cause difficulties for the optimiser,
+                  and are almost certainly not a good use of resources as they will cause long spots of idle time.
+               </description>
+               <target class="Cargo" />
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

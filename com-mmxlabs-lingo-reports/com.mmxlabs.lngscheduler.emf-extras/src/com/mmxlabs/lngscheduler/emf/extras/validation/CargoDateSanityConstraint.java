@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.validation;
 
+import javax.management.timer.Timer;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
@@ -14,13 +16,18 @@ import scenario.cargo.CargoType;
 import scenario.cargo.Slot;
 
 /**
- * Check that the end of any cargo's discharge window is not before the start of
- * its load window.
+ * Checks that the user hasn't allowed a really long time between a load and a discharge
+ * 
+ * TODO this and CargoDateConstraint should both consider the travel time
  * 
  * @author Tom Hinton
  * 
  */
-public class CargoDateConstraint extends AbstractModelConstraint {
+public class CargoDateSanityConstraint extends AbstractModelConstraint {
+	/**
+	 * This is the maximum sensible amount of travel time in a cargo, in days
+	 */
+	private static final long SENSIBLE_TRAVEL_TIME = 60 ;
 
 	/*
 	 * (non-Javadoc)
@@ -38,15 +45,13 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			final Slot dischargeSlot = cargo.getDischargeSlot();
 			if (cargo.getCargoType().equals(CargoType.FLEET)
 					&& loadSlot != null && dischargeSlot != null) {
-				if (dischargeSlot.getWindowEnd().before(
-						loadSlot.getWindowStart())) {
-					return ctx.createFailureStatus(cargo.getId());
+				final long availableTime = (dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime()) / Timer.ONE_DAY;
+				if (availableTime >
+					SENSIBLE_TRAVEL_TIME) {
+					return ctx.createFailureStatus(cargo.getId(), availableTime, SENSIBLE_TRAVEL_TIME);
 				}
-				// TODO check travel time feasibility here
-				
 			}
 		}
 		return ctx.createSuccessStatus();
 	}
-
 }
