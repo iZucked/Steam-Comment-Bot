@@ -9,10 +9,49 @@
       </category>
       <constraintProvider
             cache="true">
+         <!-- 
+         	Multiple package statements are required because there's no recursive package inclusion  -->
          <package
                namespaceUri="http://com.mmxlabs.lng.emf" />
+         <package
+               namespaceUri="http://com.mmxlabs.lng.emf/fleet" />
+         <package
+               namespaceUri="http://com.mmxlabs.lng.emf/cargo" />
          <constraints
                categories="com.mmxlabs.lngscheduler.emf-extras.constraints">
+            <constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.CargoVolumeConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_volumes"
+            	lang="Java"
+            	mode="Batch"
+            	name="Cargo Volumes"
+            	severity="ERROR"
+            	statusCode="1">
+            	<message>
+            		Cargo {0} has invalid minimum and maximum load volumes.
+            	</message>
+            	<description>
+            		A cargo's maximum load volume should exceed its minimum discharge volume, and 
+            		its minimum load volume should not exceed its maximimum discharge volume.
+            	</description>
+            	<target class="Cargo" />
+            </constraint>
+            <constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.CargoDateConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_dates"
+            	lang="Java"
+            	mode="Batch"
+            	name="Cargo Dates"
+            	severity="ERROR"
+            	statusCode="1">
+            	<message>
+            		Cargo {0} has invalid load and discharge dates.
+            	</message>
+            	<description>
+            		A cargo's load date should be before its discharge date
+            	</description>
+            	<target class="Cargo" />
+            </constraint>
             <constraint
                   class="com.mmxlabs.lngscheduler.emf.extras.validation.SlotVolumeConstraint"
                   id="com.mmxlabs.lngscheduler.emf-extras.constraints.slot_volumes"
@@ -27,9 +66,24 @@
                <description>
                   Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
                </description>
-               <target class="cargo.Slot" />
-               <target
-                     class="EObject" />
+               <target class="Slot" />
+            </constraint>
+           	<constraint
+                  class="com.mmxlabs.lngscheduler.emf.extras.validation.InitialStateFeasibilityConstraint"
+                  id="com.mmxlabs.lngscheduler.emf-extras.constraints.initial_feasibility"
+                  lang="Java"
+                  mode="Batch"
+                  name="Initial State Feasibility"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Scenario {0} has no feasible initial solution ({1}).
+               </message>
+               <description>
+                  The optimiser either needs a feasible initial solution, or the solution construction heuristic must be able to find one.
+                  If it can't find a start solution, we cannot proceed.
+               </description>
+               <target class="Scenario" />
             </constraint>
          </constraints>
       </constraintProvider>

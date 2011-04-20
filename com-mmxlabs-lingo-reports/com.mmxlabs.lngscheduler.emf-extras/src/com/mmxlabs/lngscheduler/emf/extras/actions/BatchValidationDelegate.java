@@ -150,6 +150,8 @@ public class BatchValidationDelegate
 	public void run(IAction action) {
 //		ValidationDelegateClientSelector.running = true;
 		
+		//TODO trigger EMF validation as well?
+		
 		IBatchValidator validator = ModelValidationService.getInstance()
 			.newValidator(EvaluationMode.BATCH);
 		// include live constraints, also, in batch validation
