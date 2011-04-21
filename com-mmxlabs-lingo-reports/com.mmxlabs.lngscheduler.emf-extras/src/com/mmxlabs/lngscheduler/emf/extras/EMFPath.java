@@ -48,16 +48,16 @@ public class EMFPath {
 		}
 	}
 
-	public Object get(EObject root) {
+	public Object get(EObject root, final int depth) {
 		if (failSilently) {
 			try {
-				return actuallyGet(root);
+				return actuallyGet(root, depth);
 			} catch (Throwable ex) {
 				return null;
 			}
 		} else {
 			try {
-				return actuallyGet(root);
+				return actuallyGet(root, depth);
 			} catch (InvocationTargetException e) {
 				throw new RuntimeException(e);
 			}
@@ -75,13 +75,13 @@ public class EMFPath {
 		}
 	}
 
-	private Object actuallyGet(EObject root) throws InvocationTargetException {
-		for (int i = 0; i < path.length - 1; i++) {
+	private Object actuallyGet(EObject root, int depth) throws InvocationTargetException {
+		for (int i = 0; i < path.length - (1+depth); i++) {
 			final Object el = path[i];
 			root = (EObject) chase(root, el);
 		}
 		if (path.length > 0) {
-			return chase(root, path[path.length - 1]);
+			return chase(root, path[path.length - (1+depth)]);
 		} else {
 			return root;
 		}
@@ -94,6 +94,23 @@ public class EMFPath {
 		} else {
 			return root.eGet((EStructuralFeature) el);
 		}
+	}
+
+	/**
+	 * @param input
+	 * @param i
+	 * @return
+	 */
+	public Object get(final EObject input) {
+		return get(input, 0);
+	}
+
+	/**
+	 * @param i
+	 * @return
+	 */
+	public Object getPathComponent(int i) {
+		return path[path.length - (i+1)];
 	}
 
 }
