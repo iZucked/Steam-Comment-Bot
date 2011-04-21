@@ -8,25 +8,36 @@ package scenario.presentation.cargoeditor;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -35,12 +46,16 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import scenario.presentation.ScenarioEditor;
+import scenario.presentation.cargoeditor.handlers.AddAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
@@ -83,6 +98,91 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		getToolBarManager().update(true);
 		return viewer;
+	}
+
+	/**
+	 * Creates an add action; many subclasses will want to override this.
+	 * 
+	 * @param viewer2
+	 * @param editingDomain
+	 * @param e
+	 * @return
+	 */
+	protected Action createAddAction(final TableViewer viewer,
+			final EditingDomain editingDomain, final EMFPath contentPath) {
+		return new AddAction(editingDomain, contentPath.getTargetType()
+				.getName()) {
+			@Override
+			protected Object getOwner() {
+				return contentPath.get((EObject) viewer.getInput(), 1);
+			}
+
+			@Override
+			protected Object getFeature() {
+				return contentPath.getPathComponent(0);
+			}
+
+			@Override
+			protected EObject createObject() {
+				if (viewer.getSelection().isEmpty() == false) {
+					if (viewer.getSelection() instanceof IStructuredSelection) {
+						final IStructuredSelection sel = (IStructuredSelection) viewer
+								.getSelection();
+						if (sel.size() == 1) {
+							final Object selection = sel.getFirstElement();
+							if (selection instanceof EObject) {
+								final EObject object = (EObject) selection;
+								return EcoreUtil.copy(object); // duplicate when
+																// there is a
+																// selection
+							}
+						}
+					}
+				}
+				final EReference ref = (EReference) contentPath
+						.getPathComponent(0);
+				final EClass ec = ref.getEReferenceType();
+				final EPackage p = ec.getEPackage();
+				final EFactory f = p.getEFactoryInstance();
+				if (ec.isAbstract()) {
+					// select subclass
+					final LinkedList<EClass> subClasses = new LinkedList<EClass>();
+					for (final EClassifier classifier : p.getEClassifiers()) {
+						if (classifier instanceof EClass) {
+							final EClass possibleSubClass = (EClass) classifier;
+							if (ec.isSuperTypeOf(possibleSubClass) && possibleSubClass.isAbstract() == false) {
+								subClasses.add(possibleSubClass);
+							}
+						}
+					}
+					// display picker dialog somehow
+					final Shell shell = PlatformUI.getWorkbench()
+							.getActiveWorkbenchWindow().getShell();
+					final ElementListSelectionDialog elsd = new ElementListSelectionDialog(shell, 
+							new LabelProvider() {
+								@Override
+								public String getText(Object element) {
+									return ((EClass)element).getName();
+								}
+					});
+					elsd.setElements(subClasses.toArray());
+					elsd.setTitle("Which type of " + ec.getName() + " do you want to add?");
+					if (elsd.open() != Window.OK) {
+						return null;
+					}
+					final Object[] result = elsd.getResult();
+					return f.create((EClass) result[0]);
+				} else {
+					return f.create(ec);
+				}
+			}
+
+			@Override
+			public void run() {
+				super.run();
+				viewer.refresh();
+			}
+		};
 	}
 
 	private boolean shouldEditCell = false;
@@ -181,21 +281,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	public void init(final List<EReference> path,
 			final AdapterFactory adapterFactory) {
 
-		// TODO figure out why this doesn't work
-		getToolBarManager().add(new Action("Pack Columns") {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					final TableColumn[] columns = viewer.getTable()
-							.getColumns();
-					for (final TableColumn c : columns) {
-						c.pack();
-					}
-				}
-			}
-		});
-
 		final Table table = viewer.getTable();
 		final TableLayout layout = new TableLayout();
 		table.setLayout(layout);
@@ -207,17 +292,22 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			public int compare(final Viewer viewer, final Object e1,
 					final Object e2) {
 				int order = 0;
-				final Iterator<TableColumn> iterator = columnSortOrder.iterator();
+				final Iterator<TableColumn> iterator = columnSortOrder
+						.iterator();
 				while (order == 0 && iterator.hasNext()) {
 					final TableColumn col = iterator.next();
-					//TODO the columnSortOrder could just hold the renderers, avoiding this lookup
-					final ICellRenderer renderer = (ICellRenderer) col.getData(COLUMN_RENDERER);
+					// TODO the columnSortOrder could just hold the renderers,
+					// avoiding this lookup
+					final ICellRenderer renderer = (ICellRenderer) col
+							.getData(COLUMN_RENDERER);
 					final EMFPath path = (EMFPath) col.getData(COLUMN_PATH);
-					final Comparable c1 = renderer.getComparable(path.get((EObject)e1));
-					final Comparable c2 = renderer.getComparable(path.get((EObject)e2));
+					final Comparable c1 = renderer.getComparable(path
+							.get((EObject) e1));
+					final Comparable c2 = renderer.getComparable(path
+							.get((EObject) e2));
 					order = c1.compareTo(c2);
 				}
-				
+
 				return sortDescending ? -order : order;
 			}
 		});
@@ -277,27 +367,26 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		final HashSet<EObject> currentElements = new HashSet<EObject>();
 
-		// TODO somewhere inside this, we need to make ourselves listen
-		// for deep changes. not sure how
 		final EContentAdapter adapter = new EContentAdapter() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-//				System.err.println(notification);
+				// System.err.println(notification);
 				if (notification.isTouch() == false) {
 					// this is a change, so we have to refresh.
 					// ideally we just want to update the changed object, but we
 					// get the notification from
 					// somewhere below, so we need to go up
 					EObject source = (EObject) notification.getNotifier();
-//					if (currentElements.contains(source))
-//						return;
+					// if (currentElements.contains(source))
+					// return;
 					while (!(currentElements.contains(source))
-							&& ((source = source.eContainer()) != null));
+							&& ((source = source.eContainer()) != null))
+						;
 					if (source != null) {
-							viewer.update(source, null);
-							// this seems to clear the selection
-							return;
+						viewer.update(source, null);
+						// this seems to clear the selection
+						return;
 					}
 				}
 			}
@@ -333,6 +422,16 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				return new Object[] {};
 			}
 		});
+
+		{
+			final Action a = createAddAction(viewer, part.getEditingDomain(),
+					new EMFPath(true, path));
+			if (a != null) {
+				final ToolBarManager x = getToolBarManager();
+				x.add(a);
+				x.update(true);
+			}
+		}
 	}
 
 	@Override
@@ -346,8 +445,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		return viewer;
 	}
 
-	public <T extends ICellManipulator&ICellRenderer>void addTypicalColumn(final String columnName,
-			 final T manipulatorAndRenderer, final Object...path) {
-		this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
+	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(
+			final String columnName, final T manipulatorAndRenderer,
+			final Object... path) {
+		this.addColumn(columnName, manipulatorAndRenderer,
+				manipulatorAndRenderer, path);
 	}
 }

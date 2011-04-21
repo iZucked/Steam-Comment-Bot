@@ -58,6 +58,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -1700,47 +1701,50 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					getSite().getPage(), ScenarioEditor.this) {
 
 				final SwapDischargeSlotsAction swapAction = new SwapDischargeSlotsAction();
-				final AddAction addAction = new AddAction(getEditingDomain(),
-						"Cargo") {
-					final CargoFactory cf = CargoFactory.eINSTANCE;
 
-					@Override
-					protected EObject createObject() {
-						// TODO copy
-						final Cargo result = cf.createCargo();
-						result.setId("New Cargo");
-						final LoadSlot l = cf.createLoadSlot();
-						l.setId("New Cargo Load");
-						final Slot d = cf.createSlot();
-						d.setId("New Cargo Discharge");
-						result.setLoadSlot(l);
-						result.setDischargeSlot(d);
-						return result;
-					}
+				@Override
+				protected Action createAddAction(final TableViewer viewer,
+						final EditingDomain editingDomain, final EMFPath path) {
+					return new AddAction(editingDomain, "Cargo") {
+						final CargoFactory cf = CargoFactory.eINSTANCE;
 
-					@Override
-					public void run() {
-						super.run();
-						getViewer().refresh();
-					}
+						@Override
+						protected EObject createObject() {
+							// TODO copy
+							final Cargo result = cf.createCargo();
+							result.setId("New Cargo");
+							final LoadSlot l = cf.createLoadSlot();
+							l.setId("New Cargo Load");
+							final Slot d = cf.createSlot();
+							d.setId("New Cargo Discharge");
+							result.setLoadSlot(l);
+							result.setDischargeSlot(d);
+							return result;
+						}
 
-					@Override
-					protected Object getOwner() {
-						return getScenario().getCargoModel();
-					}
+						@Override
+						public void run() {
+							super.run();
+							viewer.refresh();
+						}
 
-					@Override
-					protected Object getFeature() {
-						return CargoPackage.eINSTANCE.getCargoModel_Cargoes();
-					}
-				};
+						@Override
+						protected Object getOwner() {
+							return path.get((EObject) viewer.getInput(), 1);
+						}
+
+						@Override
+						protected Object getFeature() {
+							return path.getPathComponent(0);
+						}
+					};
+				}
 
 				@Override
 				public Viewer createViewer(final Composite parent) {
 					final Viewer v = super.createViewer(parent);
 
 					getToolBarManager().add(swapAction);
-					getToolBarManager().add(addAction);
 					getToolBarManager().update(true);
 
 					v.addSelectionChangedListener(swapAction);
