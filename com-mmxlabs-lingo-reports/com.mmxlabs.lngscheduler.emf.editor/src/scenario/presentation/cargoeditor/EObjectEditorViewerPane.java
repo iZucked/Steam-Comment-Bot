@@ -6,6 +6,7 @@
 package scenario.presentation.cargoeditor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -100,6 +101,23 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		return viewer;
 	}
 
+	protected Action createDeleteAction(final TableViewer viewer,
+			final EditingDomain editingDomain) {
+		return new scenario.presentation.cargoeditor.handlers.DeleteAction(
+				editingDomain) {
+			@Override
+			protected Collection<EObject> getTargets() {
+				return ((IStructuredSelection) viewer.getSelection()).toList();
+			}
+
+			@Override
+			public void run() {
+				super.run();
+				viewer.refresh();
+			}			
+		};
+	}
+
 	/**
 	 * Creates an add action; many subclasses will want to override this.
 	 * 
@@ -150,7 +168,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					for (final EClassifier classifier : p.getEClassifiers()) {
 						if (classifier instanceof EClass) {
 							final EClass possibleSubClass = (EClass) classifier;
-							if (ec.isSuperTypeOf(possibleSubClass) && possibleSubClass.isAbstract() == false) {
+							if (ec.isSuperTypeOf(possibleSubClass)
+									&& possibleSubClass.isAbstract() == false) {
 								subClasses.add(possibleSubClass);
 							}
 						}
@@ -158,15 +177,16 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					// display picker dialog somehow
 					final Shell shell = PlatformUI.getWorkbench()
 							.getActiveWorkbenchWindow().getShell();
-					final ElementListSelectionDialog elsd = new ElementListSelectionDialog(shell, 
-							new LabelProvider() {
+					final ElementListSelectionDialog elsd = new ElementListSelectionDialog(
+							shell, new LabelProvider() {
 								@Override
 								public String getText(Object element) {
-									return ((EClass)element).getName();
+									return ((EClass) element).getName();
 								}
-					});
+							});
 					elsd.setElements(subClasses.toArray());
-					elsd.setTitle("Which type of " + ec.getName() + " do you want to add?");
+					elsd.setTitle("Which type of " + ec.getName()
+							+ " do you want to add?");
 					if (elsd.open() != Window.OK) {
 						return null;
 					}
@@ -426,11 +446,15 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		{
 			final Action a = createAddAction(viewer, part.getEditingDomain(),
 					new EMFPath(true, path));
+			final ToolBarManager x = getToolBarManager();
 			if (a != null) {
-				final ToolBarManager x = getToolBarManager();
 				x.add(a);
-				x.update(true);
 			}
+			final Action b = createDeleteAction(viewer, part.getEditingDomain());
+			if (b != null) {
+				x.add(b);
+			}
+			x.update(true);
 		}
 	}
 
