@@ -238,18 +238,6 @@
 		</plugins>
 	</build>
 
-	<pluginRepositories>
-		<!-- maven plugin repository for tycho snapshots -->
-		<pluginRepository>
-			<id>org.sonatype.tycho</id>
-			<name>Tycho snapshot repository</name>
-			<url>http://repository.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<repositories>
 
 		<!-- We use repositories defined here rather than the platform target to 
