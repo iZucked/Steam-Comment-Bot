@@ -85,6 +85,9 @@ public class ScenarioRunner {
 		optimiser
 				.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
 
+		// Limit number of iterations to keep runtime down.
+		optimiser.setNumberOfIterations(10000);
+		
 		optimiser.init();
 
 		optimiser.start(context);
