@@ -1939,7 +1939,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
                         Point extent = null;
                         if (gs.needsNameUpdate() || gs.getNameExtent() == null) {
-                            extent = gc.textExtent(gs.getName(), SWT.DRAW_DELIMITER);
+                        	extent = gc.textExtent(gs.getName(), SWT.DRAW_DELIMITER);
                             gs.setNameExtent(extent);
                             gs.setNeedsNameUpdate(false);
                         } else {
@@ -1977,7 +1977,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
                     gc.drawImage(image, x + xStart - 1, yStart + textLocY);
                 } else if (gs.getTextOrientation() == SWT.HORIZONTAL) {
-                    gc.drawText(gs.getName(), horiSpacer, yStart + (gsHeight / 2) - (gs.getNameExtent().y / 2), true);
+                	gc.drawText(gs.getName(), horiSpacer, yStart + (gsHeight / 2) - (gs.getNameExtent().y / 2), true);
                 }
 
                 yStart += gsHeight - 1;
@@ -4757,8 +4757,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
      * Removes a GanttEvent from the chart.
      * 
      * @param event GanttEvent to remove
+     * @return true if removed
      */
-    public void removeEvent(GanttEvent event) {
+    public boolean removeEvent(GanttEvent event) {
+    	if (event == null) {
+    		return false;
+    	}
+    	
         checkWidget();
 
         internalRemoveEvent(event);
@@ -4777,8 +4782,20 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         }
 
         //eventNumbersChanged();
+        if (event.getScopeParent() != null) {
+        	event.getScopeParent().removeScopeEvent(event);
+        }
+        if (event.getGanttSection() != null) {
+        	event.getGanttSection().removeGanttEvent(event);
+        }        
+        if (event.getGanttGroup() != null) {
+        	event.getGanttGroup().removeEvent(event);
+        }
+        boolean ret = _ganttEvents.remove(event);
 
         redrawEventsArea();
+        
+        return ret;
     }
 
     /**
@@ -5470,25 +5487,27 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                         }
                     } else {
                         // shift or ctrl + shift
-                        final Calendar last = (Calendar) _selHeaderDates.get(_selHeaderDates.size() - 1);
-                        long days = 0;
-                        boolean reverse = false;
-                        if (last.before(cal)) {
-                            days = DateHelper.daysBetween(last, cal);
-                        } else {
-                            days = DateHelper.daysBetween(cal, last);
-                            reverse = true;
-                        }
-
-                        // all dates
-                        final Calendar temp = Calendar.getInstance(_defaultLocale);
-                        temp.setTime(last.getTime());
-                        for (int i = 0; i < (int) days; i++) {
-                            temp.add(Calendar.DATE, reverse ? -1 : 1);
-                            final Calendar temp2 = Calendar.getInstance(_defaultLocale);
-                            temp2.setTime(temp.getTime());
-                            _selHeaderDates.add(temp2);
-                        }
+                    	if (!_selHeaderDates.isEmpty()) {
+	                        final Calendar last = (Calendar) _selHeaderDates.get(_selHeaderDates.size() - 1);
+	                        long days = 0;
+	                        boolean reverse = false;
+	                        if (last.before(cal)) {
+	                            days = DateHelper.daysBetween(last, cal);
+	                        } else {
+	                            days = DateHelper.daysBetween(cal, last);
+	                            reverse = true;
+	                        }
+	
+	                        // all dates
+	                        final Calendar temp = Calendar.getInstance(_defaultLocale);
+	                        temp.setTime(last.getTime());
+	                        for (int i = 0; i < (int) days; i++) {
+	                            temp.add(Calendar.DATE, reverse ? -1 : 1);
+	                            final Calendar temp2 = Calendar.getInstance(_defaultLocale);
+	                            temp2.setTime(temp.getTime());
+	                            _selHeaderDates.add(temp2);
+	                        }
+                    	}
                     }
                 } else {
                     if (_selHeaderDates.contains(cal)) {
@@ -5703,7 +5722,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                 
                 // check if any of the moved/resized events overlap any of our date ranges
                 for (int x = 0; x < _dragEvents.size(); x++) {
-                	final GanttEvent ge = (GanttEvent) _dragEvents.get(i);
+                	final GanttEvent ge = (GanttEvent) _dragEvents.get(x);
 
 	                // event is not allowed to be on these dates, undo
 	                if (!range.canEventOccupy(ge.getActualStartDate(), ge.getActualEndDate())) {
@@ -7283,12 +7302,21 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     private void updateScopeXY(GanttEvent ge) {
         // if the event is part of a scope, force the parent to recalculate it's size etc, thus we don't have to recalculate everything
         if (ge != null) {
+        	//System.err.println(ge.getParentScopeChain());
+        
             ge.calculateScope();
             int newStartX = getXForDate(ge.getEarliestScopeEvent().getActualStartDate());
             int newWidth = getXLengthForEvent(ge);
             ge.updateX(newStartX);
             ge.updateWidth(newWidth);
         }
+        
+    	/*for (int i = 0; i < _ganttEvents.size(); i++) {
+    		GanttEvent e = (GanttEvent) _ganttEvents.get(i);
+    		if (e.getScopeEvents().size() > 0)
+    		e.calculateScope();        		
+    	}
+    	redraw();*/
     }
 
     // moves one event on the canvas. If SHIFT is held and linked events is true,
@@ -7423,7 +7451,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                         continue;
                     }
                 }
-
+                
                 // we already validated dates here, so we can just set them (Besides, dual validation is bad, as one date will be validated
                 // before the next one is set, which can cause serious issues when we do drag and drops
                 event.setRevisedStart(cal1, false);
@@ -7721,8 +7749,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
      * 
      * @return Image of the chart
      */
-    public Image getImage() {
-        return getImage(_mainBounds);
+    public Image getImage() {    	
+        return getImage(_visibleBounds);    	
     }   
 
     /**
@@ -7856,22 +7884,42 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
      * @return Image of chart
      */
     public Image getImage(Rectangle bounds) {
+    /*	if (true) {
+    		Image full = getFullImage();
+    		
+    		Image buffer = new Image(getDisplay(), new Rectangle(0, 0, bounds.width, bounds.height));
+    		GC foo = new GC(buffer);
+    		foo.drawImage(full, bounds.x, bounds.y, bounds.width, bounds.height, 0, 0, bounds.width, bounds.height);
+    		foo.dispose();
+    		return buffer;
+    	}
+    	*/
         checkWidget();
+        setRedraw(false);
+
         _savingChartImage = true;
-        int oldVscroll = _vScrollPos;
-        _vScrollPos = 0;
         try {
             Image buffer = new Image(getDisplay(), bounds);
 
             GC gc2 = new GC(buffer);
-            drawChartOntoGC(gc2, null);
+            drawChartOntoGC(gc2, bounds);
+            
+            // we don't draw this when saving an image until the very end as we push
+            // bounds around differently and it gets drawn mis-aligned if we draw it
+            // before
+            if (hasGanttSections() && _settings.getSectionSide() == SWT.RIGHT) {
+                drawSectionColumn(gc2, bounds, false, true, false, true);
+            }
+
             gc2.dispose();
             return buffer;
         } catch (Exception err) {
             SWT.error(SWT.ERROR_UNSPECIFIED, err);
         } finally {
             _savingChartImage = false;
-            _vScrollPos = oldVscroll;
+
+            setRedraw(true);
+            redraw();
         }
 
         return null;
