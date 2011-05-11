@@ -8,10 +8,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.mmxlabs.common.Pair;
 
 public final class Options {
 	private String optionPrefix;
@@ -33,7 +37,7 @@ public final class Options {
 	public List<String> parseAndSet(final String[] args, final Object object)
 			throws InvalidOptionException, InvalidArgumentException {
 		final Map<String, Method> methodMap = new HashMap<String, Method>();
-
+		final List<Pair<Integer, String>> names = new ArrayList<Pair<Integer, String>>();
 		for (final Method m : object.getClass().getMethods()) {
 			if (m.isAnnotationPresent(Option.class)) {
 				final Option option = m.getAnnotation(Option.class);
@@ -78,25 +82,41 @@ public final class Options {
 							+ " has too many parameters!");
 				}
 				methodMap.put(name, m);
+				names.add(new Pair<Integer, String>(option.order(), name));
 			}
 		}
 
 		final List<String> r = parse(args);
 
-		for (final Map.Entry<String, Method> entry : methodMap.entrySet()) {
-			final Method method = entry.getValue();
+		Collections.sort(names, new Comparator<Pair<Integer, String>>() {
+			@Override
+			public int compare(Pair<Integer, String> arg0,
+					Pair<Integer, String> arg1) {
+				int x = arg0.getFirst().compareTo(arg1.getFirst());
+				if (x == 0) {
+					return arg0.getSecond().compareTo(arg1.getSecond());
+				}
+				return x;
+			}
+		
+		});
+		
+		for (final Pair<Integer, String> p : names) {
+			final Method method = methodMap.get(p.getSecond());
 			try {
-				method.invoke(object, getOption(entry.getKey()));
+				method.invoke(object, getOption(p.getSecond()));
 			} catch (final IllegalArgumentException e) {
 				final InvalidArgumentException ex = new InvalidArgumentException(
-						"Wrong argument " + getOption(entry.getKey()));
-				ex.setOption(entry.getKey());
+						"Wrong argument " + getOption(p.getSecond()));
+				ex.setOption(p.getSecond());
 				throw ex;
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(
 						"@Option used incorrectly for field "
 								+ method.getName());
 			} catch (final InvocationTargetException e) {
+				e.printStackTrace();
+				
 				throw new RuntimeException("This really should never happen");
 			}
 		}

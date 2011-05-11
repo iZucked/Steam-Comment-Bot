@@ -16,4 +16,5 @@ public @interface Option {
 	public String help();
 	public String name() default "";
 	public String defaultValue() default EMPTY_DEFAULT_STRING_HACK;
+	public int order() default 0;
 }
