@@ -68,6 +68,16 @@ public class AnnotatedSolutionExporter {
 	final ScheduleFactory factory = SchedulePackage.eINSTANCE
 			.getScheduleFactory();
 
+	private boolean exportRuntimeAndFitness = false;
+
+	public boolean isExportRuntimeAndFitness() {
+		return exportRuntimeAndFitness;
+	}
+
+	public void setExportRuntimeAndFitness(boolean exportRuntimeAndFitness) {
+		this.exportRuntimeAndFitness = exportRuntimeAndFitness;
+	}
+
 	public AnnotatedSolutionExporter() {
 		exporters.add(new IdleEventExporter());
 		exporters.add(new JourneyEventExporter());
@@ -266,17 +276,19 @@ public class AnnotatedSolutionExporter {
 			outputFitnesses.add(fitness);
 		}
 
-		// final ScheduleFitness eRuntime = factory.createScheduleFitness();
-		// eRuntime.setName("runtime");
-		// eRuntime.setValue(runtime);
-		//
-		// outputFitnesses.add(eRuntime);
-		//
-		// final ScheduleFitness eIters = factory.createScheduleFitness();
-		// eIters.setName("iterations");
-		// eIters.setValue(iterations.longValue());
-		//
-		// outputFitnesses.add(eIters);
+		if (isExportRuntimeAndFitness()) {
+			final ScheduleFitness eRuntime = factory.createScheduleFitness();
+			eRuntime.setName("runtime");
+			eRuntime.setValue(runtime);
+
+			outputFitnesses.add(eRuntime);
+
+			final ScheduleFitness eIters = factory.createScheduleFitness();
+			eIters.setName("iterations");
+			eIters.setValue(iterations.longValue());
+
+			outputFitnesses.add(eIters);
+		}
 
 		// Process DES cargoes from the input side
 
