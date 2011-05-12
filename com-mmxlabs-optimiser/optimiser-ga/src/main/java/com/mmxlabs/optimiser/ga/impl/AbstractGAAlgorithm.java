@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.ga.Individual;
 
 public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 		IGeneticAlgorithm<I> {
-
+	
 	private final IIndividualEvaluator<I> individualEvaluator;
 
 	private final IIndividualFactory<I> individualFactory;
@@ -186,7 +186,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 		// Record best entry;
 		final Tuple<I> t = topN.first();
 		if (t.f < bestFitness) {
-			bestIndividual = t.i;
+			bestIndividual = t.i.clone(); //have to clone, because sometimes we are adjusted elsewhere
 			bestFitness = t.f;
 		}
 	}
