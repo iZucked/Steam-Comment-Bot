@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,9 +19,11 @@ public class CopyTreeToClipboardActionTest {
 	@Test
 	public void testCopyTreeToClipboardAction() throws InterruptedException {
 
+		SWTUtils.waitForDisplayToAppear();
+		
 		// Get bot ref to workbench
 		final SWTWorkbenchBot bot = new SWTWorkbenchBot();
-		
+
 		// Get shell
 		final Shell shell = bot.activeShell().widget;
 
