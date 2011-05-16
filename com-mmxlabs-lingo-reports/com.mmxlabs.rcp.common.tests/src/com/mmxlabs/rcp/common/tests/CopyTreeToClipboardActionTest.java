@@ -20,6 +20,7 @@ public class CopyTreeToClipboardActionTest {
 
 		// Get bot ref to workbench
 		final SWTWorkbenchBot bot = new SWTWorkbenchBot();
+		
 		// Get shell
 		final Shell shell = bot.activeShell().widget;
 
@@ -31,6 +32,7 @@ public class CopyTreeToClipboardActionTest {
 				final StringBuilder expectedStringBuilder = new StringBuilder();
 				shell.setLayout(new FillLayout());
 				final Tree tree = new Tree(shell, SWT.BORDER);
+				
 				// Generate TreeItems and the expected output string
 				for (int i = 0; i < 4; i++) {
 					final TreeItem iItem = new TreeItem(tree, 0);
@@ -55,11 +57,13 @@ public class CopyTreeToClipboardActionTest {
 				final CopyTreeToClipboardAction a = new CopyTreeToClipboardAction(
 						tree);
 				a.run();
+				
 				// Grab clipboard contents
 				final Clipboard cb = new Clipboard(bot.getDisplay());
 				try {
 					final TextTransfer transfer = TextTransfer.getInstance();
 					final Object contents = cb.getContents(transfer);
+
 					// Expect a String
 					Assert.assertTrue(contents instanceof String);
 
