@@ -1835,7 +1835,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 
 			// TODO sort out initial vessel column
-
 			cargoPane.getViewer().setInput(
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
