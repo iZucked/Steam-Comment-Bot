@@ -8,11 +8,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class CopyTableToClipboardActionTest {
 
 	@Test

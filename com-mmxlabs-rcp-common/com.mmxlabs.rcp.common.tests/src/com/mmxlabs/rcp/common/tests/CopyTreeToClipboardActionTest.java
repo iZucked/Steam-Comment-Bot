@@ -8,12 +8,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class CopyTreeToClipboardActionTest {
 
 	@Test
