@@ -6,9 +6,15 @@ package scenario.presentation.cargoeditor.importer;
 
 import org.eclipse.emf.ecore.EClass;
 
+import scenario.fleet.FleetPackage;
 import scenario.market.MarketPackage;
 
 /**
+ * Provides subclasses of {@link EObjectImporter} suitable for a given {@link EClass}.
+ * 
+ * In most cases these will just be the base class, but some EClasses require a special format.
+ * 
+ * 
  * @author Tom Hinton
  *
  */
@@ -30,7 +36,11 @@ public class EObjectImporterFactory {
 			marketImporter.setOutputEClass(importClass);
 			return marketImporter;
 		}
-		
+		if (FleetPackage.eINSTANCE.getFuelConsumptionLine().isSuperTypeOf(importClass)) {
+			final FuelConsumptionLineImporter i = new FuelConsumptionLineImporter();
+			i.setOutputEClass(importClass);
+			return i;
+		}
 		final EObjectImporter result = new EObjectImporter();
 		result.setOutputEClass(importClass);
 		return result;

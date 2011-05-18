@@ -42,6 +42,8 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -91,6 +93,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
@@ -100,6 +103,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
@@ -160,6 +164,9 @@ import scenario.presentation.cargoeditor.dialogs.PortAndTimeDialog;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.handlers.AddAction;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
+import scenario.presentation.cargoeditor.importer.DeferredReference;
+import scenario.presentation.cargoeditor.importer.ImportSession;
+import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
@@ -171,10 +178,16 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
- * This is an example of a Scenario model editor. <!-- begin-user-doc --> <!--
- * end-user-doc -->
+ * This is a heavily modified version of the generated editor for a scenario.
  * 
- * @generated
+ * The main constituents are the {@link EObjectEditorViewerPane}, which displays
+ * general-purpose reflectively created editing tables for the contents of
+ * ELists, and the {@link EObjectDetailPropertySheetPage}, which displays a
+ * custom property sheet page for editing those values which are not shown in a
+ * table column. The separate editors are displayed in tabs and constructed in
+ * the {@link #createPages()} method.
+ * 
+ * @generated NO
  */
 public class ScenarioEditor extends MultiPageEditorPart implements
 		IEditingDomainProvider, ISelectionProvider, IMenuListener,
@@ -1911,7 +1924,87 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
 
 			final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this);
+					getSite().getPage(), ScenarioEditor.this) {
+
+				/**
+				 * Because vessel classes are split into two files we need some
+				 * custom code here to ask the user to select both.
+				 * 
+				 * For now it just displays two open dialogs, one for each file
+				 * and then runs two import sessions. The second import session
+				 * is customized to hook up fuel consumption curves.
+				 */
+				@Override
+				protected Action createImportAction(final TableViewer viewer,
+						final EditingDomain editingDomain, final EMFPath ePath) {
+					return new Action() {
+
+						@Override
+						public void run() {
+							final FileDialog dialog = new FileDialog(PlatformUI
+									.getWorkbench().getActiveWorkbenchWindow()
+									.getShell(), SWT.OPEN);
+
+							dialog.setFilterExtensions(new String[] { "*.csv" });
+							dialog.setText("Select the vessel class file");
+							final String vcFile = dialog.open();
+							if (vcFile == null)
+								return;
+							dialog.setText("Now select the fuel curves file");
+							final String fcFile = dialog.open();
+							if (fcFile == null)
+								return;
+
+							final ArrayList<DeferredReference> defer = new ArrayList<DeferredReference>();
+							final NamedObjectRegistry reg = new NamedObjectRegistry();
+							reg.addEObjects((EObject) viewer.getInput());
+
+							// now run the imports
+							final ImportSession vesselClassSession = new ImportSession();
+							vesselClassSession.setDeferredReferences(defer);
+							vesselClassSession.setNamedObjectRegistry(reg);
+							vesselClassSession.setInputFileName(vcFile);
+							vesselClassSession
+									.setOutputObjectClass(FleetPackage.eINSTANCE
+											.getVesselClass());
+
+							vesselClassSession.run();
+
+							// register new objects
+							for (final EObject object : vesselClassSession
+									.getImportedObjects()) {
+								reg.addEObject(object);
+							}
+							// add stuff to scenario and re-register names
+
+							final ImportSession fccSession = new ImportSession();
+							fccSession.setDeferredReferences(defer);
+							fccSession.setNamedObjectRegistry(reg);
+							fccSession
+									.setOutputObjectClass(FleetPackage.eINSTANCE
+											.getFuelConsumptionLine());
+							fccSession.setInputFileName(fcFile);
+
+							fccSession.run();
+
+							getEditingDomain()
+									.getCommandStack()
+									.execute(
+											getEditingDomain()
+													.createCommand(
+															AddCommand.class,
+															new CommandParameter(
+																	((Scenario) viewer
+																			.getInput())
+																			.getFleetModel(),
+																	FleetPackage.eINSTANCE
+																			.getFleetModel_VesselClasses(),
+																	vesselClassSession
+																			.getImportedObjects())));
+						}
+					};
+				}
+			};
 
 			vcePane.createControl(sash);
 

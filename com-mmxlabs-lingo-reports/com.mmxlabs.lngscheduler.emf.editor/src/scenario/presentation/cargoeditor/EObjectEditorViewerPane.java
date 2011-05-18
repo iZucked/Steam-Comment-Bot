@@ -7,6 +7,7 @@ package scenario.presentation.cargoeditor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -26,8 +27,11 @@ import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
@@ -62,6 +66,8 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.handlers.AddAction;
+import scenario.presentation.cargoeditor.importer.ExportCSVAction;
+import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
@@ -87,15 +93,18 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final ScenarioEditor part) {
 		super(page, part);
 		this.part = part;
-		
+
 		IEditorInput x = part.getEditorInput();
 		if (x instanceof IResource) {
 			System.err.println(" x is a resource ");
 		} else if (x instanceof IAdaptable) {
-			final IResource res = (IResource) ((IAdaptable)x).getAdapter(IResource.class);
-			System.err.println("x adapted to "+res);
+			final IResource res = (IResource) ((IAdaptable) x)
+					.getAdapter(IResource.class);
+			System.err.println("x adapted to " + res);
 			try {
-				for (final IMarker m : res.findMarkers("org.eclipse.core.resources.marker", true, IResource.DEPTH_INFINITE)) {
+				for (final IMarker m : res.findMarkers(
+						"org.eclipse.core.resources.marker", true,
+						IResource.DEPTH_INFINITE)) {
 					System.err.println(m);
 				}
 			} catch (CoreException e) {
@@ -135,7 +144,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			public void run() {
 				super.run();
 				viewer.refresh();
-			}			
+			}
 		};
 	}
 
@@ -465,18 +474,97 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		});
 
 		{
-			final Action a = createAddAction(viewer, part.getEditingDomain(),
-					new EMFPath(true, path));
 			final ToolBarManager x = getToolBarManager();
-			if (a != null) {
-				x.add(a);
+			final EMFPath ePath = new EMFPath(true, path);
+			{
+				final Action a = createAddAction(viewer,
+						part.getEditingDomain(), ePath);
+				if (a != null) {
+					x.add(a);
+				}
 			}
-			final Action b = createDeleteAction(viewer, part.getEditingDomain());
-			if (b != null) {
-				x.add(b);
+			{
+				final Action b = createDeleteAction(viewer,
+						part.getEditingDomain());
+				if (b != null) {
+					x.add(b);
+				}
+			}
+			{
+				final Action a = createImportAction(viewer,
+						part.getEditingDomain(), ePath);
+				if (a != null)
+					x.add(a);
+			}
+			{
+				final Action a = createExportAction(viewer, ePath);
+				if (a != null)
+					x.add(a);
 			}
 			x.update(true);
 		}
+	}
+
+	/**
+	 * A hook to override or disable the export button.
+	 * 
+	 * @param ePath
+	 * @param viewer2
+	 * @param editingDomain
+	 * @return
+	 */
+	protected Action createExportAction(final TableViewer viewer,
+			final EMFPath ePath) {
+		return new ExportCSVAction() {
+			@Override
+			protected List<EObject> getObjectsToExport() {
+				final EObject root = (EObject) viewer.getInput();
+				final Object result = ePath.get(root);
+				if (result instanceof List) {
+					return (List<EObject>) result;
+				} else {
+					return Collections.singletonList((EObject) result);
+				}
+			}
+		};
+	}
+
+	/**
+	 * Provides a hook for subclasses to override the behavior of the import
+	 * button, in particular for vessel classes which need a fuel curve file.
+	 * 
+	 * @param viewer2
+	 * @param editingDomain
+	 * @param ePath
+	 * @return
+	 */
+	protected Action createImportAction(final TableViewer viewer,
+			final EditingDomain editingDomain, final EMFPath ePath) {
+		return new ImportCSVAction() {
+
+			@Override
+			protected EObject getToplevelObject() {
+				return (EObject) viewer.getInput();
+			}
+
+			@Override
+			protected EClass getImportClass() {
+				return (EClass) ((EStructuralFeature) ePath.getPathComponent(0))
+						.getEType();
+			}
+
+			@Override
+			protected void addObjects(final List<EObject> newObjects) {
+				editingDomain.getCommandStack().execute(
+						editingDomain.createCommand(
+								AddCommand.class,
+								new CommandParameter(ePath.get(
+										getToplevelObject(), 1), ePath
+										.getPathComponent(0), newObjects)));
+
+				viewer.refresh();
+			}
+		};
 	}
 
 	@Override
