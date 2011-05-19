@@ -251,5 +251,22 @@
    <extension
          point="org.eclipse.ui.handlers">
    </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="com.mmxlabs.lngscheduler.emf.editor.importer.sampleCategory"
+            name="Scenario Import">
+      </category>
+      <wizard
+            category="com.mmxlabs.lngscheduler.emf.editor.importer.sampleCategory"
+            class="com.mmxlabs.lngscheduler.emf.editor.importer.CSVImportWizard"
+            icon="icons/sample.gif"
+            id="com.mmxlabs.lngscheduler.emf.editor.importer.CSVImportWizard"
+            name="Import Scenario from CSV Files">
+         <description>
+            Import a file from the local file system into the workspace.
+         </description>
+      </wizard>
+   </extension>
 
 </plugin>

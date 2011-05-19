@@ -27,7 +27,7 @@ import scenario.port.PortPackage;
  * @author Tom Hinton
  * 
  */
-class Postprocessor {
+public class Postprocessor {
 	private static final Postprocessor INSTANCE = new Postprocessor();
 
 	protected Postprocessor() {
@@ -102,6 +102,7 @@ class Postprocessor {
 	}
 
 	public void postprocess(final EObject object) {
+		if (object == null) return;
 		postprocess(object, true);
 	}
 }

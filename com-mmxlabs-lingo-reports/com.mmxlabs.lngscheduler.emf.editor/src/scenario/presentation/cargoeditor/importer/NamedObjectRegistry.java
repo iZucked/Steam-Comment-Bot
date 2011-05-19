@@ -30,6 +30,7 @@ public class NamedObjectRegistry {
 	}
 
 	public void addEObjects(final EObject top) {
+		if (top == null) return;
 		addEObject(top);
 		final TreeIterator<EObject> iterator = top.eAllContents();
 		while (iterator.hasNext()) {
@@ -38,6 +39,8 @@ public class NamedObjectRegistry {
 	}
 	
 	public void addEObject(final EObject top) {
+		if (top == null)
+			return;
 		final EDataType stringType = EcorePackage.eINSTANCE.getEString();
 		for (final EAttribute attribute : top.eClass().getEAllAttributes()) {
 			if (attribute.getEAttributeType().equals(stringType)) {
