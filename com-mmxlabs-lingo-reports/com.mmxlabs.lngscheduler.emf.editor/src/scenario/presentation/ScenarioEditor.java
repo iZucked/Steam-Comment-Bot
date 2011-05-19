@@ -167,6 +167,7 @@ import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
 import scenario.presentation.cargoeditor.importer.ImportSession;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
+import scenario.presentation.cargoeditor.importer.Postprocessor;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
@@ -1976,7 +1977,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								reg.addEObject(object);
 							}
 							// add stuff to scenario and re-register names
-
+							
 							final ImportSession fccSession = new ImportSession();
 							fccSession.setDeferredReferences(defer);
 							fccSession.setNamedObjectRegistry(reg);
@@ -1987,6 +1988,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 							fccSession.run();
 
+							for (final DeferredReference r : defer) {
+								r.setRegistry(reg.getContents());
+								r.run();
+							}
+							
+							for (final EObject object : vesselClassSession
+									.getImportedObjects()) {
+								Postprocessor.getInstance().postprocess(object);
+							}
+							
 							getEditingDomain()
 									.getCommandStack()
 									.execute(
