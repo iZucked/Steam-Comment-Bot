@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import scenario.fleet.FleetPackage;
 import scenario.market.MarketPackage;
+import scenario.port.PortPackage;
 
 /**
  * Provides subclasses of {@link EObjectImporter} suitable for a given {@link EClass}.
@@ -38,6 +39,11 @@ public class EObjectImporterFactory {
 		}
 		if (FleetPackage.eINSTANCE.getFuelConsumptionLine().isSuperTypeOf(importClass)) {
 			final FuelConsumptionLineImporter i = new FuelConsumptionLineImporter();
+			i.setOutputEClass(importClass);
+			return i;
+		}
+		if (PortPackage.eINSTANCE.getDistanceModel().isSuperTypeOf(importClass)) {
+			final DistanceModelImporter i = new DistanceModelImporter();
 			i.setOutputEClass(importClass);
 			return i;
 		}

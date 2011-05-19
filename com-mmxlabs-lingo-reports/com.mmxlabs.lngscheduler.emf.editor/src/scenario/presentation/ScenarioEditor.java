@@ -164,8 +164,10 @@ import scenario.presentation.cargoeditor.dialogs.PortAndTimeDialog;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.handlers.AddAction;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
+import scenario.presentation.cargoeditor.importer.CSVReader;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
-import scenario.presentation.cargoeditor.importer.ImportSession;
+import scenario.presentation.cargoeditor.importer.EObjectImporter;
+import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
@@ -1942,76 +1944,76 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 						@Override
 						public void run() {
-							final FileDialog dialog = new FileDialog(PlatformUI
-									.getWorkbench().getActiveWorkbenchWindow()
-									.getShell(), SWT.OPEN);
+							try {
+								final FileDialog dialog = new FileDialog(
+										PlatformUI.getWorkbench()
+												.getActiveWorkbenchWindow()
+												.getShell(), SWT.OPEN);
 
-							dialog.setFilterExtensions(new String[] { "*.csv" });
-							dialog.setText("Select the vessel class file");
-							final String vcFile = dialog.open();
-							if (vcFile == null)
-								return;
-							dialog.setText("Now select the fuel curves file");
-							final String fcFile = dialog.open();
-							if (fcFile == null)
-								return;
+								dialog.setFilterExtensions(new String[] { "*.csv" });
+								dialog.setText("Select the vessel class file");
+								final String vcFile = dialog.open();
+								if (vcFile == null)
+									return;
+								dialog.setText("Now select the fuel curves file");
+								final String fcFile = dialog.open();
+								if (fcFile == null)
+									return;
 
-							final ArrayList<DeferredReference> defer = new ArrayList<DeferredReference>();
-							final NamedObjectRegistry reg = new NamedObjectRegistry();
-							reg.addEObjects((EObject) viewer.getInput());
+								final ArrayList<DeferredReference> defer = new ArrayList<DeferredReference>();
+								final NamedObjectRegistry reg = new NamedObjectRegistry();
+								reg.addEObjects((EObject) viewer.getInput());
 
-							// now run the imports
-							final ImportSession vesselClassSession = new ImportSession();
-							vesselClassSession.setDeferredReferences(defer);
-							vesselClassSession.setNamedObjectRegistry(reg);
-							vesselClassSession.setInputFileName(vcFile);
-							vesselClassSession
-									.setOutputObjectClass(FleetPackage.eINSTANCE
-											.getVesselClass());
+								final EObjectImporter vci = EObjectImporterFactory
+										.getInstance().getImporter(
+												FleetPackage.eINSTANCE
+														.getVesselClass());
 
-							vesselClassSession.run();
+								final CSVReader reader = new CSVReader(vcFile);
+								final Collection<EObject> vesselClasses = vci
+										.importObjects(reader, defer, reg);
 
-							// register new objects
-							for (final EObject object : vesselClassSession
-									.getImportedObjects()) {
-								reg.addEObject(object);
+								// register new objects
+								for (final EObject object : vesselClasses) {
+									reg.addEObject(object);
+								}
+								// add stuff to scenario and re-register names
+
+								final EObjectImporter fcImporter = EObjectImporterFactory
+										.getInstance()
+										.getImporter(
+												FleetPackage.eINSTANCE
+														.getFuelConsumptionLine());
+
+								final CSVReader reader2 = new CSVReader(fcFile);
+								fcImporter.importObjects(reader2, defer, reg);
+
+								for (final DeferredReference r : defer) {
+									r.setRegistry(reg.getContents());
+									r.run();
+								}
+
+								for (final EObject object : vesselClasses) {
+									Postprocessor.getInstance().postprocess(
+											object);
+								}
+
+								getEditingDomain()
+										.getCommandStack()
+										.execute(
+												getEditingDomain()
+														.createCommand(
+																AddCommand.class,
+																new CommandParameter(
+																		((Scenario) viewer
+																				.getInput())
+																				.getFleetModel(),
+																		FleetPackage.eINSTANCE
+																				.getFleetModel_VesselClasses(),
+																		vesselClasses)));
+							} catch (IOException ex) {
+
 							}
-							// add stuff to scenario and re-register names
-							
-							final ImportSession fccSession = new ImportSession();
-							fccSession.setDeferredReferences(defer);
-							fccSession.setNamedObjectRegistry(reg);
-							fccSession
-									.setOutputObjectClass(FleetPackage.eINSTANCE
-											.getFuelConsumptionLine());
-							fccSession.setInputFileName(fcFile);
-
-							fccSession.run();
-
-							for (final DeferredReference r : defer) {
-								r.setRegistry(reg.getContents());
-								r.run();
-							}
-							
-							for (final EObject object : vesselClassSession
-									.getImportedObjects()) {
-								Postprocessor.getInstance().postprocess(object);
-							}
-							
-							getEditingDomain()
-									.getCommandStack()
-									.execute(
-											getEditingDomain()
-													.createCommand(
-															AddCommand.class,
-															new CommandParameter(
-																	((Scenario) viewer
-																			.getInput())
-																			.getFleetModel(),
-																	FleetPackage.eINSTANCE
-																			.getFleetModel_VesselClasses(),
-																	vesselClassSession
-																			.getImportedObjects())));
 						}
 					};
 				}

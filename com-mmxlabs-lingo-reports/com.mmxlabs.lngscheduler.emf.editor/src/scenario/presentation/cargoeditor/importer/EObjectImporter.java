@@ -4,8 +4,10 @@
  */
 package scenario.presentation.cargoeditor.importer;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -58,6 +60,24 @@ public class EObjectImporter {
 		return outputEClass;
 	}
 
+	public Collection<EObject> importObjects(final CSVReader reader,
+			final Collection<DeferredReference> deferredReferences,
+			final NamedObjectRegistry registry) {
+		final LinkedList<EObject> importedObjects = new LinkedList<EObject>();
+		// open input file and retrieve fields
+
+		try {
+			Map<String, String> row = null;
+			while ((row = reader.readRow()) != null) {
+				importedObjects.add(importObject(row, deferredReferences,
+						registry));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return importedObjects;
+	}
+
 	public EObject importObject(final Map<String, String> fields,
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
@@ -79,7 +99,7 @@ public class EObjectImporter {
 				populateReference(result, reference, fields, deferredReferences);
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -99,14 +119,18 @@ public class EObjectImporter {
 			final String referenceName = reference.getName().toLowerCase();
 			if (fields.containsKey(referenceName)) {
 				final String filePath = fields.get(referenceName);
-				final ImportSession session = new ImportSession();
-				session.setDeferredReferences(deferredReferences);
-				session.setInputFileName(filePath);
-				session.setOutputObjectClass(reference.getEReferenceType());
-				session.setNamedObjectRegistry(registry);
-				session.run();
-				((EList<EObject>) result.eGet(reference)).addAll(session
-						.getImportedObjects());
+
+				try {
+					final CSVReader reader = new CSVReader(filePath);
+					final EObjectImporter importer = EObjectImporterFactory
+							.getInstance().getImporter(
+									reference.getEReferenceType());
+					((EList<EObject>) result.eGet(reference)).addAll(
+						importer.importObjects(reader, deferredReferences, registry)
+					);
+				} catch (IOException e) {
+
+				}
 			}
 		} else {
 			// get sub-fields

@@ -554,7 +554,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 
 			@Override
-			protected void addObjects(final List<EObject> newObjects) {
+			protected void addObjects(final Collection<EObject> newObjects) {
 				editingDomain.getCommandStack().execute(
 						editingDomain.createCommand(
 								AddCommand.class,
