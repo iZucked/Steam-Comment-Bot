@@ -19,42 +19,44 @@ import org.eclipse.swt.widgets.Spinner;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
-public class NumberInlineEditor extends BasicAttributeInlineEditor {
+public class NumberInlineEditor extends UnsettableInlineEditor {
 	private EDataType type;
+
 	public NumberInlineEditor(EMFPath path, EStructuralFeature feature,
 			EditingDomain editingDomain) {
 		super(path, feature, editingDomain);
 	}
 
 	private Spinner spinner;
+
 	@Override
-	public Control createControl(Composite parent) {
+	public Control createValueControl(Composite parent) {
 		final Spinner spinner = new Spinner(parent, SWT.NONE);
-		
+
 		spinner.addSelectionListener(new SelectionListener() {
 			{
 				final SelectionListener sl = this;
-				spinner.addDisposeListener(
-						new DisposeListener() {
-							@Override
-							public void widgetDisposed(DisposeEvent e) {
-								spinner.removeSelectionListener(sl);
-							}
-						});
+				spinner.addDisposeListener(new DisposeListener() {
+					@Override
+					public void widgetDisposed(DisposeEvent e) {
+						spinner.removeSelectionListener(sl);
+					}
+				});
 			}
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				doSetValue(getSpinnerValue());
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				doSetValue(getSpinnerValue());
 			}
 		});
-		
-		if (feature.getEType().equals(EcorePackage.eINSTANCE.getEInt()) ||
-				feature.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
+
+		if (feature.getEType().equals(EcorePackage.eINSTANCE.getEInt())
+				|| feature.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
 			spinner.setDigits(0);
 			spinner.setMaximum(Integer.MAX_VALUE);
 			spinner.setMinimum(0);
@@ -63,13 +65,13 @@ public class NumberInlineEditor extends BasicAttributeInlineEditor {
 			spinner.setMaximum(Integer.MAX_VALUE);
 			spinner.setMinimum(0);
 		}
-		
+
 		type = (EDataType) feature.getEType();
-		
+
 		this.spinner = spinner;
 		return spinner;
 	}
-	
+
 	private Number getSpinnerValue() {
 		if (spinner.getDigits() == 0) {
 			if (type.equals(EcorePackage.eINSTANCE.getELong())) {
@@ -79,18 +81,18 @@ public class NumberInlineEditor extends BasicAttributeInlineEditor {
 			}
 		} else {
 			if (type.equals(EcorePackage.eINSTANCE.getEFloat())) {
-				return (Float) ((float)
-						(spinner.getSelection() * Math.pow(10, -spinner.getDigits())));
+				return (Float) ((float) (spinner.getSelection() * Math.pow(10,
+						-spinner.getDigits())));
 			} else {
-				return (Double) (
-						(spinner.getSelection() * Math.pow(10, -spinner.getDigits())));
+				return (Double) ((spinner.getSelection() * Math.pow(10,
+						-spinner.getDigits())));
 			}
 		}
 	}
-	
+
 	private int numberToSelection(final Number number) {
 		final int d = spinner.getDigits();
-		
+
 		if (d == 0) {
 			return number.intValue();
 		} else {
@@ -99,8 +101,12 @@ public class NumberInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	protected void updateDisplay(final Object value) {
-		spinner.setSelection(numberToSelection((Number) value));
+	protected void updateValueDisplay(Object value) {
+		if (value == null) {
+			spinner.setSelection(0);
+		} else {
+			spinner.setSelection(numberToSelection((Number) value));
+		}
 	}
 
 }
