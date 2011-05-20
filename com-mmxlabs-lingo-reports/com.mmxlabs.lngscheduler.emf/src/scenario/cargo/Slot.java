@@ -27,6 +27,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.Slot#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getContract <em>Contract</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getFixedPrice <em>Fixed Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -242,6 +243,59 @@ public interface Slot extends EObject {
 	 * @generated
 	 */
 	void setContract(Contract value);
+
+	/**
+	 * Returns the value of the '<em><b>Fixed Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fixed Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fixed Price</em>' attribute.
+	 * @see #isSetFixedPrice()
+	 * @see #unsetFixedPrice()
+	 * @see #setFixedPrice(float)
+	 * @see scenario.cargo.CargoPackage#getSlot_FixedPrice()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	float getFixedPrice();
+
+	/**
+	 * Sets the value of the '{@link scenario.cargo.Slot#getFixedPrice <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fixed Price</em>' attribute.
+	 * @see #isSetFixedPrice()
+	 * @see #unsetFixedPrice()
+	 * @see #getFixedPrice()
+	 * @generated
+	 */
+	void setFixedPrice(float value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.cargo.Slot#getFixedPrice <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetFixedPrice()
+	 * @see #getFixedPrice()
+	 * @see #setFixedPrice(float)
+	 * @generated
+	 */
+	void unsetFixedPrice();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.cargo.Slot#getFixedPrice <em>Fixed Price</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Fixed Price</em>' attribute is set.
+	 * @see #unsetFixedPrice()
+	 * @see #getFixedPrice()
+	 * @see #setFixedPrice(float)
+	 * @generated
+	 */
+	boolean isSetFixedPrice();
 
 	/**
 	 * <!-- begin-user-doc -->
