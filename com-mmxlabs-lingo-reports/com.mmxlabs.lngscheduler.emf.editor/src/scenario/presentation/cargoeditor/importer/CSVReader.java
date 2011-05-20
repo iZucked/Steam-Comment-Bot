@@ -24,7 +24,8 @@ public class CSVReader {
 
 	private BufferedReader reader;
 	private final String[] headerLine;
-
+	private final Map<String, String> originalHeaderLine = new HashMap<String, String>();
+	
 	/**
 	 * @param inputFileName
 	 * @throws IOException
@@ -33,8 +34,14 @@ public class CSVReader {
 		reader = new BufferedReader(new FileReader(inputFileName));
 		headerLine = readLine();
 		for (int i = 0; i < headerLine.length; i++) {
-			headerLine[i] = headerLine[i].toLowerCase();
+			final String lc = headerLine[i].toLowerCase();
+			originalHeaderLine.put(lc, headerLine[i]);
+			headerLine[i] = lc;
 		}
+	}
+	
+	public String getCasedColumnName(final String lowerCaseName) {
+		return originalHeaderLine.get(lowerCaseName);
 	}
 
 	private String[] readLine() throws IOException {
