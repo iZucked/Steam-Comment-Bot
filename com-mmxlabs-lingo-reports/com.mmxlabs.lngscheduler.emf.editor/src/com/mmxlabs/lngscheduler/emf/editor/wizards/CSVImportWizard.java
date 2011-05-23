@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.mmxlabs.lngscheduler.emf.editor.importer;
+package com.mmxlabs.lngscheduler.emf.editor.wizards;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
