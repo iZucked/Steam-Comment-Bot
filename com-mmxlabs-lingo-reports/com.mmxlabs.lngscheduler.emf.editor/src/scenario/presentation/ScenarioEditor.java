@@ -25,6 +25,7 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.URIEditorInput;
@@ -39,11 +40,13 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -171,7 +174,9 @@ import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
+import scenario.schedule.CargoAllocation;
 import scenario.schedule.SchedulePackage;
+import scenario.schedule.events.SlotVisit;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
@@ -181,14 +186,12 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
- * This is a heavily modified version of the generated editor for a scenario.
- * 
- * The main constituents are the {@link EObjectEditorViewerPane}, which displays
- * general-purpose reflectively created editing tables for the contents of
- * ELists, and the {@link EObjectDetailPropertySheetPage}, which displays a
- * custom property sheet page for editing those values which are not shown in a
- * table column. The separate editors are displayed in tabs and constructed in
- * the {@link #createPages()} method.
+ * k EObjectEditorViewerPane}, which displays general-purpose reflectively
+ * created editing tables for the contents of ELists, and the
+ * {@link EObjectDetailPropertySheetPage}, which displays a custom property
+ * sheet page for editing those values which are not shown in a table column.
+ * The separate editors are displayed in tabs and constructed in the
+ * {@link #createPages()} method.
  * 
  * @generated NO
  */
@@ -214,7 +217,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 
 			Collections.sort(result, new Comparator<Pair<String, ?>>() {
-
 				@Override
 				public int compare(final Pair<String, ?> o1,
 						final Pair<String, ?> o2) {
@@ -1726,6 +1728,20 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 						@Override
 						protected EObject createObject() {
+							if (viewer.getSelection().isEmpty() == false) {
+								if (viewer.getSelection() instanceof IStructuredSelection) {
+									final IStructuredSelection sel = (IStructuredSelection) viewer
+											.getSelection();
+									if (sel.size() == 1) {
+										final Object selection = sel
+												.getFirstElement();
+										if (selection instanceof EObject) {
+											final EObject object = (EObject) selection;
+											return EcoreUtil.copy(object);
+										}
+									}
+								}
+							}
 							// TODO copy
 							final Cargo result = cf.createCargo();
 							result.setId("New Cargo");
@@ -1752,6 +1768,84 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						@Override
 						protected Object getFeature() {
 							return path.getPathComponent(0);
+						}
+					};
+				}
+
+				@Override
+				protected Action createDeleteAction(final TableViewer viewer,
+						final EditingDomain editingDomain) {
+					// TODO custom delete action which also deletes associated
+					// events from any schedules.
+					return new Action() {
+						@Override
+						public void run() {
+							final CompoundCommand cc = new CompoundCommand();
+							final ISelection selection = viewer.getSelection();
+							if (selection instanceof IStructuredSelection) {
+								final Scenario scenario = getScenario();
+								final Object[] selectedObjects = ((IStructuredSelection) selection)
+										.toArray();
+								for (final Object object : selectedObjects) {
+									if (object instanceof Cargo) {
+										cc.append(deleteCargo(scenario,
+												(Cargo) object));
+									}
+								}
+							}
+							editingDomain.getCommandStack().execute(cc);
+						}
+
+						private Command deleteCargo(final Scenario scenario,
+								final Cargo cargo) {
+							final CompoundCommand cc = new CompoundCommand();
+
+							// get crossreferences and delete stuff
+							for (final Setting setting : EcoreUtil.UsageCrossReferencer
+									.find(cargo.getLoadSlot(), scenario)) {
+								final EObject referent = setting.getEObject();
+								if (referent instanceof CargoAllocation) {
+									final CargoAllocation allocation = (CargoAllocation) referent;
+									cc.append(DeleteCommand.create(
+											editingDomain, allocation));
+									cc.append(DeleteCommand.create(
+											editingDomain,
+											allocation.getBallastIdle()));
+									cc.append(DeleteCommand.create(
+											editingDomain,
+											allocation.getLadenIdle()));
+									cc.append(DeleteCommand.create(
+											editingDomain,
+											allocation.getLadenLeg()));
+									cc.append(DeleteCommand.create(
+											editingDomain,
+											allocation.getBallastLeg()));
+									
+									// delete revenue
+									cc.append(DeleteCommand.create(editingDomain, allocation.getLoadRevenue()));
+									cc.append(DeleteCommand.create(editingDomain, allocation.getShippingRevenue()));
+									cc.append(DeleteCommand.create(editingDomain, allocation.getDischargeRevenue()));
+								} else if (referent instanceof SlotVisit) {
+									cc.append(DeleteCommand.create(
+											editingDomain, referent));
+								}
+							}
+
+							// delete final slotvisit
+							for (final Setting setting : EcoreUtil.UsageCrossReferencer
+									.find(cargo.getDischargeSlot(), scenario)) {
+								final EObject referent = setting.getEObject();
+								if (referent instanceof SlotVisit) {
+									cc.append(DeleteCommand.create(
+											editingDomain, referent));
+								}
+							}
+
+							// delete the cargo
+							cc.append(DeleteCommand
+									.create(editingDomain, cargo));
+
+							return cc;
 						}
 					};
 				}
