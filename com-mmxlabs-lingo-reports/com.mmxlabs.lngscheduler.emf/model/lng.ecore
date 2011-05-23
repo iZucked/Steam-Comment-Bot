@@ -582,6 +582,8 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="#//contract/Contract"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fixedPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//cargo/Slot">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCVvalue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat">

@@ -259,12 +259,22 @@
       </category>
       <wizard
             category="com.mmxlabs.lngscheduler.emf.editor.importer.sampleCategory"
-            class="com.mmxlabs.lngscheduler.emf.editor.importer.CSVImportWizard"
+            class="com.mmxlabs.lngscheduler.emf.editor.wizards.CSVImportWizard"
             icon="icons/sample.gif"
             id="com.mmxlabs.lngscheduler.emf.editor.importer.CSVImportWizard"
             name="Import Scenario from CSV Files">
          <description>
             Import a file from the local file system into the workspace.
+         </description>
+      </wizard>
+      <wizard
+            category="com.mmxlabs.lngscheduler.emf.editor.importer.sampleCategory"
+            class="com.mmxlabs.lngscheduler.emf.editor.wizards.ScenarioExportWizard"
+            icon="icons/sample.gif"
+            id="com.mmxlabs.lngscheduler.emf.editor.importer.DerivedScenarioWizard"
+            name="Create Derived Scenario">
+         <description>
+            Create a new scenario derived from some or all of an existing one.
          </description>
       </wizard>
    </extension>

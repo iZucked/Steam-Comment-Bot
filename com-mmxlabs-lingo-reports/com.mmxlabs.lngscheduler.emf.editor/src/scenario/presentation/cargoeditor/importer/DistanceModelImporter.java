@@ -46,7 +46,7 @@ public class DistanceModelImporter extends EObjectImporter {
 						dl.setDistance(x);
 						deferredReferences.add(new DeferredReference(dl,
 								PortPackage.eINSTANCE.getDistanceLine_ToPort(),
-								column.getKey()));
+								reader.getCasedColumnName(column.getKey())));
 						lines.add(dl);
 					} catch (NumberFormatException nfe) {
 						fromPort = column.getValue();

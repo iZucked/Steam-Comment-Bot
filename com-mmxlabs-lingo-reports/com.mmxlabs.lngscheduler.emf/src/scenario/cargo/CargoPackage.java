@@ -271,13 +271,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__CONTRACT = 7;
 
 	/**
+	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__FIXED_PRICE = 8;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = 8;
+	int SLOT_FEATURE_COUNT = 9;
 
 	/**
 	 * The operation id for the '<em>Get Local Window Start</em>' operation.
@@ -387,6 +396,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__CONTRACT = SLOT__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__FIXED_PRICE = SLOT__FIXED_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CVvalue</b></em>' attribute.
@@ -650,6 +668,17 @@ public interface CargoPackage extends EPackage {
 	EReference getSlot_Contract();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Slot#getFixedPrice <em>Fixed Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fixed Price</em>'.
+	 * @see scenario.cargo.Slot#getFixedPrice()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_FixedPrice();
+
+	/**
 	 * Returns the meta object for the '{@link scenario.cargo.Slot#getLocalWindowStart() <em>Get Local Window Start</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -879,6 +908,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT__CONTRACT = eINSTANCE.getSlot_Contract();
+
+		/**
+		 * The meta object literal for the '<em><b>Fixed Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__FIXED_PRICE = eINSTANCE.getSlot_FixedPrice();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Local Window Start</b></em>' operation.

@@ -370,6 +370,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlot_FixedPrice() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EOperation getSlot__GetLocalWindowStart() {
 		return slotEClass.getEOperations().get(0);
@@ -465,6 +474,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__WINDOW_DURATION);
 		createEAttribute(slotEClass, SLOT__SLOT_DURATION);
 		createEReference(slotEClass, SLOT__CONTRACT);
+		createEAttribute(slotEClass, SLOT__FIXED_PRICE);
 		createEOperation(slotEClass, SLOT___GET_LOCAL_WINDOW_START);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_CONTRACT);
 
@@ -532,6 +542,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_WindowDuration(), ecorePackage.getEInt(), "windowDuration", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_SlotDuration(), ecorePackage.getEInt(), "slotDuration", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_Contract(), theContractPackage.getContract(), null, "contract", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_FixedPrice(), ecorePackage.getEFloat(), "fixedPrice", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetLocalWindowStart(), ecorePackage.getEJavaObject(), "getLocalWindowStart", 1, 1, IS_UNIQUE, IS_ORDERED);
 

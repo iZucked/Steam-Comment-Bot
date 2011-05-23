@@ -5,6 +5,7 @@
 package scenario.presentation.cargoeditor.detailview;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -72,8 +73,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	protected void unsetValue() {
-		super.doSetValue(null); // setting null usually triggers an unset
-		// there is no proper unset command though :/
+		super.doSetValue(SetCommand.UNSET_VALUE); 
 	}
 
 	@Override

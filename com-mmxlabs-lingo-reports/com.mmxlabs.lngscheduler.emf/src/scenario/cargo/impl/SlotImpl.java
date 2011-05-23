@@ -39,6 +39,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getSlotDuration <em>Slot Duration</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -184,6 +185,35 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected Contract contract;
+
+	/**
+	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFixedPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final float FIXED_PRICE_EDEFAULT = 0.0F;
+
+	/**
+	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFixedPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected float fixedPrice = FIXED_PRICE_EDEFAULT;
+
+	/**
+	 * This is true if the Fixed Price attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fixedPriceESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -427,6 +457,52 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public float getFixedPrice() {
+		return fixedPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFixedPrice(float newFixedPrice) {
+		float oldFixedPrice = fixedPrice;
+		fixedPrice = newFixedPrice;
+		boolean oldFixedPriceESet = fixedPriceESet;
+		fixedPriceESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__FIXED_PRICE, oldFixedPrice, fixedPrice, !oldFixedPriceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetFixedPrice() {
+		float oldFixedPrice = fixedPrice;
+		boolean oldFixedPriceESet = fixedPriceESet;
+		fixedPrice = FIXED_PRICE_EDEFAULT;
+		fixedPriceESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__FIXED_PRICE, oldFixedPrice, FIXED_PRICE_EDEFAULT, oldFixedPriceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetFixedPrice() {
+		return fixedPriceESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object getLocalWindowStart() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
@@ -477,6 +553,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return getFixedPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -512,6 +590,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)newValue);
+				return;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				setFixedPrice((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -549,6 +630,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)null);
 				return;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				unsetFixedPrice();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -577,6 +661,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return slotDuration != SLOT_DURATION_EDEFAULT;
 			case CargoPackage.SLOT__CONTRACT:
 				return contract != null;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return isSetFixedPrice();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -619,6 +705,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		result.append(windowDuration);
 		result.append(", slotDuration: ");
 		result.append(slotDuration);
+		result.append(", fixedPrice: ");
+		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

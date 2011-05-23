@@ -7,7 +7,6 @@
  */
 package scenario.presentation.cargoeditor.detailview;
 
-
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -24,7 +23,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 /**
  * 
  * TODO sometimes field B should be refreshed when field A changes; currently
- * 		only field A knows about changes because they happen in here.
+ * only field A knows about changes because they happen in here.
  * 
  * @author Tom Hinton
  * 
@@ -59,26 +58,30 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	}
 
 	private synchronized void doUpdateDisplayWithValue() {
-		if (currentlySettingValue) return;
+		if (currentlySettingValue)
+			return;
 		currentlySettingValue = true;
 		updateDisplay(getValue());
 		currentlySettingValue = false;
 	}
-	
+
 	/**
-	 * Subclasses can override this to trigger a redisplay when other fields change
+	 * Subclasses can override this to trigger a redisplay when other fields
+	 * change
+	 * 
 	 * @param changedFeature
 	 * @return
 	 */
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		return feature.equals(changedFeature);
 	}
-	
+
 	@Override
 	public void notifyChanged(final Notification msg) {
 		super.notifyChanged(msg);
 		// check if msg is relevant
-		if (msg.getFeature() != null && updateOnChangeToFeature(msg.getFeature())) {
+		if (msg.getFeature() != null
+				&& updateOnChangeToFeature(msg.getFeature())) {
 			doUpdateDisplayWithValue();
 		}
 		if (msg.getFeature() != null && msg.getFeature().equals(feature)) {
@@ -94,15 +97,17 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 
 	/**
 	 * Subclasses should call this method when their value has been changed.
+	 * 
 	 * @param value
 	 */
 	protected synchronized void doSetValue(final Object value) {
-//		System.err.println("setvalue on " + feature.getName() + " to " + value + " (" + currentlySettingValue + ")");
-		if (currentlySettingValue) return; //avoid re-entering
+		// System.err.println("setvalue on " + feature.getName() + " to " +
+		// value + " (" + currentlySettingValue + ")");
+		if (currentlySettingValue)
+			return; // avoid re-entering
 		currentlySettingValue = true;
 		final Object currentValue = getValue();
-		if (!((currentValue == null && value == null) || 
-				((currentValue != null && value != null) && currentValue
+		if (!((currentValue == null && value == null) || ((currentValue != null && value != null) && currentValue
 				.equals(value)))) {
 			final Command command = createSetCommand(value);
 			editingDomain.getCommandStack().execute(command);
@@ -113,12 +118,17 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	}
 
 	protected Command createSetCommand(final Object value) {
-//		System.err.println("Creating set command (" + input + "." + feature.getName() + " <- " + value + ")");
+		// System.err.println("Creating set command (" + input + "." +
+		// feature.getName() + " <- " + value + ")");
 		final Command command = editingDomain.createCommand(SetCommand.class,
 				new CommandParameter(input, feature, value));
-		((SetCommand) command).setLabel("Set " + feature.getName() + " to "
-				+ value == null ? "null " : value.toString());
-		
+		if (value == null) {
+			((SetCommand) command).setLabel("Clear " + feature.getName());
+		} else {
+			((SetCommand) command).setLabel("Set " + feature.getName() + " to "
+					+ value.toString());
+		}
+
 		return command;
 	}
 
