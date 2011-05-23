@@ -5,6 +5,7 @@
 
 package scenario.presentation.cargoeditor;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,14 +14,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EFactory;
@@ -28,6 +33,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EValidator;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -52,7 +59,9 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -275,6 +284,49 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			public String getText(final Object element) {
 				return renderer.render(path.get((EObject) element));
 			}
+
+			@Override
+			public Color getBackground(Object element) {
+				final EObject object = (EObject) element;
+
+				if (hasValidationError(object)) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+				}
+				
+				final TreeIterator<EObject> iterator = object.eAllContents();
+				while (iterator.hasNext()) {
+					if (hasValidationError(iterator.next())) return 
+						Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+				}
+
+				return super.getBackground(element);
+			}
+
+			private boolean hasValidationError(final EObject object) {
+				final Resource r = object.eResource();
+				final IFile containingFile = ResourcesPlugin.getWorkspace()
+						.getRoot()
+						.getFile(new Path(r.getURI().toPlatformString(true)));
+				try {
+					final IMarker[] markers = containingFile.findMarkers(
+							IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+					for (final IMarker marker : markers) {
+						final String uri = marker.getAttribute(
+								EValidator.URI_ATTRIBUTE, null);
+						if (uri == null)
+							continue;
+						final URI uri2 = URI.create(uri);
+						if (uri2.getFragment().equals(r.getURIFragment(object))) {
+							return true;
+						}
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+
+				return false;
+			}
+
 		});
 
 		column.setEditingSupport(new EditingSupport(viewer) {
