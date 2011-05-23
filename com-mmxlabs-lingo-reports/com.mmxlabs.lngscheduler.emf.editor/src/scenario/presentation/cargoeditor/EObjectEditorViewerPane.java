@@ -46,7 +46,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -620,7 +619,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			@Override
 			protected void addObjects(final Collection<EObject> newObjects) {
-				// this is quite a complicated procedure because it has to handle potential replacements.
+				// this is quite a complicated procedure because it has to
+				// handle potential replacements.
 				final Map<String, EObject> objectsWithNames = new HashMap<String, EObject>();
 				for (final EObject oldObject : ((EList<EObject>) ePath
 						.get(getToplevelObject()))) {
@@ -629,77 +629,116 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 				final CompoundCommand cc = new CompoundCommand();
 
-				final EObject container = (EObject) ePath.get(getToplevelObject(), 1);
+				final EObject container = (EObject) ePath.get(
+						getToplevelObject(), 1);
 				final Object containerFeature = ePath.getPathComponent(0);
-				
+
 				for (final EObject newObject : newObjects) {
 					final String newId = getId(newObject);
 					if (objectsWithNames.containsKey(newId)) {
 						// object existed before, so we have to replace it
 						// get the old object
 						final EObject oldObject = objectsWithNames.get(newId);
-						// find all references to it
-						final Collection<Setting> references = EcoreUtil.UsageCrossReferencer
-								.find(oldObject, getToplevelObject());
+						cc.append(createFixReferencesAndContainments(oldObject,
+								newObject));
 
-						// iterate over those references and fix them
-						for (final Setting setting : references) {
-							final EStructuralFeature feature = setting
-									.getEStructuralFeature();
-							if (feature instanceof EReference) {
-								final EReference ref = (EReference) feature;
-								final int index = ((EList) setting.getEObject()
-										.eGet(feature)).indexOf(oldObject);
+						// fix references to contained objects as well, or we
+						// get a dangling reference
 
-								// multi-references need a remove and an add
-								// TODO this will NOT WORK if the old list
-								// contains more than one reference
-								// to the object being replaced, but at the
-								// moment our domain does not do that.
-								if (ref.isMany()) {
-									cc.append(RemoveCommand.create(
-											editingDomain,
-											setting.getEObject(),
-											setting.getEStructuralFeature(),
-											oldObject));
-
-									// add the new one in at the same index
-
-									cc.append(AddCommand.create(editingDomain,
-											setting.getEObject(),
-											setting.getEStructuralFeature(),
-											newObject, index));
-
-									continue; // skip over generic set four
-												// lines below
-								}
-							}
-
-							// single references need a set
-							cc.append(SetCommand.create(editingDomain,
-									setting.getEObject(),
-									setting.getEStructuralFeature(), newObject));
-						}
 						// now perform replace in the original container
+						//TODO should we delete the old object?
 						cc.append(ReplaceCommand.create(editingDomain,
 								oldObject, Collections.singleton(newObject)));
 					} else {
 						// just do the add
-						cc.append(
-								AddCommand.create(editingDomain,container , containerFeature, newObject));
+						cc.append(AddCommand.create(editingDomain, container,
+								containerFeature, newObject));
 					}
 				}
 
 				editingDomain.getCommandStack().execute(cc);
-				
-//				editingDomain.getCommandStack().execute(
-//						editingDomain.createCommand(
-//								AddCommand.class,
-//								new CommandParameter(ePath.get(
-//										getToplevelObject(), 1), ePath
-//										.getPathComponent(0), newObjects)));
+
+				// editingDomain.getCommandStack().execute(
+				// editingDomain.createCommand(
+				// AddCommand.class,
+				// new CommandParameter(ePath.get(
+				// getToplevelObject(), 1), ePath
+				// .getPathComponent(0), newObjects)));
 
 				viewer.refresh();
+			}
+
+			/**
+			 * Fix up any references to oldObject so they refer to newObject,
+			 * and fix up any references to singly-contained entries in
+			 * oldObject to the analogous entries in newObject, if they exist
+			 * 
+			 * @param oldObject
+			 * @param newObject
+			 * @return
+			 */
+			private Command createFixReferencesAndContainments(
+					final EObject oldObject, final EObject newObject) {
+				final CompoundCommand cc = new CompoundCommand();
+				cc.append(createFixReferences(oldObject, newObject));
+				for (final EReference reference : oldObject.eClass()
+						.getEAllContainments()) {
+					if (reference.isMany() == false) {
+						if (newObject.eClass().getEAllContainments()
+								.contains(reference)) {
+							cc.append(createFixReferencesAndContainments(
+									(EObject) oldObject.eGet(reference),
+									(EObject) newObject.eGet(reference)));
+						}
+					}
+				}
+				return cc;
+			}
+
+			private Command createFixReferences(final EObject oldObject,
+					final EObject newObject) {
+				final CompoundCommand cc = new CompoundCommand();
+				// find all references to it
+				final Collection<Setting> references = EcoreUtil.UsageCrossReferencer
+						.find(oldObject, getToplevelObject());
+
+				// iterate over those references and fix them
+				for (final Setting setting : references) {
+					final EStructuralFeature feature = setting
+							.getEStructuralFeature();
+					if (feature instanceof EReference) {
+						final EReference ref = (EReference) feature;
+						final int index = ((EList) setting.getEObject().eGet(
+								feature)).indexOf(oldObject);
+
+						// multi-references need a remove and an add
+						// TODO this will NOT WORK if the old list
+						// contains more than one reference
+						// to the object being replaced, but at the
+						// moment our domain does not do that.
+						if (ref.isMany()) {
+							cc.append(RemoveCommand.create(editingDomain,
+									setting.getEObject(),
+									setting.getEStructuralFeature(), oldObject));
+
+							// add the new one in at the same index
+
+							cc.append(AddCommand.create(editingDomain,
+									setting.getEObject(),
+									setting.getEStructuralFeature(), newObject,
+									index));
+
+							continue; // skip over generic set four
+										// lines below
+						}
+					}
+
+					// single references need a set
+					cc.append(SetCommand.create(editingDomain,
+							setting.getEObject(),
+							setting.getEStructuralFeature(), newObject));
+				}
+				return cc;
 			}
 
 			private String getId(final EObject object) {
