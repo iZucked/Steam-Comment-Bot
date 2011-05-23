@@ -9,10 +9,12 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -21,24 +23,33 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.EValidator;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.ReplaceCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
@@ -73,6 +84,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
+import scenario.NamedObject;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.handlers.AddAction;
 import scenario.presentation.cargoeditor.importer.ExportCSVAction;
@@ -292,11 +304,12 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				if (hasValidationError(object)) {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 				}
-				
+
 				final TreeIterator<EObject> iterator = object.eAllContents();
 				while (iterator.hasNext()) {
-					if (hasValidationError(iterator.next())) return 
-						Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+					if (hasValidationError(iterator.next()))
+						return Display.getCurrent().getSystemColor(
+								SWT.COLOR_RED);
 				}
 
 				return super.getBackground(element);
@@ -607,14 +620,107 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			@Override
 			protected void addObjects(final Collection<EObject> newObjects) {
-				editingDomain.getCommandStack().execute(
-						editingDomain.createCommand(
-								AddCommand.class,
-								new CommandParameter(ePath.get(
-										getToplevelObject(), 1), ePath
-										.getPathComponent(0), newObjects)));
+				// this is quite a complicated procedure because it has to handle potential replacements.
+				final Map<String, EObject> objectsWithNames = new HashMap<String, EObject>();
+				for (final EObject oldObject : ((EList<EObject>) ePath
+						.get(getToplevelObject()))) {
+					objectsWithNames.put(getId(oldObject), oldObject);
+				}
+
+				final CompoundCommand cc = new CompoundCommand();
+
+				final EObject container = (EObject) ePath.get(getToplevelObject(), 1);
+				final Object containerFeature = ePath.getPathComponent(0);
+				
+				for (final EObject newObject : newObjects) {
+					final String newId = getId(newObject);
+					if (objectsWithNames.containsKey(newId)) {
+						// object existed before, so we have to replace it
+						// get the old object
+						final EObject oldObject = objectsWithNames.get(newId);
+						// find all references to it
+						final Collection<Setting> references = EcoreUtil.UsageCrossReferencer
+								.find(oldObject, getToplevelObject());
+
+						// iterate over those references and fix them
+						for (final Setting setting : references) {
+							final EStructuralFeature feature = setting
+									.getEStructuralFeature();
+							if (feature instanceof EReference) {
+								final EReference ref = (EReference) feature;
+								final int index = ((EList) setting.getEObject()
+										.eGet(feature)).indexOf(oldObject);
+
+								// multi-references need a remove and an add
+								// TODO this will NOT WORK if the old list
+								// contains more than one reference
+								// to the object being replaced, but at the
+								// moment our domain does not do that.
+								if (ref.isMany()) {
+									cc.append(RemoveCommand.create(
+											editingDomain,
+											setting.getEObject(),
+											setting.getEStructuralFeature(),
+											oldObject));
+
+									// add the new one in at the same index
+
+									cc.append(AddCommand.create(editingDomain,
+											setting.getEObject(),
+											setting.getEStructuralFeature(),
+											newObject, index));
+
+									continue; // skip over generic set four
+												// lines below
+								}
+							}
+
+							// single references need a set
+							cc.append(SetCommand.create(editingDomain,
+									setting.getEObject(),
+									setting.getEStructuralFeature(), newObject));
+						}
+						// now perform replace in the original container
+						cc.append(ReplaceCommand.create(editingDomain,
+								oldObject, Collections.singleton(newObject)));
+					} else {
+						// just do the add
+						cc.append(
+								AddCommand.create(editingDomain,container , containerFeature, newObject));
+					}
+				}
+
+				editingDomain.getCommandStack().execute(cc);
+				
+//				editingDomain.getCommandStack().execute(
+//						editingDomain.createCommand(
+//								AddCommand.class,
+//								new CommandParameter(ePath.get(
+//										getToplevelObject(), 1), ePath
+//										.getPathComponent(0), newObjects)));
 
 				viewer.refresh();
+			}
+
+			private String getId(final EObject object) {
+				if (object instanceof NamedObject) {
+					return ((NamedObject) object).getName();
+				} else {
+					final EDataType stringType = EcorePackage.eINSTANCE
+							.getEString();
+					for (final EAttribute attribute : object.eClass()
+							.getEAllAttributes()) {
+						if (attribute.getEAttributeType().equals(stringType)) {
+							if (attribute.getName().equalsIgnoreCase("name")
+									|| attribute.getName().equalsIgnoreCase(
+											"id")) {
+								// add to registry for type
+								return (String) object.eGet(attribute);
+							}
+						}
+					}
+				}
+				return "";
 			}
 		};
 	}
