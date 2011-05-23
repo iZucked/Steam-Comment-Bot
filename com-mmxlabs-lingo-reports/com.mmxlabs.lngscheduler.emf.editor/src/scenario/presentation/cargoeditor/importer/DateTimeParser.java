@@ -6,6 +6,7 @@ package scenario.presentation.cargoeditor.importer;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -20,7 +21,9 @@ import org.eclipse.emf.ecore.EcorePackage;
  */
 public class DateTimeParser {
 	private final static DateTimeParser INSTANCE = new DateTimeParser();
-
+	final SimpleDateFormat consistentDate = new SimpleDateFormat("yyyy-MM-dd");
+	final SimpleDateFormat consistentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	final SimpleDateFormat dateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
 	protected DateTimeParser() {
 
 	}
@@ -39,6 +42,16 @@ public class DateTimeParser {
 		final Locale locale = Locale.getDefault();
 
 		//try parsing as a date and time
+		try {
+			final Date result = consistentDateTime.parse(dateString);
+			return result;
+		} catch (ParseException ex) {}
+		
+		try {
+			final Date result = dateWithShortTime.parse(dateString);
+			return result;
+		} catch (ParseException ex) {}
+		
 		for (int style = DateFormat.FULL; style <= DateFormat.SHORT; style++) {
 			for (int timeStyle = DateFormat.FULL; timeStyle <= DateFormat.SHORT; timeStyle++) {
 				DateFormat df = DateFormat.getDateTimeInstance(style, timeStyle, locale);
@@ -51,6 +64,11 @@ public class DateTimeParser {
 				}
 			}
 		}
+		
+		try {
+			final Date result = consistentDate.parse(dateString);
+			return result;
+		} catch (ParseException ex) {}
 		
 		//maybe it's just a date?
 		for (int style = DateFormat.FULL; style <= DateFormat.SHORT; style++) {
