@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
