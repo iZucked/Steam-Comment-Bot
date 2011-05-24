@@ -7,6 +7,7 @@ package scenario.presentation;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -63,7 +64,6 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
-import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -73,7 +73,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -83,7 +82,6 @@ import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -97,15 +95,11 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -154,11 +148,14 @@ import scenario.presentation.ChartViewer.IChartContentProvider;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
+import scenario.presentation.cargoeditor.EObjectDetailDialog;
 import scenario.presentation.cargoeditor.EObjectDetailPropertySheetPage;
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.EnumAttributeManipulator;
+import scenario.presentation.cargoeditor.IDetailViewContainer;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NonEditableColumn;
@@ -1873,6 +1870,33 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					final Viewer v = super.createViewer(parent);
 
 					getToolBarManager().add(swapAction);
+					getToolBarManager().add(new Action() {
+						@Override
+						public void run() {
+							final ISelection selection = getViewer()
+									.getSelection();
+							if (selection instanceof IStructuredSelection) {
+								final IStructuredSelection ssel = (IStructuredSelection) selection;
+								final List l = Arrays.asList(ssel.toArray());
+
+								final EObjectDetailDialog dialog = new EObjectDetailDialog(
+										PlatformUI.getWorkbench()
+												.getActiveWorkbenchWindow()
+												.getShell(), SWT.NONE,
+										getEditingDomain());
+								
+								ScenarioEditor.this.setupDetailViewContainer(dialog);
+								
+								if (dialog.open(l).size() > 0) getViewer().refresh();
+							}
+						}
+
+						@Override
+						public String getToolTipText() {
+							return "Display editor dialog";
+						}
+											
+					});
 					getToolBarManager().update(true);
 
 					v.addSelectionChangedListener(swapAction);
@@ -2474,13 +2498,24 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	public IPropertySheetPage getPropertySheetPage() {
 		final EObjectDetailPropertySheetPage page = new EObjectDetailPropertySheetPage(
 				getEditingDomain());
+		setupDetailViewContainer(page);
+		return page;
+	}
+
+	/**
+	 * Add editors to any detail view container
+	 * 
+	 * @param page
+	 */
+	private void setupDetailViewContainer(final IDetailViewContainer page) {
 		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature) {
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
 						return new ReferenceInlineEditor(path, feature,
-								editingDomain, portProvider);
+								editingDomain, processor, portProvider);
 					}
 				});
 
@@ -2489,9 +2524,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature) {
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
 						return new ReferenceInlineEditor(path, feature,
-								editingDomain, contractProvider) {
+								editingDomain, processor, contractProvider) {
 							@Override
 							protected boolean updateOnChangeToFeature(
 									final Object changedFeature) {
@@ -2512,9 +2548,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature) {
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
 						return new ReferenceInlineEditor(path, feature,
-								editingDomain, marketProvider);
+								editingDomain, processor, marketProvider);
 					}
 				});
 
@@ -2523,9 +2560,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature) {
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
 						return new EENumInlineEditor(path,
-								(EAttribute) feature, editingDomain);
+								(EAttribute) feature, editingDomain, processor);
 					}
 				});
 
@@ -2534,9 +2572,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature) {
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
 						return new ReferenceInlineEditor(path, feature,
-								editingDomain, entityProvider);
+								editingDomain, processor, entityProvider);
 					}
 				});
 
@@ -2545,8 +2584,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature) {
-						return new FuelCurveEditor(path, feature, editingDomain);
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
+						return new FuelCurveEditor(path, feature,
+								editingDomain, processor);
 					}
 				});
 
@@ -2555,9 +2596,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature) {
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
 						return new ReferenceInlineEditor(path, feature,
-								editingDomain, vesselClassProvider);
+								editingDomain, processor, vesselClassProvider);
 					}
 				});
 
@@ -2566,9 +2608,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature) {
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
 						return new ReferenceInlineEditor(path, feature,
-								editingDomain, scheduleProvider);
+								editingDomain, processor, scheduleProvider);
 					}
 				});
 
@@ -2582,7 +2625,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				"Discharge");
 		page.setNameForFeature(
 				CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
-		return page;
 	}
 
 	/**
