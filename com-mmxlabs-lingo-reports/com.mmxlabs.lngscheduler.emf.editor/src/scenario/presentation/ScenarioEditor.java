@@ -63,6 +63,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
+import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -72,6 +73,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -81,6 +83,7 @@ import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -94,11 +97,15 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -1794,7 +1801,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								}
 							}
 							if (cc.canExecute() == false) {
-								throw new RuntimeException("problem with stupid command");
+								throw new RuntimeException(
+										"problem with stupid command");
 							}
 							editingDomain.getCommandStack().execute(cc);
 							viewer.refresh();
@@ -1824,11 +1832,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 									cc.append(DeleteCommand.create(
 											editingDomain,
 											allocation.getBallastLeg()));
-									
+
 									// delete revenue
-									cc.append(DeleteCommand.create(editingDomain, allocation.getLoadRevenue()));
-									cc.append(DeleteCommand.create(editingDomain, allocation.getShippingRevenue()));
-									cc.append(DeleteCommand.create(editingDomain, allocation.getDischargeRevenue()));
+									cc.append(DeleteCommand.create(
+											editingDomain,
+											allocation.getLoadRevenue()));
+									cc.append(DeleteCommand.create(
+											editingDomain,
+											allocation.getShippingRevenue()));
+									cc.append(DeleteCommand.create(
+											editingDomain,
+											allocation.getDischargeRevenue()));
 								} else if (referent instanceof SlotVisit) {
 									cc.append(DeleteCommand.create(
 											editingDomain, referent));
