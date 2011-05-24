@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.provider;
 
@@ -10,39 +12,46 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.emf.ecore.EStructuralFeature;
+
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.fleet.FleetFactory;
-import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
+import scenario.fleet.VesselFuel;
+
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
- * This is the item provider adapter for a {@link scenario.fleet.FleetModel} object.
+ * This is the item provider adapter for a {@link scenario.fleet.VesselFuel} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class FleetModelItemProvider
-	extends ItemProviderAdapter
+public class VesselFuelItemProvider
+	extends NamedObjectItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetModelItemProvider(AdapterFactory adapterFactory) {
+	public VesselFuelItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -57,52 +66,65 @@ public class FleetModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addUnitPricePropertyDescriptor(object);
+			addEquivalenceFactorPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Unit Price feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__FLEET);
-			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES);
-			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS);
-			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__FUELS);
-		}
-		return childrenFeatures;
+	protected void addUnitPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselFuel_unitPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselFuel_unitPrice_feature", "_UI_VesselFuel_type"),
+				 FleetPackage.Literals.VESSEL_FUEL__UNIT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
+	 * This adds a property descriptor for the Equivalence Factor feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
+	protected void addEquivalenceFactorPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselFuel_equivalenceFactor_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselFuel_equivalenceFactor_feature", "_UI_VesselFuel_type"),
+				 FleetPackage.Literals.VESSEL_FUEL__EQUIVALENCE_FACTOR,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This returns FleetModel.gif.
+	 * This returns VesselFuel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FleetModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselFuel"));
 	}
 
 	/**
@@ -113,7 +135,10 @@ public class FleetModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_FleetModel_type");
+		String label = ((VesselFuel)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_VesselFuel_type") :
+			getString("_UI_VesselFuel_type") + " " + label;
 	}
 
 	/**
@@ -127,12 +152,10 @@ public class FleetModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(FleetModel.class)) {
-			case FleetPackage.FLEET_MODEL__FLEET:
-			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-			case FleetPackage.FLEET_MODEL__FUELS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+		switch (notification.getFeatureID(VesselFuel.class)) {
+			case FleetPackage.VESSEL_FUEL__UNIT_PRICE:
+			case FleetPackage.VESSEL_FUEL__EQUIVALENCE_FACTOR:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -148,31 +171,6 @@ public class FleetModelItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__FLEET,
-				 FleetFactory.eINSTANCE.createVessel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES,
-				 FleetFactory.eINSTANCE.createVesselClass()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS,
-				 FleetFactory.eINSTANCE.createCharterOut()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS,
-				 FleetFactory.eINSTANCE.createDrydock()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__FUELS,
-				 FleetFactory.eINSTANCE.createVesselFuel()));
 	}
 
 	/**

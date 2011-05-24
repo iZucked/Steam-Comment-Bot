@@ -20,6 +20,7 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselEvent;
+import scenario.fleet.VesselFuel;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,6 +32,7 @@ import scenario.fleet.VesselEvent;
  *   <li>{@link scenario.fleet.impl.FleetModelImpl#getFleet <em>Fleet</em>}</li>
  *   <li>{@link scenario.fleet.impl.FleetModelImpl#getVesselClasses <em>Vessel Classes</em>}</li>
  *   <li>{@link scenario.fleet.impl.FleetModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
+ *   <li>{@link scenario.fleet.impl.FleetModelImpl#getFuels <em>Fuels</em>}</li>
  * </ul>
  * </p>
  *
@@ -66,6 +68,16 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	 * @ordered
 	 */
 	protected EList<VesselEvent> vesselEvents;
+
+	/**
+	 * The cached value of the '{@link #getFuels() <em>Fuels</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFuels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselFuel> fuels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -129,6 +141,18 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<VesselFuel> getFuels() {
+		if (fuels == null) {
+			fuels = new EObjectContainmentEList<VesselFuel>(VesselFuel.class, this, FleetPackage.FLEET_MODEL__FUELS);
+		}
+		return fuels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -138,6 +162,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 				return ((InternalEList<?>)getVesselClasses()).basicRemove(otherEnd, msgs);
 			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
 				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
+			case FleetPackage.FLEET_MODEL__FUELS:
+				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -156,6 +182,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 				return getVesselClasses();
 			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
 				return getVesselEvents();
+			case FleetPackage.FLEET_MODEL__FUELS:
+				return getFuels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -181,6 +209,10 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 				getVesselEvents().clear();
 				getVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
 				return;
+			case FleetPackage.FLEET_MODEL__FUELS:
+				getFuels().clear();
+				getFuels().addAll((Collection<? extends VesselFuel>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -202,6 +234,9 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
 				getVesselEvents().clear();
 				return;
+			case FleetPackage.FLEET_MODEL__FUELS:
+				getFuels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -220,6 +255,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 				return vesselClasses != null && !vesselClasses.isEmpty();
 			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
 				return vesselEvents != null && !vesselEvents.isEmpty();
+			case FleetPackage.FLEET_MODEL__FUELS:
+				return fuels != null && !fuels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

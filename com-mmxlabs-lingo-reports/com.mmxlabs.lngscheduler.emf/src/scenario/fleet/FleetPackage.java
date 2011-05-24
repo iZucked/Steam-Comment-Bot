@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -97,13 +98,22 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__VESSEL_EVENTS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__FUELS = 3;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = 3;
+	int FLEET_MODEL_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Model</em>' class.
@@ -234,31 +244,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__MAX_SPEED = 3;
 
 	/**
-	 * The feature id for the '<em><b>Base Fuel Unit Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__BASE_FUEL_UNIT_PRICE = 4;
-
-	/**
-	 * The feature id for the '<em><b>Base Fuel Equivalence Factor</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR = 5;
-
-	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__LADEN_ATTRIBUTES = 6;
+	int VESSEL_CLASS__LADEN_ATTRIBUTES = 4;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -267,7 +259,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BALLAST_ATTRIBUTES = 7;
+	int VESSEL_CLASS__BALLAST_ATTRIBUTES = 5;
 
 	/**
 	 * The feature id for the '<em><b>Min Heel Volume</b></em>' attribute.
@@ -276,7 +268,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL_VOLUME = 8;
+	int VESSEL_CLASS__MIN_HEEL_VOLUME = 6;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -285,7 +277,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__FILL_CAPACITY = 9;
+	int VESSEL_CLASS__FILL_CAPACITY = 7;
 
 	/**
 	 * The feature id for the '<em><b>Daily Charter Price</b></em>' attribute.
@@ -294,7 +286,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__DAILY_CHARTER_PRICE = 10;
+	int VESSEL_CLASS__DAILY_CHARTER_PRICE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -303,7 +295,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__SPOT_CHARTER_COUNT = 11;
+	int VESSEL_CLASS__SPOT_CHARTER_COUNT = 9;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -312,7 +304,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__INACCESSIBLE_PORTS = 12;
+	int VESSEL_CLASS__INACCESSIBLE_PORTS = 10;
+
+	/**
+	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__BASE_FUEL = 11;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -321,7 +322,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = 13;
+	int VESSEL_CLASS_FEATURE_COUNT = 12;
 
 	/**
 	 * The number of operations of the '<em>Vessel Class</em>' class.
@@ -780,6 +781,70 @@ public interface FleetPackage extends EPackage {
 	int DRYDOCK_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link scenario.fleet.impl.VesselFuelImpl <em>Vessel Fuel</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.fleet.impl.VesselFuelImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselFuel()
+	 * @generated
+	 */
+	int VESSEL_FUEL = 9;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_FUEL__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_FUEL__UNIT_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Equivalence Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_FUEL__EQUIVALENCE_FACTOR = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Fuel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_FUEL_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_FUEL___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Vessel Fuel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_FUEL_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -787,7 +852,7 @@ public interface FleetPackage extends EPackage {
 	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselState()
 	 * @generated
 	 */
-	int VESSEL_STATE = 9;
+	int VESSEL_STATE = 10;
 
 
 	/**
@@ -832,6 +897,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFleetModel_VesselEvents();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.fleet.FleetModel#getFuels <em>Fuels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fuels</em>'.
+	 * @see scenario.fleet.FleetModel#getFuels()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_Fuels();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.Vessel <em>Vessel</em>}'.
@@ -953,17 +1029,6 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_MaxSpeed();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getBaseFuelUnitPrice <em>Base Fuel Unit Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Fuel Unit Price</em>'.
-	 * @see scenario.fleet.VesselClass#getBaseFuelUnitPrice()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_BaseFuelUnitPrice();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1030,17 +1095,6 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_SpotCharterCount();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getBaseFuelEquivalenceFactor <em>Base Fuel Equivalence Factor</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Fuel Equivalence Factor</em>'.
-	 * @see scenario.fleet.VesselClass#getBaseFuelEquivalenceFactor()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_BaseFuelEquivalenceFactor();
-
-	/**
 	 * Returns the meta object for the reference list '{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1050,6 +1104,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselClass_InaccessiblePorts();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Base Fuel</em>'.
+	 * @see scenario.fleet.VesselClass#getBaseFuel()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_BaseFuel();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.FuelConsumptionLine <em>Fuel Consumption Line</em>}'.
@@ -1299,6 +1364,38 @@ public interface FleetPackage extends EPackage {
 	EClass getDrydock();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.fleet.VesselFuel <em>Vessel Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Fuel</em>'.
+	 * @see scenario.fleet.VesselFuel
+	 * @generated
+	 */
+	EClass getVesselFuel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselFuel#getUnitPrice <em>Unit Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unit Price</em>'.
+	 * @see scenario.fleet.VesselFuel#getUnitPrice()
+	 * @see #getVesselFuel()
+	 * @generated
+	 */
+	EAttribute getVesselFuel_UnitPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselFuel#getEquivalenceFactor <em>Equivalence Factor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Equivalence Factor</em>'.
+	 * @see scenario.fleet.VesselFuel#getEquivalenceFactor()
+	 * @see #getVesselFuel()
+	 * @generated
+	 */
+	EAttribute getVesselFuel_EquivalenceFactor();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.fleet.VesselState <em>Vessel State</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1363,6 +1460,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_MODEL__VESSEL_EVENTS = eINSTANCE.getFleetModel_VesselEvents();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuels</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__FUELS = eINSTANCE.getFleetModel_Fuels();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.VesselImpl <em>Vessel</em>}' class.
@@ -1457,14 +1562,6 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_CLASS__MAX_SPEED = eINSTANCE.getVesselClass_MaxSpeed();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Fuel Unit Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__BASE_FUEL_UNIT_PRICE = eINSTANCE.getVesselClass_BaseFuelUnitPrice();
-
-		/**
 		 * The meta object literal for the '<em><b>Laden Attributes</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1513,20 +1610,20 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_CLASS__SPOT_CHARTER_COUNT = eINSTANCE.getVesselClass_SpotCharterCount();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Fuel Equivalence Factor</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR = eINSTANCE.getVesselClass_BaseFuelEquivalenceFactor();
-
-		/**
 		 * The meta object literal for the '<em><b>Inaccessible Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference VESSEL_CLASS__INACCESSIBLE_PORTS = eINSTANCE.getVesselClass_InaccessiblePorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Fuel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__BASE_FUEL = eINSTANCE.getVesselClass_BaseFuel();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
@@ -1723,6 +1820,32 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DRYDOCK = eINSTANCE.getDrydock();
+
+		/**
+		 * The meta object literal for the '{@link scenario.fleet.impl.VesselFuelImpl <em>Vessel Fuel</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.fleet.impl.VesselFuelImpl
+		 * @see scenario.fleet.impl.FleetPackageImpl#getVesselFuel()
+		 * @generated
+		 */
+		EClass VESSEL_FUEL = eINSTANCE.getVesselFuel();
+
+		/**
+		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_FUEL__UNIT_PRICE = eINSTANCE.getVesselFuel_UnitPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Equivalence Factor</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_FUEL__EQUIVALENCE_FACTOR = eINSTANCE.getVesselFuel_EquivalenceFactor();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.

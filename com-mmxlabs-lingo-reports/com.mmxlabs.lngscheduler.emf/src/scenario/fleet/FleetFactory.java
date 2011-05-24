@@ -96,6 +96,15 @@ public interface FleetFactory extends EFactory {
 	Drydock createDrydock();
 
 	/**
+	 * Returns a new object of class '<em>Vessel Fuel</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Fuel</em>'.
+	 * @generated
+	 */
+	VesselFuel createVesselFuel();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

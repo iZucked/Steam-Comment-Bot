@@ -56,6 +56,8 @@
           eType="#//fleet/VesselClass" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvents" upperBound="-1"
           eType="#//fleet/VesselEvent" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fuels" upperBound="-1"
+          eType="#//fleet/VesselFuel" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Vessel">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -72,14 +74,6 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelUnitPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelEquivalenceFactor"
-          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
-          defaultValueLiteral="0.5">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="The factor relating boiloff to base fuel; one unit of boiloff is equivalent to this many units of base fuel."/>
-        </eAnnotations>
-      </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EReference" name="ladenAttributes" eType="#//fleet/VesselStateAttributes"
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="ballastAttributes" eType="#//fleet/VesselStateAttributes"
@@ -107,6 +101,8 @@
           <details key="documentation" value="A list of ports where this vessel can't dock because it is too large in some way."/>
         </eAnnotations>
       </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuel" lowerBound="1"
+          eType="#//fleet/VesselFuel"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FuelConsumptionLine">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -150,6 +146,12 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CharterOut" eSuperTypes="#//fleet/VesselEvent"/>
     <eClassifiers xsi:type="ecore:EClass" name="Drydock" eSuperTypes="#//fleet/VesselEvent"/>
+    <eClassifiers xsi:type="ecore:EClass" name="VesselFuel" eSuperTypes="#//NamedObject">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitPrice" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel">

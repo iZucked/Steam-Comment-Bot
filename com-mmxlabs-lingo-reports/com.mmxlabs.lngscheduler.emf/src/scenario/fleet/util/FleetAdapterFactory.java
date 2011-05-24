@@ -9,6 +9,8 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.NamedObject;
+import scenario.ScenarioObject;
 import scenario.fleet.*;
 import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
@@ -108,6 +110,18 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseDrydock(Drydock object) {
 				return createDrydockAdapter();
+			}
+			@Override
+			public Adapter caseVesselFuel(VesselFuel object) {
+				return createVesselFuelAdapter();
+			}
+			@Override
+			public Adapter caseScenarioObject(ScenarioObject object) {
+				return createScenarioObjectAdapter();
+			}
+			@Override
+			public Adapter caseNamedObject(NamedObject object) {
+				return createNamedObjectAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -252,6 +266,48 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDrydockAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.VesselFuel <em>Vessel Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.VesselFuel
+	 * @generated
+	 */
+	public Adapter createVesselFuelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.ScenarioObject <em>Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.ScenarioObject
+	 * @generated
+	 */
+	public Adapter createScenarioObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.NamedObject <em>Named Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.NamedObject
+	 * @generated
+	 */
+	public Adapter createNamedObjectAdapter() {
 		return null;
 	}
 

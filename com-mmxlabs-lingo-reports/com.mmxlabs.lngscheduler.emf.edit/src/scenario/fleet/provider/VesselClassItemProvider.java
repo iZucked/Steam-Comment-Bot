@@ -63,13 +63,12 @@ public class VesselClassItemProvider
 			addCapacityPropertyDescriptor(object);
 			addMinSpeedPropertyDescriptor(object);
 			addMaxSpeedPropertyDescriptor(object);
-			addBaseFuelUnitPricePropertyDescriptor(object);
-			addBaseFuelEquivalenceFactorPropertyDescriptor(object);
 			addMinHeelVolumePropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
 			addDailyCharterPricePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
+			addBaseFuelPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -154,28 +153,6 @@ public class VesselClassItemProvider
 				 getString("_UI_VesselClass_maxSpeed_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_maxSpeed_feature", "_UI_VesselClass_type"),
 				 FleetPackage.Literals.VESSEL_CLASS__MAX_SPEED,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Base Fuel Unit Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBaseFuelUnitPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselClass_baseFuelUnitPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_baseFuelUnitPrice_feature", "_UI_VesselClass_type"),
-				 FleetPackage.Literals.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE,
 				 true,
 				 false,
 				 false,
@@ -273,28 +250,6 @@ public class VesselClassItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Base Fuel Equivalence Factor feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBaseFuelEquivalenceFactorPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselClass_baseFuelEquivalenceFactor_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_baseFuelEquivalenceFactor_feature", "_UI_VesselClass_type"),
-				 FleetPackage.Literals.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Inaccessible Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -308,6 +263,28 @@ public class VesselClassItemProvider
 				 getString("_UI_VesselClass_inaccessiblePorts_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_inaccessiblePorts_feature", "_UI_VesselClass_type"),
 				 FleetPackage.Literals.VESSEL_CLASS__INACCESSIBLE_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Base Fuel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBaseFuelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_baseFuel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_baseFuel_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__BASE_FUEL,
 				 true,
 				 false,
 				 true,
@@ -388,8 +365,6 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE:
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:

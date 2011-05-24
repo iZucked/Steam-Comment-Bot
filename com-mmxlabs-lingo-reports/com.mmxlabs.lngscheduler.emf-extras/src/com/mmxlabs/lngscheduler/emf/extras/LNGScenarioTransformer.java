@@ -560,9 +560,9 @@ public class LNGScenarioTransformer {
 																// capacity mean
 																// to be scaled?
 							Calculator.scaleToInt(eVc.getMinHeelVolume()),
-							Calculator.scaleToInt(eVc.getBaseFuelUnitPrice()),
+							Calculator.scaleToInt(eVc.getBaseFuel().getUnitPrice()),
 							Calculator.scaleToInt(eVc
-									.getBaseFuelEquivalenceFactor()),
+									.getBaseFuel().getEquivalenceFactor()),
 							// This should be divide?
 							Calculator.scaleToInt(eVc.getDailyCharterPrice() / 24.0));
 			vesselClassAssociation.add(eVc, vc);

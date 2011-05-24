@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselStateAttributes;
 import scenario.port.Port;
 
@@ -30,8 +31,6 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuelUnitPrice <em>Base Fuel Unit Price</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuelEquivalenceFactor <em>Base Fuel Equivalence Factor</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinHeelVolume <em>Min Heel Volume</em>}</li>
@@ -39,6 +38,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuel <em>Base Fuel</em>}</li>
  * </ul>
  * </p>
  *
@@ -124,46 +124,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected float maxSpeed = MAX_SPEED_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getBaseFuelUnitPrice() <em>Base Fuel Unit Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseFuelUnitPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final float BASE_FUEL_UNIT_PRICE_EDEFAULT = 0.0F;
-
-	/**
-	 * The cached value of the '{@link #getBaseFuelUnitPrice() <em>Base Fuel Unit Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseFuelUnitPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected float baseFuelUnitPrice = BASE_FUEL_UNIT_PRICE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getBaseFuelEquivalenceFactor() <em>Base Fuel Equivalence Factor</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseFuelEquivalenceFactor()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final float BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT = 0.5F;
-
-	/**
-	 * The cached value of the '{@link #getBaseFuelEquivalenceFactor() <em>Base Fuel Equivalence Factor</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseFuelEquivalenceFactor()
-	 * @generated
-	 * @ordered
-	 */
-	protected float baseFuelEquivalenceFactor = BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getLadenAttributes() <em>Laden Attributes</em>}' containment reference.
@@ -276,6 +236,16 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	protected EList<Port> inaccessiblePorts;
 
 	/**
+	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseFuel()
+	 * @generated
+	 * @ordered
+	 */
+	protected VesselFuel baseFuel;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -384,29 +354,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 		maxSpeed = newMaxSpeed;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MAX_SPEED, oldMaxSpeed, maxSpeed));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public float getBaseFuelUnitPrice() {
-		return baseFuelUnitPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setBaseFuelUnitPrice(float newBaseFuelUnitPrice) {
-		float oldBaseFuelUnitPrice = baseFuelUnitPrice;
-		baseFuelUnitPrice = newBaseFuelUnitPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE, oldBaseFuelUnitPrice, baseFuelUnitPrice));
 	}
 
 	/**
@@ -597,34 +544,49 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	 * @generated
 	 */
 	@Override
-	public float getBaseFuelEquivalenceFactor() {
-		return baseFuelEquivalenceFactor;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setBaseFuelEquivalenceFactor(float newBaseFuelEquivalenceFactor) {
-		float oldBaseFuelEquivalenceFactor = baseFuelEquivalenceFactor;
-		baseFuelEquivalenceFactor = newBaseFuelEquivalenceFactor;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR, oldBaseFuelEquivalenceFactor, baseFuelEquivalenceFactor));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<Port> getInaccessiblePorts() {
 		if (inaccessiblePorts == null) {
 			inaccessiblePorts = new EObjectResolvingEList<Port>(Port.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS);
 		}
 		return inaccessiblePorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselFuel getBaseFuel() {
+		if (baseFuel != null && baseFuel.eIsProxy()) {
+			InternalEObject oldBaseFuel = (InternalEObject)baseFuel;
+			baseFuel = (VesselFuel)eResolveProxy(oldBaseFuel);
+			if (baseFuel != oldBaseFuel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_CLASS__BASE_FUEL, oldBaseFuel, baseFuel));
+			}
+		}
+		return baseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselFuel basicGetBaseFuel() {
+		return baseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBaseFuel(VesselFuel newBaseFuel) {
+		VesselFuel oldBaseFuel = baseFuel;
+		baseFuel = newBaseFuel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BASE_FUEL, oldBaseFuel, baseFuel));
 	}
 
 	/**
@@ -659,10 +621,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return getMinSpeed();
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 				return getMaxSpeed();
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE:
-				return getBaseFuelUnitPrice();
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
-				return getBaseFuelEquivalenceFactor();
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 				return getLadenAttributes();
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
@@ -677,6 +635,9 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return getSpotCharterCount();
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
+				if (resolve) return getBaseFuel();
+				return basicGetBaseFuel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -702,12 +663,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 				setMaxSpeed((Float)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE:
-				setBaseFuelUnitPrice((Float)newValue);
-				return;
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
-				setBaseFuelEquivalenceFactor((Float)newValue);
-				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 				setLadenAttributes((VesselStateAttributes)newValue);
 				return;
@@ -729,6 +684,9 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				getInaccessiblePorts().addAll((Collection<? extends Port>)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
+				setBaseFuel((VesselFuel)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -754,12 +712,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 				setMaxSpeed(MAX_SPEED_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE:
-				setBaseFuelUnitPrice(BASE_FUEL_UNIT_PRICE_EDEFAULT);
-				return;
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
-				setBaseFuelEquivalenceFactor(BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 				setLadenAttributes((VesselStateAttributes)null);
 				return;
@@ -781,6 +733,9 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				return;
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
+				setBaseFuel((VesselFuel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -801,10 +756,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return minSpeed != MIN_SPEED_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 				return maxSpeed != MAX_SPEED_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_UNIT_PRICE:
-				return baseFuelUnitPrice != BASE_FUEL_UNIT_PRICE_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__BASE_FUEL_EQUIVALENCE_FACTOR:
-				return baseFuelEquivalenceFactor != BASE_FUEL_EQUIVALENCE_FACTOR_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 				return ladenAttributes != null;
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
@@ -819,6 +770,8 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
+				return baseFuel != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -841,10 +794,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 		result.append(minSpeed);
 		result.append(", maxSpeed: ");
 		result.append(maxSpeed);
-		result.append(", baseFuelUnitPrice: ");
-		result.append(baseFuelUnitPrice);
-		result.append(", baseFuelEquivalenceFactor: ");
-		result.append(baseFuelEquivalenceFactor);
 		result.append(", minHeelVolume: ");
 		result.append(minHeelVolume);
 		result.append(", fillCapacity: ");

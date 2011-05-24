@@ -9,6 +9,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.NamedObject;
+import scenario.ScenarioObject;
 import scenario.fleet.*;
 import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
@@ -144,6 +146,14 @@ public class FleetSwitch<T> {
 				Drydock drydock = (Drydock)theEObject;
 				T result = caseDrydock(drydock);
 				if (result == null) result = caseVesselEvent(drydock);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.VESSEL_FUEL: {
+				VesselFuel vesselFuel = (VesselFuel)theEObject;
+				T result = caseVesselFuel(vesselFuel);
+				if (result == null) result = caseNamedObject(vesselFuel);
+				if (result == null) result = caseScenarioObject(vesselFuel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -283,6 +293,51 @@ public class FleetSwitch<T> {
 	 * @generated
 	 */
 	public T caseDrydock(Drydock object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Fuel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Fuel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselFuel(VesselFuel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioObject(ScenarioObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 
