@@ -242,8 +242,6 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		scenario.fleet.VesselClass eVesselClass = FleetFactory.eINSTANCE
 				.createVesselClass();
 		eVesselClass.setName(name);
-		eVesselClass.setBaseFuelUnitPrice(baseFuelUnitPrice);
-		eVesselClass.setBaseFuelEquivalenceFactor(baseFuelEquivalenceFactor);
 		eVesselClass.setCapacity(capacity);
 		eVesselClass.setMinSpeed(minSpeed);
 		eVesselClass.setMaxSpeed(maxSpeed);
