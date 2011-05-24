@@ -679,6 +679,40 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public void createMissingModels() {
+		if (getFleetModel() == null)
+			setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());
+		
+		if (getPortModel() == null)
+			setPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());
+		
+		if (getCargoModel() == null)
+			setCargoModel(scenario.cargo.CargoFactory.eINSTANCE.createCargoModel());
+		
+		if (getContractModel() == null)
+			setContractModel(scenario.contract.ContractFactory.eINSTANCE.createContractModel());
+		
+		if (getScheduleModel() == null)
+			setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());
+		
+		if (getMarketModel() == null)
+			setMarketModel(scenario.market.MarketFactory.eINSTANCE.createMarketModel());
+		
+		if (getDistanceModel() == null)
+			setDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());
+		
+		if (getCanalModel() == null)
+			setCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());
+		
+		if (getOptimisation() == null)
+			setOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -874,6 +908,9 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 				return getOrCreateFleetModel();
 			case ScenarioPackage.SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL:
 				return getOrCreateScheduleModel();
+			case ScenarioPackage.SCENARIO___CREATE_MISSING_MODELS:
+				createMissingModels();
+				return null;
 		}
 		return super.eInvoke(operationID, arguments);
 	}

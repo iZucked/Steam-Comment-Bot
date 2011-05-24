@@ -303,6 +303,15 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getScenario__CreateMissingModels() {
+		return scenarioEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getScenarioObject() {
 		return scenarioObjectEClass;
@@ -381,6 +390,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		createEAttribute(scenarioEClass, SCENARIO__NAME);
 		createEOperation(scenarioEClass, SCENARIO___GET_OR_CREATE_FLEET_MODEL);
 		createEOperation(scenarioEClass, SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL);
+		createEOperation(scenarioEClass, SCENARIO___CREATE_MISSING_MODELS);
 
 		scenarioObjectEClass = createEClass(SCENARIO_OBJECT);
 		createEOperation(scenarioObjectEClass, SCENARIO_OBJECT___GET_CONTAINER);
@@ -454,6 +464,8 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		initEOperation(getScenario__GetOrCreateFleetModel(), theFleetPackage.getFleetModel(), "getOrCreateFleetModel", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getScenario__GetOrCreateScheduleModel(), theSchedulePackage.getScheduleModel(), "getOrCreateScheduleModel", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getScenario__CreateMissingModels(), null, "createMissingModels", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(scenarioObjectEClass, ScenarioObject.class, "ScenarioObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

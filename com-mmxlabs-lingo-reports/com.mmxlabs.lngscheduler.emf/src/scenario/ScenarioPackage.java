@@ -197,13 +197,22 @@ public interface ScenarioPackage extends EPackage {
 	int SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL = 1;
 
 	/**
+	 * The operation id for the '<em>Create Missing Models</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO___CREATE_MISSING_MODELS = 2;
+
+	/**
 	 * The number of operations of the '<em>Scenario</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_OPERATION_COUNT = 2;
+	int SCENARIO_OPERATION_COUNT = 3;
 
 
 	/**
@@ -443,6 +452,16 @@ public interface ScenarioPackage extends EPackage {
 	EOperation getScenario__GetOrCreateScheduleModel();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.Scenario#createMissingModels() <em>Create Missing Models</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Create Missing Models</em>' operation.
+	 * @see scenario.Scenario#createMissingModels()
+	 * @generated
+	 */
+	EOperation getScenario__CreateMissingModels();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.ScenarioObject <em>Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -618,6 +637,14 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL = eINSTANCE.getScenario__GetOrCreateScheduleModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Create Missing Models</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCENARIO___CREATE_MISSING_MODELS = eINSTANCE.getScenario__CreateMissingModels();
 
 		/**
 		 * The meta object literal for the '{@link scenario.impl.ScenarioObjectImpl <em>Object</em>}' class.

@@ -43,6 +43,7 @@ import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
 import scenario.market.Market;
@@ -154,14 +155,14 @@ public class RandomScenarioUtils {
 	public Scenario addDefaultFleet(final Scenario scenario, final int spotCount) {
 		// generate the standard fleet
 		VesselClass steam_138 = addVesselClass(scenario, "STEAM-138", 12,
-				19.5f, 138000, 400);
+				19.5f, 138000);
 		VesselClass steam_145 = addVesselClass(scenario, "STEAM-145", 12,
-				19.5f, 145000, 400);
+				19.5f, 145000);
 		VesselClass dfde_177 = addVesselClass(scenario, "DFDE-177", 12, 19.5f,
-				177000, 600); // TODO different from testutils, because the
+				177000); // TODO different from testutils, because the
 								// curve for DFDE doesn't contain a speed of 20.
 		VesselClass steam_126 = addVesselClass(scenario, "STEAM-126", 12,
-				19.5f, 138000, 400); // TODO units in the model; should it be a
+				19.5f, 138000); // TODO units in the model; should it be a
 										// float?
 
 		float[][] steamLaden = new float[][] { { 12, 91 }, { 13, 100 },
@@ -182,31 +183,41 @@ public class RandomScenarioUtils {
 			dfdeBallast[i][1] = 0.94f * dfdeLaden[i][1];
 		}
 
+		final VesselFuel costs400 = FleetFactory.eINSTANCE.createVesselFuel();
+		costs400.setName("MDO");
+		costs400.setEquivalenceFactor(0.5f);
+		costs400.setUnitPrice(400);
+		
+		final VesselFuel costs600 = FleetFactory.eINSTANCE.createVesselFuel();
+		costs400.setName("HFO");
+		costs400.setEquivalenceFactor(0.5f);
+		costs400.setUnitPrice(600);
+		
 		// create class parameters; currently model uses containment for curves,
 		// so we need to do duplicates
 		steam_138.setLadenAttributes(createVesselStateAttributes(
 				VesselState.LADEN, 200, 180, 50, steamLaden));
 		steam_138.setBallastAttributes(createVesselStateAttributes(
 				VesselState.BALLAST, 180, 100, 50, steamBallast));
-		steam_138.setBaseFuelEquivalenceFactor(0.5f);
+		steam_138.setBaseFuel(costs400);
 
 		steam_145.setLadenAttributes(createVesselStateAttributes(
 				VesselState.LADEN, 200, 180, 50, steamLaden));
 		steam_145.setBallastAttributes(createVesselStateAttributes(
 				VesselState.BALLAST, 180, 100, 50, steamBallast));
-		steam_145.setBaseFuelEquivalenceFactor(0.5f);
+		steam_145.setBaseFuel(costs400);
 
 		dfde_177.setLadenAttributes(createVesselStateAttributes(
 				VesselState.LADEN, 230, 210, 50, dfdeLaden));
 		dfde_177.setBallastAttributes(createVesselStateAttributes(
 				VesselState.BALLAST, 180, 100, 50, dfdeBallast));
-		dfde_177.setBaseFuelEquivalenceFactor(0.5f);
+		dfde_177.setBaseFuel(costs600);
 
 		steam_126.setLadenAttributes(createVesselStateAttributes(
 				VesselState.LADEN, 200, 180, 50, steamLaden));
 		steam_126.setBallastAttributes(createVesselStateAttributes(
 				VesselState.BALLAST, 180, 100, 50, steamBallast));
-		steam_126.setBaseFuelEquivalenceFactor(0.5f);
+		steam_126.setBaseFuel(costs400);
 
 		steam_138.setSpotCharterCount(spotCount);
 		steam_145.setSpotCharterCount(spotCount);
@@ -743,14 +754,13 @@ public class RandomScenarioUtils {
 	}
 
 	private VesselClass addVesselClass(Scenario scenario, String name,
-			int minSpeed, float maxSpeed, long capacity, int baseFuelUnitPrice) {
+			int minSpeed, float maxSpeed, long capacity) {
 		VesselClass vc = fleetFactory.createVesselClass();
 
 		vc.setName(name);
 		vc.setMinSpeed(minSpeed);
 		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
-		vc.setBaseFuelUnitPrice(baseFuelUnitPrice);
 		vc.setDailyCharterPrice(40000);
 
 		scenario.getFleetModel().getVesselClasses().add(vc);
