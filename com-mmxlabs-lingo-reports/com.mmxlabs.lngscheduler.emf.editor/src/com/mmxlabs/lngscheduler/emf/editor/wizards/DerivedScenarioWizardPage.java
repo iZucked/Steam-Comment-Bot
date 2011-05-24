@@ -1,9 +1,29 @@
 package com.mmxlabs.lngscheduler.emf.editor.wizards;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -13,16 +33,27 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
-import org.eclipse.ui.dialogs.ResourceSelectionDialog;
+import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
+
+import scenario.Scenario;
+import scenario.ScenarioFactory;
+import scenario.ScenarioPackage;
+import scenario.cargo.CargoPackage;
+import scenario.contract.ContractPackage;
+import scenario.fleet.FleetPackage;
+import scenario.market.MarketPackage;
+import scenario.port.PortPackage;
+
+import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -44,52 +75,172 @@ public class DerivedScenarioWizardPage extends WizardPage {
 	 */
 	public DerivedScenarioWizardPage(ISelection selection) {
 		super("wizardPage");
-		setTitle("Multi-page Editor File");
-		setDescription("This wizard creates a new file with *.scenario extension that can be opened by a multi-page editor.");
+		setTitle("Create Derived Sceanrio");
+		setDescription("This wizard creates a new scenario derived from static data in other scenarios or model files.");
 		this.selection = selection;
+	}
+
+	private Map<EClass, String> sourceMap = new HashMap<EClass, String>();
+
+	private ModifyListener createModifyListener(final EClass typeToImport) {
+		return new ModifyListener() {
+			@Override
+			public void modifyText(final ModifyEvent e) {
+				final Text text = (Text) e.widget;
+				sourceMap.put(typeToImport, text.getText());
+			}
+		};
+	}
+
+	private SelectionListener createSelectionListener(final String caption,
+			final Text linkedText, final Set<String> extensions) {
+		return new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO may need a better dialog for this.
+				final ResourceListSelectionDialog rlsd = new ResourceListSelectionDialog(
+						getShell(), ResourcesPlugin.getWorkspace().getRoot(),
+						IResource.FILE | IResource.DEPTH_INFINITE) {
+					@Override
+					protected boolean select(final IResource resource) {
+						return super.select(resource)
+								&& extensions.contains(resource
+										.getFileExtension().toLowerCase());
+					}
+				};
+
+				rlsd.setMessage("Select a " + caption + " source");
+
+				if (rlsd.open() == ResourceListSelectionDialog.OK) {
+					linkedText.setText(((IResource) rlsd.getResult()[0])
+							.getFullPath().toString());
+				}
+			}
+		};
+	}
+
+	private EObject getFirstElementWithClass(final EObject top,
+			final EClass eClass) {
+		final TreeIterator<EObject> iterator = top.eAllContents();
+		while (iterator.hasNext()) {
+			final EObject el = iterator.next();
+			if (el.eClass().equals(eClass))
+				return el;
+		}
+		return null;
+	}
+
+	/**
+	 * Load all the referenced files into a resource set and then copy any stuff
+	 * that is produced into a scenario. This probably won't work.
+	 * 
+	 * @return
+	 */
+	public Scenario createScenario() {
+		System.err.println(sourceMap);
+		final Scenario result = ScenarioFactory.eINSTANCE.createScenario();
+
+		final ResourceSet resourceSet = new ResourceSetImpl();
+
+		resourceSet
+				.getResourceFactoryRegistry()
+				.getExtensionToFactoryMap()
+				.put(Resource.Factory.Registry.DEFAULT_EXTENSION,
+						new XMIResourceFactoryImpl());
+		resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI,
+				ScenarioPackage.eINSTANCE);
+
+		final Set<String> loadedResources = new HashSet<String>();
+		
+		// read all the elements which we've imported
+		for (final Map.Entry<EClass, String> entry : sourceMap.entrySet()) {
+			// try and read entry
+			if (loadedResources.contains(entry.getValue())) continue;
+			loadedResources.add(entry.getValue());
+			resourceSet.getResource(URI.createPlatformResourceURI(entry.getValue(), true), true);
+//			System.err.println(resourceSet.createResource(URI.createPlatformResourceURI(entry.getValue(), true)));
+		}
+
+		here: for (final Map.Entry<EClass, String> entry : sourceMap.entrySet()) {
+			for (final Resource resource : resourceSet.getResources()) {
+				for (final EObject e : resource.getContents()) {
+					
+					final EObject e2 = getFirstElementWithClass(e,
+							entry.getKey());
+					if (e2 != null) {
+						// insert e2
+						for (final EReference ref : result.eClass()
+								.getEAllContainments()) {
+							if (ref.getEType().equals(entry.getKey())) {
+								result.eSet(ref, e2);
+							}
+						}
+						continue here;
+					}
+				}
+			}
+		}
+
+		result.createMissingModels();
+		
+		return result;
+	}
+
+	private void createSourcePicker(final Composite container,
+			final String caption, final EClass typeToImport,
+			final String[] extensions) {
+		new Label(container, SWT.NONE).setText(caption + ":");
+		final Text text = new Text(container, SWT.BORDER | SWT.SINGLE);
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addModifyListener(createModifyListener(typeToImport));
+
+		final Button b = new Button(container, SWT.PUSH);
+		b.setText("Browse...");
+
+		b.addSelectionListener(createSelectionListener(caption, text,
+				new HashSet<String>(Arrays.asList(extensions))));
 	}
 
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
-	public void createControl(Composite parent) {
-
-		Composite container = new Composite(parent, SWT.NULL);
+	public void createControl(final Composite parent) {
+		final Composite container = new Composite(parent, SWT.NULL);
+		container.setLayout(new GridLayout());
 
 		final Group sources = new Group(container, SWT.NONE);
 		sources.setText("Data Sources");
-		sources.setData(new GridData(GridData.FILL_HORIZONTAL));
+		sources.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout layout = new GridLayout();
 		sources.setLayout(layout);
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 
-		new Label(sources, SWT.NONE).setText("&Port Model:");
-		new Text(sources, SWT.BORDER | SWT.SINGLE).setLayoutData(new GridData(
-				GridData.FILL_HORIZONTAL));
-		{
-			final Button b = new Button(sources, SWT.PUSH);
-			b.setText("Browse...");
-			b.addSelectionListener(new SelectionAdapter() {
+		createSourcePicker(sources, "&Ports",
+				PortPackage.eINSTANCE.getPortModel(), new String[] {
+						"scenario", "portmodel" });
+		createSourcePicker(sources, "&Distances",
+				PortPackage.eINSTANCE.getDistanceModel(), new String[] {
+						"scenario", "distancemodel" });
+		createSourcePicker(sources, "&Fleet",
+				FleetPackage.eINSTANCE.getFleetModel(), new String[] {
+						"scenario", "fleetmodel" });
+		createSourcePicker(sources, "&Markets",
+				MarketPackage.eINSTANCE.getMarketModel(), new String[] {
+						"scenario", "marketmodel" });
+		createSourcePicker(sources, "&Contracts",
+				ContractPackage.eINSTANCE.getContractModel(), new String[] {
+						"scenario", "contractmodel" });
+		createSourcePicker(sources, "C&argos",
+				CargoPackage.eINSTANCE.getCargoModel(), new String[] {
+						"scenario", "cargomodel" });
 
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					ResourceSelectionDialog rsd = new ResourceSelectionDialog(
-							getShell(), ResourcesPlugin.getWorkspace()
-									.getRoot(), "Select Port Model Source");
-					rsd.open();
-				}
-
-			});
-		}
 		final Group destination = new Group(container, SWT.NONE);
 		destination.setText("Destination");
 		layout = new GridLayout();
 		destination.setLayout(layout);
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
-
-		container.setLayout(new GridLayout());
 
 		destination.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
