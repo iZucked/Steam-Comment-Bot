@@ -1793,7 +1793,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 									}
 								}
 							}
+							if (cc.canExecute() == false) {
+								throw new RuntimeException("problem with stupid command");
+							}
 							editingDomain.getCommandStack().execute(cc);
+							viewer.refresh();
 						}
 
 						private Command deleteCargo(final Scenario scenario,
