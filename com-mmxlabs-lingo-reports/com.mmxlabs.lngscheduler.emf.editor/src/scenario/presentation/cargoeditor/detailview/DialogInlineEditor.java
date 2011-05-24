@@ -18,12 +18,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	public DialogInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain) {
-		super(path, feature, editingDomain);
+			EditingDomain editingDomain, final ICommandProcessor processor) {
+		super(path, feature, editingDomain, processor);
 	}
 	private Button button;
 	private Label label;

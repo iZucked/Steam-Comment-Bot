@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
@@ -39,20 +40,46 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 public class EObjectDetailView extends Composite {
 	private final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
 	private final List<IInlineEditor> editors = new ArrayList<IInlineEditor>();
+	private final ICommandProcessor processor;
 
-	public EObjectDetailView(final Composite parent, int style) {
+	public EObjectDetailView(final Composite parent, int style,
+			final ICommandProcessor processor) {
 		super(parent, style);
+		this.processor = processor;
 	}
 
+	/**
+	 * This is an interface for objects which should create an
+	 * {@link IInlineEditor} for a given path to target + feature to edit +
+	 * command processor for processing the final commands
+	 * 
+	 * @author Tom Hinton
+	 * 
+	 */
 	public interface IInlineEditorFactory {
 		public IInlineEditor createEditor(final EMFPath path,
-				final EStructuralFeature feature);
+				final EStructuralFeature feature,
+				final ICommandProcessor commandProcessor);
 	}
 
+	/**
+	 * This is an interface for an inline editor. It is given an input, and
+	 * should generate commands and send them to the appropriate command
+	 * processor when stuff happens.
+	 * 
+	 * @author Tom Hinton
+	 * 
+	 */
 	public interface IInlineEditor {
 		public void setInput(final EObject object);
 
 		public Control createControl(final Composite parent);
+	}
+
+	public interface ICommandProcessor {
+		public void processCommand(final Command command,
+				final EObject target,
+				final EStructuralFeature feature);
 	}
 
 	// private class NonEditableEditor extends BasicAttributeInlineEditor {
@@ -158,18 +185,18 @@ public class EObjectDetailView extends Composite {
 				// attributeControl = blank.createControl(controls);
 			} else {
 				final IInlineEditor attributeEditor = attributeEditorFactory
-						.createEditor(path, attribute);
+						.createEditor(path, attribute, processor);
 				// create label for this attribute
 
 				final Label attributeLabel = new Label(controls, SWT.RIGHT);
 				String attributeName = nameByFeature.get(attribute);
 				if (attributeName == null)
-					attributeName = unmangle(attribute.getName()) ;
-				attributeLabel.setText(attributeName+ ": ");
+					attributeName = unmangle(attribute.getName());
+				attributeLabel.setText(attributeName + ": ");
 				final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER,
 						false, false);
 				attributeLabel.setLayoutData(labelData);
-				
+
 				editors.add(attributeEditor);
 				attributeControl = attributeEditor.createControl(controls);
 			}

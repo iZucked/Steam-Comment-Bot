@@ -18,14 +18,16 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
 	private Object lastSetValue;
 	public UnsettableInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain) {
-		super(path, feature, editingDomain);
+			EditingDomain editingDomain,final ICommandProcessor processor) {
+		super(path, feature, editingDomain, processor);
 	}
 
 	protected abstract Control createValueControl(Composite parent);

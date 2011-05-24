@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Listener;
 
 import scenario.port.Port;
 import scenario.port.PortPackage;
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.controls.DateAndTime;
@@ -31,8 +32,8 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	private final EReference portReference;
 
 	public LocalDateInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain) {
-		super(path, feature, editingDomain);
+			EditingDomain editingDomain, final ICommandProcessor processor) {
+		super(path, feature, editingDomain, processor);
 		final EClass container = feature.getEContainingClass();
 		// check for associated port reference
 		EReference portReference = null;

@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 
 import com.mmxlabs.common.Pair;
@@ -39,9 +40,9 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	private final ArrayList<EObject> valueList = new ArrayList<EObject>();
 
 	public ReferenceInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain,
+			EditingDomain editingDomain, final ICommandProcessor processor,
 			final IReferenceValueProvider valueProvider) {
-		super(path, feature, editingDomain);
+		super(path, feature, editingDomain, processor);
 		this.valueProvider = valueProvider;
 	}
 

@@ -15,13 +15,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class TextInlineEditor extends UnsettableInlineEditor {
 	private Text text;
 	public TextInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain) {
-		super(path, feature, editingDomain);
+			EditingDomain editingDomain, final ICommandProcessor processor) {
+		super(path, feature, editingDomain, processor);
 	}
 
 	@Override

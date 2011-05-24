@@ -17,14 +17,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
 
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class NumberInlineEditor extends UnsettableInlineEditor {
 	private EDataType type;
 
 	public NumberInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain) {
-		super(path, feature, editingDomain);
+			EditingDomain editingDomain, final ICommandProcessor processor) {
+		super(path, feature, editingDomain, processor);
 	}
 
 	private Spinner spinner;

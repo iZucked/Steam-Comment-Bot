@@ -16,6 +16,7 @@ import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
@@ -36,12 +37,16 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	protected boolean currentlySettingValue = false;
 
 	protected final EditingDomain editingDomain;
+	protected final ICommandProcessor commandProcessor;
 
 	public BasicAttributeInlineEditor(final EMFPath path,
-			final EStructuralFeature feature, final EditingDomain editingDomain) {
+			final EStructuralFeature feature,
+			final EditingDomain editingDomain,
+			final ICommandProcessor commandProcessor) {
 		this.path = path;
 		this.feature = feature;
 		this.editingDomain = editingDomain;
+		this.commandProcessor = commandProcessor;
 	}
 
 	@Override
@@ -110,7 +115,8 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		if (!((currentValue == null && value == null) || ((currentValue != null && value != null) && currentValue
 				.equals(value)))) {
 			final Command command = createSetCommand(value);
-			editingDomain.getCommandStack().execute(command);
+			commandProcessor.processCommand(command, input, feature);
+//			editingDomain.getCommandStack().execute(command);
 		}
 
 		// create set command here.

@@ -18,6 +18,7 @@ import org.eclipse.swt.SWT;
 
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.VesselStateAttributes;
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
@@ -25,8 +26,8 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 public class FuelCurveEditor extends DialogInlineEditor {
 
 	public FuelCurveEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain) {
-		super(path, feature, editingDomain);
+			EditingDomain editingDomain,final ICommandProcessor processor) {
+		super(path, feature, editingDomain, processor);
 	}
 
 	@Override

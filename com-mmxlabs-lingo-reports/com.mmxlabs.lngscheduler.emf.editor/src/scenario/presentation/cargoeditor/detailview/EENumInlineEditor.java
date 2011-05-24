@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class EENumInlineEditor extends BasicAttributeInlineEditor {
@@ -25,8 +27,8 @@ public class EENumInlineEditor extends BasicAttributeInlineEditor {
 	private Combo combo;
 
 	public EENumInlineEditor(EMFPath path, EAttribute feature,
-			EditingDomain editingDomain) {
-		super(path, feature, editingDomain);
+			EditingDomain editingDomain, final ICommandProcessor processor) {
+		super(path, feature, editingDomain, processor);
 		this.eenum = (EEnum) feature.getEAttributeType();	}
 
 	@Override
