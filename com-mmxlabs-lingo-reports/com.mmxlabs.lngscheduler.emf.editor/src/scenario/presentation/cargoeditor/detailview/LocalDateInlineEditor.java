@@ -92,6 +92,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	
 	@Override
 	protected void updateControl() {
+		if (dateAndTime.isDisposed()) return;
 		if (input != null && portReference != null && input.eGet(portReference) != null) {
 			dateAndTime.setTimeZone(getTimeZone()); 
 		}
@@ -99,6 +100,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
+		if (dateAndTime.isDisposed()) return;
 		// Value will be a Date, so we need to find a port and localize the
 		// date. Same as in the other date editors.
 		final Date utcDate = (Date) value;

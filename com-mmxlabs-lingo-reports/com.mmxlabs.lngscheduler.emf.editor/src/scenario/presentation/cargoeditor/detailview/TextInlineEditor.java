@@ -55,6 +55,7 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
+		if (text.isDisposed()) return;
 		text.setText(value == null ? "null" : value.toString());
 	}
 }

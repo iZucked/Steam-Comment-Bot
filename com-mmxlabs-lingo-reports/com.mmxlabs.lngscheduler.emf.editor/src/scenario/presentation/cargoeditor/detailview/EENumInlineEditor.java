@@ -66,6 +66,7 @@ public class EENumInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(Object value) {
+		if (combo.isDisposed()) return;
 		combo.setText(((Enumerator) value).getName());
 	}
 

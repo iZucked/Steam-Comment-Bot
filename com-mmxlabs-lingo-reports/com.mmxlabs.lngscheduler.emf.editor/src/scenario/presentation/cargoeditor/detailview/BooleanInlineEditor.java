@@ -59,6 +59,7 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(final Object value) {
+		if (button.isDisposed()) return;
 		if (Boolean.TRUE.equals(value)) {
 			this.button.setSelection(true);
 		} else {

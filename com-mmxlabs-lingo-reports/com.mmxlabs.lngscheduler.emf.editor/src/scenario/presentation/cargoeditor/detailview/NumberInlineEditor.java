@@ -104,6 +104,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(Object value) {
+		if (spinner.isDisposed()) return;
 		if (value == null) {
 			spinner.setSelection(0);
 		} else {

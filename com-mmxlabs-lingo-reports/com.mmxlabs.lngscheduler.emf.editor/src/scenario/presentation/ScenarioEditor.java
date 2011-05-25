@@ -94,6 +94,7 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -105,6 +106,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -202,12 +204,59 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 public class ScenarioEditor extends MultiPageEditorPart implements
 		IEditingDomainProvider, ISelectionProvider, IMenuListener,
 		IViewerProvider {
+	private class ScenarioObjectEditorViewerPane extends
+			EObjectEditorViewerPane {
+		/**
+		 * @param page
+		 * @param part
+		 */
+		public ScenarioObjectEditorViewerPane(IWorkbenchPage page,
+				ScenarioEditor part) {
+			super(page, part);
+		}
+
+		@Override
+		public Viewer createViewer(final Composite parent) {
+			final Viewer v = super.createViewer(parent);
+			v.getControl().addKeyListener(new KeyListener() {
+				@Override
+				public void keyReleased(org.eclipse.swt.events.KeyEvent e) {
+					if (e.keyCode == '\r') {
+						final ISelection selection = getViewer().getSelection();
+						if (selection instanceof IStructuredSelection) {
+							final IStructuredSelection ssel = (IStructuredSelection) selection;
+							final List l = Arrays.asList(ssel.toArray());
+
+							final EObjectDetailDialog dialog = new EObjectDetailDialog(
+									PlatformUI.getWorkbench()
+											.getActiveWorkbenchWindow()
+											.getShell(), SWT.NONE,
+									getEditingDomain());
+
+							ScenarioEditor.this
+									.setupDetailViewContainer(dialog);
+
+							if (dialog.open(l).size() > 0)
+								getViewer().refresh();
+						}
+					}
+				}
+
+				@Override
+				public void keyPressed(org.eclipse.swt.events.KeyEvent e) {
+				}
+			});
+			return v;
+		}
+	}
+
 	private abstract class ScenarioRVP implements IReferenceValueProvider {
 		protected Scenario getEnclosingScenario(EObject target) {
-			while (target != null && !(target instanceof Scenario)) {
-				target = target.eContainer();
-			}
-			return (Scenario) target;
+			return getScenario(); // required so that dialog editor works
+			// while (target != null && !(target instanceof Scenario)) {
+			// target = target.eContainer();
+			// }
+			// return (Scenario) target;
 		}
 
 		protected ArrayList<Pair<String, EObject>> getSortedNames(
@@ -1404,7 +1453,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 		{
-			final EObjectEditorViewerPane entitiesPane = new EObjectEditorViewerPane(
+			final EObjectEditorViewerPane entitiesPane = new ScenarioObjectEditorViewerPane(
 					getSite().getPage(), ScenarioEditor.this);
 
 			entitiesPane.createControl(sash);
@@ -1432,7 +1481,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			entitiesPane.getViewer().setInput(input);
 		}
 		{
-			final EObjectEditorViewerPane salesPane = new EObjectEditorViewerPane(
+			final EObjectEditorViewerPane salesPane = new ScenarioObjectEditorViewerPane(
 					getSite().getPage(), ScenarioEditor.this);
 
 			salesPane.createControl(sash);
@@ -1475,7 +1524,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			salesPane.getViewer().setInput(input);
 		}
 		{
-			final EObjectEditorViewerPane purchasePane = new EObjectEditorViewerPane(
+			final EObjectEditorViewerPane purchasePane = new ScenarioObjectEditorViewerPane(
 					getSite().getPage(), ScenarioEditor.this);
 
 			purchasePane.createControl(sash);
@@ -1522,7 +1571,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	private void createEventsEditor() {
-		final EObjectEditorViewerPane eventsPane = new EObjectEditorViewerPane(
+		final EObjectEditorViewerPane eventsPane = new ScenarioObjectEditorViewerPane(
 				getSite().getPage(), ScenarioEditor.this);
 
 		eventsPane.createControl(getContainer());
@@ -1602,7 +1651,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		final SashForm sash = new SashForm(getContainer(), SWT.SMOOTH
 				| SWT.HORIZONTAL);
 
-		final EObjectEditorViewerPane markets = new EObjectEditorViewerPane(
+		final EObjectEditorViewerPane markets = new ScenarioObjectEditorViewerPane(
 				getSite().getPage(), this);
 
 		markets.createControl(sash);
@@ -1719,7 +1768,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Create a page for the cargo editor
 		{
 
-			final EObjectEditorViewerPane cargoPane = new EObjectEditorViewerPane(
+			final EObjectEditorViewerPane cargoPane = new ScenarioObjectEditorViewerPane(
 					getSite().getPage(), ScenarioEditor.this) {
 
 				final SwapDischargeSlotsAction swapAction = new SwapDischargeSlotsAction();
@@ -1870,33 +1919,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					final Viewer v = super.createViewer(parent);
 
 					getToolBarManager().add(swapAction);
-					getToolBarManager().add(new Action() {
-						@Override
-						public void run() {
-							final ISelection selection = getViewer()
-									.getSelection();
-							if (selection instanceof IStructuredSelection) {
-								final IStructuredSelection ssel = (IStructuredSelection) selection;
-								final List l = Arrays.asList(ssel.toArray());
-
-								final EObjectDetailDialog dialog = new EObjectDetailDialog(
-										PlatformUI.getWorkbench()
-												.getActiveWorkbenchWindow()
-												.getShell(), SWT.NONE,
-										getEditingDomain());
-								
-								ScenarioEditor.this.setupDetailViewContainer(dialog);
-								
-								if (dialog.open(l).size() > 0) getViewer().refresh();
-							}
-						}
-
-						@Override
-						public String getToolTipText() {
-							return "Display editor dialog";
-						}
-											
-					});
 					getToolBarManager().update(true);
 
 					v.addSelectionChangedListener(swapAction);
@@ -2003,7 +2025,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	private void createPortEditor(
 			final IReferenceValueProvider everyContractProvider,
 			final IReferenceValueProvider marketProvider) {
-		final EObjectEditorViewerPane portsPane = new EObjectEditorViewerPane(
+		final EObjectEditorViewerPane portsPane = new ScenarioObjectEditorViewerPane(
 				getSite().getPage(), ScenarioEditor.this);
 		// cargoPane.createControl(getContainer());
 
@@ -2062,7 +2084,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		{
 			final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
 
-			final EObjectEditorViewerPane vcePane = new EObjectEditorViewerPane(
+			final EObjectEditorViewerPane vcePane = new ScenarioObjectEditorViewerPane(
 					getSite().getPage(), ScenarioEditor.this) {
 
 				/**
@@ -2249,7 +2271,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			createContextMenuFor(vcePane.getViewer());
 
-			final EObjectEditorViewerPane fleetPane = new EObjectEditorViewerPane(
+			final EObjectEditorViewerPane fleetPane = new ScenarioObjectEditorViewerPane(
 					getSite().getPage(), ScenarioEditor.this);
 
 			fleetPane.createControl(sash);

@@ -83,6 +83,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateControl() {
+		if (combo.isDisposed()) return;
 		final List<Pair<String, EObject>> values = valueProvider
 				.getAllowedValues(input, feature);
 		// update combo contents
@@ -99,6 +100,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
+		if (combo.isDisposed()) return;
 		final int curIndex = valueList.indexOf(value);
 		if (curIndex == -1) combo.setText(""); 
 		else combo.setText(nameList.get(curIndex));

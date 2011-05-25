@@ -7,15 +7,9 @@
  */
 package scenario.presentation.cargoeditor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -31,14 +25,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
-import scenario.presentation.cargoeditor.detailview.BooleanInlineEditor;
-import scenario.presentation.cargoeditor.detailview.LocalDateInlineEditor;
-import scenario.presentation.cargoeditor.detailview.NumberInlineEditor;
-import scenario.presentation.cargoeditor.detailview.TextInlineEditor;
-
-import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
  * @author Tom Hinton

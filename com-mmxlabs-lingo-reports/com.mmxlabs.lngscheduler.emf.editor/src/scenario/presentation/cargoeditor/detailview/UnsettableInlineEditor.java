@@ -91,7 +91,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	protected synchronized void doSetValue(final Object value) {
 		lastSetValue = value; // hold for later checking and unchecking.
 		// maybe set button when value is changed
-		if (setButton != null && value != null) {
+		if (setButton != null && value != null && !setButton.isDisposed()) {
 			setButton.setSelection(true);
 		}
 		if (setButton == null || setButton.getSelection()) {
@@ -105,6 +105,6 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (setButton == null || value != null) {
 			updateValueDisplay(value);
 		}
-		if (setButton != null) setButton.setSelection(value != null);
+		if (setButton != null && !setButton.isDisposed()) setButton.setSelection(value != null);
 	}
 }
