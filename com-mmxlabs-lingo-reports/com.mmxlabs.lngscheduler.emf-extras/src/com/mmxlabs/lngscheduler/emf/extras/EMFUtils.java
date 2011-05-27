@@ -7,17 +7,23 @@ package com.mmxlabs.lngscheduler.emf.extras;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import scenario.Scenario;
@@ -72,9 +78,11 @@ public class EMFUtils {
 	 * Deserialize a byte array produced by {@link #serializeEObject(EObject)}.
 	 * See the doc for that on why this is necessary.
 	 * 
-	 * @param <T> 
-	 * @param byteArray the serialized form of the object
-	 * @param clazz the EClass of the object
+	 * @param <T>
+	 * @param byteArray
+	 *            the serialized form of the object
+	 * @param clazz
+	 *            the EClass of the object
 	 * @return the deserialized object
 	 */
 	@SuppressWarnings("unchecked")
@@ -138,17 +146,19 @@ public class EMFUtils {
 	}
 
 	private static void updateMinMax(Pair<Date, Date> pair, Date date) {
-		if (date == null) return;
+		if (date == null)
+			return;
 		if (pair.getFirst() == null || date.before(pair.getFirst()))
 			pair.setFirst(date);
 		if (pair.getSecond() == null || date.after(pair.getSecond()))
 			pair.setSecond(date);
-		
+
 	}
-	
-	public static Pair<Date, Date> findEarliestAndLatestEvents(final Scenario scenario) {
+
+	public static Pair<Date, Date> findEarliestAndLatestEvents(
+			final Scenario scenario) {
 		final Pair<Date, Date> result = new Pair<Date, Date>(null, null);
-		
+
 		final TreeIterator<EObject> iterator = scenario.eAllContents();
 		while (iterator.hasNext()) {
 			final EObject o = iterator.next();
@@ -165,9 +175,10 @@ public class EMFUtils {
 				updateMinMax(result, ((CharterOut) o).getEndDate());
 			}
 		}
-		
+
 		return result;
 	}
+
 	/**
 	 * Find min/max dates and place them in the given pair, by reference.
 	 * 
@@ -176,16 +187,16 @@ public class EMFUtils {
 	 */
 	private static void findMinMaxDateAttributes(final EObject object,
 			final Pair<Date, Date> mm) {
-		
+
 		final TreeIterator<EObject> iter = object.eAllContents();
 		while (iter.hasNext()) {
 			final EObject sub = iter.next();
 			final EClass eClass = sub.eClass();
-			
+
 			for (final EAttribute attribute : eClass.getEAllAttributes()) {
 				if (sub.eIsSet(attribute)) {
-					if (Date.class.isAssignableFrom(attribute.getEAttributeType()
-							.getInstanceClass())) {
+					if (Date.class.isAssignableFrom(attribute
+							.getEAttributeType().getInstanceClass())) {
 						final Date dt = (Date) sub.eGet(attribute);
 
 						if (mm.getFirst() == null || dt.before(mm.getFirst()))
@@ -197,5 +208,78 @@ public class EMFUtils {
 				}
 			}
 		}
+	}
+
+	public static EClass findConcreteSubclass(final EClass eClass) {
+		if (eClass.isAbstract()) {
+			for (final EClassifier otherClass : eClass.getEPackage()
+					.getEClassifiers()) {
+				if (otherClass instanceof EClass) {
+					if (!(((EClass) otherClass).isAbstract())
+							&& eClass.isSuperTypeOf((EClass) otherClass)) {
+						return (EClass) otherClass;
+					}
+				}
+			}
+			return null;
+		} else {
+			return eClass;
+		}
+	}
+
+	/**
+	 * Create an eClass and all its contained objects
+	 * 
+	 * @param eClass
+	 * @return
+	 */
+	public static EObject createEObject(final EClass eClass) {
+		final EClass concrete = findConcreteSubclass(eClass);
+		if (concrete == null)
+			return null;
+		final EObject result = concrete.getEPackage().getEFactoryInstance()
+				.create(concrete);
+
+		for (final EReference ref : eClass.getEAllContainments()) {
+			if (ref.isMany())
+				continue;
+			final EObject contained = createEObject(ref.getEReferenceType());
+			if (contained == null)
+				return null;
+			result.eSet(ref, contained);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Find an EClass which is a common superclass of the given objects
+	 * NOTE this does not work with multiple supertypes
+	 * 
+	 * @param objects
+	 * @return
+	 */
+	public static EClass findCommonSuperclass(final Collection<EObject> objects) {
+		EClass result = null;
+		for (final EObject object : objects) {
+			if (result == null) {
+				result = object.eClass();
+			} else {
+				final EClass oClass = object.eClass();
+				if (!result.isSuperTypeOf(oClass)) {
+					// problem! find common supertype
+					while (!result.isSuperTypeOf(oClass)) {
+						final EList<EClass> supers = result.getESuperTypes();
+						if (supers == null || supers.isEmpty())
+							return null;
+						result = supers.get(0); // TODO
+												// multiple
+												// inheritance
+												// issues?
+					}
+				}
+			}
+		}
+		return result;
 	}
 }
