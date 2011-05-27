@@ -177,7 +177,14 @@ public final class VoyagePlanIterator<T> {
 			final ScheduledSequence sequence) {
 
 		for (final ICargoSchedulerFitnessComponent<T> component : components) {
-			component.startSequence(sequence.getResource(), true); // hmm
+			/*
+			 * Although the "true" here looks bad (always evaluate every
+			 * sequence), we need to keep track somehow of which sequences have
+			 * changed in the layer above. The random sequence scheduler may
+			 * well change every sequence's schedule even if only one or two
+			 * sequences' elements have been shifted by a move.
+			 */
+			component.startSequence(sequence.getResource(), true);
 		}
 
 		setVoyagePlans(sequence.getVoyagePlans(), sequence.getStartTime());
@@ -224,15 +231,15 @@ public final class VoyagePlanIterator<T> {
 			final Iterable<ICargoSchedulerFitnessComponent<T>> components,
 			final ScheduledSequences sequences,
 			final IAnnotatedSolution<T> annotatedSolution) {
-		
+
 		for (final ICargoSchedulerFitnessComponent<T> component : components) {
 			component.startEvaluation();
 		}
-		
+
 		for (final ScheduledSequence sequence : sequences) {
 			annotateSequence(sequence, components, annotatedSolution);
 		}
-		
+
 		for (final ICargoSchedulerFitnessComponent<T> component : components) {
 			component.endEvaluationAndAnnotate(annotatedSolution);
 		}
@@ -247,7 +254,7 @@ public final class VoyagePlanIterator<T> {
 			final Iterable<ICargoSchedulerFitnessComponent<T>> components,
 			final IAnnotatedSolution<T> annotatedSolution) {
 		for (final ICargoSchedulerFitnessComponent<T> component : components) {
-			component.startSequence(sequence.getResource(), true); // hmm
+			component.startSequence(sequence.getResource(), true);
 		}
 
 		setVoyagePlans(sequence.getVoyagePlans(), sequence.getStartTime());
@@ -261,14 +268,16 @@ public final class VoyagePlanIterator<T> {
 				for (final ICargoSchedulerFitnessComponent<T> component : components) {
 					if (!component.nextVoyagePlan(plan, time))
 						return;
-					if (!component.annotateNextObject(obj, time, annotatedSolution))
+					if (!component.annotateNextObject(obj, time,
+							annotatedSolution))
 						return;
 				}
 			} else {
 				final Object obj = nextObject();
 				final int time = getCurrentTime();
 				for (final ICargoSchedulerFitnessComponent<T> component : components) {
-					if (!component.annotateNextObject(obj, time, annotatedSolution))
+					if (!component.annotateNextObject(obj, time,
+							annotatedSolution))
 						return;
 				}
 			}
