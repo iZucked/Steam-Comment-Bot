@@ -14,7 +14,7 @@ package com.mmxlabs.common;
  * @param <B>
  *            the type of the second item
  */
-public final class Pair<A, B> {
+public class Pair<A, B> {
 	private A first;
 	private B second;
 
