@@ -4,12 +4,17 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 
 /**
+ * 
+ * TODO add future discount curve support.
+ * 
  * @author hinton
  *
  */
@@ -17,6 +22,7 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 		ICargoSchedulerFitnessComponent<T> {
 	private final IFitnessCore<T> core;
 	private final String name;
+	private ICurve discountCurve = new ConstantValueCurve(1);
 	
 	protected AbstractSchedulerFitnessComponent(final String name, final IFitnessCore<T> core) {
 		super();
@@ -24,6 +30,10 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 		this.name = name;
 	}
 
+	protected long getDiscountedValue(final int time, final long value) {
+		return (long) (discountCurve.getValueAtPoint(time) * value);
+	}
+	
 	@Override
 	public final String getName() {
 		return name;

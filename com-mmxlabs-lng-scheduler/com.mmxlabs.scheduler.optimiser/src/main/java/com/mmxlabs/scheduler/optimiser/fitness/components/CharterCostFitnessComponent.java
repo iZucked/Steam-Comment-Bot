@@ -59,14 +59,14 @@ public class CharterCostFitnessComponent<T> extends
 			charterPrice = vessel.getVesselClass().getHourlyCharterPrice();
 			firstLoadTime = -1;
 			lastTime = -1;
-			
+
 			if (vessel.getVesselInstanceType().equals(
-				VesselInstanceType.SPOT_CHARTER)) {
+					VesselInstanceType.SPOT_CHARTER)) {
 				loadPortType = PortType.Load;
 			} else {
 				loadPortType = PortType.Start;
 			}
-			
+
 			return true; // we are interested
 		} else {
 			return false; // we are not interested in this sequence - we won't
@@ -105,7 +105,8 @@ public class CharterCostFitnessComponent<T> extends
 		// addDiscountedValue(firstLoadTime,
 		// Calculator.multiply(lastTime - firstLoadTime, charterPrice));
 
-		return (firstLoadTime == -1 || lastTime == -1) ? 0 : Calculator
-				.multiply(lastTime - firstLoadTime, charterPrice);
+		return (firstLoadTime == -1 || lastTime == -1) ? 0
+				: getDiscountedValue(firstLoadTime, Calculator.multiply(
+						lastTime - firstLoadTime, charterPrice));
 	}
 }

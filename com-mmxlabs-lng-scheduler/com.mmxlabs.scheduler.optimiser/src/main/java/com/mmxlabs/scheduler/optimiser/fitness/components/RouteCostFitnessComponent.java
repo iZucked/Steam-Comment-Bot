@@ -81,7 +81,7 @@ public class RouteCostFitnessComponent<T> extends
 					.getVesselState();
 //			addDiscountedValue(startTime, 
 //					routeCostProvider.getRouteCost(route, vesselClass, vesselState));
-			accumulator += routeCostProvider.getRouteCost(route, vesselClass, vesselState);
+			accumulator += getDiscountedValue(time,routeCostProvider.getRouteCost(route, vesselClass, vesselState));
 		}
 		return true;
 	}

@@ -84,7 +84,7 @@ public final class CostComponent<T> extends
 						consumption, detail.getFuelUnitPrice(fuel));
 
 //				addDiscountedValue(time, fuelCost);
-				accumulator += fuelCost;
+				accumulator += getDiscountedValue(time, fuelCost);
 			}
 		}
 		return true;

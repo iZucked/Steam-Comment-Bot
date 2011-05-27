@@ -54,7 +54,7 @@ public final class LatenessComponent<T> extends
 			
 			if (tw != null && time > tw.getEnd()) {
 //				addDiscountedValue(time, 1000000*(time - tw.getEnd()));
-				accumulator  += (long)PENALTY * (time - tw.getEnd());
+				accumulator  += getDiscountedValue(time, (long)PENALTY * (time - tw.getEnd()));
 			}
 		}
 		return true;

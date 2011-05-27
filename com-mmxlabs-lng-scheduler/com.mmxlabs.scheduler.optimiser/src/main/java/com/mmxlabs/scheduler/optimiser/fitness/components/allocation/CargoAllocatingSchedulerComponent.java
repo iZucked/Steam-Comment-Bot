@@ -30,6 +30,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * A fitness component which does cargo allocation within the scheduler loop.
  * This will be slower but better.
  * 
+ * TODO this does not make use of the discount curve; revenue booked later on
+ * should be discounted.
+ * 
  * @author hinton
  * 
  */
@@ -182,7 +185,7 @@ public class CargoAllocatingSchedulerComponent<T> extends
 	@Override
 	public long endEvaluationAndGetCost() {
 		allocator.solve();
-		// -allocator.getProfit()
+		// -allocator.getProfit() //TODO ask allocator to discount future values?
 		return setLastEvaluatedFitness(0); // cost is just
 											// the p&l.
 	}
