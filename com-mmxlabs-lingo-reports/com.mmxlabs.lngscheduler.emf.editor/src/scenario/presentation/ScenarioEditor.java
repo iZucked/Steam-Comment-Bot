@@ -239,16 +239,32 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 										new IShellProvider() {
 											@Override
 											public Shell getShell() {
-												return v.getControl().getShell();
+												return v.getControl()
+														.getShell();
 											}
 										});
-								ScenarioEditor.this.setupDetailViewContainer(multiDialog);
-								multiDialog.setEditorFactoryForFeature(CargoPackage.eINSTANCE.getCargo_Id(), null);
-								multiDialog.setEditorFactoryForFeature(ScenarioPackage.eINSTANCE.getNamedObject_Name(), null);
-								multiDialog.setEditorFactoryForFeature(FleetPackage.eINSTANCE.getVessel_Name(), null);
-								multiDialog.setEditorFactoryForFeature(FleetPackage.eINSTANCE.getVesselClass_Name(), null);
+								ScenarioEditor.this
+										.setupDetailViewContainer(multiDialog);
+								multiDialog.setEditorFactoryForFeature(
+										CargoPackage.eINSTANCE.getCargo_Id(),
+										null);
+								multiDialog.setEditorFactoryForFeature(
+										ScenarioPackage.eINSTANCE
+												.getNamedObject_Name(), null);
+								multiDialog.setEditorFactoryForFeature(
+										FleetPackage.eINSTANCE.getVessel_Name(),
+										null);
+								multiDialog.setEditorFactoryForFeature(
+										FleetPackage.eINSTANCE
+												.getVesselClass_Name(), null);
+								multiDialog.setEditorFactoryForFeature(
+										FleetPackage.eINSTANCE
+												.getVesselEvent_Id(), null);
 								if (multiDialog.open(l, getEditingDomain()) == Dialog.OK) {
-									getEditingDomain().getCommandStack().execute(multiDialog.createCommand());
+									getEditingDomain()
+											.getCommandStack()
+											.execute(
+													multiDialog.createCommand());
 								}
 							} else {
 
