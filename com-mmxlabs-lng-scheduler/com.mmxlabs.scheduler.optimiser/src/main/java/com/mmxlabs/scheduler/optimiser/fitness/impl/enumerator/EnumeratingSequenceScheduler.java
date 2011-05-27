@@ -180,8 +180,7 @@ public class EnumeratingSequenceScheduler<T> extends
 
 		final int size = sequences.size();
 
-		// TODO consider resizing these when necessary
-		if (arrivalTimes.length != size) {
+		if (arrivalTimes == null || arrivalTimes.length != size) {
 			arrivalTimes = new int[size][];
 			windowStartTime = new int[size][];
 			windowEndTime = new int[size][];
@@ -218,7 +217,6 @@ public class EnumeratingSequenceScheduler<T> extends
 		// // separationPoints[index].clear();
 		resizeAll(sequenceIndex, size);
 
-		final int[] arrivalTimes = this.arrivalTimes[sequenceIndex];
 		final int[] windowStartTime = this.windowStartTime[sequenceIndex];
 		final int[] windowEndTime = this.windowEndTime[sequenceIndex];
 		final int[] minTimeToNextElement = this.minTimeToNextElement[sequenceIndex];
