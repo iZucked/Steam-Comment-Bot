@@ -18,7 +18,7 @@ import org.eclipse.swt.SWT;
 
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.VesselStateAttributes;
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;

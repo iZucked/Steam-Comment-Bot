@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
@@ -28,7 +28,7 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public Control createValueControl(Composite parent) {
-		final Text text = new Text(parent, SWT.NONE);
+		final Text text = new Text(parent, SWT.BORDER);
 		
 		text.addModifyListener(
 				new ModifyListener() {

@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 

@@ -71,6 +71,7 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -85,6 +86,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.SashForm;
@@ -94,12 +96,14 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -150,14 +154,8 @@ import scenario.presentation.ChartViewer.IChartContentProvider;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
-import scenario.presentation.cargoeditor.EObjectDetailDialog;
-import scenario.presentation.cargoeditor.EObjectDetailPropertySheetPage;
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.EnumAttributeManipulator;
-import scenario.presentation.cargoeditor.IDetailViewContainer;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NonEditableColumn;
@@ -167,8 +165,15 @@ import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
 import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailPropertySheetPage;
+import scenario.presentation.cargoeditor.detailview.EObjectMultiDialog;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
+import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.dialogs.PortAndTimeDialog;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.handlers.AddAction;
@@ -179,6 +184,7 @@ import scenario.presentation.cargoeditor.importer.EObjectImporter;
 import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
+import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.SchedulePackage;
@@ -227,17 +233,35 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							final IStructuredSelection ssel = (IStructuredSelection) selection;
 							final List l = Arrays.asList(ssel.toArray());
 
-							final EObjectDetailDialog dialog = new EObjectDetailDialog(
-									PlatformUI.getWorkbench()
-											.getActiveWorkbenchWindow()
-											.getShell(), SWT.NONE,
-									getEditingDomain());
+							if (l.size() > 1
+									&& (e.stateMask | SWT.CONTROL) != 0) {
+								final EObjectMultiDialog multiDialog = new EObjectMultiDialog(
+										new IShellProvider() {
+											@Override
+											public Shell getShell() {
+												return v.getControl().getShell();
+											}
+										});
+								ScenarioEditor.this.setupDetailViewContainer(multiDialog);
+								multiDialog.setEditorFactoryForFeature(CargoPackage.eINSTANCE.getCargo_Id(), null);
+								multiDialog.setEditorFactoryForFeature(ScenarioPackage.eINSTANCE.getNamedObject_Name(), null);
+								multiDialog.setEditorFactoryForFeature(FleetPackage.eINSTANCE.getVessel_Name(), null);
+								multiDialog.setEditorFactoryForFeature(FleetPackage.eINSTANCE.getVesselClass_Name(), null);
+								if (multiDialog.open(l, getEditingDomain()) == Dialog.OK) {
+									getEditingDomain().getCommandStack().execute(multiDialog.createCommand());
+								}
+							} else {
 
-							ScenarioEditor.this
-									.setupDetailViewContainer(dialog);
+								final EObjectDetailDialog dialog = new EObjectDetailDialog(
+										v.getControl().getShell(), SWT.NONE,
+										getEditingDomain());
 
-							if (dialog.open(l).size() > 0)
-								getViewer().refresh();
+								ScenarioEditor.this
+										.setupDetailViewContainer(dialog);
+
+								if (dialog.open(l).size() > 0)
+									getViewer().refresh();
+							}
 						}
 					}
 				}
@@ -1923,6 +1947,30 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 					v.addSelectionChangedListener(swapAction);
 
+					v.getControl().addKeyListener(new KeyListener() {
+						@Override
+						public void keyPressed(final KeyEvent e) {
+						}
+
+						@Override
+						public void keyReleased(final KeyEvent e) {
+
+							if (e.keyCode == ' ') {
+
+								final ISelection selection = v.getSelection();
+								if (selection instanceof IStructuredSelection) {
+									final IStructuredSelection ssel = (IStructuredSelection) selection;
+									final List l = Arrays.asList(ssel.toArray());
+
+									final WiringDialog wiringDialog = new WiringDialog(
+											v.getControl().getShell());
+
+									wiringDialog.open(l, getEditingDomain());
+								}
+							}
+						}
+					});
+
 					return v;
 				}
 
@@ -2530,6 +2578,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @param page
 	 */
 	private void setupDetailViewContainer(final IDetailViewContainer page) {
+		page.addDefaultEditorFactories();
 		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
 				new IInlineEditorFactory() {
 					@Override

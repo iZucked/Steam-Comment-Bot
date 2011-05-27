@@ -16,8 +16,8 @@ import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 

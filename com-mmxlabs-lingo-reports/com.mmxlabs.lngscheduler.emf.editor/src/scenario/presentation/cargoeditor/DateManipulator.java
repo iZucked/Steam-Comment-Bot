@@ -17,10 +17,10 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.rcp.common.celleditors.DateTimeCellEditor;
-
 import scenario.port.Port;
 import scenario.port.PortPackage;
+
+import com.mmxlabs.rcp.common.celleditors.DateTimeCellEditor;
 
 /**
  * @author hinton

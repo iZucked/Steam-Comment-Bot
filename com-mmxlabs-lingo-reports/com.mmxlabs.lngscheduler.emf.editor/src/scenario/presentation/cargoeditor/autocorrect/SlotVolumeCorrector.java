@@ -11,6 +11,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
+
 import com.mmxlabs.common.Pair;
 
 public class SlotVolumeCorrector extends BaseCorrector {

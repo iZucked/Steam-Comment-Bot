@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor;
+package scenario.presentation.cargoeditor.detailview;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,13 +16,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditor;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
-import scenario.presentation.cargoeditor.detailview.BooleanInlineEditor;
-import scenario.presentation.cargoeditor.detailview.LocalDateInlineEditor;
-import scenario.presentation.cargoeditor.detailview.NumberInlineEditor;
-import scenario.presentation.cargoeditor.detailview.TextInlineEditor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
@@ -41,7 +37,7 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 	
 	public void addDefaultEditorFactories() {
 		editorFactories.put(EcorePackage.eINSTANCE.getEString(),
-				new IInlineEditorFactory() {
+				wrapEditorFactory(new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(EMFPath path,
 							EStructuralFeature feature,
@@ -49,9 +45,9 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 						return new TextInlineEditor(path, feature,
 								getEditingDomain(), processor);
 					}
-				});
+				}));
 
-		final IInlineEditorFactory numberEditorFactory = new IInlineEditorFactory() {
+		final IInlineEditorFactory numberEditorFactory = wrapEditorFactory(new IInlineEditorFactory() {
 			@Override
 			public IInlineEditor createEditor(EMFPath path,
 					EStructuralFeature feature,
@@ -59,7 +55,7 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 				return new NumberInlineEditor(path, feature, getEditingDomain(),
 						processor);
 			}
-		};
+		});
 
 		editorFactories.put(EcorePackage.eINSTANCE.getEInt(),
 				numberEditorFactory);
@@ -70,7 +66,7 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 		editorFactories.put(EcorePackage.eINSTANCE.getEDouble(),
 				numberEditorFactory);
 		editorFactories.put(EcorePackage.eINSTANCE.getEDate(),
-				new IInlineEditorFactory() {
+				wrapEditorFactory(new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(EMFPath path,
 							EStructuralFeature feature,
@@ -78,10 +74,10 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 						return new LocalDateInlineEditor(path, feature,
 								getEditingDomain(), processor);
 					}
-				});
+				}));
 
 		editorFactories.put(EcorePackage.eINSTANCE.getEBoolean(),
-				new IInlineEditorFactory() {
+				wrapEditorFactory(new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(EMFPath path,
 							EStructuralFeature feature,
@@ -89,7 +85,11 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 						return new BooleanInlineEditor(path, feature,
 								getEditingDomain(), processor);
 					}
-				});
+				}));
+	}
+	
+	protected IInlineEditorFactory wrapEditorFactory(final IInlineEditorFactory factory) {
+		return factory;
 	}
 	
 	protected EObjectDetailView getDetailView(final EClass eClass, final Composite control) {
@@ -97,7 +97,7 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 			return detailViewsByClass.get(eClass);
 		} else {
 			final EObjectDetailView eodv = new EObjectDetailView(control,
-					SWT.NONE, getProcessor());
+					SWT.NONE, getProcessor(), getEditingDomain());
 
 			for (final Map.Entry<EClassifier, IInlineEditorFactory> entry : editorFactories
 					.entrySet()) {
@@ -130,11 +130,11 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 	
 	public void setEditorFactoryForClassifier(final EClassifier classifier,
 			final IInlineEditorFactory factory) {
-		editorFactories.put(classifier, factory);
+		editorFactories.put(classifier, wrapEditorFactory(factory));
 	}
 
 	public void setEditorFactoryForFeature(final EStructuralFeature feature,
-			final IInlineEditorFactory iInlineEditorFactory) {
-		editorFactoriesByFeature.put(feature, iInlineEditorFactory);
+			final IInlineEditorFactory factory) {
+		editorFactoriesByFeature.put(feature, wrapEditorFactory(factory));
 	}
 }

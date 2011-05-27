@@ -2,12 +2,12 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor;
+package scenario.presentation.cargoeditor.detailview;
 
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 
 /**
  * @author Tom Hinton

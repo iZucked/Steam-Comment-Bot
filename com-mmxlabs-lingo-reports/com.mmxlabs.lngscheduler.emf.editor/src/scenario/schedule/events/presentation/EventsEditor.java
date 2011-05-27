@@ -113,8 +113,8 @@ import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.LngEditorAdvisor;
 import scenario.presentation.LngEditorPlugin;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
-import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
+import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
 

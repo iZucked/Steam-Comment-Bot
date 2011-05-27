@@ -5,7 +5,7 @@
 /**
  * 
  */
-package scenario.presentation.cargoeditor;
+package scenario.presentation.cargoeditor.detailview;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
@@ -24,7 +24,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
 /**
  * @author Tom Hinton
@@ -47,7 +47,7 @@ public class EObjectDetailPropertySheetPage extends EObjectDetailViewContainer i
 			}
 		};
 		this.editingDomain = editingDomain;
-		addDefaultEditorFactories();
+//		addDefaultEditorFactories();
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class EObjectDetailPropertySheetPage extends EObjectDetailViewContainer i
 						if (activeDetailView != null) {
 							((GridData) activeDetailView.getLayoutData()).exclude = true;
 							activeDetailView.setVisible(false);
-							activeDetailView.setInput(null);
+							activeDetailView.setInput((EObject)null);
 						}
 						activeDetailView = eodv;
 						((GridData) activeDetailView.getLayoutData()).exclude = false;
@@ -119,7 +119,7 @@ public class EObjectDetailPropertySheetPage extends EObjectDetailViewContainer i
 					if (activeDetailView != null) {
 						((GridData) activeDetailView.getLayoutData()).exclude = true;
 						activeDetailView.setVisible(false);
-						activeDetailView.setInput(null);
+						activeDetailView.setInput((EObject)null);
 					}
 					activeDetailView = null;
 				}

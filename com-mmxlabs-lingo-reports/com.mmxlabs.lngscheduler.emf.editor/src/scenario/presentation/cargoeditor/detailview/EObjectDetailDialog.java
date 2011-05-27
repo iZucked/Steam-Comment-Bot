@@ -2,10 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor;
+package scenario.presentation.cargoeditor.detailview;
 
 import java.util.ArrayList;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -35,9 +34,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
-import scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory;
-import org.eclipse.swt.widgets.Label;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 
 /**
  * Why does tidy imports keep stripping my class comments? A dialog based
@@ -82,7 +80,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			}
 		};
 
-		viewContainerDelegate.addDefaultEditorFactories();
+//		viewContainerDelegate.addDefaultEditorFactories();
 	}
 
 	/**
@@ -200,8 +198,10 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 */
 	private Shell createShell(final List<EObject> objects) {
 		final Shell shell = new Shell(getParent(), getStyle()
-				| (SWT.DIALOG_TRIM & ~SWT.CLOSE) | SWT.APPLICATION_MODAL);
-		shell.setSize(389, 197);
+				| (SWT.DIALOG_TRIM & ~SWT.CLOSE) | SWT.APPLICATION_MODAL
+				| SWT.RESIZE);
+		
+//		shell.setSize(389, 197);
 
 		shell.setText("Editing (1/" + objects.size() + ")");
 
@@ -324,7 +324,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			if (activeDetailView != null) {
 				((GridData) activeDetailView.getLayoutData()).exclude = true;
 				activeDetailView.setVisible(false);
-				activeDetailView.setInput(null);
+				activeDetailView.setInput((EObject)null);
 			}
 			activeDetailView = eodv;
 			((GridData) activeDetailView.getLayoutData()).exclude = false;

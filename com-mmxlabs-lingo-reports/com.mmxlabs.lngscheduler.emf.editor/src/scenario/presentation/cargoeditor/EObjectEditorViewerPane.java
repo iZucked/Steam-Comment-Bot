@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -78,7 +77,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
@@ -113,25 +111,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final ScenarioEditor part) {
 		super(page, part);
 		this.part = part;
-
-		IEditorInput x = part.getEditorInput();
-		if (x instanceof IResource) {
-			System.err.println(" x is a resource ");
-		} else if (x instanceof IAdaptable) {
-			final IResource res = (IResource) ((IAdaptable) x)
-					.getAdapter(IResource.class);
-			System.err.println("x adapted to " + res);
-			try {
-				for (final IMarker m : res.findMarkers(
-						"org.eclipse.core.resources.marker", true,
-						IResource.DEPTH_INFINITE)) {
-					System.err.println(m);
-				}
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 
 	@Override
@@ -316,6 +295,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			private boolean hasValidationError(final EObject object) {
 				final Resource r = object.eResource();
+				
 				final IFile containingFile = ResourcesPlugin.getWorkspace()
 						.getRoot()
 						.getFile(new Path(r.getURI().toPlatformString(true)));

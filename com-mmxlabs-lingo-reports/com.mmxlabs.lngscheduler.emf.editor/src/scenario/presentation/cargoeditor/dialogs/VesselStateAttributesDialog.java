@@ -50,11 +50,11 @@ import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.Range;
 
-import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
-
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.VesselStateAttributes;
+
+import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
 
 public class VesselStateAttributesDialog extends Dialog {
 	protected Shell shlFuelCurve;

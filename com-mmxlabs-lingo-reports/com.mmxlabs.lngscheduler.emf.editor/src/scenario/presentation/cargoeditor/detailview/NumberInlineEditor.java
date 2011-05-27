@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
 
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
@@ -33,7 +33,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public Control createValueControl(Composite parent) {
-		final Spinner spinner = new Spinner(parent, SWT.NONE);
+		final Spinner spinner = new Spinner(parent, SWT.BORDER);
 
 		spinner.addSelectionListener(new SelectionListener() {
 			{

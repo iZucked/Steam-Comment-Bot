@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor;
+package scenario.presentation.cargoeditor.detailview;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -22,6 +23,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+
+import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
@@ -43,7 +46,7 @@ public class EObjectDetailView extends Composite {
 	private final ICommandProcessor processor;
 
 	public EObjectDetailView(final Composite parent, int style,
-			final ICommandProcessor processor) {
+			final ICommandProcessor processor, final EditingDomain editingDomain) {
 		super(parent, style);
 		this.processor = processor;
 	}
@@ -77,8 +80,7 @@ public class EObjectDetailView extends Composite {
 	}
 
 	public interface ICommandProcessor {
-		public void processCommand(final Command command,
-				final EObject target,
+		public void processCommand(final Command command, final EObject target,
 				final EStructuralFeature feature);
 	}
 
@@ -110,7 +112,6 @@ public class EObjectDetailView extends Composite {
 	}
 
 	public void initForEClass(final EClass objectClass) {
-		System.err.println("Make detail view for " + objectClass.getName());
 		int groupCount = 1;
 		addGroupForEClass(objectClass, unmangle(objectClass.getName()),
 				new EMFPath(true));

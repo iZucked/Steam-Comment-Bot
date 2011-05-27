@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Listener;
 
 import scenario.port.Port;
 import scenario.port.PortPackage;
-import scenario.presentation.cargoeditor.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.controls.DateAndTime;
