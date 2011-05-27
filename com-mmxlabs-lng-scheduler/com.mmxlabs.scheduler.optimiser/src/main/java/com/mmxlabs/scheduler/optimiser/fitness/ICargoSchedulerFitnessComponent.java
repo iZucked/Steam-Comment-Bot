@@ -53,6 +53,16 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	void startSequence(IResource resource, boolean sequenceHasChanged);
 
 	/**
+	 * Consider the next voyageplan - note that the contents of the given plan
+	 * will be presented to nextObject after this
+	 * 
+	 * @param voyagePlan
+	 * @param time
+	 * @return
+	 */
+	boolean nextVoyagePlan(final VoyagePlan voyagePlan, final int time);
+	
+	/**
 	 * Evaluate an object from the sequence, either a VoyageDetails or a
 	 * PortDetails
 	 * 
@@ -66,26 +76,20 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	boolean nextObject(final Object object, final int time);
 
 	/**
-	 * Evaluate an object from the sequence and do any resulting annotations.
-	 * Note that you need to use a suitable provider to reverse-lookup a sequence element
-	 * for use with the annotated sequence.
+	 * Evaluate an object from the sequence and do any resulting annotations;
+	 * this will be called instead of {@link #nextObject(Object, int)} when
+	 * annotating.
+	 * 
+	 * Note that you need to use a suitable provider to reverse-lookup a
+	 * sequence element for use with the annotated sequence.
 	 * 
 	 * @param object
 	 * @param time
 	 * @param annotatedSolution
 	 * @return
 	 */
-	boolean annotateNextObject(final Object object, final int time, final IAnnotatedSolution<T> annotatedSolution);
-	
-	/**
-	 * Consider the next voyageplan - note that the contents of the given plan
-	 * will be presented to nextObject after this
-	 * 
-	 * @param voyagePlan
-	 * @param time
-	 * @return
-	 */
-	boolean nextVoyagePlan(final VoyagePlan voyagePlan, final int time);
+	boolean annotateNextObject(final Object object, final int time,
+			final IAnnotatedSolution<T> annotatedSolution);
 
 	/**
 	 * Indicates the end of the current sequence
@@ -101,9 +105,11 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * @return the total cost of this solution
 	 */
 	long endEvaluationAndGetCost();
-	
+
 	/**
-	 * Finish evaluating a solution and add any laggardly annotations which may be required.
+	 * Finish evaluating a solution and add any laggardly annotations which may
+	 * be required.
+	 * 
 	 * @param solution
 	 */
 	void endEvaluationAndAnnotate(IAnnotatedSolution<T> solution);

@@ -584,6 +584,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		voyagePlan.setLNGFuelVolume(lngConsumed);
 
+		//TODO remove this, after checking it's OK
 		voyagePlan.setLoadVolume(loadVolumeInM3);
 
 		// compute load price after everything else, because it needs to know

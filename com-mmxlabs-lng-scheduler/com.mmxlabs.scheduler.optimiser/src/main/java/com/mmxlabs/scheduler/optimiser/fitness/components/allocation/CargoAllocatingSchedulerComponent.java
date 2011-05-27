@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.fitness.components.AbstractSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.FastCargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -35,7 +36,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class CargoAllocatingSchedulerComponent<T> extends
 		AbstractSchedulerFitnessComponent<T> {
 	private IVesselProvider vesselProvider;
-	private final ICargoAllocator<T> allocator = new FastCargoAllocator<T>();
+	private ICargoAllocator<T> allocator = null;
 
 	private final String vesselProviderKey, volumeLimitProviderKey;
 	private IPortSlotProvider<T> portSlotProvider;
@@ -66,8 +67,18 @@ public class CargoAllocatingSchedulerComponent<T> extends
 
 		portSlotProvider = data.getDataComponentProvider(portSlotProviderKey,
 				IPortSlotProvider.class);
-		allocator.setTotalVolumeLimitProvider(data.getDataComponentProvider(
-				volumeLimitProviderKey, ITotalVolumeLimitProvider.class));
+
+		final ITotalVolumeLimitProvider<T> tvlp = data
+				.getDataComponentProvider(volumeLimitProviderKey,
+						ITotalVolumeLimitProvider.class);
+
+		if (tvlp.isEmpty()) {
+			allocator = new UnconstrainedCargoAllocator<T>();
+		} else {
+			allocator = new FastCargoAllocator<T>();
+		}
+
+		allocator.setTotalVolumeLimitProvider(tvlp);
 		allocator.init();
 	}
 
@@ -126,7 +137,8 @@ public class CargoAllocatingSchedulerComponent<T> extends
 			} else if (slot instanceof IDischargeSlot) {
 				assert loadDetails != null;
 
-				//TODO does not handle possible port visits between load and discharge
+				// TODO does not handle possible port visits between load and
+				// discharge
 				allocator.addCargo(lastVoyagePlan, loadDetails,
 						voyageBeforeLast, portDetails, lastVoyage, loadTime,
 						time, capacityUsedForFuel, vesselClass);

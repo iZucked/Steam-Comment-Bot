@@ -23,6 +23,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  */
 public class DirectRandomSequenceScheduler<T> extends
 		EnumeratingSequenceScheduler<T> {
+	/**
+	 * 
+	 */
+	private static final int RETRY_COUNT = 5;
 	private int seed = 0;
 	private Random random;
 	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);
@@ -62,7 +66,7 @@ public class DirectRandomSequenceScheduler<T> extends
 			if (getBestResult() == null) {
 				failures++;
 				i = 0;
-				if (failures > 5 * sampleCount) {
+				if (failures > RETRY_COUNT * sampleCount) {
 					log.error("Sequences have not had a feasible solution in " + sampleCount * 5 + " samples");
 					return null;
 				}

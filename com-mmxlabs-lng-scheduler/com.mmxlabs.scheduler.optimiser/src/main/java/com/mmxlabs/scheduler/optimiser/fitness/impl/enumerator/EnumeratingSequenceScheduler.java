@@ -19,7 +19,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -147,6 +146,7 @@ public class EnumeratingSequenceScheduler<T> extends
 
 		final int size = sequences.size();
 
+		//TODO consider resizing these when necessary
 		arrivalTimes = new int[size][];
 		windowStartTime = new int[size][];
 		windowEndTime = new int[size][];
