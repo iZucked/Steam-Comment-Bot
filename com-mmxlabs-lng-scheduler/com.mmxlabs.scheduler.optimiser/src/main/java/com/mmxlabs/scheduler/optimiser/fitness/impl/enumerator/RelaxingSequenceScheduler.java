@@ -38,7 +38,7 @@ public class RelaxingSequenceScheduler<T> extends
 		evaluate();
 
 		for (int seq = 0; seq < arrivalTimes.length; seq++) {
-			for (int pos = 0; pos < arrivalTimes[seq].length; pos++) {
+			for (int pos = 0; pos < sizes[seq]; pos++) {
 				relax(seq, pos);
 			}
 		}
@@ -87,7 +87,7 @@ public class RelaxingSequenceScheduler<T> extends
 		prepare(0);
 
 		for (int seq = 0; seq < arrivalTimes.length; seq++) {
-			for (int pos = 0; pos < arrivalTimes[seq].length; pos++) {
+			for (int pos = 0; pos < sizes[seq]; pos++) {
 				arrivalTimes[seq][pos] = getMinArrivalTime(seq, pos);
 			}
 		}

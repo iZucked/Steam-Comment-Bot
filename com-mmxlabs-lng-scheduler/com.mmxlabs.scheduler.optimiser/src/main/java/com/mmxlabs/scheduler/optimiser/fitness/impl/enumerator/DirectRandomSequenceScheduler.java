@@ -83,7 +83,7 @@ public class DirectRandomSequenceScheduler<T> extends
 	 */
 	private void randomise() {
 		for (int seq = 0; seq<arrivalTimes.length; seq++) {
-			for (int pos = 0; pos<arrivalTimes[seq].length; pos++) {
+			for (int pos = 0; pos<sizes[seq]; pos++) {
 				final int min = getMinArrivalTime(seq, pos);
 				final int max = getMaxArrivalTime(seq, pos);
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);

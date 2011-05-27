@@ -50,10 +50,15 @@ public class EnumeratingSequenceScheduler<T> extends
 	 */
 	protected int bestIndex = 0;
 
+	/**
+	 * The output of the scheduler; these are the arrival times for each element
+	 * in each sequence. 
+	 * 
+	 */
 	protected int[][] arrivalTimes;
 	/**
 	 * The start times of each window, appropriately `clipped' to deal with
-	 * infeasible choices or null time windows
+	 * infeasible choices or null time windows.
 	 */
 	private int[][] windowStartTime;
 	/**
@@ -67,10 +72,15 @@ public class EnumeratingSequenceScheduler<T> extends
 	private int[][] minTimeToNextElement;
 	/**
 	 * The maximum time to get from the indexed element to its successor. This
-	 * is the maximum travel time + visit time at this element
+	 * is the maximum travel time + visit time at this element 
 	 */
 	private int[][] maxTimeToNextElement;
 
+	/**
+	 * The number of elements in each array.
+	 */
+	protected int[] sizes;
+	
 	/**
 	 * Holds a list of points at which the cost function can be separated. This
 	 * occurs when a given journey leg <em>always</em> involves some idle time,
@@ -88,6 +98,29 @@ public class EnumeratingSequenceScheduler<T> extends
 	// private IVesselProvider vesselProvider;
 	// private IMultiMatrixProvider<T, Integer> distanceProvider;
 	//
+
+	/**
+	 * Resize one of the integer buffers above
+	 */
+	private final void resize(int[][] arrays, int arrayIndex, int size) {
+		if (arrays[arrayIndex].length < (size)) {
+			arrays[arrayIndex] = new int[(size)];
+		}
+	}
+	
+	/**
+	 * Resize all the integer buffers for a given route
+	 * @param arrayIndex
+	 * @param size
+	 */
+	private final void resizeAll(int sequenceIndex, int size) {
+		resize(arrivalTimes, sequenceIndex, size);
+		resize(windowStartTime, sequenceIndex, size);
+		resize(windowEndTime, sequenceIndex, size);
+		resize(minTimeToNextElement, sequenceIndex, size);
+		resize(maxTimeToNextElement, sequenceIndex, size);
+		sizes[sequenceIndex] = size;
+	}
 
 	/**
 	 * The current sequences
@@ -112,7 +145,8 @@ public class EnumeratingSequenceScheduler<T> extends
 	}
 
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences<T> sequences,
+			final boolean forExport) {
 
 		resetBest();
 
@@ -146,12 +180,15 @@ public class EnumeratingSequenceScheduler<T> extends
 
 		final int size = sequences.size();
 
-		//TODO consider resizing these when necessary
-		arrivalTimes = new int[size][];
-		windowStartTime = new int[size][];
-		windowEndTime = new int[size][];
-		minTimeToNextElement = new int[size][];
-		maxTimeToNextElement = new int[size][];
+		// TODO consider resizing these when necessary
+		if (arrivalTimes.length != size) {
+			arrivalTimes = new int[size][];
+			windowStartTime = new int[size][];
+			windowEndTime = new int[size][];
+			minTimeToNextElement = new int[size][];
+			maxTimeToNextElement = new int[size][];
+			sizes = new int[size];
+		}
 
 		for (int i = 0; i < size; i++) {
 			v *= prepare(i, limit);
@@ -179,12 +216,13 @@ public class EnumeratingSequenceScheduler<T> extends
 		// minTimeToNextElement[sequenceIndex] = new int[size];
 		// maxTimeToNextElement[sequenceIndex] = new int[size];
 		// // separationPoints[index].clear();
+		resizeAll(sequenceIndex, size);
 
-		final int[] arrivalTimes = this.arrivalTimes[sequenceIndex] = new int[size];
-		final int[] windowStartTime = this.windowStartTime[sequenceIndex] = new int[size];
-		final int[] windowEndTime = this.windowEndTime[sequenceIndex] = new int[size];
-		final int[] minTimeToNextElement = this.minTimeToNextElement[sequenceIndex] = new int[size];
-		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex] = new int[size];
+		final int[] arrivalTimes = this.arrivalTimes[sequenceIndex];
+		final int[] windowStartTime = this.windowStartTime[sequenceIndex];
+		final int[] windowEndTime = this.windowEndTime[sequenceIndex];
+		final int[] minTimeToNextElement = this.minTimeToNextElement[sequenceIndex];
+		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex];
 
 		final IVesselProvider vesselProvider = super.getVesselProvider();
 
@@ -280,7 +318,7 @@ public class EnumeratingSequenceScheduler<T> extends
 
 		// now perform reverse-pass to trim any overly late end times
 		// (that is end times which would make us late at the next element)
-		for (index = arrivalTimes.length - 2; index >= 0; index--) {
+		for (index = size - 2; index >= 0; index--) {
 			// trim the end of this time window so that the next element is
 			// reachable without lateness
 			// (but never so that the end time is before the start time)
@@ -309,7 +347,7 @@ public class EnumeratingSequenceScheduler<T> extends
 		// separationPoints.add(arrivalTimes.length - 1);
 
 		long approximateCombinations = 1;
-		for (index = 0; index < arrivalTimes.length; index++) {
+		for (index = 0; index < size; index++) {
 			approximateCombinations *= windowEndTime[index]
 					- windowStartTime[index] + 1;
 			if (approximateCombinations >= maxValue)
@@ -328,7 +366,7 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * @param index
 	 */
 	protected void enumerate(final int seq, final int index) {
-		if (seq == arrivalTimes.length && index == arrivalTimes[0].length) {
+		if (seq == arrivalTimes.length && index < sizes[seq]) {
 			evaluate();
 			return;
 		} else if (seq == arrivalTimes.length) {
