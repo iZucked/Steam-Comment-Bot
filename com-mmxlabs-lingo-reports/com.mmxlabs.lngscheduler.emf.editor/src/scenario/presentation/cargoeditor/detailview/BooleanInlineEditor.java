@@ -54,7 +54,7 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 		
 		this.button = button;
 		
-		return button;
+		return super.createControl(parent);
 	}
 
 	@Override

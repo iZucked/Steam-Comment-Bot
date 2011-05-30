@@ -25,57 +25,61 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
 	private Object lastSetValue;
-	public UnsettableInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain,final ICommandProcessor processor) {
+
+	public UnsettableInlineEditor(final EMFPath path, final EStructuralFeature feature,
+			final EditingDomain editingDomain, final ICommandProcessor processor) {
 		super(path, feature, editingDomain, processor);
 	}
 
 	protected abstract Control createValueControl(Composite parent);
+
 	protected abstract void updateValueDisplay(final Object value);
+
 	protected void updateControl() {
-		
+
 	}
-	
+
 	@Override
-	public Control createControl(Composite parent) {
+	public Control createControl(final Composite parent) {
+
 		if (feature.isUnsettable()) {
 			final Composite sub = new Composite(parent, SWT.NONE);
 			sub.setLayout(new GridLayout(2, false));
 			final Button setButton = new Button(sub, SWT.CHECK);
 			this.setButton = setButton;
-			setButton.addSelectionListener(
-					new SelectionAdapter() {
-						{
-							final SelectionAdapter self = this;
-							setButton.addDisposeListener(new DisposeListener() {
-								@Override
-								public void widgetDisposed(final DisposeEvent e) {
-									setButton.removeSelectionListener(self);
-								}});
-						}
-
+			setButton.addSelectionListener(new SelectionAdapter() {
+				{
+					final SelectionAdapter self = this;
+					setButton.addDisposeListener(new DisposeListener() {
 						@Override
-						public void widgetSelected(final SelectionEvent e) {
-							if (setButton.getSelection()) {
-								doSetValue(lastSetValue); 
-							} else {
-								// unset value
-								unsetValue();
-							}
+						public void widgetDisposed(final DisposeEvent e) {
+							setButton.removeSelectionListener(self);
 						}
+					});
+				}
+
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					if (setButton.getSelection()) {
+						doSetValue(lastSetValue);
+					} else {
+						// unset value
+						unsetValue();
 					}
-					);
-			setButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+				}
+			});
+			setButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,
+					false));
 			final Control inner = createValueControl(sub);
 			inner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-			return sub;
 		} else {
-			return createValueControl(parent);
+			createValueControl(parent);
 		}
+		return super.createControl(parent);
 	}
 
 	protected void unsetValue() {
-		super.doSetValue(SetCommand.UNSET_VALUE); 
+		super.doSetValue(SetCommand.UNSET_VALUE);
 	}
 
 	@Override
@@ -100,11 +104,12 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	@Override
-	protected void updateDisplay(Object value) {
+	protected void updateDisplay(final Object value) {
 		updateControl();
 		if (setButton == null || value != null) {
 			updateValueDisplay(value);
 		}
-		if (setButton != null && !setButton.isDisposed()) setButton.setSelection(value != null);
+		if (setButton != null && !setButton.isDisposed())
+			setButton.setSelection(value != null);
 	}
 }
