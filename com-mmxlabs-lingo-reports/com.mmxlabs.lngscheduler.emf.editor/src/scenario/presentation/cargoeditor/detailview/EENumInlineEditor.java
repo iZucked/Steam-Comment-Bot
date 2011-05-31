@@ -61,7 +61,7 @@ public class EENumInlineEditor extends BasicAttributeInlineEditor {
 					public void widgetDefaultSelected(SelectionEvent e) {}
 				});
 		
-		return super.createControl(parent);
+		return super.wrapControl(combo);
 	}
 
 	@Override

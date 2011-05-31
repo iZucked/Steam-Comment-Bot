@@ -42,6 +42,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	@Override
 	public Control createControl(final Composite parent) {
 
+		final Control c;
 		if (feature.isUnsettable()) {
 			final Composite sub = new Composite(parent, SWT.NONE);
 			sub.setLayout(new GridLayout(2, false));
@@ -72,10 +73,11 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 					false));
 			final Control inner = createValueControl(sub);
 			inner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			c = sub;
 		} else {
-			createValueControl(parent);
+			c = createValueControl(parent);
 		}
-		return super.createControl(parent);
+		return super.wrapControl(c);
 	}
 
 	protected void unsetValue() {

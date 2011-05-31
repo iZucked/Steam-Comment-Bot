@@ -153,7 +153,8 @@ public class EObjectDetailView extends Composite {
 		final Composite controls = group;
 		final GridLayout groupLayout = new GridLayout(2, false);
 		controls.setLayout(groupLayout);
-
+		groupLayout.horizontalSpacing = 10;
+		
 		for (final EStructuralFeature attribute : objectClass
 				.getEAllStructuralFeatures()) {
 
@@ -198,6 +199,8 @@ public class EObjectDetailView extends Composite {
 						false, false);
 				attributeLabel.setLayoutData(labelData);
 
+				
+				
 				editors.add(attributeEditor);
 				attributeControl = attributeEditor.createControl(controls);
 			}

@@ -13,7 +13,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -27,7 +26,6 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
@@ -54,6 +52,17 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	protected final ICommandProcessor commandProcessor;
 	private ControlDecoration decoration;
 
+	protected final FieldDecoration decorationInfo = FieldDecorationRegistry
+			.getDefault().getFieldDecoration(
+					FieldDecorationRegistry.DEC_INFORMATION);
+
+	protected final FieldDecoration decorationWarning = FieldDecorationRegistry
+			.getDefault().getFieldDecoration(
+					FieldDecorationRegistry.DEC_WARNING);
+
+	protected final FieldDecoration decorationError = FieldDecorationRegistry
+			.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+
 	public BasicAttributeInlineEditor(final EMFPath path,
 			final EStructuralFeature feature,
 			final EditingDomain editingDomain,
@@ -79,8 +88,9 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	}
 
 	private synchronized void doUpdateDisplayWithValue() {
-		if (currentlySettingValue)
+		if (currentlySettingValue) {
 			return;
+		}
 		currentlySettingValue = true;
 		updateDisplay(getValue());
 		currentlySettingValue = false;
@@ -124,8 +134,9 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	protected synchronized void doSetValue(final Object value) {
 		// System.err.println("setvalue on " + feature.getName() + " to " +
 		// value + " (" + currentlySettingValue + ")");
-		if (currentlySettingValue)
+		if (currentlySettingValue) {
 			return; // avoid re-entering
+		}
 		currentlySettingValue = true;
 		final Object currentValue = getValue();
 		if (!((currentValue == null && value == null) || ((currentValue != null && value != null) && currentValue
@@ -134,6 +145,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 			commandProcessor.processCommand(command, input, feature);
 			// editingDomain.getCommandStack().execute(command);
 
+			// Validate object changes
 			validate(value);
 		}
 
@@ -155,28 +167,30 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		final IBatchValidator validator = ModelValidationService.getInstance()
 				.newValidator(EvaluationMode.BATCH);
 
-		// // include live constraints, also, in batch validation
+		// include live constraints, also, in batch validation
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS,
 				true);
-		
+
+		// Validate object
 		final IStatus status = validator.validate(source);
-		
+
 		if (status.isOK()) {
 			// No problems, so hide decoration
 			decoration.hide();
 		} else {
-			// Builder used to accumlate messages
+			// Default severity
+			int severity = IStatus.INFO;
+			
+			// Builder used to accumulate messages
 			final StringBuilder sb = new StringBuilder();
-			// Key used for icon. By default, we have warnings
-			// TODO: Could assume info, then up to warn & error?
-			String iconKey = FieldDecorationRegistry.DEC_WARNING;
 
 			if (!status.isMultiStatus()) {
 				final IConstraintStatus cstatus = (IConstraintStatus) status;
 				sb.append(cstatus.getMessage());
-				// Error! Change icon
-				if (cstatus.getSeverity() == IStatus.ERROR) {
-					iconKey = FieldDecorationRegistry.DEC_ERROR;
+
+				// Is severity worse, then note it
+				if (cstatus.getSeverity() > severity) {
+					severity = cstatus.getSeverity();
 				}
 			} else {
 				final IStatus[] children = status.getChildren();
@@ -184,21 +198,31 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 					final IConstraintStatus cstatus = (IConstraintStatus) element;
 					sb.append(cstatus.getMessage());
 					sb.append("\n");
-					// Error! Change icon
-					if (cstatus.getSeverity() == IStatus.ERROR) {
-						iconKey = FieldDecorationRegistry.DEC_ERROR;
+					// Is severity worse, then note it
+					if (cstatus.getSeverity() > severity) {
+						severity = cstatus.getSeverity();
 					}
 				}
 			}
+			
 			// Update description text
 			decoration.setDescriptionText(sb.toString());
 
 			// Update icon
-			final FieldDecoration fieldDecoration = FieldDecorationRegistry
-					.getDefault().getFieldDecoration(iconKey);
-			decoration.setImage(fieldDecoration.getImage());
+			switch (severity) {
+			case IStatus.INFO:
+				decoration.setImage(decorationInfo.getImage());
+				break;
+			case IStatus.WARNING:
+				decoration.setImage(decorationWarning.getImage());
+				break;
+			case IStatus.ERROR:
+			default:
+				decoration.setImage(decorationError.getImage());
+				break;
+			}
 
-			// Show!
+			// Show the decoration.
 			decoration.show();
 		}
 	}
@@ -222,16 +246,16 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		return input.eGet(feature);
 	}
 
-	@Override
-	public Control createControl(final Composite c) {
+	public Control wrapControl(final Control c) {
 		decoration = new ControlDecoration(c, SWT.LEFT | SWT.TOP);
 
-		// Show info icon, unless overrwritten
-		final FieldDecoration fieldDecoration = FieldDecorationRegistry
-				.getDefault().getFieldDecoration(
-						FieldDecorationRegistry.DEC_INFORMATION);
-		decoration.setImage(fieldDecoration.getImage());
+		// These should be the defaults...
+		decoration.setShowHover(true);
+		decoration.setShowOnlyOnFocus(false);
 		
+		// Set a default image
+		decoration.setImage(decorationInfo.getImage());
+
 		// Hide by default
 		decoration.hide();
 

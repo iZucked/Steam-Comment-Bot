@@ -69,7 +69,7 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 				}
 				);
 		
-		return super.createControl(contents);
+		return super.wrapControl(contents);
 	}
 
 	@Override
