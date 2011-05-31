@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -145,7 +146,8 @@ public abstract class EMFReportView extends ViewPart implements
 				}
 			}
 			if (object instanceof Schedule) {
-				return ((Schedule) object).getName();
+				return URI.decode(((Schedule)object).eResource().getURI().lastSegment())
+						.replaceAll(".scenario", "");
 			} else {
 				return "";
 			}
@@ -233,7 +235,7 @@ public abstract class EMFReportView extends ViewPart implements
 	private TableViewer viewer;
 
 	private Action packColumnsAction;
-	
+
 	private Action copyTableAction;
 
 	protected abstract IStructuredContentProvider getContentProvider();
@@ -290,7 +292,7 @@ public abstract class EMFReportView extends ViewPart implements
 		final ISelection selection = getSite().getWorkbenchWindow()
 				.getSelectionService()
 				.getSelection("com.mmxlabs.rcp.navigator");
-		
+
 		// Trigger initial view selection
 		selectionChanged(null, selection);
 	}
@@ -378,7 +380,7 @@ public abstract class EMFReportView extends ViewPart implements
 				// TODO: This is how I usually do it - SG
 				column.dispose();
 		}
-//		viewer.getTable().pack(true);
+		// viewer.getTable().pack(true);
 	}
 
 	@Override

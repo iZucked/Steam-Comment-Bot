@@ -7,6 +7,7 @@ package com.mmxlabs.demo.reports.views;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -53,7 +54,8 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 					final Schedule schedule = (Schedule) o;
 					long total = 0l;
 					for (final ScheduleFitness f : schedule.getFitness()) {
-						rowDataList.add(new RowData(schedule.getName(), f.getName(), f.getValue()));
+						final String name = URI.decode(schedule.eResource().getURI().lastSegment()).replaceAll(".scenario","");
+						rowDataList.add(new RowData(name, f.getName(), f.getValue()));
 						if (!(f.getName().equals("iterations") || f.getName()
 								.equals("runtime")))
 							total += f.getValue();

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -98,7 +99,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		final String scheduleName = schedule.getName();
+		final String scheduleName = URI.decode(schedule.eResource().getURI().lastSegment()).replaceAll(".scenario","");
 
 		for (final Entry<FuelType, Long> entry : totalFuelCosts.entrySet()) {
 			output.add(new RowData(scheduleName, entry.getKey().toString(),
