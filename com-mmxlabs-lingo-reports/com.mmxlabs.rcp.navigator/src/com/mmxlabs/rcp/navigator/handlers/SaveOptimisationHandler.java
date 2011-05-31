@@ -86,6 +86,20 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 											.copy(((LNGSchedulerJob) job)
 													.getScenario());
 
+									// Process scenario - prune out intermediate schedules .... 
+									int numSchedules = scenario.getScheduleModel().getSchedules().size();
+									while (numSchedules > 1) {
+										scenario.getScheduleModel().getSchedules().remove(0);
+										--numSchedules;
+									}
+									// .. and set remaining schedule to the new initial state
+									if (numSchedules == 1) {
+										scenario.getOptimisation().getCurrentSettings().setInitialSchedule(scenario.getScheduleModel().getSchedules().get(0));
+									} else {
+										// TODO: Necessary?
+//										scenario.getOptimisation().getCurrentSettings().setInitialSchedule(null);
+									}
+									
 									// Create resource set to save into
 									final ResourceSetImpl resourceSet = new ResourceSetImpl();
 
