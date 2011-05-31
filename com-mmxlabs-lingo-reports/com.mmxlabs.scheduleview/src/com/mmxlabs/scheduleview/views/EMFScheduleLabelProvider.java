@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduleview.views;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
@@ -39,7 +40,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	public String getText(final Object element) {
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
-			final String name = sequence.eResource().getURI().lastSegment().replaceAll("%20", " ").replaceAll(".scenario","");
+
+			final String name = URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
+			
 			return sequence.getVessel().getName() + "\n" + name;
 		}
 		return null;
