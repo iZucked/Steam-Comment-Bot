@@ -4,12 +4,8 @@
  */
 package scenario.presentation.cargoeditor.handlers;
 
-import java.util.Collections;
-
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 
@@ -39,11 +35,11 @@ public abstract class AddAction extends Action {
 	 * 
 	 * @return
 	 */
-	protected abstract EObject createObject();
+	public abstract EObject createObject();
 
-	protected abstract Object getOwner();
+	public abstract Object getOwner();
 
-	protected abstract Object getFeature();
+	public abstract Object getFeature();
 
 	private final EditingDomain editingDomain;
 

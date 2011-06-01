@@ -49,6 +49,8 @@ import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEdi
  * original, create command to update original, execute command. This also helps
  * with validation.
  * 
+ * TODO use jface dialog not SWT dialog.
+ * 
  * @author Tom Hinton
  * 
  */

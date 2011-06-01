@@ -161,17 +161,17 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		return new AddAction(editingDomain, contentPath.getTargetType()
 				.getName()) {
 			@Override
-			protected Object getOwner() {
+			public Object getOwner() {
 				return contentPath.get((EObject) viewer.getInput(), 1);
 			}
 
 			@Override
-			protected Object getFeature() {
+			public Object getFeature() {
 				return contentPath.getPathComponent(0);
 			}
 
 			@Override
-			protected EObject createObject() {
+			public EObject createObject() {
 				if (viewer.getSelection().isEmpty() == false) {
 					if (viewer.getSelection() instanceof IStructuredSelection) {
 						final IStructuredSelection sel = (IStructuredSelection) viewer
