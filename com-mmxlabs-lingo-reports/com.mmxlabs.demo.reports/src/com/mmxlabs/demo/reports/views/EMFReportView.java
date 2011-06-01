@@ -61,6 +61,14 @@ public abstract class EMFReportView extends ViewPart implements
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	boolean sortDescending = false;
 
+	protected EMFReportView() {
+		this.helpContextId = null;
+	}
+	
+	protected EMFReportView(final String helpContextId) {
+		this.helpContextId = helpContextId;
+	}
+	
 	private class ColumnHandler {
 		private static final String COLUMN_HANDLER = "COLUMN_HANDLER";
 		private final IFormatter formatter;
@@ -237,6 +245,7 @@ public abstract class EMFReportView extends ViewPart implements
 	private Action packColumnsAction;
 
 	private Action copyTableAction;
+	private final String helpContextId;
 
 	protected abstract IStructuredContentProvider getContentProvider();
 
@@ -278,10 +287,13 @@ public abstract class EMFReportView extends ViewPart implements
 			handler.createColumn(viewer).getColumn().pack();
 		}
 
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.viewer");
+		if (helpContextId != null) {
+			PlatformUI
+					.getWorkbench()
+					.getHelpSystem()
+					.setHelp(viewer.getControl(), helpContextId);
+		}
+		
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();

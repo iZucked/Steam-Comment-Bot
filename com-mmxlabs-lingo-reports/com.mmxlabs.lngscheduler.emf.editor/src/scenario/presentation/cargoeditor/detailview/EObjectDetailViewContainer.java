@@ -35,6 +35,7 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 	protected abstract EditingDomain getEditingDomain();
 	protected abstract ICommandProcessor getProcessor();
 	
+	@Override
 	public void addDefaultEditorFactories() {
 		editorFactories.put(EcorePackage.eINSTANCE.getEString(),
 				wrapEditorFactory(new IInlineEditorFactory() {
@@ -123,16 +124,19 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 		}
 	}
 	
+	@Override
 	public void setNameForFeature(final EStructuralFeature feature,
 			final String string) {
 		nameByFeature.put(feature, string);
 	}
 	
+	@Override
 	public void setEditorFactoryForClassifier(final EClassifier classifier,
 			final IInlineEditorFactory factory) {
 		editorFactories.put(classifier, wrapEditorFactory(factory));
 	}
 
+	@Override
 	public void setEditorFactoryForFeature(final EStructuralFeature feature,
 			final IInlineEditorFactory factory) {
 		editorFactoriesByFeature.put(feature, wrapEditorFactory(factory));
