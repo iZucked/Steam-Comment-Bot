@@ -52,7 +52,7 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselEvent;
-import scenario.market.Market;
+import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.MarketPackage;
 import scenario.port.DistanceModel;
@@ -163,8 +163,8 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							.add((VesselClass) object);
 				} else if (object instanceof Vessel) {
 					scenario.getFleetModel().getFleet().add((Vessel) object);
-				} else if (object instanceof Market) {
-					scenario.getMarketModel().getMarkets().add((Market) object);
+				} else if (object instanceof Index) {
+					scenario.getMarketModel().getIndices().add((Index) object);
 				} else if (object instanceof SalesContract) {
 					scenario.getContractModel().getSalesContracts()
 							.add((SalesContract) object);
@@ -290,7 +290,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					marketEditor.setFileExtensions(extensions);
 					marketEditor.setEmptyStringAllowed(true);
 					marketEditor.getTextControl(group).addModifyListener(
-							listener(MarketPackage.eINSTANCE.getMarket()));
+							listener(MarketPackage.eINSTANCE.getIndex()));
 					final FileFieldEditor contractEditor = new FileFieldEditor(
 							"cSelect", "Contracts", group);
 					contractEditor.setFileExtensions(extensions);
