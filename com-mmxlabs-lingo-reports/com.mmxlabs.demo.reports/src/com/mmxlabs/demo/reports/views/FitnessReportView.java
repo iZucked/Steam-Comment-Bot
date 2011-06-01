@@ -198,7 +198,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 		PlatformUI
 				.getWorkbench()
 				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.viewer");
+				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.FitnessReportView");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();

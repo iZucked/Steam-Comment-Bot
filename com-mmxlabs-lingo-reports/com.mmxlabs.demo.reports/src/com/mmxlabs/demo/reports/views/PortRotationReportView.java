@@ -46,6 +46,9 @@ public class PortRotationReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.demo.reports.views.PortRotationReportView";
 
 	public PortRotationReportView() {
+		
+		super("com.mmxlabs.demo.reports.PortRotationReportView");
+		
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 		final EventsPackage ep = EventsPackage.eINSTANCE;
 		final CargoPackage cp = CargoPackage.eINSTANCE;

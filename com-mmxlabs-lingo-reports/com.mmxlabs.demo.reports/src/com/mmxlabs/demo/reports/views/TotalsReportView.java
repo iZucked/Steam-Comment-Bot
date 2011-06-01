@@ -216,7 +216,7 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 		PlatformUI
 				.getWorkbench()
 				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.viewer");
+				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.TotalsReportView");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();

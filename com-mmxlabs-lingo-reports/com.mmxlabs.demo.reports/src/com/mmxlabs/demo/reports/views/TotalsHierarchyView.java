@@ -468,7 +468,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		PlatformUI
 				.getWorkbench()
 				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.viewer");
+				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.TotalsHierarchyView");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
