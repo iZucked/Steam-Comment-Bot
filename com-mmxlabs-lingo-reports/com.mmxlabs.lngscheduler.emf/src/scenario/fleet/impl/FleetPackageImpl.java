@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.impl.CargoPackageImpl;
@@ -286,18 +287,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getVessel_Name() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getVessel_Class() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(1);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -307,7 +298,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EReference getVessel_StartRequirement() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(2);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -317,7 +308,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EReference getVessel_EndRequirement() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(3);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -327,7 +318,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EAttribute getVessel_TimeChartered() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -346,7 +337,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getVesselClass_Name() {
+	public EAttribute getVesselClass_Capacity() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -356,7 +347,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getVesselClass_Capacity() {
+	public EAttribute getVesselClass_MinSpeed() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -366,7 +357,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getVesselClass_MinSpeed() {
+	public EAttribute getVesselClass_MaxSpeed() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -376,18 +367,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getVesselClass_MaxSpeed() {
-		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getVesselClass_LadenAttributes() {
-		return (EReference)vesselClassEClass.getEStructuralFeatures().get(4);
+		return (EReference)vesselClassEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -397,7 +378,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EReference getVesselClass_BallastAttributes() {
-		return (EReference)vesselClassEClass.getEStructuralFeatures().get(5);
+		return (EReference)vesselClassEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -407,7 +388,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EAttribute getVesselClass_MinHeelVolume() {
-		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -417,7 +398,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EAttribute getVesselClass_FillCapacity() {
-		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -427,7 +408,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EAttribute getVesselClass_DailyCharterPrice() {
-		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -437,7 +418,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EAttribute getVesselClass_SpotCharterCount() {
-		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -447,7 +428,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	@Override
 	public EReference getVesselClass_InaccessiblePorts() {
-		return (EReference)vesselClassEClass.getEStructuralFeatures().get(10);
+		return (EReference)vesselClassEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -456,7 +437,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVesselClass_BaseFuel() {
-		return (EReference)vesselClassEClass.getEStructuralFeatures().get(11);
+		return (EReference)vesselClassEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -753,14 +734,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEReference(fleetModelEClass, FLEET_MODEL__FUELS);
 
 		vesselEClass = createEClass(VESSEL);
-		createEAttribute(vesselEClass, VESSEL__NAME);
 		createEReference(vesselEClass, VESSEL__CLASS);
 		createEReference(vesselEClass, VESSEL__START_REQUIREMENT);
 		createEReference(vesselEClass, VESSEL__END_REQUIREMENT);
 		createEAttribute(vesselEClass, VESSEL__TIME_CHARTERED);
 
 		vesselClassEClass = createEClass(VESSEL_CLASS);
-		createEAttribute(vesselClassEClass, VESSEL_CLASS__NAME);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__CAPACITY);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MIN_SPEED);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MAX_SPEED);
@@ -834,14 +813,16 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
+		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		vesselEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		vesselClassEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 		charterOutEClass.getESuperTypes().add(this.getVesselEvent());
 		drydockEClass.getESuperTypes().add(this.getVesselEvent());
 		vesselFuelEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
@@ -854,14 +835,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getFleetModel_Fuels(), this.getVesselFuel(), null, "fuels", null, 0, -1, FleetModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselEClass, Vessel.class, "Vessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getVessel_Name(), ecorePackage.getEString(), "name", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_Class(), this.getVesselClass(), null, "class", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_StartRequirement(), this.getPortAndTime(), null, "startRequirement", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_EndRequirement(), this.getPortAndTime(), null, "endRequirement", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_TimeChartered(), ecorePackage.getEBoolean(), "timeChartered", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselClassEClass, VesselClass.class, "VesselClass", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getVesselClass_Name(), ecorePackage.getEString(), "name", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_Capacity(), ecorePackage.getELong(), "capacity", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MinSpeed(), ecorePackage.getEFloat(), "minSpeed", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MaxSpeed(), ecorePackage.getEFloat(), "maxSpeed", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

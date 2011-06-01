@@ -7,12 +7,14 @@ package scenario.schedule.fleetallocation.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.schedule.fleetallocation.*;
+import scenario.schedule.fleetallocation.AllocatedVessel;
+import scenario.schedule.fleetallocation.FleetVessel;
+import scenario.schedule.fleetallocation.FleetallocationFactory;
+import scenario.schedule.fleetallocation.FleetallocationPackage;
+import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
  * <!-- begin-user-doc -->

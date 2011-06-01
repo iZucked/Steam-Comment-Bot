@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import scenario.ScenarioPackage;
 
 /**
@@ -60,6 +61,61 @@ public interface MarketPackage extends EPackage {
 	MarketPackage eINSTANCE = scenario.market.impl.MarketPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link scenario.market.impl.IndexImpl <em>Index</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.market.impl.IndexImpl
+	 * @see scenario.market.impl.MarketPackageImpl#getIndex()
+	 * @generated
+	 */
+	int INDEX = 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Price Curve</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX__PRICE_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Index</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Index</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.market.impl.MarketModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -68,6 +124,15 @@ public interface MarketPackage extends EPackage {
 	 * @generated
 	 */
 	int MARKET_MODEL = 1;
+
+	/**
+	 * The feature id for the '<em><b>Indices</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_MODEL__INDICES = 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.market.impl.StepwisePriceCurveImpl <em>Stepwise Price Curve</em>}' class.
@@ -88,70 +153,6 @@ public interface MarketPackage extends EPackage {
 	 * @generated
 	 */
 	int STEPWISE_PRICE = 3;
-
-	/**
-	 * The meta object id for the '{@link scenario.market.impl.MarketImpl <em>Market</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see scenario.market.impl.MarketImpl
-	 * @see scenario.market.impl.MarketPackageImpl#getMarket()
-	 * @generated
-	 */
-	int MARKET = 0;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKET__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Price Curve</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKET__PRICE_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Market</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKET_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Container</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKET___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
-
-	/**
-	 * The number of operations of the '<em>Market</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKET_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Markets</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKET_MODEL__MARKETS = 0;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -253,6 +254,27 @@ public interface MarketPackage extends EPackage {
 	int STEPWISE_PRICE_OPERATION_COUNT = 0;
 
 	/**
+	 * Returns the meta object for class '{@link scenario.market.Index <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Index</em>'.
+	 * @see scenario.market.Index
+	 * @generated
+	 */
+	EClass getIndex();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link scenario.market.Index#getPriceCurve <em>Price Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Price Curve</em>'.
+	 * @see scenario.market.Index#getPriceCurve()
+	 * @see #getIndex()
+	 * @generated
+	 */
+	EReference getIndex_PriceCurve();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.market.MarketModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -263,15 +285,15 @@ public interface MarketPackage extends EPackage {
 	EClass getMarketModel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.market.MarketModel#getMarkets <em>Markets</em>}'.
+	 * Returns the meta object for the containment reference list '{@link scenario.market.MarketModel#getIndices <em>Indices</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Markets</em>'.
-	 * @see scenario.market.MarketModel#getMarkets()
+	 * @return the meta object for the containment reference list '<em>Indices</em>'.
+	 * @see scenario.market.MarketModel#getIndices()
 	 * @see #getMarketModel()
 	 * @generated
 	 */
-	EReference getMarketModel_Markets();
+	EReference getMarketModel_Indices();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.market.StepwisePriceCurve <em>Stepwise Price Curve</em>}'.
@@ -348,27 +370,6 @@ public interface MarketPackage extends EPackage {
 	EAttribute getStepwisePrice_PriceFromDate();
 
 	/**
-	 * Returns the meta object for class '{@link scenario.market.Market <em>Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Market</em>'.
-	 * @see scenario.market.Market
-	 * @generated
-	 */
-	EClass getMarket();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link scenario.market.Market#getPriceCurve <em>Price Curve</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Price Curve</em>'.
-	 * @see scenario.market.Market#getPriceCurve()
-	 * @see #getMarket()
-	 * @generated
-	 */
-	EReference getMarket_PriceCurve();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -391,6 +392,24 @@ public interface MarketPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
+		 * The meta object literal for the '{@link scenario.market.impl.IndexImpl <em>Index</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.market.impl.IndexImpl
+		 * @see scenario.market.impl.MarketPackageImpl#getIndex()
+		 * @generated
+		 */
+		EClass INDEX = eINSTANCE.getIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Curve</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INDEX__PRICE_CURVE = eINSTANCE.getIndex_PriceCurve();
+
+		/**
 		 * The meta object literal for the '{@link scenario.market.impl.MarketModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -401,12 +420,12 @@ public interface MarketPackage extends EPackage {
 		EClass MARKET_MODEL = eINSTANCE.getMarketModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Markets</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Indices</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKET_MODEL__MARKETS = eINSTANCE.getMarketModel_Markets();
+		EReference MARKET_MODEL__INDICES = eINSTANCE.getMarketModel_Indices();
 
 		/**
 		 * The meta object literal for the '{@link scenario.market.impl.StepwisePriceCurveImpl <em>Stepwise Price Curve</em>}' class.
@@ -467,24 +486,6 @@ public interface MarketPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute STEPWISE_PRICE__PRICE_FROM_DATE = eINSTANCE.getStepwisePrice_PriceFromDate();
-
-		/**
-		 * The meta object literal for the '{@link scenario.market.impl.MarketImpl <em>Market</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see scenario.market.impl.MarketImpl
-		 * @see scenario.market.impl.MarketPackageImpl#getMarket()
-		 * @generated
-		 */
-		EClass MARKET = eINSTANCE.getMarket();
-
-		/**
-		 * The meta object literal for the '<em><b>Price Curve</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MARKET__PRICE_CURVE = eINSTANCE.getMarket_PriceCurve();
 
 	}
 

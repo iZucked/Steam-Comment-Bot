@@ -64,8 +64,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="fuels" upperBound="-1"
           eType="#//fleet/VesselFuel" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Vessel">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Vessel" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EReference" name="class" eType="#//fleet/VesselClass"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="startRequirement" lowerBound="1"
           eType="#//fleet/PortAndTime" containment="true"/>
@@ -74,8 +73,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeChartered" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="VesselClass">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eClassifiers xsi:type="ecore:EClass" name="VesselClass" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
@@ -485,10 +483,8 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
           eType="#//port/Port" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Port">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultMarket" eType="#//market/Market"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//NamedObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultIndex" eType="#//market/Index"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="defaultContract" lowerBound="1"
           eType="#//contract/Contract"/>
@@ -504,8 +500,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="toPort" eType="#//port/Port"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Canal">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Canal" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EReference" name="classCosts" upperBound="-1"
           eType="#//port/VesselClassCost" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -621,8 +616,8 @@
     <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" abstract="true"
         eSuperTypes="#//contract/Contract"/>
     <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//contract/Contract">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
-          eType="#//market/Market"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1"
+          eType="#//market/Index"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="markup" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="1.05"/>
     </eClassifiers>
@@ -647,9 +642,9 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitPrice" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="MarketPricePurchaseContract" eSuperTypes="#//contract/PurchaseContract">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
-          eType="#//market/Market"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IndexPricePurchaseContract" eSuperTypes="#//contract/PurchaseContract">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1"
+          eType="#//market/Index"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="NetbackPurchaseContract" eSuperTypes="#//contract/PurchaseContract">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" lowerBound="1"
@@ -658,10 +653,10 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="ProfitSharingPurchaseContract" eSuperTypes="#//contract/PurchaseContract">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
-          eType="#//market/Market"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="referenceMarket" lowerBound="1"
-          eType="#//market/Market"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1"
+          eType="#//market/Index"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referenceIndex" lowerBound="1"
+          eType="#//market/Index"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="alpha" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="beta" lowerBound="1"
@@ -675,13 +670,13 @@
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="market" nsURI="http://com.mmxlabs.lng.emf/market" nsPrefix="com.mmxlabs.lng.emf.market">
-    <eClassifiers xsi:type="ecore:EClass" name="Market" eSuperTypes="#//NamedObject">
+    <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EReference" name="priceCurve" lowerBound="1"
           eType="#//market/StepwisePriceCurve" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="MarketModel">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="markets" upperBound="-1"
-          eType="#//market/Market" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="indices" upperBound="-1"
+          eType="#//market/Index" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="StepwisePriceCurve">
       <eOperations name="getValueAtDate" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat">
@@ -702,27 +697,68 @@
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="optimiser" nsURI="http://com.mmxlabs.lng.emf/optimiser" nsPrefix="com.mmxlabs.lng.emf.optimiser">
-    <eClassifiers xsi:type="ecore:EClass" name="OptimisationSettings">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OptimisationSettings" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="randomSeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
           eType="#//optimiser/Constraint" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="objectives" upperBound="-1"
           eType="#//optimiser/Objective" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="initialSchedule" eType="#//schedule/Schedule"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultDiscountCurve"
+          lowerBound="1" eType="#//optimiser/DiscountCurve" unsettable="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A discount curve which will be applied to all this optimisation's objectives which don't themselves have a discount curve set. If unset, no discounts will be applied."/>
+        </eAnnotations>
+      </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Optimisation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="allSettings" upperBound="-1"
           eType="#//optimiser/OptimisationSettings" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="currentSettings" eType="#//optimiser/OptimisationSettings"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="discountCurves" upperBound="-1"
+          eType="#//optimiser/DiscountCurve" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Constraint">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Objective">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="discountCurve" lowerBound="1"
+          eType="#//optimiser/DiscountCurve" unsettable="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A discount curve to be used for weighting this objective. If this field is unset, the defaultDiscountCurve in the containing OptimisationSettings will be used instead."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DiscountCurve" eSuperTypes="#//NamedObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A collection of discounts together with a base-time from which the discount curve should apply."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="discounts" upperBound="-1"
+          eType="#//optimiser/Discount" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The earliest date from which the discount curve should apply. If this is not set, the discount curve applies from the optimisation's start."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Discount">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A discount value, which gives a time from the start of its containing curve and a discount factor for fitnesses from that time up to the next specified time (if any)"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The time offset from the beginning of the curve from which this discount factor applies, in hours."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="discountFactor" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The discount factor itself, a floating point number indicating how much weight a fitness value should be given in this interval (0 means no weight, 1 means normal weight)"/>
+        </eAnnotations>
+      </eStructuralFeatures>
     </eClassifiers>
     <eSubpackages name="lso" nsURI="http://com.mmxlabs.lng.emf/optimiser/lso" nsPrefix="com.mmxlabs.lng.emf.optimiser.lso">
       <eClassifiers xsi:type="ecore:EClass" name="LSOSettings" eSuperTypes="#//optimiser/OptimisationSettings">

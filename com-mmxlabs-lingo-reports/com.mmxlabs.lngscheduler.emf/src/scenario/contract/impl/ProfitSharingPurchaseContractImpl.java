@@ -6,12 +6,12 @@ package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import scenario.contract.ContractPackage;
 import scenario.contract.ProfitSharingPurchaseContract;
-import scenario.market.Market;
+import scenario.market.Index;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,8 +20,8 @@ import scenario.market.Market;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getMarket <em>Market</em>}</li>
- *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getReferenceMarket <em>Reference Market</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getReferenceIndex <em>Reference Index</em>}</li>
  *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getAlpha <em>Alpha</em>}</li>
  *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getBeta <em>Beta</em>}</li>
  *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getGamma <em>Gamma</em>}</li>
@@ -32,23 +32,23 @@ import scenario.market.Market;
  */
 public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl implements ProfitSharingPurchaseContract {
 	/**
-	 * The cached value of the '{@link #getMarket() <em>Market</em>}' reference.
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarket()
+	 * @see #getIndex()
 	 * @generated
 	 * @ordered
 	 */
-	protected Market market;
+	protected Index index;
 	/**
-	 * The cached value of the '{@link #getReferenceMarket() <em>Reference Market</em>}' reference.
+	 * The cached value of the '{@link #getReferenceIndex() <em>Reference Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getReferenceMarket()
+	 * @see #getReferenceIndex()
 	 * @generated
 	 * @ordered
 	 */
-	protected Market referenceMarket;
+	protected Index referenceIndex;
 	/**
 	 * The default value of the '{@link #getAlpha() <em>Alpha</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -128,17 +128,16 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Market getMarket() {
-		if (market != null && market.eIsProxy()) {
-			InternalEObject oldMarket = (InternalEObject)market;
-			market = (Market)eResolveProxy(oldMarket);
-			if (market != oldMarket) {
+	public Index getIndex() {
+		if (index != null && index.eIsProxy()) {
+			InternalEObject oldIndex = (InternalEObject)index;
+			index = (Index)eResolveProxy(oldIndex);
+			if (index != oldIndex) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__MARKET, oldMarket, market));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX, oldIndex, index));
 			}
 		}
-		return market;
+		return index;
 	}
 
 	/**
@@ -146,8 +145,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Market basicGetMarket() {
-		return market;
+	public Index basicGetIndex() {
+		return index;
 	}
 
 	/**
@@ -155,12 +154,11 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setMarket(Market newMarket) {
-		Market oldMarket = market;
-		market = newMarket;
+	public void setIndex(Index newIndex) {
+		Index oldIndex = index;
+		index = newIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__MARKET, oldMarket, market));
+			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX, oldIndex, index));
 	}
 
 	/**
@@ -168,17 +166,16 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Market getReferenceMarket() {
-		if (referenceMarket != null && referenceMarket.eIsProxy()) {
-			InternalEObject oldReferenceMarket = (InternalEObject)referenceMarket;
-			referenceMarket = (Market)eResolveProxy(oldReferenceMarket);
-			if (referenceMarket != oldReferenceMarket) {
+	public Index getReferenceIndex() {
+		if (referenceIndex != null && referenceIndex.eIsProxy()) {
+			InternalEObject oldReferenceIndex = (InternalEObject)referenceIndex;
+			referenceIndex = (Index)eResolveProxy(oldReferenceIndex);
+			if (referenceIndex != oldReferenceIndex) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET, oldReferenceMarket, referenceMarket));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX, oldReferenceIndex, referenceIndex));
 			}
 		}
-		return referenceMarket;
+		return referenceIndex;
 	}
 
 	/**
@@ -186,8 +183,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Market basicGetReferenceMarket() {
-		return referenceMarket;
+	public Index basicGetReferenceIndex() {
+		return referenceIndex;
 	}
 
 	/**
@@ -195,12 +192,11 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setReferenceMarket(Market newReferenceMarket) {
-		Market oldReferenceMarket = referenceMarket;
-		referenceMarket = newReferenceMarket;
+	public void setReferenceIndex(Index newReferenceIndex) {
+		Index oldReferenceIndex = referenceIndex;
+		referenceIndex = newReferenceIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET, oldReferenceMarket, referenceMarket));
+			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX, oldReferenceIndex, referenceIndex));
 	}
 
 	/**
@@ -280,12 +276,12 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__MARKET:
-				if (resolve) return getMarket();
-				return basicGetMarket();
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET:
-				if (resolve) return getReferenceMarket();
-				return basicGetReferenceMarket();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				if (resolve) return getIndex();
+				return basicGetIndex();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				if (resolve) return getReferenceIndex();
+				return basicGetReferenceIndex();
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
 				return getAlpha();
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
@@ -304,11 +300,11 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__MARKET:
-				setMarket((Market)newValue);
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				setIndex((Index)newValue);
 				return;
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET:
-				setReferenceMarket((Market)newValue);
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				setReferenceIndex((Index)newValue);
 				return;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
 				setAlpha((Float)newValue);
@@ -331,11 +327,11 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__MARKET:
-				setMarket((Market)null);
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				setIndex((Index)null);
 				return;
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET:
-				setReferenceMarket((Market)null);
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				setReferenceIndex((Index)null);
 				return;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
 				setAlpha(ALPHA_EDEFAULT);
@@ -358,10 +354,10 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__MARKET:
-				return market != null;
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET:
-				return referenceMarket != null;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				return index != null;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				return referenceIndex != null;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
 				return alpha != ALPHA_EDEFAULT;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:

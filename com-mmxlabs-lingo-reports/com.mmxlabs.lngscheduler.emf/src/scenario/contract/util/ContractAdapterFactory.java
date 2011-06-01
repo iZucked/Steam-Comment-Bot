@@ -11,11 +11,17 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-import scenario.contract.*;
+import scenario.contract.Contract;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
+import scenario.contract.Entity;
+import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
+import scenario.contract.NetbackPurchaseContract;
+import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.contract.TotalVolumeLimit;
 
 /**
  * <!-- begin-user-doc -->
@@ -98,8 +104,8 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 				return createFixedPricePurchaseContractAdapter();
 			}
 			@Override
-			public Adapter caseMarketPricePurchaseContract(MarketPricePurchaseContract object) {
-				return createMarketPricePurchaseContractAdapter();
+			public Adapter caseIndexPricePurchaseContract(IndexPricePurchaseContract object) {
+				return createIndexPricePurchaseContractAdapter();
 			}
 			@Override
 			public Adapter caseNetbackPurchaseContract(NetbackPurchaseContract object) {
@@ -226,16 +232,16 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.contract.MarketPricePurchaseContract <em>Market Price Purchase Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.contract.IndexPricePurchaseContract <em>Index Price Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.contract.MarketPricePurchaseContract
+	 * @see scenario.contract.IndexPricePurchaseContract
 	 * @generated
 	 */
-	public Adapter createMarketPricePurchaseContractAdapter() {
+	public Adapter createIndexPricePurchaseContractAdapter() {
 		return null;
 	}
 

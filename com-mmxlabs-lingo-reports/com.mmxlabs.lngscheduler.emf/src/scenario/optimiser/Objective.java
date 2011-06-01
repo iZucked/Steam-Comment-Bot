@@ -4,7 +4,7 @@
  */
 package scenario.optimiser;
 
-import org.eclipse.emf.ecore.EObject;
+import scenario.NamedObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -14,8 +14,8 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.optimiser.Objective#getName <em>Name</em>}</li>
  *   <li>{@link scenario.optimiser.Objective#getWeight <em>Weight</em>}</li>
+ *   <li>{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}</li>
  * </ul>
  * </p>
  *
@@ -23,33 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Objective extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see scenario.optimiser.OptimiserPackage#getObjective_Name()
-	 * @model
-	 * @generated
-	 */
-	String getName();
-
-	/**
-	 * Sets the value of the '{@link scenario.optimiser.Objective#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
-	 * @generated
-	 */
-	void setName(String value);
-
+public interface Objective extends NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Weight</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -75,5 +49,57 @@ public interface Objective extends EObject {
 	 * @generated
 	 */
 	void setWeight(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Discount Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * A discount curve to be used for weighting this objective. If this field is unset, the defaultDiscountCurve in the containing OptimisationSettings will be used instead.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Discount Curve</em>' reference.
+	 * @see #isSetDiscountCurve()
+	 * @see #unsetDiscountCurve()
+	 * @see #setDiscountCurve(DiscountCurve)
+	 * @see scenario.optimiser.OptimiserPackage#getObjective_DiscountCurve()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	DiscountCurve getDiscountCurve();
+
+	/**
+	 * Sets the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Discount Curve</em>' reference.
+	 * @see #isSetDiscountCurve()
+	 * @see #unsetDiscountCurve()
+	 * @see #getDiscountCurve()
+	 * @generated
+	 */
+	void setDiscountCurve(DiscountCurve value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDiscountCurve()
+	 * @see #getDiscountCurve()
+	 * @see #setDiscountCurve(DiscountCurve)
+	 * @generated
+	 */
+	void unsetDiscountCurve();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Discount Curve</em>' reference is set.
+	 * @see #unsetDiscountCurve()
+	 * @see #getDiscountCurve()
+	 * @see #setDiscountCurve(DiscountCurve)
+	 * @generated
+	 */
+	boolean isSetDiscountCurve();
 
 } // Objective

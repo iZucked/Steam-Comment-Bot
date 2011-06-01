@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import scenario.ScenarioPackage;
 
 /**
@@ -141,7 +142,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__NAME = 0;
+	int VESSEL__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Class</b></em>' reference.
@@ -150,7 +151,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__CLASS = 1;
+	int VESSEL__CLASS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Start Requirement</b></em>' containment reference.
@@ -159,7 +160,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__START_REQUIREMENT = 2;
+	int VESSEL__START_REQUIREMENT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>End Requirement</b></em>' containment reference.
@@ -168,7 +169,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__END_REQUIREMENT = 3;
+	int VESSEL__END_REQUIREMENT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Time Chartered</b></em>' attribute.
@@ -177,7 +178,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__TIME_CHARTERED = 4;
+	int VESSEL__TIME_CHARTERED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -186,7 +187,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = 5;
+	int VESSEL_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Vessel</em>' class.
@@ -195,7 +205,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_OPERATION_COUNT = 0;
+	int VESSEL_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
@@ -214,7 +224,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__NAME = 0;
+	int VESSEL_CLASS__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
@@ -223,7 +233,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__CAPACITY = 1;
+	int VESSEL_CLASS__CAPACITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
@@ -232,7 +242,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_SPEED = 2;
+	int VESSEL_CLASS__MIN_SPEED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
@@ -241,7 +251,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MAX_SPEED = 3;
+	int VESSEL_CLASS__MAX_SPEED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
@@ -250,7 +260,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__LADEN_ATTRIBUTES = 4;
+	int VESSEL_CLASS__LADEN_ATTRIBUTES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -259,7 +269,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BALLAST_ATTRIBUTES = 5;
+	int VESSEL_CLASS__BALLAST_ATTRIBUTES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Min Heel Volume</b></em>' attribute.
@@ -268,7 +278,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL_VOLUME = 6;
+	int VESSEL_CLASS__MIN_HEEL_VOLUME = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -277,7 +287,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__FILL_CAPACITY = 7;
+	int VESSEL_CLASS__FILL_CAPACITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Daily Charter Price</b></em>' attribute.
@@ -286,7 +296,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__DAILY_CHARTER_PRICE = 8;
+	int VESSEL_CLASS__DAILY_CHARTER_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -295,7 +305,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__SPOT_CHARTER_COUNT = 9;
+	int VESSEL_CLASS__SPOT_CHARTER_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -304,7 +314,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__INACCESSIBLE_PORTS = 10;
+	int VESSEL_CLASS__INACCESSIBLE_PORTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
@@ -313,7 +323,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BASE_FUEL = 11;
+	int VESSEL_CLASS__BASE_FUEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -322,7 +332,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = 12;
+	int VESSEL_CLASS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Vessel Class</em>' class.
@@ -331,7 +350,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_OPERATION_COUNT = 0;
+	int VESSEL_CLASS_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
@@ -920,17 +939,6 @@ public interface FleetPackage extends EPackage {
 	EClass getVessel();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.Vessel#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see scenario.fleet.Vessel#getName()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EAttribute getVessel_Name();
-
-	/**
 	 * Returns the meta object for the reference '{@link scenario.fleet.Vessel#getClass_ <em>Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -983,17 +991,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getVesselClass();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see scenario.fleet.VesselClass#getName()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_Name();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getCapacity <em>Capacity</em>}'.
@@ -1480,14 +1477,6 @@ public interface FleetPackage extends EPackage {
 		EClass VESSEL = eINSTANCE.getVessel();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL__NAME = eINSTANCE.getVessel_Name();
-
-		/**
 		 * The meta object literal for the '<em><b>Class</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1528,14 +1517,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EClass VESSEL_CLASS = eINSTANCE.getVesselClass();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__NAME = eINSTANCE.getVesselClass_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.

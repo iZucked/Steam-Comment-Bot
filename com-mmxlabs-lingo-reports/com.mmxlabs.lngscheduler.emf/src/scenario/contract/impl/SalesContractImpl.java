@@ -8,9 +8,10 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import scenario.contract.ContractPackage;
 import scenario.contract.SalesContract;
-import scenario.market.Market;
+import scenario.market.Index;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,7 +20,7 @@ import scenario.market.Market;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.contract.impl.SalesContractImpl#getMarket <em>Market</em>}</li>
+ *   <li>{@link scenario.contract.impl.SalesContractImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link scenario.contract.impl.SalesContractImpl#getMarkup <em>Markup</em>}</li>
  * </ul>
  * </p>
@@ -28,14 +29,14 @@ import scenario.market.Market;
  */
 public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
-	 * The cached value of the '{@link #getMarket() <em>Market</em>}' reference.
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarket()
+	 * @see #getIndex()
 	 * @generated
 	 * @ordered
 	 */
-	protected Market market;
+	protected Index index;
 	/**
 	 * The default value of the '{@link #getMarkup() <em>Markup</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -79,17 +80,16 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Market getMarket() {
-		if (market != null && market.eIsProxy()) {
-			InternalEObject oldMarket = (InternalEObject)market;
-			market = (Market)eResolveProxy(oldMarket);
-			if (market != oldMarket) {
+	public Index getIndex() {
+		if (index != null && index.eIsProxy()) {
+			InternalEObject oldIndex = (InternalEObject)index;
+			index = (Index)eResolveProxy(oldIndex);
+			if (index != oldIndex) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.SALES_CONTRACT__MARKET, oldMarket, market));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.SALES_CONTRACT__INDEX, oldIndex, index));
 			}
 		}
-		return market;
+		return index;
 	}
 
 	/**
@@ -97,8 +97,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Market basicGetMarket() {
-		return market;
+	public Index basicGetIndex() {
+		return index;
 	}
 
 	/**
@@ -106,12 +106,11 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setMarket(Market newMarket) {
-		Market oldMarket = market;
-		market = newMarket;
+	public void setIndex(Index newIndex) {
+		Index oldIndex = index;
+		index = newIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.SALES_CONTRACT__MARKET, oldMarket, market));
+			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.SALES_CONTRACT__INDEX, oldIndex, index));
 	}
 
 	/**
@@ -145,9 +144,9 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__MARKET:
-				if (resolve) return getMarket();
-				return basicGetMarket();
+			case ContractPackage.SALES_CONTRACT__INDEX:
+				if (resolve) return getIndex();
+				return basicGetIndex();
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				return getMarkup();
 		}
@@ -162,8 +161,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__MARKET:
-				setMarket((Market)newValue);
+			case ContractPackage.SALES_CONTRACT__INDEX:
+				setIndex((Index)newValue);
 				return;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				setMarkup((Float)newValue);
@@ -180,8 +179,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__MARKET:
-				setMarket((Market)null);
+			case ContractPackage.SALES_CONTRACT__INDEX:
+				setIndex((Index)null);
 				return;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				setMarkup(MARKUP_EDEFAULT);
@@ -198,8 +197,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__MARKET:
-				return market != null;
+			case ContractPackage.SALES_CONTRACT__INDEX:
+				return index != null;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				return markup != MARKUP_EDEFAULT;
 		}

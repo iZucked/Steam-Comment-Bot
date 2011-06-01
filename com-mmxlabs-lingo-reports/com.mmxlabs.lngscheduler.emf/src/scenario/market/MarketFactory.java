@@ -24,6 +24,15 @@ public interface MarketFactory extends EFactory {
 	MarketFactory eINSTANCE = scenario.market.impl.MarketFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Index</em>'.
+	 * @generated
+	 */
+	Index createIndex();
+
+	/**
 	 * Returns a new object of class '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -49,15 +58,6 @@ public interface MarketFactory extends EFactory {
 	 * @generated
 	 */
 	StepwisePrice createStepwisePrice();
-
-	/**
-	 * Returns a new object of class '<em>Market</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Market</em>'.
-	 * @generated
-	 */
-	Market createMarket();
 
 	/**
 	 * Returns the package supported by this factory.

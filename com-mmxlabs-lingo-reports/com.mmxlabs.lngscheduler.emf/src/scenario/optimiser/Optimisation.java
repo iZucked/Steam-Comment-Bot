@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link scenario.optimiser.Optimisation#getAllSettings <em>All Settings</em>}</li>
  *   <li>{@link scenario.optimiser.Optimisation#getCurrentSettings <em>Current Settings</em>}</li>
+ *   <li>{@link scenario.optimiser.Optimisation#getDiscountCurves <em>Discount Curves</em>}</li>
  * </ul>
  * </p>
  *
@@ -66,5 +67,21 @@ public interface Optimisation extends EObject {
 	 * @generated
 	 */
 	void setCurrentSettings(OptimisationSettings value);
+
+	/**
+	 * Returns the value of the '<em><b>Discount Curves</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.optimiser.DiscountCurve}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Discount Curves</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Discount Curves</em>' containment reference list.
+	 * @see scenario.optimiser.OptimiserPackage#getOptimisation_DiscountCurves()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<DiscountCurve> getDiscountCurves();
 
 } // Optimisation

@@ -4,7 +4,6 @@
  */
 package scenario.schedule.events;
 
-import scenario.fleet.VesselEvent;
 import scenario.fleet.CharterOut;
 import scenario.schedule.CharterOutRevenue;
 

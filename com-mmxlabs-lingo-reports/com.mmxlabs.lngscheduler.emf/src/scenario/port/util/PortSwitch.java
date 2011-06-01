@@ -9,12 +9,16 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.port.*;
+import scenario.NamedObject;
+import scenario.ScenarioObject;
+import scenario.port.Canal;
+import scenario.port.CanalModel;
 import scenario.port.DistanceLine;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
+import scenario.port.VesselClassCost;
 
 /**
  * <!-- begin-user-doc -->
@@ -99,6 +103,8 @@ public class PortSwitch<T> {
 			case PortPackage.PORT: {
 				Port port = (Port)theEObject;
 				T result = casePort(port);
+				if (result == null) result = caseNamedObject(port);
+				if (result == null) result = caseScenarioObject(port);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -117,6 +123,8 @@ public class PortSwitch<T> {
 			case PortPackage.CANAL: {
 				Canal canal = (Canal)theEObject;
 				T result = caseCanal(canal);
+				if (result == null) result = caseNamedObject(canal);
+				if (result == null) result = caseScenarioObject(canal);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -238,6 +246,36 @@ public class PortSwitch<T> {
 	 * @generated
 	 */
 	public T caseVesselClassCost(VesselClassCost object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioObject(ScenarioObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 

@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import scenario.ScenarioPackage;
 
 /**
@@ -270,13 +271,13 @@ public interface ContractPackage extends EPackage {
 	int SALES_CONTRACT__ENTITY = CONTRACT__ENTITY;
 
 	/**
-	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * The feature id for the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT__MARKET = CONTRACT_FEATURE_COUNT + 0;
+	int SALES_CONTRACT__INDEX = CONTRACT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Markup</b></em>' attribute.
@@ -519,14 +520,14 @@ public interface ContractPackage extends EPackage {
 	int FIXED_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link scenario.contract.impl.MarketPricePurchaseContractImpl <em>Market Price Purchase Contract</em>}' class.
+	 * The meta object id for the '{@link scenario.contract.impl.IndexPricePurchaseContractImpl <em>Index Price Purchase Contract</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see scenario.contract.impl.MarketPricePurchaseContractImpl
-	 * @see scenario.contract.impl.ContractPackageImpl#getMarketPricePurchaseContract()
+	 * @see scenario.contract.impl.IndexPricePurchaseContractImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getIndexPricePurchaseContract()
 	 * @generated
 	 */
-	int MARKET_PRICE_PURCHASE_CONTRACT = 6;
+	int INDEX_PRICE_PURCHASE_CONTRACT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -535,7 +536,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_PRICE_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+	int INDEX_PRICE_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -544,25 +545,25 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_PRICE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+	int INDEX_PRICE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
 
 	/**
-	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * The feature id for the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_PRICE_PURCHASE_CONTRACT__MARKET = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+	int INDEX_PRICE_PURCHASE_CONTRACT__INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Market Price Purchase Contract</em>' class.
+	 * The number of structural features of the '<em>Index Price Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_PRICE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+	int INDEX_PRICE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -571,16 +572,16 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_PRICE_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
+	int INDEX_PRICE_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
 
 	/**
-	 * The number of operations of the '<em>Market Price Purchase Contract</em>' class.
+	 * The number of operations of the '<em>Index Price Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
+	int INDEX_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.NetbackPurchaseContractImpl <em>Netback Purchase Contract</em>}' class.
@@ -684,22 +685,22 @@ public interface ContractPackage extends EPackage {
 	int PROFIT_SHARING_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
 
 	/**
-	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * The feature id for the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT__MARKET = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+	int PROFIT_SHARING_PURCHASE_CONTRACT__INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Reference Market</b></em>' reference.
+	 * The feature id for the '<em><b>Reference Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+	int PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Alpha</b></em>' attribute.
@@ -842,15 +843,15 @@ public interface ContractPackage extends EPackage {
 	EClass getSalesContract();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.contract.SalesContract#getMarket <em>Market</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.contract.SalesContract#getIndex <em>Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Market</em>'.
-	 * @see scenario.contract.SalesContract#getMarket()
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see scenario.contract.SalesContract#getIndex()
 	 * @see #getSalesContract()
 	 * @generated
 	 */
-	EReference getSalesContract_Market();
+	EReference getSalesContract_Index();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.contract.SalesContract#getMarkup <em>Markup</em>}'.
@@ -982,25 +983,25 @@ public interface ContractPackage extends EPackage {
 	EAttribute getFixedPricePurchaseContract_UnitPrice();
 
 	/**
-	 * Returns the meta object for class '{@link scenario.contract.MarketPricePurchaseContract <em>Market Price Purchase Contract</em>}'.
+	 * Returns the meta object for class '{@link scenario.contract.IndexPricePurchaseContract <em>Index Price Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Market Price Purchase Contract</em>'.
-	 * @see scenario.contract.MarketPricePurchaseContract
+	 * @return the meta object for class '<em>Index Price Purchase Contract</em>'.
+	 * @see scenario.contract.IndexPricePurchaseContract
 	 * @generated
 	 */
-	EClass getMarketPricePurchaseContract();
+	EClass getIndexPricePurchaseContract();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.contract.MarketPricePurchaseContract#getMarket <em>Market</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.contract.IndexPricePurchaseContract#getIndex <em>Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Market</em>'.
-	 * @see scenario.contract.MarketPricePurchaseContract#getMarket()
-	 * @see #getMarketPricePurchaseContract()
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see scenario.contract.IndexPricePurchaseContract#getIndex()
+	 * @see #getIndexPricePurchaseContract()
 	 * @generated
 	 */
-	EReference getMarketPricePurchaseContract_Market();
+	EReference getIndexPricePurchaseContract_Index();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.contract.NetbackPurchaseContract <em>Netback Purchase Contract</em>}'.
@@ -1045,26 +1046,26 @@ public interface ContractPackage extends EPackage {
 	EClass getProfitSharingPurchaseContract();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.contract.ProfitSharingPurchaseContract#getMarket <em>Market</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.contract.ProfitSharingPurchaseContract#getIndex <em>Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Market</em>'.
-	 * @see scenario.contract.ProfitSharingPurchaseContract#getMarket()
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see scenario.contract.ProfitSharingPurchaseContract#getIndex()
 	 * @see #getProfitSharingPurchaseContract()
 	 * @generated
 	 */
-	EReference getProfitSharingPurchaseContract_Market();
+	EReference getProfitSharingPurchaseContract_Index();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.contract.ProfitSharingPurchaseContract#getReferenceMarket <em>Reference Market</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.contract.ProfitSharingPurchaseContract#getReferenceIndex <em>Reference Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Reference Market</em>'.
-	 * @see scenario.contract.ProfitSharingPurchaseContract#getReferenceMarket()
+	 * @return the meta object for the reference '<em>Reference Index</em>'.
+	 * @see scenario.contract.ProfitSharingPurchaseContract#getReferenceIndex()
 	 * @see #getProfitSharingPurchaseContract()
 	 * @generated
 	 */
-	EReference getProfitSharingPurchaseContract_ReferenceMarket();
+	EReference getProfitSharingPurchaseContract_ReferenceIndex();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.contract.ProfitSharingPurchaseContract#getAlpha <em>Alpha</em>}'.
@@ -1213,12 +1214,12 @@ public interface ContractPackage extends EPackage {
 		EClass SALES_CONTRACT = eINSTANCE.getSalesContract();
 
 		/**
-		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SALES_CONTRACT__MARKET = eINSTANCE.getSalesContract_Market();
+		EReference SALES_CONTRACT__INDEX = eINSTANCE.getSalesContract_Index();
 
 		/**
 		 * The meta object literal for the '<em><b>Markup</b></em>' attribute feature.
@@ -1323,22 +1324,22 @@ public interface ContractPackage extends EPackage {
 		EAttribute FIXED_PRICE_PURCHASE_CONTRACT__UNIT_PRICE = eINSTANCE.getFixedPricePurchaseContract_UnitPrice();
 
 		/**
-		 * The meta object literal for the '{@link scenario.contract.impl.MarketPricePurchaseContractImpl <em>Market Price Purchase Contract</em>}' class.
+		 * The meta object literal for the '{@link scenario.contract.impl.IndexPricePurchaseContractImpl <em>Index Price Purchase Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see scenario.contract.impl.MarketPricePurchaseContractImpl
-		 * @see scenario.contract.impl.ContractPackageImpl#getMarketPricePurchaseContract()
+		 * @see scenario.contract.impl.IndexPricePurchaseContractImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getIndexPricePurchaseContract()
 		 * @generated
 		 */
-		EClass MARKET_PRICE_PURCHASE_CONTRACT = eINSTANCE.getMarketPricePurchaseContract();
+		EClass INDEX_PRICE_PURCHASE_CONTRACT = eINSTANCE.getIndexPricePurchaseContract();
 
 		/**
-		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKET_PRICE_PURCHASE_CONTRACT__MARKET = eINSTANCE.getMarketPricePurchaseContract_Market();
+		EReference INDEX_PRICE_PURCHASE_CONTRACT__INDEX = eINSTANCE.getIndexPricePurchaseContract_Index();
 
 		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.NetbackPurchaseContractImpl <em>Netback Purchase Contract</em>}' class.
@@ -1377,20 +1378,20 @@ public interface ContractPackage extends EPackage {
 		EClass PROFIT_SHARING_PURCHASE_CONTRACT = eINSTANCE.getProfitSharingPurchaseContract();
 
 		/**
-		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PROFIT_SHARING_PURCHASE_CONTRACT__MARKET = eINSTANCE.getProfitSharingPurchaseContract_Market();
+		EReference PROFIT_SHARING_PURCHASE_CONTRACT__INDEX = eINSTANCE.getProfitSharingPurchaseContract_Index();
 
 		/**
-		 * The meta object literal for the '<em><b>Reference Market</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Reference Index</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET = eINSTANCE.getProfitSharingPurchaseContract_ReferenceMarket();
+		EReference PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX = eINSTANCE.getProfitSharingPurchaseContract_ReferenceIndex();
 
 		/**
 		 * The meta object literal for the '<em><b>Alpha</b></em>' attribute feature.

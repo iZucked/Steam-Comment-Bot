@@ -60,6 +60,24 @@ public interface OptimiserFactory extends EFactory {
 	Objective createObjective();
 
 	/**
+	 * Returns a new object of class '<em>Discount Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Discount Curve</em>'.
+	 * @generated
+	 */
+	DiscountCurve createDiscountCurve();
+
+	/**
+	 * Returns a new object of class '<em>Discount</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Discount</em>'.
+	 * @generated
+	 */
+	Discount createDiscount();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

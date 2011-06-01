@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.impl.CargoPackageImpl;
@@ -19,7 +20,7 @@ import scenario.contract.impl.ContractPackageImpl;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.impl.FleetPackageImpl;
 import scenario.impl.ScenarioPackageImpl;
-import scenario.market.Market;
+import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
@@ -50,7 +51,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass marketEClass = null;
+	private EClass indexEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -171,9 +172,8 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EClass getMarket() {
-		return marketEClass;
+	public EClass getIndex() {
+		return indexEClass;
 	}
 
 	/**
@@ -181,9 +181,8 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EReference getMarket_PriceCurve() {
-		return (EReference)marketEClass.getEStructuralFeatures().get(0);
+	public EReference getIndex_PriceCurve() {
+		return (EReference)indexEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -201,8 +200,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EReference getMarketModel_Markets() {
+	public EReference getMarketModel_Indices() {
 		return (EReference)marketModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -305,11 +303,11 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		isCreated = true;
 
 		// Create classes and their features
-		marketEClass = createEClass(MARKET);
-		createEReference(marketEClass, MARKET__PRICE_CURVE);
+		indexEClass = createEClass(INDEX);
+		createEReference(indexEClass, INDEX__PRICE_CURVE);
 
 		marketModelEClass = createEClass(MARKET_MODEL);
-		createEReference(marketModelEClass, MARKET_MODEL__MARKETS);
+		createEReference(marketModelEClass, MARKET_MODEL__INDICES);
 
 		stepwisePriceCurveEClass = createEClass(STEPWISE_PRICE_CURVE);
 		createEReference(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE__PRICES);
@@ -352,14 +350,14 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		marketEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		indexEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(marketEClass, Market.class, "Market", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMarket_PriceCurve(), this.getStepwisePriceCurve(), null, "priceCurve", null, 1, 1, Market.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(indexEClass, Index.class, "Index", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getIndex_PriceCurve(), this.getStepwisePriceCurve(), null, "priceCurve", null, 1, 1, Index.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketModelEClass, MarketModel.class, "MarketModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMarketModel_Markets(), this.getMarket(), null, "markets", null, 0, -1, MarketModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketModel_Indices(), this.getIndex(), null, "indices", null, 0, -1, MarketModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(stepwisePriceCurveEClass, StepwisePriceCurve.class, "StepwisePriceCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getStepwisePriceCurve_Prices(), this.getStepwisePrice(), null, "prices", null, 0, -1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import scenario.market.Market;
+import scenario.market.Index;
 import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
 
@@ -25,7 +25,7 @@ import scenario.market.MarketPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.market.impl.MarketModelImpl#getMarkets <em>Markets</em>}</li>
+ *   <li>{@link scenario.market.impl.MarketModelImpl#getIndices <em>Indices</em>}</li>
  * </ul>
  * </p>
  *
@@ -33,15 +33,14 @@ import scenario.market.MarketPackage;
  */
 public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	/**
-	 * The cached value of the '{@link #getMarkets() <em>Markets</em>}' containment reference list.
+	 * The cached value of the '{@link #getIndices() <em>Indices</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarkets()
+	 * @see #getIndices()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Market> markets;
-
+	protected EList<Index> indices;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -66,12 +65,11 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EList<Market> getMarkets() {
-		if (markets == null) {
-			markets = new EObjectContainmentEList<Market>(Market.class, this, MarketPackage.MARKET_MODEL__MARKETS);
+	public EList<Index> getIndices() {
+		if (indices == null) {
+			indices = new EObjectContainmentEList<Index>(Index.class, this, MarketPackage.MARKET_MODEL__INDICES);
 		}
-		return markets;
+		return indices;
 	}
 
 	/**
@@ -82,8 +80,8 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__MARKETS:
-				return ((InternalEList<?>)getMarkets()).basicRemove(otherEnd, msgs);
+			case MarketPackage.MARKET_MODEL__INDICES:
+				return ((InternalEList<?>)getIndices()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -96,8 +94,8 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__MARKETS:
-				return getMarkets();
+			case MarketPackage.MARKET_MODEL__INDICES:
+				return getIndices();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -111,9 +109,9 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__MARKETS:
-				getMarkets().clear();
-				getMarkets().addAll((Collection<? extends Market>)newValue);
+			case MarketPackage.MARKET_MODEL__INDICES:
+				getIndices().clear();
+				getIndices().addAll((Collection<? extends Index>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -127,8 +125,8 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__MARKETS:
-				getMarkets().clear();
+			case MarketPackage.MARKET_MODEL__INDICES:
+				getIndices().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -142,8 +140,8 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__MARKETS:
-				return markets != null && !markets.isEmpty();
+			case MarketPackage.MARKET_MODEL__INDICES:
+				return indices != null && !indices.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

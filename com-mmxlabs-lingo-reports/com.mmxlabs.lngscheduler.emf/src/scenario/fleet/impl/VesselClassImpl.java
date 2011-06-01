@@ -5,19 +5,20 @@
 package scenario.fleet.impl;
 
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselStateAttributes;
+import scenario.impl.NamedObjectImpl;
 import scenario.port.Port;
 
 /**
@@ -27,7 +28,6 @@ import scenario.port.Port;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.VesselClassImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
@@ -44,27 +44,7 @@ import scenario.port.Port;
  *
  * @generated
  */
-public class VesselClassImpl extends EObjectImpl implements VesselClass {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
+public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	/**
 	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -262,29 +242,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.VESSEL_CLASS;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__NAME, oldName, name));
 	}
 
 	/**
@@ -613,8 +570,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS__NAME:
-				return getName();
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				return getCapacity();
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
@@ -651,9 +606,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS__NAME:
-				setName((String)newValue);
-				return;
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				setCapacity((Long)newValue);
 				return;
@@ -700,9 +652,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				setCapacity(CAPACITY_EDEFAULT);
 				return;
@@ -748,8 +697,6 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				return capacity != CAPACITY_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
@@ -786,9 +733,7 @@ public class VesselClassImpl extends EObjectImpl implements VesselClass {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", capacity: ");
+		result.append(" (capacity: ");
 		result.append(capacity);
 		result.append(", minSpeed: ");
 		result.append(minSpeed);

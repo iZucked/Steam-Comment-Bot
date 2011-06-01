@@ -9,7 +9,15 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.optimiser.*;
+import scenario.NamedObject;
+import scenario.ScenarioObject;
+import scenario.optimiser.Constraint;
+import scenario.optimiser.Discount;
+import scenario.optimiser.DiscountCurve;
+import scenario.optimiser.Objective;
+import scenario.optimiser.Optimisation;
+import scenario.optimiser.OptimisationSettings;
+import scenario.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -88,6 +96,8 @@ public class OptimiserSwitch<T> {
 			case OptimiserPackage.OPTIMISATION_SETTINGS: {
 				OptimisationSettings optimisationSettings = (OptimisationSettings)theEObject;
 				T result = caseOptimisationSettings(optimisationSettings);
+				if (result == null) result = caseNamedObject(optimisationSettings);
+				if (result == null) result = caseScenarioObject(optimisationSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -100,12 +110,30 @@ public class OptimiserSwitch<T> {
 			case OptimiserPackage.CONSTRAINT: {
 				Constraint constraint = (Constraint)theEObject;
 				T result = caseConstraint(constraint);
+				if (result == null) result = caseNamedObject(constraint);
+				if (result == null) result = caseScenarioObject(constraint);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case OptimiserPackage.OBJECTIVE: {
 				Objective objective = (Objective)theEObject;
 				T result = caseObjective(objective);
+				if (result == null) result = caseNamedObject(objective);
+				if (result == null) result = caseScenarioObject(objective);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case OptimiserPackage.DISCOUNT_CURVE: {
+				DiscountCurve discountCurve = (DiscountCurve)theEObject;
+				T result = caseDiscountCurve(discountCurve);
+				if (result == null) result = caseNamedObject(discountCurve);
+				if (result == null) result = caseScenarioObject(discountCurve);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case OptimiserPackage.DISCOUNT: {
+				Discount discount = (Discount)theEObject;
+				T result = caseDiscount(discount);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -170,6 +198,66 @@ public class OptimiserSwitch<T> {
 	 * @generated
 	 */
 	public T caseObjective(Objective object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Discount Curve</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Discount Curve</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDiscountCurve(DiscountCurve object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Discount</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Discount</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDiscount(Discount object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioObject(ScenarioObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 

@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.impl.CargoPackageImpl;
@@ -21,6 +22,8 @@ import scenario.impl.ScenarioPackageImpl;
 import scenario.market.MarketPackage;
 import scenario.market.impl.MarketPackageImpl;
 import scenario.optimiser.Constraint;
+import scenario.optimiser.Discount;
+import scenario.optimiser.DiscountCurve;
 import scenario.optimiser.Objective;
 import scenario.optimiser.Optimisation;
 import scenario.optimiser.OptimisationSettings;
@@ -71,6 +74,20 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * @generated
 	 */
 	private EClass objectiveEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass discountCurveEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass discountEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -181,7 +198,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getOptimisationSettings_Name() {
+	public EAttribute getOptimisationSettings_RandomSeed() {
 		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -191,18 +208,8 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getOptimisationSettings_RandomSeed() {
-		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getOptimisationSettings_Constraints() {
-		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(2);
+		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -212,7 +219,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 */
 	@Override
 	public EReference getOptimisationSettings_Objectives() {
-		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(3);
+		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -222,6 +229,15 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 */
 	@Override
 	public EReference getOptimisationSettings_InitialSchedule() {
+		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getOptimisationSettings_DefaultDiscountCurve() {
 		return (EReference)optimisationSettingsEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -260,6 +276,15 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getOptimisation_DiscountCurves() {
+		return (EReference)optimisationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getConstraint() {
 		return constraintEClass;
@@ -271,18 +296,8 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getConstraint_Name() {
-		return (EAttribute)constraintEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getConstraint_Enabled() {
-		return (EAttribute)constraintEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)constraintEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -301,7 +316,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getObjective_Name() {
+	public EAttribute getObjective_Weight() {
 		return (EAttribute)objectiveEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -310,9 +325,62 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EAttribute getObjective_Weight() {
-		return (EAttribute)objectiveEClass.getEStructuralFeatures().get(1);
+	public EReference getObjective_DiscountCurve() {
+		return (EReference)objectiveEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getDiscountCurve() {
+		return discountCurveEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDiscountCurve_Discounts() {
+		return (EReference)discountCurveEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDiscountCurve_StartDate() {
+		return (EAttribute)discountCurveEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getDiscount() {
+		return discountEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDiscount_Time() {
+		return (EAttribute)discountEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDiscount_DiscountFactor() {
+		return (EAttribute)discountEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -345,23 +413,31 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 
 		// Create classes and their features
 		optimisationSettingsEClass = createEClass(OPTIMISATION_SETTINGS);
-		createEAttribute(optimisationSettingsEClass, OPTIMISATION_SETTINGS__NAME);
 		createEAttribute(optimisationSettingsEClass, OPTIMISATION_SETTINGS__RANDOM_SEED);
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__CONSTRAINTS);
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__OBJECTIVES);
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__INITIAL_SCHEDULE);
+		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE);
 
 		optimisationEClass = createEClass(OPTIMISATION);
 		createEReference(optimisationEClass, OPTIMISATION__ALL_SETTINGS);
 		createEReference(optimisationEClass, OPTIMISATION__CURRENT_SETTINGS);
+		createEReference(optimisationEClass, OPTIMISATION__DISCOUNT_CURVES);
 
 		constraintEClass = createEClass(CONSTRAINT);
-		createEAttribute(constraintEClass, CONSTRAINT__NAME);
 		createEAttribute(constraintEClass, CONSTRAINT__ENABLED);
 
 		objectiveEClass = createEClass(OBJECTIVE);
-		createEAttribute(objectiveEClass, OBJECTIVE__NAME);
 		createEAttribute(objectiveEClass, OBJECTIVE__WEIGHT);
+		createEReference(objectiveEClass, OBJECTIVE__DISCOUNT_CURVE);
+
+		discountCurveEClass = createEClass(DISCOUNT_CURVE);
+		createEReference(discountCurveEClass, DISCOUNT_CURVE__DISCOUNTS);
+		createEAttribute(discountCurveEClass, DISCOUNT_CURVE__START_DATE);
+
+		discountEClass = createEClass(DISCOUNT);
+		createEAttribute(discountEClass, DISCOUNT__TIME);
+		createEAttribute(discountEClass, DISCOUNT__DISCOUNT_FACTOR);
 	}
 
 	/**
@@ -389,6 +465,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 
 		// Obtain other dependent packages
 		LsoPackage theLsoPackage = (LsoPackage)EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI);
+		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
 		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 
 		// Add subpackages
@@ -399,26 +476,38 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		optimisationSettingsEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		constraintEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		objectiveEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		discountCurveEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(optimisationSettingsEClass, OptimisationSettings.class, "OptimisationSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getOptimisationSettings_Name(), ecorePackage.getEString(), "name", null, 0, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptimisationSettings_RandomSeed(), ecorePackage.getELong(), "randomSeed", null, 0, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_Constraints(), this.getConstraint(), null, "constraints", null, 0, -1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_Objectives(), this.getObjective(), null, "objectives", null, 0, -1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_InitialSchedule(), theSchedulePackage.getSchedule(), null, "initialSchedule", null, 0, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptimisationSettings_DefaultDiscountCurve(), this.getDiscountCurve(), null, "defaultDiscountCurve", null, 1, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optimisationEClass, Optimisation.class, "Optimisation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOptimisation_AllSettings(), this.getOptimisationSettings(), null, "allSettings", null, 0, -1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisation_CurrentSettings(), this.getOptimisationSettings(), null, "currentSettings", null, 0, 1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptimisation_DiscountCurves(), this.getDiscountCurve(), null, "discountCurves", null, 0, -1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(constraintEClass, Constraint.class, "Constraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getConstraint_Name(), ecorePackage.getEString(), "name", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getConstraint_Enabled(), ecorePackage.getEBoolean(), "enabled", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(objectiveEClass, Objective.class, "Objective", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getObjective_Name(), ecorePackage.getEString(), "name", null, 0, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getObjective_Weight(), ecorePackage.getEDouble(), "weight", null, 0, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getObjective_DiscountCurve(), this.getDiscountCurve(), null, "discountCurve", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(discountCurveEClass, DiscountCurve.class, "DiscountCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDiscountCurve_Discounts(), this.getDiscount(), null, "discounts", null, 0, -1, DiscountCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiscountCurve_StartDate(), ecorePackage.getEDate(), "startDate", null, 1, 1, DiscountCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(discountEClass, Discount.class, "Discount", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDiscount_Time(), ecorePackage.getEInt(), "time", null, 1, 1, Discount.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiscount_DiscountFactor(), ecorePackage.getEFloat(), "discountFactor", "1", 1, 1, Discount.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //OptimiserPackageImpl

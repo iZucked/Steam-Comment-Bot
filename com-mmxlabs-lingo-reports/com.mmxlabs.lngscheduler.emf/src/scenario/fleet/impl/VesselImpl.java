@@ -9,12 +9,12 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+import scenario.impl.NamedObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,7 +23,6 @@ import scenario.fleet.VesselClass;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.VesselImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getClass_ <em>Class</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getStartRequirement <em>Start Requirement</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getEndRequirement <em>End Requirement</em>}</li>
@@ -33,27 +32,7 @@ import scenario.fleet.VesselClass;
  *
  * @generated
  */
-public class VesselImpl extends EObjectImpl implements Vessel {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
+public class VesselImpl extends NamedObjectImpl implements Vessel {
 	/**
 	 * The cached value of the '{@link #getClass_() <em>Class</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -121,29 +100,6 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.VESSEL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__NAME, oldName, name));
 	}
 
 	/**
@@ -323,8 +279,6 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.VESSEL__NAME:
-				return getName();
 			case FleetPackage.VESSEL__CLASS:
 				if (resolve) return getClass_();
 				return basicGetClass();
@@ -347,9 +301,6 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.VESSEL__NAME:
-				setName((String)newValue);
-				return;
 			case FleetPackage.VESSEL__CLASS:
 				setClass((VesselClass)newValue);
 				return;
@@ -374,9 +325,6 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL__CLASS:
 				setClass((VesselClass)null);
 				return;
@@ -401,8 +349,6 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case FleetPackage.VESSEL__CLASS:
 				return class_ != null;
 			case FleetPackage.VESSEL__START_REQUIREMENT:
@@ -425,9 +371,7 @@ public class VesselImpl extends EObjectImpl implements Vessel {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", timeChartered: ");
+		result.append(" (timeChartered: ");
 		result.append(timeChartered);
 		result.append(')');
 		return result.toString();

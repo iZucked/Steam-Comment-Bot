@@ -1,51 +1,50 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.ContractPackage;
-import scenario.contract.MarketPricePurchaseContract;
-
-import scenario.market.Market;
+import scenario.contract.IndexPricePurchaseContract;
+import scenario.market.Index;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Market Price Purchase Contract</b></em>'.
+ * An implementation of the model object '<em><b>Index Price Purchase Contract</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.contract.impl.MarketPricePurchaseContractImpl#getMarket <em>Market</em>}</li>
+ *   <li>{@link scenario.contract.impl.IndexPricePurchaseContractImpl#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implements MarketPricePurchaseContract {
+public class IndexPricePurchaseContractImpl extends PurchaseContractImpl implements IndexPricePurchaseContract {
 	/**
-	 * The cached value of the '{@link #getMarket() <em>Market</em>}' reference.
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarket()
+	 * @see #getIndex()
 	 * @generated
 	 * @ordered
 	 */
-	protected Market market;
+	protected Index index;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MarketPricePurchaseContractImpl() {
+	protected IndexPricePurchaseContractImpl() {
 		super();
 	}
 
@@ -56,7 +55,7 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ContractPackage.Literals.MARKET_PRICE_PURCHASE_CONTRACT;
+		return ContractPackage.Literals.INDEX_PRICE_PURCHASE_CONTRACT;
 	}
 
 	/**
@@ -64,17 +63,16 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Market getMarket() {
-		if (market != null && market.eIsProxy()) {
-			InternalEObject oldMarket = (InternalEObject)market;
-			market = (Market)eResolveProxy(oldMarket);
-			if (market != oldMarket) {
+	public Index getIndex() {
+		if (index != null && index.eIsProxy()) {
+			InternalEObject oldIndex = (InternalEObject)index;
+			index = (Index)eResolveProxy(oldIndex);
+			if (index != oldIndex) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT__MARKET, oldMarket, market));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT__INDEX, oldIndex, index));
 			}
 		}
-		return market;
+		return index;
 	}
 
 	/**
@@ -82,8 +80,8 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Market basicGetMarket() {
-		return market;
+	public Index basicGetIndex() {
+		return index;
 	}
 
 	/**
@@ -91,12 +89,11 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setMarket(Market newMarket) {
-		Market oldMarket = market;
-		market = newMarket;
+	public void setIndex(Index newIndex) {
+		Index oldIndex = index;
+		index = newIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT__MARKET, oldMarket, market));
+			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT__INDEX, oldIndex, index));
 	}
 
 	/**
@@ -107,9 +104,9 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT__MARKET:
-				if (resolve) return getMarket();
-				return basicGetMarket();
+			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT__INDEX:
+				if (resolve) return getIndex();
+				return basicGetIndex();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -122,8 +119,8 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT__MARKET:
-				setMarket((Market)newValue);
+			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT__INDEX:
+				setIndex((Index)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -137,8 +134,8 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT__MARKET:
-				setMarket((Market)null);
+			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT__INDEX:
+				setIndex((Index)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -152,10 +149,10 @@ public class MarketPricePurchaseContractImpl extends PurchaseContractImpl implem
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT__MARKET:
-				return market != null;
+			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT__INDEX:
+				return index != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //MarketPricePurchaseContractImpl
+} //IndexPricePurchaseContractImpl

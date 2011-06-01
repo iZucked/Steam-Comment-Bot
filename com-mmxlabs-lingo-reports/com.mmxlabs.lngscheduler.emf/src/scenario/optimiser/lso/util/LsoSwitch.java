@@ -9,9 +9,15 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.NamedObject;
+import scenario.ScenarioObject;
 import scenario.optimiser.OptimisationSettings;
-
-import scenario.optimiser.lso.*;
+import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.MoveGeneratorSettings;
+import scenario.optimiser.lso.RandomMoveGeneratorSettings;
+import scenario.optimiser.lso.ThresholderSettings;
 
 /**
  * <!-- begin-user-doc -->
@@ -91,6 +97,8 @@ public class LsoSwitch<T> {
 				LSOSettings lsoSettings = (LSOSettings)theEObject;
 				T result = caseLSOSettings(lsoSettings);
 				if (result == null) result = caseOptimisationSettings(lsoSettings);
+				if (result == null) result = caseNamedObject(lsoSettings);
+				if (result == null) result = caseScenarioObject(lsoSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -196,6 +204,36 @@ public class LsoSwitch<T> {
 	 * @generated
 	 */
 	public T caseConstrainedMoveGeneratorSettings(ConstrainedMoveGeneratorSettings object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioObject(ScenarioObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 

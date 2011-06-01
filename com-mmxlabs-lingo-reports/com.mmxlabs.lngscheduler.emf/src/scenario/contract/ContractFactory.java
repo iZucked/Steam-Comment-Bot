@@ -69,13 +69,13 @@ public interface ContractFactory extends EFactory {
 	FixedPricePurchaseContract createFixedPricePurchaseContract();
 
 	/**
-	 * Returns a new object of class '<em>Market Price Purchase Contract</em>'.
+	 * Returns a new object of class '<em>Index Price Purchase Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Market Price Purchase Contract</em>'.
+	 * @return a new object of class '<em>Index Price Purchase Contract</em>'.
 	 * @generated
 	 */
-	MarketPricePurchaseContract createMarketPricePurchaseContract();
+	IndexPricePurchaseContract createIndexPricePurchaseContract();
 
 	/**
 	 * Returns a new object of class '<em>Netback Purchase Contract</em>'.

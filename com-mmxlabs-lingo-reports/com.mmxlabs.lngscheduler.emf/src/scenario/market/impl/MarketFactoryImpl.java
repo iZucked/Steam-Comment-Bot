@@ -10,11 +10,12 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.market.*;
-import scenario.market.Market;
+import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
+import scenario.market.StepwisePrice;
+import scenario.market.StepwisePriceCurve;
 
 /**
  * <!-- begin-user-doc -->
@@ -60,13 +61,23 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case MarketPackage.MARKET: return createMarket();
+			case MarketPackage.INDEX: return createIndex();
 			case MarketPackage.MARKET_MODEL: return createMarketModel();
 			case MarketPackage.STEPWISE_PRICE_CURVE: return createStepwisePriceCurve();
 			case MarketPackage.STEPWISE_PRICE: return createStepwisePrice();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Index createIndex() {
+		IndexImpl index = new IndexImpl();
+		return index;
 	}
 
 	/**
@@ -100,17 +111,6 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	public StepwisePrice createStepwisePrice() {
 		StepwisePriceImpl stepwisePrice = new StepwisePriceImpl();
 		return stepwisePrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Market createMarket() {
-		MarketImpl market = new MarketImpl();
-		return market;
 	}
 
 	/**
