@@ -120,7 +120,8 @@ public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
 							sub.setLayoutData(new GridData(
 									GridData.FILL_HORIZONTAL));
 
-							sub.setEnabled(false);
+//							sub.setEnabled(false);
+							setControlEnabled(sub, false);
 							final Button check = new Button(composite,
 									SWT.TOGGLE);
 							check.setText("Set");
@@ -133,12 +134,14 @@ public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
 										featuresToSet
 												.add(new Pair<EMFPath, EStructuralFeature>(
 														path, feature));
-										sub.setEnabled(true);
+										setControlEnabled(sub, true);
+//										sub.setEnabled(true);
 									} else {
 										featuresToSet
 												.remove(new Pair<EMFPath, EStructuralFeature>(
 														path, feature));
-										sub.setEnabled(false);
+//										sub.setEnabled(false);
+										setControlEnabled(sub, false);
 									}
 								}
 							});
@@ -150,6 +153,16 @@ public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
 			};
 		}
 	};
+	
+	private void setControlEnabled(final Control sub, final boolean enabled) {
+		sub.setEnabled(enabled);
+		if (sub instanceof Composite) {
+			for (final Control c : ((Composite) sub).getChildren()) {
+				setControlEnabled(c, enabled);
+			}
+		}
+	}
+	
 	private List<EObject> objects = null;
 	private EditingDomain editingDomain;
 	private ICommandProcessor processor = new ICommandProcessor() {
