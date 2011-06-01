@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
@@ -50,6 +51,8 @@ public class PortRotationReportView extends EMFReportView {
 		final CargoPackage cp = CargoPackage.eINSTANCE;
 		final PortPackage pp = PortPackage.eINSTANCE;
 
+		final EStructuralFeature name = ScenarioPackage.eINSTANCE.getNamedObject_Name();
+		
 		addColumn("Schedule", containingScheduleFormatter);
 
 		addColumn("Vessel", objectFormatter,
@@ -88,11 +91,11 @@ public class PortRotationReportView extends EMFReportView {
 		});
 		addColumn("Speed", objectFormatter, ep.getJourney_Speed());
 		addColumn("From Port", objectFormatter, ep.getJourney_FromPort(),
-				pp.getPort_Name());
+				name);
 		addColumn("To Port", objectFormatter, ep.getJourney_ToPort(),
-				pp.getPort_Name());
+				name);
 		addColumn("At Port", objectFormatter, ep.getPortVisit_Port(),
-				pp.getPort_Name());
+				name);
 		addColumn("Route", objectFormatter, ep.getJourney_Route());
 
 		addColumn("Load Volume", new IntegerFormatter() {
