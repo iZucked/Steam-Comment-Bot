@@ -332,6 +332,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
+	final ScenarioRVP fuelProvider = new ScenarioRVP() {
+		@Override
+		public List<Pair<String, EObject>> getAllowedValues(EObject target,
+				EStructuralFeature field) {
+			return getSortedNames(getEnclosingScenario(target).getFleetModel().getFuels(), namedObjectName);
+		}
+	};
+	
 	final ScenarioRVP vesselProvider = new ScenarioRVP() {
 		@Override
 		public List<Pair<String, EObject>> getAllowedValues(EObject target,
@@ -2464,6 +2472,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				});
 
+		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE.getVesselFuel(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, processor, fuelProvider);
+					}
+				});
+		
 		page.setEditorFactoryForClassifier(
 				ContractPackage.eINSTANCE.getContract(),
 				new IInlineEditorFactory() {
