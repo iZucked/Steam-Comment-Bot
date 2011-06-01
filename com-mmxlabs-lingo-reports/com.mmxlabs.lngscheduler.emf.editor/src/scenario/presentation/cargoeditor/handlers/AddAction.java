@@ -8,8 +8,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
-
-import scenario.presentation.LngEditorPlugin;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * An action for adding model elements
@@ -22,9 +22,8 @@ public abstract class AddAction extends Action {
 		super();
 		this.editingDomain = editingDomain;
 
-		setImageDescriptor(LngEditorPlugin.Implementation
-				.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin()
-						.getSymbolicName(), "/icons/add.gif"));
+		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
+				.getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		setToolTipText("Add " + name);
 		setText("Add " + name);
 	}
