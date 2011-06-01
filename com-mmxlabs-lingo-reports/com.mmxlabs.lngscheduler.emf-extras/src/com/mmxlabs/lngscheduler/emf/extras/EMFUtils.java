@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.Iterator;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import scenario.Scenario;
@@ -253,8 +252,8 @@ public class EMFUtils {
 	}
 
 	/**
-	 * Find an EClass which is a common superclass of the given objects
-	 * NOTE this does not work with multiple supertypes
+	 * Find an EClass which is a common superclass of the given objects NOTE
+	 * this does not work with multiple supertypes
 	 * 
 	 * @param objects
 	 * @return
@@ -281,5 +280,22 @@ public class EMFUtils {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Returns true if all the {@link EObject}s in the given collection have the
+	 * same {@link EClass}.
+	 * 
+	 * @param objects
+	 * @return true if all objects have same {@link EClass}
+	 */
+	public static boolean allSameEClass(final Collection<? extends EObject> objects) {
+		final Iterator<? extends EObject> it = objects.iterator();
+		if (it.hasNext() == false) return true;
+		final EClass firstClass = it.next().eClass();
+		while (it.hasNext()) {
+			if (it.next().eClass() != firstClass) return false;
+		}
+		return true;
 	}
 }
