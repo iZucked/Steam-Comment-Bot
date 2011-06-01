@@ -26,7 +26,6 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.URIEditorInput;
@@ -38,16 +37,15 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -124,8 +122,6 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
-import scenario.cargo.Cargo;
-import scenario.cargo.CargoFactory;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
@@ -162,7 +158,6 @@ import scenario.presentation.cargoeditor.NonEditableColumn;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
-import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
@@ -182,13 +177,12 @@ import scenario.presentation.cargoeditor.importer.CSVReader;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
 import scenario.presentation.cargoeditor.importer.EObjectImporter;
 import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
+import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
-import scenario.schedule.CargoAllocation;
 import scenario.schedule.SchedulePackage;
-import scenario.schedule.events.SlotVisit;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
@@ -1330,7 +1324,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final AutoCorrector autoCorrector = new AutoCorrector(
 					getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
-			autoCorrector.addCorrector(new DateLocalisingCorrector());
+			// autoCorrector.addCorrector(new DateLocalisingCorrector());
 
 			final Scenario s = ((Scenario) (editingDomain.getResourceSet()
 					.getResources().get(0).getContents().get(0)));
@@ -2080,7 +2074,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				@Override
 				protected Action createImportAction(final TableViewer viewer,
 						final EditingDomain editingDomain, final EMFPath ePath) {
-					return new Action() {
+					return new ImportCSVAction() {
 
 						@Override
 						public void run() {
@@ -2154,6 +2148,30 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							} catch (IOException ex) {
 
 							}
+						}
+
+						/*
+						 * Because I've over-ridden the run method up there,
+						 * these methods can safely return null. However, it
+						 * does mean that vessel class imports will not have any
+						 * of the nice merging behaviour that other importers get.
+						 * 
+						 * TODO fix this.
+						 */
+
+						@Override
+						protected EObject getToplevelObject() {
+							return null;
+						}
+
+						@Override
+						protected void addObjects(Collection<EObject> newObjects) {
+
+						}
+
+						@Override
+						protected EClass getImportClass() {
+							return null;
 						}
 					};
 				}

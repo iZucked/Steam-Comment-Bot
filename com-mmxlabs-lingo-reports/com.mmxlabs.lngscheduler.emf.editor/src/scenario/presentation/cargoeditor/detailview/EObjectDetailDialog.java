@@ -78,7 +78,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			@Override
 			public void processCommand(Command command, EObject target,
 					EStructuralFeature feature) {
-				editingDomain.getCommandStack().execute(command);
+				//commands need not be in the stack, as we don't care for undoing them
+				command.execute();
 			}
 		};
 
