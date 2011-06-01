@@ -34,7 +34,9 @@ public abstract class AddAction extends Action {
 	}
 
 	/**
-	 * Create an instance of the object to add, or return null to cancel the action
+	 * Create an instance of the object to add, or return null to cancel the
+	 * action
+	 * 
 	 * @return
 	 */
 	protected abstract EObject createObject();
@@ -45,17 +47,13 @@ public abstract class AddAction extends Action {
 
 	private final EditingDomain editingDomain;
 
-	
-	
 	@Override
 	public void run() {
 		final EObject object = createObject();
-		if (object == null) return; //if cancelled, subclasses return null
-		final Command command = editingDomain.createCommand(
-				AddCommand.class,
-				new CommandParameter(getOwner(), getFeature(), Collections
-						.singleton(object)));
-
-		editingDomain.getCommandStack().execute(command);
+		if (object == null)
+			return; // if cancelled, subclasses return null
+		editingDomain.getCommandStack().execute(
+				AddCommand.create(editingDomain, getOwner(), getFeature(),
+						object));
 	}
 }
