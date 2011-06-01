@@ -210,9 +210,22 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 public class ScenarioEditor extends MultiPageEditorPart implements
 		IEditingDomainProvider, ISelectionProvider, IMenuListener,
 		IViewerProvider {
-	
-	final static EAttribute namedObjectName = ScenarioPackage.eINSTANCE.getNamedObject_Name();
-	
+
+	final static EAttribute namedObjectName = ScenarioPackage.eINSTANCE
+			.getNamedObject_Name();
+
+	/**
+	 * This extension of {@link EObjectEditorViewerPane} adds the following
+	 * <ol>
+	 * <li>A handler which pops up either an {@link EObjectDetailDialog} or an
+	 * {@link EObjectMultiDialog} when you hit return</li>
+	 * <li>
+	 * An add action which displays an {@link EObjectDetailDialog} when you add
+	 * a new element</li>
+	 * 
+	 * @author Tom Hinton
+	 * 
+	 */
 	private class ScenarioObjectEditorViewerPane extends
 			EObjectEditorViewerPane {
 		/**
@@ -224,7 +237,54 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			super(page, part);
 		}
 
+		/**
+		 * Create a custom add action, which delegates to the default behaviour
+		 * to create the object, but adds in an editor dialog.
+		 */
 		@Override
+		protected Action createAddAction(final TableViewer viewer,
+				final EditingDomain editingDomain, EMFPath contentPath) {
+			final AddAction delegate = (AddAction) super.createAddAction(
+					viewer, editingDomain, contentPath);
+			final Action result = new AddAction(editingDomain, contentPath
+					.getTargetType().getName()) {
+				@Override
+				public EObject createObject() {
+					final EObject newObject = delegate.createObject();
+
+					final EObjectDetailDialog dialog = new EObjectDetailDialog(
+							viewer.getControl().getShell(), SWT.NONE,
+							editingDomain);
+
+					ScenarioEditor.this.setupDetailViewContainer(dialog);
+
+					if (dialog.open(Collections.singletonList(newObject))
+							.size() > 0) {
+						return newObject;
+					} else {
+						return null;
+					}
+				}
+
+				@Override
+				public Object getOwner() {
+					return delegate.getOwner();
+				}
+
+				@Override
+				public Object getFeature() {
+					return delegate.getFeature();
+				}
+			};
+			return result;
+		}
+
+		@Override
+		/**
+		 * Hook a key listener to the viewer to pick up return and display an editor.
+		 * 
+		 * TODO cache editors for efficiency.
+		 */
 		public Viewer createViewer(final Composite parent) {
 			final Viewer v = super.createViewer(parent);
 			v.getControl().addKeyListener(new KeyListener() {
@@ -254,7 +314,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								multiDialog.setEditorFactoryForFeature(
 										ScenarioPackage.eINSTANCE
 												.getNamedObject_Name(), null);
-								
+
 								multiDialog.setEditorFactoryForFeature(
 										FleetPackage.eINSTANCE
 												.getVesselEvent_Id(), null);
@@ -265,7 +325,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 													multiDialog.createCommand());
 								}
 							} else {
-
 								final EObjectDetailDialog dialog = new EObjectDetailDialog(
 										v.getControl().getShell(), SWT.NONE,
 										getEditingDomain());
@@ -336,18 +395,18 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		@Override
 		public List<Pair<String, EObject>> getAllowedValues(EObject target,
 				EStructuralFeature field) {
-			return getSortedNames(getEnclosingScenario(target).getFleetModel().getFuels(), namedObjectName);
+			return getSortedNames(getEnclosingScenario(target).getFleetModel()
+					.getFuels(), namedObjectName);
 		}
 	};
-	
+
 	final ScenarioRVP vesselProvider = new ScenarioRVP() {
 		@Override
 		public List<Pair<String, EObject>> getAllowedValues(EObject target,
 				EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getFleetModel().getFleet(),
-					namedObjectName);
+					.getFleetModel().getFleet(), namedObjectName);
 			return result;
 		}
 	};
@@ -358,8 +417,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getFleetModel().getVesselClasses(),
-					namedObjectName);
+					.getFleetModel().getVesselClasses(), namedObjectName);
 			return result;
 		}
 	};
@@ -370,8 +428,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getContractModel().getEntities(),
-					namedObjectName);
+					.getContractModel().getEntities(), namedObjectName);
 			return result;
 		}
 	};
@@ -384,8 +441,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				return Collections.emptyList();
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getPortModel().getPorts(),
-					namedObjectName);
+					.getPortModel().getPorts(), namedObjectName);
 			return result;
 		}
 	};
@@ -454,8 +510,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getMarketModel().getIndices(),
-					namedObjectName);
+					.getMarketModel().getIndices(), namedObjectName);
 			return result;
 		}
 	};
@@ -1549,11 +1604,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							.getContract_Entity(), entityProvider,
 							getEditingDomain()));
 
-			salesPane.addTypicalColumn(
-					"Index",
-					new SingleReferenceManipulator(ContractPackage.eINSTANCE
-							.getSalesContract_Index(), indexProvider,
-							getEditingDomain()));
+			salesPane.addTypicalColumn("Index", new SingleReferenceManipulator(
+					ContractPackage.eINSTANCE.getSalesContract_Index(),
+					indexProvider, getEditingDomain()));
 
 			// salesPane.addTypicalColumn(
 			// "Regas Efficiency",
@@ -2116,8 +2169,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			vcePane.init(path2, adapterFactory);
 			{
 				final BasicAttributeManipulator name = new BasicAttributeManipulator(
-						namedObjectName,
-						getEditingDomain());
+						namedObjectName, getEditingDomain());
 				vcePane.addColumn("Name", name, name);
 			}
 			{
@@ -2198,7 +2250,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							.getContents().get(0));
 
 			vcePane.setTitle("Vessel Classes");
-			
+
 			createContextMenuFor(vcePane.getViewer());
 
 			final EObjectEditorViewerPane fleetPane = new ScenarioObjectEditorViewerPane(
@@ -2216,8 +2268,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			fleetPane.init(path, adapterFactory);
 			{
 				final BasicAttributeManipulator name = new BasicAttributeManipulator(
-						namedObjectName,
-						getEditingDomain());
+						namedObjectName, getEditingDomain());
 				fleetPane.addColumn("Name", name, name);
 			}
 
@@ -2472,7 +2523,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				});
 
-		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE.getVesselFuel(),
+		page.setEditorFactoryForClassifier(
+				FleetPackage.eINSTANCE.getVesselFuel(),
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
@@ -2482,7 +2534,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								editingDomain, processor, fuelProvider);
 					}
 				});
-		
+
 		page.setEditorFactoryForClassifier(
 				ContractPackage.eINSTANCE.getContract(),
 				new IInlineEditorFactory() {
