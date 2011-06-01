@@ -286,15 +286,14 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 				terminal++;
 			}
 
-			if (terminal >= positions.size())
-				return;
-
+			boolean draggedToNowhere = terminal >= positions.size();
+			
 			final Rectangle ca = getClientArea();
 
 			final boolean control = (e.stateMask & SWT.CONTROL) != 0;
 
 			// now find column
-			if (!draggingFromLeft
+			if (!draggedToNowhere && !draggingFromLeft
 					&& (e.x >= terminalSize && e.x <= 2 * terminalSize)) {
 				// arrived in left column from right
 				final int ix = wiring.indexOf(draggingFrom);
@@ -306,7 +305,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 						wiring.set(ix, -1);
 				}
 				wiring.set(terminal, draggingFrom);
-			} else if (draggingFromLeft
+			} else if (!draggedToNowhere && draggingFromLeft
 					&& (e.x >= ca.width - terminalSize * 2 && e.x <= ca.width
 							- terminalSize)) {
 				// arrived in right column
@@ -332,6 +331,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 			}
 			wiringChanged(wiring);
 		}
+		
 		redraw();
 	}
 
