@@ -274,11 +274,11 @@ public abstract class PopupComposite extends Composite {
 
 	@Override
 	protected void checkSubclass() {
-		String name = getClass().getName();
-		int index = name.lastIndexOf('.');
-		if (!name.substring(0, index + 1).equals(PACKAGE_PREFIX)) {
-			SWT.error(SWT.ERROR_INVALID_SUBCLASS);
-		}
+//		String name = getClass().getName();
+//		int index = name.lastIndexOf('.');
+//		if (!name.substring(0, index + 1).equals(PACKAGE_PREFIX)) {
+//			SWT.error(SWT.ERROR_INVALID_SUBCLASS);
+//		}
 	}
 
 	/**
