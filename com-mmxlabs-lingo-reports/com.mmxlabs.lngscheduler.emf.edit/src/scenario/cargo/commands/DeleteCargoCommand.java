@@ -63,14 +63,15 @@ public class DeleteCargoCommand extends DeleteCommand {
 		// sequence elements
 		// cargo allocations
 		// profit and loss bookings
-
+		boolean deletedCargoAllocation = false;
 		for (final Map.Entry<EObject, Collection<EStructuralFeature.Setting>> entry : usages
 				.entrySet()) {
 			final EObject referer = entry.getKey();
 			if (referer instanceof SlotVisit) {
 				appendAndExecute(DeleteCommand.create(domain,
 						Collections.singleton(referer)));
-			} else if (referer instanceof CargoAllocation) {
+			} else if (referer instanceof CargoAllocation && !deletedCargoAllocation) {
+				deletedCargoAllocation = true;
 				final CargoAllocation ca = (CargoAllocation) referer;
 				appendAndExecute(DeleteCommand.create(domain,
 						Collections.singleton(ca.getBallastIdle())));
