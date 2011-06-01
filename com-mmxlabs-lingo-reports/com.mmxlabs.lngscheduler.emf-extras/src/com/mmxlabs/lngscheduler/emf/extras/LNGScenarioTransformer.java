@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,6 +48,9 @@ import scenario.fleet.VesselStateAttributes;
 import scenario.market.Index;
 import scenario.market.StepwisePrice;
 import scenario.market.StepwisePriceCurve;
+import scenario.optimiser.Discount;
+import scenario.optimiser.DiscountCurve;
+import scenario.optimiser.Objective;
 import scenario.optimiser.OptimisationSettings;
 import scenario.port.Canal;
 import scenario.port.DistanceLine;
@@ -56,6 +60,7 @@ import scenario.port.VesselClassCost;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.InterpolatingDiscountCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -151,8 +156,7 @@ public class LNGScenarioTransformer {
 		final Association<Index, ICurve> indexAssociation = new Association<Index, ICurve>();
 
 		for (final Index index : scenario.getMarketModel().getIndices()) {
-			final StepwiseIntegerCurve curve = createCurveForIndex(index,
-					1.0f);
+			final StepwiseIntegerCurve curve = createCurveForIndex(index, 1.0f);
 
 			indexAssociation.add(index, curve);
 		}
@@ -205,10 +209,8 @@ public class LNGScenarioTransformer {
 						.scaleToInt(((FixedPricePurchaseContract) c)
 								.getUnitPrice()));
 			} else if (c instanceof IndexPricePurchaseContract) {
-				calculator = builder
-						.createMarketPriceContract(indexAssociation
-								.lookup(((IndexPricePurchaseContract) c)
-										.getIndex()));
+				calculator = builder.createMarketPriceContract(indexAssociation
+						.lookup(((IndexPricePurchaseContract) c).getIndex()));
 			} else if (c instanceof ProfitSharingPurchaseContract) {
 				final ProfitSharingPurchaseContract p = (ProfitSharingPurchaseContract) c;
 				calculator = builder.createProfitSharingContract(
@@ -239,7 +241,55 @@ public class LNGScenarioTransformer {
 
 		buildTotalVolumeLimits(builder, portAssociation);
 
+		buildDiscountCurves(builder);
+
 		return builder.getOptimisationData();
+	}
+
+	/**
+	 * Create and associate discount curves
+	 * 
+	 * This ought to be in {@link OptimisationTransformer} but that doesn't have
+	 * access to set up DCPs.
+	 * 
+	 * @param builder
+	 */
+	private void buildDiscountCurves(final SchedulerBuilder builder) {
+		final Map<DiscountCurve, ICurve> discountCurveMap = new LinkedHashMap<DiscountCurve, ICurve>();
+		for (final DiscountCurve curve : scenario.getOptimisation()
+				.getDiscountCurves()) {
+			final InterpolatingDiscountCurve realCurve = new InterpolatingDiscountCurve();
+
+			final int baseTime = curve.isSetStartDate() ? convertTime(curve
+					.getStartDate()) : 0;
+			if (baseTime > 0) {
+				realCurve.setValueAtPoint(0, 1);
+				realCurve.setValueAtPoint(baseTime - 1, 1);
+			}
+
+			for (final Discount d : curve.getDiscounts()) {
+				realCurve.setValueAtPoint(baseTime + d.getTime(),
+						d.getDiscountFactor());
+			}
+		}
+
+		// set up DCP
+
+		final DiscountCurve defaultCurve = scenario.getOptimisation()
+				.getCurrentSettings().isSetDefaultDiscountCurve() ? scenario
+				.getOptimisation().getCurrentSettings()
+				.getDefaultDiscountCurve() : null;
+
+		for (final Objective objective : scenario.getOptimisation()
+				.getCurrentSettings().getObjectives()) {
+			if (objective.isSetDiscountCurve()) {
+				builder.setFitnessComponentDiscountCurve(objective.getName(),
+						discountCurveMap.get(objective.getDiscountCurve()));
+			} else {
+				builder.setFitnessComponentDiscountCurve(objective.getName(),
+						discountCurveMap.get(defaultCurve));
+			}
+		}
 	}
 
 	private StepwiseIntegerCurve createCurveForIndex(final Index index,
@@ -560,9 +610,10 @@ public class LNGScenarioTransformer {
 																// capacity mean
 																// to be scaled?
 							Calculator.scaleToInt(eVc.getMinHeelVolume()),
-							Calculator.scaleToInt(eVc.getBaseFuel().getUnitPrice()),
-							Calculator.scaleToInt(eVc
-									.getBaseFuel().getEquivalenceFactor()),
+							Calculator.scaleToInt(eVc.getBaseFuel()
+									.getUnitPrice()),
+							Calculator.scaleToInt(eVc.getBaseFuel()
+									.getEquivalenceFactor()),
 							// This should be divide?
 							Calculator.scaleToInt(eVc.getDailyCharterPrice() / 24.0));
 			vesselClassAssociation.add(eVc, vc);
