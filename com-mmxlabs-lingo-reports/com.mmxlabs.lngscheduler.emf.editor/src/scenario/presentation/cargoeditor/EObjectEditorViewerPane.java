@@ -689,8 +689,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 							.getEStructuralFeature();
 					if (feature instanceof EReference) {
 						final EReference ref = (EReference) feature;
-						final int index = ((EList) setting.getEObject().eGet(
-								feature)).indexOf(oldObject);
+						
 
 						// multi-references need a remove and an add
 						// TODO this will NOT WORK if the old list
@@ -698,6 +697,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						// to the object being replaced, but at the
 						// moment our domain does not do that.
 						if (ref.isMany()) {
+							final int index = ((EList) setting.getEObject().eGet(
+									feature)).indexOf(oldObject);
+							
 							cc.append(RemoveCommand.create(editingDomain,
 									setting.getEObject(),
 									setting.getEStructuralFeature(), oldObject));
