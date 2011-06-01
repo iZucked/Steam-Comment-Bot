@@ -133,7 +133,7 @@ import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.Contract;
 import scenario.contract.ContractPackage;
 import scenario.contract.FixedPricePurchaseContract;
-import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
 import scenario.contract.NetbackPurchaseContract;
 import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
@@ -167,13 +167,13 @@ import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailPropertySheetPage;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.detailview.EObjectMultiDialog;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.dialogs.PortAndTimeDialog;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.handlers.AddAction;
@@ -210,6 +210,9 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 public class ScenarioEditor extends MultiPageEditorPart implements
 		IEditingDomainProvider, ISelectionProvider, IMenuListener,
 		IViewerProvider {
+	
+	final static EAttribute namedObjectName = ScenarioPackage.eINSTANCE.getNamedObject_Name();
+	
 	private class ScenarioObjectEditorViewerPane extends
 			EObjectEditorViewerPane {
 		/**
@@ -251,12 +254,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								multiDialog.setEditorFactoryForFeature(
 										ScenarioPackage.eINSTANCE
 												.getNamedObject_Name(), null);
-								multiDialog.setEditorFactoryForFeature(
-										FleetPackage.eINSTANCE.getVessel_Name(),
-										null);
-								multiDialog.setEditorFactoryForFeature(
-										FleetPackage.eINSTANCE
-												.getVesselClass_Name(), null);
+								
 								multiDialog.setEditorFactoryForFeature(
 										FleetPackage.eINSTANCE
 												.getVesselEvent_Id(), null);
@@ -334,6 +332,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
+	final ScenarioRVP fuelProvider = new ScenarioRVP() {
+		@Override
+		public List<Pair<String, EObject>> getAllowedValues(EObject target,
+				EStructuralFeature field) {
+			return getSortedNames(getEnclosingScenario(target).getFleetModel().getFuels(), namedObjectName);
+		}
+	};
+	
 	final ScenarioRVP vesselProvider = new ScenarioRVP() {
 		@Override
 		public List<Pair<String, EObject>> getAllowedValues(EObject target,
@@ -341,7 +347,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getFleetModel().getFleet(),
-					FleetPackage.eINSTANCE.getVessel_Name());
+					namedObjectName);
 			return result;
 		}
 	};
@@ -353,7 +359,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getFleetModel().getVesselClasses(),
-					FleetPackage.eINSTANCE.getVesselClass_Name());
+					namedObjectName);
 			return result;
 		}
 	};
@@ -365,7 +371,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getContractModel().getEntities(),
-					ScenarioPackage.eINSTANCE.getNamedObject_Name());
+					namedObjectName);
 			return result;
 		}
 	};
@@ -379,7 +385,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getPortModel().getPorts(),
-					PortPackage.eINSTANCE.getPort_Name());
+					namedObjectName);
 			return result;
 		}
 	};
@@ -442,14 +448,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
-	final ScenarioRVP marketProvider = new ScenarioRVP() {
+	final ScenarioRVP indexProvider = new ScenarioRVP() {
 		@Override
 		public List<Pair<String, EObject>> getAllowedValues(
 				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getMarketModel().getMarkets(),
-					ScenarioPackage.eINSTANCE.getNamedObject_Name());
+					.getMarketModel().getIndices(),
+					namedObjectName);
 			return result;
 		}
 	};
@@ -1258,9 +1264,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			createEventsEditor();
 
-			createPortEditor(contractProvider, marketProvider);
+			createPortEditor(contractProvider, indexProvider);
 
-			createMarketEditor();
+			createIndexEditor();
 
 			createContractEditor();
 
@@ -1544,9 +1550,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							getEditingDomain()));
 
 			salesPane.addTypicalColumn(
-					"Market",
+					"Index",
 					new SingleReferenceManipulator(ContractPackage.eINSTANCE
-							.getSalesContract_Market(), marketProvider,
+							.getSalesContract_Index(), indexProvider,
 							getEditingDomain()));
 
 			// salesPane.addTypicalColumn(
@@ -1578,8 +1584,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			purchasePane.addTypicalColumn("Type", new NonEditableColumn() {
 				@Override
 				public String render(Object object) {
-					if (object instanceof MarketPricePurchaseContract) {
-						return "Market Price";
+					if (object instanceof IndexPricePurchaseContract) {
+						return "Index Price";
 					} else if (object instanceof FixedPricePurchaseContract) {
 						return "Fixed Price";
 					} else if (object instanceof NetbackPurchaseContract) {
@@ -1663,13 +1669,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		final MultipleReferenceManipulator vessels = new MultipleReferenceManipulator(
 				fp.getVesselEvent_Vessels(), editingDomain, vesselProvider,
-				fp.getVessel_Name());
+				namedObjectName);
 
 		eventsPane.addColumn("Vessels", vessels, vessels);
 
 		final MultipleReferenceManipulator classes = new MultipleReferenceManipulator(
 				fp.getVesselEvent_VesselClasses(), editingDomain,
-				vesselClassProvider, fp.getVesselClass_Name());
+				vesselClassProvider, namedObjectName);
 
 		eventsPane.addColumn("Classes", classes, classes);
 
@@ -1684,40 +1690,40 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		setPageText(pageIndex, "Events");
 	}
 
-	private void createMarketEditor() {
+	private void createIndexEditor() {
 		// price curves only for now
 		// split view, chart at the bottom editor at the top
 
 		final SashForm sash = new SashForm(getContainer(), SWT.SMOOTH
 				| SWT.HORIZONTAL);
 
-		final EObjectEditorViewerPane markets = new ScenarioObjectEditorViewerPane(
+		final EObjectEditorViewerPane indices = new ScenarioObjectEditorViewerPane(
 				getSite().getPage(), this);
 
-		markets.createControl(sash);
-		markets.setTitle("Markets", getTitleImage());
+		indices.createControl(sash);
+		indices.setTitle("Indices", getTitleImage());
 
 		final List<EReference> path2 = new LinkedList<EReference>();
 
 		path2.add(ScenarioPackage.eINSTANCE.getScenario_MarketModel());
-		path2.add(MarketPackage.eINSTANCE.getMarketModel_Markets());
+		path2.add(MarketPackage.eINSTANCE.getMarketModel_Indices());
 
-		markets.init(path2, getAdapterFactory());
+		indices.init(path2, getAdapterFactory());
 
 		final BasicAttributeManipulator name = new BasicAttributeManipulator(
 				ScenarioPackage.eINSTANCE.getNamedObject_Name(),
 				getEditingDomain());
 
-		markets.addColumn("Name", name, name);
+		indices.addColumn("Name", name, name);
 
 		final NumericAttributeManipulator defaultValue = new NumericAttributeManipulator(
 				MarketPackage.eINSTANCE.getStepwisePriceCurve_DefaultValue(),
 				getEditingDomain());
 
-		markets.addColumn("Default Value", defaultValue, defaultValue,
-				MarketPackage.eINSTANCE.getMarket_PriceCurve());
+		indices.addColumn("Default Value", defaultValue, defaultValue,
+				MarketPackage.eINSTANCE.getIndex_PriceCurve());
 
-		markets.getViewer().setInput(
+		indices.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
@@ -1756,7 +1762,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			@Override
 			public double[] getYSeries(int i) {
-				StepwisePriceCurve curve = mm.getMarkets().get(i)
+				StepwisePriceCurve curve = mm.getIndices().get(i)
 						.getPriceCurve();
 				double[] answer = new double[curve.getPrices().size()];
 				for (int j = 0; j < answer.length; j++) {
@@ -1772,18 +1778,18 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			@Override
 			public String getSeriesName(int i) {
-				return mm.getMarkets().get(i).getName();
+				return mm.getIndices().get(i).getName();
 			}
 
 			@Override
 			public int getSeriesCount() {
 				// return 1;
-				return mm.getMarkets().size();
+				return mm.getIndices().size();
 			}
 
 			@Override
 			public Date[] getDateXSeries(int i) {
-				StepwisePriceCurve curve = mm.getMarkets().get(i)
+				StepwisePriceCurve curve = mm.getIndices().get(i)
 						.getPriceCurve();
 				Date[] answer = new Date[curve.getPrices().size()];
 				for (int j = 0; j < curve.getPrices().size(); j++) {
@@ -1812,147 +1818,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					getSite().getPage(), ScenarioEditor.this) {
 
 				final SwapDischargeSlotsAction swapAction = new SwapDischargeSlotsAction();
-
-				@Override
-				protected Action createAddAction(final TableViewer viewer,
-						final EditingDomain editingDomain, final EMFPath path) {
-					return new AddAction(editingDomain, "Cargo") {
-						final CargoFactory cf = CargoFactory.eINSTANCE;
-
-						@Override
-						protected EObject createObject() {
-							if (viewer.getSelection().isEmpty() == false) {
-								if (viewer.getSelection() instanceof IStructuredSelection) {
-									final IStructuredSelection sel = (IStructuredSelection) viewer
-											.getSelection();
-									if (sel.size() == 1) {
-										final Object selection = sel
-												.getFirstElement();
-										if (selection instanceof EObject) {
-											final EObject object = (EObject) selection;
-											return EcoreUtil.copy(object);
-										}
-									}
-								}
-							}
-							// TODO copy
-							final Cargo result = cf.createCargo();
-							result.setId("New Cargo");
-							final LoadSlot l = cf.createLoadSlot();
-							l.setId("New Cargo Load");
-							final Slot d = cf.createSlot();
-							d.setId("New Cargo Discharge");
-							result.setLoadSlot(l);
-							result.setDischargeSlot(d);
-							return result;
-						}
-
-						@Override
-						public void run() {
-							super.run();
-							viewer.refresh();
-						}
-
-						@Override
-						protected Object getOwner() {
-							return path.get((EObject) viewer.getInput(), 1);
-						}
-
-						@Override
-						protected Object getFeature() {
-							return path.getPathComponent(0);
-						}
-					};
-				}
-
-				@Override
-				protected Action createDeleteAction(final TableViewer viewer,
-						final EditingDomain editingDomain) {
-					// TODO custom delete action which also deletes associated
-					// events from any schedules.
-					return new Action() {
-						@Override
-						public void run() {
-							final CompoundCommand cc = new CompoundCommand();
-							final ISelection selection = viewer.getSelection();
-							if (selection instanceof IStructuredSelection) {
-								final Scenario scenario = getScenario();
-								final Object[] selectedObjects = ((IStructuredSelection) selection)
-										.toArray();
-								for (final Object object : selectedObjects) {
-									if (object instanceof Cargo) {
-										cc.append(deleteCargo(scenario,
-												(Cargo) object));
-									}
-								}
-							}
-							if (cc.canExecute() == false) {
-								throw new RuntimeException(
-										"problem with stupid command");
-							}
-							editingDomain.getCommandStack().execute(cc);
-							viewer.refresh();
-						}
-
-						private Command deleteCargo(final Scenario scenario,
-								final Cargo cargo) {
-							final CompoundCommand cc = new CompoundCommand();
-
-							// get crossreferences and delete stuff
-							for (final Setting setting : EcoreUtil.UsageCrossReferencer
-									.find(cargo.getLoadSlot(), scenario)) {
-								final EObject referent = setting.getEObject();
-								if (referent instanceof CargoAllocation) {
-									final CargoAllocation allocation = (CargoAllocation) referent;
-									cc.append(DeleteCommand.create(
-											editingDomain, allocation));
-									cc.append(DeleteCommand.create(
-											editingDomain,
-											allocation.getBallastIdle()));
-									cc.append(DeleteCommand.create(
-											editingDomain,
-											allocation.getLadenIdle()));
-									cc.append(DeleteCommand.create(
-											editingDomain,
-											allocation.getLadenLeg()));
-									cc.append(DeleteCommand.create(
-											editingDomain,
-											allocation.getBallastLeg()));
-
-									// delete revenue
-									cc.append(DeleteCommand.create(
-											editingDomain,
-											allocation.getLoadRevenue()));
-									cc.append(DeleteCommand.create(
-											editingDomain,
-											allocation.getShippingRevenue()));
-									cc.append(DeleteCommand.create(
-											editingDomain,
-											allocation.getDischargeRevenue()));
-								} else if (referent instanceof SlotVisit) {
-									cc.append(DeleteCommand.create(
-											editingDomain, referent));
-								}
-							}
-
-							// delete final slotvisit
-							for (final Setting setting : EcoreUtil.UsageCrossReferencer
-									.find(cargo.getDischargeSlot(), scenario)) {
-								final EObject referent = setting.getEObject();
-								if (referent instanceof SlotVisit) {
-									cc.append(DeleteCommand.create(
-											editingDomain, referent));
-								}
-							}
-
-							// delete the cargo
-							cc.append(DeleteCommand
-									.create(editingDomain, cargo));
-
-							return cc;
-						}
-					};
-				}
 
 				@Override
 				public Viewer createViewer(final Composite parent) {
@@ -2106,17 +1971,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		final PortPackage pp = PortPackage.eINSTANCE;
 		{
 			BasicAttributeManipulator manipulator = new BasicAttributeManipulator(
-					pp.getPort_Name(), getEditingDomain());
+					namedObjectName, getEditingDomain());
 			portsPane.addColumn("Name", manipulator, manipulator);
 			manipulator = new BasicAttributeManipulator(pp.getPort_TimeZone(),
 					getEditingDomain());
 			portsPane.addColumn("Timezone", manipulator, manipulator);
 
 			final SingleReferenceManipulator mm = new SingleReferenceManipulator(
-					pp.getPort_DefaultMarket(), marketProvider,
+					pp.getPort_DefaultIndex(), marketProvider,
 					getEditingDomain());
 
-			portsPane.addColumn("Default Market", mm, mm);
+			portsPane.addColumn("Default Index", mm, mm);
 
 			final SingleReferenceManipulator cm = new SingleReferenceManipulator(
 					pp.getPort_DefaultContract(), everyContractProvider,
@@ -2251,7 +2116,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			vcePane.init(path2, adapterFactory);
 			{
 				final BasicAttributeManipulator name = new BasicAttributeManipulator(
-						FleetPackage.eINSTANCE.getVesselClass_Name(),
+						namedObjectName,
 						getEditingDomain());
 				vcePane.addColumn("Name", name, name);
 			}
@@ -2266,8 +2131,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(
 						FleetPackage.eINSTANCE
 								.getVesselClass_InaccessiblePorts(),
-						getEditingDomain(), portProvider, PortPackage.eINSTANCE
-								.getPort_Name());
+						getEditingDomain(), portProvider, namedObjectName);
 				vcePane.addColumn("Inaccessible Ports", capacity, capacity);
 			}
 
@@ -2333,6 +2197,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
+			vcePane.setTitle("Vessel Classes");
+			
 			createContextMenuFor(vcePane.getViewer());
 
 			final EObjectEditorViewerPane fleetPane = new ScenarioObjectEditorViewerPane(
@@ -2350,7 +2216,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			fleetPane.init(path, adapterFactory);
 			{
 				final BasicAttributeManipulator name = new BasicAttributeManipulator(
-						FleetPackage.eINSTANCE.getVessel_Name(),
+						namedObjectName,
 						getEditingDomain());
 				fleetPane.addColumn("Name", name, name);
 			}
@@ -2606,6 +2472,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				});
 
+		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE.getVesselFuel(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature,
+							final ICommandProcessor processor) {
+						return new ReferenceInlineEditor(path, feature,
+								editingDomain, processor, fuelProvider);
+					}
+				});
+		
 		page.setEditorFactoryForClassifier(
 				ContractPackage.eINSTANCE.getContract(),
 				new IInlineEditorFactory() {
@@ -2631,14 +2508,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				});
 
-		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getMarket(),
+		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getIndex(),
 				new IInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
 							final EStructuralFeature feature,
 							final ICommandProcessor processor) {
 						return new ReferenceInlineEditor(path, feature,
-								editingDomain, processor, marketProvider);
+								editingDomain, processor, indexProvider);
 					}
 				});
 

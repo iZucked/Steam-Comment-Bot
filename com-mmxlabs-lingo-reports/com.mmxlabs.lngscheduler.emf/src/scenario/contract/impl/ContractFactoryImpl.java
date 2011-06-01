@@ -10,11 +10,17 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.contract.*;
+import scenario.contract.Contract;
 import scenario.contract.ContractFactory;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
+import scenario.contract.Entity;
+import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
+import scenario.contract.NetbackPurchaseContract;
+import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.contract.TotalVolumeLimit;
 
 /**
  * <!-- begin-user-doc -->
@@ -65,7 +71,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 			case ContractPackage.TOTAL_VOLUME_LIMIT: return createTotalVolumeLimit();
 			case ContractPackage.ENTITY: return createEntity();
 			case ContractPackage.FIXED_PRICE_PURCHASE_CONTRACT: return createFixedPricePurchaseContract();
-			case ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT: return createMarketPricePurchaseContract();
+			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT: return createIndexPricePurchaseContract();
 			case ContractPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT: return createProfitSharingPurchaseContract();
 			case ContractPackage.CONTRACT: return createContract();
@@ -134,10 +140,9 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public MarketPricePurchaseContract createMarketPricePurchaseContract() {
-		MarketPricePurchaseContractImpl marketPricePurchaseContract = new MarketPricePurchaseContractImpl();
-		return marketPricePurchaseContract;
+	public IndexPricePurchaseContract createIndexPricePurchaseContract() {
+		IndexPricePurchaseContractImpl indexPricePurchaseContract = new IndexPricePurchaseContractImpl();
+		return indexPricePurchaseContract;
 	}
 
 	/**

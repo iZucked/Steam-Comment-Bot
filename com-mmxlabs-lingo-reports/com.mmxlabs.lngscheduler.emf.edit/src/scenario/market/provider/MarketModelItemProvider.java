@@ -73,7 +73,7 @@ public class MarketModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(MarketPackage.Literals.MARKET_MODEL__MARKETS);
+			childrenFeatures.add(MarketPackage.Literals.MARKET_MODEL__INDICES);
 		}
 		return childrenFeatures;
 	}
@@ -125,7 +125,7 @@ public class MarketModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(MarketModel.class)) {
-			case MarketPackage.MARKET_MODEL__MARKETS:
+			case MarketPackage.MARKET_MODEL__INDICES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -145,8 +145,8 @@ public class MarketModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(MarketPackage.Literals.MARKET_MODEL__MARKETS,
-				 MarketFactory.eINSTANCE.createMarket()));
+				(MarketPackage.Literals.MARKET_MODEL__INDICES,
+				 MarketFactory.eINSTANCE.createIndex()));
 	}
 
 	/**

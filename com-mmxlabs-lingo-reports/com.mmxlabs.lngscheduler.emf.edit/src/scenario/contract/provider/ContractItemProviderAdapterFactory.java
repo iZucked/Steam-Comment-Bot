@@ -188,26 +188,26 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.contract.MarketPricePurchaseContract} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.contract.IndexPricePurchaseContract} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MarketPricePurchaseContractItemProvider marketPricePurchaseContractItemProvider;
+	protected IndexPricePurchaseContractItemProvider indexPricePurchaseContractItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.contract.MarketPricePurchaseContract}.
+	 * This creates an adapter for a {@link scenario.contract.IndexPricePurchaseContract}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createMarketPricePurchaseContractAdapter() {
-		if (marketPricePurchaseContractItemProvider == null) {
-			marketPricePurchaseContractItemProvider = new MarketPricePurchaseContractItemProvider(this);
+	public Adapter createIndexPricePurchaseContractAdapter() {
+		if (indexPricePurchaseContractItemProvider == null) {
+			indexPricePurchaseContractItemProvider = new IndexPricePurchaseContractItemProvider(this);
 		}
 
-		return marketPricePurchaseContractItemProvider;
+		return indexPricePurchaseContractItemProvider;
 	}
 
 	/**
@@ -389,7 +389,7 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 		if (totalVolumeLimitItemProvider != null) totalVolumeLimitItemProvider.dispose();
 		if (entityItemProvider != null) entityItemProvider.dispose();
 		if (fixedPricePurchaseContractItemProvider != null) fixedPricePurchaseContractItemProvider.dispose();
-		if (marketPricePurchaseContractItemProvider != null) marketPricePurchaseContractItemProvider.dispose();
+		if (indexPricePurchaseContractItemProvider != null) indexPricePurchaseContractItemProvider.dispose();
 		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();
 		if (profitSharingPurchaseContractItemProvider != null) profitSharingPurchaseContractItemProvider.dispose();
 		if (contractItemProvider != null) contractItemProvider.dispose();

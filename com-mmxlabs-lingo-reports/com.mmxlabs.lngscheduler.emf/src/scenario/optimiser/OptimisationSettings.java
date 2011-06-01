@@ -6,7 +6,7 @@ package scenario.optimiser;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
+import scenario.NamedObject;
 import scenario.schedule.Schedule;
 
 /**
@@ -17,11 +17,11 @@ import scenario.schedule.Schedule;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.optimiser.OptimisationSettings#getName <em>Name</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getRandomSeed <em>Random Seed</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getInitialSchedule <em>Initial Schedule</em>}</li>
+ *   <li>{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
  * </ul>
  * </p>
  *
@@ -29,33 +29,7 @@ import scenario.schedule.Schedule;
  * @model
  * @generated
  */
-public interface OptimisationSettings extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_Name()
-	 * @model
-	 * @generated
-	 */
-	String getName();
-
-	/**
-	 * Sets the value of the '{@link scenario.optimiser.OptimisationSettings#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
-	 * @generated
-	 */
-	void setName(String value);
-
+public interface OptimisationSettings extends NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Random Seed</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -139,5 +113,57 @@ public interface OptimisationSettings extends EObject {
 	 * @generated
 	 */
 	void setInitialSchedule(Schedule value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Discount Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * A discount curve which will be applied to all this optimisation's objectives which don't themselves have a discount curve set. If unset, no discounts will be applied.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Default Discount Curve</em>' reference.
+	 * @see #isSetDefaultDiscountCurve()
+	 * @see #unsetDefaultDiscountCurve()
+	 * @see #setDefaultDiscountCurve(DiscountCurve)
+	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_DefaultDiscountCurve()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	DiscountCurve getDefaultDiscountCurve();
+
+	/**
+	 * Sets the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default Discount Curve</em>' reference.
+	 * @see #isSetDefaultDiscountCurve()
+	 * @see #unsetDefaultDiscountCurve()
+	 * @see #getDefaultDiscountCurve()
+	 * @generated
+	 */
+	void setDefaultDiscountCurve(DiscountCurve value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDefaultDiscountCurve()
+	 * @see #getDefaultDiscountCurve()
+	 * @see #setDefaultDiscountCurve(DiscountCurve)
+	 * @generated
+	 */
+	void unsetDefaultDiscountCurve();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Default Discount Curve</em>' reference is set.
+	 * @see #unsetDefaultDiscountCurve()
+	 * @see #getDefaultDiscountCurve()
+	 * @see #setDefaultDiscountCurve(DiscountCurve)
+	 * @generated
+	 */
+	boolean isSetDefaultDiscountCurve();
 
 } // OptimisationSettings

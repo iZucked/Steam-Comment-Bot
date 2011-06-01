@@ -28,6 +28,7 @@ import scenario.optimiser.Objective;
 import scenario.optimiser.OptimiserPackage;
 
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.optimiser.Objective} object.
@@ -36,7 +37,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class ObjectiveItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
@@ -60,32 +61,10 @@ public class ObjectiveItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 			addWeightPropertyDescriptor(object);
+			addDiscountCurvePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Objective_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Objective_name_feature", "_UI_Objective_type"),
-				 OptimiserPackage.Literals.OBJECTIVE__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -106,6 +85,28 @@ public class ObjectiveItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Discount Curve feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDiscountCurvePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Objective_discountCurve_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Objective_discountCurve_feature", "_UI_Objective_type"),
+				 OptimiserPackage.Literals.OBJECTIVE__DISCOUNT_CURVE,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -147,7 +148,6 @@ public class ObjectiveItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Objective.class)) {
-			case OptimiserPackage.OBJECTIVE__NAME:
 			case OptimiserPackage.OBJECTIVE__WEIGHT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

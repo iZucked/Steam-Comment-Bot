@@ -5,12 +5,12 @@
 package scenario.optimiser.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import scenario.impl.NamedObjectImpl;
+import scenario.optimiser.DiscountCurve;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimiserPackage;
 
@@ -21,34 +21,14 @@ import scenario.optimiser.OptimiserPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.optimiser.impl.ObjectiveImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.optimiser.impl.ObjectiveImpl#getWeight <em>Weight</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.ObjectiveImpl#getDiscountCurve <em>Discount Curve</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class ObjectiveImpl extends EObjectImpl implements Objective {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
+public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	/**
 	 * The default value of the '{@link #getWeight() <em>Weight</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -70,6 +50,25 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	protected double weight = WEIGHT_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getDiscountCurve() <em>Discount Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDiscountCurve()
+	 * @generated
+	 * @ordered
+	 */
+	protected DiscountCurve discountCurve;
+
+	/**
+	 * This is true if the Discount Curve reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean discountCurveESet;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -86,29 +85,6 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	@Override
 	protected EClass eStaticClass() {
 		return OptimiserPackage.Literals.OBJECTIVE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OBJECTIVE__NAME, oldName, name));
 	}
 
 	/**
@@ -139,13 +115,77 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public DiscountCurve getDiscountCurve() {
+		if (discountCurve != null && discountCurve.eIsProxy()) {
+			InternalEObject oldDiscountCurve = (InternalEObject)discountCurve;
+			discountCurve = (DiscountCurve)eResolveProxy(oldDiscountCurve);
+			if (discountCurve != oldDiscountCurve) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, oldDiscountCurve, discountCurve));
+			}
+		}
+		return discountCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DiscountCurve basicGetDiscountCurve() {
+		return discountCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDiscountCurve(DiscountCurve newDiscountCurve) {
+		DiscountCurve oldDiscountCurve = discountCurve;
+		discountCurve = newDiscountCurve;
+		boolean oldDiscountCurveESet = discountCurveESet;
+		discountCurveESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, oldDiscountCurve, discountCurve, !oldDiscountCurveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetDiscountCurve() {
+		DiscountCurve oldDiscountCurve = discountCurve;
+		boolean oldDiscountCurveESet = discountCurveESet;
+		discountCurve = null;
+		discountCurveESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, oldDiscountCurve, null, oldDiscountCurveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetDiscountCurve() {
+		return discountCurveESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case OptimiserPackage.OBJECTIVE__NAME:
-				return getName();
 			case OptimiserPackage.OBJECTIVE__WEIGHT:
 				return getWeight();
+			case OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE:
+				if (resolve) return getDiscountCurve();
+				return basicGetDiscountCurve();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -158,11 +198,11 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case OptimiserPackage.OBJECTIVE__NAME:
-				setName((String)newValue);
-				return;
 			case OptimiserPackage.OBJECTIVE__WEIGHT:
 				setWeight((Double)newValue);
+				return;
+			case OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE:
+				setDiscountCurve((DiscountCurve)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -176,11 +216,11 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.OBJECTIVE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case OptimiserPackage.OBJECTIVE__WEIGHT:
 				setWeight(WEIGHT_EDEFAULT);
+				return;
+			case OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE:
+				unsetDiscountCurve();
 				return;
 		}
 		super.eUnset(featureID);
@@ -194,10 +234,10 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.OBJECTIVE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case OptimiserPackage.OBJECTIVE__WEIGHT:
 				return weight != WEIGHT_EDEFAULT;
+			case OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE:
+				return isSetDiscountCurve();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -212,9 +252,7 @@ public class ObjectiveImpl extends EObjectImpl implements Objective {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", weight: ");
+		result.append(" (weight: ");
 		result.append(weight);
 		result.append(')');
 		return result.toString();

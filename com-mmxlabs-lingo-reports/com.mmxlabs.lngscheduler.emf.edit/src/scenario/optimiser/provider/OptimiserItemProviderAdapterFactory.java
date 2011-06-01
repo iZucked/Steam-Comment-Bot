@@ -166,6 +166,52 @@ public class OptimiserItemProviderAdapterFactory extends OptimiserAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.optimiser.DiscountCurve} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DiscountCurveItemProvider discountCurveItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.optimiser.DiscountCurve}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDiscountCurveAdapter() {
+		if (discountCurveItemProvider == null) {
+			discountCurveItemProvider = new DiscountCurveItemProvider(this);
+		}
+
+		return discountCurveItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.optimiser.Discount} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DiscountItemProvider discountItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.optimiser.Discount}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDiscountAdapter() {
+		if (discountItemProvider == null) {
+			discountItemProvider = new DiscountItemProvider(this);
+		}
+
+		return discountItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -274,6 +320,8 @@ public class OptimiserItemProviderAdapterFactory extends OptimiserAdapterFactory
 		if (optimisationItemProvider != null) optimisationItemProvider.dispose();
 		if (constraintItemProvider != null) constraintItemProvider.dispose();
 		if (objectiveItemProvider != null) objectiveItemProvider.dispose();
+		if (discountCurveItemProvider != null) discountCurveItemProvider.dispose();
+		if (discountItemProvider != null) discountItemProvider.dispose();
 	}
 
 }

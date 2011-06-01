@@ -30,6 +30,7 @@ import scenario.optimiser.OptimiserFactory;
 import scenario.optimiser.OptimiserPackage;
 
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.optimiser.OptimisationSettings} object.
@@ -38,7 +39,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class OptimisationSettingsItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
@@ -62,33 +63,11 @@ public class OptimisationSettingsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 			addRandomSeedPropertyDescriptor(object);
 			addInitialSchedulePropertyDescriptor(object);
+			addDefaultDiscountCurvePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_OptimisationSettings_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_name_feature", "_UI_OptimisationSettings_type"),
-				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -127,6 +106,28 @@ public class OptimisationSettingsItemProvider
 				 getString("_UI_OptimisationSettings_initialSchedule_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_initialSchedule_feature", "_UI_OptimisationSettings_type"),
 				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default Discount Curve feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultDiscountCurvePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimisationSettings_defaultDiscountCurve_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_defaultDiscountCurve_feature", "_UI_OptimisationSettings_type"),
+				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE,
 				 true,
 				 false,
 				 true,
@@ -203,7 +204,6 @@ public class OptimisationSettingsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(OptimisationSettings.class)) {
-			case OptimiserPackage.OPTIMISATION_SETTINGS__NAME:
 			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

@@ -5,6 +5,7 @@
 package scenario.impl;
 
 import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -705,7 +706,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 			setCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());
 		
 		if (getOptimisation() == null)
-			setOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());
+					setOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());
 	}
 
 	/**

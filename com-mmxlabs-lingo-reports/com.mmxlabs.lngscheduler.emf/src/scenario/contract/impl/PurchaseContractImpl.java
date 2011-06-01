@@ -5,6 +5,7 @@
 package scenario.contract.impl;
 
 import org.eclipse.emf.ecore.EClass;
+
 import scenario.contract.ContractPackage;
 import scenario.contract.PurchaseContract;
 

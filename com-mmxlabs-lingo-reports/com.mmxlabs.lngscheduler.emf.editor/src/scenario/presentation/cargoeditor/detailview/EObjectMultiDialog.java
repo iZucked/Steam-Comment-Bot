@@ -23,6 +23,7 @@ import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -109,10 +110,17 @@ public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
 							layout.marginWidth = 0;
 							composite.setLayout(layout);
 							
-							final Control sub = proxy.createControl(composite);
+							final Composite c2 = new Composite(composite, SWT.NONE);
+							final GridLayout layout2 = new GridLayout(1, false);
+							layout2.marginHeight = 0;
+							layout2.marginWidth = 0;
+							c2.setLayout(layout2);
+							
+							final Control sub = proxy.createControl(c2);
 							sub.setLayoutData(new GridData(
 									GridData.FILL_HORIZONTAL));
 
+							sub.setEnabled(false);
 							final Button check = new Button(composite,
 									SWT.TOGGLE);
 							check.setText("Set");
@@ -125,10 +133,12 @@ public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
 										featuresToSet
 												.add(new Pair<EMFPath, EStructuralFeature>(
 														path, feature));
+										sub.setEnabled(true);
 									} else {
 										featuresToSet
 												.remove(new Pair<EMFPath, EStructuralFeature>(
 														path, feature));
+										sub.setEnabled(false);
 									}
 								}
 							});

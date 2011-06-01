@@ -7,12 +7,17 @@ package scenario.optimiser.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.optimiser.*;
+import scenario.optimiser.Constraint;
+import scenario.optimiser.Discount;
+import scenario.optimiser.DiscountCurve;
+import scenario.optimiser.Objective;
+import scenario.optimiser.Optimisation;
+import scenario.optimiser.OptimisationSettings;
+import scenario.optimiser.OptimiserFactory;
+import scenario.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -62,6 +67,8 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 			case OptimiserPackage.OPTIMISATION: return createOptimisation();
 			case OptimiserPackage.CONSTRAINT: return createConstraint();
 			case OptimiserPackage.OBJECTIVE: return createObjective();
+			case OptimiserPackage.DISCOUNT_CURVE: return createDiscountCurve();
+			case OptimiserPackage.DISCOUNT: return createDiscount();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -109,6 +116,26 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	public Objective createObjective() {
 		ObjectiveImpl objective = new ObjectiveImpl();
 		return objective;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DiscountCurve createDiscountCurve() {
+		DiscountCurveImpl discountCurve = new DiscountCurveImpl();
+		return discountCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Discount createDiscount() {
+		DiscountImpl discount = new DiscountImpl();
+		return discount;
 	}
 
 	/**

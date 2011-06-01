@@ -10,17 +10,14 @@ import java.util.Date;
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
-
 import scenario.contract.Contract;
 import scenario.port.Port;
 

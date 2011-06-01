@@ -5,7 +5,6 @@
 package scenario.optimiser.lso.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.optimiser.lso.LsoPackage;

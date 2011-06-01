@@ -31,6 +31,7 @@ import scenario.port.PortFactory;
 import scenario.port.PortPackage;
 
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.port.Canal} object.
@@ -39,7 +40,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class CanalItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
@@ -63,32 +64,9 @@ public class CanalItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 			addDefaultCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Canal_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Canal_name_feature", "_UI_Canal_type"),
-				 PortPackage.Literals.CANAL__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -181,7 +159,6 @@ public class CanalItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Canal.class)) {
-			case PortPackage.CANAL__NAME:
 			case PortPackage.CANAL__DEFAULT_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

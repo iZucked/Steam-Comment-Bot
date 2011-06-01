@@ -8,18 +8,14 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import scenario.impl.NamedObjectImpl;
 import scenario.port.Canal;
 import scenario.port.DistanceModel;
 import scenario.port.PortPackage;
@@ -32,7 +28,6 @@ import scenario.port.VesselClassCost;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.port.impl.CanalImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.impl.CanalImpl#getClassCosts <em>Class Costs</em>}</li>
  *   <li>{@link scenario.port.impl.CanalImpl#getDefaultCost <em>Default Cost</em>}</li>
  *   <li>{@link scenario.port.impl.CanalImpl#getDistanceModel <em>Distance Model</em>}</li>
@@ -41,27 +36,7 @@ import scenario.port.VesselClassCost;
  *
  * @generated
  */
-public class CanalImpl extends EObjectImpl implements Canal {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
+public class CanalImpl extends NamedObjectImpl implements Canal {
 	/**
 	 * The cached value of the '{@link #getClassCosts() <em>Class Costs</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -119,29 +94,6 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	@Override
 	protected EClass eStaticClass() {
 		return PortPackage.Literals.CANAL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.CANAL__NAME, oldName, name));
 	}
 
 	/**
@@ -249,8 +201,6 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PortPackage.CANAL__NAME:
-				return getName();
 			case PortPackage.CANAL__CLASS_COSTS:
 				return getClassCosts();
 			case PortPackage.CANAL__DEFAULT_COST:
@@ -270,9 +220,6 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PortPackage.CANAL__NAME:
-				setName((String)newValue);
-				return;
 			case PortPackage.CANAL__CLASS_COSTS:
 				getClassCosts().clear();
 				getClassCosts().addAll((Collection<? extends VesselClassCost>)newValue);
@@ -295,9 +242,6 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PortPackage.CANAL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case PortPackage.CANAL__CLASS_COSTS:
 				getClassCosts().clear();
 				return;
@@ -319,8 +263,6 @@ public class CanalImpl extends EObjectImpl implements Canal {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PortPackage.CANAL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case PortPackage.CANAL__CLASS_COSTS:
 				return classCosts != null && !classCosts.isEmpty();
 			case PortPackage.CANAL__DEFAULT_COST:
@@ -341,9 +283,7 @@ public class CanalImpl extends EObjectImpl implements Canal {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", defaultCost: ");
+		result.append(" (defaultCost: ");
 		result.append(defaultCost);
 		result.append(')');
 		return result.toString();

@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.market.impl;
 
@@ -9,25 +11,26 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import scenario.impl.NamedObjectImpl;
-import scenario.market.Market;
+import scenario.market.Index;
 import scenario.market.MarketPackage;
 import scenario.market.StepwisePriceCurve;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Market</b></em>'.
+ * An implementation of the model object '<em><b>Index</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.market.impl.MarketImpl#getPriceCurve <em>Price Curve</em>}</li>
+ *   <li>{@link scenario.market.impl.IndexImpl#getPriceCurve <em>Price Curve</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class MarketImpl extends NamedObjectImpl implements Market {
+public class IndexImpl extends NamedObjectImpl implements Index {
 	/**
 	 * The cached value of the '{@link #getPriceCurve() <em>Price Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -43,7 +46,7 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MarketImpl() {
+	protected IndexImpl() {
 		super();
 	}
 
@@ -54,7 +57,7 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MarketPackage.Literals.MARKET;
+		return MarketPackage.Literals.INDEX;
 	}
 
 	/**
@@ -62,7 +65,6 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public StepwisePriceCurve getPriceCurve() {
 		return priceCurve;
 	}
@@ -76,7 +78,7 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 		StepwisePriceCurve oldPriceCurve = priceCurve;
 		priceCurve = newPriceCurve;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MarketPackage.MARKET__PRICE_CURVE, oldPriceCurve, newPriceCurve);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MarketPackage.INDEX__PRICE_CURVE, oldPriceCurve, newPriceCurve);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -87,19 +89,18 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setPriceCurve(StepwisePriceCurve newPriceCurve) {
 		if (newPriceCurve != priceCurve) {
 			NotificationChain msgs = null;
 			if (priceCurve != null)
-				msgs = ((InternalEObject)priceCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MarketPackage.MARKET__PRICE_CURVE, null, msgs);
+				msgs = ((InternalEObject)priceCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, msgs);
 			if (newPriceCurve != null)
-				msgs = ((InternalEObject)newPriceCurve).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MarketPackage.MARKET__PRICE_CURVE, null, msgs);
+				msgs = ((InternalEObject)newPriceCurve).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, msgs);
 			msgs = basicSetPriceCurve(newPriceCurve, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.MARKET__PRICE_CURVE, newPriceCurve, newPriceCurve));
+			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.INDEX__PRICE_CURVE, newPriceCurve, newPriceCurve));
 	}
 
 	/**
@@ -110,7 +111,7 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MarketPackage.MARKET__PRICE_CURVE:
+			case MarketPackage.INDEX__PRICE_CURVE:
 				return basicSetPriceCurve(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -124,7 +125,7 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MarketPackage.MARKET__PRICE_CURVE:
+			case MarketPackage.INDEX__PRICE_CURVE:
 				return getPriceCurve();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -135,11 +136,10 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MarketPackage.MARKET__PRICE_CURVE:
+			case MarketPackage.INDEX__PRICE_CURVE:
 				setPriceCurve((StepwisePriceCurve)newValue);
 				return;
 		}
@@ -154,7 +154,7 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MarketPackage.MARKET__PRICE_CURVE:
+			case MarketPackage.INDEX__PRICE_CURVE:
 				setPriceCurve((StepwisePriceCurve)null);
 				return;
 		}
@@ -169,10 +169,10 @@ public class MarketImpl extends NamedObjectImpl implements Market {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MarketPackage.MARKET__PRICE_CURVE:
+			case MarketPackage.INDEX__PRICE_CURVE:
 				return priceCurve != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //MarketImpl
+} //IndexImpl

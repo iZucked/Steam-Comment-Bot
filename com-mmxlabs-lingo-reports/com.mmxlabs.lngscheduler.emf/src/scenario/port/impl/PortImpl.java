@@ -8,10 +8,10 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.contract.Contract;
-import scenario.market.Market;
+import scenario.impl.NamedObjectImpl;
+import scenario.market.Index;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
@@ -22,8 +22,7 @@ import scenario.port.PortPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
- *   <li>{@link scenario.port.impl.PortImpl#getDefaultMarket <em>Default Market</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultIndex <em>Default Index</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultContract <em>Default Contract</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
@@ -32,36 +31,16 @@ import scenario.port.PortPackage;
  *
  * @generated
  */
-public class PortImpl extends EObjectImpl implements Port {
+public class PortImpl extends NamedObjectImpl implements Port {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * The cached value of the '{@link #getDefaultIndex() <em>Default Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
+	 * @see #getDefaultIndex()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getDefaultMarket() <em>Default Market</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDefaultMarket()
-	 * @generated
-	 * @ordered
-	 */
-	protected Market defaultMarket;
+	protected Index defaultIndex;
 
 	/**
 	 * The default value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
@@ -137,40 +116,16 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Market getDefaultMarket() {
-		if (defaultMarket != null && defaultMarket.eIsProxy()) {
-			InternalEObject oldDefaultMarket = (InternalEObject)defaultMarket;
-			defaultMarket = (Market)eResolveProxy(oldDefaultMarket);
-			if (defaultMarket != oldDefaultMarket) {
+	public Index getDefaultIndex() {
+		if (defaultIndex != null && defaultIndex.eIsProxy()) {
+			InternalEObject oldDefaultIndex = (InternalEObject)defaultIndex;
+			defaultIndex = (Index)eResolveProxy(oldDefaultIndex);
+			if (defaultIndex != oldDefaultIndex) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.PORT__DEFAULT_MARKET, oldDefaultMarket, defaultMarket));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.PORT__DEFAULT_INDEX, oldDefaultIndex, defaultIndex));
 			}
 		}
-		return defaultMarket;
+		return defaultIndex;
 	}
 
 	/**
@@ -178,8 +133,8 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Market basicGetDefaultMarket() {
-		return defaultMarket;
+	public Index basicGetDefaultIndex() {
+		return defaultIndex;
 	}
 
 	/**
@@ -187,12 +142,11 @@ public class PortImpl extends EObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setDefaultMarket(Market newDefaultMarket) {
-		Market oldDefaultMarket = defaultMarket;
-		defaultMarket = newDefaultMarket;
+	public void setDefaultIndex(Index newDefaultIndex) {
+		Index oldDefaultIndex = defaultIndex;
+		defaultIndex = newDefaultIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_MARKET, oldDefaultMarket, defaultMarket));
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_INDEX, oldDefaultIndex, defaultIndex));
 	}
 
 	/**
@@ -287,11 +241,9 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PortPackage.PORT__NAME:
-				return getName();
-			case PortPackage.PORT__DEFAULT_MARKET:
-				if (resolve) return getDefaultMarket();
-				return basicGetDefaultMarket();
+			case PortPackage.PORT__DEFAULT_INDEX:
+				if (resolve) return getDefaultIndex();
+				return basicGetDefaultIndex();
 			case PortPackage.PORT__TIME_ZONE:
 				return getTimeZone();
 			case PortPackage.PORT__DEFAULT_CONTRACT:
@@ -311,11 +263,8 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PortPackage.PORT__NAME:
-				setName((String)newValue);
-				return;
-			case PortPackage.PORT__DEFAULT_MARKET:
-				setDefaultMarket((Market)newValue);
+			case PortPackage.PORT__DEFAULT_INDEX:
+				setDefaultIndex((Index)newValue);
 				return;
 			case PortPackage.PORT__TIME_ZONE:
 				setTimeZone((String)newValue);
@@ -338,11 +287,8 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PortPackage.PORT__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case PortPackage.PORT__DEFAULT_MARKET:
-				setDefaultMarket((Market)null);
+			case PortPackage.PORT__DEFAULT_INDEX:
+				setDefaultIndex((Index)null);
 				return;
 			case PortPackage.PORT__TIME_ZONE:
 				setTimeZone(TIME_ZONE_EDEFAULT);
@@ -365,10 +311,8 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PortPackage.PORT__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case PortPackage.PORT__DEFAULT_MARKET:
-				return defaultMarket != null;
+			case PortPackage.PORT__DEFAULT_INDEX:
+				return defaultIndex != null;
 			case PortPackage.PORT__TIME_ZONE:
 				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
 			case PortPackage.PORT__DEFAULT_CONTRACT:
@@ -389,9 +333,7 @@ public class PortImpl extends EObjectImpl implements Port {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", timeZone: ");
+		result.append(" (timeZone: ");
 		result.append(timeZone);
 		result.append(", regasEfficiency: ");
 		result.append(regasEfficiency);

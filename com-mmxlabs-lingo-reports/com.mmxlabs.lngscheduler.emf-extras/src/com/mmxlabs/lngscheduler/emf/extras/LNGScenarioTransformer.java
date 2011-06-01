@@ -31,7 +31,7 @@ import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.contract.FixedPricePurchaseContract;
-import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
 import scenario.contract.NetbackPurchaseContract;
 import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.contract.PurchaseContract;
@@ -44,7 +44,7 @@ import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselEvent;
 import scenario.fleet.VesselStateAttributes;
-import scenario.market.Market;
+import scenario.market.Index;
 import scenario.market.StepwisePrice;
 import scenario.market.StepwisePriceCurve;
 import scenario.optimiser.OptimisationSettings;
@@ -148,13 +148,13 @@ public class LNGScenarioTransformer {
 		 * builder?)
 		 */
 
-		final Association<Market, ICurve> marketAssociation = new Association<Market, ICurve>();
+		final Association<Index, ICurve> indexAssociation = new Association<Index, ICurve>();
 
-		for (final Market market : scenario.getMarketModel().getMarkets()) {
-			final StepwiseIntegerCurve curve = createCurveForMarket(market,
+		for (final Index index : scenario.getMarketModel().getIndices()) {
+			final StepwiseIntegerCurve curve = createCurveForIndex(index,
 					1.0f);
 
-			marketAssociation.add(market, curve);
+			indexAssociation.add(index, curve);
 		}
 
 		SchedulerBuilder builder = new SchedulerBuilder();
@@ -204,16 +204,16 @@ public class LNGScenarioTransformer {
 				calculator = builder.createFixedPriceContract(Calculator
 						.scaleToInt(((FixedPricePurchaseContract) c)
 								.getUnitPrice()));
-			} else if (c instanceof MarketPricePurchaseContract) {
+			} else if (c instanceof IndexPricePurchaseContract) {
 				calculator = builder
-						.createMarketPriceContract(marketAssociation
-								.lookup(((MarketPricePurchaseContract) c)
-										.getMarket()));
+						.createMarketPriceContract(indexAssociation
+								.lookup(((IndexPricePurchaseContract) c)
+										.getIndex()));
 			} else if (c instanceof ProfitSharingPurchaseContract) {
 				final ProfitSharingPurchaseContract p = (ProfitSharingPurchaseContract) c;
 				calculator = builder.createProfitSharingContract(
-						marketAssociation.lookup(p.getMarket()),
-						marketAssociation.lookup(p.getReferenceMarket()),
+						indexAssociation.lookup(p.getIndex()),
+						indexAssociation.lookup(p.getReferenceIndex()),
 						Calculator.scaleToInt(p.getAlpha()),
 						Calculator.scaleToInt(p.getBeta()),
 						Calculator.scaleToInt(p.getGamma()));
@@ -229,7 +229,7 @@ public class LNGScenarioTransformer {
 			purchaseContractAssociation.add(c, calculator);
 		}
 
-		buildCargoes(builder, portAssociation, marketAssociation,
+		buildCargoes(builder, portAssociation, indexAssociation,
 				vesselAssociations.getSecond(), entities,
 				purchaseContractAssociation);
 
@@ -242,9 +242,9 @@ public class LNGScenarioTransformer {
 		return builder.getOptimisationData();
 	}
 
-	private StepwiseIntegerCurve createCurveForMarket(final Market market,
+	private StepwiseIntegerCurve createCurveForIndex(final Index index,
 			float scale) {
-		final StepwisePriceCurve curveModel = market.getPriceCurve();
+		final StepwisePriceCurve curveModel = index.getPriceCurve();
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
 		curve.setDefaultValue(Calculator.scaleToInt(scale
@@ -351,14 +351,14 @@ public class LNGScenarioTransformer {
 	 * @param builder
 	 *            current builder. should already have ports/distances/vessels
 	 *            built
-	 * @param marketAssociation
+	 * @param indexAssociation
 	 * @param entities
 	 * @param purchaseContractAssociation
 	 */
 	private void buildCargoes(
 			final SchedulerBuilder builder,
 			final Association<Port, IPort> ports,
-			final Association<Market, ICurve> marketAssociation,
+			final Association<Index, ICurve> indexAssociation,
 			final Association<Vessel, IVessel> vesselAssociation,
 			final ModelEntityMap entities,
 			final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation) {
@@ -381,8 +381,8 @@ public class LNGScenarioTransformer {
 					dischargeStart,
 					dischargeStart + dischargeSlot.getWindowDuration());
 
-			final Market dischargeMarket = ((SalesContract) dischargeSlot
-					.getSlotOrPortContract()).getMarket();
+			final Index dischargeIndex = ((SalesContract) dischargeSlot
+					.getSlotOrPortContract()).getIndex();
 
 			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot
 					.getSlotOrPortContract());
@@ -401,10 +401,10 @@ public class LNGScenarioTransformer {
 				final float regasEfficiency = (dischargeSlot.getPort())
 						.getRegasEfficiency();
 				if (regasEfficiency != 1.0f) {
-					dischargeCurve = createCurveForMarket(dischargeMarket,
+					dischargeCurve = createCurveForIndex(dischargeIndex,
 							regasEfficiency);
 				} else {
-					dischargeCurve = marketAssociation.lookup(dischargeMarket);
+					dischargeCurve = indexAssociation.lookup(dischargeIndex);
 				}
 			}
 

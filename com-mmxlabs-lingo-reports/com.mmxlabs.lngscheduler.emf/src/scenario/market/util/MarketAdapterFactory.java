@@ -6,14 +6,16 @@ package scenario.market.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-import scenario.market.*;
+import scenario.market.Index;
+import scenario.market.MarketModel;
+import scenario.market.MarketPackage;
+import scenario.market.StepwisePrice;
+import scenario.market.StepwisePriceCurve;
 
 /**
  * <!-- begin-user-doc -->
@@ -72,8 +74,8 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 	protected MarketSwitch<Adapter> modelSwitch =
 		new MarketSwitch<Adapter>() {
 			@Override
-			public Adapter caseMarket(Market object) {
-				return createMarketAdapter();
+			public Adapter caseIndex(Index object) {
+				return createIndexAdapter();
 			}
 			@Override
 			public Adapter caseMarketModel(MarketModel object) {
@@ -114,6 +116,20 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.market.Index <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.market.Index
+	 * @generated
+	 */
+	public Adapter createIndexAdapter() {
+		return null;
+	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link scenario.market.MarketModel <em>Model</em>}'.
@@ -182,20 +198,6 @@ public class MarketAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link scenario.market.Market <em>Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see scenario.market.Market
-	 * @generated
-	 */
-	public Adapter createMarketAdapter() {
 		return null;
 	}
 

@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.market.MarketModel#getMarkets <em>Markets</em>}</li>
+ *   <li>{@link scenario.market.MarketModel#getIndices <em>Indices</em>}</li>
  * </ul>
  * </p>
  *
@@ -25,19 +25,19 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface MarketModel extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Markets</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.market.Market}.
+	 * Returns the value of the '<em><b>Indices</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.market.Index}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Markets</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Indices</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Markets</em>' containment reference list.
-	 * @see scenario.market.MarketPackage#getMarketModel_Markets()
+	 * @return the value of the '<em>Indices</em>' containment reference list.
+	 * @see scenario.market.MarketPackage#getMarketModel_Indices()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Market> getMarkets();
+	EList<Index> getIndices();
 
 } // MarketModel

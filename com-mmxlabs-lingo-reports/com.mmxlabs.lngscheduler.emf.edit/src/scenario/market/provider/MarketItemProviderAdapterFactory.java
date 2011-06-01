@@ -73,6 +73,29 @@ public class MarketItemProviderAdapterFactory extends MarketAdapterFactory imple
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.market.Index} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IndexItemProvider indexItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.market.Index}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIndexAdapter() {
+		if (indexItemProvider == null) {
+			indexItemProvider = new IndexItemProvider(this);
+		}
+
+		return indexItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link scenario.market.MarketModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -139,29 +162,6 @@ public class MarketItemProviderAdapterFactory extends MarketAdapterFactory imple
 		}
 
 		return stepwisePriceItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link scenario.market.Market} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MarketItemProvider marketItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.market.Market}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMarketAdapter() {
-		if (marketItemProvider == null) {
-			marketItemProvider = new MarketItemProvider(this);
-		}
-
-		return marketItemProvider;
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class MarketItemProviderAdapterFactory extends MarketAdapterFactory imple
 	 */
 	@Override
 	public void dispose() {
-		if (marketItemProvider != null) marketItemProvider.dispose();
+		if (indexItemProvider != null) indexItemProvider.dispose();
 		if (marketModelItemProvider != null) marketModelItemProvider.dispose();
 		if (stepwisePriceCurveItemProvider != null) stepwisePriceCurveItemProvider.dispose();
 		if (stepwisePriceItemProvider != null) stepwisePriceItemProvider.dispose();

@@ -33,7 +33,7 @@ import scenario.cargo.Slot;
 import scenario.contract.ContractFactory;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
-import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.fleet.CharterOut;
@@ -46,7 +46,7 @@ import scenario.fleet.VesselClass;
 import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
-import scenario.market.Market;
+import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.MarketPackage;
 import scenario.market.StepwisePrice;
@@ -267,8 +267,8 @@ public class RandomScenarioUtils {
 			int maxVisit, int minSlack, int maxSlack, double locality,
 			int scenarioDuration) throws NumberFormatException, IOException {
 		// set up markets
-		final Market loadMarket = marketFactory.createMarket();
-		final Market dischargeMarket = marketFactory.createMarket();
+		final Index loadMarket = marketFactory.createIndex();
+		final Index dischargeMarket = marketFactory.createIndex();
 
 		final StepwisePriceCurve loadCurve = marketFactory
 				.createStepwisePriceCurve();
@@ -278,8 +278,8 @@ public class RandomScenarioUtils {
 		loadMarket.setPriceCurve(loadCurve);
 		dischargeMarket.setPriceCurve(dischargeCurve);
 
-		loadMarket.setName("LNG Sales Market");
-		dischargeMarket.setName("LNG Purchase Market");
+		loadMarket.setName("LNG Sales Index");
+		dischargeMarket.setName("LNG Purchase Index");
 
 		// random walk time
 		// every 30d, price changes a bit. load price tracks discharge price
@@ -316,8 +316,8 @@ public class RandomScenarioUtils {
 		}
 
 		scenario.setMarketModel(marketFactory.createMarketModel());
-		scenario.getMarketModel().getMarkets().add(loadMarket);
-		scenario.getMarketModel().getMarkets().add(dischargeMarket);
+		scenario.getMarketModel().getIndices().add(loadMarket);
+		scenario.getMarketModel().getIndices().add(dischargeMarket);
 
 		final ContractFactory contractFactory = ContractPackage.eINSTANCE
 				.getContractFactory();
@@ -339,16 +339,16 @@ public class RandomScenarioUtils {
 
 		final SalesContract dischargeContract = contractFactory
 				.createSalesContract();
-		final MarketPricePurchaseContract loadContract = contractFactory
-				.createMarketPricePurchaseContract();
+		final IndexPricePurchaseContract loadContract = contractFactory
+				.createIndexPricePurchaseContract();
 
 //		dischargeContract.setRegasEfficiency(1);
 		dischargeContract.setEntity(dischargeEntity);
 		dischargeContract.setName("discharge contract");
-		dischargeContract.setMarket(dischargeMarket);
+		dischargeContract.setIndex(dischargeMarket);
 
 		loadContract.setEntity(loadEntity);
-		loadContract.setMarket(loadMarket);
+		loadContract.setIndex(loadMarket);
 		loadContract.setName("load contract");
 
 		scenario.getContractModel().getSalesContracts().add(dischargeContract);

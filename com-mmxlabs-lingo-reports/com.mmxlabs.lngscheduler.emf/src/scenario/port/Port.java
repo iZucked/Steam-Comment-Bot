@@ -4,10 +4,9 @@
  */
 package scenario.port;
 
-import org.eclipse.emf.ecore.EObject;
-
+import scenario.NamedObject;
 import scenario.contract.Contract;
-import scenario.market.Market;
+import scenario.market.Index;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,8 +16,7 @@ import scenario.market.Market;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.port.Port#getName <em>Name</em>}</li>
- *   <li>{@link scenario.port.Port#getDefaultMarket <em>Default Market</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultIndex <em>Default Index</em>}</li>
  *   <li>{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}</li>
  *   <li>{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}</li>
@@ -29,58 +27,32 @@ import scenario.market.Market;
  * @model
  * @generated
  */
-public interface Port extends EObject {
+public interface Port extends NamedObject {
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>Default Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Default Index</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see scenario.port.PortPackage#getPort_Name()
-	 * @model required="true"
-	 * @generated
-	 */
-	String getName();
-
-	/**
-	 * Sets the value of the '{@link scenario.port.Port#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
-	 * @generated
-	 */
-	void setName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Default Market</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Default Market</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Default Market</em>' reference.
-	 * @see #setDefaultMarket(Market)
-	 * @see scenario.port.PortPackage#getPort_DefaultMarket()
+	 * @return the value of the '<em>Default Index</em>' reference.
+	 * @see #setDefaultIndex(Index)
+	 * @see scenario.port.PortPackage#getPort_DefaultIndex()
 	 * @model
 	 * @generated
 	 */
-	Market getDefaultMarket();
+	Index getDefaultIndex();
 
 	/**
-	 * Sets the value of the '{@link scenario.port.Port#getDefaultMarket <em>Default Market</em>}' reference.
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultIndex <em>Default Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Default Market</em>' reference.
-	 * @see #getDefaultMarket()
+	 * @param value the new value of the '<em>Default Index</em>' reference.
+	 * @see #getDefaultIndex()
 	 * @generated
 	 */
-	void setDefaultMarket(Market value);
+	void setDefaultIndex(Index value);
 
 	/**
 	 * Returns the value of the '<em><b>Time Zone</b></em>' attribute.

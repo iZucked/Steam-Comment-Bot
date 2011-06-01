@@ -9,6 +9,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import scenario.ScenarioPackage;
+
 /**
  * <!-- begin-user-doc -->
  * The <b>Package</b> for the model.
@@ -74,7 +76,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS__NAME = 0;
+	int OPTIMISATION_SETTINGS__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Random Seed</b></em>' attribute.
@@ -83,7 +85,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS__RANDOM_SEED = 1;
+	int OPTIMISATION_SETTINGS__RANDOM_SEED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
@@ -92,7 +94,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS__CONSTRAINTS = 2;
+	int OPTIMISATION_SETTINGS__CONSTRAINTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
@@ -101,7 +103,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS__OBJECTIVES = 3;
+	int OPTIMISATION_SETTINGS__OBJECTIVES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Initial Schedule</b></em>' reference.
@@ -110,7 +112,16 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = 4;
+	int OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Default Discount Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Optimisation Settings</em>' class.
@@ -119,7 +130,16 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS_FEATURE_COUNT = 5;
+	int OPTIMISATION_SETTINGS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Optimisation Settings</em>' class.
@@ -128,7 +148,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS_OPERATION_COUNT = 0;
+	int OPTIMISATION_SETTINGS_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.optimiser.impl.OptimisationImpl <em>Optimisation</em>}' class.
@@ -159,13 +179,22 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION__CURRENT_SETTINGS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Discount Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION__DISCOUNT_CURVES = 2;
+
+	/**
 	 * The number of structural features of the '<em>Optimisation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_FEATURE_COUNT = 2;
+	int OPTIMISATION_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Optimisation</em>' class.
@@ -193,7 +222,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT__NAME = 0;
+	int CONSTRAINT__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
@@ -202,7 +231,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT__ENABLED = 1;
+	int CONSTRAINT__ENABLED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Constraint</em>' class.
@@ -211,7 +240,16 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT_FEATURE_COUNT = 2;
+	int CONSTRAINT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Constraint</em>' class.
@@ -220,7 +258,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT_OPERATION_COUNT = 0;
+	int CONSTRAINT_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.optimiser.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -239,7 +277,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECTIVE__NAME = 0;
+	int OBJECTIVE__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Weight</b></em>' attribute.
@@ -248,7 +286,16 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECTIVE__WEIGHT = 1;
+	int OBJECTIVE__WEIGHT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Discount Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECTIVE__DISCOUNT_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Objective</em>' class.
@@ -257,8 +304,17 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECTIVE_FEATURE_COUNT = 2;
+	int OBJECTIVE_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECTIVE___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Objective</em>' class.
@@ -267,7 +323,118 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECTIVE_OPERATION_COUNT = 0;
+	int OBJECTIVE_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+
+	/**
+	 * The meta object id for the '{@link scenario.optimiser.impl.DiscountCurveImpl <em>Discount Curve</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.optimiser.impl.DiscountCurveImpl
+	 * @see scenario.optimiser.impl.OptimiserPackageImpl#getDiscountCurve()
+	 * @generated
+	 */
+	int DISCOUNT_CURVE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_CURVE__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Discounts</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_CURVE__DISCOUNTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_CURVE__START_DATE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Discount Curve</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_CURVE_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_CURVE___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Discount Curve</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_CURVE_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.optimiser.impl.DiscountImpl <em>Discount</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.optimiser.impl.DiscountImpl
+	 * @see scenario.optimiser.impl.OptimiserPackageImpl#getDiscount()
+	 * @generated
+	 */
+	int DISCOUNT = 5;
+
+	/**
+	 * The feature id for the '<em><b>Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT__TIME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Discount Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT__DISCOUNT_FACTOR = 1;
+
+	/**
+	 * The number of structural features of the '<em>Discount</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Discount</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_OPERATION_COUNT = 0;
 
 
 	/**
@@ -279,17 +446,6 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getOptimisationSettings();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.optimiser.OptimisationSettings#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see scenario.optimiser.OptimisationSettings#getName()
-	 * @see #getOptimisationSettings()
-	 * @generated
-	 */
-	EAttribute getOptimisationSettings_Name();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.optimiser.OptimisationSettings#getRandomSeed <em>Random Seed</em>}'.
@@ -336,6 +492,17 @@ public interface OptimiserPackage extends EPackage {
 	EReference getOptimisationSettings_InitialSchedule();
 
 	/**
+	 * Returns the meta object for the reference '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Default Discount Curve</em>'.
+	 * @see scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve()
+	 * @see #getOptimisationSettings()
+	 * @generated
+	 */
+	EReference getOptimisationSettings_DefaultDiscountCurve();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.Optimisation <em>Optimisation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -368,6 +535,17 @@ public interface OptimiserPackage extends EPackage {
 	EReference getOptimisation_CurrentSettings();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.optimiser.Optimisation#getDiscountCurves <em>Discount Curves</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Discount Curves</em>'.
+	 * @see scenario.optimiser.Optimisation#getDiscountCurves()
+	 * @see #getOptimisation()
+	 * @generated
+	 */
+	EReference getOptimisation_DiscountCurves();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.Constraint <em>Constraint</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -376,17 +554,6 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getConstraint();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.optimiser.Constraint#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see scenario.optimiser.Constraint#getName()
-	 * @see #getConstraint()
-	 * @generated
-	 */
-	EAttribute getConstraint_Name();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.optimiser.Constraint#isEnabled <em>Enabled</em>}'.
@@ -410,17 +577,6 @@ public interface OptimiserPackage extends EPackage {
 	EClass getObjective();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.optimiser.Objective#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see scenario.optimiser.Objective#getName()
-	 * @see #getObjective()
-	 * @generated
-	 */
-	EAttribute getObjective_Name();
-
-	/**
 	 * Returns the meta object for the attribute '{@link scenario.optimiser.Objective#getWeight <em>Weight</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -430,6 +586,81 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getObjective_Weight();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Discount Curve</em>'.
+	 * @see scenario.optimiser.Objective#getDiscountCurve()
+	 * @see #getObjective()
+	 * @generated
+	 */
+	EReference getObjective_DiscountCurve();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.optimiser.DiscountCurve <em>Discount Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Discount Curve</em>'.
+	 * @see scenario.optimiser.DiscountCurve
+	 * @generated
+	 */
+	EClass getDiscountCurve();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.optimiser.DiscountCurve#getDiscounts <em>Discounts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Discounts</em>'.
+	 * @see scenario.optimiser.DiscountCurve#getDiscounts()
+	 * @see #getDiscountCurve()
+	 * @generated
+	 */
+	EReference getDiscountCurve_Discounts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.DiscountCurve#getStartDate <em>Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Date</em>'.
+	 * @see scenario.optimiser.DiscountCurve#getStartDate()
+	 * @see #getDiscountCurve()
+	 * @generated
+	 */
+	EAttribute getDiscountCurve_StartDate();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.optimiser.Discount <em>Discount</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Discount</em>'.
+	 * @see scenario.optimiser.Discount
+	 * @generated
+	 */
+	EClass getDiscount();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.Discount#getTime <em>Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time</em>'.
+	 * @see scenario.optimiser.Discount#getTime()
+	 * @see #getDiscount()
+	 * @generated
+	 */
+	EAttribute getDiscount_Time();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.Discount#getDiscountFactor <em>Discount Factor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Discount Factor</em>'.
+	 * @see scenario.optimiser.Discount#getDiscountFactor()
+	 * @see #getDiscount()
+	 * @generated
+	 */
+	EAttribute getDiscount_DiscountFactor();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -464,14 +695,6 @@ public interface OptimiserPackage extends EPackage {
 		EClass OPTIMISATION_SETTINGS = eINSTANCE.getOptimisationSettings();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTIMISATION_SETTINGS__NAME = eINSTANCE.getOptimisationSettings_Name();
-
-		/**
 		 * The meta object literal for the '<em><b>Random Seed</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -504,6 +727,14 @@ public interface OptimiserPackage extends EPackage {
 		EReference OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = eINSTANCE.getOptimisationSettings_InitialSchedule();
 
 		/**
+		 * The meta object literal for the '<em><b>Default Discount Curve</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE = eINSTANCE.getOptimisationSettings_DefaultDiscountCurve();
+
+		/**
 		 * The meta object literal for the '{@link scenario.optimiser.impl.OptimisationImpl <em>Optimisation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -530,6 +761,14 @@ public interface OptimiserPackage extends EPackage {
 		EReference OPTIMISATION__CURRENT_SETTINGS = eINSTANCE.getOptimisation_CurrentSettings();
 
 		/**
+		 * The meta object literal for the '<em><b>Discount Curves</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISATION__DISCOUNT_CURVES = eINSTANCE.getOptimisation_DiscountCurves();
+
+		/**
 		 * The meta object literal for the '{@link scenario.optimiser.impl.ConstraintImpl <em>Constraint</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -538,14 +777,6 @@ public interface OptimiserPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CONSTRAINT = eINSTANCE.getConstraint();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CONSTRAINT__NAME = eINSTANCE.getConstraint_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
@@ -566,20 +797,72 @@ public interface OptimiserPackage extends EPackage {
 		EClass OBJECTIVE = eINSTANCE.getObjective();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OBJECTIVE__NAME = eINSTANCE.getObjective_Name();
-
-		/**
 		 * The meta object literal for the '<em><b>Weight</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute OBJECTIVE__WEIGHT = eINSTANCE.getObjective_Weight();
+
+		/**
+		 * The meta object literal for the '<em><b>Discount Curve</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OBJECTIVE__DISCOUNT_CURVE = eINSTANCE.getObjective_DiscountCurve();
+
+		/**
+		 * The meta object literal for the '{@link scenario.optimiser.impl.DiscountCurveImpl <em>Discount Curve</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.optimiser.impl.DiscountCurveImpl
+		 * @see scenario.optimiser.impl.OptimiserPackageImpl#getDiscountCurve()
+		 * @generated
+		 */
+		EClass DISCOUNT_CURVE = eINSTANCE.getDiscountCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Discounts</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DISCOUNT_CURVE__DISCOUNTS = eINSTANCE.getDiscountCurve_Discounts();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCOUNT_CURVE__START_DATE = eINSTANCE.getDiscountCurve_StartDate();
+
+		/**
+		 * The meta object literal for the '{@link scenario.optimiser.impl.DiscountImpl <em>Discount</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.optimiser.impl.DiscountImpl
+		 * @see scenario.optimiser.impl.OptimiserPackageImpl#getDiscount()
+		 * @generated
+		 */
+		EClass DISCOUNT = eINSTANCE.getDiscount();
+
+		/**
+		 * The meta object literal for the '<em><b>Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCOUNT__TIME = eINSTANCE.getDiscount_Time();
+
+		/**
+		 * The meta object literal for the '<em><b>Discount Factor</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCOUNT__DISCOUNT_FACTOR = eINSTANCE.getDiscount_DiscountFactor();
 
 	}
 

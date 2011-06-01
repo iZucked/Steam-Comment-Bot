@@ -11,7 +11,11 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-import scenario.market.*;
+import scenario.market.Index;
+import scenario.market.MarketModel;
+import scenario.market.MarketPackage;
+import scenario.market.StepwisePrice;
+import scenario.market.StepwisePriceCurve;
 
 /**
  * <!-- begin-user-doc -->
@@ -87,11 +91,11 @@ public class MarketSwitch<T> {
 	 */
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case MarketPackage.MARKET: {
-				Market market = (Market)theEObject;
-				T result = caseMarket(market);
-				if (result == null) result = caseNamedObject(market);
-				if (result == null) result = caseScenarioObject(market);
+			case MarketPackage.INDEX: {
+				Index index = (Index)theEObject;
+				T result = caseIndex(index);
+				if (result == null) result = caseNamedObject(index);
+				if (result == null) result = caseScenarioObject(index);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -115,6 +119,21 @@ public class MarketSwitch<T> {
 			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Index</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIndex(Index object) {
+		return null;
 	}
 
 	/**
@@ -189,21 +208,6 @@ public class MarketSwitch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Market</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Market</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMarket(Market object) {
 		return null;
 	}
 

@@ -11,12 +11,16 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-import scenario.fleet.*;
+import scenario.fleet.CharterOut;
+import scenario.fleet.Drydock;
 import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
+import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselEvent;
+import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselStateAttributes;
 
 /**

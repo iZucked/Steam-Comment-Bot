@@ -59,8 +59,8 @@ public class ProfitSharingPurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMarketPropertyDescriptor(object);
-			addReferenceMarketPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
+			addReferenceIndexPropertyDescriptor(object);
 			addAlphaPropertyDescriptor(object);
 			addBetaPropertyDescriptor(object);
 			addGammaPropertyDescriptor(object);
@@ -69,19 +69,19 @@ public class ProfitSharingPurchaseContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Market feature.
+	 * This adds a property descriptor for the Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMarketPropertyDescriptor(Object object) {
+	protected void addIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ProfitSharingPurchaseContract_market_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_market_feature", "_UI_ProfitSharingPurchaseContract_type"),
-				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__MARKET,
+				 getString("_UI_ProfitSharingPurchaseContract_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_index_feature", "_UI_ProfitSharingPurchaseContract_type"),
+				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX,
 				 true,
 				 false,
 				 true,
@@ -91,19 +91,19 @@ public class ProfitSharingPurchaseContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Reference Market feature.
+	 * This adds a property descriptor for the Reference Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addReferenceMarketPropertyDescriptor(Object object) {
+	protected void addReferenceIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ProfitSharingPurchaseContract_referenceMarket_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_referenceMarket_feature", "_UI_ProfitSharingPurchaseContract_type"),
-				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_MARKET,
+				 getString("_UI_ProfitSharingPurchaseContract_referenceIndex_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharingPurchaseContract_referenceIndex_feature", "_UI_ProfitSharingPurchaseContract_type"),
+				 ContractPackage.Literals.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX,
 				 true,
 				 false,
 				 true,

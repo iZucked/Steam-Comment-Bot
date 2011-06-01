@@ -9,6 +9,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import scenario.ScenarioPackage;
+
 /**
  * <!-- begin-user-doc -->
  * The <b>Package</b> for the model.
@@ -111,16 +113,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__NAME = 0;
+	int PORT__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Default Market</b></em>' reference.
+	 * The feature id for the '<em><b>Default Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_MARKET = 1;
+	int PORT__DEFAULT_INDEX = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Time Zone</b></em>' attribute.
@@ -129,7 +131,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__TIME_ZONE = 2;
+	int PORT__TIME_ZONE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Default Contract</b></em>' reference.
@@ -138,7 +140,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_CONTRACT = 3;
+	int PORT__DEFAULT_CONTRACT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Regas Efficiency</b></em>' attribute.
@@ -147,7 +149,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__REGAS_EFFICIENCY = 4;
+	int PORT__REGAS_EFFICIENCY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -156,8 +158,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = 5;
+	int PORT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Port</em>' class.
@@ -166,7 +177,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_OPERATION_COUNT = 0;
+	int PORT_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
@@ -278,7 +289,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__NAME = 0;
+	int CANAL__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Class Costs</b></em>' containment reference list.
@@ -287,7 +298,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__CLASS_COSTS = 1;
+	int CANAL__CLASS_COSTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Default Cost</b></em>' attribute.
@@ -296,7 +307,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__DEFAULT_COST = 2;
+	int CANAL__DEFAULT_COST = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Distance Model</b></em>' containment reference.
@@ -305,7 +316,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__DISTANCE_MODEL = 3;
+	int CANAL__DISTANCE_MODEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Canal</em>' class.
@@ -314,7 +325,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_FEATURE_COUNT = 4;
+	int CANAL_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Canal</em>' class.
@@ -323,7 +343,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_OPERATION_COUNT = 0;
+	int CANAL_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.port.impl.CanalModelImpl <em>Canal Model</em>}' class.
@@ -468,26 +488,15 @@ public interface PortPackage extends EPackage {
 	EClass getPort();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.port.Port#getName <em>Name</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.port.Port#getDefaultIndex <em>Default Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see scenario.port.Port#getName()
+	 * @return the meta object for the reference '<em>Default Index</em>'.
+	 * @see scenario.port.Port#getDefaultIndex()
 	 * @see #getPort()
 	 * @generated
 	 */
-	EAttribute getPort_Name();
-
-	/**
-	 * Returns the meta object for the reference '{@link scenario.port.Port#getDefaultMarket <em>Default Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Default Market</em>'.
-	 * @see scenario.port.Port#getDefaultMarket()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EReference getPort_DefaultMarket();
+	EReference getPort_DefaultIndex();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}'.
@@ -595,17 +604,6 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getCanal();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.port.Canal#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see scenario.port.Canal#getName()
-	 * @see #getCanal()
-	 * @generated
-	 */
-	EAttribute getCanal_Name();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link scenario.port.Canal#getClassCosts <em>Class Costs</em>}'.
@@ -777,20 +775,12 @@ public interface PortPackage extends EPackage {
 		EClass PORT = eINSTANCE.getPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Default Index</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute PORT__NAME = eINSTANCE.getPort_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Default Market</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT__DEFAULT_MARKET = eINSTANCE.getPort_DefaultMarket();
+		EReference PORT__DEFAULT_INDEX = eINSTANCE.getPort_DefaultIndex();
 
 		/**
 		 * The meta object literal for the '<em><b>Time Zone</b></em>' attribute feature.
@@ -877,14 +867,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CANAL = eINSTANCE.getCanal();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CANAL__NAME = eINSTANCE.getCanal_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Class Costs</b></em>' containment reference list feature.

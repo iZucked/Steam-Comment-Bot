@@ -59,11 +59,11 @@ public class CargoReportView extends EMFReportView {
 
 		addColumn("Load Port", objectFormatter,
 				s.getCargoAllocation_LoadSlot(), c.getSlot_Port(),
-				p.getPort_Name());
+				name);
 
 		addColumn("Discharge Port", objectFormatter,
 				s.getCargoAllocation_DischargeSlot(), c.getSlot_Port(),
-				p.getPort_Name());
+				name);
 
 		addColumn("Load Date", calendarFormatter,
 				s.getCargoAllocation__GetLocalLoadDate());

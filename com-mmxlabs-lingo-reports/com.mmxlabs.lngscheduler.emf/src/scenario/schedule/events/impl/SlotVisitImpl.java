@@ -5,15 +5,12 @@
 package scenario.schedule.events.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
-
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.SlotVisit;

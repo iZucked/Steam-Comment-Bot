@@ -5,7 +5,6 @@
 package scenario.schedule.events;
 
 import scenario.fleet.VesselState;
-
 import scenario.port.Port;
 
 /**

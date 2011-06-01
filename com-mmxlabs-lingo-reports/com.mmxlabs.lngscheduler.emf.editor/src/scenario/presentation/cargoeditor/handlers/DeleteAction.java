@@ -16,12 +16,15 @@ import org.eclipse.jface.action.Action;
 import scenario.presentation.LngEditorPlugin;
 
 /**
- * An action for deleting model elements; there's another built-in action by the same name, which might do just as well?
+ * An action for deleting model elements; there's another built-in action by the
+ * same name, which might do just as well?
+ * 
  * @author Tom Hinton
- *
+ * 
  */
 public abstract class DeleteAction extends Action {
 	private final EditingDomain editingDomain;
+
 	protected DeleteAction(final EditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
 		setImageDescriptor(LngEditorPlugin.Implementation
@@ -30,12 +33,15 @@ public abstract class DeleteAction extends Action {
 		setToolTipText("Delete Selection");
 		setText("Delete Selection");
 	}
+
 	protected abstract Collection<EObject> getTargets();
+
 	@Override
 	public void run() {
 		final Collection<EObject> target = getTargets();
-		final Command deleteCommand = 
-			editingDomain.createCommand(DeleteCommand.class, new CommandParameter(null, null, target));
-		editingDomain.getCommandStack().execute(deleteCommand);
+		if (target.size() > 0) {
+			editingDomain.getCommandStack().execute(
+					DeleteCommand.create(editingDomain, target));
+		}
 	}
 }

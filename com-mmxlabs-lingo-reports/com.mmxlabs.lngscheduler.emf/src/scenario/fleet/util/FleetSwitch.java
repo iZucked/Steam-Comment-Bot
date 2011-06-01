@@ -11,12 +11,16 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-import scenario.fleet.*;
+import scenario.fleet.CharterOut;
+import scenario.fleet.Drydock;
 import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
+import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselEvent;
+import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselStateAttributes;
 
 /**
@@ -102,12 +106,16 @@ public class FleetSwitch<T> {
 			case FleetPackage.VESSEL: {
 				Vessel vessel = (Vessel)theEObject;
 				T result = caseVessel(vessel);
+				if (result == null) result = caseNamedObject(vessel);
+				if (result == null) result = caseScenarioObject(vessel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case FleetPackage.VESSEL_CLASS: {
 				VesselClass vesselClass = (VesselClass)theEObject;
 				T result = caseVesselClass(vesselClass);
+				if (result == null) result = caseNamedObject(vesselClass);
+				if (result == null) result = caseScenarioObject(vesselClass);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

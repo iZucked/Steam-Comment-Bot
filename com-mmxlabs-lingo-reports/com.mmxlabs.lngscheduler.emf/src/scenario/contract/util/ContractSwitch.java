@@ -11,11 +11,17 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-import scenario.contract.*;
+import scenario.contract.Contract;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
+import scenario.contract.Entity;
+import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
+import scenario.contract.NetbackPurchaseContract;
+import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.contract.TotalVolumeLimit;
 
 /**
  * <!-- begin-user-doc -->
@@ -139,13 +145,13 @@ public class ContractSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ContractPackage.MARKET_PRICE_PURCHASE_CONTRACT: {
-				MarketPricePurchaseContract marketPricePurchaseContract = (MarketPricePurchaseContract)theEObject;
-				T result = caseMarketPricePurchaseContract(marketPricePurchaseContract);
-				if (result == null) result = casePurchaseContract(marketPricePurchaseContract);
-				if (result == null) result = caseContract(marketPricePurchaseContract);
-				if (result == null) result = caseNamedObject(marketPricePurchaseContract);
-				if (result == null) result = caseScenarioObject(marketPricePurchaseContract);
+			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT: {
+				IndexPricePurchaseContract indexPricePurchaseContract = (IndexPricePurchaseContract)theEObject;
+				T result = caseIndexPricePurchaseContract(indexPricePurchaseContract);
+				if (result == null) result = casePurchaseContract(indexPricePurchaseContract);
+				if (result == null) result = caseContract(indexPricePurchaseContract);
+				if (result == null) result = caseNamedObject(indexPricePurchaseContract);
+				if (result == null) result = caseScenarioObject(indexPricePurchaseContract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -272,17 +278,17 @@ public class ContractSwitch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Market Price Purchase Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Index Price Purchase Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Market Price Purchase Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Index Price Purchase Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMarketPricePurchaseContract(MarketPricePurchaseContract object) {
+	public T caseIndexPricePurchaseContract(IndexPricePurchaseContract object) {
 		return null;
 	}
 

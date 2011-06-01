@@ -143,7 +143,7 @@ public class ProfitAndLossCalculator {
 					.getCargoCVvalue()) - saleableMMBTU;
 
 			// lookup the final market sales price
-			final float salesPricePerMMBTU = dischargeContract.getMarket()
+			final float salesPricePerMMBTU = dischargeContract.getIndex()
 					.getPriceCurve()
 					.getValueAtDate(allocation.getDischargeDate());
 

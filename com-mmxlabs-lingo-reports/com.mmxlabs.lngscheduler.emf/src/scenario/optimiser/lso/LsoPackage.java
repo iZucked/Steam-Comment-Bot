@@ -115,6 +115,15 @@ public interface LsoPackage extends EPackage {
 	int LSO_SETTINGS__INITIAL_SCHEDULE = OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE;
 
 	/**
+	 * The feature id for the '<em><b>Default Discount Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__DEFAULT_DISCOUNT_CURVE = OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE;
+
+	/**
 	 * The feature id for the '<em><b>Number Of Steps</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -149,6 +158,15 @@ public interface LsoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LSO_SETTINGS_FEATURE_COUNT = OptimiserPackage.OPTIMISATION_SETTINGS_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS___GET_CONTAINER = OptimiserPackage.OPTIMISATION_SETTINGS___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>LSO Settings</em>' class.

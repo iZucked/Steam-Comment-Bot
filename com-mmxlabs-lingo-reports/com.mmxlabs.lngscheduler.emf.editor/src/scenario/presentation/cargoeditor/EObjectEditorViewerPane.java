@@ -88,6 +88,7 @@ import scenario.presentation.cargoeditor.importer.ExportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
@@ -190,7 +191,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						.getPathComponent(0);
 				final EClass ec = ref.getEReferenceType();
 				final EPackage p = ec.getEPackage();
-				final EFactory f = p.getEFactoryInstance();
+				
 				if (ec.isAbstract()) {
 					// select subclass
 					final LinkedList<EClass> subClasses = new LinkedList<EClass>();
@@ -220,9 +221,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						return null;
 					}
 					final Object[] result = elsd.getResult();
-					return f.create((EClass) result[0]);
+					return EMFUtils.createEObject((EClass) result[0]); // include contained objects
 				} else {
-					return f.create(ec);
+					return EMFUtils.createEObject(ec);
 				}
 			}
 

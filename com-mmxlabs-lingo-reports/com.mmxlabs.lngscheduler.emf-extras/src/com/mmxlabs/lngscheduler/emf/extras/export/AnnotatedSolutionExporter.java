@@ -19,7 +19,7 @@ import scenario.Scenario;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoType;
 import scenario.contract.FixedPricePurchaseContract;
-import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.fleet.Vessel;
@@ -312,7 +312,7 @@ public class AnnotatedSolutionExporter {
 				// find discharge price per mmbtu
 				final SalesContract dischargeContract = (SalesContract) cargo
 						.getDischargeSlot().getSlotOrPortContract();
-				final float salesPricePerMMBTU = dischargeContract.getMarket()
+				final float salesPricePerMMBTU = dischargeContract.getIndex()
 						.getPriceCurve()
 						.getValueAtDate(allocation.getDischargeDate());
 				// * dischargeContract.getRegasEfficiency();
@@ -323,9 +323,9 @@ public class AnnotatedSolutionExporter {
 				if (purchaseContract instanceof FixedPricePurchaseContract) {
 					purchasePricePerMMBTU = ((FixedPricePurchaseContract) purchaseContract)
 							.getUnitPrice();
-				} else if (purchaseContract instanceof MarketPricePurchaseContract) {
-					purchasePricePerMMBTU = ((MarketPricePurchaseContract) purchaseContract)
-							.getMarket().getPriceCurve()
+				} else if (purchaseContract instanceof IndexPricePurchaseContract) {
+					purchasePricePerMMBTU = ((IndexPricePurchaseContract) purchaseContract)
+							.getIndex().getPriceCurve()
 							.getValueAtDate(allocation.getDischargeDate());
 				} else {
 					System.err
