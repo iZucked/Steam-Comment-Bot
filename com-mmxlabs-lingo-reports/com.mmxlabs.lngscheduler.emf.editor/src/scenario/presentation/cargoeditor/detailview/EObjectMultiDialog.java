@@ -113,6 +113,7 @@ public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
 							sub.setLayoutData(new GridData(
 									GridData.FILL_HORIZONTAL));
 
+							sub.setEnabled(false);
 							final Button check = new Button(composite,
 									SWT.TOGGLE);
 							check.setText("Set");
@@ -125,10 +126,12 @@ public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
 										featuresToSet
 												.add(new Pair<EMFPath, EStructuralFeature>(
 														path, feature));
+										sub.setEnabled(true);
 									} else {
 										featuresToSet
 												.remove(new Pair<EMFPath, EStructuralFeature>(
 														path, feature));
+										sub.setEnabled(false);
 									}
 								}
 							});
