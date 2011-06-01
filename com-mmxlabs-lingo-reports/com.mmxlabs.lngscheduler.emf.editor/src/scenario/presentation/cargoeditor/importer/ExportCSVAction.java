@@ -8,9 +8,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
@@ -22,8 +25,10 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 /**
  * Reflective export action, counterpart to {@link ImportCSVAction}
@@ -36,6 +41,11 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
  * 
  */
 public abstract class ExportCSVAction extends Action {
+	public ExportCSVAction() {
+		super("Export to CSV", AbstractUIPlugin.imageDescriptorFromPlugin(
+				"org.eclipse.ui", "$nl$/icons/full/etool16/export_wiz.gif"));
+	}
+
 	@Override
 	public void run() {
 		final List<EObject> objects = getObjectsToExport();
@@ -46,16 +56,71 @@ public abstract class ExportCSVAction extends Action {
 		if (objects.size() == 0)
 			return;
 
-		// get save file name
-		final FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getShell(), SWT.SAVE);
-		fileDialog.setFileName("export.csv"); // TODO set a more sensible name
-		fileDialog.setFilterExtensions(new String[] { "*.csv" });
-		final String saveFilePath = fileDialog.open();
-		if (saveFilePath == null)
-			return;
+		final EClass topLevelClass = EMFUtils.findCommonSuperclass(objects);
+		final EObjectImporter exporter = EObjectImporterFactory.getInstance()
+				.getImporter(topLevelClass);
+		final Map<String, Collection<Map<String, String>>> result = exporter
+				.exportObjects(objects);
 
-		exportObjects(objects, saveFilePath);
+		for (final Map.Entry<String, Collection<Map<String, String>>> entry : result
+				.entrySet()) {
+			final String group = entry.getKey();
+
+			final FileDialog fileDialog = new FileDialog(PlatformUI
+					.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					SWT.SAVE);
+			fileDialog.setText("Choose export location for " + group + "s");
+			fileDialog.setFileName(group + ".csv"); // TODO set a more sensible
+													// name
+			fileDialog.setFilterExtensions(new String[] { "*.csv" });
+			final String saveFilePath = fileDialog.open();
+			if (saveFilePath == null)
+				return;
+			writeObjects(saveFilePath, entry.getValue());
+		}
+	}
+
+	/**
+	 * Write out the given maps
+	 * 
+	 * @param value
+	 */
+	private void writeObjects(final String filename,
+			final Collection<Map<String, String>> value) {
+		try {
+			final BufferedWriter bw = new BufferedWriter(new FileWriter(
+					filename));
+
+			final LinkedHashSet<String> keys = new LinkedHashSet<String>();
+			for (final Map<String, String> map : value) {
+				keys.addAll(map.keySet());
+			}
+
+			boolean comma = false;
+			for (final String col : keys) {
+				bw.write((comma ? ", " : "") + col);
+				comma = true;
+			}
+
+			// bw.newLine();
+
+			for (final Map<String, String> row : value) {
+				bw.newLine();
+				comma = false;
+				for (final String col : keys) {
+					final String v = row.get(col);
+					final String ve = v == null ? "" : (v.contains(",") ? "\""
+							+ v.replace("\"", "\"\"") + "\"" : v);
+					bw.write((comma ? "," : "") + ve);
+					comma = true;
+				}
+			}
+
+			bw.flush();
+			bw.close();
+		} catch (final IOException ex) {
+			return;
+		}
 	}
 
 	private void exportObjects(final List<EObject> objects,

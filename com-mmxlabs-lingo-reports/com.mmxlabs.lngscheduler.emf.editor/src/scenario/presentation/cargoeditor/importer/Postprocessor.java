@@ -4,6 +4,8 @@
  */
 package scenario.presentation.cargoeditor.importer;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -79,15 +81,31 @@ public class Postprocessor {
 						final Date date = (Date) object.eGet(attribute);
 						if (date == null)
 							continue;
-						final Calendar in = Calendar.getInstance();
-						final Calendar out = Calendar.getInstance(zone);
-						in.setTime(date);
-						out.set(in.get(Calendar.YEAR), in.get(Calendar.MONTH),
-								in.get(Calendar.DATE),
-								in.get(Calendar.HOUR_OF_DAY),
-								in.get(Calendar.MINUTE),
-								in.get(Calendar.SECOND));
-						object.eSet(attribute, out.getTime());
+						
+						final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:00");
+						format.setTimeZone(TimeZone.getTimeZone("UTC"));
+						final String s = format.format(date);
+						System.err.println("Intermediate string " + s + " (UTC)");
+						format.setTimeZone(zone);
+						try {
+							final Date d2 = format.parse(s);
+							System.err.println(date + " => " + d2);
+							object.eSet(attribute, d2);
+						} catch (ParseException e) {
+//							e.printStackTrace();
+						}
+//						
+//						final Calendar in = Calendar.getInstance();
+//						final Calendar out = Calendar.getInstance(zone);
+//						in.setTime(date);
+//						out.clear();
+//						out.set(in.get(Calendar.YEAR), in.get(Calendar.MONTH),
+//								in.get(Calendar.DATE),
+//								in.get(Calendar.HOUR_OF_DAY),
+//								in.get(Calendar.MINUTE),
+//								in.get(Calendar.SECOND));
+//						
+//						object.eSet(attribute, out.getTime());
 					}
 				}
 			}

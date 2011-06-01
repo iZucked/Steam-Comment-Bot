@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 
+import scenario.NamedObject;
+
 import com.mmxlabs.common.Pair;
 
 /**
@@ -41,23 +43,39 @@ public class NamedObjectRegistry {
 	public void addEObject(final EObject top) {
 		if (top == null)
 			return;
+		final String id = getName(top);
+		if (id.isEmpty() == false) {
+			contents.put(new Pair<EClass, String>(top.eClass(), id), top);
+			
+			// process superclasses
+			for (final EClass superclass : top.eClass().getEAllSuperTypes()) {
+				if (superclass.isAbstract()) {
+					contents.put(new Pair<EClass, String>(superclass, id), top);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Get the name / id field of an object.
+	 * @param top
+	 * @return
+	 */
+	public static String getName(final EObject top) {
+		if (top == null) return "";
+		if (top instanceof NamedObject) {
+			return ((NamedObject) top).getName();
+		}
 		final EDataType stringType = EcorePackage.eINSTANCE.getEString();
 		for (final EAttribute attribute : top.eClass().getEAllAttributes()) {
 			if (attribute.getEAttributeType().equals(stringType)) {
 				if (attribute.getName().equalsIgnoreCase("name") || attribute.getName().equalsIgnoreCase("id")) {
-					// add to registry for type
 					final String id = (String) top.eGet(attribute);
-					contents.put(new Pair<EClass, String>(top.eClass(), id), top);
-					// also add for abstract supertypes;
-					// TODO check they have an id field?
-					for (final EClass superclass : top.eClass().getEAllSuperTypes()) {
-						if (superclass.isAbstract()) {
-							contents.put(new Pair<EClass, String>(superclass, id), top);
-						}
-					}
+					return id;
 				}
 			}
 		}
+		return "";
 	}
 
 	public Map<Pair<EClass, String>, EObject> getContents() {

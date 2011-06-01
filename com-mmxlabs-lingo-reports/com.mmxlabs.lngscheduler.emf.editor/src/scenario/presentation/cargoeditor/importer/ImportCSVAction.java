@@ -13,9 +13,11 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Pair;
 
@@ -27,7 +29,8 @@ import com.mmxlabs.common.Pair;
  */
 public abstract class ImportCSVAction extends Action {
 	public ImportCSVAction() {
-		super();
+		super("Import from CSV", AbstractUIPlugin.imageDescriptorFromPlugin(
+				"org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 	}
 
 	protected abstract EObject getToplevelObject();
@@ -35,7 +38,7 @@ public abstract class ImportCSVAction extends Action {
 	protected abstract void addObjects(final Collection<EObject> newObjects);
 
 	protected abstract EClass getImportClass();
-
+	
 	@Override
 	public void run() {
 		final FileDialog openDialog = new FileDialog(PlatformUI.getWorkbench()

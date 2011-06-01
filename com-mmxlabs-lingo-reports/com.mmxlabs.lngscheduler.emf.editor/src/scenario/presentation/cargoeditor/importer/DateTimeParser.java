@@ -4,11 +4,10 @@
  */
 package scenario.presentation.cargoeditor.importer;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -22,10 +21,16 @@ import org.eclipse.emf.ecore.EcorePackage;
 public class DateTimeParser {
 	private final static DateTimeParser INSTANCE = new DateTimeParser();
 	final SimpleDateFormat consistentDate = new SimpleDateFormat("yyyy-MM-dd");
-	final SimpleDateFormat consistentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-	final SimpleDateFormat dateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
-	protected DateTimeParser() {
+	final SimpleDateFormat consistentDateTime = new SimpleDateFormat(
+			"yyyy-MM-dd HH:00");
+	final SimpleDateFormat dateWithShortTime = new SimpleDateFormat(
+			"yyyy-MM-dd HH");
 
+	protected DateTimeParser() {
+		final TimeZone utc = TimeZone.getTimeZone("UTC");
+		consistentDate.setTimeZone(utc);
+		consistentDateTime.setTimeZone(utc);
+		dateWithShortTime.setTimeZone(utc);
 	}
 
 	public static DateTimeParser getInstance() {
@@ -33,53 +38,29 @@ public class DateTimeParser {
 	}
 
 	/**
-	 * Attempt to parse the given string into a date using all known
-	 * date / date+time formats in the current locale.
+	 * Try and parse it as one of the date time strings above, or as an ecore date.
+	 * 
 	 * @param dateString
 	 * @return
 	 */
 	public Date parseDate(final String dateString) {
-		final Locale locale = Locale.getDefault();
-
-		//try parsing as a date and time
+		// try parsing as a date and time
 		try {
 			final Date result = consistentDateTime.parse(dateString);
 			return result;
-		} catch (ParseException ex) {}
-		
+		} catch (ParseException ex) {
+		}
+
 		try {
 			final Date result = dateWithShortTime.parse(dateString);
 			return result;
-		} catch (ParseException ex) {}
-		
-		for (int style = DateFormat.FULL; style <= DateFormat.SHORT; style++) {
-			for (int timeStyle = DateFormat.FULL; timeStyle <= DateFormat.SHORT; timeStyle++) {
-				DateFormat df = DateFormat.getDateTimeInstance(style, timeStyle, locale);
-				try {
-					Date result = df.parse(dateString);
-					// either return "true", or return the Date obtained Date object
-					return result;
-				} catch (ParseException ex) {
-					continue;
-				}
-			}
+		} catch (ParseException ex) {
 		}
-		
+
 		try {
 			final Date result = consistentDate.parse(dateString);
 			return result;
-		} catch (ParseException ex) {}
-		
-		//maybe it's just a date?
-		for (int style = DateFormat.FULL; style <= DateFormat.SHORT; style++) {
-			DateFormat df = DateFormat.getDateInstance(style, locale);
-			try {
-				Date result = df.parse(dateString);
-				// either return "true", or return the Date obtained Date object
-				return result;
-			} catch (ParseException ex) {
-				continue;
-			}
+		} catch (ParseException ex) {
 		}
 
 		// last try - use ECore
@@ -89,5 +70,12 @@ public class DateTimeParser {
 		} catch (final Exception ex) {
 			return null;
 		}
+	}
+
+	public String formatDate(final Date date, final String zone) {
+		final SimpleDateFormat c = (SimpleDateFormat) consistentDateTime
+				.clone();
+		c.setTimeZone(TimeZone.getTimeZone(zone));
+		return c.format(date);
 	}
 }

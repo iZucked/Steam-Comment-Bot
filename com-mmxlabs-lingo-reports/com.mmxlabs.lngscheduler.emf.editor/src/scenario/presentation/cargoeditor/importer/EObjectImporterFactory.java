@@ -32,6 +32,11 @@ public class EObjectImporterFactory {
 	
 	public EObjectImporter getImporter(final EClass importClass) {
 		//TODO handle any other special cases here.
+		if (FleetPackage.eINSTANCE.getVesselClass().isSuperTypeOf(importClass)) {
+			final VesselClassImporter i = new VesselClassImporter();
+			i.setOutputEClass(importClass);
+			return i;
+		}
 		if (MarketPackage.eINSTANCE.getStepwisePriceCurve().isSuperTypeOf(importClass)) {
 			final PriceCurveImporter marketImporter = new PriceCurveImporter();
 			marketImporter.setOutputEClass(importClass);

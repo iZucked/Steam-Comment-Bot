@@ -6,7 +6,9 @@ package scenario.presentation.cargoeditor.importer;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -20,6 +22,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
+
+import scenario.port.Port;
+import scenario.port.PortPackage;
+
+import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 /**
  * Gadget for importing EObjects and their singly contained sub-objects. If you
@@ -60,6 +68,154 @@ public class EObjectImporter {
 		return outputEClass;
 	}
 
+	/**
+	 * Flatten a bunch of EObjects down into a lot of key-value maps.
+	 * 
+	 * This isn't quite symmetric with the import side API.
+	 * 
+	 * @param objects
+	 *            some EObjects to export
+	 * @return a map from group name to a collection of rows, in key-value form.
+	 */
+	public Map<String, Collection<Map<String, String>>> exportObjects(
+			final Collection<EObject> objects) {
+
+		// default thing is to check whether the objects are variadic (for the
+		// kind column)
+		// and then export each object one at a time.
+
+		// the caller can then descide how to serialize the data.
+
+		final boolean sameTypes = EMFUtils.allSameEClass(objects);
+		final EClass commonType = EMFUtils.findCommonSuperclass(objects);
+		final LinkedList<Map<String, String>> results = new LinkedList<Map<String, String>>();
+		for (final EObject object : objects) {
+			final Map<String, String> map = exportObject(object);
+			if (sameTypes == false) {
+				map.put("kind", object.eClass().getName());
+			}
+			results.add(map);
+		}
+
+		return CollectionsUtil.makeHashMap(commonType.getName(), results);
+	}
+
+	/**
+	 * Flatten the given object into its component parts
+	 * 
+	 * @param object
+	 * @return a map which describes object
+	 */
+	protected Map<String, String> exportObject(final EObject object) {
+		return exportObject(object, "");
+	}
+	
+	/**
+	 * @param eGet
+	 * @param prefix2
+	 * @return
+	 */
+	private Map<String, String> exportObject(EObject object, String prefix) {
+		// First write out all the fields in the object, then write all the
+		// fields in its contained objects
+		final LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
+		flattenAttributesAndReferences(object, prefix, result);
+		flattenContainments(object, prefix, result);
+		return result;
+	}
+
+	/**
+	 * Add all of the attributes of the given object to the given output map,
+	 * prefixing field names with the prefix and SEPARATOR
+	 * 
+	 * @param object
+	 * @param prefix
+	 * @param output
+	 */
+	protected void flattenAttributesAndReferences(final EObject object,
+			final String prefix, final Map<String, String> output) {
+		String timezone = "UTC";
+		for (final EReference ref : object.eClass().getEAllReferences()) {
+			if (ref.getEReferenceType().equals(PortPackage.eINSTANCE.getPort())
+					&& ref.isContainment() == false && ref.isMany() == false) {
+				final Port p = (Port) object.eGet(ref);
+				if (p != null) {
+					timezone = p.getTimeZone();
+					break;
+				}
+			}
+		}
+
+		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
+			final Object value = object.eIsSet(attribute) ? object
+					.eGet(attribute) : null;
+			String svalue = "";
+			if (value instanceof Date) {
+				svalue = DateTimeParser.getInstance().formatDate((Date) value,
+						timezone);
+			} else if (value instanceof Float || value instanceof Double) {
+				svalue = String.format("%3g", ((Number) value).doubleValue());
+			} else if (value != null) {
+				svalue = value.toString();
+			}
+			output.put(prefix + attribute.getName(), svalue);
+		}
+
+		for (final EReference reference : object.eClass().getEAllReferences()) {
+			if (reference.isContainment())
+				continue;
+			if (reference.isMany()) {
+				final EList<EObject> values = (EList<EObject>) object
+						.eGet(reference);
+
+				final StringBuffer sb = new StringBuffer();
+				boolean comma = false;
+				for (final EObject v : values) {
+					sb.append((comma ? "," : "")
+							+ NamedObjectRegistry.getName(v));
+				}
+				output.put(prefix + reference.getName(), sb.toString());
+			} else {
+				final EObject value = (EObject) object.eGet(reference);
+				output.put(prefix + reference.getName(),
+						NamedObjectRegistry.getName(value));
+			}
+		}
+	}
+
+	/**
+	 * Recursively flatten the fields of all singly-contained objects.
+	 * 
+	 * @param object
+	 * @param prefix
+	 * @param output
+	 */
+	protected void flattenContainments(final EObject object,
+			final String prefix, final Map<String, String> output) {
+		for (final EReference ref : object.eClass().getEAllContainments()) {
+			if (ref.isMany()) {
+				flattenMultiContainment(object, prefix, ref, output);
+			} else {
+				// get exporter for contained data and do the business.
+				final EObjectImporter exporter = EObjectImporterFactory.getInstance().getImporter(ref.getEReferenceType());
+				
+				final String prefix2 = prefix + ref.getName() + SEPARATOR;
+				
+				final Map<String, String> subObject = exporter.exportObject((EObject) object.eGet(ref), prefix2);
+				
+				for (final Map.Entry<String, String> entry : subObject.entrySet()) {
+					output.put(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+	}
+
+	protected void flattenMultiContainment(final EObject object,
+			final String prefix, final EReference reference,
+			final Map<String, String> output) {
+		
+	}
+
 	public Collection<EObject> importObjects(final CSVReader reader,
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
@@ -78,7 +234,15 @@ public class EObjectImporter {
 		return importedObjects;
 	}
 
-	public EObject importObject(final Map<String, String> fields,
+	/**
+	 * @param referencePrefix
+	 * @param subFields
+	 * @param deferredReferences
+	 * @param registry
+	 * @return
+	 */
+	private EObject importObject(final String prefix,
+			final Map<String, String> fields,
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
 		final EPackage ePackage = outputEClass.getEPackage();
@@ -88,35 +252,42 @@ public class EObjectImporter {
 		final EObject result = eFactory.create(trueOutputClass);
 
 		for (final EAttribute attribute : trueOutputClass.getEAllAttributes()) {
-			populateAttribute(result, attribute, fields);
+			populateAttribute(prefix, result, attribute, fields);
 		}
 
 		for (final EReference reference : trueOutputClass.getEAllReferences()) {
 			if (reference.isContainment()) {
-				populateContainment(result, reference, fields,
+				populateContainment(prefix, result, reference, fields,
 						deferredReferences, registry);
 			} else {
-				populateReference(result, reference, fields, deferredReferences);
+				populateReference(prefix, result, reference, fields, deferredReferences);
 			}
 		}
 
 		return result;
 	}
+	
+	public EObject importObject(final Map<String, String> fields,
+			final Collection<DeferredReference> deferredReferences,
+			final NamedObjectRegistry registry) {
+		return importObject("", fields, deferredReferences, registry);
+	}
 
 	/**
+	 * @param prefix 
 	 * @param result
 	 * @param reference
 	 * @param fields
 	 * @param deferredReferences
 	 * @param registry
 	 */
-	protected void populateContainment(final EObject result,
+	protected void populateContainment(final String prefix, final EObject result,
 			final EReference reference, final Map<String, String> fields,
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
 		if (reference.isMany()) {
 			// import multiple; default behaviour is to run another session
-			final String referenceName = reference.getName().toLowerCase();
+			final String referenceName = prefix + reference.getName().toLowerCase();
 			if (fields.containsKey(referenceName)) {
 				final String filePath = fields.get(referenceName);
 
@@ -125,46 +296,39 @@ public class EObjectImporter {
 					final EObjectImporter importer = EObjectImporterFactory
 							.getInstance().getImporter(
 									reference.getEReferenceType());
-					((EList<EObject>) result.eGet(reference)).addAll(
-						importer.importObjects(reader, deferredReferences, registry)
-					);
+					((EList<EObject>) result.eGet(reference))
+							.addAll(importer.importObjects(reader,
+									deferredReferences, registry));
 				} catch (IOException e) {
 
 				}
 			}
 		} else {
 			// get sub-fields
-			final Map<String, String> subFields = new HashMap<String, String>();
-			final String referencePrefix = reference.getName().toLowerCase()
+			final String referencePrefix = prefix + reference.getName().toLowerCase()
 					+ SEPARATOR;
-			for (final Map.Entry<String, String> column : fields.entrySet()) {
-				if (column.getKey().startsWith(referencePrefix)) {
-					subFields
-							.put(column.getKey().substring(
-									referencePrefix.length()),
-									column.getValue());
-				}
-			}
+			
 			// perform import
 			final EObjectImporter importer = EObjectImporterFactory
 					.getInstance().getImporter(reference.getEReferenceType());
-			final EObject value = importer.importObject(subFields,
+			final EObject value = importer.importObject(referencePrefix, fields,
 					deferredReferences, registry);
 			result.eSet(reference, value);
 		}
 	}
 
 	/**
+	 * @param prefix 
 	 * @param result
 	 * @param reference
 	 * @param fields
 	 * @param deferredReferences
 	 */
-	protected void populateReference(final EObject target,
+	protected void populateReference(String prefix, final EObject target,
 			final EReference reference, final Map<String, String> fields,
 			final Collection<DeferredReference> deferredReferences) {
 
-		final String referenceName = reference.getName().toLowerCase();
+		final String referenceName = prefix + reference.getName().toLowerCase();
 		if (fields.containsKey(referenceName)) {
 			final String value = fields.get(referenceName);
 
@@ -182,13 +346,14 @@ public class EObjectImporter {
 	}
 
 	/**
+	 * @param prefix 
 	 * @param result
 	 * @param attribute
 	 * @param fields
 	 */
-	protected void populateAttribute(final EObject target,
+	protected void populateAttribute(String prefix, final EObject target,
 			final EAttribute attribute, final Map<String, String> fields) {
-		final String attributeName = attribute.getName().toLowerCase();
+		final String attributeName = prefix + attribute.getName().toLowerCase();
 		if (fields.containsKey(attributeName)) {
 			final String value = fields.get(attributeName);
 			final EDataType dataType = attribute.getEAttributeType();
@@ -196,13 +361,16 @@ public class EObjectImporter {
 			// TODO local dates are especially tricky, maybe do a second pass to
 			// fix them.
 			final Object obj;
-			if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
-				obj = DateTimeParser.getInstance().parseDate(value);
-			} else {
-				obj = dataType.getEPackage().getEFactoryInstance()
-						.createFromString(dataType, value);
+			try {
+				if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
+					obj = DateTimeParser.getInstance().parseDate(value);
+				} else {
+					obj = dataType.getEPackage().getEFactoryInstance()
+							.createFromString(dataType, value);
+				}
+				target.eSet(attribute, obj);
+			} catch (final Exception ex) {
 			}
-			target.eSet(attribute, obj);
 		}
 	}
 }
