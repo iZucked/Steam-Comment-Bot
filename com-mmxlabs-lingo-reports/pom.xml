@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<!-- Tycho required maven 3.0 -->
+	<!-- Tycho requires maven 3.0 -->
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
