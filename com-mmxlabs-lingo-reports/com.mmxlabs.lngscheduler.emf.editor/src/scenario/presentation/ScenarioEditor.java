@@ -158,6 +158,7 @@ import scenario.presentation.cargoeditor.NonEditableColumn;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
+import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
@@ -805,6 +806,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
+	private AutoCorrector autoCorrector;
+
 	/**
 	 * Handles activation of the editor or it's associated views. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -1321,10 +1324,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// add autocorrector
 
-			final AutoCorrector autoCorrector = new AutoCorrector(
+			autoCorrector = new AutoCorrector(
 					getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
-			// autoCorrector.addCorrector(new DateLocalisingCorrector());
+			autoCorrector.addCorrector(new DateLocalisingCorrector());
 
 			final Scenario s = ((Scenario) (editingDomain.getResourceSet()
 					.getResources().get(0).getContents().get(0)));
@@ -2154,7 +2157,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						 * Because I've over-ridden the run method up there,
 						 * these methods can safely return null. However, it
 						 * does mean that vessel class imports will not have any
-						 * of the nice merging behaviour that other importers get.
+						 * of the nice merging behaviour that other importers
+						 * get.
 						 * 
 						 * TODO fix this.
 						 */

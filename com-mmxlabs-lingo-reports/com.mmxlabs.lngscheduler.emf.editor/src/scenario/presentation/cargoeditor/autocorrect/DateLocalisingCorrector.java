@@ -46,6 +46,10 @@ public class DateLocalisingCorrector extends BaseCorrector {
 
 					final Port oldValue = (Port) notification.getOldValue();
 
+					if (oldValue == null)
+						return null; // break out if port was null, because this
+										// is probably an import.
+
 					final Port newValue = (Port) notification.getNewValue();
 
 					final TimeZone oldZone = getZone(oldValue);
@@ -72,9 +76,11 @@ public class DateLocalisingCorrector extends BaseCorrector {
 									c.get(Calendar.MINUTE),
 									c.get(Calendar.SECOND));
 							return new Pair<String, Command>(
-									"Adjust date to local time",
-									makeSetter(editingDomain, (EObject) notification.getNotifier(), attribute, c2.getTime())
-									);
+									"Adjust date to local time", makeSetter(
+											editingDomain,
+											(EObject) notification
+													.getNotifier(), attribute,
+											c2.getTime()));
 						}
 					}
 				}
