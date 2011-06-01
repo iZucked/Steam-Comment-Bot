@@ -103,7 +103,7 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * Resize one of the integer buffers above
 	 */
 	private final void resize(int[][] arrays, int arrayIndex, int size) {
-		if (arrays[arrayIndex].length < (size)) {
+		if (arrays[arrayIndex] == null || arrays[arrayIndex].length < (size)) {
 			arrays[arrayIndex] = new int[(size)];
 		}
 	}
