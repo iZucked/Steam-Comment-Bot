@@ -25,6 +25,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.port.Port} object.
@@ -33,7 +34,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class PortItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
@@ -57,8 +58,7 @@ public class PortItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
-			addDefaultMarketPropertyDescriptor(object);
+			addDefaultIndexPropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
 			addDefaultContractPropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
@@ -67,41 +67,19 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Name feature.
+	 * This adds a property descriptor for the Default Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addNamePropertyDescriptor(Object object) {
+	protected void addDefaultIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Port_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_name_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Default Market feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDefaultMarketPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_defaultMarket_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultMarket_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__DEFAULT_MARKET,
+				 getString("_UI_Port_defaultIndex_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultIndex_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_INDEX,
 				 true,
 				 false,
 				 true,
@@ -213,7 +191,6 @@ public class PortItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Port.class)) {
-			case PortPackage.PORT__NAME:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

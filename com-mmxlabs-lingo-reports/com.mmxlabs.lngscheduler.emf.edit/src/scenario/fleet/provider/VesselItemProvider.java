@@ -27,6 +27,7 @@ import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.fleet.Vessel} object.
@@ -35,7 +36,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class VesselItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
@@ -59,33 +60,10 @@ public class VesselItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 			addClassPropertyDescriptor(object);
 			addTimeCharteredPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_name_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -200,7 +178,6 @@ public class VesselItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Vessel.class)) {
-			case FleetPackage.VESSEL__NAME:
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

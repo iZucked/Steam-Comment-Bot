@@ -53,26 +53,26 @@ public class SalesContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMarketPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
 			addMarkupPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Market feature.
+	 * This adds a property descriptor for the Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMarketPropertyDescriptor(Object object) {
+	protected void addIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SalesContract_market_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SalesContract_market_feature", "_UI_SalesContract_type"),
-				 ContractPackage.Literals.SALES_CONTRACT__MARKET,
+				 getString("_UI_SalesContract_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SalesContract_index_feature", "_UI_SalesContract_type"),
+				 ContractPackage.Literals.SALES_CONTRACT__INDEX,
 				 true,
 				 false,
 				 true,

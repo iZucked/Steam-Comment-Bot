@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.provider;
 
@@ -20,15 +22,15 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 import scenario.contract.ContractPackage;
-import scenario.contract.MarketPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
 
 /**
- * This is the item provider adapter for a {@link scenario.contract.MarketPricePurchaseContract} object.
+ * This is the item provider adapter for a {@link scenario.contract.IndexPricePurchaseContract} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class MarketPricePurchaseContractItemProvider
+public class IndexPricePurchaseContractItemProvider
 	extends PurchaseContractItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -42,7 +44,7 @@ public class MarketPricePurchaseContractItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MarketPricePurchaseContractItemProvider(AdapterFactory adapterFactory) {
+	public IndexPricePurchaseContractItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -57,25 +59,25 @@ public class MarketPricePurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMarketPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Market feature.
+	 * This adds a property descriptor for the Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMarketPropertyDescriptor(Object object) {
+	protected void addIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MarketPricePurchaseContract_market_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketPricePurchaseContract_market_feature", "_UI_MarketPricePurchaseContract_type"),
-				 ContractPackage.Literals.MARKET_PRICE_PURCHASE_CONTRACT__MARKET,
+				 getString("_UI_IndexPricePurchaseContract_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_IndexPricePurchaseContract_index_feature", "_UI_IndexPricePurchaseContract_type"),
+				 ContractPackage.Literals.INDEX_PRICE_PURCHASE_CONTRACT__INDEX,
 				 true,
 				 false,
 				 true,
@@ -85,14 +87,14 @@ public class MarketPricePurchaseContractItemProvider
 	}
 
 	/**
-	 * This returns MarketPricePurchaseContract.gif.
+	 * This returns IndexPricePurchaseContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/MarketPricePurchaseContract"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/IndexPricePurchaseContract"));
 	}
 
 	/**
@@ -103,10 +105,10 @@ public class MarketPricePurchaseContractItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((MarketPricePurchaseContract)object).getName();
+		String label = ((IndexPricePurchaseContract)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_MarketPricePurchaseContract_type") :
-			getString("_UI_MarketPricePurchaseContract_type") + " " + label;
+			getString("_UI_IndexPricePurchaseContract_type") :
+			getString("_UI_IndexPricePurchaseContract_type") + " " + label;
 	}
 
 	/**

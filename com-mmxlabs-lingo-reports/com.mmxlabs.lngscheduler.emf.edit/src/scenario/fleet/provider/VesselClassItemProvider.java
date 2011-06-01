@@ -27,6 +27,7 @@ import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.fleet.VesselClass} object.
@@ -35,7 +36,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class VesselClassItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
@@ -59,7 +60,6 @@ public class VesselClassItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addMinSpeedPropertyDescriptor(object);
 			addMaxSpeedPropertyDescriptor(object);
@@ -71,28 +71,6 @@ public class VesselClassItemProvider
 			addBaseFuelPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselClass_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_name_feature", "_UI_VesselClass_type"),
-				 FleetPackage.Literals.VESSEL_CLASS__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -361,7 +339,6 @@ public class VesselClassItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselClass.class)) {
-			case FleetPackage.VESSEL_CLASS__NAME:
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:

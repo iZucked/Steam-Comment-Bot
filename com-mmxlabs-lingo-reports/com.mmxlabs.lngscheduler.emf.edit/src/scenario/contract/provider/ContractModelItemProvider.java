@@ -159,7 +159,7 @@ public class ContractModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS,
-				 ContractFactory.eINSTANCE.createMarketPricePurchaseContract()));
+				 ContractFactory.eINSTANCE.createIndexPricePurchaseContract()));
 
 		newChildDescriptors.add
 			(createChildParameter

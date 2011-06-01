@@ -28,6 +28,7 @@ import scenario.optimiser.Constraint;
 import scenario.optimiser.OptimiserPackage;
 
 import scenario.provider.LngEditPlugin;
+import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.optimiser.Constraint} object.
@@ -36,7 +37,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class ConstraintItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
@@ -60,32 +61,9 @@ public class ConstraintItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 			addEnabledPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Constraint_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Constraint_name_feature", "_UI_Constraint_type"),
-				 OptimiserPackage.Literals.CONSTRAINT__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -147,7 +125,6 @@ public class ConstraintItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Constraint.class)) {
-			case OptimiserPackage.CONSTRAINT__NAME:
 			case OptimiserPackage.CONSTRAINT__ENABLED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

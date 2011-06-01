@@ -1,36 +1,46 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
-package scenario.market.provider;
+package scenario.optimiser.provider;
 
 
 import java.util.Collection;
 import java.util.List;
+
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import scenario.market.Market;
-import scenario.market.MarketFactory;
-import scenario.market.MarketPackage;
+
+import scenario.optimiser.DiscountCurve;
+import scenario.optimiser.OptimiserFactory;
+import scenario.optimiser.OptimiserPackage;
+
 import scenario.provider.LngEditPlugin;
 import scenario.provider.NamedObjectItemProvider;
 
 /**
- * This is the item provider adapter for a {@link scenario.market.Market} object.
+ * This is the item provider adapter for a {@link scenario.optimiser.DiscountCurve} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class MarketItemProvider
+public class DiscountCurveItemProvider
 	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -44,7 +54,7 @@ public class MarketItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MarketItemProvider(AdapterFactory adapterFactory) {
+	public DiscountCurveItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -59,8 +69,31 @@ public class MarketItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addStartDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Start Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStartDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DiscountCurve_startDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DiscountCurve_startDate_feature", "_UI_DiscountCurve_type"),
+				 OptimiserPackage.Literals.DISCOUNT_CURVE__START_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -75,7 +108,7 @@ public class MarketItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(MarketPackage.Literals.MARKET__PRICE_CURVE);
+			childrenFeatures.add(OptimiserPackage.Literals.DISCOUNT_CURVE__DISCOUNTS);
 		}
 		return childrenFeatures;
 	}
@@ -94,14 +127,14 @@ public class MarketItemProvider
 	}
 
 	/**
-	 * This returns Market.gif.
+	 * This returns DiscountCurve.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Market"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/DiscountCurve"));
 	}
 
 	/**
@@ -112,10 +145,10 @@ public class MarketItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Market)object).getName();
+		String label = ((DiscountCurve)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Market_type") :
-			getString("_UI_Market_type") + " " + label;
+			getString("_UI_DiscountCurve_type") :
+			getString("_UI_DiscountCurve_type") + " " + label;
 	}
 
 	/**
@@ -129,8 +162,11 @@ public class MarketItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Market.class)) {
-			case MarketPackage.MARKET__PRICE_CURVE:
+		switch (notification.getFeatureID(DiscountCurve.class)) {
+			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -150,8 +186,8 @@ public class MarketItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(MarketPackage.Literals.MARKET__PRICE_CURVE,
-				 MarketFactory.eINSTANCE.createStepwisePriceCurve()));
+				(OptimiserPackage.Literals.DISCOUNT_CURVE__DISCOUNTS,
+				 OptimiserFactory.eINSTANCE.createDiscount()));
 	}
 
 	/**
