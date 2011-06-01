@@ -82,6 +82,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.NetbackContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.ProfitSharingContract;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListCargoAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
@@ -90,6 +91,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
@@ -191,6 +193,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final Map<IPort, List<TotalVolumeLimit>> dischargeLimits = new HashMap<IPort, List<TotalVolumeLimit>>();
 
 	private final ITotalVolumeLimitEditor<ISequenceElement> totalVolumeLimits;
+
+	private IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor(SchedulerConstants.DCP_discountCurveProvider);
 
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
@@ -1140,5 +1144,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadPriceCalculator createNetbackContract(int buyersMargin) {
 		return new NetbackContract(buyersMargin, portDistanceProvider);
+	}
+
+	/**
+	 * Set a discount curve for the given fitness component name
+	 * @param name
+	 * @param iCurve
+	 */
+	public void setFitnessComponentDiscountCurve(String name, ICurve iCurve) {
+		discountCurveProvider .setDiscountCurve(name, iCurve);
+		
 	}
 }
