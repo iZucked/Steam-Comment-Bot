@@ -122,11 +122,11 @@ public class SchedulerView extends ViewPart {
 
 		viewer.setInput(getViewSite());
 
-		// Create the help context id for the viewer's control
+		// Create the help context id for the viewer's control. This is in the format of pluginid.contextId
 		PlatformUI
 				.getWorkbench()
 				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.scheduleview.viewer");
+				.setHelp(viewer.getControl(), "com.mmxlabs.scheduleview.SchedulerViewer");
 
 		makeActions();
 		hookContextMenu();
