@@ -194,7 +194,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final ITotalVolumeLimitEditor<ISequenceElement> totalVolumeLimits;
 
-	private IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor(SchedulerConstants.DCP_discountCurveProvider);
+	private IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor(
+			SchedulerConstants.DCP_discountCurveProvider);
 
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
@@ -301,7 +302,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setTimeWindow(window);
 		slot.setMinLoadVolume(minVolumeInM3);
 		slot.setMaxLoadVolume(maxVolumeInM3);
-//		slot.setPurchasePriceCurve(pricePerMMBTu);
+		// slot.setPurchasePriceCurve(pricePerMMBTu);
 		slot.setLoadPriceCalculator(loadContract);
 		slot.setCargoCVValue(cargoCVValue);
 
@@ -461,7 +462,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// set element duration to 1 hour, just so it's visible on the chart
 		elementDurationsProvider.setElementDuration(element, 1);
-		
+
 		portProvider.setPortForElement(port, element);
 		portSlotsProvider.setPortSlot(element, slot);
 		// Return elements are always end elements?
@@ -742,8 +743,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselClassRouteCost(final String route, final IVesselClass vesselClass,
-			final VesselState state, final int tollPrice) {
+	public void setVesselClassRouteCost(final String route,
+			final IVesselClass vesselClass, final VesselState state,
+			final int tollPrice) {
 		routeCostProvider.setRouteCost(route, vesselClass, state, tollPrice);
 	}
 
@@ -751,11 +753,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public void setDefaultRouteCost(final String route, final int defaultPrice) {
 		routeCostProvider.setDefaultRouteCost(route, defaultPrice);
 	}
-	
+
 	@Override
-	public void setVesselClassRouteTimeAndFuel(final String name, final IVesselClass vc,
-			final int transitTimeInHours, final long baseFuelInScaledMT) {
-		routeCostProvider.setRouteTimeAndFuel(name, vc, transitTimeInHours, baseFuelInScaledMT);
+	public void setVesselClassRouteTimeAndFuel(final String name,
+			final IVesselClass vc, final int transitTimeInHours,
+			final long baseFuelInScaledMT) {
+		routeCostProvider.setRouteTimeAndFuel(name, vc, transitTimeInHours,
+				baseFuelInScaledMT);
 	}
 
 	@Override
@@ -770,7 +774,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// create return elements before fixing time windows,
 		// because the next bit will have to patch up their time windows
 		createReturnElements();
-		
+
 		// Patch up end time windows
 		final int latestTime = endOfLatestWindow + 24 * 7;
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
@@ -790,6 +794,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.setResources(resources);
 		data.setSequenceElements(sequenceElements);
+
+		data.addDataComponentProvider(
+				SchedulerConstants.DCP_discountCurveProvider,
+				discountCurveProvider);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_vesselProvider,
 				vesselProvider);
@@ -948,10 +956,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param idleConsumptionRateInMTPerHour
 	 * @param consumptionCalculatorInMTPerHour
 	 */
-	public void setVesselClassStateParamaters(
-			final IVesselClass vc,
-			final VesselState state,
-			final int nboRateInM3PerHour,
+	public void setVesselClassStateParamaters(final IVesselClass vc,
+			final VesselState state, final int nboRateInM3PerHour,
 			final int idleNBORateInM3PerHour,
 			final int idleConsumptionRateInMTPerHour,
 			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
@@ -978,10 +984,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IVesselEventPortSlot createCharterOut(final ITimeWindow arrival,
 			final IPort port, final int durationHours) {
 		final VesselEvent co = new VesselEvent(arrival, durationHours, port);
-		final VesselEventPortSlot slot = new VesselEventPortSlot(
-				"charter-out-" + charterOuts.size(), co.getPort(),
-				co.getTimeWindow(), co);
-		
+		final VesselEventPortSlot slot = new VesselEventPortSlot("charter-out-"
+				+ charterOuts.size(), co.getPort(), co.getTimeWindow(), co);
+
 		charterOuts.add(slot);
 		vesselCharterOuts.put(slot, new HashSet<IVessel>());
 		vesselClassCharterOuts.put(slot, new HashSet<IVesselClass>());
@@ -1021,7 +1026,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		for (final IVesselEventPortSlot slot : charterOuts) {
 			final IVesselEvent charterOut = slot.getVesselEvent();
-			
+
 			final SequenceElement element = new SequenceElement(
 					indexingContext, "charter-out-" + i, slot);
 
@@ -1041,8 +1046,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			portProvider.setPortForElement(charterOut.getPort(), element);
 
 			final Set<IResource> resources = new HashSet<IResource>();
-			final Set<IVessel> supportedVessels = vesselCharterOuts
-					.get(slot);
+			final Set<IVessel> supportedVessels = vesselCharterOuts.get(slot);
 			final Set<IVesselClass> supportedClasses = vesselClassCharterOuts
 					.get(slot);
 			for (final IVessel vessel : vessels) {
@@ -1137,10 +1141,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ILoadPriceCalculator createProfitSharingContract(ICurve actualMarket,
-			ICurve referenceMarket, int alpha, int beta, int gamma) {
-		return new ProfitSharingContract(actualMarket, referenceMarket, alpha, beta, gamma);
+	public ILoadPriceCalculator createProfitSharingContract(
+			ICurve actualMarket, ICurve referenceMarket, int alpha, int beta,
+			int gamma) {
+		return new ProfitSharingContract(actualMarket, referenceMarket, alpha,
+				beta, gamma);
 	}
+
 	@Override
 	public ILoadPriceCalculator createNetbackContract(int buyersMargin) {
 		return new NetbackContract(buyersMargin, portDistanceProvider);
@@ -1148,11 +1155,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	/**
 	 * Set a discount curve for the given fitness component name
+	 * 
 	 * @param name
 	 * @param iCurve
 	 */
 	public void setFitnessComponentDiscountCurve(String name, ICurve iCurve) {
-		discountCurveProvider .setDiscountCurve(name, iCurve);
-		
+		discountCurveProvider.setDiscountCurve(name, iCurve);
+
 	}
 }
