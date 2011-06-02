@@ -31,7 +31,12 @@ import scenario.cargo.Slot;
 import com.mmxlabs.common.Pair;
 
 /**
- * A composite for displaying a wiring editor
+ * A composite for displaying a wiring editor. Contains a {@link WiringDiagram},
+ * which lets the user view and edit a matching in a bipartite graph, and
+ * provides the interfacing logic to apply a new matching to the cargos passed
+ * in through {@link #setCargos(List)}.
+ * 
+ * The {@link #createApplyCommand(EditingDomain)} applies the changes.
  * 
  * @author Tom Hinton
  * 
@@ -74,7 +79,7 @@ public class WiringComposite extends Composite {
 		setLayout(layout);
 	}
 
-	//TODO fix this, it's not quite correct.
+	// TODO fix this, it's not quite correct.
 	private class Highlight {
 		private final Label idLabel, leftLabel, rightLabel;
 		private final int index;
@@ -217,8 +222,8 @@ public class WiringComposite extends Composite {
 					.setText(cargo.getDischargeSlot().getPort().getName());
 
 			idLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-			loadLabel
-					.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+			loadLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
+					false));
 			dischargeLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
 					false));
 
@@ -228,7 +233,7 @@ public class WiringComposite extends Composite {
 
 			final Highlight h = new Highlight(wiringDiagram, idLabel,
 					loadLabel, dischargeLabel, index);
-			
+
 			idLabel.setData(h);
 			loadLabel.setData(h);
 			dischargeLabel.setData(h);

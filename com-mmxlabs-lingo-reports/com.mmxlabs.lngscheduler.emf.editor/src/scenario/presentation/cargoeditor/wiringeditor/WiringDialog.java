@@ -30,6 +30,14 @@ import org.eclipse.swt.widgets.Shell;
 import scenario.cargo.Cargo;
 
 /**
+ * A dialog which contains a {@link WiringComposite} - all the logic happens in
+ * there.
+ * 
+ * 
+ * Normal usage is to call {@link #open(List, EditingDomain)} with a list of
+ * cargos to rewire. If the user presses the OK button the dialog will then
+ * execute a command to make the necessary changes.
+ * 
  * @author Tom Hinton
  * 
  */
@@ -70,15 +78,17 @@ public class WiringDialog extends Dialog {
 				false, false, 1, 1));
 		buttonsComposite.setBounds(0, 0, 64, 64);
 		buttonsComposite.setLayout(new GridLayout(3, false));
-		
-		((GridLayout)buttonsComposite.getLayout()).marginWidth = 0;
-		
+
+		((GridLayout) buttonsComposite.getLayout()).marginWidth = 0;
+
 		Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
-		btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
+				false, 1, 1));
 		btnOptimise.setText("Optimise");
 
 		final Button btnOk = new Button(buttonsComposite, SWT.NONE);
-		GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1,
+				1);
 		gd_btnOk.widthHint = 50;
 		btnOk.setLayoutData(gd_btnOk);
 		btnOk.setText("OK");
@@ -86,19 +96,21 @@ public class WiringDialog extends Dialog {
 		btnOk.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				domain.getCommandStack().execute(wiringComposite.createApplyCommand(domain));
-				
+				domain.getCommandStack().execute(
+						wiringComposite.createApplyCommand(domain));
+
 				shell.close();
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
+
 			}
 		});
-		
+
 		Button btnCancel = new Button(buttonsComposite, SWT.NONE);
-		GridData gd_btnCancel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnCancel = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
 		gd_btnCancel.widthHint = 50;
 		btnCancel.setLayoutData(gd_btnCancel);
 		btnCancel.setText("Cancel");
@@ -108,8 +120,8 @@ public class WiringDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				shell.close();
 			}
-		});		
-		
+		});
+
 		wiringComposite.setCargos(cargos);
 
 		wiringComposite.addListener(SWT.Modify, new Listener() {

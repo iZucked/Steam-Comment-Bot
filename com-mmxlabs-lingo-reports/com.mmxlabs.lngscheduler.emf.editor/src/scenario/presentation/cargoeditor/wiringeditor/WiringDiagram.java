@@ -26,7 +26,17 @@ import org.eclipse.swt.widgets.Display;
 import com.mmxlabs.common.Pair;
 
 /**
- * A control for drawing a wiring diagram
+ * A control for drawing a wiring diagram. This just displays an arbitrary
+ * bipartite graph / matching.
+ * 
+ * The graph must have equal numbers of vertices on each side, which are
+ * identified by the integers from 0 to n-1. The wiring itself is described in
+ * the {@link #wiring} list. The ith element of the list contains the index of
+ * the right-hand element to which left hand element i is connected, or -1 if
+ * there is no connection.
+ * 
+ * Thus wiring.get(1) gives the right-hand node connected to left-hand node 1,
+ * and wiring.indexOf(1) gives the left-hand node connected to right-hand node 1.
  * 
  * @author Tom Hinton
  * 
@@ -47,6 +57,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 	private int dragX, dragY;
 
 	/**
+	 * Create a new wiring diagram
 	 * @param parent
 	 * @param style
 	 */
@@ -57,10 +68,20 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 		addMouseMoveListener(this);
 	}
 
+	/**
+	 * Set the colour of left hand terminal i to the given color. Doesn't refresh.
+	 * @param i
+	 * @param color
+	 */
 	public void setLeftTerminalColor(final int index, final Color color) {
 		terminalColours.get(index).setFirst(color);
 	}
 
+	/**
+	 * Set the colour of right hand terminal i to the given color. Doesn't refresh
+	 * @param i
+	 * @param color
+	 */
 	public void setRightTerminalColor(final int index, final Color color) {
 		terminalColours.get(index).setSecond(color);
 	}
@@ -73,7 +94,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 	public void setWireColor(final int index, final Color color) {
 		wireColours.set(index, color);
 	}
-	
+
 	public void setWireColors(final List<Color> colours) {
 		wireColours.clear();
 		wireColours.addAll(colours);
@@ -287,7 +308,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 			}
 
 			boolean draggedToNowhere = terminal >= positions.size();
-			
+
 			final Rectangle ca = getClientArea();
 
 			final boolean control = (e.stateMask & SWT.CONTROL) != 0;
@@ -305,7 +326,8 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 						wiring.set(ix, -1);
 				}
 				wiring.set(terminal, draggingFrom);
-			} else if (!draggedToNowhere && draggingFromLeft
+			} else if (!draggedToNowhere
+					&& draggingFromLeft
 					&& (e.x >= ca.width - terminalSize * 2 && e.x <= ca.width
 							- terminalSize)) {
 				// arrived in right column
@@ -331,7 +353,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 			}
 			wiringChanged(wiring);
 		}
-		
+
 		redraw();
 	}
 

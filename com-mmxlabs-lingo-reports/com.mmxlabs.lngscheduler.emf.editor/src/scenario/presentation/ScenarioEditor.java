@@ -160,7 +160,6 @@ import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
 import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
-import scenario.presentation.cargoeditor.curveeditor.CurveDialog;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailPropertySheetPage;
