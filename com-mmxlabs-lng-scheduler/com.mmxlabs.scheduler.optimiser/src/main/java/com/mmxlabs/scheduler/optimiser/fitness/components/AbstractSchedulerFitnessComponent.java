@@ -34,7 +34,11 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 	}
 
 	protected long getDiscountedValue(final int time, final long value) {
-		return (long) (discountCurve.getValueAtPoint(time) * value);
+		final double factor = discountCurve.getValueAtPoint(time);
+		
+		final long result = (long) (value * factor);
+		
+		return result;
 	}
 
 	@Override
