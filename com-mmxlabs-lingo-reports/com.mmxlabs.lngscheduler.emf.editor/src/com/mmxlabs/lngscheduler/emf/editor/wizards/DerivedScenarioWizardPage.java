@@ -211,22 +211,22 @@ public class DerivedScenarioWizardPage extends WizardPage {
 
 		createSourcePicker(sources, "&Ports",
 				PortPackage.eINSTANCE.getPortModel(), new String[] {
-						"scenario", "portmodel" });
+						"scenario", "port" });
 		createSourcePicker(sources, "&Distances",
 				PortPackage.eINSTANCE.getDistanceModel(), new String[] {
 						"scenario", "distancemodel" });
 		createSourcePicker(sources, "&Fleet",
 				FleetPackage.eINSTANCE.getFleetModel(), new String[] {
-						"scenario", "fleetmodel" });
+						"scenario", "fleet" });
 		createSourcePicker(sources, "&Markets",
 				MarketPackage.eINSTANCE.getMarketModel(), new String[] {
-						"scenario", "marketmodel" });
+						"scenario", "market" });
 		createSourcePicker(sources, "&Contracts",
 				ContractPackage.eINSTANCE.getContractModel(), new String[] {
-						"scenario", "contractmodel" });
+						"scenario", "contract" });
 		createSourcePicker(sources, "C&argos",
 				CargoPackage.eINSTANCE.getCargoModel(), new String[] {
-						"scenario", "cargomodel" });
+						"scenario", "cargo" });
 
 		final Group destination = new Group(container, SWT.NONE);
 		destination.setText("Destination");
