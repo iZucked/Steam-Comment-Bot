@@ -79,6 +79,20 @@
                menubarPath="file/additions"
                id="scenario.presentation.LngEditorAdvisorOpenAction"/>
       </actionSet>
+      <actionSet
+            id="com.mmxlabs.lngscheduler.emf.editor.actionSet"
+            label="Sample Action Set"
+            visible="true">
+         <action
+               class="com.mmxlabs.lngscheduler.emf.editor.actions.PriceCurveAction"
+               icon="icons/sample.gif"
+               id="com.mmxlabs.lngscheduler.emf.editor.actions.PriceCurveAction"
+               label="Edit Default &amp;Discount Curve"
+               menubarPath="scenarioMenuID/actions"
+               toolbarPath="sampleGroup"
+               tooltip="Edit the active discount curve for this scenario">
+         </action>
+      </actionSet>
    </extension>
 
    <extension point="org.eclipse.ui.actionSets">

@@ -293,7 +293,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							final List l = Arrays.asList(ssel.toArray());
 
 							if (l.size() > 1
-									&& (e.stateMask | SWT.CONTROL) != 0) {
+									&& (e.stateMask & SWT.CONTROL) == 0) {
 								final EObjectMultiDialog multiDialog = new EObjectMultiDialog(
 										new IShellProvider() {
 											@Override
@@ -1854,7 +1854,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		setPageText(addPage(sash), "Price Curves");
 	}
 
-	private Scenario getScenario() {
+	public Scenario getScenario() {
 		return (Scenario) editingDomain.getResourceSet().getResources().get(0)
 				.getContents().get(0);
 	}
