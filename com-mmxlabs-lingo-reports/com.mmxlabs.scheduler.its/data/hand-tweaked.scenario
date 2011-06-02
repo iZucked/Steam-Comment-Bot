@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<com.mmxlabs.lng.emf:Scenario xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.mmxlabs.lng.emf="http://com.mmxlabs.lng.emf" xmlns:com.mmxlabs.lng.emf.fleet="http://com.mmxlabs.lng.emf/fleet" xmlns:com.mmxlabs.lng.emf.contract="http://com.mmxlabs.lng.emf/contract" xmlns:com.mmxlabs.lng.emf.optimiser.lso="http://com.mmxlabs.lng.emf/optimiser/lso" xmlns:com.mmxlabs.lng.emf.schedule="http://com.mmxlabs.lng.emf/schedule" xmlns:com.mmxlabs.lng.emf.schedule.events="http://com.mmxlabs.lng.emf/schedule/events" xmlns:com.mmxlabs.lng.emf.schedule.fleetallocation="http://com.mmxlabs.lng.emf/schedule/fleetallocation" name="Demo scenario v3">
+<com.mmxlabs.lng.emf:Scenario xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.mmxlabs.lng.emf="http://com.mmxlabs.lng.emf" xmlns:com.mmxlabs.lng.emf.contract="http://com.mmxlabs.lng.emf/contract" xmlns:com.mmxlabs.lng.emf.fleet="http://com.mmxlabs.lng.emf/fleet" xmlns:com.mmxlabs.lng.emf.optimiser.lso="http://com.mmxlabs.lng.emf/optimiser/lso" xmlns:com.mmxlabs.lng.emf.schedule="http://com.mmxlabs.lng.emf/schedule" xmlns:com.mmxlabs.lng.emf.schedule.events="http://com.mmxlabs.lng.emf/schedule/events" xmlns:com.mmxlabs.lng.emf.schedule.fleetallocation="http://com.mmxlabs.lng.emf/schedule/fleetallocation" name="Demo scenario v3">
   <fleetModel>
     <fleet name="Methane Kari Elin" class="//@fleetModel/@vesselClasses.0">
       <startRequirement/>
@@ -85,7 +85,7 @@
       <startRequirement/>
       <endRequirement/>
     </fleet>
-    <vesselClasses name="STEAM-138" capacity="138000" minSpeed="12.0" maxSpeed="19.5" baseFuelUnitPrice="400.0" fillCapacity="0.98" dailyCharterPrice="40000" spotCharterCount="4">
+    <vesselClasses name="STEAM-138" capacity="138000" minSpeed="12.0" maxSpeed="19.5" fillCapacity="0.98" dailyCharterPrice="40000" spotCharterCount="4" baseFuel="//@fleetModel/@fuels.0">
       <ladenAttributes nboRate="200.0" idleNBORate="180.0" idleConsumptionRate="50.0">
         <fuelConsumptionCurve speed="12.0" consumption="91.0"/>
         <fuelConsumptionCurve speed="13.0" consumption="100.0"/>
@@ -109,7 +109,7 @@
         <fuelConsumptionCurve speed="19.5" consumption="178.6"/>
       </ballastAttributes>
     </vesselClasses>
-    <vesselClasses name="STEAM-145" capacity="145000" minSpeed="12.0" maxSpeed="19.5" baseFuelUnitPrice="400.0" fillCapacity="0.98" dailyCharterPrice="40000" spotCharterCount="4">
+    <vesselClasses name="STEAM-145" capacity="145000" minSpeed="12.0" maxSpeed="19.5" fillCapacity="0.98" dailyCharterPrice="40000" spotCharterCount="4" baseFuel="//@fleetModel/@fuels.0">
       <ladenAttributes nboRate="200.0" idleNBORate="180.0" idleConsumptionRate="50.0">
         <fuelConsumptionCurve speed="12.0" consumption="91.0"/>
         <fuelConsumptionCurve speed="13.0" consumption="100.0"/>
@@ -133,7 +133,7 @@
         <fuelConsumptionCurve speed="19.5" consumption="178.6"/>
       </ballastAttributes>
     </vesselClasses>
-    <vesselClasses name="DFDE-177" capacity="177000" minSpeed="12.0" maxSpeed="19.5" baseFuelUnitPrice="600.0" minHeelVolume="500" fillCapacity="0.985" dailyCharterPrice="50000" spotCharterCount="4">
+    <vesselClasses name="DFDE-177" capacity="177000" minSpeed="12.0" maxSpeed="19.5" minHeelVolume="500" fillCapacity="0.985" dailyCharterPrice="50000" spotCharterCount="4" baseFuel="//@fleetModel/@fuels.0">
       <ladenAttributes nboRate="230.0" idleNBORate="210.0" idleConsumptionRate="50.0">
         <fuelConsumptionCurve speed="12.0" consumption="50.0"/>
         <fuelConsumptionCurve speed="13.0" consumption="65.0"/>
@@ -157,7 +157,7 @@
         <fuelConsumptionCurve speed="19.5" consumption="136.3"/>
       </ballastAttributes>
     </vesselClasses>
-    <vesselClasses name="STEAM-126" capacity="138000" minSpeed="12.0" maxSpeed="19.5" baseFuelUnitPrice="400.0" fillCapacity="0.98" dailyCharterPrice="40000" spotCharterCount="3">
+    <vesselClasses name="STEAM-126" capacity="138000" minSpeed="12.0" maxSpeed="19.5" fillCapacity="0.98" dailyCharterPrice="40000" spotCharterCount="3" baseFuel="//@fleetModel/@fuels.0">
       <ladenAttributes nboRate="200.0" idleNBORate="180.0" idleConsumptionRate="50.0">
         <fuelConsumptionCurve speed="12.0" consumption="91.0"/>
         <fuelConsumptionCurve speed="13.0" consumption="100.0"/>
@@ -181,57 +181,57 @@
         <fuelConsumptionCurve speed="19.5" consumption="178.6"/>
       </ballastAttributes>
     </vesselClasses>
-     <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 1" startDate="2009-06-01T16:16:00.000+0100" endDate="2009-06-28T16:20:00.000+0100" duration="90" port="//@portModel/@ports.32" vessels="//@fleetModel/@fleet.5 //@fleetModel/@fleet.2"/>
-     <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 2" startDate="2009-10-01T15:16:00.287+0100" endDate="2009-10-18T16:20:00.000+0100" duration="90" port="//@portModel/@ports.7" vesselClasses="//@fleetModel/@vesselClasses.2 //@fleetModel/@vesselClasses.3"/>
-     <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 3" startDate="2009-10-06T14:16:00.535+0100" endDate="2009-10-24T15:39:00.000+0100" duration="80" port="//@portModel/@ports.19" vesselClasses="//@fleetModel/@vesselClasses.0 //@fleetModel/@vesselClasses.1"/>
-    
-     </fleetModel>
+    <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 1" startDate="2009-06-01T16:16:00.000+0100" endDate="2009-06-28T16:20:00.000+0100" duration="90" port="//@portModel/@ports.32" vessels="//@fleetModel/@fleet.5 //@fleetModel/@fleet.2"/>
+    <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 2" startDate="2009-10-01T15:16:00.287+0100" endDate="2009-10-18T16:20:00.000+0100" duration="90" port="//@portModel/@ports.7" vesselClasses="//@fleetModel/@vesselClasses.2 //@fleetModel/@vesselClasses.3"/>
+    <vesselEvents xsi:type="com.mmxlabs.lng.emf.fleet:CharterOut" id="Charter out 3" startDate="2009-10-06T14:16:00.535+0100" endDate="2009-10-24T15:39:00.000+0100" duration="80" port="//@portModel/@ports.19" vesselClasses="//@fleetModel/@vesselClasses.0 //@fleetModel/@vesselClasses.1"/>
+    <fuels name="MDO" unitPrice="400.0" equivalenceFactor="0.5"/>
+  </fleetModel>
   <portModel>
-    <ports name="Ras Laffan" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Qatar" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Yemen LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Aden" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Sakhalin-2" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Sakhalin" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Port Fontin" defaultMarket="//@marketModel/@markets.2" timeZone="America/Port_of_Spain" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Kenai LNG" defaultMarket="//@marketModel/@markets.2" timeZone="America/Anchorage" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Karratha Gas Plant" defaultMarket="//@marketModel/@markets.2" timeZone="Australia/Perth" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Darwin LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Australia/Darwin" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Hammerfest LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Europe/Oslo" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Sonatrach LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Africa/Algiers" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Bethioua" defaultMarket="//@marketModel/@markets.2" timeZone="Africa/Algiers" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Punta Europa LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Africa/Malabo" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="SEGAS" defaultMarket="//@marketModel/@markets.2" timeZone="Africa/Cairo" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Bonny Nigeria" defaultMarket="//@marketModel/@markets.2" timeZone="Africa/Lagos" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Malaysia LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Kuching" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Brunei LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Brunei" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Arun LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Jakarta" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Bontang LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Makassar" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Tannguh" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Jayapura" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Oman LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Muscat" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Idku LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Africa/Cairo" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="ADGAS LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Dubai" defaultContract="//@contractModel/@purchaseContracts.0"/>
-    <ports name="Fluxys" defaultMarket="//@marketModel/@markets.1" timeZone="Europe/Brussels" defaultContract="//@contractModel/@salesContracts.2"/>
-    <ports name="South Hook LNG" defaultMarket="//@marketModel/@markets.3" timeZone="Europe/London" defaultContract="//@contractModel/@salesContracts.1"/>
-    <ports name="Dragon LNG" defaultMarket="//@marketModel/@markets.3" timeZone="Europe/London" defaultContract="//@contractModel/@salesContracts.1"/>
-    <ports name="Petrobras Guanabara LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/Sao_Paulo" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Petrobras Pecem LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/Fortaleza" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Canaport LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/Moncton" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Quintero Bay LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/Santiago" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Dapeng LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Shanghai" defaultContract="//@contractModel/@salesContracts.3"/>
-    <ports name="Fujian LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Shanghai" defaultContract="//@contractModel/@salesContracts.3"/>
-    <ports name="Chita LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Tokyo" defaultContract="//@contractModel/@salesContracts.3"/>
-    <ports name="Hakodate LNG" defaultMarket="//@marketModel/@markets.2" timeZone="Asia/Tokyo" defaultContract="//@contractModel/@salesContracts.3"/>
-    <ports name="Barcelona LNG" defaultMarket="//@marketModel/@markets.1" timeZone="Europe/Madrid" defaultContract="//@contractModel/@salesContracts.2"/>
-    <ports name="Bilbao LNG" defaultMarket="//@marketModel/@markets.1" timeZone="Europe/Madrid" defaultContract="//@contractModel/@salesContracts.2"/>
-    <ports name="Huelva LNG" defaultMarket="//@marketModel/@markets.1" timeZone="Europe/Madrid" defaultContract="//@contractModel/@salesContracts.2"/>
-    <ports name="Cartagena LNG" defaultMarket="//@marketModel/@markets.1" timeZone="Europe/Madrid" defaultContract="//@contractModel/@salesContracts.2"/>
-    <ports name="Dominion Cove Point LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/New_York" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Northeast Gateway Deepwater Port" defaultMarket="//@marketModel/@markets.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Gulf Gateway Deepwater Port" defaultMarket="//@marketModel/@markets.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Southern LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/New_York" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Trunkline LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="EcoElectrica LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/Puerto_Rico" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Sabine Pass LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Freeport LNG" defaultMarket="//@marketModel/@markets.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
-    <ports name="Everett Marine Terminal" defaultMarket="//@marketModel/@markets.0" timeZone="America/New_York" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Ras Laffan" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Qatar" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Yemen LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Aden" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Sakhalin-2" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Sakhalin" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Port Fontin" defaultIndex="//@marketModel/@indices.2" timeZone="America/Port_of_Spain" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Kenai LNG" defaultIndex="//@marketModel/@indices.2" timeZone="America/Anchorage" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Karratha Gas Plant" defaultIndex="//@marketModel/@indices.2" timeZone="Australia/Perth" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Darwin LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Australia/Darwin" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Hammerfest LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Europe/Oslo" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Sonatrach LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Africa/Algiers" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Bethioua" defaultIndex="//@marketModel/@indices.2" timeZone="Africa/Algiers" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Punta Europa LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Africa/Malabo" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="SEGAS" defaultIndex="//@marketModel/@indices.2" timeZone="Africa/Cairo" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Bonny Nigeria" defaultIndex="//@marketModel/@indices.2" timeZone="Africa/Lagos" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Malaysia LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Kuching" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Brunei LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Brunei" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Arun LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Jakarta" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Bontang LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Makassar" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Tannguh" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Jayapura" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Oman LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Muscat" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Idku LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Africa/Cairo" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="ADGAS LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Dubai" defaultContract="//@contractModel/@purchaseContracts.0"/>
+    <ports name="Fluxys" defaultIndex="//@marketModel/@indices.1" timeZone="Europe/Brussels" defaultContract="//@contractModel/@salesContracts.2"/>
+    <ports name="South Hook LNG" defaultIndex="//@marketModel/@indices.3" timeZone="Europe/London" defaultContract="//@contractModel/@salesContracts.1"/>
+    <ports name="Dragon LNG" defaultIndex="//@marketModel/@indices.3" timeZone="Europe/London" defaultContract="//@contractModel/@salesContracts.1"/>
+    <ports name="Petrobras Guanabara LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/Sao_Paulo" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Petrobras Pecem LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/Fortaleza" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Canaport LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/Moncton" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Quintero Bay LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/Santiago" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Dapeng LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Shanghai" defaultContract="//@contractModel/@salesContracts.3"/>
+    <ports name="Fujian LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Shanghai" defaultContract="//@contractModel/@salesContracts.3"/>
+    <ports name="Chita LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Tokyo" defaultContract="//@contractModel/@salesContracts.3"/>
+    <ports name="Hakodate LNG" defaultIndex="//@marketModel/@indices.2" timeZone="Asia/Tokyo" defaultContract="//@contractModel/@salesContracts.3"/>
+    <ports name="Barcelona LNG" defaultIndex="//@marketModel/@indices.1" timeZone="Europe/Madrid" defaultContract="//@contractModel/@salesContracts.2"/>
+    <ports name="Bilbao LNG" defaultIndex="//@marketModel/@indices.1" timeZone="Europe/Madrid" defaultContract="//@contractModel/@salesContracts.2"/>
+    <ports name="Huelva LNG" defaultIndex="//@marketModel/@indices.1" timeZone="Europe/Madrid" defaultContract="//@contractModel/@salesContracts.2"/>
+    <ports name="Cartagena LNG" defaultIndex="//@marketModel/@indices.1" timeZone="Europe/Madrid" defaultContract="//@contractModel/@salesContracts.2"/>
+    <ports name="Dominion Cove Point LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/New_York" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Northeast Gateway Deepwater Port" defaultIndex="//@marketModel/@indices.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Gulf Gateway Deepwater Port" defaultIndex="//@marketModel/@indices.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Southern LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/New_York" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Trunkline LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="EcoElectrica LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/Puerto_Rico" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Sabine Pass LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Freeport LNG" defaultIndex="//@marketModel/@indices.0" timeZone="America/Chicago" defaultContract="//@contractModel/@salesContracts.0"/>
+    <ports name="Everett Marine Terminal" defaultIndex="//@marketModel/@indices.0" timeZone="America/New_York" defaultContract="//@contractModel/@salesContracts.0"/>
   </portModel>
   <cargoModel>
     <cargoes id="cargo-0" cargoType="DES">
@@ -1037,15 +1037,15 @@
   </cargoModel>
   <contractModel>
     <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:NetbackPurchaseContract" name="A Netback Contract" entity="//@contractModel/@entities.3" buyersMargin="1.0"/>
-    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:ProfitSharingPurchaseContract" name="A PS contract" entity="//@contractModel/@entities.0" market="//@marketModel/@markets.3" referenceMarket="//@marketModel/@markets.1" alpha="0.1" beta="0.1" gamma="0.1"/>
-    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:MarketPricePurchaseContract" name="HH Spot Purchase" entity="//@contractModel/@entities.3" market="//@marketModel/@markets.0"/>
-    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:MarketPricePurchaseContract" name="NBP Spot Purchase" entity="//@contractModel/@entities.3" market="//@marketModel/@markets.3"/>
-    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:MarketPricePurchaseContract" name="JCC Spot Purchase" entity="//@contractModel/@entities.3" market="//@marketModel/@markets.2"/>
-    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:MarketPricePurchaseContract" name="TTF Spot Purchase" entity="//@contractModel/@entities.3" market="//@marketModel/@markets.1"/>
-    <salesContracts name="HH Sales" entity="//@contractModel/@entities.1" market="//@marketModel/@markets.0"/>
-    <salesContracts name="NBP Sales" entity="//@contractModel/@entities.0" market="//@marketModel/@markets.3"/>
-    <salesContracts name="TTF Sales" entity="//@contractModel/@entities.0" market="//@marketModel/@markets.1"/>
-    <salesContracts name="JCC Sales" entity="//@contractModel/@entities.2" market="//@marketModel/@markets.2"/>
+    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:ProfitSharingPurchaseContract" name="A PS contract" entity="//@contractModel/@entities.0" index="//@marketModel/@indices.3" referenceIndex="//@marketModel/@indices.1" alpha="0.1" beta="0.1" gamma="0.1"/>
+    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:IndexPricePurchaseContract" name="HH Spot Purchase" entity="//@contractModel/@entities.3" index="//@marketModel/@indices.0"/>
+    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:IndexPricePurchaseContract" name="NBP Spot Purchase" entity="//@contractModel/@entities.3" index="//@marketModel/@indices.3"/>
+    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:IndexPricePurchaseContract" name="JCC Spot Purchase" entity="//@contractModel/@entities.3" index="//@marketModel/@indices.2"/>
+    <purchaseContracts xsi:type="com.mmxlabs.lng.emf.contract:IndexPricePurchaseContract" name="TTF Spot Purchase" entity="//@contractModel/@entities.3" index="//@marketModel/@indices.1"/>
+    <salesContracts name="HH Sales" entity="//@contractModel/@entities.1" index="//@marketModel/@indices.0"/>
+    <salesContracts name="NBP Sales" entity="//@contractModel/@entities.0" index="//@marketModel/@indices.3"/>
+    <salesContracts name="TTF Sales" entity="//@contractModel/@entities.0" index="//@marketModel/@indices.1"/>
+    <salesContracts name="JCC Sales" entity="//@contractModel/@entities.2" index="//@marketModel/@indices.2"/>
     <entities name="BG Europe" taxRate="0.26"/>
     <entities name="BG US" taxRate="0.38"/>
     <entities name="BG Asia" taxRate="0.05"/>
@@ -8537,7 +8537,7 @@
     </schedules>
   </scheduleModel>
   <marketModel>
-    <markets name="Henry Hub">
+    <indices name="Henry Hub">
       <priceCurve defaultValue="4.37">
         <prices date="2010-01-04T00:00:00.000+0000" priceFromDate="6.09"/>
         <prices date="2010-01-05T00:00:00.000+0000" priceFromDate="6.19"/>
@@ -8790,8 +8790,8 @@
         <prices date="2010-12-29T00:00:00.000+0000" priceFromDate="4.19"/>
         <prices date="2010-12-30T00:00:00.000+0000" priceFromDate="4.23"/>
       </priceCurve>
-    </markets>
-    <markets name="TTF">
+    </indices>
+    <indices name="TTF">
       <priceCurve defaultValue="8.39">
         <prices date="2008-04-11T00:00:00.000+0100" priceFromDate="11.13"/>
         <prices date="2008-04-14T00:00:00.000+0100" priceFromDate="11.13"/>
@@ -8855,8 +8855,8 @@
         <prices date="2010-10-04T00:00:00.000+0100" priceFromDate="7.71"/>
         <prices date="2011-01-21T00:00:00.000+0000" priceFromDate="10.05"/>
       </priceCurve>
-    </markets>
-    <markets name="JCC">
+    </indices>
+    <indices name="JCC">
       <priceCurve defaultValue="11.94">
         <prices date="2008-03-31T00:00:00.000+0100" priceFromDate="14.17"/>
         <prices date="2008-04-30T00:00:00.000+0100" priceFromDate="14.99"/>
@@ -8894,8 +8894,8 @@
         <prices date="2010-12-31T00:00:00.000+0000" priceFromDate="12.76"/>
         <prices date="2011-01-31T00:00:00.000+0000" priceFromDate="13.63"/>
       </priceCurve>
-    </markets>
-    <markets name="NBP">
+    </indices>
+    <indices name="NBP">
       <priceCurve defaultValue="7.01">
         <prices date="2008-03-20T00:00:00.000+0000" priceFromDate="8.63"/>
         <prices date="2008-03-21T00:00:00.000+0000" priceFromDate="8.63"/>
@@ -9649,7 +9649,7 @@
         <prices date="2011-03-17T00:00:00.000+0000" priceFromDate="10.41"/>
         <prices date="2011-03-18T00:00:00.000+0000" priceFromDate="10.24"/>
       </priceCurve>
-    </markets>
+    </indices>
   </marketModel>
   <distanceModel>
     <distances fromPort="//@portModel/@ports.20" toPort="//@portModel/@ports.20"/>
