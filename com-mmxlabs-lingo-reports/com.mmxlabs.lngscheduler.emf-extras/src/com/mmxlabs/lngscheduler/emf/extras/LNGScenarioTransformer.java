@@ -271,6 +271,8 @@ public class LNGScenarioTransformer {
 				realCurve.setValueAtPoint(baseTime + d.getTime(),
 						d.getDiscountFactor());
 			}
+			
+			discountCurveMap.put(curve, realCurve);
 		}
 
 		// set up DCP
