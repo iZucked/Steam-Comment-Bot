@@ -37,7 +37,10 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			final Slot loadSlot = cargo.getLoadSlot();
 			final Slot dischargeSlot = cargo.getDischargeSlot();
 			if (cargo.getCargoType().equals(CargoType.FLEET)
-					&& loadSlot != null && dischargeSlot != null) {
+					&& loadSlot != null && dischargeSlot != null
+					&& cargo.getLoadSlot().getWindowStart() != null
+					&& cargo.getDischargeSlot().getWindowStart() != null
+			) {
 				if (dischargeSlot.getWindowEnd().before(
 						loadSlot.getWindowStart())) {
 					return ctx.createFailureStatus(cargo.getId());
