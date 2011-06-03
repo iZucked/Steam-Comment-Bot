@@ -25,10 +25,10 @@ import scenario.port.PortPackage;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
-import com.mmxlabs.rcp.common.controls.DateAndTime;
+import com.mmxlabs.rcp.common.controls.DateAndComboTime;
 
 public class LocalDateInlineEditor extends UnsettableInlineEditor {
-	private DateAndTime dateAndTime;
+	private DateAndComboTime dateAndTime;
 	private final EReference portReference;
 
 	public LocalDateInlineEditor(EMFPath path, EStructuralFeature feature,
@@ -50,7 +50,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Control createValueControl(Composite parent) {
-		final DateAndTime dateAndTime = new DateAndTime(parent, SWT.NONE, false);
+		final DateAndComboTime dateAndTime = new DateAndComboTime(parent, SWT.NONE, false, 0);
 		this.dateAndTime = dateAndTime;
 		
 		final Listener listener = new Listener() {
