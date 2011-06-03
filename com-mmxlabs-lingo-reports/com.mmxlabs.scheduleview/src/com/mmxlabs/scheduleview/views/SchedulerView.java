@@ -7,6 +7,9 @@ package com.mmxlabs.scheduleview.views;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -18,6 +21,7 @@ import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
@@ -122,11 +126,13 @@ public class SchedulerView extends ViewPart {
 
 		viewer.setInput(getViewSite());
 
-		// Create the help context id for the viewer's control. This is in the format of pluginid.contextId
+		// Create the help context id for the viewer's control. This is in the
+		// format of pluginid.contextId
 		PlatformUI
 				.getWorkbench()
 				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.scheduleview.SchedulerViewer");
+				.setHelp(viewer.getControl(),
+						"com.mmxlabs.scheduleview.SchedulerViewer");
 
 		makeActions();
 		hookContextMenu();
@@ -145,7 +151,7 @@ public class SchedulerView extends ViewPart {
 				final List<Schedule> schedules = ScheduleAdapter
 						.getSchedules(selection);
 				if (!schedules.isEmpty()) {
-					boolean needFit = viewer.getInput() == null;
+					final boolean needFit = viewer.getInput() == null;
 					setInput(schedules);
 					if (needFit) {
 						Display.getDefault().asyncExec(new Runnable() {
@@ -220,6 +226,7 @@ public class SchedulerView extends ViewPart {
 		manager.add(toggleColourSchemeAction);
 		manager.add(sortModeAction);
 		manager.add(packAction);
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void makeActions() {
@@ -236,46 +243,10 @@ public class SchedulerView extends ViewPart {
 		zoomOutAction.setDisabledImageDescriptor(Activator
 				.getImageDescriptor("icons/dlcl16/zoomout_nav.gif"));
 
-		toggleColourSchemeAction = new Action() {
-			EMFScheduleLabelProvider.Mode mode = EMFScheduleLabelProvider.Mode.VesselState;
+		toggleColourSchemeAction = new ToggleColourSchemeAction(
+				(EMFScheduleLabelProvider) (viewer.getLabelProvider()));
 
-			@Override
-			public void run() {
-
-				final EMFScheduleLabelProvider lp = (EMFScheduleLabelProvider) (viewer
-						.getLabelProvider());
-
-				final int nextMode = (mode.ordinal() + 1)
-						% Mode.values().length;
-				mode = EMFScheduleLabelProvider.Mode.values()[nextMode];
-				lp.setMode(mode);
-
-				viewer.setInput(viewer.getInput());
-
-				redraw();
-			};
-		};
-		toggleColourSchemeAction.setText("Colour Scheme");
-		toggleColourSchemeAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/colour_scheme.gif"));
-
-		sortModeAction = new Action() {
-
-			@Override
-			public void run() {
-
-				ScenarioViewerComparator.Mode mode = viewerComparator.getMode();
-				final int nextMode = (mode.ordinal() + 1)
-						% ScenarioViewerComparator.Mode.values().length;
-				mode = ScenarioViewerComparator.Mode.values()[nextMode];
-				viewerComparator.setMode(mode);
-
-				viewer.setInput(viewer.getInput());
-			};
-		};
-		sortModeAction.setText("Sort");
-		sortModeAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/alphab_sort_co.gif"));
+		sortModeAction = new SortModeAction(viewerComparator);
 
 		packAction = new PackAction(viewer.getGanttChart());
 		packAction.setImageDescriptor(Activator
@@ -353,4 +324,182 @@ public class SchedulerView extends ViewPart {
 
 		return propertySheetPage;
 	}
+
+	class ToggleColourSchemeAction extends Action implements IMenuCreator {
+
+		private final EMFScheduleLabelProvider lp;
+		private Menu lastMenu = null;
+
+		public ToggleColourSchemeAction(final EMFScheduleLabelProvider lp) {
+			super("Colour Scheme", IAction.AS_DROP_DOWN_MENU);
+			this.lp = lp;
+
+			setImageDescriptor(Activator
+					.getImageDescriptor("/icons/colour_scheme.gif"));
+		}
+
+		@Override
+		public void run() {
+
+			Mode mode = lp.getMode();
+			final int nextMode = (mode.ordinal() + 1) % Mode.values().length;
+			mode = EMFScheduleLabelProvider.Mode.values()[nextMode];
+			lp.setMode(mode);
+
+			viewer.setInput(viewer.getInput());
+
+			redraw();
+		};
+
+		@Override
+		public IMenuCreator getMenuCreator() {
+			return this;
+		}
+
+		@Override
+		public Menu getMenu(final Menu parent) {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+
+			createMenuItems(lastMenu);
+
+			return lastMenu;
+		}
+
+		@Override
+		public Menu getMenu(final Control parent) {
+
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+			createMenuItems(lastMenu);
+			return lastMenu;
+		}
+
+		private void createMenuItems(final Menu menu) {
+
+			for (final Mode mode : EMFScheduleLabelProvider.Mode.values()) {
+
+				final Action a = new Action(mode.getDisplayName(),
+						IAction.AS_RADIO_BUTTON) {
+					@Override
+					public void run() {
+						lp.setMode(mode);
+						viewer.setInput(viewer.getInput());
+						redraw();
+					}
+				};
+
+				// a.setActionDefinitionId(mode.toString());
+				final ActionContributionItem actionContributionItem = new ActionContributionItem(
+						a);
+				actionContributionItem.fill(menu, -1);
+
+				// Set initially checked item.
+				if (lp.getMode() == mode) {
+					a.setChecked(true);
+				}
+			}
+		}
+
+		@Override
+		public void dispose() {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+				lastMenu = null;
+			}
+		}
+	};
+
+	class SortModeAction extends Action implements IMenuCreator {
+
+		private final ScenarioViewerComparator comparator;
+		private Menu lastMenu = null;
+
+		public SortModeAction(final ScenarioViewerComparator comparator) {
+			super("Sort", IAction.AS_DROP_DOWN_MENU);
+			this.comparator = comparator;
+
+			setImageDescriptor(Activator
+					.getImageDescriptor("/icons/alphab_sort_co.gif"));
+		}
+
+		@Override
+		public void run() {
+
+			// Step through modes
+			ScenarioViewerComparator.Mode mode = comparator.getMode();
+			final int nextMode = (mode.ordinal() + 1) % Mode.values().length;
+			mode = ScenarioViewerComparator.Mode.values()[nextMode];
+			comparator.setMode(mode);
+
+			viewer.setInput(viewer.getInput());
+		};
+
+		@Override
+		public IMenuCreator getMenuCreator() {
+			return this;
+		}
+
+		@Override
+		public Menu getMenu(final Menu parent) {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+
+			createMenuItems(lastMenu);
+
+			return lastMenu;
+		}
+
+		@Override
+		public Menu getMenu(final Control parent) {
+
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+			createMenuItems(lastMenu);
+			return lastMenu;
+		}
+
+		private void createMenuItems(final Menu menu) {
+
+			for (final ScenarioViewerComparator.Mode mode : ScenarioViewerComparator.Mode
+					.values()) {
+
+				final Action a = new Action(mode.getDisplayName(),
+						IAction.AS_RADIO_BUTTON) {
+					@Override
+					public void run() {
+						comparator.setMode(mode);
+						viewer.setInput(viewer.getInput());
+					}
+				};
+
+				// a.setActionDefinitionId(mode.toString());
+				final ActionContributionItem actionContributionItem = new ActionContributionItem(
+						a);
+				actionContributionItem.fill(menu, -1);
+
+				// Set initially checked item.
+				if (comparator.getMode() == mode) {
+					a.setChecked(true);
+				}
+			}
+		}
+
+		@Override
+		public void dispose() {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+				lastMenu = null;
+			}
+		}
+	};
+
 }
