@@ -19,12 +19,13 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.IConstraintDescriptor;
+import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
@@ -42,26 +43,53 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
  */
 public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		IInlineEditor {
+
+	/**
+	 * Object being edited
+	 */
 	protected EObject input;
+
+	/**
+	 * Source object passed into control
+	 */
 	protected EObject source;
+
+	/**
+	 * The path from the {@link #source} to the {@link #input} object.
+	 */
 	protected final EMFPath path;
 	protected final EStructuralFeature feature;
 	protected boolean currentlySettingValue = false;
 
 	protected final EditingDomain editingDomain;
 	protected final ICommandProcessor commandProcessor;
+
+	/**
+	 * {@link ControlDecoration} used to show validation messages.
+	 */
 	private ControlDecoration decoration;
 
+	/**
+	 * Cached reference to the Information icon
+	 */
 	protected final FieldDecoration decorationInfo = FieldDecorationRegistry
 			.getDefault().getFieldDecoration(
 					FieldDecorationRegistry.DEC_INFORMATION);
 
+	/**
+	 * Cached reference to the Warning icon
+	 */
 	protected final FieldDecoration decorationWarning = FieldDecorationRegistry
 			.getDefault().getFieldDecoration(
 					FieldDecorationRegistry.DEC_WARNING);
 
+	/**
+	 * Cached reference to the Error icon
+	 */
 	protected final FieldDecoration decorationError = FieldDecorationRegistry
 			.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+
+	private IBatchValidator validator;
 
 	public BasicAttributeInlineEditor(final EMFPath path,
 			final EStructuralFeature feature,
@@ -71,6 +99,24 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		this.feature = feature;
 		this.editingDomain = editingDomain;
 		this.commandProcessor = commandProcessor;
+
+		validator = ModelValidationService.getInstance().newValidator(
+				EvaluationMode.BATCH);
+
+		// include live constraints, also, in batch validation
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS,
+				true);
+		
+		// Add filter to only update on changes to this object
+		validator.addConstraintFilter(new IConstraintFilter() {
+
+			@Override
+			public boolean accept(IConstraintDescriptor constraint,
+					EObject target) {
+
+				return target == source || target == input;
+			}
+		});
 	}
 
 	@Override
@@ -85,6 +131,9 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 			input.eAdapters().add(this);
 			doUpdateDisplayWithValue();
 		}
+
+		// Set initial validation state
+		validate(source);
 	}
 
 	private synchronized void doUpdateDisplayWithValue() {
@@ -163,24 +212,19 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	 */
 	private void validate(final Object value) {
 
-		// Create a validator to check object
-		final IBatchValidator validator = ModelValidationService.getInstance()
-				.newValidator(EvaluationMode.BATCH);
+		// Disable until we work out a better way to do this
+//		final IStatus status = validator.validate(source);
+//		updateValidation(status);
+	}
 
-		// include live constraints, also, in batch validation
-		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS,
-				true);
-
-		// Validate object
-		final IStatus status = validator.validate(source);
-
+	private void updateValidation(final IStatus status) {
 		if (status.isOK()) {
 			// No problems, so hide decoration
 			decoration.hide();
 		} else {
 			// Default severity
 			int severity = IStatus.INFO;
-			
+
 			// Builder used to accumulate messages
 			final StringBuilder sb = new StringBuilder();
 
@@ -192,6 +236,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 				if (cstatus.getSeverity() > severity) {
 					severity = cstatus.getSeverity();
 				}
+
 			} else {
 				final IStatus[] children = status.getChildren();
 				for (final IStatus element : children) {
@@ -204,7 +249,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 					}
 				}
 			}
-			
+
 			// Update description text
 			decoration.setDescriptionText(sb.toString());
 
@@ -252,7 +297,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		// These should be the defaults...
 		decoration.setShowHover(true);
 		decoration.setShowOnlyOnFocus(false);
-		
+
 		// Set a default image
 		decoration.setImage(decorationInfo.getImage());
 
