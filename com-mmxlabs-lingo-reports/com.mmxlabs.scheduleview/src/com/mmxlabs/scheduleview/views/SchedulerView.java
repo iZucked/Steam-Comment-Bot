@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduleview.views;
 
+
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -41,7 +42,6 @@ import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.scheduleview.Activator;
-import com.mmxlabs.scheduleview.views.EMFScheduleLabelProvider.Mode;
 
 public class SchedulerView extends ViewPart {
 
@@ -341,8 +341,8 @@ public class SchedulerView extends ViewPart {
 		@Override
 		public void run() {
 
-			Mode mode = lp.getMode();
-			final int nextMode = (mode.ordinal() + 1) % Mode.values().length;
+			EMFScheduleLabelProvider.Mode mode = lp.getMode();
+			final int nextMode = (mode.ordinal() + 1) % EMFScheduleLabelProvider.Mode.values().length;
 			mode = EMFScheduleLabelProvider.Mode.values()[nextMode];
 			lp.setMode(mode);
 
@@ -381,7 +381,7 @@ public class SchedulerView extends ViewPart {
 
 		private void createMenuItems(final Menu menu) {
 
-			for (final Mode mode : EMFScheduleLabelProvider.Mode.values()) {
+			for (final EMFScheduleLabelProvider.Mode mode : EMFScheduleLabelProvider.Mode.values()) {
 
 				final Action a = new Action(mode.getDisplayName(),
 						IAction.AS_RADIO_BUTTON) {
@@ -432,7 +432,7 @@ public class SchedulerView extends ViewPart {
 
 			// Step through modes
 			ScenarioViewerComparator.Mode mode = comparator.getMode();
-			final int nextMode = (mode.ordinal() + 1) % Mode.values().length;
+			final int nextMode = (mode.ordinal() + 1) % ScenarioViewerComparator.Mode.values().length;
 			mode = ScenarioViewerComparator.Mode.values()[nextMode];
 			comparator.setMode(mode);
 
