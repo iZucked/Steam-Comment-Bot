@@ -59,11 +59,11 @@ public class DatePopup extends PopupComposite {
 
 	private class Forward implements Listener {
 		final int et;
-		public Forward(int et) {
+		public Forward(final int et) {
 			this.et = et;
 		}
 		@Override
-		public void handleEvent(Event event) {
+		public void handleEvent(final Event event) {
 			if (isDisposed()) return;
 			notifyListeners(et, event);
 		}
@@ -92,7 +92,7 @@ public class DatePopup extends PopupComposite {
 		dateAndTime.setValue(value);
 		popupDateAndTime.setValue(value);
 		settingValue = false;
-		Event event = new Event();
+		final Event event = new Event();
 		event.widget = this;
 		notifyListeners(SWT.Selection, event);
 	}
