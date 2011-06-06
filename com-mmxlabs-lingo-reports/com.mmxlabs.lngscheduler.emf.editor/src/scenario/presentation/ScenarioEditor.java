@@ -682,6 +682,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	protected IPartListener partListener = new IPartListener() {
+		@Override
 		public void partActivated(final IWorkbenchPart p) {
 			if (p instanceof ContentOutline) {
 				if (((ContentOutline) p).getCurrentPage() == contentOutlinePage) {
@@ -701,18 +702,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 		}
 
+		@Override
 		public void partBroughtToTop(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
+		@Override
 		public void partClosed(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
+		@Override
 		public void partDeactivated(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
+		@Override
 		public void partOpened(final IWorkbenchPart p) {
 			// Ignore.
 		}
@@ -992,8 +997,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// be the selection of the viewer with focus.
 		//
 		commandStack.addCommandStackListener(new CommandStackListener() {
+			@Override
 			public void commandStackChanged(final EventObject event) {
 				getContainer().getDisplay().asyncExec(new Runnable() {
+					@Override
 					public void run() {
 						firePropertyChange(IEditorPart.PROP_DIRTY);
 
@@ -1043,6 +1050,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		//
 		if (theSelection != null && !theSelection.isEmpty()) {
 			final Runnable runnable = new Runnable() {
+				@Override
 				public void run() {
 					// Try to select the items in the current content viewer of
 					// the editor.
@@ -1167,6 +1175,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					// This just notifies those things that are affected by the
 					// section.
 					//
+					@Override
 					public void selectionChanged(
 							final SelectionChangedEvent selectionChangedEvent) {
 						setSelection(selectionChangedEvent.getSelection());
