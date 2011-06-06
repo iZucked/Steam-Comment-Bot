@@ -296,5 +296,18 @@
             name="Create Derived Scenario">
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="com.mmxlabs.lngscheduler.emf.editor.export"
+            name="Scenario Export">
+      </category>
+      <wizard
+            category="com.mmxlabs.lngscheduler.emf.editor.export"
+            class="com.mmxlabs.lngscheduler.emf.editor.wizards.CSVExportWizard"
+            id="com.mmxlabs.lngscheduler.emf.editor.export-csv"
+            name="Export Scenario to CSV Files">
+      </wizard>
+   </extension>
 
 </plugin>
