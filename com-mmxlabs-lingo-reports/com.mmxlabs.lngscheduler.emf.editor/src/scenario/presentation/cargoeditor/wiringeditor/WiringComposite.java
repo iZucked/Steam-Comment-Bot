@@ -229,8 +229,8 @@ public class WiringComposite extends Composite {
 
 			idLabel.addMouseTrackListener(highlighter);
 			loadLabel.addMouseTrackListener(highlighter);
-			dischargeLabel.addMouseTrackListener(highlighter);
-
+//			dischargeLabel.addMouseTrackListener(highlighter);
+			// TODO add mousetrack listener for discharge label.
 			final Highlight h = new Highlight(wiringDiagram, idLabel,
 					loadLabel, dischargeLabel, index);
 
