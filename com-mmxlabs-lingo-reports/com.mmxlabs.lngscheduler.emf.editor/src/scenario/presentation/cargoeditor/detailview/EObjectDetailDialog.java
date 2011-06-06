@@ -178,7 +178,9 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			// For containment references, we need to compare the contained
 			// object, rather than generate a SetCommand.
 			if (original.eClass().getEAllContainments().contains(feature)) {
-
+				
+				// TODO: Handle non-EObject references such as Lists (e.g. for VesselClass edits
+				
 				final Command c = makeEqualizer(
 						(EObject) original.eGet(feature),
 						(EObject) duplicate.eGet(feature));
