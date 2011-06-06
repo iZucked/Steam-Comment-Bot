@@ -15,6 +15,7 @@ import java.util.TimeZone;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -64,11 +65,11 @@ public abstract class EMFReportView extends ViewPart implements
 	protected EMFReportView() {
 		this.helpContextId = null;
 	}
-	
+
 	protected EMFReportView(final String helpContextId) {
 		this.helpContextId = helpContextId;
 	}
-	
+
 	private class ColumnHandler {
 		private static final String COLUMN_HANDLER = "COLUMN_HANDLER";
 		private final IFormatter formatter;
@@ -154,7 +155,8 @@ public abstract class EMFReportView extends ViewPart implements
 				}
 			}
 			if (object instanceof Schedule) {
-				return URI.decode(((Schedule)object).eResource().getURI().lastSegment())
+				return URI.decode(
+						((Schedule) object).eResource().getURI().lastSegment())
 						.replaceAll(".scenario", "");
 			} else {
 				return "";
@@ -288,12 +290,10 @@ public abstract class EMFReportView extends ViewPart implements
 		}
 
 		if (helpContextId != null) {
-			PlatformUI
-					.getWorkbench()
-					.getHelpSystem()
+			PlatformUI.getWorkbench().getHelpSystem()
 					.setHelp(viewer.getControl(), helpContextId);
 		}
-		
+
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
@@ -338,8 +338,15 @@ public abstract class EMFReportView extends ViewPart implements
 	}
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
-		manager.add(packColumnsAction);
-		manager.add(copyTableAction);
+		manager.add(new GroupMarker("pack"));
+		manager.add(new GroupMarker("additions"));
+		manager.add(new GroupMarker("edit"));
+		manager.add(new GroupMarker("copy"));
+		manager.add(new GroupMarker("importers"));
+		manager.add(new GroupMarker("exporters"));
+
+		manager.appendToGroup("pack", packColumnsAction);
+		manager.appendToGroup("copy", copyTableAction);
 	}
 
 	private void makeActions() {

@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -520,8 +521,15 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	}
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
-		manager.add(packColumnsAction);
-		manager.add(copyTreeAction);
+		manager.add(new GroupMarker("pack"));
+		manager.add(new GroupMarker("additions"));
+		manager.add(new GroupMarker("edit"));
+		manager.add(new GroupMarker("copy"));
+		manager.add(new GroupMarker("importers"));
+		manager.add(new GroupMarker("exporters"));
+
+		manager.appendToGroup("pack", packColumnsAction);
+		manager.appendToGroup("copy", copyTreeAction);
 	}
 
 	private void makeActions() {
