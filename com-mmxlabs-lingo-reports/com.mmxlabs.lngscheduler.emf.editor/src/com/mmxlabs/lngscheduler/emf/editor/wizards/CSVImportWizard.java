@@ -40,24 +40,19 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.cargo.Cargo;
-import scenario.cargo.CargoFactory;
 import scenario.cargo.CargoPackage;
-import scenario.contract.ContractFactory;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
-import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselEvent;
 import scenario.market.Index;
-import scenario.market.MarketFactory;
 import scenario.market.MarketPackage;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
-import scenario.port.PortFactory;
 import scenario.port.PortPackage;
 import scenario.presentation.cargoeditor.importer.CSVReader;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
@@ -143,13 +138,8 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		}
 
 		scenario = ScenarioFactory.eINSTANCE.createScenario();
-		scenario.setCargoModel(CargoFactory.eINSTANCE.createCargoModel());
-		scenario.setFleetModel(FleetFactory.eINSTANCE.createFleetModel());
-		scenario.setMarketModel(MarketFactory.eINSTANCE.createMarketModel());
-		scenario.setContractModel(ContractFactory.eINSTANCE
-				.createContractModel());
-		scenario.setPortModel(PortFactory.eINSTANCE.createPortModel());
-		scenario.setCanalModel(PortFactory.eINSTANCE.createCanalModel());
+		
+		scenario.createMissingModels();
 		scenario.setName(destinationPage.getFileName());
 
 		// and last of all put all the results into a new scenario according to
@@ -292,11 +282,19 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					marketEditor.getTextControl(group).addModifyListener(
 							listener(MarketPackage.eINSTANCE.getIndex()));
 					final FileFieldEditor contractEditor = new FileFieldEditor(
-							"cSelect", "Contracts", group);
+							"pcSelect", "Purchase Contracts", group);
 					contractEditor.setFileExtensions(extensions);
 					contractEditor.setEmptyStringAllowed(true);
 					contractEditor.getTextControl(group).addModifyListener(
-							listener(ContractPackage.eINSTANCE.getContract()));
+							listener(ContractPackage.eINSTANCE.getPurchaseContract()));
+					
+					final FileFieldEditor scontractEditor = new FileFieldEditor(
+							"scSelect", "Sales Contracts", group);
+					scontractEditor.setFileExtensions(extensions);
+					scontractEditor.setEmptyStringAllowed(true);
+					scontractEditor.getTextControl(group).addModifyListener(
+							listener(ContractPackage.eINSTANCE.getSalesContract()));
+					
 					final FileFieldEditor entityEditor = new FileFieldEditor(
 							"eSelect", "Entities", group);
 					entityEditor.setFileExtensions(extensions);
