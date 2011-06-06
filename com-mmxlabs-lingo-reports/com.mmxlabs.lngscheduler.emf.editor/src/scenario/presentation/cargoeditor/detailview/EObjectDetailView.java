@@ -45,7 +45,7 @@ public class EObjectDetailView extends Composite {
 	private final List<IInlineEditor> editors = new ArrayList<IInlineEditor>();
 	private final ICommandProcessor processor;
 
-	public EObjectDetailView(final Composite parent, int style,
+	public EObjectDetailView(final Composite parent, final int style,
 			final ICommandProcessor processor, final EditingDomain editingDomain) {
 		super(parent, style);
 		this.processor = processor;
@@ -254,7 +254,7 @@ public class EObjectDetailView extends Composite {
 
 	private final Map<EStructuralFeature, String> nameByFeature = new HashMap<EStructuralFeature, String>();
 
-	public void setNameForFeature(EStructuralFeature key, String value) {
+	public void setNameForFeature(final EStructuralFeature key, final String value) {
 		nameByFeature.put(key, value);
 	}
 }
