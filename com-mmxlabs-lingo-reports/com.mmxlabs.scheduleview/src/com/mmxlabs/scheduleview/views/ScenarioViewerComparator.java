@@ -25,7 +25,17 @@ import scenario.schedule.fleetallocation.SpotVessel;
 public class ScenarioViewerComparator extends ViewerComparator {
 
 	public enum Mode {
-		STACK, INTERLEAVE
+		STACK("Stack"), INTERLEAVE("Interleave");
+
+		private final String displayName;
+
+		private Mode(String displayName) {
+			this.displayName = displayName;
+		}
+
+		public final String getDisplayName() {
+			return displayName;
+		}
 	};
 
 	private Mode mode = Mode.STACK;

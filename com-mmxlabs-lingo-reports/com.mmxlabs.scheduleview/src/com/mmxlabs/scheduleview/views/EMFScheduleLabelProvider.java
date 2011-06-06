@@ -49,14 +49,28 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	}
 
 	public enum Mode {
-		VesselState, FuelChoice, Canal
+		VesselState("Vessel State"), FuelChoice("Fuel Choice"), Canal("Route Choice");
 		/* , Lateness */
+		
+		private final String displayName;
+		
+		private Mode(String displayName) {
+			this.displayName = displayName;
+		}
+		
+		public final String getDisplayName() {
+			return displayName;
+		}
 	}
 
 	private Mode mode = Mode.VesselState;
 
 	public void setMode(Mode mode) {
 		this.mode = mode;
+	}
+
+	protected final Mode getMode() {
+		return mode;
 	}
 
 	@Override
