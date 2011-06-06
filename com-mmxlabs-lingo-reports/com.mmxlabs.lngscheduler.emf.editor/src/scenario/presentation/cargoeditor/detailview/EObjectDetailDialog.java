@@ -172,8 +172,9 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		for (final EStructuralFeature feature : original.eClass()
 				.getEAllStructuralFeatures()) {
-			if (original.eGet(feature).equals(duplicate.eGet(feature)))
+			if (original.eGet(feature).equals(duplicate.eGet(feature))) {
 				continue;
+			}
 			if (feature.isMany()) {
 				System.err.println("Multiple valued feature: " + feature);
 				Collection c = (Collection) original.eGet(feature);
