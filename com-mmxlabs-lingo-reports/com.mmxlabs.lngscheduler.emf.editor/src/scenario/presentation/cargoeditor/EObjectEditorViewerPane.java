@@ -5,7 +5,6 @@
 
 package scenario.presentation.cargoeditor;
 
-import java.lang.ref.Reference;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +33,6 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
