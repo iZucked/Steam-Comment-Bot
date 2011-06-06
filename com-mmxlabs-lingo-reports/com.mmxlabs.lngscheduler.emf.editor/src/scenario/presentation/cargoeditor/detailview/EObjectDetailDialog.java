@@ -78,14 +78,15 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		this.editingDomain = editingDomain;
 		processor = new ICommandProcessor() {
 			@Override
-			public void processCommand(final Command command, final EObject target,
-					final EStructuralFeature feature) {
-				//commands need not be in the stack, as we don't care for undoing them
+			public void processCommand(final Command command,
+					final EObject target, final EStructuralFeature feature) {
+				// commands need not be in the stack, as we don't care for
+				// undoing them
 				command.execute();
 			}
 		};
 
-//		viewContainerDelegate.addDefaultEditorFactories();
+		// viewContainerDelegate.addDefaultEditorFactories();
 	}
 
 	/**
@@ -222,8 +223,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		final Shell shell = new Shell(getParent(), getStyle()
 				| (SWT.DIALOG_TRIM & ~SWT.CLOSE) | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
-		
-//		shell.setSize(389, 197);
+
+		// shell.setSize(389, 197);
 
 		shell.setText("Editing (1/" + objects.size() + ")");
 
@@ -263,8 +264,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		});
 
 		final Button btnNext = new Button(composite_1, SWT.NONE);
-		final GridData gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true, false,
-				1, 1);
+		final GridData gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true,
+				false, 1, 1);
 		gd_btnNext.heightHint = 26;
 		btnNext.setLayoutData(gd_btnNext);
 		btnNext.setText("&Forward");
@@ -289,8 +290,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		final Button btnOk = new Button(composite_1, SWT.NONE);
 		shell.setDefaultButton(btnOk);
 
-		final GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
-				1, 1);
+		final GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1);
 		gd_btnOk.widthHint = 60;
 		gd_btnOk.heightHint = 26;
 		btnOk.setLayoutData(gd_btnOk);
@@ -307,8 +308,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		});
 
 		final Button btnCancel = new Button(composite_1, SWT.NONE);
-		final GridData gd_btnCancel = new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1);
+		final GridData gd_btnCancel = new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1);
 		gd_btnCancel.widthHint = 60;
 		gd_btnCancel.heightHint = 26;
 		btnCancel.setLayoutData(gd_btnCancel);
@@ -348,7 +349,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			if (activeDetailView != null) {
 				((GridData) activeDetailView.getLayoutData()).exclude = true;
 				activeDetailView.setVisible(false);
-				activeDetailView.setInput((EObject)null);
+				activeDetailView.setInput((EObject) null);
 			}
 			activeDetailView = eodv;
 			((GridData) activeDetailView.getLayoutData()).exclude = false;
@@ -392,7 +393,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 * (org.eclipse.emf.ecore.EStructuralFeature, java.lang.String)
 	 */
 	@Override
-	public void setNameForFeature(final EStructuralFeature feature, final String string) {
+	public void setNameForFeature(final EStructuralFeature feature,
+			final String string) {
 		viewContainerDelegate.setNameForFeature(feature, string);
 	}
 

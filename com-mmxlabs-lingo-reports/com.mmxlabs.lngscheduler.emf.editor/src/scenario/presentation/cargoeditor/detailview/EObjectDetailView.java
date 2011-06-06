@@ -116,11 +116,13 @@ public class EObjectDetailView extends Composite {
 		addGroupForEClass(objectClass, unmangle(objectClass.getName()),
 				new EMFPath(true));
 		for (final EReference reference : objectClass.getEAllContainments()) {
-			if (reference.isMany())
+			if (reference.isMany()) {
 				continue;
+			}
 			String groupName = nameByFeature.get(reference);
-			if (groupName == null)
+			if (groupName == null) {
 				groupName = unmangle(reference.getName());
+			}
 
 			addGroupForEClass(reference.getEReferenceType(), groupName,
 					new EMFPath(true, reference));
