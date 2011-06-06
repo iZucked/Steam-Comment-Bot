@@ -97,7 +97,7 @@ public class EObjectImporter {
 			results.add(map);
 		}
 
-		return CollectionsUtil.makeHashMap(commonType.getName(), results);
+		return CollectionsUtil.makeHashMap(outputEClass.getName(), results);
 	}
 
 	/**

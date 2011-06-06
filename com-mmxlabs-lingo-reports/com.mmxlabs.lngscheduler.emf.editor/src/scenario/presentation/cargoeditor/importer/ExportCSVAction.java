@@ -56,9 +56,9 @@ public abstract class ExportCSVAction extends Action {
 		if (objects.size() == 0)
 			return;
 
-		final EClass topLevelClass = EMFUtils.findCommonSuperclass(objects);
+//		final EClass topLevelClass = EMFUtils.findCommonSuperclass(objects);
 		final EObjectImporter exporter = EObjectImporterFactory.getInstance()
-				.getImporter(topLevelClass);
+				.getImporter(getExportEClass());
 		final Map<String, Collection<Map<String, String>>> result = exporter
 				.exportObjects(objects);
 
@@ -267,4 +267,5 @@ public abstract class ExportCSVAction extends Action {
 	}
 
 	protected abstract List<EObject> getObjectsToExport();
+	protected abstract EClass getExportEClass();
 }
