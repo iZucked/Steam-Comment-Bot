@@ -142,28 +142,34 @@ public abstract class ExportCSVAction extends Action {
 			final BufferedWriter bw = new BufferedWriter(new FileWriter(
 					saveFilePath));
 
-			if (classes.size() > 1) {
+			// Show always export KIND as we may only be exporting a single type
+			// of object, but it is still part of a set of classes with a common
+			// abstract class.
+			{
 				bw.append("KIND");
 			}
 			boolean c3 = false;
 			for (final EMFPath p : paths) {
-				if (c3)
+				if (c3) {
 					bw.append(", ");
-				c3 = true;
+					c3 = true;
+				}
 				bw.write(p.toString());
 			}
 
 			for (final EObject object : objects) {
 				bw.newLine();
 				boolean c = false;
-				if (classes.size() > 1) {
+				// KIND Column
+				{
 					bw.write(object.eClass().getName());
 					c = true;
 				}
 				for (final EMFPath p : paths) {
-					if (c)
+					if (c) {
 						bw.write(", ");
-					c = true;
+						c = true;
+					}
 					final Object o = p.get(object);
 					if (o != null) {
 						if (o instanceof EList) {
@@ -193,9 +199,10 @@ public abstract class ExportCSVAction extends Action {
 								bw.write("\"");
 								boolean c2 = false;
 								for (final EObject r : e) {
-									if (c2)
+									if (c2) {
 										bw.write(",");
-									c2 = true;
+										c2 = true;
+									}
 									bw.write(getName(r));
 								}
 								bw.write("\"");

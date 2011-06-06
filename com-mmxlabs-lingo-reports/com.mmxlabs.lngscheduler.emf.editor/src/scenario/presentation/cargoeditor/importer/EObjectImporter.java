@@ -85,14 +85,18 @@ public class EObjectImporter {
 
 		// the caller can then decide how to serialize the data.
 
-		final boolean sameTypes = EMFUtils.allSameEClass(objects);
+//		final boolean sameTypes = EMFUtils.allSameEClass(objects);
 		final EClass commonType = EMFUtils.findCommonSuperclass(objects);
 		final LinkedList<Map<String, String>> results = new LinkedList<Map<String, String>>();
 		for (final EObject object : objects) {
 			final Map<String, String> map = exportObject(object);
-			if (sameTypes == false) {
+			// Show always export KIND as we may only be exporting a single type
+			// of object, but it is still part of a set of classes with a common
+			// abstract class.
+
+//			if (sameTypes == false) {
 				map.put("kind", object.eClass().getName());
-			}
+//			}
 			results.add(map);
 		}
 
