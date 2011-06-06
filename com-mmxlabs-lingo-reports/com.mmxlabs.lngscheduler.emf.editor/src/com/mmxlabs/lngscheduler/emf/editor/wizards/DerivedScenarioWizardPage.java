@@ -68,7 +68,7 @@ public class DerivedScenarioWizardPage extends WizardPage {
 	 */
 	public DerivedScenarioWizardPage(ISelection selection) {
 		super("wizardPage");
-		setTitle("Create Derived Sceanrio");
+		setTitle("Create Derived Scenario");
 		setDescription("This wizard creates a new scenario derived from static data in other scenarios or model files.");
 		this.selection = selection;
 	}
@@ -90,7 +90,6 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		return new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO may need a better dialog for this.
 				final ResourceListSelectionDialog rlsd = new ResourceListSelectionDialog(
 						getShell(), ResourcesPlugin.getWorkspace().getRoot(),
 						IResource.FILE | IResource.DEPTH_INFINITE) {
@@ -218,7 +217,7 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		createSourcePicker(sources, "&Fleet",
 				FleetPackage.eINSTANCE.getFleetModel(), new String[] {
 						"scenario", "fleet" });
-		createSourcePicker(sources, "&Markets",
+		createSourcePicker(sources, "&Indices",
 				MarketPackage.eINSTANCE.getMarketModel(), new String[] {
 						"scenario", "market" });
 		createSourcePicker(sources, "&Contracts",
