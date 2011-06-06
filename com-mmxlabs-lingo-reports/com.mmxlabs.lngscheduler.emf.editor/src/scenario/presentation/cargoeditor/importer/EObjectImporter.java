@@ -86,8 +86,8 @@ public class EObjectImporter {
 
 		// the caller can then descide how to serialize the data.
 
-		final boolean sameTypes = EMFUtils.allSameEClass(objects);
 		final EClass commonType = EMFUtils.findCommonSuperclass(objects);
+		final boolean sameTypes = EMFUtils.allSameEClass(objects) && !outputEClass.isAbstract();
 		final LinkedList<Map<String, String>> results = new LinkedList<Map<String, String>>();
 		for (final EObject object : objects) {
 			final Map<String, String> map = exportObject(object);
