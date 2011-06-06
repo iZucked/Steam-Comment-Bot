@@ -13,7 +13,6 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
@@ -35,7 +34,7 @@ public abstract class ImportCSVAction extends Action {
 
 	protected abstract EObject getToplevelObject();
 
-	protected abstract void addObjects(final Collection<EObject> newObjects);
+	public abstract void addObjects(final Collection<EObject> newObjects);
 
 	protected abstract EClass getImportClass();
 	
