@@ -77,6 +77,7 @@
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.scheduler.its</module>
 		<module>com.mmxlabs.rcp.common.tests</module>
+		<module>com.mmxlabs.demo.doc</module>
 	</modules>
 
 	<!-- Pom dependencies to "consider". These need to be OSGi bundles for the 
