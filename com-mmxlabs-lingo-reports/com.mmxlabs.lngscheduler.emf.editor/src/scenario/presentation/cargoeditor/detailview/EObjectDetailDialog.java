@@ -76,8 +76,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		this.editingDomain = editingDomain;
 		processor = new ICommandProcessor() {
 			@Override
-			public void processCommand(Command command, EObject target,
-					EStructuralFeature feature) {
+			public void processCommand(final Command command, final EObject target,
+					final EStructuralFeature feature) {
 				//commands need not be in the stack, as we don't care for undoing them
 				command.execute();
 			}
@@ -222,19 +222,19 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		// insert EObjectDetailView
 
-		Composite composite_1 = new Composite(shell, SWT.NONE);
+		final Composite composite_1 = new Composite(shell, SWT.NONE);
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 		composite_1.setLayout(new GridLayout(4, false));
 
-		Button btnPrev = new Button(composite_1, SWT.NONE);
+		final Button btnPrev = new Button(composite_1, SWT.NONE);
 		btnPrev.setText("&Back");
 		btnPrev.setImage(PlatformUI.getWorkbench().getSharedImages()
 				.getImage(ISharedImages.IMG_TOOL_BACK));
 
 		btnPrev.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				selectedObjectIndex--;
 				if (selectedObjectIndex < 0) {
 					selectedObjectIndex = objects.size() - 1;
@@ -246,8 +246,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			}
 		});
 
-		Button btnNext = new Button(composite_1, SWT.NONE);
-		GridData gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true, false,
+		final Button btnNext = new Button(composite_1, SWT.NONE);
+		final GridData gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true, false,
 				1, 1);
 		gd_btnNext.heightHint = 26;
 		btnNext.setLayoutData(gd_btnNext);
@@ -257,10 +257,11 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		btnNext.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				selectedObjectIndex++;
-				if (selectedObjectIndex >= objects.size())
+				if (selectedObjectIndex >= objects.size()) {
 					selectedObjectIndex = 0;
+				}
 				displaySelectedObject(composite,
 						objects.get(selectedObjectIndex));
 
@@ -269,10 +270,10 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			}
 		});
 
-		Button btnOk = new Button(composite_1, SWT.NONE);
+		final Button btnOk = new Button(composite_1, SWT.NONE);
 		shell.setDefaultButton(btnOk);
 
-		GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
+		final GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
 				1, 1);
 		gd_btnOk.widthHint = 60;
 		gd_btnOk.heightHint = 26;
@@ -282,15 +283,15 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		btnOk.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				performActions = true;
 				shell.close();
 			}
 
 		});
 
-		Button btnCancel = new Button(composite_1, SWT.NONE);
-		GridData gd_btnCancel = new GridData(SWT.RIGHT, SWT.CENTER, false,
+		final Button btnCancel = new Button(composite_1, SWT.NONE);
+		final GridData gd_btnCancel = new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1);
 		gd_btnCancel.widthHint = 60;
 		gd_btnCancel.heightHint = 26;
@@ -375,7 +376,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 * (org.eclipse.emf.ecore.EStructuralFeature, java.lang.String)
 	 */
 	@Override
-	public void setNameForFeature(EStructuralFeature feature, String string) {
+	public void setNameForFeature(final EStructuralFeature feature, final String string) {
 		viewContainerDelegate.setNameForFeature(feature, string);
 	}
 
@@ -387,8 +388,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 * scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory)
 	 */
 	@Override
-	public void setEditorFactoryForClassifier(EClassifier classifier,
-			IInlineEditorFactory factory) {
+	public void setEditorFactoryForClassifier(final EClassifier classifier,
+			final IInlineEditorFactory factory) {
 		viewContainerDelegate
 				.setEditorFactoryForClassifier(classifier, factory);
 	}
@@ -401,8 +402,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 * scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory)
 	 */
 	@Override
-	public void setEditorFactoryForFeature(EStructuralFeature feature,
-			IInlineEditorFactory iInlineEditorFactory) {
+	public void setEditorFactoryForFeature(final EStructuralFeature feature,
+			final IInlineEditorFactory iInlineEditorFactory) {
 		viewContainerDelegate.setEditorFactoryForFeature(feature,
 				iInlineEditorFactory);
 	}
