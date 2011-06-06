@@ -143,6 +143,7 @@ import scenario.market.StepwisePriceCurve;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
+import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
@@ -178,6 +179,7 @@ import scenario.presentation.cargoeditor.importer.CSVReader;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
 import scenario.presentation.cargoeditor.importer.EObjectImporter;
 import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
+import scenario.presentation.cargoeditor.importer.ExportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
@@ -1324,8 +1326,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// add autocorrector
 
-			autoCorrector = new AutoCorrector(
-					getEditingDomain());
+			autoCorrector = new AutoCorrector(getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
 			autoCorrector.addCorrector(new DateLocalisingCorrector());
 
@@ -1774,7 +1775,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
-
 		final ChartViewer chart = new ChartViewer(sash);
 
 		// TODO this is a hack
@@ -2001,10 +2001,68 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final IReferenceValueProvider everyContractProvider,
 			final IReferenceValueProvider marketProvider) {
 		final EObjectEditorViewerPane portsPane = new ScenarioObjectEditorViewerPane(
-				getSite().getPage(), ScenarioEditor.this);
-		// cargoPane.createControl(getContainer());
+				getSite().getPage(), ScenarioEditor.this) {
 
-		portsPane.createControl(getContainer());
+			// override import and export to do distance matrix along with
+			// ports.
+
+			@Override
+			protected Action createExportAction(final TableViewer viewer,
+					final EMFPath ePath) {
+				final Action exportPortsAction = super.createExportAction(viewer, ePath);
+				final Action exportDistanceModelAction = new ExportCSVAction() {
+					@Override
+					public void run() {
+						exportPortsAction.run();
+						super.run();
+					}
+
+					@Override
+					protected List<EObject> getObjectsToExport() {
+						return Collections.singletonList((EObject) getScenario().getDistanceModel());
+					}
+					
+					@Override
+					protected EClass getExportEClass() {
+						return PortPackage.eINSTANCE.getDistanceModel();
+					}
+				};
+				return exportDistanceModelAction;
+			}
+
+			@Override
+			protected Action createImportAction(final TableViewer viewer,
+					final EditingDomain editingDomain, final EMFPath ePath) {
+				final ImportCSVAction delegate = (ImportCSVAction) super.createImportAction(viewer, editingDomain, ePath);
+				return new ImportCSVAction() {
+					@Override
+					public void run() {
+						delegate.run();
+						super.run();
+					}
+
+					@Override
+					protected EObject getToplevelObject() {
+						return getScenario();
+					}
+					
+					@Override
+					protected EClass getImportClass() {
+						return PortPackage.eINSTANCE.getDistanceModel();
+					}
+					
+					@Override
+					public void addObjects(final Collection<EObject> newObjects) {
+						getScenario().setDistanceModel((DistanceModel) newObjects.iterator().next());
+					}
+				};
+			}
+
+		};
+
+		final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
+
+		portsPane.createControl(sash);
 
 		final List<EReference> path = new LinkedList<EReference>();
 
@@ -2047,9 +2105,29 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		createContextMenuFor(portsPane.getViewer());
 
-		final int pageIndex = addPage(portsPane.getControl());
-		setPageText(pageIndex, "Ports"); // TODO localize this
-											// string or whatever
+		{
+			final EObjectEditorViewerPane canalEVP = new ScenarioObjectEditorViewerPane(
+					getSite().getPage(), ScenarioEditor.this);
+
+			canalEVP.createControl(sash);
+			canalEVP.setTitle("Canals", getTitleImage());
+
+			final List<EReference> p2 = new LinkedList<EReference>();
+
+			p2.add(ScenarioPackage.eINSTANCE.getScenario_CanalModel());
+			p2.add(PortPackage.eINSTANCE.getCanalModel_Canals());
+
+			canalEVP.init(p2, adapterFactory);
+
+			canalEVP.addTypicalColumn("Name", new BasicAttributeManipulator(
+					namedObjectName, getEditingDomain()));
+			
+			canalEVP.getViewer().setInput(getScenario());
+			createContextMenuFor(canalEVP.getViewer());
+		}
+
+		final int pageIndex = addPage(sash);
+		setPageText(pageIndex, "Ports and Distances");
 
 	}
 
@@ -2131,9 +2209,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 									Postprocessor.getInstance().postprocess(
 											object);
 								}
-								
+
 								delegate.addObjects(vesselClasses);
-								
+
 							} catch (IOException ex) {
 
 							}
@@ -2141,7 +2219,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 						/*
 						 * Because I've over-ridden the run method up there,
-						 * these methods can safely return null. 
+						 * these methods can safely return null.
 						 */
 
 						@Override
