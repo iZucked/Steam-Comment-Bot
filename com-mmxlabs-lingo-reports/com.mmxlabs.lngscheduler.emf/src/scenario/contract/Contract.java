@@ -19,7 +19,7 @@ import scenario.NamedObject;
  * </p>
  *
  * @see scenario.contract.ContractPackage#getContract()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface Contract extends NamedObject {

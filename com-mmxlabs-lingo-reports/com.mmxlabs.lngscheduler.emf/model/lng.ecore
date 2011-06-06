@@ -664,7 +664,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="gamma" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Contract" eSuperTypes="#//NamedObject">
+    <eClassifiers xsi:type="ecore:EClass" name="Contract" abstract="true" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
           eType="#//contract/Entity"/>
     </eClassifiers>

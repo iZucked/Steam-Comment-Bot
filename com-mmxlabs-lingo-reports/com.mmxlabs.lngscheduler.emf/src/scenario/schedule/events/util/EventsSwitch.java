@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.ScenarioObject;
+import scenario.schedule.events.*;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;

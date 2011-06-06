@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+import scenario.port.*;
 import scenario.port.Canal;
 import scenario.port.CanalModel;
 import scenario.port.DistanceLine;

@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.contract.*;
 import scenario.contract.Contract;
 import scenario.contract.ContractFactory;
 import scenario.contract.ContractModel;
@@ -74,7 +75,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT: return createIndexPricePurchaseContract();
 			case ContractPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT: return createProfitSharingPurchaseContract();
-			case ContractPackage.CONTRACT: return createContract();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -165,17 +165,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	public ProfitSharingPurchaseContract createProfitSharingPurchaseContract() {
 		ProfitSharingPurchaseContractImpl profitSharingPurchaseContract = new ProfitSharingPurchaseContractImpl();
 		return profitSharingPurchaseContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Contract createContract() {
-		ContractImpl contract = new ContractImpl();
-		return contract;
 	}
 
 	/**

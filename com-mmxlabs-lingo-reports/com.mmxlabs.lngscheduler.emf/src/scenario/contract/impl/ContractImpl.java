@@ -27,7 +27,7 @@ import scenario.impl.NamedObjectImpl;
  *
  * @generated
  */
-public class ContractImpl extends NamedObjectImpl implements Contract {
+public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->

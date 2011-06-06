@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.schedule.events.*;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsFactory;
 import scenario.schedule.events.EventsPackage;

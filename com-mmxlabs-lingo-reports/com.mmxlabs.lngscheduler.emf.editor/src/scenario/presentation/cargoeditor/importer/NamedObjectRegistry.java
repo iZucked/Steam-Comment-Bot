@@ -40,6 +40,16 @@ public class NamedObjectRegistry {
 		}
 	}
 	
+	private void addAbstractSuperclasses(final EClass superClass, final EObject object, final String id) {
+		if (superClass.isAbstract()) {
+			contents.put(new Pair<EClass, String>(superClass, id), object);
+		}
+		
+		for (final EClass superSuperClass : superClass.getEAllSuperTypes()) {
+			addAbstractSuperclasses(superSuperClass, object, id);
+		}
+	}
+	
 	public void addEObject(final EObject top) {
 		if (top == null)
 			return;
@@ -49,9 +59,7 @@ public class NamedObjectRegistry {
 			
 			// process superclasses
 			for (final EClass superclass : top.eClass().getEAllSuperTypes()) {
-				if (superclass.isAbstract()) {
-					contents.put(new Pair<EClass, String>(superclass, id), top);
-				}
+				addAbstractSuperclasses(superclass, top, id);
 			}
 		}
 	}

@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.market.*;
 import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.MarketModel;

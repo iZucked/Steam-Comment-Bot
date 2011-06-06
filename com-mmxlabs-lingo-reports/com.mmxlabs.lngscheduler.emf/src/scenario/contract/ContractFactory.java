@@ -96,15 +96,6 @@ public interface ContractFactory extends EFactory {
 	ProfitSharingPurchaseContract createProfitSharingPurchaseContract();
 
 	/**
-	 * Returns a new object of class '<em>Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Contract</em>'.
-	 * @generated
-	 */
-	Contract createContract();
-
-	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

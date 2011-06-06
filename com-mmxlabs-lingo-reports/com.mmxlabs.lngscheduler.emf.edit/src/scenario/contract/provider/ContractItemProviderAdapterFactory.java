@@ -257,29 +257,6 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.contract.Contract} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ContractItemProvider contractItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.contract.Contract}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createContractAdapter() {
-		if (contractItemProvider == null) {
-			contractItemProvider = new ContractItemProvider(this);
-		}
-
-		return contractItemProvider;
-	}
-
-	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -392,7 +369,6 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 		if (indexPricePurchaseContractItemProvider != null) indexPricePurchaseContractItemProvider.dispose();
 		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();
 		if (profitSharingPurchaseContractItemProvider != null) profitSharingPurchaseContractItemProvider.dispose();
-		if (contractItemProvider != null) contractItemProvider.dispose();
 	}
 
 }

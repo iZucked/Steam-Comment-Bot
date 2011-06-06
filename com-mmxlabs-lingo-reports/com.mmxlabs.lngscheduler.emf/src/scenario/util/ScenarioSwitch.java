@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.*;
 import scenario.NamedObject;
 import scenario.Scenario;
 import scenario.ScenarioObject;
