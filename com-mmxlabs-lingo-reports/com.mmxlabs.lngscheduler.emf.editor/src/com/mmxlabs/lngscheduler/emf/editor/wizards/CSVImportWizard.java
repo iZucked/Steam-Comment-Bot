@@ -272,11 +272,11 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 				{
 					final Group group = new Group(topLevel, SWT.NONE);
 					group.setLayout(new RowLayout(SWT.VERTICAL));
-					group.setText("Markets and Contracts");
+					group.setText("Indices and Contracts");
 					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 							false));
 					final FileFieldEditor marketEditor = new FileFieldEditor(
-							"mSelect", "Markets", group);
+							"mSelect", "Indices", group);
 					marketEditor.setFileExtensions(extensions);
 					marketEditor.setEmptyStringAllowed(true);
 					marketEditor.getTextControl(group).addModifyListener(
