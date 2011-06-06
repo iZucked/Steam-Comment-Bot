@@ -1741,9 +1741,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	private void createIndexEditor() {
-		// price curves only for now
-		// split view, chart at the bottom editor at the top
-
 		final SashForm sash = new SashForm(getContainer(), SWT.SMOOTH
 				| SWT.HORIZONTAL);
 
@@ -1777,7 +1774,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
-		// TODO add csv import button? make editor dialog?
 
 		final ChartViewer chart = new ChartViewer(sash);
 
@@ -1850,7 +1846,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 		});
 
-		setPageText(addPage(sash), "Price Curves");
+		setPageText(addPage(sash), "Indices");
 	}
 
 	public Scenario getScenario() {
@@ -2137,22 +2133,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								}
 								
 								delegate.addObjects(vesselClasses);
-//
-//								getEditingDomain()
-//										.getCommandStack()
-//										.execute(
-//												getEditingDomain()
-//														.createCommand(
-//																AddCommand.class,
-//																new CommandParameter(
-//																		((Scenario) viewer
-//																				.getInput())
-//																				.getFleetModel(),
-//																		FleetPackage.eINSTANCE
-//																				.getFleetModel_VesselClasses(),
-//																		vesselClasses)));
-								
-								
 								
 							} catch (IOException ex) {
 
@@ -2161,12 +2141,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 						/*
 						 * Because I've over-ridden the run method up there,
-						 * these methods can safely return null. However, it
-						 * does mean that vessel class imports will not have any
-						 * of the nice merging behaviour that other importers
-						 * get.
-						 * 
-						 * TODO fix this.
+						 * these methods can safely return null. 
 						 */
 
 						@Override
@@ -2277,7 +2252,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-			vcePane.setTitle("Vessel Classes");
+			vcePane.setTitle("Vessel Classes", getTitleImage());
 
 			createContextMenuFor(vcePane.getViewer());
 
