@@ -50,6 +50,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -116,14 +117,20 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	@Override
 	public Viewer createViewer(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI);
-
+		
+		getToolBarManager().add(new GroupMarker("pack"));
+		getToolBarManager().add(new GroupMarker("additions"));
+		getToolBarManager().add(new GroupMarker("edit"));
+		getToolBarManager().add(new GroupMarker("copy"));
+		getToolBarManager().add(new GroupMarker("importers"));
+		getToolBarManager().add(new GroupMarker("exporters"));
 		{
 			final Action a = new PackTableColumnsAction(viewer);
-			getToolBarManager().add(a);
+			getToolBarManager().appendToGroup("pack", a);
 		}
 		{
 			final Action a = new CopyTableToClipboardAction(viewer.getTable());
-			getToolBarManager().add(a);
+			getToolBarManager().appendToGroup("copy", a);
 		}
 
 		getToolBarManager().update(true);
@@ -542,26 +549,26 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				final Action a = createAddAction(viewer,
 						part.getEditingDomain(), ePath);
 				if (a != null) {
-					x.add(a);
+					x.appendToGroup("edit", a);
 				}
 			}
 			{
 				final Action b = createDeleteAction(viewer,
 						part.getEditingDomain());
 				if (b != null) {
-					x.add(b);
+					x.appendToGroup("edit",b);
 				}
 			}
 			{
 				final Action a = createImportAction(viewer,
 						part.getEditingDomain(), ePath);
 				if (a != null)
-					x.add(a);
+					x.appendToGroup("importers",a);
 			}
 			{
 				final Action a = createExportAction(viewer, ePath);
 				if (a != null)
-					x.add(a);
+					x.appendToGroup("exporters",a);
 			}
 			x.update(true);
 		}
