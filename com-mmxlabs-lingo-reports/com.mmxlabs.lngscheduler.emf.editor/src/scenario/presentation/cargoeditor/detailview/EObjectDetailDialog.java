@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.common.Equality;
+
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 
@@ -172,7 +174,21 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		for (final EStructuralFeature feature : original.eClass()
 				.getEAllStructuralFeatures()) {
-			if (original.eGet(feature).equals(duplicate.eGet(feature))) {
+			// For containment references, we need to compare the contained
+			// object, rather than generate a SetCommand.
+			if (original.eClass().getEAllContainments().contains(feature)) {
+
+				final Command c = makeEqualizer(
+						(EObject) original.eGet(feature),
+						(EObject) duplicate.eGet(feature));
+				if (!c.getAffectedObjects().isEmpty()) {
+					compound.append(c);
+				}
+
+				continue;
+			}
+			// Skip items which have not changed.
+			if (Equality.isEqual(original.eGet(feature), duplicate.eGet(feature))) {
 				continue;
 			}
 			if (feature.isMany()) {
