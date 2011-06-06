@@ -2077,8 +2077,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				@Override
 				protected Action createImportAction(final TableViewer viewer,
 						final EditingDomain editingDomain, final EMFPath ePath) {
+					final ImportCSVAction delegate = (ImportCSVAction) super
+							.createImportAction(viewer, editingDomain, ePath);
 					return new ImportCSVAction() {
-
 						@Override
 						public void run() {
 							try {
@@ -2134,20 +2135,25 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 									Postprocessor.getInstance().postprocess(
 											object);
 								}
-
-								getEditingDomain()
-										.getCommandStack()
-										.execute(
-												getEditingDomain()
-														.createCommand(
-																AddCommand.class,
-																new CommandParameter(
-																		((Scenario) viewer
-																				.getInput())
-																				.getFleetModel(),
-																		FleetPackage.eINSTANCE
-																				.getFleetModel_VesselClasses(),
-																		vesselClasses)));
+								
+								delegate.addObjects(vesselClasses);
+//
+//								getEditingDomain()
+//										.getCommandStack()
+//										.execute(
+//												getEditingDomain()
+//														.createCommand(
+//																AddCommand.class,
+//																new CommandParameter(
+//																		((Scenario) viewer
+//																				.getInput())
+//																				.getFleetModel(),
+//																		FleetPackage.eINSTANCE
+//																				.getFleetModel_VesselClasses(),
+//																		vesselClasses)));
+								
+								
+								
 							} catch (IOException ex) {
 
 							}
@@ -2169,7 +2175,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						}
 
 						@Override
-						protected void addObjects(Collection<EObject> newObjects) {
+						public void addObjects(Collection<EObject> newObjects) {
 
 						}
 
