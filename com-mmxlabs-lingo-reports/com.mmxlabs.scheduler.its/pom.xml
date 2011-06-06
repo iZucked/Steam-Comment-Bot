@@ -13,7 +13,6 @@
 	<packaging>eclipse-test-plugin</packaging>
 	<version>1.0.0.qualifier</version>
 
-
 	<profiles>
 		<!-- The quickTests profile skips the long running scenario tests -->
 		<profile>
@@ -25,6 +24,7 @@
 						<artifactId>tycho-surefire-plugin</artifactId>
 						<version>${tycho.version}</version>
 						<configuration>
+							<failIfNoTests>false</failIfNoTests>
 							<excludes>
 								<exclude>**/OptimisationRepeatabilityTest.java</exclude>
 							</excludes>
