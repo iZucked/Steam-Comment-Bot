@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
+import scenario.provider.LngEditPlugin;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
@@ -193,7 +194,16 @@ public class EObjectDetailView extends Composite {
 				// create label for this attribute
 
 				final Label attributeLabel = new Label(controls, SWT.RIGHT);
+				//Check supplied mappings
 				String attributeName = nameByFeature.get(attribute);
+				// Try using LNG Edit Plugin information
+				if (attributeName == null) {
+					// Construct key in form used by plugin.properties
+					final String key = "_UI_" + objectClass.getName() +"_" + attribute.getName() + "_feature";
+					// TODO: Pass in an instance of ResourceLocator rather than direct dependence on LngEditPlugin
+					attributeName = LngEditPlugin.getPlugin().getString(key);
+				}
+				// Ok, so nothing provided, try and deduce name
 				if (attributeName == null)
 					attributeName = unmangle(attribute.getName());
 				attributeLabel.setText(attributeName + ": ");
