@@ -36,7 +36,11 @@ import com.mmxlabs.common.Pair;
  * there is no connection.
  * 
  * Thus wiring.get(1) gives the right-hand node connected to left-hand node 1,
- * and wiring.indexOf(1) gives the left-hand node connected to right-hand node 1.
+ * and wiring.indexOf(1) gives the left-hand node connected to right-hand node
+ * 1.
+ * 
+ * TODO allow mismatched states, where there may be differing numbers of
+ * left-hand and right-hand terminals.
  * 
  * @author Tom Hinton
  * 
@@ -54,10 +58,13 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 	private int draggingFrom = -1;
 	private boolean draggingFromLeft = false;
 
+	private boolean showAddTerminals = false;
+
 	private int dragX, dragY;
 
 	/**
 	 * Create a new wiring diagram
+	 * 
 	 * @param parent
 	 * @param style
 	 */
@@ -69,7 +76,9 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 	}
 
 	/**
-	 * Set the colour of left hand terminal i to the given color. Doesn't refresh.
+	 * Set the colour of left hand terminal i to the given color. Doesn't
+	 * refresh.
+	 * 
 	 * @param i
 	 * @param color
 	 */
@@ -78,7 +87,9 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 	}
 
 	/**
-	 * Set the colour of right hand terminal i to the given color. Doesn't refresh
+	 * Set the colour of right hand terminal i to the given color. Doesn't
+	 * refresh
+	 * 
 	 * @param i
 	 * @param color
 	 */
@@ -86,6 +97,12 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 		terminalColours.get(index).setSecond(color);
 	}
 
+	/**
+	 * Set all the terminal colours at once; the ith element is a pair, whose
+	 * first member is the left hand colour
+	 * 
+	 * @param colours
+	 */
 	public void setTerminalColors(final List<Pair<Color, Color>> colours) {
 		terminalColours.clear();
 		terminalColours.addAll(colours);
@@ -210,6 +227,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 		int i = 0;
 		graphics.setForeground(Display.getCurrent().getSystemColor(
 				SWT.COLOR_BLACK));
+		float maxMidpoint = 0;
 		for (final float midpoint : terminalPositions) {
 
 			// draw terminal blobs
@@ -233,6 +251,12 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 					terminalSize);
 
 			i++;
+			maxMidpoint = Math.max(maxMidpoint, midpoint);
+		}
+
+		if (showAddTerminals) {
+			final float midpoint = maxMidpoint + 2 * terminalSize;
+
 		}
 	}
 

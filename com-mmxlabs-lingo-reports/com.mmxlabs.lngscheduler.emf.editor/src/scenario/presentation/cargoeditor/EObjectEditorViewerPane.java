@@ -5,6 +5,7 @@
 
 package scenario.presentation.cargoeditor;
 
+import java.lang.ref.Reference;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -191,7 +192,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						.getPathComponent(0);
 				final EClass ec = ref.getEReferenceType();
 				final EPackage p = ec.getEPackage();
-				
+
 				if (ec.isAbstract()) {
 					// select subclass
 					final LinkedList<EClass> subClasses = new LinkedList<EClass>();
@@ -221,7 +222,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						return null;
 					}
 					final Object[] result = elsd.getResult();
-					return EMFUtils.createEObject((EClass) result[0]); // include contained objects
+					return EMFUtils.createEObject((EClass) result[0]); // include
+																		// contained
+																		// objects
 				} else {
 					return EMFUtils.createEObject(ec);
 				}
@@ -296,7 +299,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			private boolean hasValidationError(final EObject object) {
 				final Resource r = object.eResource();
-				
+
 				final IFile containingFile = ResourcesPlugin.getWorkspace()
 						.getRoot()
 						.getFile(new Path(r.getURI().toPlatformString(true)));
@@ -460,7 +463,20 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		});
 
+		/**
+		 * A set containing the elements currently being displayed, which is
+		 * used by #adapter to determine which row to refresh when a
+		 * notification comes in
+		 */
 		final HashSet<EObject> currentElements = new HashSet<EObject>();
+
+		/**
+		 * A one-element list referring to the EObject which contains all the
+		 * display elements. #adapter uses this to determine when a notification
+		 * comes on the top-level object, and so all the contents should be
+		 * refreshed (e.g. after an import)
+		 */
+		final EObject[] currentContainer = new EObject[] { null };
 
 		final EContentAdapter adapter = new EContentAdapter() {
 			@Override
@@ -475,6 +491,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					EObject source = (EObject) notification.getNotifier();
 					// if (currentElements.contains(source))
 					// return;
+					if (source == currentContainer[0]) {
+						viewer.refresh();
+						return;
+					}
 					while (!(currentElements.contains(source))
 							&& ((source = source.eContainer()) != null))
 						;
@@ -501,10 +521,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					for (final EReference ref : path) {
 						object = o.eGet(ref);
 						if (object instanceof EList) {
-							for (final EObject e : (EList<EObject>) object) {
-								e.eAdapters().add(adapter);
-								currentElements.add(e);
-							}
+							o.eAdapters().add(adapter);
+							currentElements.addAll((EList) object);
+							currentContainer[0] = o;
 							return ((EList) object).toArray();
 						}
 						if (object instanceof EObject) {
@@ -599,7 +618,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 
 			@Override
-			protected void addObjects(final Collection<EObject> newObjects) {
+			public void addObjects(final Collection<EObject> newObjects) {
 				// this is quite a complicated procedure because it has to
 				// handle potential replacements.
 				final Map<String, EObject> objectsWithNames = new HashMap<String, EObject>();
@@ -618,16 +637,16 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					final String newId = getId(newObject);
 					if (objectsWithNames.containsKey(newId)) {
 						// object existed before, so we have to replace it
-						// get the old object
 						final EObject oldObject = objectsWithNames.get(newId);
-						cc.append(createFixReferencesAndContainments(oldObject,
-								newObject));
+						final Command fixrefs = createFixReferencesAndContainments(
+								oldObject, newObject);
+						if (fixrefs != null)
+							cc.append(fixrefs);
 
 						// fix references to contained objects as well, or we
 						// get a dangling reference
 
 						// now perform replace in the original container
-						//TODO should we delete the old object?
 						cc.append(ReplaceCommand.create(editingDomain,
 								oldObject, Collections.singleton(newObject)));
 					} else {
@@ -638,21 +657,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				}
 
 				editingDomain.getCommandStack().execute(cc);
-
-				// editingDomain.getCommandStack().execute(
-				// editingDomain.createCommand(
-				// AddCommand.class,
-				// new CommandParameter(ePath.get(
-				// getToplevelObject(), 1), ePath
-				// .getPathComponent(0), newObjects)));
-
-				viewer.refresh();
 			}
 
 			/**
 			 * Fix up any references to oldObject so they refer to newObject,
 			 * and fix up any references to singly-contained entries in
 			 * oldObject to the analogous entries in newObject, if they exist
+			 * 
+			 * returns null if there is nothing to do.
 			 * 
 			 * @param oldObject
 			 * @param newObject
@@ -661,23 +673,42 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			private Command createFixReferencesAndContainments(
 					final EObject oldObject, final EObject newObject) {
 				final CompoundCommand cc = new CompoundCommand();
-				cc.append(createFixReferences(oldObject, newObject));
+				final Command fixReferences = createFixReferences(oldObject,
+						newObject);
+				if (fixReferences != null)
+					cc.append(fixReferences);
+
 				for (final EReference reference : oldObject.eClass()
 						.getEAllContainments()) {
 					if (reference.isMany() == false) {
 						if (newObject.eClass().getEAllContainments()
 								.contains(reference)) {
-							cc.append(createFixReferencesAndContainments(
+							final Command recur = createFixReferencesAndContainments(
 									(EObject) oldObject.eGet(reference),
-									(EObject) newObject.eGet(reference)));
+									(EObject) newObject.eGet(reference));
+							if (recur != null)
+								cc.append(recur);
 						}
 					}
 				}
-				return cc;
+				if (cc.getCommandList().isEmpty())
+					return null;
+				else
+					return cc;
 			}
 
+			/**
+			 * Create a command which updates references to oldObject so that
+			 * they point to newObject instead. Returns null if there are no
+			 * references to update (because an empty compoundCommand is not executable.
+			 * 
+			 * @param oldObject
+			 * @param newObject
+			 * @return
+			 */
 			private Command createFixReferences(final EObject oldObject,
 					final EObject newObject) {
+
 				final CompoundCommand cc = new CompoundCommand();
 				// find all references to it
 				final Collection<Setting> references = EcoreUtil.UsageCrossReferencer
@@ -689,7 +720,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 							.getEStructuralFeature();
 					if (feature instanceof EReference) {
 						final EReference ref = (EReference) feature;
-						
 
 						// multi-references need a remove and an add
 						// TODO this will NOT WORK if the old list
@@ -697,9 +727,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						// to the object being replaced, but at the
 						// moment our domain does not do that.
 						if (ref.isMany()) {
-							final int index = ((EList) setting.getEObject().eGet(
-									feature)).indexOf(oldObject);
-							
+							final int index = ((EList) setting.getEObject()
+									.eGet(feature)).indexOf(oldObject);
+
 							cc.append(RemoveCommand.create(editingDomain,
 									setting.getEObject(),
 									setting.getEStructuralFeature(), oldObject));
@@ -721,6 +751,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 							setting.getEObject(),
 							setting.getEStructuralFeature(), newObject));
 				}
+				
+				if (cc.getCommandList().isEmpty())
+					return null;
+				
 				return cc;
 			}
 

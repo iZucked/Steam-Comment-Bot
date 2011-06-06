@@ -44,7 +44,7 @@ public class NamedObjectRegistry {
 		if (top == null)
 			return;
 		final String id = getName(top);
-		if (id.isEmpty() == false) {
+		if (id != null && id.isEmpty() == false) {
 			contents.put(new Pair<EClass, String>(top.eClass(), id), top);
 			
 			// process superclasses
@@ -62,7 +62,7 @@ public class NamedObjectRegistry {
 	 * @return
 	 */
 	public static String getName(final EObject top) {
-		if (top == null) return "";
+		if (top == null) return null;
 		if (top instanceof NamedObject) {
 			return ((NamedObject) top).getName();
 		}
@@ -75,7 +75,7 @@ public class NamedObjectRegistry {
 				}
 			}
 		}
-		return "";
+		return null;
 	}
 
 	public Map<Pair<EClass, String>, EObject> getContents() {
