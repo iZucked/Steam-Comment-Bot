@@ -285,6 +285,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			v.getControl().addKeyListener(new KeyListener() {
 				@Override
 				public void keyReleased(final org.eclipse.swt.events.KeyEvent e) {
+					
+					// TODO: Wrap up in a command with keybingings
 					if (e.keyCode == '\r') {
 						final ISelection selection = getViewer().getSelection();
 						if (selection instanceof IStructuredSelection) {
