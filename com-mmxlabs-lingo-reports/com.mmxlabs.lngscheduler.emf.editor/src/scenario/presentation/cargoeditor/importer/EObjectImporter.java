@@ -7,7 +7,6 @@ package scenario.presentation.cargoeditor.importer;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -84,7 +83,7 @@ public class EObjectImporter {
 		// kind column)
 		// and then export each object one at a time.
 
-		// the caller can then descide how to serialize the data.
+		// the caller can then decide how to serialize the data.
 
 		final boolean sameTypes = EMFUtils.allSameEClass(objects);
 		final EClass commonType = EMFUtils.findCommonSuperclass(objects);
