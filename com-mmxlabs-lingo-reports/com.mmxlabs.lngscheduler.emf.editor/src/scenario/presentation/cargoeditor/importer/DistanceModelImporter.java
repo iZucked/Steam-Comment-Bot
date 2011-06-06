@@ -106,6 +106,7 @@ public class DistanceModelImporter extends EObjectImporter {
 							}
 						}
 					}
+					rows.add(map);
 				}
 				
 				result.put(outputName, rows);
