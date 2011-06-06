@@ -236,8 +236,9 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				selectedObjectIndex--;
-				if (selectedObjectIndex < 0)
+				if (selectedObjectIndex < 0) {
 					selectedObjectIndex = objects.size() - 1;
+				}
 				displaySelectedObject(composite,
 						objects.get(selectedObjectIndex));
 				shell.setText("Editing (" + (selectedObjectIndex + 1) + "/"
