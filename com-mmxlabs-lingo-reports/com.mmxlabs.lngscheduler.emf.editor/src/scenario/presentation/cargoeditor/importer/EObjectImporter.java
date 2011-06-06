@@ -87,7 +87,8 @@ public class EObjectImporter {
 		// the caller can then descide how to serialize the data.
 
 		final EClass commonType = EMFUtils.findCommonSuperclass(objects);
-		final boolean sameTypes = EMFUtils.allSameEClass(objects) && !outputEClass.isAbstract();
+		final boolean sameTypes = EMFUtils.allSameEClass(objects)
+				&& !outputEClass.isAbstract();
 		final LinkedList<Map<String, String>> results = new LinkedList<Map<String, String>>();
 		for (final EObject object : objects) {
 			final Map<String, String> map = exportObject(object);
@@ -109,7 +110,7 @@ public class EObjectImporter {
 	protected Map<String, String> exportObject(final EObject object) {
 		return exportObject(object, "");
 	}
-	
+
 	/**
 	 * @param eGet
 	 * @param prefix2
@@ -197,13 +198,16 @@ public class EObjectImporter {
 				flattenMultiContainment(object, prefix, ref, output);
 			} else {
 				// get exporter for contained data and do the business.
-				final EObjectImporter exporter = EObjectImporterFactory.getInstance().getImporter(ref.getEReferenceType());
-				
+				final EObjectImporter exporter = EObjectImporterFactory
+						.getInstance().getImporter(ref.getEReferenceType());
+
 				final String prefix2 = prefix + ref.getName() + SEPARATOR;
-				
-				final Map<String, String> subObject = exporter.exportObject((EObject) object.eGet(ref), prefix2);
-				
-				for (final Map.Entry<String, String> entry : subObject.entrySet()) {
+
+				final Map<String, String> subObject = exporter.exportObject(
+						(EObject) object.eGet(ref), prefix2);
+
+				for (final Map.Entry<String, String> entry : subObject
+						.entrySet()) {
 					output.put(entry.getKey(), entry.getValue());
 				}
 			}
@@ -213,7 +217,7 @@ public class EObjectImporter {
 	protected void flattenMultiContainment(final EObject object,
 			final String prefix, final EReference reference,
 			final Map<String, String> output) {
-		
+
 	}
 
 	public Collection<EObject> importObjects(final CSVReader reader,
@@ -260,13 +264,14 @@ public class EObjectImporter {
 				populateContainment(prefix, result, reference, fields,
 						deferredReferences, registry);
 			} else {
-				populateReference(prefix, result, reference, fields, deferredReferences);
+				populateReference(prefix, result, reference, fields,
+						deferredReferences);
 			}
 		}
 
 		return result;
 	}
-	
+
 	public EObject importObject(final Map<String, String> fields,
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
@@ -274,20 +279,22 @@ public class EObjectImporter {
 	}
 
 	/**
-	 * @param prefix 
+	 * @param prefix
 	 * @param result
 	 * @param reference
 	 * @param fields
 	 * @param deferredReferences
 	 * @param registry
 	 */
-	protected void populateContainment(final String prefix, final EObject result,
-			final EReference reference, final Map<String, String> fields,
+	protected void populateContainment(final String prefix,
+			final EObject result, final EReference reference,
+			final Map<String, String> fields,
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
 		if (reference.isMany()) {
 			// import multiple; default behaviour is to run another session
-			final String referenceName = prefix + reference.getName().toLowerCase();
+			final String referenceName = prefix
+					+ reference.getName().toLowerCase();
 			if (fields.containsKey(referenceName)) {
 				final String filePath = fields.get(referenceName);
 
@@ -305,20 +312,20 @@ public class EObjectImporter {
 			}
 		} else {
 			// get sub-fields
-			final String referencePrefix = prefix + reference.getName().toLowerCase()
-					+ SEPARATOR;
-			
+			final String referencePrefix = prefix
+					+ reference.getName().toLowerCase() + SEPARATOR;
+
 			// perform import
 			final EObjectImporter importer = EObjectImporterFactory
 					.getInstance().getImporter(reference.getEReferenceType());
-			final EObject value = importer.importObject(referencePrefix, fields,
-					deferredReferences, registry);
+			final EObject value = importer.importObject(referencePrefix,
+					fields, deferredReferences, registry);
 			result.eSet(reference, value);
 		}
 	}
 
 	/**
-	 * @param prefix 
+	 * @param prefix
 	 * @param result
 	 * @param reference
 	 * @param fields
@@ -346,7 +353,7 @@ public class EObjectImporter {
 	}
 
 	/**
-	 * @param prefix 
+	 * @param prefix
 	 * @param result
 	 * @param attribute
 	 * @param fields
@@ -368,7 +375,11 @@ public class EObjectImporter {
 					obj = dataType.getEPackage().getEFactoryInstance()
 							.createFromString(dataType, value);
 				}
-				target.eSet(attribute, obj);
+				if (!attribute.isUnsettable() || obj != null) {
+					target.eSet(attribute, obj);
+				} else {
+					target.eUnset(attribute);
+				}
 			} catch (final Exception ex) {
 			}
 		}
