@@ -590,6 +590,11 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					return Collections.singletonList((EObject) result);
 				}
 			}
+
+			@Override
+			protected EClass getExportEClass() {
+				return (EClass) ePath.getTargetType();
+			}
 		};
 	}
 
