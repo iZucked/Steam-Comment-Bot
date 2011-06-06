@@ -177,15 +177,15 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			}
 			if (feature.isMany()) {
 				System.err.println("Multiple valued feature: " + feature);
-				Collection c = (Collection) original.eGet(feature);
+				Collection<?> c = (Collection<?>) original.eGet(feature);
 				if (c.size() > 0)
 					compound.append(RemoveCommand.create(editingDomain,
 							original, feature, c));
 				// new values
-				c = (Collection) duplicate.eGet(feature);
+				c = (Collection<?>) duplicate.eGet(feature);
 				if (c.size() > 0)
 					compound.append(AddCommand.create(editingDomain, original,
-							feature, (Collection) duplicate.eGet(feature)));
+							feature, (Collection<?>) duplicate.eGet(feature)));
 			} else {
 				compound.append(SetCommand.create(editingDomain, original,
 						feature, duplicate.eGet(feature)));
