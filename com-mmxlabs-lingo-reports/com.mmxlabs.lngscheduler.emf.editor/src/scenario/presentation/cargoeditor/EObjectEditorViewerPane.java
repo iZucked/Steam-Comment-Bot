@@ -209,7 +209,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					final ElementListSelectionDialog elsd = new ElementListSelectionDialog(
 							shell, new LabelProvider() {
 								@Override
-								public String getText(Object element) {
+								public String getText(final Object element) {
 									return ((EClass) element).getName();
 								}
 							});
@@ -278,7 +278,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 
 			@Override
-			public Color getBackground(Object element) {
+			public Color getBackground(final Object element) {
 				final EObject object = (EObject) element;
 
 				if (hasValidationError(object)) {
@@ -314,7 +314,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 							return true;
 						}
 					}
-				} catch (CoreException e) {
+				} catch (final CoreException e) {
 					e.printStackTrace();
 				}
 
