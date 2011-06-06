@@ -122,11 +122,10 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	@Override
 	public void setInput(final EObject source) {
 		this.source = source;
-		final EObject object = (EObject) path.get(source);
 		if (input != null) {
 			input.eAdapters().remove(this);
 		}
-		input = object;
+		input = (source == null) ? null : (EObject) path.get(source);
 		if (input != null) {
 			input.eAdapters().add(this);
 			doUpdateDisplayWithValue();

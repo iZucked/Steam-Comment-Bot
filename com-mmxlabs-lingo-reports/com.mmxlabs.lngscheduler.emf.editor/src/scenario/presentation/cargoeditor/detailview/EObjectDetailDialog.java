@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.common.Equality;
+
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 
@@ -76,14 +78,15 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		this.editingDomain = editingDomain;
 		processor = new ICommandProcessor() {
 			@Override
-			public void processCommand(Command command, EObject target,
-					EStructuralFeature feature) {
-				//commands need not be in the stack, as we don't care for undoing them
+			public void processCommand(final Command command,
+					final EObject target, final EStructuralFeature feature) {
+				// commands need not be in the stack, as we don't care for
+				// undoing them
 				command.execute();
 			}
 		};
 
-//		viewContainerDelegate.addDefaultEditorFactories();
+		// viewContainerDelegate.addDefaultEditorFactories();
 	}
 
 	/**
@@ -172,19 +175,36 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		for (final EStructuralFeature feature : original.eClass()
 				.getEAllStructuralFeatures()) {
-			if (original.eGet(feature).equals(duplicate.eGet(feature)))
+			// For containment references, we need to compare the contained
+			// object, rather than generate a SetCommand.
+			if (original.eClass().getEAllContainments().contains(feature)) {
+
+				final Command c = makeEqualizer(
+						(EObject) original.eGet(feature),
+						(EObject) duplicate.eGet(feature));
+				if (!c.getAffectedObjects().isEmpty()) {
+					compound.append(c);
+				}
+
 				continue;
+			}
+			// Skip items which have not changed.
+			if (Equality.isEqual(original.eGet(feature), duplicate.eGet(feature))) {
+				continue;
+			}
 			if (feature.isMany()) {
 				System.err.println("Multiple valued feature: " + feature);
-				Collection c = (Collection) original.eGet(feature);
-				if (c.size() > 0)
+				Collection<?> c = (Collection<?>) original.eGet(feature);
+				if (c.size() > 0) {
 					compound.append(RemoveCommand.create(editingDomain,
 							original, feature, c));
+				}
 				// new values
-				c = (Collection) duplicate.eGet(feature);
-				if (c.size() > 0)
+				c = (Collection<?>) duplicate.eGet(feature);
+				if (c.size() > 0) {
 					compound.append(AddCommand.create(editingDomain, original,
-							feature, (Collection) duplicate.eGet(feature)));
+							feature, (Collection<?>) duplicate.eGet(feature)));
+				}
 			} else {
 				compound.append(SetCommand.create(editingDomain, original,
 						feature, duplicate.eGet(feature)));
@@ -203,8 +223,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		final Shell shell = new Shell(getParent(), getStyle()
 				| (SWT.DIALOG_TRIM & ~SWT.CLOSE) | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
-		
-//		shell.setSize(389, 197);
+
+		// shell.setSize(389, 197);
 
 		shell.setText("Editing (1/" + objects.size() + ")");
 
@@ -219,22 +239,23 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		// insert EObjectDetailView
 
-		Composite composite_1 = new Composite(shell, SWT.NONE);
+		final Composite composite_1 = new Composite(shell, SWT.NONE);
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 		composite_1.setLayout(new GridLayout(4, false));
 
-		Button btnPrev = new Button(composite_1, SWT.NONE);
+		final Button btnPrev = new Button(composite_1, SWT.NONE);
 		btnPrev.setText("&Back");
 		btnPrev.setImage(PlatformUI.getWorkbench().getSharedImages()
 				.getImage(ISharedImages.IMG_TOOL_BACK));
 
 		btnPrev.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				selectedObjectIndex--;
-				if (selectedObjectIndex < 0)
+				if (selectedObjectIndex < 0) {
 					selectedObjectIndex = objects.size() - 1;
+				}
 				displaySelectedObject(composite,
 						objects.get(selectedObjectIndex));
 				shell.setText("Editing (" + (selectedObjectIndex + 1) + "/"
@@ -242,9 +263,9 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			}
 		});
 
-		Button btnNext = new Button(composite_1, SWT.NONE);
-		GridData gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true, false,
-				1, 1);
+		final Button btnNext = new Button(composite_1, SWT.NONE);
+		final GridData gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true,
+				false, 1, 1);
 		gd_btnNext.heightHint = 26;
 		btnNext.setLayoutData(gd_btnNext);
 		btnNext.setText("&Forward");
@@ -253,10 +274,11 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		btnNext.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				selectedObjectIndex++;
-				if (selectedObjectIndex >= objects.size())
+				if (selectedObjectIndex >= objects.size()) {
 					selectedObjectIndex = 0;
+				}
 				displaySelectedObject(composite,
 						objects.get(selectedObjectIndex));
 
@@ -265,11 +287,11 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			}
 		});
 
-		Button btnOk = new Button(composite_1, SWT.NONE);
+		final Button btnOk = new Button(composite_1, SWT.NONE);
 		shell.setDefaultButton(btnOk);
 
-		GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
-				1, 1);
+		final GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1);
 		gd_btnOk.widthHint = 60;
 		gd_btnOk.heightHint = 26;
 		btnOk.setLayoutData(gd_btnOk);
@@ -278,16 +300,16 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		btnOk.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				performActions = true;
 				shell.close();
 			}
 
 		});
 
-		Button btnCancel = new Button(composite_1, SWT.NONE);
-		GridData gd_btnCancel = new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1);
+		final Button btnCancel = new Button(composite_1, SWT.NONE);
+		final GridData gd_btnCancel = new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1);
 		gd_btnCancel.widthHint = 60;
 		gd_btnCancel.heightHint = 26;
 		btnCancel.setLayoutData(gd_btnCancel);
@@ -327,7 +349,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			if (activeDetailView != null) {
 				((GridData) activeDetailView.getLayoutData()).exclude = true;
 				activeDetailView.setVisible(false);
-				activeDetailView.setInput((EObject)null);
+				activeDetailView.setInput((EObject) null);
 			}
 			activeDetailView = eodv;
 			((GridData) activeDetailView.getLayoutData()).exclude = false;
@@ -371,7 +393,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 * (org.eclipse.emf.ecore.EStructuralFeature, java.lang.String)
 	 */
 	@Override
-	public void setNameForFeature(EStructuralFeature feature, String string) {
+	public void setNameForFeature(final EStructuralFeature feature,
+			final String string) {
 		viewContainerDelegate.setNameForFeature(feature, string);
 	}
 
@@ -383,8 +406,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 * scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory)
 	 */
 	@Override
-	public void setEditorFactoryForClassifier(EClassifier classifier,
-			IInlineEditorFactory factory) {
+	public void setEditorFactoryForClassifier(final EClassifier classifier,
+			final IInlineEditorFactory factory) {
 		viewContainerDelegate
 				.setEditorFactoryForClassifier(classifier, factory);
 	}
@@ -397,8 +420,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 * scenario.presentation.cargoeditor.EObjectDetailView.IInlineEditorFactory)
 	 */
 	@Override
-	public void setEditorFactoryForFeature(EStructuralFeature feature,
-			IInlineEditorFactory iInlineEditorFactory) {
+	public void setEditorFactoryForFeature(final EStructuralFeature feature,
+			final IInlineEditorFactory iInlineEditorFactory) {
 		viewContainerDelegate.setEditorFactoryForFeature(feature,
 				iInlineEditorFactory);
 	}

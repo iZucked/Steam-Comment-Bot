@@ -45,7 +45,7 @@ public class EObjectDetailView extends Composite {
 	private final List<IInlineEditor> editors = new ArrayList<IInlineEditor>();
 	private final ICommandProcessor processor;
 
-	public EObjectDetailView(final Composite parent, int style,
+	public EObjectDetailView(final Composite parent, final int style,
 			final ICommandProcessor processor, final EditingDomain editingDomain) {
 		super(parent, style);
 		this.processor = processor;
@@ -116,11 +116,13 @@ public class EObjectDetailView extends Composite {
 		addGroupForEClass(objectClass, unmangle(objectClass.getName()),
 				new EMFPath(true));
 		for (final EReference reference : objectClass.getEAllContainments()) {
-			if (reference.isMany())
+			if (reference.isMany()) {
 				continue;
+			}
 			String groupName = nameByFeature.get(reference);
-			if (groupName == null)
+			if (groupName == null) {
 				groupName = unmangle(reference.getName());
+			}
 
 			addGroupForEClass(reference.getEReferenceType(), groupName,
 					new EMFPath(true, reference));
@@ -252,7 +254,7 @@ public class EObjectDetailView extends Composite {
 
 	private final Map<EStructuralFeature, String> nameByFeature = new HashMap<EStructuralFeature, String>();
 
-	public void setNameForFeature(EStructuralFeature key, String value) {
+	public void setNameForFeature(final EStructuralFeature key, final String value) {
 		nameByFeature.put(key, value);
 	}
 }
