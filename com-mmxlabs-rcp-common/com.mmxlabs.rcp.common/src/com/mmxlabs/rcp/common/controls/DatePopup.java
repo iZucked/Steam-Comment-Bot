@@ -20,15 +20,15 @@ import org.eclipse.swt.widgets.Shell;
  *
  */
 public class DatePopup extends PopupComposite {
-	private DateAndTime dateAndTime;
-	private DateAndTime popupDateAndTime;
+	private DateAndComboTime dateAndTime;
+	private DateAndComboTime popupDateAndTime;
 	
 	private Calendar value;
 	private Listener listener;
 	
 	private boolean settingValue = false;
 	
-	public DatePopup(Composite parent, int style) {
+	public DatePopup(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
@@ -38,7 +38,7 @@ public class DatePopup extends PopupComposite {
 				@Override
 				public void handleEvent(final Event event) {
 					if (settingValue) return;
-					final DateAndTime source = (DateAndTime) event.widget;
+					final DateAndComboTime source = (DateAndComboTime) event.widget;
 					setValue(source.getValue());
 				}
 			};
@@ -49,7 +49,7 @@ public class DatePopup extends PopupComposite {
 	@Override
 	protected void createPopupContents(final Shell popup) {
 		popup.setLayout (new FillLayout());
-		popupDateAndTime = new DateAndTime(popup, SWT.NONE, true);
+		popupDateAndTime = new DateAndComboTime(popup, SWT.NONE, true, 0);
 		popupDateAndTime.addListener(SWT.Selection, getListener());
 		popupDateAndTime.addListener(SWT.KeyDown, new Forward(SWT.KeyDown));
 		popupDateAndTime.addListener(SWT.KeyUp, new Forward(SWT.KeyUp));
@@ -71,8 +71,8 @@ public class DatePopup extends PopupComposite {
 	}
 	
 	@Override
-	protected Composite createSmallWidget(final Composite parent, int style) {
-		dateAndTime = new DateAndTime(parent, style, false);
+	protected Composite createSmallWidget(final Composite parent, final int style) {
+		dateAndTime = new DateAndComboTime(parent, style, false, 0);
 		dateAndTime.addListener(SWT.Selection, getListener());
 		
 		dateAndTime.addListener(SWT.KeyDown, new Forward(SWT.KeyDown));
