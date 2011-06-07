@@ -267,6 +267,13 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					vEditor.setEmptyStringAllowed(true);
 					vEditor.getTextControl(group).addModifyListener(
 							listener(FleetPackage.eINSTANCE.getVessel()));
+					
+					final FileFieldEditor vbfEditor = new FileFieldEditor(
+							"vbfSelect", "Base Fuels", group);
+					vEditor.setFileExtensions(extensions);
+					vEditor.setEmptyStringAllowed(true);
+					vEditor.getTextControl(group).addModifyListener(
+							listener(FleetPackage.eINSTANCE.getVesselFuel()));
 				}
 
 				{
