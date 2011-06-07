@@ -2734,6 +2734,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				"Discharge");
 		page.setNameForFeature(
 				CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
+		
+		page.setNameForFeature(FleetPackage.eINSTANCE.getVesselStateAttributes_NboRate(), "NBO Rate");
+		page.setNameForFeature(FleetPackage.eINSTANCE.getVesselStateAttributes_IdleNBORate(), "Idle NBO Rate");
 	}
 
 	/**
