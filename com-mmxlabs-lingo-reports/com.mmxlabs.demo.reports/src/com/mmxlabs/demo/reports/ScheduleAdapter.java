@@ -123,6 +123,10 @@ public class ScheduleAdapter {
 			}
 		}
 
+		if (schedules.isEmpty()) {
+			return null;
+		}
+		
 		return schedules;
 	}
 
