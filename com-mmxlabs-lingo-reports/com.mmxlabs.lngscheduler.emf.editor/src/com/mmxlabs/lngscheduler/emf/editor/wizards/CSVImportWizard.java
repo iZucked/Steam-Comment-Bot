@@ -11,6 +11,7 @@
 package com.mmxlabs.lngscheduler.emf.editor.wizards;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -28,14 +29,19 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import scenario.Scenario;
@@ -73,6 +79,7 @@ import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
@@ -226,6 +233,13 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		destinationPage
 				.setDescription("Select a location in the workspace where the new scenario will be created and provide a name for it.");
 		inputPage = new WizardPage("Choose CSV Data to Import") {
+
+			/**
+			 * Used to let the directory picker set the default file names where
+			 * they exist.
+			 */
+			private Map<EClass, Pair<FileFieldEditor, Composite>> editorMap = new HashMap<EClass, Pair<FileFieldEditor, Composite>>();
+
 			{
 				setTitle("Choose Input Data");
 				setDescription("Choose the various files from which data should be imported; blank fields will be ignored.");
@@ -286,11 +300,17 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					group.setText("Indices and Contracts");
 					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 							false));
-					
-					makeEditor(group, "Indices", MarketPackage.eINSTANCE.getIndex(), extensions);
-					makeEditor(group, "Purchase Contracts", ContractPackage.eINSTANCE.getPurchaseContract(), extensions);
-					makeEditor(group, "Sales Contracts", ContractPackage.eINSTANCE.getSalesContract(), extensions);
-					makeEditor(group, "Entities", ContractPackage.eINSTANCE.getEntity(), extensions);
+
+					makeEditor(group, "Indices",
+							MarketPackage.eINSTANCE.getIndex(), extensions);
+					makeEditor(group, "Purchase Contracts",
+							ContractPackage.eINSTANCE.getPurchaseContract(),
+							extensions);
+					makeEditor(group, "Sales Contracts",
+							ContractPackage.eINSTANCE.getSalesContract(),
+							extensions);
+					makeEditor(group, "Entities",
+							ContractPackage.eINSTANCE.getEntity(), extensions);
 				}
 
 				{
@@ -299,10 +319,53 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					group.setText("Cargoes and Events");
 					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 							false));
-					makeEditor(group, "Cargoes", CargoPackage.eINSTANCE.getCargo(), extensions);
-					makeEditor(group, "Events", FleetPackage.eINSTANCE.getVesselEvent(), extensions);
+					makeEditor(group, "Cargoes",
+							CargoPackage.eINSTANCE.getCargo(), extensions);
+					makeEditor(group, "Events",
+							FleetPackage.eINSTANCE.getVesselEvent(), extensions);
 				}
 
+				final Button pickAll = new Button(topLevel, SWT.NONE);
+				pickAll.setText("Use Default Filenames");
+				pickAll.setLayoutData(new GridData(SWT.END, SWT.CENTER, false,
+						false));
+
+				pickAll.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						final DirectoryDialog dd = new DirectoryDialog(
+								getShell());
+						final String s = dd.open();
+						if (s == null) {
+							return;
+						}
+						for (final Map.Entry<EClass, Pair<FileFieldEditor, Composite>> entry : editorMap
+								.entrySet()) {
+							final String defaultName = getDefaultName(entry
+									.getKey());
+							final File f = new File(s + "/" + defaultName
+									+ ".csv");
+							if (f.exists()) {
+
+								entry.getValue()
+										.getFirst()
+										.getTextControl(
+												entry.getValue().getSecond())
+										.setText(f.getAbsolutePath());
+							}
+						}
+					}
+
+					private String getDefaultName(final EClass key) {
+						if (key == FleetPackage.eINSTANCE.getFuelConsumptionLine()) {
+							return "Fuel Curve";
+						}
+						if (key == PortPackage.eINSTANCE.getDistanceModel()) {
+							return "Default-Distances";
+						}
+						return key.getName();
+					}
+				});
 				setControl(topLevel);
 			}
 
@@ -314,6 +377,10 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 				portsEditor.setEmptyStringAllowed(true);
 				portsEditor.getTextControl(group).addModifyListener(
 						listener(ec));
+				
+				portsEditor.setPreferenceStore(PlatformUI.getPreferenceStore());
+				editorMap.put(ec, new Pair<FileFieldEditor, Composite>(
+						portsEditor, group));
 			}
 		};
 	}

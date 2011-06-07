@@ -85,11 +85,11 @@ public class Postprocessor {
 						final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:00");
 						format.setTimeZone(TimeZone.getTimeZone("UTC"));
 						final String s = format.format(date);
-						System.err.println("Intermediate string " + s + " (UTC)");
+						
 						format.setTimeZone(zone);
 						try {
 							final Date d2 = format.parse(s);
-							System.err.println(date + " => " + d2);
+							
 							object.eSet(attribute, d2);
 						} catch (ParseException e) {
 //							e.printStackTrace();
