@@ -48,6 +48,7 @@ import org.eclipse.ui.part.ViewPart;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
+import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
@@ -249,6 +250,7 @@ public abstract class EMFReportView extends ViewPart implements
 
 	private Action copyTableAction;
 	private final String helpContextId;
+	private IJobManagerListener jobManagerListener;
 
 	protected abstract IStructuredContentProvider getContentProvider();
 
@@ -299,15 +301,19 @@ public abstract class EMFReportView extends ViewPart implements
 		hookContextMenu();
 		contributeToActionBars();
 
-		getSite().getWorkbenchWindow().getSelectionService()
-				.addSelectionListener("com.mmxlabs.rcp.navigator", this);
+//		getSite().getWorkbenchWindow().getSelectionService()
+//				.addSelectionListener("com.mmxlabs.rcp.navigator", this);
+//
+//		final ISelection selection = getSite().getWorkbenchWindow()
+//				.getSelectionService()
+//				.getSelection("com.mmxlabs.rcp.navigator");
 
-		final ISelection selection = getSite().getWorkbenchWindow()
-				.getSelectionService()
-				.getSelection("com.mmxlabs.rcp.navigator");
+//		// Trigger initial view selection
+//		selectionChanged(null, selection);
+		
+		jobManagerListener = ScheduleAdapter
+				.registerView(viewer);
 
-		// Trigger initial view selection
-		selectionChanged(null, selection);
 	}
 
 	private void hookContextMenu() {
@@ -379,13 +385,13 @@ public abstract class EMFReportView extends ViewPart implements
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
 
-		final List<Schedule> schedules = ScheduleAdapter
-				.getSchedules(selection);
-		if (schedules.isEmpty()) {
-			setInput(null);
-		} else {
-			setInput(schedules);
-		}
+//		final List<Schedule> schedules = ScheduleAdapter
+//				.getSchedules(selection);
+//		if (schedules.isEmpty()) {
+//			setInput(null);
+//		} else {
+//			setInput(schedules);
+//		}
 	}
 
 	public void removeColumn(final String title) {
@@ -406,9 +412,11 @@ public abstract class EMFReportView extends ViewPart implements
 
 	@Override
 	public void dispose() {
-		getSite().getPage().removeSelectionListener(
-				"com.mmxlabs.rcp.navigator", this);
+//		getSite().getPage().removeSelectionListener(
+//				"com.mmxlabs.rcp.navigator", this);
 
+		ScheduleAdapter.deregisterView(jobManagerListener);
+		
 		super.dispose();
 	}
 }

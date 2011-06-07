@@ -5,8 +5,6 @@
 package com.mmxlabs.scheduleview.views;
 
 
-import java.util.List;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -16,26 +14,20 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-
-import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -43,6 +35,7 @@ import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
+import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.scheduleview.Activator;
 
 public class SchedulerView extends ViewPart {
@@ -58,7 +51,7 @@ public class SchedulerView extends ViewPart {
 
 	private Action toggleColourSchemeAction;
 
-	private ISelectionListener selectionListener;
+//	private ISelectionListener selectionListener;
 
 	private PackAction packAction;
 
@@ -67,6 +60,8 @@ public class SchedulerView extends ViewPart {
 	private Action sortModeAction;
 
 	private final ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
+
+	private IJobManagerListener jobManagerListener;
 
 	/**
 	 * The constructor.
@@ -142,52 +137,57 @@ public class SchedulerView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		/*
-		 * Add selection listener. may need tidying up.
-		 */
+//		/*
+//		 * Add selection listener. may need tidying up.
+//		 */
+//
+//		selectionListener = new ISelectionListener() {
+//
+//			@Override
+//			public void selectionChanged(final IWorkbenchPart part,
+//					final ISelection selection) {
+//
+//				final List<Schedule> schedules = ScheduleAdapter
+//						.getSchedules(selection);
+//				if (!schedules.isEmpty()) {
+//					final boolean needFit = viewer.getInput() == null;
+//					setInput(schedules);
+//					if (needFit) {
+//						Display.getDefault().asyncExec(new Runnable() {
+//
+//							@Override
+//							public void run() {
+//								packAction.run();
+//							}
+//						});
+//					}
+//				} else {
+//					setInput(null);
+//				}
+//			}
+//		};
 
-		selectionListener = new ISelectionListener() {
-
-			@Override
-			public void selectionChanged(final IWorkbenchPart part,
-					final ISelection selection) {
-
-				final List<Schedule> schedules = ScheduleAdapter
-						.getSchedules(selection);
-				if (!schedules.isEmpty()) {
-					final boolean needFit = viewer.getInput() == null;
-					setInput(schedules);
-					if (needFit) {
-						Display.getDefault().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								packAction.run();
-							}
-						});
-					}
-				} else {
-					setInput(null);
-				}
-			}
-		};
-
-		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-				selectionListener);
 
 		getSite().setSelectionProvider(viewer);
 
-		// Update view from current selection
-		final ISelection selection = getSite().getWorkbenchWindow()
-				.getSelectionService()
-				.getSelection("com.mmxlabs.rcp.navigator");
-		selectionListener.selectionChanged(null, selection);
+		jobManagerListener = ScheduleAdapter.registerView(viewer);
+
+//		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+//				selectionListener);
+		
+//		// Update view from current selection
+//		final ISelection selection = getSite().getWorkbenchWindow()
+//				.getSelectionService()
+//				.getSelection("com.mmxlabs.rcp.navigator");
+//		selectionListener.selectionChanged(null, selection);
 	}
 
 	@Override
 	public void dispose() {
-		getSite().getPage().removeSelectionListener(
-				"com.mmxlabs.rcp.navigator", selectionListener);
+		
+		ScheduleAdapter	.deregisterView(jobManagerListener);
+//		getSite().getPage().removeSelectionListener(
+//				"com.mmxlabs.rcp.navigator", selectionListener);
 
 		super.dispose();
 	}
@@ -294,7 +294,14 @@ public class SchedulerView extends ViewPart {
 			@Override
 			public void run() {
 				if (!viewer.getControl().isDisposed()) {
+					
+					final boolean needFit = viewer.getInput() == null;
+					
 					viewer.setInput(input);
+					
+					if (input != null && needFit) {
+						packAction.run();
+					}
 				}
 			}
 		});

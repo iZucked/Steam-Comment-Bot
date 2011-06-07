@@ -43,6 +43,7 @@ import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.demo.reports.views.FitnessContentProvider.RowData;
+import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
@@ -96,6 +97,8 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	private Action packColumnsAction;
 	
 	private Action copyTableAction;
+
+	private IJobManagerListener jobManagerListener;
 
 	static class ViewLabelProvider extends CellLabelProvider implements
 			ITableLabelProvider {
@@ -203,16 +206,18 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-
-		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-				this);
-
-		// Trigger initial view state
-		final ISelection selection = getSite().getWorkbenchWindow()
-				.getSelectionService()
-				.getSelection("com.mmxlabs.rcp.navigator");
-
-		selectionChanged(null, selection);
+//
+//		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+//				this);
+//
+//		// Trigger initial view state
+//		final ISelection selection = getSite().getWorkbenchWindow()
+//				.getSelectionService()
+//				.getSelection("com.mmxlabs.rcp.navigator");
+//
+//		selectionChanged(null, selection);
+		
+		jobManagerListener = ScheduleAdapter.registerView(viewer);
 	}
 
 	private void hookContextMenu() {
@@ -316,8 +321,10 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void dispose() {
-		getSite().getPage().removeSelectionListener(
-				"com.mmxlabs.rcp.navigator", this);
+//		getSite().getPage().removeSelectionListener(
+//				"com.mmxlabs.rcp.navigator", this);
+		
+		ScheduleAdapter.deregisterView(jobManagerListener);
 
 		super.dispose();
 	}
