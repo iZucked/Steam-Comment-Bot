@@ -34,9 +34,9 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 import scenario.schedule.Schedule;
@@ -266,6 +266,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	private void makeActions() {
 		packColumnsAction = new PackTableColumnsAction(viewer);
 		copyTableAction = new CopyTableToClipboardAction(viewer.getTable());
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
 	/**
