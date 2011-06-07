@@ -25,7 +25,9 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import scenario.Scenario;
 
 import com.mmxlabs.jobcontoller.Activator;
+import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 
 /**
@@ -69,6 +71,16 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 						return false;
 					}
 
+					final IJobManager jobManager = Activator.getDefault().getJobManager();
+					final IManagedJob existingJob = jobManager.findJobForResource(resource);
+
+					if (existingJob == null || existingJob.getJobState() == JobState.CREATED) {
+						// Remove existing job. We assume that it will be disposed somehow.....
+						jobManager.removeJob(existingJob);
+					} else {
+						return false;
+					}
+					
 					final WorkspaceJob job = new WorkspaceJob(
 							"Evaluate Scenario") {
 
@@ -157,7 +169,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 					final IManagedJob job = Activator.getDefault()
 							.getJobManager().findJobForResource(resource);
 
-					if (job == null) {
+					if (job == null || job.getJobState() == JobState.CREATED) {
 						return true;
 					}
 				}

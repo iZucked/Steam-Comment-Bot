@@ -110,7 +110,20 @@ public class SchedulerView extends ViewPart {
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings);
+				| SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings) {
+			@Override
+			protected synchronized void inputChanged(Object input,
+					Object oldInput) {
+				super.inputChanged(input, oldInput);
+				
+				if (input != null && oldInput == null) {
+					if (packAction != null) {
+						packAction.run();
+					}
+				}
+
+			}
+		};
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
