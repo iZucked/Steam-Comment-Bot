@@ -5,6 +5,7 @@
 package scenario.presentation.cargoeditor.importer;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class CSVReader {
 
 	private BufferedReader reader;
 	private final String[] headerLine;
+	private final String directory;
 	private final Map<String, String> originalHeaderLine = new HashMap<String, String>();
 	
 	/**
@@ -31,6 +33,7 @@ public class CSVReader {
 	 * @throws IOException
 	 */
 	public CSVReader(final String inputFileName) throws IOException {
+		directory = new File(inputFileName).getParent();
 		reader = new BufferedReader(new FileReader(inputFileName));
 		headerLine = readLine();
 		for (int i = 0; i < headerLine.length; i++) {
@@ -38,6 +41,10 @@ public class CSVReader {
 			originalHeaderLine.put(lc, headerLine[i]);
 			headerLine[i] = lc;
 		}
+	}
+	
+	public CSVReader getAdjacentReader(final String pathFragment) throws IOException {
+		return new CSVReader(directory +File.separator+ pathFragment);
 	}
 	
 	public String getCasedColumnName(final String lowerCaseName) {

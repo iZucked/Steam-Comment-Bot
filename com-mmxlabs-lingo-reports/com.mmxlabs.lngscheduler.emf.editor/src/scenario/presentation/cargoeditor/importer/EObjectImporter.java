@@ -7,6 +7,7 @@ package scenario.presentation.cargoeditor.importer;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -25,7 +26,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 /**
@@ -37,7 +37,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
  * 
  */
 public class EObjectImporter {
-	private static final String SEPARATOR = ".";
+	protected static final String SEPARATOR = ".";
 	protected EClass outputEClass;
 
 	public EObjectImporter() {
@@ -67,6 +67,13 @@ public class EObjectImporter {
 		return outputEClass;
 	}
 
+	private final Map<String, Collection<Map<String, String>>> currentExportResults = new HashMap<String, Collection<Map<String, String>>>();
+	private CSVReader currentReader;
+
+	protected CSVReader getCurrentReader() {
+		return currentReader;
+	}
+
 	/**
 	 * Flatten a bunch of EObjects down into a lot of key-value maps.
 	 * 
@@ -85,10 +92,14 @@ public class EObjectImporter {
 
 		// the caller can then decide how to serialize the data.
 
-		final EClass commonType = EMFUtils.findCommonSuperclass(objects);
+		currentExportResults.clear();
+
 		final boolean sameTypes = EMFUtils.allSameEClass(objects)
 				&& !outputEClass.isAbstract();
-		final LinkedList<Map<String, String>> results = new LinkedList<Map<String, String>>();
+		final Collection<Map<String, String>> results = addExportFile(outputEClass
+				.getName());
+
+		new LinkedList<Map<String, String>>();
 		for (final EObject object : objects) {
 			final Map<String, String> map = exportObject(object);
 			if (sameTypes == false) {
@@ -97,7 +108,20 @@ public class EObjectImporter {
 			results.add(map);
 		}
 
-		return CollectionsUtil.makeHashMap(outputEClass.getName(), results);
+		return currentExportResults;
+	}
+
+	/**
+	 * Create another file to export to
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	protected Collection<Map<String, String>> addExportFile(
+			final String filename) {
+		final LinkedList<Map<String, String>> rows = new LinkedList<Map<String, String>>();
+		currentExportResults.put(filename, rows);
+		return rows;
 	}
 
 	/**
@@ -196,32 +220,67 @@ public class EObjectImporter {
 			if (ref.isMany()) {
 				flattenMultiContainment(object, prefix, ref, output);
 			} else {
-				// get exporter for contained data and do the business.
-				final EObjectImporter exporter = EObjectImporterFactory
-						.getInstance().getImporter(ref.getEReferenceType());
-
-				final String prefix2 = prefix + ref.getName() + SEPARATOR;
-
-				final Map<String, String> subObject = exporter.exportObject(
-						(EObject) object.eGet(ref), prefix2);
-
-				for (final Map.Entry<String, String> entry : subObject
-						.entrySet()) {
-					output.put(entry.getKey(), entry.getValue());
-				}
+				flattenSingleContainment(object, prefix, output, ref);
 			}
+		}
+	}
+
+	/**
+	 * Flatten a singly contained object. Default behaviour is to add more
+	 * fields.
+	 * 
+	 * @param object
+	 * @param prefix
+	 * @param output
+	 * @param ref
+	 */
+	protected void flattenSingleContainment(final EObject object,
+			final String prefix, final Map<String, String> output,
+			final EReference ref) {
+		// get exporter for contained data and do the business.
+		final EObjectImporter exporter = EObjectImporterFactory.getInstance()
+				.getImporter(ref.getEReferenceType());
+
+		final String prefix2 = prefix + ref.getName() + SEPARATOR;
+
+		final Map<String, String> subObject = exporter.exportObject(
+				(EObject) object.eGet(ref), prefix2);
+
+		for (final Map.Entry<String, String> entry : subObject.entrySet()) {
+			output.put(entry.getKey(), entry.getValue());
 		}
 	}
 
 	protected void flattenMultiContainment(final EObject object,
 			final String prefix, final EReference reference,
 			final Map<String, String> output) {
+		// default behaviour is to create another file
+		final EObjectImporter i2 = EObjectImporterFactory.getInstance()
+				.getImporter(reference.getEReferenceType());
 
+		// i2.importObjects(reader, deferredReferences, registry)
+		final Map<String, Collection<Map<String, String>>> subObjects = i2
+				.exportObjects((Collection<EObject>) object.eGet(reference));
+
+		String fieldValue = "";
+		for (final Map.Entry<String, Collection<Map<String, String>>> e : subObjects
+				.entrySet()) {
+			final String adjustedName = NamedObjectRegistry.getName(object)
+					+ "-" + e.getKey();
+			Collection<Map<String, String>> extraFile = addExportFile(adjustedName);
+			if (e.getKey().equals(reference.getEReferenceType().getName())) {
+				fieldValue = adjustedName;
+			}
+			extraFile.addAll(e.getValue());
+		}
+
+		output.put(prefix + reference.getName(), fieldValue);
 	}
 
 	public Collection<EObject> importObjects(final CSVReader reader,
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
+		currentReader = reader;
 		final LinkedList<EObject> importedObjects = new LinkedList<EObject>();
 		// open input file and retrieve fields
 
@@ -298,7 +357,8 @@ public class EObjectImporter {
 				final String filePath = fields.get(referenceName);
 
 				try {
-					final CSVReader reader = new CSVReader(filePath);
+					final CSVReader reader = currentReader
+							.getAdjacentReader(filePath);
 					final EObjectImporter importer = EObjectImporterFactory
 							.getInstance().getImporter(
 									reference.getEReferenceType());
