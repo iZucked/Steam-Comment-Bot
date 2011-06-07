@@ -691,15 +691,6 @@ public class RandomScenarioUtils {
 		thresholderSettings.setEpochLength(1000);
 		thresholderSettings.setInitialAcceptanceRate(0.2);
 		settings.setThresholderSettings(thresholderSettings);
-		//
-		// RandomMoveGeneratorSettings mgs =
-		// lsof.createRandomMoveGeneratorSettings();
-		// mgs.setUsing2over2(true);
-		// mgs.setUsing3over2(true);
-		// mgs.setUsing4over1(true);
-		// mgs.setUsing4over2(true);
-		//
-		// settings.setMoveGeneratorSettings(mgs);
 
 		optimisation.getAllSettings().add(settings);
 		optimisation.setCurrentSettings(settings);
