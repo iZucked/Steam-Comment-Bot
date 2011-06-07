@@ -84,7 +84,7 @@ public class EObjectImporter {
 	 * @return a map from group name to a collection of rows, in key-value form.
 	 */
 	public Map<String, Collection<Map<String, String>>> exportObjects(
-			final Collection<EObject> objects) {
+			final Collection<? extends EObject> objects) {
 
 		// default thing is to check whether the objects are variadic (for the
 		// kind column)

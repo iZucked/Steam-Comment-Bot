@@ -74,7 +74,7 @@ public class DistanceModelImporter extends EObjectImporter {
 
 	@Override
 	public Map<String, Collection<Map<String, String>>> exportObjects(
-			final Collection<EObject> objects) {
+			final Collection<? extends EObject> objects) {
 		final Map<String, Collection<Map<String, String>>> result = new HashMap<String, Collection<Map<String, String>>>();
 		for (final EObject model : objects) {
 			if (model instanceof DistanceModel) {
