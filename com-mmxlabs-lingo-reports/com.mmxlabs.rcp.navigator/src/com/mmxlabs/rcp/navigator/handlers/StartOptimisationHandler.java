@@ -53,7 +53,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = HandlerUtil
 				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-		
+
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
@@ -93,8 +93,11 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						job = createOptimisationJob(jmv, resource, s);
 					}
 
-					// Resume if paused
-					if (job.getJobState() == JobState.PAUSED) {
+					if (job.getJobState() == JobState.CREATED) {
+						job.prepare();
+						job.start();
+						// Resume if paused
+					} else if (job.getJobState() == JobState.PAUSED) {
 						job.resume();
 					} else {
 						job.start();
@@ -146,15 +149,16 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 			}
 		});
-		
-		final Job eclipseJob = new Job("Evaluate initial state of " + scenario.getName()) {
+
+		final Job eclipseJob = new Job("Evaluate initial state of "
+				+ scenario.getName()) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				newJob.prepare();
 				return Status.OK_STATUS;
 			}
 		};
-		
+
 		eclipseJob.setPriority(Job.SHORT);
 		eclipseJob.schedule();
 		

@@ -75,7 +75,6 @@ public abstract class AbstractManagedJob implements IManagedJob {
 
 		@Override
 		protected void canceling() {
-			// TODO Auto-generated method stub
 			super.canceling();
 			resume();
 		}
@@ -92,6 +91,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		super();
 		this.jobName = jobName;
 		runner = new Runner(jobName);
+		currentState = JobState.CREATED;
 	}
 	
 
@@ -108,8 +108,9 @@ public abstract class AbstractManagedJob implements IManagedJob {
 				final Iterator<IManagedJobListener> iterator = listeners.iterator();
 				while (iterator.hasNext()) {
 					final IManagedJobListener mjl = iterator.next();
-					if (!mjl.jobStateChanged(this, oldState, newState))
+					if (!mjl.jobStateChanged(this, oldState, newState)) {
 						iterator.remove();
+					}
 				}
 			}
 		}

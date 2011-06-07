@@ -18,11 +18,14 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 
+import scenario.Scenario;
+
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
+import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 
 public class TheNavigator extends CommonNavigator {
@@ -78,10 +81,7 @@ public class TheNavigator extends CommonNavigator {
 	@Override
 	protected CommonViewer createCommonViewerObject(final Composite aParent) {
 		return new CommonViewer(getViewSite().getId(), aParent, SWT.MULTI
-				| SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL /*
-																	 * |
-																	 * SWT.CHECK
-																	 */);
+				| SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
 	}
 
 	@Override
@@ -117,21 +117,73 @@ public class TheNavigator extends CommonNavigator {
 		initListeners(aViewer);
 		aViewer.getNavigatorContentService().restoreState(memento);
 
+		/**
+		 * Create a listener to keep the selected jobs up-to-date
+		 */
 		treeTable.addListener(SWT.Selection, new Listener() {
 
 			@Override
 			public void handleEvent(final Event event) {
+
+				// Without SWT.CHECK style?
 				if (event.item instanceof Button
 						&& event.item.getData() instanceof IResource) {
 					final IResource resource = (IResource) event.item.getData();
 					final Button button = (Button) event.item;
 
 					// Set selection status
-					Activator
-							.getDefault()
-							.getJobManager()
-							.setResourceSelection(resource,
-									button.getSelection());
+					final IJobManager jobManager = Activator.getDefault()
+							.getJobManager();
+
+					if (jobManager.findJobForResource(resource) == null) {
+						final Scenario scenario = (Scenario) resource
+								.getAdapter(Scenario.class);
+
+						if (scenario == null) {
+							return;
+						}
+
+						final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
+						jobManager.addJob(j, resource);
+					}
+					jobManager.setResourceSelection(resource,
+							button.getSelection());
+				}
+
+				else if (event.item instanceof TreeItem) {
+					final TreeItem ti = (TreeItem) event.item;
+					if (ti.getData() instanceof IResource) {
+
+						final IResource resource = (IResource) event.item
+								.getData();
+
+						final Scenario scenario = (Scenario) resource
+								.getAdapter(Scenario.class);
+
+						// Only allow resources with a scenario to be checked
+						if (scenario == null) {
+							ti.setChecked(false);
+							return;
+						}
+						// Set selection status
+						final IJobManager jobManager = Activator.getDefault()
+								.getJobManager();
+
+						// If checked, then ensure we have a job
+						if (ti.getChecked()
+								&& jobManager.findJobForResource(resource) == null) {
+
+							// Create a job, but do not prepare it for fast
+							// viewing.
+							final LNGSchedulerJob j = new LNGSchedulerJob(
+									scenario);
+
+							jobManager.addJob(j, resource);
+						}
+
+						jobManager.setResourceSelection(resource,
+								ti.getChecked());
+					}
 				}
 			}
 		});

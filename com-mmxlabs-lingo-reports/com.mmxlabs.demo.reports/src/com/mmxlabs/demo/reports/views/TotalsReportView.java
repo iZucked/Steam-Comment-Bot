@@ -37,12 +37,14 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.demo.reports.views.TotalsContentProvider.RowData;
+import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
@@ -60,6 +62,8 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	private Action packColumnsAction;
 	
 	private Action copyTableAction;
+
+	private IJobManagerListener jobManagerListener;
 
 	static class ViewLabelProvider extends CellLabelProvider implements
 			ITableLabelProvider {
@@ -221,15 +225,17 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-
-		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-				this);
-
-		final ISelection selection = getSite().getWorkbenchWindow()
-				.getSelectionService()
-				.getSelection("com.mmxlabs.rcp.navigator");
-
-		selectionChanged(null, selection);
+//
+//		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+//				this);
+//
+//		final ISelection selection = getSite().getWorkbenchWindow()
+//				.getSelectionService()
+//				.getSelection("com.mmxlabs.rcp.navigator");
+//
+//		selectionChanged(null, selection);
+		
+		jobManagerListener = ScheduleAdapter.registerView(viewer);
 	}
 
 	private void hookContextMenu() {
@@ -276,6 +282,7 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	private void makeActions() {
 		packColumnsAction = new PackTableColumnsAction(viewer);
 		copyTableAction = new CopyTableToClipboardAction(viewer.getTable());
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
 	/**
@@ -325,8 +332,10 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void dispose() {
-		getSite().getPage().removeSelectionListener(
-				"com.mmxlabs.rcp.navigator", this);
+//		getSite().getPage().removeSelectionListener(
+//				"com.mmxlabs.rcp.navigator", this);
+		
+		ScheduleAdapter.deregisterView(jobManagerListener);
 		super.dispose();
 	}
 }

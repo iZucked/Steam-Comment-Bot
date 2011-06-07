@@ -33,6 +33,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 import scenario.contract.Entity;
@@ -51,6 +52,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
+import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
@@ -98,6 +100,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	}
 
 	static final DecimalFormat myFormat = new DecimalFormat("$###,###,###");
+
+	private IJobManagerListener jobManagerListener;
 
 	private static class TreeData {
 
@@ -471,15 +475,18 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-
-		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-				this);
-
-		final ISelection selection = getSite().getWorkbenchWindow()
-				.getSelectionService()
-				.getSelection("com.mmxlabs.rcp.navigator");
-
-		selectionChanged(null, selection);
+//
+//		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+//				this);
+//
+//		final ISelection selection = getSite().getWorkbenchWindow()
+//				.getSelectionService()
+//				.getSelection("com.mmxlabs.rcp.navigator");
+//
+//		selectionChanged(null, selection);
+		
+		jobManagerListener = ScheduleAdapter.registerView(viewer);
+		
 	}
 
 	@Override
@@ -531,13 +538,16 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	private void makeActions() {
 		packColumnsAction = new PackTreeColumnsAction(viewer);
 		copyTreeAction = new CopyTreeToClipboardAction(viewer.getTree());
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTreeAction);
 	}
 
 	@Override
 	public void dispose() {
 
-		getSite().getPage().removeSelectionListener(
-				"com.mmxlabs.rcp.navigator", this);
+//		getSite().getPage().removeSelectionListener(
+//				"com.mmxlabs.rcp.navigator", this);
+		
+		ScheduleAdapter.deregisterView(jobManagerListener);
 
 		super.dispose();
 	}

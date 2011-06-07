@@ -191,12 +191,6 @@ public final class JobManager implements IJobManager {
 		if (selectedJobs.contains(job)) {
 			deselectJob(job);
 		} else {
-			// Ensure only one job is active.
-			// TODO: Fix up various views to handle multiple jobs
-			while (selectedJobs.isEmpty() == false) {
-				deselectJob(selectedJobs.get(0));
-			}
-
 			selectJob(job);
 		}
 	}
