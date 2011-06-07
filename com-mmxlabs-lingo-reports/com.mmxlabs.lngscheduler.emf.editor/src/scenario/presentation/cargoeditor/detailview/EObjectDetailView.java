@@ -197,12 +197,12 @@ public class EObjectDetailView extends Composite {
 				//Check supplied mappings
 				String attributeName = nameByFeature.get(attribute);
 				// Try using LNG Edit Plugin information
-				if (attributeName == null) {
-					// Construct key in form used by plugin.properties
-					final String key = "_UI_" + objectClass.getName() +"_" + attribute.getName() + "_feature";
-					// TODO: Pass in an instance of ResourceLocator rather than direct dependence on LngEditPlugin
-					attributeName = LngEditPlugin.getPlugin().getString(key);
-				}
+//				if (attributeName == null) {
+//					// Construct key in form used by plugin.properties
+//					final String key = "_UI_" + objectClass.getName() +"_" + attribute.getName() + "_feature";
+//					// TODO: Pass in an instance of ResourceLocator rather than direct dependence on LngEditPlugin
+//					attributeName = LngEditPlugin.getPlugin().getString(key);
+//				}
 				// Ok, so nothing provided, try and deduce name
 				if (attributeName == null)
 					attributeName = unmangle(attribute.getName());

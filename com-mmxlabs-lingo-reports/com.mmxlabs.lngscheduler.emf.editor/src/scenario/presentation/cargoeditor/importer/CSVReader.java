@@ -84,6 +84,10 @@ public class CSVReader {
 					temp.append(c);
 				} else {
 					state = State.NORMAL;
+					if (c == ',') {
+						fields.add(temp.toString().trim());
+						temp = new StringBuffer();
+					}
 				}
 				break;
 			}

@@ -158,6 +158,7 @@ import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
 import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
+import scenario.presentation.cargoeditor.autocorrect.SlotIdCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
@@ -1338,6 +1339,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			autoCorrector = new AutoCorrector(getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
 			autoCorrector.addCorrector(new DateLocalisingCorrector());
+			autoCorrector.addCorrector(new SlotIdCorrector());
 
 			final Scenario s = ((Scenario) (editingDomain.getResourceSet()
 					.getResources().get(0).getContents().get(0)));

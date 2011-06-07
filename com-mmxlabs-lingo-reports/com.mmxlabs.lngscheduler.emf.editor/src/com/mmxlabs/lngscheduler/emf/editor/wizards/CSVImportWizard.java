@@ -78,6 +78,8 @@ import scenario.presentation.cargoeditor.importer.EObjectImporter;
 import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
+import scenario.schedule.Schedule;
+import scenario.schedule.SchedulePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
@@ -131,7 +133,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		// do final postprocessing
 		// first add names for all the new objects
 		for (final EObject object : importedObjects) {
-			nor.addEObject(object);
+			nor.addEObjects(object);
 		}
 		// process fuel curves
 		if (inputFilePaths.containsKey(FleetPackage.eINSTANCE
@@ -200,6 +202,9 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							.add((VesselFuel) object);
 				} else if (object instanceof Canal) {
 					scenario.getCanalModel().getCanals().add((Canal) object);
+				} else if (object instanceof Schedule) {
+					scenario.getScheduleModel().getSchedules()
+							.add((Schedule) object);
 				}
 			}
 		}
@@ -323,6 +328,8 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							CargoPackage.eINSTANCE.getCargo(), extensions);
 					makeEditor(group, "Events",
 							FleetPackage.eINSTANCE.getVesselEvent(), extensions);
+					makeEditor(group, "Sequence",
+							SchedulePackage.eINSTANCE.getSchedule(), extensions);
 				}
 
 				final Button pickAll = new Button(topLevel, SWT.NONE);
@@ -357,11 +364,15 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					}
 
 					private String getDefaultName(final EClass key) {
-						if (key == FleetPackage.eINSTANCE.getFuelConsumptionLine()) {
+						if (key == FleetPackage.eINSTANCE
+								.getFuelConsumptionLine()) {
 							return "Fuel Curve";
 						}
 						if (key == PortPackage.eINSTANCE.getDistanceModel()) {
 							return "Default-Distances";
+						}
+						if (key == SchedulePackage.eINSTANCE.getSchedule()) {
+							return "Schedule-Start State";
 						}
 						return key.getName();
 					}
@@ -377,7 +388,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 				portsEditor.setEmptyStringAllowed(true);
 				portsEditor.getTextControl(group).addModifyListener(
 						listener(ec));
-				
+
 				portsEditor.setPreferenceStore(PlatformUI.getPreferenceStore());
 				editorMap.put(ec, new Pair<FileFieldEditor, Composite>(
 						portsEditor, group));
@@ -482,6 +493,11 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		optimisation.getAllSettings().add(settings);
 		optimisation.setCurrentSettings(settings);
 		scenario.setOptimisation(optimisation);
+
+		if (scenario.getScheduleModel().getSchedules().isEmpty() == false) {
+			settings.setInitialSchedule(scenario.getScheduleModel()
+					.getSchedules().get(0));
+		}
 	}
 
 	private Constraint createConstraint(OptimiserFactory of, String name,

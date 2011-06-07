@@ -6,6 +6,7 @@ package scenario.presentation.cargoeditor.importer;
 
 import org.eclipse.emf.ecore.EClass;
 
+import scenario.cargo.CargoPackage;
 import scenario.fleet.FleetPackage;
 import scenario.market.MarketPackage;
 import scenario.port.PortPackage;

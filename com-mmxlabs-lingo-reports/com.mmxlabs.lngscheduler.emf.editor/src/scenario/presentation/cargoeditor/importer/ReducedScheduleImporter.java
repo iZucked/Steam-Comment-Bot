@@ -90,9 +90,8 @@ public class ReducedScheduleImporter extends EObjectImporter {
 		String[] line = null;
 		try {
 			while (null != (line = reader.readLine())) {
-				System.err.println(Arrays.toString(line));
+			
 				final String vesselName = line[0];
-				System.err.println("Vessel name = " + vesselName);
 				final Sequence answer = ScheduleFactory.eINSTANCE
 						.createSequence();
 				result.getSequences().add(answer);

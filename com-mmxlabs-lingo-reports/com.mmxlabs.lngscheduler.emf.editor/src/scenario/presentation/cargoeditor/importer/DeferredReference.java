@@ -46,7 +46,22 @@ public class DeferredReference implements Runnable {
 	public void run() {
 		assert this.registry != null;
 
-		final EObject value = registry.get(key);
+		EObject value = registry.get(key);
+		
+		if (value == null) {
+			if (key.getSecond().isEmpty() == false) {
+				for (final Map.Entry<Pair<EClass, String>, EObject> entry : registry
+						.entrySet()) {
+					if (entry.getKey().getSecond().equals(key.getSecond())) {
+						if (key.getFirst().isSuperTypeOf(entry.getKey().getFirst())) {
+							value = entry.getValue();
+							break;
+						}
+					}
+				}
+			}
+		}
+		
 		if (value != null) {
 			if (reference.isMany()) {
 				@SuppressWarnings("unchecked")
@@ -57,11 +72,12 @@ public class DeferredReference implements Runnable {
 				target.eSet(reference, value);
 			}
 		} else {
-			if (key.getSecond().isEmpty() == false)
+			if (key.getSecond().isEmpty() == false) {
 				System.err.println("Warning: no value for "
 						+ key.getFirst().getName() + " named "
 						+ key.getSecond() + " (setting " + reference.getName()
 						+ " on a " + target.eClass().getName() + ")");
+			}
 		}
 	}
 }

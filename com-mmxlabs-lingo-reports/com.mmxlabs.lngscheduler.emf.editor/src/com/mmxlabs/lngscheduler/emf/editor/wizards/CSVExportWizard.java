@@ -36,6 +36,7 @@ import scenario.fleet.FleetPackage;
 import scenario.market.MarketPackage;
 import scenario.port.PortPackage;
 import scenario.presentation.cargoeditor.importer.ImporterUtil;
+import scenario.schedule.SchedulePackage;
 
 /**
  * @author Tom Hinton
@@ -147,22 +148,36 @@ public class CSVExportWizard extends Wizard implements IWorkbenchWizard {
 		final String name = name2.replace(".scenario", "");
 		exportObjects(CargoPackage.eINSTANCE.getCargo(), scenario
 				.getCargoModel().getCargoes(), name);
-		
-		exportObjects(FleetPackage.eINSTANCE.getVessel(), scenario.getFleetModel().getFleet(), name);
-		exportObjects(FleetPackage.eINSTANCE.getVesselClass(), scenario.getFleetModel().getVesselClasses(), name);
-		exportObjects(FleetPackage.eINSTANCE.getVesselEvent(), scenario.getFleetModel().getVesselEvents(), name);
-		exportObjects(FleetPackage.eINSTANCE.getVesselFuel(), scenario.getFleetModel().getFuels(), name);
 
-		exportObjects(PortPackage.eINSTANCE.getPort(), scenario.getPortModel().getPorts(), name);
-		exportObjects(PortPackage.eINSTANCE.getDistanceModel(), Collections.singletonList(scenario.getDistanceModel()), name);
-		exportObjects(PortPackage.eINSTANCE.getCanal(), scenario.getCanalModel().getCanals(), name);
-		
-		exportObjects(ContractPackage.eINSTANCE.getSalesContract(), scenario.getContractModel().getSalesContracts(), name);
-		exportObjects(ContractPackage.eINSTANCE.getPurchaseContract(), scenario.getContractModel().getPurchaseContracts(), name);
-		exportObjects(ContractPackage.eINSTANCE.getEntity(), scenario.getContractModel().getEntities(), name);
-		
-		exportObjects(MarketPackage.eINSTANCE.getIndex(), scenario.getMarketModel().getIndices(), name);
-		
+		exportObjects(FleetPackage.eINSTANCE.getVessel(), scenario
+				.getFleetModel().getFleet(), name);
+		exportObjects(FleetPackage.eINSTANCE.getVesselClass(), scenario
+				.getFleetModel().getVesselClasses(), name);
+		exportObjects(FleetPackage.eINSTANCE.getVesselEvent(), scenario
+				.getFleetModel().getVesselEvents(), name);
+		exportObjects(FleetPackage.eINSTANCE.getVesselFuel(), scenario
+				.getFleetModel().getFuels(), name);
+
+		exportObjects(PortPackage.eINSTANCE.getPort(), scenario.getPortModel()
+				.getPorts(), name);
+		exportObjects(PortPackage.eINSTANCE.getDistanceModel(),
+				Collections.singletonList(scenario.getDistanceModel()), name);
+		exportObjects(PortPackage.eINSTANCE.getCanal(), scenario
+				.getCanalModel().getCanals(), name);
+
+		exportObjects(ContractPackage.eINSTANCE.getSalesContract(), scenario
+				.getContractModel().getSalesContracts(), name);
+		exportObjects(ContractPackage.eINSTANCE.getPurchaseContract(), scenario
+				.getContractModel().getPurchaseContracts(), name);
+		exportObjects(ContractPackage.eINSTANCE.getEntity(), scenario
+				.getContractModel().getEntities(), name);
+
+		exportObjects(MarketPackage.eINSTANCE.getIndex(), scenario
+				.getMarketModel().getIndices(), name);
+
+		exportObjects(SchedulePackage.eINSTANCE.getSchedule(), scenario
+				.getScheduleModel().getSchedules(), name);
+
 		return true;
 	}
 
@@ -181,7 +196,7 @@ public class CSVExportWizard extends Wizard implements IWorkbenchWizard {
 		for (final Map.Entry<String, Collection<Map<String, String>>> entry : maps
 				.entrySet()) {
 			// TODO ignore name so we can use default things for import?
-			final String suffix = /*name + "-" + */ entry.getKey() + ".csv";
+			final String suffix = /* name + "-" + */entry.getKey() + ".csv";
 			ImporterUtil.getInstance().writeObjects(
 					currentFile.getAbsolutePath() + "/" + suffix,
 					entry.getValue());
