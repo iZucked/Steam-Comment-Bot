@@ -32,6 +32,11 @@ public class EObjectImporterFactory {
 	
 	public EObjectImporter getImporter(final EClass importClass) {
 		//TODO handle any other special cases here.
+		if (FleetPackage.eINSTANCE.getVesselStateAttributes().isSuperTypeOf(importClass)) {
+			final VesselStateAttributesImporter i = new VesselStateAttributesImporter();
+			i.setOutputEClass(importClass);
+			return i;
+		}
 		if (PortPackage.eINSTANCE.getCanal().isSuperTypeOf(importClass)) {
 			final CanalImporter ci = new CanalImporter();
 			ci.setOutputEClass(importClass);

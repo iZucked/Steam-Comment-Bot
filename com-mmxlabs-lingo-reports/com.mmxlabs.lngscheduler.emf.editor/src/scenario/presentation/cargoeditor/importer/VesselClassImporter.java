@@ -42,7 +42,7 @@ public class VesselClassImporter extends EObjectImporter {
 		
 		return result;
 	}
-
+	
 	/**
 	 * @param vcName
 	 * @param ballastAttributes

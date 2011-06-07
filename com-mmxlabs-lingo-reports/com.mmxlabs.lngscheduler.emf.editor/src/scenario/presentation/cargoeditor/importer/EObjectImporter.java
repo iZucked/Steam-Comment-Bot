@@ -377,10 +377,18 @@ public class EObjectImporter {
 			// perform import
 			final EObjectImporter importer = EObjectImporterFactory
 					.getInstance().getImporter(reference.getEReferenceType());
+			importer.setCurrentReader(getCurrentReader());
 			final EObject value = importer.importObject(referencePrefix,
 					fields, deferredReferences, registry);
 			result.eSet(reference, value);
 		}
+	}
+
+	/**
+	 * @param currentReader
+	 */
+	protected void setCurrentReader(CSVReader currentReader) {
+		this.currentReader = currentReader;
 	}
 
 	/**
