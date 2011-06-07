@@ -199,7 +199,8 @@ public class EObjectDetailView extends Composite {
 				// Try using LNG Edit Plugin information
 				if (attributeName == null) {
 					// Construct key in form used by plugin.properties
-					final String key = "_UI_" + objectClass.getName() +"_" + attribute.getName() + "_feature";
+//					final String key = "_UI_" + objectClass.getName() +"_" + attribute.getName() + "_feature";
+					final String key = "_UI_" + attribute.getEContainingClass().getName() +"_" + attribute.getName() + "_feature";
 					// TODO: Pass in an instance of ResourceLocator rather than direct dependence on LngEditPlugin
 					attributeName = LngEditPlugin.getPlugin().getString(key);
 				}
