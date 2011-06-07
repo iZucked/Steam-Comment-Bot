@@ -5,6 +5,7 @@
 package scenario.presentation.cargoeditor.importer;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,28 +57,23 @@ public class ReducedScheduleImporter extends EObjectImporter {
 				final Schedule schedule = (Schedule) object;
 				final Collection<Map<String, String>> answer = new LinkedList<Map<String, String>>();
 
-				result.put("Schedule-" + schedule.getName(), answer);
-
-				final LinkedHashMap<String, String> output = new LinkedHashMap<String, String>();
 				for (final Sequence seq : schedule.getSequences()) {
+					final LinkedHashMap<String, String> output = new LinkedHashMap<String, String>();
 					output.put("Vessel", seq.getVessel().getName());
 					int seqExtent = 0;
-					for (int i = 0; i < seq.getEvents().size(); i++) {
-						if (seq.getEvents().size() < i) {
-							final ScheduledEvent event = seq.getEvents().get(i);
-							if (event instanceof SlotVisit) {
-								if (((SlotVisit) event).getSlot() instanceof LoadSlot) {
-									seqExtent++;
-									output.put("" + seqExtent,
-											((Cargo) ((SlotVisit) event)
-													.getSlot().eContainer())
-													.getId());
-								}
+					for (final ScheduledEvent event : seq.getEvents()) {
+						if (event instanceof SlotVisit) {
+							if (((SlotVisit) event).getSlot() instanceof LoadSlot) {
+								seqExtent++;
+								output.put("" + seqExtent,
+										((Cargo) ((SlotVisit) event).getSlot()
+												.eContainer()).getId());
 							}
 						}
 					}
+					answer.add(output);
 				}
-				answer.add(output);
+				result.put("Schedule-" + schedule.getName(), answer);
 			}
 		}
 
@@ -89,17 +85,21 @@ public class ReducedScheduleImporter extends EObjectImporter {
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
 		final Schedule result = ScheduleFactory.eINSTANCE.createSchedule();
-		final Pattern p = Pattern.compile("(.*) \\d+$");
+		final Pattern p = Pattern.compile("(.*) (\\d+)$");
 
 		String[] line = null;
 		try {
 			while (null != (line = reader.readLine())) {
+				System.err.println(Arrays.toString(line));
+				final String vesselName = line[0];
+				System.err.println("Vessel name = " + vesselName);
 				final Sequence answer = ScheduleFactory.eINSTANCE
 						.createSequence();
-				final Matcher m = p.matcher(line[0]);
+				result.getSequences().add(answer);
+				final Matcher m = p.matcher(vesselName);
 				final AllocatedVessel av;
 				if (m.matches()) {
-					final int spotIndex = Integer.parseInt(m.group());
+					final int spotIndex = Integer.parseInt(m.group(2));
 					final SpotVessel sv = FleetallocationFactory.eINSTANCE
 							.createSpotVessel();
 					av = sv;
@@ -107,28 +107,32 @@ public class ReducedScheduleImporter extends EObjectImporter {
 
 					deferredReferences.add(new DeferredReference(sv,
 							FleetallocationPackage.eINSTANCE
-									.getSpotVessel_VesselClass(), m.group(0)));
+									.getSpotVessel_VesselClass(), m.group(1)));
 				} else {
 					final FleetVessel fv = FleetallocationFactory.eINSTANCE
 							.createFleetVessel();
 					av = fv;
 					deferredReferences.add(new DeferredReference(av,
 							FleetallocationPackage.eINSTANCE
-									.getFleetVessel_Vessel(), line[0]));
+									.getFleetVessel_Vessel(), vesselName));
 				}
 
 				answer.setVessel(av);
 
 				for (int i = 1; i < line.length; i++) {
+					if (line[i].isEmpty()) continue;
 					final SlotVisit loadVisit = EventsFactory.eINSTANCE
 							.createSlotVisit();
 					final SlotVisit dischargeVisit = EventsFactory.eINSTANCE
 							.createSlotVisit();
 
+					answer.getEvents().add(loadVisit);
+					answer.getEvents().add(dischargeVisit);
+					
 					deferredReferences.add(new DeferredReference(loadVisit,
 							EventsPackage.eINSTANCE.getSlotVisit_Slot(),
 							"load-" + line[i]));
-					
+
 					deferredReferences.add(new DeferredReference(loadVisit,
 							EventsPackage.eINSTANCE.getSlotVisit_Slot(),
 							"discharge-" + line[i]));
@@ -138,6 +142,8 @@ public class ReducedScheduleImporter extends EObjectImporter {
 
 		}
 
+		result.setName(reader.getFileName().replace(".csv", ""));
+		
 		return Collections.singleton((EObject) result);
 	}
 }

@@ -197,6 +197,7 @@ public class EObjectImporter {
 				for (final EObject v : values) {
 					sb.append((comma ? "," : "")
 							+ NamedObjectRegistry.getName(v));
+					comma = true;
 				}
 				output.put(prefix + reference.getName(), sb.toString());
 			} else {
