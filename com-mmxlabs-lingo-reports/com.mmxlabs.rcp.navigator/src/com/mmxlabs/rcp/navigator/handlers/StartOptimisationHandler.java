@@ -22,9 +22,9 @@ import scenario.Scenario;
 
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
+import com.mmxlabs.jobcontroller.core.impl.DisposeOnRemoveListener;
 import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 
 /**
@@ -117,38 +117,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 		// Hook in a listener to automatically dispose the job once it is no
 		// longer needed
-		jmv.addJobManagerListener(new IJobManagerListener() {
-
-			@Override
-			public void jobSelected(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-			}
-
-			@Override
-			public void jobRemoved(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-				// If this is the job being removed, then dispose and remove
-				// references to it
-				if (job == newJob) {
-					jobManager.removeJobManagerListener(this);
-					newJob.dispose();
-				}
-			}
-
-			@Override
-			public void jobDeselected(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-			}
-
-			@Override
-			public void jobAdded(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-			}
-		});
+		jmv.addJobManagerListener(new DisposeOnRemoveListener(newJob));
 
 		final Job eclipseJob = new Job("Evaluate initial state of "
 				+ scenario.getName()) {
