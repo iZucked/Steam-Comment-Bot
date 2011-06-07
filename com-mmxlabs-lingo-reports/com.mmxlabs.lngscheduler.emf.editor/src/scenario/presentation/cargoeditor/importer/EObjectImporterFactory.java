@@ -6,9 +6,11 @@ package scenario.presentation.cargoeditor.importer;
 
 import org.eclipse.emf.ecore.EClass;
 
+import scenario.cargo.CargoPackage;
 import scenario.fleet.FleetPackage;
 import scenario.market.MarketPackage;
 import scenario.port.PortPackage;
+import scenario.schedule.SchedulePackage;
 
 /**
  * Provides subclasses of {@link EObjectImporter} suitable for a given {@link EClass}.
@@ -32,6 +34,26 @@ public class EObjectImporterFactory {
 	
 	public EObjectImporter getImporter(final EClass importClass) {
 		//TODO handle any other special cases here.
+		if (CargoPackage.eINSTANCE.getCargo().isSuperTypeOf(importClass)) {
+			final CargoImporter i = new CargoImporter();
+			i.setOutputEClass(importClass);
+			return i;
+		}
+		if (SchedulePackage.eINSTANCE.getSchedule().isSuperTypeOf(importClass)) {
+			final ReducedScheduleImporter i = new ReducedScheduleImporter();
+			i.setOutputEClass(importClass);
+			return i;
+		}
+		if (FleetPackage.eINSTANCE.getVesselStateAttributes().isSuperTypeOf(importClass)) {
+			final VesselStateAttributesImporter i = new VesselStateAttributesImporter();
+			i.setOutputEClass(importClass);
+			return i;
+		}
+		if (PortPackage.eINSTANCE.getCanal().isSuperTypeOf(importClass)) {
+			final CanalImporter ci = new CanalImporter();
+			ci.setOutputEClass(importClass);
+			return ci;
+		}
 		if (FleetPackage.eINSTANCE.getVesselClass().isSuperTypeOf(importClass)) {
 			final VesselClassImporter i = new VesselClassImporter();
 			i.setOutputEClass(importClass);

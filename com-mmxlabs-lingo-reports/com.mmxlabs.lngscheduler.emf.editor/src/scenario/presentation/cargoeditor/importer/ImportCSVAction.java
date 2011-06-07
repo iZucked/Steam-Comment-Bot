@@ -18,6 +18,10 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import scenario.fleet.FleetPackage;
+import scenario.port.PortPackage;
+
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 
 /**
@@ -44,7 +48,8 @@ public abstract class ImportCSVAction extends Action {
 				.getActiveWorkbenchWindow().getShell(), SWT.OPEN);
 
 		openDialog.setFilterExtensions(new String[] { "*.csv" });
-		openDialog.setText("Choose a CSV file from which to import");
+		openDialog.setText("Choose a CSV file from which to import " + getNiceName(getImportClass()));
+		
 		final String inputFileName = openDialog.open();
 		if (inputFileName == null)
 			return;
@@ -81,5 +86,23 @@ public abstract class ImportCSVAction extends Action {
 		} catch (IOException e) {
 		}
 
+	}
+
+	
+	private final Map<EClass, String> niceNames = 
+		CollectionsUtil.makeHashMap(
+				PortPackage.eINSTANCE.getDistanceModel(), "Distance Matrix",
+				FleetPackage.eINSTANCE.getVesselEvent(), "Vessel Events",
+				FleetPackage.eINSTANCE.getVesselClass(), "Vessel Classes");
+	/**
+	 * @param importClass
+	 * @return
+	 */
+	private String getNiceName(EClass importClass) {
+		if (niceNames.containsKey(importClass)) {
+			return niceNames.get(importClass);
+		} else {
+			return importClass.getName() + "s";
+		}
 	}
 }

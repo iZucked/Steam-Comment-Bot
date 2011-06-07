@@ -24,7 +24,7 @@ import scenario.fleet.VesselStateAttributes;
 public class VesselClassImporter extends EObjectImporter {
 	@Override
 	public Map<String, Collection<Map<String, String>>> exportObjects(
-			Collection<EObject> objects) {
+			Collection<? extends EObject> objects) {
 		final Map<String, Collection<Map<String, String>>> result = super
 				.exportObjects(objects);
 
@@ -42,7 +42,7 @@ public class VesselClassImporter extends EObjectImporter {
 		
 		return result;
 	}
-
+	
 	/**
 	 * @param vcName
 	 * @param ballastAttributes

@@ -31,6 +31,10 @@ public class NamedObjectRegistry {
 
 	}
 
+	/**
+	 * Add an EObject to the registry ({@link #addEObject(EObject)}, and add all its contents.
+	 * @param top
+	 */
 	public void addEObjects(final EObject top) {
 		if (top == null) return;
 		addEObject(top);
@@ -50,6 +54,10 @@ public class NamedObjectRegistry {
 		}
 	}
 	
+	/**
+	 * Add an EObject to the registry, but ignore its contents.
+	 * @param top
+	 */
 	public void addEObject(final EObject top) {
 		if (top == null)
 			return;

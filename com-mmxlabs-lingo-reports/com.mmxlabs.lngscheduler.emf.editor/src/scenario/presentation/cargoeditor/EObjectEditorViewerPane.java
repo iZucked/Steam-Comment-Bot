@@ -82,6 +82,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import scenario.NamedObject;
+import scenario.port.Canal;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.handlers.AddAction;
 import scenario.presentation.cargoeditor.importer.ExportCSVAction;
@@ -117,13 +118,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	@Override
 	public Viewer createViewer(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI);
-		
+
 		getToolBarManager().add(new GroupMarker("pack"));
 		getToolBarManager().add(new GroupMarker("additions"));
 		getToolBarManager().add(new GroupMarker("edit"));
-		getToolBarManager().add(new GroupMarker("copy"));
+		
 		getToolBarManager().add(new GroupMarker("importers"));
 		getToolBarManager().add(new GroupMarker("exporters"));
+		getToolBarManager().add(new GroupMarker("copy"));
 		{
 			final Action a = new PackTableColumnsAction(viewer);
 			getToolBarManager().appendToGroup("pack", a);
@@ -292,6 +294,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 				}
 
+				//TODO hack because this is very slow and canals contain many elements
+				if (object instanceof Canal) return super.getBackground(element);
+				
 				final TreeIterator<EObject> iterator = object.eAllContents();
 				while (iterator.hasNext()) {
 					if (hasValidationError(iterator.next()))
@@ -570,6 +575,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				if (a != null)
 					x.appendToGroup("exporters",a);
 			}
+			
 			x.update(true);
 		}
 	}
@@ -657,8 +663,16 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						// get a dangling reference
 
 						// now perform replace in the original container
-						cc.append(ReplaceCommand.create(editingDomain,
-								oldObject, Collections.singleton(newObject)));
+						final Command replace = ReplaceCommand.create(
+								editingDomain, oldObject.eContainer(), oldObject.eContainingFeature(), oldObject, 
+								Collections.singleton(newObject));
+						
+						if (replace.canExecute() == false) {
+							System.err
+									.println("Cannot execute replace command from "
+											+ oldObject + " to " + newObject);
+						}
+						cc.append(replace);
 					} else {
 						// just do the add
 						cc.append(AddCommand.create(editingDomain, container,
@@ -666,6 +680,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					}
 				}
 
+				if (cc.canExecute() == false) {
+					System.err
+							.println("Warning: cannot evaluate import command");
+				}
 				editingDomain.getCommandStack().execute(cc);
 			}
 
@@ -703,14 +721,21 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				}
 				if (cc.getCommandList().isEmpty())
 					return null;
-				else
+				else {
+					if (cc.canExecute() == false) {
+						System.err.println("Cannot execute ref fixer from "
+								+ oldObject + " to " + newObject);
+					}
 					return cc;
+				}
+
 			}
 
 			/**
 			 * Create a command which updates references to oldObject so that
 			 * they point to newObject instead. Returns null if there are no
-			 * references to update (because an empty compoundCommand is not executable.
+			 * references to update (because an empty compoundCommand is not
+			 * executable.
 			 * 
 			 * @param oldObject
 			 * @param newObject
@@ -761,10 +786,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 							setting.getEObject(),
 							setting.getEStructuralFeature(), newObject));
 				}
-				
+
 				if (cc.getCommandList().isEmpty())
 					return null;
-				
+
+				if (cc.canExecute() == false) {
+					System.err.println("Cannot fix references from "
+							+ oldObject + " to " + newObject);
+				}
 				return cc;
 			}
 

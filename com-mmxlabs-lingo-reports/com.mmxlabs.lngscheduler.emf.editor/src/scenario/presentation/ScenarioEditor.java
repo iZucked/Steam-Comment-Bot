@@ -44,8 +44,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -160,6 +158,7 @@ import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
 import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
+import scenario.presentation.cargoeditor.autocorrect.SlotIdCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
@@ -1340,6 +1339,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			autoCorrector = new AutoCorrector(getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
 			autoCorrector.addCorrector(new DateLocalisingCorrector());
+			autoCorrector.addCorrector(new SlotIdCorrector());
 
 			final Scenario s = ((Scenario) (editingDomain.getResourceSet()
 					.getResources().get(0).getContents().get(0)));
@@ -2734,6 +2734,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				"Discharge");
 		page.setNameForFeature(
 				CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
+		
+		page.setNameForFeature(FleetPackage.eINSTANCE.getVesselStateAttributes_NboRate(), "NBO Rate");
+		page.setNameForFeature(FleetPackage.eINSTANCE.getVesselStateAttributes_IdleNBORate(), "Idle NBO Rate");
 	}
 
 	/**

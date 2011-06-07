@@ -5,6 +5,7 @@
 package scenario.presentation.cargoeditor.importer;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,6 +25,8 @@ public class CSVReader {
 
 	private BufferedReader reader;
 	private final String[] headerLine;
+	private final String directory;
+	private final String filename;
 	private final Map<String, String> originalHeaderLine = new HashMap<String, String>();
 	
 	/**
@@ -31,6 +34,8 @@ public class CSVReader {
 	 * @throws IOException
 	 */
 	public CSVReader(final String inputFileName) throws IOException {
+		directory = new File(inputFileName).getParent();
+		filename = new File(inputFileName).getName();
 		reader = new BufferedReader(new FileReader(inputFileName));
 		headerLine = readLine();
 		for (int i = 0; i < headerLine.length; i++) {
@@ -40,11 +45,15 @@ public class CSVReader {
 		}
 	}
 	
+	public CSVReader getAdjacentReader(final String pathFragment) throws IOException {
+		return new CSVReader(directory +File.separator+ pathFragment);
+	}
+	
 	public String getCasedColumnName(final String lowerCaseName) {
 		return originalHeaderLine.get(lowerCaseName);
 	}
 
-	private String[] readLine() throws IOException {
+	public String[] readLine() throws IOException {
 		final String line = reader.readLine();
 		if (line == null) return null;
 		final LinkedList<String> fields = new LinkedList<String>();
@@ -75,6 +84,10 @@ public class CSVReader {
 					temp.append(c);
 				} else {
 					state = State.NORMAL;
+					if (c == ',') {
+						fields.add(temp.toString().trim());
+						temp = new StringBuffer();
+					}
 				}
 				break;
 			}
@@ -98,4 +111,10 @@ public class CSVReader {
 		return row;
 	}
 
+	/**
+	 * @return
+	 */
+	public String getFileName() {
+		return filename;
+	}
 }
