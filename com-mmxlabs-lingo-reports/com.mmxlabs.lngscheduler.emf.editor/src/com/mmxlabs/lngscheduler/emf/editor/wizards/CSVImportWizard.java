@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
@@ -273,9 +274,14 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							set.getPackageRegistry().put(scenario.eClass().getEPackage().getNsURI(),
 									scenario.eClass().getEPackage());
 
-							final Resource resource = set.createResource(URI.createGenericURI(
-									"invalid", "invalid", "invalid"));
+							URI nonsenseURI = URI.createGenericURI(
+									"invalid", "invalid", "").trimFragment();
+							
+							final Resource resource = set.createResource(nonsenseURI);
 		
+							
+							resource.setURI(nonsenseURI.trimFragment());
+							
 							resource.getContents().add(scenario); // scenario must be
 															// in a resourceset
 															// for things to
