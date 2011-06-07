@@ -232,16 +232,8 @@ public class SchedulerView extends ViewPart {
 	private void makeActions() {
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
-		zoomInAction.setImageDescriptor(Activator
-				.getImageDescriptor("icons/clcl16/zoomin_nav.gif"));
-		zoomInAction.setDisabledImageDescriptor(Activator
-				.getImageDescriptor("icons/dlcl16/zoomin_nav.gif"));
-
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
-		zoomOutAction.setImageDescriptor(Activator
-				.getImageDescriptor("icons/clcl16/zoomout_nav.gif"));
-		zoomOutAction.setDisabledImageDescriptor(Activator
-				.getImageDescriptor("icons/dlcl16/zoomout_nav.gif"));
+
 
 		toggleColourSchemeAction = new ToggleColourSchemeAction(
 				(EMFScheduleLabelProvider) (viewer.getLabelProvider()));
@@ -249,8 +241,6 @@ public class SchedulerView extends ViewPart {
 		sortModeAction = new SortModeAction(viewerComparator);
 
 		packAction = new PackAction(viewer.getGanttChart());
-		packAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/pack.gif"));
 	}
 
 	/**

@@ -22,6 +22,7 @@ public class PackAction extends Action {
 	public PackAction(final GanttChart ganttChart) {
 		super();
 		setText("Fit");
+		setImageDescriptor(Activator.getImageDescriptor("/icons/pack.gif"));
 		this.ganttChart = ganttChart;
 	}
 
@@ -33,7 +34,7 @@ public class PackAction extends Action {
 		Calendar earliestDate = null;
 		Calendar latestDate = null;
 
-		for (final GanttEvent event : (List<GanttEvent>)composite.getEvents()) {
+		for (final GanttEvent event : (List<GanttEvent>) composite.getEvents()) {
 			final Calendar startDate = event.getEarliestStartDate();
 			final Calendar endDate = event.getLatestEndDate();
 			if (earliestDate == null || startDate.before(earliestDate)) {
@@ -61,8 +62,9 @@ public class PackAction extends Action {
 			}
 
 			final Calendar leftDate = (Calendar) earliestDate.clone();
-			leftDate.setTimeInMillis(leftDate.getTimeInMillis() - Timer.ONE_DAY * 14);
-			
+			leftDate.setTimeInMillis(leftDate.getTimeInMillis() - Timer.ONE_DAY
+					* 14);
+
 			// Set the left hand side
 			composite.setDate(leftDate, SWT.LEFT);
 		}
