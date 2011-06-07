@@ -155,7 +155,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		}
 
 		scenario = ScenarioFactory.eINSTANCE.createScenario();
-		
+
 		scenario.createMissingModels();
 		scenario.setName(destinationPage.getFileName());
 
@@ -189,15 +189,16 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					scenario.getFleetModel().getVesselEvents()
 							.add((VesselEvent) object);
 				} else if (object instanceof VesselFuel) {
-					scenario.getFleetModel().getFuels().add((VesselFuel) object);
+					scenario.getFleetModel().getFuels()
+							.add((VesselFuel) object);
 				} else if (object instanceof Canal) {
 					scenario.getCanalModel().getCanals().add((Canal) object);
 				}
 			}
 		}
-		
+
 		addDefaultSettings(scenario);
-		
+
 		IFile file = destinationPage.createNewFile();
 		if (file == null)
 			return false;
@@ -252,25 +253,14 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					group.setText("Ports and Distances");
 					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 							false));
-					final FileFieldEditor portsEditor = new FileFieldEditor(
-							"portsSelect", "Ports", group);
-					portsEditor.setFileExtensions(extensions);
-					portsEditor.setEmptyStringAllowed(true);
-					portsEditor.getTextControl(group).addModifyListener(
-							listener(PortPackage.eINSTANCE.getPort()));
-					final FileFieldEditor dmEditor = new FileFieldEditor(
-							"dmSelect", "Distance Matrix", group);
-					dmEditor.setFileExtensions(extensions);
-					dmEditor.setEmptyStringAllowed(true);
-					dmEditor.getTextControl(group).addModifyListener(
-							listener(PortPackage.eINSTANCE.getDistanceModel()));
-					
-					final FileFieldEditor canalEditor = new FileFieldEditor(
-							"canalSelect", "Canals", group);
-					canalEditor.setFileExtensions(extensions);
-					canalEditor.setEmptyStringAllowed(true);
-					canalEditor.getTextControl(group).addModifyListener(
-							listener(PortPackage.eINSTANCE.getCanal()));
+
+					makeEditor(group, "Ports", PortPackage.eINSTANCE.getPort(),
+							extensions);
+					makeEditor(group, "Distance Matrix",
+							PortPackage.eINSTANCE.getDistanceModel(),
+							extensions);
+					makeEditor(group, "Canals",
+							PortPackage.eINSTANCE.getCanal(), extensions);
 				}
 
 				{
@@ -279,32 +269,15 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					group.setText("Fleet");
 					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 							false));
-					final FileFieldEditor vcEditor = new FileFieldEditor(
-							"vcSelect", "Vessel Classes", group);
-					vcEditor.setFileExtensions(extensions);
-					vcEditor.setEmptyStringAllowed(true);
-					vcEditor.getTextControl(group).addModifyListener(
-							listener(FleetPackage.eINSTANCE.getVesselClass()));
-					final FileFieldEditor fcEditor = new FileFieldEditor(
-							"fcSelect", "Fuel Curves", group);
-					fcEditor.setFileExtensions(extensions);
-					fcEditor.setEmptyStringAllowed(true);
-					fcEditor.getTextControl(group).addModifyListener(
-							listener(FleetPackage.eINSTANCE
-									.getFuelConsumptionLine()));
-					final FileFieldEditor vEditor = new FileFieldEditor(
-							"vSelect", "Vessels", group);
-					vEditor.setFileExtensions(extensions);
-					vEditor.setEmptyStringAllowed(true);
-					vEditor.getTextControl(group).addModifyListener(
-							listener(FleetPackage.eINSTANCE.getVessel()));
-					
-					final FileFieldEditor vbfEditor = new FileFieldEditor(
-							"vbfSelect", "Base Fuels", group);
-					vEditor.setFileExtensions(extensions);
-					vEditor.setEmptyStringAllowed(true);
-					vEditor.getTextControl(group).addModifyListener(
-							listener(FleetPackage.eINSTANCE.getVesselFuel()));
+					makeEditor(group, "Vessel Classes",
+							FleetPackage.eINSTANCE.getVesselClass(), extensions);
+					makeEditor(group, "Fuel Curves",
+							FleetPackage.eINSTANCE.getFuelConsumptionLine(),
+							extensions);
+					makeEditor(group, "Vessels",
+							FleetPackage.eINSTANCE.getVessel(), extensions);
+					makeEditor(group, "Base Fuels",
+							FleetPackage.eINSTANCE.getVesselFuel(), extensions);
 				}
 
 				{
@@ -313,32 +286,11 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					group.setText("Indices and Contracts");
 					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 							false));
-					final FileFieldEditor marketEditor = new FileFieldEditor(
-							"mSelect", "Indices", group);
-					marketEditor.setFileExtensions(extensions);
-					marketEditor.setEmptyStringAllowed(true);
-					marketEditor.getTextControl(group).addModifyListener(
-							listener(MarketPackage.eINSTANCE.getIndex()));
-					final FileFieldEditor contractEditor = new FileFieldEditor(
-							"pcSelect", "Purchase Contracts", group);
-					contractEditor.setFileExtensions(extensions);
-					contractEditor.setEmptyStringAllowed(true);
-					contractEditor.getTextControl(group).addModifyListener(
-							listener(ContractPackage.eINSTANCE.getPurchaseContract()));
 					
-					final FileFieldEditor scontractEditor = new FileFieldEditor(
-							"scSelect", "Sales Contracts", group);
-					scontractEditor.setFileExtensions(extensions);
-					scontractEditor.setEmptyStringAllowed(true);
-					scontractEditor.getTextControl(group).addModifyListener(
-							listener(ContractPackage.eINSTANCE.getSalesContract()));
-					
-					final FileFieldEditor entityEditor = new FileFieldEditor(
-							"eSelect", "Entities", group);
-					entityEditor.setFileExtensions(extensions);
-					entityEditor.setEmptyStringAllowed(true);
-					entityEditor.getTextControl(group).addModifyListener(
-							listener(ContractPackage.eINSTANCE.getEntity()));
+					makeEditor(group, "Indices", MarketPackage.eINSTANCE.getIndex(), extensions);
+					makeEditor(group, "Purchase Contracts", ContractPackage.eINSTANCE.getPurchaseContract(), extensions);
+					makeEditor(group, "Sales Contracts", ContractPackage.eINSTANCE.getSalesContract(), extensions);
+					makeEditor(group, "Entities", ContractPackage.eINSTANCE.getEntity(), extensions);
 				}
 
 				{
@@ -347,21 +299,21 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					group.setText("Cargoes and Events");
 					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 							false));
-					final FileFieldEditor cargoEditor = new FileFieldEditor(
-							"cgSelect", "Cargoes", group);
-					cargoEditor.setFileExtensions(extensions);
-					cargoEditor.setEmptyStringAllowed(true);
-					cargoEditor.getTextControl(group).addModifyListener(
-							listener(CargoPackage.eINSTANCE.getCargo()));
-					final FileFieldEditor eventEditor = new FileFieldEditor(
-							"veSelect", "Events", group);
-					eventEditor.setFileExtensions(extensions);
-					eventEditor.setEmptyStringAllowed(true);
-					eventEditor.getTextControl(group).addModifyListener(
-							listener(FleetPackage.eINSTANCE.getVesselEvent()));
+					makeEditor(group, "Cargoes", CargoPackage.eINSTANCE.getCargo(), extensions);
+					makeEditor(group, "Events", FleetPackage.eINSTANCE.getVesselEvent(), extensions);
 				}
 
 				setControl(topLevel);
+			}
+
+			private void makeEditor(Group group, String name, EClass ec,
+					String[] extensions) {
+				final FileFieldEditor portsEditor = new FileFieldEditor(name
+						+ "Select", name, group);
+				portsEditor.setFileExtensions(extensions);
+				portsEditor.setEmptyStringAllowed(true);
+				portsEditor.getTextControl(group).addModifyListener(
+						listener(ec));
 			}
 		};
 	}
@@ -376,7 +328,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		addPage(inputPage);
 		addPage(destinationPage);
 	}
-	
+
 	/**
 	 * Add some standard optimiser settings to the given scenario
 	 * 
@@ -464,7 +416,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		optimisation.setCurrentSettings(settings);
 		scenario.setOptimisation(optimisation);
 	}
-	
+
 	private Constraint createConstraint(OptimiserFactory of, String name,
 			boolean enabled) {
 		Constraint c = of.createConstraint();
@@ -473,7 +425,8 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		return c;
 	}
 
-	private Objective createObjective(OptimiserFactory of, String name, double weight) {
+	private Objective createObjective(OptimiserFactory of, String name,
+			double weight) {
 		Objective o = of.createObjective();
 		o.setName(name);
 		o.setWeight(weight);
