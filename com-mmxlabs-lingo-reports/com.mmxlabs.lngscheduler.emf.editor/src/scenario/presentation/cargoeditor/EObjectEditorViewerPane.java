@@ -122,9 +122,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		getToolBarManager().add(new GroupMarker("pack"));
 		getToolBarManager().add(new GroupMarker("additions"));
 		getToolBarManager().add(new GroupMarker("edit"));
-		getToolBarManager().add(new GroupMarker("copy"));
+		
 		getToolBarManager().add(new GroupMarker("importers"));
 		getToolBarManager().add(new GroupMarker("exporters"));
+		getToolBarManager().add(new GroupMarker("copy"));
 		{
 			final Action a = new PackTableColumnsAction(viewer);
 			getToolBarManager().appendToGroup("pack", a);
