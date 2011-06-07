@@ -30,6 +30,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -39,6 +40,7 @@ import scenario.schedule.Schedule;
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.PackAction;
+import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.scheduleview.Activator;
@@ -60,6 +62,8 @@ public class SchedulerView extends ViewPart {
 
 	private PackAction packAction;
 
+	private SaveFullImageAction saveFullImageAction;
+	
 	private Action sortModeAction;
 
 	private final ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
@@ -211,11 +215,14 @@ public class SchedulerView extends ViewPart {
 	private void fillLocalPullDown(final IMenuManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
+		manager.add(saveFullImageAction);
+
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
+		manager.add(saveFullImageAction);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
@@ -234,13 +241,16 @@ public class SchedulerView extends ViewPart {
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
 
-
 		toggleColourSchemeAction = new ToggleColourSchemeAction(
 				(EMFScheduleLabelProvider) (viewer.getLabelProvider()));
 
 		sortModeAction = new SortModeAction(viewerComparator);
 
 		packAction = new PackAction(viewer.getGanttChart());
+		
+		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
+		
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.SAVE_AS.getId(), saveFullImageAction);
 	}
 
 	/**
