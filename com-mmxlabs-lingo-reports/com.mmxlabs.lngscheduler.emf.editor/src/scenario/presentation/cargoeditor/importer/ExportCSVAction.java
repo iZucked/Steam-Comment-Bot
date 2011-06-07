@@ -72,6 +72,7 @@ public abstract class ExportCSVAction extends Action {
 			fileDialog.setText("Choose export location for " + group + "s");
 			fileDialog.setFileName(group + ".csv"); // TODO set a more sensible
 													// name
+			fileDialog.setOverwrite(true);
 			fileDialog.setFilterExtensions(new String[] { "*.csv" });
 			final String saveFilePath = fileDialog.open();
 			if (saveFilePath == null)
