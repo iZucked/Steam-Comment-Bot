@@ -1878,7 +1878,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				public Viewer createViewer(final Composite parent) {
 					final Viewer v = super.createViewer(parent);
 
-					getToolBarManager().add(swapAction);
+					getToolBarManager().appendToGroup("edit", swapAction);
 					getToolBarManager().update(true);
 
 					v.addSelectionChangedListener(swapAction);

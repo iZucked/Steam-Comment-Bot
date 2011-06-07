@@ -120,9 +120,19 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	public Viewer createViewer(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI);
 
+		getToolBarManager().add(new GroupMarker("pack"));
+		getToolBarManager().add(new GroupMarker("additions"));
+		getToolBarManager().add(new GroupMarker("edit"));
+		getToolBarManager().add(new GroupMarker("copy"));
+		getToolBarManager().add(new GroupMarker("importers"));
+		getToolBarManager().add(new GroupMarker("exporters"));
 		{
 			final Action a = new PackTableColumnsAction(viewer);
-			getToolBarManager().add(a);
+			getToolBarManager().appendToGroup("pack", a);
+		}
+		{
+			final Action a = new CopyTableToClipboardAction(viewer.getTable());
+			getToolBarManager().appendToGroup("copy", a);
 		}
 
 		getToolBarManager().update(true);
@@ -208,7 +218,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					final ElementListSelectionDialog elsd = new ElementListSelectionDialog(
 							shell, new LabelProvider() {
 								@Override
-								public String getText(Object element) {
+								public String getText(final Object element) {
 									return ((EClass) element).getName();
 								}
 							});
@@ -277,7 +287,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 
 			@Override
-			public Color getBackground(Object element) {
+			public Color getBackground(final Object element) {
 				final EObject object = (EObject) element;
 
 				if (hasValidationError(object)) {
@@ -316,7 +326,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 							return true;
 						}
 					}
-				} catch (CoreException e) {
+				} catch (final CoreException e) {
 					e.printStackTrace();
 				}
 
@@ -544,31 +554,26 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				final Action a = createAddAction(viewer,
 						part.getEditingDomain(), ePath);
 				if (a != null) {
-					x.add(a);
+					x.appendToGroup("edit", a);
 				}
 			}
 			{
 				final Action b = createDeleteAction(viewer,
 						part.getEditingDomain());
 				if (b != null) {
-					x.add(b);
+					x.appendToGroup("edit",b);
 				}
 			}
 			{
 				final Action a = createImportAction(viewer,
 						part.getEditingDomain(), ePath);
 				if (a != null)
-					x.add(a);
+					x.appendToGroup("importers",a);
 			}
 			{
 				final Action a = createExportAction(viewer, ePath);
 				if (a != null)
-					x.add(a);
-			}
-			
-			{
-				final Action a = new CopyTableToClipboardAction(viewer.getTable());
-				x.add(a);
+					x.appendToGroup("exporters",a);
 			}
 			
 			x.update(true);
