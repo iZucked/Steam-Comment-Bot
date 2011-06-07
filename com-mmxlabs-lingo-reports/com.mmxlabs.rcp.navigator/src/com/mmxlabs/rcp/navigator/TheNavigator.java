@@ -24,6 +24,7 @@ import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.jobcontroller.core.impl.DisposeOnRemoveListener;
 import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
 import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
@@ -178,6 +179,8 @@ public class TheNavigator extends CommonNavigator {
 							final LNGSchedulerJob j = new LNGSchedulerJob(
 									scenario);
 
+							jobManager.addJobManagerListener(new DisposeOnRemoveListener(j));
+							
 							jobManager.addJob(j, resource);
 						}
 
