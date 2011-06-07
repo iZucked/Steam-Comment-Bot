@@ -92,6 +92,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		super();
 		this.jobName = jobName;
 		runner = new Runner(jobName);
+		currentState = JobState.CREATED;
 	}
 	
 
