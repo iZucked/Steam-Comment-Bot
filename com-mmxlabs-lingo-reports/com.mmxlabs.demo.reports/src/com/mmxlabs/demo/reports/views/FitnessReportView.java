@@ -240,12 +240,19 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
+		
+		manager.add(new GroupMarker("pack"));
 		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		manager.add(new GroupMarker("additions"));
+		manager.add(new GroupMarker("edit"));
+		manager.add(new GroupMarker("copy"));
+		manager.add(new GroupMarker("importers"));
+		manager.add(new GroupMarker("exporters"));
 	}
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(new GroupMarker("pack"));
+		// Other plug-ins can contribute there actions here
 		manager.add(new GroupMarker("additions"));
 		manager.add(new GroupMarker("edit"));
 		manager.add(new GroupMarker("copy"));
