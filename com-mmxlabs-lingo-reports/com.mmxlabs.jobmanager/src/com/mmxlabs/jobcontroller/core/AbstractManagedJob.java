@@ -75,7 +75,6 @@ public abstract class AbstractManagedJob implements IManagedJob {
 
 		@Override
 		protected void canceling() {
-			// TODO Auto-generated method stub
 			super.canceling();
 			resume();
 		}
