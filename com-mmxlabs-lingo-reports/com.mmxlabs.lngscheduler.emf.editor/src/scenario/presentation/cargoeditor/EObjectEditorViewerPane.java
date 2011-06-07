@@ -179,8 +179,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 
 			@Override
-			public EObject createObject() {
-				if (viewer.getSelection().isEmpty() == false) {
+			public EObject createObject(final boolean usingSelection) {
+				if (usingSelection && viewer.getSelection().isEmpty() == false) {
 					if (viewer.getSelection() instanceof IStructuredSelection) {
 						final IStructuredSelection sel = (IStructuredSelection) viewer
 								.getSelection();
@@ -236,12 +236,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					return EMFUtils.createEObject(ec);
 				}
 			}
-
-			@Override
-			public void run() {
-				super.run();
-				viewer.refresh();
-			}
+			
+			
 		};
 	}
 

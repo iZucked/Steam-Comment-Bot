@@ -8,6 +8,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
@@ -17,9 +22,11 @@ import org.eclipse.ui.PlatformUI;
  * @author Tom Hinton
  * 
  */
-public abstract class AddAction extends Action {
+public abstract class AddAction extends Action implements IMenuCreator {
+	private Menu lastMenu = null;
+
 	public AddAction(final EditingDomain editingDomain, final String name) {
-		super();
+		super("Add " + name, IAction.AS_DROP_DOWN_MENU);
 		this.editingDomain = editingDomain;
 
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
@@ -34,21 +41,106 @@ public abstract class AddAction extends Action {
 	 * 
 	 * @return
 	 */
-	public abstract EObject createObject();
+	public abstract EObject createObject(boolean useSelection);
 
 	public abstract Object getOwner();
 
 	public abstract Object getFeature();
 
 	private final EditingDomain editingDomain;
+	
+	private Action addSubAction, copySubAction;
+	
+	private boolean defaultToCopy = true;
 
 	@Override
-	public void run() {
-		final EObject object = createObject();
+	public final void run() {
+		run(defaultToCopy);
+	}
+
+	protected void run(final boolean usingSelection) {
+		final EObject object = createObject(usingSelection);
 		if (object == null)
 			return; // if cancelled, subclasses return null
 		editingDomain.getCommandStack().execute(
 				AddCommand.create(editingDomain, getOwner(), getFeature(),
 						object));
+	}
+
+	@Override
+	public void dispose() {
+		lastMenu.dispose();
+	}
+
+	@Override
+	public Menu getMenu(Control parent) {
+		if (lastMenu != null) {
+			lastMenu.dispose();
+		}
+		lastMenu = new Menu(parent);
+
+		createMenuItems(lastMenu);
+
+		return lastMenu;
+	}
+
+	@Override
+	public Menu getMenu(Menu parent) {
+		if (lastMenu != null) {
+			lastMenu.dispose();
+		}
+		lastMenu = new Menu(parent);
+		createMenuItems(lastMenu);
+		return lastMenu;
+	}
+
+	/**
+	 * @param lastMenu2
+	 */
+	private void createMenuItems(final Menu menu) {
+		{
+			final Action a = new Action("Duplicate and edit",
+					IAction.AS_RADIO_BUTTON) {
+				@Override
+				public void run() {
+//					AddAction.this.run(true);
+					copySubAction.setChecked(true);
+					addSubAction.setChecked(false);
+					defaultToCopy = true;
+				}
+			};
+
+			final ActionContributionItem actionContributionItem = new ActionContributionItem(
+					a);
+			actionContributionItem.fill(menu, -1);
+			a.setChecked(true);
+			
+			copySubAction = a;
+		}
+		{
+			final Action a = new Action("Add blank item",
+					IAction.AS_RADIO_BUTTON) {
+
+				@Override
+				public void run() {
+//					AddAction.this.run(false);
+					copySubAction.setChecked(false);
+					addSubAction.setChecked(true);
+					defaultToCopy = false;
+					
+				}
+
+			};
+			final ActionContributionItem actionContributionItem = new ActionContributionItem(
+					a);
+			actionContributionItem.fill(menu, -1);
+			
+			addSubAction = a;
+		}
+	}
+
+	@Override
+	public IMenuCreator getMenuCreator() {
+		return this;
 	}
 }

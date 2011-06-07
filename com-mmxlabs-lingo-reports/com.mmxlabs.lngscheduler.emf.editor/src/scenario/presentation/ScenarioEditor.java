@@ -245,8 +245,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final Action result = new AddAction(editingDomain, contentPath
 					.getTargetType().getName()) {
 				@Override
-				public EObject createObject() {
-					final EObject newObject = delegate.createObject();
+				public EObject createObject(final boolean usingSelection) {
+					final EObject newObject = delegate.createObject(usingSelection);
 
 					final EObjectDetailDialog dialog = new EObjectDetailDialog(
 							viewer.getControl().getShell(), SWT.NONE,
