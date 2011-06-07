@@ -104,10 +104,15 @@ public abstract class AddAction extends Action implements IMenuCreator {
 				@Override
 				public void run() {
 //					AddAction.this.run(true);
-					copySubAction.setChecked(true);
-					addSubAction.setChecked(false);
+					
 					defaultToCopy = true;
 				}
+
+				@Override
+				public boolean isChecked() {
+					return defaultToCopy;
+				}
+				
 			};
 
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(
@@ -124,12 +129,15 @@ public abstract class AddAction extends Action implements IMenuCreator {
 				@Override
 				public void run() {
 //					AddAction.this.run(false);
-					copySubAction.setChecked(false);
-					addSubAction.setChecked(true);
+					
 					defaultToCopy = false;
 					
 				}
 
+				@Override
+				public boolean isChecked() {
+					return !defaultToCopy;
+				}
 			};
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(
 					a);
