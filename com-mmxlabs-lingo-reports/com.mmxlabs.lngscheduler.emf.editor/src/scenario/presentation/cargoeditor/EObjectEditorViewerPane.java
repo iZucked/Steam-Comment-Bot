@@ -124,10 +124,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final Action a = new PackTableColumnsAction(viewer);
 			getToolBarManager().add(a);
 		}
-		{
-			final Action a = new CopyTableToClipboardAction(viewer.getTable());
-			getToolBarManager().add(a);
-		}
 
 		getToolBarManager().update(true);
 		return viewer;
@@ -569,6 +565,12 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				if (a != null)
 					x.add(a);
 			}
+			
+			{
+				final Action a = new CopyTableToClipboardAction(viewer.getTable());
+				x.add(a);
+			}
+			
 			x.update(true);
 		}
 	}
