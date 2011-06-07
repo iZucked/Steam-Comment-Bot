@@ -45,6 +45,7 @@ import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
 import com.mmxlabs.jobmanager.ui.Activator;
+import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -69,6 +70,7 @@ public class JobManagerView extends ViewPart {
 	public static final String ID = "com.mmxlabs.jobcontroller.views.JobManager";
 
 	private TableViewer viewer;
+	private Action packAction;
 	private Action startAction;
 	private Action pauseAction;
 	private Action stopAction;
@@ -432,6 +434,7 @@ public class JobManagerView extends ViewPart {
 	}
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
+		manager.add(packAction);
 		manager.add(toggleDisplayAction);
 		manager.add(startAction);
 		manager.add(pauseAction);
@@ -440,6 +443,9 @@ public class JobManagerView extends ViewPart {
 	}
 
 	private void makeActions() {
+
+		packAction = new PackTableColumnsAction(viewer);
+
 		startAction = new Action() {
 			@Override
 			public void run() {
