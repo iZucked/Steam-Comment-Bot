@@ -108,8 +108,9 @@ public abstract class AbstractManagedJob implements IManagedJob {
 				final Iterator<IManagedJobListener> iterator = listeners.iterator();
 				while (iterator.hasNext()) {
 					final IManagedJobListener mjl = iterator.next();
-					if (!mjl.jobStateChanged(this, oldState, newState))
+					if (!mjl.jobStateChanged(this, oldState, newState)) {
 						iterator.remove();
+					}
 				}
 			}
 		}
