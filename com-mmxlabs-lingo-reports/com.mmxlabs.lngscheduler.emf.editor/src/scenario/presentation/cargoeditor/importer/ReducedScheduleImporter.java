@@ -86,7 +86,7 @@ public class ReducedScheduleImporter extends EObjectImporter {
 			final NamedObjectRegistry registry) {
 		final Schedule result = ScheduleFactory.eINSTANCE.createSchedule();
 		final Pattern p = Pattern.compile("(.*) (\\d+)$");
-
+		
 		String[] line = null;
 		try {
 			while (null != (line = reader.readLine())) {
@@ -116,6 +116,7 @@ public class ReducedScheduleImporter extends EObjectImporter {
 									.getFleetVessel_Vessel(), vesselName));
 				}
 
+				result.getFleet().add(av);
 				answer.setVessel(av);
 
 				for (int i = 1; i < line.length; i++) {
@@ -131,10 +132,12 @@ public class ReducedScheduleImporter extends EObjectImporter {
 					deferredReferences.add(new DeferredReference(loadVisit,
 							EventsPackage.eINSTANCE.getSlotVisit_Slot(),
 							"load-" + line[i]));
-
+					
 					deferredReferences.add(new DeferredReference(loadVisit,
 							EventsPackage.eINSTANCE.getSlotVisit_Slot(),
 							"discharge-" + line[i]));
+
+					
 				}
 			}
 		} catch (IOException e) {

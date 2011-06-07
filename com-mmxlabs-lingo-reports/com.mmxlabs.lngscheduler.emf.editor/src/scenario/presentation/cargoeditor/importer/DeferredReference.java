@@ -55,6 +55,7 @@ public class DeferredReference implements Runnable {
 					if (entry.getKey().getSecond().equals(key.getSecond())) {
 						if (key.getFirst().isSuperTypeOf(entry.getKey().getFirst())) {
 							value = entry.getValue();
+							System.err.println("Found value for difficult key " + key.getSecond());
 							break;
 						}
 					}
