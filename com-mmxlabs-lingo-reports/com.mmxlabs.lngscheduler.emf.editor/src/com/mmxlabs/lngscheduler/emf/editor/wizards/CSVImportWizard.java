@@ -465,7 +465,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		scenario.setOptimisation(optimisation);
 	}
 	
-	Constraint createConstraint(OptimiserFactory of, String name,
+	private Constraint createConstraint(OptimiserFactory of, String name,
 			boolean enabled) {
 		Constraint c = of.createConstraint();
 		c.setName(name);
@@ -473,7 +473,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		return c;
 	}
 
-	Objective createObjective(OptimiserFactory of, String name, double weight) {
+	private Objective createObjective(OptimiserFactory of, String name, double weight) {
 		Objective o = of.createObjective();
 		o.setName(name);
 		o.setWeight(weight);
