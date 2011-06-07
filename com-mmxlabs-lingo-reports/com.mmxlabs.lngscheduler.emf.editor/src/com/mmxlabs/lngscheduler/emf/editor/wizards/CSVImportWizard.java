@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -52,6 +53,15 @@ import scenario.fleet.VesselEvent;
 import scenario.fleet.VesselFuel;
 import scenario.market.Index;
 import scenario.market.MarketPackage;
+import scenario.optimiser.Constraint;
+import scenario.optimiser.Objective;
+import scenario.optimiser.Optimisation;
+import scenario.optimiser.OptimiserFactory;
+import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.LsoFactory;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.ThresholderSettings;
 import scenario.port.Canal;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
@@ -63,8 +73,12 @@ import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 
-import com.mmxlabs.demo.app.wizards.RandomScenarioUtils;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
+import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
+import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
 public class CSVImportWizard extends Wizard implements IImportWizard {
 	WizardNewFileCreationPage destinationPage;
@@ -182,7 +196,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 			}
 		}
 		
-		new RandomScenarioUtils().addDefaultSettings(scenario);
+		addDefaultSettings(scenario);
 		
 		IFile file = destinationPage.createNewFile();
 		if (file == null)
@@ -361,5 +375,108 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		super.addPages();
 		addPage(inputPage);
 		addPage(destinationPage);
+	}
+	
+	/**
+	 * Add some standard optimiser settings to the given scenario
+	 * 
+	 * Copied from RandomScenarioUtils, due to build cycle issues.
+	 * 
+	 * TODO check these are reasonable settings (num. iters etc)
+	 * 
+	 * @param scenario
+	 */
+	private void addDefaultSettings(Scenario scenario) {
+		final OptimiserFactory of = OptimiserPackage.eINSTANCE
+				.getOptimiserFactory();
+		final LsoFactory lsof = LsoPackage.eINSTANCE.getLsoFactory();
+
+		Optimisation optimisation = of.createOptimisation();
+
+		LSOSettings settings = lsof.createLSOSettings();
+
+		settings.setName("Default LSO Settings");
+
+		// create constraints
+		{
+			final EList<Constraint> constraints = settings.getConstraints();
+			constraints.add(createConstraint(of,
+					ResourceAllocationConstraintCheckerFactory.NAME, true));
+			constraints
+					.add(createConstraint(
+							of,
+							OrderedSequenceElementsConstraintCheckerFactory.NAME,
+							true));
+			constraints.add(createConstraint(of,
+					PortTypeConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of,
+					TravelTimeConstraintCheckerFactory.NAME, true));
+		}
+
+		// create objectives
+		{
+			final EList<Objective> objectives = settings.getObjectives();
+			objectives
+					.add(createObjective(
+							of,
+							CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME,
+							1));
+			objectives.add(createObjective(of,
+					CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME,
+					1));
+			objectives
+					.add(createObjective(
+							of,
+							CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME,
+							1));
+			objectives
+					.add(createObjective(
+							of,
+							CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME,
+							1));
+			objectives
+					.add(createObjective(
+							of,
+							CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME,
+							0));
+			objectives
+					.add(createObjective(
+							of,
+							CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
+							1));
+			objectives
+					.add(createObjective(
+							of,
+							CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME,
+							1));
+
+		}
+
+		settings.setNumberOfSteps(20000);
+		ThresholderSettings thresholderSettings = lsof
+				.createThresholderSettings();
+		thresholderSettings.setAlpha(0.9);
+		thresholderSettings.setEpochLength(1000);
+		thresholderSettings.setInitialAcceptanceRate(0.2);
+		settings.setThresholderSettings(thresholderSettings);
+
+		optimisation.getAllSettings().add(settings);
+		optimisation.setCurrentSettings(settings);
+		scenario.setOptimisation(optimisation);
+	}
+	
+	Constraint createConstraint(OptimiserFactory of, String name,
+			boolean enabled) {
+		Constraint c = of.createConstraint();
+		c.setName(name);
+		c.setEnabled(enabled);
+		return c;
+	}
+
+	Objective createObjective(OptimiserFactory of, String name, double weight) {
+		Objective o = of.createObjective();
+		o.setName(name);
+		o.setWeight(weight);
+		return o;
 	}
 }
