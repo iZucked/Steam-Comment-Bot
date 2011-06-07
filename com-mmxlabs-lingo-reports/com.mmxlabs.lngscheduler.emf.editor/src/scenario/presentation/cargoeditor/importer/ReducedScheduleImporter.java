@@ -133,11 +133,9 @@ public class ReducedScheduleImporter extends EObjectImporter {
 							EventsPackage.eINSTANCE.getSlotVisit_Slot(),
 							"load-" + line[i]));
 					
-					deferredReferences.add(new DeferredReference(loadVisit,
+					deferredReferences.add(new DeferredReference(dischargeVisit,
 							EventsPackage.eINSTANCE.getSlotVisit_Slot(),
 							"discharge-" + line[i]));
-
-					
 				}
 			}
 		} catch (IOException e) {

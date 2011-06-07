@@ -29,5 +29,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.emf.validation;bundle-version="1.4.0",
  com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="1.0.0",
- com.mmxlabs.optimiser.common;bundle-version="1.0.0"
+ com.mmxlabs.optimiser.common;bundle-version="1.0.0",
+ com.mmxlabs.optimiser.core;bundle-version="1.0.0",
+ com.mmxlabs.optimiser.lso;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
