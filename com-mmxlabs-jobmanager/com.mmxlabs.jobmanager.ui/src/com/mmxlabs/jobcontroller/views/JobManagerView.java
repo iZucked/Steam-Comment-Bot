@@ -456,7 +456,10 @@ public class JobManagerView extends ViewPart {
 				while (itr.hasNext()) {
 					// TODO: Check states
 					final IManagedJob job = itr.next();
-					if (job.getJobState() == JobState.PAUSED) {
+					if (job.getJobState() == JobState.CREATED) {
+						job.prepare();
+						job.start();
+					} else if (job.getJobState() == JobState.PAUSED) {
 						job.resume();
 					} else {
 						job.start();
@@ -627,6 +630,9 @@ public class JobManagerView extends ViewPart {
 					final IManagedJob job = itr.next();
 
 					switch (job.getJobState()) {
+					case CREATED:
+						startEnabled = true;
+						toogleDisplayEnabled = true;
 					case CANCELLED:
 						startEnabled = true;
 						toogleDisplayEnabled = true;
