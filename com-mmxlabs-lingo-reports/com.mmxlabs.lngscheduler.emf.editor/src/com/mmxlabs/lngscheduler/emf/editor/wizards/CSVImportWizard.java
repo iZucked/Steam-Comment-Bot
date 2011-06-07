@@ -49,8 +49,10 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselEvent;
+import scenario.fleet.VesselFuel;
 import scenario.market.Index;
 import scenario.market.MarketPackage;
+import scenario.port.Canal;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortPackage;
@@ -61,6 +63,7 @@ import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 
+import com.mmxlabs.demo.app.wizards.RandomScenarioUtils;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 public class CSVImportWizard extends Wizard implements IImportWizard {
@@ -171,9 +174,16 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 				} else if (object instanceof VesselEvent) {
 					scenario.getFleetModel().getVesselEvents()
 							.add((VesselEvent) object);
+				} else if (object instanceof VesselFuel) {
+					scenario.getFleetModel().getFuels().add((VesselFuel) object);
+				} else if (object instanceof Canal) {
+					scenario.getCanalModel().getCanals().add((Canal) object);
 				}
 			}
 		}
+		
+		new RandomScenarioUtils().addDefaultSettings(scenario);
+		
 		IFile file = destinationPage.createNewFile();
 		if (file == null)
 			return false;
@@ -240,6 +250,13 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					dmEditor.setEmptyStringAllowed(true);
 					dmEditor.getTextControl(group).addModifyListener(
 							listener(PortPackage.eINSTANCE.getDistanceModel()));
+					
+					final FileFieldEditor canalEditor = new FileFieldEditor(
+							"canalSelect", "Canals", group);
+					canalEditor.setFileExtensions(extensions);
+					canalEditor.setEmptyStringAllowed(true);
+					canalEditor.getTextControl(group).addModifyListener(
+							listener(PortPackage.eINSTANCE.getCanal()));
 				}
 
 				{
