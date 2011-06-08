@@ -9,12 +9,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -22,6 +23,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.ListSelectionDialog;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngscheduler.emf.editor.util.CommandUtil;
 
 /**
  * @author hinton
@@ -54,40 +56,31 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	@Override
 	public void setValue(Object object, Object value) {
-		final EObject target = (EObject) object;
-		final CompoundCommand cc = new CompoundCommand(
-				CompoundCommand.LAST_COMMAND_ALL);
-
-		// TODO: Check equals...
-		// TODO set command name.
-		cc.append(editingDomain.createCommand(
-				RemoveCommand.class,
-				new CommandParameter(target, field, (Collection<?>) target
-						.eGet(field))));
-		cc.append(editingDomain.createCommand(AddCommand.class,
-				new CommandParameter(target, field, (Collection<?>) value)));
-		editingDomain.getCommandStack().execute(cc);
+		editingDomain.getCommandStack().execute(
+				CommandUtil.createMultipleAttributeSetter(editingDomain,
+						(EObject) object, field, (Collection) value));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow, Object object) {
-		List<Pair<String, EObject>> options = valueProvider.getAllowedValues((EObject)object, field);
-		
+		List<Pair<String, EObject>> options = valueProvider.getAllowedValues(
+				(EObject) object, field);
+
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
-		
+
 		ListSelectionDialog dlg = new ListSelectionDialog(
 				cellEditorWindow.getShell(), options.toArray(),
 				new ArrayContentProvider(), new LabelProvider() {
 
 					@Override
 					public String getText(Object element) {
-						return ((Pair<String, ?> )element).getFirst();
+						return ((Pair<String, ?>) element).getFirst();
 					}
 				}, "Select values:");
 		dlg.setTitle("Value Selection");
-		
+
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
 		final Collection<EObject> sel = (Collection<EObject>) getValue(object);
 		for (final Pair<String, EObject> p : options) {
@@ -95,7 +88,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 				selectedOptions.add(p);
 			}
 		}
-		
+
 		dlg.setInitialSelections(selectedOptions.toArray());
 		dlg.setBlockOnOpen(true);
 		dlg.open();

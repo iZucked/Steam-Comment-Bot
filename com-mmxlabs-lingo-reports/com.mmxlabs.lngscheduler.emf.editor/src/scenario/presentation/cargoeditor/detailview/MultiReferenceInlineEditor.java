@@ -10,9 +10,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -33,24 +35,29 @@ import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngscheduler.emf.editor.util.CommandUtil;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
  * An inline editor for editing multi-value references. Pops up a dialog.
+ * 
  * @author Tom Hinton
- *
+ * 
  */
 public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	private IReferenceValueProvider valueProvider;
 	private Label theLabel;
+
 	/**
 	 * @param path
 	 * @param feature
 	 * @param editingDomain
 	 * @param commandProcessor
 	 */
-	public MultiReferenceInlineEditor(final EMFPath path, final EStructuralFeature feature,
-			final EditingDomain editingDomain, final ICommandProcessor commandProcessor,
+	public MultiReferenceInlineEditor(final EMFPath path,
+			final EStructuralFeature feature,
+			final EditingDomain editingDomain,
+			final ICommandProcessor commandProcessor,
 			final IReferenceValueProvider valueProvider) {
 		super(path, feature, editingDomain, commandProcessor);
 		this.valueProvider = valueProvider;
@@ -63,12 +70,12 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		buttonAndLabel.setLayout(gl);
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
-		
+
 		final Label label = new Label(buttonAndLabel, SWT.NONE);
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		final Button button = new Button(buttonAndLabel, SWT.NONE);
 		button.setText("Edit");
-		
+
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -79,20 +86,17 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 				}
 			}
 		});
-		
+
 		theLabel = label;
-		
+
 		return buttonAndLabel;
 	}
 
 	@Override
 	protected Command createSetCommand(Object value) {
-		final CompoundCommand setter = new CompoundCommand();
-		
-		//TODO this only works once - why?
-		setter.append(super.createSetCommand(SetCommand.UNSET_VALUE));
-		setter.append(AddCommand.create(editingDomain, target, feature, (Collection) value));
-		
+		final CompoundCommand setter = CommandUtil
+				.createMultipleAttributeSetter(editingDomain, input, feature,
+						(Collection) value);
 		return setter;
 	}
 
@@ -107,26 +111,26 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		}
 		theLabel.setText(sb.toString());
 	}
-	
-	@SuppressWarnings("unchecked")
 
+	@SuppressWarnings("unchecked")
 	protected List<EObject> openDialogBox(Control cellEditorWindow) {
-		List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
-		
+		List<Pair<String, EObject>> options = valueProvider.getAllowedValues(
+				input, feature);
+
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
-		
+
 		ListSelectionDialog dlg = new ListSelectionDialog(
 				cellEditorWindow.getShell(), options.toArray(),
 				new ArrayContentProvider(), new LabelProvider() {
 
 					@Override
 					public String getText(Object element) {
-						return ((Pair<String, ?> )element).getFirst();
+						return ((Pair<String, ?>) element).getFirst();
 					}
 				}, "Select values:");
 		dlg.setTitle("Value Selection");
-		
+
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
 		final Collection<EObject> sel = (Collection<EObject>) getValue();
 		for (final Pair<String, EObject> p : options) {
@@ -134,7 +138,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 				selectedOptions.add(p);
 			}
 		}
-		
+
 		dlg.setInitialSelections(selectedOptions.toArray());
 		dlg.setBlockOnOpen(true);
 		dlg.open();

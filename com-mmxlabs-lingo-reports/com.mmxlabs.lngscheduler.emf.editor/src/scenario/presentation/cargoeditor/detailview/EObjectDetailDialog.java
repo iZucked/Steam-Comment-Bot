@@ -35,6 +35,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.lngscheduler.emf.editor.util.CommandUtil;
 
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
@@ -209,9 +210,9 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 					final Command c = makeEqualizer(
 							(EObject) original.eGet(feature),
 							(EObject) duplicate.eGet(feature));
-//					if (!c.getAffectedObjects().isEmpty()) {
-						compound.append(c);
-//					}
+					// if (!c.getAffectedObjects().isEmpty()) {
+					compound.append(c);
+					// }
 				}
 
 				continue;
@@ -222,18 +223,9 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 				continue;
 			}
 			if (feature.isMany()) {
-				System.err.println("Multiple valued feature: " + feature);
-				Collection<?> c = (Collection<?>) original.eGet(feature);
-				if (c.size() > 0) {
-					compound.append(RemoveCommand.create(editingDomain,
-							original, feature, c));
-				}
-				// new values
-				c = (Collection<?>) duplicate.eGet(feature);
-				if (c.size() > 0) {
-					compound.append(AddCommand.create(editingDomain, original,
-							feature, (Collection<?>) duplicate.eGet(feature)));
-				}
+				compound.append(CommandUtil.createMultipleAttributeSetter(
+						editingDomain, original, feature,
+						(Collection) duplicate.eGet(feature)));
 			} else {
 				compound.append(SetCommand.create(editingDomain, original,
 						feature, duplicate.eGet(feature)));
