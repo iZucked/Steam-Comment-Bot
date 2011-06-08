@@ -5,6 +5,7 @@
 package com.mmxlabs.demo.reports.views;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,11 +49,11 @@ import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 public class FitnessReportView extends ViewPart implements ISelectionListener {
-	private ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
+	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
 
 	private boolean inverseSort = false;
 
-	protected void setSortColumn(final TableColumn column, int value) {
+	protected void setSortColumn(final TableColumn column, final int value) {
 		if (sortColumns.get(0) == value) {
 			inverseSort = !inverseSort;
 		} else {
@@ -81,7 +82,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				setSortColumn(column, value);
 			}
 		});
@@ -142,7 +143,22 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	@Override
 	public void createPartControl(final Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+				| SWT.V_SCROLL) {
+			@Override
+			protected void inputChanged(final Object input, final Object oldInput) {
+				super.inputChanged(input, oldInput);
+				
+				final boolean inputEmpty = input == null || (input instanceof Collection && ((Collection<?>)input).isEmpty());
+				final boolean oldInputEmpty = oldInput == null || (oldInput instanceof Collection && ((Collection<?>)oldInput).isEmpty());
+				
+				if (inputEmpty != oldInputEmpty) {
+
+					if (packColumnsAction != null) {
+						packColumnsAction.run();
+					}
+				}
+			};
+		};
 		viewer.setContentProvider(new FitnessContentProvider());
 		viewer.setInput(getViewSite());
 
@@ -172,7 +188,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 
 		viewer.setComparator(new ViewerComparator() {
 			@Override
-			public int compare(Viewer viewer, Object e1, Object e2) {
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 				final RowData r1 = (RowData) e1;
 				final RowData r2 = (RowData) e2;
 

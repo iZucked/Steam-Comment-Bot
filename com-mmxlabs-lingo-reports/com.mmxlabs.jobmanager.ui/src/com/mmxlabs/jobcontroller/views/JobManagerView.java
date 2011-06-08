@@ -167,10 +167,8 @@ public class JobManagerView extends ViewPart {
 				case 1:
 					return job.getJobName();
 				case 2:
-					return Integer.toString(job.getProgress());
+					return Integer.toString(job.getProgress()) + "%";
 				case 3:
-					return Integer.toString(100);
-				case 4:
 					return job.getJobState().toString();
 				}
 			}
@@ -338,10 +336,7 @@ public class JobManagerView extends ViewPart {
 		tvc2.getColumn().setText("Progress");
 
 		final TableViewerColumn tvc3 = new TableViewerColumn(viewer, SWT.None);
-		tvc3.getColumn().setText("Total Progress");
-
-		final TableViewerColumn tvc4 = new TableViewerColumn(viewer, SWT.None);
-		tvc4.getColumn().setText("Status");
+		tvc3.getColumn().setText("Status");
 
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);

@@ -6,6 +6,7 @@ package com.mmxlabs.demo.reports.views;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,6 @@ import scenario.contract.Entity;
 import scenario.schedule.BookedRevenue;
 import scenario.schedule.LineItem;
 import scenario.schedule.Schedule;
-import scenario.schedule.ScheduleFitness;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
@@ -55,7 +55,6 @@ import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
-import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
 /**
  * A view which displays the cost breakdown as a hierarchy, thus
@@ -377,7 +376,21 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	@Override
 	public void createPartControl(final Composite parent) {
 		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI
-				| SWT.H_SCROLL | SWT.V_SCROLL);
+				| SWT.H_SCROLL | SWT.V_SCROLL) {
+			@Override
+			protected void inputChanged(final Object input, final Object oldInput) {
+				super.inputChanged(input, oldInput);
+				
+				final boolean inputEmpty = input == null || (input instanceof Collection && ((Collection<?>)input).isEmpty());
+				final boolean oldInputEmpty = oldInput == null || (oldInput instanceof Collection && ((Collection<?>)oldInput).isEmpty());
+				
+				if (inputEmpty != oldInputEmpty) {
+					if (packColumnsAction != null) {
+						packColumnsAction.run();
+					}
+				}
+			};
+		};;
 
 		// autopack and set alternating colours - disabled because no longer
 		// required
