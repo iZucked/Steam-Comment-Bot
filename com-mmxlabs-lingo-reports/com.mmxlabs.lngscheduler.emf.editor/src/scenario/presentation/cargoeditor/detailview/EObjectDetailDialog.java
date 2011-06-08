@@ -178,20 +178,47 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			// For containment references, we need to compare the contained
 			// object, rather than generate a SetCommand.
 			if (original.eClass().getEAllContainments().contains(feature)) {
-				
-				// TODO: Handle non-EObject references such as Lists (e.g. for VesselClass edits
-				
-				final Command c = makeEqualizer(
-						(EObject) original.eGet(feature),
-						(EObject) duplicate.eGet(feature));
-				if (!c.getAffectedObjects().isEmpty()) {
-					compound.append(c);
+
+				// TODO: Handle non-EObject references such as Lists (e.g. for
+				// VesselClass edits
+				// TODO: fix this temporary fix, which presumes that multiply
+				// contained objects
+				// are not referenced elsewhere and so will not create dangling
+				// hrefs
+				// one possible solution is to use the code in the
+				// ImportCSVAction which relinks objects that have been
+				// replaced.
+				if (feature.isMany()) {
+					Collection<?> c = (Collection<?>) original.eGet(feature);
+					final CompoundCommand compound2 = new CompoundCommand();
+					if (c.size() > 0) {
+						compound2.append(RemoveCommand.create(editingDomain,
+								original, feature, c));
+					}
+					// new values
+					c = (Collection<?>) duplicate.eGet(feature);
+					if (c.size() > 0) {
+						compound2.append(AddCommand.create(editingDomain,
+								original, feature,
+								(Collection<?>) duplicate.eGet(feature)));
+					}
+					// getaffectedobjects on removecommand throws an NPE
+					if (compound2.getCommandList().isEmpty() == false)
+						compound.append(compound2);
+				} else {
+					final Command c = makeEqualizer(
+							(EObject) original.eGet(feature),
+							(EObject) duplicate.eGet(feature));
+//					if (!c.getAffectedObjects().isEmpty()) {
+						compound.append(c);
+//					}
 				}
 
 				continue;
 			}
 			// Skip items which have not changed.
-			if (Equality.isEqual(original.eGet(feature), duplicate.eGet(feature))) {
+			if (Equality.isEqual(original.eGet(feature),
+					duplicate.eGet(feature))) {
 				continue;
 			}
 			if (feature.isMany()) {
