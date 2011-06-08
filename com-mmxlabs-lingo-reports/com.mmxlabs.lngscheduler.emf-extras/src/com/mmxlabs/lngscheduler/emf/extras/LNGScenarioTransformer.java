@@ -59,6 +59,7 @@ import scenario.port.VesselClassCost;
 
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.InterpolatingDiscountCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
@@ -81,6 +82,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing
@@ -271,7 +273,7 @@ public class LNGScenarioTransformer {
 				realCurve.setValueAtPoint(baseTime + d.getTime(),
 						d.getDiscountFactor());
 			}
-			
+
 			discountCurveMap.put(curve, realCurve);
 		}
 
@@ -433,23 +435,42 @@ public class LNGScenarioTransformer {
 					dischargeStart,
 					dischargeStart + dischargeSlot.getWindowDuration());
 
-			final Index dischargeIndex = ((SalesContract) dischargeSlot
-					.getSlotOrPortContract()).getIndex();
-
-			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot
-					.getSlotOrPortContract());
+			final ILoadPriceCalculator loadPriceCalculator;
+			if (loadSlot.isSetFixedPrice()) {
+				loadPriceCalculator = new ILoadPriceCalculator() {
+					@Override
+					public int calculateLoadUnitPrice(int loadTime,
+							long loadVolume, int dischargeTime,
+							int actualSalesPrice, int cvValue,
+							VoyageDetails ladenLeg, VoyageDetails ballastLeg,
+							IVesselClass vesselClass) {
+						return Calculator.scaleToInt(loadSlot.getFixedPrice());
+					}
+				};
+			} else {
+				final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot
+						.getSlotOrPortContract());
+				loadPriceCalculator = purchaseContractAssociation
+						.lookup(purchaseContract);
+			}
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(),
 					ports.lookup(loadSlot.getPort()), loadWindow,
 					Calculator.scale(loadSlot.getMinQuantity()),
 					Calculator.scale(loadSlot.getMaxQuantity()),
-					purchaseContractAssociation.lookup(purchaseContract),
+					loadPriceCalculator,
 					(int) Calculator.scale(loadSlot.getCargoCVvalue()),
 					dischargeSlot.getSlotDuration());
 
 			final ICurve dischargeCurve;
-			// create scaled discharge market, incorporating regas losses
-			{
+
+			if (dischargeSlot.isSetFixedPrice()) {
+				dischargeCurve = new ConstantValueCurve(
+						Calculator.scaleToInt(dischargeSlot.getFixedPrice()));
+			} else {
+				final Index dischargeIndex = ((SalesContract) dischargeSlot
+						.getSlotOrPortContract()).getIndex();
+				
 				final float regasEfficiency = (dischargeSlot.getPort())
 						.getRegasEfficiency();
 				if (regasEfficiency != 1.0f) {
