@@ -246,6 +246,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final EditingDomain editingDomain, final EMFPath contentPath) {
 			final AddAction delegate = (AddAction) super.createAddAction(
 					viewer, editingDomain, contentPath);
+			
 			final Action result = new AddAction(editingDomain, contentPath
 					.getTargetType().getName()) {
 				@Override
@@ -1978,7 +1979,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 									final WiringDialog wiringDialog = new WiringDialog(
 											v.getControl().getShell());
 
-									wiringDialog.open(l, getEditingDomain());
+									wiringDialog.open(l, getEditingDomain(), portProvider);
 								}
 							}
 						}

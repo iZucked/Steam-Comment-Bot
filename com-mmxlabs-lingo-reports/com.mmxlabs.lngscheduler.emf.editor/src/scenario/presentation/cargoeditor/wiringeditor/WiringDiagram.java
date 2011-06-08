@@ -58,8 +58,6 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 	private int draggingFrom = -1;
 	private boolean draggingFromLeft = false;
 
-	private boolean showAddTerminals = false;
-
 	private int dragX, dragY;
 
 	/**
@@ -227,7 +225,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 		int i = 0;
 		graphics.setForeground(Display.getCurrent().getSystemColor(
 				SWT.COLOR_BLACK));
-		float maxMidpoint = 0;
+		
 		for (final float midpoint : terminalPositions) {
 
 			// draw terminal blobs
@@ -251,12 +249,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 					terminalSize);
 
 			i++;
-			maxMidpoint = Math.max(maxMidpoint, midpoint);
-		}
-
-		if (showAddTerminals) {
-			final float midpoint = maxMidpoint + 2 * terminalSize;
-
+			
 		}
 	}
 
@@ -322,6 +315,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 			dragging = false;
 
 			final List<Float> positions = getTerminalPositions();
+			
 			int terminal = 0;
 
 			for (final float y : positions) {
@@ -332,7 +326,9 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 			}
 
 			boolean draggedToNowhere = terminal >= positions.size();
-
+			
+			
+			
 			final Rectangle ca = getClientArea();
 
 			final boolean control = (e.stateMask & SWT.CONTROL) != 0;
@@ -378,7 +374,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 			wiringChanged(wiring);
 		}
 
-		redraw();
+		if (!isDisposed()) redraw();
 	}
 
 	/**

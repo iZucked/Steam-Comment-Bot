@@ -236,8 +236,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					return EMFUtils.createEObject(ec);
 				}
 			}
-			
-			
 		};
 	}
 

@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import scenario.cargo.Cargo;
+import scenario.presentation.cargoeditor.IReferenceValueProvider;
 
 /**
  * A dialog which contains a {@link WiringComposite} - all the logic happens in
@@ -49,10 +50,11 @@ public class WiringDialog extends Dialog {
 		super(parent);
 	}
 
-	public void open(final List<Cargo> cargos, final EditingDomain domain) {
+	public void open(final List<Cargo> cargos, final EditingDomain domain,
+			final IReferenceValueProvider portProvider) {
 		final Shell shell = new Shell((SWT.DIALOG_TRIM & ~SWT.CLOSE)
 				| SWT.APPLICATION_MODAL | SWT.RESIZE);
-		shell.setSize(500, 300);
+		shell.setSize(800, 600);
 		shell.setText("Redirection Wizard");
 		GridLayout gl_shell = new GridLayout(1, false);
 		gl_shell.verticalSpacing = 6;
@@ -81,15 +83,23 @@ public class WiringDialog extends Dialog {
 
 		((GridLayout) buttonsComposite.getLayout()).marginWidth = 0;
 
-//		Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
-//		btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-//				false, 1, 1));
-//		btnOptimise.setText("Optimise");
+		 Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
+		 btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
+		 false, 1, 1));
+		 btnOptimise.setText("Add Cargo");
+		 
+		 btnOptimise.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				wiringComposite.addNewCargo(null);
+			}});
 
 		final Button btnOk = new Button(buttonsComposite, SWT.NONE);
-		GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1,
-				1);
+		GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
+				1, 1);
 		gd_btnOk.widthHint = 50;
+		gd_btnOk.grabExcessHorizontalSpace = true;
 		btnOk.setLayoutData(gd_btnOk);
 		btnOk.setText("OK");
 
@@ -122,6 +132,7 @@ public class WiringDialog extends Dialog {
 			}
 		});
 
+		wiringComposite.setPortProvider(portProvider);
 		wiringComposite.setCargos(cargos);
 
 		wiringComposite.addListener(SWT.Modify, new Listener() {

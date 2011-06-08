@@ -48,9 +48,9 @@ public abstract class AddAction extends Action implements IMenuCreator {
 	public abstract Object getFeature();
 
 	private final EditingDomain editingDomain;
-	
+
 	private Action addSubAction, copySubAction;
-	
+
 	private boolean defaultToCopy = true;
 
 	@Override
@@ -104,7 +104,7 @@ public abstract class AddAction extends Action implements IMenuCreator {
 				@Override
 				public void run() {
 //					AddAction.this.run(true);
-					
+
 					defaultToCopy = true;
 				}
 
@@ -112,14 +112,14 @@ public abstract class AddAction extends Action implements IMenuCreator {
 				public boolean isChecked() {
 					return defaultToCopy;
 				}
-				
+
 			};
 
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(
 					a);
 			actionContributionItem.fill(menu, -1);
-			a.setChecked(true);
-			
+			a.setChecked(defaultToCopy);
+
 			copySubAction = a;
 		}
 		{
@@ -129,9 +129,7 @@ public abstract class AddAction extends Action implements IMenuCreator {
 				@Override
 				public void run() {
 //					AddAction.this.run(false);
-					
 					defaultToCopy = false;
-					
 				}
 
 				@Override
@@ -142,7 +140,7 @@ public abstract class AddAction extends Action implements IMenuCreator {
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(
 					a);
 			actionContributionItem.fill(menu, -1);
-			
+			a.setChecked(!defaultToCopy);
 			addSubAction = a;
 		}
 	}
