@@ -49,18 +49,18 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 		rowData = new RowData[0];
 		if (newInput instanceof Iterable) {
 			final List<RowData> rowDataList = new LinkedList<RowData>();
-			for (final Object o : ((Iterable) newInput)) {
+			for (final Object o : ((Iterable<?>) newInput)) {
 				if (o instanceof Schedule) {
 					final Schedule schedule = (Schedule) o;
+					final String scheduleName = URI.decode(schedule.eResource().getURI().lastSegment()).replaceAll(".scenario","");
 					long total = 0l;
 					for (final ScheduleFitness f : schedule.getFitness()) {
-						final String name = URI.decode(schedule.eResource().getURI().lastSegment()).replaceAll(".scenario","");
-						rowDataList.add(new RowData(name, f.getName(), f.getValue()));
+						rowDataList.add(new RowData(scheduleName, f.getName(), f.getValue()));
 						if (!(f.getName().equals("iterations") || f.getName()
 								.equals("runtime")))
 							total += f.getValue();
 					}
-					rowDataList.add(new RowData(schedule.getName(), "Total", total));
+					rowDataList.add(new RowData(scheduleName, "Total", total));
 
 				}
 			}
