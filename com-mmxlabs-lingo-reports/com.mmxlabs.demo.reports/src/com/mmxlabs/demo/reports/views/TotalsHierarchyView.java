@@ -134,7 +134,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		}
 
 		public long getCost() {
-			if (nonValued) return 0;
+			if (nonValued)
+				return 0;
 			long accumulator = cost;
 			for (final TreeData d : children)
 				accumulator += d.getCost();
@@ -171,6 +172,11 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	 * @param schedule
 	 */
 	private void setSelectedSchedules(final List<Schedule> schedules) {
+		final TreeData dummy = createTreeData(schedules);
+		viewer.setInput(dummy);
+	}
+
+	private TreeData createTreeData(final List<Schedule> schedules) {
 		final TreeData dummy = new TreeData("");
 		if (schedules.size() == 1) {
 			final Schedule schedule = schedules.get(0);
@@ -178,8 +184,10 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 			dummy.addChild(createProfitTreeData(schedule));
 		} else {
 			for (final Schedule schedule : schedules) {
-				final String scheduleName = URI.decode(schedule.eResource().getURI().lastSegment()).replaceAll(".scenario","");
-//				final String scheduleName = schedule.getName();
+				final String scheduleName = URI.decode(
+						schedule.eResource().getURI().lastSegment())
+						.replaceAll(".scenario", "");
+				// final String scheduleName = schedule.getName();
 				// don't sum costs and profits, because it's meaningless
 				// (profits already include costs)
 				final TreeData group = new TreeData(scheduleName, true);
@@ -188,7 +196,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 				dummy.addChild(group);
 			}
 		}
-		viewer.setInput(dummy);
+		return dummy;
 	}
 
 	private TreeData createProfitTreeData(final Schedule schedule) {
@@ -197,27 +205,29 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		if (schedule != null) {
 			for (final BookedRevenue revenue : schedule.getRevenue()) {
 				final Entity e = revenue.getEntity();
-				if (e == null || e.getOwnership() == 0) continue;
-				
+				if (e == null || e.getOwnership() == 0)
+					continue;
+
 				TreeData td = byEntity.get(e);
 				if (td == null) {
 					td = new TreeData(e.getName());
 					top.addChild(td);
-					byEntity.put(e,td);
+					byEntity.put(e, td);
 				}
-				
+
 				final TreeData rd = new TreeData(revenue.getName());
-				
+
 				td.addChild(rd);
-				
+
 				for (final LineItem item : revenue.getLineItems()) {
-					final TreeData li = new TreeData(item.getName(), item.getValue());
+					final TreeData li = new TreeData(item.getName(),
+							item.getValue());
 					rd.addChild(li);
 				}
-				
+
 				rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
-				assert(rd.getCost() == revenue.getTaxedValue());
-				//TODO this does not take account of ownership proportion
+				assert (rd.getCost() == revenue.getTaxedValue());
+				// TODO this does not take account of ownership proportion
 			}
 		}
 		return top;
@@ -417,8 +427,10 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 			@Override
 			public Object[] getElements(final Object object) {
-
-				if (object instanceof TreeData) {
+				if (object instanceof List) {
+					final TreeData top = createTreeData((List) object);
+					return getChildren(top);
+				} else if (object instanceof TreeData) {
 					final TreeData data = (TreeData) object;
 					// if (data.getParent() == null) {
 					// return new Object[]{object};
@@ -471,22 +483,23 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		PlatformUI
 				.getWorkbench()
 				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.TotalsHierarchyView");
+				.setHelp(viewer.getControl(),
+						"com.mmxlabs.demo.reports.TotalsHierarchyView");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-//
-//		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-//				this);
-//
-//		final ISelection selection = getSite().getWorkbenchWindow()
-//				.getSelectionService()
-//				.getSelection("com.mmxlabs.rcp.navigator");
-//
-//		selectionChanged(null, selection);
-		
+		//
+		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+		// this);
+		//
+		// final ISelection selection = getSite().getWorkbenchWindow()
+		// .getSelectionService()
+		// .getSelection("com.mmxlabs.rcp.navigator");
+		//
+		// selectionChanged(null, selection);
+
 		jobManagerListener = ScheduleAdapter.registerView(viewer);
-		
+
 	}
 
 	@Override
@@ -538,15 +551,16 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	private void makeActions() {
 		packColumnsAction = new PackTreeColumnsAction(viewer);
 		copyTreeAction = new CopyTreeToClipboardAction(viewer.getTree());
-		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTreeAction);
+		getViewSite().getActionBars().setGlobalActionHandler(
+				ActionFactory.COPY.getId(), copyTreeAction);
 	}
 
 	@Override
 	public void dispose() {
 
-//		getSite().getPage().removeSelectionListener(
-//				"com.mmxlabs.rcp.navigator", this);
-		
+		// getSite().getPage().removeSelectionListener(
+		// "com.mmxlabs.rcp.navigator", this);
+
 		ScheduleAdapter.deregisterView(jobManagerListener);
 
 		super.dispose();
