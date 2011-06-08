@@ -588,7 +588,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final EMFPath ePath) {
 		return new ExportCSVAction() {
 			@Override
-			protected List<EObject> getObjectsToExport() {
+			public List<EObject> getObjectsToExport() {
 				final EObject root = (EObject) viewer.getInput();
 				final Object result = ePath.get(root);
 				if (result instanceof List) {
@@ -599,7 +599,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 
 			@Override
-			protected EClass getExportEClass() {
+			public EClass getExportEClass() {
 				return (EClass) ePath.getTargetType();
 			}
 		};

@@ -379,9 +379,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			return result;
 		}
+
 		@Override
 		public String getName(final EObject target) {
-			return ((NamedObject)target).getName();
+			return ((NamedObject) target).getName();
 		}
 	}
 
@@ -399,8 +400,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		@Override
 		public String getName(final EObject target) {
-			if (target == null) return "none";
-			return ((Schedule)target).getName();
+			if (target == null)
+				return "none";
+			return ((Schedule) target).getName();
 		}
 	};
 
@@ -1584,7 +1586,60 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 		{
 			final EObjectEditorViewerPane entitiesPane = new ScenarioObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this);
+					getSite().getPage(), ScenarioEditor.this) {
+				@Override
+				protected Action createExportAction(TableViewer viewer,
+						EMFPath ePath) {
+					final ExportCSVAction delegate = (ExportCSVAction) super
+							.createExportAction(viewer, ePath);
+					return new ExportCSVAction() {
+						@Override
+						public List<EObject> getObjectsToExport() {
+							final List<EObject> export = delegate
+									.getObjectsToExport();
+
+							export.add(getScenario().getContractModel()
+									.getShippingEntity());
+
+							return export;
+						}
+
+						@Override
+						public EClass getExportEClass() {
+							return delegate.getExportEClass();
+						}
+					};
+				}
+
+				@Override
+				protected Action createImportAction(TableViewer viewer,
+						EditingDomain editingDomain, EMFPath ePath) {
+					final ImportCSVAction delegate = (ImportCSVAction) super
+							.createImportAction(viewer, editingDomain, ePath);
+					return new ImportCSVAction() {
+						@Override
+						protected EObject getToplevelObject() {
+							return getScenario();
+						}
+
+						@Override
+						protected EClass getImportClass() {
+							return ContractPackage.eINSTANCE.getEntity();
+						}
+
+						@Override
+						public void addObjects(Collection<EObject> newObjects) {
+							delegate.addObjects(newObjects);
+							final Scenario scenario = getScenario();
+							scenario.getContractModel().setShippingEntity(
+									scenario.getContractModel()
+											.getEntities()
+											.get(scenario.getContractModel()
+													.getEntities().size() - 1));
+						}
+					};
+				}
+			};
 
 			entitiesPane.createControl(sash);
 			entitiesPane.init(CollectionsUtil.makeArrayList(
@@ -2057,14 +2112,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 
 					@Override
-					protected List<EObject> getObjectsToExport() {
+					public List<EObject> getObjectsToExport() {
 						return Collections
 								.singletonList((EObject) getScenario()
 										.getDistanceModel());
 					}
 
 					@Override
-					protected EClass getExportEClass() {
+					public EClass getExportEClass() {
 						return PortPackage.eINSTANCE.getDistanceModel();
 					}
 				};
@@ -2632,11 +2687,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		return page;
 	}
 
-	private class MultiReferenceEditorFactory implements IMultiInlineEditorFactory {
+	private class MultiReferenceEditorFactory implements
+			IMultiInlineEditorFactory {
 		private final EditingDomain editingDomain;
 		private final IReferenceValueProvider valueProvider;
 
-		
 		public MultiReferenceEditorFactory(EditingDomain editingDomain,
 				IReferenceValueProvider valueProvider) {
 			super();
@@ -2644,23 +2699,21 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			this.valueProvider = valueProvider;
 		}
 
-
 		@Override
 		public IInlineEditor createEditor(EMFPath path,
 				EStructuralFeature feature, ICommandProcessor commandProcessor) {
-			return new ReferenceInlineEditor(path, feature,
-					editingDomain, commandProcessor, valueProvider);
+			return new ReferenceInlineEditor(path, feature, editingDomain,
+					commandProcessor, valueProvider);
 		}
-
 
 		@Override
 		public IInlineEditor createMultiEditor(EMFPath path,
 				EStructuralFeature feature, ICommandProcessor commandProcessor) {
-			return new MultiReferenceInlineEditor(path, feature,
-					editingDomain, commandProcessor, valueProvider);
+			return new MultiReferenceInlineEditor(path, feature, editingDomain,
+					commandProcessor, valueProvider);
 		}
 	}
-	
+
 	/**
 	 * Add editors to any detail view container
 	 * 
@@ -2670,8 +2723,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		page.addDefaultEditorFactories();
 
 		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
-				new MultiReferenceEditorFactory(getEditingDomain(), portProvider));
-				
+				new MultiReferenceEditorFactory(getEditingDomain(),
+						portProvider));
 
 		page.setEditorFactoryForClassifier(
 				FleetPackage.eINSTANCE.getVesselFuel(),
@@ -2757,13 +2810,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 				});
 
-		page.setEditorFactoryForClassifier(
-				FleetPackage.eINSTANCE.getVesselClass(),
-				new MultiReferenceEditorFactory(getEditingDomain(), vesselClassProvider));
+		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE
+				.getVesselClass(), new MultiReferenceEditorFactory(
+				getEditingDomain(), vesselClassProvider));
 
-		page.setEditorFactoryForClassifier(
-				FleetPackage.eINSTANCE.getVessel(),
-				new MultiReferenceEditorFactory(getEditingDomain(), vesselProvider));
+		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE.getVessel(),
+				new MultiReferenceEditorFactory(getEditingDomain(),
+						vesselProvider));
 
 		page.setEditorFactoryForClassifier(
 				SchedulePackage.eINSTANCE.getSchedule(),
@@ -2794,10 +2847,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		page.setNameForFeature(
 				FleetPackage.eINSTANCE.getVesselStateAttributes_IdleNBORate(),
 				"Idle NBO Rate");
-		
+
 		page.setNameForFeature(
-				CargoPackage.eINSTANCE.getCargo_AllowedVessels(),
-				"Restrict To");
+				CargoPackage.eINSTANCE.getCargo_AllowedVessels(), "Restrict To");
 	}
 
 	/**

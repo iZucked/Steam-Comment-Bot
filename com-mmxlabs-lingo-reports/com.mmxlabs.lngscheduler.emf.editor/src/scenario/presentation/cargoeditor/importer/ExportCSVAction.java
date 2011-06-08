@@ -69,7 +69,7 @@ public abstract class ExportCSVAction extends Action {
 		}
 	}
 
-	protected abstract List<EObject> getObjectsToExport();
+	public abstract List<EObject> getObjectsToExport();
 
-	protected abstract EClass getExportEClass();
+	public abstract EClass getExportEClass();
 }
