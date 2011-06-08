@@ -67,6 +67,7 @@ public final class JobManager implements IJobManager {
 	 */
 	@Override
 	public void removeJob(final IManagedJob job) {
+		if (job == null) return;
 		if (selectedJobs.contains(job)) {
 			deselectJob(job);
 		}
