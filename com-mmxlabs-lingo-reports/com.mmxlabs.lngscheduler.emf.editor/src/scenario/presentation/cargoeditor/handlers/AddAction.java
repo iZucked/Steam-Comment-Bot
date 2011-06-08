@@ -99,7 +99,7 @@ public abstract class AddAction extends Action implements IMenuCreator {
 	 */
 	private void createMenuItems(final Menu menu) {
 		{
-			final Action a = new Action("Duplicate and edit",
+			final Action a = new Action("Duplicate",
 					IAction.AS_RADIO_BUTTON) {
 				@Override
 				public void run() {
@@ -123,7 +123,7 @@ public abstract class AddAction extends Action implements IMenuCreator {
 			copySubAction = a;
 		}
 		{
-			final Action a = new Action("Add blank item",
+			final Action a = new Action("Add Blank",
 					IAction.AS_RADIO_BUTTON) {
 
 				@Override
