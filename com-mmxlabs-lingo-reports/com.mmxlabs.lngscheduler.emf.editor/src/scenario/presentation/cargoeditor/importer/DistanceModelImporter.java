@@ -56,7 +56,7 @@ public class DistanceModelImporter extends EObjectImporter {
 								reader.getCasedColumnName(column.getKey())));
 						lines.add(dl);
 					} catch (NumberFormatException nfe) {
-						fromPort = column.getValue();
+						if (column.getValue().isEmpty() == false) fromPort = column.getValue();
 					}
 				}
 				for (final DistanceLine dl : lines) {
