@@ -261,6 +261,14 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 					addDefaultSettings(scenario);
 
+					// copy shipping entity from last entity.
+					scenario.getContractModel()
+							.setShippingEntity(
+									scenario.getContractModel()
+											.getEntities()
+											.get(scenario.getContractModel().getEntities()
+													.size() - 1));
+					
 					if (scenario.getOptimisation().getCurrentSettings()
 							.getInitialSchedule() != null) {
 						// evaluate initial schedule
@@ -268,24 +276,26 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 						try {
 							final ResourceSet set = new ResourceSetImpl();
 							final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
-							set.getResourceFactoryRegistry().getExtensionToFactoryMap()
-									.put("*", rf);
+							set.getResourceFactoryRegistry()
+									.getExtensionToFactoryMap().put("*", rf);
 
-							set.getPackageRegistry().put(scenario.eClass().getEPackage().getNsURI(),
+							set.getPackageRegistry().put(
+									scenario.eClass().getEPackage().getNsURI(),
 									scenario.eClass().getEPackage());
 
-							URI nonsenseURI = URI.createGenericURI(
-									"invalid", "invalid", "").trimFragment();
-							
-							final Resource resource = set.createResource(nonsenseURI);
-		
-							
+							URI nonsenseURI = URI.createGenericURI("invalid",
+									"invalid", "").trimFragment();
+
+							final Resource resource = set
+									.createResource(nonsenseURI);
+
 							resource.setURI(nonsenseURI.trimFragment());
-							
-							resource.getContents().add(scenario); // scenario must be
-															// in a resourceset
-															// for things to
-															// function.
+
+							resource.getContents().add(scenario); // scenario
+																	// must be
+							// in a resourceset
+							// for things to
+							// function.
 
 							final LNGScenarioTransformer lst = new LNGScenarioTransformer(
 									scenario);
@@ -350,6 +360,8 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		}
 
 		scenario.setName(destinationPage.getFileName());
+
+
 
 		IFile file = destinationPage.createNewFile();
 		if (file == null)

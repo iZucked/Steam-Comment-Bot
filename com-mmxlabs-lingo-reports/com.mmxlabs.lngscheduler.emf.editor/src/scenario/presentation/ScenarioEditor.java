@@ -2794,6 +2794,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		page.setNameForFeature(
 				FleetPackage.eINSTANCE.getVesselStateAttributes_IdleNBORate(),
 				"Idle NBO Rate");
+		
+		page.setNameForFeature(
+				CargoPackage.eINSTANCE.getCargo_AllowedVessels(),
+				"Restrict To");
 	}
 
 	/**

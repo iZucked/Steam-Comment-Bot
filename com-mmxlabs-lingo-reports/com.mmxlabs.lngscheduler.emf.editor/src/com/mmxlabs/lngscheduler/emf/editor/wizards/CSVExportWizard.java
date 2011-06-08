@@ -5,13 +5,13 @@
 package com.mmxlabs.lngscheduler.emf.editor.wizards;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
@@ -169,8 +169,10 @@ public class CSVExportWizard extends Wizard implements IWorkbenchWizard {
 				.getContractModel().getSalesContracts(), name);
 		exportObjects(ContractPackage.eINSTANCE.getPurchaseContract(), scenario
 				.getContractModel().getPurchaseContracts(), name);
-		exportObjects(ContractPackage.eINSTANCE.getEntity(), scenario
-				.getContractModel().getEntities(), name);
+		final List<EObject> allEntities = new ArrayList<EObject>();
+		allEntities.addAll(scenario.getContractModel().getEntities());
+		allEntities.add(scenario.getContractModel().getShippingEntity());
+		exportObjects(ContractPackage.eINSTANCE.getEntity(), allEntities, name);
 
 		exportObjects(MarketPackage.eINSTANCE.getIndex(), scenario
 				.getMarketModel().getIndices(), name);
