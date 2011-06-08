@@ -5,6 +5,8 @@
 package com.mmxlabs.scheduleview.views;
 
 
+import java.util.Collection;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -116,12 +118,15 @@ public class SchedulerView extends ViewPart {
 					Object oldInput) {
 				super.inputChanged(input, oldInput);
 				
-				if (input != null && oldInput == null) {
+				final boolean inputEmpty = input == null || (input instanceof Collection && ((Collection<?>)input).isEmpty());
+				final boolean oldInputEmpty = oldInput == null || (oldInput instanceof Collection && ((Collection<?>)oldInput).isEmpty());
+				
+				if (inputEmpty != oldInputEmpty) {
+
 					if (packAction != null) {
 						packAction.run();
 					}
 				}
-
 			}
 		};
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
