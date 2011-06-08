@@ -46,6 +46,7 @@ public class DistanceModelImporter extends EObjectImporter {
 				lines.clear();
 				String fromPort = null;
 				for (final Map.Entry<String, String> column : row.entrySet()) {
+					if (column.getValue().isEmpty()) continue;
 					try {
 						final int x = Integer.parseInt(column.getValue());
 						final DistanceLine dl = PortFactory.eINSTANCE

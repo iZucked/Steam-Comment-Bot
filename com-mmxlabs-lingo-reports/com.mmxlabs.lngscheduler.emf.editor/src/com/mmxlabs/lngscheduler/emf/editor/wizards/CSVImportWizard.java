@@ -262,13 +262,13 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					addDefaultSettings(scenario);
 
 					// copy shipping entity from last entity.
-					scenario.getContractModel()
-							.setShippingEntity(
-									scenario.getContractModel()
-											.getEntities()
-											.get(scenario.getContractModel().getEntities()
-													.size() - 1));
-					
+					if (scenario.getContractModel().getEntities().isEmpty() == false)
+						scenario.getContractModel().setShippingEntity(
+								scenario.getContractModel()
+										.getEntities()
+										.get(scenario.getContractModel()
+												.getEntities().size() - 1));
+
 					if (scenario.getOptimisation().getCurrentSettings()
 							.getInitialSchedule() != null) {
 						// evaluate initial schedule
@@ -360,8 +360,6 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		}
 
 		scenario.setName(destinationPage.getFileName());
-
-
 
 		IFile file = destinationPage.createNewFile();
 		if (file == null)
