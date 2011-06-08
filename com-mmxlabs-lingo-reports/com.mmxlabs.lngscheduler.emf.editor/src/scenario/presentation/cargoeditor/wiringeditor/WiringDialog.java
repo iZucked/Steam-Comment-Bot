@@ -53,7 +53,7 @@ public class WiringDialog extends Dialog {
 		final Shell shell = new Shell((SWT.DIALOG_TRIM & ~SWT.CLOSE)
 				| SWT.APPLICATION_MODAL | SWT.RESIZE);
 		shell.setSize(500, 300);
-		shell.setText("Wiring Editor");
+		shell.setText("Redirection Wizard");
 		GridLayout gl_shell = new GridLayout(1, false);
 		gl_shell.verticalSpacing = 6;
 		shell.setLayout(gl_shell);
@@ -81,10 +81,10 @@ public class WiringDialog extends Dialog {
 
 		((GridLayout) buttonsComposite.getLayout()).marginWidth = 0;
 
-		Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
-		btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-				false, 1, 1));
-		btnOptimise.setText("Optimise");
+//		Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
+//		btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
+//				false, 1, 1));
+//		btnOptimise.setText("Optimise");
 
 		final Button btnOk = new Button(buttonsComposite, SWT.NONE);
 		GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1,

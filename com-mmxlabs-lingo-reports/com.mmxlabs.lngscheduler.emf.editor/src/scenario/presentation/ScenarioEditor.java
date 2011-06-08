@@ -118,6 +118,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import scenario.NamedObject;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
@@ -166,9 +167,11 @@ import scenario.presentation.cargoeditor.detailview.EObjectDetailPropertySheetPa
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IMultiInlineEditorFactory;
 import scenario.presentation.cargoeditor.detailview.EObjectMultiDialog;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
+import scenario.presentation.cargoeditor.detailview.MultiReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
 import scenario.presentation.cargoeditor.dialogs.PortAndTimeDialog;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
@@ -184,6 +187,7 @@ import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
+import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
@@ -246,7 +250,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					.getTargetType().getName()) {
 				@Override
 				public EObject createObject(final boolean usingSelection) {
-					final EObject newObject = delegate.createObject(usingSelection);
+					final EObject newObject = delegate
+							.createObject(usingSelection);
 
 					final EObjectDetailDialog dialog = new EObjectDetailDialog(
 							viewer.getControl().getShell(), SWT.NONE,
@@ -286,7 +291,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			v.getControl().addKeyListener(new KeyListener() {
 				@Override
 				public void keyReleased(final org.eclipse.swt.events.KeyEvent e) {
-					
+
 					// TODO: Wrap up in a command with keybindings
 					if (e.keyCode == '\r') {
 						final ISelection selection = getViewer().getSelection();
@@ -374,6 +379,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			return result;
 		}
+		@Override
+		public String getName(final EObject target) {
+			return ((NamedObject)target).getName();
+		}
 	}
 
 	final ScenarioRVP scheduleProvider = new ScenarioRVP() {
@@ -387,21 +396,28 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			result.add(0, new Pair<String, EObject>("none", null));
 			return result;
 		}
+
+		@Override
+		public String getName(final EObject target) {
+			if (target == null) return "none";
+			return ((Schedule)target).getName();
+		}
 	};
 
 	final ScenarioRVP fuelProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(final EObject target,
-				final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAllowedValues(
+				final EObject target, final EStructuralFeature field) {
 			return getSortedNames(getEnclosingScenario(target).getFleetModel()
 					.getFuels(), namedObjectName);
 		}
+
 	};
 
 	final ScenarioRVP vesselProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(final EObject target,
-				final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAllowedValues(
+				final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getEnclosingScenario(target);
 			final List<Pair<String, EObject>> result = getSortedNames(scenario
 					.getFleetModel().getFleet(), namedObjectName);
@@ -778,9 +794,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				case Resource.RESOURCE__IS_LOADED:
 				case Resource.RESOURCE__ERRORS:
 				case Resource.RESOURCE__WARNINGS: {
-					final Resource resource = (Resource) notification.getNotifier();
-					final Diagnostic diagnostic = analyzeResourceProblems(resource,
-							null);
+					final Resource resource = (Resource) notification
+							.getNotifier();
+					final Diagnostic diagnostic = analyzeResourceProblems(
+							resource, null);
 					if (diagnostic.getSeverity() != Diagnostic.OK) {
 						resourceToDiagnosticMap.put(resource, diagnostic);
 					} else {
@@ -898,10 +915,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	protected void updateProblemIndication() {
 		if (updateProblemIndication) {
-			final BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK,
-					"com.mmxlabs.lngscheduler.emf.editor", 0, null,
-					new Object[] { editingDomain.getResourceSet() });
-			for (final Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
+			final BasicDiagnostic diagnostic = new BasicDiagnostic(
+					Diagnostic.OK, "com.mmxlabs.lngscheduler.emf.editor", 0,
+					null, new Object[] { editingDomain.getResourceSet() });
+			for (final Diagnostic childDiagnostic : resourceToDiagnosticMap
+					.values()) {
 				if (childDiagnostic.getSeverity() != Diagnostic.OK) {
 					diagnostic.add(childDiagnostic);
 				}
@@ -1238,7 +1256,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				new UnwrappingSelectionProvider(viewer));
 
 		final int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-		final Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance() };
+		final Transfer[] transfers = new Transfer[] { LocalTransfer
+				.getInstance() };
 		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(
 				viewer));
 		viewer.addDropSupport(dndOperations, transfers,
@@ -1267,7 +1286,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					false);
 		}
 
-		final Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
+		final Diagnostic diagnostic = analyzeResourceProblems(resource,
+				exception);
 		if (diagnostic.getSeverity() != Diagnostic.OK) {
 			resourceToDiagnosticMap.put(resource,
 					analyzeResourceProblems(resource, exception));
@@ -1994,6 +2014,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						cargoPackage.getCargo_DischargeSlot());
 			}
 
+			{
+				final MultipleReferenceManipulator av = new MultipleReferenceManipulator(
+						cargoPackage.getCargo_AllowedVessels(),
+						getEditingDomain(), vesselProvider, namedObjectName);
+				cargoPane.addTypicalColumn("Restrict To", av);
+			}
+
 			// TODO sort out initial vessel column
 			cargoPane.getViewer().setInput(
 					editingDomain.getResourceSet().getResources().get(0)
@@ -2020,7 +2047,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			@Override
 			protected Action createExportAction(final TableViewer viewer,
 					final EMFPath ePath) {
-				final Action exportPortsAction = super.createExportAction(viewer, ePath);
+				final Action exportPortsAction = super.createExportAction(
+						viewer, ePath);
 				final Action exportDistanceModelAction = new ExportCSVAction() {
 					@Override
 					public void run() {
@@ -2030,9 +2058,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 					@Override
 					protected List<EObject> getObjectsToExport() {
-						return Collections.singletonList((EObject) getScenario().getDistanceModel());
+						return Collections
+								.singletonList((EObject) getScenario()
+										.getDistanceModel());
 					}
-					
+
 					@Override
 					protected EClass getExportEClass() {
 						return PortPackage.eINSTANCE.getDistanceModel();
@@ -2044,7 +2074,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			@Override
 			protected Action createImportAction(final TableViewer viewer,
 					final EditingDomain editingDomain, final EMFPath ePath) {
-				final ImportCSVAction delegate = (ImportCSVAction) super.createImportAction(viewer, editingDomain, ePath);
+				final ImportCSVAction delegate = (ImportCSVAction) super
+						.createImportAction(viewer, editingDomain, ePath);
 				return new ImportCSVAction() {
 					@Override
 					public void run() {
@@ -2056,15 +2087,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					protected EObject getToplevelObject() {
 						return getScenario();
 					}
-					
+
 					@Override
 					protected EClass getImportClass() {
 						return PortPackage.eINSTANCE.getDistanceModel();
 					}
-					
+
 					@Override
 					public void addObjects(final Collection<EObject> newObjects) {
-						getScenario().setDistanceModel((DistanceModel) newObjects.iterator().next());
+						getScenario().setDistanceModel(
+								(DistanceModel) newObjects.iterator().next());
 					}
 				};
 			}
@@ -2132,7 +2164,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			canalEVP.addTypicalColumn("Name", new BasicAttributeManipulator(
 					namedObjectName, getEditingDomain()));
-			
+
 			canalEVP.getViewer().setInput(getScenario());
 			createContextMenuFor(canalEVP.getViewer());
 		}
@@ -2239,7 +2271,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						}
 
 						@Override
-						public void addObjects(final Collection<EObject> newObjects) {
+						public void addObjects(
+								final Collection<EObject> newObjects) {
 
 						}
 
@@ -2576,7 +2609,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					.addSelectionChangedListener(new ISelectionChangedListener() {
 						// This ensures that we handle selections correctly.
 						//
-						public void selectionChanged(final SelectionChangedEvent event) {
+						public void selectionChanged(
+								final SelectionChangedEvent event) {
 							handleContentOutlineSelection(event.getSelection());
 						}
 					});
@@ -2598,6 +2632,35 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		return page;
 	}
 
+	private class MultiReferenceEditorFactory implements IMultiInlineEditorFactory {
+		private final EditingDomain editingDomain;
+		private final IReferenceValueProvider valueProvider;
+
+		
+		public MultiReferenceEditorFactory(EditingDomain editingDomain,
+				IReferenceValueProvider valueProvider) {
+			super();
+			this.editingDomain = editingDomain;
+			this.valueProvider = valueProvider;
+		}
+
+
+		@Override
+		public IInlineEditor createEditor(EMFPath path,
+				EStructuralFeature feature, ICommandProcessor commandProcessor) {
+			return new ReferenceInlineEditor(path, feature,
+					editingDomain, commandProcessor, valueProvider);
+		}
+
+
+		@Override
+		public IInlineEditor createMultiEditor(EMFPath path,
+				EStructuralFeature feature, ICommandProcessor commandProcessor) {
+			return new MultiReferenceInlineEditor(path, feature,
+					editingDomain, commandProcessor, valueProvider);
+		}
+	}
+	
 	/**
 	 * Add editors to any detail view container
 	 * 
@@ -2605,16 +2668,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	private void setupDetailViewContainer(final IDetailViewContainer page) {
 		page.addDefaultEditorFactories();
+
 		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new ReferenceInlineEditor(path, feature,
-								editingDomain, processor, portProvider);
-					}
-				});
+				new MultiReferenceEditorFactory(getEditingDomain(), portProvider));
+				
 
 		page.setEditorFactoryForClassifier(
 				FleetPackage.eINSTANCE.getVesselFuel(),
@@ -2702,15 +2759,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		page.setEditorFactoryForClassifier(
 				FleetPackage.eINSTANCE.getVesselClass(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new ReferenceInlineEditor(path, feature,
-								editingDomain, processor, vesselClassProvider);
-					}
-				});
+				new MultiReferenceEditorFactory(getEditingDomain(), vesselClassProvider));
+
+		page.setEditorFactoryForClassifier(
+				FleetPackage.eINSTANCE.getVessel(),
+				new MultiReferenceEditorFactory(getEditingDomain(), vesselProvider));
 
 		page.setEditorFactoryForClassifier(
 				SchedulePackage.eINSTANCE.getSchedule(),
@@ -2734,9 +2787,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				"Discharge");
 		page.setNameForFeature(
 				CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
-		
-		page.setNameForFeature(FleetPackage.eINSTANCE.getVesselStateAttributes_NboRate(), "NBO Rate");
-		page.setNameForFeature(FleetPackage.eINSTANCE.getVesselStateAttributes_IdleNBORate(), "Idle NBO Rate");
+
+		page.setNameForFeature(
+				FleetPackage.eINSTANCE.getVesselStateAttributes_NboRate(),
+				"NBO Rate");
+		page.setNameForFeature(
+				FleetPackage.eINSTANCE.getVesselStateAttributes_IdleNBORate(),
+				"Idle NBO Rate");
 	}
 
 	/**
@@ -2963,7 +3020,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	@Override
-	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
+	public void addSelectionChangedListener(
+			final ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
 

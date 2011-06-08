@@ -11,10 +11,9 @@ import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEdi
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public interface IDetailViewContainer {
-
 	public abstract void addDefaultEditorFactories();
 
 	public abstract void setNameForFeature(EStructuralFeature feature,
@@ -25,5 +24,4 @@ public interface IDetailViewContainer {
 
 	public abstract void setEditorFactoryForFeature(EStructuralFeature feature,
 			IInlineEditorFactory iInlineEditorFactory);
-
 }

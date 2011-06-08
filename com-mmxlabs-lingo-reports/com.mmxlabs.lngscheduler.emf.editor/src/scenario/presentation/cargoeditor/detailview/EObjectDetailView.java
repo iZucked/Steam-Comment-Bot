@@ -66,6 +66,12 @@ public class EObjectDetailView extends Composite {
 				final ICommandProcessor commandProcessor);
 	}
 
+	public interface IMultiInlineEditorFactory extends IInlineEditorFactory {
+		public IInlineEditor createMultiEditor(final EMFPath path,
+				final EStructuralFeature feature,
+				final ICommandProcessor commandProcessor);
+	}
+
 	/**
 	 * This is an interface for an inline editor. It is given an input, and
 	 * should generate commands and send them to the appropriate command
@@ -157,27 +163,28 @@ public class EObjectDetailView extends Composite {
 		final GridLayout groupLayout = new GridLayout(2, false);
 		controls.setLayout(groupLayout);
 		groupLayout.horizontalSpacing = 10;
-		
+
 		for (final EStructuralFeature attribute : objectClass
 				.getEAllStructuralFeatures()) {
 
+			// create editor for this attribute
 			if (attribute instanceof EReference) {
 				final EReference reference = (EReference) attribute;
 				if (reference.isContainment()
 						&& !(editorFactoriesByFeature.containsKey(reference)))
 					continue;
-				if (reference.isMany()
-						&& !(editorFactoriesByFeature.containsKey(reference)))
-					continue; // skip
 			}
-
-			// create editor for this attribute
 
 			final EClassifier attributeType = attribute.getEType();
 
 			final IInlineEditorFactory attributeEditorFactory = editorFactoriesByFeature
 					.containsKey(attribute) ? editorFactoriesByFeature
 					.get(attribute) : editorFactories.get(attributeType);
+
+			if (attribute.isMany()
+					&& !(attributeEditorFactory instanceof IMultiInlineEditorFactory))
+				continue;
+
 			// final IInlineEditor attributeEditor = new TextInlineEditor(path,
 			// attribute, editingDomain);
 			final Control attributeControl;
@@ -189,19 +196,30 @@ public class EObjectDetailView extends Composite {
 				// editors.add(blank);
 				// attributeControl = blank.createControl(controls);
 			} else {
-				final IInlineEditor attributeEditor = attributeEditorFactory
-						.createEditor(path, attribute, processor);
+				final IInlineEditor attributeEditor;
+				if (attribute.isMany()) {
+					attributeEditor = ((IMultiInlineEditorFactory) attributeEditorFactory)
+							.createMultiEditor(path, attribute, processor);
+				} else {
+					attributeEditor = attributeEditorFactory.createEditor(path,
+							attribute, processor);
+				}
+
 				// create label for this attribute
 
 				final Label attributeLabel = new Label(controls, SWT.RIGHT);
-				//Check supplied mappings
+				// Check supplied mappings
 				String attributeName = nameByFeature.get(attribute);
 				// Try using LNG Edit Plugin information
 				if (attributeName == null) {
 					// Construct key in form used by plugin.properties
-//					final String key = "_UI_" + objectClass.getName() +"_" + attribute.getName() + "_feature";
-					final String key = "_UI_" + attribute.getEContainingClass().getName() +"_" + attribute.getName() + "_feature";
-					// TODO: Pass in an instance of ResourceLocator rather than direct dependence on LngEditPlugin
+					// final String key = "_UI_" + objectClass.getName() +"_" +
+					// attribute.getName() + "_feature";
+					final String key = "_UI_"
+							+ attribute.getEContainingClass().getName() + "_"
+							+ attribute.getName() + "_feature";
+					// TODO: Pass in an instance of ResourceLocator rather than
+					// direct dependence on LngEditPlugin
 					attributeName = LngEditPlugin.getPlugin().getString(key);
 				}
 				// Ok, so nothing provided, try and deduce name
@@ -212,8 +230,6 @@ public class EObjectDetailView extends Composite {
 						false, false);
 				attributeLabel.setLayoutData(labelData);
 
-				
-				
 				editors.add(attributeEditor);
 				attributeControl = attributeEditor.createControl(controls);
 			}
@@ -265,7 +281,8 @@ public class EObjectDetailView extends Composite {
 
 	private final Map<EStructuralFeature, String> nameByFeature = new HashMap<EStructuralFeature, String>();
 
-	public void setNameForFeature(final EStructuralFeature key, final String value) {
+	public void setNameForFeature(final EStructuralFeature key,
+			final String value) {
 		nameByFeature.put(key, value);
 	}
 }

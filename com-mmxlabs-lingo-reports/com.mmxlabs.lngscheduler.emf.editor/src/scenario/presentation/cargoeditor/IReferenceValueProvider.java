@@ -14,5 +14,5 @@ import com.mmxlabs.common.Pair;
 public interface IReferenceValueProvider {
 	public List<Pair<String, EObject>> getAllowedValues(
 			final EObject target, final EStructuralFeature field);
-//	public String getName(final EObject target);
+	public String getName(final EObject target);
 }
