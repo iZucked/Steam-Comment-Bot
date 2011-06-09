@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.jobcontroller.core.impl;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
 import scenario.Scenario;
 import scenario.schedule.Schedule;
 
@@ -28,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
  */
 public class LNGSchedulerJob extends AbstractManagedJob {
 	private static final int REPORT_PERCENTAGE = 1;
-	private final Scenario scenario;
+	private Scenario scenario;
 	private int currentProgress = 0;
 
 	private final ModelEntityMap entities = new ResourcelessModelEntityMap();
@@ -38,7 +40,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	public LNGSchedulerJob(final Scenario scenario) {
 		super("Optimising " + scenario.getName());
 		this.scenario = scenario;
-		entities.setScenario(scenario);
+//		entities.setScenario(scenario);
 	}
 
 	/*
@@ -48,6 +50,12 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	 */
 	@Override
 	protected void reallyPrepare() {
+		
+		scenario = EcoreUtil.copy(scenario);
+//		scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
+
+		entities.setScenario(scenario);
+		
 		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
 
 		final OptimisationTransformer ot = new OptimisationTransformer(

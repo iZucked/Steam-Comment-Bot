@@ -113,7 +113,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	private IManagedJob createOptimisationJob(final IJobManager jmv,
 			final IResource resource, Scenario scenario) {
 
-		scenario = EcoreUtil.copy(scenario);
+//		scenario = EcoreUtil.copy(scenario);
 		scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
 		
 		final LNGSchedulerJob newJob = new LNGSchedulerJob(scenario);

@@ -5,11 +5,18 @@
 package com.mmxlabs.rcp.navigator;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
@@ -25,6 +32,7 @@ import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.impl.DisposeOnRemoveListener;
 import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
 import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
@@ -32,6 +40,8 @@ import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 
 public class TheNavigator extends CommonNavigator {
 
+	private final ResourceListener resourceListener = new ResourceListener();
+	
 	final IJobManagerListener jobManagerListener = new JobManagerListener() {
 
 		/**
@@ -138,14 +148,14 @@ public class TheNavigator extends CommonNavigator {
 							.getJobManager();
 
 					if (jobManager.findJobForResource(resource) == null) {
-						Scenario scenario = (Scenario) resource
+						final Scenario scenario = (Scenario) resource
 								.getAdapter(Scenario.class);
 
 						if (scenario == null) {
 							return;
 						}
 
-						scenario = EcoreUtil.copy(scenario);
+//						scenario = EcoreUtil.copy(scenario);
 						scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
 						
 						final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
@@ -164,6 +174,9 @@ public class TheNavigator extends CommonNavigator {
 
 						final Scenario scenario = (Scenario) resource
 								.getAdapter(Scenario.class);
+
+//						scenario = EcoreUtil.copy(scenario);
+						scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
 
 						// Only allow resources with a scenario to be checked
 						if (scenario == null) {
@@ -216,4 +229,104 @@ public class TheNavigator extends CommonNavigator {
 
 		super.dispose();
 	}
+	
+
+	private class ResourceListener implements IResourceChangeListener,
+			IResourceDeltaVisitor {
+
+		private final ResourceSetImpl resourceSet = new ResourceSetImpl();
+
+		public ResourceListener() {
+			ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
+					IResourceChangeEvent.POST_CHANGE);
+		}
+
+		public void dispose() {
+			ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+		}
+
+		@Override
+		public void resourceChanged(final IResourceChangeEvent event) {
+			try {
+				final IResourceDelta delta = event.getDelta();
+				delta.accept(this);
+			} catch (final CoreException e) {
+				// System.out.println("Resource Changed Fail - " +
+				// e.toString());
+			}
+		}
+
+		@Override
+		public boolean visit(final IResourceDelta delta) throws CoreException {
+			final IResource changedResource = delta.getResource();
+
+			if (changedResource.getType() == IResource.FILE
+					&& changedResource.getFileExtension().equals("scenario")) {
+//				try {
+
+//					final String path = ((IFile) changedResource).getFullPath()
+//							.toString();
+//					final URI uri = URI.createPlatformResourceURI(path, true);
+//					final Resource res = resourceSet.getResource(uri, false);
+//					if (res != null) {
+//						res.unload();
+//						// Only load resource if not removed
+//						if ((delta.getKind() & IResourceDelta.REMOVED) == 0) {
+//							res.load(resourceSet.getLoadOptions());
+//						}
+//					}
+
+					boolean reselect = false;
+					final IJobManager jobManager = Activator.getDefault()
+							.getJobManager();
+					{
+						// If checked, then ensure we have a job
+						final IManagedJob oldJ = jobManager
+								.findJobForResource(changedResource);
+						if (oldJ == null) {
+							return false;
+						}
+						if (oldJ.getJobState() != JobState.CREATED) {
+							return false;
+						}
+						reselect = jobManager.getSelectedJobs().contains(oldJ);
+					Display.getDefault().asyncExec(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							jobManager.removeJob(oldJ);
+							
+						}
+					});
+						
+					}
+//					// Load up new job
+//					{
+//						final Scenario scenario = (Scenario) changedResource
+//								.getAdapter(Scenario.class);
+//						// Create a job, but do not prepare it for fast
+//						// viewing.
+//						final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
+//
+//						jobManager
+//								.addJobManagerListener(new DisposeOnRemoveListener(
+//										j));
+//						jobManager.addJob(j, changedResource);
+//						if (reselect) {
+//							jobManager.setJobSelection(j, true);
+//						}
+//					}
+
+//				} catch (final IOException ie) {
+//					System.err.println("Error reloading resource - "
+//							+ ie.toString());
+//				}
+				return false;
+			}
+			return true;
+		}
+
+	}
+
 }
