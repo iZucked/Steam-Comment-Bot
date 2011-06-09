@@ -49,7 +49,6 @@ public class DeleteHelper {
 		for (final Map.Entry<EClass, Set<EObject>> entry : byClass.entrySet()) {
 			allObjects.addAll(createDeleter(domain, entry.getKey(), entry.getValue()).getObjectsToDelete());
 		}
-		
 	
 		return DeleteCommand.create(domain, allObjects);
 	}
