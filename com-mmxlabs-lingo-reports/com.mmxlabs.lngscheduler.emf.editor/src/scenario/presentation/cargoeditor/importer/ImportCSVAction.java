@@ -4,12 +4,20 @@
  */
 package scenario.presentation.cargoeditor.importer;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
@@ -41,59 +49,88 @@ public abstract class ImportCSVAction extends Action {
 	public abstract void addObjects(final Collection<EObject> newObjects);
 
 	protected abstract EClass getImportClass();
-	
+
 	@Override
 	public void run() {
 		final FileDialog openDialog = new FileDialog(PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getShell(), SWT.OPEN);
 
 		openDialog.setFilterExtensions(new String[] { "*.csv" });
-		openDialog.setText("Choose a CSV file from which to import " + getNiceName(getImportClass()));
-		
+		openDialog.setText("Choose a CSV file from which to import "
+				+ getNiceName(getImportClass()));
+
 		final String inputFileName = openDialog.open();
 		if (inputFileName == null)
 			return;
 
-		final List<DeferredReference> deferments = new ArrayList<DeferredReference>();
-		final NamedObjectRegistry registry = new NamedObjectRegistry();
+		final WorkspaceJob job = new WorkspaceJob("Import CSV from " + inputFileName) {
 
-		registry.addEObjects(getToplevelObject());
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor)
+					throws CoreException {
+				// count lines in file
+				BufferedReader br;
+				try {
+					br = new BufferedReader(new FileReader(new File(
+							inputFileName)));
+					int lineCount = 0;
+					while (br.readLine() != null)
+						lineCount++;
+					br.close();
+					monitor.beginTask("Import CSV Data", 4);
 
-		final EObjectImporter importer = EObjectImporterFactory.getInstance()
-				.getImporter(getImportClass());
+					final List<DeferredReference> deferments = new ArrayList<DeferredReference>();
+					monitor.subTask("Prepare names");
+					final NamedObjectRegistry registry = new NamedObjectRegistry();
+					monitor.worked(1);
+					registry.addEObjects(getToplevelObject());
+					monitor.subTask("Read CSV");
+					final EObjectImporter importer = EObjectImporterFactory
+							.getInstance().getImporter(getImportClass());
+					final CSVReader reader = new CSVReader(inputFileName);
+					final Collection<EObject> importedObjects = importer
+							.importObjects(reader, deferments, registry);
+					monitor.worked(1);
+					// Tell implementation to add these objects
+					monitor.subTask("Merge new data");
+					addObjects(importedObjects);
+					monitor.worked(1);
+					// update references
+					registry.addEObjects(getToplevelObject());
+					// link up imported references
 
-		try {
-			final CSVReader reader = new CSVReader(inputFileName);
-			final Collection<EObject> importedObjects = importer.importObjects(
-					reader, deferments, registry);
-			// Tell implementation to add these objects
-			addObjects(importedObjects);
-			// update references
-			registry.addEObjects(getToplevelObject());
-			// link up imported references
+					final Map<Pair<EClass, String>, EObject> m = registry
+							.getContents();
+					for (final DeferredReference dr : deferments) {
+						dr.setRegistry(m);
+						dr.run();
+					}
 
-			final Map<Pair<EClass, String>, EObject> m = registry.getContents();
-			for (final DeferredReference dr : deferments) {
-				dr.setRegistry(m);
-				dr.run();
+					monitor.worked(1);
+					// finally do any postprocessing
+					// fixes dates and times, derives missing fields etc.
+					for (final EObject object : importedObjects) {
+						Postprocessor.getInstance().postprocess(object);
+					}
+
+					return Status.OK_STATUS;
+				} catch (IOException e) {
+					return Status.CANCEL_STATUS;
+				}
 			}
-
-			// finally do any postprocessing
-			// fixes dates and times, derives missing fields etc.
-			for (final EObject object : importedObjects) {
-				Postprocessor.getInstance().postprocess(object);
-			}
-		} catch (IOException e) {
-		}
-
+		};
+		
+		// Trigger UI for progress monitor
+		job.setUser(true);
+		// Schedule job for launching
+		job.schedule();
 	}
 
-	
-	private final Map<EClass, String> niceNames = 
-		CollectionsUtil.makeHashMap(
-				PortPackage.eINSTANCE.getDistanceModel(), "Distance Matrix",
-				FleetPackage.eINSTANCE.getVesselEvent(), "Vessel Events",
-				FleetPackage.eINSTANCE.getVesselClass(), "Vessel Classes");
+	private final Map<EClass, String> niceNames = CollectionsUtil.makeHashMap(
+			PortPackage.eINSTANCE.getDistanceModel(), "Distance Matrix",
+			FleetPackage.eINSTANCE.getVesselEvent(), "Vessel Events",
+			FleetPackage.eINSTANCE.getVesselClass(), "Vessel Classes");
+
 	/**
 	 * @param importClass
 	 * @return

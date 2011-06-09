@@ -106,8 +106,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	private final ScenarioEditor part;
 	private TableViewer viewer;
 
-	final boolean[] ignoreNotifications = new boolean[] {false};
-	
+	final boolean[] ignoreNotifications = new boolean[] { false };
+
 	private final ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
 	private boolean sortDescending = false;
 
@@ -124,7 +124,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		getToolBarManager().add(new GroupMarker("pack"));
 		getToolBarManager().add(new GroupMarker("additions"));
 		getToolBarManager().add(new GroupMarker("edit"));
-		
+
 		getToolBarManager().add(new GroupMarker("importers"));
 		getToolBarManager().add(new GroupMarker("exporters"));
 		getToolBarManager().add(new GroupMarker("copy"));
@@ -290,9 +290,11 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 				}
 
-				//TODO hack because this is very slow and canals contain many elements
-				if (object instanceof Canal) return super.getBackground(element);
-				
+				// TODO hack because this is very slow and canals contain many
+				// elements
+				if (object instanceof Canal)
+					return super.getBackground(element);
+
 				final TreeIterator<EObject> iterator = object.eAllContents();
 				while (iterator.hasNext()) {
 					if (hasValidationError(iterator.next()))
@@ -484,15 +486,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		 */
 		final EObject[] currentContainer = new EObject[] { null };
 
-		
-		
 		final EContentAdapter adapter = new EContentAdapter() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				
-				if (ignoreNotifications[0]) return;
-				
+
+				if (ignoreNotifications[0])
+					return;
+
 				// System.err.println(notification);
 				if (notification.isTouch() == false) {
 					// this is a change, so we have to refresh.
@@ -562,21 +563,21 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				final Action b = createDeleteAction(viewer,
 						part.getEditingDomain());
 				if (b != null) {
-					x.appendToGroup("edit",b);
+					x.appendToGroup("edit", b);
 				}
 			}
 			{
 				final Action a = createImportAction(viewer,
 						part.getEditingDomain(), ePath);
 				if (a != null)
-					x.appendToGroup("importers",a);
+					x.appendToGroup("importers", a);
 			}
 			{
 				final Action a = createExportAction(viewer, ePath);
 				if (a != null)
-					x.appendToGroup("exporters",a);
+					x.appendToGroup("exporters", a);
 			}
-			
+
 			x.update(true);
 		}
 	}
@@ -665,9 +666,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 						// now perform replace in the original container
 						final Command replace = ReplaceCommand.create(
-								editingDomain, oldObject.eContainer(), oldObject.eContainingFeature(), oldObject, 
+								editingDomain, oldObject.eContainer(),
+								oldObject.eContainingFeature(), oldObject,
 								Collections.singleton(newObject));
-						
+
 						if (replace.canExecute() == false) {
 							System.err
 									.println("Cannot execute replace command from "
@@ -685,13 +687,19 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					System.err
 							.println("Warning: cannot evaluate import command");
 				}
-			
+
 				ignoreNotifications[0] = true;
-			
+
 				editingDomain.getCommandStack().execute(cc);
-				
+
 				ignoreNotifications[0] = false;
-				viewer.refresh();
+				PlatformUI.getWorkbench().getDisplay()
+						.asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								viewer.refresh();
+							}
+						});
 			}
 
 			/**
