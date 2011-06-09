@@ -106,6 +106,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	private final ScenarioEditor part;
 	private TableViewer viewer;
 
+	final boolean[] ignoreNotifications = new boolean[] {false};
+	
 	private final ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
 	private boolean sortDescending = false;
 
@@ -482,10 +484,15 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		 */
 		final EObject[] currentContainer = new EObject[] { null };
 
+		
+		
 		final EContentAdapter adapter = new EContentAdapter() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
+				
+				if (ignoreNotifications[0]) return;
+				
 				// System.err.println(notification);
 				if (notification.isTouch() == false) {
 					// this is a change, so we have to refresh.
@@ -678,7 +685,13 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					System.err
 							.println("Warning: cannot evaluate import command");
 				}
+			
+				ignoreNotifications[0] = true;
+			
 				editingDomain.getCommandStack().execute(cc);
+				
+				ignoreNotifications[0] = false;
+				viewer.refresh();
 			}
 
 			/**
