@@ -247,7 +247,11 @@ public class OptimisationTransformer {
 				// get the sequence for the chosen vessel
 				final IModifiableSequence<ISequenceElement> ms = advice
 						.getModifiableSequence(vp.getResource(vessel));
-				ms.add(serp.getStartElement(vp.getResource(vessel)));
+				final IResource r = vp.getResource(vessel);
+				if (r == null) {
+					int x = 1;
+				}
+				ms.add(serp.getStartElement(r));
 				for (final ScheduledEvent event : sequence.getEvents()) {
 					if (event instanceof SlotVisit) {
 						final SlotVisit v = (SlotVisit) event;
