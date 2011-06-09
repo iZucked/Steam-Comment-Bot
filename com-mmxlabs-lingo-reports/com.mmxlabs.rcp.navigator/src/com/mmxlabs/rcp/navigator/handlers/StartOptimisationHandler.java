@@ -129,7 +129,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		};
 
 		eclipseJob.setPriority(Job.SHORT);
-		eclipseJob.schedule();
+//		eclipseJob.schedule();
 		
 //		newJob.prepare();
 
