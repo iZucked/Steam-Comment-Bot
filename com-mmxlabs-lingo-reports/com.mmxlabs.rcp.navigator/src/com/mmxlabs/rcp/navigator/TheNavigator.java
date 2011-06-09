@@ -5,6 +5,7 @@
 package com.mmxlabs.rcp.navigator;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -137,13 +138,16 @@ public class TheNavigator extends CommonNavigator {
 							.getJobManager();
 
 					if (jobManager.findJobForResource(resource) == null) {
-						final Scenario scenario = (Scenario) resource
+						Scenario scenario = (Scenario) resource
 								.getAdapter(Scenario.class);
 
 						if (scenario == null) {
 							return;
 						}
 
+						scenario = EcoreUtil.copy(scenario);
+						scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
+						
 						final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
 						jobManager.addJob(j, resource);
 					}

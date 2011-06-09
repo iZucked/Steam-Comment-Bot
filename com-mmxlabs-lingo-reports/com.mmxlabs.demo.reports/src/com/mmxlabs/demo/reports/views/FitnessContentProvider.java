@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import scenario.Scenario;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleFitness;
 
@@ -52,7 +53,8 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 			for (final Object o : ((Iterable<?>) newInput)) {
 				if (o instanceof Schedule) {
 					final Schedule schedule = (Schedule) o;
-					final String scheduleName = URI.decode(schedule.eResource().getURI().lastSegment()).replaceAll(".scenario","");
+					Scenario s = (Scenario)schedule.eContainer().eContainer();
+					final String scheduleName = 		s.getName();
 					long total = 0l;
 					for (final ScheduleFitness f : schedule.getFitness()) {
 						rowDataList.add(new RowData(scheduleName, f.getName(), f.getValue()));

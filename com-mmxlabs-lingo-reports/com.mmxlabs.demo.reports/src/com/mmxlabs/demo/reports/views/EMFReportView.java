@@ -46,6 +46,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import scenario.Scenario;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
@@ -158,9 +159,8 @@ public abstract class EMFReportView extends ViewPart implements
 				}
 			}
 			if (object instanceof Schedule) {
-				return URI.decode(
-						((Schedule) object).eResource().getURI().lastSegment())
-						.replaceAll(".scenario", "");
+				Scenario s = (Scenario)((Schedule)object).eContainer().eContainer();
+				return s.getName();
 			} else {
 				return "";
 			}

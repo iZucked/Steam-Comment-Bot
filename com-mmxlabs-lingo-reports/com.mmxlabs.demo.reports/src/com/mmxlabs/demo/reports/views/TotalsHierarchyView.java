@@ -37,6 +37,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import scenario.Scenario;
 import scenario.contract.Entity;
 import scenario.schedule.BookedRevenue;
 import scenario.schedule.LineItem;
@@ -183,9 +184,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 			dummy.addChild(createProfitTreeData(schedule));
 		} else {
 			for (final Schedule schedule : schedules) {
-				final String scheduleName = URI.decode(
-						schedule.eResource().getURI().lastSegment())
-						.replaceAll(".scenario", "");
+				Scenario s = (Scenario)schedule.eContainer().eContainer();
+				final String scheduleName = 		s.getName();
 				// final String scheduleName = schedule.getName();
 				// don't sum costs and profits, because it's meaningless
 				// (profits already include costs)

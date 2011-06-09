@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import scenario.Scenario;
 import scenario.contract.Entity;
 import scenario.schedule.BookedRevenue;
 import scenario.schedule.Schedule;
@@ -99,7 +100,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		final String scheduleName = URI.decode(schedule.eResource().getURI().lastSegment()).replaceAll(".scenario","");
+		Scenario s = (Scenario)schedule.eContainer().eContainer();
+		final String scheduleName = 		s.getName();
 
 		for (final Entry<FuelType, Long> entry : totalFuelCosts.entrySet()) {
 			output.add(new RowData(scheduleName, entry.getKey().toString(),

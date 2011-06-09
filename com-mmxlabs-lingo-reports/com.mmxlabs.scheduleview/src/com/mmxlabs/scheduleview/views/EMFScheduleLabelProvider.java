@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
+import scenario.Scenario;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.FuelMixture;
@@ -41,7 +42,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
-			final String name = URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
+			Scenario s = (Scenario)sequence.eContainer().eContainer().eContainer();
+			final String name = 		s.getName();
+//			final String name = URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
 			
 			return sequence.getVessel().getName() + "\n" + name;
 		}

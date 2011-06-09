@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -110,8 +111,11 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	}
 
 	private IManagedJob createOptimisationJob(final IJobManager jmv,
-			final IResource resource, final Scenario scenario) {
+			final IResource resource, Scenario scenario) {
 
+		scenario = EcoreUtil.copy(scenario);
+		scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
+		
 		final LNGSchedulerJob newJob = new LNGSchedulerJob(scenario);
 		jmv.addJob(newJob, resource);
 
@@ -119,16 +123,16 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		// longer needed
 		jmv.addJobManagerListener(new DisposeOnRemoveListener(newJob));
 
-		final Job eclipseJob = new Job("Evaluate initial state of "
-				+ scenario.getName()) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				newJob.prepare();
-				return Status.OK_STATUS;
-			}
-		};
-
-		eclipseJob.setPriority(Job.SHORT);
+//		final Job eclipseJob = new Job("Evaluate initial state of "
+//				+ scenario.getName()) {
+//			@Override
+//			protected IStatus run(IProgressMonitor monitor) {
+//				newJob.prepare();
+//				return Status.OK_STATUS;
+//			}
+//		};
+//
+//		eclipseJob.setPriority(Job.SHORT);
 //		eclipseJob.schedule();
 		
 //		newJob.prepare();
