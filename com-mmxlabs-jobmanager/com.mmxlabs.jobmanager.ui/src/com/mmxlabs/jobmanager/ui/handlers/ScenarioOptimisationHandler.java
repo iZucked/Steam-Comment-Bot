@@ -31,19 +31,22 @@ public class ScenarioOptimisationHandler extends AbstractScenarioHandler {
 	@Override
 	public void handleScenario(final ExecutionEvent event,
 			final String filename, final Scenario scenario) {
-		IWorkbenchWindow window;
-		try {
-			window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-			final JobManagerView jmv = (JobManagerView) window.getWorkbench()
-					.getActiveWorkbenchWindow().getActivePage()
-					.showView(JobManagerView.ID);
-			LNGSchedulerJob job = new LNGSchedulerJob(scenario);
-//			ScenarioOptimisationJob job = new ScenarioOptimisationJob(filename,
-//					scenario);
-			jmv.addJob(job ,null);
-//			job.start();
-		} catch (ExecutionException e) {
-		} catch (PartInitException e) {
-		}
+		
+		throw new UnsupportedOperationException("No longer supported");
+//		
+//		IWorkbenchWindow window;
+//		try {
+//			window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+//			final JobManagerView jmv = (JobManagerView) window.getWorkbench()
+//					.getActiveWorkbenchWindow().getActivePage()
+//					.showView(JobManagerView.ID);
+//			LNGSchedulerJob job = new LNGSchedulerJob(scenario);
+////			ScenarioOptimisationJob job = new ScenarioOptimisationJob(filename,
+////					scenario);
+//			jmv.addJob(job ,null);
+////			job.start();
+//		} catch (ExecutionException e) {
+//		} catch (PartInitException e) {
+//		}
 	}
 }
