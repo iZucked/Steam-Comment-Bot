@@ -178,6 +178,7 @@ public class WiringComposite extends Composite {
 
 	private class PortAndDateComposite extends Composite implements
 			SelectionListener {
+		private static final int LONG_LENGTH = 20;
 		public final DateTime dateTime;
 		public final Combo combo;
 		private int hours;
@@ -198,8 +199,11 @@ public class WiringComposite extends Composite {
 			dateTime = new DateTime(this, SWT.MEDIUM | SWT.DATE);
 			ports = rvp.getAllowedValues(slot,
 					CargoPackage.eINSTANCE.getSlot_Port());
+			
+			// trim port names
+			
 			for (final Pair<String, EObject> p : ports) {
-				combo.add(p.getFirst());
+				combo.add(shorten(p.getFirst()));
 			}
 
 			setPort(slot.getPort());
@@ -208,6 +212,14 @@ public class WiringComposite extends Composite {
 			dateTime.addSelectionListener(this);
 		}
 
+		
+		private String shorten(final String longString) {
+			if (longString.length() > LONG_LENGTH + 3) {
+				return longString.substring(0, LONG_LENGTH) + "...";
+			}
+			return longString;
+		}
+		
 		/**
 		 * @param date
 		 */
@@ -227,7 +239,7 @@ public class WiringComposite extends Composite {
 		 * @param port
 		 */
 		public void setPort(Port port) {
-			combo.setText(port.getName());
+			combo.setText(shorten(port.getName()));
 		}
 
 		public Date getDate() {

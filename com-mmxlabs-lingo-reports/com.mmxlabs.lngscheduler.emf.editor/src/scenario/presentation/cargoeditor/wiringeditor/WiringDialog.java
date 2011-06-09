@@ -54,7 +54,7 @@ public class WiringDialog extends Dialog {
 			final IReferenceValueProvider portProvider) {
 		final Shell shell = new Shell((SWT.DIALOG_TRIM & ~SWT.CLOSE)
 				| SWT.APPLICATION_MODAL | SWT.RESIZE);
-		shell.setSize(800, 600);
+		shell.setSize(1000, 600);
 		shell.setText("Redirection Wizard");
 		GridLayout gl_shell = new GridLayout(1, false);
 		gl_shell.verticalSpacing = 6;
