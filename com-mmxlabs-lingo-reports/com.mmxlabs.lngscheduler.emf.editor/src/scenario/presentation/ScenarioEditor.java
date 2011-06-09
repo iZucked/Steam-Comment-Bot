@@ -6,6 +6,7 @@ package scenario.presentation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -2476,16 +2478,36 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						if (pat == null) {
 							return "No constraint";
 						}
-						return (pat.isSetPort() ? pat.getPort().getName()
-								: "Anywhere")
-								+ " "
-								+ "from "
-								+ (pat.isSetStartTime() ? pat.getStartTime()
-										.toString() : "any time")
-								+ " "
-								+ "to "
-								+ (pat.isSetEndTime() ? pat.getEndTime()
-										.toString() : "any time");
+						
+						final String port;
+						final String startTime;
+						final String endTime;
+						
+						final TimeZone zone;
+						if (pat.isSetPort()) {
+							port = pat.getPort().getName();
+							zone = TimeZone.getTimeZone(pat.getPort().getTimeZone());
+						} else {
+							zone = TimeZone.getTimeZone("GMT");
+							port = "Anywhere";
+						}
+						
+						final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+						df.setTimeZone(zone);
+						
+						if (pat.isSetStartTime()) {
+							startTime = df.format(pat.getStartTime());
+						} else {
+							startTime = "any time";
+						}
+						
+						if (pat.isSetEndTime()) {
+							endTime = df.format(pat.getEndTime());
+						} else {
+							endTime = "any time";
+						}
+						
+						return port + " from " + startTime + " to " + endTime;
 					}
 
 					@Override
