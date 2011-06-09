@@ -248,7 +248,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				final EditingDomain editingDomain, final EMFPath contentPath) {
 			final AddAction delegate = (AddAction) super.createAddAction(
 					viewer, editingDomain, contentPath);
-			
+
 			final Action result = new AddAction(editingDomain, contentPath
 					.getTargetType().getName()) {
 				@Override
@@ -1033,8 +1033,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						final Command mostRecentCommand = ((CommandStack) event
 								.getSource()).getMostRecentCommand();
 						if (mostRecentCommand != null) {
-							setSelectionToViewer(mostRecentCommand
-									.getAffectedObjects());
+							try {
+								setSelectionToViewer(mostRecentCommand
+										.getAffectedObjects());
+							} catch (Exception ex) {
+								// not all commands will do this properly ,if you put a 
+							}
 						}
 						if (propertySheetPage != null
 								&& !propertySheetPage.getControl().isDisposed()) {
@@ -1981,7 +1985,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 									final WiringDialog wiringDialog = new WiringDialog(
 											v.getControl().getShell());
 
-									wiringDialog.open(l, getEditingDomain(), portProvider);
+									wiringDialog.open(l, getEditingDomain(),
+											portProvider);
 								}
 							}
 						}
@@ -2478,35 +2483,37 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						if (pat == null) {
 							return "No constraint";
 						}
-						
+
 						final String port;
 						final String startTime;
 						final String endTime;
-						
+
 						final TimeZone zone;
 						if (pat.isSetPort()) {
 							port = pat.getPort().getName();
-							zone = TimeZone.getTimeZone(pat.getPort().getTimeZone());
+							zone = TimeZone.getTimeZone(pat.getPort()
+									.getTimeZone());
 						} else {
 							zone = TimeZone.getTimeZone("GMT");
 							port = "Anywhere";
 						}
-						
-						final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+
+						final DateFormat df = DateFormat.getDateTimeInstance(
+								DateFormat.SHORT, DateFormat.SHORT);
 						df.setTimeZone(zone);
-						
+
 						if (pat.isSetStartTime()) {
 							startTime = df.format(pat.getStartTime());
 						} else {
 							startTime = "any time";
 						}
-						
+
 						if (pat.isSetEndTime()) {
 							endTime = df.format(pat.getEndTime());
 						} else {
 							endTime = "any time";
 						}
-						
+
 						return port + " from " + startTime + " to " + endTime;
 					}
 

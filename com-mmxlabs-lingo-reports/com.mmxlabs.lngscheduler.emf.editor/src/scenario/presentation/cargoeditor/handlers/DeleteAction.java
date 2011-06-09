@@ -7,11 +7,12 @@ package scenario.presentation.cargoeditor.handlers;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+
+import scenario.presentation.cargoeditor.handlers.delete.DeleteHelper;
 
 /**
  * An action for deleting model elements; there's another built-in action by the
@@ -38,7 +39,7 @@ public abstract class DeleteAction extends Action {
 		final Collection<EObject> target = getTargets();
 		if (target.size() > 0) {
 			editingDomain.getCommandStack().execute(
-					DeleteCommand.create(editingDomain, target));
+					DeleteHelper.createDeleteCommand(editingDomain, target));
 		}
 	}
 }
