@@ -5,11 +5,10 @@
 package scenario.presentation.cargoeditor.handlers.delete;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -20,9 +19,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
  * @author Tom Hinton
  * 
  */
-public class TrackedDeleteCommand extends CompoundCommand {
-	final Set<EObject> deletedObjects;
-	protected Collection collection;
+public class Deleter {
+	protected Collection<? extends EObject> collection;
 	protected EditingDomain domain;
 
 	/**
@@ -30,17 +28,13 @@ public class TrackedDeleteCommand extends CompoundCommand {
 	 * @param collection
 	 * @param deletedObjects
 	 */
-	public TrackedDeleteCommand(EditingDomain domain, Collection<?> collection,
-			Set<EObject> deletedObjects) {
-		this.deletedObjects = deletedObjects;
-		this.collection = collection;
+	public Deleter(final EditingDomain domain, final Collection<? extends EObject> targets) {
 		this.domain = domain;
-		append(new IdentityCommand());
+		this.collection = targets;
 	}
 
-	@Override
-	public void execute() {
-		deletedObjects.addAll((Collection<? extends EObject>) collection);
+	public Set<EObject> getObjectsToDelete() {
+		return new HashSet<EObject>(collection);
 	}
 
 	/**

@@ -5,14 +5,13 @@
 package scenario.presentation.cargoeditor.handlers.delete;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -24,7 +23,6 @@ import scenario.schedule.SchedulePackage;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
 
 
-
 /**
  * Temporary hack to hook up delete commands
  * 
@@ -33,30 +31,31 @@ import scenario.schedule.fleetallocation.FleetallocationPackage;
  */
 public class DeleteHelper {
 	public static Command createDeleteCommand(final EditingDomain domain, final Collection<? extends EObject> objects) {
-		final Map<EClass, Collection<EObject>> byClass = new HashMap<EClass, Collection<EObject>>();
-		
-		final Set<EObject> deletedObjects = new HashSet<EObject>();
+		final Map<EClass, Set<EObject>> byClass = new HashMap<EClass, Set<EObject>>();
 		
 		for (final EObject object : objects) {
-			Collection<EObject> b = byClass.get(object.eClass());
+			if (object == null) continue;
+			Set<EObject> b = byClass.get(object.eClass());
 			if (b == null) {
-				b = new LinkedList<EObject>();
+				b = new HashSet<EObject>();
 				byClass.put(object.eClass(), b);
 			}
 			b.add(object);
 		}
 		
-		final CompoundCommand cc = new CompoundCommand();
+		final Set<EObject> allObjects = new HashSet<EObject>();
+
 		
-		for (final Map.Entry<EClass, Collection<EObject>> entry : byClass.entrySet()) {
-			cc.append(createDeleteCommand(domain, entry.getKey(), entry.getValue(), deletedObjects));
+		for (final Map.Entry<EClass, Set<EObject>> entry : byClass.entrySet()) {
+			allObjects.addAll(createDeleter(domain, entry.getKey(), entry.getValue()).getObjectsToDelete());
 		}
 		
-		deletedObjects.addAll(objects);
-		
-		cc.append(DeleteCommand.create(domain, deletedObjects));
-		
-		return cc;
+	
+		return DeleteCommand.create(domain, allObjects);
+	}
+	
+	public static Deleter createDeleter(final EditingDomain domain, final EObject object) {
+		return createDeleter(domain, object.eClass(), Collections.singleton(object));
 	}
 
 	/**
@@ -66,21 +65,21 @@ public class DeleteHelper {
 	 * @param deletedObjects 
 	 * @return
 	 */
-	private static Command createDeleteCommand(EditingDomain domain, EClass key,
-			Collection<? extends EObject> value, Set<EObject> deletedObjects) {
+	public static Deleter createDeleter(EditingDomain domain, EClass key,
+			Set<? extends EObject> value) {
 		if (key == CargoPackage.eINSTANCE.getCargo()) {
-			return new DeleteCargoCommand(domain, value, deletedObjects);
+			return new DeleteCargoCommand(domain, value);
 		} else if (key == SchedulePackage.eINSTANCE.getCargoAllocation()) {
-			return new DeleteCargoAllocationCommand(domain, value, deletedObjects);
+			return new DeleteCargoAllocationCommand(domain, value);
 		} else if (key == FleetPackage.eINSTANCE.getVessel()) {
-			return new DeleteVesselCommand(domain, value, deletedObjects);
+			return new DeleteVesselCommand(domain, value);
 		} else if (key == FleetPackage.eINSTANCE.getVesselClass()) {
-			return new DeleteVesselClassCommand(domain, value, deletedObjects);
+			return new DeleteVesselClassCommand(domain, value);
 		} else if (FleetallocationPackage.eINSTANCE.getAllocatedVessel().isSuperTypeOf(key)) {
-			return new DeleteAllocatedVesselCommand(domain, value, deletedObjects);
+			return new DeleteAllocatedVesselCommand(domain, value);
 		} else if (SchedulePackage.eINSTANCE.getSequence() == key) {
-			return new DeleteSequenceCommand(domain, value, deletedObjects);
+			return new DeleteSequenceCommand(domain, value);
 		}
-		return new TrackedDeleteCommand(domain, value, deletedObjects);
+		return new Deleter(domain, value);
 	}
 }

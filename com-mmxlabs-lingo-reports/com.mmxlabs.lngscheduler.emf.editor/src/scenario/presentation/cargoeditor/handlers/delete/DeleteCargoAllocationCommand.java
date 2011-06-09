@@ -5,11 +5,9 @@
 package scenario.presentation.cargoeditor.handlers.delete;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import scenario.schedule.CargoAllocation;
@@ -21,35 +19,36 @@ import scenario.schedule.CargoAllocation;
  * @author Tom Hinton
  * 
  */
-public class DeleteCargoAllocationCommand extends TrackedDeleteCommand {
+public class DeleteCargoAllocationCommand extends Deleter {
 
 	/**
 	 * @param domain
 	 * @param collection
-	 * @param deletedObjects 
+	 * @param deletedObjects
 	 */
 	public DeleteCargoAllocationCommand(final EditingDomain domain,
-			final Collection<?> collection, Set<EObject> deletedObjects) {
-		super(domain, collection, deletedObjects);
+			final Collection<? extends EObject> collection) {
+		super(domain, collection);
 	}
 
 	@Override
-	public void execute() {
+	public Set<EObject> getObjectsToDelete() {
+		final Set<EObject> t = super.getObjectsToDelete();
 		for (final Object object : collection) {
 			if (object instanceof CargoAllocation) {
 				final CargoAllocation a = (CargoAllocation) object;
 				if (a.getLoadRevenue() != null)
-					appendAndExecute(DeleteHelper.createDeleteCommand(domain,
-							Collections.singleton(a.getLoadRevenue())));
+					t.addAll(DeleteHelper.createDeleter(domain,
+							a.getLoadRevenue()).getObjectsToDelete());
 				if (a.getShippingRevenue() != null)
-					appendAndExecute(DeleteHelper.createDeleteCommand(domain,
-							Collections.singleton(a.getShippingRevenue())));
+
+					t.addAll(DeleteHelper.createDeleter(domain,
+							a.getShippingRevenue()).getObjectsToDelete());
 				if (a.getDischargeRevenue() != null)
-					appendAndExecute(DeleteHelper.createDeleteCommand(domain,
-							Collections.singleton(a.getDischargeRevenue())));
+					t.addAll(DeleteHelper.createDeleter(domain,
+							a.getDischargeRevenue()).getObjectsToDelete());
 			}
 		}
-
-		super.execute();
+		return t;
 	}
 }

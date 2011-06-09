@@ -24,20 +24,20 @@ import scenario.schedule.CargoAllocation;
  * @author Tom Hinton
  * 
  */
-public class DeleteSequenceCommand extends TrackedDeleteCommand {
+public class DeleteSequenceCommand extends Deleter {
 	/**
 	 * @param domain
 	 * @param collection
 	 * @param deletedObjects 
 	 */
-	public DeleteSequenceCommand(EditingDomain domain, Collection<?> collection, Set<EObject> deletedObjects) {
-		super(domain, collection, deletedObjects);
+	public DeleteSequenceCommand(EditingDomain domain, Collection<? extends EObject> targets) {
+		super(domain, targets);
 	}
-
+	
 	@Override
-	public void execute() {
-		// find objects related to cargo; the superclass already does this step,
-		// but we end up doing it again.
+	public Set<EObject> getObjectsToDelete() {
+		final Set<EObject> t = super.getObjectsToDelete();
+		
 		final Collection<EObject> eObjects = new LinkedHashSet<EObject>();
 		for (final Object wrappedObject : collection) {
 			final Object object = AdapterFactoryEditingDomain
@@ -68,12 +68,14 @@ public class DeleteSequenceCommand extends TrackedDeleteCommand {
 					continue;
 				deletees.add(referer);
 				if (referer instanceof CargoAllocation) {
-					appendAndExecute(DeleteHelper.createDeleteCommand(domain,
-							Collections.singleton(referer)));
+					t.addAll(DeleteHelper.createDeleter(domain, referer).getObjectsToDelete());
 				}
 			}
 		}
-
-		super.execute();
+		
+		return t;
 	}
+
+
+
 }

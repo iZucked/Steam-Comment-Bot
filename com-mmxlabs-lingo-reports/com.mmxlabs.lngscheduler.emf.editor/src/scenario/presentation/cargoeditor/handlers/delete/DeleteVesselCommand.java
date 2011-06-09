@@ -30,20 +30,19 @@ import scenario.schedule.fleetallocation.FleetVessel;
  * @author Tom Hinton
  * 
  */
-public class DeleteVesselCommand extends TrackedDeleteCommand {
+public class DeleteVesselCommand extends Deleter {
 	/**
 	 * @param domain
 	 * @param collection
 	 * @param deletedObjects 
 	 */
-	public DeleteVesselCommand(EditingDomain domain, Collection<?> collection, Set<EObject> deletedObjects) {
-		super(domain, collection, deletedObjects);
+	public DeleteVesselCommand(EditingDomain domain, Collection<? extends EObject> collection) {
+		super(domain, collection);
 	}
-
+	
 	@Override
-	public void execute() {
-		// find objects related to cargo; the superclass already does this step,
-		// but we end up doing it again.
+	public Set<EObject> getObjectsToDelete() {
+		final Set<EObject> t = super.getObjectsToDelete();
 		final Collection<EObject> eObjects = new LinkedHashSet<EObject>();
 		for (final Object wrappedObject : collection) {
 			final Object object = AdapterFactoryEditingDomain
@@ -72,12 +71,11 @@ public class DeleteVesselCommand extends TrackedDeleteCommand {
 				if (seen.contains(referer)) continue;
 				seen.add(referer);
 				if (referer instanceof FleetVessel) {
-					appendAndExecute(DeleteHelper.createDeleteCommand(domain,
-							Collections.singleton(referer)));
+					t.addAll(DeleteHelper.createDeleter(domain,
+							referer).getObjectsToDelete());
 				}
 			}
 		}
-
-		super.execute();
+		return t;
 	}
 }

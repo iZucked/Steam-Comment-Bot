@@ -30,21 +30,22 @@ import scenario.schedule.fleetallocation.SpotVessel;
  * @author Tom Hinton
  * 
  */
-public class DeleteVesselClassCommand extends TrackedDeleteCommand {
+public class DeleteVesselClassCommand extends Deleter {
 	/**
 	 * @param domain
 	 * @param collection
 	 * @param deletedObjects 
 	 */
 	public DeleteVesselClassCommand(EditingDomain domain,
-			Collection<?> collection, Set<EObject> deletedObjects) {
-		super(domain, collection, deletedObjects);
+			Collection<? extends EObject> collection) {
+		super(domain, collection);
 	}
 
+	
+	
 	@Override
-	public void execute() {
-		// find objects related to cargo; the superclass already does this step,
-		// but we end up doing it again.
+	public Set<EObject> getObjectsToDelete() {
+		final Set<EObject> t= super.getObjectsToDelete();
 		final Collection<EObject> eObjects = new LinkedHashSet<EObject>();
 		for (final Object wrappedObject : collection) {
 			final Object object = AdapterFactoryEditingDomain
@@ -66,22 +67,19 @@ public class DeleteVesselClassCommand extends TrackedDeleteCommand {
 		final Map<EObject, Collection<EStructuralFeature.Setting>> usages = super
 				.findReferences(eObjects);
 
-		final HashSet<EObject> seen = new HashSet<EObject>();
 		for (final Map.Entry<EObject, Collection<EStructuralFeature.Setting>> entry : usages
 				.entrySet()) {
 			for (final EStructuralFeature.Setting setting : entry.getValue()) {
 				final EObject referer = setting.getEObject();
-				if (seen.contains(referer))
-					continue;
-				seen.add(referer);
+
 				if (referer instanceof Vessel || referer instanceof SpotVessel
 						|| referer instanceof VesselClassCost) {
-					appendAndExecute(DeleteHelper.createDeleteCommand(domain,
-							Collections.singleton(referer)));
+					t.addAll(DeleteHelper.createDeleter(domain,
+							referer).getObjectsToDelete());
 				}
 			}
-		}
-
-		super.execute();
+		}		
+		return t;
 	}
+
 }
