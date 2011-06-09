@@ -9,17 +9,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
+import scenario.Scenario;
+
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
 import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
+import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-
-import scenario.Scenario;
 
 /**
  * Check that a scenario has a feasible initial solution by doing an evaluation
@@ -42,7 +42,7 @@ public class InitialStateFeasibilityConstraint extends AbstractModelConstraint {
 		if (object instanceof Scenario) {
 			final Scenario scenario = (Scenario) object;
 
-			final ModelEntityMap entities = new ModelEntityMap();
+			final ModelEntityMap entities = new ResourcelessModelEntityMap();
 			entities.setScenario(scenario);
 
 			final LNGScenarioTransformer lst = new LNGScenarioTransformer(

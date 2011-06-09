@@ -27,10 +27,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -93,10 +91,10 @@ import scenario.schedule.SchedulePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
-import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
 import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
+import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
@@ -301,7 +299,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 									scenario);
 							final OptimisationTransformer ot = new OptimisationTransformer(
 									lst.getOptimisationSettings());
-							final ModelEntityMap entities = new ModelEntityMap();
+							final ModelEntityMap entities = new ResourcelessModelEntityMap();
 							entities.setScenario(scenario);
 							IOptimisationData<ISequenceElement> data;
 							data = lst.createOptimisationData(entities);

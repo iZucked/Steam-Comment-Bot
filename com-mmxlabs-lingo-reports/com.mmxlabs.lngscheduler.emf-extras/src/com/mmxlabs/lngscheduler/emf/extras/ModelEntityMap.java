@@ -31,8 +31,12 @@ public class ModelEntityMap {
 
 	private final Map<URI, Object> reverseMap = new HashMap<URI, Object>();
 
-	private Date earliestDate;
+	protected Date earliestDate;
 
+	public ModelEntityMap() {
+		
+	}
+	
 	/**
 	 * @param scenario
 	 */
