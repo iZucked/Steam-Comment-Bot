@@ -11,12 +11,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
@@ -34,11 +33,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.common.Equality;
-import com.mmxlabs.lngscheduler.emf.editor.util.CommandUtil;
-
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
+
+import com.mmxlabs.common.Equality;
+import com.mmxlabs.lngscheduler.emf.editor.util.CommandUtil;
 
 /**
  * Why does tidy imports keep stripping my class comments? A dialog based
@@ -138,7 +137,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 							+ duplicate);
 				}
 			}
-			if (cc.canExecute()) {
+			final boolean isExecutable = cc.canExecute();
+			if (isExecutable) {
 				editingDomain.getCommandStack().execute(cc);
 			} else {
 				System.err
@@ -173,7 +173,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	private Command makeEqualizer(final EObject original,
 			final EObject duplicate) {
 		final CompoundCommand compound = new CompoundCommand();
-
+		compound.append(new IdentityCommand());
 		for (final EStructuralFeature feature : original.eClass()
 				.getEAllStructuralFeatures()) {
 			// For containment references, we need to compare the contained
@@ -190,22 +190,14 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 				// ImportCSVAction which relinks objects that have been
 				// replaced.
 				if (feature.isMany()) {
-					Collection<?> c = (Collection<?>) original.eGet(feature);
-					final CompoundCommand compound2 = new CompoundCommand();
-					if (c.size() > 0) {
-						compound2.append(RemoveCommand.create(editingDomain,
-								original, feature, c));
+					final Command mas = CommandUtil
+							.createMultipleAttributeSetter(editingDomain,
+									original, feature,
+									(Collection) duplicate.eGet(feature));
+					if (mas.canExecute() == false) {
+						System.err.println("Problem on multi-value containment setter");
 					}
-					// new values
-					c = (Collection<?>) duplicate.eGet(feature);
-					if (c.size() > 0) {
-						compound2.append(AddCommand.create(editingDomain,
-								original, feature,
-								(Collection<?>) duplicate.eGet(feature)));
-					}
-					// getaffectedobjects on removecommand throws an NPE
-					if (compound2.getCommandList().isEmpty() == false)
-						compound.append(compound2);
+					compound.append(mas);
 				} else {
 					final Command c = makeEqualizer(
 							(EObject) original.eGet(feature),
@@ -223,12 +215,22 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 				continue;
 			}
 			if (feature.isMany()) {
-				compound.append(CommandUtil.createMultipleAttributeSetter(
+				final Command mas = CommandUtil.createMultipleAttributeSetter(
 						editingDomain, original, feature,
-						(Collection) duplicate.eGet(feature)));
+						(Collection) duplicate.eGet(feature));
+				if (mas.canExecute() == false) {
+					System.err
+							.println("Problem on multi-value reference setter");
+				}
+				compound.append(mas);
 			} else {
-				compound.append(SetCommand.create(editingDomain, original,
-						feature, duplicate.eGet(feature)));
+				if (feature.isUnsettable() && duplicate.eIsSet(feature) == false) {
+					compound.append(SetCommand.create(editingDomain, original,
+							feature, SetCommand.UNSET_VALUE));
+				} else {
+					compound.append(SetCommand.create(editingDomain, original,
+							feature, duplicate.eGet(feature)));
+				}
 			}
 		}
 
