@@ -277,8 +277,6 @@ public class CargoItemProvider extends ItemProviderAdapter implements
 		return LngEditPlugin.INSTANCE;
 	}
 
-	
-	
 	@Override
 	public Command createCommand(Object object, EditingDomain domain,
 			Class<? extends Command> commandClass,
@@ -290,5 +288,4 @@ public class CargoItemProvider extends ItemProviderAdapter implements
 					commandParameter);
 		}
 	}
-
 }
