@@ -82,11 +82,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import scenario.NamedObject;
+import scenario.fleet.VesselClass;
 import scenario.port.Canal;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.handlers.AddAction;
 import scenario.presentation.cargoeditor.importer.ExportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportCSVAction;
+import scenario.presentation.cargoeditor.importer.ImportUI;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
@@ -105,8 +107,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	private static final String COLUMN_PATH = "COLUMN_PATH";
 	private final ScenarioEditor part;
 	private TableViewer viewer;
-
-	final boolean[] ignoreNotifications = new boolean[] { false };
 
 	private final ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
 	private boolean sortDescending = false;
@@ -292,7 +292,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 				// TODO hack because this is very slow and canals contain many
 				// elements
-				if (object instanceof Canal)
+				if (object instanceof Canal || object instanceof VesselClass)
 					return super.getBackground(element);
 
 				final TreeIterator<EObject> iterator = object.eAllContents();
@@ -491,8 +491,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 
-				if (ignoreNotifications[0])
+				if (ImportUI.isImporting()) {
+					ImportUI.refreshLater(viewer);
 					return;
+				}
 
 				// System.err.println(notification);
 				if (notification.isTouch() == false) {
@@ -688,18 +690,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 							.println("Warning: cannot evaluate import command");
 				}
 
-				ignoreNotifications[0] = true;
 
 				editingDomain.getCommandStack().execute(cc);
 
-				ignoreNotifications[0] = false;
-				PlatformUI.getWorkbench().getDisplay()
-						.asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								viewer.refresh();
-							}
-						});
+				ImportUI.refresh(viewer);
 			}
 
 			/**

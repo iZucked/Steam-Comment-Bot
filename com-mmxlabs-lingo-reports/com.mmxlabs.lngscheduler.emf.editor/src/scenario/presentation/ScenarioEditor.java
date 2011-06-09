@@ -185,6 +185,7 @@ import scenario.presentation.cargoeditor.importer.EObjectImporter;
 import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
 import scenario.presentation.cargoeditor.importer.ExportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportCSVAction;
+import scenario.presentation.cargoeditor.importer.ImportUI;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
@@ -2263,6 +2264,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						@Override
 						public void run() {
 							try {
+								ImportUI.beginImport();
 								final FileDialog dialog = new FileDialog(
 										PlatformUI.getWorkbench()
 												.getActiveWorkbenchWindow()
@@ -2317,9 +2319,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								}
 
 								delegate.addObjects(vesselClasses);
-
+								ImportUI.endImport();
 							} catch (final IOException ex) {
-
+								ImportUI.endImport();
 							}
 						}
 

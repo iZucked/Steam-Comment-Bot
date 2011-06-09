@@ -63,7 +63,8 @@ public abstract class ImportCSVAction extends Action {
 		if (inputFileName == null)
 			return;
 
-		final WorkspaceJob job = new WorkspaceJob("Import CSV from " + inputFileName) {
+		final WorkspaceJob job = new WorkspaceJob("Import CSV from "
+				+ inputFileName) {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor)
@@ -71,6 +72,7 @@ public abstract class ImportCSVAction extends Action {
 				// count lines in file
 				BufferedReader br;
 				try {
+					ImportUI.beginImport();
 					br = new BufferedReader(new FileReader(new File(
 							inputFileName)));
 					int lineCount = 0;
@@ -93,7 +95,9 @@ public abstract class ImportCSVAction extends Action {
 					monitor.worked(1);
 					// Tell implementation to add these objects
 					monitor.subTask("Merge new data");
-					addObjects(importedObjects);
+					for (final EObject object : importedObjects) {
+						registry.addEObjects(object);
+					}
 					monitor.worked(1);
 					// update references
 					registry.addEObjects(getToplevelObject());
@@ -113,13 +117,17 @@ public abstract class ImportCSVAction extends Action {
 						Postprocessor.getInstance().postprocess(object);
 					}
 
+					addObjects(importedObjects);
+
+					ImportUI.endImport();
 					return Status.OK_STATUS;
 				} catch (IOException e) {
+					ImportUI.endImport();
 					return Status.CANCEL_STATUS;
 				}
 			}
 		};
-		
+
 		// Trigger UI for progress monitor
 		job.setUser(true);
 		// Schedule job for launching
