@@ -13,6 +13,7 @@ import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
 import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
+import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -30,7 +31,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	private final Scenario scenario;
 	private int currentProgress = 0;
 
-	private final ModelEntityMap entities = new ModelEntityMap();
+	private final ModelEntityMap entities = new ResourcelessModelEntityMap();
 
 	private LocalSearchOptimiser<ISequenceElement> optimiser;
 
