@@ -59,14 +59,10 @@ public class DeleteSequenceCommand extends Deleter {
 		final Map<EObject, Collection<EStructuralFeature.Setting>> usages = super
 				.findReferences(eObjects);
 
-		final Set<EObject> deletees = new HashSet<EObject>();
 		for (final Map.Entry<EObject, Collection<EStructuralFeature.Setting>> entry : usages
 				.entrySet()) {
 			for (final EStructuralFeature.Setting setting : entry.getValue()) {
 				final EObject referer = setting.getEObject();
-				if (deletees.contains(referer))
-					continue;
-				deletees.add(referer);
 				if (referer instanceof CargoAllocation) {
 					t.addAll(DeleteHelper.createDeleter(domain, referer).getObjectsToDelete());
 				}

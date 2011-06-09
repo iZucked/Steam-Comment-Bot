@@ -66,15 +66,12 @@ public class DeleteCargoCommand extends Deleter {
 		// what objects refer to the cargo, or its contents?
 		// sequence elements
 		// cargo allocations
-		// profit and loss bookings
-		final HashSet<EObject> seen = new HashSet<EObject>();
+
 		for (final Map.Entry<EObject, Collection<EStructuralFeature.Setting>> entry : usages
 				.entrySet()) {
 			for (final EStructuralFeature.Setting setting : entry.getValue()) {
 				final EObject referer = setting.getEObject();
-				if (seen.contains(referer))
-					continue;
-				seen.add(referer);
+
 				if (referer instanceof SlotVisit) {
 					t.addAll(DeleteHelper.createDeleter(domain,
 							referer).getObjectsToDelete());

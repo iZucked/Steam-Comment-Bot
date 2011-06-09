@@ -63,13 +63,10 @@ public class DeleteVesselCommand extends Deleter {
 
 		final Map<EObject, Collection<EStructuralFeature.Setting>> usages = super
 				.findReferences(eObjects);
-		final HashSet<EObject> seen = new HashSet<EObject>();
 		for (final Map.Entry<EObject, Collection<EStructuralFeature.Setting>> entry : usages
 				.entrySet()) {
 			for (final EStructuralFeature.Setting setting : entry.getValue()) {
 				final EObject referer = setting.getEObject();
-				if (seen.contains(referer)) continue;
-				seen.add(referer);
 				if (referer instanceof FleetVessel) {
 					t.addAll(DeleteHelper.createDeleter(domain,
 							referer).getObjectsToDelete());
