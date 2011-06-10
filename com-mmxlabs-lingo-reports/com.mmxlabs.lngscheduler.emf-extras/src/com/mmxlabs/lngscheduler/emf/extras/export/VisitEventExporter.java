@@ -119,13 +119,13 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			final VesselEventVisit vev;
 			if (event instanceof CharterOut) {
 				final CharterOutVisit cov = factory.createCharterOutVisit();
-				portVisit = cov;
 				vev = cov;
 				cov.setCharterOut(entities.getModelObject(slot, CharterOut.class));
 			} else {
 				vev = factory.createVesselEventVisit();
 			}
 			vev.setVesselEvent(event);
+			portVisit = vev;
 		} else {
 			portVisit = factory.createPortVisit();
 		}
