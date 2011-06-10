@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduleview.views;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
@@ -15,7 +14,6 @@ import org.eclipse.swt.widgets.Display;
 
 import scenario.Scenario;
 import scenario.schedule.Sequence;
-import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.Idle;
@@ -23,6 +21,7 @@ import scenario.schedule.events.Journey;
 import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
+import scenario.schedule.events.VesselEventVisit;
 
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 
@@ -172,7 +171,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 				} else {					
 					return ColorCache.getColor(0, 0, 255);
 				}
-			} else if (element instanceof CharterOutVisit) {
+			} else if (element instanceof VesselEventVisit) {
 				return ColorCache.getColor(223, 115, 255);
 			}
 			break;

@@ -434,11 +434,15 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" lowerBound="1"
             eType="#//schedule/CargoAllocation"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="CharterOutVisit" eSuperTypes="#//schedule/events/PortVisit">
+      <eClassifiers xsi:type="ecore:EClass" name="CharterOutVisit" eSuperTypes="#//schedule/events/VesselEventVisit">
         <eStructuralFeatures xsi:type="ecore:EReference" name="charterOut" lowerBound="1"
             eType="#//fleet/CharterOut"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="revenue" lowerBound="1"
             eType="#//schedule/CharterOutRevenue"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//schedule/events/PortVisit">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
+            eType="#//fleet/VesselEvent"/>
       </eClassifiers>
     </eSubpackages>
     <eSubpackages name="fleetallocation" nsURI="http://com.mmxlabs.lng.emf/schedule/fleetallocation"

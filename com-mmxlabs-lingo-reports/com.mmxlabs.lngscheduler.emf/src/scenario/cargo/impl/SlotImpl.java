@@ -91,7 +91,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MAX_QUANTITY_EDEFAULT = 0;
+	protected static final int MAX_QUANTITY_EDEFAULT = 1000000;
 
 	/**
 	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
@@ -141,7 +141,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int WINDOW_DURATION_EDEFAULT = 0;
+	protected static final int WINDOW_DURATION_EDEFAULT = 24;
 
 	/**
 	 * The cached value of the '{@link #getWindowDuration() <em>Window Duration</em>}' attribute.
@@ -161,7 +161,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int SLOT_DURATION_EDEFAULT = 0;
+	protected static final int SLOT_DURATION_EDEFAULT = 6;
 
 	/**
 	 * The cached value of the '{@link #getSlotDuration() <em>Slot Duration</em>}' attribute.

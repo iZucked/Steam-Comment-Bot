@@ -28,7 +28,7 @@ import scenario.schedule.events.EventsPackage;
  *
  * @generated
  */
-public class CharterOutVisitImpl extends PortVisitImpl implements CharterOutVisit {
+public class CharterOutVisitImpl extends VesselEventVisitImpl implements CharterOutVisit {
 	/**
 	 * The cached value of the '{@link #getCharterOut() <em>Charter Out</em>}' reference.
 	 * <!-- begin-user-doc -->

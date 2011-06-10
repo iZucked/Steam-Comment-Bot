@@ -24,7 +24,7 @@ import scenario.schedule.CharterOutRevenue;
  * @model
  * @generated
  */
-public interface CharterOutVisit extends PortVisit {
+public interface CharterOutVisit extends VesselEventVisit {
 	/**
 	 * Returns the value of the '<em><b>Charter Out</b></em>' reference.
 	 * <!-- begin-user-doc -->

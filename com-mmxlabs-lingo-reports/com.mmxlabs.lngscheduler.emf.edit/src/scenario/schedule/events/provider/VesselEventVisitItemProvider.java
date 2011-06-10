@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.provider;
 
@@ -20,26 +22,30 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.VesselEventVisit;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.events.CharterOutVisit} object.
+ * This is the item provider adapter for a {@link scenario.schedule.events.VesselEventVisit} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CharterOutVisitItemProvider
-	extends VesselEventVisitItemProvider
+public class VesselEventVisitItemProvider
+	extends PortVisitItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterOutVisitItemProvider(AdapterFactory adapterFactory) {
+	public VesselEventVisitItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -54,26 +60,25 @@ public class CharterOutVisitItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addCharterOutPropertyDescriptor(object);
-			addRevenuePropertyDescriptor(object);
+			addVesselEventPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Charter Out feature.
+	 * This adds a property descriptor for the Vessel Event feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCharterOutPropertyDescriptor(Object object) {
+	protected void addVesselEventPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterOutVisit_charterOut_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutVisit_charterOut_feature", "_UI_CharterOutVisit_type"),
-				 EventsPackage.Literals.CHARTER_OUT_VISIT__CHARTER_OUT,
+				 getString("_UI_VesselEventVisit_vesselEvent_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEventVisit_vesselEvent_feature", "_UI_VesselEventVisit_type"),
+				 EventsPackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT,
 				 true,
 				 false,
 				 true,
@@ -83,36 +88,14 @@ public class CharterOutVisitItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Revenue feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRevenuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterOutVisit_revenue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutVisit_revenue_feature", "_UI_CharterOutVisit_type"),
-				 EventsPackage.Literals.CHARTER_OUT_VISIT__REVENUE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns CharterOutVisit.gif.
+	 * This returns VesselEventVisit.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CharterOutVisit"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselEventVisit"));
 	}
 
 	/**
@@ -123,11 +106,11 @@ public class CharterOutVisitItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((CharterOutVisit)object).getStartTime();
+		Date labelValue = ((VesselEventVisit)object).getStartTime();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CharterOutVisit_type") :
-			getString("_UI_CharterOutVisit_type") + " " + label;
+			getString("_UI_VesselEventVisit_type") :
+			getString("_UI_VesselEventVisit_type") + " " + label;
 	}
 
 	/**

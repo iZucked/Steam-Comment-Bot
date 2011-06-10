@@ -258,6 +258,29 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.VesselEventVisit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselEventVisitItemProvider vesselEventVisitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.events.VesselEventVisit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselEventVisitAdapter() {
+		if (vesselEventVisitItemProvider == null) {
+			vesselEventVisitItemProvider = new VesselEventVisitItemProvider(this);
+		}
+
+		return vesselEventVisitItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -370,6 +393,7 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
 		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
 		if (charterOutVisitItemProvider != null) charterOutVisitItemProvider.dispose();
+		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
 	}
 
 }

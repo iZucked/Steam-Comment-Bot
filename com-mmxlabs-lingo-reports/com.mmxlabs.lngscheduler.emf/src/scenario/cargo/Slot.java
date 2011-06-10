@@ -90,6 +90,7 @@ public interface Slot extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
+	 * The default value is <code>"1000000"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Max Quantity</em>' attribute isn't clear,
@@ -99,7 +100,7 @@ public interface Slot extends EObject {
 	 * @return the value of the '<em>Max Quantity</em>' attribute.
 	 * @see #setMaxQuantity(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_MaxQuantity()
-	 * @model
+	 * @model default="1000000"
 	 * @generated
 	 */
 	int getMaxQuantity();
@@ -168,6 +169,7 @@ public interface Slot extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Window Duration</b></em>' attribute.
+	 * The default value is <code>"24"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Window Duration</em>' attribute isn't clear,
@@ -177,7 +179,7 @@ public interface Slot extends EObject {
 	 * @return the value of the '<em>Window Duration</em>' attribute.
 	 * @see #setWindowDuration(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_WindowDuration()
-	 * @model
+	 * @model default="24"
 	 * @generated
 	 */
 	int getWindowDuration();
@@ -194,6 +196,7 @@ public interface Slot extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Slot Duration</b></em>' attribute.
+	 * The default value is <code>"6"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Slot Duration</em>' attribute isn't clear,
@@ -203,7 +206,7 @@ public interface Slot extends EObject {
 	 * @return the value of the '<em>Slot Duration</em>' attribute.
 	 * @see #setSlotDuration(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_SlotDuration()
-	 * @model
+	 * @model default="6"
 	 * @generated
 	 */
 	int getSlotDuration();

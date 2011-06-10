@@ -77,6 +77,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 			case EventsPackage.PORT_VISIT: return createPortVisit();
 			case EventsPackage.SLOT_VISIT: return createSlotVisit();
 			case EventsPackage.CHARTER_OUT_VISIT: return createCharterOutVisit();
+			case EventsPackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -202,6 +203,16 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	public CharterOutVisit createCharterOutVisit() {
 		CharterOutVisitImpl charterOutVisit = new CharterOutVisitImpl();
 		return charterOutVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselEventVisit createVesselEventVisit() {
+		VesselEventVisitImpl vesselEventVisit = new VesselEventVisitImpl();
+		return vesselEventVisit;
 	}
 
 	/**

@@ -39,6 +39,7 @@ import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.CharterOut;
+import scenario.fleet.Drydock;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
@@ -370,32 +371,33 @@ public class LNGScenarioTransformer {
 			Association<Vessel, IVessel> vessels, ModelEntityMap entities) {
 		for (final VesselEvent event : scenario.getFleetModel()
 				.getVesselEvents()) {
+			final ITimeWindow window = builder.createTimeWindow(
+					convertTime(event.getStartDate()),
+					convertTime(event.getEndDate()));
+			final IPort port = portAssociation.lookup(event.getPort());
+			final int durationHours = event.getDuration() * 24;
+			final IVesselEventPortSlot builderSlot;
 			if (event instanceof CharterOut) {
 				final CharterOut charterOut = (CharterOut) event;
-				final ITimeWindow window = builder.createTimeWindow(
-						convertTime(charterOut.getStartDate()),
-						convertTime(charterOut.getEndDate()));
-				final IPort port = portAssociation.lookup(charterOut.getPort());
-
-				final IVesselEventPortSlot builderCharterOut = builder
-						.createCharterOut(window, port,
-								charterOut.getDuration() * 24); // EMF
-																// measures
-																// in days
-																// here.
-
-				entities.addModelObject(charterOut, builderCharterOut);
-
-				for (final Vessel v : charterOut.getVessels()) {
-					builder.addCharterOutVessel(builderCharterOut,
-							vessels.lookup(v));
-				}
-
-				for (final VesselClass vc : charterOut.getVesselClasses()) {
-					builder.addCharterOutVesselClass(builderCharterOut,
-							classes.lookup(vc));
-				}
+				//TODO add heel requirements for charterout
+				builderSlot = builder.createVesselEvent(event.getId(), window,
+						port, durationHours, 0, 0);
+			} else {
+				builderSlot = builder.createVesselEvent(event.getId(), window,
+						port, durationHours, 0, 0);
 			}
+			
+			for (final Vessel v : event.getVessels()) {
+				builder.addVesselEventVessel(builderSlot,
+						vessels.lookup(v));
+			}
+
+			for (final VesselClass vc : event.getVesselClasses()) {
+				builder.addVesselEventVesselClass(builderSlot,
+						classes.lookup(vc));
+			}
+			
+			entities.addModelObject(event, builderSlot);
 		}
 	}
 
@@ -470,7 +472,7 @@ public class LNGScenarioTransformer {
 			} else {
 				final Index dischargeIndex = ((SalesContract) dischargeSlot
 						.getSlotOrPortContract()).getIndex();
-				
+
 				final float regasEfficiency = (dischargeSlot.getPort())
 						.getRegasEfficiency();
 				if (regasEfficiency != 1.0f) {

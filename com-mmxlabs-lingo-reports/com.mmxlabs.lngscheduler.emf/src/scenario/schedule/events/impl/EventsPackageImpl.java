@@ -41,6 +41,7 @@ import scenario.schedule.events.Journey;
 import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
+import scenario.schedule.events.VesselEventVisit;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
 import scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl;
 import scenario.schedule.impl.SchedulePackageImpl;
@@ -107,6 +108,13 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * @generated
 	 */
 	private EClass charterOutVisitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselEventVisitEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -620,6 +628,24 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getVesselEventVisit() {
+		return vesselEventVisitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselEventVisit_VesselEvent() {
+		return (EReference)vesselEventVisitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
@@ -712,6 +738,9 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		createEReference(charterOutVisitEClass, CHARTER_OUT_VISIT__CHARTER_OUT);
 		createEReference(charterOutVisitEClass, CHARTER_OUT_VISIT__REVENUE);
 
+		vesselEventVisitEClass = createEClass(VESSEL_EVENT_VISIT);
+		createEReference(vesselEventVisitEClass, VESSEL_EVENT_VISIT__VESSEL_EVENT);
+
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		fuelTypeEEnum = createEEnum(FUEL_TYPE);
@@ -759,7 +788,8 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		journeyEClass.getESuperTypes().add(this.getFuelMixture());
 		portVisitEClass.getESuperTypes().add(this.getScheduledEvent());
 		slotVisitEClass.getESuperTypes().add(this.getPortVisit());
-		charterOutVisitEClass.getESuperTypes().add(this.getPortVisit());
+		charterOutVisitEClass.getESuperTypes().add(this.getVesselEventVisit());
+		vesselEventVisitEClass.getESuperTypes().add(this.getPortVisit());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(fuelMixtureEClass, FuelMixture.class, "FuelMixture", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -820,6 +850,9 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		initEClass(charterOutVisitEClass, CharterOutVisit.class, "CharterOutVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterOutVisit_CharterOut(), theFleetPackage.getCharterOut(), null, "charterOut", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOutVisit_Revenue(), theSchedulePackage.getCharterOutRevenue(), null, "revenue", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselEventVisitEClass, VesselEventVisit.class, "VesselEventVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselEventVisit_VesselEvent(), theFleetPackage.getVesselEvent(), null, "vesselEvent", null, 1, 1, VesselEventVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");

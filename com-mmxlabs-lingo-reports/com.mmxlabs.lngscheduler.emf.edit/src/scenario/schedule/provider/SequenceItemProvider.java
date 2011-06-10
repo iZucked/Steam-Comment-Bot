@@ -203,6 +203,11 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 EventsFactory.eINSTANCE.createVesselEventVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 EventsFactory.eINSTANCE.createCharterOutVisit()));
 
 		newChildDescriptors.add

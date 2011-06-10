@@ -807,6 +807,115 @@ public interface EventsPackage extends EPackage {
 	int SLOT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link scenario.schedule.events.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.events.impl.VesselEventVisitImpl
+	 * @see scenario.schedule.events.impl.EventsPackageImpl#getVesselEventVisit()
+	 * @generated
+	 */
+	int VESSEL_EVENT_VISIT = 8;
+
+	/**
+	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__START_TIME = PORT_VISIT__START_TIME;
+
+	/**
+	 * The feature id for the '<em><b>End Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__END_TIME = PORT_VISIT__END_TIME;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__PORT = PORT_VISIT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = PORT_VISIT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT___GET_CONTAINER = PORT_VISIT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Event Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT___GET_EVENT_DURATION = PORT_VISIT___GET_EVENT_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT___GET_HIRE_COST = PORT_VISIT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Local Start Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT___GET_LOCAL_START_TIME = PORT_VISIT___GET_LOCAL_START_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Local End Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT___GET_LOCAL_END_TIME = PORT_VISIT___GET_LOCAL_END_TIME;
+
+	/**
+	 * The number of operations of the '<em>Vessel Event Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.CharterOutVisitImpl <em>Charter Out Visit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -823,7 +932,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT__START_TIME = PORT_VISIT__START_TIME;
+	int CHARTER_OUT_VISIT__START_TIME = VESSEL_EVENT_VISIT__START_TIME;
 
 	/**
 	 * The feature id for the '<em><b>End Time</b></em>' attribute.
@@ -832,7 +941,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT__END_TIME = PORT_VISIT__END_TIME;
+	int CHARTER_OUT_VISIT__END_TIME = VESSEL_EVENT_VISIT__END_TIME;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -841,7 +950,16 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT__PORT = PORT_VISIT__PORT;
+	int CHARTER_OUT_VISIT__PORT = VESSEL_EVENT_VISIT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT__VESSEL_EVENT = VESSEL_EVENT_VISIT__VESSEL_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Charter Out</b></em>' reference.
@@ -850,7 +968,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT__CHARTER_OUT = PORT_VISIT_FEATURE_COUNT + 0;
+	int CHARTER_OUT_VISIT__CHARTER_OUT = VESSEL_EVENT_VISIT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' reference.
@@ -859,7 +977,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT__REVENUE = PORT_VISIT_FEATURE_COUNT + 1;
+	int CHARTER_OUT_VISIT__REVENUE = VESSEL_EVENT_VISIT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out Visit</em>' class.
@@ -868,7 +986,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 2;
+	int CHARTER_OUT_VISIT_FEATURE_COUNT = VESSEL_EVENT_VISIT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -877,7 +995,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT___GET_CONTAINER = PORT_VISIT___GET_CONTAINER;
+	int CHARTER_OUT_VISIT___GET_CONTAINER = VESSEL_EVENT_VISIT___GET_CONTAINER;
 
 	/**
 	 * The operation id for the '<em>Get Event Duration</em>' operation.
@@ -886,7 +1004,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT___GET_EVENT_DURATION = PORT_VISIT___GET_EVENT_DURATION;
+	int CHARTER_OUT_VISIT___GET_EVENT_DURATION = VESSEL_EVENT_VISIT___GET_EVENT_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Hire Cost</em>' operation.
@@ -895,7 +1013,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT___GET_HIRE_COST = PORT_VISIT___GET_HIRE_COST;
+	int CHARTER_OUT_VISIT___GET_HIRE_COST = VESSEL_EVENT_VISIT___GET_HIRE_COST;
 
 	/**
 	 * The operation id for the '<em>Get Local Start Time</em>' operation.
@@ -904,7 +1022,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT___GET_LOCAL_START_TIME = PORT_VISIT___GET_LOCAL_START_TIME;
+	int CHARTER_OUT_VISIT___GET_LOCAL_START_TIME = VESSEL_EVENT_VISIT___GET_LOCAL_START_TIME;
 
 	/**
 	 * The operation id for the '<em>Get Local End Time</em>' operation.
@@ -913,7 +1031,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT___GET_LOCAL_END_TIME = PORT_VISIT___GET_LOCAL_END_TIME;
+	int CHARTER_OUT_VISIT___GET_LOCAL_END_TIME = VESSEL_EVENT_VISIT___GET_LOCAL_END_TIME;
 
 	/**
 	 * The number of operations of the '<em>Charter Out Visit</em>' class.
@@ -922,7 +1040,7 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 0;
+	int CHARTER_OUT_VISIT_OPERATION_COUNT = VESSEL_EVENT_VISIT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.events.FuelUnit <em>Fuel Unit</em>}' enum.
@@ -932,7 +1050,7 @@ public interface EventsPackage extends EPackage {
 	 * @see scenario.schedule.events.impl.EventsPackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 8;
+	int FUEL_UNIT = 9;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.events.FuelType <em>Fuel Type</em>}' enum.
@@ -942,7 +1060,7 @@ public interface EventsPackage extends EPackage {
 	 * @see scenario.schedule.events.impl.EventsPackageImpl#getFuelType()
 	 * @generated
 	 */
-	int FUEL_TYPE = 9;
+	int FUEL_TYPE = 10;
 
 
 	/**
@@ -1367,6 +1485,27 @@ public interface EventsPackage extends EPackage {
 	EReference getCharterOutVisit_Revenue();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.schedule.events.VesselEventVisit <em>Vessel Event Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Event Visit</em>'.
+	 * @see scenario.schedule.events.VesselEventVisit
+	 * @generated
+	 */
+	EClass getVesselEventVisit();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.events.VesselEventVisit#getVesselEvent <em>Vessel Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Event</em>'.
+	 * @see scenario.schedule.events.VesselEventVisit#getVesselEvent()
+	 * @see #getVesselEventVisit()
+	 * @generated
+	 */
+	EReference getVesselEventVisit_VesselEvent();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.schedule.events.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1743,6 +1882,24 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_OUT_VISIT__REVENUE = eINSTANCE.getCharterOutVisit_Revenue();
+
+		/**
+		 * The meta object literal for the '{@link scenario.schedule.events.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.schedule.events.impl.VesselEventVisitImpl
+		 * @see scenario.schedule.events.impl.EventsPackageImpl#getVesselEventVisit()
+		 * @generated
+		 */
+		EClass VESSEL_EVENT_VISIT = eINSTANCE.getVesselEventVisit();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Event</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT_VISIT__VESSEL_EVENT = eINSTANCE.getVesselEventVisit_VesselEvent();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.FuelUnit <em>Fuel Unit</em>}' enum.

@@ -153,9 +153,19 @@ public class EventsSwitch<T> {
 			case EventsPackage.CHARTER_OUT_VISIT: {
 				CharterOutVisit charterOutVisit = (CharterOutVisit)theEObject;
 				T result = caseCharterOutVisit(charterOutVisit);
+				if (result == null) result = caseVesselEventVisit(charterOutVisit);
 				if (result == null) result = casePortVisit(charterOutVisit);
 				if (result == null) result = caseScheduledEvent(charterOutVisit);
 				if (result == null) result = caseScenarioObject(charterOutVisit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EventsPackage.VESSEL_EVENT_VISIT: {
+				VesselEventVisit vesselEventVisit = (VesselEventVisit)theEObject;
+				T result = caseVesselEventVisit(vesselEventVisit);
+				if (result == null) result = casePortVisit(vesselEventVisit);
+				if (result == null) result = caseScheduledEvent(vesselEventVisit);
+				if (result == null) result = caseScenarioObject(vesselEventVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -280,6 +290,21 @@ public class EventsSwitch<T> {
 	 * @generated
 	 */
 	public T caseCharterOutVisit(CharterOutVisit object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Visit</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Event Visit</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselEventVisit(VesselEventVisit object) {
 		return null;
 	}
 
