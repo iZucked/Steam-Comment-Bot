@@ -2832,13 +2832,20 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		page.setEditorFactoryForFeature(FleetPackage.eINSTANCE
 				.getVesselStateAttributes_FuelConsumptionCurve(),
-				new IInlineEditorFactory() {
+				new IMultiInlineEditorFactory() {
 					@Override
 					public IInlineEditor createEditor(final EMFPath path,
 							final EStructuralFeature feature,
 							final ICommandProcessor processor) {
 						return new FuelCurveEditor(path, feature,
 								editingDomain, processor);
+					}
+
+					@Override
+					public IInlineEditor createMultiEditor(EMFPath path,
+							EStructuralFeature feature,
+							ICommandProcessor commandProcessor) {
+						return createEditor(path, feature, commandProcessor);
 					}
 				});
 
