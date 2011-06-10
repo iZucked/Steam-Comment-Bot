@@ -409,21 +409,21 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IVesselEventPortSlot createCharterOut(ITimeWindow arrivalTimeWindow,
-			IPort port, int durationHours) {
+	public IVesselEventPortSlot createVesselEvent(final String s, ITimeWindow arrivalTimeWindow,
+			IPort port, int durationHours, final int a, final int b) {
 		return delegate
-				.createCharterOut(arrivalTimeWindow, port, durationHours);
+				.createVesselEvent(s, arrivalTimeWindow, port, durationHours,a,b);
 	}
 
 	@Override
-	public void addCharterOutVessel(IVesselEventPortSlot charterOut, IVessel vessel) {
-		delegate.addCharterOutVessel(charterOut, vessel);
+	public void addVesselEventVessel(IVesselEventPortSlot charterOut, IVessel vessel) {
+		delegate.addVesselEventVessel(charterOut, vessel);
 	}
 
 	@Override
-	public void addCharterOutVesselClass(IVesselEventPortSlot charterOut,
+	public void addVesselEventVesselClass(IVesselEventPortSlot charterOut,
 			IVesselClass vesselClass) {
-		delegate.addCharterOutVesselClass(charterOut, vesselClass);
+		delegate.addVesselEventVesselClass(charterOut, vesselClass);
 	}
 
 	@Override
