@@ -601,7 +601,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vessel.setVesselInstanceType(vesselInstanceType);
 
 		vessel.setHourlyCharterOutPrice(hourlyCharterOutRate);
-		
+
 		vessels.add(vessel);
 
 		final IResource resource = new Resource(indexingContext, name);
@@ -981,16 +981,32 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final Set<IPort> inaccessiblePorts) {
 		this.portExclusionProvider.setExcludedPorts(vc, inaccessiblePorts);
 	}
-
+	
 	@Override
-	public IVesselEventPortSlot createVesselEvent(final String id,
+	public IVesselEventPortSlot createCharterOutEvent(final String id,
 			final ITimeWindow arrival, final IPort port,
 			final int durationHours, final int minHeelOut, final int maxHeelOut) {
+		return createVesselEvent(id, PortType.CharterOut, arrival, port,
+				durationHours, minHeelOut, maxHeelOut);
+	}
+	
+	@Override
+	public IVesselEventPortSlot createDrydockEvent(final String id,
+			final ITimeWindow arrival, final IPort port,
+			final int durationHours) {
+		return createVesselEvent(id, PortType.DryDock, arrival, port,
+				durationHours, 0,0);
+	}
+
+	public IVesselEventPortSlot createVesselEvent(final String id,
+			final PortType portType, final ITimeWindow arrival,
+			final IPort port, final int durationHours, final int minHeelOut,
+			final int maxHeelOut) {
 		final VesselEvent co = new VesselEvent(arrival, durationHours, port);
 		final VesselEventPortSlot slot = new VesselEventPortSlot(id,
 				co.getPort(), co.getTimeWindow(), co);
-
 		vesselEvents.add(slot);
+		slot.setPortType(portType);
 		vesselEventVessels.put(slot, new HashSet<IVessel>());
 		vesselEventVesselClasses.put(slot, new HashSet<IVesselClass>());
 		return slot;
