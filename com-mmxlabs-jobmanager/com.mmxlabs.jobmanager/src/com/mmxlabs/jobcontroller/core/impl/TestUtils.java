@@ -428,57 +428,73 @@ public final class TestUtils {
 		
 		
 		builder.createVessel("Methane Rita Andrea", vesselClass1,
+				vesselClass1.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Methane Jane Elizabeth", vesselClass2,
+				vesselClass2.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Methane Lydon Volney", vesselClass2,
+				vesselClass2.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Methane Shirley Elizabeth", vesselClass2,
+				vesselClass2.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Methane Heather Sally", vesselClass2,
+				vesselClass2.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Methane Alison Victoria", vesselClass2,
+				vesselClass2.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Methane Nile Eagle", vesselClass2,
+				vesselClass2.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 
 		builder.createVessel("Methane Julia Louise", vesselClass3,
+				vesselClass3.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		// Vessel due to come online July 10
 		builder.createVessel("Methane Becki Anne", vesselClass3,
+				vesselClass3.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		// Vessel due to come online Sept 10
 		builder.createVessel("Methane Mickie Harper", vesselClass3,
+				vesselClass3.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		// Vessel due to come online Oct 10
 		builder.createVessel("Methane Unknown", vesselClass3,
+				vesselClass3.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 
 		// Charter Vessels
 		builder.createVessel("Hilli", vesselClass4,
+				vesselClass4.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Gimi", vesselClass4,
+				vesselClass4.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Khannur", vesselClass4,
+				vesselClass4.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Golar Freeze", vesselClass4,
+				vesselClass4.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 		builder.createVessel("Methane Princes", vesselClass1,
+				vesselClass4.getHourlyCharterInPrice(),
 				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
 				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
 
