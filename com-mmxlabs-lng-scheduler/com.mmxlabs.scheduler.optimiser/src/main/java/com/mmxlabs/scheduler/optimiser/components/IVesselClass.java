@@ -150,10 +150,9 @@ public interface IVesselClass {
 	int getBaseFuelConversionFactor();
 
 	/**
-	 * Returns the hourly charter price for this vessel class, if chartered.
+	 * Returns the hourly rate at which vessels of this class can be chartered in.
 	 * 
 	 * @return hourly charter price
 	 */
-	int getHourlyCharterPrice();
-
+	int getHourlyCharterInPrice();
 }
