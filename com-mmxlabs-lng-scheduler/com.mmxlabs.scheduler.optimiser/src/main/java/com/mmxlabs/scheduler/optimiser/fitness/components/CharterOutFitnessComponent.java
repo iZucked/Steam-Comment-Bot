@@ -10,8 +10,11 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 /**
@@ -45,7 +48,7 @@ public class CharterOutFitnessComponent<T> extends
 	/**
 	 * The hourly charter price of the current vessel, when iterating
 	 */
-	private int charterPrice;
+	private int charterOutPrice;
 	/**
 	 * The minimum idle time which we should consider feasible as a potential
 	 * charter-out
@@ -60,6 +63,11 @@ public class CharterOutFitnessComponent<T> extends
 	 * revenue is 90% of the charter in cost for a vessel class)
 	 */
 	private double bidAskSpread;
+
+	/**
+	 * Accumulates the amount of time spent on confirmed charter outs in this sequence.
+	 */
+	private int charterOutTimeAccumulator;
 
 	public CharterOutFitnessComponent(final String name,
 			final String vesselProviderKey, final IFitnessCore<T> core) {
@@ -78,9 +86,10 @@ public class CharterOutFitnessComponent<T> extends
 	protected boolean reallyStartSequence(IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		idleTimeAccumulator = 0;
+		charterOutTimeAccumulator = 0;
 		if (vessel.getVesselInstanceType().equals(VesselInstanceType.FLEET)) {
 			// fleet vessels have potential charter-out value;
-			charterPrice = vessel.getVesselClass().getHourlyCharterInPrice();
+			charterOutPrice = vessel.getHourlyCharterOutPrice();
 			return true;
 		} else {
 			return false;
@@ -93,10 +102,15 @@ public class CharterOutFitnessComponent<T> extends
 			@SuppressWarnings("unchecked")
 			final VoyageDetails<T> voyageDetails = (VoyageDetails<T>) object;
 			// check idle time is quite long, so a charter out is not ridiculous
-			if (voyageDetails.getIdleTime() > idleTimeThreshold) {
+			if (generateOpportunities && voyageDetails.getIdleTime() > idleTimeThreshold) {
 				// TODO this is where a market model would slot in (or maybe
 				// above)
 				idleTimeAccumulator += voyageDetails.getIdleTime();
+			}
+		} else if (object instanceof PortDetails) {
+			final PortDetails portDetails = (PortDetails) object;
+			if (portDetails.getPortSlot().getPortType().equals(PortType.CharterOut)) {
+				charterOutTimeAccumulator += portDetails.getVisitDuration();
 			}
 		}
 		return true;
@@ -104,13 +118,14 @@ public class CharterOutFitnessComponent<T> extends
 
 	@Override
 	protected long endSequenceAndGetCost() {
-		// TODO charter out revenue should be less than charter in cost, due to
-		// arbitrage
-
 		// result is negated because this is (potential) revenue.
-		return -Calculator.multiply(
-				Calculator.multiply(idleTimeAccumulator, charterPrice),
-				bidAskSpread);
+		long definiteValue = Calculator.multiply(charterOutTimeAccumulator, charterOutPrice);
+		if (generateOpportunities) {
+			definiteValue += Calculator.multiply(
+					Calculator.multiply(idleTimeAccumulator, charterOutPrice),
+					bidAskSpread);
+		}
+		return -definiteValue;
 	}
 
 	// TODO annotation code for UI
