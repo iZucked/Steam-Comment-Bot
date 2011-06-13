@@ -85,7 +85,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 
 			sb.append("Start Time: " + event.getStartTime() + "\n");
 			sb.append("End Time: " + event.getEndTime() + "\n");
-			sb.append("Duration: " + event.getDuration() + " hours\n");
+			sb.append("Duration: " + event.getEventDuration() + " hours\n");
 
 			if (element instanceof PortVisit) {
 				final PortVisit visit = (PortVisit) element;
