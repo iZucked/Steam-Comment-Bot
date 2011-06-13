@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.provider;
 
@@ -10,8 +12,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -20,12 +25,12 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
+
 import scenario.provider.LngEditPlugin;
 import scenario.provider.NamedObjectItemProvider;
 
@@ -38,7 +43,11 @@ import scenario.provider.NamedObjectItemProvider;
 public class VesselItemProvider
 	extends NamedObjectItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -62,6 +71,7 @@ public class VesselItemProvider
 
 			addClassPropertyDescriptor(object);
 			addTimeCharteredPropertyDescriptor(object);
+			addDailyCharterOutPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -111,6 +121,28 @@ public class VesselItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Daily Charter Out Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDailyCharterOutPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_dailyCharterOutPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_dailyCharterOutPrice_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__DAILY_CHARTER_OUT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -124,6 +156,7 @@ public class VesselItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL__START_REQUIREMENT);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL__END_REQUIREMENT);
+			childrenFeatures.add(FleetPackage.Literals.VESSEL__PORT_EXCLUSIONS);
 		}
 		return childrenFeatures;
 	}
@@ -179,10 +212,12 @@ public class VesselItemProvider
 
 		switch (notification.getFeatureID(Vessel.class)) {
 			case FleetPackage.VESSEL__TIME_CHARTERED:
+			case FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL__START_REQUIREMENT:
 			case FleetPackage.VESSEL__END_REQUIREMENT:
+			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -209,6 +244,11 @@ public class VesselItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL__END_REQUIREMENT,
 				 FleetFactory.eINSTANCE.createPortAndTime()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL__PORT_EXCLUSIONS,
+				 FleetFactory.eINSTANCE.createPortExclusion()));
 	}
 
 	/**

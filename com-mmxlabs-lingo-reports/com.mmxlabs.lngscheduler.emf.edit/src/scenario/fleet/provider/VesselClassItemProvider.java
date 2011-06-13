@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.provider;
 
@@ -10,8 +12,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -20,12 +25,12 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
+
 import scenario.provider.LngEditPlugin;
 import scenario.provider.NamedObjectItemProvider;
 
@@ -38,7 +43,11 @@ import scenario.provider.NamedObjectItemProvider;
 public class VesselClassItemProvider
 	extends NamedObjectItemProvider
 	implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -65,8 +74,9 @@ public class VesselClassItemProvider
 			addMaxSpeedPropertyDescriptor(object);
 			addMinHeelVolumePropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
-			addDailyCharterPricePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
+			addDailyCharterPricePropertyDescriptor(object);
+			addDailyCharterOutPricePropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
 			addBaseFuelPropertyDescriptor(object);
 		}
@@ -206,6 +216,28 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Daily Charter Out Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDailyCharterOutPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_dailyCharterOutPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_dailyCharterOutPrice_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Spot Charter Count feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -285,6 +317,7 @@ public class VesselClassItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__LADEN_ATTRIBUTES);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES);
+			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__PORT_EXCLUSIONS);
 		}
 		return childrenFeatures;
 	}
@@ -344,12 +377,14 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
-			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
+			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -376,6 +411,11 @@ public class VesselClassItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES,
 				 FleetFactory.eINSTANCE.createVesselStateAttributes()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL_CLASS__PORT_EXCLUSIONS,
+				 FleetFactory.eINSTANCE.createPortExclusion()));
 	}
 
 	/**

@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.provider;
 
@@ -10,6 +12,7 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.edit.provider.ChangeNotifier;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -280,12 +283,34 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This returns the root adapter factory that contains this factory.
+	 * This keeps track of the one adapter used for all {@link scenario.fleet.PortExclusion} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortExclusionItemProvider portExclusionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.fleet.PortExclusion}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
+	public Adapter createPortExclusionAdapter() {
+		if (portExclusionItemProvider == null) {
+			portExclusionItemProvider = new PortExclusionItemProvider(this);
+		}
+
+		return portExclusionItemProvider;
+	}
+
+	/**
+	 * This returns the root adapter factory that contains this factory.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ComposeableAdapterFactory getRootAdapterFactory() {
 		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
 	}
@@ -296,7 +321,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
 		this.parentAdapterFactory = parentAdapterFactory;
 	}
@@ -345,7 +369,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void addListener(INotifyChangedListener notifyChangedListener) {
 		changeNotifier.addListener(notifyChangedListener);
 	}
@@ -356,7 +379,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void removeListener(INotifyChangedListener notifyChangedListener) {
 		changeNotifier.removeListener(notifyChangedListener);
 	}
@@ -367,7 +389,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void fireNotifyChanged(Notification notification) {
 		changeNotifier.fireNotifyChanged(notification);
 
@@ -382,7 +403,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void dispose() {
 		if (fleetModelItemProvider != null) fleetModelItemProvider.dispose();
 		if (vesselItemProvider != null) vesselItemProvider.dispose();
@@ -393,6 +413,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (charterOutItemProvider != null) charterOutItemProvider.dispose();
 		if (drydockItemProvider != null) drydockItemProvider.dispose();
 		if (vesselFuelItemProvider != null) vesselFuelItemProvider.dispose();
+		if (portExclusionItemProvider != null) portExclusionItemProvider.dispose();
 	}
 
 }

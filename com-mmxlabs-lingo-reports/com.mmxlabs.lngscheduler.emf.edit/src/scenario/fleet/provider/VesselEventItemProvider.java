@@ -70,9 +70,10 @@ public class VesselEventItemProvider
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
-			addPortPropertyDescriptor(object);
+			addStartPortPropertyDescriptor(object);
 			addVesselsPropertyDescriptor(object);
 			addVesselClassesPropertyDescriptor(object);
+			addEndPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -166,19 +167,19 @@ public class VesselEventItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Port feature.
+	 * This adds a property descriptor for the Start Port feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPortPropertyDescriptor(Object object) {
+	protected void addStartPortPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselEvent_port_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_port_feature", "_UI_VesselEvent_type"),
-				 FleetPackage.Literals.VESSEL_EVENT__PORT,
+				 getString("_UI_VesselEvent_startPort_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_startPort_feature", "_UI_VesselEvent_type"),
+				 FleetPackage.Literals.VESSEL_EVENT__START_PORT,
 				 true,
 				 false,
 				 true,
@@ -223,6 +224,28 @@ public class VesselEventItemProvider
 				 getString("_UI_VesselEvent_vesselClasses_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_vesselClasses_feature", "_UI_VesselEvent_type"),
 				 FleetPackage.Literals.VESSEL_EVENT__VESSEL_CLASSES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the End Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEndPortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselEvent_endPort_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_endPort_feature", "_UI_VesselEvent_type"),
+				 FleetPackage.Literals.VESSEL_EVENT__END_PORT,
 				 true,
 				 false,
 				 true,
