@@ -1809,8 +1809,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		eventsPane.addColumn("Duration (days)", duration, duration);
 
 		final SingleReferenceManipulator port = new SingleReferenceManipulator(
-				fp.getVesselEvent_Port(), portProvider, editingDomain);
-		eventsPane.addColumn("Port", port, port);
+				fp.getVesselEvent_StartPort(), portProvider, editingDomain);
+		eventsPane.addColumn("Start Port", port, port);
 
 		final MultipleReferenceManipulator vessels = new MultipleReferenceManipulator(
 				fp.getVesselEvent_Vessels(), editingDomain, vesselProvider,

@@ -629,6 +629,11 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME,
 							1));
 
+			objectives
+					.add(createObjective(
+							of,
+							CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME,
+							1));
 		}
 
 		settings.setNumberOfSteps(20000);
