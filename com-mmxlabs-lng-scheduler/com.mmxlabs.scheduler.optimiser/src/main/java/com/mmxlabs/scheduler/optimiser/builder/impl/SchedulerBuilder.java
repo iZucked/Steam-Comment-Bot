@@ -172,10 +172,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IPortExclusionProviderEditor portExclusionProvider;
 
-	private final List<VesselEventPortSlot> charterOuts = new LinkedList<VesselEventPortSlot>();
-	private final Map<VesselEventPortSlot, Set<IVessel>> vesselCharterOuts = new HashMap<VesselEventPortSlot, Set<IVessel>>();
+	private final List<VesselEventPortSlot> vesselEvents = new LinkedList<VesselEventPortSlot>();
+	private final Map<VesselEventPortSlot, Set<IVessel>> vesselEventVessels = new HashMap<VesselEventPortSlot, Set<IVessel>>();
 
-	private final Map<VesselEventPortSlot, Set<IVesselClass>> vesselClassCharterOuts = new HashMap<VesselEventPortSlot, Set<IVesselClass>>();
+	private final Map<VesselEventPortSlot, Set<IVesselClass>> vesselEventVesselClasses = new HashMap<VesselEventPortSlot, Set<IVesselClass>>();
 
 	private final IReturnElementProviderEditor<ISequenceElement> returnElementProvider;
 
@@ -981,54 +981,56 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IVesselEventPortSlot createCharterOut(final ITimeWindow arrival,
-			final IPort port, final int durationHours) {
+	public IVesselEventPortSlot createVesselEvent(final String id,
+			final ITimeWindow arrival, final IPort port,
+			final int durationHours, final int minHeelOut, final int maxHeelOut) {
 		final VesselEvent co = new VesselEvent(arrival, durationHours, port);
-		final VesselEventPortSlot slot = new VesselEventPortSlot("charter-out-"
-				+ charterOuts.size(), co.getPort(), co.getTimeWindow(), co);
+		final VesselEventPortSlot slot = new VesselEventPortSlot(id,
+				co.getPort(), co.getTimeWindow(), co);
 
-		charterOuts.add(slot);
-		vesselCharterOuts.put(slot, new HashSet<IVessel>());
-		vesselClassCharterOuts.put(slot, new HashSet<IVesselClass>());
+		vesselEvents.add(slot);
+		vesselEventVessels.put(slot, new HashSet<IVessel>());
+		vesselEventVesselClasses.put(slot, new HashSet<IVesselClass>());
 		return slot;
 	}
 
 	@Override
-	public void addCharterOutVessel(final IVesselEventPortSlot charterOut,
+	public void addVesselEventVessel(final IVesselEventPortSlot charterOut,
 			final IVessel vessel) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException(
 					"IVessel was not created using this builder");
 		}
-		if (!charterOuts.contains(charterOut)) {
+		if (!vesselEvents.contains(charterOut)) {
 			throw new IllegalArgumentException(
 					"ICharterOut was not created using this builder");
 		}
-		vesselCharterOuts.get(charterOut).add(vessel);
+		vesselEventVessels.get(charterOut).add(vessel);
 	}
 
 	@Override
-	public void addCharterOutVesselClass(final IVesselEventPortSlot charterOut,
+	public void addVesselEventVesselClass(
+			final IVesselEventPortSlot charterOut,
 			final IVesselClass vesselClass) {
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException(
 					"IVesselClass was not created using this builder");
 		}
-		if (!charterOuts.contains(charterOut)) {
+		if (!vesselEvents.contains(charterOut)) {
 			throw new IllegalArgumentException(
 					"ICharterOut was not created using this builder");
 		}
-		vesselClassCharterOuts.get(charterOut).add(vesselClass);
+		vesselEventVesselClasses.get(charterOut).add(vesselClass);
 	}
 
 	protected void buildCharterOuts() {
 		int i = 0;
 
-		for (final IVesselEventPortSlot slot : charterOuts) {
+		for (final IVesselEventPortSlot slot : vesselEvents) {
 			final IVesselEvent charterOut = slot.getVesselEvent();
 
 			final SequenceElement element = new SequenceElement(
-					indexingContext, "charter-out-" + i, slot);
+					indexingContext, slot.getId(), slot);
 
 			sequenceElements.add(element);
 
@@ -1046,8 +1048,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			portProvider.setPortForElement(charterOut.getPort(), element);
 
 			final Set<IResource> resources = new HashSet<IResource>();
-			final Set<IVessel> supportedVessels = vesselCharterOuts.get(slot);
-			final Set<IVesselClass> supportedClasses = vesselClassCharterOuts
+			final Set<IVessel> supportedVessels = vesselEventVessels.get(slot);
+			final Set<IVesselClass> supportedClasses = vesselEventVesselClasses
 					.get(slot);
 			for (final IVessel vessel : vessels) {
 				if (vessel.getVesselInstanceType() != VesselInstanceType.SPOT_CHARTER

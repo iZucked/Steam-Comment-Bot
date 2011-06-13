@@ -117,19 +117,19 @@ public interface ISchedulerBuilder {
 			int nboSpeed);
 
 	/**
-	 * Create a charter out object.
+	 * Create a vessel event object (a charter out, drydock, etc)
 	 * 
 	 * @param arrivalTimeWindow
 	 * @param port
 	 * @param durationHours
 	 * @return
 	 */
-	IVesselEventPortSlot createCharterOut(ITimeWindow arrivalTimeWindow, IPort port,
-			int durationHours);
+	IVesselEventPortSlot createVesselEvent(String id, ITimeWindow arrivalTimeWindow, IPort port,
+			int durationHours, int minHeelOut, int maxHeelOut);
 
-	void addCharterOutVessel(IVesselEventPortSlot charterOut, IVessel vessel);
+	void addVesselEventVessel(IVesselEventPortSlot charterOut, IVessel vessel);
 
-	void addCharterOutVesselClass(IVesselEventPortSlot charterOut,
+	void addVesselEventVesselClass(IVesselEventPortSlot charterOut,
 			IVesselClass vesselClass);
 
 	/**
