@@ -52,7 +52,7 @@ public final class VesselClass implements IVesselClass {
 	/**
 	 * Stores the price per hour to charter vessels of this class.
 	 */
-	private int hourlyCharterPrice;
+	private int hourlyCharterInPrice;
 
 	@Override
 	public String getName() {
@@ -177,13 +177,13 @@ public final class VesselClass implements IVesselClass {
 		this.baseFuelConversionFactor = baseFuelConversionFactor;
 	}
 
-	public void setHourlyCharterPrice(int hourlyCharterPrice) {
-		this.hourlyCharterPrice = hourlyCharterPrice;
+	public void setHourlyCharterInPrice(int hourlyCharterInPrice) {
+		this.hourlyCharterInPrice = hourlyCharterInPrice;
 	}
 
 	@Override
 	public int getHourlyCharterInPrice() {
-		return hourlyCharterPrice;
+		return hourlyCharterInPrice;
 	}
 
 	@Override
