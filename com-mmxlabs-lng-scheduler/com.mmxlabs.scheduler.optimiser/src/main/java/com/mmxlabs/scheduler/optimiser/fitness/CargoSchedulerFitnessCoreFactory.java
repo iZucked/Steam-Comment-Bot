@@ -25,9 +25,9 @@ public final class CargoSchedulerFitnessCoreFactory implements
 	public static final String DISTANCE_COMPONENT_NAME = "cargo-scheduler-distance";
 
 	public static final String LATENESS_COMPONENT_NAME = "cargo-scheduler-lateness";
-	
+
 	public static final String COST_BASE_COMPONENT_NAME = "cargo-scheduler-cost-base";
-	
+
 	public static final String COST_LNG_COMPONENT_NAME = "cargo-scheduler-cost-lng";
 
 	public static final String CHARTER_COST_COMPONENT_NAME = "cargo-scheduler-charter-cost";
@@ -36,24 +36,29 @@ public final class CargoSchedulerFitnessCoreFactory implements
 
 	public static final String CARGO_ALLOCATION_COMPONENT_NAME = "cargo-scheduler-volume-allocation";
 
-	/* default scheduler factory creates default GA scheduler */
-	//TODO: Make static class
-	private ISchedulerFactory schedulerFactory =
-		new ISchedulerFactory() {
+	public static final String CHARTER_REVENUE_COMPONENT_NAME = "cargo-scheduler-charter-revenue";
 
-			@Override
-			public ISequenceScheduler createScheduler(IOptimisationData data,
-					Collection components) {
-				return SchedulerUtils.createDirectRandomSequenceScheduler(data, components);
-//				return SchedulerUtils.createRelaxingSequenceScheduler(data, components);
-			}
+	/* default scheduler factory creates default GA scheduler */
+	// TODO: Make static class
+	private ISchedulerFactory schedulerFactory = new ISchedulerFactory() {
+
+		@Override
+		public ISequenceScheduler createScheduler(IOptimisationData data,
+				Collection components) {
+			return SchedulerUtils.createDirectRandomSequenceScheduler(data,
+					components);
+			// return SchedulerUtils.createRelaxingSequenceScheduler(data,
+			// components);
+		}
 	};
 
 	@Override
 	public Collection<String> getFitnessComponentNames() {
 		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME,
-				LATENESS_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME,
-				CHARTER_COST_COMPONENT_NAME, ROUTE_PRICE_COMPONENT_NAME, CARGO_ALLOCATION_COMPONENT_NAME);
+				LATENESS_COMPONENT_NAME, COST_BASE_COMPONENT_NAME,
+				COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME,
+				ROUTE_PRICE_COMPONENT_NAME, CARGO_ALLOCATION_COMPONENT_NAME,
+				CHARTER_REVENUE_COMPONENT_NAME);
 	}
 
 	@Override
@@ -67,7 +72,7 @@ public final class CargoSchedulerFitnessCoreFactory implements
 		core.setSchedulerFactory(schedulerFactory);
 		return core;
 	}
-	
+
 	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
 		this.schedulerFactory = schedulerFactory;
 	}

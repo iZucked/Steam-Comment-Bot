@@ -119,7 +119,7 @@ public class TestCalculations {
 		final IStartEndRequirement endRequirement = builder
 				.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1,
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0,
 				startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
@@ -733,7 +733,7 @@ public class TestCalculations {
 		final IStartEndRequirement endRequirement = builder
 				.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1,
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0,
 				startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
@@ -1351,7 +1351,7 @@ public class TestCalculations {
 		final IStartEndRequirement endRequirement = builder
 				.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1,
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0,
 				startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);

@@ -140,6 +140,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass,
+			int hourlyCharterOutRate,
 			IStartEndRequirement startConstraint,
 			IStartEndRequirement endConstraint);
 
@@ -154,6 +155,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass,
+			int hourlyCharterOutRate,
 			VesselInstanceType vesselInstanceType, IStartEndRequirement start,
 			IStartEndRequirement end);
 

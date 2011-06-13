@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.CharterOutFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.DistanceComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
@@ -90,6 +91,11 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 						SchedulerConstants.DCP_vesselProvider,
 						SchedulerConstants.DCP_totalVolumeLimitProvider,
 						SchedulerConstants.DCP_portSlotsProvider, this));
+
+		components
+				.add(new CharterOutFitnessComponent<T>(
+						CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME,
+						SchedulerConstants.DCP_vesselProvider, this));
 	}
 
 	@Override
@@ -158,7 +164,8 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 	@Override
 	public void annotate(final ISequences<T> sequences,
 			final IAnnotatedSolution<T> solution, final boolean forExport) {
-		final ScheduledSequences schedule = scheduler.schedule(sequences, forExport);
+		final ScheduledSequences schedule = scheduler.schedule(sequences,
+				forExport);
 		// Do basic voyageplan annotation
 		final VoyagePlanAnnotator<T> annotator = new VoyagePlanAnnotator<T>();
 

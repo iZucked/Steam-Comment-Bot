@@ -10,7 +10,6 @@ package com.mmxlabs.scheduler.optimiser.components;
  *
  */
 public interface IVesselEventPortSlot extends IPortSlot {
-
 	IVesselEvent getVesselEvent();
 
 }

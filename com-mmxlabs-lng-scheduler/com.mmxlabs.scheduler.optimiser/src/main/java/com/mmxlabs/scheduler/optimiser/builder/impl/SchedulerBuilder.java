@@ -530,10 +530,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVessel createVessel(final String name,
-			final IVesselClass vesselClass, final IStartEndRequirement start,
-			final IStartEndRequirement end) {
-		return this.createVessel(name, vesselClass, VesselInstanceType.FLEET,
-				start, end);
+			final IVesselClass vesselClass, int hourlyCharterOutRate,
+			final IStartEndRequirement start, final IStartEndRequirement end) {
+		return this.createVessel(name, vesselClass, hourlyCharterOutRate,
+				VesselInstanceType.FLEET, start, end);
 	}
 
 	/**
@@ -569,13 +569,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final IStartEndRequirement start = createStartEndRequirement();
 		final IStartEndRequirement end = createStartEndRequirement();
 
-		return createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER,
-				start, end);
+		return createVessel(name, vesselClass, 0,
+				VesselInstanceType.SPOT_CHARTER, start, end);
 	}
 
 	@Override
 	public IVessel createVessel(final String name,
-			final IVesselClass vesselClass,
+			final IVesselClass vesselClass, int hourlyCharterOutRate,
 			final VesselInstanceType vesselInstanceType,
 			final IStartEndRequirement start, final IStartEndRequirement end) {
 
@@ -600,6 +600,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vessel.setVesselInstanceType(vesselInstanceType);
 
+		vessel.setHourlyCharterOutPrice(hourlyCharterOutRate);
+		
 		vessels.add(vessel);
 
 		final IResource resource = new Resource(indexingContext, name);
