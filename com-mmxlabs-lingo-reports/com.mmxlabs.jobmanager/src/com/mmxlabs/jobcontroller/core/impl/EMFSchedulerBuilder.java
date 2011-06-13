@@ -321,11 +321,12 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVessel createVessel(String name, IVesselClass vesselClass,
+			int x,
 			IStartEndRequirement startConstraint,
 			IStartEndRequirement endConstraint) {
 		
 		
-		IVessel vessel = delegate.createVessel(name, vesselClass, startConstraint, endConstraint);
+		IVessel vessel = delegate.createVessel(name, vesselClass,x, startConstraint, endConstraint);
 
 		scenario.fleet.Vessel eVessel = FleetFactory.eINSTANCE.createVessel();
 		eVessel.setName(name);
@@ -353,6 +354,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVessel createVessel(String name, IVesselClass vesselClass,
+			int x,
 			VesselInstanceType vesselInstanceType, IStartEndRequirement start,
 			IStartEndRequirement end) {
 		return null;
@@ -395,7 +397,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		IStartEndRequirement start = createStartEndRequirement();
 		IStartEndRequirement end = createStartEndRequirement();
 		
-		return createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, start, end);
+		return createVessel(name, vesselClass,0, VesselInstanceType.SPOT_CHARTER, start, end);
 	}
 
 	@Override
