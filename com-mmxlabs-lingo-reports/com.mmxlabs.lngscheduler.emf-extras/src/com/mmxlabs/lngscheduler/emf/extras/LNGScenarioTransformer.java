@@ -374,7 +374,7 @@ public class LNGScenarioTransformer {
 			final ITimeWindow window = builder.createTimeWindow(
 					convertTime(event.getStartDate()),
 					convertTime(event.getEndDate()));
-			final IPort port = portAssociation.lookup(event.getPort());
+			final IPort port = portAssociation.lookup(event.getStartPort());
 			final int durationHours = event.getDuration() * 24;
 			final IVesselEventPortSlot builderSlot;
 			if (event instanceof CharterOut) {

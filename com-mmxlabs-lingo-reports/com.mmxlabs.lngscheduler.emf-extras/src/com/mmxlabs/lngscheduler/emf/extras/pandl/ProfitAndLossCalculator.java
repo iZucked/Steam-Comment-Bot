@@ -62,28 +62,39 @@ public class ProfitAndLossCalculator {
 					// add revenue for charter out
 					final CharterOutRevenue revenue = scheduleFactory
 							.createCharterOutRevenue();
-					
+
 					visit.setRevenue(revenue);
-					
+
 					revenue.setCharterOut(visit);
-					
+
 					revenue.setEntity(scenario.getContractModel()
 							.getShippingEntity());
 					revenue.setDate(visit.getEndTime());
-					
+
 					final LineItem li = scheduleFactory.createLineItem();
 					li.setName("Charter out revenue");
 					li.setParty(null);
-					li.setValue((evt.getDuration()
-							* ((FleetVessel) seq.getVessel()).getVessel()
-									.getClass_().getDailyCharterPrice())/24);
-					
+
+					final FleetVessel fleetVessel = (FleetVessel) seq
+							.getVessel();
+					final int dailyCharterPrice = fleetVessel.getVessel()
+							.isSetDailyCharterOutPrice() ? fleetVessel
+							.getVessel().getDailyCharterOutPrice()
+							: (fleetVessel.getVessel().getClass_()
+									.isSetDailyCharterOutPrice() ? fleetVessel
+									.getVessel().getClass_()
+									.getDailyCharterOutPrice() : fleetVessel
+									.getVessel().getClass_()
+									.getDailyCharterPrice());
+
+					li.setValue((evt.getEventDuration() * dailyCharterPrice) / 24);
+							
 					// TODO onward ballast leg costs - we pay or renter pays?
 					// at the moment I'm saying we pay.
 					revenue.getLineItems().add(li);
-					
+
 					schedule.getRevenue().add(revenue);
-					
+
 					getNextLeg = true;
 					lastRevenue = revenue;
 				} else if (getNextLeg && evt instanceof Journey) {
@@ -91,14 +102,14 @@ public class ProfitAndLossCalculator {
 					final LineItem li = scheduleFactory.createLineItem();
 					li.setName("Onward journey cost");
 					li.setParty(null);
-					li.setValue(- (int) journey.getTotalCost());
+					li.setValue(-(int) journey.getTotalCost());
 					lastRevenue.getLineItems().add(li);
 				} else if (getNextLeg && evt instanceof Idle) {
 					final Idle idle = (Idle) evt;
 					final LineItem li = scheduleFactory.createLineItem();
 					li.setName("Onward idle cost");
 					li.setParty(null);
-					li.setValue(- (int) idle.getTotalCost());
+					li.setValue(-(int) idle.getTotalCost());
 					lastRevenue.getLineItems().add(li);
 					getNextLeg = false;
 				}
