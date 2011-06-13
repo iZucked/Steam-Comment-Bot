@@ -1,18 +1,26 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+
 import scenario.schedule.CargoAllocation;
+
 import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.SlotVisit;
 
 /**
@@ -74,7 +82,6 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Slot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -101,7 +108,6 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setSlot(Slot newSlot) {
 		Slot oldSlot = slot;
 		slot = newSlot;
@@ -114,7 +120,6 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public CargoAllocation getCargoAllocation() {
 		if (cargoAllocation != null && cargoAllocation.eIsProxy()) {
 			InternalEObject oldCargoAllocation = (InternalEObject)cargoAllocation;
@@ -141,12 +146,30 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
 		CargoAllocation oldCargoAllocation = cargoAllocation;
 		cargoAllocation = newCargoAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.SLOT_VISIT__CARGO_ALLOCATION, oldCargoAllocation, cargoAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getId() {
+		return getSlot().getId();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getDisplayTypeName() {
+		if (getSlot() instanceof scenario.cargo.LoadSlot) return "Load";
+		else return "Discharge";
 	}
 
 	/**
@@ -219,14 +242,37 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 		return super.eIsSet(featureID);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
-	public String getDisplayTypeName() {
-		return getSlot() instanceof LoadSlot ? "Load" : "Discharge";
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == PortVisit.class) {
+			switch (baseOperationID) {
+				case EventsPackage.PORT_VISIT___GET_ID: return EventsPackage.SLOT_VISIT___GET_ID;
+				case EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME: return EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
-	public String getId() {
-		return getSlot().getId();
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case EventsPackage.SLOT_VISIT___GET_ID:
+				return getId();
+			case EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME:
+				return getDisplayTypeName();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //SlotVisitImpl

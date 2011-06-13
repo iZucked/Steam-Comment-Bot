@@ -1,20 +1,25 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.impl;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.Date;
 
-import javax.management.timer.Timer;
-
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.impl.ScenarioObjectImpl;
+
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.ScheduledEvent;
 
@@ -97,7 +102,6 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Date getStartTime() {
 		return startTime;
 	}
@@ -107,7 +111,6 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setStartTime(Date newStartTime) {
 		Date oldStartTime = startTime;
 		startTime = newStartTime;
@@ -120,7 +123,6 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Date getEndTime() {
 		return endTime;
 	}
@@ -130,7 +132,6 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setEndTime(Date newEndTime) {
 		Date oldEndTime = endTime;
 		endTime = newEndTime;
@@ -143,7 +144,6 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getEventDuration() {
 		return (int) ((getEndTime().getTime() - getStartTime().getTime()) / javax.management.timer.Timer.ONE_HOUR); 
 	}
@@ -153,7 +153,6 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getHireCost() {
 		return (long) (((scenario.schedule.Sequence) eContainer()).getVessel().getHourlyCharterPrice() * getEventDuration());
 	}
@@ -163,7 +162,6 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Object getLocalStartTime() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -175,7 +173,6 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Object getLocalEndTime() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -288,11 +285,4 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 		return result.toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see scenario.schedule.events.ScheduledEvent#getDuration()
-	 */
-	@Override
-	public int getDuration() {
-		return (int) ((getEndTime().getTime() - getStartTime().getTime()) / Timer.ONE_HOUR); 
-	}
 } //ScheduledEventImpl

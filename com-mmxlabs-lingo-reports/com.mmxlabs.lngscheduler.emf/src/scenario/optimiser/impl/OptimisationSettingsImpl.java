@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.impl;
 
@@ -8,19 +10,25 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.impl.NamedObjectImpl;
+
 import scenario.optimiser.Constraint;
 import scenario.optimiser.DiscountCurve;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimisationSettings;
 import scenario.optimiser.OptimiserPackage;
+
 import scenario.schedule.Schedule;
 
 /**
@@ -134,7 +142,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getRandomSeed() {
 		return randomSeed;
 	}
@@ -144,7 +151,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setRandomSeed(long newRandomSeed) {
 		long oldRandomSeed = randomSeed;
 		randomSeed = newRandomSeed;
@@ -157,7 +163,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<Constraint> getConstraints() {
 		if (constraints == null) {
 			constraints = new EObjectContainmentEList<Constraint>(Constraint.class, this, OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS);
@@ -170,7 +175,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<Objective> getObjectives() {
 		if (objectives == null) {
 			objectives = new EObjectContainmentEList<Objective>(Objective.class, this, OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES);
@@ -183,7 +187,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Schedule getInitialSchedule() {
 		if (initialSchedule != null && initialSchedule.eIsProxy()) {
 			InternalEObject oldInitialSchedule = (InternalEObject)initialSchedule;
@@ -210,7 +213,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setInitialSchedule(Schedule newInitialSchedule) {
 		Schedule oldInitialSchedule = initialSchedule;
 		initialSchedule = newInitialSchedule;

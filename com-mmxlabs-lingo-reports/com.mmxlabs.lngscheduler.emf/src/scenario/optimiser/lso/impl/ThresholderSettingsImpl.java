@@ -1,11 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.lso.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -112,7 +116,6 @@ public class ThresholderSettingsImpl extends EObjectImpl implements ThresholderS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public double getAlpha() {
 		return alpha;
 	}
@@ -122,7 +125,6 @@ public class ThresholderSettingsImpl extends EObjectImpl implements ThresholderS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setAlpha(double newAlpha) {
 		double oldAlpha = alpha;
 		alpha = newAlpha;
@@ -135,7 +137,6 @@ public class ThresholderSettingsImpl extends EObjectImpl implements ThresholderS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public double getInitialAcceptanceRate() {
 		return initialAcceptanceRate;
 	}
@@ -145,7 +146,6 @@ public class ThresholderSettingsImpl extends EObjectImpl implements ThresholderS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setInitialAcceptanceRate(double newInitialAcceptanceRate) {
 		double oldInitialAcceptanceRate = initialAcceptanceRate;
 		initialAcceptanceRate = newInitialAcceptanceRate;
@@ -158,7 +158,6 @@ public class ThresholderSettingsImpl extends EObjectImpl implements ThresholderS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getEpochLength() {
 		return epochLength;
 	}
@@ -168,7 +167,6 @@ public class ThresholderSettingsImpl extends EObjectImpl implements ThresholderS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setEpochLength(int newEpochLength) {
 		int oldEpochLength = epochLength;
 		epochLength = newEpochLength;

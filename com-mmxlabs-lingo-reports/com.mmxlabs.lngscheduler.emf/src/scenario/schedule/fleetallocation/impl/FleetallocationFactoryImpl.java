@@ -1,21 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.schedule.fleetallocation.*;
-import scenario.schedule.fleetallocation.AllocatedVessel;
-import scenario.schedule.fleetallocation.FleetVessel;
-import scenario.schedule.fleetallocation.FleetallocationFactory;
-import scenario.schedule.fleetallocation.FleetallocationPackage;
-import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -74,7 +73,6 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public AllocatedVessel createAllocatedVessel() {
 		AllocatedVesselImpl allocatedVessel = new AllocatedVesselImpl();
 		return allocatedVessel;
@@ -85,7 +83,6 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FleetVessel createFleetVessel() {
 		FleetVesselImpl fleetVessel = new FleetVesselImpl();
 		return fleetVessel;
@@ -96,7 +93,6 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public SpotVessel createSpotVessel() {
 		SpotVesselImpl spotVessel = new SpotVesselImpl();
 		return spotVessel;
@@ -107,7 +103,6 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FleetallocationPackage getFleetallocationPackage() {
 		return (FleetallocationPackage)getEPackage();
 	}

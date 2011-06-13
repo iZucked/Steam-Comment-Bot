@@ -1,11 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.cargo.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.cargo.CargoPackage;
@@ -69,7 +73,6 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getCargoCVvalue() {
 		return cargoCVvalue;
 	}
@@ -79,7 +82,6 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setCargoCVvalue(float newCargoCVvalue) {
 		float oldCargoCVvalue = cargoCVvalue;
 		cargoCVvalue = newCargoCVvalue;

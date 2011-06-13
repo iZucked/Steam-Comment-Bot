@@ -1,17 +1,24 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.Contract;
+
 import scenario.impl.NamedObjectImpl;
+
 import scenario.market.Index;
+
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
@@ -154,7 +161,6 @@ public class PortImpl extends NamedObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getTimeZone() {
 		return timeZone;
 	}
@@ -164,7 +170,6 @@ public class PortImpl extends NamedObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setTimeZone(String newTimeZone) {
 		String oldTimeZone = timeZone;
 		timeZone = newTimeZone;
@@ -177,7 +182,6 @@ public class PortImpl extends NamedObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Contract getDefaultContract() {
 		if (defaultContract != null && defaultContract.eIsProxy()) {
 			InternalEObject oldDefaultContract = (InternalEObject)defaultContract;
@@ -204,7 +208,6 @@ public class PortImpl extends NamedObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setDefaultContract(Contract newDefaultContract) {
 		Contract oldDefaultContract = defaultContract;
 		defaultContract = newDefaultContract;

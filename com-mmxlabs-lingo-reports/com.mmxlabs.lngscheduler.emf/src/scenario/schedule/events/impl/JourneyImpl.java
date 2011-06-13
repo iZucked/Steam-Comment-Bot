@@ -1,23 +1,32 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.impl;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.fleet.VesselState;
+
 import scenario.port.Port;
+
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
@@ -199,7 +208,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<FuelQuantity> getFuelUsage() {
 		if (fuelUsage == null) {
 			fuelUsage = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, EventsPackage.JOURNEY__FUEL_USAGE);
@@ -212,7 +220,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Port getToPort() {
 		if (toPort != null && toPort.eIsProxy()) {
 			InternalEObject oldToPort = (InternalEObject)toPort;
@@ -239,7 +246,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setToPort(Port newToPort) {
 		Port oldToPort = toPort;
 		toPort = newToPort;
@@ -252,7 +258,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public VesselState getVesselState() {
 		return vesselState;
 	}
@@ -262,7 +267,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setVesselState(VesselState newVesselState) {
 		VesselState oldVesselState = vesselState;
 		vesselState = newVesselState == null ? VESSEL_STATE_EDEFAULT : newVesselState;
@@ -275,7 +279,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getRoute() {
 		return route;
 	}
@@ -285,7 +288,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setRoute(String newRoute) {
 		String oldRoute = route;
 		route = newRoute;
@@ -298,7 +300,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public double getSpeed() {
 		return speed;
 	}
@@ -308,7 +309,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setSpeed(double newSpeed) {
 		double oldSpeed = speed;
 		speed = newSpeed;
@@ -321,7 +321,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getDistance() {
 		return distance;
 	}
@@ -331,7 +330,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setDistance(int newDistance) {
 		int oldDistance = distance;
 		distance = newDistance;
@@ -344,7 +342,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Port getFromPort() {
 		if (fromPort != null && fromPort.eIsProxy()) {
 			InternalEObject oldFromPort = (InternalEObject)fromPort;
@@ -371,7 +368,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setFromPort(Port newFromPort) {
 		Port oldFromPort = fromPort;
 		fromPort = newFromPort;
@@ -384,7 +380,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getRouteCost() {
 		return routeCost;
 	}
@@ -394,7 +389,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setRouteCost(long newRouteCost) {
 		long oldRouteCost = routeCost;
 		routeCost = newRouteCost;
@@ -407,7 +401,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getTotalCost() {
 		return getRouteCost() + getTotalFuelCost() + getHireCost();
 	}
@@ -417,7 +410,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Object getLocalStartTime() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getFromPort().getTimeZone())
@@ -431,7 +423,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Object getLocalEndTime() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getToPort().getTimeZone())
@@ -445,7 +436,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getTotalFuelCost() {
 		long totalCost = 0;
 		

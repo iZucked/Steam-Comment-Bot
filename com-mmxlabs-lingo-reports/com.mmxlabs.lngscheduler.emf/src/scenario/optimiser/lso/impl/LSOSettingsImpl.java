@@ -1,16 +1,21 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.lso.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.optimiser.impl.OptimisationSettingsImpl;
+
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoPackage;
 import scenario.optimiser.lso.MoveGeneratorSettings;
@@ -96,7 +101,6 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getNumberOfSteps() {
 		return numberOfSteps;
 	}
@@ -106,7 +110,6 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setNumberOfSteps(int newNumberOfSteps) {
 		int oldNumberOfSteps = numberOfSteps;
 		numberOfSteps = newNumberOfSteps;
@@ -119,7 +122,6 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ThresholderSettings getThresholderSettings() {
 		return thresholderSettings;
 	}
@@ -144,7 +146,6 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setThresholderSettings(ThresholderSettings newThresholderSettings) {
 		if (newThresholderSettings != thresholderSettings) {
 			NotificationChain msgs = null;
@@ -164,7 +165,6 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public MoveGeneratorSettings getMoveGeneratorSettings() {
 		return moveGeneratorSettings;
 	}
@@ -189,7 +189,6 @@ public class LSOSettingsImpl extends OptimisationSettingsImpl implements LSOSett
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setMoveGeneratorSettings(MoveGeneratorSettings newMoveGeneratorSettings) {
 		if (newMoveGeneratorSettings != moveGeneratorSettings) {
 			NotificationChain msgs = null;

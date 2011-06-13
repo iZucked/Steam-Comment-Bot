@@ -1,10 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -24,7 +27,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface DistanceModel extends EObject {
-
 	/**
 	 * Returns the value of the '<em><b>Distances</b></em>' containment reference list.
 	 * The list contents are of type {@link scenario.port.DistanceLine}.
@@ -40,4 +42,5 @@ public interface DistanceModel extends EObject {
 	 * @generated
 	 */
 	EList<DistanceLine> getDistances();
+
 } // DistanceModel

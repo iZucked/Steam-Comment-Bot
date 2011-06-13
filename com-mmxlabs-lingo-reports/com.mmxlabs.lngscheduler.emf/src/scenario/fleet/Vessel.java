@@ -1,8 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet;
+
+import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
 
@@ -18,6 +22,8 @@ import scenario.NamedObject;
  *   <li>{@link scenario.fleet.Vessel#getStartRequirement <em>Start Requirement</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getEndRequirement <em>End Requirement</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}</li>
+ *   <li>{@link scenario.fleet.Vessel#getPortExclusions <em>Port Exclusions</em>}</li>
+ *   <li>{@link scenario.fleet.Vessel#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -129,5 +135,73 @@ public interface Vessel extends NamedObject {
 	 * @generated
 	 */
 	void setTimeChartered(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Exclusions</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.fleet.PortExclusion}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Exclusions</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Exclusions</em>' containment reference list.
+	 * @see scenario.fleet.FleetPackage#getVessel_PortExclusions()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PortExclusion> getPortExclusions();
+
+	/**
+	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The cost per day of spot chartering vessels of this class, expressed in dollars
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Daily Charter Out Price</em>' attribute.
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @see scenario.fleet.FleetPackage#getVessel_DailyCharterOutPrice()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	int getDailyCharterOutPrice();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.Vessel#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Daily Charter Out Price</em>' attribute.
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @generated
+	 */
+	void setDailyCharterOutPrice(int value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.fleet.Vessel#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @generated
+	 */
+	void unsetDailyCharterOutPrice();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.fleet.Vessel#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Daily Charter Out Price</em>' attribute is set.
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @generated
+	 */
+	boolean isSetDailyCharterOutPrice();
 
 } // Vessel

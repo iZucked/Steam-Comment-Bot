@@ -1,18 +1,24 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.VesselClass;
+
 import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
 import scenario.schedule.fleetallocation.SpotVessel;
@@ -86,7 +92,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getIndex() {
 		return index;
 	}
@@ -96,7 +101,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setIndex(int newIndex) {
 		int oldIndex = index;
 		index = newIndex;
@@ -109,7 +113,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public VesselClass getVesselClass() {
 		if (vesselClass != null && vesselClass.eIsProxy()) {
 			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
@@ -136,7 +139,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setVesselClass(VesselClass newVesselClass) {
 		VesselClass oldVesselClass = vesselClass;
 		vesselClass = newVesselClass;
@@ -149,7 +151,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public double getHourlyCharterPrice() {
 		return 
 		((getVesselClass().getDailyCharterPrice() * 1000) / 24) / 1000.0;
@@ -160,7 +161,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getName() {
 		return getVesselClass().getName() + " " + getIndex();
 	}
@@ -282,4 +282,5 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 		result.append(')');
 		return result.toString();
 	}
+
 } //SpotVesselImpl

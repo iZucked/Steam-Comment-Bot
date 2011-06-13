@@ -1,25 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.port.*;
-import scenario.port.Canal;
-import scenario.port.CanalModel;
-import scenario.port.DistanceLine;
-import scenario.port.DistanceModel;
-import scenario.port.Port;
-import scenario.port.PortFactory;
-import scenario.port.PortModel;
-import scenario.port.PortPackage;
-import scenario.port.VesselClassCost;
 
 /**
  * <!-- begin-user-doc -->
@@ -82,7 +77,6 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public PortModel createPortModel() {
 		PortModelImpl portModel = new PortModelImpl();
 		return portModel;
@@ -93,7 +87,6 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Port createPort() {
 		PortImpl port = new PortImpl();
 		return port;
@@ -104,7 +97,6 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public DistanceModel createDistanceModel() {
 		DistanceModelImpl distanceModel = new DistanceModelImpl();
 		return distanceModel;
@@ -115,7 +107,6 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public DistanceLine createDistanceLine() {
 		DistanceLineImpl distanceLine = new DistanceLineImpl();
 		return distanceLine;
@@ -126,7 +117,6 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Canal createCanal() {
 		CanalImpl canal = new CanalImpl();
 		return canal;
@@ -137,7 +127,6 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public CanalModel createCanalModel() {
 		CanalModelImpl canalModel = new CanalModelImpl();
 		return canalModel;
@@ -148,7 +137,6 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public VesselClassCost createVesselClassCost() {
 		VesselClassCostImpl vesselClassCost = new VesselClassCostImpl();
 		return vesselClassCost;
@@ -159,7 +147,6 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public PortPackage getPortPackage() {
 		return (PortPackage)getEPackage();
 	}

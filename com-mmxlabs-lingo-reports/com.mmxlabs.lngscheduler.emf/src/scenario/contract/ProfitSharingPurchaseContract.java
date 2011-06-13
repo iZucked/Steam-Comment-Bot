@@ -1,11 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract;
 
 import scenario.market.Index;
-
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +29,6 @@ import scenario.market.Index;
  * @generated
  */
 public interface ProfitSharingPurchaseContract extends PurchaseContract {
-
 	/**
 	 * Returns the value of the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -158,4 +158,5 @@ public interface ProfitSharingPurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setGamma(float value);
+
 } // ProfitSharingPurchaseContract

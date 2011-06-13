@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule;
 
@@ -56,7 +58,6 @@ public interface CharterOutRevenue extends BookedRevenue {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getCharterOut().getCharterOut().getId();'"
 	 * @generated
 	 */
-	@Override
 	String getName();
 
 } // CharterOutRevenue

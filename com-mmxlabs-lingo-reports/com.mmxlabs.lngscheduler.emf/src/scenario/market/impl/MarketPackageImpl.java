@@ -1,42 +1,64 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.market.impl;
-
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.ScenarioPackage;
+
 import scenario.cargo.CargoPackage;
+
 import scenario.cargo.impl.CargoPackageImpl;
+
 import scenario.contract.ContractPackage;
+
 import scenario.contract.impl.ContractPackageImpl;
+
 import scenario.fleet.FleetPackage;
+
 import scenario.fleet.impl.FleetPackageImpl;
+
 import scenario.impl.ScenarioPackageImpl;
+
 import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
 import scenario.market.StepwisePrice;
 import scenario.market.StepwisePriceCurve;
+
 import scenario.optimiser.OptimiserPackage;
+
 import scenario.optimiser.impl.OptimiserPackageImpl;
+
 import scenario.optimiser.lso.LsoPackage;
+
 import scenario.optimiser.lso.impl.LsoPackageImpl;
+
 import scenario.port.PortPackage;
+
 import scenario.port.impl.PortPackageImpl;
+
 import scenario.schedule.SchedulePackage;
+
 import scenario.schedule.events.EventsPackage;
+
 import scenario.schedule.events.impl.EventsPackageImpl;
+
 import scenario.schedule.fleetallocation.FleetallocationPackage;
+
 import scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl;
+
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -190,7 +212,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getMarketModel() {
 		return marketModelEClass;
 	}
@@ -209,7 +230,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getStepwisePriceCurve() {
 		return stepwisePriceCurveEClass;
 	}
@@ -219,7 +239,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getStepwisePriceCurve_Prices() {
 		return (EReference)stepwisePriceCurveEClass.getEStructuralFeatures().get(0);
 	}
@@ -229,7 +248,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getStepwisePriceCurve_DefaultValue() {
 		return (EAttribute)stepwisePriceCurveEClass.getEStructuralFeatures().get(1);
 	}
@@ -239,7 +257,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EOperation getStepwisePriceCurve__GetValueAtDate__Date() {
 		return stepwisePriceCurveEClass.getEOperations().get(0);
 	}
@@ -249,7 +266,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getStepwisePrice() {
 		return stepwisePriceEClass;
 	}
@@ -259,7 +275,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getStepwisePrice_Date() {
 		return (EAttribute)stepwisePriceEClass.getEStructuralFeatures().get(0);
 	}
@@ -269,7 +284,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getStepwisePrice_PriceFromDate() {
 		return (EAttribute)stepwisePriceEClass.getEStructuralFeatures().get(1);
 	}
@@ -279,7 +293,6 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public MarketFactory getMarketFactory() {
 		return (MarketFactory)getEFactoryInstance();
 	}

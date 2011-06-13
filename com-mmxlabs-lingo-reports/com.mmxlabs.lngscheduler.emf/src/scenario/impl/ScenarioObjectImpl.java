@@ -1,14 +1,18 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.ScenarioObject;
@@ -48,7 +52,6 @@ public abstract class ScenarioObjectImpl extends EObjectImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EObject getContainer() {
 		return eContainer();
 	}

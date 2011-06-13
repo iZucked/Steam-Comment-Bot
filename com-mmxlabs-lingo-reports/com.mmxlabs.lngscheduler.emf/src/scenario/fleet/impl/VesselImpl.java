@@ -1,19 +1,32 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
+import scenario.fleet.PortExclusion;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+
 import scenario.impl.NamedObjectImpl;
 
 /**
@@ -27,6 +40,8 @@ import scenario.impl.NamedObjectImpl;
  *   <li>{@link scenario.fleet.impl.VesselImpl#getStartRequirement <em>Start Requirement</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getEndRequirement <em>End Requirement</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#isTimeChartered <em>Time Chartered</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselImpl#getPortExclusions <em>Port Exclusions</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselImpl#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -84,6 +99,45 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	protected boolean timeChartered = TIME_CHARTERED_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getPortExclusions() <em>Port Exclusions</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortExclusions()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PortExclusion> portExclusions;
+
+	/**
+	 * The default value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyCharterOutPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DAILY_CHARTER_OUT_PRICE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyCharterOutPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected int dailyCharterOutPrice = DAILY_CHARTER_OUT_PRICE_EDEFAULT;
+
+	/**
+	 * This is true if the Daily Charter Out Price attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dailyCharterOutPriceESet;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -107,7 +161,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public VesselClass getClass_() {
 		if (class_ != null && class_.eIsProxy()) {
 			InternalEObject oldClass = (InternalEObject)class_;
@@ -134,7 +187,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setClass(VesselClass newClass) {
 		VesselClass oldClass = class_;
 		class_ = newClass;
@@ -147,7 +199,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public PortAndTime getStartRequirement() {
 		return startRequirement;
 	}
@@ -172,7 +223,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setStartRequirement(PortAndTime newStartRequirement) {
 		if (newStartRequirement != startRequirement) {
 			NotificationChain msgs = null;
@@ -192,7 +242,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public PortAndTime getEndRequirement() {
 		return endRequirement;
 	}
@@ -217,7 +266,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setEndRequirement(PortAndTime newEndRequirement) {
 		if (newEndRequirement != endRequirement) {
 			NotificationChain msgs = null;
@@ -237,7 +285,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isTimeChartered() {
 		return timeChartered;
 	}
@@ -247,12 +294,69 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setTimeChartered(boolean newTimeChartered) {
 		boolean oldTimeChartered = timeChartered;
 		timeChartered = newTimeChartered;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__TIME_CHARTERED, oldTimeChartered, timeChartered));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<PortExclusion> getPortExclusions() {
+		if (portExclusions == null) {
+			portExclusions = new EObjectContainmentEList<PortExclusion>(PortExclusion.class, this, FleetPackage.VESSEL__PORT_EXCLUSIONS);
+		}
+		return portExclusions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getDailyCharterOutPrice() {
+		return dailyCharterOutPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDailyCharterOutPrice(int newDailyCharterOutPrice) {
+		int oldDailyCharterOutPrice = dailyCharterOutPrice;
+		dailyCharterOutPrice = newDailyCharterOutPrice;
+		boolean oldDailyCharterOutPriceESet = dailyCharterOutPriceESet;
+		dailyCharterOutPriceESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE, oldDailyCharterOutPrice, dailyCharterOutPrice, !oldDailyCharterOutPriceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetDailyCharterOutPrice() {
+		int oldDailyCharterOutPrice = dailyCharterOutPrice;
+		boolean oldDailyCharterOutPriceESet = dailyCharterOutPriceESet;
+		dailyCharterOutPrice = DAILY_CHARTER_OUT_PRICE_EDEFAULT;
+		dailyCharterOutPriceESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE, oldDailyCharterOutPrice, DAILY_CHARTER_OUT_PRICE_EDEFAULT, oldDailyCharterOutPriceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetDailyCharterOutPrice() {
+		return dailyCharterOutPriceESet;
 	}
 
 	/**
@@ -267,6 +371,8 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 				return basicSetStartRequirement(null, msgs);
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				return basicSetEndRequirement(null, msgs);
+			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
+				return ((InternalEList<?>)getPortExclusions()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -288,6 +394,10 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 				return getEndRequirement();
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				return isTimeChartered();
+			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
+				return getPortExclusions();
+			case FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE:
+				return getDailyCharterOutPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -313,6 +423,13 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				setTimeChartered((Boolean)newValue);
 				return;
+			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
+				getPortExclusions().clear();
+				getPortExclusions().addAll((Collection<? extends PortExclusion>)newValue);
+				return;
+			case FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE:
+				setDailyCharterOutPrice((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -337,6 +454,12 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				setTimeChartered(TIME_CHARTERED_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
+				getPortExclusions().clear();
+				return;
+			case FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE:
+				unsetDailyCharterOutPrice();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -357,6 +480,10 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 				return endRequirement != null;
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				return timeChartered != TIME_CHARTERED_EDEFAULT;
+			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
+				return portExclusions != null && !portExclusions.isEmpty();
+			case FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE:
+				return isSetDailyCharterOutPrice();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -373,6 +500,8 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (timeChartered: ");
 		result.append(timeChartered);
+		result.append(", dailyCharterOutPrice: ");
+		if (dailyCharterOutPriceESet) result.append(dailyCharterOutPrice); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

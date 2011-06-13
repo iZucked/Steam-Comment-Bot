@@ -1,8 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
-
 package scenario.schedule;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -20,6 +21,7 @@ import scenario.ScenarioPackage;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -226,7 +228,6 @@ public interface SchedulePackage extends EPackage {
 	 */
 	int SEQUENCE_FEATURE_COUNT = 3;
 
-
 	/**
 	 * The number of operations of the '<em>Sequence</em>' class.
 	 * <!-- begin-user-doc -->
@@ -408,7 +409,6 @@ public interface SchedulePackage extends EPackage {
 	 */
 	int CARGO_ALLOCATION_FEATURE_COUNT = 17;
 
-
 	/**
 	 * The operation id for the '<em>Get Total Cost</em>' operation.
 	 * <!-- begin-user-doc -->
@@ -500,7 +500,6 @@ public interface SchedulePackage extends EPackage {
 	 */
 	int SCHEDULE_FITNESS_FEATURE_COUNT = 2;
 
-
 	/**
 	 * The number of operations of the '<em>Fitness</em>' class.
 	 * <!-- begin-user-doc -->
@@ -509,7 +508,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SCHEDULE_FITNESS_OPERATION_COUNT = 0;
-
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.LineItemImpl <em>Line Item</em>}' class.
@@ -710,7 +708,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int BOOKED_REVENUE_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 6;
-
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.impl.CargoRevenueImpl <em>Cargo Revenue</em>}' class.
@@ -1618,6 +1615,7 @@ public interface SchedulePackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>

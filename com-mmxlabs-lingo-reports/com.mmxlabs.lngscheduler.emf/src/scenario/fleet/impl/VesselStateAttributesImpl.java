@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.impl;
 
@@ -8,11 +10,15 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -153,7 +159,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public VesselState getVesselState() {
 		return vesselState;
 	}
@@ -163,7 +168,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setVesselState(VesselState newVesselState) {
 		VesselState oldVesselState = vesselState;
 		vesselState = newVesselState == null ? VESSEL_STATE_EDEFAULT : newVesselState;
@@ -176,7 +180,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getNboRate() {
 		return nboRate;
 	}
@@ -186,7 +189,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setNboRate(float newNboRate) {
 		float oldNboRate = nboRate;
 		nboRate = newNboRate;
@@ -199,7 +201,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getIdleNBORate() {
 		return idleNBORate;
 	}
@@ -209,7 +210,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setIdleNBORate(float newIdleNBORate) {
 		float oldIdleNBORate = idleNBORate;
 		idleNBORate = newIdleNBORate;
@@ -222,7 +222,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getIdleConsumptionRate() {
 		return idleConsumptionRate;
 	}
@@ -232,7 +231,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setIdleConsumptionRate(float newIdleConsumptionRate) {
 		float oldIdleConsumptionRate = idleConsumptionRate;
 		idleConsumptionRate = newIdleConsumptionRate;
@@ -245,7 +243,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<FuelConsumptionLine> getFuelConsumptionCurve() {
 		if (fuelConsumptionCurve == null) {
 			fuelConsumptionCurve = new EObjectContainmentEList<FuelConsumptionLine>(FuelConsumptionLine.class, this, FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE);

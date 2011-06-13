@@ -1,12 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -94,7 +98,6 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Port getFromPort() {
 		if (fromPort != null && fromPort.eIsProxy()) {
 			InternalEObject oldFromPort = (InternalEObject)fromPort;
@@ -121,7 +124,6 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setFromPort(Port newFromPort) {
 		Port oldFromPort = fromPort;
 		fromPort = newFromPort;
@@ -134,7 +136,6 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Port getToPort() {
 		if (toPort != null && toPort.eIsProxy()) {
 			InternalEObject oldToPort = (InternalEObject)toPort;
@@ -161,7 +162,6 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setToPort(Port newToPort) {
 		Port oldToPort = toPort;
 		toPort = newToPort;
@@ -174,7 +174,6 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getDistance() {
 		return distance;
 	}
@@ -184,7 +183,6 @@ public class DistanceLineImpl extends EObjectImpl implements DistanceLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setDistance(int newDistance) {
 		int oldDistance = distance;
 		distance = newDistance;

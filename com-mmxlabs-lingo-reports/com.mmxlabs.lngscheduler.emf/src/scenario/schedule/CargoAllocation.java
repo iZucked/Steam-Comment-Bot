@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule;
 
@@ -11,8 +13,10 @@ import org.eclipse.emf.ecore.EObject;
 import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.Journey;
+
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**

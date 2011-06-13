@@ -1,10 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events;
 
 import scenario.fleet.CharterOut;
+
 import scenario.schedule.CharterOutRevenue;
 
 /**
@@ -77,5 +80,4 @@ public interface CharterOutVisit extends VesselEventVisit {
 	 */
 	void setRevenue(CharterOutRevenue value);
 
-	
 } // CharterOutVisit

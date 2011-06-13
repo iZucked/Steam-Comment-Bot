@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet;
-
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -20,6 +21,7 @@ import scenario.ScenarioPackage;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -181,13 +183,31 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__TIME_CHARTERED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Port Exclusions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__PORT_EXCLUSIONS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Daily Charter Out Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__DAILY_CHARTER_OUT_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int VESSEL_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -290,22 +310,31 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__FILL_CAPACITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Daily Charter Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__DAILY_CHARTER_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
-
-	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__SPOT_CHARTER_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+	int VESSEL_CLASS__SPOT_CHARTER_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Daily Charter Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__DAILY_CHARTER_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Daily Charter Out Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -314,7 +343,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__INACCESSIBLE_PORTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+	int VESSEL_CLASS__INACCESSIBLE_PORTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
@@ -323,7 +352,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BASE_FUEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+	int VESSEL_CLASS__BASE_FUEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Port Exclusions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__PORT_EXCLUSIONS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -332,7 +370,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+	int VESSEL_CLASS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -573,13 +611,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_EVENT__DURATION = 3;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * The feature id for the '<em><b>Start Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__PORT = 4;
+	int VESSEL_EVENT__START_PORT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
@@ -600,13 +638,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_EVENT__VESSEL_CLASSES = 6;
 
 	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__END_PORT = 7;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_FEATURE_COUNT = 7;
+	int VESSEL_EVENT_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Vessel Event</em>' class.
@@ -664,13 +711,13 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__DURATION = VESSEL_EVENT__DURATION;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * The feature id for the '<em><b>Start Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__PORT = VESSEL_EVENT__PORT;
+	int CHARTER_OUT__START_PORT = VESSEL_EVENT__START_PORT;
 
 	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
@@ -689,6 +736,15 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT__VESSEL_CLASSES = VESSEL_EVENT__VESSEL_CLASSES;
+
+	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__END_PORT = VESSEL_EVENT__END_PORT;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
@@ -755,13 +811,13 @@ public interface FleetPackage extends EPackage {
 	int DRYDOCK__DURATION = VESSEL_EVENT__DURATION;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * The feature id for the '<em><b>Start Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DRYDOCK__PORT = VESSEL_EVENT__PORT;
+	int DRYDOCK__START_PORT = VESSEL_EVENT__START_PORT;
 
 	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
@@ -780,6 +836,15 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRYDOCK__VESSEL_CLASSES = VESSEL_EVENT__VESSEL_CLASSES;
+
+	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__END_PORT = VESSEL_EVENT__END_PORT;
 
 	/**
 	 * The number of structural features of the '<em>Drydock</em>' class.
@@ -864,6 +929,70 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_FUEL_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link scenario.fleet.impl.PortExclusionImpl <em>Port Exclusion</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.fleet.impl.PortExclusionImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getPortExclusion()
+	 * @generated
+	 */
+	int PORT_EXCLUSION = 10;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_EXCLUSION__PORT = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_EXCLUSION__START_DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_EXCLUSION__END_DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Port Exclusion</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_EXCLUSION_FEATURE_COUNT = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_EXCLUSION___GET_CONTAINER = ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Port Exclusion</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_EXCLUSION_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -871,7 +1000,7 @@ public interface FleetPackage extends EPackage {
 	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselState()
 	 * @generated
 	 */
-	int VESSEL_STATE = 10;
+	int VESSEL_STATE = 11;
 
 
 	/**
@@ -983,6 +1112,28 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_TimeChartered();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.fleet.Vessel#getPortExclusions <em>Port Exclusions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Port Exclusions</em>'.
+	 * @see scenario.fleet.Vessel#getPortExclusions()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_PortExclusions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.Vessel#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Daily Charter Out Price</em>'.
+	 * @see scenario.fleet.Vessel#getDailyCharterOutPrice()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_DailyCharterOutPrice();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.fleet.VesselClass <em>Vessel Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1081,6 +1232,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_DailyCharterPrice();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Daily Charter Out Price</em>'.
+	 * @see scenario.fleet.VesselClass#getDailyCharterOutPrice()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_DailyCharterOutPrice();
+
+	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1112,6 +1274,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselClass_BaseFuel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.fleet.VesselClass#getPortExclusions <em>Port Exclusions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Port Exclusions</em>'.
+	 * @see scenario.fleet.VesselClass#getPortExclusions()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_PortExclusions();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.FuelConsumptionLine <em>Fuel Consumption Line</em>}'.
@@ -1308,15 +1481,15 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselEvent_Duration();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.fleet.VesselEvent#getPort <em>Port</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.fleet.VesselEvent#getStartPort <em>Start Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see scenario.fleet.VesselEvent#getPort()
+	 * @return the meta object for the reference '<em>Start Port</em>'.
+	 * @see scenario.fleet.VesselEvent#getStartPort()
 	 * @see #getVesselEvent()
 	 * @generated
 	 */
-	EReference getVesselEvent_Port();
+	EReference getVesselEvent_StartPort();
 
 	/**
 	 * Returns the meta object for the reference list '{@link scenario.fleet.VesselEvent#getVessels <em>Vessels</em>}'.
@@ -1339,6 +1512,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselEvent_VesselClasses();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.fleet.VesselEvent#getEndPort <em>End Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>End Port</em>'.
+	 * @see scenario.fleet.VesselEvent#getEndPort()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EReference getVesselEvent_EndPort();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.CharterOut <em>Charter Out</em>}'.
@@ -1393,6 +1577,49 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselFuel_EquivalenceFactor();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.fleet.PortExclusion <em>Port Exclusion</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Port Exclusion</em>'.
+	 * @see scenario.fleet.PortExclusion
+	 * @generated
+	 */
+	EClass getPortExclusion();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.fleet.PortExclusion#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see scenario.fleet.PortExclusion#getPort()
+	 * @see #getPortExclusion()
+	 * @generated
+	 */
+	EReference getPortExclusion_Port();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.PortExclusion#getStartDate <em>Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Date</em>'.
+	 * @see scenario.fleet.PortExclusion#getStartDate()
+	 * @see #getPortExclusion()
+	 * @generated
+	 */
+	EAttribute getPortExclusion_StartDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.PortExclusion#getEndDate <em>End Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Date</em>'.
+	 * @see scenario.fleet.PortExclusion#getEndDate()
+	 * @see #getPortExclusion()
+	 * @generated
+	 */
+	EAttribute getPortExclusion_EndDate();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.fleet.VesselState <em>Vessel State</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1417,6 +1644,7 @@ public interface FleetPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>
@@ -1509,6 +1737,22 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__TIME_CHARTERED = eINSTANCE.getVessel_TimeChartered();
 
 		/**
+		 * The meta object literal for the '<em><b>Port Exclusions</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__PORT_EXCLUSIONS = eINSTANCE.getVessel_PortExclusions();
+
+		/**
+		 * The meta object literal for the '<em><b>Daily Charter Out Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__DAILY_CHARTER_OUT_PRICE = eINSTANCE.getVessel_DailyCharterOutPrice();
+
+		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1583,6 +1827,14 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_CLASS__DAILY_CHARTER_PRICE = eINSTANCE.getVesselClass_DailyCharterPrice();
 
 		/**
+		 * The meta object literal for the '<em><b>Daily Charter Out Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE = eINSTANCE.getVesselClass_DailyCharterOutPrice();
+
+		/**
 		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1605,6 +1857,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_CLASS__BASE_FUEL = eINSTANCE.getVesselClass_BaseFuel();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Exclusions</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__PORT_EXCLUSIONS = eINSTANCE.getVesselClass_PortExclusions();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.
@@ -1759,12 +2019,12 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_EVENT__DURATION = eINSTANCE.getVesselEvent_Duration();
 
 		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Start Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_EVENT__PORT = eINSTANCE.getVesselEvent_Port();
+		EReference VESSEL_EVENT__START_PORT = eINSTANCE.getVesselEvent_StartPort();
 
 		/**
 		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
@@ -1781,6 +2041,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_EVENT__VESSEL_CLASSES = eINSTANCE.getVesselEvent_VesselClasses();
+
+		/**
+		 * The meta object literal for the '<em><b>End Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT__END_PORT = eINSTANCE.getVesselEvent_EndPort();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.CharterOutImpl <em>Charter Out</em>}' class.
@@ -1827,6 +2095,40 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_FUEL__EQUIVALENCE_FACTOR = eINSTANCE.getVesselFuel_EquivalenceFactor();
+
+		/**
+		 * The meta object literal for the '{@link scenario.fleet.impl.PortExclusionImpl <em>Port Exclusion</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.fleet.impl.PortExclusionImpl
+		 * @see scenario.fleet.impl.FleetPackageImpl#getPortExclusion()
+		 * @generated
+		 */
+		EClass PORT_EXCLUSION = eINSTANCE.getPortExclusion();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_EXCLUSION__PORT = eINSTANCE.getPortExclusion_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_EXCLUSION__START_DATE = eINSTANCE.getPortExclusion_StartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_EXCLUSION__END_DATE = eINSTANCE.getPortExclusion_EndDate();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.

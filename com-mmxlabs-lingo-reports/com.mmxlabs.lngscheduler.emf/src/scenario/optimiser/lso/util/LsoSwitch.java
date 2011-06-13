@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.lso.util;
 
@@ -11,14 +13,10 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+
 import scenario.optimiser.OptimisationSettings;
+
 import scenario.optimiser.lso.*;
-import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
-import scenario.optimiser.lso.LSOSettings;
-import scenario.optimiser.lso.LsoPackage;
-import scenario.optimiser.lso.MoveGeneratorSettings;
-import scenario.optimiser.lso.RandomMoveGeneratorSettings;
-import scenario.optimiser.lso.ThresholderSettings;
 
 /**
  * <!-- begin-user-doc -->

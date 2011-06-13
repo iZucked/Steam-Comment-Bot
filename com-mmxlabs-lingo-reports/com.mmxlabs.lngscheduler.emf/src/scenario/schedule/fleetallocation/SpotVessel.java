@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation;
 
@@ -83,7 +85,6 @@ public interface SpotVessel extends AllocatedVessel {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return \r\n((getVesselClass().getDailyCharterPrice() * 1000) / 24) / 1000.0;'"
 	 * @generated
 	 */
-	@Override
 	double getHourlyCharterPrice();
 
 	/**
@@ -93,7 +94,6 @@ public interface SpotVessel extends AllocatedVessel {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getVesselClass().getName() + \" \" + getIndex();'"
 	 * @generated
 	 */
-	@Override
 	String getName();
 
 } // SpotVessel

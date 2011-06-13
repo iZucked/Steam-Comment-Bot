@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.impl;
 
@@ -8,22 +10,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.schedule.events.*;
-import scenario.schedule.events.CharterOutVisit;
-import scenario.schedule.events.EventsFactory;
-import scenario.schedule.events.EventsPackage;
-import scenario.schedule.events.FuelMixture;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.FuelUnit;
-import scenario.schedule.events.Idle;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.PortVisit;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
 
 /**
  * <!-- begin-user-doc -->
@@ -122,7 +114,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FuelMixture createFuelMixture() {
 		FuelMixtureImpl fuelMixture = new FuelMixtureImpl();
 		return fuelMixture;
@@ -133,7 +124,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FuelQuantity createFuelQuantity() {
 		FuelQuantityImpl fuelQuantity = new FuelQuantityImpl();
 		return fuelQuantity;
@@ -144,7 +134,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ScheduledEvent createScheduledEvent() {
 		ScheduledEventImpl scheduledEvent = new ScheduledEventImpl();
 		return scheduledEvent;
@@ -155,7 +144,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Idle createIdle() {
 		IdleImpl idle = new IdleImpl();
 		return idle;
@@ -166,7 +154,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Journey createJourney() {
 		JourneyImpl journey = new JourneyImpl();
 		return journey;
@@ -177,7 +164,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public PortVisit createPortVisit() {
 		PortVisitImpl portVisit = new PortVisitImpl();
 		return portVisit;
@@ -188,7 +174,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public SlotVisit createSlotVisit() {
 		SlotVisitImpl slotVisit = new SlotVisitImpl();
 		return slotVisit;
@@ -199,7 +184,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public CharterOutVisit createCharterOutVisit() {
 		CharterOutVisitImpl charterOutVisit = new CharterOutVisitImpl();
 		return charterOutVisit;
@@ -260,7 +244,6 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EventsPackage getEventsPackage() {
 		return (EventsPackage)getEPackage();
 	}

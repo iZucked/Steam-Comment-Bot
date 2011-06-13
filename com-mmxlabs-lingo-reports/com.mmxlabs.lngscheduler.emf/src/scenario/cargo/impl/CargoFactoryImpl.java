@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.cargo.impl;
 
@@ -8,17 +10,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.cargo.*;
-import scenario.cargo.Cargo;
-import scenario.cargo.CargoFactory;
-import scenario.cargo.CargoModel;
-import scenario.cargo.CargoPackage;
-import scenario.cargo.CargoType;
-import scenario.cargo.LoadSlot;
-import scenario.cargo.Slot;
 
 /**
  * <!-- begin-user-doc -->
@@ -108,7 +105,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public CargoModel createCargoModel() {
 		CargoModelImpl cargoModel = new CargoModelImpl();
 		return cargoModel;
@@ -119,7 +115,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Cargo createCargo() {
 		CargoImpl cargo = new CargoImpl();
 		return cargo;
@@ -130,7 +125,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Slot createSlot() {
 		SlotImpl slot = new SlotImpl();
 		return slot;
@@ -141,7 +135,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public LoadSlot createLoadSlot() {
 		LoadSlotImpl loadSlot = new LoadSlotImpl();
 		return loadSlot;
@@ -172,7 +165,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public CargoPackage getCargoPackage() {
 		return (CargoPackage)getEPackage();
 	}

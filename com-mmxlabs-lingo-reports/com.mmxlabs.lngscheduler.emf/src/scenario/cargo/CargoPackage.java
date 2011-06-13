@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.cargo;
 
@@ -18,6 +20,7 @@ import org.eclipse.emf.ecore.EReference;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -178,7 +181,6 @@ public interface CargoPackage extends EPackage {
 	 */
 	int CARGO_FEATURE_COUNT = 5;
 
-
 	/**
 	 * The number of operations of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
@@ -307,13 +309,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_PORT_CONTRACT = 1;
 
 	/**
+	 * The operation id for the '<em>Get Window End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_WINDOW_END = 2;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = 2;
+	int SLOT_OPERATION_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -443,6 +454,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT = SLOT___GET_SLOT_OR_PORT_CONTRACT;
 
 	/**
+	 * The operation id for the '<em>Get Window End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_WINDOW_END = SLOT___GET_WINDOW_END;
+
+	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -460,6 +480,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	int CARGO_TYPE = 4;
+
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.CargoModel <em>Model</em>}'.
@@ -699,6 +720,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrPortContract();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getWindowEnd() <em>Get Window End</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Window End</em>' operation.
+	 * @see scenario.cargo.Slot#getWindowEnd()
+	 * @generated
+	 */
+	EOperation getSlot__GetWindowEnd();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -744,6 +775,7 @@ public interface CargoPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>
@@ -932,6 +964,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_PORT_CONTRACT = eINSTANCE.getSlot__GetSlotOrPortContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Window End</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_WINDOW_END = eINSTANCE.getSlot__GetWindowEnd();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

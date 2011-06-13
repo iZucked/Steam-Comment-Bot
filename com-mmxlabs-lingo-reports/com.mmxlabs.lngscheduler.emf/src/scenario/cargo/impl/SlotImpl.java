@@ -1,24 +1,30 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.Date;
 
-import javax.management.timer.Timer;
-
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
+
 import scenario.contract.Contract;
+
 import scenario.port.Port;
 
 /**
@@ -236,7 +242,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getId() {
 		return id;
 	}
@@ -246,7 +251,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setId(String newId) {
 		String oldId = id;
 		id = newId;
@@ -259,7 +263,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getMinQuantity() {
 		return minQuantity;
 	}
@@ -269,7 +272,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setMinQuantity(int newMinQuantity) {
 		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
@@ -282,7 +284,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getMaxQuantity() {
 		return maxQuantity;
 	}
@@ -292,7 +293,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setMaxQuantity(int newMaxQuantity) {
 		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
@@ -305,7 +305,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -332,7 +331,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -345,7 +343,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Date getWindowStart() {
 		return windowStart;
 	}
@@ -355,7 +352,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setWindowStart(Date newWindowStart) {
 		Date oldWindowStart = windowStart;
 		windowStart = newWindowStart;
@@ -368,7 +364,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getWindowDuration() {
 		return windowDuration;
 	}
@@ -378,7 +373,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setWindowDuration(int newWindowDuration) {
 		int oldWindowDuration = windowDuration;
 		windowDuration = newWindowDuration;
@@ -391,7 +385,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getSlotDuration() {
 		return slotDuration;
 	}
@@ -401,7 +394,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setSlotDuration(int newSlotDuration) {
 		int oldSlotDuration = slotDuration;
 		slotDuration = newSlotDuration;
@@ -414,7 +406,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Contract getContract() {
 		if (contract != null && contract.eIsProxy()) {
 			InternalEObject oldContract = (InternalEObject)contract;
@@ -441,7 +432,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setContract(Contract newContract) {
 		Contract oldContract = contract;
 		contract = newContract;
@@ -500,7 +490,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Object getLocalWindowStart() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
@@ -514,7 +503,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Contract getSlotOrPortContract() {
 		if (getContract() != null)
 			return getContract();
@@ -522,6 +510,18 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			return getPort().getDefaultContract();
 		else
 			return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Date getWindowEnd() {
+		return new Date(getWindowStart()
+								.getTime()
+								+ javax.management.timer.Timer.ONE_HOUR
+								* getWindowDuration());
 	}
 
 	/**
@@ -676,6 +676,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getLocalWindowStart();
 			case CargoPackage.SLOT___GET_SLOT_OR_PORT_CONTRACT:
 				return getSlotOrPortContract();
+			case CargoPackage.SLOT___GET_WINDOW_END:
+				return getWindowEnd();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -706,17 +708,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
-	}
-
-	/* (non-Javadoc)
-	 * @see scenario.cargo.Slot#getWindowEnd()
-	 */
-	@Override
-	public Date getWindowEnd() {
-		return new Date(getWindowStart()
-				.getTime()
-				+ Timer.ONE_HOUR
-				* getWindowDuration());
 	}
 
 } //SlotImpl

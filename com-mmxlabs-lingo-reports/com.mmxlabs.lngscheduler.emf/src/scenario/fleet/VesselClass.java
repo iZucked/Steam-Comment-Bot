@@ -1,12 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet;
 
 import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
+
 import scenario.port.Port;
 
 /**
@@ -24,10 +27,12 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getPortExclusions <em>Port Exclusions</em>}</li>
  * </ul>
  * </p>
  *
@@ -169,10 +174,6 @@ public interface VesselClass extends NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Min Heel Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Min Heel Volume</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * The volume of cargo below which boil-off cannot be used for fuel. Some vessels cannot access LNG below a certain level in their tanks for fuel.
@@ -247,6 +248,58 @@ public interface VesselClass extends NamedObject {
 	void setDailyCharterPrice(int value);
 
 	/**
+	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The cost per day of spot chartering vessels of this class, expressed in dollars
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Daily Charter Out Price</em>' attribute.
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_DailyCharterOutPrice()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	int getDailyCharterOutPrice();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Daily Charter Out Price</em>' attribute.
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @generated
+	 */
+	void setDailyCharterOutPrice(int value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @generated
+	 */
+	void unsetDailyCharterOutPrice();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Daily Charter Out Price</em>' attribute is set.
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @generated
+	 */
+	boolean isSetDailyCharterOutPrice();
+
+	/**
 	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -312,5 +365,21 @@ public interface VesselClass extends NamedObject {
 	 * @generated
 	 */
 	void setBaseFuel(VesselFuel value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Exclusions</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.fleet.PortExclusion}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Exclusions</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Exclusions</em>' containment reference list.
+	 * @see scenario.fleet.FleetPackage#getVesselClass_PortExclusions()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PortExclusion> getPortExclusions();
 
 } // VesselClass

@@ -1,18 +1,24 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.port.Port;
+
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.PortVisit;
 
@@ -64,7 +70,6 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -91,7 +96,6 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -104,7 +108,6 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Object getLocalStartTime() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
@@ -118,13 +121,30 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Object getLocalEndTime() {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
 		);
 		calendar.setTime(getEndTime());
 		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getId() {
+		return "visit to " + port.getName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getDisplayTypeName() {
+		return eClass().getName().replace("Visit", "");
 	}
 
 	/**
@@ -198,17 +218,12 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 				return getLocalStartTime();
 			case EventsPackage.PORT_VISIT___GET_LOCAL_END_TIME:
 				return getLocalEndTime();
+			case EventsPackage.PORT_VISIT___GET_ID:
+				return getId();
+			case EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME:
+				return getDisplayTypeName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
-	@Override
-	public String getDisplayTypeName() {
-		return "Port";
-	}
-
-	@Override
-	public String getId() {
-		return "";
-	}
 } //PortVisitImpl

@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation.util;
 
@@ -10,10 +12,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.schedule.fleetallocation.*;
-import scenario.schedule.fleetallocation.AllocatedVessel;
-import scenario.schedule.fleetallocation.FleetVessel;
-import scenario.schedule.fleetallocation.FleetallocationPackage;
-import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
  * <!-- begin-user-doc -->

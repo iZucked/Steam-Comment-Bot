@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet;
 
@@ -103,6 +105,15 @@ public interface FleetFactory extends EFactory {
 	 * @generated
 	 */
 	VesselFuel createVesselFuel();
+
+	/**
+	 * Returns a new object of class '<em>Port Exclusion</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port Exclusion</em>'.
+	 * @generated
+	 */
+	PortExclusion createPortExclusion();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -1,16 +1,22 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.cargo.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -55,6 +61,7 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected EList<Slot> spareDischargeSlots;
+
 	/**
 	 * The cached value of the '{@link #getSpareLoadSlots() <em>Spare Load Slots</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -89,7 +96,6 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<Cargo> getCargoes() {
 		if (cargoes == null) {
 			cargoes = new EObjectContainmentEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES);
@@ -102,7 +108,6 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<Slot> getSpareDischargeSlots() {
 		if (spareDischargeSlots == null) {
 			spareDischargeSlots = new EObjectContainmentEList<Slot>(Slot.class, this, CargoPackage.CARGO_MODEL__SPARE_DISCHARGE_SLOTS);
@@ -115,7 +120,6 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<LoadSlot> getSpareLoadSlots() {
 		if (spareLoadSlots == null) {
 			spareLoadSlots = new EObjectContainmentEList<LoadSlot>(LoadSlot.class, this, CargoPackage.CARGO_MODEL__SPARE_LOAD_SLOTS);

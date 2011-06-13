@@ -1,19 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.*;
-import scenario.Scenario;
-import scenario.ScenarioFactory;
-import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -70,7 +71,6 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements ScenarioFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Scenario createScenario() {
 		ScenarioImpl scenario = new ScenarioImpl();
 		return scenario;
@@ -81,7 +81,6 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements ScenarioFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ScenarioPackage getScenarioPackage() {
 		return (ScenarioPackage)getEPackage();
 	}

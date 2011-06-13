@@ -1,23 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.lso.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.optimiser.lso.*;
-import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
-import scenario.optimiser.lso.LSOSettings;
-import scenario.optimiser.lso.LsoFactory;
-import scenario.optimiser.lso.LsoPackage;
-import scenario.optimiser.lso.MoveGeneratorSettings;
-import scenario.optimiser.lso.RandomMoveGeneratorSettings;
-import scenario.optimiser.lso.ThresholderSettings;
 
 /**
  * <!-- begin-user-doc -->
@@ -78,7 +75,6 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public LSOSettings createLSOSettings() {
 		LSOSettingsImpl lsoSettings = new LSOSettingsImpl();
 		return lsoSettings;
@@ -89,7 +85,6 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ThresholderSettings createThresholderSettings() {
 		ThresholderSettingsImpl thresholderSettings = new ThresholderSettingsImpl();
 		return thresholderSettings;
@@ -100,7 +95,6 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public MoveGeneratorSettings createMoveGeneratorSettings() {
 		MoveGeneratorSettingsImpl moveGeneratorSettings = new MoveGeneratorSettingsImpl();
 		return moveGeneratorSettings;
@@ -111,7 +105,6 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public RandomMoveGeneratorSettings createRandomMoveGeneratorSettings() {
 		RandomMoveGeneratorSettingsImpl randomMoveGeneratorSettings = new RandomMoveGeneratorSettingsImpl();
 		return randomMoveGeneratorSettings;
@@ -122,7 +115,6 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ConstrainedMoveGeneratorSettings createConstrainedMoveGeneratorSettings() {
 		ConstrainedMoveGeneratorSettingsImpl constrainedMoveGeneratorSettings = new ConstrainedMoveGeneratorSettingsImpl();
 		return constrainedMoveGeneratorSettings;
@@ -133,7 +125,6 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public LsoPackage getLsoPackage() {
 		return (LsoPackage)getEPackage();
 	}

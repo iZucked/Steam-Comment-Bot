@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation;
 
@@ -17,6 +19,7 @@ import org.eclipse.emf.ecore.EReference;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -196,7 +199,6 @@ public interface FleetallocationPackage extends EPackage {
 	 */
 	int SPOT_VESSEL_FEATURE_COUNT = ALLOCATED_VESSEL_FEATURE_COUNT + 2;
 
-
 	/**
 	 * The operation id for the '<em>Get Hourly Charter Price</em>' operation.
 	 * <!-- begin-user-doc -->
@@ -353,6 +355,7 @@ public interface FleetallocationPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>

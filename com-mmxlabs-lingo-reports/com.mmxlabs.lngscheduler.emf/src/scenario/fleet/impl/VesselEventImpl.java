@@ -10,17 +10,22 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselEvent;
+
 import scenario.port.Port;
 
 /**
@@ -34,9 +39,10 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getEndDate <em>End Date</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getDuration <em>Duration</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselEventImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getStartPort <em>Start Port</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getVessels <em>Vessels</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getVesselClasses <em>Vessel Classes</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getEndPort <em>End Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -124,14 +130,14 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	protected int duration = DURATION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * The cached value of the '{@link #getStartPort() <em>Start Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPort()
+	 * @see #getStartPort()
 	 * @generated
 	 * @ordered
 	 */
-	protected Port port;
+	protected Port startPort;
 
 	/**
 	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
@@ -152,6 +158,16 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	 * @ordered
 	 */
 	protected EList<VesselClass> vesselClasses;
+
+	/**
+	 * The cached value of the '{@link #getEndPort() <em>End Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port endPort;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -261,16 +277,16 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port getPort() {
-		if (port != null && port.eIsProxy()) {
-			InternalEObject oldPort = (InternalEObject)port;
-			port = (Port)eResolveProxy(oldPort);
-			if (port != oldPort) {
+	public Port getStartPort() {
+		if (startPort != null && startPort.eIsProxy()) {
+			InternalEObject oldStartPort = (InternalEObject)startPort;
+			startPort = (Port)eResolveProxy(oldStartPort);
+			if (startPort != oldStartPort) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_EVENT__PORT, oldPort, port));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_EVENT__START_PORT, oldStartPort, startPort));
 			}
 		}
-		return port;
+		return startPort;
 	}
 
 	/**
@@ -278,8 +294,8 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port basicGetPort() {
-		return port;
+	public Port basicGetStartPort() {
+		return startPort;
 	}
 
 	/**
@@ -287,11 +303,11 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPort(Port newPort) {
-		Port oldPort = port;
-		port = newPort;
+	public void setStartPort(Port newStartPort) {
+		Port oldStartPort = startPort;
+		startPort = newStartPort;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__PORT, oldPort, port));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__START_PORT, oldStartPort, startPort));
 	}
 
 	/**
@@ -323,6 +339,44 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Port getEndPort() {
+		if (endPort != null && endPort.eIsProxy()) {
+			InternalEObject oldEndPort = (InternalEObject)endPort;
+			endPort = (Port)eResolveProxy(oldEndPort);
+			if (endPort != oldEndPort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_EVENT__END_PORT, oldEndPort, endPort));
+			}
+		}
+		return endPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetEndPort() {
+		return endPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEndPort(Port newEndPort) {
+		Port oldEndPort = endPort;
+		endPort = newEndPort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__END_PORT, oldEndPort, endPort));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -334,13 +388,16 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 				return getEndDate();
 			case FleetPackage.VESSEL_EVENT__DURATION:
 				return getDuration();
-			case FleetPackage.VESSEL_EVENT__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
+			case FleetPackage.VESSEL_EVENT__START_PORT:
+				if (resolve) return getStartPort();
+				return basicGetStartPort();
 			case FleetPackage.VESSEL_EVENT__VESSELS:
 				return getVessels();
 			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
 				return getVesselClasses();
+			case FleetPackage.VESSEL_EVENT__END_PORT:
+				if (resolve) return getEndPort();
+				return basicGetEndPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -366,8 +423,8 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 			case FleetPackage.VESSEL_EVENT__DURATION:
 				setDuration((Integer)newValue);
 				return;
-			case FleetPackage.VESSEL_EVENT__PORT:
-				setPort((Port)newValue);
+			case FleetPackage.VESSEL_EVENT__START_PORT:
+				setStartPort((Port)newValue);
 				return;
 			case FleetPackage.VESSEL_EVENT__VESSELS:
 				getVessels().clear();
@@ -376,6 +433,9 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
 				getVesselClasses().clear();
 				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
+				return;
+			case FleetPackage.VESSEL_EVENT__END_PORT:
+				setEndPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -401,14 +461,17 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 			case FleetPackage.VESSEL_EVENT__DURATION:
 				setDuration(DURATION_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_EVENT__PORT:
-				setPort((Port)null);
+			case FleetPackage.VESSEL_EVENT__START_PORT:
+				setStartPort((Port)null);
 				return;
 			case FleetPackage.VESSEL_EVENT__VESSELS:
 				getVessels().clear();
 				return;
 			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
 				getVesselClasses().clear();
+				return;
+			case FleetPackage.VESSEL_EVENT__END_PORT:
+				setEndPort((Port)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -430,12 +493,14 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 				return END_DATE_EDEFAULT == null ? endDate != null : !END_DATE_EDEFAULT.equals(endDate);
 			case FleetPackage.VESSEL_EVENT__DURATION:
 				return duration != DURATION_EDEFAULT;
-			case FleetPackage.VESSEL_EVENT__PORT:
-				return port != null;
+			case FleetPackage.VESSEL_EVENT__START_PORT:
+				return startPort != null;
 			case FleetPackage.VESSEL_EVENT__VESSELS:
 				return vessels != null && !vessels.isEmpty();
 			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
 				return vesselClasses != null && !vesselClasses.isEmpty();
+			case FleetPackage.VESSEL_EVENT__END_PORT:
+				return endPort != null;
 		}
 		return super.eIsSet(featureID);
 	}

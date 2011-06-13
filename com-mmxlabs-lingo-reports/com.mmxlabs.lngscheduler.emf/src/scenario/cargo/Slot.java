@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.cargo;
 
@@ -9,6 +11,7 @@ import java.util.Date;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.contract.Contract;
+
 import scenario.port.Port;
 
 /**
@@ -318,6 +321,13 @@ public interface Slot extends EObject {
 	 */
 	Contract getSlotOrPortContract();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return new Date(getWindowStart()\r\n\t\t\t\t\t\t.getTime()\r\n\t\t\t\t\t\t+ javax.management.timer.Timer.ONE_HOUR\r\n\t\t\t\t\t\t* getWindowDuration());'"
+	 * @generated
+	 */
 	Date getWindowEnd();
 
 } // Slot

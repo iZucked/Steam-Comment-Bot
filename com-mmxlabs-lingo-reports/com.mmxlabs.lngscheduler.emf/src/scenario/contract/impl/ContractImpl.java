@@ -1,17 +1,22 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.Contract;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
+
 import scenario.impl.NamedObjectImpl;
 
 /**
@@ -62,7 +67,6 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Entity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -89,7 +93,6 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setEntity(Entity newEntity) {
 		Entity oldEntity = entity;
 		entity = newEntity;

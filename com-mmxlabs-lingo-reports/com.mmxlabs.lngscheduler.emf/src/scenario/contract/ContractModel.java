@@ -1,10 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -65,7 +68,7 @@ public interface ContractModel extends EObject {
 	 * The list contents are of type {@link scenario.contract.TotalVolumeLimit}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Volume Constraints</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Volume Constraints</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->

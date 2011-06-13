@@ -9,6 +9,7 @@ package scenario.fleet;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.port.Port;
@@ -25,9 +26,10 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.VesselEvent#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link scenario.fleet.VesselEvent#getEndDate <em>End Date</em>}</li>
  *   <li>{@link scenario.fleet.VesselEvent#getDuration <em>Duration</em>}</li>
- *   <li>{@link scenario.fleet.VesselEvent#getPort <em>Port</em>}</li>
+ *   <li>{@link scenario.fleet.VesselEvent#getStartPort <em>Start Port</em>}</li>
  *   <li>{@link scenario.fleet.VesselEvent#getVessels <em>Vessels</em>}</li>
  *   <li>{@link scenario.fleet.VesselEvent#getVesselClasses <em>Vessel Classes</em>}</li>
+ *   <li>{@link scenario.fleet.VesselEvent#getEndPort <em>End Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -141,30 +143,30 @@ public interface VesselEvent extends EObject {
 	void setDuration(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Port</b></em>' reference.
+	 * Returns the value of the '<em><b>Start Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Port</em>' reference isn't clear,
+	 * If the meaning of the '<em>Start Port</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Port</em>' reference.
-	 * @see #setPort(Port)
-	 * @see scenario.fleet.FleetPackage#getVesselEvent_Port()
+	 * @return the value of the '<em>Start Port</em>' reference.
+	 * @see #setStartPort(Port)
+	 * @see scenario.fleet.FleetPackage#getVesselEvent_StartPort()
 	 * @model required="true"
 	 * @generated
 	 */
-	Port getPort();
+	Port getStartPort();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselEvent#getPort <em>Port</em>}' reference.
+	 * Sets the value of the '{@link scenario.fleet.VesselEvent#getStartPort <em>Start Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Port</em>' reference.
-	 * @see #getPort()
+	 * @param value the new value of the '<em>Start Port</em>' reference.
+	 * @see #getStartPort()
 	 * @generated
 	 */
-	void setPort(Port value);
+	void setStartPort(Port value);
 
 	/**
 	 * Returns the value of the '<em><b>Vessels</b></em>' reference list.
@@ -197,5 +199,31 @@ public interface VesselEvent extends EObject {
 	 * @generated
 	 */
 	EList<VesselClass> getVesselClasses();
+
+	/**
+	 * Returns the value of the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>End Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>End Port</em>' reference.
+	 * @see #setEndPort(Port)
+	 * @see scenario.fleet.FleetPackage#getVesselEvent_EndPort()
+	 * @model required="true"
+	 * @generated
+	 */
+	Port getEndPort();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselEvent#getEndPort <em>End Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>End Port</em>' reference.
+	 * @see #getEndPort()
+	 * @generated
+	 */
+	void setEndPort(Port value);
 
 } // VesselEvent

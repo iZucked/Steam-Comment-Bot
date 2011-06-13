@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.util;
 
@@ -11,14 +13,8 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+
 import scenario.optimiser.*;
-import scenario.optimiser.Constraint;
-import scenario.optimiser.Discount;
-import scenario.optimiser.DiscountCurve;
-import scenario.optimiser.Objective;
-import scenario.optimiser.Optimisation;
-import scenario.optimiser.OptimisationSettings;
-import scenario.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc -->

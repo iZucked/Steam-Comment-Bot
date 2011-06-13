@@ -1,24 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.optimiser.*;
-import scenario.optimiser.Constraint;
-import scenario.optimiser.Discount;
-import scenario.optimiser.DiscountCurve;
-import scenario.optimiser.Objective;
-import scenario.optimiser.Optimisation;
-import scenario.optimiser.OptimisationSettings;
-import scenario.optimiser.OptimiserFactory;
-import scenario.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -80,7 +76,6 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public OptimisationSettings createOptimisationSettings() {
 		OptimisationSettingsImpl optimisationSettings = new OptimisationSettingsImpl();
 		return optimisationSettings;
@@ -91,7 +86,6 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Optimisation createOptimisation() {
 		OptimisationImpl optimisation = new OptimisationImpl();
 		return optimisation;
@@ -102,7 +96,6 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Constraint createConstraint() {
 		ConstraintImpl constraint = new ConstraintImpl();
 		return constraint;
@@ -113,7 +106,6 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Objective createObjective() {
 		ObjectiveImpl objective = new ObjectiveImpl();
 		return objective;
@@ -144,7 +136,6 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public OptimiserPackage getOptimiserPackage() {
 		return (OptimiserPackage)getEPackage();
 	}

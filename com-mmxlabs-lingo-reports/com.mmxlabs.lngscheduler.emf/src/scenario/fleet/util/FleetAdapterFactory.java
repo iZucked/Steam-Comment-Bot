@@ -1,28 +1,22 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+
 import scenario.fleet.*;
-import scenario.fleet.CharterOut;
-import scenario.fleet.Drydock;
-import scenario.fleet.FleetModel;
-import scenario.fleet.FleetPackage;
-import scenario.fleet.FuelConsumptionLine;
-import scenario.fleet.PortAndTime;
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-import scenario.fleet.VesselEvent;
-import scenario.fleet.VesselFuel;
-import scenario.fleet.VesselStateAttributes;
 
 /**
  * <!-- begin-user-doc -->
@@ -119,6 +113,10 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseVesselFuel(VesselFuel object) {
 				return createVesselFuelAdapter();
+			}
+			@Override
+			public Adapter casePortExclusion(PortExclusion object) {
+				return createPortExclusionAdapter();
 			}
 			@Override
 			public Adapter caseScenarioObject(ScenarioObject object) {
@@ -285,6 +283,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselFuelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.PortExclusion <em>Port Exclusion</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.PortExclusion
+	 * @generated
+	 */
+	public Adapter createPortExclusionAdapter() {
 		return null;
 	}
 

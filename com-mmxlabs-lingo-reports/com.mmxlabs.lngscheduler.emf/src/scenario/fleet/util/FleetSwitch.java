@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.util;
 
@@ -11,18 +13,8 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+
 import scenario.fleet.*;
-import scenario.fleet.CharterOut;
-import scenario.fleet.Drydock;
-import scenario.fleet.FleetModel;
-import scenario.fleet.FleetPackage;
-import scenario.fleet.FuelConsumptionLine;
-import scenario.fleet.PortAndTime;
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-import scenario.fleet.VesselEvent;
-import scenario.fleet.VesselFuel;
-import scenario.fleet.VesselStateAttributes;
 
 /**
  * <!-- begin-user-doc -->
@@ -163,6 +155,13 @@ public class FleetSwitch<T> {
 				T result = caseVesselFuel(vesselFuel);
 				if (result == null) result = caseNamedObject(vesselFuel);
 				if (result == null) result = caseScenarioObject(vesselFuel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.PORT_EXCLUSION: {
+				PortExclusion portExclusion = (PortExclusion)theEObject;
+				T result = casePortExclusion(portExclusion);
+				if (result == null) result = caseScenarioObject(portExclusion);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -317,6 +316,21 @@ public class FleetSwitch<T> {
 	 * @generated
 	 */
 	public T caseVesselFuel(VesselFuel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Port Exclusion</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Port Exclusion</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortExclusion(PortExclusion object) {
 		return null;
 	}
 

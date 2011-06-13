@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port.impl;
 
@@ -8,14 +10,19 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.impl.NamedObjectImpl;
+
 import scenario.port.Canal;
 import scenario.port.DistanceModel;
 import scenario.port.PortPackage;
@@ -101,7 +108,6 @@ public class CanalImpl extends NamedObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<VesselClassCost> getClassCosts() {
 		if (classCosts == null) {
 			classCosts = new EObjectContainmentEList<VesselClassCost>(VesselClassCost.class, this, PortPackage.CANAL__CLASS_COSTS);
@@ -114,7 +120,6 @@ public class CanalImpl extends NamedObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getDefaultCost() {
 		return defaultCost;
 	}
@@ -124,7 +129,6 @@ public class CanalImpl extends NamedObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setDefaultCost(int newDefaultCost) {
 		int oldDefaultCost = defaultCost;
 		defaultCost = newDefaultCost;
@@ -137,7 +141,6 @@ public class CanalImpl extends NamedObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public DistanceModel getDistanceModel() {
 		return distanceModel;
 	}
@@ -162,7 +165,6 @@ public class CanalImpl extends NamedObjectImpl implements Canal {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setDistanceModel(DistanceModel newDistanceModel) {
 		if (newDistanceModel != distanceModel) {
 			NotificationChain msgs = null;

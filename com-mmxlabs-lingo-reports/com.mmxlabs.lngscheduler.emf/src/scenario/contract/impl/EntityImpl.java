@@ -1,15 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
+
 import scenario.impl.NamedObjectImpl;
 
 /**
@@ -91,7 +96,6 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getTaxRate() {
 		return taxRate;
 	}
@@ -101,7 +105,6 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setTaxRate(float newTaxRate) {
 		float oldTaxRate = taxRate;
 		taxRate = newTaxRate;
@@ -114,7 +117,6 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getOwnership() {
 		return ownership;
 	}
@@ -124,7 +126,6 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setOwnership(float newOwnership) {
 		float oldOwnership = ownership;
 		ownership = newOwnership;

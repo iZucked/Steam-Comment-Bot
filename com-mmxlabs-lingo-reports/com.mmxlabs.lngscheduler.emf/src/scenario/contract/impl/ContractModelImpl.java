@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.impl;
 
@@ -8,11 +10,15 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -115,7 +121,6 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<PurchaseContract> getPurchaseContracts() {
 		if (purchaseContracts == null) {
 			purchaseContracts = new EObjectContainmentEList<PurchaseContract>(PurchaseContract.class, this, ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS);
@@ -128,7 +133,6 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<SalesContract> getSalesContracts() {
 		if (salesContracts == null) {
 			salesContracts = new EObjectContainmentEList<SalesContract>(SalesContract.class, this, ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS);
@@ -141,7 +145,6 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<TotalVolumeLimit> getVolumeConstraints() {
 		if (volumeConstraints == null) {
 			volumeConstraints = new EObjectContainmentEList<TotalVolumeLimit>(TotalVolumeLimit.class, this, ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
@@ -154,7 +157,6 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<Entity> getEntities() {
 		if (entities == null) {
 			entities = new EObjectContainmentEList<Entity>(Entity.class, this, ContractPackage.CONTRACT_MODEL__ENTITIES);
@@ -167,7 +169,6 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Entity getShippingEntity() {
 		return shippingEntity;
 	}
@@ -192,7 +193,6 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setShippingEntity(Entity newShippingEntity) {
 		if (newShippingEntity != shippingEntity) {
 			NotificationChain msgs = null;

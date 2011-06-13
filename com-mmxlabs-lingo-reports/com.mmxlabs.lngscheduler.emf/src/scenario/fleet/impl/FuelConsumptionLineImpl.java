@@ -1,11 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -91,7 +95,6 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getSpeed() {
 		return speed;
 	}
@@ -101,7 +104,6 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setSpeed(float newSpeed) {
 		float oldSpeed = speed;
 		speed = newSpeed;
@@ -114,7 +116,6 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getConsumption() {
 		return consumption;
 	}
@@ -124,7 +125,6 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setConsumption(float newConsumption) {
 		float oldConsumption = consumption;
 		consumption = newConsumption;

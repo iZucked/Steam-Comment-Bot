@@ -1,30 +1,46 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port.impl;
-
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.ScenarioPackage;
+
 import scenario.cargo.CargoPackage;
+
 import scenario.cargo.impl.CargoPackageImpl;
+
 import scenario.contract.ContractPackage;
+
 import scenario.contract.impl.ContractPackageImpl;
+
 import scenario.fleet.FleetPackage;
+
 import scenario.fleet.impl.FleetPackageImpl;
+
 import scenario.impl.ScenarioPackageImpl;
+
 import scenario.market.MarketPackage;
+
 import scenario.market.impl.MarketPackageImpl;
+
 import scenario.optimiser.OptimiserPackage;
+
 import scenario.optimiser.impl.OptimiserPackageImpl;
+
 import scenario.optimiser.lso.LsoPackage;
+
 import scenario.optimiser.lso.impl.LsoPackageImpl;
+
 import scenario.port.Canal;
 import scenario.port.CanalModel;
 import scenario.port.DistanceLine;
@@ -34,11 +50,17 @@ import scenario.port.PortFactory;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
 import scenario.port.VesselClassCost;
+
 import scenario.schedule.SchedulePackage;
+
 import scenario.schedule.events.EventsPackage;
+
 import scenario.schedule.events.impl.EventsPackageImpl;
+
 import scenario.schedule.fleetallocation.FleetallocationPackage;
+
 import scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl;
+
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -195,7 +217,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getPortModel() {
 		return portModelEClass;
 	}
@@ -205,7 +226,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getPortModel_Ports() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -215,7 +235,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getPort() {
 		return portEClass;
 	}
@@ -234,7 +253,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getPort_TimeZone() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(1);
 	}
@@ -244,7 +262,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getPort_DefaultContract() {
 		return (EReference)portEClass.getEStructuralFeatures().get(2);
 	}
@@ -263,7 +280,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getDistanceModel() {
 		return distanceModelEClass;
 	}
@@ -273,7 +289,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getDistanceModel_Distances() {
 		return (EReference)distanceModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -283,7 +298,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getDistanceLine() {
 		return distanceLineEClass;
 	}
@@ -293,7 +307,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getDistanceLine_FromPort() {
 		return (EReference)distanceLineEClass.getEStructuralFeatures().get(0);
 	}
@@ -303,7 +316,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getDistanceLine_ToPort() {
 		return (EReference)distanceLineEClass.getEStructuralFeatures().get(1);
 	}
@@ -313,7 +325,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getDistanceLine_Distance() {
 		return (EAttribute)distanceLineEClass.getEStructuralFeatures().get(2);
 	}
@@ -323,7 +334,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getCanal() {
 		return canalEClass;
 	}
@@ -333,7 +343,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCanal_ClassCosts() {
 		return (EReference)canalEClass.getEStructuralFeatures().get(0);
 	}
@@ -343,7 +352,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getCanal_DefaultCost() {
 		return (EAttribute)canalEClass.getEStructuralFeatures().get(1);
 	}
@@ -353,7 +361,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCanal_DistanceModel() {
 		return (EReference)canalEClass.getEStructuralFeatures().get(2);
 	}
@@ -363,7 +370,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getCanalModel() {
 		return canalModelEClass;
 	}
@@ -373,7 +379,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCanalModel_Canals() {
 		return (EReference)canalModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -383,7 +388,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getVesselClassCost() {
 		return vesselClassCostEClass;
 	}
@@ -393,7 +397,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getVesselClassCost_VesselClass() {
 		return (EReference)vesselClassCostEClass.getEStructuralFeatures().get(0);
 	}
@@ -403,7 +406,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getVesselClassCost_LadenCost() {
 		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(1);
 	}
@@ -413,7 +415,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getVesselClassCost_UnladenCost() {
 		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(2);
 	}
@@ -423,7 +424,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getVesselClassCost_TransitTime() {
 		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(3);
 	}
@@ -433,7 +433,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getVesselClassCost_TransitFuel() {
 		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(4);
 	}
@@ -443,7 +442,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}

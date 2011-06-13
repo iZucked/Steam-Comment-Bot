@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation;
 
@@ -17,7 +19,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface AllocatedVessel extends EObject {
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -34,4 +35,5 @@ public interface AllocatedVessel extends EObject {
 	 * @generated
 	 */
 	String getName();
+
 } // AllocatedVessel

@@ -1,13 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.schedule.fleetallocation.AllocatedVessel;
@@ -47,7 +51,6 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public double getHourlyCharterPrice() {
 		return 0;
 	}
@@ -57,7 +60,6 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getName() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT

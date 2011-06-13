@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.impl;
 
@@ -8,11 +10,15 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -91,7 +97,6 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<OptimisationSettings> getAllSettings() {
 		if (allSettings == null) {
 			allSettings = new EObjectContainmentEList<OptimisationSettings>(OptimisationSettings.class, this, OptimiserPackage.OPTIMISATION__ALL_SETTINGS);
@@ -104,7 +109,6 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public OptimisationSettings getCurrentSettings() {
 		if (currentSettings != null && currentSettings.eIsProxy()) {
 			InternalEObject oldCurrentSettings = (InternalEObject)currentSettings;
@@ -131,7 +135,6 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setCurrentSettings(OptimisationSettings newCurrentSettings) {
 		OptimisationSettings oldCurrentSettings = currentSettings;
 		currentSettings = newCurrentSettings;

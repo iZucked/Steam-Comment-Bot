@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.market;
 
@@ -19,6 +21,7 @@ import scenario.ScenarioPackage;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -135,26 +138,6 @@ public interface MarketPackage extends EPackage {
 	int MARKET_MODEL__INDICES = 0;
 
 	/**
-	 * The meta object id for the '{@link scenario.market.impl.StepwisePriceCurveImpl <em>Stepwise Price Curve</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see scenario.market.impl.StepwisePriceCurveImpl
-	 * @see scenario.market.impl.MarketPackageImpl#getStepwisePriceCurve()
-	 * @generated
-	 */
-	int STEPWISE_PRICE_CURVE = 2;
-
-	/**
-	 * The meta object id for the '{@link scenario.market.impl.StepwisePriceImpl <em>Stepwise Price</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see scenario.market.impl.StepwisePriceImpl
-	 * @see scenario.market.impl.MarketPackageImpl#getStepwisePrice()
-	 * @generated
-	 */
-	int STEPWISE_PRICE = 3;
-
-	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -171,6 +154,16 @@ public interface MarketPackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKET_MODEL_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.market.impl.StepwisePriceCurveImpl <em>Stepwise Price Curve</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.market.impl.StepwisePriceCurveImpl
+	 * @see scenario.market.impl.MarketPackageImpl#getStepwisePriceCurve()
+	 * @generated
+	 */
+	int STEPWISE_PRICE_CURVE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Prices</b></em>' containment reference list.
@@ -218,6 +211,16 @@ public interface MarketPackage extends EPackage {
 	int STEPWISE_PRICE_CURVE_OPERATION_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link scenario.market.impl.StepwisePriceImpl <em>Stepwise Price</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.market.impl.StepwisePriceImpl
+	 * @see scenario.market.impl.MarketPackageImpl#getStepwisePrice()
+	 * @generated
+	 */
+	int STEPWISE_PRICE = 3;
+
+	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -252,6 +255,7 @@ public interface MarketPackage extends EPackage {
 	 * @ordered
 	 */
 	int STEPWISE_PRICE_OPERATION_COUNT = 0;
+
 
 	/**
 	 * Returns the meta object for class '{@link scenario.market.Index <em>Index</em>}'.
@@ -384,6 +388,7 @@ public interface MarketPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>

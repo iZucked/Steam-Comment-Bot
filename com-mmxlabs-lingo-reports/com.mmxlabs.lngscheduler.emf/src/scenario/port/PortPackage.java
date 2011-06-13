@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port;
 
@@ -18,6 +20,7 @@ import scenario.ScenarioPackage;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -160,7 +163,6 @@ public interface PortPackage extends EPackage {
 	 */
 	int PORT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
-
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
 	 * <!-- begin-user-doc -->
@@ -261,7 +263,6 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISTANCE_LINE_FEATURE_COUNT = 3;
-
 
 	/**
 	 * The number of operations of the '<em>Distance Line</em>' class.
@@ -373,7 +374,6 @@ public interface PortPackage extends EPackage {
 	 */
 	int CANAL_MODEL_FEATURE_COUNT = 1;
 
-
 	/**
 	 * The number of operations of the '<em>Canal Model</em>' class.
 	 * <!-- begin-user-doc -->
@@ -455,6 +455,7 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int VESSEL_CLASS_COST_OPERATION_COUNT = 0;
+
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.PortModel <em>Model</em>}'.
@@ -739,6 +740,7 @@ public interface PortPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>

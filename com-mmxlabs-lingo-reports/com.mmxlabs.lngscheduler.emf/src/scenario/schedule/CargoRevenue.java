@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule;
 
@@ -55,7 +57,6 @@ public interface CargoRevenue extends BookedRevenue {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getCargo().getName();'"
 	 * @generated
 	 */
-	@Override
 	String getName();
 
 } // CargoRevenue

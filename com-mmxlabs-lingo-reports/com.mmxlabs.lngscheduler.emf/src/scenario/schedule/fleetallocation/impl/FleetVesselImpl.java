@@ -1,18 +1,24 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.Vessel;
+
 import scenario.schedule.fleetallocation.FleetVessel;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
 
@@ -64,7 +70,6 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -91,7 +96,6 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -104,7 +108,6 @@ public class FleetVesselImpl extends AllocatedVesselImpl implements FleetVessel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getName() {
 		return getVessel().getName();
 	}

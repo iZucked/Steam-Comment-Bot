@@ -1,12 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser;
 
 import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
+
 import scenario.schedule.Schedule;
 
 /**

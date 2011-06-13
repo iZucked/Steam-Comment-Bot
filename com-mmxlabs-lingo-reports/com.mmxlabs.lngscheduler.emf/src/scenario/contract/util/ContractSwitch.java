@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.util;
 
@@ -11,18 +13,8 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+
 import scenario.contract.*;
-import scenario.contract.Contract;
-import scenario.contract.ContractModel;
-import scenario.contract.ContractPackage;
-import scenario.contract.Entity;
-import scenario.contract.FixedPricePurchaseContract;
-import scenario.contract.IndexPricePurchaseContract;
-import scenario.contract.NetbackPurchaseContract;
-import scenario.contract.ProfitSharingPurchaseContract;
-import scenario.contract.PurchaseContract;
-import scenario.contract.SalesContract;
-import scenario.contract.TotalVolumeLimit;
 
 /**
  * <!-- begin-user-doc -->

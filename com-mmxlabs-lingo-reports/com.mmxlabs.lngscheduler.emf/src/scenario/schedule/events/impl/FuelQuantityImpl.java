@@ -1,11 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -156,7 +160,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FuelType getFuelType() {
 		return fuelType;
 	}
@@ -166,7 +169,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setFuelType(FuelType newFuelType) {
 		FuelType oldFuelType = fuelType;
 		fuelType = newFuelType == null ? FUEL_TYPE_EDEFAULT : newFuelType;
@@ -179,7 +181,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getQuantity() {
 		return quantity;
 	}
@@ -189,7 +190,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setQuantity(long newQuantity) {
 		long oldQuantity = quantity;
 		quantity = newQuantity;
@@ -202,7 +202,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getUnitPrice() {
 		return unitPrice;
 	}
@@ -212,7 +211,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setUnitPrice(long newUnitPrice) {
 		long oldUnitPrice = unitPrice;
 		unitPrice = newUnitPrice;
@@ -225,7 +223,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getTotalPrice() {
 		return totalPrice;
 	}
@@ -235,7 +232,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setTotalPrice(long newTotalPrice) {
 		long oldTotalPrice = totalPrice;
 		totalPrice = newTotalPrice;
@@ -248,7 +244,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FuelUnit getFuelUnit() {
 		return fuelUnit;
 	}
@@ -258,7 +253,6 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setFuelUnit(FuelUnit newFuelUnit) {
 		FuelUnit oldFuelUnit = fuelUnit;
 		fuelUnit = newFuelUnit == null ? FUEL_UNIT_EDEFAULT : newFuelUnit;

@@ -1,17 +1,24 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.impl;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -67,7 +74,6 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<FuelQuantity> getFuelUsage() {
 		if (fuelUsage == null) {
 			fuelUsage = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, EventsPackage.FUEL_MIXTURE__FUEL_USAGE);
@@ -80,7 +86,6 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public long getTotalFuelCost() {
 		long totalCost = 0;
 		

@@ -6,8 +6,10 @@
  */
 package scenario.schedule.events.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -16,6 +18,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import scenario.fleet.VesselEvent;
 
 import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.VesselEventVisit;
 
 /**
@@ -104,6 +107,15 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getId() {
+		return getVesselEvent().getId();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -156,6 +168,36 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 				return vesselEvent != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == PortVisit.class) {
+			switch (baseOperationID) {
+				case EventsPackage.PORT_VISIT___GET_ID: return EventsPackage.VESSEL_EVENT_VISIT___GET_ID;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case EventsPackage.VESSEL_EVENT_VISIT___GET_ID:
+				return getId();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //VesselEventVisitImpl

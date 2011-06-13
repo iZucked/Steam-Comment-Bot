@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.impl;
 
@@ -8,22 +10,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.fleet.*;
-import scenario.fleet.CharterOut;
-import scenario.fleet.Drydock;
-import scenario.fleet.FleetFactory;
-import scenario.fleet.FleetModel;
-import scenario.fleet.FleetPackage;
-import scenario.fleet.FuelConsumptionLine;
-import scenario.fleet.PortAndTime;
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-import scenario.fleet.VesselFuel;
-import scenario.fleet.VesselState;
-import scenario.fleet.VesselStateAttributes;
 
 /**
  * <!-- begin-user-doc -->
@@ -78,6 +70,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.CHARTER_OUT: return createCharterOut();
 			case FleetPackage.DRYDOCK: return createDrydock();
 			case FleetPackage.VESSEL_FUEL: return createVesselFuel();
+			case FleetPackage.PORT_EXCLUSION: return createPortExclusion();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -118,7 +111,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FleetModel createFleetModel() {
 		FleetModelImpl fleetModel = new FleetModelImpl();
 		return fleetModel;
@@ -129,7 +121,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Vessel createVessel() {
 		VesselImpl vessel = new VesselImpl();
 		return vessel;
@@ -140,7 +131,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public VesselClass createVesselClass() {
 		VesselClassImpl vesselClass = new VesselClassImpl();
 		return vesselClass;
@@ -151,7 +141,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FuelConsumptionLine createFuelConsumptionLine() {
 		FuelConsumptionLineImpl fuelConsumptionLine = new FuelConsumptionLineImpl();
 		return fuelConsumptionLine;
@@ -162,7 +151,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public VesselStateAttributes createVesselStateAttributes() {
 		VesselStateAttributesImpl vesselStateAttributes = new VesselStateAttributesImpl();
 		return vesselStateAttributes;
@@ -173,7 +161,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public PortAndTime createPortAndTime() {
 		PortAndTimeImpl portAndTime = new PortAndTimeImpl();
 		return portAndTime;
@@ -184,7 +171,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public CharterOut createCharterOut() {
 		CharterOutImpl charterOut = new CharterOutImpl();
 		return charterOut;
@@ -215,6 +201,16 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PortExclusion createPortExclusion() {
+		PortExclusionImpl portExclusion = new PortExclusionImpl();
+		return portExclusion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public VesselState createVesselStateFromString(EDataType eDataType, String initialValue) {
 		VesselState result = VesselState.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -235,7 +231,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FleetPackage getFleetPackage() {
 		return (FleetPackage)getEPackage();
 	}

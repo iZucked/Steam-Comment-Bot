@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.cargo.impl;
-
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -11,9 +12,11 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.ScenarioPackage;
+
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoFactory;
 import scenario.cargo.CargoModel;
@@ -21,24 +24,43 @@ import scenario.cargo.CargoPackage;
 import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
+
 import scenario.contract.ContractPackage;
+
 import scenario.contract.impl.ContractPackageImpl;
+
 import scenario.fleet.FleetPackage;
+
 import scenario.fleet.impl.FleetPackageImpl;
+
 import scenario.impl.ScenarioPackageImpl;
+
 import scenario.market.MarketPackage;
+
 import scenario.market.impl.MarketPackageImpl;
+
 import scenario.optimiser.OptimiserPackage;
+
 import scenario.optimiser.impl.OptimiserPackageImpl;
+
 import scenario.optimiser.lso.LsoPackage;
+
 import scenario.optimiser.lso.impl.LsoPackageImpl;
+
 import scenario.port.PortPackage;
+
 import scenario.port.impl.PortPackageImpl;
+
 import scenario.schedule.SchedulePackage;
+
 import scenario.schedule.events.EventsPackage;
+
 import scenario.schedule.events.impl.EventsPackageImpl;
+
 import scenario.schedule.fleetallocation.FleetallocationPackage;
+
 import scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl;
+
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
@@ -181,7 +203,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getCargoModel() {
 		return cargoModelEClass;
 	}
@@ -191,7 +212,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCargoModel_Cargoes() {
 		return (EReference)cargoModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -201,7 +221,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCargoModel_SpareDischargeSlots() {
 		return (EReference)cargoModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -211,7 +230,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCargoModel_SpareLoadSlots() {
 		return (EReference)cargoModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -221,7 +239,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getCargo() {
 		return cargoEClass;
 	}
@@ -231,7 +248,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getCargo_Id() {
 		return (EAttribute)cargoEClass.getEStructuralFeatures().get(0);
 	}
@@ -241,7 +257,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCargo_LoadSlot() {
 		return (EReference)cargoEClass.getEStructuralFeatures().get(1);
 	}
@@ -251,7 +266,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCargo_DischargeSlot() {
 		return (EReference)cargoEClass.getEStructuralFeatures().get(2);
 	}
@@ -261,7 +275,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getCargo_AllowedVessels() {
 		return (EReference)cargoEClass.getEStructuralFeatures().get(3);
 	}
@@ -271,7 +284,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getCargo_CargoType() {
 		return (EAttribute)cargoEClass.getEStructuralFeatures().get(4);
 	}
@@ -281,7 +293,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EClass getSlot() {
 		return slotEClass;
 	}
@@ -291,7 +302,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getSlot_Id() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(0);
 	}
@@ -301,7 +311,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getSlot_MinQuantity() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(1);
 	}
@@ -311,7 +320,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getSlot_MaxQuantity() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(2);
 	}
@@ -321,7 +329,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getSlot_Port() {
 		return (EReference)slotEClass.getEStructuralFeatures().get(3);
 	}
@@ -331,7 +338,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getSlot_WindowStart() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(4);
 	}
@@ -341,7 +347,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getSlot_WindowDuration() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(5);
 	}
@@ -351,7 +356,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getSlot_SlotDuration() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(6);
 	}
@@ -361,7 +365,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EReference getSlot_Contract() {
 		return (EReference)slotEClass.getEStructuralFeatures().get(7);
 	}
@@ -380,7 +383,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EOperation getSlot__GetLocalWindowStart() {
 		return slotEClass.getEOperations().get(0);
 	}
@@ -390,7 +392,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EOperation getSlot__GetSlotOrPortContract() {
 		return slotEClass.getEOperations().get(1);
 	}
@@ -400,7 +401,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
+	public EOperation getSlot__GetWindowEnd() {
+		return slotEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getLoadSlot() {
 		return loadSlotEClass;
 	}
@@ -410,7 +419,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EAttribute getLoadSlot_CargoCVvalue() {
 		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(0);
 	}
@@ -420,7 +428,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -430,7 +437,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public CargoFactory getCargoFactory() {
 		return (CargoFactory)getEFactoryInstance();
 	}
@@ -478,6 +484,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__FIXED_PRICE);
 		createEOperation(slotEClass, SLOT___GET_LOCAL_WINDOW_START);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_CONTRACT);
+		createEOperation(slotEClass, SLOT___GET_WINDOW_END);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CVVALUE);
@@ -548,6 +555,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getSlot__GetLocalWindowStart(), ecorePackage.getEJavaObject(), "getLocalWindowStart", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrPortContract(), theContractPackage.getContract(), "getSlotOrPortContract", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetWindowEnd(), ecorePackage.getEDate(), "getWindowEnd", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCVvalue(), ecorePackage.getEFloat(), "cargoCVvalue", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

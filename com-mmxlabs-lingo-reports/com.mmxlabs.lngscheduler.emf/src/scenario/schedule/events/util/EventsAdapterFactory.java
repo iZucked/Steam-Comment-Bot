@@ -1,25 +1,21 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.ScenarioObject;
+
 import scenario.schedule.events.*;
-import scenario.schedule.events.CharterOutVisit;
-import scenario.schedule.events.EventsPackage;
-import scenario.schedule.events.FuelMixture;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.Idle;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.PortVisit;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
 
 /**
  * <!-- begin-user-doc -->

@@ -72,6 +72,14 @@
           eType="#//fleet/PortAndTime" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeChartered" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="portExclusions" upperBound="-1"
+          eType="#//fleet/PortExclusion" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyCharterOutPrice"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The cost per day of spot chartering vessels of this class, expressed in dollars"/>
+        </eAnnotations>
+      </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="VesselClass" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
@@ -92,12 +100,18 @@
           <details key="documentation" value="The ship fill capacity, as a proportion (from 0 to 1). Ship fill capacity is the percentage of vessel cargo capacity that can actually be used. Typically this is 98.5%."/>
         </eAnnotations>
       </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotCharterCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyCharterPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation" value="The cost per day of spot chartering vessels of this class, expressed in dollars"/>
         </eAnnotations>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotCharterCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyCharterOutPrice"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The cost per day of spot chartering vessels of this class, expressed in dollars"/>
+        </eAnnotations>
+      </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1"
           eType="#//port/Port">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -106,6 +120,8 @@
       </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuel" lowerBound="1"
           eType="#//fleet/VesselFuel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="portExclusions" upperBound="-1"
+          eType="#//fleet/PortExclusion" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FuelConsumptionLine">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -140,12 +156,14 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="startPort" lowerBound="1"
           eType="#//port/Port"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
           eType="#//fleet/Vessel"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
           eType="#//fleet/VesselClass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" lowerBound="1"
+          eType="#//port/Port"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CharterOut" eSuperTypes="#//fleet/VesselEvent"/>
     <eClassifiers xsi:type="ecore:EClass" name="Drydock" eSuperTypes="#//fleet/VesselEvent"/>
@@ -154,6 +172,14 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PortExclusion" eSuperTypes="#//ScenarioObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
+          eType="#//port/Port"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
@@ -425,10 +451,30 @@
             <details key="body" value="final java.util.Calendar calendar = java.util.Calendar.getInstance(&#xA;java.util.TimeZone.getTimeZone(getPort().getTimeZone())&#xA;);&#xA;calendar.setTime(getEndTime());&#xA;return calendar;"/>
           </eAnnotations>
         </eOperations>
+        <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return &quot;visit to &quot; + port.getName();"/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getDisplayTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return eClass().getName().replace(&quot;Visit&quot;, &quot;&quot;);"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
             eType="#//port/Port"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="SlotVisit" eSuperTypes="#//schedule/events/PortVisit">
+        <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return getSlot().getId();"/>
+          </eAnnotations>
+        </eOperations>
+        <eOperations name="getDisplayTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="if (getSlot() instanceof scenario.cargo.LoadSlot) return &quot;Load&quot;;&#xD;&#xA;else return &quot;Discharge&quot;;"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1"
             eType="#//cargo/Slot"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" lowerBound="1"
@@ -441,6 +487,11 @@
             eType="#//schedule/CharterOutRevenue"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//schedule/events/PortVisit">
+        <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return getVesselEvent().getId();"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
             eType="#//fleet/VesselEvent"/>
       </eClassifiers>
@@ -578,6 +629,11 @@
       <eOperations name="getSlotOrPortContract" lowerBound="1" eType="#//contract/Contract">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="if (getContract() != null)&#xA;&#x9;return getContract();&#xA;else if (getPort() != null)&#xA;&#x9;return getPort().getDefaultContract();&#xA;else&#xA;&#x9;return null;"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getWindowEnd" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return new Date(getWindowStart()&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;.getTime()&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;+ javax.management.timer.Timer.ONE_HOUR&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;* getWindowDuration());"/>
         </eAnnotations>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

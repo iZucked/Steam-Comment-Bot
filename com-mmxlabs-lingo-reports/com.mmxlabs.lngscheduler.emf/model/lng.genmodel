@@ -19,6 +19,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//Scenario/optimisation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//Scenario/version"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//Scenario/name"/>
+      <genOperations ecoreOperation="lng.ecore#//Scenario/getOrCreateFleetModel"/>
+      <genOperations ecoreOperation="lng.ecore#//Scenario/getOrCreateScheduleModel"/>
+      <genOperations ecoreOperation="lng.ecore#//Scenario/createMissingModels"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lng.ecore#//ScenarioObject">
       <genOperations ecoreOperation="lng.ecore#//ScenarioObject/getContainer"/>
@@ -34,23 +37,21 @@
       <genClasses ecoreClass="lng.ecore#//fleet/FleetModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/FleetModel/fleet"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/FleetModel/vesselClasses"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/FleetModel/charterOuts"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/FleetModel/vesselEvents"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/FleetModel/fuels"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//fleet/Vessel">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/Vessel/name"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//fleet/Vessel/class"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/Vessel/startRequirement"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/Vessel/endRequirement"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/Vessel/timeChartered"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/Vessel/portExclusions"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//fleet/VesselClass">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/name"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/capacity"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/minSpeed"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/maxSpeed"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/baseFuelUnitPrice"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/baseFuelEquivalenceFactor"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselClass/ladenAttributes"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselClass/ballastAttributes"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/minHeelVolume"/>
@@ -59,6 +60,9 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/spotCharterCount"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselClass/inaccessiblePorts"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselClass/baseFuel"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselClass/portExclusions"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//fleet/FuelConsumptionLine">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/FuelConsumptionLine/speed"/>
@@ -77,17 +81,29 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/PortAndTime/startTime"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/PortAndTime/endTime"/>
       </genClasses>
-      <genClasses ecoreClass="lng.ecore#//fleet/CharterOut">
+      <genClasses image="false" ecoreClass="lng.ecore#//fleet/VesselEvent">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselEvent/id"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselEvent/startDate"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselEvent/endDate"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselEvent/duration"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference lng.ecore#//fleet/CharterOut/port"/>
+            ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselEvent/port"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference lng.ecore#//fleet/CharterOut/vessels"/>
+            ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselEvent/vessels"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference lng.ecore#//fleet/CharterOut/vesselClasses"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/startDate"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/endDate"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/duration"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/id"/>
+            ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselEvent/vesselClasses"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//fleet/CharterOut"/>
+      <genClasses ecoreClass="lng.ecore#//fleet/Drydock"/>
+      <genClasses ecoreClass="lng.ecore#//fleet/VesselFuel">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselFuel/unitPrice"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselFuel/equivalenceFactor"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//fleet/PortExclusion">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//fleet/PortExclusion/port"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/PortExclusion/startDate"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/PortExclusion/endDate"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Schedule" disposableProviderFactory="true" ecorePackage="lng.ecore#//schedule">
@@ -100,6 +116,7 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//schedule/Schedule/cargoAllocations"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//schedule/Schedule/fleet"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//schedule/Schedule/fitness"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//schedule/Schedule/revenue"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//schedule/Sequence">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//schedule/Sequence/events"/>
@@ -128,14 +145,51 @@
             ecoreFeature="ecore:EReference lng.ecore#//schedule/CargoAllocation/ladenIdle"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//schedule/CargoAllocation/ballastIdle"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//schedule/CargoAllocation/loadRevenue"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//schedule/CargoAllocation/shippingRevenue"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//schedule/CargoAllocation/dischargeRevenue"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//schedule/CargoAllocation/cargoType"/>
         <genOperations ecoreOperation="lng.ecore#//schedule/CargoAllocation/getTotalCost"/>
         <genOperations ecoreOperation="lng.ecore#//schedule/CargoAllocation/getLocalLoadDate"/>
         <genOperations ecoreOperation="lng.ecore#//schedule/CargoAllocation/getLocalDischargeDate"/>
         <genOperations ecoreOperation="lng.ecore#//schedule/CargoAllocation/getLoadVolume"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/CargoAllocation/getName"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//schedule/ScheduleFitness">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//schedule/ScheduleFitness/name"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//schedule/ScheduleFitness/value"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//schedule/LineItem">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//schedule/LineItem/value"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//schedule/LineItem/party"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/LineItem/isCost"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/LineItem/isRevenue"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//schedule/BookedRevenue">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//schedule/BookedRevenue/entity"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//schedule/BookedRevenue/date"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//schedule/BookedRevenue/lineItems"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/BookedRevenue/getUntaxedValue"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/BookedRevenue/getTaxedValue"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/BookedRevenue/getUntaxedRevenues"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/BookedRevenue/getUntaxedCosts"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/BookedRevenue/getTaxCost"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/BookedRevenue/getName"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//schedule/CargoRevenue">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//schedule/CargoRevenue/cargo"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/CargoRevenue/getName"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//schedule/CharterOutRevenue">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//schedule/CharterOutRevenue/charterOut"/>
+        <genOperations ecoreOperation="lng.ecore#//schedule/CharterOutRevenue/getName"/>
       </genClasses>
       <nestedGenPackages prefix="Events" disposableProviderFactory="true" ecorePackage="lng.ecore#//schedule/events">
         <genEnums typeSafeEnumCompatible="false" ecoreEnum="lng.ecore#//schedule/events/FuelUnit">
@@ -200,6 +254,12 @@
         <genClasses ecoreClass="lng.ecore#//schedule/events/CharterOutVisit">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
               ecoreFeature="ecore:EReference lng.ecore#//schedule/events/CharterOutVisit/charterOut"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference lng.ecore#//schedule/events/CharterOutVisit/revenue"/>
+        </genClasses>
+        <genClasses ecoreClass="lng.ecore#//schedule/events/VesselEventVisit">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference lng.ecore#//schedule/events/VesselEventVisit/vesselEvent"/>
         </genClasses>
       </nestedGenPackages>
       <nestedGenPackages prefix="Fleetallocation" disposableProviderFactory="true"
@@ -227,10 +287,12 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//port/PortModel/ports"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//port/Port">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/name"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference lng.ecore#//port/Port/defaultMarket"/>
+            ecoreFeature="ecore:EReference lng.ecore#//port/Port/defaultIndex"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/timeZone"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//port/Port/defaultContract"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/regasEfficiency"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//port/DistanceModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//port/DistanceModel/distances"/>
@@ -243,7 +305,6 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/DistanceLine/distance"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//port/Canal">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Canal/name"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//port/Canal/classCosts"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Canal/defaultCost"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//port/Canal/distanceModel"/>
@@ -261,8 +322,15 @@
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Cargo" disposableProviderFactory="true" ecorePackage="lng.ecore#//cargo">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="lng.ecore#//cargo/CargoType">
+        <genEnumLiterals ecoreEnumLiteral="lng.ecore#//cargo/CargoType/Fleet"/>
+        <genEnumLiterals ecoreEnumLiteral="lng.ecore#//cargo/CargoType/FOB"/>
+        <genEnumLiterals ecoreEnumLiteral="lng.ecore#//cargo/CargoType/DES"/>
+      </genEnums>
       <genClasses ecoreClass="lng.ecore#//cargo/CargoModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//cargo/CargoModel/cargoes"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//cargo/CargoModel/spareDischargeSlots"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//cargo/CargoModel/spareLoadSlots"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//cargo/Cargo">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//cargo/Cargo/id"/>
@@ -270,6 +338,7 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//cargo/Cargo/dischargeSlot"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//cargo/Cargo/allowedVessels"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//cargo/Cargo/cargoType"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//cargo/Slot">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//cargo/Slot/id"/>
@@ -282,7 +351,9 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//cargo/Slot/slotDuration"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//cargo/Slot/contract"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//cargo/Slot/fixedPrice"/>
         <genOperations ecoreOperation="lng.ecore#//cargo/Slot/getLocalWindowStart"/>
+        <genOperations ecoreOperation="lng.ecore#//cargo/Slot/getSlotOrPortContract"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//cargo/LoadSlot">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//cargo/LoadSlot/cargoCVvalue"/>
@@ -299,8 +370,8 @@
       <genClasses ecoreClass="lng.ecore#//contract/PurchaseContract"/>
       <genClasses ecoreClass="lng.ecore#//contract/SalesContract">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference lng.ecore#//contract/SalesContract/market"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/SalesContract/regasEfficiency"/>
+            ecoreFeature="ecore:EReference lng.ecore#//contract/SalesContract/index"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/SalesContract/markup"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//contract/TotalVolumeLimit">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
@@ -312,33 +383,46 @@
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//contract/Entity">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/Entity/taxRate"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/Entity/ownership"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//contract/FixedPricePurchaseContract">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/FixedPricePurchaseContract/unitPrice"/>
       </genClasses>
-      <genClasses ecoreClass="lng.ecore#//contract/MarketPricePurchaseContract">
+      <genClasses ecoreClass="lng.ecore#//contract/IndexPricePurchaseContract">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference lng.ecore#//contract/MarketPricePurchaseContract/market"/>
+            ecoreFeature="ecore:EReference lng.ecore#//contract/IndexPricePurchaseContract/index"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//contract/NetbackPurchaseContract">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/NetbackPurchaseContract/lowerBound"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/NetbackPurchaseContract/buyersMargin"/>
       </genClasses>
-      <genClasses ecoreClass="lng.ecore#//contract/ProfitSharingPurchaseContract"/>
+      <genClasses ecoreClass="lng.ecore#//contract/ProfitSharingPurchaseContract">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//contract/ProfitSharingPurchaseContract/index"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//contract/ProfitSharingPurchaseContract/referenceIndex"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/ProfitSharingPurchaseContract/alpha"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/ProfitSharingPurchaseContract/beta"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/ProfitSharingPurchaseContract/gamma"/>
+      </genClasses>
       <genClasses ecoreClass="lng.ecore#//contract/Contract">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//contract/Contract/entity"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Market" disposableProviderFactory="true" ecorePackage="lng.ecore#//market">
-      <genClasses ecoreClass="lng.ecore#//market/Market">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//market/Market/priceCurve"/>
+      <genClasses ecoreClass="lng.ecore#//market/Index">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//market/Index/priceCurve"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//market/MarketModel">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//market/MarketModel/markets"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//market/MarketModel/indices"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//market/StepwisePriceCurve">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//market/StepwisePriceCurve/prices"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//market/StepwisePriceCurve/defaultValue"/>
+        <genOperations ecoreOperation="lng.ecore#//market/StepwisePriceCurve/getValueAtDate">
+          <genParameters ecoreParameter="lng.ecore#//market/StepwisePriceCurve/getValueAtDate/date"/>
+        </genOperations>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//market/StepwisePrice">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//market/StepwisePrice/date"/>
@@ -347,25 +431,35 @@
     </nestedGenPackages>
     <nestedGenPackages prefix="Optimiser" disposableProviderFactory="true" ecorePackage="lng.ecore#//optimiser">
       <genClasses ecoreClass="lng.ecore#//optimiser/OptimisationSettings">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/OptimisationSettings/name"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/OptimisationSettings/randomSeed"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//optimiser/OptimisationSettings/constraints"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//optimiser/OptimisationSettings/objectives"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//optimiser/OptimisationSettings/initialSchedule"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//optimiser/OptimisationSettings/defaultDiscountCurve"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//optimiser/Optimisation">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//optimiser/Optimisation/allSettings"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//optimiser/Optimisation/currentSettings"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//optimiser/Optimisation/discountCurves"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//optimiser/Constraint">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/Constraint/name"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/Constraint/enabled"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//optimiser/Objective">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/Objective/name"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/Objective/weight"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference lng.ecore#//optimiser/Objective/discountCurve"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//optimiser/DiscountCurve">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//optimiser/DiscountCurve/discounts"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/DiscountCurve/startDate"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//optimiser/Discount">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/Discount/time"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//optimiser/Discount/discountFactor"/>
       </genClasses>
       <nestedGenPackages prefix="Lso" disposableProviderFactory="true" ecorePackage="lng.ecore#//optimiser/lso">
         <genClasses ecoreClass="lng.ecore#//optimiser/lso/LSOSettings">

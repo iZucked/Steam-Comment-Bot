@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule;
 
@@ -9,6 +11,7 @@ import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.ScenarioObject;
+
 import scenario.contract.Entity;
 
 /**

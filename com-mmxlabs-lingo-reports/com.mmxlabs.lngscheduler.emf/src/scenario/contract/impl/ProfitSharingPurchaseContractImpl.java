@@ -1,16 +1,21 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.ContractPackage;
 import scenario.contract.ProfitSharingPurchaseContract;
+
 import scenario.market.Index;
 
 /**
@@ -40,6 +45,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * @ordered
 	 */
 	protected Index index;
+
 	/**
 	 * The cached value of the '{@link #getReferenceIndex() <em>Reference Index</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -49,6 +55,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * @ordered
 	 */
 	protected Index referenceIndex;
+
 	/**
 	 * The default value of the '{@link #getAlpha() <em>Alpha</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -58,6 +65,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * @ordered
 	 */
 	protected static final float ALPHA_EDEFAULT = 0.0F;
+
 	/**
 	 * The cached value of the '{@link #getAlpha() <em>Alpha</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -67,6 +75,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * @ordered
 	 */
 	protected float alpha = ALPHA_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getBeta() <em>Beta</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -76,6 +85,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * @ordered
 	 */
 	protected static final float BETA_EDEFAULT = 0.0F;
+
 	/**
 	 * The cached value of the '{@link #getBeta() <em>Beta</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -85,6 +95,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * @ordered
 	 */
 	protected float beta = BETA_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getGamma() <em>Gamma</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -94,6 +105,7 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * @ordered
 	 */
 	protected static final float GAMMA_EDEFAULT = 0.0F;
+
 	/**
 	 * The cached value of the '{@link #getGamma() <em>Gamma</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -204,7 +216,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getAlpha() {
 		return alpha;
 	}
@@ -214,7 +225,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setAlpha(float newAlpha) {
 		float oldAlpha = alpha;
 		alpha = newAlpha;
@@ -227,7 +237,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getBeta() {
 		return beta;
 	}
@@ -237,7 +246,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setBeta(float newBeta) {
 		float oldBeta = beta;
 		beta = newBeta;
@@ -250,7 +258,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getGamma() {
 		return gamma;
 	}
@@ -260,7 +267,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setGamma(float newGamma) {
 		float oldGamma = gamma;
 		gamma = newGamma;

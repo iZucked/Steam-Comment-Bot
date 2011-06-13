@@ -1,14 +1,19 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.impl.NamedObjectImpl;
+
 import scenario.optimiser.Constraint;
 import scenario.optimiser.OptimiserPackage;
 
@@ -70,7 +75,6 @@ public class ConstraintImpl extends NamedObjectImpl implements Constraint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -80,7 +84,6 @@ public class ConstraintImpl extends NamedObjectImpl implements Constraint {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setEnabled(boolean newEnabled) {
 		boolean oldEnabled = enabled;
 		enabled = newEnabled;

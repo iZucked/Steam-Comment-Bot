@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet;
 
@@ -16,5 +18,4 @@ package scenario.fleet;
  * @generated
  */
 public interface CharterOut extends VesselEvent {
-
 } // CharterOut

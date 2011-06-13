@@ -1,19 +1,24 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.fleet.impl;
 
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
+
 import scenario.port.Port;
 
 /**
@@ -133,7 +138,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -160,7 +164,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -175,7 +178,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void unsetPort() {
 		Port oldPort = port;
 		boolean oldPortESet = portESet;
@@ -190,7 +192,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isSetPort() {
 		return portESet;
 	}
@@ -200,7 +201,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Date getStartTime() {
 		return startTime;
 	}
@@ -210,7 +210,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setStartTime(Date newStartTime) {
 		Date oldStartTime = startTime;
 		startTime = newStartTime;
@@ -225,7 +224,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void unsetStartTime() {
 		Date oldStartTime = startTime;
 		boolean oldStartTimeESet = startTimeESet;
@@ -240,7 +238,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isSetStartTime() {
 		return startTimeESet;
 	}
@@ -250,7 +247,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Date getEndTime() {
 		return endTime;
 	}
@@ -260,7 +256,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setEndTime(Date newEndTime) {
 		Date oldEndTime = endTime;
 		endTime = newEndTime;
@@ -275,7 +270,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void unsetEndTime() {
 		Date oldEndTime = endTime;
 		boolean oldEndTimeESet = endTimeESet;
@@ -290,7 +284,6 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isSetEndTime() {
 		return endTimeESet;
 	}

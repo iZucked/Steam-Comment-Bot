@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port.util;
 
@@ -11,15 +13,8 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+
 import scenario.port.*;
-import scenario.port.Canal;
-import scenario.port.CanalModel;
-import scenario.port.DistanceLine;
-import scenario.port.DistanceModel;
-import scenario.port.Port;
-import scenario.port.PortModel;
-import scenario.port.PortPackage;
-import scenario.port.VesselClassCost;
 
 /**
  * <!-- begin-user-doc -->

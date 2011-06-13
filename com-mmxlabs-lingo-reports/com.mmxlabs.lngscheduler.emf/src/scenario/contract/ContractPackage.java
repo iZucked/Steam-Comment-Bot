@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract;
 
@@ -18,6 +20,7 @@ import scenario.ScenarioPackage;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -297,7 +300,6 @@ public interface ContractPackage extends EPackage {
 	 */
 	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
 
-
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
 	 * <!-- begin-user-doc -->
@@ -380,7 +382,6 @@ public interface ContractPackage extends EPackage {
 	 */
 	int TOTAL_VOLUME_LIMIT_FEATURE_COUNT = 5;
 
-
 	/**
 	 * The number of operations of the '<em>Total Volume Limit</em>' class.
 	 * <!-- begin-user-doc -->
@@ -389,7 +390,6 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int TOTAL_VOLUME_LIMIT_OPERATION_COUNT = 0;
-
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.EntityImpl <em>Entity</em>}' class.
@@ -1136,6 +1136,7 @@ public interface ContractPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>

@@ -1,16 +1,21 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.ContractPackage;
 import scenario.contract.SalesContract;
+
 import scenario.market.Index;
 
 /**
@@ -37,6 +42,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * @ordered
 	 */
 	protected Index index;
+
 	/**
 	 * The default value of the '{@link #getMarkup() <em>Markup</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -46,6 +52,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * @ordered
 	 */
 	protected static final float MARKUP_EDEFAULT = 1.05F;
+
 	/**
 	 * The cached value of the '{@link #getMarkup() <em>Markup</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -118,7 +125,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getMarkup() {
 		return markup;
 	}
@@ -128,7 +134,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setMarkup(float newMarkup) {
 		float oldMarkup = markup;
 		markup = newMarkup;

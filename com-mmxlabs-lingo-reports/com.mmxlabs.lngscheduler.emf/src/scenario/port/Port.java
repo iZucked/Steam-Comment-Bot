@@ -1,11 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port;
 
 import scenario.NamedObject;
+
 import scenario.contract.Contract;
+
 import scenario.market.Index;
 
 /**

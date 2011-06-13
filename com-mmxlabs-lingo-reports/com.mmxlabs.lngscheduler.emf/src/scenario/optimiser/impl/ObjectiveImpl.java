@@ -1,15 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.impl.NamedObjectImpl;
+
 import scenario.optimiser.DiscountCurve;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimiserPackage;
@@ -92,7 +97,6 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public double getWeight() {
 		return weight;
 	}
@@ -102,7 +106,6 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setWeight(double newWeight) {
 		double oldWeight = weight;
 		weight = newWeight;

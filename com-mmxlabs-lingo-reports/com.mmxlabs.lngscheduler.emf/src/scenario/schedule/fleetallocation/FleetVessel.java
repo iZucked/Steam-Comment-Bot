@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.fleetallocation;
 
@@ -56,7 +58,6 @@ public interface FleetVessel extends AllocatedVessel {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getVessel().getName();'"
 	 * @generated
 	 */
-	@Override
 	String getName();
 
 } // FleetVessel

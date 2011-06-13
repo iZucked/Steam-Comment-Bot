@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.port;
 
@@ -36,10 +38,6 @@ public interface VesselClassCost extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Vessel Class</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * The vessel class to which these costs apply, for this canal
@@ -65,10 +63,6 @@ public interface VesselClassCost extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Laden Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Laden Cost</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * The toll in dollars paid for letting a laden vessel of this class pass through this canal
@@ -94,10 +88,6 @@ public interface VesselClassCost extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Unladen Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Unladen Cost</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * The toll in dollars for an unladen vessel of this class to pass through this canal.

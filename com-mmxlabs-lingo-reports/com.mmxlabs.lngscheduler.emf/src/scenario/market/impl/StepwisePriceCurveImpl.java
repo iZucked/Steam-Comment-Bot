@@ -1,20 +1,27 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.market.impl;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -91,7 +98,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EList<StepwisePrice> getPrices() {
 		if (prices == null) {
 			prices = new EObjectContainmentEList<StepwisePrice>(StepwisePrice.class, this, MarketPackage.STEPWISE_PRICE_CURVE__PRICES);
@@ -104,7 +110,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getDefaultValue() {
 		return defaultValue;
 	}
@@ -114,7 +119,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setDefaultValue(float newDefaultValue) {
 		float oldDefaultValue = defaultValue;
 		defaultValue = newDefaultValue;
@@ -127,7 +131,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getValueAtDate(Date date) {
 		final EList<StepwisePrice> prices = getPrices();
 		

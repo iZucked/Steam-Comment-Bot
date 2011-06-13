@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario;
-
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -18,6 +19,7 @@ import org.eclipse.emf.ecore.EReference;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -177,7 +179,6 @@ public interface ScenarioPackage extends EPackage {
 	 */
 	int SCENARIO_FEATURE_COUNT = 11;
 
-
 	/**
 	 * The operation id for the '<em>Get Or Create Fleet Model</em>' operation.
 	 * <!-- begin-user-doc -->
@@ -213,7 +214,6 @@ public interface ScenarioPackage extends EPackage {
 	 * @ordered
 	 */
 	int SCENARIO_OPERATION_COUNT = 3;
-
 
 	/**
 	 * The meta object id for the '{@link scenario.impl.ScenarioObjectImpl <em>Object</em>}' class.
@@ -251,7 +251,6 @@ public interface ScenarioPackage extends EPackage {
 	 * @ordered
 	 */
 	int SCENARIO_OBJECT_OPERATION_COUNT = 1;
-
 
 	/**
 	 * The meta object id for the '{@link scenario.impl.NamedObjectImpl <em>Named Object</em>}' class.
@@ -517,6 +516,7 @@ public interface ScenarioPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>

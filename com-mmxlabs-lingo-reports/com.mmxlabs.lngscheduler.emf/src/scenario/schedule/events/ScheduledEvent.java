@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events;
 
@@ -112,10 +114,4 @@ public interface ScheduledEvent extends ScenarioObject {
 	 */
 	Object getLocalEndTime();
 
-	/**
-	 * The duration of this event in hours
-	 * @generated NO
-	 * @return
-	 */
-	int getDuration();
 } // ScheduledEvent

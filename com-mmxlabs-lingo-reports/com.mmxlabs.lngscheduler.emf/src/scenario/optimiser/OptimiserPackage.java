@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser;
 
@@ -18,6 +20,7 @@ import scenario.ScenarioPackage;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -306,7 +309,6 @@ public interface OptimiserPackage extends EPackage {
 	 */
 	int OBJECTIVE_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
-
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
 	 * <!-- begin-user-doc -->
@@ -324,7 +326,6 @@ public interface OptimiserPackage extends EPackage {
 	 * @ordered
 	 */
 	int OBJECTIVE_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
-
 
 	/**
 	 * The meta object id for the '{@link scenario.optimiser.impl.DiscountCurveImpl <em>Discount Curve</em>}' class.
@@ -677,6 +678,7 @@ public interface OptimiserPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>

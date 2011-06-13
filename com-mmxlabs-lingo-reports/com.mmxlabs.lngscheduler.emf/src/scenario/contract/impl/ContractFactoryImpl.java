@@ -1,27 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.contract.*;
-import scenario.contract.Contract;
-import scenario.contract.ContractFactory;
-import scenario.contract.ContractModel;
-import scenario.contract.ContractPackage;
-import scenario.contract.Entity;
-import scenario.contract.FixedPricePurchaseContract;
-import scenario.contract.IndexPricePurchaseContract;
-import scenario.contract.NetbackPurchaseContract;
-import scenario.contract.ProfitSharingPurchaseContract;
-import scenario.contract.SalesContract;
-import scenario.contract.TotalVolumeLimit;
 
 /**
  * <!-- begin-user-doc -->
@@ -85,7 +78,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ContractModel createContractModel() {
 		ContractModelImpl contractModel = new ContractModelImpl();
 		return contractModel;
@@ -96,7 +88,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public SalesContract createSalesContract() {
 		SalesContractImpl salesContract = new SalesContractImpl();
 		return salesContract;
@@ -107,7 +98,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public TotalVolumeLimit createTotalVolumeLimit() {
 		TotalVolumeLimitImpl totalVolumeLimit = new TotalVolumeLimitImpl();
 		return totalVolumeLimit;
@@ -118,7 +108,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Entity createEntity() {
 		EntityImpl entity = new EntityImpl();
 		return entity;
@@ -129,7 +118,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public FixedPricePurchaseContract createFixedPricePurchaseContract() {
 		FixedPricePurchaseContractImpl fixedPricePurchaseContract = new FixedPricePurchaseContractImpl();
 		return fixedPricePurchaseContract;
@@ -150,7 +138,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public NetbackPurchaseContract createNetbackPurchaseContract() {
 		NetbackPurchaseContractImpl netbackPurchaseContract = new NetbackPurchaseContractImpl();
 		return netbackPurchaseContract;
@@ -161,7 +148,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ProfitSharingPurchaseContract createProfitSharingPurchaseContract() {
 		ProfitSharingPurchaseContractImpl profitSharingPurchaseContract = new ProfitSharingPurchaseContractImpl();
 		return profitSharingPurchaseContract;
@@ -172,7 +158,6 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ContractPackage getContractPackage() {
 		return (ContractPackage)getEPackage();
 	}

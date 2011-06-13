@@ -1,11 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.ContractPackage;
@@ -90,7 +94,6 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public int getLowerBound() {
 		return lowerBound;
 	}
@@ -100,7 +103,6 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setLowerBound(int newLowerBound) {
 		int oldLowerBound = lowerBound;
 		lowerBound = newLowerBound;
@@ -113,7 +115,6 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public float getBuyersMargin() {
 		return buyersMargin;
 	}
@@ -123,7 +124,6 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setBuyersMargin(float newBuyersMargin) {
 		float oldBuyersMargin = buyersMargin;
 		buyersMargin = newBuyersMargin;

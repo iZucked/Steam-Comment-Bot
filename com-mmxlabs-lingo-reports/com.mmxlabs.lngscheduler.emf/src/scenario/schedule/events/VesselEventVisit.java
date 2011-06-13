@@ -51,4 +51,13 @@ public interface VesselEventVisit extends PortVisit {
 	 */
 	void setVesselEvent(VesselEvent value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getVesselEvent().getId();'"
+	 * @generated
+	 */
+	String getId();
+
 } // VesselEventVisit

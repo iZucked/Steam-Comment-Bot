@@ -1,10 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.schedule.events;
 
 import scenario.cargo.Slot;
+
 import scenario.schedule.CargoAllocation;
 
 /**
@@ -76,5 +79,23 @@ public interface SlotVisit extends PortVisit {
 	 * @generated
 	 */
 	void setCargoAllocation(CargoAllocation value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getSlot().getId();'"
+	 * @generated
+	 */
+	String getId();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getSlot() instanceof scenario.cargo.LoadSlot) return \"Load\";\r\nelse return \"Discharge\";'"
+	 * @generated
+	 */
+	String getDisplayTypeName();
 
 } // SlotVisit

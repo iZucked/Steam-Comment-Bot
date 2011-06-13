@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.optimiser.lso;
 
@@ -18,6 +20,7 @@ import scenario.optimiser.OptimiserPackage;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -223,7 +226,6 @@ public interface LsoPackage extends EPackage {
 	 */
 	int THRESHOLDER_SETTINGS_FEATURE_COUNT = 3;
 
-
 	/**
 	 * The number of operations of the '<em>Thresholder Settings</em>' class.
 	 * <!-- begin-user-doc -->
@@ -343,7 +345,6 @@ public interface LsoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONSTRAINED_MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 0;
-
 
 	/**
 	 * The number of operations of the '<em>Constrained Move Generator Settings</em>' class.
@@ -530,6 +531,7 @@ public interface LsoPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>

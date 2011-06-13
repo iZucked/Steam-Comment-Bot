@@ -1,22 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package scenario.market.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import scenario.market.*;
-import scenario.market.Index;
-import scenario.market.MarketFactory;
-import scenario.market.MarketModel;
-import scenario.market.MarketPackage;
-import scenario.market.StepwisePrice;
-import scenario.market.StepwisePriceCurve;
 
 /**
  * <!-- begin-user-doc -->
@@ -86,7 +84,6 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public MarketModel createMarketModel() {
 		MarketModelImpl marketModel = new MarketModelImpl();
 		return marketModel;
@@ -97,7 +94,6 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public StepwisePriceCurve createStepwisePriceCurve() {
 		StepwisePriceCurveImpl stepwisePriceCurve = new StepwisePriceCurveImpl();
 		return stepwisePriceCurve;
@@ -108,7 +104,6 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public StepwisePrice createStepwisePrice() {
 		StepwisePriceImpl stepwisePrice = new StepwisePriceImpl();
 		return stepwisePrice;
@@ -119,7 +114,6 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public MarketPackage getMarketPackage() {
 		return (MarketPackage)getEPackage();
 	}
