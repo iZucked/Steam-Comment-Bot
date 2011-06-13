@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -95,10 +97,27 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 								newJob = new LNGSchedulerJob(scenario);
 								newJob.prepare();
 
-								try {
-									scenario.eResource().save(
-											Collections.emptyMap());
+								final Scenario newS = newJob.getScenario();
+							
+								// Process scenario - prune out intermediate schedules .... 
+								int numSchedules = newS.getScheduleModel().getSchedules().size();
+								while (numSchedules > 1) {
+									newS.getScheduleModel().getSchedules().remove(0);
+									--numSchedules;
+								}
+								// .. and set remaining schedule to the new initial state
+								if (numSchedules == 1) {
+									newS.getOptimisation().getCurrentSettings().setInitialSchedule(newS.getScheduleModel().getSchedules().get(0));
+								} else {
+									// TODO: Necessary?
+//									newS.getOptimisation().getCurrentSettings().setInitialSchedule(null);
+								}
 
+								// Create new resource using original scenario URI
+								final XMIResourceImpl r = new XMIResourceImpl(scenario.eResource().getURI());
+								r.getContents().add(newJob.getScenario());
+								try {
+									r.save(Collections.emptyMap());
 									monitor.worked(4);
 								} catch (final IOException e) {
 									e.printStackTrace();
