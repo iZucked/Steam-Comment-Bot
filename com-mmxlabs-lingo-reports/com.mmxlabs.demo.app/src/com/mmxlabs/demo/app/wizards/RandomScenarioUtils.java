@@ -784,10 +784,12 @@ public class RandomScenarioUtils {
 				RandomHelper.chooseElementFrom(random, scenario.getFleetModel()
 						.getVesselClasses()));
 
-		co.setPort(RandomHelper
+		co.setStartPort(RandomHelper
 				.chooseElementFrom(random,
 						scenario.getCargoModel().getCargoes()).getLoadSlot()
 				.getPort());
+		
+		co.setEndPort(co.getStartPort());
 
 		scenario.getFleetModel().getVesselEvents().add(co);
 	}

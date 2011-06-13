@@ -411,13 +411,6 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IVesselEventPortSlot createVesselEvent(final String s, ITimeWindow arrivalTimeWindow,
-			IPort port, int durationHours, final int a, final int b) {
-		return delegate
-				.createVesselEvent(s, arrivalTimeWindow, port, durationHours,a,b);
-	}
-
-	@Override
 	public void addVesselEventVessel(IVesselEventPortSlot charterOut, IVessel vessel) {
 		delegate.addVesselEventVessel(charterOut, vessel);
 	}
@@ -483,5 +476,26 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ILoadPriceCalculator createNetbackContract(int buyersMargin) {
 		return delegate.createNetbackContract(buyersMargin);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder#createCharterOutEvent(java.lang.String, com.mmxlabs.optimiser.common.components.ITimeWindow, com.mmxlabs.scheduler.optimiser.components.IPort, int, int, int)
+	 */
+	@Override
+	public IVesselEventPortSlot createCharterOutEvent(String id,
+			ITimeWindow arrivalTimeWindow, IPort port, int durationHours,
+			int minHeelOut, int maxHeelOut) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder#createDrydockEvent(java.lang.String, com.mmxlabs.optimiser.common.components.ITimeWindow, com.mmxlabs.scheduler.optimiser.components.IPort, int)
+	 */
+	@Override
+	public IVesselEventPortSlot createDrydockEvent(String id,
+			ITimeWindow arrivalTimeWindow, IPort port, int durationHours) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
