@@ -747,13 +747,31 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__END_PORT = VESSEL_EVENT__END_PORT;
 
 	/**
+	 * The feature id for the '<em><b>Min Heel Out</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__MIN_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Max Heel Out</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__MAX_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
+	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Charter Out</em>' class.
@@ -1535,6 +1553,28 @@ public interface FleetPackage extends EPackage {
 	EClass getCharterOut();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getMinHeelOut <em>Min Heel Out</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Heel Out</em>'.
+	 * @see scenario.fleet.CharterOut#getMinHeelOut()
+	 * @see #getCharterOut()
+	 * @generated
+	 */
+	EAttribute getCharterOut_MinHeelOut();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getMaxHeelOut <em>Max Heel Out</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Heel Out</em>'.
+	 * @see scenario.fleet.CharterOut#getMaxHeelOut()
+	 * @see #getCharterOut()
+	 * @generated
+	 */
+	EAttribute getCharterOut_MaxHeelOut();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.fleet.Drydock <em>Drydock</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2059,6 +2099,22 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CHARTER_OUT = eINSTANCE.getCharterOut();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Heel Out</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT__MIN_HEEL_OUT = eINSTANCE.getCharterOut_MinHeelOut();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Heel Out</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT__MAX_HEEL_OUT = eINSTANCE.getCharterOut_MaxHeelOut();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.DrydockImpl <em>Drydock</em>}' class.

@@ -379,24 +379,22 @@ public class LNGScenarioTransformer {
 			final IVesselEventPortSlot builderSlot;
 			if (event instanceof CharterOut) {
 				final CharterOut charterOut = (CharterOut) event;
-				//TODO add heel requirements for charterout
 				builderSlot = builder.createVesselEvent(event.getId(), window,
 						port, durationHours, 0, 0);
 			} else {
 				builderSlot = builder.createVesselEvent(event.getId(), window,
 						port, durationHours, 0, 0);
 			}
-			
+
 			for (final Vessel v : event.getVessels()) {
-				builder.addVesselEventVessel(builderSlot,
-						vessels.lookup(v));
+				builder.addVesselEventVessel(builderSlot, vessels.lookup(v));
 			}
 
 			for (final VesselClass vc : event.getVesselClasses()) {
 				builder.addVesselEventVesselClass(builderSlot,
 						classes.lookup(vc));
 			}
-			
+
 			entities.addModelObject(event, builderSlot);
 		}
 	}
@@ -682,8 +680,16 @@ public class LNGScenarioTransformer {
 					portAssociation, eV.getStartRequirement());
 			IStartEndRequirement endRequirement = createRequirement(builder,
 					portAssociation, eV.getEndRequirement());
+
+			final int dailyCharterPrice = eV.isSetDailyCharterOutPrice() ? eV
+					.getDailyCharterOutPrice() : (eV.getClass_()
+					.isSetDailyCharterOutPrice() ? eV.getClass_()
+					.getDailyCharterOutPrice() : eV.getClass_()
+					.getDailyCharterPrice());
+
 			final IVessel vessel = builder.createVessel(eV.getName(),
 					vesselClassAssociation.lookup(eV.getClass_()),
+					Calculator.scale(dailyCharterPrice)/24,
 					eV.isTimeChartered() ? VesselInstanceType.TIME_CHARTER
 							: VesselInstanceType.FLEET, startRequirement,
 					endRequirement);

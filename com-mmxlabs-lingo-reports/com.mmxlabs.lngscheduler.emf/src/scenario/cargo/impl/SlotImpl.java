@@ -97,7 +97,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MAX_QUANTITY_EDEFAULT = 1000000;
+	protected static final int MAX_QUANTITY_EDEFAULT = 2147483647;
 
 	/**
 	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.

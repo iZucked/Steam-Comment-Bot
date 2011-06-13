@@ -93,7 +93,7 @@ public interface Slot extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
-	 * The default value is <code>"1000000"</code>.
+	 * The default value is <code>"2147483647"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Max Quantity</em>' attribute isn't clear,
@@ -103,7 +103,7 @@ public interface Slot extends EObject {
 	 * @return the value of the '<em>Max Quantity</em>' attribute.
 	 * @see #setMaxQuantity(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_MaxQuantity()
-	 * @model default="1000000"
+	 * @model default="2147483647"
 	 * @generated
 	 */
 	int getMaxQuantity();
