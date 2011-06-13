@@ -207,7 +207,7 @@ public class SchedulerBuilderTest {
 		Assert.assertEquals(minHeel, vesselClass.getMinHeel());
 		Assert.assertEquals(7000, vesselClass.getBaseFuelUnitPrice());
 		Assert.assertEquals(1000, vesselClass.getBaseFuelConversionFactor());
-		Assert.assertEquals(1234, vesselClass.getHourlyCharterPrice());
+		Assert.assertEquals(1234, vesselClass.getHourlyCharterInPrice());
 
 		fail("Not yet implemented - Internal state checks");
 	}

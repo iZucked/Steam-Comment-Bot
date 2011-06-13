@@ -61,7 +61,7 @@ public class TestNetbackContract {
 				will(returnValue(1000)); // 1000 nautical miles
 				atLeast(1).of(vesselClass).getMaxSpeed();
 				will(returnValue(MAX_SPEED)); // 10 knots => 100 hours
-				atLeast(1).of(vesselClass).getHourlyCharterPrice();
+				atLeast(1).of(vesselClass).getHourlyCharterInPrice();
 				will(returnValue(1000));
 				
 				atLeast(1).of(slotA).getPort();

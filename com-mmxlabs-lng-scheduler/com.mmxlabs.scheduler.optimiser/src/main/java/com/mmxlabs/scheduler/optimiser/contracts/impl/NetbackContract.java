@@ -53,7 +53,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 		// vessel cost (don't use calculator.multiply here; hours are not
 		// scaled, but price is)
 		totalRealTransportCosts += (dischargeTime - loadTime)
-				* vesselClass.getHourlyCharterPrice();
+				* vesselClass.getHourlyCharterInPrice();
 
 		final int notionalReturnSpeed = vesselClass.getMaxSpeed(); // fair?
 
@@ -84,7 +84,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 						* notionalTransportTime, notionalFuelCost);
 
 		final long notionalTransportCosts = (vesselClass
-				.getHourlyCharterPrice() * notionalTransportTime)
+				.getHourlyCharterInPrice() * notionalTransportTime)
 				+ totalNotionalFuelCost;
 
 		final long transportCostPerMMBTU = Calculator.divide(

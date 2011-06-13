@@ -15,8 +15,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 /**
- * A fitness component which looks for possible charter-out opportunities (long
- * idle periods), and allocates potential revenue to them.
+ * A fitness component which computes the revenue from charter-outs, and also
+ * can generate potential charter-out opportunities if it's configured to do so.
  * 
  * TODO Consider details of the charter market; the spot charters might also
  * benefit from this.
@@ -27,6 +27,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 public class CharterOutFitnessComponent<T> extends
 		AbstractPerRouteSchedulerFitnessComponent<T> implements
 		IFitnessComponent<T> {
+	/**
+	 * If true, look for large blocks of idle time where charter-outs could go, and
+	 * assign some value to them. Otherwise do nothing.
+	 */
+	private boolean generateOpportunities = false;
 
 	/**
 	 * Vessel provider, for finding out whether a resource corresponds to a
@@ -75,7 +80,7 @@ public class CharterOutFitnessComponent<T> extends
 		idleTimeAccumulator = 0;
 		if (vessel.getVesselInstanceType().equals(VesselInstanceType.FLEET)) {
 			// fleet vessels have potential charter-out value;
-			charterPrice = vessel.getVesselClass().getHourlyCharterPrice();
+			charterPrice = vessel.getVesselClass().getHourlyCharterInPrice();
 			return true;
 		} else {
 			return false;
@@ -101,12 +106,12 @@ public class CharterOutFitnessComponent<T> extends
 	protected long endSequenceAndGetCost() {
 		// TODO charter out revenue should be less than charter in cost, due to
 		// arbitrage
-		
-		//result is negated because this is (potential) revenue.
+
+		// result is negated because this is (potential) revenue.
 		return -Calculator.multiply(
 				Calculator.multiply(idleTimeAccumulator, charterPrice),
 				bidAskSpread);
 	}
-	
-	//TODO annotation code for UI
+
+	// TODO annotation code for UI
 }

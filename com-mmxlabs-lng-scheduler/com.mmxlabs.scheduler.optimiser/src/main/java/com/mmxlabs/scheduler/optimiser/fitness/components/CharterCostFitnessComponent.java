@@ -56,7 +56,7 @@ public class CharterCostFitnessComponent<T> extends
 				VesselInstanceType.SPOT_CHARTER)
 				|| vessel.getVesselInstanceType().equals(
 						VesselInstanceType.TIME_CHARTER)) {
-			charterPrice = vessel.getVesselClass().getHourlyCharterPrice();
+			charterPrice = vessel.getVesselClass().getHourlyCharterInPrice();
 			firstLoadTime = -1;
 			lastTime = -1;
 

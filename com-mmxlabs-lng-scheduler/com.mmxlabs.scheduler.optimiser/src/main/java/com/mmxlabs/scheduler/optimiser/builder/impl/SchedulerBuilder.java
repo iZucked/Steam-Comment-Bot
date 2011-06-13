@@ -908,7 +908,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPricePerMT);
 		vesselClass.setBaseFuelConversionFactor(baseFuelEquivalenceInM3TOMT);
 
-		vesselClass.setHourlyCharterPrice(hourlyCharterPrice);
+		vesselClass.setHourlyCharterInPrice(hourlyCharterPrice);
 
 		vesselClasses.add(vesselClass);
 
