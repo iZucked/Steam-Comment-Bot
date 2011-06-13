@@ -238,7 +238,7 @@ public class LNGScenarioTransformer {
 				vesselAssociations.getSecond(), entities,
 				purchaseContractAssociation);
 
-		buildCharterOuts(builder, portAssociation,
+		buildVesselEvents(builder, portAssociation,
 				vesselAssociations.getFirst(), vesselAssociations.getSecond(),
 				entities);
 
@@ -365,7 +365,7 @@ public class LNGScenarioTransformer {
 		latestTime = a.getSecond();
 	}
 
-	private void buildCharterOuts(SchedulerBuilder builder,
+	private void buildVesselEvents(SchedulerBuilder builder,
 			Association<Port, IPort> portAssociation,
 			Association<VesselClass, IVesselClass> classes,
 			Association<Vessel, IVessel> vessels, ModelEntityMap entities) {
@@ -379,11 +379,12 @@ public class LNGScenarioTransformer {
 			final IVesselEventPortSlot builderSlot;
 			if (event instanceof CharterOut) {
 				final CharterOut charterOut = (CharterOut) event;
-				builderSlot = builder.createVesselEvent(event.getId(), window,
-						port, durationHours, 0, 0);
+				builderSlot = builder.createCharterOutEvent(event.getId(),
+						window, port, durationHours,
+						charterOut.getMinHeelOut(), charterOut.getMaxHeelOut());
 			} else {
-				builderSlot = builder.createVesselEvent(event.getId(), window,
-						port, durationHours, 0, 0);
+				builderSlot = builder.createDrydockEvent(event.getId(), window,
+						port, durationHours);
 			}
 
 			for (final Vessel v : event.getVessels()) {
@@ -688,8 +689,8 @@ public class LNGScenarioTransformer {
 					.getDailyCharterPrice());
 
 			final IVessel vessel = builder.createVessel(eV.getName(),
-					vesselClassAssociation.lookup(eV.getClass_()),
-					Calculator.scale(dailyCharterPrice)/24,
+					vesselClassAssociation.lookup(eV.getClass_()), Calculator
+							.scale(dailyCharterPrice) / 24,
 					eV.isTimeChartered() ? VesselInstanceType.TIME_CHARTER
 							: VesselInstanceType.FLEET, startRequirement,
 					endRequirement);
