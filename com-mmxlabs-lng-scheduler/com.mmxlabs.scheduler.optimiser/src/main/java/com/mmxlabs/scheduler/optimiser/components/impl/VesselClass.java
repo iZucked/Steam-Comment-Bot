@@ -182,7 +182,7 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	@Override
-	public int getHourlyCharterPrice() {
+	public int getHourlyCharterInPrice() {
 		return hourlyCharterPrice;
 	}
 

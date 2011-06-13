@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
-import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -29,6 +28,8 @@ public final class Vessel extends IndexedObject implements IVessel {
 
 	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
 
+	private int hourlyCharterOutPrice;
+	
 	@Override
 	public String getName() {
 		return name;
@@ -61,4 +62,12 @@ public final class Vessel extends IndexedObject implements IVessel {
 		return getName();
 	}
 
+	@Override
+	public int getHourlyCharterOutPrice() {
+		return hourlyCharterOutPrice;
+	}
+
+	public void setHourlyCharterOutPrice(int hourlyCharterOutPrice) {
+		this.hourlyCharterOutPrice = hourlyCharterOutPrice;
+	}
 }
