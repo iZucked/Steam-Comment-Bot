@@ -375,13 +375,14 @@ public class LNGScenarioTransformer {
 					convertTime(event.getStartDate()),
 					convertTime(event.getEndDate()));
 			final IPort port = portAssociation.lookup(event.getStartPort());
+			final IPort endPort = portAssociation.lookup(event.getEndPort());
 			final int durationHours = event.getDuration() * 24;
 			final IVesselEventPortSlot builderSlot;
 			if (event instanceof CharterOut) {
 				final CharterOut charterOut = (CharterOut) event;
 				builderSlot = builder.createCharterOutEvent(event.getId(),
-						window, port, durationHours,
-						Calculator.scale(charterOut.getMaxHeelOut()),
+						window, port,endPort, durationHours,
+						charterOut.getMaxHeelOut() * (long)Calculator.ScaleFactor,
 						Calculator.scaleToInt(charterOut.getHeelCVValue()));
 			} else {
 				builderSlot = builder.createDrydockEvent(event.getId(), window,
