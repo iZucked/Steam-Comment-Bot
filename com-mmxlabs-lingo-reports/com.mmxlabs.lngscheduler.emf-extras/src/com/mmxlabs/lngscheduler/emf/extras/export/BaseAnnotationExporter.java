@@ -13,6 +13,7 @@ import scenario.schedule.ScheduleFactory;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.EventsFactory;
 import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 
@@ -50,9 +51,9 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 		fuelTypes.put(FuelComponent.IdleBase, FuelType.BASE_FUEL);
 		fuelTypes.put(FuelComponent.NBO, FuelType.NBO);
 		fuelTypes.put(FuelComponent.IdleNBO, FuelType.NBO);
-		
+
 		fuelTypes.put(FuelComponent.FBO, FuelType.FBO);
-		
+
 		fuelUnits.put(FuelUnit.M3, scenario.schedule.events.FuelUnit.M3);
 		fuelUnits.put(FuelUnit.MT, scenario.schedule.events.FuelUnit.MT);
 		fuelUnits.put(FuelUnit.MMBTu, scenario.schedule.events.FuelUnit.MMB_TU);
@@ -89,7 +90,7 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	 * @param cost
 	 * @return
 	 */
-	protected FuelQuantity createFuelQuantity(final FuelComponent fc,
+	private FuelQuantity createFuelQuantity(final FuelComponent fc,
 			final long consumption, final long cost) {
 		final FuelQuantity fq = factory.createFuelQuantity();
 
@@ -102,5 +103,28 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 		fq.setFuelUnit(fuelUnits.get(fc.getDefaultFuelUnit()));
 
 		return fq;
+	}
+
+	protected void addFuelQuantity(final FuelMixture mixture,
+			final FuelComponent component, final long consumption,
+			final long cost) {
+		final FuelType fuelType = fuelTypes.get(component);
+
+		for (final FuelQuantity fq : mixture.getFuelUsage()) {
+			if (fq.getFuelType().equals(fuelType)) {
+				// add to existing
+				// TODO this will accumulate rounding error worse than batch
+				// adding with a final division.
+				fq.setQuantity(fq.getQuantity() + consumption
+						/ Calculator.ScaleFactor);
+				fq.setTotalPrice(fq.getTotalPrice() + cost
+						/ Calculator.ScaleFactor);
+				fq.setUnitPrice(consumption == 0 ? 0 : cost / consumption);
+				return;
+			}
+		}
+
+		mixture.getFuelUsage().add(
+				createFuelQuantity(component, consumption, cost));
 	}
 }

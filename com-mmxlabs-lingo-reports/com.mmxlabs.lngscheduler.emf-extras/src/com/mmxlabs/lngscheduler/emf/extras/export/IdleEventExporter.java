@@ -32,7 +32,7 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 	}
 
 	private Port lastePort = null;
-	
+
 	@Override
 	public ScheduledEvent export(final ISequenceElement element,
 			final Map<String, Object> annotations, final AllocatedVessel v) {
@@ -40,11 +40,11 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		final IIdleEvent<ISequenceElement> event = (IIdleEvent<ISequenceElement>) annotations
 				.get(SchedulerConstants.AI_idleInfo);
 
-		if (event == null) return null;
-		
-		
+		if (event == null)
+			return null;
+
 		Port ePort = entities.getModelObject(event.getPort(), Port.class);
-		
+
 		// TODO this is a bit of a kludge; the ANYWHERE port does not
 		// have an EMF representation, but we do want idle time for it
 		// so we assume if we hit a dubious port it's ANYWHERE and that
@@ -54,8 +54,8 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		} else {
 			lastePort = ePort;
 		}
-//		if (ePort == null)
-//			return null;
+		// if (ePort == null)
+		// return null;
 
 		final Idle idle = factory.createIdle();
 
@@ -72,12 +72,10 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 			break;
 		}
 
-		final EList<FuelQuantity> fuelUsage = idle.getFuelUsage();
-
 		for (final FuelComponent fc : FuelComponent.getIdleFuelComponents()) {
-			fuelUsage.add(createFuelQuantity(fc,
+			addFuelQuantity(idle, fc,
 					event.getFuelConsumption(fc, fc.getDefaultFuelUnit()),
-					event.getFuelCost(fc)));
+					event.getFuelCost(fc));
 		}
 
 		return idle;

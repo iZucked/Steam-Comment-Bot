@@ -74,14 +74,11 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 
 		journey.setSpeed(event.getSpeed() / (double) Calculator.ScaleFactor);
 
-		final EList<FuelQuantity> fuelUsage = journey.getFuelUsage();
 		for (final FuelComponent fc : FuelComponent.getTravelFuelComponents()) {
 			final long consumption = event.getFuelConsumption(fc,
 					fc.getDefaultFuelUnit());
 			final long cost = event.getFuelCost(fc);
-			final FuelQuantity fq = createFuelQuantity(fc, consumption, cost);
-
-			fuelUsage.add(fq);
+			addFuelQuantity(journey, fc, consumption, cost);
 		}
 
 		return journey;
