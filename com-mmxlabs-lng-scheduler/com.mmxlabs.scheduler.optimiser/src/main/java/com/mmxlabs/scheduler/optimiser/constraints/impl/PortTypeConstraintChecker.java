@@ -178,6 +178,7 @@ public final class PortTypeConstraintChecker<T> implements
 			case CharterOut:
 			case DryDock:
 			case Other:
+			case Virtual:
 				if (seenLoad) {
 					// Cannot insert between load and discharge
 					if (messages != null)
