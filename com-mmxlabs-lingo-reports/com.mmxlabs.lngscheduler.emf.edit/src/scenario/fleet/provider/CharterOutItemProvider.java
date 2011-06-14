@@ -61,33 +61,10 @@ public class CharterOutItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMinHeelOutPropertyDescriptor(object);
 			addMaxHeelOutPropertyDescriptor(object);
 			addHeelCVValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Min Heel Out feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMinHeelOutPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterOut_minHeelOut_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_minHeelOut_feature", "_UI_CharterOut_type"),
-				 FleetPackage.Literals.CHARTER_OUT__MIN_HEEL_OUT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -171,7 +148,6 @@ public class CharterOutItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CharterOut.class)) {
-			case FleetPackage.CHARTER_OUT__MIN_HEEL_OUT:
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

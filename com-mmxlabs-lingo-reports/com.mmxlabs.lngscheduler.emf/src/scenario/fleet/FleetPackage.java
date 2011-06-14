@@ -620,13 +620,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_EVENT__START_PORT = 4;
 
 	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__END_PORT = 5;
+
+	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__VESSELS = 5;
+	int VESSEL_EVENT__VESSELS = 6;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Classes</b></em>' reference list.
@@ -635,16 +644,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__VESSEL_CLASSES = 6;
-
-	/**
-	 * The feature id for the '<em><b>End Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT__END_PORT = 7;
+	int VESSEL_EVENT__VESSEL_CLASSES = 7;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
@@ -720,6 +720,15 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__START_PORT = VESSEL_EVENT__START_PORT;
 
 	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__END_PORT = VESSEL_EVENT__END_PORT;
+
+	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -738,31 +747,13 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__VESSEL_CLASSES = VESSEL_EVENT__VESSEL_CLASSES;
 
 	/**
-	 * The feature id for the '<em><b>End Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT__END_PORT = VESSEL_EVENT__END_PORT;
-
-	/**
-	 * The feature id for the '<em><b>Min Heel Out</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT__MIN_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Max Heel Out</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__MAX_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 1;
+	int CHARTER_OUT__MAX_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Heel CV Value</b></em>' attribute.
@@ -771,7 +762,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__HEEL_CV_VALUE = VESSEL_EVENT_FEATURE_COUNT + 2;
+	int CHARTER_OUT__HEEL_CV_VALUE = VESSEL_EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
@@ -780,7 +771,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 3;
+	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Charter Out</em>' class.
@@ -847,6 +838,15 @@ public interface FleetPackage extends EPackage {
 	int DRYDOCK__START_PORT = VESSEL_EVENT__START_PORT;
 
 	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__END_PORT = VESSEL_EVENT__END_PORT;
+
+	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -863,15 +863,6 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRYDOCK__VESSEL_CLASSES = VESSEL_EVENT__VESSEL_CLASSES;
-
-	/**
-	 * The feature id for the '<em><b>End Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DRYDOCK__END_PORT = VESSEL_EVENT__END_PORT;
 
 	/**
 	 * The number of structural features of the '<em>Drydock</em>' class.
@@ -1562,17 +1553,6 @@ public interface FleetPackage extends EPackage {
 	EClass getCharterOut();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getMinHeelOut <em>Min Heel Out</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Min Heel Out</em>'.
-	 * @see scenario.fleet.CharterOut#getMinHeelOut()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EAttribute getCharterOut_MinHeelOut();
-
-	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getMaxHeelOut <em>Max Heel Out</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2119,14 +2099,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CHARTER_OUT = eINSTANCE.getCharterOut();
-
-		/**
-		 * The meta object literal for the '<em><b>Min Heel Out</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT__MIN_HEEL_OUT = eINSTANCE.getCharterOut_MinHeelOut();
 
 		/**
 		 * The meta object literal for the '<em><b>Max Heel Out</b></em>' attribute feature.

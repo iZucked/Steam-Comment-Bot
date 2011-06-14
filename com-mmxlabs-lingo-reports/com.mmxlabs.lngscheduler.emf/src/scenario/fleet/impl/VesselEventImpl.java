@@ -40,9 +40,9 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getEndDate <em>End Date</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getStartPort <em>Start Port</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getEndPort <em>End Port</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getVessels <em>Vessels</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselEventImpl#getVesselClasses <em>Vessel Classes</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselEventImpl#getEndPort <em>End Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -140,6 +140,16 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	protected Port startPort;
 
 	/**
+	 * The cached value of the '{@link #getEndPort() <em>End Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port endPort;
+
+	/**
 	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -158,16 +168,6 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	 * @ordered
 	 */
 	protected EList<VesselClass> vesselClasses;
-
-	/**
-	 * The cached value of the '{@link #getEndPort() <em>End Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEndPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port endPort;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -391,13 +391,13 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 			case FleetPackage.VESSEL_EVENT__START_PORT:
 				if (resolve) return getStartPort();
 				return basicGetStartPort();
+			case FleetPackage.VESSEL_EVENT__END_PORT:
+				if (resolve) return getEndPort();
+				return basicGetEndPort();
 			case FleetPackage.VESSEL_EVENT__VESSELS:
 				return getVessels();
 			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
 				return getVesselClasses();
-			case FleetPackage.VESSEL_EVENT__END_PORT:
-				if (resolve) return getEndPort();
-				return basicGetEndPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -426,6 +426,9 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 			case FleetPackage.VESSEL_EVENT__START_PORT:
 				setStartPort((Port)newValue);
 				return;
+			case FleetPackage.VESSEL_EVENT__END_PORT:
+				setEndPort((Port)newValue);
+				return;
 			case FleetPackage.VESSEL_EVENT__VESSELS:
 				getVessels().clear();
 				getVessels().addAll((Collection<? extends Vessel>)newValue);
@@ -433,9 +436,6 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
 				getVesselClasses().clear();
 				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
-				return;
-			case FleetPackage.VESSEL_EVENT__END_PORT:
-				setEndPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -464,14 +464,14 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 			case FleetPackage.VESSEL_EVENT__START_PORT:
 				setStartPort((Port)null);
 				return;
+			case FleetPackage.VESSEL_EVENT__END_PORT:
+				setEndPort((Port)null);
+				return;
 			case FleetPackage.VESSEL_EVENT__VESSELS:
 				getVessels().clear();
 				return;
 			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
 				getVesselClasses().clear();
-				return;
-			case FleetPackage.VESSEL_EVENT__END_PORT:
-				setEndPort((Port)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -495,12 +495,12 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 				return duration != DURATION_EDEFAULT;
 			case FleetPackage.VESSEL_EVENT__START_PORT:
 				return startPort != null;
+			case FleetPackage.VESSEL_EVENT__END_PORT:
+				return endPort != null;
 			case FleetPackage.VESSEL_EVENT__VESSELS:
 				return vessels != null && !vessels.isEmpty();
 			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
 				return vesselClasses != null && !vesselClasses.isEmpty();
-			case FleetPackage.VESSEL_EVENT__END_PORT:
-				return endPort != null;
 		}
 		return super.eIsSet(featureID);
 	}

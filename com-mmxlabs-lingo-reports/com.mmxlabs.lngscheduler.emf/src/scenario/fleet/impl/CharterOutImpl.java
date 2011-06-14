@@ -20,7 +20,6 @@ import scenario.fleet.FleetPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.CharterOutImpl#getMinHeelOut <em>Min Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getMaxHeelOut <em>Max Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getHeelCVValue <em>Heel CV Value</em>}</li>
  * </ul>
@@ -29,24 +28,6 @@ import scenario.fleet.FleetPackage;
  * @generated
  */
 public class CharterOutImpl extends VesselEventImpl implements CharterOut {
-	/**
-	 * The default value of the '{@link #getMinHeelOut() <em>Min Heel Out</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMinHeelOut()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int MIN_HEEL_OUT_EDEFAULT = 0;
-	/**
-	 * The cached value of the '{@link #getMinHeelOut() <em>Min Heel Out</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMinHeelOut()
-	 * @generated
-	 * @ordered
-	 */
-	protected int minHeelOut = MIN_HEEL_OUT_EDEFAULT;
 	/**
 	 * The default value of the '{@link #getMaxHeelOut() <em>Max Heel Out</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -109,27 +90,6 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getMinHeelOut() {
-		return minHeelOut;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setMinHeelOut(int newMinHeelOut) {
-		int oldMinHeelOut = minHeelOut;
-		minHeelOut = newMinHeelOut;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__MIN_HEEL_OUT, oldMinHeelOut, minHeelOut));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getMaxHeelOut() {
 		return maxHeelOut;
 	}
@@ -175,8 +135,6 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__MIN_HEEL_OUT:
-				return getMinHeelOut();
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				return getMaxHeelOut();
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
@@ -193,9 +151,6 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__MIN_HEEL_OUT:
-				setMinHeelOut((Integer)newValue);
-				return;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				setMaxHeelOut((Integer)newValue);
 				return;
@@ -214,9 +169,6 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__MIN_HEEL_OUT:
-				setMinHeelOut(MIN_HEEL_OUT_EDEFAULT);
-				return;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				setMaxHeelOut(MAX_HEEL_OUT_EDEFAULT);
 				return;
@@ -235,8 +187,6 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__MIN_HEEL_OUT:
-				return minHeelOut != MIN_HEEL_OUT_EDEFAULT;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				return maxHeelOut != MAX_HEEL_OUT_EDEFAULT;
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
@@ -255,9 +205,7 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (minHeelOut: ");
-		result.append(minHeelOut);
-		result.append(", maxHeelOut: ");
+		result.append(" (maxHeelOut: ");
 		result.append(maxHeelOut);
 		result.append(", heelCVValue: ");
 		result.append(heelCVValue);

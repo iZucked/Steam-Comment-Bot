@@ -664,15 +664,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVesselEvent_Vessels() {
-		return (EReference)vesselEventEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselEvent_VesselClasses() {
 		return (EReference)vesselEventEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -681,8 +672,17 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getVesselEvent_EndPort() {
+	public EReference getVesselEvent_VesselClasses() {
 		return (EReference)vesselEventEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselEvent_EndPort() {
+		return (EReference)vesselEventEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -699,7 +699,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCharterOut_MinHeelOut() {
+	public EAttribute getCharterOut_MaxHeelOut() {
 		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -708,17 +708,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCharterOut_MaxHeelOut() {
-		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getCharterOut_HeelCVValue() {
-		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -881,12 +872,11 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__END_DATE);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__DURATION);
 		createEReference(vesselEventEClass, VESSEL_EVENT__START_PORT);
+		createEReference(vesselEventEClass, VESSEL_EVENT__END_PORT);
 		createEReference(vesselEventEClass, VESSEL_EVENT__VESSELS);
 		createEReference(vesselEventEClass, VESSEL_EVENT__VESSEL_CLASSES);
-		createEReference(vesselEventEClass, VESSEL_EVENT__END_PORT);
 
 		charterOutEClass = createEClass(CHARTER_OUT);
-		createEAttribute(charterOutEClass, CHARTER_OUT__MIN_HEEL_OUT);
 		createEAttribute(charterOutEClass, CHARTER_OUT__MAX_HEEL_OUT);
 		createEAttribute(charterOutEClass, CHARTER_OUT__HEEL_CV_VALUE);
 
@@ -996,12 +986,11 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVesselEvent_EndDate(), ecorePackage.getEDate(), "endDate", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselEvent_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselEvent_StartPort(), thePortPackage.getPort(), null, "startPort", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselEvent_EndPort(), thePortPackage.getPort(), null, "endPort", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselEvent_Vessels(), this.getVessel(), null, "vessels", null, 0, -1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselEvent_VesselClasses(), this.getVesselClass(), null, "vesselClasses", null, 0, -1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselEvent_EndPort(), thePortPackage.getPort(), null, "endPort", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterOutEClass, CharterOut.class, "CharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCharterOut_MinHeelOut(), ecorePackage.getEInt(), "minHeelOut", "0", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOut_MaxHeelOut(), ecorePackage.getEInt(), "maxHeelOut", "2147483647", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOut_HeelCVValue(), ecorePackage.getEFloat(), "heelCVValue", "22.8", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

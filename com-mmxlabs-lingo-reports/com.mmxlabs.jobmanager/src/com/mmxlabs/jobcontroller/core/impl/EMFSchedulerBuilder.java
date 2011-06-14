@@ -54,7 +54,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
  * @author Simon Goodall
  * 
  */
-public final class EMFSchedulerBuilder implements ISchedulerBuilder {
+public final class EMFSchedulerBuilder {}/*implements ISchedulerBuilder {
 
 	private final ISchedulerBuilder delegate;
 
@@ -433,9 +433,7 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		delegate.setDefaultRouteCost(route, defaultPrice);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder#addTotalVolumeConstraint(java.util.Set, boolean, boolean, long, com.mmxlabs.optimiser.common.components.ITimeWindow)
-	 */
+
 	@Override
 	public void addTotalVolumeConstraint(Set<IPort> ports, boolean loads,
 			boolean discharges, long maximumTotalVolume, ITimeWindow timeWindow) {
@@ -478,9 +476,6 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		return delegate.createNetbackContract(buyersMargin);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder#createCharterOutEvent(java.lang.String, com.mmxlabs.optimiser.common.components.ITimeWindow, com.mmxlabs.scheduler.optimiser.components.IPort, int, int, int)
-	 */
 	@Override
 	public IVesselEventPortSlot createCharterOutEvent(String id,
 			ITimeWindow arrivalTimeWindow, IPort port, int durationHours,
@@ -489,13 +484,11 @@ public final class EMFSchedulerBuilder implements ISchedulerBuilder {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder#createDrydockEvent(java.lang.String, com.mmxlabs.optimiser.common.components.ITimeWindow, com.mmxlabs.scheduler.optimiser.components.IPort, int)
-	 */
+
 	@Override
 	public IVesselEventPortSlot createDrydockEvent(String id,
 			ITimeWindow arrivalTimeWindow, IPort port, int durationHours) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-}
+} */

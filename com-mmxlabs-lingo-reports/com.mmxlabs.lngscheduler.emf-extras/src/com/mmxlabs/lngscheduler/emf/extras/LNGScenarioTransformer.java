@@ -381,7 +381,8 @@ public class LNGScenarioTransformer {
 				final CharterOut charterOut = (CharterOut) event;
 				builderSlot = builder.createCharterOutEvent(event.getId(),
 						window, port, durationHours,
-						charterOut.getMinHeelOut(), charterOut.getMaxHeelOut());
+						Calculator.scale(charterOut.getMaxHeelOut()),
+						Calculator.scaleToInt(charterOut.getHeelCVValue()));
 			} else {
 				builderSlot = builder.createDrydockEvent(event.getId(), window,
 						port, durationHours);

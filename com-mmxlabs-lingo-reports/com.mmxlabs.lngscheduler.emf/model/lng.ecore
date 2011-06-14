@@ -158,16 +158,14 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="startPort" lowerBound="1"
           eType="#//port/Port"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" lowerBound="1"
+          eType="#//port/Port"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
           eType="#//fleet/Vessel"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
           eType="#//fleet/VesselClass"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" lowerBound="1"
-          eType="#//port/Port"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CharterOut" eSuperTypes="#//fleet/VesselEvent">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minHeelOut" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxHeelOut" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="2147483647"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelCVValue" lowerBound="1"
