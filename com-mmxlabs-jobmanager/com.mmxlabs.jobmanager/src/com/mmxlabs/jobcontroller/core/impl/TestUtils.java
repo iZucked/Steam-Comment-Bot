@@ -162,349 +162,349 @@ public final class TestUtils {
 		return lso;
 	}
 
-	public static IOptimisationData<ISequenceElement> createProblem() {
-
-		InputStream stream = TestUtils.class
-				.getResourceAsStream("/data/distances.csv");
-
-		com.mmxlabs.common.csv.DistanceImporter di = new com.mmxlabs.common.csv.DistanceImporter();
-		// TODO: Import CSV File
-		try {
-			di.importDistances(stream);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		// TODO: Match port names
-
-		final EMFSchedulerBuilder builder = new EMFSchedulerBuilder(
-				new SchedulerBuilder());
-
-		// Build XY ports so distance is automatically populated`
-		// TODO: Add API to determine which distance provider to use
-
-		// Load ports
-		final IPort port1 = builder.createPort("Punta Europa Marine Terminal");
-		final IPort port2 = builder.createPort("Idku");
-		final IPort port3 = builder.createPort("Point Fortin");
-		final IPort port4 = builder.createPort("Bonny Island LNG Terminal");
-
-		final List<IPort> loadPorts = CollectionsUtil.makeArrayList(port1,
-				port2, port3, port4);
-
-		Map<IPort, Integer> loadSlotCount = new HashMap<IPort, Integer>();
-		loadSlotCount.put(port1, 59);
-		loadSlotCount.put(port2, 63);
-		loadSlotCount.put(port3, 74);
-		loadSlotCount.put(port4, 41);
-
-		// Discharge ports
-		final IPort port5 = builder.createPort("Quintero");
-		final IPort port6 = builder.createPort("Zeebrugge");
-		// final IPort port7 = builder.createPort("Guangdong LNG Terminal");
-		final IPort port8 = builder.createPort("Shanghai");
-		final IPort port9 = builder.createPort("Sakai LNG");
-		final IPort port10 = builder.createPort("Sines LNG Terminal");
-		final IPort port11 = builder.createPort("Singapore");
-		final IPort port12 = builder.createPort("Bilboa - LNG Terminal");
-		// final IPort port13 = builder.createPort("Taichung");
-		final IPort port14 = builder.createPort("Yung-an");
-		final IPort port15 = builder.createPort("Milford Haven");
-		final IPort port16 = builder.createPort("Elba Island - Savanah");
-		final IPort port17 = builder.createPort("Lake Charles - LNG Berths");
-
-		final List<IPort> dischargePorts = CollectionsUtil.makeArrayList(port5,
-				port6, /* port7, */port8, port9, port10, port11, port12, /*
-																		 * nport13,
-																		 */
-				port14, port15, port16, port17);
-
-		Map<IPort, Integer> dischargeSlotCount = new HashMap<IPort, Integer>();
-		dischargeSlotCount.put(port5, 43);
-		dischargeSlotCount.put(port6, 7);
-		// dischargeSlotCount.put(port7, 1);
-		dischargeSlotCount.put(port8, 7);
-		dischargeSlotCount.put(port9, 7);
-		dischargeSlotCount.put(port10, 5);
-		dischargeSlotCount.put(port11, 57);
-		dischargeSlotCount.put(port12, 7);
-		// dischargeSlotCount.put(port13, 1);
-		dischargeSlotCount.put(port14, 7);
-		dischargeSlotCount.put(port15, 41);
-		dischargeSlotCount.put(port16, 51);
-		dischargeSlotCount.put(port17, 5);
-
-		List<IPort> ports = new ArrayList<IPort>();
-		ports.addAll(loadPorts);
-		ports.addAll(dischargePorts);
-
-		for (IPort a : ports) {
-			for (IPort b : ports) {
-				Integer d = di.getDistance(a.getName(), b.getName());
-				builder.setPortToPortDistance(a, b,
-						IMultiMatrixProvider.Default_Key, d);
-				builder.setPortToPortDistance(b, a,
-						IMultiMatrixProvider.Default_Key, d);
-			}
-		}
-
-		buildFleet(builder, new Random(1), loadPorts, loadPorts);
-
-		// Convert the map of port slot counts into a list with the port
-		// occuring the relevant number of times.
-		// These will be converted into port slots
-		List<IPort> loadPortNumbers = new ArrayList<IPort>();
-		for (Map.Entry<IPort, Integer> entry : loadSlotCount.entrySet()) {
-			for (int i = 0; i < entry.getValue(); ++i) {
-				loadPortNumbers.add(entry.getKey());
-			}
-		}
-
-		List<IPort> dischargePortNumbers = new ArrayList<IPort>();
-		for (Map.Entry<IPort, Integer> entry : dischargeSlotCount.entrySet()) {
-			for (int i = 0; i < entry.getValue(); ++i) {
-				dischargePortNumbers.add(entry.getKey());
-			}
-		}
-		System.out.printf("Load count %d, Discharge count %d\n",
-				loadPortNumbers.size(), dischargePortNumbers.size());
-		assert (dischargePortNumbers.size() == loadPortNumbers.size());
-
-		buildCargoes(builder, loadPortNumbers, dischargePortNumbers,
-				new Random(1), di);
-
-		// TODO: Set port durations
-		// ....
-
-		// Generate the optimisation data
-		final IOptimisationData<ISequenceElement> data = builder
-				.getOptimisationData();
-
-		// TODO: Make this part of the builder API -- no direct access to
-		// sequence elements
-		final IElementDurationProviderEditor editor = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_elementDurationsProvider,
-						IElementDurationProviderEditor.class);
-
-		if (editor != null) {
-			for (final ISequenceElement e : data.getSequenceElements()) {
-				for (final IResource r : data.getResources()) {
-					editor.setElementDuration(e, r, 24);
-				}
-			}
-		}
-
-		String pathName = "/SavedScenarios/scenario-"
-				+ Calendar.getInstance().getTime().getTime() + ".scenario";
-		builder.saveEMFModel(URI.createPlatformResourceURI(pathName));
-
-		builder.dispose();
-
-		return data;
-	}
-
-	private static void buildCargoes(final ISchedulerBuilder builder,
-			final List<IPort> loadPorts, final List<IPort> dischargePorts,
-			final Random random, com.mmxlabs.common.csv.DistanceImporter di) {
-
-		// final IXYPortDistanceCalculator distanceProvider = new
-		// XYPortEuclideanDistanceCalculator();
-
-		// Randomly sort load and discharge ports
-		Collections.shuffle(loadPorts);
-		Collections.shuffle(dischargePorts);
-
-		// Generate the random load windows, then sort chronologically to help
-		// build the initial solution correctly.
-		List<Integer> startWindows = new ArrayList(loadPorts.size());
-		for (int i = 0; i < loadPorts.size(); ++i) {
-			final int start = random.nextInt(365);
-			startWindows.add(start);
-		}
-		Collections.sort(startWindows);
-
-		for (int i = 0; i < loadPorts.size(); ++i) {
-			final IPort port1 = (IPort) loadPorts.get(i);
-			final IPort port2 = (IPort) dischargePorts.get(i);
-
-			// Link duration between windows to distance and speed
-			final int distance = di.getDistance(port1.getName(),
-					port2.getName());
-			final int minTime = (int) Math.ceil(distance / 20.0 / 24.0);
-			final int maxTime = (int) Math.ceil(distance / 12.0 / 24.0);
-
-			final int start = startWindows.get(i);
-			final int end = 1 + start + minTime
-					+ random.nextInt(maxTime - minTime + 15);
-
-			final ITimeWindow tw1 = builder.createTimeWindow(start * 24,
-					(start + 1) * 24);
-			final ITimeWindow tw2 = builder.createTimeWindow(end * 24,
-					(end + 1) * 24);
-
-			int extra = random.nextInt(100) * 1000;
-			int salesPrice = 170000 + extra;
-
-			int purchasePrice = salesPrice - 20000;
-			
-			final ILoadSlot load = builder.createLoadSlot("load" + i, port1,
-					tw1, 0, 200000000, null, 22800, 24);
-			final IDischargeSlot discharge = builder.createDischargeSlot(
-					"discharge" + i, port2, tw2, 0, 200000000, null, 24);
-			builder.createCargo("cargo" + i, load, discharge);
-
-			// Only build 200 cargoes
-			if (i == 199) {
-				break;
-			}
-		}
-	}
-
-	public static void buildFleet(final ISchedulerBuilder builder,
-			Random random, List<IPort> startPorts, List<IPort> endPorts) {
-
-		// Consumption Curves
-		// DFDE is approx 40 MT less than steam at 20 knots. Steam is roughly
-		// 180MT at 20 knots
-		final TreeMap<Integer, Long> dfdeKeypoints = new TreeMap<Integer, Long>();
-		dfdeKeypoints.put(12000, 800000l / 24);
-		dfdeKeypoints.put(20000, 1400000l / 24);
-		final InterpolatingConsumptionRateCalculator dfdeConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
-				dfdeKeypoints);
-
-		final TreeMap<Integer, Long> steamKeypoints = new TreeMap<Integer, Long>();
-		steamKeypoints.put(12000, 120000l / 24);
-		steamKeypoints.put(20000, 180000l / 24);
-		final InterpolatingConsumptionRateCalculator steamConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
-				steamKeypoints);
-
-		// TODO: Update boil-off speeds
-
-		// TODO: Test boil-off speeds are even working
-
-		// WHY DO WE ONLY GET MIN/MAX SPEEDS IN OUTPUT?
-
-		final IVesselClass vesselClass4 = builder.createVesselClass(
-				"STEAM-126", 12000, 19500, 126000000l, 0, 200000, 500);
-		final IVesselClass vesselClass1 = builder.createVesselClass(
-				"STEAM-138", 12000, 20000, 138000000l, 0, 200000, 500);
-		final IVesselClass vesselClass2 = builder.createVesselClass(
-				"STEAM-145", 12000, 20000, 145000000l, 0, 200000, 500);
-		final IVesselClass vesselClass3 = builder.createVesselClass("DFDE-177",
-				12000, 20000, 177000000l, 0, 200000, 500);
-
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
-				138000 / 24, 118000 / 24, 10000 / 24,
-				steamConsumptionCalculator, 15000);
-		builder.setVesselClassStateParamaters(vesselClass1,
-				VesselState.Ballast, 138000 / 24, 118000 / 24, 1000 / 24,
-				steamConsumptionCalculator, 15000);
-
-		// Nile Eagle is 0.15% boil off laden
-		builder.setVesselClassStateParamaters(vesselClass2, VesselState.Laden,
-				145000 / 24, 125000 / 24, 10000 / 24,
-				steamConsumptionCalculator, 15000);
-		builder.setVesselClassStateParamaters(vesselClass2,
-				VesselState.Ballast, 145000 / 24, 125000 / 24, 1000 / 24,
-				steamConsumptionCalculator, 15000);
-
-		builder.setVesselClassStateParamaters(vesselClass3, VesselState.Laden,
-				177000 / 24, 157000 / 24, 10000 / 24,
-				dfdeConsumptionCalculator, 15000);
-		builder.setVesselClassStateParamaters(vesselClass3,
-				VesselState.Ballast, 177000 / 24, 157000 / 24, 1000 / 24,
-				dfdeConsumptionCalculator, 15000);
-
-		builder.setVesselClassStateParamaters(vesselClass4, VesselState.Laden,
-				126000 / 24, 106000 / 24, 10000 / 24,
-				steamConsumptionCalculator, 15000);
-		builder.setVesselClassStateParamaters(vesselClass4,
-				VesselState.Ballast, 126000 / 24, 106000 / 24, 1000 / 24,
-				steamConsumptionCalculator, 15000);
-
-		// Owned Vessels
-		
-		
-		builder.createVessel("Methane Rita Andrea", vesselClass1,
-				vesselClass1.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Methane Jane Elizabeth", vesselClass2,
-				vesselClass2.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Methane Lydon Volney", vesselClass2,
-				vesselClass2.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Methane Shirley Elizabeth", vesselClass2,
-				vesselClass2.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Methane Heather Sally", vesselClass2,
-				vesselClass2.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Methane Alison Victoria", vesselClass2,
-				vesselClass2.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Methane Nile Eagle", vesselClass2,
-				vesselClass2.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-
-		builder.createVessel("Methane Julia Louise", vesselClass3,
-				vesselClass3.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		// Vessel due to come online July 10
-		builder.createVessel("Methane Becki Anne", vesselClass3,
-				vesselClass3.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		// Vessel due to come online Sept 10
-		builder.createVessel("Methane Mickie Harper", vesselClass3,
-				vesselClass3.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		// Vessel due to come online Oct 10
-		builder.createVessel("Methane Unknown", vesselClass3,
-				vesselClass3.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-
-		// Charter Vessels
-		builder.createVessel("Hilli", vesselClass4,
-				vesselClass4.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Gimi", vesselClass4,
-				vesselClass4.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Khannur", vesselClass4,
-				vesselClass4.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Golar Freeze", vesselClass4,
-				vesselClass4.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-		builder.createVessel("Methane Princes", vesselClass1,
-				vesselClass4.getHourlyCharterInPrice(),
-				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
-				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
-
-		// Other vessels
-
-		builder.createSpotVessels("spot-" + vesselClass1.getName(),vesselClass1, 3);
-		builder.createSpotVessels("spot-" + vesselClass2.getName(),vesselClass2, 3);
-		builder.createSpotVessels("spot-" + vesselClass3.getName(),vesselClass3, 3);
-		builder.createSpotVessels("spot-" + vesselClass4.getName(),vesselClass4, 3);
-	}
+//	public static IOptimisationData<ISequenceElement> createProblem() {
+//
+//		InputStream stream = TestUtils.class
+//				.getResourceAsStream("/data/distances.csv");
+//
+//		com.mmxlabs.common.csv.DistanceImporter di = new com.mmxlabs.common.csv.DistanceImporter();
+//		// TODO: Import CSV File
+//		try {
+//			di.importDistances(stream);
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//
+//		// TODO: Match port names
+//
+//		final EMFSchedulerBuilder builder = new EMFSchedulerBuilder(
+//				new SchedulerBuilder());
+//
+//		// Build XY ports so distance is automatically populated`
+//		// TODO: Add API to determine which distance provider to use
+//
+//		// Load ports
+//		final IPort port1 = builder.createPort("Punta Europa Marine Terminal");
+//		final IPort port2 = builder.createPort("Idku");
+//		final IPort port3 = builder.createPort("Point Fortin");
+//		final IPort port4 = builder.createPort("Bonny Island LNG Terminal");
+//
+//		final List<IPort> loadPorts = CollectionsUtil.makeArrayList(port1,
+//				port2, port3, port4);
+//
+//		Map<IPort, Integer> loadSlotCount = new HashMap<IPort, Integer>();
+//		loadSlotCount.put(port1, 59);
+//		loadSlotCount.put(port2, 63);
+//		loadSlotCount.put(port3, 74);
+//		loadSlotCount.put(port4, 41);
+//
+//		// Discharge ports
+//		final IPort port5 = builder.createPort("Quintero");
+//		final IPort port6 = builder.createPort("Zeebrugge");
+//		// final IPort port7 = builder.createPort("Guangdong LNG Terminal");
+//		final IPort port8 = builder.createPort("Shanghai");
+//		final IPort port9 = builder.createPort("Sakai LNG");
+//		final IPort port10 = builder.createPort("Sines LNG Terminal");
+//		final IPort port11 = builder.createPort("Singapore");
+//		final IPort port12 = builder.createPort("Bilboa - LNG Terminal");
+//		// final IPort port13 = builder.createPort("Taichung");
+//		final IPort port14 = builder.createPort("Yung-an");
+//		final IPort port15 = builder.createPort("Milford Haven");
+//		final IPort port16 = builder.createPort("Elba Island - Savanah");
+//		final IPort port17 = builder.createPort("Lake Charles - LNG Berths");
+//
+//		final List<IPort> dischargePorts = CollectionsUtil.makeArrayList(port5,
+//				port6, /* port7, */port8, port9, port10, port11, port12, /*
+//																		 * nport13,
+//																		 */
+//				port14, port15, port16, port17);
+//
+//		Map<IPort, Integer> dischargeSlotCount = new HashMap<IPort, Integer>();
+//		dischargeSlotCount.put(port5, 43);
+//		dischargeSlotCount.put(port6, 7);
+//		// dischargeSlotCount.put(port7, 1);
+//		dischargeSlotCount.put(port8, 7);
+//		dischargeSlotCount.put(port9, 7);
+//		dischargeSlotCount.put(port10, 5);
+//		dischargeSlotCount.put(port11, 57);
+//		dischargeSlotCount.put(port12, 7);
+//		// dischargeSlotCount.put(port13, 1);
+//		dischargeSlotCount.put(port14, 7);
+//		dischargeSlotCount.put(port15, 41);
+//		dischargeSlotCount.put(port16, 51);
+//		dischargeSlotCount.put(port17, 5);
+//
+//		List<IPort> ports = new ArrayList<IPort>();
+//		ports.addAll(loadPorts);
+//		ports.addAll(dischargePorts);
+//
+//		for (IPort a : ports) {
+//			for (IPort b : ports) {
+//				Integer d = di.getDistance(a.getName(), b.getName());
+//				builder.setPortToPortDistance(a, b,
+//						IMultiMatrixProvider.Default_Key, d);
+//				builder.setPortToPortDistance(b, a,
+//						IMultiMatrixProvider.Default_Key, d);
+//			}
+//		}
+//
+//		buildFleet(builder, new Random(1), loadPorts, loadPorts);
+//
+//		// Convert the map of port slot counts into a list with the port
+//		// occuring the relevant number of times.
+//		// These will be converted into port slots
+//		List<IPort> loadPortNumbers = new ArrayList<IPort>();
+//		for (Map.Entry<IPort, Integer> entry : loadSlotCount.entrySet()) {
+//			for (int i = 0; i < entry.getValue(); ++i) {
+//				loadPortNumbers.add(entry.getKey());
+//			}
+//		}
+//
+//		List<IPort> dischargePortNumbers = new ArrayList<IPort>();
+//		for (Map.Entry<IPort, Integer> entry : dischargeSlotCount.entrySet()) {
+//			for (int i = 0; i < entry.getValue(); ++i) {
+//				dischargePortNumbers.add(entry.getKey());
+//			}
+//		}
+//		System.out.printf("Load count %d, Discharge count %d\n",
+//				loadPortNumbers.size(), dischargePortNumbers.size());
+//		assert (dischargePortNumbers.size() == loadPortNumbers.size());
+//
+//		buildCargoes(builder, loadPortNumbers, dischargePortNumbers,
+//				new Random(1), di);
+//
+//		// TODO: Set port durations
+//		// ....
+//
+//		// Generate the optimisation data
+//		final IOptimisationData<ISequenceElement> data = builder
+//				.getOptimisationData();
+//
+//		// TODO: Make this part of the builder API -- no direct access to
+//		// sequence elements
+//		final IElementDurationProviderEditor editor = data
+//				.getDataComponentProvider(
+//						SchedulerConstants.DCP_elementDurationsProvider,
+//						IElementDurationProviderEditor.class);
+//
+//		if (editor != null) {
+//			for (final ISequenceElement e : data.getSequenceElements()) {
+//				for (final IResource r : data.getResources()) {
+//					editor.setElementDuration(e, r, 24);
+//				}
+//			}
+//		}
+//
+//		String pathName = "/SavedScenarios/scenario-"
+//				+ Calendar.getInstance().getTime().getTime() + ".scenario";
+//		builder.saveEMFModel(URI.createPlatformResourceURI(pathName));
+//
+//		builder.dispose();
+//
+//		return data;
+//	}
+//
+//	private static void buildCargoes(final ISchedulerBuilder builder,
+//			final List<IPort> loadPorts, final List<IPort> dischargePorts,
+//			final Random random, com.mmxlabs.common.csv.DistanceImporter di) {
+//
+//		// final IXYPortDistanceCalculator distanceProvider = new
+//		// XYPortEuclideanDistanceCalculator();
+//
+//		// Randomly sort load and discharge ports
+//		Collections.shuffle(loadPorts);
+//		Collections.shuffle(dischargePorts);
+//
+//		// Generate the random load windows, then sort chronologically to help
+//		// build the initial solution correctly.
+//		List<Integer> startWindows = new ArrayList(loadPorts.size());
+//		for (int i = 0; i < loadPorts.size(); ++i) {
+//			final int start = random.nextInt(365);
+//			startWindows.add(start);
+//		}
+//		Collections.sort(startWindows);
+//
+//		for (int i = 0; i < loadPorts.size(); ++i) {
+//			final IPort port1 = (IPort) loadPorts.get(i);
+//			final IPort port2 = (IPort) dischargePorts.get(i);
+//
+//			// Link duration between windows to distance and speed
+//			final int distance = di.getDistance(port1.getName(),
+//					port2.getName());
+//			final int minTime = (int) Math.ceil(distance / 20.0 / 24.0);
+//			final int maxTime = (int) Math.ceil(distance / 12.0 / 24.0);
+//
+//			final int start = startWindows.get(i);
+//			final int end = 1 + start + minTime
+//					+ random.nextInt(maxTime - minTime + 15);
+//
+//			final ITimeWindow tw1 = builder.createTimeWindow(start * 24,
+//					(start + 1) * 24);
+//			final ITimeWindow tw2 = builder.createTimeWindow(end * 24,
+//					(end + 1) * 24);
+//
+//			int extra = random.nextInt(100) * 1000;
+//			int salesPrice = 170000 + extra;
+//
+//			int purchasePrice = salesPrice - 20000;
+//			
+//			final ILoadSlot load = builder.createLoadSlot("load" + i, port1,
+//					tw1, 0, 200000000, null, 22800, 24);
+//			final IDischargeSlot discharge = builder.createDischargeSlot(
+//					"discharge" + i, port2, tw2, 0, 200000000, null, 24);
+//			builder.createCargo("cargo" + i, load, discharge);
+//
+//			// Only build 200 cargoes
+//			if (i == 199) {
+//				break;
+//			}
+//		}
+//	}
+//
+//	public static void buildFleet(final ISchedulerBuilder builder,
+//			Random random, List<IPort> startPorts, List<IPort> endPorts) {
+//
+//		// Consumption Curves
+//		// DFDE is approx 40 MT less than steam at 20 knots. Steam is roughly
+//		// 180MT at 20 knots
+//		final TreeMap<Integer, Long> dfdeKeypoints = new TreeMap<Integer, Long>();
+//		dfdeKeypoints.put(12000, 800000l / 24);
+//		dfdeKeypoints.put(20000, 1400000l / 24);
+//		final InterpolatingConsumptionRateCalculator dfdeConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
+//				dfdeKeypoints);
+//
+//		final TreeMap<Integer, Long> steamKeypoints = new TreeMap<Integer, Long>();
+//		steamKeypoints.put(12000, 120000l / 24);
+//		steamKeypoints.put(20000, 180000l / 24);
+//		final InterpolatingConsumptionRateCalculator steamConsumptionCalculator = new InterpolatingConsumptionRateCalculator(
+//				steamKeypoints);
+//
+//		// TODO: Update boil-off speeds
+//
+//		// TODO: Test boil-off speeds are even working
+//
+//		// WHY DO WE ONLY GET MIN/MAX SPEEDS IN OUTPUT?
+//
+//		final IVesselClass vesselClass4 = builder.createVesselClass(
+//				"STEAM-126", 12000, 19500, 126000000l, 0, 200000, 500);
+//		final IVesselClass vesselClass1 = builder.createVesselClass(
+//				"STEAM-138", 12000, 20000, 138000000l, 0, 200000, 500);
+//		final IVesselClass vesselClass2 = builder.createVesselClass(
+//				"STEAM-145", 12000, 20000, 145000000l, 0, 200000, 500);
+//		final IVesselClass vesselClass3 = builder.createVesselClass("DFDE-177",
+//				12000, 20000, 177000000l, 0, 200000, 500);
+//
+//		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
+//				138000 / 24, 118000 / 24, 10000 / 24,
+//				steamConsumptionCalculator, 15000);
+//		builder.setVesselClassStateParamaters(vesselClass1,
+//				VesselState.Ballast, 138000 / 24, 118000 / 24, 1000 / 24,
+//				steamConsumptionCalculator, 15000);
+//
+//		// Nile Eagle is 0.15% boil off laden
+//		builder.setVesselClassStateParamaters(vesselClass2, VesselState.Laden,
+//				145000 / 24, 125000 / 24, 10000 / 24,
+//				steamConsumptionCalculator, 15000);
+//		builder.setVesselClassStateParamaters(vesselClass2,
+//				VesselState.Ballast, 145000 / 24, 125000 / 24, 1000 / 24,
+//				steamConsumptionCalculator, 15000);
+//
+//		builder.setVesselClassStateParamaters(vesselClass3, VesselState.Laden,
+//				177000 / 24, 157000 / 24, 10000 / 24,
+//				dfdeConsumptionCalculator, 15000);
+//		builder.setVesselClassStateParamaters(vesselClass3,
+//				VesselState.Ballast, 177000 / 24, 157000 / 24, 1000 / 24,
+//				dfdeConsumptionCalculator, 15000);
+//
+//		builder.setVesselClassStateParamaters(vesselClass4, VesselState.Laden,
+//				126000 / 24, 106000 / 24, 10000 / 24,
+//				steamConsumptionCalculator, 15000);
+//		builder.setVesselClassStateParamaters(vesselClass4,
+//				VesselState.Ballast, 126000 / 24, 106000 / 24, 1000 / 24,
+//				steamConsumptionCalculator, 15000);
+//
+//		// Owned Vessels
+//		
+//		
+//		builder.createVessel("Methane Rita Andrea", vesselClass1,
+//				vesselClass1.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Methane Jane Elizabeth", vesselClass2,
+//				vesselClass2.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Methane Lydon Volney", vesselClass2,
+//				vesselClass2.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Methane Shirley Elizabeth", vesselClass2,
+//				vesselClass2.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Methane Heather Sally", vesselClass2,
+//				vesselClass2.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Methane Alison Victoria", vesselClass2,
+//				vesselClass2.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Methane Nile Eagle", vesselClass2,
+//				vesselClass2.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//
+//		builder.createVessel("Methane Julia Louise", vesselClass3,
+//				vesselClass3.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		// Vessel due to come online July 10
+//		builder.createVessel("Methane Becki Anne", vesselClass3,
+//				vesselClass3.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		// Vessel due to come online Sept 10
+//		builder.createVessel("Methane Mickie Harper", vesselClass3,
+//				vesselClass3.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		// Vessel due to come online Oct 10
+//		builder.createVessel("Methane Unknown", vesselClass3,
+//				vesselClass3.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//
+//		// Charter Vessels
+//		builder.createVessel("Hilli", vesselClass4,
+//				vesselClass4.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Gimi", vesselClass4,
+//				vesselClass4.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Khannur", vesselClass4,
+//				vesselClass4.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Golar Freeze", vesselClass4,
+//				vesselClass4.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//		builder.createVessel("Methane Princes", vesselClass1,
+//				vesselClass4.getHourlyCharterInPrice(),
+//				builder.createStartEndRequirement(startPorts.get(random.nextInt(startPorts.size()))),
+//				builder.createStartEndRequirement(endPorts.get(random.nextInt(endPorts.size()))));
+//
+//		// Other vessels
+//
+//		builder.createSpotVessels("spot-" + vesselClass1.getName(),vesselClass1, 3);
+//		builder.createSpotVessels("spot-" + vesselClass2.getName(),vesselClass2, 3);
+//		builder.createSpotVessels("spot-" + vesselClass3.getName(),vesselClass3, 3);
+//		builder.createSpotVessels("spot-" + vesselClass4.getName(),vesselClass4, 3);
+//	}
 
 	/**
 	 * Create a randomly generated {@link ISequences} object using the given
