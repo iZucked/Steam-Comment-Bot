@@ -11,6 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -345,9 +346,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					}
 				} else if (slot instanceof IDischargeSlot) {
 					dischargeIdx = i;
-				} else {
-					// Currently another slot type, no LNG state to pull in as
-					// yet.
+				} else if (slot instanceof IVesselEventPortSlot) {
+					final IVesselEventPortSlot eventSlot = (IVesselEventPortSlot) slot;
+					// get heel parameters for this event.
 				}
 
 				for (final FuelComponent fc : FuelComponent.values()) {
