@@ -11,13 +11,35 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 public class VesselEvent implements IVesselEvent {
 	private ITimeWindow timeWindow;
 	private int durationHours;
-	private IPort port;
+	private IPort startPort, endPort;
+	private int maxHeelOut, heelCVValue;
 		
-	public VesselEvent(ITimeWindow timeWindow, int durationHours, IPort port) {
+	public VesselEvent() {
 		super();
+	}
+
+	public void setTimeWindow(final ITimeWindow timeWindow) {
 		this.timeWindow = timeWindow;
+	}
+
+	public void setDurationHours(final int durationHours) {
 		this.durationHours = durationHours;
-		this.port = port;
+	}
+
+	public void setStartPort(final IPort startPort) {
+		this.startPort = startPort;
+	}
+
+	public void setEndPort(final IPort endPort) {
+		this.endPort = endPort;
+	}
+
+	public void setMaxHeelOut(final int maxHeelOut) {
+		this.maxHeelOut = maxHeelOut;
+	}
+
+	public void setHeelCVValue(final int heelCVValue) {
+		this.heelCVValue = heelCVValue;
 	}
 
 	@Override
@@ -31,7 +53,31 @@ public class VesselEvent implements IVesselEvent {
 	}
 
 	@Override
-	public IPort getPort() {
-		return port;
+	public IPort getStartPort() {
+		return startPort;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.components.IVesselEvent#getEndPort()
+	 */
+	@Override
+	public IPort getEndPort() {
+		return endPort;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.components.IVesselEvent#getMaxHeelOut()
+	 */
+	@Override
+	public int getMaxHeelOut() {
+		return maxHeelOut;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.components.IVesselEvent#getHeelCVValue()
+	 */
+	@Override
+	public int getHeelCVValue() {
+		return heelCVValue;
 	}
 }
