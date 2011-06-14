@@ -189,6 +189,8 @@ public final class VoyageOptions implements Cloneable {
 				return false;
 			}
 
+			if (availableLNG != vo.availableLNG) return false;
+			
 			return true;
 		}
 		return false;
