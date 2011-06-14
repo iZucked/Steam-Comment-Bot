@@ -16,7 +16,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
  * 
  */
 public final class VoyageOptions implements Cloneable {
-
 	private int availableTime;
 	private int distance;
 	private IVessel vessel;
@@ -27,6 +26,8 @@ public final class VoyageOptions implements Cloneable {
 	private boolean useNBOForIdle;
 	private boolean useNBOForTravel;
 	private boolean useFBOForSupplement;
+	
+	private long availableLNG;
 
 	private String route;
 
@@ -48,6 +49,7 @@ public final class VoyageOptions implements Cloneable {
 		setUseNBOForIdle(options.useNBOForIdle());
 		setRoute(options.getRoute());
 		setVesselState(options.getVesselState());
+		setAvailableLNG(options.getAvailableLNG());
 	}
 
 	public final int getAvailableTime() {
@@ -136,6 +138,14 @@ public final class VoyageOptions implements Cloneable {
 
 	public final void setVesselState(final VesselState vesselState) {
 		this.vesselState = vesselState;
+	}
+
+	public long getAvailableLNG() {
+		return availableLNG;
+	}
+
+	public void setAvailableLNG(long availableLNG) {
+		this.availableLNG = availableLNG;
 	}
 
 	@Override

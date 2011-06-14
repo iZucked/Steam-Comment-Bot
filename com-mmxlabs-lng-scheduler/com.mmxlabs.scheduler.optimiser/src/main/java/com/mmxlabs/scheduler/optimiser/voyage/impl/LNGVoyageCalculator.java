@@ -146,15 +146,16 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		// Calculate fuel requirements
 		if (options.useNBOForTravel()) {
-
+			long remainingLNGinM3 = options.getAvailableLNG();
 			long nboRateInM3PerHour = vesselClass.getNBORate(vesselState);
 			/**
 			 * The total quantity of LNG inevitably boiled off in this journey,
 			 * in M3
 			 */
-			final long nboProvidedInM3 = Calculator.quantityFromRateTime(
-					nboRateInM3PerHour, travelTimeInHours);
-
+			final long nboProvidedInM3 = Math.min(
+					Calculator.quantityFromRateTime(nboRateInM3PerHour,
+							travelTimeInHours), remainingLNGinM3);
+			remainingLNGinM3 -= nboProvidedInM3;
 			/**
 			 * The total quantity of LNG inevitably boiled off in this journey,
 			 * in MT. Normally less than the amount boiled off in M3
@@ -176,13 +177,34 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				final long diffInM3 = Calculator.convertMTToM3(diffInMT,
 						equivalenceFactorM3ToMT);
 				if (options.useFBOForSupplement()) {
-					// Use FBO for remaining quantity
-					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3,
-							diffInM3);
-					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT,
-							diffInMT);
-					output.setFuelConsumption(FuelComponent.Base_Supplemental,
-							FuelUnit.MT, 0);
+					if (diffInM3 <= remainingLNGinM3) {
+						// Use FBO for remaining quantity
+						output.setFuelConsumption(FuelComponent.FBO,
+								FuelUnit.M3, diffInM3);
+						output.setFuelConsumption(FuelComponent.FBO,
+								FuelUnit.MT, diffInMT);
+						output.setFuelConsumption(
+								FuelComponent.Base_Supplemental, FuelUnit.MT, 0);
+					} else {
+						// there's not enough left to use FBO only; use
+						// whatever's left
+						// and then whatever extra we need
+						final long remainingMTofLNG = Calculator.convertM3ToMT(
+								remainingLNGinM3, equivalenceFactorM3ToMT);
+						final long missingMTofBasefuel = diffInMT
+								- remainingMTofLNG;
+
+						output.setFuelConsumption(FuelComponent.FBO,
+								FuelUnit.M3, remainingLNGinM3);
+						output.setFuelConsumption(FuelComponent.FBO,
+								FuelUnit.MT, remainingMTofLNG);
+						output.setFuelConsumption(
+								FuelComponent.Base_Supplemental, FuelUnit.MT, 0);
+
+						output.setFuelConsumption(
+								FuelComponent.Base_Supplemental, FuelUnit.MT,
+								missingMTofBasefuel);
+					}
 				} else {
 					// Use base for remaining quantity
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, 0);
@@ -322,6 +344,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		int loadIdx = -1;
 		int dischargeIdx = -1;
+		long availableHeelinM3 = 0;
 
 		final long[] fuelConsumptions = new long[FuelComponent.values().length];
 
@@ -346,9 +369,6 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					}
 				} else if (slot instanceof IDischargeSlot) {
 					dischargeIdx = i;
-				} else if (slot instanceof IVesselEventPortSlot) {
-					final IVesselEventPortSlot eventSlot = (IVesselEventPortSlot) slot;
-					// get heel parameters for this event.
 				}
 
 				for (final FuelComponent fc : FuelComponent.values()) {
@@ -364,6 +384,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					fuelConsumptions[fc.ordinal()] += details
 							.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 				}
+
+				availableHeelinM3 += details.getOptions().getAvailableLNG();
 
 				// TODO: Assert that if discharge.heelOut set, then future
 				// voyages have no LNG
@@ -497,8 +519,10 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			lngConsumed = fuelConsumptions[FuelComponent.NBO.ordinal()]
 					+ fuelConsumptions[FuelComponent.FBO.ordinal()]
 					+ fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
-			if (lngConsumed > 0) {
-				throw new RuntimeException("LNG Required, but non loaded");
+			if (lngConsumed > availableHeelinM3) {
+				throw new RuntimeException(lngConsumed
+						+ " M3 of LNG required, but only " + availableHeelinM3
+						+ " available");
 			}
 		}
 
@@ -585,7 +609,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		voyagePlan.setLNGFuelVolume(lngConsumed);
 
-		//TODO remove this, after checking it's OK
+		// TODO remove this, after checking it's OK
 		voyagePlan.setLoadVolume(loadVolumeInM3);
 
 		// compute load price after everything else, because it needs to know
@@ -598,7 +622,12 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					arrivalTimes[loadIdx / 2], loadVolumeInM3,
 					arrivalTimes[dischargeIdx / 2], dischargeUnitPrice,
 					cargoCVValue, (VoyageDetails) sequence[loadIdx + 1],
-					(VoyageDetails) sequence[dischargeIdx + 1], vesselClass);
+
+					(dischargeIdx + 1 < sequence.length) ?
+
+					(VoyageDetails) sequence[dischargeIdx + 1] : null,
+
+					vesselClass);
 			// .calculateLoadUnitPrice(voyagePlan, arrivalTimes[loadIdx / 2],
 			// arrivalTimes[dischargeIdx / 2]);
 			loadM3Price = (int) Calculator

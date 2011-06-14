@@ -12,7 +12,8 @@ public class VesselEvent implements IVesselEvent {
 	private ITimeWindow timeWindow;
 	private int durationHours;
 	private IPort startPort, endPort;
-	private int maxHeelOut, heelCVValue;
+	private long maxHeelOut;
+	private int heelCVValue;
 		
 	public VesselEvent() {
 		super();
@@ -34,7 +35,7 @@ public class VesselEvent implements IVesselEvent {
 		this.endPort = endPort;
 	}
 
-	public void setMaxHeelOut(final int maxHeelOut) {
+	public void setMaxHeelOut(final long maxHeelOut) {
 		this.maxHeelOut = maxHeelOut;
 	}
 
@@ -69,7 +70,7 @@ public class VesselEvent implements IVesselEvent {
 	 * @see com.mmxlabs.scheduler.optimiser.components.IVesselEvent#getMaxHeelOut()
 	 */
 	@Override
-	public int getMaxHeelOut() {
+	public long getMaxHeelOut() {
 		return maxHeelOut;
 	}
 

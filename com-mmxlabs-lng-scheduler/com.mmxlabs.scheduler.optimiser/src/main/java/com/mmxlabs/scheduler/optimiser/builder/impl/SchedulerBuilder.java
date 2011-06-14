@@ -985,7 +985,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IVesselEventPortSlot createCharterOutEvent(final String id,
 			final ITimeWindow arrival, final IPort port,
-			final int durationHours, final int maxHeelOut, final int heelCVValue) {
+			final int durationHours, final long maxHeelOut, final int heelCVValue) {
 		return createVesselEvent(id, PortType.CharterOut, arrival, port,
 				durationHours, maxHeelOut, heelCVValue);
 	}
@@ -999,7 +999,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	public IVesselEventPortSlot createVesselEvent(final String id,
 			final PortType portType, final ITimeWindow arrival,
-			final IPort port, final int durationHours, final int maxHeelOut,
+			final IPort port, final int durationHours, final long maxHeelOut,
 			final int heelCVValue) {
 		final VesselEvent event = new VesselEvent();
 

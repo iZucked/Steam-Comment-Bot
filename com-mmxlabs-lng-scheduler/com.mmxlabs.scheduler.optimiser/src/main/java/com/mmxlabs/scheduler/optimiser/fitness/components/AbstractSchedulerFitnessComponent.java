@@ -35,9 +35,9 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 
 	protected long getDiscountedValue(final int time, final long value) {
 		final double factor = discountCurve.getValueAtPoint(time);
-		
+
 		final long result = (long) (value * factor);
-		
+
 		return result;
 	}
 
@@ -87,9 +87,10 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 
 	@Override
 	public void init(final IOptimisationData<T> data) {
-		discountCurve = data.getDataComponentProvider(
-				SchedulerConstants.DCP_discountCurveProvider,
-				IDiscountCurveProvider.class).getDiscountCurve(getName());
+		if (data != null)
+			discountCurve = data.getDataComponentProvider(
+					SchedulerConstants.DCP_discountCurveProvider,
+					IDiscountCurveProvider.class).getDiscountCurve(getName());
 	}
 
 	@Override

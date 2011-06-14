@@ -135,7 +135,7 @@ public interface ISchedulerBuilder {
 	 */
 	IVesselEventPortSlot createCharterOutEvent(String id,
 			ITimeWindow arrivalTimeWindow, IPort port, int durationHours,
-			int maxHeelOut, int heelCVValue);
+			long maxHeelOut, int heelCVValue);
 
 	/**
 	 * Create a dry dock event

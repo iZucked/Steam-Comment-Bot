@@ -38,7 +38,7 @@ public interface IVesselEvent {
 	 * The maximum volume of LNG available for travel after the event
 	 * @return
 	 */
-	public int getMaxHeelOut();
+	public long getMaxHeelOut();
 	/**
 	 * The CV Value of any LNG available for travel after the event.
 	 * @return

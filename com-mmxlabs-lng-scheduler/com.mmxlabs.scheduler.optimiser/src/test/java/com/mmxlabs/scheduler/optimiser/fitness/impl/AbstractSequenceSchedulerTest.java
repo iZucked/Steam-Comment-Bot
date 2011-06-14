@@ -54,6 +54,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -209,6 +210,10 @@ public final class AbstractSequenceSchedulerTest {
 				.mock(IVoyagePlanOptimiser.class);
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
+		final IRouteCostProvider routeCostProvider = context
+				.mock(IRouteCostProvider.class);
+		scheduler.setRouteCostProvider(routeCostProvider);
+
 		// Init scheduler and ensure all required components are in place
 		scheduler.init();
 
@@ -306,14 +311,14 @@ public final class AbstractSequenceSchedulerTest {
 		testVoyagePlan.setSequence(testSequence);
 
 		context.setDefaultResultForType(VoyagePlan.class, testVoyagePlan);
-		
+
 		// Final set of arrival times
 		final int[] arrivalTimes = new int[] { 5, 10, 15, 20 };
-		
+
 		// Expected arrival times per plan
 		final int[] arrivalTimes1 = new int[] { 5, 10, 15 };
 		final int[] arrivalTimes2 = new int[] { 15, 20 };
-		
+
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		context.checking(new Expectations() {
@@ -361,9 +366,15 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).init();
 				one(voyagePlanOptimiser).optimise();
 				one(voyagePlanOptimiser).reset();
-				
-				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes1))));
-				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes2))));
+
+				one(voyagePlanOptimiser)
+						.setArrivalTimes(
+								with(equal(CollectionsUtil
+										.toArrayList(arrivalTimes1))));
+				one(voyagePlanOptimiser)
+						.setArrivalTimes(
+								with(equal(CollectionsUtil
+										.toArrayList(arrivalTimes2))));
 			}
 		});
 
@@ -493,6 +504,10 @@ public final class AbstractSequenceSchedulerTest {
 				.mock(IVoyagePlanOptimiser.class);
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
+		final IRouteCostProvider routeCostProvider = context
+				.mock(IRouteCostProvider.class);
+		scheduler.setRouteCostProvider(routeCostProvider);
+
 		// Init scheduler and ensure all required components are in place
 		scheduler.init();
 
@@ -575,7 +590,7 @@ public final class AbstractSequenceSchedulerTest {
 		testVoyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, 100);
 
 		context.setDefaultResultForType(VoyagePlan.class, testVoyagePlan);
-		
+
 		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
@@ -611,11 +626,11 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).init();
 				one(voyagePlanOptimiser).optimise();
 				one(voyagePlanOptimiser).reset();
-				
-				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes))));
+
+				one(voyagePlanOptimiser).setArrivalTimes(
+						with(equal(CollectionsUtil.toArrayList(arrivalTimes))));
 			}
 		});
-
 
 		// Schedule sequence
 		final ScheduledSequence plansAndTime = scheduler.schedule(resource,
@@ -676,6 +691,8 @@ public final class AbstractSequenceSchedulerTest {
 				.mock(ITimeWindowDataComponentProvider.class);
 		final IVoyagePlanOptimiser voyagePlanOptimiser = context
 				.mock(IVoyagePlanOptimiser.class);
+		final IRouteCostProvider routeCostProvider = context
+				.mock(IRouteCostProvider.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -688,6 +705,7 @@ public final class AbstractSequenceSchedulerTest {
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
+		scheduler.setRouteCostProvider(routeCostProvider);
 
 		scheduler.init();
 
@@ -725,7 +743,9 @@ public final class AbstractSequenceSchedulerTest {
 				.mock(ITimeWindowDataComponentProvider.class);
 		final IVoyagePlanOptimiser voyagePlanOptimiser = context
 				.mock(IVoyagePlanOptimiser.class);
+		final IRouteCostProvider routeCostProvider = context.mock(IRouteCostProvider.class);
 
+		
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
 
@@ -737,6 +757,7 @@ public final class AbstractSequenceSchedulerTest {
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 		scheduler.setVesselProvider(vesselProvider);
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
+		scheduler.setRouteCostProvider(routeCostProvider);
 
 		scheduler.init();
 	}
