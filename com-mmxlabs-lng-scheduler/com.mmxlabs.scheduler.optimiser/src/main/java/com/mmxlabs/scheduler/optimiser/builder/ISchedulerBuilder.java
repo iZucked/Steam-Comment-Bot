@@ -123,8 +123,10 @@ public interface ISchedulerBuilder {
 	 *            the ID of the charter out
 	 * @param arrivalTimeWindow
 	 *            a time window in which the vessel must arrive at the port
-	 * @param port
-	 *            the port at which the charter out is happening
+	 * @param startPort
+	 *            the port where the client is collecting the vessel
+	 * @param endPort
+	 * 				the port where the vessel is being returned to
 	 * @param durationHours
 	 *            how long the charter out is for, in hours
 	 * @param maxHeelOut
@@ -134,7 +136,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVesselEventPortSlot createCharterOutEvent(String id,
-			ITimeWindow arrivalTimeWindow, IPort port, int durationHours,
+			ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours,
 			long maxHeelOut, int heelCVValue);
 
 	/**
@@ -145,7 +147,7 @@ public interface ISchedulerBuilder {
 	 * @param arrivalTimeWindow
 	 *            the time window in which the vessel must arrive at the port
 	 * @param port
-	 *            the port where the dry dock is happening
+	 *            the port where the dry dock is 
 	 * @param durationHours
 	 *            the number of hours the dry dock will take
 	 * @return
