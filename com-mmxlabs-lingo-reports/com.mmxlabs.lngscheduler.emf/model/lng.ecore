@@ -170,6 +170,8 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxHeelOut" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="2147483647"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelCVValue" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="22.8"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Drydock" eSuperTypes="#//fleet/VesselEvent"/>
     <eClassifiers xsi:type="ecore:EClass" name="VesselFuel" eSuperTypes="#//NamedObject">

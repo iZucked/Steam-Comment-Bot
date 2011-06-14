@@ -22,6 +22,7 @@ import scenario.fleet.FleetPackage;
  * <ul>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getMinHeelOut <em>Min Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getMaxHeelOut <em>Max Heel Out</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getHeelCVValue <em>Heel CV Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -64,6 +65,25 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * @ordered
 	 */
 	protected int maxHeelOut = MAX_HEEL_OUT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHeelCVValue() <em>Heel CV Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCVValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final float HEEL_CV_VALUE_EDEFAULT = 22.8F;
+	/**
+	 * The cached value of the '{@link #getHeelCVValue() <em>Heel CV Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCVValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected float heelCVValue = HEEL_CV_VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -131,6 +151,27 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public float getHeelCVValue() {
+		return heelCVValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelCVValue(float newHeelCVValue) {
+		float oldHeelCVValue = heelCVValue;
+		heelCVValue = newHeelCVValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__HEEL_CV_VALUE, oldHeelCVValue, heelCVValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -138,6 +179,8 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 				return getMinHeelOut();
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				return getMaxHeelOut();
+			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
+				return getHeelCVValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -155,6 +198,9 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 				return;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				setMaxHeelOut((Integer)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
+				setHeelCVValue((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -174,6 +220,9 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				setMaxHeelOut(MAX_HEEL_OUT_EDEFAULT);
 				return;
+			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
+				setHeelCVValue(HEEL_CV_VALUE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -190,6 +239,8 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 				return minHeelOut != MIN_HEEL_OUT_EDEFAULT;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				return maxHeelOut != MAX_HEEL_OUT_EDEFAULT;
+			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
+				return heelCVValue != HEEL_CV_VALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -208,6 +259,8 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 		result.append(minHeelOut);
 		result.append(", maxHeelOut: ");
 		result.append(maxHeelOut);
+		result.append(", heelCVValue: ");
+		result.append(heelCVValue);
 		result.append(')');
 		return result.toString();
 	}

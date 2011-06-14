@@ -717,6 +717,15 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCharterOut_HeelCVValue() {
+		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDrydock() {
 		return drydockEClass;
 	}
@@ -879,6 +888,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		charterOutEClass = createEClass(CHARTER_OUT);
 		createEAttribute(charterOutEClass, CHARTER_OUT__MIN_HEEL_OUT);
 		createEAttribute(charterOutEClass, CHARTER_OUT__MAX_HEEL_OUT);
+		createEAttribute(charterOutEClass, CHARTER_OUT__HEEL_CV_VALUE);
 
 		drydockEClass = createEClass(DRYDOCK);
 
@@ -993,6 +1003,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEClass(charterOutEClass, CharterOut.class, "CharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCharterOut_MinHeelOut(), ecorePackage.getEInt(), "minHeelOut", "0", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOut_MaxHeelOut(), ecorePackage.getEInt(), "maxHeelOut", "2147483647", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOut_HeelCVValue(), ecorePackage.getEFloat(), "heelCVValue", "22.8", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(drydockEClass, Drydock.class, "Drydock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

@@ -765,13 +765,22 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__MAX_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Heel CV Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__HEEL_CV_VALUE = VESSEL_EVENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 2;
+	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Charter Out</em>' class.
@@ -1575,6 +1584,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getCharterOut_MaxHeelOut();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getHeelCVValue <em>Heel CV Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel CV Value</em>'.
+	 * @see scenario.fleet.CharterOut#getHeelCVValue()
+	 * @see #getCharterOut()
+	 * @generated
+	 */
+	EAttribute getCharterOut_HeelCVValue();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.fleet.Drydock <em>Drydock</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2115,6 +2135,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_OUT__MAX_HEEL_OUT = eINSTANCE.getCharterOut_MaxHeelOut();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel CV Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT__HEEL_CV_VALUE = eINSTANCE.getCharterOut_HeelCVValue();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.DrydockImpl <em>Drydock</em>}' class.
