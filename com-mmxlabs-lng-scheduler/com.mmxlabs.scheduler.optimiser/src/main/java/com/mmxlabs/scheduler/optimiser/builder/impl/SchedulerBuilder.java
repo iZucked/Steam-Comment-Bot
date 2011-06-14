@@ -981,30 +981,44 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final Set<IPort> inaccessiblePorts) {
 		this.portExclusionProvider.setExcludedPorts(vc, inaccessiblePorts);
 	}
-	
+
 	@Override
 	public IVesselEventPortSlot createCharterOutEvent(final String id,
 			final ITimeWindow arrival, final IPort port,
-			final int durationHours, final int minHeelOut, final int maxHeelOut) {
+			final int durationHours, final int maxHeelOut, final int heelCVValue) {
 		return createVesselEvent(id, PortType.CharterOut, arrival, port,
-				durationHours, minHeelOut, maxHeelOut);
+				durationHours, maxHeelOut, heelCVValue);
 	}
-	
+
 	@Override
 	public IVesselEventPortSlot createDrydockEvent(final String id,
-			final ITimeWindow arrival, final IPort port,
-			final int durationHours) {
+			final ITimeWindow arrival, final IPort port, final int durationHours) {
 		return createVesselEvent(id, PortType.DryDock, arrival, port,
-				durationHours, 0,0);
+				durationHours, 0, 0);
 	}
 
 	public IVesselEventPortSlot createVesselEvent(final String id,
 			final PortType portType, final ITimeWindow arrival,
-			final IPort port, final int durationHours, final int minHeelOut,
-			final int maxHeelOut) {
-		final VesselEvent co = new VesselEvent(arrival, durationHours, port);
+			final IPort port, final int durationHours, final int maxHeelOut,
+			final int heelCVValue) {
+		final VesselEvent event = new VesselEvent();
+
+		// TODO should start port and end port be set on this single sequence
+		// element,
+		// or should there be a second invisible sequence element for
+		// repositioning, and something
+		// which rigs the distance to be zero between repositioning elements?
+		
+		event.setTimeWindow(arrival);
+		event.setDurationHours(durationHours);
+		event.setStartPort(port);
+		event.setEndPort(port);
+		event.setMaxHeelOut(maxHeelOut);
+		event.setHeelCVValue(heelCVValue);
+
 		final VesselEventPortSlot slot = new VesselEventPortSlot(id,
-				co.getPort(), co.getTimeWindow(), co);
+				event.getStartPort(), event.getTimeWindow(), event);
+
 		vesselEvents.add(slot);
 		slot.setPortType(portType);
 		vesselEventVessels.put(slot, new HashSet<IVessel>());
@@ -1063,7 +1077,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			portSlotsProvider.setPortSlot(element, slot);
 
-			portProvider.setPortForElement(charterOut.getPort(), element);
+			portProvider.setPortForElement(charterOut.getStartPort(), element);
 
 			final Set<IResource> resources = new HashSet<IResource>();
 			final Set<IVessel> supportedVessels = vesselEventVessels.get(slot);
