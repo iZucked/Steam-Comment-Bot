@@ -119,28 +119,57 @@ public interface ISchedulerBuilder {
 	/**
 	 * Create a charter out event
 	 * 
+	 * @param id
+	 *            the ID of the charter out
 	 * @param arrivalTimeWindow
+	 *            a time window in which the vessel must arrive at the port
 	 * @param port
+	 *            the port at which the charter out is happening
 	 * @param durationHours
+	 *            how long the charter out is for, in hours
+	 * @param maxHeelOut
+	 *            the maximum amount of heel available for travel
+	 * @param heelCVValue
+	 *            the CV value of heel available for travel
 	 * @return
 	 */
-	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort port,
-			int durationHours, int minHeelOut, int maxHeelOut);
+	IVesselEventPortSlot createCharterOutEvent(String id,
+			ITimeWindow arrivalTimeWindow, IPort port, int durationHours,
+			int maxHeelOut, int heelCVValue);
 
 	/**
-	 * Create a drydock event
+	 * Create a dry dock event
+	 * 
 	 * @param id
+	 *            the ID of the dry dock
 	 * @param arrivalTimeWindow
+	 *            the time window in which the vessel must arrive at the port
 	 * @param port
+	 *            the port where the dry dock is happening
 	 * @param durationHours
+	 *            the number of hours the dry dock will take
 	 * @return
 	 */
-	IVesselEventPortSlot createDrydockEvent(String id, ITimeWindow arrivalTimeWindow, IPort port,
-			int durationHours);
-	
-	void addVesselEventVessel(IVesselEventPortSlot charterOut, IVessel vessel);
+	IVesselEventPortSlot createDrydockEvent(String id,
+			ITimeWindow arrivalTimeWindow, IPort port, int durationHours);
 
-	void addVesselEventVesselClass(IVesselEventPortSlot charterOut,
+	/**
+	 * Add a single vessel to the list of vessels which can service the given
+	 * {@link IVesselEventPortSlot}
+	 * 
+	 * @param charterOut
+	 * @param vessel
+	 */
+	void addVesselEventVessel(IVesselEventPortSlot event, IVessel vessel);
+
+	/**
+	 * Add all the vessels in a given class to the vessels which can service the
+	 * given event slot.
+	 * 
+	 * @param event
+	 * @param vesselClass
+	 */
+	void addVesselEventVesselClass(IVesselEventPortSlot event,
 			IVesselClass vesselClass);
 
 	/**
@@ -151,8 +180,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass,
-			int hourlyCharterOutRate,
-			IStartEndRequirement startConstraint,
+			int hourlyCharterOutRate, IStartEndRequirement startConstraint,
 			IStartEndRequirement endConstraint);
 
 	/**
@@ -166,9 +194,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass,
-			int hourlyCharterOutRate,
-			VesselInstanceType vesselInstanceType, IStartEndRequirement start,
-			IStartEndRequirement end);
+			int hourlyCharterOutRate, VesselInstanceType vesselInstanceType,
+			IStartEndRequirement start, IStartEndRequirement end);
 
 	/**
 	 * Create a start/end requirement which constrains nothing
@@ -282,11 +309,14 @@ public interface ISchedulerBuilder {
 
 	/**
 	 * Set the default toll associated with passing by a given route
-	 * @param route the route name
-	 * @param defaultPrice the associated toll in dollars
+	 * 
+	 * @param route
+	 *            the route name
+	 * @param defaultPrice
+	 *            the associated toll in dollars
 	 */
 	void setDefaultRouteCost(String route, int defaultPrice);
-	
+
 	/**
 	 * Set the extra time and fuel required for the given vessel class to travel
 	 * by the given route
@@ -303,7 +333,7 @@ public interface ISchedulerBuilder {
 	 */
 	void setVesselClassRouteTimeAndFuel(String name, IVesselClass vc, int time,
 			long fuel);
-	
+
 	/**
 	 * Specify an amount of time a given {@link IResource} must incur if
 	 * assigned to the given {@link ISequenceElement}.
@@ -333,7 +363,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
-			long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue,
+			long minVolume, long maxVolume,
+			ILoadPriceCalculator priceCalculator, int cargoCVValue,
 			int durationHours);
 
 	/**
