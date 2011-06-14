@@ -788,7 +788,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		// Create charter out elements
-		buildCharterOuts();
+		buildVesselEvents();
 
 		portDistanceProvider.cacheExtremalValues(ports);
 
@@ -984,22 +984,23 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVesselEventPortSlot createCharterOutEvent(final String id,
-			final ITimeWindow arrival, final IPort port,
-			final int durationHours, final long maxHeelOut, final int heelCVValue) {
-		return createVesselEvent(id, PortType.CharterOut, arrival, port,
+			final ITimeWindow arrival, final IPort fromPort, final IPort toPort,
+			final int durationHours, final long maxHeelOut,
+			final int heelCVValue) {
+		return createVesselEvent(id, PortType.CharterOut, arrival, fromPort, toPort,
 				durationHours, maxHeelOut, heelCVValue);
 	}
 
 	@Override
 	public IVesselEventPortSlot createDrydockEvent(final String id,
 			final ITimeWindow arrival, final IPort port, final int durationHours) {
-		return createVesselEvent(id, PortType.DryDock, arrival, port,
+		return createVesselEvent(id, PortType.DryDock, arrival, port,port,
 				durationHours, 0, 0);
 	}
 
 	public IVesselEventPortSlot createVesselEvent(final String id,
 			final PortType portType, final ITimeWindow arrival,
-			final IPort port, final int durationHours, final long maxHeelOut,
+			final IPort fromPort, IPort toPort, final int durationHours, final long maxHeelOut,
 			final int heelCVValue) {
 		final VesselEvent event = new VesselEvent();
 
@@ -1008,16 +1009,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// or should there be a second invisible sequence element for
 		// repositioning, and something
 		// which rigs the distance to be zero between repositioning elements?
-		
+
 		event.setTimeWindow(arrival);
 		event.setDurationHours(durationHours);
-		event.setStartPort(port);
-		event.setEndPort(port);
+		event.setStartPort(fromPort);
+		event.setEndPort(toPort);
 		event.setMaxHeelOut(maxHeelOut);
 		event.setHeelCVValue(heelCVValue);
 
 		final VesselEventPortSlot slot = new VesselEventPortSlot(id,
-				event.getStartPort(), event.getTimeWindow(), event);
+				event.getEndPort(), event.getTimeWindow(), event);
 
 		vesselEvents.add(slot);
 		slot.setPortType(portType);
@@ -1055,29 +1056,79 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselEventVesselClasses.get(charterOut).add(vesselClass);
 	}
 
-	protected void buildCharterOuts() {
+	protected void buildVesselEvents() {
 		int i = 0;
 
 		for (final IVesselEventPortSlot slot : vesselEvents) {
-			final IVesselEvent charterOut = slot.getVesselEvent();
+			final IVesselEvent vesselEvent = slot.getVesselEvent();
 
-			final SequenceElement element = new SequenceElement(
+			final SequenceElement endElement = new SequenceElement(
 					indexingContext, slot.getId(), slot);
 
-			sequenceElements.add(element);
+			final SequenceElement startElement;
+			final SequenceElement redirectElement;
 
-			timeWindowProvider.setTimeWindows(element,
-					Collections.singletonList(charterOut.getTimeWindow()));
-			portTypeProvider.setPortType(element, PortType.CharterOut);
+			if (vesselEvent.getStartPort() != vesselEvent.getEndPort()) {
+				// We insert two extra elements and slots, so that we go
+				// startPort -> ANYWHERE -> endPort
+				final VesselEventPortSlot startSlot = new VesselEventPortSlot(
+						"start-" + slot.getId(), vesselEvent.getStartPort(),
+						slot.getTimeWindow(), vesselEvent);
+				final VesselEventPortSlot redirectSlot = new VesselEventPortSlot(
+						"redirect-" + slot.getId(), ANYWHERE,
+						slot.getTimeWindow(), vesselEvent);
 
-			elementDurationsProvider.setElementDuration(element,
-					charterOut.getDurationHours());
+				startSlot.setPortType(PortType.Waypoint);
+				redirectSlot.setPortType(PortType.Virtual);
+
+				startElement = new SequenceElement(indexingContext,
+						startSlot.getId(), startSlot);
+				redirectElement = new SequenceElement(indexingContext,
+						redirectSlot.getId(), redirectSlot);
+
+				orderedSequenceElementsEditor.setElementOrder(startElement,
+						redirectElement);
+				orderedSequenceElementsEditor.setElementOrder(redirectElement,
+						endElement);
+
+				timeWindowProvider.setTimeWindows(startElement,
+						Collections.singletonList(vesselEvent.getTimeWindow()));
+				elementDurationsProvider.setElementDuration(startElement, 0);
+				elementDurationsProvider.setElementDuration(redirectElement, 0);
+
+				portSlotsProvider.setPortSlot(startElement, startSlot);
+				portSlotsProvider.setPortSlot(redirectElement, redirectSlot);
+
+				portTypeProvider.setPortType(startElement,
+						startSlot.getPortType());
+				portTypeProvider.setPortType(redirectElement,
+						redirectSlot.getPortType());
+
+				portProvider.setPortForElement(startSlot.getPort(),
+						startElement);
+				portProvider.setPortForElement(redirectSlot.getPort(),
+						redirectElement);
+				
+				sequenceElements.add(startElement);
+				sequenceElements.add(redirectElement);
+			} else {
+				startElement = redirectElement = null;
+			}
+
+			sequenceElements.add(endElement);
+
+			timeWindowProvider.setTimeWindows(endElement,
+					Collections.singletonList(vesselEvent.getTimeWindow()));
+			portTypeProvider.setPortType(endElement, slot.getPortType());
+
+			elementDurationsProvider.setElementDuration(endElement,
+					vesselEvent.getDurationHours());
 
 			// element needs a port slot
 
-			portSlotsProvider.setPortSlot(element, slot);
+			portSlotsProvider.setPortSlot(endElement, slot);
 
-			portProvider.setPortForElement(charterOut.getStartPort(), element);
+			portProvider.setPortForElement(slot.getPort(), endElement);
 
 			final Set<IResource> resources = new HashSet<IResource>();
 			final Set<IVessel> supportedVessels = vesselEventVessels.get(slot);
@@ -1093,7 +1144,19 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				}
 			}
 
-			resourceAllocationProvider.setAllowedResources(element, resources);
+			resourceAllocationProvider.setAllowedResources(endElement,
+					resources);
+			
+			if (startElement != null) {
+				resourceAllocationProvider.setAllowedResources(startElement,
+						resources);
+			}
+			
+			if (redirectElement != null) {
+				resourceAllocationProvider.setAllowedResources(redirectElement,
+						resources);
+			}
+			
 			i++;
 		}
 	}
