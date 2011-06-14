@@ -168,8 +168,10 @@ public abstract class AbstractSequenceScheduler<T> implements
 					options.setAvailableLNG(
 							((IVesselEventPortSlot) prevPortSlot).getVesselEvent().getMaxHeelOut()
 							);
+				} else if (prevPortType == PortType.Load) {
+					options.setAvailableLNG(vessel.getVesselClass().getCargoCapacity());
 				} else {
-					options.setAvailableLNG(Integer.MAX_VALUE);
+					options.setAvailableLNG(0);
 				}
 				
 				// Determined by voyage plan optimiser
