@@ -51,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -207,6 +208,11 @@ public class AnnotatedSolutionExporter {
 				}
 			};
 
+			final IPortTypeProvider<ISequenceElement> portTypeProvider = data
+					.getDataComponentProvider(
+							SchedulerConstants.DCP_portTypeProvider,
+							IPortTypeProvider.class);
+
 			final List<ScheduledEvent> eventsForElement = new ArrayList<ScheduledEvent>();
 			for (final ISequenceElement element : annotatedSolution
 					.getSequences().getSequence(resource)) {
@@ -214,6 +220,8 @@ public class AnnotatedSolutionExporter {
 				final Map<String, Object> annotations = elementAnnotations
 						.getAnnotations(element);
 
+				// filter virtual ports out here?
+				
 				for (final IAnnotationExporter exporter : exporters) {
 					final ScheduledEvent result = exporter.export(element,
 							annotations, outputVessel);
