@@ -54,13 +54,20 @@ public enum PortType {
 	Waypoint,
 
 	/**
-	 * Port type is a charter out, which will have a start time window
-	 * and duration.
+	 * Port type is a charter out, which will have a start time window and
+	 * duration.
 	 */
 	CharterOut,
-	
+
 	/**
 	 * Generic port type.
 	 */
-	Other;
+	Other,
+
+	/**
+	 * Used to denote a visit to a port which doesn't have any real-world
+	 * associated port. Journey legs to or from a virtual port should have no
+	 * associated costs/route choices/etc.
+	 */
+	Virtual;
 }
