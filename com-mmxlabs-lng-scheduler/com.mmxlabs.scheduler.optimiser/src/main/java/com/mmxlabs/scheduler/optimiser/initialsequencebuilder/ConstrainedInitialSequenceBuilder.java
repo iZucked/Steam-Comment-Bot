@@ -246,6 +246,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 			chunk.add(head);
 			while (followerCache.get(head).size() == 1) {
 				head = followerCache.get(head).iterator().next();
+				if (!unsequencedElements.contains(head)) break;
 				chunk.add(head);
 			}
 			chunks.add(chunk);
