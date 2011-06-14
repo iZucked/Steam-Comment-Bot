@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.List;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -16,10 +17,13 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A sequence scheduler which enumerates possible combinations of arrival times
@@ -52,7 +56,7 @@ public class EnumeratingSequenceScheduler<T> extends
 
 	/**
 	 * The output of the scheduler; these are the arrival times for each element
-	 * in each sequence. 
+	 * in each sequence.
 	 * 
 	 */
 	protected int[][] arrivalTimes;
@@ -72,7 +76,7 @@ public class EnumeratingSequenceScheduler<T> extends
 	private int[][] minTimeToNextElement;
 	/**
 	 * The maximum time to get from the indexed element to its successor. This
-	 * is the maximum travel time + visit time at this element 
+	 * is the maximum travel time + visit time at this element
 	 */
 	private int[][] maxTimeToNextElement;
 
@@ -80,7 +84,20 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * The number of elements in each array.
 	 */
 	protected int[] sizes;
-	
+
+	/**
+	 * Whether or not the {@link PortType} of any {@link PortSlot} associated
+	 * with each sequence element has {@link PortType} Virtual. If a sequence
+	 * element is virtual, the travel times should be held at zero and the
+	 * virtual element and its neighbors should have the same time window.
+	 * 
+	 * Thus if we see A -> virtual -> B, the arrival time at B should be clamped
+	 * to the arrival time at A. This is done by checks in the
+	 * {@link #getMinArrivalTime(int, int)} and
+	 * {@link #getMaxArrivalTime(int, int)} methods.
+	 */
+	private boolean[][] isVirtual;
+
 	/**
 	 * Holds a list of points at which the cost function can be separated. This
 	 * occurs when a given journey leg <em>always</em> involves some idle time,
@@ -107,9 +124,19 @@ public class EnumeratingSequenceScheduler<T> extends
 			arrays[arrayIndex] = new int[(size)];
 		}
 	}
-	
+
+	/**
+	 * Resize one of the boolean buffers above.
+	 */
+	private void resize(boolean[][] arrays, int arrayIndex, int size) {
+		if (arrays[arrayIndex] == null || arrays[arrayIndex].length < (size)) {
+			arrays[arrayIndex] = new boolean[(size)];
+		}
+	}
+
 	/**
 	 * Resize all the integer buffers for a given route
+	 * 
 	 * @param arrayIndex
 	 * @param size
 	 */
@@ -119,6 +146,9 @@ public class EnumeratingSequenceScheduler<T> extends
 		resize(windowEndTime, sequenceIndex, size);
 		resize(minTimeToNextElement, sequenceIndex, size);
 		resize(maxTimeToNextElement, sequenceIndex, size);
+
+		resize(isVirtual, sequenceIndex, size);
+
 		sizes[sequenceIndex] = size;
 	}
 
@@ -186,6 +216,7 @@ public class EnumeratingSequenceScheduler<T> extends
 			windowEndTime = new int[size][];
 			minTimeToNextElement = new int[size][];
 			maxTimeToNextElement = new int[size][];
+			isVirtual = new boolean[size][];
 			sizes = new int[size];
 		}
 
@@ -221,7 +252,10 @@ public class EnumeratingSequenceScheduler<T> extends
 		final int[] windowEndTime = this.windowEndTime[sequenceIndex];
 		final int[] minTimeToNextElement = this.minTimeToNextElement[sequenceIndex];
 		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex];
+		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
 
+		final IPortTypeProvider<T> portTypeProvider = super
+				.getPortTypeProvider();
 		final IVesselProvider vesselProvider = super.getVesselProvider();
 
 		final ITimeWindowDataComponentProvider timeWindowProvider = super
@@ -245,6 +279,8 @@ public class EnumeratingSequenceScheduler<T> extends
 		for (final T element : sequence) {
 			List<ITimeWindow> windows = timeWindowProvider
 					.getTimeWindows(element);
+
+			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
 
 			// Calculate minimum inter-element durations
 			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider
@@ -425,6 +461,13 @@ public class EnumeratingSequenceScheduler<T> extends
 	protected final int getMinArrivalTime(final int seq, final int index) {
 		if (index == 0) {
 			return windowStartTime[seq][index];
+		} else if (isVirtual[seq][index] || isVirtual[seq][index - 1]) {
+			// if this is a virtual port, or we've just been to a virtual port
+			// we enforce zero travel time, because virtual ports aren't
+			// supposed to have any effect. A similar clause applies in
+			// getMaxArrivalTime().
+
+			return arrivalTimes[seq][index - 1];
 		} else {
 			// whichever is later: previous arrival time + travel, or
 			// window start.
@@ -444,15 +487,22 @@ public class EnumeratingSequenceScheduler<T> extends
 	 * @return
 	 */
 	protected final int getMaxArrivalTime(final int seq, final int index) {
-		return Math.max(getMinArrivalTime(seq, index), // the latest we can
-														// arrive
-														// here is either window
-														// end
-														// time, or if we're
-														// late
-														// clamp to the
-														// earliest.
-				windowEndTime[seq][index]);
+		if (index > 0 && (isVirtual[seq][index] || isVirtual[seq][index - 1])) {
+			// if this is a virtual element, or the previous element was
+			// virtual, enforce zero travel time
+			return arrivalTimes[seq][index - 1];
+		} else {
+			return Math.max(getMinArrivalTime(seq, index), // the latest we can
+															// arrive
+															// here is either
+															// window
+															// end
+															// time, or if we're
+															// late
+															// clamp to the
+															// earliest.
+					windowEndTime[seq][index]);
+		}
 	}
 
 	public ScheduleEvaluator<T> getScheduleEvaluator() {
