@@ -10,7 +10,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -24,6 +23,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
  * TODO Consider details of the charter market; the spot charters might also
  * benefit from this.
  * 
+ * TODO export potential charter outs, and hook the settings up to the interface
+ * somewhere.
+ * 
  * @author hinton
  * 
  */
@@ -31,8 +33,8 @@ public class CharterOutFitnessComponent<T> extends
 		AbstractPerRouteSchedulerFitnessComponent<T> implements
 		IFitnessComponent<T> {
 	/**
-	 * If true, look for large blocks of idle time where charter-outs could go, and
-	 * assign some value to them. Otherwise do nothing.
+	 * If true, look for large blocks of idle time where charter-outs could go,
+	 * and assign some value to them. Otherwise do nothing.
 	 */
 	private boolean generateOpportunities = false;
 
@@ -55,19 +57,15 @@ public class CharterOutFitnessComponent<T> extends
 	 */
 	private int idleTimeThreshold;
 	/**
-	 * Accumulator for the total potentially usable idle time on this sequence
+	 * The proportion of the charter out price which we should assign to
+	 * "potential" charter outs (as opposed to confirmed ones)
 	 */
-	private int idleTimeAccumulator;
-	/**
-	 * The bid/ask spread as a proportion (e.g. 0.9 implies that the charter out
-	 * revenue is 90% of the charter in cost for a vessel class)
-	 */
-	private double bidAskSpread;
+	private double generatedDiscountFactor;
 
 	/**
-	 * Accumulates the amount of time spent on confirmed charter outs in this sequence.
+	 * Accumulator for (discounted) fitness value
 	 */
-	private int charterOutTimeAccumulator;
+	private long fitnessAccumulator;
 
 	public CharterOutFitnessComponent(final String name,
 			final String vesselProviderKey, final IFitnessCore<T> core) {
@@ -85,8 +83,8 @@ public class CharterOutFitnessComponent<T> extends
 	@Override
 	protected boolean reallyStartSequence(IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		idleTimeAccumulator = 0;
-		charterOutTimeAccumulator = 0;
+		fitnessAccumulator = 0;
+
 		if (vessel.getVesselInstanceType().equals(VesselInstanceType.FLEET)) {
 			// fleet vessels have potential charter-out value;
 			charterOutPrice = vessel.getHourlyCharterOutPrice();
@@ -102,15 +100,25 @@ public class CharterOutFitnessComponent<T> extends
 			@SuppressWarnings("unchecked")
 			final VoyageDetails<T> voyageDetails = (VoyageDetails<T>) object;
 			// check idle time is quite long, so a charter out is not ridiculous
-			if (generateOpportunities && voyageDetails.getIdleTime() > idleTimeThreshold) {
+			if (generateOpportunities
+					&& voyageDetails.getIdleTime() > idleTimeThreshold) {
 				// TODO this is where a market model would slot in (or maybe
 				// above)
-				idleTimeAccumulator += voyageDetails.getIdleTime();
+
+				// TODO the discount factor probably shouldn't be a double, but
+				// it's not used at the moment.
+
+				fitnessAccumulator += getDiscountedValue(time,
+						Calculator.multiply(voyageDetails.getIdleTime(),
+								charterOutPrice * generatedDiscountFactor));
 			}
 		} else if (object instanceof PortDetails) {
 			final PortDetails portDetails = (PortDetails) object;
-			if (portDetails.getPortSlot().getPortType().equals(PortType.CharterOut)) {
-				charterOutTimeAccumulator += portDetails.getVisitDuration();
+			if (portDetails.getPortSlot().getPortType()
+					.equals(PortType.CharterOut)) {
+				fitnessAccumulator += getDiscountedValue(time,
+						Calculator.multiply(portDetails.getVisitDuration(),
+								charterOutPrice));
 			}
 		}
 		return true;
@@ -119,14 +127,6 @@ public class CharterOutFitnessComponent<T> extends
 	@Override
 	protected long endSequenceAndGetCost() {
 		// result is negated because this is (potential) revenue.
-		long definiteValue = Calculator.multiply(charterOutTimeAccumulator, charterOutPrice);
-		if (generateOpportunities) {
-			definiteValue += Calculator.multiply(
-					Calculator.multiply(idleTimeAccumulator, charterOutPrice),
-					bidAskSpread);
-		}
-		return -definiteValue;
+		return -fitnessAccumulator;
 	}
-
-	// TODO annotation code for UI
 }
