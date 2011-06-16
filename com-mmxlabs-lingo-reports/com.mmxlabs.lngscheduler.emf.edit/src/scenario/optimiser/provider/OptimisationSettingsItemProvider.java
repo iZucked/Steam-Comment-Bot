@@ -72,6 +72,7 @@ public class OptimisationSettingsItemProvider
 			addRandomSeedPropertyDescriptor(object);
 			addInitialSchedulePropertyDescriptor(object);
 			addDefaultDiscountCurvePropertyDescriptor(object);
+			addFreezeDaysFromStartPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -138,6 +139,28 @@ public class OptimisationSettingsItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Freeze Days From Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFreezeDaysFromStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimisationSettings_freezeDaysFromStart_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_freezeDaysFromStart_feature", "_UI_OptimisationSettings_type"),
+				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -211,6 +234,7 @@ public class OptimisationSettingsItemProvider
 
 		switch (notification.getFeatureID(OptimisationSettings.class)) {
 			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
+			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
