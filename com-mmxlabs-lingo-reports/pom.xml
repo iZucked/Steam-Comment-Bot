@@ -73,7 +73,7 @@
 		<module>com.mmxlabs.scheduleview</module>
 		<module>com.mmxlabs.rcp.navigator</module>
 		<module>com.mmxlabs.rcp.common</module>
-		
+
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.scheduler.its</module>
 		<module>com.mmxlabs.rcp.common.tests</module>
@@ -87,15 +87,9 @@
 		are not correctly being used. -->
 	<dependencies>
 
-<!-- Now in mmx 3rd Part Repo  -->
-<!--
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math</artifactId>
-			<version>2.1</version>
-			<scope>compile</scope>
-		</dependency>
--->
+		<!-- Now in mmx 3rd Part Repo -->
+		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-math</artifactId> 
+			<version>2.1</version> <scope>compile</scope> </dependency> -->
 
 	</dependencies>
 
@@ -180,23 +174,10 @@
 							packaging type. -->
 						<!-- See Tycho 520 (https://issues.sonatype.org/browse/TYCHO-520) -->
 						<!-- See Eclipse 313997 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=313997) -->
-						<!-- 
-						<environment>
-							<os>macosx</os>
-							<ws>carbon</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-						-->
+						<!-- <environment> <os>macosx</os> <ws>carbon</ws> <arch>x86</arch> 
+							</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86</arch> 
+							</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> 
+							</environment> -->
 					</environments>
 
 				</configuration>
@@ -263,9 +244,20 @@
 		</repository>
 
 		<repository>
+			<id>mmxlabs-p2-snapshots</id>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-snapshots/</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>mmxlabs-p2-external</id>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external/</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
 			<id>mmxlabs-thirdparty</id>
-			<!-- Dummy URL -->
-			<url>http://localhost/</url>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external-other/</url>
 			<layout>p2</layout>
 		</repository>
 
