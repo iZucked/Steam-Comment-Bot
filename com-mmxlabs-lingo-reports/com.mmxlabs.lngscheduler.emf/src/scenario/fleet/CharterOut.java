@@ -6,6 +6,8 @@
  */
 package scenario.fleet;
 
+import scenario.port.Port;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -15,6 +17,7 @@ package scenario.fleet;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getMaxHeelOut <em>Max Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getHeelCVValue <em>Heel CV Value</em>}</li>
  * </ul>
@@ -25,6 +28,32 @@ package scenario.fleet;
  * @generated
  */
 public interface CharterOut extends VesselEvent {
+
+	/**
+	 * Returns the value of the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>End Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>End Port</em>' reference.
+	 * @see #setEndPort(Port)
+	 * @see scenario.fleet.FleetPackage#getCharterOut_EndPort()
+	 * @model required="true"
+	 * @generated
+	 */
+	Port getEndPort();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>End Port</em>' reference.
+	 * @see #getEndPort()
+	 * @generated
+	 */
+	void setEndPort(Port value);
 
 	/**
 	 * Returns the value of the '<em><b>Max Heel Out</b></em>' attribute.

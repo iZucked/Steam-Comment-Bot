@@ -127,13 +127,22 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Freeze Days From Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Optimisation Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int OPTIMISATION_SETTINGS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -504,6 +513,17 @@ public interface OptimiserPackage extends EPackage {
 	EReference getOptimisationSettings_DefaultDiscountCurve();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.OptimisationSettings#getFreezeDaysFromStart <em>Freeze Days From Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Freeze Days From Start</em>'.
+	 * @see scenario.optimiser.OptimisationSettings#getFreezeDaysFromStart()
+	 * @see #getOptimisationSettings()
+	 * @generated
+	 */
+	EAttribute getOptimisationSettings_FreezeDaysFromStart();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.Optimisation <em>Optimisation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -735,6 +755,14 @@ public interface OptimiserPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE = eINSTANCE.getOptimisationSettings_DefaultDiscountCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Freeze Days From Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START = eINSTANCE.getOptimisationSettings_FreezeDaysFromStart();
 
 		/**
 		 * The meta object literal for the '{@link scenario.optimiser.impl.OptimisationImpl <em>Optimisation</em>}' class.

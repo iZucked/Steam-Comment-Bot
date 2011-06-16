@@ -43,6 +43,7 @@ import scenario.schedule.Schedule;
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getInitialSchedule <em>Initial Schedule</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getFreezeDaysFromStart <em>Freeze Days From Start</em>}</li>
  * </ul>
  * </p>
  *
@@ -117,6 +118,26 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * @ordered
 	 */
 	protected boolean defaultDiscountCurveESet;
+
+	/**
+	 * The default value of the '{@link #getFreezeDaysFromStart() <em>Freeze Days From Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFreezeDaysFromStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int FREEZE_DAYS_FROM_START_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getFreezeDaysFromStart() <em>Freeze Days From Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFreezeDaysFromStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected int freezeDaysFromStart = FREEZE_DAYS_FROM_START_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -288,6 +309,27 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getFreezeDaysFromStart() {
+		return freezeDaysFromStart;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFreezeDaysFromStart(int newFreezeDaysFromStart) {
+		int oldFreezeDaysFromStart = freezeDaysFromStart;
+		freezeDaysFromStart = newFreezeDaysFromStart;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START, oldFreezeDaysFromStart, freezeDaysFromStart));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -319,6 +361,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				if (resolve) return getDefaultDiscountCurve();
 				return basicGetDefaultDiscountCurve();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
+				return getFreezeDaysFromStart();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -349,6 +393,9 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				setDefaultDiscountCurve((DiscountCurve)newValue);
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
+				setFreezeDaysFromStart((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -376,6 +423,9 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				unsetDefaultDiscountCurve();
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
+				setFreezeDaysFromStart(FREEZE_DAYS_FROM_START_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -398,6 +448,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 				return initialSchedule != null;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				return isSetDefaultDiscountCurve();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
+				return freezeDaysFromStart != FREEZE_DAYS_FROM_START_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -414,6 +466,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (randomSeed: ");
 		result.append(randomSeed);
+		result.append(", freezeDaysFromStart: ");
+		result.append(freezeDaysFromStart);
 		result.append(')');
 		return result.toString();
 	}

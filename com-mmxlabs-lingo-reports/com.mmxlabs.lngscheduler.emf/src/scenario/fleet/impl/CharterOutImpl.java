@@ -9,9 +9,11 @@ package scenario.fleet.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import scenario.fleet.CharterOut;
 import scenario.fleet.FleetPackage;
+import scenario.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,6 +22,7 @@ import scenario.fleet.FleetPackage;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getEndPort <em>End Port</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getMaxHeelOut <em>Max Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getHeelCVValue <em>Heel CV Value</em>}</li>
  * </ul>
@@ -28,6 +31,15 @@ import scenario.fleet.FleetPackage;
  * @generated
  */
 public class CharterOutImpl extends VesselEventImpl implements CharterOut {
+	/**
+	 * The cached value of the '{@link #getEndPort() <em>End Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port endPort;
 	/**
 	 * The default value of the '{@link #getMaxHeelOut() <em>Max Heel Out</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -90,6 +102,44 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Port getEndPort() {
+		if (endPort != null && endPort.eIsProxy()) {
+			InternalEObject oldEndPort = (InternalEObject)endPort;
+			endPort = (Port)eResolveProxy(oldEndPort);
+			if (endPort != oldEndPort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.CHARTER_OUT__END_PORT, oldEndPort, endPort));
+			}
+		}
+		return endPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetEndPort() {
+		return endPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEndPort(Port newEndPort) {
+		Port oldEndPort = endPort;
+		endPort = newEndPort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__END_PORT, oldEndPort, endPort));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getMaxHeelOut() {
 		return maxHeelOut;
 	}
@@ -135,6 +185,9 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case FleetPackage.CHARTER_OUT__END_PORT:
+				if (resolve) return getEndPort();
+				return basicGetEndPort();
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				return getMaxHeelOut();
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
@@ -151,6 +204,9 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case FleetPackage.CHARTER_OUT__END_PORT:
+				setEndPort((Port)newValue);
+				return;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				setMaxHeelOut((Integer)newValue);
 				return;
@@ -169,6 +225,9 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case FleetPackage.CHARTER_OUT__END_PORT:
+				setEndPort((Port)null);
+				return;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				setMaxHeelOut(MAX_HEEL_OUT_EDEFAULT);
 				return;
@@ -187,6 +246,8 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case FleetPackage.CHARTER_OUT__END_PORT:
+				return endPort != null;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				return maxHeelOut != MAX_HEEL_OUT_EDEFAULT;
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:

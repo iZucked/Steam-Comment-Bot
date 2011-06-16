@@ -25,6 +25,7 @@ import scenario.schedule.Schedule;
  *   <li>{@link scenario.optimiser.OptimisationSettings#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getInitialSchedule <em>Initial Schedule</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
+ *   <li>{@link scenario.optimiser.OptimisationSettings#getFreezeDaysFromStart <em>Freeze Days From Start</em>}</li>
  * </ul>
  * </p>
  *
@@ -168,5 +169,32 @@ public interface OptimisationSettings extends NamedObject {
 	 * @generated
 	 */
 	boolean isSetDefaultDiscountCurve();
+
+	/**
+	 * Returns the value of the '<em><b>Freeze Days From Start</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Freeze Days From Start</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Freeze Days From Start</em>' attribute.
+	 * @see #setFreezeDaysFromStart(int)
+	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_FreezeDaysFromStart()
+	 * @model default="0" required="true"
+	 * @generated
+	 */
+	int getFreezeDaysFromStart();
+
+	/**
+	 * Sets the value of the '{@link scenario.optimiser.OptimisationSettings#getFreezeDaysFromStart <em>Freeze Days From Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Freeze Days From Start</em>' attribute.
+	 * @see #getFreezeDaysFromStart()
+	 * @generated
+	 */
+	void setFreezeDaysFromStart(int value);
 
 } // OptimisationSettings

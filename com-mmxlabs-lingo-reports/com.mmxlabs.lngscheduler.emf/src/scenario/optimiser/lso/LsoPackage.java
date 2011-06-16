@@ -127,6 +127,15 @@ public interface LsoPackage extends EPackage {
 	int LSO_SETTINGS__DEFAULT_DISCOUNT_CURVE = OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE;
 
 	/**
+	 * The feature id for the '<em><b>Freeze Days From Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__FREEZE_DAYS_FROM_START = OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START;
+
+	/**
 	 * The feature id for the '<em><b>Number Of Steps</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
