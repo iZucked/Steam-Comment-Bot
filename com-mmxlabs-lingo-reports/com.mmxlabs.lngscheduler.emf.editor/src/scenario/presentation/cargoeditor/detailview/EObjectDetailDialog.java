@@ -133,8 +133,6 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 				final EObject duplicate = duplicates.get(i);
 				if (!original.equals(duplicate)) {
 					cc.append(makeEqualizer(original, duplicate));
-					System.err.println("Equalizing " + original + " with "
-							+ duplicate);
 				}
 			}
 			final boolean isExecutable = cc.canExecute();
