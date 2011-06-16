@@ -13,6 +13,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -126,7 +127,7 @@ public interface ISchedulerBuilder {
 	 * @param startPort
 	 *            the port where the client is collecting the vessel
 	 * @param endPort
-	 * 				the port where the vessel is being returned to
+	 *            the port where the vessel is being returned to
 	 * @param durationHours
 	 *            how long the charter out is for, in hours
 	 * @param maxHeelOut
@@ -136,8 +137,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVesselEventPortSlot createCharterOutEvent(String id,
-			ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours,
-			long maxHeelOut, int heelCVValue);
+			ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort,
+			int durationHours, long maxHeelOut, int heelCVValue);
 
 	/**
 	 * Create a dry dock event
@@ -147,7 +148,7 @@ public interface ISchedulerBuilder {
 	 * @param arrivalTimeWindow
 	 *            the time window in which the vessel must arrive at the port
 	 * @param port
-	 *            the port where the dry dock is 
+	 *            the port where the dry dock is
 	 * @param durationHours
 	 *            the number of hours the dry dock will take
 	 * @return
@@ -454,4 +455,80 @@ public interface ISchedulerBuilder {
 			ICurve referenceMarket, int alpha, int beta, int gamma);
 
 	ILoadPriceCalculator createNetbackContract(int buyersMargin);
+
+	/**
+	 * Constrains the given slot to lie only on the given vessels.
+	 * 
+	 * Note that this does not ensure the compatibility of any other
+	 * constraints; for example, if you use
+	 * {@link #setVesselClassInaccessiblePorts(IVesselClass, Set)} to prevent
+	 * vessels of this class from visiting the port for this slot, you will have
+	 * an unsolvable scenario.
+	 * 
+	 * Passing an empty set or null will clear any constraint
+	 * 
+	 * @param slot
+	 *            the slot to bind to a vessel
+	 * @param vessel
+	 *            the vessel to keep this slot on
+	 */
+	void constrainSlotToVessels(IPortSlot slot, Set<IVessel> vessels);
+
+	/**
+	 * Constrains the given slot to lie only on vessels with the given classes.
+	 * 
+	 * In the end the slot will be on the union of vessels with these classes
+	 * and any vessels set with {@link #constrainSlotToVessels(IPortSlot, Set)}.
+	 * 
+	 * Passing an empty or null set will clear any constraint.
+	 * 
+	 * Calls to this method <em>replace</em> previous calls, rather than
+	 * combining them.
+	 * 
+	 * @param slot
+	 * @param vesselClasses
+	 */
+	void constrainSlotToVesselClasses(IPortSlot slot,
+			Set<IVesselClass> vesselClasses);
+
+	/**
+	 * <p>
+	 * Constraints the given port slots to be adjacent to one another in the
+	 * solution, in the order that they occur as arguments here.
+	 * </p>
+	 * <p>
+	 * Notes:
+	 * <ol>
+	 * <li>This does nothing to ensure the compatibility of other constraints,
+	 * so if you constrain two slots to be adjacent and then restrict them to
+	 * different vessels with
+	 * {@link #constrainSlotToVessels(IPortSlot, IVessel)} (for example) you
+	 * will have an unsolvable scenario.</li>
+	 * <li>Slots do not always relate directly to sequence elements; slots which
+	 * produce a redirection, like some charter outs, can result in the creation
+	 * of several sequence elements (although those elements have their own
+	 * slots, they are internal). This method does account for that, so if you
+	 * constrain something to come before a charter out with a redirection the
+	 * virtual elements introduced for the redirection won't be a problem.</li>
+	 * <li>Passing null for either argument removes any existing constraint set
+	 * with the non-null argument in the same position, so
+	 * <code>constrainSlotAdjacency(x, y); constrainSlotAdjacency(null, y);</code>
+	 * is an identity operation.</li>
+	 * </ol>
+	 * </p>
+	 * 
+	 * @param firstSlot
+	 *            this slot will always precede secondSlot
+	 * @param secondSlot
+	 *            this slot will always after firstSlot
+	 */
+	void constrainSlotAdjacency(IPortSlot firstSlot, IPortSlot secondSlot);
+
+	/**
+	 * Set a discount curve for the given fitness component name
+	 * 
+	 * @param name
+	 * @param iCurve
+	 */
+	void setFitnessComponentDiscountCurve(String name, ICurve iCurve);
 }
