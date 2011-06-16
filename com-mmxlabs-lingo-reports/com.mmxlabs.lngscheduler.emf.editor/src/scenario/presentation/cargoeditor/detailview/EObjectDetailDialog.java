@@ -270,20 +270,6 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		btnPrev.setImage(PlatformUI.getWorkbench().getSharedImages()
 				.getImage(ISharedImages.IMG_TOOL_BACK));
 
-		btnPrev.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				selectedObjectIndex--;
-				if (selectedObjectIndex < 0) {
-					selectedObjectIndex = objects.size() - 1;
-				}
-				displaySelectedObject(composite,
-						objects.get(selectedObjectIndex));
-				shell.setText("Editing (" + (selectedObjectIndex + 1) + "/"
-						+ objects.size() + ")");
-			}
-		});
-
 		final Button btnNext = new Button(composite_1, SWT.NONE);
 		final GridData gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true,
 				false, 1, 1);
@@ -293,13 +279,44 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		btnNext.setImage(PlatformUI.getWorkbench().getSharedImages()
 				.getImage(ISharedImages.IMG_TOOL_FORWARD));
 
+		final Runnable updateButtonEnablement = new Runnable() {
+			@Override
+			public void run() {
+				if (selectedObjectIndex == 0) {
+					btnPrev.setEnabled(false);
+				} else {
+					btnPrev.setEnabled(true);
+				}
+				
+				if (selectedObjectIndex == objects.size() - 1) {
+					btnNext.setEnabled(false);
+				} else {
+					btnNext.setEnabled(true);
+				}
+			}
+		};
+		
+		btnPrev.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				selectedObjectIndex--;
+				
+				updateButtonEnablement.run();
+				
+				displaySelectedObject(composite,
+						objects.get(selectedObjectIndex));
+				shell.setText("Editing (" + (selectedObjectIndex + 1) + "/"
+						+ objects.size() + ")");
+			}
+		});
+		
 		btnNext.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				selectedObjectIndex++;
-				if (selectedObjectIndex >= objects.size()) {
-					selectedObjectIndex = 0;
-				}
+
+				updateButtonEnablement.run();
+				
 				displaySelectedObject(composite,
 						objects.get(selectedObjectIndex));
 
@@ -347,6 +364,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		displaySelectedObject(composite, objects.get(selectedObjectIndex));
 
+		updateButtonEnablement.run();
+		
 		return shell;
 	}
 
