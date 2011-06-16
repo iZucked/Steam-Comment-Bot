@@ -59,7 +59,6 @@ import scenario.port.Port;
 import scenario.port.VesselClassCost;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
-import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 import scenario.schedule.events.VesselEventVisit;
