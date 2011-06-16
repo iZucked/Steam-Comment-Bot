@@ -45,7 +45,7 @@ public class BasicAttributeManipulator implements ICellManipulator,
 		final Object currentValue = reallyGetValue(object);
 		if ((currentValue == null && value == null) || ((currentValue != null && value != null) && currentValue.equals(value)))
 			return;
-		System.err.println(currentValue + " => " + value);
+
 		final Command command = editingDomain.createCommand(SetCommand.class,
 				new CommandParameter((EObject) object, field, value));
 		((SetCommand) command).setLabel("Set " + field.getName() + " to "
