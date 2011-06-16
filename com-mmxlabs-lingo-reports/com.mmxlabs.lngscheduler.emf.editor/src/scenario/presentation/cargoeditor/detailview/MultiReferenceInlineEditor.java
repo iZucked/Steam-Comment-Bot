@@ -12,6 +12,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -107,7 +108,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		for (final EObject obj : selectedValues) {
 			if (sb.length() > 0)
 				sb.append(", ");
-			sb.append(valueProvider.getName(obj));
+			sb.append(valueProvider.getName(input, (EReference) feature, obj));
 		}
 		theLabel.setText(sb.toString());
 	}

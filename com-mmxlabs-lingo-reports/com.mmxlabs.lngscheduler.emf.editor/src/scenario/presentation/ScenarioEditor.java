@@ -297,6 +297,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				public void keyReleased(final org.eclipse.swt.events.KeyEvent e) {
 
 					// TODO: Wrap up in a command with keybindings
+					// TODO if you edit a cell and then press return to finish
+					// editing,
+					// this listener still happens. Either we need to cancel the
+					// event,
+					// or detect editing from the viewer, or set our own flags
+					// to prevent this problem.
 					if (e.keyCode == '\r') {
 						final ISelection selection = getViewer().getSelection();
 						if (selection instanceof IStructuredSelection) {
@@ -354,13 +360,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	}
 
-	private abstract class ScenarioRVP implements IReferenceValueProvider {
+	private abstract class ScenarioRVP extends EContentAdapter implements
+			IReferenceValueProvider {
+		final EAttribute nameAttribute;
+
+		public ScenarioRVP(EAttribute nameAttribute) {
+			super();
+			this.nameAttribute = nameAttribute;
+		}
+
 		protected Scenario getEnclosingScenario(final EObject target) {
 			return getScenario(); // required so that dialog editor works
-			// while (target != null && !(target instanceof Scenario)) {
-			// target = target.eContainer();
-			// }
-			// return (Scenario) target;
 		}
 
 		protected ArrayList<Pair<String, EObject>> getSortedNames(
@@ -385,153 +395,255 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 
 		@Override
-		public String getName(final EObject target) {
+		public String getName(final EObject referer,
+				final EReference reference, final EObject target) {
 			return ((NamedObject) target).getName();
 		}
+
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if (!notification.isTouch()
+					&& isRelevantTarget(notification.getNotifier(),
+							notification.getFeature())) {
+				cacheValues();
+			}
+		}
+
+		protected boolean isRelevantTarget(final Object target,
+				final Object feature) {
+			return feature.equals(nameAttribute);
+		}
+
+		protected abstract void cacheValues();
 	}
 
-	final ScenarioRVP scheduleProvider = new ScenarioRVP() {
-		@Override
-		public List<Pair<String, EObject>> getAllowedValues(
-				final EObject target, final EStructuralFeature field) {
-			final Scenario scenario = getEnclosingScenario(target);
-			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getScheduleModel().getSchedules(),
-					SchedulePackage.eINSTANCE.getSchedule_Name());
-			result.add(0, new Pair<String, EObject>("none", null));
-			return result;
+	private abstract class SimpleRVP extends ScenarioRVP {
+		private List<Pair<String, EObject>> cachedValues = null;
+		private final EReference containingReference;
+
+		public SimpleRVP(final EReference containingReference) {
+			super(namedObjectName);
+			this.containingReference = containingReference;
 		}
 
 		@Override
-		public String getName(final EObject target) {
+		public List<Pair<String, EObject>> getAllowedValues(EObject target,
+				EStructuralFeature field) {
+			if (cachedValues == null) {
+				install();
+				cacheValues();
+			}
+			return cachedValues;
+		}
+
+		protected abstract void install();
+
+		@Override
+		protected boolean isRelevantTarget(Object target, Object feature) {
+			return (super.isRelevantTarget(target, feature) && (containingReference
+					.getEReferenceType().isSuperTypeOf(((EObject) target)
+					.eClass())))
+					|| feature == containingReference;
+		}
+
+		@Override
+		protected void cacheValues() {
+			cachedValues = getSortedNames(getObjects(), namedObjectName);
+			final Pair<String, EObject> none = getEmptyObject();
+			if (none != null)
+				cachedValues.add(0, none);
+		}
+
+		protected Pair<String, EObject> getEmptyObject() {
+			return null;
+		}
+
+		protected abstract EList<? extends EObject> getObjects();
+	}
+
+	final ScenarioRVP scheduleProvider = new SimpleRVP(
+			SchedulePackage.eINSTANCE.getScheduleModel_Schedules()) {
+
+		protected void install() {
+			getScenario().getScheduleModel().eAdapters().add(this);
+		}
+
+		@Override
+		public String getName(final EObject referer,
+				final EReference reference, final EObject target) {
 			if (target == null)
 				return "none";
 			return ((Schedule) target).getName();
 		}
-	};
 
-	final ScenarioRVP fuelProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(
-				final EObject target, final EStructuralFeature field) {
-			return getSortedNames(getEnclosingScenario(target).getFleetModel()
-					.getFuels(), namedObjectName);
+		protected Pair<String, EObject> getEmptyObject() {
+			return new Pair<String, EObject>("none", null);
 		}
 
-	};
-
-	final ScenarioRVP vesselProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(
-				final EObject target, final EStructuralFeature field) {
-			final Scenario scenario = getEnclosingScenario(target);
-			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getFleetModel().getFleet(), namedObjectName);
-			return result;
+		protected EList<? extends EObject> getObjects() {
+			return getScenario().getScheduleModel().getSchedules();
 		}
 	};
 
-	final ScenarioRVP vesselClassProvider = new ScenarioRVP() {
+	final ScenarioRVP fuelProvider = new SimpleRVP(
+			FleetPackage.eINSTANCE.getFleetModel_Fuels()) {
+		protected void install() {
+			getScenario().getFleetModel().eAdapters().add(this);
+		}
+
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(
-				final EObject target, final EStructuralFeature field) {
-			final Scenario scenario = getEnclosingScenario(target);
-			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getFleetModel().getVesselClasses(), namedObjectName);
-			return result;
+		protected EList<? extends EObject> getObjects() {
+			return getScenario().getFleetModel().getFuels();
 		}
 	};
 
-	final ScenarioRVP entityProvider = new ScenarioRVP() {
+	final ScenarioRVP vesselProvider = new SimpleRVP(
+			FleetPackage.eINSTANCE.getFleetModel_Fleet()) {
+		protected void install() {
+			getScenario().getFleetModel().eAdapters().add(this);
+		}
+
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(
-				final EObject target, final EStructuralFeature field) {
-			final Scenario scenario = getEnclosingScenario(target);
-			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getContractModel().getEntities(), namedObjectName);
-			return result;
+		protected EList<? extends EObject> getObjects() {
+			return getScenario().getFleetModel().getFleet();
 		}
 	};
 
-	final ScenarioRVP portProvider = new ScenarioRVP() {
+	final ScenarioRVP vesselClassProvider = new SimpleRVP(
+			FleetPackage.eINSTANCE.getFleetModel_VesselClasses()) {
+		protected void install() {
+			getScenario().getFleetModel().eAdapters().add(this);
+		}
+
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(
-				final EObject target, final EStructuralFeature field) {
-			if (target == null)
-				return Collections.emptyList();
-			final Scenario scenario = getEnclosingScenario(target);
-			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getPortModel().getPorts(), namedObjectName);
-			return result;
+		protected EList<? extends EObject> getObjects() {
+			return getScenario().getFleetModel().getVesselClasses();
 		}
 	};
 
-	final ScenarioRVP contractProvider = new ScenarioRVP() {
+	final ScenarioRVP entityProvider = new SimpleRVP(
+			ContractPackage.eINSTANCE.getContractModel_Entities()) {
+		protected void install() {
+			getScenario().getContractModel().eAdapters().add(this);
+		}
+
+		@Override
+		protected EList<? extends EObject> getObjects() {
+			return getScenario().getContractModel().getEntities();
+		}
+	};
+
+	final ScenarioRVP portProvider = new SimpleRVP(
+			PortPackage.eINSTANCE.getPortModel_Ports()) {
+		protected void install() {
+			getScenario().getPortModel().eAdapters().add(this);
+		}
+
+		@Override
+		protected EList<? extends EObject> getObjects() {
+			return getScenario().getPortModel().getPorts();
+		}
+	};
+
+	final ScenarioRVP indexProvider = new SimpleRVP(
+			MarketPackage.eINSTANCE.getMarketModel_Indices()) {
+		protected void install() {
+			getScenario().getMarketModel().eAdapters().add(this);
+		}
+
+		@Override
+		protected EList<? extends EObject> getObjects() {
+			return getScenario().getMarketModel().getIndices();
+		}
+	};
+
+	final ScenarioRVP contractProvider = new ScenarioRVP(namedObjectName) {
+		private List<Pair<String, EObject>> purchaseContracts = null;
+		private List<Pair<String, EObject>> salesContracts = null;
+		private List<Pair<String, EObject>> allContracts = null;
+
+		protected void install() {
+			getScenario().getContractModel().eAdapters().add(this);
+		}
+
 		@Override
 		public List<Pair<String, EObject>> getAllowedValues(
 				final EObject target, final EStructuralFeature field) {
-			final String nullValueName;
-			final List<Pair<String, EObject>> result;
-			final Scenario scenario = getEnclosingScenario(target);
+			final Scenario scenario = getScenario();
+
+			if (purchaseContracts == null) {
+				install();
+				cacheValues();
+			}
 
 			if (scenario != null) {
-
 				if (target instanceof LoadSlot) {
-					// load slots have load contracts
-					result = getSortedNames(scenario.getContractModel()
-							.getPurchaseContracts(),
-							ScenarioPackage.eINSTANCE.getNamedObject_Name());
-					final Port port = ((Slot) target).getPort();
-					final Contract portContract = port == null ? null : port
-							.getDefaultContract();
-					if (portContract == null) {
-						nullValueName = "empty";
-					} else {
-						nullValueName = portContract.getName() + " [from "
-								+ ((Slot) target).getPort().getName() + "]";
-					}
+					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(
+							purchaseContracts);
+					result.get(0).setFirst(getName(target, null, null));
+					return result;
 				} else if (target instanceof Slot) {
-					// discharge slots have discharge contracts
-					result = getSortedNames(scenario.getContractModel()
-							.getSalesContracts(),
-							ScenarioPackage.eINSTANCE.getNamedObject_Name());
-					final Port port = ((Slot) target).getPort();
+					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(
+							salesContracts);
+
+					result.get(0).setFirst(getName(target, null, null));
+					return result;
+				} else {
+					return allContracts;
+				}
+			}
+
+			return Collections.singletonList(new Pair<String, EObject>("empty",
+					null));
+		}
+
+		@Override
+		public String getName(EObject referer, EReference reference,
+				EObject target) {
+			if (target == null) {
+				if (referer instanceof Slot) {
+					final Port port = ((Slot) referer).getPort();
 					final Contract portContract = port == null ? null : port
 							.getDefaultContract();
-					if (portContract == null) {
-						nullValueName = "empty";
+					if (portContract != null) {
+						return portContract.getName() + " [from "
+								+ port.getName() + "]";
 					} else {
-						nullValueName = portContract.getName() + " [from "
-								+ ((Slot) target).getPort().getName() + "]";
+						return "empty";
 					}
 				} else {
-					// other things have all kinds of contract
-					result = getSortedNames(scenario.getContractModel()
-							.getSalesContracts(),
-							ScenarioPackage.eINSTANCE.getNamedObject_Name());
-					result.addAll(getSortedNames(scenario.getContractModel()
-							.getPurchaseContracts(), ScenarioPackage.eINSTANCE
-							.getNamedObject_Name()));
-					nullValueName = "empty";
+					return "empty";
 				}
 			} else {
-				result = new LinkedList<Pair<String, EObject>>();
-				nullValueName = "empty";
+				return (String) target.eGet(nameAttribute);
 			}
-			result.add(0, new Pair<String, EObject>(nullValueName, null));
-
-			return result;
 		}
-	};
 
-	final ScenarioRVP indexProvider = new ScenarioRVP() {
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(
-				final EObject target, final EStructuralFeature field) {
-			final Scenario scenario = getEnclosingScenario(target);
-			final List<Pair<String, EObject>> result = getSortedNames(scenario
-					.getMarketModel().getIndices(), namedObjectName);
-			return result;
+		protected void cacheValues() {
+			final Scenario scenario = getScenario();
+			salesContracts = getSortedNames(scenario.getContractModel()
+					.getSalesContracts(), nameAttribute);
+			purchaseContracts = getSortedNames(scenario.getContractModel()
+					.getPurchaseContracts(), nameAttribute);
+			allContracts = getSortedNames(scenario.getContractModel()
+					.getSalesContracts(), nameAttribute);
+			allContracts.addAll(purchaseContracts);
+			allContracts.add(0, new Pair<String, EObject>("empty", null));
+			salesContracts.add(0, new Pair<String, EObject>("empty", null));
+			purchaseContracts.add(0, new Pair<String, EObject>("empty", null));
+		}
+
+		@Override
+		protected boolean isRelevantTarget(Object target, Object feature) {
+			return (feature == nameAttribute && target instanceof Contract)
+					|| feature == ContractPackage.eINSTANCE
+							.getContractModel_PurchaseContracts()
+					|| feature == ContractPackage.eINSTANCE
+							.getContractModel_SalesContracts();
 		}
 	};
 
@@ -1038,7 +1150,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								setSelectionToViewer(mostRecentCommand
 										.getAffectedObjects());
 							} catch (Exception ex) {
-								// not all commands will do this properly ,if you put a 
+								// not all commands will do this properly ,if
+								// you put a
 							}
 						}
 						if (propertySheetPage != null

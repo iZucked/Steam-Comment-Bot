@@ -37,16 +37,8 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-//		if (valueList.size() == 0) 
-			canEdit(object);
 		final EObject value = (EObject) super.getValue(object);
-
-		int x = valueList.indexOf(value);
-		if (x == -1)
-			return "empty";
-		else
-			return names.get(x);
-
+		return valueProvider.getName((EObject) object, (EReference) field, value);
 	}
 
 	@Override
