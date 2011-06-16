@@ -6,6 +6,7 @@ package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,7 +40,6 @@ import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.CharterOut;
-import scenario.fleet.Drydock;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
@@ -57,6 +57,15 @@ import scenario.port.Canal;
 import scenario.port.DistanceLine;
 import scenario.port.Port;
 import scenario.port.VesselClassCost;
+import scenario.schedule.Schedule;
+import scenario.schedule.Sequence;
+import scenario.schedule.events.PortVisit;
+import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.SlotVisit;
+import scenario.schedule.events.VesselEventVisit;
+import scenario.schedule.fleetallocation.AllocatedVessel;
+import scenario.schedule.fleetallocation.FleetVessel;
+import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
@@ -68,11 +77,13 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -246,6 +257,8 @@ public class LNGScenarioTransformer {
 
 		buildDiscountCurves(builder);
 
+		freezeStartSequences(builder, entities);
+
 		return builder.getOptimisationData();
 	}
 
@@ -375,14 +388,16 @@ public class LNGScenarioTransformer {
 					convertTime(event.getStartDate()),
 					convertTime(event.getEndDate()));
 			final IPort port = portAssociation.lookup(event.getStartPort());
-			final IPort endPort = portAssociation.lookup(event.getEndPort());
 			final int durationHours = event.getDuration() * 24;
 			final IVesselEventPortSlot builderSlot;
 			if (event instanceof CharterOut) {
 				final CharterOut charterOut = (CharterOut) event;
+				final IPort endPort = portAssociation.lookup(charterOut
+						.getEndPort());
 				builderSlot = builder.createCharterOutEvent(event.getId(),
-						window, port,endPort, durationHours,
-						charterOut.getMaxHeelOut() * (long)Calculator.ScaleFactor,
+						window, port, endPort, durationHours,
+						charterOut.getMaxHeelOut()
+								* (long) Calculator.ScaleFactor,
 						Calculator.scaleToInt(charterOut.getHeelCVValue()));
 			} else {
 				builderSlot = builder.createDrydockEvent(event.getId(), window,
@@ -705,10 +720,34 @@ public class LNGScenarioTransformer {
 		 * Create spot charter vessels with no start/end requirements
 		 */
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
-			if (eVc.getSpotCharterCount() > 0)
-				builder.createSpotVessels("SPOT-" + eVc.getName(),
-						vesselClassAssociation.lookup(eVc),
+			if (eVc.getSpotCharterCount() > 0) {
+				final List<IVessel> spots = builder.createSpotVessels("SPOT-"
+						+ eVc.getName(), vesselClassAssociation.lookup(eVc),
 						eVc.getSpotCharterCount());
+				// TODO this is not necessarily ideal; if there is an initial
+				// solution set we associate all the spot vessels with ones in
+				// that solution.
+				int vesselIndex = 0;
+				if (scenario.getOptimisation() != null
+						&& scenario.getOptimisation().getCurrentSettings() != null) {
+					final Schedule initialSchedule = scenario.getOptimisation()
+							.getCurrentSettings().getInitialSchedule();
+					if (initialSchedule != null) {
+						for (final AllocatedVessel allocatedVessel : initialSchedule
+								.getFleet()) {
+							if (allocatedVessel instanceof SpotVessel
+									&& ((SpotVessel) allocatedVessel)
+											.getVesselClass() == eVc) {
+								// map it to one of the ones we have just made
+								assert vesselIndex < spots.size() : "Initial schedule should not have more spot vessels than fleet suggests";
+								entities.addModelObject(allocatedVessel,
+										spots.get(vesselIndex));
+								vesselIndex++;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		return new Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>>(
@@ -796,6 +835,100 @@ public class LNGScenarioTransformer {
 				Calculator.scaleToInt(attrs.getNboRate()) / 24,
 				Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
 				Calculator.scaleToInt(attrs.getIdleConsumptionRate()) / 24, cc);
+	}
+
+	public void freezeStartSequences(final ISchedulerBuilder builder,
+			final ModelEntityMap entities) {
+		if (scenario.getOptimisation() != null
+				&& scenario.getOptimisation().getCurrentSettings() != null
+				&& scenario.getOptimisation().getCurrentSettings()
+						.getInitialSchedule() != null) {
+			final int freezeHours = 24 * scenario.getOptimisation()
+					.getCurrentSettings().getFreezeDaysFromStart();
+			if (freezeHours <= 0)
+				return;
+			final Schedule initialSchedule = scenario.getOptimisation()
+					.getCurrentSettings().getInitialSchedule();
+			// set up constraints on elements of initial schedule
+
+			// TODO at the moment OptimisationTransformer also processes the
+			// initial schedule, to create advice for the initial sequence
+			// builder. This isn't ideal, but if we want the ISchedulerBuilder
+			// to be the only way to get an IOptimisationData, and to prevent
+			// post-hoc changes to same it has to be this way.
+
+			final Date freezeDate = entities.getDateFromHours(freezeHours);
+			System.err.println("Freezing sequencing decisions before " + freezeDate);
+			for (final Sequence sequence : initialSchedule.getSequences()) {
+				final AllocatedVessel av = sequence.getVessel();
+				final IVessel builderVessel;
+				if (av instanceof SpotVessel) {
+					// reverse lookup hack - see above where I associated spot
+					// vessels with
+					// IVessels in buildFleet(.)
+					builderVessel = entities.getOptimiserObject(av,
+							IVessel.class);
+				} else if (av instanceof FleetVessel) {
+					builderVessel = entities.getOptimiserObject(
+							((FleetVessel) av).getVessel(), IVessel.class);
+				} else {
+					throw new RuntimeException(
+							av.getClass().getSimpleName()
+									+ " is a kind of AllocatedVessel this code cannot translate");
+				}
+
+				IPortSlot previousSlot = null;
+				/**
+				 * Used to ensure that if we freeze a load we also freeze the next discharge.
+				 */
+				boolean waitingForDischargeSlot = false;
+				for (final ScheduledEvent event : sequence.getEvents()) {
+					if (event.getStartTime().before(freezeDate) || waitingForDischargeSlot) {
+						final IPortSlot currentSlot;
+						if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							// lock sequence and vessel
+							currentSlot = entities.getOptimiserObject(
+									slotVisit.getSlot(), IPortSlot.class);
+							if (slotVisit.getSlot() instanceof LoadSlot) {
+								waitingForDischargeSlot = true;
+							} else {
+								waitingForDischargeSlot = false;
+							}
+						} else if (event instanceof VesselEventVisit) {
+							final VesselEventVisit vev = (VesselEventVisit) event;
+							currentSlot = entities.getOptimiserObject(
+									vev.getVesselEvent(), IPortSlot.class);
+						} else {
+							currentSlot = null;
+						}
+
+						if (currentSlot != null) {
+							// bind slot to vessel - this overrides any previous
+							// binding
+							builder.constrainSlotToVessels(currentSlot,
+									Collections.singleton(builderVessel));
+
+							// this removes any binding to vessel class, because
+							// the allowed vessels are the union of the above
+							// and the classes.
+							builder.constrainSlotToVesselClasses(currentSlot,
+									null);
+							if (previousSlot != null) {
+								// bind sequencing as well - this forces
+								// previousSlot to come before currentSlot.
+								builder.constrainSlotAdjacency(previousSlot,
+										currentSlot);
+							}
+
+							previousSlot = currentSlot;
+						}
+					} else {
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	/**

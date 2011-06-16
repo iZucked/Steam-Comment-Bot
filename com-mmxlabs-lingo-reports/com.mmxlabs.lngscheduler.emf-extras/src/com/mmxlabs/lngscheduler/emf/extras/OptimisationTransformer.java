@@ -179,8 +179,9 @@ public class OptimisationTransformer {
 	}
 
 	/**
-	 * Create initial sequences; currently random, ideally will use the
-	 * optimisation settings.
+	 * Create initial sequences; starts with the advice sequences (if there are
+	 * any) and then uses the {@link ConstrainedInitialSequenceBuilder} to sort
+	 * out any unsequenced elements.
 	 * 
 	 * @param data
 	 * @return
@@ -209,21 +210,21 @@ public class OptimisationTransformer {
 							SchedulerConstants.DCP_startEndRequirementProvider,
 							IStartEndRequirementProvider.class);
 
-			// collect spot vessels
-			for (final IResource resource : data.getResources()) {
-				final IVessel vessel = vp.getVessel(resource);
-				if (vessel.getVesselInstanceType().equals(
-						VesselInstanceType.SPOT_CHARTER)) {
-					if (spotVesselsByClass.containsKey(vessel.getVesselClass())) {
-						spotVesselsByClass.get(vessel.getVesselClass()).add(
-								vessel);
-					} else {
-						final HashSet<IVessel> hs = new LinkedHashSet<IVessel>();
-						hs.add(vessel);
-						spotVesselsByClass.put(vessel.getVesselClass(), hs);
-					}
-				}
-			}
+			// // collect spot vessels
+			// for (final IResource resource : data.getResources()) {
+			// final IVessel vessel = vp.getVessel(resource);
+			// if (vessel.getVesselInstanceType().equals(
+			// VesselInstanceType.SPOT_CHARTER)) {
+			// if (spotVesselsByClass.containsKey(vessel.getVesselClass())) {
+			// spotVesselsByClass.get(vessel.getVesselClass()).add(
+			// vessel);
+			// } else {
+			// final HashSet<IVessel> hs = new LinkedHashSet<IVessel>();
+			// hs.add(vessel);
+			// spotVesselsByClass.put(vessel.getVesselClass(), hs);
+			// }
+			// }
+			// }
 
 			for (final Sequence sequence : settings.getInitialSchedule()
 					.getSequences()) {
@@ -232,13 +233,21 @@ public class OptimisationTransformer {
 				final IVessel vessel;
 
 				if (av instanceof SpotVessel) {
-					final IVesselClass vesselClass = mem.getOptimiserObject(
-							((SpotVessel) av).getVesselClass(),
-							IVesselClass.class);
-					// match vesselClass with a suitable vessel
-					vessel = spotVesselsByClass.get(vesselClass).iterator()
-							.next();
-					spotVesselsByClass.get(vesselClass).remove(vessel);
+					// final IVesselClass vesselClass = mem.getOptimiserObject(
+					// ((SpotVessel) av).getVesselClass(),
+					// IVesselClass.class);
+					// // match vesselClass with a suitable vessel
+					// vessel = spotVesselsByClass.get(vesselClass).iterator()
+					// .next();
+					// spotVesselsByClass.get(vesselClass).remove(vessel);
+
+					/**
+					 * This works because {@link LNGScenarioTransformer}
+					 * previously allocated all SpotVessels in the initial
+					 * schedule to IVessels
+					 */
+
+					vessel = mem.getOptimiserObject(av, IVessel.class);
 				} else {
 					vessel = mem.getOptimiserObject(
 							((FleetVessel) av).getVessel(), IVessel.class);
@@ -258,13 +267,19 @@ public class OptimisationTransformer {
 						final IPortSlot portSlot = mem.getOptimiserObject(
 								((SlotVisit) event).getSlot(), IPortSlot.class);
 						if (portSlot == null) {
-							System.err.println("Slot " + v.getSlot().getId() + " is missing from the optimisation - perhaps you changed its cargo type but didn't delete it from the initial solution");
+							System.err
+									.println("Slot "
+											+ v.getSlot().getId()
+											+ " is missing from the optimisation - perhaps you changed its cargo type but didn't delete it from the initial solution");
 							continue;
 						}
 						ms.add(psp.getElement(portSlot));
 					} else if (event instanceof CharterOutVisit) {
-						final CharterOut co = ((CharterOutVisit)event).getCharterOut();
-						final IVesselEventPortSlot coSlot = mem.getOptimiserObject(co, IVesselEventPortSlot.class);
+						final CharterOut co = ((CharterOutVisit) event)
+								.getCharterOut();
+						final IVesselEventPortSlot coSlot = mem
+								.getOptimiserObject(co,
+										IVesselEventPortSlot.class);
 						ms.add(psp.getElement(coSlot));
 					}
 				}
