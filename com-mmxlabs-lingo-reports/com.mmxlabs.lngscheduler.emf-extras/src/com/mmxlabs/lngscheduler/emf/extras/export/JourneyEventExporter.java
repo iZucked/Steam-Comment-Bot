@@ -40,6 +40,8 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 
 		if (event == null) return null;
 		
+		if (event.getDistance() == 0) return null; // filter out zero-length journeys
+		
 		final Port eFromPort = entities.getModelObject(event.getFromPort(),
 				Port.class);
 		final Port eToPort = entities.getModelObject(event.getToPort(),
