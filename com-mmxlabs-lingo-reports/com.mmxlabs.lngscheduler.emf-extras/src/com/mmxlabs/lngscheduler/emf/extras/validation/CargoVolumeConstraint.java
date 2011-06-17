@@ -8,8 +8,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.emf.validation.model.IConstraintStatus;
+
+import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 import scenario.cargo.Cargo;
+import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 
 /**
@@ -33,10 +37,12 @@ public class CargoVolumeConstraint extends AbstractModelConstraint {
 			final Slot dischargeSlot = cargo.getDischargeSlot();
 			if (loadSlot != null && dischargeSlot != null) {
 				if (loadSlot.getMaxQuantity() < dischargeSlot.getMinQuantity()) {
-					return ctx.createFailureStatus(cargo.getId());
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity().getName());
+					return status;
 				}
 				if (loadSlot.getMinQuantity() > dischargeSlot.getMaxQuantity()) {
-					return ctx.createFailureStatus(cargo.getId());
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity().getName());
+					return status;
 				}
 			}
 		}

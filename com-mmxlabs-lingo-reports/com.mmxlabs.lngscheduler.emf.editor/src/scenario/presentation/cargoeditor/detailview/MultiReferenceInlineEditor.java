@@ -90,7 +90,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 		theLabel = label;
 
-		return buttonAndLabel;
+		return super.wrapControl(buttonAndLabel);
 	}
 
 	@Override

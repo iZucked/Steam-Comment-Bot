@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -16,6 +18,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -45,11 +50,38 @@ public class EObjectDetailView extends Composite {
 	private final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
 	private final List<IInlineEditor> editors = new ArrayList<IInlineEditor>();
 	private final ICommandProcessor processor;
+	
+	private final IBatchValidator validator;
+	private EObject input;
+	
+
 
 	public EObjectDetailView(final Composite parent, final int style,
 			final ICommandProcessor processor, final EditingDomain editingDomain) {
 		super(parent, style);
-		this.processor = processor;
+		// Wrap in processor which triggers validation on object change
+		this.processor = new ICommandProcessor() {
+
+			@Override
+			public void processCommand(final Command command, final EObject target,
+					final EStructuralFeature feature) {
+				
+				processor .processCommand(command, target, feature);
+				
+				final IStatus status = validator.validate(input);
+				
+				for (final IInlineEditor e : editors) {
+					e.processValidation(status);
+				}
+			}
+		};
+		
+		validator = ModelValidationService.getInstance().newValidator(
+				EvaluationMode.BATCH);
+
+		// include live constraints, also, in batch validation
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS,
+				true);
 	}
 
 	/**
@@ -84,6 +116,8 @@ public class EObjectDetailView extends Composite {
 		public void setInput(final EObject object);
 
 		public Control createControl(final Composite parent);
+		
+		void processValidation(IStatus status);
 	}
 
 	public interface ICommandProcessor {
@@ -261,6 +295,9 @@ public class EObjectDetailView extends Composite {
 	}
 
 	public void setInput(final EObject object) {
+		
+		this.input = object;
+		
 		// release any reference to old input and handle new input
 		for (final IInlineEditor editor : editors) {
 			try {
@@ -269,6 +306,12 @@ public class EObjectDetailView extends Composite {
 				System.err.println("Error setting input on " + editor);
 				ex.printStackTrace();
 			}
+		}
+
+		// Set initial validation status
+		final IStatus status = (input == null) ? Status.OK_STATUS : validator.validate(input);
+		for (final IInlineEditor e : editors) {
+			e.processValidation(status);
 		}
 	}
 
