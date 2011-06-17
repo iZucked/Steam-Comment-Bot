@@ -11,7 +11,6 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -41,7 +40,7 @@ import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 public class TheNavigator extends CommonNavigator {
 
 	private final ResourceListener resourceListener = new ResourceListener();
-	
+
 	final IJobManagerListener jobManagerListener = new JobManagerListener() {
 
 		/**
@@ -196,8 +195,10 @@ public class TheNavigator extends CommonNavigator {
 							final LNGSchedulerJob j = new LNGSchedulerJob(
 									scenario);
 
-							jobManager.addJobManagerListener(new DisposeOnRemoveListener(j));
-							
+							jobManager
+									.addJobManagerListener(new DisposeOnRemoveListener(
+											j));
+
 							jobManager.addJob(j, resource);
 						}
 
@@ -227,14 +228,20 @@ public class TheNavigator extends CommonNavigator {
 		Activator.getDefault().getJobManager()
 				.removeJobManagerListener(jobManagerListener);
 
+		resourceListener.dispose();
+
 		super.dispose();
 	}
-	
 
+	/**
+	 * {@link IResourceChangeListener} implementation to remove jobs in the
+	 * CREATED state on filesystem changes.
+	 * 
+	 * @author Simon Goodall
+	 * 
+	 */
 	private class ResourceListener implements IResourceChangeListener,
 			IResourceDeltaVisitor {
-
-		private final ResourceSetImpl resourceSet = new ResourceSetImpl();
 
 		public ResourceListener() {
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
@@ -262,66 +269,44 @@ public class TheNavigator extends CommonNavigator {
 
 			if (changedResource.getType() == IResource.FILE
 					&& changedResource.getFileExtension().equals("scenario")) {
-//				try {
+				// try {
 
-//					final String path = ((IFile) changedResource).getFullPath()
-//							.toString();
-//					final URI uri = URI.createPlatformResourceURI(path, true);
-//					final Resource res = resourceSet.getResource(uri, false);
-//					if (res != null) {
-//						res.unload();
-//						// Only load resource if not removed
-//						if ((delta.getKind() & IResourceDelta.REMOVED) == 0) {
-//							res.load(resourceSet.getLoadOptions());
-//						}
-//					}
+				// final String path = ((IFile) changedResource).getFullPath()
+				// .toString();
+				// final URI uri = URI.createPlatformResourceURI(path, true);
+				// final Resource res = resourceSet.getResource(uri, false);
+				// if (res != null) {
+				// res.unload();
+				// // Only load resource if not removed
+				// if ((delta.getKind() & IResourceDelta.REMOVED) == 0) {
+				// res.load(resourceSet.getLoadOptions());
+				// }
+				// }
 
-					boolean reselect = false;
-					final IJobManager jobManager = Activator.getDefault()
-							.getJobManager();
-					{
-						// If checked, then ensure we have a job
-						final IManagedJob oldJ = jobManager
-								.findJobForResource(changedResource);
-						if (oldJ == null) {
-							return false;
-						}
-						if (oldJ.getJobState() != JobState.CREATED) {
-							return false;
-						}
-						reselect = jobManager.getSelectedJobs().contains(oldJ);
+//				boolean reselect = false;
+				final IJobManager jobManager = Activator.getDefault()
+						.getJobManager();
+				{
+					// If checked, then ensure we have a job
+					final IManagedJob oldJ = jobManager
+							.findJobForResource(changedResource);
+					if (oldJ == null) {
+						return false;
+					}
+					if (oldJ.getJobState() != JobState.CREATED) {
+						return false;
+					}
+//					reselect = jobManager.getSelectedJobs().contains(oldJ);
 					Display.getDefault().asyncExec(new Runnable() {
-						
+
 						@Override
 						public void run() {
-							// TODO Auto-generated method stub
 							jobManager.removeJob(oldJ);
-							
+
 						}
 					});
-						
-					}
-//					// Load up new job
-//					{
-//						final Scenario scenario = (Scenario) changedResource
-//								.getAdapter(Scenario.class);
-//						// Create a job, but do not prepare it for fast
-//						// viewing.
-//						final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
-//
-//						jobManager
-//								.addJobManagerListener(new DisposeOnRemoveListener(
-//										j));
-//						jobManager.addJob(j, changedResource);
-//						if (reselect) {
-//							jobManager.setJobSelection(j, true);
-//						}
-//					}
 
-//				} catch (final IOException ie) {
-//					System.err.println("Error reloading resource - "
-//							+ ie.toString());
-//				}
+				}
 				return false;
 			}
 			return true;
