@@ -9,7 +9,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
+
+import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 
 /**
@@ -37,13 +41,13 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 				final Slot slot = (Slot) object;
 				//TODO return some placeholders for the error message
 				if (slot.getMinQuantity() < 0) {
-					return ctx.createFailureStatus();					
+					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MinQuantity().getName());
 				}
 				if (slot.getMaxQuantity() < 0) {
-					return ctx.createFailureStatus();
+					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity().getName());
 				}
 				if (slot.getMinQuantity() > slot.getMaxQuantity()) {
-					return ctx.createFailureStatus();
+					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MinQuantity().getName());
 				}
 			}
 		}
