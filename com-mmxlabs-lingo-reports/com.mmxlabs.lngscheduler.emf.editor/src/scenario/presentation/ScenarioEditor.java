@@ -120,7 +120,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
-import scenario.NamedObject;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
@@ -367,10 +366,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		public ScenarioRVP(EAttribute nameAttribute) {
 			super();
 			this.nameAttribute = nameAttribute;
-		}
-
-		protected Scenario getEnclosingScenario(final EObject target) {
-			return getScenario(); // required so that dialog editor works
 		}
 
 		protected ArrayList<Pair<String, EObject>> getSortedNames(
