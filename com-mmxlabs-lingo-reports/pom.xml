@@ -258,13 +258,13 @@
 
 		<repository>
 			<id>mmxlabs-p2-external</id>
-			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external/</url>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-external/</url>
 			<layout>p2</layout>
 		</repository>
 
 		<repository>
 			<id>mmxlabs-thirdparty</id>
-			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external-other/</url>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external-other/repo/</url>
 			<layout>p2</layout>
 		</repository>
 
