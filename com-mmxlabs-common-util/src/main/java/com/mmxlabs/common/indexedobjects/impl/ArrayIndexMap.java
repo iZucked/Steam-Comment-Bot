@@ -85,23 +85,30 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 			@Override
 			public Iterator<U> iterator() {
 				return new Iterator<U>() {
+					private void advance() {
+						index++;
+						while (index < isSet.length && !isSet[index]) {
+							index++;
+						}
+					}
+					
 					private int index = 0;
 
 					@Override
 					public boolean hasNext() {
-						while (index < isSet.length && !isSet[index]) {
-							index++;
-						}
+						
 						if (index < isSet.length && isSet[index]) return true;
 						else return false;
 					}
 
 					@Override
 					public U next() {
-						if (!(index < isSet.length && isSet[index])) {
+						if (!hasNext()) {
 							throw new NoSuchElementException();
 						}
-						return contents[index];
+						final U result = contents[index];
+						advance();
+						return result;
 					}
 
 					@Override
