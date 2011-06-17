@@ -122,20 +122,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		// longer needed
 		jmv.addJobManagerListener(new DisposeOnRemoveListener(newJob));
 
-//		final Job eclipseJob = new Job("Evaluate initial state of "
-//				+ scenario.getName()) {
-//			@Override
-//			protected IStatus run(IProgressMonitor monitor) {
-//				newJob.prepare();
-//				return Status.OK_STATUS;
-//			}
-//		};
-//
-//		eclipseJob.setPriority(Job.SHORT);
-//		eclipseJob.schedule();
-		
-//		newJob.prepare();
-
 		return newJob;
 	}
 
