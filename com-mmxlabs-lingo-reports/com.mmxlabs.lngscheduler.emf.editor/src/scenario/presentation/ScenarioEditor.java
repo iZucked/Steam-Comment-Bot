@@ -397,7 +397,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		@Override
 		public String getName(final EObject referer,
 				final EReference reference, final EObject target) {
-			return ((NamedObject) target).getName();
+			if (target == null) return "empty";
+			return (String) target.eGet(nameAttribute);
 		}
 
 		@Override
