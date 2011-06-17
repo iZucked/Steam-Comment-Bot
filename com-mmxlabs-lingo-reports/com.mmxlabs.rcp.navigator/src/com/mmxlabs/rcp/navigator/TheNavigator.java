@@ -140,6 +140,9 @@ public class TheNavigator extends CommonNavigator {
 				if (event.item instanceof Button
 						&& event.item.getData() instanceof IResource) {
 					final IResource resource = (IResource) event.item.getData();
+					if (resource == null) {
+						return;
+					}
 					final Button button = (Button) event.item;
 
 					// Set selection status
@@ -154,9 +157,15 @@ public class TheNavigator extends CommonNavigator {
 							return;
 						}
 
-//						scenario = EcoreUtil.copy(scenario);
-						scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
-						
+						String name = resource.getName();
+
+						final String fileExtension = resource
+								.getFileExtension();
+						if (fileExtension != null) {
+							name = name.replaceAll("." + fileExtension, "");
+						}
+						scenario.setName(name);
+
 						final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
 						jobManager.addJob(j, resource);
 					}
@@ -171,17 +180,29 @@ public class TheNavigator extends CommonNavigator {
 						final IResource resource = (IResource) event.item
 								.getData();
 
+						if (resource == null) {
+							return;
+						}
+
 						final Scenario scenario = (Scenario) resource
 								.getAdapter(Scenario.class);
 
-//						scenario = EcoreUtil.copy(scenario);
-						scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
-
-						// Only allow resources with a scenario to be checked
 						if (scenario == null) {
+							// Only allow resources with a scenario to be
+							// checked
 							ti.setChecked(false);
 							return;
 						}
+
+						String name = resource.getName();
+
+						final String fileExtension = resource
+								.getFileExtension();
+						if (fileExtension != null) {
+							name = name.replaceAll("." + fileExtension, "");
+						}
+						scenario.setName(name);
+
 						// Set selection status
 						final IJobManager jobManager = Activator.getDefault()
 								.getJobManager();

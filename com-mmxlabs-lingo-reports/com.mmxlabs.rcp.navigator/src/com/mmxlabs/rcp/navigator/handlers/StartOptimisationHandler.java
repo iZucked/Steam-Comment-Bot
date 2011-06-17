@@ -9,11 +9,6 @@ import java.util.Iterator;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -113,9 +108,13 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	private IManagedJob createOptimisationJob(final IJobManager jmv,
 			final IResource resource, Scenario scenario) {
 
-//		scenario = EcoreUtil.copy(scenario);
-		scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
-		
+		String name = resource.getName();
+
+		final String fileExtension = resource.getFileExtension();
+		if (fileExtension != null) {
+			name = name.replaceAll("." + fileExtension, "");
+		}
+		scenario.setName(name);
 		final LNGSchedulerJob newJob = new LNGSchedulerJob(scenario);
 		jmv.addJob(newJob, resource);
 
