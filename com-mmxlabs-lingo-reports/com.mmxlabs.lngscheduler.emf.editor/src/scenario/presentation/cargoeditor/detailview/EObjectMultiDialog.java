@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EClass;
@@ -99,6 +100,12 @@ public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
 						public void setInput(final EObject object) {
 							proxy.setInput(object);
 						}
+						
+						@Override
+						public void processValidation(IStatus status) {
+							proxy.processValidation(status);
+							
+						};
 
 						@Override
 						public Control createControl(final Composite parent) {
