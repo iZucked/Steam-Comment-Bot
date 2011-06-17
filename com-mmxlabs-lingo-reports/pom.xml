@@ -37,7 +37,7 @@
 
 	<properties>
 		<!-- Tycho version to use -->
-		<tycho.version>0.12.0</tycho.version>
+		<tycho.version>0.13.0-SNAPSHOT</tycho.version>
 
 		<!-- Continue even when tests fail -->
 		<maven.test.failure.ignore>true</maven.test.failure.ignore>
@@ -170,14 +170,21 @@
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
-						<!-- Currently unable to build for mac (on linux) using eclipse-repository 
-							packaging type. -->
-						<!-- See Tycho 520 (https://issues.sonatype.org/browse/TYCHO-520) -->
-						<!-- See Eclipse 313997 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=313997) -->
-						<!-- <environment> <os>macosx</os> <ws>carbon</ws> <arch>x86</arch> 
-							</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86</arch> 
-							</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> 
-							</environment> -->
+						<environment>
+							<os>macosx</os>
+							<ws>carbon</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
 					</environments>
 
 				</configuration>
@@ -262,4 +269,15 @@
 		</repository>
 
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>org.sonatype.tycho</id>
+			<name>Tycho snapshot repository</name>
+			<url>https://repository.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
