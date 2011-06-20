@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.validation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IStatus;
@@ -19,7 +22,10 @@ import scenario.cargo.CargoType;
 import scenario.cargo.Slot;
 import scenario.fleet.VesselClass;
 import scenario.port.DistanceLine;
+import scenario.port.DistanceModel;
+import scenario.port.Port;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
@@ -85,21 +91,51 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
 
-				for (final DistanceLine dl : scenario.getDistanceModel()
-						.getDistances()) {
-					if (dl.getFromPort() == loadSlot.getPort()
-							&& dl.getToPort() == dischargeSlot.getPort()) {
-						final int distance = dl.getDistance();
-						if (distance / maxSpeedKnots > availableTime) {
-							return new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus(
-											cargo.getId(),
-											(int) (distance / maxSpeedKnots),
-											availableTime),
-									cargo.getLoadSlot(), CargoPackage.eINSTANCE
-											.getSlot_WindowStart().getName());
-						}
+				Map<DistanceModel, Map<Pair<Port, Port>, Integer>> distanceMatrices = (Map<DistanceModel, Map<Pair<Port, Port>, Integer>>) ctx
+						.getCurrentConstraintData();
+
+				if (distanceMatrices == null) {
+					distanceMatrices = new HashMap<DistanceModel, Map<Pair<Port, Port>, Integer>>();
+					ctx.putCurrentConstraintData(distanceMatrices);
+				}
+
+				Map<Pair<Port, Port>, Integer> distanceMatrix = distanceMatrices
+						.get(scenario.getDistanceModel());
+				if (distanceMatrix == null) {
+					distanceMatrix = new HashMap<Pair<Port, Port>, Integer>();
+					for (final DistanceLine dl : scenario.getDistanceModel()
+							.getDistances()) {
+						distanceMatrix.put(
+								new Pair<Port, Port>(dl.getFromPort(), dl
+										.getToPort()), dl.getDistance());
 					}
+					distanceMatrices.put(scenario.getDistanceModel(),
+							distanceMatrix);
+				}
+
+				final Integer distance = distanceMatrix
+						.get(new Pair<Port, Port>(loadSlot.getPort(),
+								dischargeSlot.getPort()));
+				if (distance == null) {
+					// distance line is missing
+					//TODO customize message for this case.
+					// seems like a waste to run the same code twice
+					return new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus(
+									cargo.getId(), "infinity", availableTime),
+							cargo.getLoadSlot(), CargoPackage.eINSTANCE
+									.getSlot_Port().getName());
+				} else {
+					if (distance / maxSpeedKnots > availableTime) {
+						return new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus(
+										cargo.getId(),
+										(int) (distance / maxSpeedKnots),
+										availableTime), cargo.getLoadSlot(),
+								CargoPackage.eINSTANCE.getSlot_WindowStart()
+										.getName());
+					}
+
 				}
 			}
 		}
