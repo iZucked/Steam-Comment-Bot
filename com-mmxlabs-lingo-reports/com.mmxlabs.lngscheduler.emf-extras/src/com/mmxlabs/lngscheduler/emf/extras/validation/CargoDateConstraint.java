@@ -47,7 +47,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			) {
 				if (dischargeSlot.getWindowEnd().before(
 						loadSlot.getWindowStart())) {
-					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart().getName());
+					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 				}
 				// TODO check travel time feasibility here
 			}

@@ -37,11 +37,11 @@ public class CargoVolumeConstraint extends AbstractModelConstraint {
 			final Slot dischargeSlot = cargo.getDischargeSlot();
 			if (loadSlot != null && dischargeSlot != null) {
 				if (loadSlot.getMaxQuantity() < dischargeSlot.getMinQuantity()) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity().getName());
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					return status;
 				}
 				if (loadSlot.getMinQuantity() > dischargeSlot.getMaxQuantity()) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity().getName());
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					return status;
 				}
 			}

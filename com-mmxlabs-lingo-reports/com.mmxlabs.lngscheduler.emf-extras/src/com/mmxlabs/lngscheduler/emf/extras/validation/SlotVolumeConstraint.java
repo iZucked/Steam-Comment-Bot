@@ -41,13 +41,13 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 				final Slot slot = (Slot) object;
 				//TODO return some placeholders for the error message
 				if (slot.getMinQuantity() < 0) {
-					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MinQuantity().getName());
+					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 				}
 				if (slot.getMaxQuantity() < 0) {
-					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity().getName());
+					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 				}
 				if (slot.getMinQuantity() > slot.getMaxQuantity()) {
-					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MinQuantity().getName());
+					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 				}
 			}
 		}
