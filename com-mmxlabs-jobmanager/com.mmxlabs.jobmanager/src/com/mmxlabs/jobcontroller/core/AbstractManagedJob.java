@@ -5,8 +5,10 @@
 
 package com.mmxlabs.jobcontroller.core;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -103,14 +105,15 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	private synchronized void setJobState(final JobState newState) {
 		final JobState oldState = currentState;
 		if (oldState != newState) {
-			synchronized (listeners) {
-				currentState = newState;
-				final Iterator<IManagedJobListener> iterator = listeners.iterator();
-				while (iterator.hasNext()) {
-					final IManagedJobListener mjl = iterator.next();
-					if (!mjl.jobStateChanged(this, oldState, newState)) {
-						iterator.remove();
-					}
+			
+			currentState = newState;
+			
+			// Take copy to avoid concurrent modification exceptions. 
+			final List<IManagedJobListener> copy = new ArrayList<IManagedJobListener>(listeners);
+			
+			for (final IManagedJobListener mjl : copy) {
+				if (!mjl.jobStateChanged(this, oldState, newState)) {
+					listeners.remove(mjl);
 				}
 			}
 		}
@@ -191,11 +194,13 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	protected void setProgress(final int newProgress) {
 		final int delta = newProgress - progress;
 		progress = newProgress;
-		final Iterator<IManagedJobListener> iterator = listeners.iterator();
-		while (iterator.hasNext()) {
-			final IManagedJobListener mjl = iterator.next();
-			if (!mjl.jobProgressUpdated(this, delta))
-				iterator.remove();
+		// Take copy to avoid concurrent modification exceptions. 
+		final List<IManagedJobListener> copy = new ArrayList<IManagedJobListener>(listeners);
+		
+		for (final IManagedJobListener mjl : copy) {
+			if (!mjl.jobProgressUpdated(this, delta)) {
+				listeners.remove(mjl);
+			}
 		}
 	}
 
