@@ -30,7 +30,6 @@ public class CargoVolumeConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
-		System.err.println(this.getClass().getSimpleName() + " " + object);
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 			final Slot loadSlot = cargo.getLoadSlot();

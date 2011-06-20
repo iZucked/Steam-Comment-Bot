@@ -17,7 +17,7 @@
                namespaceUri="http://com.mmxlabs.lng.emf/fleet" />
          <package
                namespaceUri="http://com.mmxlabs.lng.emf/cargo" />
-         <package namespaceUri="http://com.mmxlabs.emf/schedule" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf/schedule" />
          <constraints
                categories="com.mmxlabs.lngscheduler.emf-extras.constraints">
             <constraint
@@ -46,10 +46,12 @@
             	severity="ERROR"
             	statusCode="1">
             	<message>
-            		Cargo {0} has invalid load and discharge dates.
+            		Cargo {0} has invalid load and discharge dates - {1} hours are allotted for a journey
+            		which requires at least {2}.
             	</message>
             	<description>
-            		A cargo's load date should be before its discharge date
+            		The load and discharge dates for a cargo should allow enough time between them for
+            		the fastest fleet vessel to make the journey at maximum speed.
             	</description>
             	<target class="Cargo" />
             </constraint>
