@@ -183,6 +183,10 @@
             		Named elements should have unique names.
             	</description>
             	<target class="NamedObject" />
+            	<target class="Cargo" />
+             <target
+                   class="VesselEvent">
+             </target>
             </constraint>
          </constraints>
       </constraintProvider>
