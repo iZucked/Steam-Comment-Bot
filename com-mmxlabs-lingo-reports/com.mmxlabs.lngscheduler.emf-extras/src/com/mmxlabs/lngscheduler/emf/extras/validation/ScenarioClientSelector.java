@@ -18,7 +18,6 @@ public class ScenarioClientSelector implements IClientSelector {
 	 */
 	@Override
 	public boolean selects(final Object object) {
-		System.err.println("Selecting " + object);
 		return true; // not sure what ought to happen here
 	}
 
