@@ -8,8 +8,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.emf.validation.model.IConstraintStatus;
+
+import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 import scenario.cargo.Cargo;
+import scenario.cargo.CargoPackage;
 import scenario.cargo.CargoType;
 import scenario.cargo.Slot;
 
@@ -43,10 +47,9 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			) {
 				if (dischargeSlot.getWindowEnd().before(
 						loadSlot.getWindowStart())) {
-					return ctx.createFailureStatus(cargo.getId());
+					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart().getName());
 				}
 				// TODO check travel time feasibility here
-				
 			}
 		}
 		return ctx.createSuccessStatus();

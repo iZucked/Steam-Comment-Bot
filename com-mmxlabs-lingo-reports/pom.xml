@@ -37,7 +37,7 @@
 
 	<properties>
 		<!-- Tycho version to use -->
-		<tycho.version>0.12.0</tycho.version>
+		<tycho.version>0.13.0-SNAPSHOT</tycho.version>
 
 		<!-- Continue even when tests fail -->
 		<maven.test.failure.ignore>true</maven.test.failure.ignore>
@@ -170,14 +170,21 @@
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
-						<!-- Currently unable to build for mac (on linux) using eclipse-repository 
-							packaging type. -->
-						<!-- See Tycho 520 (https://issues.sonatype.org/browse/TYCHO-520) -->
-						<!-- See Eclipse 313997 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=313997) -->
-						<!-- <environment> <os>macosx</os> <ws>carbon</ws> <arch>x86</arch> 
-							</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86</arch> 
-							</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> 
-							</environment> -->
+						<environment>
+							<os>macosx</os>
+							<ws>carbon</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
 					</environments>
 
 				</configuration>
@@ -230,13 +237,13 @@
 			<url>http://download.eclipse.org/releases/helios</url>
 			<layout>p2</layout>
 		</repository>
-
+<!--
 		<repository>
 			<id>eclipse-3.6</id>
 			<url>http://download.eclipse.org/eclipse/updates/3.6</url>
 			<layout>p2</layout>
 		</repository>
-
+-->
 		<repository>
 			<id>swtbot</id>
 			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
@@ -251,15 +258,26 @@
 
 		<repository>
 			<id>mmxlabs-p2-external</id>
-			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external/</url>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-external/</url>
 			<layout>p2</layout>
 		</repository>
 
 		<repository>
 			<id>mmxlabs-thirdparty</id>
-			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external-other/</url>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external-other/repo/</url>
 			<layout>p2</layout>
 		</repository>
 
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>org.sonatype.tycho</id>
+			<name>Tycho snapshot repository</name>
+			<url>https://repository.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 </project>

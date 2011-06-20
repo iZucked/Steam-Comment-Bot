@@ -197,7 +197,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 			} else {
 				final IStatus[] children = status.getChildren();
 				for (final IStatus element : children) {
-					if (checkStatus(status)) {
+					if (checkStatus(element)) {
 
 						sb.append(element.getMessage());
 						sb.append("\n");
