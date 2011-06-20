@@ -261,7 +261,7 @@ public class TheNavigator extends CommonNavigator {
 	 * @author Simon Goodall
 	 * 
 	 */
-	private class ResourceListener implements IResourceChangeListener,
+	private static class ResourceListener implements IResourceChangeListener,
 			IResourceDeltaVisitor {
 
 		public ResourceListener() {
