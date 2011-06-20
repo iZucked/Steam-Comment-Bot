@@ -803,7 +803,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		createReturnElements();
 
 		// Patch up end time windows
-		final int latestTime = endOfLatestWindow + 24 * 7;
+		final int latestTime = endOfLatestWindow + 24 * 15;
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime,
 					latestTime + 1);
