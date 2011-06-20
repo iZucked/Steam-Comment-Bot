@@ -25,13 +25,16 @@ public class SequenceNoGapsConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
+		
+		
 		if (object instanceof Sequence) {
 			final Sequence sequence = (Sequence) object;
 			Date lastEndDate = (sequence.getEvents().isEmpty() ? null : sequence.getEvents().get(0).getStartTime());
-			
+
 			for (final ScheduledEvent event : sequence.getEvents()) {
 				final Date eventStart = event.getStartTime();
 				final Date eventEnd = event.getEndTime();
+				
 				if (eventStart.before(lastEndDate)) {
 					return ctx.createFailureStatus(sequence.getVessel().getName());
 				} else if (eventStart.after(lastEndDate)) {
