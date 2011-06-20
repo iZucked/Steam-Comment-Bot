@@ -17,6 +17,7 @@
                namespaceUri="http://com.mmxlabs.lng.emf/fleet" />
          <package
                namespaceUri="http://com.mmxlabs.lng.emf/cargo" />
+         <package namespaceUri="http://com.mmxlabs.emf/schedule" />
          <constraints
                categories="com.mmxlabs.lngscheduler.emf-extras.constraints">
             <constraint
@@ -102,6 +103,26 @@
                </description>
                <target class="Cargo" />
             </constraint>
+            
+            <constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.SequenceNoGapsConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.sequence_gaps"
+            	lang="Java"
+            	mode="Batch"
+            	name="Sequence Gaps"
+            	severity="ERROR"
+            	statusCode="1">
+            	<message>
+            		Vessel {0}'s schedule has gaps between events
+            	</message>
+            	<description>
+            		There should be no time in a vessel's schedule which has not been accounted for. If you have
+            		deleted something from the problem definition you may need to re-evaluate the scenario to ensure
+            		that no schedules have gaps in them.
+            	</description>
+            	<target class="Sequence" />
+            </constraint>
+            
          </constraints>
       </constraintProvider>
    </extension>
