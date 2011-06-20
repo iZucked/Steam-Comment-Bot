@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.jobcontroller.core.impl;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import scenario.Scenario;
@@ -33,6 +35,8 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	private Scenario scenario;
 	private int currentProgress = 0;
 
+	private Schedule intermediateSchedule = null;
+
 	private final ModelEntityMap entities = new ResourcelessModelEntityMap();
 
 	private LocalSearchOptimiser<ISequenceElement> optimiser;
@@ -40,7 +44,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	public LNGSchedulerJob(final Scenario scenario) {
 		super("Optimising " + scenario.getName());
 		this.scenario = scenario;
-//		entities.setScenario(scenario);
+		// entities.setScenario(scenario);
 	}
 
 	/*
@@ -50,12 +54,13 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	 */
 	@Override
 	protected void reallyPrepare() {
-		
+
 		scenario = EcoreUtil.copy(scenario);
-//		scenario.setName(resource.getName().replaceAll(resource.getFileExtension(), ""));
+		// scenario.setName(resource.getName().replaceAll(resource.getFileExtension(),
+		// ""));
 
 		entities.setScenario(scenario);
-		
+
 		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
 
 		final OptimisationTransformer ot = new OptimisationTransformer(
@@ -88,15 +93,17 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		saveSolution("start state", startSolution);
 	}
 
-	private void saveSolution(final String name,
+	private Schedule saveSolution(final String name,
 			final IAnnotatedSolution<ISequenceElement> solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario,
 				entities, solution);
 
 		schedule.setName(scenario.getName() + " " + name);
-		
+
 		scenario.getOrCreateScheduleModel().getSchedules().add(schedule);
+
+		return schedule;
 	}
 
 	/*
@@ -110,15 +117,28 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		currentProgress += REPORT_PERCENTAGE;
 
 		if ((currentProgress % 5) == 0) {
-			saveSolution(currentProgress + "%", optimiser.getBestSolution(false));
+			if (intermediateSchedule != null) {
+				((EList<EObject>) intermediateSchedule.eContainer().eGet(
+						intermediateSchedule.eContainingFeature()))
+						.remove(intermediateSchedule);
+			}
+			intermediateSchedule = saveSolution(currentProgress + "%",
+					optimiser.getBestSolution(false));
 		}
-		
-//		System.err.println("current fitness " + optimiser.getFitnessEvaluator().getCurrentFitness() + ", best " +
-//				optimiser.getFitnessEvaluator().getBestFitness());
-		
+
+		// System.err.println("current fitness " +
+		// optimiser.getFitnessEvaluator().getCurrentFitness() + ", best " +
+		// optimiser.getFitnessEvaluator().getBestFitness());
+
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
+			if (intermediateSchedule != null) {
+				((EList<EObject>) intermediateSchedule.eContainer().eGet(
+						intermediateSchedule.eContainingFeature()))
+						.remove(intermediateSchedule);
+			}
+			intermediateSchedule = null;
 			saveSolution("optimised", optimiser.getBestSolution(true));
 			return false;
 		} else {
@@ -150,8 +170,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 
 		super.dispose();
 	}
-	
-	
+
 	public final Scenario getScenario() {
 		return scenario;
 	}
