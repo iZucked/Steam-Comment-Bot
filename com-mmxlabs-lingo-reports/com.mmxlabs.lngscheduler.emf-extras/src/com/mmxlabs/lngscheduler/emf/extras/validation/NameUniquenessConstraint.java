@@ -41,8 +41,9 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 		final EObject target = ctx.getTarget();
 
 		final EObject container = target.eContainer();
+		if (container == null) return ctx.createSuccessStatus(); //TODO sort out this issue
 		final EStructuralFeature feature = target.eContainingFeature();
-		if (feature.isMany()
+		if (feature != null && feature.isMany()
 				&& feature instanceof EReference
 				&& ((EReference) feature).getEReferenceType()
 						.getEAllAttributes().contains(nameAttribute)) {
