@@ -19,7 +19,6 @@ import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.contract.Entity;
-import scenario.port.PortPackage;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
@@ -47,7 +46,6 @@ public class CargoReportView extends EMFReportView {
 
 		final EAttribute name = ScenarioPackage.eINSTANCE.getNamedObject_Name();
 
-		final PortPackage p = PortPackage.eINSTANCE;
 		addColumn("Schedule", containingScheduleFormatter);
 		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName()); // TODO
 																			// cargo
@@ -151,7 +149,7 @@ public class CargoReportView extends EMFReportView {
 					if (viewer.getControl().isDisposed()) return;
 					final Set<Scenario> scenarios = new HashSet<Scenario>();
 					if (newInput instanceof Iterable) {
-						for (final Object element : ((Iterable) newInput)) {
+						for (final Object element : ((Iterable<?>) newInput)) {
 							if (element instanceof Schedule) {
 								// find all referenced entities
 								for (final String s : entityColumnNames) {
@@ -189,7 +187,7 @@ public class CargoReportView extends EMFReportView {
 			public Object[] getElements(Object object) {
 				final ArrayList<CargoAllocation> allocations = new ArrayList<CargoAllocation>();
 				if (object instanceof Iterable) {
-					for (final Object o : (Iterable) object) {
+					for (final Object o : (Iterable<?>) object) {
 						if (o instanceof Schedule) {
 							// collect allocations from object
 							allocations.addAll(((Schedule) o)
