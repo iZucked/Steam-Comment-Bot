@@ -184,6 +184,15 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getName() {
+		return "";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -263,6 +272,8 @@ public class ScheduledEventImpl extends ScenarioObjectImpl implements ScheduledE
 				return getLocalStartTime();
 			case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_END_TIME:
 				return getLocalEndTime();
+			case EventsPackage.SCHEDULED_EVENT___GET_NAME:
+				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

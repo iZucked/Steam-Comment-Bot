@@ -60,4 +60,22 @@ public interface VesselEventVisit extends PortVisit {
 	 */
 	String getId();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getId();'"
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getVesselEvent().eClass().getName();'"
+	 * @generated
+	 */
+	String getDisplayTypeName();
+
 } // VesselEventVisit

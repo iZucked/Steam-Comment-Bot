@@ -21,6 +21,7 @@ import scenario.schedule.CargoAllocation;
 
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.PortVisit;
+import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 
 /**
@@ -177,6 +178,15 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getName() {
+		return getCargoAllocation().getName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -249,6 +259,12 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 */
 	@Override
 	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == ScheduledEvent.class) {
+			switch (baseOperationID) {
+				case EventsPackage.SCHEDULED_EVENT___GET_NAME: return EventsPackage.SLOT_VISIT___GET_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
+			}
+		}
 		if (baseClass == PortVisit.class) {
 			switch (baseOperationID) {
 				case EventsPackage.PORT_VISIT___GET_ID: return EventsPackage.SLOT_VISIT___GET_ID;
@@ -271,6 +287,8 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 				return getId();
 			case EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME:
 				return getDisplayTypeName();
+			case EventsPackage.SLOT_VISIT___GET_NAME:
+				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

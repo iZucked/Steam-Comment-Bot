@@ -395,6 +395,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getScheduledEvent__GetName() {
+		return scheduledEventEClass.getEOperations().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getIdle() {
 		return idleEClass;
 	}
@@ -620,6 +629,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getSlotVisit__GetName() {
+		return slotVisitEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCharterOutVisit() {
 		return charterOutVisitEClass;
 	}
@@ -667,6 +685,24 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 */
 	public EOperation getVesselEventVisit__GetId() {
 		return vesselEventVisitEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselEventVisit__GetName() {
+		return vesselEventVisitEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselEventVisit__GetDisplayTypeName() {
+		return vesselEventVisitEClass.getEOperations().get(2);
 	}
 
 	/**
@@ -733,6 +769,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_HIRE_COST);
 		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_LOCAL_START_TIME);
 		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_LOCAL_END_TIME);
+		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_NAME);
 
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__VESSEL_STATE);
@@ -762,6 +799,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		createEReference(slotVisitEClass, SLOT_VISIT__CARGO_ALLOCATION);
 		createEOperation(slotVisitEClass, SLOT_VISIT___GET_ID);
 		createEOperation(slotVisitEClass, SLOT_VISIT___GET_DISPLAY_TYPE_NAME);
+		createEOperation(slotVisitEClass, SLOT_VISIT___GET_NAME);
 
 		charterOutVisitEClass = createEClass(CHARTER_OUT_VISIT);
 		createEReference(charterOutVisitEClass, CHARTER_OUT_VISIT__CHARTER_OUT);
@@ -770,6 +808,8 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		vesselEventVisitEClass = createEClass(VESSEL_EVENT_VISIT);
 		createEReference(vesselEventVisitEClass, VESSEL_EVENT_VISIT__VESSEL_EVENT);
 		createEOperation(vesselEventVisitEClass, VESSEL_EVENT_VISIT___GET_ID);
+		createEOperation(vesselEventVisitEClass, VESSEL_EVENT_VISIT___GET_NAME);
+		createEOperation(vesselEventVisitEClass, VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME);
 
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
@@ -846,6 +886,8 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 
 		initEOperation(getScheduledEvent__GetLocalEndTime(), ecorePackage.getEJavaObject(), "getLocalEndTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+		initEOperation(getScheduledEvent__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_VesselState(), theFleetPackage.getVesselState(), "vesselState", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -885,6 +927,8 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 
 		initEOperation(getSlotVisit__GetDisplayTypeName(), ecorePackage.getEString(), "getDisplayTypeName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
+		initEOperation(getSlotVisit__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(charterOutVisitEClass, CharterOutVisit.class, "CharterOutVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterOutVisit_CharterOut(), theFleetPackage.getCharterOut(), null, "charterOut", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOutVisit_Revenue(), theSchedulePackage.getCharterOutRevenue(), null, "revenue", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -893,6 +937,10 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		initEReference(getVesselEventVisit_VesselEvent(), theFleetPackage.getVesselEvent(), null, "vesselEvent", null, 1, 1, VesselEventVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselEventVisit__GetId(), ecorePackage.getEString(), "getId", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselEventVisit__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselEventVisit__GetDisplayTypeName(), ecorePackage.getEString(), "getDisplayTypeName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");
