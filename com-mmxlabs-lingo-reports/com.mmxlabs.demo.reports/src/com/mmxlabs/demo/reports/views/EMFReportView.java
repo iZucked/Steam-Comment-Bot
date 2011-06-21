@@ -74,7 +74,7 @@ public abstract class EMFReportView extends ViewPart implements
 		this.helpContextId = helpContextId;
 	}
 
-	private class ColumnHandler {
+	protected class ColumnHandler {
 		private static final String COLUMN_HANDLER = "COLUMN_HANDLER";
 		private final IFormatter formatter;
 		private final EMFPath path;
@@ -133,7 +133,7 @@ public abstract class EMFReportView extends ViewPart implements
 		}
 	}
 
-	private void makeSortColumn(final ColumnHandler handler) {
+	protected void makeSortColumn(final ColumnHandler handler) {
 		if (handlers.get(0).equals(handler)) {
 			sortDescending = !sortDescending;
 		} else {
@@ -141,7 +141,8 @@ public abstract class EMFReportView extends ViewPart implements
 			handlers.remove(handler);
 			handlers.add(0, handler);
 		}
-		viewer.refresh();
+		if (viewer != null)
+			viewer.refresh();
 	}
 
 	protected interface IFormatter {
@@ -255,7 +256,7 @@ public abstract class EMFReportView extends ViewPart implements
 
 	protected abstract IStructuredContentProvider getContentProvider();
 
-	protected void addColumn(final String title, final IFormatter formatter,
+	protected ColumnHandler addColumn(final String title, final IFormatter formatter,
 			final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(formatter, path, title);
 		handlers.add(handler);
@@ -263,6 +264,8 @@ public abstract class EMFReportView extends ViewPart implements
 		if (viewer != null) {
 			handler.createColumn(viewer).getColumn().pack();
 		}
+		
+		return handler;
 	}
 
 	@Override

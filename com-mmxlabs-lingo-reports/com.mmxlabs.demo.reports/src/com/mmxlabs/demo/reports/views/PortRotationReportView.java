@@ -58,7 +58,7 @@ public class PortRotationReportView extends EMFReportView {
 		
 		addColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("Vessel", objectFormatter,
+		final ColumnHandler vesselColumn = addColumn("Vessel", objectFormatter,
 				ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(),
 				sp.getSequence_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
@@ -77,7 +77,7 @@ public class PortRotationReportView extends EMFReportView {
 //				ep.getSlotVisit_CargoAllocation(),
 //				sp.getCargoAllocation__GetName()
 //		);
-		addColumn("Start Date", calendarFormatter,
+		final ColumnHandler dateColumn = addColumn("Start Date", calendarFormatter,
 				ep.getScheduledEvent__GetLocalStartTime());
 		addColumn("End Date", calendarFormatter,
 				ep.getScheduledEvent__GetLocalEndTime());
@@ -206,6 +206,8 @@ public class PortRotationReportView extends EMFReportView {
 			}
 		});
 
+		makeSortColumn(dateColumn);
+		makeSortColumn(vesselColumn);
 	}
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
