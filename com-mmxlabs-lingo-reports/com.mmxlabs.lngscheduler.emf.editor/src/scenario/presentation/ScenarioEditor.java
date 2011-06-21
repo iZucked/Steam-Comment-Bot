@@ -2664,7 +2664,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						FleetPackage.eINSTANCE.getVessel_EndRequirement(),
 						getEditingDomain());
 
-				fleetPane.addColumn("Start constraint", endRequirement,
+				fleetPane.addColumn("End constraint", endRequirement,
 						endRequirement);
 			}
 
