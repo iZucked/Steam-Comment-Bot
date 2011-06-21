@@ -626,6 +626,7 @@ public class JobManagerView extends ViewPart {
 					case CREATED:
 						startEnabled = true;
 						toogleDisplayEnabled = true;
+						break;
 					case CANCELLED:
 						startEnabled = true;
 						toogleDisplayEnabled = true;
