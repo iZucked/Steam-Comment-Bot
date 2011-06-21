@@ -248,6 +248,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		if (status instanceof IDetailConstraintStatus) {
 			final IDetailConstraintStatus s = (IDetailConstraintStatus) status;
 
+			//TODO why are we using feature.getName().equals() rather than feature == ...?
 			return (s.getObject() == input && feature.getName().equals(
 					s.getFeature()));
 		}
