@@ -120,7 +120,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
-import scenario.NamedObject;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
@@ -338,7 +337,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 													multiDialog.createCommand());
 								}
 							} else {
-								final EObjectDetailDialog dialog = new EObjectDetailDialog(
+								if (l.size() == 0) return;
+ 								final EObjectDetailDialog dialog = new EObjectDetailDialog(
 										v.getControl().getShell(), SWT.NONE,
 										getEditingDomain());
 
@@ -367,10 +367,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		public ScenarioRVP(EAttribute nameAttribute) {
 			super();
 			this.nameAttribute = nameAttribute;
-		}
-
-		protected Scenario getEnclosingScenario(final EObject target) {
-			return getScenario(); // required so that dialog editor works
 		}
 
 		protected ArrayList<Pair<String, EObject>> getSortedNames(
@@ -427,6 +423,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			super(namedObjectName);
 			this.containingReference = containingReference;
 		}
+		
+		public SimpleRVP(final EReference containingReference, final EAttribute name) {
+			super(name);
+			this.containingReference = containingReference;
+		}
 
 		@Override
 		public List<Pair<String, EObject>> getAllowedValues(EObject target,
@@ -450,7 +451,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		@Override
 		protected void cacheValues() {
-			cachedValues = getSortedNames(getObjects(), namedObjectName);
+			cachedValues = getSortedNames(getObjects(), nameAttribute);
 			final Pair<String, EObject> none = getEmptyObject();
 			if (none != null)
 				cachedValues.add(0, none);
@@ -464,7 +465,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	final ScenarioRVP scheduleProvider = new SimpleRVP(
-			SchedulePackage.eINSTANCE.getScheduleModel_Schedules()) {
+			SchedulePackage.eINSTANCE.getScheduleModel_Schedules(), SchedulePackage.eINSTANCE.getSchedule_Name()) {
 
 		protected void install() {
 			getScenario().getScheduleModel().eAdapters().add(this);
@@ -1479,6 +1480,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			createContractEditor();
 
 			// add autocorrector
+			
+			createScheduleEditor();
 
 			autoCorrector = new AutoCorrector(getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
@@ -1699,6 +1702,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				updateProblemIndication();
 			}
 		});
+	}
+
+	/**
+	 * Create an editor for the initial schedule
+	 */
+	private void createScheduleEditor() {
+		
 	}
 
 	private void createContractEditor() {
@@ -2655,7 +2665,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						FleetPackage.eINSTANCE.getVessel_EndRequirement(),
 						getEditingDomain());
 
-				fleetPane.addColumn("Start constraint", endRequirement,
+				fleetPane.addColumn("End constraint", endRequirement,
 						endRequirement);
 			}
 

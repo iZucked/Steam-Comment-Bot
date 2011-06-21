@@ -266,13 +266,31 @@ public interface EventsPackage extends EPackage {
 	int SCHEDULED_EVENT___GET_LOCAL_END_TIME = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 3;
 
 	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT___GET_NAME = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Get Display Type Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 5;
+
+	/**
 	 * The number of operations of the '<em>Scheduled Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULED_EVENT_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 4;
+	int SCHEDULED_EVENT_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.PortVisitImpl <em>Port Visit</em>}' class.
@@ -346,6 +364,15 @@ public interface EventsPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_VISIT___GET_HIRE_COST = SCHEDULED_EVENT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_NAME = SCHEDULED_EVENT___GET_NAME;
 
 	/**
 	 * The operation id for the '<em>Get Local Start Time</em>' operation.
@@ -482,6 +509,15 @@ public interface EventsPackage extends EPackage {
 	 * @ordered
 	 */
 	int IDLE___GET_HIRE_COST = PORT_VISIT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE___GET_NAME = PORT_VISIT___GET_NAME;
 
 	/**
 	 * The operation id for the '<em>Get Local Start Time</em>' operation.
@@ -683,6 +719,24 @@ public interface EventsPackage extends EPackage {
 	int JOURNEY___GET_HIRE_COST = SCHEDULED_EVENT___GET_HIRE_COST;
 
 	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_NAME = SCHEDULED_EVENT___GET_NAME;
+
+	/**
+	 * The operation id for the '<em>Get Display Type Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_DISPLAY_TYPE_NAME = SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME;
+
+	/**
 	 * The operation id for the '<em>Get Total Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -855,13 +909,22 @@ public interface EventsPackage extends EPackage {
 	int SLOT_VISIT___GET_DISPLAY_TYPE_NAME = PORT_VISIT_OPERATION_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT___GET_NAME = PORT_VISIT_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Slot Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 2;
+	int SLOT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
@@ -964,15 +1027,6 @@ public interface EventsPackage extends EPackage {
 	int VESSEL_EVENT_VISIT___GET_LOCAL_END_TIME = PORT_VISIT___GET_LOCAL_END_TIME;
 
 	/**
-	 * The operation id for the '<em>Get Display Type Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME = PORT_VISIT___GET_DISPLAY_TYPE_NAME;
-
-	/**
 	 * The operation id for the '<em>Get Id</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -982,13 +1036,31 @@ public interface EventsPackage extends EPackage {
 	int VESSEL_EVENT_VISIT___GET_ID = PORT_VISIT_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT___GET_NAME = PORT_VISIT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Display Type Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME = PORT_VISIT_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Vessel Event Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 1;
+	int VESSEL_EVENT_VISIT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.CharterOutVisitImpl <em>Charter Out Visit</em>}' class.
@@ -1109,15 +1181,6 @@ public interface EventsPackage extends EPackage {
 	int CHARTER_OUT_VISIT___GET_LOCAL_END_TIME = VESSEL_EVENT_VISIT___GET_LOCAL_END_TIME;
 
 	/**
-	 * The operation id for the '<em>Get Display Type Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT_VISIT___GET_DISPLAY_TYPE_NAME = VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME;
-
-	/**
 	 * The operation id for the '<em>Get Id</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1125,6 +1188,24 @@ public interface EventsPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_VISIT___GET_ID = VESSEL_EVENT_VISIT___GET_ID;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT___GET_NAME = VESSEL_EVENT_VISIT___GET_NAME;
+
+	/**
+	 * The operation id for the '<em>Get Display Type Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT___GET_DISPLAY_TYPE_NAME = VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME;
 
 	/**
 	 * The number of operations of the '<em>Charter Out Visit</em>' class.
@@ -1323,6 +1404,26 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getScheduledEvent__GetLocalEndTime();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.ScheduledEvent#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.events.ScheduledEvent#getName()
+	 * @generated
+	 */
+	EOperation getScheduledEvent__GetName();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.ScheduledEvent#getDisplayTypeName() <em>Get Display Type Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Display Type Name</em>' operation.
+	 * @see scenario.schedule.events.ScheduledEvent#getDisplayTypeName()
+	 * @generated
+	 */
+	EOperation getScheduledEvent__GetDisplayTypeName();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.Idle <em>Idle</em>}'.
@@ -1586,6 +1687,16 @@ public interface EventsPackage extends EPackage {
 	EOperation getSlotVisit__GetDisplayTypeName();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.SlotVisit#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.events.SlotVisit#getName()
+	 * @generated
+	 */
+	EOperation getSlotVisit__GetName();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.CharterOutVisit <em>Charter Out Visit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1647,6 +1758,26 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getVesselEventVisit__GetId();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.VesselEventVisit#getName() <em>Get Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Name</em>' operation.
+	 * @see scenario.schedule.events.VesselEventVisit#getName()
+	 * @generated
+	 */
+	EOperation getVesselEventVisit__GetName();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.VesselEventVisit#getDisplayTypeName() <em>Get Display Type Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Display Type Name</em>' operation.
+	 * @see scenario.schedule.events.VesselEventVisit#getDisplayTypeName()
+	 * @generated
+	 */
+	EOperation getVesselEventVisit__GetDisplayTypeName();
 
 	/**
 	 * Returns the meta object for enum '{@link scenario.schedule.events.FuelUnit <em>Fuel Unit</em>}'.
@@ -1824,6 +1955,22 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SCHEDULED_EVENT___GET_LOCAL_END_TIME = eINSTANCE.getScheduledEvent__GetLocalEndTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCHEDULED_EVENT___GET_NAME = eINSTANCE.getScheduledEvent__GetName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Display Type Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME = eINSTANCE.getScheduledEvent__GetDisplayTypeName();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.IdleImpl <em>Idle</em>}' class.
@@ -2034,6 +2181,14 @@ public interface EventsPackage extends EPackage {
 		EOperation SLOT_VISIT___GET_DISPLAY_TYPE_NAME = eINSTANCE.getSlotVisit__GetDisplayTypeName();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT_VISIT___GET_NAME = eINSTANCE.getSlotVisit__GetName();
+
+		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.CharterOutVisitImpl <em>Charter Out Visit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2084,6 +2239,22 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation VESSEL_EVENT_VISIT___GET_ID = eINSTANCE.getVesselEventVisit__GetId();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_EVENT_VISIT___GET_NAME = eINSTANCE.getVesselEventVisit__GetName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Display Type Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME = eINSTANCE.getVesselEventVisit__GetDisplayTypeName();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.FuelUnit <em>Fuel Unit</em>}' enum.

@@ -108,10 +108,10 @@ public class DateAndComboTime extends Composite {
 		// value. grar.
 
 		c.clear();
-
+	
 		c.set(date.getYear(), date.getMonth(), date.getDay(),
 				time.getSelectionIndex(), offset);
-
+		
 		return c;
 	}
 
