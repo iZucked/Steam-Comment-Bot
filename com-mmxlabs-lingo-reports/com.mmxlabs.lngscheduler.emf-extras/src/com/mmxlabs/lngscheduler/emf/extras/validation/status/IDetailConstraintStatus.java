@@ -12,6 +12,8 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 /**
  * Extended version of {@link IConstraintStatus} adding additional details about
  * which {@link EStructuralFeature} of an {@link EObject} the status refers to.
+ *
+ * TODO: Extend to allow multiple object/feature pairs
  * 
  * @author Simon Goodall
  * 
@@ -24,7 +26,7 @@ public interface IDetailConstraintStatus extends IConstraintStatus {
 	 * 
 	 * @return
 	 */
-	String getFeature();
+	EStructuralFeature getFeature();
 
 	/**
 	 * The {@link EObject} instance {@link #getFeature()} relates to. This may

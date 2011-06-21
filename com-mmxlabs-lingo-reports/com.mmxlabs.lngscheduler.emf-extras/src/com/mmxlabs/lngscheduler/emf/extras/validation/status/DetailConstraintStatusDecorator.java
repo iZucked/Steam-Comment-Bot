@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.emf.validation.model.IModelConstraint;
 
@@ -22,11 +23,11 @@ import org.eclipse.emf.validation.model.IModelConstraint;
 public class DetailConstraintStatusDecorator implements IDetailConstraintStatus {
 
 	private final IConstraintStatus status;
-	private final String feature;
+	private final EStructuralFeature feature;
 	private final EObject object;
 
 	public DetailConstraintStatusDecorator(final IConstraintStatus status,
-			final EObject object, final String feature) {
+			final EObject object, final EStructuralFeature feature) {
 		this.status = status;
 		this.feature = feature;
 		this.object = object;
@@ -93,7 +94,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	}
 
 	@Override
-	public String getFeature() {
+	public EStructuralFeature getFeature() {
 		return feature;
 	}
 

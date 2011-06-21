@@ -5,7 +5,6 @@
 package com.mmxlabs.rcp.navigator;
 
 
-import org.eclipse.equinox.internal.event.EventHandlerTracker;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -28,7 +27,6 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 	private static Activator plugin;
 
 	private ServiceTracker jobManagerServiceTracker;
-	private EventHandlerTracker eventAdminServiceTracker;
 	private BundleContext fContext;
 
 	private IJobManager jobManager;
@@ -61,10 +59,6 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 				"(objectclass=" + IJobManager.class.getName() + ")");
 
 		jobManager = (IJobManager) jobManagerServiceTracker.getService();
-		
-		
-//		eventAdminServiceTracker = new EventHandlerTracker(context, null);
-		
 	}
 
 	/*
