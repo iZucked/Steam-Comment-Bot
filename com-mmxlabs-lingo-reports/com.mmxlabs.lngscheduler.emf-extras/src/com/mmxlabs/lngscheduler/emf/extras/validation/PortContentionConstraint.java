@@ -4,11 +4,8 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.validation;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -19,13 +16,13 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
-
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoModel;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 import scenario.port.Port;
+
+import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
  * Checks whether multiple cargos will be at the same port at the same time.
@@ -36,6 +33,12 @@ import scenario.port.Port;
  * 
  */
 public class PortContentionConstraint extends AbstractModelConstraint {
+	/**
+	 * I think this is a problem because of intransitivity.
+	 * @param o1
+	 * @param o2
+	 * @return
+	 */
 	private int overlaps(final Slot o1, final Slot o2) {
 		if (o1.getWindowStart() == o2.getWindowStart()) return 0;
 		if (o1.getWindowStart() == null) return -1;
@@ -108,16 +111,25 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 			
 			// now check for overlap
 			final StringBuffer message = new StringBuffer();
-			final SortedSet<Slot> tailSet = slotsAtPort.tailSet(slot);
+			
+			final SortedSet<Slot> headSet = slotsAtPort.headSet(slot);
+			
+			final SortedSet<Slot> tailSet = slotsAtPort.tailSet(
+					headSet.isEmpty() ? slot : headSet.last()
+			);
+			//tailSet does not work! bother!
+			System.err.println(slot.getId() + " [" + slot.getWindowStart() + " - " + slot.getWindowEnd() + "]");
+			
 			for (final Slot s : tailSet) {
-				
-				if (overlaps(slot, s) == 0) {
+				final int order = overlaps(s, slot);
+				if (order == 0) {
 					if (s != slot) {
 						message.append((message.length() > 0 ? ", " : "") + s.getId());
-					} else {
-						break;
 					}
-				}
+				} //else {
+				//	break;
+				//}
+				System.err.println(s.getId()+ ", " + order + " [" + s.getWindowStart() + " - " + s.getWindowEnd() + "]");
 			}
 			
 			if (message.length() > 0) {
@@ -127,7 +139,6 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 			}
 		}
 		
-		//TODO doesn't quite seem to work; check whether this is context issue or comparator bug.
 		return ctx.createSuccessStatus();
 	}
 
