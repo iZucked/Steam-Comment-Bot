@@ -405,6 +405,11 @@
             <details key="body" value="return &quot;&quot;;"/>
           </eAnnotations>
         </eOperations>
+        <eOperations name="getDisplayTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="body" value="return eClass().getName();"/>
+          </eAnnotations>
+        </eOperations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" lowerBound="1"
             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime" lowerBound="1"

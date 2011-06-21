@@ -62,13 +62,9 @@ public class PortRotationReportView extends EMFReportView {
 				ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(),
 				sp.getSequence_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
-		addColumn("Type", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				final ScheduledEvent se = (ScheduledEvent) object;
-				return se.eClass().getName();
-			}
-		});
+		addColumn("Type", objectFormatter,
+				ep.getScheduledEvent__GetDisplayTypeName()
+		);
 
 		addColumn("ID", objectFormatter,
 				ep.getScheduledEvent__GetName()

@@ -404,6 +404,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getScheduledEvent__GetDisplayTypeName() {
+		return scheduledEventEClass.getEOperations().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getIdle() {
 		return idleEClass;
 	}
@@ -770,6 +779,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_LOCAL_START_TIME);
 		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_LOCAL_END_TIME);
 		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_NAME);
+		createEOperation(scheduledEventEClass, SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME);
 
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__VESSEL_STATE);
@@ -887,6 +897,8 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		initEOperation(getScheduledEvent__GetLocalEndTime(), ecorePackage.getEJavaObject(), "getLocalEndTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getScheduledEvent__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getScheduledEvent__GetDisplayTypeName(), ecorePackage.getEString(), "getDisplayTypeName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_VesselState(), theFleetPackage.getVesselState(), "vesselState", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

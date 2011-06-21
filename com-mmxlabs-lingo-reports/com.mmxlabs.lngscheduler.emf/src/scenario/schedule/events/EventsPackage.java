@@ -275,13 +275,22 @@ public interface EventsPackage extends EPackage {
 	int SCHEDULED_EVENT___GET_NAME = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 4;
 
 	/**
+	 * The operation id for the '<em>Get Display Type Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 5;
+
+	/**
 	 * The number of operations of the '<em>Scheduled Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULED_EVENT_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 5;
+	int SCHEDULED_EVENT_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.PortVisitImpl <em>Port Visit</em>}' class.
@@ -717,6 +726,15 @@ public interface EventsPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOURNEY___GET_NAME = SCHEDULED_EVENT___GET_NAME;
+
+	/**
+	 * The operation id for the '<em>Get Display Type Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_DISPLAY_TYPE_NAME = SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME;
 
 	/**
 	 * The operation id for the '<em>Get Total Fuel Cost</em>' operation.
@@ -1398,6 +1416,16 @@ public interface EventsPackage extends EPackage {
 	EOperation getScheduledEvent__GetName();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.schedule.events.ScheduledEvent#getDisplayTypeName() <em>Get Display Type Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Display Type Name</em>' operation.
+	 * @see scenario.schedule.events.ScheduledEvent#getDisplayTypeName()
+	 * @generated
+	 */
+	EOperation getScheduledEvent__GetDisplayTypeName();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.Idle <em>Idle</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1935,6 +1963,14 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SCHEDULED_EVENT___GET_NAME = eINSTANCE.getScheduledEvent__GetName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Display Type Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME = eINSTANCE.getScheduledEvent__GetDisplayTypeName();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.IdleImpl <em>Idle</em>}' class.

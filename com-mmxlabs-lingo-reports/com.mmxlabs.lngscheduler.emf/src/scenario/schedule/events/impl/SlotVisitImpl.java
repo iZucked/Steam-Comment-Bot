@@ -262,6 +262,7 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 		if (baseClass == ScheduledEvent.class) {
 			switch (baseOperationID) {
 				case EventsPackage.SCHEDULED_EVENT___GET_NAME: return EventsPackage.SLOT_VISIT___GET_NAME;
+				case EventsPackage.SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME: return EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME;
 				default: return super.eDerivedOperationID(baseOperationID, baseClass);
 			}
 		}

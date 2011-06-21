@@ -35,15 +35,19 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
 public class PortContentionConstraint extends AbstractModelConstraint {
 	/**
 	 * I think this is a problem because of intransitivity.
+	 * 
 	 * @param o1
 	 * @param o2
 	 * @return
 	 */
 	private int overlaps(final Slot o1, final Slot o2) {
-		if (o1.getWindowStart() == o2.getWindowStart()) return 0;
-		if (o1.getWindowStart() == null) return -1;
-		if (o2.getWindowStart() == null) return 1;
-		
+		if (o1.getWindowStart() == o2.getWindowStart())
+			return 0;
+		if (o1.getWindowStart() == null)
+			return -1;
+		if (o2.getWindowStart() == null)
+			return 1;
+
 		// if o1 or o2 overlap anywhere, they are equal
 		// otherwise, normal rules apply.
 		if (o1.getWindowStart().before(o2.getWindowStart())) {
@@ -60,7 +64,7 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 			}
 		}
 	}
-	
+
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
@@ -78,14 +82,13 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 
 			SortedSet<Slot> slotsAtPort = slotsByPort.get(port);
 			if (slotsAtPort == null) {
-				slotsAtPort = new TreeSet<Slot>(
-						new Comparator<Slot>() {
-							@Override
-							public int compare(Slot o1, Slot o2) {
-								return overlaps(o1, o2);
-							}
-						}
-				);
+				slotsAtPort = new TreeSet<Slot>(new Comparator<Slot>() {
+					@Override
+					public int compare(Slot o1, Slot o2) {
+						return o1.getWindowStart().compareTo(
+								o2.getWindowStart());
+					}
+				});
 				// locate other slots
 				EObject container = slot.eContainer();
 				while (container != null && !(container instanceof CargoModel)) {
@@ -105,40 +108,39 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 				} else {
 					return ctx.createSuccessStatus();
 				}
-				
+
 				slotsByPort.put(port, slotsAtPort);
 			}
-			
+
 			// now check for overlap
 			final StringBuffer message = new StringBuffer();
-			
-			final SortedSet<Slot> headSet = slotsAtPort.headSet(slot);
-			
-			final SortedSet<Slot> tailSet = slotsAtPort.tailSet(
-					headSet.isEmpty() ? slot : headSet.last()
-			);
-			//tailSet does not work! bother!
-			System.err.println(slot.getId() + " [" + slot.getWindowStart() + " - " + slot.getWindowEnd() + "]");
-			
-			for (final Slot s : tailSet) {
+
+			// iterate over slots and check for overlap
+			// we could make this faster by having a second set reverse-ordered on end
+			// date and using that to find a suitable starting point in slotsAtPort?
+			for (final Slot s : slotsAtPort) {
 				final int order = overlaps(s, slot);
 				if (order == 0) {
 					if (s != slot) {
-						message.append((message.length() > 0 ? ", " : "") + s.getId());
+						message.append((message.length() > 0 ? ", " : "")
+								+ s.getId());
 					}
-				} //else {
-				//	break;
-				//}
-				System.err.println(s.getId()+ ", " + order + " [" + s.getWindowStart() + " - " + s.getWindowEnd() + "]");
+					if (s.getWindowStart().after(slot.getWindowEnd()))
+						break;
+				} // else {
+					// break;
+					// }
 			}
-			
+
 			if (message.length() > 0) {
 				return new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(slot.getId(), port.getName(), message.toString()),
-						slot, CargoPackage.eINSTANCE.getSlot_Port());
+						(IConstraintStatus) ctx.createFailureStatus(
+								slot.getId(), port.getName(),
+								message.toString()), slot,
+						CargoPackage.eINSTANCE.getSlot_Port());
 			}
 		}
-		
+
 		return ctx.createSuccessStatus();
 	}
 

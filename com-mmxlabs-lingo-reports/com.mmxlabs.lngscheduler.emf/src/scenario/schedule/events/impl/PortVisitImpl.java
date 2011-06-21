@@ -21,6 +21,7 @@ import scenario.port.Port;
 
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.PortVisit;
+import scenario.schedule.events.ScheduledEvent;
 
 /**
  * <!-- begin-user-doc -->
@@ -204,6 +205,24 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 				return port != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == ScheduledEvent.class) {
+			switch (baseOperationID) {
+				case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_START_TIME: return EventsPackage.PORT_VISIT___GET_LOCAL_START_TIME;
+				case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_END_TIME: return EventsPackage.PORT_VISIT___GET_LOCAL_END_TIME;
+				case EventsPackage.SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME: return EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
 	}
 
 	/**
