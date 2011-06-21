@@ -70,10 +70,13 @@ public class PortRotationReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("ID", objectFormatter, 
-				ep.getSlotVisit_CargoAllocation(),
-				sp.getCargoAllocation__GetName()
+		addColumn("ID", objectFormatter,
+				ep.getScheduledEvent__GetName()
 		);
+//				objectFormatter, 
+//				ep.getSlotVisit_CargoAllocation(),
+//				sp.getCargoAllocation__GetName()
+//		);
 		addColumn("Start Date", calendarFormatter,
 				ep.getScheduledEvent__GetLocalStartTime());
 		addColumn("End Date", calendarFormatter,
