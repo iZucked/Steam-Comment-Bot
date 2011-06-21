@@ -552,8 +552,6 @@ public class JobManagerView extends ViewPart {
 
 		doubleClickAction = new Action() {
 
-			int counter = 0;
-
 			@Override
 			public void run() {
 				final ISelection selection = viewer.getSelection();
