@@ -59,7 +59,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			return new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(cargo.getId()),
 					cargo.getLoadSlot(), CargoPackage.eINSTANCE
-							.getSlot_WindowStart().getName());
+							.getSlot_WindowStart());
 		}
 		return ctx.createSuccessStatus();
 	}
@@ -124,7 +124,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 							(IConstraintStatus) ctx.createFailureStatus(
 									cargo.getId(), "infinity", availableTime),
 							cargo.getLoadSlot(), CargoPackage.eINSTANCE
-									.getSlot_Port().getName());
+									.getSlot_Port());
 				} else {
 					if (distance / maxSpeedKnots > availableTime) {
 						return new DetailConstraintStatusDecorator(
@@ -132,8 +132,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 										cargo.getId(),
 										(int) (distance / maxSpeedKnots),
 										availableTime), cargo.getLoadSlot(),
-								CargoPackage.eINSTANCE.getSlot_WindowStart()
-										.getName());
+								CargoPackage.eINSTANCE.getSlot_WindowStart());
 					}
 
 				}
@@ -157,7 +156,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					(IConstraintStatus) ctx.createFailureStatus(cargo.getId(),
 							availableTime / 24, SENSIBLE_TRAVEL_TIME),
 					cargo.getLoadSlot(), CargoPackage.eINSTANCE
-							.getSlot_WindowStart().getName());
+							.getSlot_WindowStart());
 		}
 
 		return ctx.createSuccessStatus();

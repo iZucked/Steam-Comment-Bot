@@ -123,7 +123,7 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 			if (message.length() > 0) {
 				return new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(slot.getId(), port.getName(), message.toString()),
-						slot, CargoPackage.eINSTANCE.getSlot_Port().getName());
+						slot, CargoPackage.eINSTANCE.getSlot_Port());
 			}
 		}
 		

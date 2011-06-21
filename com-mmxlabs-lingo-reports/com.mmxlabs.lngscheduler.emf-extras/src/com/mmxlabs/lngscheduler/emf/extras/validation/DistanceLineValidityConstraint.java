@@ -33,8 +33,7 @@ public class DistanceLineValidityConstraint extends AbstractModelConstraint {
 			if (status != null) {
 				return new DetailConstraintStatusDecorator(
 						(IConstraintStatus) status, target,
-						PortPackage.eINSTANCE.getDistanceLine_Distance()
-								.getName());
+						PortPackage.eINSTANCE.getDistanceLine_Distance());
 			}
 		}
 		return ctx.createSuccessStatus();
