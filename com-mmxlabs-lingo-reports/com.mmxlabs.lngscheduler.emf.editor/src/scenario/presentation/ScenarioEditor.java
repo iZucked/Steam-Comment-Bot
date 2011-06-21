@@ -337,7 +337,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 													multiDialog.createCommand());
 								}
 							} else {
-								final EObjectDetailDialog dialog = new EObjectDetailDialog(
+								if (l.size() == 0) return;
+ 								final EObjectDetailDialog dialog = new EObjectDetailDialog(
 										v.getControl().getShell(), SWT.NONE,
 										getEditingDomain());
 
