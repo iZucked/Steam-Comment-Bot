@@ -11,16 +11,15 @@
             cache="true">
          <!-- 
          	Multiple package statements are required because there's no recursive package inclusion  -->
-         <package
-               namespaceUri="http://com.mmxlabs.lng.emf" />
-         <package
-               namespaceUri="http://com.mmxlabs.lng.emf/fleet" />
-         <package
-               namespaceUri="http://com.mmxlabs.lng.emf/cargo" />
-               
-               <package
-               namespaceUri="http://com.mmxlabs.lng.emf/port" />
+         <package namespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
+         <package namespaceUri="http://com.mmxlabs.lng.emf" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf/fleet" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf/cargo" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf/port" />
          <package namespaceUri="http://com.mmxlabs.lng.emf/schedule" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf/contract" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf/market" />
+         
          <constraints
                categories="com.mmxlabs.lngscheduler.emf-extras.constraints">
             <constraint
@@ -40,8 +39,6 @@
             	</description>
             	<target class="Cargo" />
             </constraint>
-            
-            
             
             <constraint
             	class="com.mmxlabs.lngscheduler.emf.extras.validation.CargoDateConstraint"
@@ -180,7 +177,14 @@
             	<description>
             		Some references should not be null.
             	</description>
-            	<target class="EObject" />
+            	<target class="Port" />
+            	<target class="Cargo" />
+            	<target class="Contract" />
+            	<target class="DistanceLine" />
+            	<target class="Vessel" />
+            	<target class="VesselClass" />
+            	<target class="CharterOut" />
+            	<target class="VesselEvent" />
              <target
                    class="VesselEvent">
              </target>

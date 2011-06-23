@@ -19,6 +19,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import scenario.cargo.CargoPackage;
+import scenario.fleet.FleetPackage;
 import scenario.port.PortPackage;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -38,7 +39,11 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 					PortPackage.eINSTANCE.getPort_DefaultContract(),
 					CargoPackage.eINSTANCE.getCargo_LoadSlot(),
 					CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
-					CargoPackage.eINSTANCE.getSlot_Port()
+					CargoPackage.eINSTANCE.getSlot_Port(),
+					FleetPackage.eINSTANCE.getVessel_Class(),
+					FleetPackage.eINSTANCE.getVesselClass_BaseFuel(),
+					FleetPackage.eINSTANCE.getCharterOut_EndPort(),
+					FleetPackage.eINSTANCE.getVesselEvent_StartPort()
 					// TODO add any more refs to check here
 			);
 	
@@ -58,6 +63,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
+		
 		final LinkedList<EReference> errors = new LinkedList<EReference>();
 		final Set<EReference> targetRefs = getReferencesToCheck(target.eClass());
 		for (final EReference ref : targetRefs) {
