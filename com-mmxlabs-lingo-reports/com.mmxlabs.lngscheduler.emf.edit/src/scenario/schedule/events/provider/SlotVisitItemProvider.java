@@ -22,6 +22,7 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import scenario.cargo.Slot;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.SlotVisit;
 
@@ -125,12 +126,15 @@ public class SlotVisitItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	@Override
 	public String getText(Object object) {
+		final Slot slot = ((SlotVisit) object).getSlot();
 		Date labelValue = ((SlotVisit)object).getStartTime();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = 
+			(slot == null ? "" : slot.getId()) +
+			labelValue == null ? "" : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_SlotVisit_type") :
 			getString("_UI_SlotVisit_type") + " " + label;
