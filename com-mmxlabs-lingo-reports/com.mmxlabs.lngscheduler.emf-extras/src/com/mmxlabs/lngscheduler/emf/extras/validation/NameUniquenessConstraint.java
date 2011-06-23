@@ -32,6 +32,8 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
  * Ensures that the name attribute of all {@link NamedObject}s in a collection
  * are unique.
  * 
+ * TODO use ctx.addResults and ctx.skipCurrentConstraintFor...
+ * 
  * @author Tom Hinton
  * 
  */
