@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.validation.status;
 
+import java.util.Set;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.AbstractModelConstraint;
@@ -26,7 +28,7 @@ public interface IDetailConstraintStatus extends IConstraintStatus {
 	 * 
 	 * @return
 	 */
-	EStructuralFeature getFeature();
+	Set<EStructuralFeature> getFeatures();
 
 	/**
 	 * The {@link EObject} instance {@link #getFeature()} relates to. This may

@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.validation.status;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
@@ -21,16 +24,23 @@ import org.eclipse.emf.validation.model.IModelConstraint;
  * 
  */
 public class DetailConstraintStatusDecorator implements IDetailConstraintStatus {
-
 	private final IConstraintStatus status;
-	private final EStructuralFeature feature;
+	private final Set<EStructuralFeature> features;
 	private final EObject object;
 
 	public DetailConstraintStatusDecorator(final IConstraintStatus status,
 			final EObject object, final EStructuralFeature feature) {
 		this.status = status;
-		this.feature = feature;
+		this.features = Collections.singleton(feature);
 		this.object = object;
+	}
+
+	public DetailConstraintStatusDecorator(final IConstraintStatus status,
+			final EObject object,
+			final Collection<? extends EStructuralFeature> features) {
+		this.status = status;
+		this.object = object;
+		this.features = new HashSet<EStructuralFeature>(features);
 	}
 
 	@Override
@@ -94,8 +104,8 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	}
 
 	@Override
-	public EStructuralFeature getFeature() {
-		return feature;
+	public Set<EStructuralFeature> getFeatures() {
+		return features;
 	}
 
 	@Override
