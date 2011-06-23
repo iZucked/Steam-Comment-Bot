@@ -8,12 +8,14 @@ import java.util.Arrays;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.compilation.ITransformer;
+
 /**
  * @author Tom Hinton
  * 
  */
 public class CompiledEMFPath extends EMFPath {
-	final IEMFPathDelegate delegate;
+	final ITransformer delegate;
 
 	/**
 	 * @param failSilently
@@ -32,6 +34,6 @@ public class CompiledEMFPath extends EMFPath {
 	@Override
 	public Object get(final EObject input) {
 		if (delegate == null) return super.get(input);
-		return delegate.getValue(input);
+		return delegate.transform(input);
 	}
 }
