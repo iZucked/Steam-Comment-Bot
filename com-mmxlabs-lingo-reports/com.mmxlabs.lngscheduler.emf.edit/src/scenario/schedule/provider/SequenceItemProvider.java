@@ -143,10 +143,13 @@ public class SequenceItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	@Override
 	public String getText(Object object) {
+		if (object instanceof Sequence) {
+			return getString("_UI_Sequence_type") + " " + ((Sequence) object).getVessel().getName();
+		}
 		return getString("_UI_Sequence_type");
 	}
 
