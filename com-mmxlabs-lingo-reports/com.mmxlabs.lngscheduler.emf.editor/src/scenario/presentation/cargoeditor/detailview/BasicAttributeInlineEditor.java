@@ -247,9 +247,8 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 
 		if (status instanceof IDetailConstraintStatus) {
 			final IDetailConstraintStatus s = (IDetailConstraintStatus) status;
-
-			return (s.getObject() == input && feature.equals(
-					s.getFeature()));
+			
+			return (s.getObject() == input && s.getFeatures().contains(feature));
 		}
 
 		return false;
