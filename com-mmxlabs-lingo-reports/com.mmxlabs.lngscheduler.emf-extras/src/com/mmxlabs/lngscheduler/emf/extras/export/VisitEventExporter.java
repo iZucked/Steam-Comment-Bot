@@ -11,7 +11,6 @@ import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.fleet.CharterOut;
-import scenario.fleet.Drydock;
 import scenario.fleet.VesselEvent;
 import scenario.port.Port;
 import scenario.schedule.CargoAllocation;
@@ -42,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 public class VisitEventExporter extends BaseAnnotationExporter {
 	private IPortSlotProvider<ISequenceElement> portSlotProvider;
 	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<IPortSlot, CargoAllocation>();
+	private Port lastPortVisited = null;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -70,6 +70,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		PortVisit portVisit = null;
 
+		lastPortVisited = ePort;
+		
 		if (slot instanceof IDischargeSlot || slot instanceof ILoadSlot) {
 			final SlotVisit sv = factory.createSlotVisit();
 			sv.setSlot(entities.getModelObject(slot, Slot.class));
@@ -112,6 +114,11 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			}
 
 			sv.setCargoAllocation(eAllocation);
+			if (sv.getSlot() instanceof LoadSlot) {
+				eAllocation.setLoadSlotVisit(sv);
+			} else {
+				eAllocation.setDischargeSlotVisit(sv);
+			}
 		} else if (slot instanceof IVesselEventPortSlot) {
 			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
 			final VesselEvent event = entities.getModelObject(slot,
@@ -148,5 +155,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				.setEndTime(entities.getDateFromHours(visitEvent.getEndTime()));
 
 		return portVisit;
+	}
+
+	/**
+	 * @return
+	 */
+	public Port getLastPortVisited() {
+		return lastPortVisited ;
 	}
 }

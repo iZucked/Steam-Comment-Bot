@@ -31,6 +31,7 @@ import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.Journey;
 
+import scenario.schedule.events.SlotVisit;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
@@ -57,6 +58,8 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getShippingRevenue <em>Shipping Revenue</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeRevenue <em>Discharge Revenue</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getCargoType <em>Cargo Type</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadSlotVisit <em>Load Slot Visit</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeSlotVisit <em>Discharge Slot Visit</em>}</li>
  * </ul>
  * </p>
  *
@@ -302,6 +305,26 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * @ordered
 	 */
 	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getLoadSlotVisit() <em>Load Slot Visit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLoadSlotVisit()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotVisit loadSlotVisit;
+
+	/**
+	 * The cached value of the '{@link #getDischargeSlotVisit() <em>Discharge Slot Visit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDischargeSlotVisit()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotVisit dischargeSlotVisit;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -854,6 +877,82 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public SlotVisit getLoadSlotVisit() {
+		if (loadSlotVisit != null && loadSlotVisit.eIsProxy()) {
+			InternalEObject oldLoadSlotVisit = (InternalEObject)loadSlotVisit;
+			loadSlotVisit = (SlotVisit)eResolveProxy(oldLoadSlotVisit);
+			if (loadSlotVisit != oldLoadSlotVisit) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT, oldLoadSlotVisit, loadSlotVisit));
+			}
+		}
+		return loadSlotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotVisit basicGetLoadSlotVisit() {
+		return loadSlotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLoadSlotVisit(SlotVisit newLoadSlotVisit) {
+		SlotVisit oldLoadSlotVisit = loadSlotVisit;
+		loadSlotVisit = newLoadSlotVisit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT, oldLoadSlotVisit, loadSlotVisit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotVisit getDischargeSlotVisit() {
+		if (dischargeSlotVisit != null && dischargeSlotVisit.eIsProxy()) {
+			InternalEObject oldDischargeSlotVisit = (InternalEObject)dischargeSlotVisit;
+			dischargeSlotVisit = (SlotVisit)eResolveProxy(oldDischargeSlotVisit);
+			if (dischargeSlotVisit != oldDischargeSlotVisit) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT, oldDischargeSlotVisit, dischargeSlotVisit));
+			}
+		}
+		return dischargeSlotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotVisit basicGetDischargeSlotVisit() {
+		return dischargeSlotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDischargeSlotVisit(SlotVisit newDischargeSlotVisit) {
+		SlotVisit oldDischargeSlotVisit = dischargeSlotVisit;
+		dischargeSlotVisit = newDischargeSlotVisit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT, oldDischargeSlotVisit, dischargeSlotVisit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public long getTotalCost() {
 		long totalCost = 0;
 		totalCost += (getLadenIdle() == null) ? 0 : getLadenIdle().getTotalCost();
@@ -959,6 +1058,12 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return basicGetDischargeRevenue();
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				return getCargoType();
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT:
+				if (resolve) return getLoadSlotVisit();
+				return basicGetLoadSlotVisit();
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT:
+				if (resolve) return getDischargeSlotVisit();
+				return basicGetDischargeSlotVisit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1021,6 +1126,12 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				setCargoType((CargoType)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT:
+				setLoadSlotVisit((SlotVisit)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT:
+				setDischargeSlotVisit((SlotVisit)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1085,6 +1196,12 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				setCargoType(CARGO_TYPE_EDEFAULT);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT:
+				setLoadSlotVisit((SlotVisit)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT:
+				setDischargeSlotVisit((SlotVisit)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1131,6 +1248,10 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return dischargeRevenue != null;
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				return cargoType != CARGO_TYPE_EDEFAULT;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT:
+				return loadSlotVisit != null;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT:
+				return dischargeSlotVisit != null;
 		}
 		return super.eIsSet(featureID);
 	}

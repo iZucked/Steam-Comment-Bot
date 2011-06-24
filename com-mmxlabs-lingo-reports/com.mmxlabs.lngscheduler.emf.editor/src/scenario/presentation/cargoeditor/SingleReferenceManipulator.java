@@ -17,6 +17,11 @@ import org.eclipse.swt.widgets.Composite;
 import com.mmxlabs.common.Pair;
 
 /**
+ * A column manipulator for setting single-valued EReference features.
+ * 
+ * Uses {@link ComboBoxCellEditor} for its edit control, and takes 
+ * the values from an {@link IReferenceValueProvider}.
+ * 
  * @author hinton
  * 
  */
@@ -26,6 +31,15 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	private ComboBoxCellEditor editor;
 
+	/**
+	 * Create a manipulator for the given field in the target object,
+	 * taking values from the given valueProvider and creating set commands
+	 * in the provided editingDomain.
+	 * 
+	 * @param field the field to set
+	 * @param valueProvider provides the names & values for the field
+	 * @param editingDomain editing domain for setting
+	 */
 	public SingleReferenceManipulator(final EReference field,
 			final IReferenceValueProvider valueProvider,
 			final EditingDomain editingDomain) {

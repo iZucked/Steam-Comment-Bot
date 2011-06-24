@@ -80,9 +80,10 @@ public class AnnotatedSolutionExporter {
 	}
 
 	public AnnotatedSolutionExporter() {
-		exporters.add(new IdleEventExporter());
+		final VisitEventExporter visitExporter = new VisitEventExporter();
+		exporters.add(new IdleEventExporter(visitExporter));
 		exporters.add(new JourneyEventExporter());
-		exporters.add(new VisitEventExporter());
+		exporters.add(visitExporter);
 	}
 
 	public Schedule exportAnnotatedSolution(final Scenario inputScenario,

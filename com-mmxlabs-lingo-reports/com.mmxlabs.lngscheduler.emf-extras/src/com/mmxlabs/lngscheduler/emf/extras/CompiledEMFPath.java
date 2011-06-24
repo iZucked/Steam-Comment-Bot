@@ -33,7 +33,12 @@ public class CompiledEMFPath extends EMFPath {
 
 	@Override
 	public Object get(final EObject input) {
-		if (delegate == null) return super.get(input);
-		return delegate.transform(input);
+		if (delegate == null)
+			return super.get(input);
+		try {
+			return delegate.transform(input);
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 }

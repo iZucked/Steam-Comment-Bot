@@ -17,6 +17,7 @@ import scenario.cargo.Slot;
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.Journey;
 
+import scenario.schedule.events.SlotVisit;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
 /**
@@ -44,6 +45,8 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  *   <li>{@link scenario.schedule.CargoAllocation#getShippingRevenue <em>Shipping Revenue</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargeRevenue <em>Discharge Revenue</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getLoadSlotVisit <em>Load Slot Visit</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getDischargeSlotVisit <em>Discharge Slot Visit</em>}</li>
  * </ul>
  * </p>
  *
@@ -497,6 +500,58 @@ public interface CargoAllocation extends EObject {
 	 * @generated
 	 */
 	void setCargoType(CargoType value);
+
+	/**
+	 * Returns the value of the '<em><b>Load Slot Visit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Load Slot Visit</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Load Slot Visit</em>' reference.
+	 * @see #setLoadSlotVisit(SlotVisit)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_LoadSlotVisit()
+	 * @model required="true"
+	 * @generated
+	 */
+	SlotVisit getLoadSlotVisit();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getLoadSlotVisit <em>Load Slot Visit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Load Slot Visit</em>' reference.
+	 * @see #getLoadSlotVisit()
+	 * @generated
+	 */
+	void setLoadSlotVisit(SlotVisit value);
+
+	/**
+	 * Returns the value of the '<em><b>Discharge Slot Visit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Discharge Slot Visit</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Discharge Slot Visit</em>' reference.
+	 * @see #setDischargeSlotVisit(SlotVisit)
+	 * @see scenario.schedule.SchedulePackage#getCargoAllocation_DischargeSlotVisit()
+	 * @model required="true"
+	 * @generated
+	 */
+	SlotVisit getDischargeSlotVisit();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.CargoAllocation#getDischargeSlotVisit <em>Discharge Slot Visit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Discharge Slot Visit</em>' reference.
+	 * @see #getDischargeSlotVisit()
+	 * @generated
+	 */
+	void setDischargeSlotVisit(SlotVisit value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -149,6 +149,7 @@ import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.ChartViewer.IChartContentProvider;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
+import scenario.presentation.cargoeditor.CargoInitialVesselManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
@@ -2207,6 +2208,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						cargoPackage.getCargo_AllowedVessels(),
 						getEditingDomain(), vesselProvider, namedObjectName);
 				cargoPane.addTypicalColumn("Restrict To", av);
+			}
+			
+			{
+				final CargoInitialVesselManipulator civm = new CargoInitialVesselManipulator(getEditingDomain());
+				cargoPane.addTypicalColumn("Initial Vessel", civm);
 			}
 
 			// TODO sort out initial vessel column

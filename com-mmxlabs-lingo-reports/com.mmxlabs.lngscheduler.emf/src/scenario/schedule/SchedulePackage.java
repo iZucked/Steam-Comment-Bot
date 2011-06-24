@@ -401,13 +401,31 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__CARGO_TYPE = 16;
 
 	/**
+	 * The feature id for the '<em><b>Load Slot Visit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__LOAD_SLOT_VISIT = 17;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Slot Visit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT = 18;
+
+	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = 17;
+	int CARGO_ALLOCATION_FEATURE_COUNT = 19;
 
 	/**
 	 * The operation id for the '<em>Get Total Cost</em>' operation.
@@ -1302,6 +1320,28 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getCargoAllocation_CargoType();
 
 	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getLoadSlotVisit <em>Load Slot Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Load Slot Visit</em>'.
+	 * @see scenario.schedule.CargoAllocation#getLoadSlotVisit()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_LoadSlotVisit();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.CargoAllocation#getDischargeSlotVisit <em>Discharge Slot Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Discharge Slot Visit</em>'.
+	 * @see scenario.schedule.CargoAllocation#getDischargeSlotVisit()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_DischargeSlotVisit();
+
+	/**
 	 * Returns the meta object for the '{@link scenario.schedule.CargoAllocation#getTotalCost() <em>Get Total Cost</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1878,6 +1918,22 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO_ALLOCATION__CARGO_TYPE = eINSTANCE.getCargoAllocation_CargoType();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Slot Visit</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__LOAD_SLOT_VISIT = eINSTANCE.getCargoAllocation_LoadSlotVisit();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Slot Visit</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT = eINSTANCE.getCargoAllocation_DischargeSlotVisit();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Total Cost</b></em>' operation.

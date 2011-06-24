@@ -31,10 +31,9 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.SchedulePackage;
 
 /**
- * This is the item provider adapter for a
- * {@link scenario.schedule.CargoAllocation} object. <!-- begin-user-doc -->
+ * This is the item provider adapter for a {@link scenario.schedule.CargoAllocation} object.
+ * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class CargoAllocationItemProvider extends ItemProviderAdapter implements
@@ -78,6 +77,8 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 			addShippingRevenuePropertyDescriptor(object);
 			addDischargeRevenuePropertyDescriptor(object);
 			addCargoTypePropertyDescriptor(object);
+			addLoadSlotVisitPropertyDescriptor(object);
+			addDischargeSlotVisitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -89,16 +90,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addLoadSlotPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_loadSlot_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_loadSlot_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_SLOT, true,
-				false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_loadSlot_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadSlot_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_SLOT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -108,16 +112,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addDischargeSlotPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_dischargeSlot_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_dischargeSlot_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_SLOT,
-				true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_dischargeSlot_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeSlot_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_SLOT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -127,17 +134,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addFuelVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_fuelVolume_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_fuelVolume_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__FUEL_VOLUME, true,
-				false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_fuelVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_fuelVolume_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__FUEL_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -147,17 +156,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addDischargeVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_dischargeVolume_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_dischargeVolume_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_VOLUME,
-				true, false, false,
-				ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_dischargeVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeVolume_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -167,17 +178,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addLoadDatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_loadDate_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_loadDate_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_DATE, true,
-				false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-				null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_loadDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadDate_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -187,17 +200,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addDischargeDatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_dischargeDate_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_dischargeDate_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_DATE,
-				true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_dischargeDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeDate_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -207,17 +222,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addLoadPriceM3PropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_loadPriceM3_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_loadPriceM3_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_PRICE_M3, true,
-				false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_loadPriceM3_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadPriceM3_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_PRICE_M3,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -227,17 +244,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addDischargePriceM3PropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_dischargePriceM3_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_dischargePriceM3_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_PRICE_M3,
-				true, false, false,
-				ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_dischargePriceM3_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargePriceM3_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_PRICE_M3,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -247,16 +266,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addVesselPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_vessel_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_vessel_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__VESSEL, true, false,
-				true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_vessel_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -266,16 +288,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addLadenLegPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_ladenLeg_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_ladenLeg_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_LEG, true,
-				false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_ladenLeg_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ladenLeg_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_LEG,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -285,16 +310,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addBallastLegPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_ballastLeg_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_ballastLeg_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_LEG, true,
-				false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_ballastLeg_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ballastLeg_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_LEG,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -304,16 +332,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addLadenIdlePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_ladenIdle_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_ladenIdle_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_IDLE, true,
-				false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_ladenIdle_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ladenIdle_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_IDLE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -323,16 +354,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addBallastIdlePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_ballastIdle_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_ballastIdle_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_IDLE, true,
-				false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_ballastIdle_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ballastIdle_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_IDLE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -342,16 +376,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addLoadRevenuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_loadRevenue_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_loadRevenue_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_REVENUE, true,
-				false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_loadRevenue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadRevenue_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_REVENUE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -361,16 +398,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addShippingRevenuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_shippingRevenue_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_shippingRevenue_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__SHIPPING_REVENUE,
-				true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_shippingRevenue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_shippingRevenue_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__SHIPPING_REVENUE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -380,16 +420,19 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addDischargeRevenuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_dischargeRevenue_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_dischargeRevenue_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_REVENUE,
-				true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_dischargeRevenue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeRevenue_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_REVENUE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -399,29 +442,74 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addCargoTypePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_CargoAllocation_cargoType_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_CargoAllocation_cargoType_feature",
-						"_UI_CargoAllocation_type"),
-				SchedulePackage.Literals.CARGO_ALLOCATION__CARGO_TYPE, true,
-				false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-				null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_cargoType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_cargoType_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__CARGO_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This returns CargoAllocation.gif. <!-- begin-user-doc --> <!--
+	 * This adds a property descriptor for the Load Slot Visit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLoadSlotVisitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_loadSlotVisit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadSlotVisit_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_SLOT_VISIT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Discharge Slot Visit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDischargeSlotVisitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_dischargeSlotVisit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeSlotVisit_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns CargoAllocation.gif.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/CargoAllocation"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CargoAllocation"));
 	}
 
 	/**
@@ -443,11 +531,10 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to
-	 * update any cached children and by creating a viewer notification, which
-	 * it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -455,16 +542,15 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoAllocation.class)) {
-		case SchedulePackage.CARGO_ALLOCATION__FUEL_VOLUME:
-		case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
-		case SchedulePackage.CARGO_ALLOCATION__LOAD_DATE:
-		case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_DATE:
-		case SchedulePackage.CARGO_ALLOCATION__LOAD_PRICE_M3:
-		case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
-		case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), false, true));
-			return;
+			case SchedulePackage.CARGO_ALLOCATION__FUEL_VOLUME:
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_DATE:
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_DATE:
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_PRICE_M3:
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 		}
 		super.notifyChanged(notification);
 	}

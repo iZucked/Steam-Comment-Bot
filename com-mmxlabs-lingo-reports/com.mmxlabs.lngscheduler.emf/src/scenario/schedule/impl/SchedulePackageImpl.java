@@ -513,6 +513,24 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCargoAllocation_LoadSlotVisit() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(17);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoAllocation_DischargeSlotVisit() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(18);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getCargoAllocation__GetTotalCost() {
 		return cargoAllocationEClass.getEOperations().get(0);
 	}
@@ -831,6 +849,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SHIPPING_REVENUE);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_REVENUE);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__CARGO_TYPE);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_SLOT_VISIT);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_TOTAL_COST);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOCAL_LOAD_DATE);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_LOCAL_DISCHARGE_DATE);
@@ -946,6 +966,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getCargoAllocation_ShippingRevenue(), this.getBookedRevenue(), null, "shippingRevenue", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoAllocation_DischargeRevenue(), this.getBookedRevenue(), null, "dischargeRevenue", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_CargoType(), theCargoPackage.getCargoType(), "cargoType", "Fleet", 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_LoadSlotVisit(), theEventsPackage.getSlotVisit(), null, "loadSlotVisit", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_DischargeSlotVisit(), theEventsPackage.getSlotVisit(), null, "dischargeSlotVisit", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCargoAllocation__GetTotalCost(), ecorePackage.getELong(), "getTotalCost", 1, 1, IS_UNIQUE, IS_ORDERED);
 

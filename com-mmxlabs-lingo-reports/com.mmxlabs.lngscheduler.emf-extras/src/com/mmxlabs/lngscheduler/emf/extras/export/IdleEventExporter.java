@@ -27,11 +27,21 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * 
  */
 public class IdleEventExporter extends BaseAnnotationExporter {
+	private final VisitEventExporter visitExporter;
+
+	/**
+	 * Take a reference to the visit exporter, as a hack to get the last visited
+	 * port
+	 * 
+	 * @param visitExporter
+	 */
+	public IdleEventExporter(final VisitEventExporter visitExporter) {
+		this.visitExporter = visitExporter;
+	}
+
 	@Override
 	public void init() {
 	}
-
-	private Port lastePort = null;
 
 	@Override
 	public ScheduledEvent export(final ISequenceElement element,
@@ -49,11 +59,8 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		// have an EMF representation, but we do want idle time for it
 		// so we assume if we hit a dubious port it's ANYWHERE and that
 		// we are really where we used to be.
-		if (ePort == null) {
-			ePort = lastePort;
-		} else {
-			lastePort = ePort;
-		}
+
+		ePort = visitExporter.getLastPortVisited();
 		// if (ePort == null)
 		// return null;
 
@@ -76,6 +83,10 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 			addFuelQuantity(idle, fc,
 					event.getFuelConsumption(fc, fc.getDefaultFuelUnit()),
 					event.getFuelCost(fc));
+		}
+
+		if (idle.getPort() == null) {
+			System.err.println("This shouldn't have happened");
 		}
 
 		return idle;
