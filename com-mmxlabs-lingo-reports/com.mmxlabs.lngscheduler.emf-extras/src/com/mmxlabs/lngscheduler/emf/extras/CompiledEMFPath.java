@@ -21,7 +21,7 @@ public class CompiledEMFPath extends EMFPath {
 	 * @param failSilently
 	 * @param path
 	 */
-	public CompiledEMFPath(boolean failSilently, Object[] path) {
+	public CompiledEMFPath(boolean failSilently, Object... path) {
 		super(failSilently, path);
 		if (failSilently) {
 			delegate = PathDelegateCache.getInstance().getPathDelegate(

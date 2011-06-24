@@ -30,6 +30,7 @@ import scenario.schedule.events.FuelType;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class ScheduledEventPropertySourceProvider implements
@@ -112,7 +113,7 @@ public class ScheduledEventPropertySourceProvider implements
 					continue;
 
 				final PropertyDescriptor descriptor = new PropertyDescriptor(
-						new EMFPath(true, attribute), unmangle(attribute.getName()));
+						new CompiledEMFPath(true, attribute), unmangle(attribute.getName()));
 				descriptor.setCategory(eClass.getName());
 				descriptor.setLabelProvider(lp);
 
@@ -124,7 +125,7 @@ public class ScheduledEventPropertySourceProvider implements
 				if (ref.isContainment() || ref.isMany() || !(ref.getEType().equals(PortPackage.eINSTANCE.getPort())))
 					continue;
 				final PropertyDescriptor descriptor = new PropertyDescriptor(
-						new EMFPath(true, ref), unmangle(ref.getName()));
+						new CompiledEMFPath(true, ref), unmangle(ref.getName()));
 				descriptor.setCategory(eClass.getName());
 				descriptor.setLabelProvider(lp);
 
@@ -133,7 +134,7 @@ public class ScheduledEventPropertySourceProvider implements
 			
 			if (event instanceof SlotVisit) {
 				PropertyDescriptor descriptor = new PropertyDescriptor(
-						new EMFPath(true, 
+						new CompiledEMFPath(true, 
 								EventsPackage.eINSTANCE.getSlotVisit_Slot(),
 								CargoPackage.eINSTANCE.getSlot_Id()
 						), "Slot ID");
@@ -144,7 +145,7 @@ public class ScheduledEventPropertySourceProvider implements
 				
 				if (((SlotVisit)event).getSlot() instanceof LoadSlot) {
 					descriptor = new PropertyDescriptor(
-							new EMFPath(true, 
+							new CompiledEMFPath(true, 
 									EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
 									SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()
 							), "Load Volume");
@@ -154,7 +155,7 @@ public class ScheduledEventPropertySourceProvider implements
 					list.add(descriptor);
 				} else {
 					descriptor = new PropertyDescriptor(
-							new EMFPath(true, 
+							new CompiledEMFPath(true, 
 									EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
 									SchedulePackage.eINSTANCE.getCargoAllocation_DischargeVolume()
 							), "Discharge Volume");
@@ -167,7 +168,7 @@ public class ScheduledEventPropertySourceProvider implements
 			
 			{
 				PropertyDescriptor descriptor = new PropertyDescriptor(
-						new EMFPath(true, EventsPackage.eINSTANCE
+						new CompiledEMFPath(true, EventsPackage.eINSTANCE
 								.getScheduledEvent__GetEventDuration()),
 						"Duration");
 				descriptor.setCategory("Time");
@@ -186,7 +187,7 @@ public class ScheduledEventPropertySourceProvider implements
 
 				if (event.getHireCost() > 0) {
 					descriptor = new PropertyDescriptor(
-							new EMFPath(true, EventsPackage.eINSTANCE
+							new CompiledEMFPath(true, EventsPackage.eINSTANCE
 									.getScheduledEvent__GetHireCost()),
 							"Hire Cost ($)");
 					descriptor.setCategory(eClass.getName());
@@ -196,7 +197,7 @@ public class ScheduledEventPropertySourceProvider implements
 				}
 
 				descriptor = new PropertyDescriptor(
-						new EMFPath(true, EventsPackage.eINSTANCE
+						new CompiledEMFPath(true, EventsPackage.eINSTANCE
 								.getScheduledEvent__GetLocalStartTime()),
 						
 						"From Date");
@@ -206,7 +207,7 @@ public class ScheduledEventPropertySourceProvider implements
 				list.add(descriptor);
 				
 				descriptor = new PropertyDescriptor(
-						new EMFPath(true, EventsPackage.eINSTANCE
+						new CompiledEMFPath(true, EventsPackage.eINSTANCE
 								.getScheduledEvent__GetLocalEndTime()),
 						
 						"To Date");

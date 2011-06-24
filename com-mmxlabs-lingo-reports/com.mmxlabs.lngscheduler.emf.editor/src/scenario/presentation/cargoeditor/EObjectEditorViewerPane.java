@@ -90,6 +90,7 @@ import scenario.presentation.cargoeditor.importer.ExportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportUI;
 
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
@@ -262,7 +263,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final Object... pathObjects) {
 		// create a column
 
-		final EMFPath path = new EMFPath(true, pathObjects);
+		final EMFPath path = new CompiledEMFPath(true, pathObjects);
 
 		final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 		final TableColumn tColumn = column.getColumn();

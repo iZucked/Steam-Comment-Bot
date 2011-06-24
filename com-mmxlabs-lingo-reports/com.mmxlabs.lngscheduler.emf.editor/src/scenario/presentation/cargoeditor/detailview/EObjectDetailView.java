@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.provider.LngEditPlugin;
 
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
@@ -155,7 +156,7 @@ public class EObjectDetailView extends Composite {
 	public void initForEClass(final EClass objectClass) {
 		int groupCount = 1;
 		addGroupForEClass(objectClass, unmangle(objectClass.getName()),
-				new EMFPath(true));
+				new CompiledEMFPath(true));
 		for (final EReference reference : objectClass.getEAllContainments()) {
 			if (reference.isMany()) {
 				continue;
@@ -166,7 +167,7 @@ public class EObjectDetailView extends Composite {
 			}
 
 			addGroupForEClass(reference.getEReferenceType(), groupName,
-					new EMFPath(true, reference));
+					new CompiledEMFPath(true, reference));
 			groupCount++;
 		}
 
