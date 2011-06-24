@@ -73,10 +73,11 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 
 			final String name = (String) target.eGet(nameAttribute);
 			if (bad.contains(name)) {
-				return new DetailConstraintStatusDecorator(
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(target
-								.eClass().getName(), name), target,
-						nameAttribute);
+								.eClass().getName(), name));
+					dsd.addEObjectAndFeature(target, nameAttribute);
+						return dsd;
 			}
 		}
 		return ctx.createSuccessStatus();

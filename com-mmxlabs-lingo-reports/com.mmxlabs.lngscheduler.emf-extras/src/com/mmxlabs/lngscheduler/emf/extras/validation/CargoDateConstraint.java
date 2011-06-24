@@ -56,10 +56,12 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	private IStatus validateSlotOrder(final IValidationContext ctx,
 			final Cargo cargo, final int availableTime) {
 		if (availableTime < 0) {
-			return new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(cargo.getId()),
-					cargo.getLoadSlot(), CargoPackage.eINSTANCE
-							.getSlot_WindowStart());
+
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus(cargo.getId()));
+			status.addEObjectAndFeature(cargo.getLoadSlot(),
+					CargoPackage.eINSTANCE.getSlot_WindowStart());
+			return status;
 		}
 		return ctx.createSuccessStatus();
 	}
@@ -120,19 +122,20 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					// distance line is missing
 					//TODO customize message for this case.
 					// seems like a waste to run the same code twice
-					return new DetailConstraintStatusDecorator(
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus(
-									cargo.getId(), "infinity", availableTime),
-							cargo.getLoadSlot(), CargoPackage.eINSTANCE
-									.getSlot_Port());
+									cargo.getId(), "infinity", availableTime));
+					dsd.addEObjectAndFeature(cargo.getLoadSlot(),
+							CargoPackage.eINSTANCE.getSlot_Port());
+					return dsd;
 				} else {
 					if (distance / maxSpeedKnots > availableTime) {
-						return new DetailConstraintStatusDecorator(
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus(
-										cargo.getId(),
-										(int) (distance / maxSpeedKnots),
-										availableTime), cargo.getLoadSlot(),
+										(int) (distance / maxSpeedKnots)));
+						dsd.addEObjectAndFeature(cargo.getLoadSlot(),
 								CargoPackage.eINSTANCE.getSlot_WindowStart());
+						return dsd;
 					}
 
 				}
@@ -152,11 +155,13 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	private IStatus validateSlotAvailableTime(final IValidationContext ctx,
 			final Cargo cargo, final int availableTime) {
 		if (availableTime / 24 > SENSIBLE_TRAVEL_TIME) {
-			return new DetailConstraintStatusDecorator(
+
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(cargo.getId(),
-							availableTime / 24, SENSIBLE_TRAVEL_TIME),
-					cargo.getLoadSlot(), CargoPackage.eINSTANCE
-							.getSlot_WindowStart());
+							availableTime / 24, SENSIBLE_TRAVEL_TIME));
+			status.addEObjectAndFeature(cargo.getLoadSlot(),
+					CargoPackage.eINSTANCE.getSlot_WindowStart());
+			return status;
 		}
 
 		return ctx.createSuccessStatus();

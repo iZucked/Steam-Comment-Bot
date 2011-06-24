@@ -7,6 +7,8 @@
  */
 package scenario.presentation.cargoeditor.detailview;
 
+import java.util.Collection;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
@@ -214,7 +216,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 				decoration.hide();
 				return;
 			}
-			
+
 			// Update description text
 			decoration.setDescriptionText(sb.toString());
 
@@ -248,8 +250,12 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		if (status instanceof IDetailConstraintStatus) {
 			final IDetailConstraintStatus s = (IDetailConstraintStatus) status;
 
-			return (s.getObject() == input && feature.equals(
-					s.getFeature()));
+			final Collection<EObject> objects = s.getObjects();
+			if (objects.contains(input)) {
+				if (s.getFeaturesForEObject(input).contains(feature)) {
+					return true;
+				}
+			}
 		}
 
 		return false;

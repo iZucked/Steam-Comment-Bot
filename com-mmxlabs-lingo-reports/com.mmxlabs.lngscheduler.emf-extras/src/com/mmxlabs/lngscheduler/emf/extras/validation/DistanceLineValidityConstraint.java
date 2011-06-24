@@ -12,6 +12,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
+import scenario.cargo.CargoPackage;
 import scenario.port.DistanceLine;
 import scenario.port.PortPackage;
 
@@ -31,9 +32,11 @@ public class DistanceLineValidityConstraint extends AbstractModelConstraint {
 			final IStatus status = validateDistance(ctx, distanceLine);
 
 			if (status != null) {
-				return new DetailConstraintStatusDecorator(
-						(IConstraintStatus) status, target,
-						PortPackage.eINSTANCE.getDistanceLine_Distance());
+				
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) status);
+				dsd.addEObjectAndFeature(target, PortPackage.eINSTANCE.getDistanceLine_Distance());
+				return dsd;
 			}
 		}
 		return ctx.createSuccessStatus();
