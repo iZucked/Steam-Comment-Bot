@@ -131,10 +131,10 @@ public class SlotVisitItemProvider
 	@Override
 	public String getText(Object object) {
 		final Slot slot = ((SlotVisit) object).getSlot();
-		Date labelValue = ((SlotVisit)object).getStartTime();
+		Date labelValue = ((SlotVisit) object).getStartTime();
 		String label = 
-			(slot == null ? "" : slot.getId()) +
-			labelValue == null ? "" : labelValue.toString();
+			(slot == null ? "" : slot.getId()) + " " + 
+			(labelValue == null ? "" : labelValue.toString());
 		return label == null || label.length() == 0 ?
 			getString("_UI_SlotVisit_type") :
 			getString("_UI_SlotVisit_type") + " " + label;

@@ -131,11 +131,11 @@ public class ScheduleFitnessItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ScheduleFitness)object).getName();
+		String label = ((ScheduleFitness)object).getName() + " = " + ((ScheduleFitness)object).getValue();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ScheduleFitness_type") :
 			getString("_UI_ScheduleFitness_type") + " " + label;
