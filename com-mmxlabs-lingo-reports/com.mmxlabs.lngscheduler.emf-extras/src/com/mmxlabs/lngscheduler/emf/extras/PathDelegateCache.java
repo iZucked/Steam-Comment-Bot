@@ -22,7 +22,7 @@ import com.mmxlabs.common.compilation.MethodChainGenerator;
  */
 public class PathDelegateCache {
 	private static final PathDelegateCache INSTANCE = new PathDelegateCache();
-	private final InjectableClassLoader loader = new InjectableClassLoader();
+	private final InjectableClassLoader loader = new InjectableClassLoader(getClass().getClassLoader());
 	private final MethodChainGenerator generator = new MethodChainGenerator();
 	public static PathDelegateCache getInstance() {
 		return INSTANCE;
