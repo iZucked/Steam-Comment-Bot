@@ -5,6 +5,7 @@
 package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import scenario.optimiser.Constraint;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimisationSettings;
 import scenario.optimiser.lso.LSOSettings;
+import scenario.schedule.CargoAllocation;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.ScheduledEvent;
@@ -187,6 +189,7 @@ public class OptimisationTransformer {
 			IOptimisationData<ISequenceElement> data, final ModelEntityMap mem) {
 		// Create the sequenced constraint checkers here
 		final IModifiableSequences<ISequenceElement> advice;
+		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
 		if (settings.getInitialSchedule() != null) {
 			advice = new ModifiableSequences<ISequenceElement>(
 					data.getResources());
@@ -282,6 +285,34 @@ public class OptimisationTransformer {
 				}
 				ms.add(serp.getEndElement(vp.getResource(vessel)));
 			}
+
+			// create resource advice (map load and discharge slots of cargo
+			// allocations to resources)
+			
+			//TODO similar thing for drydocks & charter outs.
+			for (final CargoAllocation allocation : settings
+					.getInitialSchedule().getCargoAllocations()) {
+				if (allocation.getLoadSlotVisit() == null
+						&& allocation.getVessel() != null) {
+					final ISequenceElement loadElement = psp.getElement(mem
+							.getOptimiserObject(allocation.getLoadSlot(),
+									IPortSlot.class));
+					final ISequenceElement dischargeElement = psp
+							.getElement(mem.getOptimiserObject(
+									allocation.getDischargeSlot(),
+									IPortSlot.class));
+					final IVessel vessel = (allocation.getVessel() instanceof SpotVessel) ? mem
+							.getOptimiserObject(allocation.getVessel(),
+									IVessel.class) : mem.getOptimiserObject(
+							((FleetVessel) allocation.getVessel()).getVessel(),
+							IVessel.class);
+
+					final IResource resource = vp.getResource(vessel);
+
+					resourceAdvice.put(loadElement, resource);
+					resourceAdvice.put(dischargeElement, resource);
+				}
+			}
 		} else {
 			advice = null;
 		}
@@ -291,6 +322,6 @@ public class OptimisationTransformer {
 		final IInitialSequenceBuilder<ISequenceElement> builder = new ConstrainedInitialSequenceBuilder<ISequenceElement>(
 				registry.getConstraintCheckerFactories(getEnabledConstraintNames()));
 
-		return builder.createInitialSequences(data, advice);
+		return builder.createInitialSequences(data, advice, resourceAdvice);
 	}
 }
