@@ -24,7 +24,7 @@ import com.mmxlabs.common.CollectionsUtil;
 public class MethodChainGenerator implements Opcodes {
 	private AtomicInteger counter = new AtomicInteger(0);
 	private final static String GENERATED_CLASS_PREFIX = "GeneratedMethodChain_";
-
+	private final static String OUTPUT_PACKAGE = "com.mmxlabs.common.compilation";
 	public Class<? extends ITransformer> createTransformer(
 			final List<Method> chain, final IInjectableClassLoader loader) {
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -32,12 +32,12 @@ public class MethodChainGenerator implements Opcodes {
 		final String newClassName = GENERATED_CLASS_PREFIX
 				+ counter.getAndIncrement();
 
-		final String fqn = "com.mmxlabs.common.compilation." + newClassName;
+		final String fqn = OUTPUT_PACKAGE + "." + newClassName;
 
 		cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER,
-				"com/mmxlabs/common/compilation/" + newClassName, null,
+				OUTPUT_PACKAGE.replace('.','/') + "/" + newClassName, null,
 				"java/lang/Object",
-				new String[] { "com/mmxlabs/common/compilation/ITransformer" });
+				new String[] { OUTPUT_PACKAGE.replace('.','/') + "/ITransformer" });
 
 		addBlankConstructor(cw);
 
@@ -201,7 +201,7 @@ public class MethodChainGenerator implements Opcodes {
 		
 		final Class<? extends ITransformer> tc = generator.createTransformer(
 				CollectionsUtil.makeArrayList(Integer.class.getMethod("intValue"), String.class.getMethod("toLowerCase")),
-				new InjectableClassLoader()
+				new InjectableClassLoader(generator.getClass().getClassLoader())
 		);
 		final ITransformer t = tc.newInstance();
 		System.err.println(t.transform("hello world"));

@@ -11,6 +11,12 @@ package com.mmxlabs.common.compilation;
 public class InjectableClassLoader extends ClassLoader implements IInjectableClassLoader {
 	String fqn = null;
 	byte[] bytecode = null;
+	/**
+	 * @param classLoader
+	 */
+	public InjectableClassLoader(ClassLoader classLoader) {
+		super(classLoader);
+	}
 	@Override
 	public synchronized Class<?> injectAndLoadClass(String qualifiedName, byte[] bytecode) throws ClassNotFoundException {
 		fqn = qualifiedName;
