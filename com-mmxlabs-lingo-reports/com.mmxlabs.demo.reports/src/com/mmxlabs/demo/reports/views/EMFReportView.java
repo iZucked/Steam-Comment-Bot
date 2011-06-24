@@ -51,6 +51,7 @@ import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
@@ -84,7 +85,7 @@ public abstract class EMFReportView extends ViewPart implements
 				final Object[] features, final String title) {
 			super();
 			this.formatter = formatter;
-			this.path = new EMFPath(true, features);
+			this.path = new CompiledEMFPath(true, features);
 			this.title = title;
 		}
 
