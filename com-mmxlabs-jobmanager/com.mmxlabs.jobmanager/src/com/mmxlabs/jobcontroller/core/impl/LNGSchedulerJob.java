@@ -118,9 +118,9 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 
 		if ((currentProgress % 5) == 0) {
 			if (intermediateSchedule != null) {
-				((EList<EObject>) intermediateSchedule.eContainer().eGet(
-						intermediateSchedule.eContainingFeature()))
-						.remove(intermediateSchedule);
+//				((EList<EObject>) intermediateSchedule.eContainer().eGet(
+//						intermediateSchedule.eContainingFeature()))
+//						.remove(intermediateSchedule);
 			}
 			intermediateSchedule = saveSolution(currentProgress + "%",
 					optimiser.getBestSolution(false));
