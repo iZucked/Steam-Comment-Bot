@@ -164,7 +164,7 @@ public abstract class EMFReportView extends ViewPart implements
 				
 				//TODO fix this, it's not correct nor is it reliable
 				// once a schedule has been replaced it's removed from container.
-				// bad
+				// bad.
 				Scenario s = (Scenario)((Schedule)object).eContainer().eContainer();
 				return s.getName();
 			} else {
