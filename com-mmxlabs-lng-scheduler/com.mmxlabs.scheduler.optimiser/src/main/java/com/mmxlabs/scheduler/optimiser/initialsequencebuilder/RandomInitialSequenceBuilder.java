@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -43,7 +44,8 @@ public class RandomInitialSequenceBuilder<T> implements
 
 	@Override
 	public ISequences<T> createInitialSequences(
-			final IOptimisationData<T> data, final ISequences<T> suggestion) {
+			final IOptimisationData<T> data, final ISequences<T> suggestion,
+			final Map<T, IResource> resourceSuggestion) {
 
 		List<T> sequenceElements = new ArrayList<T>(data.getSequenceElements());
 
