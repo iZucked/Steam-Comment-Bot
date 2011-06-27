@@ -41,13 +41,29 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 				final Slot slot = (Slot) object;
 				//TODO return some placeholders for the error message
 				if (slot.getMinQuantity() < 0) {
-					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					final DetailConstraintStatusDecorator dsd = 
+						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
+	
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					return dsd;
+					
 				}
 				if (slot.getMaxQuantity() < 0) {
-					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					final DetailConstraintStatusDecorator dsd = 
+						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
+
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					return dsd;
 				}
 				if (slot.getMinQuantity() > slot.getMaxQuantity()) {
-					return new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(), slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					final DetailConstraintStatusDecorator dsd = 
+						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
+
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					
+					return dsd;
 				}
 			}
 		}

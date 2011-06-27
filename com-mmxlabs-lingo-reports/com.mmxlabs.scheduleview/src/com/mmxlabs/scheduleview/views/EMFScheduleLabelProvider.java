@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.scheduleview.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -21,9 +23,9 @@ import scenario.schedule.events.Journey;
 import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
-import scenario.schedule.events.VesselEventVisit;
 
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
+import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
 /**
  * @author hinton
@@ -31,6 +33,11 @@ import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
  */
 public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 		IGanttChartToolTipProvider, IColorProvider {
+
+	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<IScheduleViewColourScheme>();
+
+	private IScheduleViewColourScheme currentScheme = null;
+
 	@Override
 	public Image getImage(final Object element) {
 		return null;
@@ -41,38 +48,27 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
-			Scenario s = (Scenario)sequence.eContainer().eContainer().eContainer();
-			final String name = 		s.getName();
-//			final String name = URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
-			
+			final Scenario s = (Scenario) sequence.eContainer().eContainer()
+					.eContainer();
+			final String name = s.getName();
+			// final String name =
+			// URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
+
 			return sequence.getVessel().getName() + "\n" + name;
 		}
 		return null;
 	}
 
-	public enum Mode {
-		VesselState("Vessel State"), FuelChoice("Fuel Choice"), Canal("Route Choice");
-		/* , Lateness */
-		
-		private final String displayName;
-		
-		private Mode(String displayName) {
-			this.displayName = displayName;
-		}
-		
-		public final String getDisplayName() {
-			return displayName;
-		}
+	public void setScheme(final IScheduleViewColourScheme scheme) {
+		this.currentScheme = scheme;
 	}
 
-	private Mode mode = Mode.VesselState;
-
-	public void setMode(Mode mode) {
-		this.mode = mode;
+	protected final IScheduleViewColourScheme getCurrentScheme() {
+		return currentScheme;
 	}
 
-	protected final Mode getMode() {
-		return mode;
+	protected List<IScheduleViewColourScheme> getColourSchemes() {
+		return colourSchemes;
 	}
 
 	@Override
@@ -89,9 +85,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 
 			if (element instanceof PortVisit) {
 				final PortVisit visit = (PortVisit) element;
-				
-				sb.append("Port: "
-						+ visit.getPort().getName() + "\n");
+
+				sb.append("Port: " + visit.getPort().getName() + "\n");
 				if (element instanceof SlotVisit) {
 					final SlotVisit svisit = (SlotVisit) element;
 					sb.append("Window Start Time: "
@@ -101,16 +96,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 				}
 			} else if (element instanceof Idle) {
 				final Idle idle = (Idle) element;
-				
-				sb.append("Port: "
-						+ idle.getPort().getName() + "\n");
-				sb.append("Vessel State: " + idle.getVesselState().getName() + "\n");
+
+				sb.append("Port: " + idle.getPort().getName() + "\n");
+				sb.append("Vessel State: " + idle.getVesselState().getName()
+						+ "\n");
 			} else if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
-				sb.append("From: "
-						+ journey.getFromPort().getName() + "\n");
-				sb.append("To: " + journey.getToPort().getName()
-						+ "\n");
+				sb.append("From: " + journey.getFromPort().getName() + "\n");
+				sb.append("To: " + journey.getToPort().getName() + "\n");
 				sb.append("Vessel State: " + journey.getVesselState().getName()
 						+ "\n");
 				sb.append("Route: " + journey.getRoute() + "\n");
@@ -126,7 +119,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 						sb.append(fq.getQuantity() + " "
 								+ fq.getFuelUnit().getName());
 						sb.append(String.format(", cost $%,.2f\n",
-								(double)fq.getTotalPrice())); 
+								(double) fq.getTotalPrice()));
 					}
 				}
 			}
@@ -157,77 +150,23 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 
 	@Override
 	public Color getForeground(final Object element) {
+		if (currentScheme != null) {
+			return currentScheme.getForeground(element);
+		}
 		return null;
 	}
 
 	@Override
 	public Color getBackground(final Object element) {
-		switch (mode) {
-		case VesselState:
-			if (element instanceof Journey) {
-				final Journey journey = (Journey) element;
-				if (journey.getVesselState().equals(scenario.fleet.VesselState.LADEN)) {
-					return ColorCache.getColor(0, 255, 0);
-				} else {					
-					return ColorCache.getColor(0, 0, 255);
-				}
-			} else if (element instanceof VesselEventVisit) {
-				return ColorCache.getColor(223, 115, 255);
-			}
-			break;
-		case FuelChoice:
-			if (element instanceof Journey) {
-				final Journey journey = (Journey) element;
-
-				int r = 0;
-				int g = 0;
-				int b = 0;
-
-				for (final FuelQuantity fq : journey.getFuelUsage()) {
-					if (fq.getQuantity() > 0) {
-						switch (fq.getFuelType()) {
-						case BASE_FUEL:
-							r = 255;
-							break;
-						case FBO:
-							b = 255;
-							break;
-						case NBO:
-							g = 255;
-							break;
-						}
-					}
-				}
-				
-				return ColorCache.getColor(r, g, b);
-			}
-			break;
-		case Canal:
-			if (element instanceof Journey) {
-				if (((Journey) element).getRouteCost() > 0) {
-					return ColorCache.getColor(0,0,255);
-				}
-			}
-			break;
-		}
-
-		// else if (mode == Mode.Lateness) {
-		if (element instanceof SlotVisit) {
-			final SlotVisit visit = (SlotVisit) element;
-			
-			if (visit.getSlot().getWindowEnd().before(visit.getStartTime())) {
-				return ColorCache.getColor(255,0,0);
-			}
-//			
-//			if (event.getPortSlot().getTimeWindow() != null
-//					&& event.getPortSlot().getTimeWindow().getEnd() < event
-//							.getStartTime()) {
-//				return ColorCache.getColor(255, 0, 0);
-//			} else if (event.getPortSlot() instanceof ICharterOutPortSlot) {
-//				return ColorCache.getColor(100, 100, 100);
-//			}
+		if (currentScheme != null) {
+			return currentScheme.getBackground(element);
 		}
 		return null;
 	}
 
+	public void addColourScheme(IScheduleViewColourScheme colourScheme) {
+		colourSchemes.add(colourScheme);
+		if (currentScheme == null && colourSchemes.size() == 1)
+			currentScheme = colourScheme;
+	}
 }

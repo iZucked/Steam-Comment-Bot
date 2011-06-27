@@ -10,11 +10,11 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
-
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
+
+import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
  * A constraint which checks that the load and discharge quantities for a cargo are compatible, so
@@ -35,12 +35,17 @@ public class CargoVolumeConstraint extends AbstractModelConstraint {
 			final Slot loadSlot = cargo.getLoadSlot();
 			final Slot dischargeSlot = cargo.getDischargeSlot();
 			if (loadSlot != null && dischargeSlot != null) {
+				
 				if (loadSlot.getMaxQuantity() < dischargeSlot.getMinQuantity()) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()));
+					status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					return status;
 				}
 				if (loadSlot.getMinQuantity() > dischargeSlot.getMaxQuantity()) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()), loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus(cargo.getId()));
+					status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					return status;
 				}
 			}

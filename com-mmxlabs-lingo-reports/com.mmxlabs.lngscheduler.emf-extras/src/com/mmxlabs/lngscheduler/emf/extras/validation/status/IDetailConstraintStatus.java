@@ -4,18 +4,15 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.validation.status;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 /**
  * Extended version of {@link IConstraintStatus} adding additional details about
- * which {@link EStructuralFeature} of an {@link EObject} the status refers to.
- *
- * TODO: Extend to allow multiple object/feature pairs
+ * which {@link EObject}s and {@link EStructuralFeature}s the status refers to.
  * 
  * @author Simon Goodall
  * 
@@ -23,19 +20,19 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 public interface IDetailConstraintStatus extends IConstraintStatus {
 
 	/**
-	 * Returns the name of the feature as defined by
-	 * {@link EStructuralFeature#getName()} this status applies to.
+	 * Returns the {@link Collection} of EObjects this status refers to.
 	 * 
 	 * @return
 	 */
-	Set<EStructuralFeature> getFeatures();
+	Collection<EObject> getObjects();
 
 	/**
-	 * The {@link EObject} instance {@link #getFeature()} relates to. This may
-	 * be different to {@link IConstraintStatus}{@link #getTarget()} if the
-	 * {@link AbstractModelConstraint} checks references.
+	 * Returns the {@link Collection} if {@link EStructuralFeature} related to
+	 * the {@link EObject}. This should be an {@link EObject} instance returned
+	 * from {@link #getObjects()}
 	 * 
 	 * @return
 	 */
-	EObject getObject();
+	Collection<EStructuralFeature> getFeaturesForEObject(EObject object);
+
 }

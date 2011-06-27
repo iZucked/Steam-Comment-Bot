@@ -6,7 +6,9 @@ package com.mmxlabs.lngscheduler.emf.extras.validation.status;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
@@ -24,23 +26,12 @@ import org.eclipse.emf.validation.model.IModelConstraint;
  * 
  */
 public class DetailConstraintStatusDecorator implements IDetailConstraintStatus {
+
 	private final IConstraintStatus status;
-	private final Set<EStructuralFeature> features;
-	private final EObject object;
+	private final Map<EObject, Collection<EStructuralFeature>> objectMap = new HashMap<EObject, Collection<EStructuralFeature>>();
 
-	public DetailConstraintStatusDecorator(final IConstraintStatus status,
-			final EObject object, final EStructuralFeature feature) {
+	public DetailConstraintStatusDecorator(final IConstraintStatus status) {
 		this.status = status;
-		this.features = Collections.singleton(feature);
-		this.object = object;
-	}
-
-	public DetailConstraintStatusDecorator(final IConstraintStatus status,
-			final EObject object,
-			final Collection<? extends EStructuralFeature> features) {
-		this.status = status;
-		this.object = object;
-		this.features = new HashSet<EStructuralFeature>(features);
 	}
 
 	@Override
@@ -104,13 +95,28 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	}
 
 	@Override
-	public Set<EStructuralFeature> getFeatures() {
-		return features;
+	public Collection<EStructuralFeature> getFeaturesForEObject(
+			final EObject obj) {
+		if (objectMap.containsKey(obj)) {
+			return objectMap.get(obj);
+		}
+		return Collections.emptyList();
 	}
 
 	@Override
-	public final EObject getObject() {
-		return object;
+	public final Collection<EObject> getObjects() {
+		return objectMap.keySet();
 	}
 
+	public void addEObjectAndFeature(final EObject obj,
+			final EStructuralFeature feature) {
+		final Collection<EStructuralFeature> features;
+		if (objectMap.containsKey(obj)) {
+			features = objectMap.get(obj);
+		} else {
+			features = new HashSet<EStructuralFeature>();
+			objectMap.put(obj, features);
+		}
+		features.add(feature);
+	}
 }

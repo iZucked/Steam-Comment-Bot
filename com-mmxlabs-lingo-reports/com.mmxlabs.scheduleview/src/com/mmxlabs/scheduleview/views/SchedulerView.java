@@ -6,6 +6,7 @@ package com.mmxlabs.scheduleview.views;
 
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -39,6 +40,11 @@ import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.scheduleview.Activator;
+import com.mmxlabs.scheduleview.views.colourschemes.FuelChoiceColourScheme;
+import com.mmxlabs.scheduleview.views.colourschemes.HighSpeedColourScheme;
+import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
+import com.mmxlabs.scheduleview.views.colourschemes.RouteChoiceColourScheme;
+import com.mmxlabs.scheduleview.views.colourschemes.VesselStateColourScheme;
 
 public class SchedulerView extends ViewPart {
 
@@ -114,8 +120,8 @@ public class SchedulerView extends ViewPart {
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings) {
 			@Override
-			protected synchronized void inputChanged(Object input,
-					Object oldInput) {
+			protected synchronized void inputChanged(final Object input,
+					final Object oldInput) {
 				super.inputChanged(input, oldInput);
 				
 				final boolean inputEmpty = input == null || (input instanceof Collection && ((Collection<?>)input).isEmpty());
@@ -133,7 +139,12 @@ public class SchedulerView extends ViewPart {
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
 		viewer.setContentProvider(new EMFScheduleContentProvider());
-		viewer.setLabelProvider(new EMFScheduleLabelProvider());
+		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider();
+		labelProvider.addColourScheme(new VesselStateColourScheme());
+		labelProvider.addColourScheme(new FuelChoiceColourScheme());
+		labelProvider.addColourScheme(new RouteChoiceColourScheme());
+		labelProvider.addColourScheme(new HighSpeedColourScheme());
+		viewer.setLabelProvider(labelProvider);
 
 		// TODO: Hook up action to alter sort behaviour
 		// Then refresh
@@ -366,10 +377,16 @@ public class SchedulerView extends ViewPart {
 		@Override
 		public void run() {
 
-			EMFScheduleLabelProvider.Mode mode = lp.getMode();
-			final int nextMode = (mode.ordinal() + 1) % EMFScheduleLabelProvider.Mode.values().length;
-			mode = EMFScheduleLabelProvider.Mode.values()[nextMode];
-			lp.setMode(mode);
+			final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
+			final IScheduleViewColourScheme currentScheme = lp.getCurrentScheme();
+			int nextIdx = -1;
+			if (currentScheme != null) {
+				nextIdx = colourSchemes.indexOf(currentScheme);
+				nextIdx = (nextIdx + 1) % colourSchemes.size();
+			}
+			if (nextIdx != -1) {
+				lp.setScheme(colourSchemes.get(nextIdx));
+			}
 
 			viewer.setInput(viewer.getInput());
 
@@ -406,13 +423,15 @@ public class SchedulerView extends ViewPart {
 
 		private void createMenuItems(final Menu menu) {
 
-			for (final EMFScheduleLabelProvider.Mode mode : EMFScheduleLabelProvider.Mode.values()) {
+			final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
+			
+			for (final IScheduleViewColourScheme scheme : colourSchemes) {
 
-				final Action a = new Action(mode.getDisplayName(),
+				final Action a = new Action(scheme.getName(),
 						IAction.AS_RADIO_BUTTON) {
 					@Override
 					public void run() {
-						lp.setMode(mode);
+						lp.setScheme(scheme);
 						viewer.setInput(viewer.getInput());
 						redraw();
 					}
@@ -424,7 +443,7 @@ public class SchedulerView extends ViewPart {
 				actionContributionItem.fill(menu, -1);
 
 				// Set initially checked item.
-				if (lp.getMode() == mode) {
+				if (lp.getCurrentScheme() == scheme) {
 					a.setChecked(true);
 				}
 			}
