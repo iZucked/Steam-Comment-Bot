@@ -86,7 +86,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 	@Override
 	protected Object getValue() {
-		if (input.eIsSet(feature)) {
+		if (!feature.isUnsettable() || input.eIsSet(feature)) {
 			return super.getValue();
 		} else {
 			return null;
