@@ -73,9 +73,12 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 		if (errors.isEmpty()) {
 			return ctx.createSuccessStatus();
 		} else {
-			return new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(), target,
-					errors);
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus());
+			for (final EReference ref : errors) {
+				dcsd.addEObjectAndFeature(target, ref);
+			}
+			return dcsd;
 		}
 	}
 }
