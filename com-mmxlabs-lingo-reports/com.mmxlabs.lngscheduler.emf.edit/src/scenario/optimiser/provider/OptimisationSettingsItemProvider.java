@@ -73,6 +73,7 @@ public class OptimisationSettingsItemProvider
 			addInitialSchedulePropertyDescriptor(object);
 			addDefaultDiscountCurvePropertyDescriptor(object);
 			addFreezeDaysFromStartPropertyDescriptor(object);
+			addIgnoreElementsAfterPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -166,6 +167,28 @@ public class OptimisationSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Ignore Elements After feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIgnoreElementsAfterPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimisationSettings_ignoreElementsAfter_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_ignoreElementsAfter_feature", "_UI_OptimisationSettings_type"),
+				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -235,6 +258,7 @@ public class OptimisationSettingsItemProvider
 		switch (notification.getFeatureID(OptimisationSettings.class)) {
 			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
+			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:

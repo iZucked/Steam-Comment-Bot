@@ -110,7 +110,6 @@ public class OptimisationItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OptimiserPackage.Literals.OPTIMISATION__ALL_SETTINGS);
-			childrenFeatures.add(OptimiserPackage.Literals.OPTIMISATION__DISCOUNT_CURVES);
 		}
 		return childrenFeatures;
 	}
@@ -163,7 +162,6 @@ public class OptimisationItemProvider
 
 		switch (notification.getFeatureID(Optimisation.class)) {
 			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-			case OptimiserPackage.OPTIMISATION__DISCOUNT_CURVES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -190,11 +188,6 @@ public class OptimisationItemProvider
 			(createChildParameter
 				(OptimiserPackage.Literals.OPTIMISATION__ALL_SETTINGS,
 				 LsoFactory.eINSTANCE.createLSOSettings()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(OptimiserPackage.Literals.OPTIMISATION__DISCOUNT_CURVES,
-				 OptimiserFactory.eINSTANCE.createDiscountCurve()));
 	}
 
 	/**
