@@ -70,6 +70,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -308,7 +309,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			private boolean hasValidationError(final EObject object) {
 				final Resource r = object.eResource();
-
+				if (r == null) return false;
 				final IFile containingFile = ResourcesPlugin.getWorkspace()
 						.getRoot()
 						.getFile(new Path(r.getURI().toPlatformString(true)));
@@ -832,8 +833,26 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	protected void requestActivation() {
+		final Control c = viewer.getControl();
+		if (c.isDisposed() || c.getDisplay() == null) return;
 		super.requestActivation();
 		part.setCurrentViewerPane(this);
+	}
+
+	
+	
+	@Override
+	public void showFocus(boolean inFocus) {
+		final Control c = viewer.getControl();
+		if (c.isDisposed() || c.getDisplay() == null) return;
+		super.showFocus(inFocus);
+	}
+
+	@Override
+	public void setFocus() {
+		final Control c = viewer.getControl();
+		if (c.isDisposed() || c.getDisplay() == null) return;
+		super.setFocus();
 	}
 
 	@Override
