@@ -36,7 +36,7 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	@Override
 	public String render(final Object object) {
 		final Object value = getValue(object);
-		if (value == null) return "null";
+		if (value == null) return "";
 		else return value.toString();
 	}
 
@@ -64,7 +64,7 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	}
 	
 	private Object reallyGetValue(Object object) {
-		if (object == null) return null;
+		if (object == null) return "";
 		return ((EObject) object).eGet(field);
 	}
 
