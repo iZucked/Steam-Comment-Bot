@@ -5,14 +5,17 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import scenario.Scenario;
 import scenario.optimiser.DiscountCurve;
 import scenario.optimiser.OptimiserPackage;
+import scenario.optimiser.lso.LSOSettings;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.curveeditor.CurveDialog;
+import scenario.presentation.cargoeditor.dialogs.OptimisationSettingsDialog;
 
 /**
  * Our sample action implements workbench action delegate. The action proxy will
@@ -22,13 +25,13 @@ import scenario.presentation.cargoeditor.curveeditor.CurveDialog;
  * 
  * @see IWorkbenchWindowActionDelegate
  */
-public class PriceCurveAction implements IWorkbenchWindowActionDelegate {
+public class OptimiserSettingsAction implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow window;
 
 	/**
 	 * The constructor.
 	 */
-	public PriceCurveAction() {
+	public OptimiserSettingsAction() {
 	}
 
 	/**
@@ -43,27 +46,15 @@ public class PriceCurveAction implements IWorkbenchWindowActionDelegate {
 					.getActivePage().getActiveEditor();
 			final Scenario scenario = editor.getScenario();
 
-			final DiscountCurve current = scenario.getOptimisation()
-					.getCurrentSettings().getDefaultDiscountCurve();
-			final CurveDialog curveDialog = new CurveDialog(window.getShell());
-			if (curveDialog.open(current) == CurveDialog.OK) {
-				// if (current == null) {
-				final CompoundCommand cc = new CompoundCommand();
-				final DiscountCurve newCurve = curveDialog.createNewCurve();
+			final LSOSettings settings = (LSOSettings) scenario
+					.getOptimisation().getCurrentSettings();
 
-				cc.append(SetCommand.create(
-						editor.getEditingDomain(),
-						scenario.getOptimisation().getCurrentSettings(),
-						OptimiserPackage.eINSTANCE
-								.getOptimisationSettings_DefaultDiscountCurve(),
-						newCurve));
+			final OptimisationSettingsDialog osd = new OptimisationSettingsDialog(
+					window.getShell(), editor.getEditingDomain(),
+					window.getActivePage(), editor);
 
-				editor.getEditingDomain().getCommandStack().execute(cc);
-				// } else {
-				// editor.getEditingDomain().getCommandStack().execute(
-				// curveDialog.createUpdateCommand(editor.getEditingDomain())
-				// );
-				// }
+			if (osd.open(settings) == Window.OK) {
+				// apply some change? decide what to do here.
 			}
 		}
 	}

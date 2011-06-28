@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.lngscheduler.emf.editor;singleton:=true
 Bundle-Version: 1.0.0
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ swing2swt.jar
 Bundle-Activator: scenario.presentation.LngEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

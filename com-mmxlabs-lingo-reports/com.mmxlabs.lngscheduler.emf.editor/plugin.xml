@@ -81,7 +81,7 @@
       </actionSet>
       <actionSet
             id="com.mmxlabs.lngscheduler.emf.editor.actionSet"
-            label="Sample Action Set"
+            label="Scenario Actions"
             visible="true">
          <action
                class="com.mmxlabs.lngscheduler.emf.editor.actions.PriceCurveAction"
@@ -91,6 +91,15 @@
                menubarPath="scenarioMenuID/actions"
                toolbarPath="sampleGroup"
                tooltip="Edit the active discount curve for this scenario">
+         </action>
+         <action
+               class="com.mmxlabs.lngscheduler.emf.editor.actions.OptimiserSettingsAction"
+               icon="icons/sample.gif"
+               id="com.mmxlabs.lngscheduler.emf.editor.actions.OptimiserSettingsAction"
+               label="Edit Optimisation Settings"
+               menubarPath="scenarioMenuID/actions"
+               toolbarPath="sampleGroup"
+               tooltip="Edit the optimisation settings for this scenario">
          </action>
       </actionSet>
    </extension>
