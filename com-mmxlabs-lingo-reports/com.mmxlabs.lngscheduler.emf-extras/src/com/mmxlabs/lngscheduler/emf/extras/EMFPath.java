@@ -76,6 +76,7 @@ public class EMFPath {
 	}
 
 	private Object actuallyGet(EObject root, int depth) throws InvocationTargetException {
+		if (depth == path.length) return root;
 		for (int i = 0; i < path.length - (1+depth); i++) {
 			final Object el = path[i];
 			root = (EObject) chase(root, el);
