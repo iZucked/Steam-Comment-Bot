@@ -270,43 +270,51 @@ public class LNGScenarioTransformer {
 	 * @param builder
 	 */
 	private void buildDiscountCurves(final SchedulerBuilder builder) {
-		final Map<DiscountCurve, ICurve> discountCurveMap = new LinkedHashMap<DiscountCurve, ICurve>();
-		for (final DiscountCurve curve : scenario.getOptimisation()
-				.getDiscountCurves()) {
-			final InterpolatingDiscountCurve realCurve = new InterpolatingDiscountCurve();
-
-			final int baseTime = curve.isSetStartDate() ? convertTime(curve
-					.getStartDate()) : 0;
-			if (baseTime > 0) {
-				realCurve.setValueAtPoint(0, 1);
-				realCurve.setValueAtPoint(baseTime - 1, 1);
-			}
-
-			for (final Discount d : curve.getDiscounts()) {
-				realCurve.setValueAtPoint(baseTime + d.getTime(),
-						d.getDiscountFactor());
-			}
-
-			discountCurveMap.put(curve, realCurve);
-		}
-
 		// set up DCP
 
 		final DiscountCurve defaultCurve = scenario.getOptimisation()
 				.getCurrentSettings().isSetDefaultDiscountCurve() ? scenario
 				.getOptimisation().getCurrentSettings()
 				.getDefaultDiscountCurve() : null;
+			
+		final ICurve realDefaultCurve;
+		if (defaultCurve == null) {
+			realDefaultCurve = new ConstantValueCurve(1);
+		} else {
+			realDefaultCurve = buildDiscountCurve(defaultCurve);
+		}
 
 		for (final Objective objective : scenario.getOptimisation()
 				.getCurrentSettings().getObjectives()) {
 			if (objective.isSetDiscountCurve()) {
 				builder.setFitnessComponentDiscountCurve(objective.getName(),
-						discountCurveMap.get(objective.getDiscountCurve()));
+						buildDiscountCurve(objective.getDiscountCurve()));
 			} else {
 				builder.setFitnessComponentDiscountCurve(objective.getName(),
-						discountCurveMap.get(defaultCurve));
+						realDefaultCurve);
 			}
 		}
+	}
+
+	/**
+	 * @param defaultCurve
+	 * @return
+	 */
+	private ICurve buildDiscountCurve(final DiscountCurve curve) {
+		final InterpolatingDiscountCurve realCurve = new InterpolatingDiscountCurve();
+
+		final int baseTime = curve.isSetStartDate() ? convertTime(curve
+				.getStartDate()) : 0;
+		if (baseTime > 0) {
+			realCurve.setValueAtPoint(0, 1);
+			realCurve.setValueAtPoint(baseTime - 1, 1);
+		}
+
+		for (final Discount d : curve.getDiscounts()) {
+			realCurve.setValueAtPoint(baseTime + d.getTime(),
+					d.getDiscountFactor());
+		}
+		return realCurve;
 	}
 
 	private StepwiseIntegerCurve createCurveForIndex(final Index index,
