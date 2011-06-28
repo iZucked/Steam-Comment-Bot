@@ -329,7 +329,6 @@ public class OptimisationSettingsDialog extends Dialog {
 					.getDefaultDiscountCurve();
 			final CurveDialog curveDialog = new CurveDialog(getParentShell());
 			if (curveDialog.open(currentCurve) == CurveDialog.OK) {
-				final CompoundCommand cc = new CompoundCommand();
 				final DiscountCurve newCurve = curveDialog.createNewCurve();
 				currentSettings.setDefaultDiscountCurve(newCurve);
 			}
