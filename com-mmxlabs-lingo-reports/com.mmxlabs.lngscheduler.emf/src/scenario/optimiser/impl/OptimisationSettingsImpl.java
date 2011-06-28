@@ -8,6 +8,7 @@ package scenario.optimiser.impl;
 
 import java.util.Collection;
 
+import java.util.Date;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -44,6 +45,7 @@ import scenario.schedule.Schedule;
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getInitialSchedule <em>Initial Schedule</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getFreezeDaysFromStart <em>Freeze Days From Start</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getIgnoreElementsAfter <em>Ignore Elements After</em>}</li>
  * </ul>
  * </p>
  *
@@ -101,7 +103,7 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	protected Schedule initialSchedule;
 
 	/**
-	 * The cached value of the '{@link #getDefaultDiscountCurve() <em>Default Discount Curve</em>}' reference.
+	 * The cached value of the '{@link #getDefaultDiscountCurve() <em>Default Discount Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getDefaultDiscountCurve()
@@ -111,7 +113,7 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	protected DiscountCurve defaultDiscountCurve;
 
 	/**
-	 * This is true if the Default Discount Curve reference has been set.
+	 * This is true if the Default Discount Curve containment reference has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -138,6 +140,35 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * @ordered
 	 */
 	protected int freezeDaysFromStart = FREEZE_DAYS_FROM_START_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getIgnoreElementsAfter() <em>Ignore Elements After</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIgnoreElementsAfter()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Date IGNORE_ELEMENTS_AFTER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getIgnoreElementsAfter() <em>Ignore Elements After</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIgnoreElementsAfter()
+	 * @generated
+	 * @ordered
+	 */
+	protected Date ignoreElementsAfter = IGNORE_ELEMENTS_AFTER_EDEFAULT;
+
+	/**
+	 * This is true if the Ignore Elements After attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean ignoreElementsAfterESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -247,14 +278,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * @generated
 	 */
 	public DiscountCurve getDefaultDiscountCurve() {
-		if (defaultDiscountCurve != null && defaultDiscountCurve.eIsProxy()) {
-			InternalEObject oldDefaultDiscountCurve = (InternalEObject)defaultDiscountCurve;
-			defaultDiscountCurve = (DiscountCurve)eResolveProxy(oldDefaultDiscountCurve);
-			if (defaultDiscountCurve != oldDefaultDiscountCurve) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, oldDefaultDiscountCurve, defaultDiscountCurve));
-			}
-		}
 		return defaultDiscountCurve;
 	}
 
@@ -263,8 +286,16 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DiscountCurve basicGetDefaultDiscountCurve() {
-		return defaultDiscountCurve;
+	public NotificationChain basicSetDefaultDiscountCurve(DiscountCurve newDefaultDiscountCurve, NotificationChain msgs) {
+		DiscountCurve oldDefaultDiscountCurve = defaultDiscountCurve;
+		defaultDiscountCurve = newDefaultDiscountCurve;
+		boolean oldDefaultDiscountCurveESet = defaultDiscountCurveESet;
+		defaultDiscountCurveESet = true;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, oldDefaultDiscountCurve, newDefaultDiscountCurve, !oldDefaultDiscountCurveESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -273,12 +304,38 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * @generated
 	 */
 	public void setDefaultDiscountCurve(DiscountCurve newDefaultDiscountCurve) {
+		if (newDefaultDiscountCurve != defaultDiscountCurve) {
+			NotificationChain msgs = null;
+			if (defaultDiscountCurve != null)
+				msgs = ((InternalEObject)defaultDiscountCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, null, msgs);
+			if (newDefaultDiscountCurve != null)
+				msgs = ((InternalEObject)newDefaultDiscountCurve).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, null, msgs);
+			msgs = basicSetDefaultDiscountCurve(newDefaultDiscountCurve, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldDefaultDiscountCurveESet = defaultDiscountCurveESet;
+			defaultDiscountCurveESet = true;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, newDefaultDiscountCurve, newDefaultDiscountCurve, !oldDefaultDiscountCurveESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicUnsetDefaultDiscountCurve(NotificationChain msgs) {
 		DiscountCurve oldDefaultDiscountCurve = defaultDiscountCurve;
-		defaultDiscountCurve = newDefaultDiscountCurve;
+		defaultDiscountCurve = null;
 		boolean oldDefaultDiscountCurveESet = defaultDiscountCurveESet;
-		defaultDiscountCurveESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, oldDefaultDiscountCurve, defaultDiscountCurve, !oldDefaultDiscountCurveESet));
+		defaultDiscountCurveESet = false;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, oldDefaultDiscountCurve, null, oldDefaultDiscountCurveESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -287,12 +344,18 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * @generated
 	 */
 	public void unsetDefaultDiscountCurve() {
-		DiscountCurve oldDefaultDiscountCurve = defaultDiscountCurve;
-		boolean oldDefaultDiscountCurveESet = defaultDiscountCurveESet;
-		defaultDiscountCurve = null;
-		defaultDiscountCurveESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, oldDefaultDiscountCurve, null, oldDefaultDiscountCurveESet));
+		if (defaultDiscountCurve != null) {
+			NotificationChain msgs = null;
+			msgs = ((InternalEObject)defaultDiscountCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, null, msgs);
+			msgs = basicUnsetDefaultDiscountCurve(msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldDefaultDiscountCurveESet = defaultDiscountCurveESet;
+			defaultDiscountCurveESet = false;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, null, null, oldDefaultDiscountCurveESet));
+		}
 	}
 
 	/**
@@ -330,6 +393,52 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Date getIgnoreElementsAfter() {
+		return ignoreElementsAfter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIgnoreElementsAfter(Date newIgnoreElementsAfter) {
+		Date oldIgnoreElementsAfter = ignoreElementsAfter;
+		ignoreElementsAfter = newIgnoreElementsAfter;
+		boolean oldIgnoreElementsAfterESet = ignoreElementsAfterESet;
+		ignoreElementsAfterESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER, oldIgnoreElementsAfter, ignoreElementsAfter, !oldIgnoreElementsAfterESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetIgnoreElementsAfter() {
+		Date oldIgnoreElementsAfter = ignoreElementsAfter;
+		boolean oldIgnoreElementsAfterESet = ignoreElementsAfterESet;
+		ignoreElementsAfter = IGNORE_ELEMENTS_AFTER_EDEFAULT;
+		ignoreElementsAfterESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER, oldIgnoreElementsAfter, IGNORE_ELEMENTS_AFTER_EDEFAULT, oldIgnoreElementsAfterESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetIgnoreElementsAfter() {
+		return ignoreElementsAfterESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -337,6 +446,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 				return ((InternalEList<?>)getConstraints()).basicRemove(otherEnd, msgs);
 			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
 				return ((InternalEList<?>)getObjectives()).basicRemove(otherEnd, msgs);
+			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
+				return basicUnsetDefaultDiscountCurve(msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -359,10 +470,11 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 				if (resolve) return getInitialSchedule();
 				return basicGetInitialSchedule();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
-				if (resolve) return getDefaultDiscountCurve();
-				return basicGetDefaultDiscountCurve();
+				return getDefaultDiscountCurve();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 				return getFreezeDaysFromStart();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
+				return getIgnoreElementsAfter();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -396,6 +508,9 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 				setFreezeDaysFromStart((Integer)newValue);
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
+				setIgnoreElementsAfter((Date)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -426,6 +541,9 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 				setFreezeDaysFromStart(FREEZE_DAYS_FROM_START_EDEFAULT);
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
+				unsetIgnoreElementsAfter();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -450,6 +568,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 				return isSetDefaultDiscountCurve();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 				return freezeDaysFromStart != FREEZE_DAYS_FROM_START_EDEFAULT;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
+				return isSetIgnoreElementsAfter();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -468,6 +588,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 		result.append(randomSeed);
 		result.append(", freezeDaysFromStart: ");
 		result.append(freezeDaysFromStart);
+		result.append(", ignoreElementsAfter: ");
+		if (ignoreElementsAfterESet) result.append(ignoreElementsAfter); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

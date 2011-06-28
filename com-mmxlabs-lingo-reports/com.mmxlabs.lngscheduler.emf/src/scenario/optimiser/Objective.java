@@ -53,27 +53,27 @@ public interface Objective extends NamedObject {
 	void setWeight(double value);
 
 	/**
-	 * Returns the value of the '<em><b>Discount Curve</b></em>' reference.
+	 * Returns the value of the '<em><b>Discount Curve</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * A discount curve to be used for weighting this objective. If this field is unset, the defaultDiscountCurve in the containing OptimisationSettings will be used instead.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Discount Curve</em>' reference.
+	 * @return the value of the '<em>Discount Curve</em>' containment reference.
 	 * @see #isSetDiscountCurve()
 	 * @see #unsetDiscountCurve()
 	 * @see #setDiscountCurve(DiscountCurve)
 	 * @see scenario.optimiser.OptimiserPackage#getObjective_DiscountCurve()
-	 * @model unsettable="true" required="true"
+	 * @model containment="true" unsettable="true" required="true"
 	 * @generated
 	 */
 	DiscountCurve getDiscountCurve();
 
 	/**
-	 * Sets the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' reference.
+	 * Sets the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Discount Curve</em>' reference.
+	 * @param value the new value of the '<em>Discount Curve</em>' containment reference.
 	 * @see #isSetDiscountCurve()
 	 * @see #unsetDiscountCurve()
 	 * @see #getDiscountCurve()
@@ -82,7 +82,7 @@ public interface Objective extends NamedObject {
 	void setDiscountCurve(DiscountCurve value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' reference.
+	 * Unsets the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #isSetDiscountCurve()
@@ -93,10 +93,10 @@ public interface Objective extends NamedObject {
 	void unsetDiscountCurve();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' reference is set.
+	 * Returns whether the value of the '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}' containment reference is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Discount Curve</em>' reference is set.
+	 * @return whether the value of the '<em>Discount Curve</em>' containment reference is set.
 	 * @see #unsetDiscountCurve()
 	 * @see #getDiscountCurve()
 	 * @see #setDiscountCurve(DiscountCurve)

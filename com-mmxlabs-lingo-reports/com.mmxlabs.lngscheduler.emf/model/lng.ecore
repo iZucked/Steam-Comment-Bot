@@ -802,7 +802,7 @@
           eType="#//optimiser/Objective" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="initialSchedule" eType="#//schedule/Schedule"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="defaultDiscountCurve"
-          lowerBound="1" eType="#//optimiser/DiscountCurve" unsettable="true">
+          lowerBound="1" eType="#//optimiser/DiscountCurve" unsettable="true" containment="true">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation" value="A discount curve which will be applied to all this optimisation's objectives which don't themselves have a discount curve set. If unset, no discounts will be applied."/>
         </eAnnotations>
@@ -810,13 +810,14 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="freezeDaysFromStart"
           lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           defaultValueLiteral="0"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ignoreElementsAfter"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
+          unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Optimisation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="allSettings" upperBound="-1"
           eType="#//optimiser/OptimisationSettings" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="currentSettings" eType="#//optimiser/OptimisationSettings"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="discountCurves" upperBound="-1"
-          eType="#//optimiser/DiscountCurve" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -824,7 +825,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="discountCurve" lowerBound="1"
-          eType="#//optimiser/DiscountCurve" unsettable="true">
+          eType="#//optimiser/DiscountCurve" unsettable="true" containment="true">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation" value="A discount curve to be used for weighting this objective. If this field is unset, the defaultDiscountCurve in the containing OptimisationSettings will be used instead."/>
         </eAnnotations>

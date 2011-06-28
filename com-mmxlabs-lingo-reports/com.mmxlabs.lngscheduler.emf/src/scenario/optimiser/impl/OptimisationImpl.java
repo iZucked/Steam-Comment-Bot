@@ -36,7 +36,6 @@ import scenario.optimiser.OptimiserPackage;
  * <ul>
  *   <li>{@link scenario.optimiser.impl.OptimisationImpl#getAllSettings <em>All Settings</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationImpl#getCurrentSettings <em>Current Settings</em>}</li>
- *   <li>{@link scenario.optimiser.impl.OptimisationImpl#getDiscountCurves <em>Discount Curves</em>}</li>
  * </ul>
  * </p>
  *
@@ -62,16 +61,6 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * @ordered
 	 */
 	protected OptimisationSettings currentSettings;
-
-	/**
-	 * The cached value of the '{@link #getDiscountCurves() <em>Discount Curves</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDiscountCurves()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<DiscountCurve> discountCurves;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -147,25 +136,11 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<DiscountCurve> getDiscountCurves() {
-		if (discountCurves == null) {
-			discountCurves = new EObjectContainmentEList<DiscountCurve>(DiscountCurve.class, this, OptimiserPackage.OPTIMISATION__DISCOUNT_CURVES);
-		}
-		return discountCurves;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
 				return ((InternalEList<?>)getAllSettings()).basicRemove(otherEnd, msgs);
-			case OptimiserPackage.OPTIMISATION__DISCOUNT_CURVES:
-				return ((InternalEList<?>)getDiscountCurves()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -183,8 +158,6 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
 				if (resolve) return getCurrentSettings();
 				return basicGetCurrentSettings();
-			case OptimiserPackage.OPTIMISATION__DISCOUNT_CURVES:
-				return getDiscountCurves();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -205,10 +178,6 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
 				setCurrentSettings((OptimisationSettings)newValue);
 				return;
-			case OptimiserPackage.OPTIMISATION__DISCOUNT_CURVES:
-				getDiscountCurves().clear();
-				getDiscountCurves().addAll((Collection<? extends DiscountCurve>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -227,9 +196,6 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
 				setCurrentSettings((OptimisationSettings)null);
 				return;
-			case OptimiserPackage.OPTIMISATION__DISCOUNT_CURVES:
-				getDiscountCurves().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -246,8 +212,6 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 				return allSettings != null && !allSettings.isEmpty();
 			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
 				return currentSettings != null;
-			case OptimiserPackage.OPTIMISATION__DISCOUNT_CURVES:
-				return discountCurves != null && !discountCurves.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

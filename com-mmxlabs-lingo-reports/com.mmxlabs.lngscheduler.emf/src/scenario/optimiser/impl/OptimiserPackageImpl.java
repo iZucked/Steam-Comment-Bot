@@ -272,6 +272,15 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getOptimisationSettings_IgnoreElementsAfter() {
+		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getOptimisation() {
 		return optimisationEClass;
 	}
@@ -292,15 +301,6 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 */
 	public EReference getOptimisation_CurrentSettings() {
 		return (EReference)optimisationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptimisation_DiscountCurves() {
-		return (EReference)optimisationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -437,11 +437,11 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__INITIAL_SCHEDULE);
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE);
 		createEAttribute(optimisationSettingsEClass, OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START);
+		createEAttribute(optimisationSettingsEClass, OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER);
 
 		optimisationEClass = createEClass(OPTIMISATION);
 		createEReference(optimisationEClass, OPTIMISATION__ALL_SETTINGS);
 		createEReference(optimisationEClass, OPTIMISATION__CURRENT_SETTINGS);
-		createEReference(optimisationEClass, OPTIMISATION__DISCOUNT_CURVES);
 
 		constraintEClass = createEClass(CONSTRAINT);
 		createEAttribute(constraintEClass, CONSTRAINT__ENABLED);
@@ -506,20 +506,20 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		initEReference(getOptimisationSettings_Constraints(), this.getConstraint(), null, "constraints", null, 0, -1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_Objectives(), this.getObjective(), null, "objectives", null, 0, -1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_InitialSchedule(), theSchedulePackage.getSchedule(), null, "initialSchedule", null, 0, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptimisationSettings_DefaultDiscountCurve(), this.getDiscountCurve(), null, "defaultDiscountCurve", null, 1, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptimisationSettings_DefaultDiscountCurve(), this.getDiscountCurve(), null, "defaultDiscountCurve", null, 1, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptimisationSettings_FreezeDaysFromStart(), ecorePackage.getEInt(), "freezeDaysFromStart", "0", 1, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptimisationSettings_IgnoreElementsAfter(), ecorePackage.getEDate(), "ignoreElementsAfter", null, 1, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optimisationEClass, Optimisation.class, "Optimisation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOptimisation_AllSettings(), this.getOptimisationSettings(), null, "allSettings", null, 0, -1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisation_CurrentSettings(), this.getOptimisationSettings(), null, "currentSettings", null, 0, 1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptimisation_DiscountCurves(), this.getDiscountCurve(), null, "discountCurves", null, 0, -1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(constraintEClass, Constraint.class, "Constraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getConstraint_Enabled(), ecorePackage.getEBoolean(), "enabled", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(objectiveEClass, Objective.class, "Objective", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getObjective_Weight(), ecorePackage.getEDouble(), "weight", null, 0, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getObjective_DiscountCurve(), this.getDiscountCurve(), null, "discountCurve", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getObjective_DiscountCurve(), this.getDiscountCurve(), null, "discountCurve", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(discountCurveEClass, DiscountCurve.class, "DiscountCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDiscountCurve_Discounts(), this.getDiscount(), null, "discounts", null, 0, -1, DiscountCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

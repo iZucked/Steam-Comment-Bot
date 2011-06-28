@@ -118,7 +118,7 @@ public interface LsoPackage extends EPackage {
 	int LSO_SETTINGS__INITIAL_SCHEDULE = OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE;
 
 	/**
-	 * The feature id for the '<em><b>Default Discount Curve</b></em>' reference.
+	 * The feature id for the '<em><b>Default Discount Curve</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -134,6 +134,15 @@ public interface LsoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LSO_SETTINGS__FREEZE_DAYS_FROM_START = OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START;
+
+	/**
+	 * The feature id for the '<em><b>Ignore Elements After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__IGNORE_ELEMENTS_AFTER = OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER;
 
 	/**
 	 * The feature id for the '<em><b>Number Of Steps</b></em>' attribute.

@@ -6,6 +6,7 @@
  */
 package scenario.optimiser;
 
+import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
@@ -26,6 +27,7 @@ import scenario.schedule.Schedule;
  *   <li>{@link scenario.optimiser.OptimisationSettings#getInitialSchedule <em>Initial Schedule</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getFreezeDaysFromStart <em>Freeze Days From Start</em>}</li>
+ *   <li>{@link scenario.optimiser.OptimisationSettings#getIgnoreElementsAfter <em>Ignore Elements After</em>}</li>
  * </ul>
  * </p>
  *
@@ -119,27 +121,27 @@ public interface OptimisationSettings extends NamedObject {
 	void setInitialSchedule(Schedule value);
 
 	/**
-	 * Returns the value of the '<em><b>Default Discount Curve</b></em>' reference.
+	 * Returns the value of the '<em><b>Default Discount Curve</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * A discount curve which will be applied to all this optimisation's objectives which don't themselves have a discount curve set. If unset, no discounts will be applied.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Default Discount Curve</em>' reference.
+	 * @return the value of the '<em>Default Discount Curve</em>' containment reference.
 	 * @see #isSetDefaultDiscountCurve()
 	 * @see #unsetDefaultDiscountCurve()
 	 * @see #setDefaultDiscountCurve(DiscountCurve)
 	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_DefaultDiscountCurve()
-	 * @model unsettable="true" required="true"
+	 * @model containment="true" unsettable="true" required="true"
 	 * @generated
 	 */
 	DiscountCurve getDefaultDiscountCurve();
 
 	/**
-	 * Sets the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' reference.
+	 * Sets the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Default Discount Curve</em>' reference.
+	 * @param value the new value of the '<em>Default Discount Curve</em>' containment reference.
 	 * @see #isSetDefaultDiscountCurve()
 	 * @see #unsetDefaultDiscountCurve()
 	 * @see #getDefaultDiscountCurve()
@@ -148,7 +150,7 @@ public interface OptimisationSettings extends NamedObject {
 	void setDefaultDiscountCurve(DiscountCurve value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' reference.
+	 * Unsets the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #isSetDefaultDiscountCurve()
@@ -159,10 +161,10 @@ public interface OptimisationSettings extends NamedObject {
 	void unsetDefaultDiscountCurve();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' reference is set.
+	 * Returns whether the value of the '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}' containment reference is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Default Discount Curve</em>' reference is set.
+	 * @return whether the value of the '<em>Default Discount Curve</em>' containment reference is set.
 	 * @see #unsetDefaultDiscountCurve()
 	 * @see #getDefaultDiscountCurve()
 	 * @see #setDefaultDiscountCurve(DiscountCurve)
@@ -196,5 +198,58 @@ public interface OptimisationSettings extends NamedObject {
 	 * @generated
 	 */
 	void setFreezeDaysFromStart(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Ignore Elements After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ignore Elements After</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ignore Elements After</em>' attribute.
+	 * @see #isSetIgnoreElementsAfter()
+	 * @see #unsetIgnoreElementsAfter()
+	 * @see #setIgnoreElementsAfter(Date)
+	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_IgnoreElementsAfter()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	Date getIgnoreElementsAfter();
+
+	/**
+	 * Sets the value of the '{@link scenario.optimiser.OptimisationSettings#getIgnoreElementsAfter <em>Ignore Elements After</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ignore Elements After</em>' attribute.
+	 * @see #isSetIgnoreElementsAfter()
+	 * @see #unsetIgnoreElementsAfter()
+	 * @see #getIgnoreElementsAfter()
+	 * @generated
+	 */
+	void setIgnoreElementsAfter(Date value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.optimiser.OptimisationSettings#getIgnoreElementsAfter <em>Ignore Elements After</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetIgnoreElementsAfter()
+	 * @see #getIgnoreElementsAfter()
+	 * @see #setIgnoreElementsAfter(Date)
+	 * @generated
+	 */
+	void unsetIgnoreElementsAfter();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.optimiser.OptimisationSettings#getIgnoreElementsAfter <em>Ignore Elements After</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Ignore Elements After</em>' attribute is set.
+	 * @see #unsetIgnoreElementsAfter()
+	 * @see #getIgnoreElementsAfter()
+	 * @see #setIgnoreElementsAfter(Date)
+	 * @generated
+	 */
+	boolean isSetIgnoreElementsAfter();
 
 } // OptimisationSettings

@@ -118,7 +118,7 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Default Discount Curve</b></em>' reference.
+	 * The feature id for the '<em><b>Default Discount Curve</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -136,13 +136,22 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Ignore Elements After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Optimisation Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int OPTIMISATION_SETTINGS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -191,22 +200,13 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION__CURRENT_SETTINGS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Discount Curves</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISATION__DISCOUNT_CURVES = 2;
-
-	/**
 	 * The number of structural features of the '<em>Optimisation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_FEATURE_COUNT = 3;
+	int OPTIMISATION_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Optimisation</em>' class.
@@ -301,7 +301,7 @@ public interface OptimiserPackage extends EPackage {
 	int OBJECTIVE__WEIGHT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Discount Curve</b></em>' reference.
+	 * The feature id for the '<em><b>Discount Curve</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -502,10 +502,10 @@ public interface OptimiserPackage extends EPackage {
 	EReference getOptimisationSettings_InitialSchedule();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}'.
+	 * Returns the meta object for the containment reference '{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Default Discount Curve</em>'.
+	 * @return the meta object for the containment reference '<em>Default Discount Curve</em>'.
 	 * @see scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve()
 	 * @see #getOptimisationSettings()
 	 * @generated
@@ -522,6 +522,17 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getOptimisationSettings_FreezeDaysFromStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.OptimisationSettings#getIgnoreElementsAfter <em>Ignore Elements After</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ignore Elements After</em>'.
+	 * @see scenario.optimiser.OptimisationSettings#getIgnoreElementsAfter()
+	 * @see #getOptimisationSettings()
+	 * @generated
+	 */
+	EAttribute getOptimisationSettings_IgnoreElementsAfter();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.Optimisation <em>Optimisation</em>}'.
@@ -554,17 +565,6 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getOptimisation_CurrentSettings();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.optimiser.Optimisation#getDiscountCurves <em>Discount Curves</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Discount Curves</em>'.
-	 * @see scenario.optimiser.Optimisation#getDiscountCurves()
-	 * @see #getOptimisation()
-	 * @generated
-	 */
-	EReference getOptimisation_DiscountCurves();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.Constraint <em>Constraint</em>}'.
@@ -609,10 +609,10 @@ public interface OptimiserPackage extends EPackage {
 	EAttribute getObjective_Weight();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}'.
+	 * Returns the meta object for the containment reference '{@link scenario.optimiser.Objective#getDiscountCurve <em>Discount Curve</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discount Curve</em>'.
+	 * @return the meta object for the containment reference '<em>Discount Curve</em>'.
 	 * @see scenario.optimiser.Objective#getDiscountCurve()
 	 * @see #getObjective()
 	 * @generated
@@ -749,7 +749,7 @@ public interface OptimiserPackage extends EPackage {
 		EReference OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = eINSTANCE.getOptimisationSettings_InitialSchedule();
 
 		/**
-		 * The meta object literal for the '<em><b>Default Discount Curve</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Default Discount Curve</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -763,6 +763,14 @@ public interface OptimiserPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START = eINSTANCE.getOptimisationSettings_FreezeDaysFromStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Ignore Elements After</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER = eINSTANCE.getOptimisationSettings_IgnoreElementsAfter();
 
 		/**
 		 * The meta object literal for the '{@link scenario.optimiser.impl.OptimisationImpl <em>Optimisation</em>}' class.
@@ -789,14 +797,6 @@ public interface OptimiserPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPTIMISATION__CURRENT_SETTINGS = eINSTANCE.getOptimisation_CurrentSettings();
-
-		/**
-		 * The meta object literal for the '<em><b>Discount Curves</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISATION__DISCOUNT_CURVES = eINSTANCE.getOptimisation_DiscountCurves();
 
 		/**
 		 * The meta object literal for the '{@link scenario.optimiser.impl.ConstraintImpl <em>Constraint</em>}' class.
@@ -835,7 +835,7 @@ public interface OptimiserPackage extends EPackage {
 		EAttribute OBJECTIVE__WEIGHT = eINSTANCE.getObjective_Weight();
 
 		/**
-		 * The meta object literal for the '<em><b>Discount Curve</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Discount Curve</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

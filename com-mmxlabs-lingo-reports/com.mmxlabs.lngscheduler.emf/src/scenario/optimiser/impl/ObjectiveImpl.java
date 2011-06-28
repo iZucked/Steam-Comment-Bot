@@ -8,6 +8,7 @@ package scenario.optimiser.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -55,7 +56,7 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	protected double weight = WEIGHT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getDiscountCurve() <em>Discount Curve</em>}' reference.
+	 * The cached value of the '{@link #getDiscountCurve() <em>Discount Curve</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getDiscountCurve()
@@ -65,7 +66,7 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	protected DiscountCurve discountCurve;
 
 	/**
-	 * This is true if the Discount Curve reference has been set.
+	 * This is true if the Discount Curve containment reference has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -119,14 +120,6 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	 * @generated
 	 */
 	public DiscountCurve getDiscountCurve() {
-		if (discountCurve != null && discountCurve.eIsProxy()) {
-			InternalEObject oldDiscountCurve = (InternalEObject)discountCurve;
-			discountCurve = (DiscountCurve)eResolveProxy(oldDiscountCurve);
-			if (discountCurve != oldDiscountCurve) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, oldDiscountCurve, discountCurve));
-			}
-		}
 		return discountCurve;
 	}
 
@@ -135,8 +128,16 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DiscountCurve basicGetDiscountCurve() {
-		return discountCurve;
+	public NotificationChain basicSetDiscountCurve(DiscountCurve newDiscountCurve, NotificationChain msgs) {
+		DiscountCurve oldDiscountCurve = discountCurve;
+		discountCurve = newDiscountCurve;
+		boolean oldDiscountCurveESet = discountCurveESet;
+		discountCurveESet = true;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, oldDiscountCurve, newDiscountCurve, !oldDiscountCurveESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -145,12 +146,38 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	 * @generated
 	 */
 	public void setDiscountCurve(DiscountCurve newDiscountCurve) {
+		if (newDiscountCurve != discountCurve) {
+			NotificationChain msgs = null;
+			if (discountCurve != null)
+				msgs = ((InternalEObject)discountCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, null, msgs);
+			if (newDiscountCurve != null)
+				msgs = ((InternalEObject)newDiscountCurve).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, null, msgs);
+			msgs = basicSetDiscountCurve(newDiscountCurve, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldDiscountCurveESet = discountCurveESet;
+			discountCurveESet = true;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, newDiscountCurve, newDiscountCurve, !oldDiscountCurveESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicUnsetDiscountCurve(NotificationChain msgs) {
 		DiscountCurve oldDiscountCurve = discountCurve;
-		discountCurve = newDiscountCurve;
+		discountCurve = null;
 		boolean oldDiscountCurveESet = discountCurveESet;
-		discountCurveESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, oldDiscountCurve, discountCurve, !oldDiscountCurveESet));
+		discountCurveESet = false;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, oldDiscountCurve, null, oldDiscountCurveESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -159,12 +186,18 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	 * @generated
 	 */
 	public void unsetDiscountCurve() {
-		DiscountCurve oldDiscountCurve = discountCurve;
-		boolean oldDiscountCurveESet = discountCurveESet;
-		discountCurve = null;
-		discountCurveESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, oldDiscountCurve, null, oldDiscountCurveESet));
+		if (discountCurve != null) {
+			NotificationChain msgs = null;
+			msgs = ((InternalEObject)discountCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, null, msgs);
+			msgs = basicUnsetDiscountCurve(msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldDiscountCurveESet = discountCurveESet;
+			discountCurveESet = false;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE, null, null, oldDiscountCurveESet));
+		}
 	}
 
 	/**
@@ -182,13 +215,26 @@ public class ObjectiveImpl extends NamedObjectImpl implements Objective {
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE:
+				return basicUnsetDiscountCurve(msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case OptimiserPackage.OBJECTIVE__WEIGHT:
 				return getWeight();
 			case OptimiserPackage.OBJECTIVE__DISCOUNT_CURVE:
-				if (resolve) return getDiscountCurve();
-				return basicGetDiscountCurve();
+				return getDiscountCurve();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
