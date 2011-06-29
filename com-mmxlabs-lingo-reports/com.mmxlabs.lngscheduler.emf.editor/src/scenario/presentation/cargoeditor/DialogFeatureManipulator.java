@@ -31,7 +31,6 @@ public abstract class DialogFeatureManipulator extends
 	public CellEditor getCellEditor(Composite c, final Object object) {
 		// TODO Auto-generated method stub
 		return new DialogCellEditor(c) {
-
 			@Override
 			protected Object openDialogBox(Control cellEditorWindow) {
 				return DialogFeatureManipulator.this.openDialogBox(
@@ -40,8 +39,7 @@ public abstract class DialogFeatureManipulator extends
 
 			@Override
 			protected void updateContents(Object value) {
-				getDefaultLabel().setText(value == null ? "" : 
-						DialogFeatureManipulator.this.renderValue(value));
+				getDefaultLabel().setText(DialogFeatureManipulator.this.renderValue(value));
 			}
 
 		};
