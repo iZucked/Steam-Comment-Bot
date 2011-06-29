@@ -1,8 +1,12 @@
 package com.mmxlabs.lngscheduler.emf.editor.actions;
 
+import java.util.Collections;
+
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
@@ -10,11 +14,9 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import scenario.Scenario;
-import scenario.optimiser.DiscountCurve;
 import scenario.optimiser.OptimiserPackage;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.curveeditor.CurveDialog;
 import scenario.presentation.cargoeditor.dialogs.OptimisationSettingsDialog;
 
 /**
@@ -54,7 +56,20 @@ public class OptimiserSettingsAction implements IWorkbenchWindowActionDelegate {
 					window.getActivePage(), editor);
 
 			if (osd.open(settings) == Window.OK) {
-				// apply some change? decide what to do here.
+				// replace settings
+				final EditingDomain editingDomain = editor.getEditingDomain();
+				final CompoundCommand cc = new CompoundCommand();
+				cc.append(DeleteCommand.create(editingDomain,
+						Collections.singleton(settings)));
+				final LSOSettings newSettings = osd.getOutput();
+				cc.append(AddCommand.create(editingDomain, scenario
+						.getOptimisation(), OptimiserPackage.eINSTANCE
+						.getOptimisation_AllSettings(), Collections
+						.singleton(newSettings)));
+				cc.append(SetCommand.create(editingDomain, scenario
+						.getOptimisation(), OptimiserPackage.eINSTANCE
+						.getOptimisation_CurrentSettings(), newSettings));
+				editingDomain.getCommandStack().execute(cc);
 			}
 		}
 	}
