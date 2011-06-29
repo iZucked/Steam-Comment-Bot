@@ -43,6 +43,8 @@ import com.mmxlabs.common.Pair;
  * This could be speeded up by cargo / allocation relationships, but that would
  * need lots of notifiers hooking up.
  * 
+ * TODO allow to clear allocation
+ * 
  * @author Tom Hinton
  * 
  */
@@ -195,7 +197,9 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 	public void setValue(final Object object, final Object value) {
 		if (value instanceof Integer && object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
-			final AllocatedVessel vessel = vessels.get((Integer) value);
+			final Integer integerValue = (Integer) value;
+			if (integerValue.intValue() == -1) return;
+			final AllocatedVessel vessel = vessels.get(integerValue);
 
 			final Scenario scenario = getScenario(cargo);
 			final Schedule schedule = getSchedule(scenario);
