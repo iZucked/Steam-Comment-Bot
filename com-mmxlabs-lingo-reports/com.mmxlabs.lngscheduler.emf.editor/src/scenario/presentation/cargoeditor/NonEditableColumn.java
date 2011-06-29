@@ -4,8 +4,14 @@
  */
 package scenario.presentation.cargoeditor;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
+
+import com.mmxlabs.common.Pair;
 
 public abstract class NonEditableColumn implements ICellManipulator, ICellRenderer {
 
@@ -33,5 +39,10 @@ public abstract class NonEditableColumn implements ICellManipulator, ICellRender
 	public boolean canEdit(Object object) {
 		return false;
 	}
-
+	
+	@Override
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
+			Object object) {
+		return Collections.emptySet();
+	}
 }

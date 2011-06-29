@@ -4,7 +4,11 @@
  */
 package scenario.presentation.cargoeditor;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -14,6 +18,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
+
+import com.mmxlabs.common.Pair;
 
 /**
  * Displays a textbox for editing an EAttribute.
@@ -83,5 +89,11 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	@Override
 	public Comparable getComparable(Object object) {
 		return render(object);
+	}
+
+	@Override
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
+			Object object) {
+		return Collections.emptySet();
 	}
 }
