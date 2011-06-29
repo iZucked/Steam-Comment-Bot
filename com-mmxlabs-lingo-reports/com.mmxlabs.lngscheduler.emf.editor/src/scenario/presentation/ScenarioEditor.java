@@ -2514,6 +2514,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					@Override
 					protected String renderValue(final Object object) {
 						final VesselStateAttributes a = (VesselStateAttributes) object;
+						if (a == null) return "";
 						return "NBO: " + a.getNboRate() + " Idle NBO: "
 								+ a.getIdleNBORate() + " Idle Base:"
 								+ a.getIdleConsumptionRate();
@@ -2556,6 +2557,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					@Override
 					protected String renderValue(final Object object) {
 						final VesselStateAttributes a = (VesselStateAttributes) object;
+						if (a == null) return "";
 						return "NBO: " + a.getNboRate() + " Idle NBO: "
 								+ a.getIdleNBORate() + " Idle Base:"
 								+ a.getIdleConsumptionRate();
