@@ -93,7 +93,7 @@
                tooltip="Edit the active discount curve for this scenario">
          </action>
          <action
-               class="com.mmxlabs.lngscheduler.emf.editor.actions.OptimiserSettingsAction"
+               class="com.mmxlabs.lngscheduler.emf.editor.actions.OptimisationSettingsAction"
                icon="icons/sample.gif"
                id="com.mmxlabs.lngscheduler.emf.editor.actions.OptimiserSettingsAction"
                label="Edit Optimisation Settings"

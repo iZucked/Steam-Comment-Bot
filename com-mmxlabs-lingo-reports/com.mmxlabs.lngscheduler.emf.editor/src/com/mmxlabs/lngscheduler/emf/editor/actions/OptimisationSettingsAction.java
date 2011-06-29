@@ -27,13 +27,13 @@ import scenario.presentation.cargoeditor.dialogs.OptimisationSettingsDialog;
  * 
  * @see IWorkbenchWindowActionDelegate
  */
-public class OptimiserSettingsAction implements IWorkbenchWindowActionDelegate {
+public class OptimisationSettingsAction implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow window;
 
 	/**
 	 * The constructor.
 	 */
-	public OptimiserSettingsAction() {
+	public OptimisationSettingsAction() {
 	}
 
 	/**
