@@ -7,8 +7,11 @@ package scenario.presentation.cargoeditor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -43,7 +46,8 @@ import com.mmxlabs.common.Pair;
  * This could be speeded up by cargo / allocation relationships, but that would
  * need lots of notifiers hooking up.
  * 
- * TODO allow to clear allocation
+ * TODO allow to clear allocation TODO hook notifier for refreshing containing
+ * {@link EObjectEditorViewerPane}
  * 
  * @author Tom Hinton
  * 
@@ -198,7 +202,8 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 		if (value instanceof Integer && object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 			final Integer integerValue = (Integer) value;
-			if (integerValue.intValue() == -1) return;
+			if (integerValue.intValue() == -1)
+				return;
 			final AllocatedVessel vessel = vessels.get(integerValue);
 
 			final Scenario scenario = getScenario(cargo);
@@ -206,7 +211,7 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 			if (scenario == null || schedule == null)
 				return;
 			final CompoundCommand command = new CompoundCommand();
-			
+
 			CargoAllocation allocation = getCargoAllocation(schedule, cargo);
 			if (allocation == null) {
 				allocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
@@ -218,7 +223,8 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 				allocation.setDischargeSlot(cargo.getDischargeSlot());
 				allocation.setVessel(vessel);
 			} else {
-				if (allocation.getVessel() == vessel) return;
+				if (allocation.getVessel() == vessel)
+					return;
 				command.append(SetCommand.create(editingDomain, allocation,
 						SchedulePackage.eINSTANCE.getCargoAllocation_Vessel(),
 						vessel));
@@ -238,7 +244,7 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 								allocation.getBallastIdle(),
 								allocation.getBallastLeg())));
 			}
-			
+
 			editingDomain.getCommandStack().execute(command);
 		}
 	}
@@ -263,12 +269,14 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 				// TODO filter out vessels which cannot carry this cargo.
 				final VesselClass avClass;
 				if (av instanceof FleetVessel) {
-					avClass = ((FleetVessel)av).getVessel().getClass_();
+					avClass = ((FleetVessel) av).getVessel().getClass_();
 				} else {
 					avClass = ((SpotVessel) av).getVesselClass();
 				}
-				if (avClass.getInaccessiblePorts().contains(cargo.getLoadSlot().getPort()) ||
-						avClass.getInaccessiblePorts().contains(cargo.getDischargeSlot().getPort()))
+				if (avClass.getInaccessiblePorts().contains(
+						cargo.getLoadSlot().getPort())
+						|| avClass.getInaccessiblePorts().contains(
+								cargo.getDischargeSlot().getPort()))
 					continue;
 				namesAndValues.add(new Pair<String, AllocatedVessel>(av
 						.getName(), av));
@@ -297,5 +305,26 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 		}
 
 		return false;
+	}
+
+	@Override
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
+			Object object) {
+		if (object instanceof Cargo) {
+			final Cargo cargo = (Cargo) object;
+			final Scenario scenario = getScenario(cargo);
+			final Schedule schedule = getSchedule(scenario);
+			final CargoAllocation allocation = getCargoAllocation(schedule, cargo);
+			
+			final LinkedList<Pair<Notifier, List<Object>>> result = new LinkedList<Pair<Notifier, List<Object>>>();
+			if (allocation != null) result.add(new Pair<Notifier, List<Object>>(allocation, null));
+			if (scenario != null) result.add(new Pair<Notifier, List<Object>>(scenario.getScheduleModel(), null));
+			if (schedule != null) result.add(new Pair<Notifier, List<Object>>(schedule, null));
+			if (scenario != null) result.add(new Pair<Notifier, List<Object>>(scenario.getOptimisation().getCurrentSettings(), null));
+			if (scenario != null) result.add(new Pair<Notifier, List<Object>>(scenario.getOptimisation(), null));
+			if (allocation != null && allocation.getLoadSlotVisit() != null) result.add(new Pair<Notifier, List<Object>>(allocation.getLoadSlotVisit().eContainer(), null));
+			return result;
+		}
+		return Collections.emptySet();
 	}
 }
