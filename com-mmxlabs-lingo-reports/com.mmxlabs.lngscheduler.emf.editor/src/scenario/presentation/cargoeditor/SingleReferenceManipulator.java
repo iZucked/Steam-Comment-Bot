@@ -5,7 +5,10 @@
 package scenario.presentation.cargoeditor;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -19,8 +22,8 @@ import com.mmxlabs.common.Pair;
 /**
  * A column manipulator for setting single-valued EReference features.
  * 
- * Uses {@link ComboBoxCellEditor} for its edit control, and takes 
- * the values from an {@link IReferenceValueProvider}.
+ * Uses {@link ComboBoxCellEditor} for its edit control, and takes the values
+ * from an {@link IReferenceValueProvider}.
  * 
  * @author hinton
  * 
@@ -32,13 +35,16 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	private ComboBoxCellEditor editor;
 
 	/**
-	 * Create a manipulator for the given field in the target object,
-	 * taking values from the given valueProvider and creating set commands
-	 * in the provided editingDomain.
+	 * Create a manipulator for the given field in the target object, taking
+	 * values from the given valueProvider and creating set commands in the
+	 * provided editingDomain.
 	 * 
-	 * @param field the field to set
-	 * @param valueProvider provides the names & values for the field
-	 * @param editingDomain editing domain for setting
+	 * @param field
+	 *            the field to set
+	 * @param valueProvider
+	 *            provides the names & values for the field
+	 * @param editingDomain
+	 *            editing domain for setting
 	 */
 	public SingleReferenceManipulator(final EReference field,
 			final IReferenceValueProvider valueProvider,
@@ -52,7 +58,8 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	@Override
 	public String render(final Object object) {
 		final EObject value = (EObject) super.getValue(object);
-		return valueProvider.getName((EObject) object, (EReference) field, value);
+		return valueProvider.getName((EObject) object, (EReference) field,
+				value);
 	}
 
 	@Override
@@ -99,8 +106,15 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	}
 
 	void setEditorNames() {
-		if (editor == null) return;
+		if (editor == null)
+			return;
 		editor.setItems(names.toArray(new String[] {}));
 	}
 
+	@Override
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
+			Object object) {
+		return valueProvider.getNotifiers((EObject) object, (EReference) field,
+				(EObject) super.getValue(object));
+	}
 }
