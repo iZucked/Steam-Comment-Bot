@@ -4,19 +4,20 @@
  */
 package scenario.presentation.cargoeditor.dialogs;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -33,11 +34,13 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.ScenarioPackage;
 import scenario.optimiser.DiscountCurve;
+import scenario.optimiser.Objective;
 import scenario.optimiser.OptimiserPackage;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoPackage;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
+import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.curveeditor.CurveDialog;
@@ -82,7 +85,7 @@ public class OptimisationSettingsDialog extends Dialog {
 		this.page = page;
 		this.editor = editor;
 	}
-	
+
 	@Override
 	public void create() {
 		super.create();
@@ -204,6 +207,53 @@ public class OptimisationSettingsDialog extends Dialog {
 					editingDomain);
 
 			evp.addTypicalColumn("Weight", weight);
+
+			final DialogFeatureManipulator curveDialogManipulator = new DialogFeatureManipulator(
+					OptimiserPackage.eINSTANCE.getObjective_DiscountCurve(),
+					editingDomain) {
+				@Override
+				protected String renderValue(Object value) {
+					if (value == null) {
+						return "Default";
+					} else {
+						return "Custom";
+					}
+				}
+
+				@Override
+				protected Object openDialogBox(Control cellEditorWindow,
+						Object object) {
+					final Objective objective = (Objective) object;
+					if (objective.isSetDiscountCurve()) {
+						final MessageDialog dialog = new MessageDialog(
+								getParentShell(), "Use default curve", null,
+								"Would you like to clear the custom discount curve for objective "
+										+ objective.getName()
+										+ ", or to edit it?", MessageDialog.QUESTION,
+								new String[] {"Edit", "Clear"}, 0);
+						
+						if (dialog.open() == Window.OK) {
+							final CurveDialog cd = new CurveDialog(getParentShell());
+							if (cd.open(objective.getDiscountCurve()) == Window.OK) {
+								return cd.createNewCurve();
+							} else {
+								return null;
+							}
+						} else {
+							return SetCommand.UNSET_VALUE;
+						}
+					} else {
+						final CurveDialog cd = new CurveDialog(getParentShell());
+						if (cd.open(null) == Window.OK) {
+							return cd.createNewCurve();
+						} else {
+							return null;
+						}
+					}
+				}
+			};
+
+			evp.addTypicalColumn("Discount Curve", curveDialogManipulator);
 
 			parent.addDisposeListener(new DisposeListener() {
 
