@@ -44,6 +44,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	@Override
 	protected String renderValue(Object value) {
+		if (value == null) return "";
 		List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		final StringBuilder sb = new StringBuilder();
 		for (final EObject obj : selectedValues) {
