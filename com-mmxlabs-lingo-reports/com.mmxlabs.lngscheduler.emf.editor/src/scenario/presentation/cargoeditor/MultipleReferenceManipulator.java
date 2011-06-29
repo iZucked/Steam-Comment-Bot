@@ -6,16 +6,15 @@ package scenario.presentation.cargoeditor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -44,7 +43,8 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	@Override
 	protected String renderValue(Object value) {
-		if (value == null) return "";
+		if (value == null)
+			return "";
 		List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		final StringBuilder sb = new StringBuilder();
 		for (final EObject obj : selectedValues) {
@@ -103,5 +103,23 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 			}
 			return resultList;
 		}
+	}
+
+	@Override
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
+			Object object) {
+		if (object != null) {
+			final EList<EObject> values = (EList) super.getValue(object);
+			final LinkedList<Pair<Notifier, List<Object>>> notifiers = new LinkedList<Pair<Notifier, List<Object>>>();
+			for (final EObject ref : values) {
+				for (final Pair<Notifier, List<Object>> p : valueProvider
+						.getNotifiers((EObject) object, (EReference) field, ref)) {
+					notifiers.add(p);
+				}
+			}
+			return notifiers;
+		}
+
+		return super.getExternalNotifiers(object);
 	}
 }
