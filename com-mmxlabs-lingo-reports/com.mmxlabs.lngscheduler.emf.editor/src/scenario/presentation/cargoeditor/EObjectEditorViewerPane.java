@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -24,8 +25,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -91,6 +95,7 @@ import scenario.presentation.cargoeditor.importer.ExportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportUI;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
@@ -112,6 +117,93 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	private final ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
 	private boolean sortDescending = false;
+
+	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
+
+	private final Adapter externalAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification msg) {
+			if (!msg.isTouch()) {
+				final Object notifier = msg.getNotifier();
+				// redraw all objects listening to this notifier
+				final Set<EObject> changed = externalReferences.get(notifier);
+				if (changed != null) {
+					for (final EObject e : changed) {
+						viewer.update(e, null);
+					}
+				}
+			}
+		}
+	};
+
+	private final Map<Notifier, Set<EObject>> externalReferences = new HashMap<Notifier, Set<EObject>>();
+	private final Map<EObject, Set<Notifier>> externalNotifiersByObject = new HashMap<EObject, Set<Notifier>>();
+
+	private void updateObjectExternalNotifiers(final EObject object) {
+		Set<Notifier> dropNotifiers = new HashSet<Notifier>();
+		Set<Notifier> addNotifiers = new HashSet<Notifier>();
+		Set<Notifier> notifiers = externalNotifiersByObject.get(object);
+
+		// look at the existing notifiers for this object, and disassociate them
+		if (notifiers != null) {
+			for (final Notifier notifier : notifiers) {
+				final Set<EObject> references = externalReferences
+						.get(notifier);
+				references.remove(object);
+				if (references.isEmpty()) {
+					dropNotifiers.add(notifier); // we may no longer have any
+													// need to be notified by
+													// this notifier at all
+				}
+			}
+		} else {
+			notifiers = new HashSet<Notifier>();
+		}
+
+		// now ask all the cell renderers what we need to watch for this object
+		for (final Pair<EMFPath, ICellRenderer> pathAndRenderer : cellRenderers) {
+			final Iterable<Pair<Notifier, List<Object>>> newNotifiers = pathAndRenderer.getSecond()
+					.getExternalNotifiers(pathAndRenderer.getFirst().get(object));
+			for (final Pair<Notifier, List<Object>> notifierAndFeatures : newNotifiers) {
+				// get the notifier we are interested in
+				final Notifier n = notifierAndFeatures.getFirst();
+				notifiers.add(n); // add it to the notifiers for this object
+
+				// relate this object to this notifier, so we can disconnect it
+				// in a future update.
+				Set<EObject> er = externalReferences.get(n);
+				if (er == null) {
+					er = new HashSet<EObject>();
+					externalReferences.put(n, er);
+				}
+
+				if (er.isEmpty()) {
+					addNotifiers.add(n); // this notifier had no related
+											// objects, so we need to adapt it.
+				}
+
+				er.add(object);
+			}
+		}
+
+		// actually hook up the notifiers
+		final Iterator<Notifier> iter = dropNotifiers.iterator();
+		while (iter.hasNext()) {
+			final Notifier n = iter.next();
+			if (addNotifiers.contains(n)) {
+				iter.remove();
+				addNotifiers.remove(n);
+			}
+		}
+
+		for (final Notifier n : dropNotifiers) {
+			n.eAdapters().remove(externalAdapter);
+		}
+
+		for (final Notifier n : addNotifiers) {
+			n.eAdapters().add(externalAdapter);
+		}
+	}
 
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
 			final ScenarioEditor part) {
@@ -155,7 +247,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			@Override
 			public void run() {
 				super.run();
-				viewer.refresh();
+				refresh();
 			}
 		};
 	}
@@ -264,7 +356,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final Object... pathObjects) {
 		// create a column
 
+		
 		final EMFPath path = new CompiledEMFPath(true, pathObjects);
+		cellRenderers.add(new Pair<EMFPath, ICellRenderer>(path,renderer));
 
 		final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 		final TableColumn tColumn = column.getColumn();
@@ -309,7 +403,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			private boolean hasValidationError(final EObject object) {
 				final Resource r = object.eResource();
-				if (r == null) return false;
+				if (r == null)
+					return false;
 				final IFile containingFile = ResourcesPlugin.getWorkspace()
 						.getRoot()
 						.getFile(new Path(r.getURI().toPlatformString(true)));
@@ -341,7 +436,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				// a value has come out of the celleditor and is being set on
 				// the element.
 				manipulator.setValue(path.get((EObject) element), value);
-				viewer.refresh();
+				refresh();
 			}
 
 			@Override
@@ -385,6 +480,59 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 		});
 	}
+
+	/**
+	 * A set containing the elements currently being displayed, which is used by
+	 * #adapter to determine which row to refresh when a notification comes in
+	 */
+	final HashSet<EObject> currentElements = new HashSet<EObject>();
+
+	/**
+	 * A one-element list referring to the EObject which contains all the
+	 * display elements. #adapter uses this to determine when a notification
+	 * comes on the top-level object, and so all the contents should be
+	 * refreshed (e.g. after an import)
+	 */
+	EObject currentContainer;
+
+	final EContentAdapter adapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+
+			if (ImportUI.isImporting()) {
+				ImportUI.refreshLater(viewer);
+				return;
+			}
+
+			// System.err.println(notification);
+			if (notification.isTouch() == false) {
+				// this is a change, so we have to refresh.
+				// ideally we just want to update the changed object, but we
+				// get the notification from
+				// somewhere below, so we need to go up
+				EObject source = (EObject) notification.getNotifier();
+				// if (currentElements.contains(source))
+				// return;
+				if (source == currentContainer) {
+					refresh();
+					return;
+				}
+				while (!(currentElements.contains(source))
+						&& ((source = source.eContainer()) != null))
+					;
+				if (source != null) {
+					viewer.update(source, null);
+					updateObjectExternalNotifiers(source); // may have changed
+															// what we need to
+															// hook
+															// notifications for
+					// this seems to clear the selection
+					return;
+				}
+			}
+		}
+	};
 
 	public void init(final List<EReference> path,
 			final AdapterFactory adapterFactory) {
@@ -473,64 +621,13 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		});
 
-		/**
-		 * A set containing the elements currently being displayed, which is
-		 * used by #adapter to determine which row to refresh when a
-		 * notification comes in
-		 */
-		final HashSet<EObject> currentElements = new HashSet<EObject>();
-
-		/**
-		 * A one-element list referring to the EObject which contains all the
-		 * display elements. #adapter uses this to determine when a notification
-		 * comes on the top-level object, and so all the contents should be
-		 * refreshed (e.g. after an import)
-		 */
-		final EObject[] currentContainer = new EObject[] { null };
-
-		final EContentAdapter adapter = new EContentAdapter() {
-			@Override
-			public void notifyChanged(final Notification notification) {
-				super.notifyChanged(notification);
-
-				if (ImportUI.isImporting()) {
-					ImportUI.refreshLater(viewer);
-					return;
-				}
-
-				// System.err.println(notification);
-				if (notification.isTouch() == false) {
-					// this is a change, so we have to refresh.
-					// ideally we just want to update the changed object, but we
-					// get the notification from
-					// somewhere below, so we need to go up
-					EObject source = (EObject) notification.getNotifier();
-					// if (currentElements.contains(source))
-					// return;
-					if (source == currentContainer[0]) {
-						viewer.refresh();
-						return;
-					}
-					while (!(currentElements.contains(source))
-							&& ((source = source.eContainer()) != null))
-						;
-					if (source != null) {
-						viewer.update(source, null);
-						// this seems to clear the selection
-						return;
-					}
-				}
-			}
-
-		};
 		viewer.setContentProvider(new AdapterFactoryContentProvider(
 				adapterFactory) {
 
 			@SuppressWarnings("rawtypes")
 			@Override
 			public Object[] getElements(Object object) {
-				adapter.unsetTarget(adapter.getTarget()); // remove adapter from
-															// old input
+				removeAdapters();
 				currentElements.clear();
 				if (object instanceof EObject) {
 					EObject o = (EObject) object;
@@ -539,7 +636,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						if (object instanceof EList) {
 							o.eAdapters().add(adapter);
 							currentElements.addAll((EList) object);
-							currentContainer[0] = o;
+							for (final EObject newElement : currentElements) {
+								updateObjectExternalNotifiers(newElement);
+							}
+							currentContainer = o;
 							return ((EList) object).toArray();
 						}
 						if (object instanceof EObject) {
@@ -584,6 +684,24 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			x.update(true);
 		}
+	}
+
+	/**
+	 * 
+	 */
+	protected void removeAdapters() {
+		if (currentContainer != null) {
+			if (currentContainer.eAdapters().contains(adapter)) {
+				currentContainer.eAdapters().remove(adapter);
+			}
+		}
+		
+		for (final Notifier n : externalReferences.keySet()) {
+			n.eAdapters().remove(externalAdapter);
+		}
+		
+		externalReferences.clear();
+		externalNotifiersByObject.clear();
 	}
 
 	/**
@@ -691,7 +809,6 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					System.err
 							.println("Warning: cannot evaluate import command");
 				}
-
 
 				editingDomain.getCommandStack().execute(cc);
 
@@ -832,26 +949,38 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	}
 
 	@Override
+	public void dispose() {
+		removeAdapters();
+		cellRenderers.clear();
+
+		currentElements.clear();
+		columnSortOrder.clear();
+
+		super.dispose();
+	}
+
+	@Override
 	protected void requestActivation() {
 		final Control c = viewer.getControl();
-		if (c.isDisposed() || c.getDisplay() == null) return;
+		if (c.isDisposed() || c.getDisplay() == null)
+			return;
 		super.requestActivation();
 		part.setCurrentViewerPane(this);
 	}
 
-	
-	
 	@Override
 	public void showFocus(boolean inFocus) {
 		final Control c = viewer.getControl();
-		if (c.isDisposed() || c.getDisplay() == null) return;
+		if (c.isDisposed() || c.getDisplay() == null)
+			return;
 		super.showFocus(inFocus);
 	}
 
 	@Override
 	public void setFocus() {
 		final Control c = viewer.getControl();
-		if (c.isDisposed() || c.getDisplay() == null) return;
+		if (c.isDisposed() || c.getDisplay() == null)
+			return;
 		super.setFocus();
 	}
 
@@ -865,5 +994,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final Object... path) {
 		this.addColumn(columnName, manipulatorAndRenderer,
 				manipulatorAndRenderer, path);
+	}
+
+	public void refresh() {
+		if (viewer != null) {
+			if (viewer.getControl() != null
+					&& viewer.getControl().isDisposed() == false) {
+				viewer.refresh();
+			}
+		}
 	}
 }
