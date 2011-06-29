@@ -30,6 +30,7 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
@@ -338,8 +339,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 													multiDialog.createCommand());
 								}
 							} else {
-								if (l.size() == 0) return;
- 								final EObjectDetailDialog dialog = new EObjectDetailDialog(
+								if (l.size() == 0)
+									return;
+								final EObjectDetailDialog dialog = new EObjectDetailDialog(
 										v.getControl().getShell(), SWT.NONE,
 										getEditingDomain());
 
@@ -394,7 +396,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		@Override
 		public String getName(final EObject referer,
 				final EReference reference, final EObject target) {
-			if (target == null) return "empty";
+			if (target == null)
+				return "empty";
 			return (String) target.eGet(nameAttribute);
 		}
 
@@ -414,6 +417,15 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 
 		protected abstract void cacheValues();
+		
+		@Override
+		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
+				EObject referer, EReference feature, EObject referenceValue) {
+			if (referenceValue == null) return Collections.emptySet();
+			return Collections.singleton(new Pair<Notifier, List<Object>>(
+					referenceValue, Collections
+							.singletonList((Object) nameAttribute)));
+		}
 	}
 
 	private abstract class SimpleRVP extends ScenarioRVP {
@@ -424,8 +436,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			super(namedObjectName);
 			this.containingReference = containingReference;
 		}
-		
-		public SimpleRVP(final EReference containingReference, final EAttribute name) {
+
+		public SimpleRVP(final EReference containingReference,
+				final EAttribute name) {
 			super(name);
 			this.containingReference = containingReference;
 		}
@@ -466,7 +479,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	final ScenarioRVP scheduleProvider = new SimpleRVP(
-			SchedulePackage.eINSTANCE.getScheduleModel_Schedules(), SchedulePackage.eINSTANCE.getSchedule_Name()) {
+			SchedulePackage.eINSTANCE.getScheduleModel_Schedules(),
+			SchedulePackage.eINSTANCE.getSchedule_Name()) {
 
 		protected void install() {
 			getScenario().getScheduleModel().eAdapters().add(this);
@@ -647,6 +661,20 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							.getContractModel_PurchaseContracts()
 					|| feature == ContractPackage.eINSTANCE
 							.getContractModel_SalesContracts();
+		}
+
+		@Override
+		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
+				EObject referer, EReference feature, EObject referenceValue) {
+			if (referenceValue == null && referer instanceof Slot) {
+				final Port port = ((Slot)referer).getPort();
+				if (port == null) return Collections.emptySet();
+
+				return Collections.singleton(new Pair<Notifier, List<Object>>(
+						port, Collections
+								.singletonList((Object) namedObjectName)));
+			}
+			return super.getNotifiers(referer, feature, referenceValue);
 		}
 	};
 
@@ -1481,7 +1509,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			createContractEditor();
 
 			// add autocorrector
-			
+
 			createScheduleEditor();
 
 			autoCorrector = new AutoCorrector(getEditingDomain());
@@ -1709,7 +1737,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * Create an editor for the initial schedule
 	 */
 	private void createScheduleEditor() {
-		
+
 	}
 
 	private void createContractEditor() {
@@ -2209,9 +2237,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						getEditingDomain(), vesselProvider, namedObjectName);
 				cargoPane.addTypicalColumn("Restrict To", av);
 			}
-			
+
 			{
-				final CargoInitialVesselManipulator civm = new CargoInitialVesselManipulator(getEditingDomain());
+				final CargoInitialVesselManipulator civm = new CargoInitialVesselManipulator(
+						getEditingDomain());
 				cargoPane.addTypicalColumn("Initial Vessel", civm);
 			}
 
@@ -2514,7 +2543,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					@Override
 					protected String renderValue(final Object object) {
 						final VesselStateAttributes a = (VesselStateAttributes) object;
-						if (a == null) return "";
+						if (a == null)
+							return "";
 						return "NBO: " + a.getNboRate() + " Idle NBO: "
 								+ a.getIdleNBORate() + " Idle Base:"
 								+ a.getIdleConsumptionRate();
@@ -2557,7 +2587,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					@Override
 					protected String renderValue(final Object object) {
 						final VesselStateAttributes a = (VesselStateAttributes) object;
-						if (a == null) return "";
+						if (a == null)
+							return "";
 						return "NBO: " + a.getNboRate() + " Idle NBO: "
 								+ a.getIdleNBORate() + " Idle Base:"
 								+ a.getIdleConsumptionRate();
