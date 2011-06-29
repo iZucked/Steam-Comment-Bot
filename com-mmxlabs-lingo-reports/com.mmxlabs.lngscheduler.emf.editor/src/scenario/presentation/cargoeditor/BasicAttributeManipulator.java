@@ -7,6 +7,7 @@ package scenario.presentation.cargoeditor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -65,7 +66,12 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	
 	private Object reallyGetValue(Object object) {
 		if (object == null) return "";
-		return ((EObject) object).eGet(field);
+		final Object result = ((EObject) object).eGet(field);
+		if (result == null && (field.getEType() == EcorePackage.eINSTANCE.getEString())) {
+			return "";
+		} else {
+			return result;
+		}
 	}
 
 	@Override
