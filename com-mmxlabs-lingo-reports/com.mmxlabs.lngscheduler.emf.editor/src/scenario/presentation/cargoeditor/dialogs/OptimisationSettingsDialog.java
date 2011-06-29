@@ -140,8 +140,6 @@ public class OptimisationSettingsDialog extends Dialog {
 			editors.add(afterEditor);
 
 			final Control control2 = afterEditor.createControl(rangeGroup);
-			new Label(rangeGroup, SWT.NONE);
-			new Label(rangeGroup, SWT.NONE);
 			control2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false));
 		}
