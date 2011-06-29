@@ -85,21 +85,30 @@
             visible="true">
          <action
                class="com.mmxlabs.lngscheduler.emf.editor.actions.PriceCurveAction"
-               icon="icons/sample.gif"
+               icon="icons/curve.gif"
                id="com.mmxlabs.lngscheduler.emf.editor.actions.PriceCurveAction"
                label="Edit Default &amp;Discount Curve"
                menubarPath="scenarioMenuID/actions"
-               toolbarPath="sampleGroup"
+               toolbarPath="scenarioGroup"
                tooltip="Edit the active discount curve for this scenario">
          </action>
          <action
                class="com.mmxlabs.lngscheduler.emf.editor.actions.OptimisationSettingsAction"
-               icon="icons/sample.gif"
+               icon="icons/settings.gif"
                id="com.mmxlabs.lngscheduler.emf.editor.actions.OptimiserSettingsAction"
                label="Edit Optimisation Settings"
                menubarPath="scenarioMenuID/actions"
-               toolbarPath="sampleGroup"
+               toolbarPath="scenarioGroup"
                tooltip="Edit the optimisation settings for this scenario">
+         </action>
+         <action
+               class="com.mmxlabs.lngscheduler.emf.editor.actions.ClearSolutionsAction"
+               icon="icons/clear.gif"
+               id="com.mmxlabs.lngscheduler.emf.editor.actions.ClearSolutionsIcon"
+               label="Remove Solutions and Vessel Assignments"
+               menubarPath="scenarioMenuID/actions"
+               toolbarPath="scenarioGroup"
+               tooltip="Removes all solutions and vessel assignments from this scenario">
          </action>
       </actionSet>
    </extension>
