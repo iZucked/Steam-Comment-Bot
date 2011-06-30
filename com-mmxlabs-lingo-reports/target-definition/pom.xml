@@ -33,6 +33,11 @@
 									<type>target</type>
 									<classifier>shiplingo</classifier>
 								</artifact>
+								<artifact>
+									<file>shiplingo-indigo.target</file>
+									<type>target</type>
+									<classifier>shiplingo-indigo</classifier>
+								</artifact>
 							</artifacts>
 						</configuration>
 					</execution>
