@@ -131,7 +131,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					// wait to refresh if there is an import happening
 					// elsewhere. then refresh everything.
 					if (ImportUI.isImporting()) {
-						ImportUI.refreshLater(viewer);
+						ImportUI.refresh(viewer);
 						return;
 					}
 					for (final EObject e : changed) {
