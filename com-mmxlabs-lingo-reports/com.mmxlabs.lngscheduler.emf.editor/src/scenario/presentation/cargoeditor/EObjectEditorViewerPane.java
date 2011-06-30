@@ -128,6 +128,12 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				// redraw all objects listening to this notifier
 				final Set<EObject> changed = externalReferences.get(notifier);
 				if (changed != null) {
+					// wait to refresh if there is an import happening
+					// elsewhere. then refresh everything.
+					if (ImportUI.isImporting()) {
+						ImportUI.refreshLater(viewer);
+						return;
+					}
 					for (final EObject e : changed) {
 						viewer.update(e, null);
 					}
@@ -162,8 +168,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		// now ask all the cell renderers what we need to watch for this object
 		for (final Pair<EMFPath, ICellRenderer> pathAndRenderer : cellRenderers) {
-			final Iterable<Pair<Notifier, List<Object>>> newNotifiers = pathAndRenderer.getSecond()
-					.getExternalNotifiers(pathAndRenderer.getFirst().get(object));
+			final Iterable<Pair<Notifier, List<Object>>> newNotifiers = pathAndRenderer
+					.getSecond().getExternalNotifiers(
+							pathAndRenderer.getFirst().get(object));
 			for (final Pair<Notifier, List<Object>> notifierAndFeatures : newNotifiers) {
 				// get the notifier we are interested in
 				final Notifier n = notifierAndFeatures.getFirst();
@@ -356,9 +363,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final Object... pathObjects) {
 		// create a column
 
-		
 		final EMFPath path = new CompiledEMFPath(true, pathObjects);
-		cellRenderers.add(new Pair<EMFPath, ICellRenderer>(path,renderer));
+		cellRenderers.add(new Pair<EMFPath, ICellRenderer>(path, renderer));
 
 		final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 		final TableColumn tColumn = column.getColumn();
@@ -695,11 +701,11 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				currentContainer.eAdapters().remove(adapter);
 			}
 		}
-		
+
 		for (final Notifier n : externalReferences.keySet()) {
 			n.eAdapters().remove(externalAdapter);
 		}
-		
+
 		externalReferences.clear();
 		externalNotifiersByObject.clear();
 	}
