@@ -389,8 +389,16 @@ public class LNGScenarioTransformer {
 			Association<Port, IPort> portAssociation,
 			Association<VesselClass, IVesselClass> classes,
 			Association<Vessel, IVessel> vessels, ModelEntityMap entities) {
+		
+		final Date latestDate = scenario.getOptimisation().getCurrentSettings().isSetIgnoreElementsAfter() ?
+				scenario.getOptimisation().getCurrentSettings().getIgnoreElementsAfter() : latestTime;
+		
 		for (final VesselEvent event : scenario.getFleetModel()
 				.getVesselEvents()) {
+			
+			if (event.getStartDate().after(latestDate))
+				continue;
+			
 			final ITimeWindow window = builder.createTimeWindow(
 					convertTime(event.getStartDate()),
 					convertTime(event.getEndDate()));
@@ -441,10 +449,17 @@ public class LNGScenarioTransformer {
 			final Association<Vessel, IVessel> vesselAssociation,
 			final ModelEntityMap entities,
 			final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation) {
+		
+		final Date latestDate = scenario.getOptimisation().getCurrentSettings().isSetIgnoreElementsAfter() ?
+				scenario.getOptimisation().getCurrentSettings().getIgnoreElementsAfter() : latestTime;
 		for (final Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// ignore all non-fleet cargoes, as far as optimisation goes.
 			if (eCargo.getCargoType().equals(CargoType.FLEET) == false)
 				continue;
+			
+			if (eCargo.getLoadSlot().getWindowStart().after(latestDate))
+				continue;
+			
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
