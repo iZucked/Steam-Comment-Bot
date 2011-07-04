@@ -96,8 +96,8 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 
 		fq.setQuantity(consumption / Calculator.ScaleFactor);
 		fq.setTotalPrice(cost / Calculator.ScaleFactor);
-		fq.setUnitPrice(consumption == 0 ? 0 : cost / consumption); // TODO
-																	// float?
+		// TODO float?
+		fq.setUnitPrice(consumption == 0 ? 0 : cost / consumption);
 
 		fq.setFuelType(fuelTypes.get(fc));
 		fq.setFuelUnit(fuelUnits.get(fc.getDefaultFuelUnit()));
