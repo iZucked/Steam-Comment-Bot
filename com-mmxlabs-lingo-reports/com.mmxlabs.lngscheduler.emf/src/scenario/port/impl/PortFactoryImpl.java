@@ -31,7 +31,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 */
 	public static PortFactory init() {
 		try {
-			PortFactory thePortFactory = (PortFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/port"); 
+			PortFactory thePortFactory = (PortFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf1/port"); 
 			if (thePortFactory != null) {
 				return thePortFactory;
 			}

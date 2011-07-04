@@ -31,7 +31,7 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements ScenarioFactory
 	 */
 	public static ScenarioFactory init() {
 		try {
-			ScenarioFactory theScenarioFactory = (ScenarioFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf"); 
+			ScenarioFactory theScenarioFactory = (ScenarioFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf1"); 
 			if (theScenarioFactory != null) {
 				return theScenarioFactory;
 			}

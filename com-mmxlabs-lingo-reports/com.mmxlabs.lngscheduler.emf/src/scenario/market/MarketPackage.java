@@ -45,7 +45,7 @@ public interface MarketPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/market";
+	String eNS_URI = "http://com.mmxlabs.lng.emf1/market";
 
 	/**
 	 * The package namespace name.

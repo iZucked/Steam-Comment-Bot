@@ -32,7 +32,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 */
 	public static EventsFactory init() {
 		try {
-			EventsFactory theEventsFactory = (EventsFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/schedule/events"); 
+			EventsFactory theEventsFactory = (EventsFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf1/schedule/events"); 
 			if (theEventsFactory != null) {
 				return theEventsFactory;
 			}

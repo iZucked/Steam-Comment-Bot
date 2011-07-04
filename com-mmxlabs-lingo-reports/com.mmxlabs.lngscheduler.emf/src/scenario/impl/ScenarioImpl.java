@@ -160,7 +160,7 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int VERSION_EDEFAULT = 1;
+	protected static final int VERSION_EDEFAULT = 2;
 
 	/**
 	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.

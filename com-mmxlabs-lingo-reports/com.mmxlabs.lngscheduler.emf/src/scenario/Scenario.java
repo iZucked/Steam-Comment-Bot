@@ -287,7 +287,7 @@ public interface Scenario extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Version</b></em>' attribute.
-	 * The default value is <code>"1"</code>.
+	 * The default value is <code>"2"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Version</em>' attribute isn't clear,
@@ -297,7 +297,7 @@ public interface Scenario extends EObject {
 	 * @return the value of the '<em>Version</em>' attribute.
 	 * @see #setVersion(int)
 	 * @see scenario.ScenarioPackage#getScenario_Version()
-	 * @model default="1"
+	 * @model default="2"
 	 * @generated
 	 */
 	int getVersion();

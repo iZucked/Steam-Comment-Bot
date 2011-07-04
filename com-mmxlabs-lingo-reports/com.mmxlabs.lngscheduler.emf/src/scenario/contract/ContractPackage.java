@@ -44,7 +44,7 @@ public interface ContractPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/contract";
+	String eNS_URI = "http://com.mmxlabs.lng.emf1/contract";
 
 	/**
 	 * The package namespace name.

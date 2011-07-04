@@ -44,7 +44,7 @@ public interface LsoPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/optimiser/lso";
+	String eNS_URI = "http://com.mmxlabs.lng.emf1/optimiser/lso";
 
 	/**
 	 * The package namespace name.

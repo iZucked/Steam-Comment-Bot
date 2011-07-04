@@ -44,7 +44,7 @@ public interface CargoPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/cargo";
+	String eNS_URI = "http://com.mmxlabs.lng.emf1/cargo";
 
 	/**
 	 * The package namespace name.

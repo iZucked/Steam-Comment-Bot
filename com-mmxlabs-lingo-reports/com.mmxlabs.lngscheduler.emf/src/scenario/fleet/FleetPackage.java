@@ -45,7 +45,7 @@ public interface FleetPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/fleet";
+	String eNS_URI = "http://com.mmxlabs.lng.emf1/fleet";
 
 	/**
 	 * The package namespace name.

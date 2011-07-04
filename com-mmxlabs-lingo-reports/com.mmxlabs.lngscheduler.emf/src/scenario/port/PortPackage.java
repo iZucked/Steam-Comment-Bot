@@ -44,7 +44,7 @@ public interface PortPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/port";
+	String eNS_URI = "http://com.mmxlabs.lng.emf1/port";
 
 	/**
 	 * The package namespace name.

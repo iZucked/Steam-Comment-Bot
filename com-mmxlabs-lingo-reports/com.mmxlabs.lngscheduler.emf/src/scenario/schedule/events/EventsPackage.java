@@ -46,7 +46,7 @@ public interface EventsPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/schedule/events";
+	String eNS_URI = "http://com.mmxlabs.lng.emf1/schedule/events";
 
 	/**
 	 * The package namespace name.

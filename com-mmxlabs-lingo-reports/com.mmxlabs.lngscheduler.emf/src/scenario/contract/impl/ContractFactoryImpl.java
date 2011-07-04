@@ -31,7 +31,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 */
 	public static ContractFactory init() {
 		try {
-			ContractFactory theContractFactory = (ContractFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/contract"); 
+			ContractFactory theContractFactory = (ContractFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf1/contract"); 
 			if (theContractFactory != null) {
 				return theContractFactory;
 			}

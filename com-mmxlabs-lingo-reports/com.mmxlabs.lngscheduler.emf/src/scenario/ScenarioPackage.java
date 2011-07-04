@@ -43,7 +43,7 @@ public interface ScenarioPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf";
+	String eNS_URI = "http://com.mmxlabs.lng.emf1";
 
 	/**
 	 * The package namespace name.

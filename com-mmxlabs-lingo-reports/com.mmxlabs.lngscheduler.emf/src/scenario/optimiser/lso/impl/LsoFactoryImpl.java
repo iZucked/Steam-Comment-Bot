@@ -31,7 +31,7 @@ public class LsoFactoryImpl extends EFactoryImpl implements LsoFactory {
 	 */
 	public static LsoFactory init() {
 		try {
-			LsoFactory theLsoFactory = (LsoFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/optimiser/lso"); 
+			LsoFactory theLsoFactory = (LsoFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf1/optimiser/lso"); 
 			if (theLsoFactory != null) {
 				return theLsoFactory;
 			}
