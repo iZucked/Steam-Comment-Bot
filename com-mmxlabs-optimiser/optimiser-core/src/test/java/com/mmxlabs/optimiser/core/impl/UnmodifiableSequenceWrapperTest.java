@@ -78,19 +78,16 @@ public class UnmodifiableSequenceWrapperTest {
 
 			@Override
 			public Object get(int index) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public ISegment getSegment(int start, int end) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public int size() {
-				// TODO Auto-generated method stub
 				return 0;
 			}
 
@@ -98,10 +95,10 @@ public class UnmodifiableSequenceWrapperTest {
 			public Iterator iterator() {
 				return target;
 			}
-			
+
 			@Override
 			public final Object last() {
-				return get(size()-1);
+				return get(size() - 1);
 			}
 
 			@Override
@@ -136,19 +133,16 @@ public class UnmodifiableSequenceWrapperTest {
 
 			@Override
 			public Object get(int index) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public ISegment getSegment(int start, int end) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public int size() {
-				// TODO Auto-generated method stub
 				return 0;
 			}
 
@@ -156,10 +150,10 @@ public class UnmodifiableSequenceWrapperTest {
 			public Iterator iterator() {
 				return target;
 			}
-			
+
 			@Override
 			public final Object last() {
-				return get(size()-1);
+				return get(size() - 1);
 			}
 
 			@Override
@@ -194,19 +188,16 @@ public class UnmodifiableSequenceWrapperTest {
 
 			@Override
 			public Object get(int index) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public ISegment getSegment(int start, int end) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public int size() {
-				// TODO Auto-generated method stub
 				return 0;
 			}
 
@@ -214,10 +205,10 @@ public class UnmodifiableSequenceWrapperTest {
 			public Iterator iterator() {
 				return target;
 			}
-			
+
 			@Override
 			public final Object last() {
-				return get(size()-1);
+				return get(size() - 1);
 			}
 
 			@Override
