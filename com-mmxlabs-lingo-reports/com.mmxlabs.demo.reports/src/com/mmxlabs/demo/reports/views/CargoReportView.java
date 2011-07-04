@@ -47,12 +47,9 @@ public class CargoReportView extends EMFReportView {
 		final EAttribute name = ScenarioPackage.eINSTANCE.getNamedObject_Name();
 
 		addColumn("Schedule", containingScheduleFormatter);
-		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName()); // TODO
-																			// cargo
-																			// id
-																			// not
-																			// slot
-																			// id.
+		
+		// TODO cargo id not slot id.
+		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName());
 
 		addColumn("Type", objectFormatter, s.getCargoAllocation_CargoType());
 
