@@ -269,12 +269,11 @@ public class EMFUtils {
 					// problem! find common supertype
 					while (!result.isSuperTypeOf(oClass)) {
 						final EList<EClass> supers = result.getESuperTypes();
-						if (supers == null || supers.isEmpty())
+						if (supers == null || supers.isEmpty()) {
 							return null;
-						result = supers.get(0); // TODO
-												// multiple
-												// inheritance
-												// issues?
+						}
+						// TODO multiple inheritance issues?
+						result = supers.get(0);
 					}
 				}
 			}
