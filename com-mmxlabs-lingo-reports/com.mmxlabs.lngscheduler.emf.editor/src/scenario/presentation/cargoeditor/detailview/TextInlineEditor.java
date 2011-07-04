@@ -37,7 +37,6 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 						text.addDisposeListener(new DisposeListener() {
 							@Override
 							public void widgetDisposed(DisposeEvent e) {
-								// TODO Auto-generated method stub
 								text.removeModifyListener(ml);
 							}
 						});
