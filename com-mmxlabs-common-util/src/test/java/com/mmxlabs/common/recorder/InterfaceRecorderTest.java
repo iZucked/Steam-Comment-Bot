@@ -50,21 +50,19 @@ public class InterfaceRecorderTest {
 
 			@Override
 			public List<Integer> getList() {
-				// TODO Auto-generated method stub
 				return ints;
 			}
 
 			@Override
-			public void setList(Integer... ints) {
-				// TODO Auto-generated method stub
+			public void setList(final Integer... ints) {
 				this.ints = new LinkedList<Integer>();
 				for (int i : ints) {
 					this.ints.add(i);
 				}
 			}
 			@Override
-			public  void done() {
-				
+			public void done() {
+
 			}
 		}
 

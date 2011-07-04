@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.common.options;
 
-
 public class InvalidOptionException extends OptionsException {
 
 	/**
@@ -15,7 +14,6 @@ public class InvalidOptionException extends OptionsException {
 
 	@Override
 	public String getMessage() {
-		// TODO Auto-generated method stub
 		return "No Such Option: " + option;
 	}
 
