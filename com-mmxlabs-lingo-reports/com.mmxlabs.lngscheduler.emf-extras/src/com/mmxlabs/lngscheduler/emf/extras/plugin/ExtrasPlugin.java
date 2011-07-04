@@ -17,8 +17,14 @@ package com.mmxlabs.lngscheduler.emf.extras.plugin;
  * $Id$
  */
 
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Factory;
+import org.eclipse.emf.ecore.resource.Resource.Factory.Descriptor;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import com.mmxlabs.lngscheduler.emf.extras.UpgradingResourceFactory;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -40,15 +46,34 @@ public class ExtrasPlugin extends AbstractUIPlugin {
 	 * This method is called upon plug-in activation
 	 */
 	@Override
-    public void start(BundleContext context) throws Exception {
+	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		// register upgrading resource factory
+		final Object current = Factory.Registry.INSTANCE
+				.getExtensionToFactoryMap().get(
+						Resource.Factory.Registry.DEFAULT_EXTENSION);
+		final Factory delegate;
+		if (current instanceof Descriptor) {
+			delegate = ((Descriptor) current).createFactory();
+		} else {
+			delegate = (Factory) current;
+		}
+
+		// this only works once per runtime.
+//		Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+//				Resource.Factory.Registry.DEFAULT_EXTENSION,
+//				new UpgradingResourceFactory(delegate));
+
+
+		Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("scenario",
+				new UpgradingResourceFactory(new XMIResourceFactoryImpl()));
 	}
 
 	/**
 	 * This method is called when the plug-in is stopped
 	 */
 	@Override
-    public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 	}
 
