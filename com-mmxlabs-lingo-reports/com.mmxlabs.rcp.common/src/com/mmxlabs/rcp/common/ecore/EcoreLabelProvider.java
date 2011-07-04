@@ -2,25 +2,20 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.rcp.navigator.ecore;
+package com.mmxlabs.rcp.common.ecore;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.swt.graphics.Image;
 
+/**
+ * Simple subclass of {@link AdapterFactoryLabelProvider} with a default
+ * constructor to pass in our {@link EcoreComposedAdapterFactory} instance.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class EcoreLabelProvider extends AdapterFactoryLabelProvider {
 
 	public EcoreLabelProvider() {
 		super(EcoreComposedAdapterFactory.getAdapterFactory());
-	}
-
-	@Override
-	public Image getImage(Object element) {
-
-		return super.getImage(element);
-	}
-
-	@Override
-	public String getText(Object element) {
-		return super.getText(element);
 	}
 }

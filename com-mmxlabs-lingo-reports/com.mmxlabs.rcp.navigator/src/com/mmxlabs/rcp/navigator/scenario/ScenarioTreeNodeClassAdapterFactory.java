@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.rcp.navigator.scenario;
 
+import java.util.Collections;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
@@ -14,7 +16,7 @@ import scenario.schedule.ScheduleModel;
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
-import com.mmxlabs.rcp.navigator.ecore.EcoreContentProvider;
+import com.mmxlabs.rcp.common.ecore.EcoreContentProvider;
 
 /**
  * Needed to make Eclipse Core Expressions resolve the adapt method for
@@ -28,7 +30,7 @@ import com.mmxlabs.rcp.navigator.ecore.EcoreContentProvider;
  */
 public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 
-	private final EcoreContentProvider scp = new EcoreContentProvider();
+	private final EcoreContentProvider scp = new EcoreContentProvider(Collections.singleton("scenario"));
 
 	@Override
 	public Object getAdapter(final Object adaptableObject,

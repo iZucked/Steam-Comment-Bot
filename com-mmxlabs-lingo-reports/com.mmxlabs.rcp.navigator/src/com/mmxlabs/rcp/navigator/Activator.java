@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.rcp.navigator;
 
-
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -45,7 +46,7 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 	 * )
 	 */
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 
@@ -69,7 +70,7 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 	 * )
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 
 		// close the service tracker
 		jobManagerServiceTracker.close();
@@ -98,7 +99,7 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 	 *            the path
 	 * @return the image descriptor
 	 */
-	public static ImageDescriptor getImageDescriptor(String path) {
+	public static ImageDescriptor getImageDescriptor(final String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
@@ -107,11 +108,12 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 	}
 
 	@Override
-	public void serviceChanged(ServiceEvent event) {
-		ServiceReference sr = event.getServiceReference();
+	public void serviceChanged(final ServiceEvent event) {
+		final ServiceReference sr = event.getServiceReference();
 		switch (event.getType()) {
 		case ServiceEvent.REGISTERED: {
-			IJobManager jobManager = (IJobManager) fContext.getService(sr);
+			final IJobManager jobManager = (IJobManager) fContext
+					.getService(sr);
 			this.jobManager = jobManager;
 		}
 			break;
@@ -121,5 +123,29 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 		}
 			break;
 		}
+	}
 
-	}}
+	public static void warning(final String message) {
+
+		final Status status = new Status(IStatus.WARNING, PLUGIN_ID, message);
+		getDefault().getLog().log(status);
+	}
+
+	public static void warning(final String message, final Throwable t) {
+
+		final Status status = new Status(IStatus.WARNING, PLUGIN_ID, message, t);
+		getDefault().getLog().log(status);
+	}
+
+	public static void error(final String message) {
+
+		final Status status = new Status(IStatus.ERROR, PLUGIN_ID, message);
+		getDefault().getLog().log(status);
+	}
+
+	public static void error(final String message, final Throwable t) {
+
+		final Status status = new Status(IStatus.ERROR, PLUGIN_ID, message, t);
+		getDefault().getLog().log(status);
+	}
+}
