@@ -33,9 +33,10 @@ public class SlotIdCorrector extends BaseCorrector {
 	@Override
 	public Pair<String, Command> correct(Notification notification,
 			EditingDomain editingDomain) {
-		// TODO Auto-generated method stub
-		if (notification.isTouch())
+
+		if (notification.isTouch()) {
 			return null;
+		}
 		if (notification.getEventType() == Notification.SET) {
 			if (notification.getFeature() == CargoPackage.eINSTANCE
 					.getCargo_Id()) {
