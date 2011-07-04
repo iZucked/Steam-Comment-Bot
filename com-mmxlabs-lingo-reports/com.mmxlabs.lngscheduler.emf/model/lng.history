@@ -3906,5 +3906,32 @@
       </changes>
     </changes>
   </releases>
+  <releases date="2011-07-04T13:29:24.949+0100" label="com.mmxlabs.lng.emf1">
+    <changes xsi:type="history:Set" element="lng.ecore#//Scenario/version" featureName="defaultValueLiteral"
+        dataValue="2" oldDataValue="1"/>
+    <changes xsi:type="history:Set" element="lng.ecore#/" featureName="nsURI" dataValue="http://com.mmxlabs.lng.emf1"
+        oldDataValue="http://com.mmxlabs.lng.emf"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/fleet" oldDataValue="http://com.mmxlabs.lng.emf/fleet"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/schedule" oldDataValue="http://com.mmxlabs.lng.emf/schedule"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/events" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/schedule/events" oldDataValue="http://com.mmxlabs.lng.emf/schedule/events"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/fleetallocation"
+        featureName="nsURI" dataValue="http://com.mmxlabs.lng.emf1/schedule/fleetallocation"
+        oldDataValue="http://com.mmxlabs.lng.emf/schedule/fleetallocation"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/port" oldDataValue="http://com.mmxlabs.lng.emf/port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/cargo" oldDataValue="http://com.mmxlabs.lng.emf/cargo"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/contract" oldDataValue="http://com.mmxlabs.lng.emf/contract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//market" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/market" oldDataValue="http://com.mmxlabs.lng.emf/market"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//optimiser" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/optimiser" oldDataValue="http://com.mmxlabs.lng.emf/optimiser"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//optimiser/lso" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf1/optimiser/lso" oldDataValue="http://com.mmxlabs.lng.emf/optimiser/lso"/>
+  </releases>
   <releases/>
 </history:History>
