@@ -19,18 +19,18 @@ import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 import com.mmxlabs.rcp.common.ecore.EcoreContentProvider;
 
 /**
- * Needed to make Eclipse Core Expressions resolve the adapt method for
- * arbitrary objects
-
- * 
- * TODO: This is no longer used for it's original purpose and should be renamed
+ * An {@link IAdapterFactory} used to get {@link Schedule} instances from a
+ * {@link Scenario} or {@link IResource}. This should be registered in the
+ * plugin.xml for this plugin.
  * 
  * @author Simon Goodall
  * 
  */
 public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 
-	private final EcoreContentProvider scp = new EcoreContentProvider(Collections.singleton("scenario"));
+	// FIXME: Get this string from somewhere else
+	private final EcoreContentProvider scp = new EcoreContentProvider(
+			Collections.singleton("scenario"));
 
 	@Override
 	public Object getAdapter(final Object adaptableObject,
