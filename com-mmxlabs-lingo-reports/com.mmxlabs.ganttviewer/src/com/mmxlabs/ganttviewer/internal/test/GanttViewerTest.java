@@ -35,69 +35,58 @@ public class GanttViewerTest {
 
 		@Override
 		public void addListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void dispose() {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public boolean isLabelProperty(Object element, String property) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public void removeListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public Color getForeground(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public Color getBackground(Object element) {
 			Random r = new Random();
-			// TODO Auto-generated method stub
 			return new Color(null, r.nextInt(255), r.nextInt(255),
 					r.nextInt(255));
 		}
 
 		@Override
 		public String getToolTipText(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public String getToolTipTitle(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public Image getToolTipImage(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public Image getImage(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public String getText(Object element) {
-			// TODO Auto-generated method stub
 			return element.toString();
 		}
 	}
@@ -133,13 +122,11 @@ public class GanttViewerTest {
 
 		@Override
 		public Calendar getElementPlannedStartTime(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public Calendar getElementPlannedEndTime(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 	}
