@@ -37,7 +37,7 @@
 
 	<properties>
 		<!-- Tycho version to use -->
-		<tycho.version>0.13.0-SNAPSHOT</tycho.version>
+		<tycho.version>0.12.0</tycho.version>
 
 		<!-- Continue even when tests fail -->
 		<maven.test.failure.ignore>true</maven.test.failure.ignore>
@@ -170,6 +170,7 @@
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
+<!--
 						<environment>
 							<os>macosx</os>
 							<ws>carbon</ws>
@@ -185,6 +186,7 @@
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
 						</environment>
+-->
 					</environments>
 
 				</configuration>
