@@ -74,7 +74,7 @@ public class UpgradingResourceFactory implements Factory {
 	private Map<URI, Object> monitors = new HashMap<URI, Object>();
 
 	/**
-	 * Get a monitor for the given URI.
+	 * Get a monitor for the given URI, to prevent reentry on load.
 	 * @param uri
 	 * @return
 	 */
