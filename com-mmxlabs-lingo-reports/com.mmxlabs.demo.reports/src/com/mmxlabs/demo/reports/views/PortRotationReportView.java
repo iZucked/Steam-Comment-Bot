@@ -106,7 +106,9 @@ public class PortRotationReportView extends EMFReportView {
 				if (object instanceof SlotVisit) {
 					final SlotVisit sv = (SlotVisit) object;
 					final CargoAllocation ca = sv.getCargoAllocation();
-					if (ca == null) return null;
+					if (ca == null) {
+						return null;
+					}
 					if (ca.getLoadSlot().equals(sv.getSlot())) {
 						return (int) ca.getLoadVolume();
 					}
@@ -121,7 +123,9 @@ public class PortRotationReportView extends EMFReportView {
 				if (object instanceof SlotVisit) {
 					final SlotVisit sv = (SlotVisit) object;
 					final CargoAllocation ca = sv.getCargoAllocation();
-					if (ca == null) return null;
+					if (ca == null) {
+						return null;
+					}
 					if (ca.getDischargeSlot().equals(sv.getSlot())) {
 						return (int) ca.getDischargeVolume();
 					}
@@ -207,7 +211,7 @@ public class PortRotationReportView extends EMFReportView {
 	}
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
-	
+
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
@@ -219,8 +223,9 @@ public class PortRotationReportView extends EMFReportView {
 						new Runnable() {
 							@Override
 							public void run() {
-								// TODO Auto-generated method stub
-								if (viewer.getControl().isDisposed()) return;
+								if (viewer.getControl().isDisposed()) {
+									return;
+								}
 								final Set<Scenario> scenarios = new HashSet<Scenario>();
 								if (newInput instanceof Iterable) {
 									for (final Object element : ((Iterable) newInput)) {
@@ -236,8 +241,9 @@ public class PortRotationReportView extends EMFReportView {
 												o = o.eContainer();
 											}
 
-											if (o != null)
+											if (o != null) {
 												scenarios.add((Scenario) o);
+											}
 										}
 									}
 
@@ -298,7 +304,9 @@ public class PortRotationReportView extends EMFReportView {
 						final CargoAllocation allocation = slotVisit
 								.getCargoAllocation();
 						
-						if (allocation == null) return null;
+						if (allocation == null) {
+							return null;
+						}
 						
 						if (entity.equals(allocation.getLoadRevenue()
 								.getEntity())) {
@@ -319,7 +327,9 @@ public class PortRotationReportView extends EMFReportView {
 					}
 				} else if (object instanceof CharterOutVisit) {
 					final CharterOutVisit cov = (CharterOutVisit) object;
-					if (cov.getRevenue() == null) return null;
+					if (cov.getRevenue() == null) {
+						return null;
+					}
 					if (entity.equals(cov.getRevenue().getEntity())) {
 						return cov.getRevenue().getTaxedValue();
 					}
