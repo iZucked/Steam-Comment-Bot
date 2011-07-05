@@ -86,7 +86,7 @@ public class PortRotationReportView extends EMFReportView {
 			}
 
 			@Override
-			public Comparable getComparable(Object object) {
+			public Comparable getComparable(final Object object) {
 				return ((ScheduledEvent) object).getEventDuration();
 			}
 
@@ -258,7 +258,7 @@ public class PortRotationReportView extends EMFReportView {
 			}
 
 			@Override
-			public Object[] getElements(Object object) {
+			public Object[] getElements(final Object object) {
 				final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
 				if (object instanceof Iterable) {
 					for (final Object o : ((Iterable) object)) {
