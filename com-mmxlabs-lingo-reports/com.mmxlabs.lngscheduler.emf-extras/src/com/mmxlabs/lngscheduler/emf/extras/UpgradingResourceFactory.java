@@ -5,6 +5,10 @@
 package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -43,21 +47,52 @@ public class UpgradingResourceFactory implements Factory {
 	}
 
 	/**
-	 * A threadlocal is used here because it's only re-entry in the same thread
-	 * that's necessarily a problem.
+	 * This set contains the URI of any resource which is currently being
+	 * migrated on this thread. When a resource is loaded on thread A and gets
+	 * migrated, subsequent invocations on thread A for the same URI are
+	 * presumed to be from the migration mechanism, and so shouldn't trigger
+	 * another migrate but just fall through.
+	 * 
+	 * Invocations from thread B should block on any migrating URI until it's
+	 * done - this is handled by the {@link #monitors} map.
 	 */
-	private ThreadLocal<Boolean> alreadyMigrating = new ThreadLocal<Boolean>() {
+	private ThreadLocal<Set<URI>> currentlyMigrating = new ThreadLocal<Set<URI>>() {
 		@Override
-		protected Boolean initialValue() {
-			return false;
+		protected Set<URI> initialValue() {
+			return new HashSet<URI>();
 		}
 	};
 
-	private void migrate(final URI uri) {
-		if (alreadyMigrating.get())
-			return;
-		alreadyMigrating.set(true);
+	/**
+	 * This map contains objects used as monitors for each loaded URI - the
+	 * purpose of this is to prevent two threads attempting to migrate the same
+	 * resource concurrently, or a second thread from loading a resource which
+	 * is inconsistent due to being in the process of migration.
+	 * 
+	 * TODO Consider the leaking issue here. It's a small one.
+	 */
+	private Map<URI, Object> monitors = new HashMap<URI, Object>();
 
+	/**
+	 * Get a monitor for the given URI.
+	 * @param uri
+	 * @return
+	 */
+	private Object getMonitor(final URI uri) {
+		Object monitor = null;
+		synchronized (monitors) {
+			monitors.get(uri);
+			if (monitor == null) {
+				monitor = new Object();
+				monitors.put(uri, monitor);
+			}
+		}
+		return monitor;
+	}
+
+	private void migrate(final URI uri) {
+		if (currentlyMigrating.get().contains(uri))
+			return;
 		final String namespace = ReleaseUtil.getNamespaceURI(uri);
 		final Migrator migrator = MigratorRegistry.getInstance().getMigrator(
 				namespace);
@@ -70,14 +105,16 @@ public class UpgradingResourceFactory implements Factory {
 			}
 			if (r != Integer.MIN_VALUE)
 				try {
+					currentlyMigrating.get().add(uri);
 					log.info("Migrating " + uri + " to version " + r);
 					migrator.migrateAndSave(Collections.singletonList(uri), r,
 							Integer.MAX_VALUE, new NullProgressMonitor());
 				} catch (final MigrationException e) {
 					throw new RuntimeException(e);
+				} finally {
+					currentlyMigrating.get().remove(uri);
 				}
 		}
-		alreadyMigrating.set(false);
 	}
 
 	/**
@@ -86,7 +123,10 @@ public class UpgradingResourceFactory implements Factory {
 	 */
 	@Override
 	public Resource createResource(final URI uri) {
-		migrate(uri);
+		final Object monitor = getMonitor(uri);
+		synchronized (monitor) {
+			migrate(uri);
+		}
 		return delegate.createResource(uri);
 	}
 }
