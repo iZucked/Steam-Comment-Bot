@@ -4,11 +4,7 @@
  */
 package scenario.presentation.cargoeditor.importer;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 

@@ -46,7 +46,6 @@ import scenario.port.Port;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 /**
  * A composite for displaying a wiring editor. Contains a {@link WiringDiagram},

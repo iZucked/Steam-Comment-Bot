@@ -12,7 +12,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
-import scenario.cargo.CargoPackage;
 import scenario.port.DistanceLine;
 import scenario.port.PortPackage;
 

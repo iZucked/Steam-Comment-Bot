@@ -5,7 +5,6 @@
 package scenario.presentation.cargoeditor;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;

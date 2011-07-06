@@ -5,8 +5,6 @@
 package scenario.presentation.cargoeditor.handlers.delete;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;

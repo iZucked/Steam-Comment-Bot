@@ -6,11 +6,8 @@ package com.mmxlabs.lngscheduler.emf.extras.export;
 
 import java.util.Map;
 
-import org.eclipse.emf.common.util.EList;
-
 import scenario.fleet.VesselState;
 import scenario.port.Port;
-import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.AllocatedVessel;

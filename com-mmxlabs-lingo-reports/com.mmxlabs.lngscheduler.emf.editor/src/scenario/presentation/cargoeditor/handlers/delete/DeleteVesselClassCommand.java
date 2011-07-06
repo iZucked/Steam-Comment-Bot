@@ -5,8 +5,6 @@
 package scenario.presentation.cargoeditor.handlers.delete;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -15,15 +13,11 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import scenario.fleet.Vessel;
 import scenario.port.VesselClassCost;
-import scenario.schedule.BookedRevenue;
-import scenario.schedule.CargoAllocation;
-import scenario.schedule.events.SlotVisit;
 import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
