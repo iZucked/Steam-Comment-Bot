@@ -105,8 +105,8 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		return null;
 	}
 
-	private IManagedJob createOptimisationJob(final IJobManager jmv,
-			final IResource resource, Scenario scenario) {
+	private static IManagedJob createOptimisationJob(final IJobManager jmv,
+			final IResource resource, final Scenario scenario) {
 
 		String name = resource.getName();
 
