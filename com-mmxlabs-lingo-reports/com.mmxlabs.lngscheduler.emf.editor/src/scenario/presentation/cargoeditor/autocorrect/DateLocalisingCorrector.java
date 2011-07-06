@@ -24,7 +24,7 @@ import com.mmxlabs.common.Pair;
 
 public class DateLocalisingCorrector extends BaseCorrector {
 
-	private TimeZone getZone(final Port port) {
+	private static TimeZone getZone(final Port port) {
 		if (port == null || port.getTimeZone() == null
 				|| port.getTimeZone().equals(""))
 			return TimeZone.getDefault();

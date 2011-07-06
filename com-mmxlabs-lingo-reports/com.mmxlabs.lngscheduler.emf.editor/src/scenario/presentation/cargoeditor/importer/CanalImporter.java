@@ -159,7 +159,7 @@ public class CanalImporter extends EObjectImporter {
 	 * @param className
 	 * @return
 	 */
-	private VesselClassCost getClassCost(Map<String, VesselClassCost> costs,
+	private static VesselClassCost getClassCost(Map<String, VesselClassCost> costs,
 			String className) {
 		if (costs.containsKey(className)) {
 			return costs.get(className);
