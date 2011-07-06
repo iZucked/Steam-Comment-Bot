@@ -112,7 +112,7 @@ import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 public class EObjectEditorViewerPane extends ViewerPane {
 	private static final String COLUMN_RENDERER = "COLUMN_RENDERER";
 	private static final String COLUMN_PATH = "COLUMN_PATH";
-	private final ScenarioEditor part;
+	protected final ScenarioEditor part;
 	private TableViewer viewer;
 
 	private final ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
