@@ -33,8 +33,7 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil
-			.makeArrayList(
-					PortPackage.eINSTANCE.getDistanceLine_FromPort(),
+			.makeArrayList(PortPackage.eINSTANCE.getDistanceLine_FromPort(),
 					PortPackage.eINSTANCE.getDistanceLine_ToPort(),
 					PortPackage.eINSTANCE.getPort_DefaultContract(),
 					CargoPackage.eINSTANCE.getCargo_LoadSlot(),
@@ -43,33 +42,37 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 					FleetPackage.eINSTANCE.getVessel_Class(),
 					FleetPackage.eINSTANCE.getVesselClass_BaseFuel(),
 					FleetPackage.eINSTANCE.getCharterOut_EndPort(),
-					FleetPackage.eINSTANCE.getVesselEvent_StartPort()
-					// TODO add any more refs to check here
+					FleetPackage.eINSTANCE.getVesselEvent_StartPort(),
+					FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(),
+					FleetPackage.eINSTANCE.getVesselClass_BallastAttributes()
+			// TODO add any more refs to check here
 			);
-	
+
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
-	
-	private static synchronized Set<EReference> getReferencesToCheck(final EClass targetClass) {
+
+	private static synchronized Set<EReference> getReferencesToCheck(
+			final EClass targetClass) {
 		Set<EReference> result = cacheByClass.get(targetClass);
 		if (result == null) {
 			result = new HashSet<EReference>(targetClass.getEAllReferences());
 			result.retainAll(checkedReferences);
 			cacheByClass.put(targetClass, result);
 		}
-		
+
 		return result;
 	}
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		
+
 		final LinkedList<EReference> errors = new LinkedList<EReference>();
 		final Set<EReference> targetRefs = getReferencesToCheck(target.eClass());
 		for (final EReference ref : targetRefs) {
-			if (target.eGet(ref) == null) errors.add(ref);
+			if (target.eGet(ref) == null)
+				errors.add(ref);
 		}
-		
+
 		if (errors.isEmpty()) {
 			return ctx.createSuccessStatus();
 		} else {
