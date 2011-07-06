@@ -114,6 +114,7 @@ public class EMFPath {
 		return path[path.length - (i+1)];
 	}
 	
+	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		for (final Object el : path) {

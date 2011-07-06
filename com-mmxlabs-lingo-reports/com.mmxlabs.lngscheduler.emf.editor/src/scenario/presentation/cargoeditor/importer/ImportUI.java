@@ -46,6 +46,7 @@ public class ImportUI {
 		//TODO should we do one runnable which refreshes everything?
 		for (final Viewer v : refresh) {
 			PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+				@Override
 				public void run() {
 					v.refresh();
 				}

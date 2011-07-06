@@ -47,20 +47,24 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
  * 
  */
 public class EObjectMultiDialog extends Dialog implements IDetailViewContainer {
+	@Override
 	public void addDefaultEditorFactories() {
 		containerDelegate.addDefaultEditorFactories();
 		System.err.println("Add default factories");
 	}
 
+	@Override
 	public void setNameForFeature(EStructuralFeature feature, String string) {
 		containerDelegate.setNameForFeature(feature, string);
 	}
 
+	@Override
 	public void setEditorFactoryForClassifier(EClassifier classifier,
 			IInlineEditorFactory factory) {
 		containerDelegate.setEditorFactoryForClassifier(classifier, factory);
 	}
 
+	@Override
 	public void setEditorFactoryForFeature(EStructuralFeature feature,
 			IInlineEditorFactory iInlineEditorFactory) {
 		containerDelegate.setEditorFactoryForFeature(feature,
