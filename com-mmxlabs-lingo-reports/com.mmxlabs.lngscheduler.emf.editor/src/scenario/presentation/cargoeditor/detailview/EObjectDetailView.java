@@ -29,11 +29,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import scenario.presentation.EditorUtils;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.provider.LngEditPlugin;
 
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 /**
  * A reflectively self-constructing detail view for EObjects. Displays a group
@@ -155,7 +157,7 @@ public class EObjectDetailView extends Composite {
 
 	public void initForEClass(final EClass objectClass) {
 		int groupCount = 1;
-		addGroupForEClass(objectClass, unmangle(objectClass.getName()),
+		addGroupForEClass(objectClass, EditorUtils.unmangle(objectClass.getName()),
 				new CompiledEMFPath(true));
 		for (final EReference reference : objectClass.getEAllContainments()) {
 			if (reference.isMany()) {
@@ -163,7 +165,7 @@ public class EObjectDetailView extends Composite {
 			}
 			String groupName = nameByFeature.get(reference);
 			if (groupName == null) {
-				groupName = unmangle(reference.getName());
+				groupName = EditorUtils.unmangle(reference.getName());
 			}
 
 			addGroupForEClass(reference.getEReferenceType(), groupName,
@@ -259,7 +261,7 @@ public class EObjectDetailView extends Composite {
 				}
 				// Ok, so nothing provided, try and deduce name
 				if (attributeName == null)
-					attributeName = unmangle(attribute.getName());
+					attributeName = EditorUtils.unmangle(attribute.getName());
 				attributeLabel.setText(attributeName + ": ");
 				final GridData labelData = new GridData(SWT.RIGHT, SWT.CENTER,
 						false, false);
@@ -277,23 +279,6 @@ public class EObjectDetailView extends Composite {
 		controls.pack();
 	}
 
-	private String unmangle(final String name) {
-		final StringBuilder sb = new StringBuilder();
-		boolean lastWasLower = true;
-		boolean firstChar = true;
-		for (final char c : name.toCharArray()) {
-			if (firstChar) {
-				sb.append(Character.toUpperCase(c));
-				firstChar = false;
-			} else {
-				if (lastWasLower && Character.isUpperCase(c))
-					sb.append(" ");
-				lastWasLower = Character.isLowerCase(c);
-				sb.append(c);
-			}
-		}
-		return sb.toString();
-	}
 
 	public void setInput(final EObject object) {
 		
