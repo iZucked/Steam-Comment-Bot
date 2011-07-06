@@ -6,9 +6,7 @@ package scenario.presentation;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -40,7 +37,6 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -63,14 +59,12 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -85,7 +79,6 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.SashForm;
@@ -95,24 +88,17 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
@@ -129,14 +115,8 @@ import scenario.cargo.Slot;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.Contract;
 import scenario.contract.ContractPackage;
-import scenario.contract.FixedPricePurchaseContract;
-import scenario.contract.IndexPricePurchaseContract;
-import scenario.contract.NetbackPurchaseContract;
-import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
-import scenario.fleet.PortAndTime;
-import scenario.fleet.VesselStateAttributes;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
 import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
@@ -144,52 +124,35 @@ import scenario.market.StepwisePriceCurve;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
-import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.ChartViewer.IChartContentProvider;
-import scenario.presentation.cargoeditor.BasicAttributeManipulator;
-import scenario.presentation.cargoeditor.CargoInitialVesselManipulator;
-import scenario.presentation.cargoeditor.DateManipulator;
-import scenario.presentation.cargoeditor.DialogFeatureManipulator;
-import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
-import scenario.presentation.cargoeditor.EnumAttributeManipulator;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
-import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
-import scenario.presentation.cargoeditor.NonEditableColumn;
-import scenario.presentation.cargoeditor.NumericAttributeManipulator;
-import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
 import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotIdCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
 import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailPropertySheetPage;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IMultiInlineEditorFactory;
-import scenario.presentation.cargoeditor.detailview.EObjectMultiDialog;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
 import scenario.presentation.cargoeditor.detailview.MultiReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
-import scenario.presentation.cargoeditor.dialogs.PortAndTimeDialog;
-import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
-import scenario.presentation.cargoeditor.handlers.AddAction;
-import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
-import scenario.presentation.cargoeditor.importer.CSVReader;
-import scenario.presentation.cargoeditor.importer.DeferredReference;
-import scenario.presentation.cargoeditor.importer.EObjectImporter;
-import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
-import scenario.presentation.cargoeditor.importer.ExportCSVAction;
-import scenario.presentation.cargoeditor.importer.ImportCSVAction;
-import scenario.presentation.cargoeditor.importer.ImportUI;
-import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
-import scenario.presentation.cargoeditor.importer.Postprocessor;
-import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
+import scenario.presentation.model_editors.CargoEVP;
+import scenario.presentation.model_editors.EntityEVP;
+import scenario.presentation.model_editors.IndexEVP;
+import scenario.presentation.model_editors.NamedObjectEVP;
+import scenario.presentation.model_editors.PortEVP;
+import scenario.presentation.model_editors.PurchaseContractEVP;
+import scenario.presentation.model_editors.SalesContractEVP;
+import scenario.presentation.model_editors.VesselClassEVP;
+import scenario.presentation.model_editors.VesselEVP;
+import scenario.presentation.model_editors.VesselEventEVP;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
@@ -197,7 +160,6 @@ import scenario.schedule.events.provider.EventsItemProviderAdapterFactory;
 import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAdapterFactory;
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
@@ -217,151 +179,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final static EAttribute namedObjectName = ScenarioPackage.eINSTANCE
 			.getNamedObject_Name();
-
-	/**
-	 * This extension of {@link EObjectEditorViewerPane} adds the following
-	 * <ol>
-	 * <li>A handler which pops up either an {@link EObjectDetailDialog} or an
-	 * {@link EObjectMultiDialog} when you hit return</li>
-	 * <li>
-	 * An add action which displays an {@link EObjectDetailDialog} when you add
-	 * a new element</li>
-	 * 
-	 * @author Tom Hinton
-	 * 
-	 */
-	private class ScenarioObjectEditorViewerPane extends
-			EObjectEditorViewerPane {
-		/**
-		 * @param page
-		 * @param part
-		 */
-		public ScenarioObjectEditorViewerPane(final IWorkbenchPage page,
-				final ScenarioEditor part) {
-			super(page, part);
-		}
-
-		/**
-		 * Create a custom add action, which delegates to the default behaviour
-		 * to create the object, but adds in an editor dialog.
-		 */
-		@Override
-		protected Action createAddAction(final TableViewer viewer,
-				final EditingDomain editingDomain, final EMFPath contentPath) {
-			final AddAction delegate = (AddAction) super.createAddAction(
-					viewer, editingDomain, contentPath);
-
-			final Action result = new AddAction(editingDomain, contentPath
-					.getTargetType().getName()) {
-				@Override
-				public EObject createObject(final boolean usingSelection) {
-					final EObject newObject = delegate
-							.createObject(usingSelection);
-
-					final EObjectDetailDialog dialog = new EObjectDetailDialog(
-							viewer.getControl().getShell(), SWT.NONE,
-							editingDomain);
-
-					ScenarioEditor.this.setupDetailViewContainer(dialog);
-
-					if (dialog.open(Collections.singletonList(newObject))
-							.size() > 0) {
-						return newObject;
-					} else {
-						return null;
-					}
-				}
-
-				@Override
-				public Object getOwner() {
-					return delegate.getOwner();
-				}
-
-				@Override
-				public Object getFeature() {
-					return delegate.getFeature();
-				}
-			};
-			return result;
-		}
-
-		@Override
-		/**
-		 * Hook a key listener to the viewer to pick up return and display an editor.
-		 * 
-		 * TODO cache editors for efficiency.
-		 */
-		public Viewer createViewer(final Composite parent) {
-			final Viewer v = super.createViewer(parent);
-			v.getControl().addKeyListener(new KeyListener() {
-				@Override
-				public void keyReleased(final org.eclipse.swt.events.KeyEvent e) {
-
-					// TODO: Wrap up in a command with keybindings
-					// TODO if you edit a cell and then press return to finish
-					// editing,
-					// this listener still happens. Either we need to cancel the
-					// event,
-					// or detect editing from the viewer, or set our own flags
-					// to prevent this problem.
-					if (e.keyCode == '\r') {
-						final ISelection selection = getViewer().getSelection();
-						if (selection instanceof IStructuredSelection) {
-							final IStructuredSelection ssel = (IStructuredSelection) selection;
-							final List l = Arrays.asList(ssel.toArray());
-
-							if (l.size() > 1
-									&& (e.stateMask & SWT.CONTROL) == 0) {
-								final EObjectMultiDialog multiDialog = new EObjectMultiDialog(
-										new IShellProvider() {
-											@Override
-											public Shell getShell() {
-												return v.getControl()
-														.getShell();
-											}
-										});
-								ScenarioEditor.this
-										.setupDetailViewContainer(multiDialog);
-								multiDialog.setEditorFactoryForFeature(
-										CargoPackage.eINSTANCE.getCargo_Id(),
-										null);
-								multiDialog.setEditorFactoryForFeature(
-										ScenarioPackage.eINSTANCE
-												.getNamedObject_Name(), null);
-
-								multiDialog.setEditorFactoryForFeature(
-										FleetPackage.eINSTANCE
-												.getVesselEvent_Id(), null);
-								if (multiDialog.open(l, getEditingDomain()) == Dialog.OK) {
-									getEditingDomain()
-											.getCommandStack()
-											.execute(
-													multiDialog.createCommand());
-								}
-							} else {
-								if (l.size() == 0)
-									return;
-								final EObjectDetailDialog dialog = new EObjectDetailDialog(
-										v.getControl().getShell(), SWT.NONE,
-										getEditingDomain());
-
-								ScenarioEditor.this
-										.setupDetailViewContainer(dialog);
-
-								if (dialog.open(l).size() > 0)
-									getViewer().refresh();
-							}
-						}
-					}
-				}
-
-				@Override
-				public void keyPressed(final org.eclipse.swt.events.KeyEvent e) {
-				}
-			});
-			return v;
-		}
-	}
 
 	private abstract class ScenarioRVP extends EContentAdapter implements
 			IReferenceValueProvider {
@@ -417,11 +234,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 
 		protected abstract void cacheValues();
-		
+
 		@Override
 		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
 				EObject referer, EReference feature, EObject referenceValue) {
-			if (referenceValue == null) return Collections.emptySet();
+			if (referenceValue == null)
+				return Collections.emptySet();
 			return Collections.singleton(new Pair<Notifier, List<Object>>(
 					referenceValue, Collections
 							.singletonList((Object) nameAttribute)));
@@ -667,8 +485,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
 				EObject referer, EReference feature, EObject referenceValue) {
 			if (referenceValue == null && referer instanceof Slot) {
-				final Port port = ((Slot)referer).getPort();
-				if (port == null) return Collections.emptySet();
+				final Port port = ((Slot) referer).getPort();
+				if (port == null)
+					return Collections.emptySet();
 
 				return Collections.singleton(new Pair<Notifier, List<Object>>(
 						port, Collections
@@ -1746,166 +1565,42 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 		{
-			final EObjectEditorViewerPane entitiesPane = new ScenarioObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this) {
-				@Override
-				protected Action createExportAction(TableViewer viewer,
-						EMFPath ePath) {
-					final ExportCSVAction delegate = (ExportCSVAction) super
-							.createExportAction(viewer, ePath);
-					return new ExportCSVAction() {
-						@Override
-						public List<EObject> getObjectsToExport() {
-							final List<EObject> export = delegate
-									.getObjectsToExport();
-
-							export.add(getScenario().getContractModel()
-									.getShippingEntity());
-
-							return export;
-						}
-
-						@Override
-						public EClass getExportEClass() {
-							return delegate.getExportEClass();
-						}
-					};
-				}
-
-				@Override
-				protected Action createImportAction(TableViewer viewer,
-						EditingDomain editingDomain, EMFPath ePath) {
-					final ImportCSVAction delegate = (ImportCSVAction) super
-							.createImportAction(viewer, editingDomain, ePath);
-					return new ImportCSVAction() {
-						@Override
-						protected EObject getToplevelObject() {
-							return getScenario();
-						}
-
-						@Override
-						protected EClass getImportClass() {
-							return ContractPackage.eINSTANCE.getEntity();
-						}
-
-						@Override
-						public void addObjects(Collection<EObject> newObjects) {
-							delegate.addObjects(newObjects);
-							final Scenario scenario = getScenario();
-							scenario.getContractModel().setShippingEntity(
-									scenario.getContractModel()
-											.getEntities()
-											.get(scenario.getContractModel()
-													.getEntities().size() - 1));
-						}
-					};
-				}
-			};
+			final EntityEVP entitiesPane = new EntityEVP(getSite().getPage(),
+					ScenarioEditor.this);
 
 			entitiesPane.createControl(sash);
-			entitiesPane.init(CollectionsUtil.makeArrayList(
+
+			entitiesPane.init(getAdapterFactory(),
 					ScenarioPackage.eINSTANCE.getScenario_ContractModel(),
-					ContractPackage.eINSTANCE.getContractModel_Entities()),
-					getAdapterFactory());
-
-			entitiesPane.addTypicalColumn(
-					"Name",
-					new BasicAttributeManipulator(ScenarioPackage.eINSTANCE
-							.getNamedObject_Name(), getEditingDomain()));
-
-			entitiesPane.addTypicalColumn(
-					"Tax Rate",
-					new NumericAttributeManipulator(ContractPackage.eINSTANCE
-							.getEntity_TaxRate(), getEditingDomain()));
-
-			entitiesPane.addTypicalColumn(
-					"Ownership",
-					new NumericAttributeManipulator(ContractPackage.eINSTANCE
-							.getEntity_Ownership(), getEditingDomain()));
+					ContractPackage.eINSTANCE.getContractModel_Entities());
 
 			entitiesPane.setTitle("Entities", getTitleImage());
 			entitiesPane.getViewer().setInput(input);
 		}
 		{
-			final EObjectEditorViewerPane salesPane = new ScenarioObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this);
+			final SalesContractEVP salesPane = new SalesContractEVP(getSite()
+					.getPage(), ScenarioEditor.this);
 
 			salesPane.createControl(sash);
 
-			salesPane.init(
-					CollectionsUtil.makeArrayList(ScenarioPackage.eINSTANCE
+			salesPane
+					.init(getAdapterFactory(), ScenarioPackage.eINSTANCE
 							.getScenario_ContractModel(),
 							ContractPackage.eINSTANCE
-									.getContractModel_SalesContracts()),
-					getAdapterFactory());
-
-			salesPane.addTypicalColumn("Name", new BasicAttributeManipulator(
-					ScenarioPackage.eINSTANCE.getNamedObject_Name(),
-					getEditingDomain()));
-
-			salesPane.addTypicalColumn(
-					"Entity",
-					new SingleReferenceManipulator(ContractPackage.eINSTANCE
-							.getContract_Entity(), entityProvider,
-							getEditingDomain()));
-
-			salesPane.addTypicalColumn("Index", new SingleReferenceManipulator(
-					ContractPackage.eINSTANCE.getSalesContract_Index(),
-					indexProvider, getEditingDomain()));
-
-			// salesPane.addTypicalColumn(
-			// "Regas Efficiency",
-			// new NumericAttributeManipulator(ContractPackage.eINSTANCE
-			// .getSalesContract_RegasEfficiency(),
-			// getEditingDomain()));
-
-			salesPane.addTypicalColumn(
-					"Sales Mark-up",
-					new NumericAttributeManipulator(ContractPackage.eINSTANCE
-							.getSalesContract_Markup(), getEditingDomain()));
+									.getContractModel_SalesContracts());
 
 			salesPane.setTitle("Sales Contracts", getTitleImage());
 			salesPane.getViewer().setInput(input);
 		}
 		{
-			final EObjectEditorViewerPane purchasePane = new ScenarioObjectEditorViewerPane(
+			final PurchaseContractEVP purchasePane = new PurchaseContractEVP(
 					getSite().getPage(), ScenarioEditor.this);
 
 			purchasePane.createControl(sash);
 
-			purchasePane.init(CollectionsUtil.makeArrayList(
-					ScenarioPackage.eINSTANCE.getScenario_ContractModel(),
-					ContractPackage.eINSTANCE
-							.getContractModel_PurchaseContracts()),
-					getAdapterFactory());
-
-			purchasePane.addTypicalColumn("Type", new NonEditableColumn() {
-				@Override
-				public String render(final Object object) {
-					if (object instanceof IndexPricePurchaseContract) {
-						return "Index Price";
-					} else if (object instanceof FixedPricePurchaseContract) {
-						return "Fixed Price";
-					} else if (object instanceof NetbackPurchaseContract) {
-						return "Netback";
-					} else if (object instanceof ProfitSharingPurchaseContract) {
-						return "Profit-sharing";
-					} else {
-						return object.getClass().getSimpleName();
-					}
-				}
-			});
-
-			purchasePane.addTypicalColumn(
-					"Name",
-					new BasicAttributeManipulator(ScenarioPackage.eINSTANCE
-							.getNamedObject_Name(), getEditingDomain()));
-
-			purchasePane.addTypicalColumn(
-					"Entity",
-					new SingleReferenceManipulator(ContractPackage.eINSTANCE
-							.getContract_Entity(), entityProvider,
-							getEditingDomain()));
+			purchasePane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE
+					.getScenario_ContractModel(), ContractPackage.eINSTANCE
+					.getContractModel_PurchaseContracts());
 
 			purchasePane.setTitle("Purchase Contracts", getTitleImage());
 			purchasePane.getViewer().setInput(input);
@@ -1915,67 +1610,15 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	private void createEventsEditor() {
-		final EObjectEditorViewerPane eventsPane = new ScenarioObjectEditorViewerPane(
-				getSite().getPage(), ScenarioEditor.this);
+		final VesselEventEVP eventsPane = new VesselEventEVP(getSite()
+				.getPage(), ScenarioEditor.this);
 
 		eventsPane.createControl(getContainer());
-
-		final List<EReference> path = new LinkedList<EReference>();
-
-		path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
-		path.add(FleetPackage.eINSTANCE.getFleetModel_VesselEvents());
-
 		eventsPane.setTitle("Events", getTitleImage());
 
-		eventsPane.init(path, adapterFactory);
-
-		final FleetPackage fp = FleetPackage.eINSTANCE;
-
-		final NonEditableColumn type = new NonEditableColumn() {
-			@Override
-			public String render(final Object object) {
-				if (object instanceof EObject) {
-					return ((EObject) object).eClass().getName();
-				} else {
-					return object.getClass().getSimpleName();
-				}
-			}
-		};
-
-		eventsPane.addTypicalColumn("Event Type", type);
-
-		final BasicAttributeManipulator id = new BasicAttributeManipulator(
-				fp.getVesselEvent_Id(), getEditingDomain());
-
-		eventsPane.addColumn("ID", id, id);
-
-		final DateManipulator start = new DateManipulator(
-				fp.getVesselEvent_StartDate(), editingDomain);
-		eventsPane.addColumn("Start Date", start, start);
-
-		final DateManipulator end = new DateManipulator(
-				fp.getVesselEvent_EndDate(), editingDomain);
-		eventsPane.addColumn("End Date", end, end);
-
-		final NumericAttributeManipulator duration = new NumericAttributeManipulator(
-				fp.getVesselEvent_Duration(), editingDomain);
-		eventsPane.addColumn("Duration (days)", duration, duration);
-
-		final SingleReferenceManipulator port = new SingleReferenceManipulator(
-				fp.getVesselEvent_StartPort(), portProvider, editingDomain);
-		eventsPane.addColumn("Start Port", port, port);
-
-		final MultipleReferenceManipulator vessels = new MultipleReferenceManipulator(
-				fp.getVesselEvent_Vessels(), editingDomain, vesselProvider,
-				namedObjectName);
-
-		eventsPane.addColumn("Vessels", vessels, vessels);
-
-		final MultipleReferenceManipulator classes = new MultipleReferenceManipulator(
-				fp.getVesselEvent_VesselClasses(), editingDomain,
-				vesselClassProvider, namedObjectName);
-
-		eventsPane.addColumn("Classes", classes, classes);
+		eventsPane.init(getAdapterFactory(),
+				ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
+				FleetPackage.eINSTANCE.getFleetModel_VesselEvents());
 
 		eventsPane.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
@@ -1992,31 +1635,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		final SashForm sash = new SashForm(getContainer(), SWT.SMOOTH
 				| SWT.HORIZONTAL);
 
-		final EObjectEditorViewerPane indices = new ScenarioObjectEditorViewerPane(
-				getSite().getPage(), this);
+		final IndexEVP indices = new IndexEVP(getSite().getPage(), this);
 
 		indices.createControl(sash);
 		indices.setTitle("Indices", getTitleImage());
 
-		final List<EReference> path2 = new LinkedList<EReference>();
-
-		path2.add(ScenarioPackage.eINSTANCE.getScenario_MarketModel());
-		path2.add(MarketPackage.eINSTANCE.getMarketModel_Indices());
-
-		indices.init(path2, getAdapterFactory());
-
-		final BasicAttributeManipulator name = new BasicAttributeManipulator(
-				ScenarioPackage.eINSTANCE.getNamedObject_Name(),
-				getEditingDomain());
-
-		indices.addColumn("Name", name, name);
-
-		final NumericAttributeManipulator defaultValue = new NumericAttributeManipulator(
-				MarketPackage.eINSTANCE.getStepwisePriceCurve_DefaultValue(),
-				getEditingDomain());
-
-		indices.addColumn("Default Value", defaultValue, defaultValue,
-				MarketPackage.eINSTANCE.getIndex_PriceCurve());
+		indices.init(getAdapterFactory(),
+				ScenarioPackage.eINSTANCE.getScenario_MarketModel(),
+				MarketPackage.eINSTANCE.getMarketModel_Indices());
 
 		indices.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
@@ -2107,149 +1733,20 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Create a page for the cargo editor
 		{
 
-			final EObjectEditorViewerPane cargoPane = new ScenarioObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this) {
-
-				final SwapDischargeSlotsAction swapAction = new SwapDischargeSlotsAction();
-
-				@Override
-				public Viewer createViewer(final Composite parent) {
-					final Viewer v = super.createViewer(parent);
-
-					getToolBarManager().appendToGroup("edit", swapAction);
-					getToolBarManager().update(true);
-
-					v.addSelectionChangedListener(swapAction);
-
-					v.getControl().addKeyListener(new KeyListener() {
-						@Override
-						public void keyPressed(final KeyEvent e) {
-						}
-
-						@Override
-						public void keyReleased(final KeyEvent e) {
-
-							if (e.keyCode == ' ') {
-
-								final ISelection selection = v.getSelection();
-								if (selection instanceof IStructuredSelection) {
-									final IStructuredSelection ssel = (IStructuredSelection) selection;
-									final List l = Arrays.asList(ssel.toArray());
-
-									final WiringDialog wiringDialog = new WiringDialog(
-											v.getControl().getShell());
-
-									wiringDialog.open(l, getEditingDomain(),
-											portProvider);
-								}
-							}
-						}
-					});
-
-					return v;
-				}
-
-				@Override
-				public void dispose() {
-
-					getViewer().removeSelectionChangedListener(swapAction);
-
-					super.dispose();
-				}
-
-			};
-			// cargoPane.createControl(getContainer());
-
-			final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
+			final CargoEVP cargoPane = new CargoEVP(getSite().getPage(),
+					ScenarioEditor.this);
 
 			cargoPane.createControl(getContainer());
-
-			final List<EReference> path = new LinkedList<EReference>();
-
-			path.add(ScenarioPackage.eINSTANCE.getScenario_CargoModel());
-			path.add(CargoPackage.eINSTANCE.getCargoModel_Cargoes());
-
 			cargoPane.setTitle("Cargoes", getTitleImage());
 
-			cargoPane.init(path, adapterFactory);
+			cargoPane.init(getAdapterFactory(),
+					ScenarioPackage.eINSTANCE.getScenario_CargoModel(),
+					CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 
-			{
-				final BasicAttributeManipulator id = new BasicAttributeManipulator(
-						cargoPackage.getCargo_Id(), getEditingDomain());
-				cargoPane.addColumn("ID", id, id);
-			}
-
-			{
-				final EnumAttributeManipulator type = new EnumAttributeManipulator(
-						cargoPackage.getCargo_CargoType(), getEditingDomain());
-				cargoPane.addColumn("Type", type, type);
-			}
-
-			{
-				final SingleReferenceManipulator port = new SingleReferenceManipulator(
-						cargoPackage.getSlot_Port(), portProvider,
-						getEditingDomain());
-				cargoPane.addColumn("Load Port", port, port,
-						cargoPackage.getCargo_LoadSlot());
-			}
-
-			{
-				final DateManipulator date = new DateManipulator(
-						cargoPackage.getSlot_WindowStart(), getEditingDomain());
-				cargoPane.addColumn("Load Date", date, date,
-						cargoPackage.getCargo_LoadSlot());
-			}
-
-			{
-				final SingleReferenceManipulator port = new SingleReferenceManipulator(
-						cargoPackage.getSlot_Contract(), loadContractProvider,
-						getEditingDomain());
-
-				cargoPane.addColumn("Load Contract", port, port,
-						cargoPackage.getCargo_LoadSlot());
-			}
-
-			{
-				final SingleReferenceManipulator port = new SingleReferenceManipulator(
-						cargoPackage.getSlot_Port(), portProvider,
-						getEditingDomain());
-				cargoPane.addColumn("Discharge Port", port, port,
-						cargoPackage.getCargo_DischargeSlot());
-			}
-			{
-				final DateManipulator date = new DateManipulator(
-						cargoPackage.getSlot_WindowStart(), getEditingDomain());
-				cargoPane.addColumn("Discharge Date", date, date,
-						cargoPackage.getCargo_DischargeSlot());
-			}
-
-			{
-				final SingleReferenceManipulator port = new SingleReferenceManipulator(
-						cargoPackage.getSlot_Contract(), loadContractProvider,
-						getEditingDomain());
-				cargoPane.addColumn("Discharge Contract", port, port,
-						cargoPackage.getCargo_DischargeSlot());
-			}
-
-			{
-				final MultipleReferenceManipulator av = new MultipleReferenceManipulator(
-						cargoPackage.getCargo_AllowedVessels(),
-						getEditingDomain(), vesselProvider, namedObjectName);
-				cargoPane.addTypicalColumn("Restrict To", av);
-			}
-
-			{
-				final CargoInitialVesselManipulator civm = new CargoInitialVesselManipulator(
-						getEditingDomain());
-				cargoPane.addTypicalColumn("Initial Vessel", civm);
-			}
-
-			// TODO sort out initial vessel column
 			cargoPane.getViewer().setInput(
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-			// TODO should this really be here?
 			createContextMenuFor(cargoPane.getViewer());
 
 			final int pageIndex = addPage(cargoPane.getControl());
@@ -2261,136 +1758,40 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	private void createPortEditor(
 			final IReferenceValueProvider everyContractProvider,
 			final IReferenceValueProvider marketProvider) {
-		final EObjectEditorViewerPane portsPane = new ScenarioObjectEditorViewerPane(
-				getSite().getPage(), ScenarioEditor.this) {
-
-			// override import and export to do distance matrix along with
-			// ports.
-
-			@Override
-			protected Action createExportAction(final TableViewer viewer,
-					final EMFPath ePath) {
-				final Action exportPortsAction = super.createExportAction(
-						viewer, ePath);
-				final Action exportDistanceModelAction = new ExportCSVAction() {
-					@Override
-					public void run() {
-						exportPortsAction.run();
-						super.run();
-					}
-
-					@Override
-					public List<EObject> getObjectsToExport() {
-						return Collections
-								.singletonList((EObject) getScenario()
-										.getDistanceModel());
-					}
-
-					@Override
-					public EClass getExportEClass() {
-						return PortPackage.eINSTANCE.getDistanceModel();
-					}
-				};
-				return exportDistanceModelAction;
-			}
-
-			@Override
-			protected Action createImportAction(final TableViewer viewer,
-					final EditingDomain editingDomain, final EMFPath ePath) {
-				final ImportCSVAction delegate = (ImportCSVAction) super
-						.createImportAction(viewer, editingDomain, ePath);
-				return new ImportCSVAction() {
-					@Override
-					public void run() {
-						delegate.run();
-						super.run();
-					}
-
-					@Override
-					protected EObject getToplevelObject() {
-						return getScenario();
-					}
-
-					@Override
-					protected EClass getImportClass() {
-						return PortPackage.eINSTANCE.getDistanceModel();
-					}
-
-					@Override
-					public void addObjects(final Collection<EObject> newObjects) {
-						getScenario().setDistanceModel(
-								(DistanceModel) newObjects.iterator().next());
-					}
-				};
-			}
-
-		};
+		final PortEVP portEditor = new PortEVP(getSite().getPage(), this);
 
 		final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
 
-		portsPane.createControl(sash);
+		portEditor.createControl(sash);
 
 		final List<EReference> path = new LinkedList<EReference>();
 
 		path.add(ScenarioPackage.eINSTANCE.getScenario_PortModel());
 		path.add(PortPackage.eINSTANCE.getPortModel_Ports());
 
-		portsPane.setTitle("Ports", getTitleImage());
+		portEditor.setTitle("Ports", getTitleImage());
 
-		portsPane.init(path, adapterFactory);
-		final PortPackage pp = PortPackage.eINSTANCE;
-		{
-			BasicAttributeManipulator manipulator = new BasicAttributeManipulator(
-					namedObjectName, getEditingDomain());
-			portsPane.addColumn("Name", manipulator, manipulator);
-			manipulator = new BasicAttributeManipulator(pp.getPort_TimeZone(),
-					getEditingDomain());
-			portsPane.addColumn("Timezone", manipulator, manipulator);
-
-			final SingleReferenceManipulator mm = new SingleReferenceManipulator(
-					pp.getPort_DefaultIndex(), marketProvider,
-					getEditingDomain());
-
-			portsPane.addColumn("Default Index", mm, mm);
-
-			final SingleReferenceManipulator cm = new SingleReferenceManipulator(
-					pp.getPort_DefaultContract(), everyContractProvider,
-					getEditingDomain());
-
-			portsPane.addColumn("Default Contract", cm, cm);
-
-			portsPane.addTypicalColumn(
-					"Regas Efficiency",
-					new NumericAttributeManipulator(PortPackage.eINSTANCE
-							.getPort_RegasEfficiency(), getEditingDomain()));
-		}
-
-		portsPane.getViewer().setInput(
+		portEditor.init(getAdapterFactory(),
+				ScenarioPackage.eINSTANCE.getScenario_PortModel(),
+				PortPackage.eINSTANCE.getPortModel_Ports());
+		portEditor.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
-		createContextMenuFor(portsPane.getViewer());
+		createContextMenuFor(portEditor.getViewer());
 
-		{
-			final EObjectEditorViewerPane canalEVP = new ScenarioObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this);
+		final NamedObjectEVP canalEVP = new NamedObjectEVP(getSite().getPage(),
+				this);
 
-			canalEVP.createControl(sash);
-			canalEVP.setTitle("Canals", getTitleImage());
+		canalEVP.createControl(sash);
+		canalEVP.setTitle("Canals", getTitleImage());
 
-			final List<EReference> p2 = new LinkedList<EReference>();
+		canalEVP.init(getAdapterFactory(),
+				ScenarioPackage.eINSTANCE.getScenario_CanalModel(),
+				PortPackage.eINSTANCE.getCanalModel_Canals());
 
-			p2.add(ScenarioPackage.eINSTANCE.getScenario_CanalModel());
-			p2.add(PortPackage.eINSTANCE.getCanalModel_Canals());
-
-			canalEVP.init(p2, adapterFactory);
-
-			canalEVP.addTypicalColumn("Name", new BasicAttributeManipulator(
-					namedObjectName, getEditingDomain()));
-
-			canalEVP.getViewer().setInput(getScenario());
-			createContextMenuFor(canalEVP.getViewer());
-		}
+		canalEVP.getViewer().setInput(getScenario());
+		createContextMenuFor(canalEVP.getViewer());
 
 		final int pageIndex = addPage(sash);
 		setPageText(pageIndex, "Ports and Distances");
@@ -2403,200 +1804,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		{
 			final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
 
-			final EObjectEditorViewerPane vcePane = new ScenarioObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this) {
-
-				/**
-				 * Because vessel classes are split into two files we need some
-				 * custom code here to ask the user to select both.
-				 * 
-				 * For now it just displays two open dialogs, one for each file
-				 * and then runs two import sessions. The second import session
-				 * is customized to hook up fuel consumption curves.
-				 */
-				@Override
-				protected Action createImportAction(final TableViewer viewer,
-						final EditingDomain editingDomain, final EMFPath ePath) {
-					final ImportCSVAction delegate = (ImportCSVAction) super
-							.createImportAction(viewer, editingDomain, ePath);
-					return new ImportCSVAction() {
-						@Override
-						public void run() {
-							try {
-								ImportUI.beginImport();
-								final FileDialog dialog = new FileDialog(
-										PlatformUI.getWorkbench()
-												.getActiveWorkbenchWindow()
-												.getShell(), SWT.OPEN);
-
-								dialog.setFilterExtensions(new String[] { "*.csv" });
-								dialog.setText("Select the vessel class file");
-								final String vcFile = dialog.open();
-								if (vcFile == null)
-									return;
-								dialog.setText("Now select the fuel curves file");
-								final String fcFile = dialog.open();
-								if (fcFile == null)
-									return;
-
-								final ArrayList<DeferredReference> defer = new ArrayList<DeferredReference>();
-								final NamedObjectRegistry reg = new NamedObjectRegistry();
-								reg.addEObjects((EObject) viewer.getInput());
-
-								final EObjectImporter vci = EObjectImporterFactory
-										.getInstance().getImporter(
-												FleetPackage.eINSTANCE
-														.getVesselClass());
-
-								final CSVReader reader = new CSVReader(vcFile);
-								final Collection<EObject> vesselClasses = vci
-										.importObjects(reader, defer, reg);
-
-								// register new objects
-								for (final EObject object : vesselClasses) {
-									reg.addEObject(object);
-								}
-								// add stuff to scenario and re-register names
-
-								final EObjectImporter fcImporter = EObjectImporterFactory
-										.getInstance()
-										.getImporter(
-												FleetPackage.eINSTANCE
-														.getFuelConsumptionLine());
-
-								final CSVReader reader2 = new CSVReader(fcFile);
-								fcImporter.importObjects(reader2, defer, reg);
-
-								for (final DeferredReference r : defer) {
-									r.setRegistry(reg.getContents());
-									r.run();
-								}
-
-								for (final EObject object : vesselClasses) {
-									Postprocessor.getInstance().postprocess(
-											object);
-								}
-
-								delegate.addObjects(vesselClasses);
-								ImportUI.endImport();
-							} catch (final IOException ex) {
-								ImportUI.endImport();
-							}
-						}
-
-						/*
-						 * Because I've over-ridden the run method up there,
-						 * these methods can safely return null.
-						 */
-
-						@Override
-						protected EObject getToplevelObject() {
-							return null;
-						}
-
-						@Override
-						public void addObjects(
-								final Collection<EObject> newObjects) {
-
-						}
-
-						@Override
-						protected EClass getImportClass() {
-							return null;
-						}
-					};
-				}
-			};
+			final VesselClassEVP vcePane = new VesselClassEVP(getSite()
+					.getPage(), this);
 
 			vcePane.createControl(sash);
 
-			final List<EReference> path2 = new LinkedList<EReference>();
-
-			path2.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
-			path2.add(FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
-
-			vcePane.init(path2, adapterFactory);
-			{
-				final BasicAttributeManipulator name = new BasicAttributeManipulator(
-						namedObjectName, getEditingDomain());
-				vcePane.addColumn("Name", name, name);
-			}
-			{
-				final BasicAttributeManipulator capacity = new NumericAttributeManipulator(
-						FleetPackage.eINSTANCE.getVesselClass_Capacity(),
-						getEditingDomain());
-				vcePane.addColumn("Capacity", capacity, capacity);
-			}
-
-			{
-				final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(
-						FleetPackage.eINSTANCE
-								.getVesselClass_InaccessiblePorts(),
-						getEditingDomain(), portProvider, namedObjectName);
-				vcePane.addColumn("Inaccessible Ports", capacity, capacity);
-			}
-
-			{
-				final DialogFeatureManipulator laden = new DialogFeatureManipulator(
-						FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(),
-						getEditingDomain()) {
-					@Override
-					protected String renderValue(final Object object) {
-						final VesselStateAttributes a = (VesselStateAttributes) object;
-						if (a == null)
-							return "";
-						return "NBO: " + a.getNboRate() + " Idle NBO: "
-								+ a.getIdleNBORate() + " Idle Base:"
-								+ a.getIdleConsumptionRate();
-					}
-
-					@Override
-					protected Object openDialogBox(
-							final Control cellEditorWindow, final Object object) {
-						final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
-								cellEditorWindow.getShell(),
-								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-										| SWT.APPLICATION_MODAL);
-
-						return dlg
-								.open((VesselStateAttributes) getValue(object));
-					}
-
-				};
-				vcePane.addColumn("Laden Fuel Usage", laden, laden);
-			}
-
-			{
-				final DialogFeatureManipulator laden = new DialogFeatureManipulator(
-						FleetPackage.eINSTANCE
-								.getVesselClass_BallastAttributes(),
-						getEditingDomain()) {
-
-					@Override
-					protected Object openDialogBox(
-							final Control cellEditorWindow, final Object object) {
-						final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
-								cellEditorWindow.getShell(),
-								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-										| SWT.APPLICATION_MODAL);
-
-						return dlg
-								.open((VesselStateAttributes) getValue(object));
-					}
-
-					@Override
-					protected String renderValue(final Object object) {
-						final VesselStateAttributes a = (VesselStateAttributes) object;
-						if (a == null)
-							return "";
-						return "NBO: " + a.getNboRate() + " Idle NBO: "
-								+ a.getIdleNBORate() + " Idle Base:"
-								+ a.getIdleConsumptionRate();
-					}
-
-				};
-				vcePane.addColumn("Ballast Fuel Usage", laden, laden);
-			}
+			vcePane.init(getAdapterFactory(),
+					ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
+					FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
 
 			vcePane.getViewer().setInput(
 					editingDomain.getResourceSet().getResources().get(0)
@@ -2606,109 +1821,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			createContextMenuFor(vcePane.getViewer());
 
-			final EObjectEditorViewerPane fleetPane = new ScenarioObjectEditorViewerPane(
-					getSite().getPage(), ScenarioEditor.this);
+			final VesselEVP fleetPane = new VesselEVP(getSite().getPage(), this);
 
 			fleetPane.createControl(sash);
-			// fleetPane.getControl().setLayoutData(new GridData(SWT.FILL,
-			// SWT.FILL, true, true));
 
-			final List<EReference> path = new LinkedList<EReference>();
-
-			path.add(ScenarioPackage.eINSTANCE.getScenario_FleetModel());
-			path.add(FleetPackage.eINSTANCE.getFleetModel_Fleet());
-
-			fleetPane.init(path, adapterFactory);
-			{
-				final BasicAttributeManipulator name = new BasicAttributeManipulator(
-						namedObjectName, getEditingDomain());
-				fleetPane.addColumn("Name", name, name);
-			}
-
-			{
-				final SingleReferenceManipulator vclass = new SingleReferenceManipulator(
-						FleetPackage.eINSTANCE.getVessel_Class(),
-						vesselClassProvider, getEditingDomain());
-				fleetPane.addColumn("Class", vclass, vclass);
-			}
-
-			{
-				class RequirementFeatureManipulator extends
-						DialogFeatureManipulator {
-
-					public RequirementFeatureManipulator(
-							final EStructuralFeature field,
-							final EditingDomain editingDomain) {
-						super(field, editingDomain);
-					}
-
-					@Override
-					protected String renderValue(final Object value) {
-						final PortAndTime pat = (PortAndTime) value;
-						if (pat == null) {
-							return "No constraint";
-						}
-
-						final String port;
-						final String startTime;
-						final String endTime;
-
-						final TimeZone zone;
-						if (pat.isSetPort()) {
-							port = pat.getPort().getName();
-							zone = TimeZone.getTimeZone(pat.getPort()
-									.getTimeZone());
-						} else {
-							zone = TimeZone.getTimeZone("GMT");
-							port = "Anywhere";
-						}
-
-						final DateFormat df = DateFormat.getDateTimeInstance(
-								DateFormat.SHORT, DateFormat.SHORT);
-						df.setTimeZone(zone);
-
-						if (pat.isSetStartTime()) {
-							startTime = df.format(pat.getStartTime());
-						} else {
-							startTime = "any time";
-						}
-
-						if (pat.isSetEndTime()) {
-							endTime = df.format(pat.getEndTime());
-						} else {
-							endTime = "any time";
-						}
-
-						return port + " from " + startTime + " to " + endTime;
-					}
-
-					@Override
-					protected Object openDialogBox(
-							final Control cellEditorWindow, final Object object) {
-						final PortAndTimeDialog patDialog = new PortAndTimeDialog(
-								cellEditorWindow.getShell(),
-								(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-										| SWT.APPLICATION_MODAL);
-
-						return patDialog.open((PortAndTime) getValue(object));
-					}
-				}
-				final DialogFeatureManipulator startRequirement = new RequirementFeatureManipulator(
-						FleetPackage.eINSTANCE.getVessel_StartRequirement(),
-						getEditingDomain());
-
-				fleetPane.addColumn("Start constraint", startRequirement,
-						startRequirement);
-
-				final DialogFeatureManipulator endRequirement = new RequirementFeatureManipulator(
-						FleetPackage.eINSTANCE.getVessel_EndRequirement(),
-						getEditingDomain());
-
-				fleetPane.addColumn("End constraint", endRequirement,
-						endRequirement);
-			}
-
-			// TODO add other desired vessel columns here
+			fleetPane.init(getAdapterFactory(),
+					ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
+					FleetPackage.eINSTANCE.getFleetModel_Fleet());
 
 			fleetPane.setTitle("Vessels", getTitleImage());
 
@@ -2719,8 +1838,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			createContextMenuFor(fleetPane.getViewer());
 
 			final int pageIndex = addPage(sash);
-			setPageText(pageIndex, "Fleet"); // TODO localize this
-			// string or whatever
+			setPageText(pageIndex, "Fleet");
 		}
 	}
 
@@ -2914,7 +2032,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @param page
 	 */
-	private void setupDetailViewContainer(final IDetailViewContainer page) {
+	public void setupDetailViewContainer(final IDetailViewContainer page) {
 		page.addDefaultEditorFactories();
 
 		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
@@ -3462,5 +2580,53 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	protected boolean showOutlineView() {
 		return true;
+	}
+
+	/**
+	 * Get the contract provider in this scenario editor.
+	 * 
+	 * @return
+	 */
+	public IReferenceValueProvider getContractProvider() {
+		return contractProvider;
+	}
+
+	/**
+	 * Get the index provider for this scenario editor
+	 * 
+	 * @return
+	 */
+	public IReferenceValueProvider getIndexProvider() {
+		return indexProvider;
+	}
+
+	/**
+	 * Get the vessel class provider for this scenario editor.
+	 * 
+	 * @return
+	 */
+	public IReferenceValueProvider getVesselClassProvider() {
+		return vesselClassProvider;
+	}
+
+	/**
+	 * @return
+	 */
+	public IReferenceValueProvider getPortProvider() {
+		return portProvider;
+	}
+
+	/**
+	 * @return
+	 */
+	public IReferenceValueProvider getVesselProvider() {
+		return vesselProvider;
+	}
+
+	/**
+	 * @return
+	 */
+	public IReferenceValueProvider getEntityProvider() {
+		return entityProvider;
 	}
 }
