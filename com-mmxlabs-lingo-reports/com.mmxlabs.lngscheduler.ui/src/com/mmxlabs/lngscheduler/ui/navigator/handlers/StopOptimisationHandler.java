@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.rcp.navigator.handlers;
+package com.mmxlabs.lngscheduler.ui.navigator.handlers;
 
 import java.util.Iterator;
 

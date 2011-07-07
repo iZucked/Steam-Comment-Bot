@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.rcp.navigator.scenario;
+package com.mmxlabs.lngscheduler.ui.navigator.scenario;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import org.eclipse.ui.navigator.ICommonLabelProvider;
 
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.rcp.navigator.Activator;
+import com.mmxlabs.lngscheduler.ui.Activator;
 
 public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 		ICommonLabelProvider, ITableLabelProvider {

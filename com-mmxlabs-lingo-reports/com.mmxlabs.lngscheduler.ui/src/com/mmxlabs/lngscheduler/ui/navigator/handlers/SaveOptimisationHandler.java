@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.rcp.navigator.handlers;
+package com.mmxlabs.lngscheduler.ui.navigator.handlers;
 
 import java.io.IOException;
 import java.util.Date;
@@ -32,7 +32,7 @@ import scenario.Scenario;
 
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.

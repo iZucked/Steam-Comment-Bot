@@ -13,7 +13,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -25,8 +24,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 
-import scenario.Scenario;
-
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
@@ -34,7 +31,6 @@ import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.impl.DisposeOnRemoveListener;
 import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
-import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 
 public class TheNavigator extends CommonNavigator {
@@ -130,82 +126,40 @@ public class TheNavigator extends CommonNavigator {
 			@Override
 			public void handleEvent(final Event event) {
 
-				// Without SWT.CHECK style?
-				if (event.item instanceof Button && event.item.getData() instanceof IResource) {
-					final IResource resource = (IResource) event.item.getData();
-					if (resource == null) {
-						return;
-					}
-					final Button button = (Button) event.item;
-
-					// Set selection status
-					final IJobManager jobManager = Activator.getDefault().getJobManager();
-
-					if (jobManager.findJobForResource(resource) == null) {
-						final Scenario scenario = (Scenario) resource.getAdapter(Scenario.class);
-
-						if (scenario == null) {
-							return;
-						}
-
-						String name = resource.getName();
-
-						final String fileExtension = resource.getFileExtension();
-						if (fileExtension != null) {
-							name = name.replaceAll("." + fileExtension, "");
-						}
-						scenario.setName(name);
-
-						final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
-						jobManager.addJob(j, resource);
-					}
-					jobManager.setResourceSelection(resource, button.getSelection());
-				}
-
-				else if (event.item instanceof TreeItem) {
+				if (event.item instanceof TreeItem) {
 					final TreeItem ti = (TreeItem) event.item;
 					if (ti.getData() instanceof IResource) {
 
+						// Get the resource
 						final IResource resource = (IResource) event.item.getData();
-
+						// Check it exists
 						if (resource == null) {
 							return;
 						}
 
-						final Scenario scenario = (Scenario) resource.getAdapter(Scenario.class);
-
-						if (scenario == null) {
-							// Only allow resources with a scenario to be
-							// checked
-							ti.setChecked(false);
-							return;
-						}
-
-						String name = resource.getName();
-
-						final String fileExtension = resource.getFileExtension();
-						if (fileExtension != null) {
-							name = name.replaceAll("." + fileExtension, "");
-						}
-						scenario.setName(name);
-
-						// Set selection status
+						// Get current job manager
 						final IJobManager jobManager = Activator.getDefault().getJobManager();
-
-						// If checked, then ensure we have a job
+						// If checked, we may need to create a job
 						if (ti.getChecked() && jobManager.findJobForResource(resource) == null) {
 
-							// FIXME:  This should not be here - perhaps as an adapter factory?
-							
-							// Create a job, but do not prepare it for fast
-							// viewing.
-							final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
-
-							jobManager.addJobManagerListener(new DisposeOnRemoveListener(j));
-
-							jobManager.addJob(j, resource);
+							// Adapt to a new or existing job
+							final IManagedJob job = (IManagedJob) resource.getAdapter(IManagedJob.class);
+							// No job - then unable to adapt or wrong type of resource
+							if (job == null) {
+								// Only allow resources with a scenario to be
+								// checked
+								ti.setChecked(false);
+								return;
+							}
+							// If the job does not already exist - it may do perhaps due to a race condition as did not exist when we started this code branch - then register it
+							if (!jobManager.getSelectedJobs().contains(job)) {
+								// Clean up when job is removed from manager
+								jobManager.addJobManagerListener(new DisposeOnRemoveListener(job));
+								jobManager.addJob(job, resource);
+							}
 						}
 
+						// Set selection status
 						jobManager.setResourceSelection(resource, ti.getChecked());
 					}
 				}

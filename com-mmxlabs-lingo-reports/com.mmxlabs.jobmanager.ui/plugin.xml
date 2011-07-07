@@ -28,43 +28,5 @@
             file="contexts.xml">
       </contexts>
    </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <category
-            id="com.mmxlabs.jobmanager.ui.commands.category"
-            name="Optimisation Commands">
-      </category>
-      <command
-            categoryId="com.mmxlabs.jobmanager.ui.commands.category"
-            id="com.mmxlabs.jobmanager.ui.commands.exportTrace"
-            name="Export Fitness Trace">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-       <handler
-            class="com.mmxlabs.jobmanager.ui.handlers.ScheduleFitnessExportHandler"
-            commandId="com.mmxlabs.jobmanager.ui.commands.exportTrace">
-      </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="com.mmxlabs.jobmanager.ui.menus.sampleMenu"
-               label="Optimisation"
-               mnemonic="M">
-            
-            <command
-                  commandId="com.mmxlabs.jobmanager.ui.commands.exportTrace"
-                  id="com.mmxlabs.jobmanager.ui.menus.exportTrace"
-                  mnemonic="E">
-            </command>
-         </menu>
-      </menuContribution>
-      
-      
-   </extension>
 
 </plugin>

@@ -8,13 +8,13 @@ import scenario.Scenario;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
 import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
 import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;

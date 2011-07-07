@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.rcp.navigator.handlers;
+package com.mmxlabs.lngscheduler.ui.navigator.handlers;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -30,7 +29,7 @@ import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -48,15 +47,14 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 	}
 
 	/**
-	 * the command has been executed, so extract extract the needed information
-	 * from the application context.
+	 * the command has been executed, so extract extract the needed information from the application context.
 	 */
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final ISelection selection = HandlerUtil
-				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-		
+		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
+		final IJobManager jobManager = Activator.getDefault().getJobManager();
+
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
@@ -66,14 +64,13 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
-					final Scenario scenario = (Scenario) resource
-							.getAdapter(Scenario.class);
+					final Scenario scenario = (Scenario) resource.getAdapter(Scenario.class);
 
+					// Need a scenario to start an optimisation
 					if (scenario == null) {
 						return false;
 					}
 
-					final IJobManager jobManager = Activator.getDefault().getJobManager();
 					final IManagedJob existingJob = jobManager.findJobForResource(resource);
 
 					if (existingJob == null || existingJob.getJobState() == JobState.CREATED) {
@@ -82,14 +79,11 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 					} else {
 						return false;
 					}
-					
-					final WorkspaceJob job = new WorkspaceJob(
-							"Evaluate Scenario") {
+
+					final WorkspaceJob job = new WorkspaceJob("Evaluate Scenario") {
 
 						@Override
-						public IStatus runInWorkspace(
-								final IProgressMonitor monitor)
-								throws CoreException {
+						public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 
 							monitor.beginTask("Evaluate Scenario", 5);
 							LNGSchedulerJob newJob = null;
@@ -98,8 +92,8 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 								newJob.prepare();
 
 								final Scenario newS = newJob.getScenario();
-							
-								// Process scenario - prune out intermediate schedules .... 
+
+								// Process scenario - prune out intermediate schedules ....
 								int numSchedules = newS.getScheduleModel().getSchedules().size();
 								while (numSchedules > 1) {
 									newS.getScheduleModel().getSchedules().remove(0);
@@ -110,7 +104,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 									newS.getOptimisation().getCurrentSettings().setInitialSchedule(newS.getScheduleModel().getSchedules().get(0));
 								} else {
 									// TODO: Necessary?
-//									newS.getOptimisation().getCurrentSettings().setInitialSchedule(null);
+									// newS.getOptimisation().getCurrentSettings().setInitialSchedule(null);
 								}
 
 								// Create new resource using original scenario URI
@@ -123,8 +117,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 									e.printStackTrace();
 								}
 
-								resource.refreshLocal(IResource.DEPTH_ONE,
-										new SubProgressMonitor(monitor, 1));
+								resource.refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
 							} finally {
 								monitor.done();
 								if (newJob != null) {
@@ -161,9 +154,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 			return false;
 		}
 
-		final ISelection selection = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getSelectionService()
-				.getSelection();
+		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
@@ -177,16 +168,14 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
-					final Scenario s = (Scenario) resource
-							.getAdapter(Scenario.class);
+					final Scenario s = (Scenario) resource.getAdapter(Scenario.class);
 
 					// Need a scenario to start an optimisation
 					if (s == null) {
 						return false;
 					}
 
-					final IManagedJob job = Activator.getDefault()
-							.getJobManager().findJobForResource(resource);
+					final IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
 
 					if (job == null || job.getJobState() == JobState.CREATED) {
 						return true;

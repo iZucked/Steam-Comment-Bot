@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.rcp.navigator.scenario;
+package com.mmxlabs.lngscheduler.ui.navigator.scenario;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;

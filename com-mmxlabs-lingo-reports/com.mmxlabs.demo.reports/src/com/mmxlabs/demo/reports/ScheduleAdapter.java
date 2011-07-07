@@ -23,8 +23,7 @@ import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
-import com.mmxlabs.jobmanager.ui.Activator;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
 
 public class ScheduleAdapter {
 

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.rcp.navigator.scenario;
+package com.mmxlabs.lngscheduler.ui.navigator.scenario;
 
 import java.util.Collections;
 
@@ -15,7 +15,7 @@ import scenario.schedule.ScheduleModel;
 
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.impl.LNGSchedulerJob;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
 import com.mmxlabs.rcp.common.ecore.EcoreContentProvider;
 
 /**
