@@ -55,6 +55,7 @@ import org.eclipse.ui.menus.IMenuService;
  * point (rebase on version in history?)
  * 
  */
+@SuppressWarnings("restriction")
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	private final IWorkbenchWindow window;
@@ -939,6 +940,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Creates actions (and contribution items) for the menu bar, toolbar and
 	 * status line.
 	 */
+	@SuppressWarnings("restriction")
 	@Override
 	protected void makeActions(final IWorkbenchWindow window) {
 

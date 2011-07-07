@@ -337,6 +337,7 @@ public class AnnotatedSolutionExporter {
 							.getIndex().getPriceCurve()
 							.getValueAtDate(allocation.getDischargeDate());
 				} else {
+					// FIXME: for P&L opt - DES cargoes will have a purchase contract (probably based on a price curve) & possibly a fixed price & quantity
 					System.err
 							.println("A DES load slot should not have a "
 									+ purchaseContract.eClass().getName()

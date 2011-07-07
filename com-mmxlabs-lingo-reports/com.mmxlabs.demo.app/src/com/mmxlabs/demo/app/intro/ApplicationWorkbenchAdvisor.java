@@ -37,6 +37,7 @@ import org.osgi.framework.Bundle;
 
 import com.mmxlabs.demo.app.Activator;
 
+@SuppressWarnings("restriction")
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private static final String PERSPECTIVE_ID = "com.mmxlabs.demo.app.perspective.editing";

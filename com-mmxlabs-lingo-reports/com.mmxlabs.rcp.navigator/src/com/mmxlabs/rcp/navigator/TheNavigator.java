@@ -50,8 +50,7 @@ public class TheNavigator extends CommonNavigator {
 		 * @param res
 		 * @param check
 		 */
-		private void checkItems(final TreeItem item, final IResource res,
-				final boolean check) {
+		private void checkItems(final TreeItem item, final IResource res, final boolean check) {
 
 			// See if we have a match
 			if (item.getData() instanceof IResource) {
@@ -68,21 +67,17 @@ public class TheNavigator extends CommonNavigator {
 		}
 
 		@Override
-		public void jobSelected(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
+		public void jobSelected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
 
-			final TreeItem[] items = TheNavigator.this.getCommonViewer()
-					.getTree().getItems();
+			final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
 			for (final TreeItem i : items) {
 				checkItems(i, resource, true);
 			}
 		}
 
 		@Override
-		public void jobDeselected(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
-			final TreeItem[] items = TheNavigator.this.getCommonViewer()
-					.getTree().getItems();
+		public void jobDeselected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+			final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
 			for (final TreeItem i : items) {
 				checkItems(i, resource, false);
 			}
@@ -91,8 +86,7 @@ public class TheNavigator extends CommonNavigator {
 
 	@Override
 	protected CommonViewer createCommonViewerObject(final Composite aParent) {
-		return new CommonViewer(getViewSite().getId(), aParent, SWT.MULTI
-				| SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
+		return new CommonViewer(getViewSite().getId(), aParent, SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
 	}
 
 	@Override
@@ -137,8 +131,7 @@ public class TheNavigator extends CommonNavigator {
 			public void handleEvent(final Event event) {
 
 				// Without SWT.CHECK style?
-				if (event.item instanceof Button
-						&& event.item.getData() instanceof IResource) {
+				if (event.item instanceof Button && event.item.getData() instanceof IResource) {
 					final IResource resource = (IResource) event.item.getData();
 					if (resource == null) {
 						return;
@@ -146,12 +139,10 @@ public class TheNavigator extends CommonNavigator {
 					final Button button = (Button) event.item;
 
 					// Set selection status
-					final IJobManager jobManager = Activator.getDefault()
-							.getJobManager();
+					final IJobManager jobManager = Activator.getDefault().getJobManager();
 
 					if (jobManager.findJobForResource(resource) == null) {
-						final Scenario scenario = (Scenario) resource
-								.getAdapter(Scenario.class);
+						final Scenario scenario = (Scenario) resource.getAdapter(Scenario.class);
 
 						if (scenario == null) {
 							return;
@@ -159,8 +150,7 @@ public class TheNavigator extends CommonNavigator {
 
 						String name = resource.getName();
 
-						final String fileExtension = resource
-								.getFileExtension();
+						final String fileExtension = resource.getFileExtension();
 						if (fileExtension != null) {
 							name = name.replaceAll("." + fileExtension, "");
 						}
@@ -169,23 +159,20 @@ public class TheNavigator extends CommonNavigator {
 						final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
 						jobManager.addJob(j, resource);
 					}
-					jobManager.setResourceSelection(resource,
-							button.getSelection());
+					jobManager.setResourceSelection(resource, button.getSelection());
 				}
 
 				else if (event.item instanceof TreeItem) {
 					final TreeItem ti = (TreeItem) event.item;
 					if (ti.getData() instanceof IResource) {
 
-						final IResource resource = (IResource) event.item
-								.getData();
+						final IResource resource = (IResource) event.item.getData();
 
 						if (resource == null) {
 							return;
 						}
 
-						final Scenario scenario = (Scenario) resource
-								.getAdapter(Scenario.class);
+						final Scenario scenario = (Scenario) resource.getAdapter(Scenario.class);
 
 						if (scenario == null) {
 							// Only allow resources with a scenario to be
@@ -196,42 +183,36 @@ public class TheNavigator extends CommonNavigator {
 
 						String name = resource.getName();
 
-						final String fileExtension = resource
-								.getFileExtension();
+						final String fileExtension = resource.getFileExtension();
 						if (fileExtension != null) {
 							name = name.replaceAll("." + fileExtension, "");
 						}
 						scenario.setName(name);
 
 						// Set selection status
-						final IJobManager jobManager = Activator.getDefault()
-								.getJobManager();
+						final IJobManager jobManager = Activator.getDefault().getJobManager();
 
 						// If checked, then ensure we have a job
-						if (ti.getChecked()
-								&& jobManager.findJobForResource(resource) == null) {
+						if (ti.getChecked() && jobManager.findJobForResource(resource) == null) {
 
+							// FIXME:  This should not be here - perhaps as an adapter factory?
+							
 							// Create a job, but do not prepare it for fast
 							// viewing.
-							final LNGSchedulerJob j = new LNGSchedulerJob(
-									scenario);
+							final LNGSchedulerJob j = new LNGSchedulerJob(scenario);
 
-							jobManager
-									.addJobManagerListener(new DisposeOnRemoveListener(
-											j));
+							jobManager.addJobManagerListener(new DisposeOnRemoveListener(j));
 
 							jobManager.addJob(j, resource);
 						}
 
-						jobManager.setResourceSelection(resource,
-								ti.getChecked());
+						jobManager.setResourceSelection(resource, ti.getChecked());
 					}
 				}
 			}
 		});
 
-		Activator.getDefault().getJobManager()
-				.addJobManagerListener(jobManagerListener);
+		Activator.getDefault().getJobManager().addJobManagerListener(jobManagerListener);
 
 		final IActionBars bars = getViewSite().getActionBars();
 		// Add pack columns action
@@ -246,8 +227,7 @@ public class TheNavigator extends CommonNavigator {
 	@Override
 	public void dispose() {
 
-		Activator.getDefault().getJobManager()
-				.removeJobManagerListener(jobManagerListener);
+		Activator.getDefault().getJobManager().removeJobManagerListener(jobManagerListener);
 
 		resourceListener.dispose();
 
@@ -255,18 +235,15 @@ public class TheNavigator extends CommonNavigator {
 	}
 
 	/**
-	 * {@link IResourceChangeListener} implementation to remove jobs in the
-	 * CREATED state on filesystem changes.
+	 * {@link IResourceChangeListener} implementation to remove jobs in the CREATED state on filesystem changes.
 	 * 
 	 * @author Simon Goodall
 	 * 
 	 */
-	private static class ResourceListener implements IResourceChangeListener,
-			IResourceDeltaVisitor {
+	private static class ResourceListener implements IResourceChangeListener, IResourceDeltaVisitor {
 
 		public ResourceListener() {
-			ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
-					IResourceChangeEvent.POST_CHANGE);
+			ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 		}
 
 		public void dispose() {
@@ -288,51 +265,31 @@ public class TheNavigator extends CommonNavigator {
 		public boolean visit(final IResourceDelta delta) throws CoreException {
 			final IResource changedResource = delta.getResource();
 
-			if (changedResource.getType() == IResource.FILE
-					&& changedResource.getFileExtension().equals("scenario")) {
-				// try {
+			if (changedResource.getType() == IResource.FILE) {
 
-				// final String path = ((IFile) changedResource).getFullPath()
-				// .toString();
-				// final URI uri = URI.createPlatformResourceURI(path, true);
-				// final Resource res = resourceSet.getResource(uri, false);
-				// if (res != null) {
-				// res.unload();
-				// // Only load resource if not removed
-				// if ((delta.getKind() & IResourceDelta.REMOVED) == 0) {
-				// res.load(resourceSet.getLoadOptions());
-				// }
-				// }
-
-//				boolean reselect = false;
-				final IJobManager jobManager = Activator.getDefault()
-						.getJobManager();
-				{
+				final IJobManager jobManager = Activator.getDefault().getJobManager();
+				if (jobManager != null) {
 					// If checked, then ensure we have a job
-					final IManagedJob oldJ = jobManager
-							.findJobForResource(changedResource);
+					final IManagedJob oldJ = jobManager.findJobForResource(changedResource);
 					if (oldJ == null) {
 						return false;
 					}
+
 					if (oldJ.getJobState() != JobState.CREATED) {
 						return false;
 					}
-//					reselect = jobManager.getSelectedJobs().contains(oldJ);
+
 					Display.getDefault().asyncExec(new Runnable() {
 
 						@Override
 						public void run() {
 							jobManager.removeJob(oldJ);
-
 						}
 					});
-
 				}
 				return false;
 			}
 			return true;
 		}
-
 	}
-
 }

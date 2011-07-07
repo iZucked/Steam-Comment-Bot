@@ -303,7 +303,12 @@
             </adapter>
             -->
          </factory>
+         <factory
+               adaptableType="org.eclipse.core.resources.IResource"
+               class="com.mmxlabs.rcp.navigator.scenario.LNGManagedJobAdapterFactory">
+            <adapter
+                  type="com.mmxlabs.jobcontroller.core.IManagedJob">
+            </adapter>
+         </factory>
       </extension>
-   
-
 </plugin>

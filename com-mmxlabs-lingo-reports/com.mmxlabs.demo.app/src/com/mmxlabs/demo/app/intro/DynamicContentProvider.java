@@ -32,7 +32,7 @@ public class DynamicContentProvider implements IIntroXHTMLContentProvider {
 	public void createContent(String id, Composite parent, FormToolkit toolkit) {
     }
 
-    private String getCurrentTimeString() {
+    private static String getCurrentTimeString() {
         StringBuffer content = new StringBuffer(
                 "Dynamic content from Intro ContentProvider: ");
         content.append("Current time is: ");
