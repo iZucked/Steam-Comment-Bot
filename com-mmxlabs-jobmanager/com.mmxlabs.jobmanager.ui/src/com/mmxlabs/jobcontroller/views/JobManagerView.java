@@ -4,39 +4,51 @@
  */
 package com.mmxlabs.jobcontroller.views;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.DropTargetListener;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.jobcontroller.core.IJobManager;
@@ -44,21 +56,16 @@ import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
+import com.mmxlabs.jobcontroller.core.impl.DisposeOnRemoveListener;
 import com.mmxlabs.jobmanager.ui.Activator;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
- * This sample class demonstrates how to plug-in a new workbench view. The view
- * shows data obtained from the model. The sample creates a dummy model on the
- * fly, but a real implementation would connect to the model available either in
- * this or another plug-in (e.g. the workspace). The view is connected to the
- * model using a content provider.
+ * This sample class demonstrates how to plug-in a new workbench view. The view shows data obtained from the model. The sample creates a dummy model on the fly, but a real implementation would connect
+ * to the model available either in this or another plug-in (e.g. the workspace). The view is connected to the model using a content provider.
  * <p>
- * The view uses a label provider to define how model objects should be
- * presented in the view. Each view can present the same model objects using
- * different labels and icons, if needed. Alternatively, a single label provider
- * can be shared between views in order to ensure that objects of the same type
- * are presented in the same way everywhere.
+ * The view uses a label provider to define how model objects should be presented in the view. Each view can present the same model objects using different labels and icons, if needed. Alternatively,
+ * a single label provider can be shared between views in order to ensure that objects of the same type are presented in the same way everywhere.
  * <p>
  */
 
@@ -82,8 +89,7 @@ public class JobManagerView extends ViewPart {
 	private final IJobManagerListener jobManagerListener = new IJobManagerListener() {
 
 		@Override
-		public void jobRemoved(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
+		public void jobRemoved(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
 
 			job.removeListener(jobListener);
 
@@ -91,8 +97,7 @@ public class JobManagerView extends ViewPart {
 		}
 
 		@Override
-		public void jobAdded(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
+		public void jobAdded(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
 
 			job.addListener(jobListener);
 
@@ -100,61 +105,26 @@ public class JobManagerView extends ViewPart {
 		}
 
 		@Override
-		public void jobSelected(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
+		public void jobSelected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
 
 			JobManagerView.this.refresh();
 		}
 
 		@Override
-		public void jobDeselected(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
+		public void jobDeselected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
 
 			JobManagerView.this.refresh();
 		}
 	};
 
-	private final IJobManager jobManager = Activator.getDefault()
-			.getJobManager();
+	private final IJobManager jobManager = Activator.getDefault().getJobManager();
 
 	public void addJob(final IManagedJob theJob, final IResource resource) {
 		theJob.prepare();
 		jobManager.addJob(theJob, resource);
 	}
 
-	/*
-	 * The content provider class is responsible for providing objects to the
-	 * view. It can wrap existing objects in adapters or simply return objects
-	 * as-is. These objects may be sensitive to the current input of the view,
-	 * or ignore it and always show the same content (like Task List, for
-	 * example).
-	 */
-
-	static class ViewContentProvider implements IStructuredContentProvider {
-		@Override
-		public void inputChanged(final Viewer v, final Object oldInput,
-				final Object newInput) {
-		}
-
-		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public Object[] getElements(final Object parent) {
-
-			if (parent instanceof List<?>) {
-				final List<IManagedJob> jobs = (List) parent;
-
-				return jobs.toArray();
-			}
-
-			return null;
-		}
-	}
-
-	class ViewLabelProvider extends LabelProvider implements
-			ITableLabelProvider {
+	private class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		private final Map<Object, Image> imageCache = new HashMap<Object, Image>();
 
@@ -220,38 +190,29 @@ public class JobManagerView extends ViewPart {
 
 				switch (state) {
 				case CANCELLED:
-					return getSite().getShell().getDisplay()
-							.getSystemImage(SWT.ICON_ERROR);
+					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_ERROR);
 				case CANCELLING:
-					return getSite().getShell().getDisplay()
-							.getSystemImage(SWT.ICON_ERROR);
+					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_ERROR);
 				case COMPLETED:
-					desc = Activator
-							.getImageDescriptor("/icons/elcl16/terminate_co.gif");
+					desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
 					break;
 				case INITIALISED:
-					desc = Activator
-							.getImageDescriptor("/icons/elcl16/terminate_co.gif");
+					desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
 					break;
 				case PAUSED:
-					desc = Activator
-							.getImageDescriptor("/icons/elcl16/suspend_co.gif");
+					desc = Activator.getImageDescriptor("/icons/elcl16/suspend_co.gif");
 					break;
 				case PAUSING:
-					desc = Activator
-							.getImageDescriptor("/icons/dlcl16/suspend_co.gif");
+					desc = Activator.getImageDescriptor("/icons/dlcl16/suspend_co.gif");
 					break;
 				case RESUMING:
-					desc = Activator
-							.getImageDescriptor("/icons/dlcl16/resume_co.gif");
+					desc = Activator.getImageDescriptor("/icons/dlcl16/resume_co.gif");
 					break;
 				case RUNNING:
-					desc = Activator
-							.getImageDescriptor("/icons/elcl16/resume_co.gif");
+					desc = Activator.getImageDescriptor("/icons/elcl16/resume_co.gif");
 					break;
 				case UNKNOWN:
-					return getSite().getShell().getDisplay()
-							.getSystemImage(SWT.ICON_WARNING);
+					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_WARNING);
 				}
 			} else {
 				desc = Activator.getImageDescriptor(key.toString());
@@ -290,8 +251,7 @@ public class JobManagerView extends ViewPart {
 
 	private final IManagedJobListener jobListener = new IManagedJobListener() {
 		@Override
-		public boolean jobStateChanged(final IManagedJob job,
-				final JobState oldState, final JobState newState) {
+		public boolean jobStateChanged(final IManagedJob job, final JobState oldState, final JobState newState) {
 			JobManagerView.this.refresh();
 			switch (newState) {
 			case PAUSED:
@@ -311,23 +271,113 @@ public class JobManagerView extends ViewPart {
 		}
 
 		@Override
-		public boolean jobProgressUpdated(final IManagedJob job,
-				final int progressDelta) {
+		public boolean jobProgressUpdated(final IManagedJob job, final int progressDelta) {
 			JobManagerView.this.refresh();
 			return true;
 		}
 	};
 
+	private final DropTargetListener dropTargetListener = new DropTargetAdapter() {
+
+		@Override
+		public void dragOver(final DropTargetEvent event) {
+			// always indicate a copy
+			event.detail = DND.DROP_COPY;
+			event.feedback = DND.FEEDBACK_NONE;
+		}
+
+		@Override
+		public void dragOperationChanged(final DropTargetEvent event) {
+			// always indicate a copy
+			event.detail = DND.DROP_COPY;
+			event.feedback = DND.FEEDBACK_NONE;
+
+		}
+
+		@Override
+		public void dragEnter(final DropTargetEvent event) {
+			// always indicate a copy
+			event.detail = DND.DROP_COPY;
+			event.feedback = DND.FEEDBACK_NONE;
+
+		}
+
+		@Override
+		public void drop(final DropTargetEvent event) {
+
+			performDrop(event);
+		}
+
+		private void performDrop(final DropTargetEvent event) {
+
+			if (ResourceTransfer.getInstance().isSupportedType(event.currentDataType)) {
+				Assert.isTrue(event.data instanceof IResource[]);
+				final IResource[] files = (IResource[]) event.data;
+				final IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						final IAdapterManager adapterManger = Platform.getAdapterManager();
+						monitor.beginTask("Create Jobs", files.length);
+						try {
+							for (int i = 0; i < files.length; i++) {
+
+								// Check to see if user has cancelled operation
+								if (monitor.isCanceled()) {
+									break;
+								}
+
+								final IResource res = files[i];
+								// Use adapter factory to create a new job instance.
+								final IManagedJob job = (IManagedJob) adapterManger.getAdapter(res, IManagedJob.class);
+
+								if (job != null) {
+
+									// Adapter may return an existing job for the resource .. so skip it
+									if (jobManager.getSelectedJobs().contains(job)) {
+										monitor.worked(1);
+										continue;
+									}
+
+									jobManager.addJob(job, res);
+
+									// Hook in a listener to automatically dispose the job once it is no
+									// longer needed
+									jobManager.addJobManagerListener(new DisposeOnRemoveListener(job));
+
+								}
+								monitor.worked(1);
+							}
+
+						} finally {
+							monitor.done();
+						}
+					}
+				};
+				// Run job modally in a progress dialog
+				final Display d = Display.getCurrent();
+				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(d.getActiveShell());
+				try {
+					dialog.run(true, true, runnable);
+				} catch (final InvocationTargetException e) {
+					Activator.error(e.getMessage(), e);
+				} catch (final InterruptedException e) {
+					Activator.error(e.getMessage(), e);
+				}
+			}
+		}
+	};
+
 	/**
-	 * This is a callback that will allow us to create the viewer and initialise
-	 * it.
+	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.FULL_SELECTION);
+		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
 		final TableViewerColumn tvc0 = new TableViewerColumn(viewer, SWT.None);
+		tvc0.getColumn().setText("");
 
 		final TableViewerColumn tvc1 = new TableViewerColumn(viewer, SWT.None);
 		tvc1.getColumn().setText("Name");
@@ -341,7 +391,7 @@ public class JobManagerView extends ViewPart {
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);
 
-		viewer.setContentProvider(new ViewContentProvider());
+		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		viewer.setLabelProvider(new ViewLabelProvider());
 		// viewer.setSorter(new NameSorter());
 		viewer.setInput(jobManager.getJobs());
@@ -352,21 +402,23 @@ public class JobManagerView extends ViewPart {
 		}
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.jobmanager.viewer");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.jobmanager.viewer");
 
 		makeActions();
 		hookContextMenu();
 		hookDoubleClickAction();
 		contributeToActionBars();
 
+		final Transfer[] dropTransferTypes = new Transfer[] { ResourceTransfer.getInstance() };
+
+		viewer.addDropSupport(DND.DROP_COPY, dropTransferTypes, dropTargetListener);
+
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 
-				final IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
+				final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 
 				updateActionEnablement(selection);
 			}
@@ -378,8 +430,8 @@ public class JobManagerView extends ViewPart {
 		for (final IManagedJob job : jobManager.getJobs()) {
 			job.addListener(jobListener);
 		}
-		// TODO: Is this required here?
-		refresh();
+		// // TODO: Is this required here?
+		// refresh();
 
 		// update button state
 		updateActionEnablement((IStructuredSelection) viewer.getSelection());
@@ -421,7 +473,6 @@ public class JobManagerView extends ViewPart {
 		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
-//		manager.add(createDummyJobAction);
 		manager.add(toggleDisplayAction);
 
 		// Other plug-ins can contribute there actions here
@@ -445,9 +496,7 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
-				final Iterator<IManagedJob> itr = selection.iterator();
+				final Iterator<IManagedJob> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
 					// TODO: Check states
 					final IManagedJob job = itr.next();
@@ -464,18 +513,14 @@ public class JobManagerView extends ViewPart {
 		};
 		startAction.setText("Start");
 		startAction.setToolTipText("Start/Resume Job");
-		startAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/elcl16/resume_co.gif"));
-		startAction.setDisabledImageDescriptor(Activator
-				.getImageDescriptor("/icons/dlcl16/resume_co.gif"));
+		startAction.setImageDescriptor(Activator.getImageDescriptor("/icons/elcl16/resume_co.gif"));
+		startAction.setDisabledImageDescriptor(Activator.getImageDescriptor("/icons/dlcl16/resume_co.gif"));
 
 		pauseAction = new Action() {
 			@Override
 			public void run() {
 
-				final IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
-				final Iterator<IManagedJob> itr = selection.iterator();
+				final Iterator<IManagedJob> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
 					// TODO: Check states
 					final IManagedJob job = itr.next();
@@ -485,18 +530,14 @@ public class JobManagerView extends ViewPart {
 		};
 		pauseAction.setText("Suspend");
 		pauseAction.setToolTipText("Suspend Job");
-		pauseAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/elcl16/suspend_co.gif"));
-		pauseAction.setDisabledImageDescriptor(Activator
-				.getImageDescriptor("/icons/dlcl16/suspend_co.gif"));
+		pauseAction.setImageDescriptor(Activator.getImageDescriptor("/icons/elcl16/suspend_co.gif"));
+		pauseAction.setDisabledImageDescriptor(Activator.getImageDescriptor("/icons/dlcl16/suspend_co.gif"));
 
 		stopAction = new Action() {
 			@Override
 			public void run() {
 
-				final IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
-				final Iterator<IManagedJob> itr = selection.iterator();
+				final Iterator<IManagedJob> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
 					final IManagedJob job = itr.next();
 					job.cancel();
@@ -505,18 +546,14 @@ public class JobManagerView extends ViewPart {
 		};
 		stopAction.setText("Abort");
 		stopAction.setToolTipText("Abort Job");
-		stopAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/elcl16/terminate_co.gif"));
-		stopAction.setDisabledImageDescriptor(Activator
-				.getImageDescriptor("/icons/dlcl16/terminate_co.gif"));
+		stopAction.setImageDescriptor(Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif"));
+		stopAction.setDisabledImageDescriptor(Activator.getImageDescriptor("/icons/dlcl16/terminate_co.gif"));
 
 		removeAction = new Action() {
 			@Override
 			public void run() {
 
-				final IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
-				final Iterator<IManagedJob> itr = selection.iterator();
+				final Iterator<IManagedJob> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
 					final IManagedJob job = itr.next();
 					job.cancel();
@@ -526,18 +563,14 @@ public class JobManagerView extends ViewPart {
 		};
 		removeAction.setText("Remove");
 		removeAction.setToolTipText("Abort and remove Job from view");
-		removeAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/elcl16/rem_co.gif"));
-		removeAction.setDisabledImageDescriptor(Activator
-				.getImageDescriptor("/icons/dlcl16/rem_co.gif"));
+		removeAction.setImageDescriptor(Activator.getImageDescriptor("/icons/elcl16/rem_co.gif"));
+		removeAction.setDisabledImageDescriptor(Activator.getImageDescriptor("/icons/dlcl16/rem_co.gif"));
 
 		toggleDisplayAction = new Action() {
 			@Override
 			public void run() {
 
-				final IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
-				final Iterator<IManagedJob> itr = selection.iterator();
+				final Iterator<IManagedJob> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
 					final IManagedJob job = itr.next();
 					jobManager.toggleJobSelection(job);
@@ -545,25 +578,20 @@ public class JobManagerView extends ViewPart {
 			}
 		};
 		toggleDisplayAction.setText("Toggle Display Flag");
-		toggleDisplayAction
-				.setToolTipText("Toggle whether or not a job is linked to views");
-		toggleDisplayAction.setImageDescriptor(Activator
-				.getImageDescriptor("/icons/console_view.gif"));
+		toggleDisplayAction.setToolTipText("Toggle whether or not a job is linked to views");
+		toggleDisplayAction.setImageDescriptor(Activator.getImageDescriptor("/icons/console_view.gif"));
 
 		doubleClickAction = new Action() {
 
 			@Override
 			public void run() {
-				final ISelection selection = viewer.getSelection();
-				final Iterator<Object> iter = ((IStructuredSelection) selection)
-						.iterator();
-				while (iter.hasNext()) {
-					final Object obj = iter.next();
-					// if (obj instanceof OptManagedJob) {
-					// jobManager.toggleJobSelection((OptManagedJob) obj);
-					// }
-				}
-
+				// final Iterator<IManagedJob> itr = getTableSelectionIterator();
+				// while (itr.hasNext()) {
+				// final Object obj = itr.next();
+				// if (obj instanceof OptManagedJob) {
+				// jobManager.toggleJobSelection((OptManagedJob) obj);
+				// }
+				// }
 			}
 		};
 		doubleClickAction.setText("Set visible job");
@@ -617,8 +645,7 @@ public class JobManagerView extends ViewPart {
 			if (selection instanceof IStructuredSelection) {
 				// Loop through jobs enabling buttons as valid. Operations
 				// will do nothing if not valid.
-				final Iterator<IManagedJob> itr = ((IStructuredSelection) selection)
-						.iterator();
+				final Iterator<IManagedJob> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
 					final IManagedJob job = itr.next();
 
@@ -686,4 +713,16 @@ public class JobManagerView extends ViewPart {
 		super.dispose();
 	}
 
+	/**
+	 * Helper method to return a typed {@link Iterator} from the {@link #viewer} selection.
+	 * 
+	 * @return
+	 */
+	private Iterator<IManagedJob> getTableSelectionIterator() {
+		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		// We assume there is only a single type of object in the table
+		@SuppressWarnings("unchecked")
+		final Iterator<IManagedJob> itr = selection.iterator();
+		return itr;
+	}
 }
