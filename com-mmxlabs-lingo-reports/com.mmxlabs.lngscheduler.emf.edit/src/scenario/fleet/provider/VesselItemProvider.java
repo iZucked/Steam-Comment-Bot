@@ -69,9 +69,9 @@ public class VesselItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addClassPropertyDescriptor(object);
 			addTimeCharteredPropertyDescriptor(object);
 			addDailyCharterOutPricePropertyDescriptor(object);
+			addClassPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

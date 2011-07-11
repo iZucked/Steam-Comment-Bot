@@ -26,9 +26,9 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.VesselEvent#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link scenario.fleet.VesselEvent#getEndDate <em>End Date</em>}</li>
  *   <li>{@link scenario.fleet.VesselEvent#getDuration <em>Duration</em>}</li>
- *   <li>{@link scenario.fleet.VesselEvent#getStartPort <em>Start Port</em>}</li>
  *   <li>{@link scenario.fleet.VesselEvent#getVessels <em>Vessels</em>}</li>
  *   <li>{@link scenario.fleet.VesselEvent#getVesselClasses <em>Vessel Classes</em>}</li>
+ *   <li>{@link scenario.fleet.VesselEvent#getStartPort <em>Start Port</em>}</li>
  * </ul>
  * </p>
  *

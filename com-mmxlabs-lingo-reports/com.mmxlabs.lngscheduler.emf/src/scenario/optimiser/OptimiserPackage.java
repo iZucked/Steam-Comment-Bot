@@ -44,7 +44,7 @@ public interface OptimiserPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf1/optimiser";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/optimiser";
 
 	/**
 	 * The package namespace name.
@@ -91,40 +91,13 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION_SETTINGS__RANDOM_SEED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISATION_SETTINGS__CONSTRAINTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISATION_SETTINGS__OBJECTIVES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Initial Schedule</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Default Discount Curve</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int OPTIMISATION_SETTINGS__INITIAL_SCHEDULE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Freeze Days From Start</b></em>' attribute.
@@ -133,7 +106,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Ignore Elements After</b></em>' attribute.
@@ -142,7 +115,34 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS__CONSTRAINTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS__OBJECTIVES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Default Discount Curve</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Optimisation Settings</em>' class.
@@ -356,22 +356,22 @@ public interface OptimiserPackage extends EPackage {
 	int DISCOUNT_CURVE__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Discounts</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCOUNT_CURVE__DISCOUNTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCOUNT_CURVE__START_DATE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+	int DISCOUNT_CURVE__START_DATE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Discounts</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCOUNT_CURVE__DISCOUNTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Discount Curve</em>' class.

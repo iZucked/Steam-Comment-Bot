@@ -36,37 +36,17 @@ import scenario.contract.TotalVolumeLimit;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.contract.impl.ContractModelImpl#getPurchaseContracts <em>Purchase Contracts</em>}</li>
- *   <li>{@link scenario.contract.impl.ContractModelImpl#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link scenario.contract.impl.ContractModelImpl#getVolumeConstraints <em>Volume Constraints</em>}</li>
  *   <li>{@link scenario.contract.impl.ContractModelImpl#getEntities <em>Entities</em>}</li>
  *   <li>{@link scenario.contract.impl.ContractModelImpl#getShippingEntity <em>Shipping Entity</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractModelImpl#getPurchaseContracts <em>Purchase Contracts</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractModelImpl#getSalesContracts <em>Sales Contracts</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class ContractModelImpl extends EObjectImpl implements ContractModel {
-	/**
-	 * The cached value of the '{@link #getPurchaseContracts() <em>Purchase Contracts</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPurchaseContracts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<PurchaseContract> purchaseContracts;
-
-	/**
-	 * The cached value of the '{@link #getSalesContracts() <em>Sales Contracts</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSalesContracts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<SalesContract> salesContracts;
-
 	/**
 	 * The cached value of the '{@link #getVolumeConstraints() <em>Volume Constraints</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -98,6 +78,26 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	protected Entity shippingEntity;
 
 	/**
+	 * The cached value of the '{@link #getPurchaseContracts() <em>Purchase Contracts</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurchaseContracts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PurchaseContract> purchaseContracts;
+
+	/**
+	 * The cached value of the '{@link #getSalesContracts() <em>Sales Contracts</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSalesContracts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<SalesContract> salesContracts;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -123,7 +123,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 */
 	public EList<PurchaseContract> getPurchaseContracts() {
 		if (purchaseContracts == null) {
-			purchaseContracts = new EObjectContainmentEList<PurchaseContract>(PurchaseContract.class, this, ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS);
+			purchaseContracts = new EObjectContainmentEList.Resolving<PurchaseContract>(PurchaseContract.class, this, ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS);
 		}
 		return purchaseContracts;
 	}
@@ -135,7 +135,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 */
 	public EList<SalesContract> getSalesContracts() {
 		if (salesContracts == null) {
-			salesContracts = new EObjectContainmentEList<SalesContract>(SalesContract.class, this, ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS);
+			salesContracts = new EObjectContainmentEList.Resolving<SalesContract>(SalesContract.class, this, ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS);
 		}
 		return salesContracts;
 	}
@@ -147,7 +147,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 */
 	public EList<TotalVolumeLimit> getVolumeConstraints() {
 		if (volumeConstraints == null) {
-			volumeConstraints = new EObjectContainmentEList<TotalVolumeLimit>(TotalVolumeLimit.class, this, ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
+			volumeConstraints = new EObjectContainmentEList.Resolving<TotalVolumeLimit>(TotalVolumeLimit.class, this, ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
 		}
 		return volumeConstraints;
 	}
@@ -159,7 +159,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 */
 	public EList<Entity> getEntities() {
 		if (entities == null) {
-			entities = new EObjectContainmentEList<Entity>(Entity.class, this, ContractPackage.CONTRACT_MODEL__ENTITIES);
+			entities = new EObjectContainmentEList.Resolving<Entity>(Entity.class, this, ContractPackage.CONTRACT_MODEL__ENTITIES);
 		}
 		return entities;
 	}
@@ -170,6 +170,29 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * @generated
 	 */
 	public Entity getShippingEntity() {
+		if (shippingEntity != null && shippingEntity.eIsProxy()) {
+			InternalEObject oldShippingEntity = (InternalEObject)shippingEntity;
+			shippingEntity = (Entity)eResolveProxy(oldShippingEntity);
+			if (shippingEntity != oldShippingEntity) {
+				InternalEObject newShippingEntity = (InternalEObject)shippingEntity;
+				NotificationChain msgs = oldShippingEntity.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY, null, null);
+				if (newShippingEntity.eInternalContainer() == null) {
+					msgs = newShippingEntity.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY, oldShippingEntity, shippingEntity));
+			}
+		}
+		return shippingEntity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Entity basicGetShippingEntity() {
 		return shippingEntity;
 	}
 
@@ -215,16 +238,16 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
-				return ((InternalEList<?>)getPurchaseContracts()).basicRemove(otherEnd, msgs);
-			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
-				return ((InternalEList<?>)getSalesContracts()).basicRemove(otherEnd, msgs);
 			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
 				return ((InternalEList<?>)getVolumeConstraints()).basicRemove(otherEnd, msgs);
 			case ContractPackage.CONTRACT_MODEL__ENTITIES:
 				return ((InternalEList<?>)getEntities()).basicRemove(otherEnd, msgs);
 			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
 				return basicSetShippingEntity(null, msgs);
+			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
+				return ((InternalEList<?>)getPurchaseContracts()).basicRemove(otherEnd, msgs);
+			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
+				return ((InternalEList<?>)getSalesContracts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -237,16 +260,17 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
-				return getPurchaseContracts();
-			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
-				return getSalesContracts();
 			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
 				return getVolumeConstraints();
 			case ContractPackage.CONTRACT_MODEL__ENTITIES:
 				return getEntities();
 			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
-				return getShippingEntity();
+				if (resolve) return getShippingEntity();
+				return basicGetShippingEntity();
+			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
+				return getPurchaseContracts();
+			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
+				return getSalesContracts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -260,14 +284,6 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
-				getPurchaseContracts().clear();
-				getPurchaseContracts().addAll((Collection<? extends PurchaseContract>)newValue);
-				return;
-			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
-				getSalesContracts().clear();
-				getSalesContracts().addAll((Collection<? extends SalesContract>)newValue);
-				return;
 			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
 				getVolumeConstraints().clear();
 				getVolumeConstraints().addAll((Collection<? extends TotalVolumeLimit>)newValue);
@@ -278,6 +294,14 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				return;
 			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
 				setShippingEntity((Entity)newValue);
+				return;
+			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
+				getPurchaseContracts().clear();
+				getPurchaseContracts().addAll((Collection<? extends PurchaseContract>)newValue);
+				return;
+			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
+				getSalesContracts().clear();
+				getSalesContracts().addAll((Collection<? extends SalesContract>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -291,12 +315,6 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
-				getPurchaseContracts().clear();
-				return;
-			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
-				getSalesContracts().clear();
-				return;
 			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
 				getVolumeConstraints().clear();
 				return;
@@ -305,6 +323,12 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				return;
 			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
 				setShippingEntity((Entity)null);
+				return;
+			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
+				getPurchaseContracts().clear();
+				return;
+			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
+				getSalesContracts().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -318,16 +342,16 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
-				return purchaseContracts != null && !purchaseContracts.isEmpty();
-			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
-				return salesContracts != null && !salesContracts.isEmpty();
 			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
 				return volumeConstraints != null && !volumeConstraints.isEmpty();
 			case ContractPackage.CONTRACT_MODEL__ENTITIES:
 				return entities != null && !entities.isEmpty();
 			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
 				return shippingEntity != null;
+			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
+				return purchaseContracts != null && !purchaseContracts.isEmpty();
+			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
+				return salesContracts != null && !salesContracts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

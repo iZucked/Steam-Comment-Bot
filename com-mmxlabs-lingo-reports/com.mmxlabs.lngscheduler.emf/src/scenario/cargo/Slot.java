@@ -29,8 +29,8 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}</li>
- *   <li>{@link scenario.cargo.Slot#getContract <em>Contract</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getFixedPrice <em>Fixed Price</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *

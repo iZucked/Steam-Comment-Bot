@@ -16,11 +16,11 @@ import scenario.market.Index;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.contract.ProfitSharingPurchaseContract#getIndex <em>Index</em>}</li>
- *   <li>{@link scenario.contract.ProfitSharingPurchaseContract#getReferenceIndex <em>Reference Index</em>}</li>
  *   <li>{@link scenario.contract.ProfitSharingPurchaseContract#getAlpha <em>Alpha</em>}</li>
  *   <li>{@link scenario.contract.ProfitSharingPurchaseContract#getBeta <em>Beta</em>}</li>
  *   <li>{@link scenario.contract.ProfitSharingPurchaseContract#getGamma <em>Gamma</em>}</li>
+ *   <li>{@link scenario.contract.ProfitSharingPurchaseContract#getIndex <em>Index</em>}</li>
+ *   <li>{@link scenario.contract.ProfitSharingPurchaseContract#getReferenceIndex <em>Reference Index</em>}</li>
  * </ul>
  * </p>
  *

@@ -31,7 +31,7 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	 */
 	public static MarketFactory init() {
 		try {
-			MarketFactory theMarketFactory = (MarketFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf1/market"); 
+			MarketFactory theMarketFactory = (MarketFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/market"); 
 			if (theMarketFactory != null) {
 				return theMarketFactory;
 			}

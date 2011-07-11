@@ -31,7 +31,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	 */
 	public static ContractFactory init() {
 		try {
-			ContractFactory theContractFactory = (ContractFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf1/contract"); 
+			ContractFactory theContractFactory = (ContractFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/contract"); 
 			if (theContractFactory != null) {
 				return theContractFactory;
 			}
@@ -61,9 +61,9 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ContractPackage.CONTRACT_MODEL: return createContractModel();
-			case ContractPackage.SALES_CONTRACT: return createSalesContract();
 			case ContractPackage.TOTAL_VOLUME_LIMIT: return createTotalVolumeLimit();
 			case ContractPackage.ENTITY: return createEntity();
+			case ContractPackage.SALES_CONTRACT: return createSalesContract();
 			case ContractPackage.FIXED_PRICE_PURCHASE_CONTRACT: return createFixedPricePurchaseContract();
 			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT: return createIndexPricePurchaseContract();
 			case ContractPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();

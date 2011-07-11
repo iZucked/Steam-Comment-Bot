@@ -44,7 +44,7 @@ public interface LsoPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf1/optimiser/lso";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/optimiser/lso";
 
 	/**
 	 * The package namespace name.
@@ -91,24 +91,6 @@ public interface LsoPackage extends EPackage {
 	int LSO_SETTINGS__RANDOM_SEED = OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED;
 
 	/**
-	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LSO_SETTINGS__CONSTRAINTS = OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS;
-
-	/**
-	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LSO_SETTINGS__OBJECTIVES = OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES;
-
-	/**
 	 * The feature id for the '<em><b>Initial Schedule</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -116,15 +98,6 @@ public interface LsoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LSO_SETTINGS__INITIAL_SCHEDULE = OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE;
-
-	/**
-	 * The feature id for the '<em><b>Default Discount Curve</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LSO_SETTINGS__DEFAULT_DISCOUNT_CURVE = OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE;
 
 	/**
 	 * The feature id for the '<em><b>Freeze Days From Start</b></em>' attribute.
@@ -143,6 +116,33 @@ public interface LsoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LSO_SETTINGS__IGNORE_ELEMENTS_AFTER = OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER;
+
+	/**
+	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__CONSTRAINTS = OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS;
+
+	/**
+	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__OBJECTIVES = OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES;
+
+	/**
+	 * The feature id for the '<em><b>Default Discount Curve</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__DEFAULT_DISCOUNT_CURVE = OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE;
 
 	/**
 	 * The feature id for the '<em><b>Number Of Steps</b></em>' attribute.

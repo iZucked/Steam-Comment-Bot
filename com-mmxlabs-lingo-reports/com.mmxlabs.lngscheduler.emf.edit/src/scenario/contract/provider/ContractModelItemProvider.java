@@ -83,11 +83,11 @@ public class ContractModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS);
-			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__SALES_CONTRACTS);
 			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__VOLUME_CONSTRAINTS);
 			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__ENTITIES);
 			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__SHIPPING_ENTITY);
+			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__PURCHASE_CONTRACTS);
+			childrenFeatures.add(ContractPackage.Literals.CONTRACT_MODEL__SALES_CONTRACTS);
 		}
 		return childrenFeatures;
 	}
@@ -139,11 +139,11 @@ public class ContractModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ContractModel.class)) {
-			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
-			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
 			case ContractPackage.CONTRACT_MODEL__VOLUME_CONSTRAINTS:
 			case ContractPackage.CONTRACT_MODEL__ENTITIES:
 			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
+			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
+			case ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -160,6 +160,21 @@ public class ContractModelItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__VOLUME_CONSTRAINTS,
+				 ContractFactory.eINSTANCE.createTotalVolumeLimit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__ENTITIES,
+				 ContractFactory.eINSTANCE.createEntity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__SHIPPING_ENTITY,
+				 ContractFactory.eINSTANCE.createEntity()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -185,21 +200,6 @@ public class ContractModelItemProvider
 			(createChildParameter
 				(ContractPackage.Literals.CONTRACT_MODEL__SALES_CONTRACTS,
 				 ContractFactory.eINSTANCE.createSalesContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ContractPackage.Literals.CONTRACT_MODEL__VOLUME_CONSTRAINTS,
-				 ContractFactory.eINSTANCE.createTotalVolumeLimit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ContractPackage.Literals.CONTRACT_MODEL__ENTITIES,
-				 ContractFactory.eINSTANCE.createEntity()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ContractPackage.Literals.CONTRACT_MODEL__SHIPPING_ENTITY,
-				 ContractFactory.eINSTANCE.createEntity()));
 	}
 
 	/**

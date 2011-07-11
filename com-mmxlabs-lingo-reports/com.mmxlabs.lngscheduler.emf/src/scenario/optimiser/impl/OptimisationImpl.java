@@ -88,7 +88,7 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	 */
 	public EList<OptimisationSettings> getAllSettings() {
 		if (allSettings == null) {
-			allSettings = new EObjectContainmentEList<OptimisationSettings>(OptimisationSettings.class, this, OptimiserPackage.OPTIMISATION__ALL_SETTINGS);
+			allSettings = new EObjectContainmentEList.Resolving<OptimisationSettings>(OptimisationSettings.class, this, OptimiserPackage.OPTIMISATION__ALL_SETTINGS);
 		}
 		return allSettings;
 	}

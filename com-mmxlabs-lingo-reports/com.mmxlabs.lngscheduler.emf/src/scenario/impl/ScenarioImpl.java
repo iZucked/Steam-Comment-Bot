@@ -8,17 +8,21 @@ package scenario.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 
@@ -45,113 +49,24 @@ import scenario.schedule.ScheduleModel;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.impl.ScenarioImpl#getFleetModel <em>Fleet Model</em>}</li>
- *   <li>{@link scenario.impl.ScenarioImpl#getPortModel <em>Port Model</em>}</li>
- *   <li>{@link scenario.impl.ScenarioImpl#getCargoModel <em>Cargo Model</em>}</li>
- *   <li>{@link scenario.impl.ScenarioImpl#getContractModel <em>Contract Model</em>}</li>
- *   <li>{@link scenario.impl.ScenarioImpl#getScheduleModel <em>Schedule Model</em>}</li>
- *   <li>{@link scenario.impl.ScenarioImpl#getMarketModel <em>Market Model</em>}</li>
- *   <li>{@link scenario.impl.ScenarioImpl#getDistanceModel <em>Distance Model</em>}</li>
- *   <li>{@link scenario.impl.ScenarioImpl#getCanalModel <em>Canal Model</em>}</li>
- *   <li>{@link scenario.impl.ScenarioImpl#getOptimisation <em>Optimisation</em>}</li>
  *   <li>{@link scenario.impl.ScenarioImpl#getVersion <em>Version</em>}</li>
  *   <li>{@link scenario.impl.ScenarioImpl#getName <em>Name</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getFleetModel <em>Fleet Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getScheduleModel <em>Schedule Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getPortModel <em>Port Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getDistanceModel <em>Distance Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getCanalModel <em>Canal Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getCargoModel <em>Cargo Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getContractModel <em>Contract Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getMarketModel <em>Market Model</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getOptimisation <em>Optimisation</em>}</li>
+ *   <li>{@link scenario.impl.ScenarioImpl#getContainedModels <em>Contained Models</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class ScenarioImpl extends EObjectImpl implements Scenario {
-	/**
-	 * The cached value of the '{@link #getFleetModel() <em>Fleet Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFleetModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected FleetModel fleetModel;
-
-	/**
-	 * The cached value of the '{@link #getPortModel() <em>Port Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected PortModel portModel;
-
-	/**
-	 * The cached value of the '{@link #getCargoModel() <em>Cargo Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCargoModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected CargoModel cargoModel;
-
-	/**
-	 * The cached value of the '{@link #getContractModel() <em>Contract Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContractModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected ContractModel contractModel;
-
-	/**
-	 * The cached value of the '{@link #getScheduleModel() <em>Schedule Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getScheduleModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected ScheduleModel scheduleModel;
-
-	/**
-	 * The cached value of the '{@link #getMarketModel() <em>Market Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMarketModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected MarketModel marketModel;
-
-	/**
-	 * The cached value of the '{@link #getDistanceModel() <em>Distance Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDistanceModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected DistanceModel distanceModel;
-
-	/**
-	 * The cached value of the '{@link #getCanalModel() <em>Canal Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCanalModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected CanalModel canalModel;
-
-	/**
-	 * The cached value of the '{@link #getOptimisation() <em>Optimisation</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOptimisation()
-	 * @generated
-	 * @ordered
-	 */
-	protected Optimisation optimisation;
-
 	/**
 	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -193,6 +108,106 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	protected String name = NAME_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getFleetModel() <em>Fleet Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFleetModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected FleetModel fleetModel;
+
+	/**
+	 * The cached value of the '{@link #getScheduleModel() <em>Schedule Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduleModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScheduleModel scheduleModel;
+
+	/**
+	 * The cached value of the '{@link #getPortModel() <em>Port Model</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected PortModel portModel;
+
+	/**
+	 * The cached value of the '{@link #getDistanceModel() <em>Distance Model</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistanceModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected DistanceModel distanceModel;
+
+	/**
+	 * The cached value of the '{@link #getCanalModel() <em>Canal Model</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected CanalModel canalModel;
+
+	/**
+	 * The cached value of the '{@link #getCargoModel() <em>Cargo Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoModel cargoModel;
+
+	/**
+	 * The cached value of the '{@link #getContractModel() <em>Contract Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContractModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected ContractModel contractModel;
+
+	/**
+	 * The cached value of the '{@link #getMarketModel() <em>Market Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarketModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected MarketModel marketModel;
+
+	/**
+	 * The cached value of the '{@link #getOptimisation() <em>Optimisation</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOptimisation()
+	 * @generated
+	 * @ordered
+	 */
+	protected Optimisation optimisation;
+
+	/**
+	 * The cached value of the '{@link #getContainedModels() <em>Contained Models</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContainedModels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<EObject> containedModels;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -217,6 +232,29 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public FleetModel getFleetModel() {
+		if (fleetModel != null && fleetModel.eIsProxy()) {
+			InternalEObject oldFleetModel = (InternalEObject)fleetModel;
+			fleetModel = (FleetModel)eResolveProxy(oldFleetModel);
+			if (fleetModel != oldFleetModel) {
+				InternalEObject newFleetModel = (InternalEObject)fleetModel;
+				NotificationChain msgs = oldFleetModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__FLEET_MODEL, null, null);
+				if (newFleetModel.eInternalContainer() == null) {
+					msgs = newFleetModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__FLEET_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__FLEET_MODEL, oldFleetModel, fleetModel));
+			}
+		}
+		return fleetModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FleetModel basicGetFleetModel() {
 		return fleetModel;
 	}
 
@@ -260,6 +298,14 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public PortModel getPortModel() {
+		if (portModel != null && portModel.eIsProxy()) {
+			InternalEObject oldPortModel = (InternalEObject)portModel;
+			portModel = (PortModel)eResolveProxy(oldPortModel);
+			if (portModel != oldPortModel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__PORT_MODEL, oldPortModel, portModel));
+			}
+		}
 		return portModel;
 	}
 
@@ -268,14 +314,8 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetPortModel(PortModel newPortModel, NotificationChain msgs) {
-		PortModel oldPortModel = portModel;
-		portModel = newPortModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__PORT_MODEL, oldPortModel, newPortModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public PortModel basicGetPortModel() {
+		return portModel;
 	}
 
 	/**
@@ -284,17 +324,10 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public void setPortModel(PortModel newPortModel) {
-		if (newPortModel != portModel) {
-			NotificationChain msgs = null;
-			if (portModel != null)
-				msgs = ((InternalEObject)portModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__PORT_MODEL, null, msgs);
-			if (newPortModel != null)
-				msgs = ((InternalEObject)newPortModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__PORT_MODEL, null, msgs);
-			msgs = basicSetPortModel(newPortModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__PORT_MODEL, newPortModel, newPortModel));
+		PortModel oldPortModel = portModel;
+		portModel = newPortModel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__PORT_MODEL, oldPortModel, portModel));
 	}
 
 	/**
@@ -303,6 +336,29 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public CargoModel getCargoModel() {
+		if (cargoModel != null && cargoModel.eIsProxy()) {
+			InternalEObject oldCargoModel = (InternalEObject)cargoModel;
+			cargoModel = (CargoModel)eResolveProxy(oldCargoModel);
+			if (cargoModel != oldCargoModel) {
+				InternalEObject newCargoModel = (InternalEObject)cargoModel;
+				NotificationChain msgs = oldCargoModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__CARGO_MODEL, null, null);
+				if (newCargoModel.eInternalContainer() == null) {
+					msgs = newCargoModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__CARGO_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__CARGO_MODEL, oldCargoModel, cargoModel));
+			}
+		}
+		return cargoModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CargoModel basicGetCargoModel() {
 		return cargoModel;
 	}
 
@@ -346,6 +402,29 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public ContractModel getContractModel() {
+		if (contractModel != null && contractModel.eIsProxy()) {
+			InternalEObject oldContractModel = (InternalEObject)contractModel;
+			contractModel = (ContractModel)eResolveProxy(oldContractModel);
+			if (contractModel != oldContractModel) {
+				InternalEObject newContractModel = (InternalEObject)contractModel;
+				NotificationChain msgs = oldContractModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__CONTRACT_MODEL, null, null);
+				if (newContractModel.eInternalContainer() == null) {
+					msgs = newContractModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__CONTRACT_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__CONTRACT_MODEL, oldContractModel, contractModel));
+			}
+		}
+		return contractModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ContractModel basicGetContractModel() {
 		return contractModel;
 	}
 
@@ -389,6 +468,29 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public ScheduleModel getScheduleModel() {
+		if (scheduleModel != null && scheduleModel.eIsProxy()) {
+			InternalEObject oldScheduleModel = (InternalEObject)scheduleModel;
+			scheduleModel = (ScheduleModel)eResolveProxy(oldScheduleModel);
+			if (scheduleModel != oldScheduleModel) {
+				InternalEObject newScheduleModel = (InternalEObject)scheduleModel;
+				NotificationChain msgs = oldScheduleModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__SCHEDULE_MODEL, null, null);
+				if (newScheduleModel.eInternalContainer() == null) {
+					msgs = newScheduleModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__SCHEDULE_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__SCHEDULE_MODEL, oldScheduleModel, scheduleModel));
+			}
+		}
+		return scheduleModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScheduleModel basicGetScheduleModel() {
 		return scheduleModel;
 	}
 
@@ -432,6 +534,29 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public MarketModel getMarketModel() {
+		if (marketModel != null && marketModel.eIsProxy()) {
+			InternalEObject oldMarketModel = (InternalEObject)marketModel;
+			marketModel = (MarketModel)eResolveProxy(oldMarketModel);
+			if (marketModel != oldMarketModel) {
+				InternalEObject newMarketModel = (InternalEObject)marketModel;
+				NotificationChain msgs = oldMarketModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__MARKET_MODEL, null, null);
+				if (newMarketModel.eInternalContainer() == null) {
+					msgs = newMarketModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__MARKET_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__MARKET_MODEL, oldMarketModel, marketModel));
+			}
+		}
+		return marketModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MarketModel basicGetMarketModel() {
 		return marketModel;
 	}
 
@@ -475,6 +600,14 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public DistanceModel getDistanceModel() {
+		if (distanceModel != null && distanceModel.eIsProxy()) {
+			InternalEObject oldDistanceModel = (InternalEObject)distanceModel;
+			distanceModel = (DistanceModel)eResolveProxy(oldDistanceModel);
+			if (distanceModel != oldDistanceModel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__DISTANCE_MODEL, oldDistanceModel, distanceModel));
+			}
+		}
 		return distanceModel;
 	}
 
@@ -483,14 +616,8 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetDistanceModel(DistanceModel newDistanceModel, NotificationChain msgs) {
-		DistanceModel oldDistanceModel = distanceModel;
-		distanceModel = newDistanceModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__DISTANCE_MODEL, oldDistanceModel, newDistanceModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public DistanceModel basicGetDistanceModel() {
+		return distanceModel;
 	}
 
 	/**
@@ -499,17 +626,10 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public void setDistanceModel(DistanceModel newDistanceModel) {
-		if (newDistanceModel != distanceModel) {
-			NotificationChain msgs = null;
-			if (distanceModel != null)
-				msgs = ((InternalEObject)distanceModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__DISTANCE_MODEL, null, msgs);
-			if (newDistanceModel != null)
-				msgs = ((InternalEObject)newDistanceModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__DISTANCE_MODEL, null, msgs);
-			msgs = basicSetDistanceModel(newDistanceModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__DISTANCE_MODEL, newDistanceModel, newDistanceModel));
+		DistanceModel oldDistanceModel = distanceModel;
+		distanceModel = newDistanceModel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__DISTANCE_MODEL, oldDistanceModel, distanceModel));
 	}
 
 	/**
@@ -518,6 +638,14 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public CanalModel getCanalModel() {
+		if (canalModel != null && canalModel.eIsProxy()) {
+			InternalEObject oldCanalModel = (InternalEObject)canalModel;
+			canalModel = (CanalModel)eResolveProxy(oldCanalModel);
+			if (canalModel != oldCanalModel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__CANAL_MODEL, oldCanalModel, canalModel));
+			}
+		}
 		return canalModel;
 	}
 
@@ -526,14 +654,8 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetCanalModel(CanalModel newCanalModel, NotificationChain msgs) {
-		CanalModel oldCanalModel = canalModel;
-		canalModel = newCanalModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__CANAL_MODEL, oldCanalModel, newCanalModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public CanalModel basicGetCanalModel() {
+		return canalModel;
 	}
 
 	/**
@@ -542,17 +664,10 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public void setCanalModel(CanalModel newCanalModel) {
-		if (newCanalModel != canalModel) {
-			NotificationChain msgs = null;
-			if (canalModel != null)
-				msgs = ((InternalEObject)canalModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__CANAL_MODEL, null, msgs);
-			if (newCanalModel != null)
-				msgs = ((InternalEObject)newCanalModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__CANAL_MODEL, null, msgs);
-			msgs = basicSetCanalModel(newCanalModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__CANAL_MODEL, newCanalModel, newCanalModel));
+		CanalModel oldCanalModel = canalModel;
+		canalModel = newCanalModel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__CANAL_MODEL, oldCanalModel, canalModel));
 	}
 
 	/**
@@ -561,6 +676,29 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public Optimisation getOptimisation() {
+		if (optimisation != null && optimisation.eIsProxy()) {
+			InternalEObject oldOptimisation = (InternalEObject)optimisation;
+			optimisation = (Optimisation)eResolveProxy(oldOptimisation);
+			if (optimisation != oldOptimisation) {
+				InternalEObject newOptimisation = (InternalEObject)optimisation;
+				NotificationChain msgs = oldOptimisation.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__OPTIMISATION, null, null);
+				if (newOptimisation.eInternalContainer() == null) {
+					msgs = newOptimisation.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioPackage.SCENARIO__OPTIMISATION, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioPackage.SCENARIO__OPTIMISATION, oldOptimisation, optimisation));
+			}
+		}
+		return optimisation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Optimisation basicGetOptimisation() {
 		return optimisation;
 	}
 
@@ -596,6 +734,18 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.SCENARIO__OPTIMISATION, newOptimisation, newOptimisation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<EObject> getContainedModels() {
+		if (containedModels == null) {
+			containedModels = new EObjectContainmentEList.Resolving<EObject>(EObject.class, this, ScenarioPackage.SCENARIO__CONTAINED_MODELS);
+		}
+		return containedModels;
 	}
 
 	/**
@@ -669,11 +819,23 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * @generated
 	 */
 	public void createMissingModels() {
+		if (getPortModel() == null) {
+			setPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());
+			getContainedModels().add(getPortModel());
+		}
+		
+		if (getDistanceModel() == null) {
+			setDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());
+			getContainedModels().add(getDistanceModel());
+		}
+		
+		if (getCanalModel() == null) {
+			setCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());
+			getContainedModels().add(getCanalModel());
+		}
+		
 		if (getFleetModel() == null)
 			setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());
-		
-		if (getPortModel() == null)
-			setPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());
 		
 		if (getCargoModel() == null)
 			setCargoModel(scenario.cargo.CargoFactory.eINSTANCE.createCargoModel());
@@ -686,12 +848,6 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 		
 		if (getMarketModel() == null)
 			setMarketModel(scenario.market.MarketFactory.eINSTANCE.createMarketModel());
-		
-		if (getDistanceModel() == null)
-			setDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());
-		
-		if (getCanalModel() == null)
-			setCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());
 		
 		if (getOptimisation() == null)
 					setOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());
@@ -707,22 +863,18 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 		switch (featureID) {
 			case ScenarioPackage.SCENARIO__FLEET_MODEL:
 				return basicSetFleetModel(null, msgs);
-			case ScenarioPackage.SCENARIO__PORT_MODEL:
-				return basicSetPortModel(null, msgs);
+			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
+				return basicSetScheduleModel(null, msgs);
 			case ScenarioPackage.SCENARIO__CARGO_MODEL:
 				return basicSetCargoModel(null, msgs);
 			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
 				return basicSetContractModel(null, msgs);
-			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
-				return basicSetScheduleModel(null, msgs);
 			case ScenarioPackage.SCENARIO__MARKET_MODEL:
 				return basicSetMarketModel(null, msgs);
-			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
-				return basicSetDistanceModel(null, msgs);
-			case ScenarioPackage.SCENARIO__CANAL_MODEL:
-				return basicSetCanalModel(null, msgs);
 			case ScenarioPackage.SCENARIO__OPTIMISATION:
 				return basicSetOptimisation(null, msgs);
+			case ScenarioPackage.SCENARIO__CONTAINED_MODELS:
+				return ((InternalEList<?>)getContainedModels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -735,28 +887,39 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ScenarioPackage.SCENARIO__FLEET_MODEL:
-				return getFleetModel();
-			case ScenarioPackage.SCENARIO__PORT_MODEL:
-				return getPortModel();
-			case ScenarioPackage.SCENARIO__CARGO_MODEL:
-				return getCargoModel();
-			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
-				return getContractModel();
-			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
-				return getScheduleModel();
-			case ScenarioPackage.SCENARIO__MARKET_MODEL:
-				return getMarketModel();
-			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
-				return getDistanceModel();
-			case ScenarioPackage.SCENARIO__CANAL_MODEL:
-				return getCanalModel();
-			case ScenarioPackage.SCENARIO__OPTIMISATION:
-				return getOptimisation();
 			case ScenarioPackage.SCENARIO__VERSION:
 				return getVersion();
 			case ScenarioPackage.SCENARIO__NAME:
 				return getName();
+			case ScenarioPackage.SCENARIO__FLEET_MODEL:
+				if (resolve) return getFleetModel();
+				return basicGetFleetModel();
+			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
+				if (resolve) return getScheduleModel();
+				return basicGetScheduleModel();
+			case ScenarioPackage.SCENARIO__PORT_MODEL:
+				if (resolve) return getPortModel();
+				return basicGetPortModel();
+			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
+				if (resolve) return getDistanceModel();
+				return basicGetDistanceModel();
+			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+				if (resolve) return getCanalModel();
+				return basicGetCanalModel();
+			case ScenarioPackage.SCENARIO__CARGO_MODEL:
+				if (resolve) return getCargoModel();
+				return basicGetCargoModel();
+			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
+				if (resolve) return getContractModel();
+				return basicGetContractModel();
+			case ScenarioPackage.SCENARIO__MARKET_MODEL:
+				if (resolve) return getMarketModel();
+				return basicGetMarketModel();
+			case ScenarioPackage.SCENARIO__OPTIMISATION:
+				if (resolve) return getOptimisation();
+				return basicGetOptimisation();
+			case ScenarioPackage.SCENARIO__CONTAINED_MODELS:
+				return getContainedModels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -766,26 +929,24 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ScenarioPackage.SCENARIO__VERSION:
+				setVersion((Integer)newValue);
+				return;
+			case ScenarioPackage.SCENARIO__NAME:
+				setName((String)newValue);
+				return;
 			case ScenarioPackage.SCENARIO__FLEET_MODEL:
 				setFleetModel((FleetModel)newValue);
-				return;
-			case ScenarioPackage.SCENARIO__PORT_MODEL:
-				setPortModel((PortModel)newValue);
-				return;
-			case ScenarioPackage.SCENARIO__CARGO_MODEL:
-				setCargoModel((CargoModel)newValue);
-				return;
-			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
-				setContractModel((ContractModel)newValue);
 				return;
 			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)newValue);
 				return;
-			case ScenarioPackage.SCENARIO__MARKET_MODEL:
-				setMarketModel((MarketModel)newValue);
+			case ScenarioPackage.SCENARIO__PORT_MODEL:
+				setPortModel((PortModel)newValue);
 				return;
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
 				setDistanceModel((DistanceModel)newValue);
@@ -793,14 +954,21 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 			case ScenarioPackage.SCENARIO__CANAL_MODEL:
 				setCanalModel((CanalModel)newValue);
 				return;
+			case ScenarioPackage.SCENARIO__CARGO_MODEL:
+				setCargoModel((CargoModel)newValue);
+				return;
+			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
+				setContractModel((ContractModel)newValue);
+				return;
+			case ScenarioPackage.SCENARIO__MARKET_MODEL:
+				setMarketModel((MarketModel)newValue);
+				return;
 			case ScenarioPackage.SCENARIO__OPTIMISATION:
 				setOptimisation((Optimisation)newValue);
 				return;
-			case ScenarioPackage.SCENARIO__VERSION:
-				setVersion((Integer)newValue);
-				return;
-			case ScenarioPackage.SCENARIO__NAME:
-				setName((String)newValue);
+			case ScenarioPackage.SCENARIO__CONTAINED_MODELS:
+				getContainedModels().clear();
+				getContainedModels().addAll((Collection<? extends EObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -814,23 +982,20 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ScenarioPackage.SCENARIO__VERSION:
+				setVersion(VERSION_EDEFAULT);
+				return;
+			case ScenarioPackage.SCENARIO__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 			case ScenarioPackage.SCENARIO__FLEET_MODEL:
 				setFleetModel((FleetModel)null);
-				return;
-			case ScenarioPackage.SCENARIO__PORT_MODEL:
-				setPortModel((PortModel)null);
-				return;
-			case ScenarioPackage.SCENARIO__CARGO_MODEL:
-				setCargoModel((CargoModel)null);
-				return;
-			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
-				setContractModel((ContractModel)null);
 				return;
 			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)null);
 				return;
-			case ScenarioPackage.SCENARIO__MARKET_MODEL:
-				setMarketModel((MarketModel)null);
+			case ScenarioPackage.SCENARIO__PORT_MODEL:
+				setPortModel((PortModel)null);
 				return;
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
 				setDistanceModel((DistanceModel)null);
@@ -838,14 +1003,20 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 			case ScenarioPackage.SCENARIO__CANAL_MODEL:
 				setCanalModel((CanalModel)null);
 				return;
+			case ScenarioPackage.SCENARIO__CARGO_MODEL:
+				setCargoModel((CargoModel)null);
+				return;
+			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
+				setContractModel((ContractModel)null);
+				return;
+			case ScenarioPackage.SCENARIO__MARKET_MODEL:
+				setMarketModel((MarketModel)null);
+				return;
 			case ScenarioPackage.SCENARIO__OPTIMISATION:
 				setOptimisation((Optimisation)null);
 				return;
-			case ScenarioPackage.SCENARIO__VERSION:
-				setVersion(VERSION_EDEFAULT);
-				return;
-			case ScenarioPackage.SCENARIO__NAME:
-				setName(NAME_EDEFAULT);
+			case ScenarioPackage.SCENARIO__CONTAINED_MODELS:
+				getContainedModels().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -859,28 +1030,30 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ScenarioPackage.SCENARIO__FLEET_MODEL:
-				return fleetModel != null;
-			case ScenarioPackage.SCENARIO__PORT_MODEL:
-				return portModel != null;
-			case ScenarioPackage.SCENARIO__CARGO_MODEL:
-				return cargoModel != null;
-			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
-				return contractModel != null;
-			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
-				return scheduleModel != null;
-			case ScenarioPackage.SCENARIO__MARKET_MODEL:
-				return marketModel != null;
-			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
-				return distanceModel != null;
-			case ScenarioPackage.SCENARIO__CANAL_MODEL:
-				return canalModel != null;
-			case ScenarioPackage.SCENARIO__OPTIMISATION:
-				return optimisation != null;
 			case ScenarioPackage.SCENARIO__VERSION:
 				return version != VERSION_EDEFAULT;
 			case ScenarioPackage.SCENARIO__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case ScenarioPackage.SCENARIO__FLEET_MODEL:
+				return fleetModel != null;
+			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
+				return scheduleModel != null;
+			case ScenarioPackage.SCENARIO__PORT_MODEL:
+				return portModel != null;
+			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
+				return distanceModel != null;
+			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+				return canalModel != null;
+			case ScenarioPackage.SCENARIO__CARGO_MODEL:
+				return cargoModel != null;
+			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
+				return contractModel != null;
+			case ScenarioPackage.SCENARIO__MARKET_MODEL:
+				return marketModel != null;
+			case ScenarioPackage.SCENARIO__OPTIMISATION:
+				return optimisation != null;
+			case ScenarioPackage.SCENARIO__CONTAINED_MODELS:
+				return containedModels != null && !containedModels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -893,13 +1066,13 @@ public class ScenarioImpl extends EObjectImpl implements Scenario {
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
+			case ScenarioPackage.SCENARIO___CREATE_MISSING_MODELS:
+				createMissingModels();
+				return null;
 			case ScenarioPackage.SCENARIO___GET_OR_CREATE_FLEET_MODEL:
 				return getOrCreateFleetModel();
 			case ScenarioPackage.SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL:
 				return getOrCreateScheduleModel();
-			case ScenarioPackage.SCENARIO___CREATE_MISSING_MODELS:
-				createMissingModels();
-				return null;
 		}
 		return super.eInvoke(operationID, arguments);
 	}

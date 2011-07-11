@@ -418,8 +418,8 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		// Initialize classes, features, and operations; add parameters
 		initEClass(lsoSettingsEClass, LSOSettings.class, "LSOSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLSOSettings_NumberOfSteps(), ecorePackage.getEInt(), "numberOfSteps", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLSOSettings_ThresholderSettings(), this.getThresholderSettings(), null, "thresholderSettings", null, 1, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLSOSettings_MoveGeneratorSettings(), this.getMoveGeneratorSettings(), null, "moveGeneratorSettings", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLSOSettings_ThresholderSettings(), this.getThresholderSettings(), null, "thresholderSettings", null, 1, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLSOSettings_MoveGeneratorSettings(), this.getMoveGeneratorSettings(), null, "moveGeneratorSettings", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(thresholderSettingsEClass, ThresholderSettings.class, "ThresholderSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getThresholderSettings_Alpha(), ecorePackage.getEDouble(), "alpha", "0.95", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

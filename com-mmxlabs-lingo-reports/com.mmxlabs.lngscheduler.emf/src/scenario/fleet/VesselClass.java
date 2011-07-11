@@ -23,16 +23,16 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.VesselClass#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getPortExclusions <em>Port Exclusions</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -130,7 +130,7 @@ public interface VesselClass extends NamedObject {
 	 * @return the value of the '<em>Laden Attributes</em>' containment reference.
 	 * @see #setLadenAttributes(VesselStateAttributes)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_LadenAttributes()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	VesselStateAttributes getLadenAttributes();
@@ -156,7 +156,7 @@ public interface VesselClass extends NamedObject {
 	 * @return the value of the '<em>Ballast Attributes</em>' containment reference.
 	 * @see #setBallastAttributes(VesselStateAttributes)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_BallastAttributes()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	VesselStateAttributes getBallastAttributes();
@@ -377,7 +377,7 @@ public interface VesselClass extends NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Port Exclusions</em>' containment reference list.
 	 * @see scenario.fleet.FleetPackage#getVesselClass_PortExclusions()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<PortExclusion> getPortExclusions();

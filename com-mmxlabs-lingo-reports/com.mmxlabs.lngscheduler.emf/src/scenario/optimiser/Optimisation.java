@@ -39,7 +39,7 @@ public interface Optimisation extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>All Settings</em>' containment reference list.
 	 * @see scenario.optimiser.OptimiserPackage#getOptimisation_AllSettings()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<OptimisationSettings> getAllSettings();

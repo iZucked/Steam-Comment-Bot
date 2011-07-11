@@ -61,9 +61,9 @@ public class CharterOutItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addEndPortPropertyDescriptor(object);
 			addMaxHeelOutPropertyDescriptor(object);
 			addHeelCVValuePropertyDescriptor(object);
+			addEndPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

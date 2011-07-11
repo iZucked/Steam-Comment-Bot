@@ -8,6 +8,7 @@ package scenario.port;
 
 import scenario.NamedObject;
 
+import scenario.UUIDObject;
 import scenario.contract.Contract;
 
 import scenario.market.Index;
@@ -20,10 +21,10 @@ import scenario.market.Index;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.port.Port#getDefaultIndex <em>Default Index</em>}</li>
  *   <li>{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}</li>
- *   <li>{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}</li>
  *   <li>{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultIndex <em>Default Index</em>}</li>
  * </ul>
  * </p>
  *
@@ -31,7 +32,7 @@ import scenario.market.Index;
  * @model
  * @generated
  */
-public interface Port extends NamedObject {
+public interface Port extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Default Index</b></em>' reference.
 	 * <!-- begin-user-doc -->

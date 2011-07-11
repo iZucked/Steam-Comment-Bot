@@ -110,7 +110,7 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	 */
 	public EList<Vessel> getFleet() {
 		if (fleet == null) {
-			fleet = new EObjectContainmentEList<Vessel>(Vessel.class, this, FleetPackage.FLEET_MODEL__FLEET);
+			fleet = new EObjectContainmentEList.Resolving<Vessel>(Vessel.class, this, FleetPackage.FLEET_MODEL__FLEET);
 		}
 		return fleet;
 	}
@@ -122,7 +122,7 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	 */
 	public EList<VesselClass> getVesselClasses() {
 		if (vesselClasses == null) {
-			vesselClasses = new EObjectContainmentEList<VesselClass>(VesselClass.class, this, FleetPackage.FLEET_MODEL__VESSEL_CLASSES);
+			vesselClasses = new EObjectContainmentEList.Resolving<VesselClass>(VesselClass.class, this, FleetPackage.FLEET_MODEL__VESSEL_CLASSES);
 		}
 		return vesselClasses;
 	}
@@ -134,7 +134,7 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	 */
 	public EList<VesselEvent> getVesselEvents() {
 		if (vesselEvents == null) {
-			vesselEvents = new EObjectContainmentEList<VesselEvent>(VesselEvent.class, this, FleetPackage.FLEET_MODEL__VESSEL_EVENTS);
+			vesselEvents = new EObjectContainmentEList.Resolving<VesselEvent>(VesselEvent.class, this, FleetPackage.FLEET_MODEL__VESSEL_EVENTS);
 		}
 		return vesselEvents;
 	}
@@ -146,7 +146,7 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	 */
 	public EList<VesselFuel> getFuels() {
 		if (fuels == null) {
-			fuels = new EObjectContainmentEList<VesselFuel>(VesselFuel.class, this, FleetPackage.FLEET_MODEL__FUELS);
+			fuels = new EObjectContainmentEList.Resolving<VesselFuel>(VesselFuel.class, this, FleetPackage.FLEET_MODEL__FUELS);
 		}
 		return fuels;
 	}

@@ -77,8 +77,8 @@ public class VesselClassItemProvider
 			addSpotCharterCountPropertyDescriptor(object);
 			addDailyCharterPricePropertyDescriptor(object);
 			addDailyCharterOutPricePropertyDescriptor(object);
-			addInaccessiblePortsPropertyDescriptor(object);
 			addBaseFuelPropertyDescriptor(object);
+			addInaccessiblePortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

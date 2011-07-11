@@ -20,8 +20,8 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.market.StepwisePriceCurve#getPrices <em>Prices</em>}</li>
  *   <li>{@link scenario.market.StepwisePriceCurve#getDefaultValue <em>Default Value</em>}</li>
+ *   <li>{@link scenario.market.StepwisePriceCurve#getPrices <em>Prices</em>}</li>
  * </ul>
  * </p>
  *
@@ -41,7 +41,7 @@ public interface StepwisePriceCurve extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Prices</em>' containment reference list.
 	 * @see scenario.market.MarketPackage#getStepwisePriceCurve_Prices()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<StepwisePrice> getPrices();

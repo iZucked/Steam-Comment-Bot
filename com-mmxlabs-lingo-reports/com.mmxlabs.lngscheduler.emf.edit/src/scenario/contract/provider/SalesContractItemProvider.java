@@ -61,8 +61,8 @@ public class SalesContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIndexPropertyDescriptor(object);
 			addMarkupPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

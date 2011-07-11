@@ -101,7 +101,7 @@ public class IdleImpl extends PortVisitImpl implements Idle {
 	 */
 	public EList<FuelQuantity> getFuelUsage() {
 		if (fuelUsage == null) {
-			fuelUsage = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, EventsPackage.IDLE__FUEL_USAGE);
+			fuelUsage = new EObjectContainmentEList.Resolving<FuelQuantity>(FuelQuantity.class, this, EventsPackage.IDLE__FUEL_USAGE);
 		}
 		return fuelUsage;
 	}

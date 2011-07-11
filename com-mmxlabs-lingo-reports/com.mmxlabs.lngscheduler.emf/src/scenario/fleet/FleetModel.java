@@ -41,7 +41,7 @@ public interface FleetModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fleet</em>' containment reference list.
 	 * @see scenario.fleet.FleetPackage#getFleetModel_Fleet()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Vessel> getFleet();
@@ -57,7 +57,7 @@ public interface FleetModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessel Classes</em>' containment reference list.
 	 * @see scenario.fleet.FleetPackage#getFleetModel_VesselClasses()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<VesselClass> getVesselClasses();
@@ -73,7 +73,7 @@ public interface FleetModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessel Events</em>' containment reference list.
 	 * @see scenario.fleet.FleetPackage#getFleetModel_VesselEvents()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<VesselEvent> getVesselEvents();
@@ -89,7 +89,7 @@ public interface FleetModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fuels</em>' containment reference list.
 	 * @see scenario.fleet.FleetPackage#getFleetModel_Fuels()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<VesselFuel> getFuels();

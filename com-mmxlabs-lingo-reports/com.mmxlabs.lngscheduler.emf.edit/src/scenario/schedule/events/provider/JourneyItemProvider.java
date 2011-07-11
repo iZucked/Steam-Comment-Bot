@@ -65,13 +65,13 @@ public class JourneyItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addToPortPropertyDescriptor(object);
 			addVesselStatePropertyDescriptor(object);
 			addRoutePropertyDescriptor(object);
 			addSpeedPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
-			addFromPortPropertyDescriptor(object);
 			addRouteCostPropertyDescriptor(object);
+			addToPortPropertyDescriptor(object);
+			addFromPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

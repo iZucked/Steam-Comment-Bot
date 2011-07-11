@@ -245,7 +245,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EReference getPort_DefaultIndex() {
-		return (EReference)portEClass.getEStructuralFeatures().get(0);
+		return (EReference)portEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_TimeZone() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_RegasEfficiency() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -344,7 +344,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EReference getCanal_ClassCosts() {
-		return (EReference)canalEClass.getEStructuralFeatures().get(0);
+		return (EReference)canalEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -353,7 +353,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getCanal_DefaultCost() {
-		return (EAttribute)canalEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)canalEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -362,7 +362,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EReference getCanal_DistanceModel() {
-		return (EReference)canalEClass.getEStructuralFeatures().get(2);
+		return (EReference)canalEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -469,10 +469,10 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(portModelEClass, PORT_MODEL__PORTS);
 
 		portEClass = createEClass(PORT);
-		createEReference(portEClass, PORT__DEFAULT_INDEX);
 		createEAttribute(portEClass, PORT__TIME_ZONE);
-		createEReference(portEClass, PORT__DEFAULT_CONTRACT);
 		createEAttribute(portEClass, PORT__REGAS_EFFICIENCY);
+		createEReference(portEClass, PORT__DEFAULT_CONTRACT);
+		createEReference(portEClass, PORT__DEFAULT_INDEX);
 
 		distanceModelEClass = createEClass(DISTANCE_MODEL);
 		createEReference(distanceModelEClass, DISTANCE_MODEL__DISTANCES);
@@ -483,9 +483,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(distanceLineEClass, DISTANCE_LINE__DISTANCE);
 
 		canalEClass = createEClass(CANAL);
-		createEReference(canalEClass, CANAL__CLASS_COSTS);
 		createEAttribute(canalEClass, CANAL__DEFAULT_COST);
 		createEReference(canalEClass, CANAL__DISTANCE_MODEL);
+		createEReference(canalEClass, CANAL__CLASS_COSTS);
 
 		canalModelEClass = createEClass(CANAL_MODEL);
 		createEReference(canalModelEClass, CANAL_MODEL__CANALS);
@@ -523,8 +523,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		// Obtain other dependent packages
 		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
-		MarketPackage theMarketPackage = (MarketPackage)EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI);
 		ContractPackage theContractPackage = (ContractPackage)EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI);
+		MarketPackage theMarketPackage = (MarketPackage)EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Create type parameters
@@ -532,21 +532,22 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		portEClass.getESuperTypes().add(theScenarioPackage.getUUIDObject());
 		portEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 		canalEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(portModelEClass, PortModel.class, "PortModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPortModel_Ports(), this.getPort(), null, "ports", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortModel_Ports(), this.getPort(), null, "ports", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPort_DefaultIndex(), theMarketPackage.getIndex(), null, "defaultIndex", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_TimeZone(), ecorePackage.getEString(), "timeZone", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPort_DefaultContract(), theContractPackage.getContract(), null, "defaultContract", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_RegasEfficiency(), ecorePackage.getEFloat(), "regasEfficiency", "1.0", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPort_DefaultContract(), theContractPackage.getContract(), null, "defaultContract", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPort_DefaultIndex(), theMarketPackage.getIndex(), null, "defaultIndex", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(distanceModelEClass, DistanceModel.class, "DistanceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDistanceModel_Distances(), this.getDistanceLine(), null, "distances", null, 0, -1, DistanceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDistanceModel_Distances(), this.getDistanceLine(), null, "distances", null, 0, -1, DistanceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(distanceLineEClass, DistanceLine.class, "DistanceLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDistanceLine_FromPort(), this.getPort(), null, "fromPort", null, 0, 1, DistanceLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -554,12 +555,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getDistanceLine_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, DistanceLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalEClass, Canal.class, "Canal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCanal_ClassCosts(), this.getVesselClassCost(), null, "classCosts", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanal_DefaultCost(), ecorePackage.getEInt(), "defaultCost", null, 0, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCanal_DistanceModel(), this.getDistanceModel(), null, "distanceModel", null, 1, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanal_DistanceModel(), this.getDistanceModel(), null, "distanceModel", null, 1, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanal_ClassCosts(), this.getVesselClassCost(), null, "classCosts", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalModelEClass, CanalModel.class, "CanalModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCanalModel_Canals(), this.getCanal(), null, "canals", null, 0, -1, CanalModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanalModel_Canals(), this.getCanal(), null, "canals", null, 0, -1, CanalModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselClassCostEClass, VesselClassCost.class, "VesselClassCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselClassCost_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -29,25 +29,15 @@ import scenario.port.Port;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.PortExclusionImpl#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.fleet.impl.PortExclusionImpl#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link scenario.fleet.impl.PortExclusionImpl#getEndDate <em>End Date</em>}</li>
+ *   <li>{@link scenario.fleet.impl.PortExclusionImpl#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusion {
-	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port port;
-
 	/**
 	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -105,6 +95,16 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	 * @ordered
 	 */
 	protected boolean endDateESet;
+
+	/**
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port port;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -263,13 +263,13 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.PORT_EXCLUSION__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
 			case FleetPackage.PORT_EXCLUSION__START_DATE:
 				return getStartDate();
 			case FleetPackage.PORT_EXCLUSION__END_DATE:
 				return getEndDate();
+			case FleetPackage.PORT_EXCLUSION__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -282,14 +282,14 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.PORT_EXCLUSION__PORT:
-				setPort((Port)newValue);
-				return;
 			case FleetPackage.PORT_EXCLUSION__START_DATE:
 				setStartDate((Date)newValue);
 				return;
 			case FleetPackage.PORT_EXCLUSION__END_DATE:
 				setEndDate((Date)newValue);
+				return;
+			case FleetPackage.PORT_EXCLUSION__PORT:
+				setPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -303,14 +303,14 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.PORT_EXCLUSION__PORT:
-				setPort((Port)null);
-				return;
 			case FleetPackage.PORT_EXCLUSION__START_DATE:
 				unsetStartDate();
 				return;
 			case FleetPackage.PORT_EXCLUSION__END_DATE:
 				unsetEndDate();
+				return;
+			case FleetPackage.PORT_EXCLUSION__PORT:
+				setPort((Port)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -324,12 +324,12 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.PORT_EXCLUSION__PORT:
-				return port != null;
 			case FleetPackage.PORT_EXCLUSION__START_DATE:
 				return isSetStartDate();
 			case FleetPackage.PORT_EXCLUSION__END_DATE:
 				return isSetEndDate();
+			case FleetPackage.PORT_EXCLUSION__PORT:
+				return port != null;
 		}
 		return super.eIsSet(featureID);
 	}

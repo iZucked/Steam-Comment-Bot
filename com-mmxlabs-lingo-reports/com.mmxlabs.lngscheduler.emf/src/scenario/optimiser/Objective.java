@@ -64,7 +64,7 @@ public interface Objective extends NamedObject {
 	 * @see #unsetDiscountCurve()
 	 * @see #setDiscountCurve(DiscountCurve)
 	 * @see scenario.optimiser.OptimiserPackage#getObjective_DiscountCurve()
-	 * @model containment="true" unsettable="true" required="true"
+	 * @model containment="true" resolveProxies="true" unsettable="true" required="true"
 	 * @generated
 	 */
 	DiscountCurve getDiscountCurve();

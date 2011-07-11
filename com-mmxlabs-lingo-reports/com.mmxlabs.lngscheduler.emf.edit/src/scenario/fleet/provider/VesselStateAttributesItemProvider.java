@@ -70,10 +70,10 @@ public class VesselStateAttributesItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVesselStatePropertyDescriptor(object);
 			addNboRatePropertyDescriptor(object);
 			addIdleNBORatePropertyDescriptor(object);
 			addIdleConsumptionRatePropertyDescriptor(object);
+			addVesselStatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -215,11 +215,8 @@ public class VesselStateAttributesItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		VesselState labelValue = ((VesselStateAttributes)object).getVesselState();
-		String label = labelValue == null ? null : labelValue.toString();
-		return label == null || label.length() == 0 ?
-			getString("_UI_VesselStateAttributes_type") :
-			getString("_UI_VesselStateAttributes_type") + " " + label;
+		VesselStateAttributes vesselStateAttributes = (VesselStateAttributes)object;
+		return getString("_UI_VesselStateAttributes_type") + " " + vesselStateAttributes.getNboRate();
 	}
 
 	/**
@@ -234,10 +231,10 @@ public class VesselStateAttributesItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselStateAttributes.class)) {
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE:

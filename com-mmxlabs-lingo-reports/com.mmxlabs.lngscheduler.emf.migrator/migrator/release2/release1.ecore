@@ -2,7 +2,7 @@
 <ecore:EPackage xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="scenario"
-    nsURI="http://com.mmxlabs.lng.emf" nsPrefix="com.mmxlabs.lng.emf">
+    nsURI="http://com.mmxlabs.lng.emf1" nsPrefix="com.mmxlabs.lng.emf">
   <eClassifiers xsi:type="ecore:EClass" name="Scenario">
     <eOperations name="createMissingModels">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -20,7 +20,7 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        defaultValueLiteral="1"/>
+        defaultValueLiteral="2"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="Default name"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fleetModel" eType="#//fleet/FleetModel"
@@ -53,7 +53,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="NamedObject" abstract="true" eSuperTypes="#//ScenarioObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eSubpackages name="fleet" nsURI="http://com.mmxlabs.lng.emf/fleet" nsPrefix="com.mmxlabs.lng.emf.fleet">
+  <eSubpackages name="fleet" nsURI="http://com.mmxlabs.lng.emf1/fleet" nsPrefix="com.mmxlabs.lng.emf.fleet">
     <eClassifiers xsi:type="ecore:EClass" name="FleetModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="fleet" upperBound="-1"
           eType="#//fleet/Vessel" containment="true"/>
@@ -187,7 +187,7 @@
           eType="#//port/Port"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
+  <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf1/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="schedules" upperBound="-1"
           eType="#//schedule/Schedule" containment="true"/>
@@ -358,7 +358,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="charterOut" lowerBound="1"
           eType="#//schedule/events/CharterOutVisit"/>
     </eClassifiers>
-    <eSubpackages name="events" nsURI="http://com.mmxlabs.lng.emf/schedule/events"
+    <eSubpackages name="events" nsURI="http://com.mmxlabs.lng.emf1/schedule/events"
         nsPrefix="com.mmxlabs.lng.emf.schedule.events">
       <eClassifiers xsi:type="ecore:EClass" name="FuelMixture">
         <eOperations name="getTotalFuelCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
@@ -530,7 +530,7 @@
             eType="#//schedule/CharterOutRevenue"/>
       </eClassifiers>
     </eSubpackages>
-    <eSubpackages name="fleetallocation" nsURI="http://com.mmxlabs.lng.emf/schedule/fleetallocation"
+    <eSubpackages name="fleetallocation" nsURI="http://com.mmxlabs.lng.emf1/schedule/fleetallocation"
         nsPrefix="com.mmxlabs.lng.emf.schedule.fleetallocation">
       <eClassifiers xsi:type="ecore:EClass" name="AllocatedVessel">
         <eOperations name="getHourlyCharterPrice" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
@@ -567,7 +567,7 @@
       </eClassifiers>
     </eSubpackages>
   </eSubpackages>
-  <eSubpackages name="port" nsURI="http://com.mmxlabs.lng.emf/port" nsPrefix="com.mmxlabs.lng.emf.port">
+  <eSubpackages name="port" nsURI="http://com.mmxlabs.lng.emf1/port" nsPrefix="com.mmxlabs.lng.emf.port">
     <eClassifiers xsi:type="ecore:EClass" name="PortModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
           eType="#//port/Port" containment="true"/>
@@ -634,7 +634,7 @@
       </eStructuralFeatures>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="cargo" nsURI="http://com.mmxlabs.lng.emf/cargo" nsPrefix="com.mmxlabs.lng.emf.cargo">
+  <eSubpackages name="cargo" nsURI="http://com.mmxlabs.lng.emf1/cargo" nsPrefix="com.mmxlabs.lng.emf.cargo">
     <eClassifiers xsi:type="ecore:EClass" name="CargoModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="cargoes" upperBound="-1"
           eType="#//cargo/Cargo" containment="true"/>
@@ -697,7 +697,7 @@
       <eLiterals name="DES" value="2" literal="DES"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="contract" nsURI="http://com.mmxlabs.lng.emf/contract" nsPrefix="com.mmxlabs.lng.emf.contract">
+  <eSubpackages name="contract" nsURI="http://com.mmxlabs.lng.emf1/contract" nsPrefix="com.mmxlabs.lng.emf.contract">
     <eClassifiers xsi:type="ecore:EClass" name="ContractModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="volumeConstraints" upperBound="-1"
           eType="#//contract/TotalVolumeLimit" containment="true"/>
@@ -766,7 +766,7 @@
           eType="#//market/Index"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="market" nsURI="http://com.mmxlabs.lng.emf/market" nsPrefix="com.mmxlabs.lng.emf.market">
+  <eSubpackages name="market" nsURI="http://com.mmxlabs.lng.emf1/market" nsPrefix="com.mmxlabs.lng.emf.market">
     <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EReference" name="priceCurve" lowerBound="1"
           eType="#//market/StepwisePriceCurve" containment="true"/>
@@ -793,7 +793,7 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="optimiser" nsURI="http://com.mmxlabs.lng.emf/optimiser" nsPrefix="com.mmxlabs.lng.emf.optimiser">
+  <eSubpackages name="optimiser" nsURI="http://com.mmxlabs.lng.emf1/optimiser" nsPrefix="com.mmxlabs.lng.emf.optimiser">
     <eClassifiers xsi:type="ecore:EClass" name="OptimisationSettings" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="randomSeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="initialSchedule" eType="#//schedule/Schedule"/>
@@ -861,7 +861,7 @@
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
-    <eSubpackages name="lso" nsURI="http://com.mmxlabs.lng.emf/optimiser/lso" nsPrefix="com.mmxlabs.lng.emf.optimiser.lso">
+    <eSubpackages name="lso" nsURI="http://com.mmxlabs.lng.emf1/optimiser/lso" nsPrefix="com.mmxlabs.lng.emf.optimiser.lso">
       <eClassifiers xsi:type="ecore:EClass" name="LSOSettings" eSuperTypes="#//optimiser/OptimisationSettings">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfSteps" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="thresholderSettings"

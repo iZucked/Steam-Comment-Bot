@@ -6,6 +6,7 @@
  */
 package scenario;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.cargo.CargoModel;
@@ -32,17 +33,18 @@ import scenario.schedule.ScheduleModel;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.Scenario#getFleetModel <em>Fleet Model</em>}</li>
- *   <li>{@link scenario.Scenario#getPortModel <em>Port Model</em>}</li>
- *   <li>{@link scenario.Scenario#getCargoModel <em>Cargo Model</em>}</li>
- *   <li>{@link scenario.Scenario#getContractModel <em>Contract Model</em>}</li>
- *   <li>{@link scenario.Scenario#getScheduleModel <em>Schedule Model</em>}</li>
- *   <li>{@link scenario.Scenario#getMarketModel <em>Market Model</em>}</li>
- *   <li>{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}</li>
- *   <li>{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}</li>
- *   <li>{@link scenario.Scenario#getOptimisation <em>Optimisation</em>}</li>
  *   <li>{@link scenario.Scenario#getVersion <em>Version</em>}</li>
  *   <li>{@link scenario.Scenario#getName <em>Name</em>}</li>
+ *   <li>{@link scenario.Scenario#getFleetModel <em>Fleet Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getScheduleModel <em>Schedule Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getPortModel <em>Port Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getCargoModel <em>Cargo Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getContractModel <em>Contract Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getMarketModel <em>Market Model</em>}</li>
+ *   <li>{@link scenario.Scenario#getOptimisation <em>Optimisation</em>}</li>
+ *   <li>{@link scenario.Scenario#getContainedModels <em>Contained Models</em>}</li>
  * </ul>
  * </p>
  *
@@ -62,7 +64,7 @@ public interface Scenario extends EObject {
 	 * @return the value of the '<em>Fleet Model</em>' containment reference.
 	 * @see #setFleetModel(FleetModel)
 	 * @see scenario.ScenarioPackage#getScenario_FleetModel()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	FleetModel getFleetModel();
@@ -78,26 +80,26 @@ public interface Scenario extends EObject {
 	void setFleetModel(FleetModel value);
 
 	/**
-	 * Returns the value of the '<em><b>Port Model</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Port Model</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Port Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Port Model</em>' containment reference.
+	 * @return the value of the '<em>Port Model</em>' reference.
 	 * @see #setPortModel(PortModel)
 	 * @see scenario.ScenarioPackage#getScenario_PortModel()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
 	PortModel getPortModel();
 
 	/**
-	 * Sets the value of the '{@link scenario.Scenario#getPortModel <em>Port Model</em>}' containment reference.
+	 * Sets the value of the '{@link scenario.Scenario#getPortModel <em>Port Model</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Port Model</em>' containment reference.
+	 * @param value the new value of the '<em>Port Model</em>' reference.
 	 * @see #getPortModel()
 	 * @generated
 	 */
@@ -114,7 +116,7 @@ public interface Scenario extends EObject {
 	 * @return the value of the '<em>Cargo Model</em>' containment reference.
 	 * @see #setCargoModel(CargoModel)
 	 * @see scenario.ScenarioPackage#getScenario_CargoModel()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	CargoModel getCargoModel();
@@ -140,7 +142,7 @@ public interface Scenario extends EObject {
 	 * @return the value of the '<em>Contract Model</em>' containment reference.
 	 * @see #setContractModel(ContractModel)
 	 * @see scenario.ScenarioPackage#getScenario_ContractModel()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	ContractModel getContractModel();
@@ -166,7 +168,7 @@ public interface Scenario extends EObject {
 	 * @return the value of the '<em>Schedule Model</em>' containment reference.
 	 * @see #setScheduleModel(ScheduleModel)
 	 * @see scenario.ScenarioPackage#getScenario_ScheduleModel()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	ScheduleModel getScheduleModel();
@@ -192,7 +194,7 @@ public interface Scenario extends EObject {
 	 * @return the value of the '<em>Market Model</em>' containment reference.
 	 * @see #setMarketModel(MarketModel)
 	 * @see scenario.ScenarioPackage#getScenario_MarketModel()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	MarketModel getMarketModel();
@@ -208,52 +210,52 @@ public interface Scenario extends EObject {
 	void setMarketModel(MarketModel value);
 
 	/**
-	 * Returns the value of the '<em><b>Distance Model</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Distance Model</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Distance Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Distance Model</em>' containment reference.
+	 * @return the value of the '<em>Distance Model</em>' reference.
 	 * @see #setDistanceModel(DistanceModel)
 	 * @see scenario.ScenarioPackage#getScenario_DistanceModel()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
 	DistanceModel getDistanceModel();
 
 	/**
-	 * Sets the value of the '{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}' containment reference.
+	 * Sets the value of the '{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Distance Model</em>' containment reference.
+	 * @param value the new value of the '<em>Distance Model</em>' reference.
 	 * @see #getDistanceModel()
 	 * @generated
 	 */
 	void setDistanceModel(DistanceModel value);
 
 	/**
-	 * Returns the value of the '<em><b>Canal Model</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Canal Model</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Canal Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Canal Model</em>' containment reference.
+	 * @return the value of the '<em>Canal Model</em>' reference.
 	 * @see #setCanalModel(CanalModel)
 	 * @see scenario.ScenarioPackage#getScenario_CanalModel()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
 	CanalModel getCanalModel();
 
 	/**
-	 * Sets the value of the '{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}' containment reference.
+	 * Sets the value of the '{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Canal Model</em>' containment reference.
+	 * @param value the new value of the '<em>Canal Model</em>' reference.
 	 * @see #getCanalModel()
 	 * @generated
 	 */
@@ -270,7 +272,7 @@ public interface Scenario extends EObject {
 	 * @return the value of the '<em>Optimisation</em>' containment reference.
 	 * @see #setOptimisation(Optimisation)
 	 * @see scenario.ScenarioPackage#getScenario_Optimisation()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	Optimisation getOptimisation();
@@ -284,6 +286,22 @@ public interface Scenario extends EObject {
 	 * @generated
 	 */
 	void setOptimisation(Optimisation value);
+
+	/**
+	 * Returns the value of the '<em><b>Contained Models</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contained Models</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contained Models</em>' containment reference list.
+	 * @see scenario.ScenarioPackage#getScenario_ContainedModels()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<EObject> getContainedModels();
 
 	/**
 	 * Returns the value of the '<em><b>Version</b></em>' attribute.
@@ -360,7 +378,7 @@ public interface Scenario extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getFleetModel() == null)\r\n\tsetFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());\r\n\r\nif (getPortModel() == null)\r\n\tsetPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());\r\n\r\nif (getCargoModel() == null)\r\n\tsetCargoModel(scenario.cargo.CargoFactory.eINSTANCE.createCargoModel());\r\n\r\nif (getContractModel() == null)\r\n\tsetContractModel(scenario.contract.ContractFactory.eINSTANCE.createContractModel());\r\n\r\nif (getScheduleModel() == null)\r\n\tsetScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());\r\n\r\nif (getMarketModel() == null)\r\n\tsetMarketModel(scenario.market.MarketFactory.eINSTANCE.createMarketModel());\r\n\r\nif (getDistanceModel() == null)\r\n\tsetDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());\r\n\r\nif (getCanalModel() == null)\r\n\tsetCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());\r\n\r\nif (getOptimisation() == null)\r\n\t\t\tsetOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getPortModel() == null) {\r\n\tsetPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());\r\n\tgetContainedModels().add(getPortModel());\r\n}\r\n\r\nif (getDistanceModel() == null) {\r\n\tsetDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());\r\n\tgetContainedModels().add(getDistanceModel());\r\n}\r\n\r\nif (getCanalModel() == null) {\r\n\tsetCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());\r\n\tgetContainedModels().add(getCanalModel());\r\n}\r\n\r\nif (getFleetModel() == null)\r\n\tsetFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());\r\n\r\nif (getCargoModel() == null)\r\n\tsetCargoModel(scenario.cargo.CargoFactory.eINSTANCE.createCargoModel());\r\n\r\nif (getContractModel() == null)\r\n\tsetContractModel(scenario.contract.ContractFactory.eINSTANCE.createContractModel());\r\n\r\nif (getScheduleModel() == null)\r\n\tsetScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());\r\n\r\nif (getMarketModel() == null)\r\n\tsetMarketModel(scenario.market.MarketFactory.eINSTANCE.createMarketModel());\r\n\r\nif (getOptimisation() == null)\r\n\t\t\tsetOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());'"
 	 * @generated
 	 */
 	void createMissingModels();

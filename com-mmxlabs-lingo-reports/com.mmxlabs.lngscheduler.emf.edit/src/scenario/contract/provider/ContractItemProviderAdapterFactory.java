@@ -359,9 +359,9 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 	 */
 	public void dispose() {
 		if (contractModelItemProvider != null) contractModelItemProvider.dispose();
-		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
 		if (totalVolumeLimitItemProvider != null) totalVolumeLimitItemProvider.dispose();
 		if (entityItemProvider != null) entityItemProvider.dispose();
+		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
 		if (fixedPricePurchaseContractItemProvider != null) fixedPricePurchaseContractItemProvider.dispose();
 		if (indexPricePurchaseContractItemProvider != null) indexPricePurchaseContractItemProvider.dispose();
 		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();

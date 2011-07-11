@@ -28,34 +28,15 @@ import scenario.port.Port;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.PortAndTimeImpl#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.fleet.impl.PortAndTimeImpl#getStartTime <em>Start Time</em>}</li>
  *   <li>{@link scenario.fleet.impl.PortAndTimeImpl#getEndTime <em>End Time</em>}</li>
+ *   <li>{@link scenario.fleet.impl.PortAndTimeImpl#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
-	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port port;
-
-	/**
-	 * This is true if the Port reference has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean portESet;
-
 	/**
 	 * The default value of the '{@link #getStartTime() <em>Start Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -113,6 +94,25 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	 * @ordered
 	 */
 	protected boolean endTimeESet;
+
+	/**
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port port;
+
+	/**
+	 * This is true if the Port reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -296,13 +296,13 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.PORT_AND_TIME__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
 			case FleetPackage.PORT_AND_TIME__START_TIME:
 				return getStartTime();
 			case FleetPackage.PORT_AND_TIME__END_TIME:
 				return getEndTime();
+			case FleetPackage.PORT_AND_TIME__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -315,14 +315,14 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.PORT_AND_TIME__PORT:
-				setPort((Port)newValue);
-				return;
 			case FleetPackage.PORT_AND_TIME__START_TIME:
 				setStartTime((Date)newValue);
 				return;
 			case FleetPackage.PORT_AND_TIME__END_TIME:
 				setEndTime((Date)newValue);
+				return;
+			case FleetPackage.PORT_AND_TIME__PORT:
+				setPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -336,14 +336,14 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.PORT_AND_TIME__PORT:
-				unsetPort();
-				return;
 			case FleetPackage.PORT_AND_TIME__START_TIME:
 				unsetStartTime();
 				return;
 			case FleetPackage.PORT_AND_TIME__END_TIME:
 				unsetEndTime();
+				return;
+			case FleetPackage.PORT_AND_TIME__PORT:
+				unsetPort();
 				return;
 		}
 		super.eUnset(featureID);
@@ -357,12 +357,12 @@ public class PortAndTimeImpl extends EObjectImpl implements PortAndTime {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.PORT_AND_TIME__PORT:
-				return isSetPort();
 			case FleetPackage.PORT_AND_TIME__START_TIME:
 				return isSetStartTime();
 			case FleetPackage.PORT_AND_TIME__END_TIME:
 				return isSetEndTime();
+			case FleetPackage.PORT_AND_TIME__PORT:
+				return isSetPort();
 		}
 		return super.eIsSet(featureID);
 	}

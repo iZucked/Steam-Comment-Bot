@@ -18,8 +18,8 @@ import scenario.schedule.CargoAllocation;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.schedule.events.SlotVisit#getSlot <em>Slot</em>}</li>
  *   <li>{@link scenario.schedule.events.SlotVisit#getCargoAllocation <em>Cargo Allocation</em>}</li>
+ *   <li>{@link scenario.schedule.events.SlotVisit#getSlot <em>Slot</em>}</li>
  * </ul>
  * </p>
  *

@@ -39,25 +39,15 @@ import scenario.schedule.SchedulePackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.schedule.impl.BookedRevenueImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link scenario.schedule.impl.BookedRevenueImpl#getDate <em>Date</em>}</li>
  *   <li>{@link scenario.schedule.impl.BookedRevenueImpl#getLineItems <em>Line Items</em>}</li>
+ *   <li>{@link scenario.schedule.impl.BookedRevenueImpl#getEntity <em>Entity</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedRevenue {
-	/**
-	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEntity()
-	 * @generated
-	 * @ordered
-	 */
-	protected Entity entity;
-
 	/**
 	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -87,6 +77,16 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * @ordered
 	 */
 	protected EList<LineItem> lineItems;
+
+	/**
+	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected Entity entity;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -173,7 +173,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 */
 	public EList<LineItem> getLineItems() {
 		if (lineItems == null) {
-			lineItems = new EObjectContainmentEList<LineItem>(LineItem.class, this, SchedulePackage.BOOKED_REVENUE__LINE_ITEMS);
+			lineItems = new EObjectContainmentEList.Resolving<LineItem>(LineItem.class, this, SchedulePackage.BOOKED_REVENUE__LINE_ITEMS);
 		}
 		return lineItems;
 	}
@@ -282,13 +282,13 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.BOOKED_REVENUE__ENTITY:
-				if (resolve) return getEntity();
-				return basicGetEntity();
 			case SchedulePackage.BOOKED_REVENUE__DATE:
 				return getDate();
 			case SchedulePackage.BOOKED_REVENUE__LINE_ITEMS:
 				return getLineItems();
+			case SchedulePackage.BOOKED_REVENUE__ENTITY:
+				if (resolve) return getEntity();
+				return basicGetEntity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -302,15 +302,15 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.BOOKED_REVENUE__ENTITY:
-				setEntity((Entity)newValue);
-				return;
 			case SchedulePackage.BOOKED_REVENUE__DATE:
 				setDate((Date)newValue);
 				return;
 			case SchedulePackage.BOOKED_REVENUE__LINE_ITEMS:
 				getLineItems().clear();
 				getLineItems().addAll((Collection<? extends LineItem>)newValue);
+				return;
+			case SchedulePackage.BOOKED_REVENUE__ENTITY:
+				setEntity((Entity)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -324,14 +324,14 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.BOOKED_REVENUE__ENTITY:
-				setEntity((Entity)null);
-				return;
 			case SchedulePackage.BOOKED_REVENUE__DATE:
 				setDate(DATE_EDEFAULT);
 				return;
 			case SchedulePackage.BOOKED_REVENUE__LINE_ITEMS:
 				getLineItems().clear();
+				return;
+			case SchedulePackage.BOOKED_REVENUE__ENTITY:
+				setEntity((Entity)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -345,12 +345,12 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.BOOKED_REVENUE__ENTITY:
-				return entity != null;
 			case SchedulePackage.BOOKED_REVENUE__DATE:
 				return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
 			case SchedulePackage.BOOKED_REVENUE__LINE_ITEMS:
 				return lineItems != null && !lineItems.isEmpty();
+			case SchedulePackage.BOOKED_REVENUE__ENTITY:
+				return entity != null;
 		}
 		return super.eIsSet(featureID);
 	}

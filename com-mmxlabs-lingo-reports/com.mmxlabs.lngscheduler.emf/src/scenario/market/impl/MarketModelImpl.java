@@ -74,7 +74,7 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	 */
 	public EList<Index> getIndices() {
 		if (indices == null) {
-			indices = new EObjectContainmentEList<Index>(Index.class, this, MarketPackage.MARKET_MODEL__INDICES);
+			indices = new EObjectContainmentEList.Resolving<Index>(Index.class, this, MarketPackage.MARKET_MODEL__INDICES);
 		}
 		return indices;
 	}

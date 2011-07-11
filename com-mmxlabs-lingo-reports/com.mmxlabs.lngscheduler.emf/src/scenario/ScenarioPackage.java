@@ -43,7 +43,7 @@ public interface ScenarioPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf1";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2";
 
 	/**
 	 * The package namespace name.
@@ -72,94 +72,13 @@ public interface ScenarioPackage extends EPackage {
 	int SCENARIO = 0;
 
 	/**
-	 * The feature id for the '<em><b>Fleet Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__FLEET_MODEL = 0;
-
-	/**
-	 * The feature id for the '<em><b>Port Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__PORT_MODEL = 1;
-
-	/**
-	 * The feature id for the '<em><b>Cargo Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__CARGO_MODEL = 2;
-
-	/**
-	 * The feature id for the '<em><b>Contract Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__CONTRACT_MODEL = 3;
-
-	/**
-	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__SCHEDULE_MODEL = 4;
-
-	/**
-	 * The feature id for the '<em><b>Market Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__MARKET_MODEL = 5;
-
-	/**
-	 * The feature id for the '<em><b>Distance Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__DISTANCE_MODEL = 6;
-
-	/**
-	 * The feature id for the '<em><b>Canal Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__CANAL_MODEL = 7;
-
-	/**
-	 * The feature id for the '<em><b>Optimisation</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO__OPTIMISATION = 8;
-
-	/**
 	 * The feature id for the '<em><b>Version</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__VERSION = 9;
+	int SCENARIO__VERSION = 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -168,7 +87,97 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__NAME = 10;
+	int SCENARIO__NAME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Fleet Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__FLEET_MODEL = 2;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__SCHEDULE_MODEL = 3;
+
+	/**
+	 * The feature id for the '<em><b>Port Model</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__PORT_MODEL = 4;
+
+	/**
+	 * The feature id for the '<em><b>Distance Model</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__DISTANCE_MODEL = 5;
+
+	/**
+	 * The feature id for the '<em><b>Canal Model</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__CANAL_MODEL = 6;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__CARGO_MODEL = 7;
+
+	/**
+	 * The feature id for the '<em><b>Contract Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__CONTRACT_MODEL = 8;
+
+	/**
+	 * The feature id for the '<em><b>Market Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__MARKET_MODEL = 9;
+
+	/**
+	 * The feature id for the '<em><b>Optimisation</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__OPTIMISATION = 10;
+
+	/**
+	 * The feature id for the '<em><b>Contained Models</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__CONTAINED_MODELS = 11;
 
 	/**
 	 * The number of structural features of the '<em>Scenario</em>' class.
@@ -177,25 +186,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_FEATURE_COUNT = 11;
-
-	/**
-	 * The operation id for the '<em>Get Or Create Fleet Model</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO___GET_OR_CREATE_FLEET_MODEL = 0;
-
-	/**
-	 * The operation id for the '<em>Get Or Create Schedule Model</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL = 1;
+	int SCENARIO_FEATURE_COUNT = 12;
 
 	/**
 	 * The operation id for the '<em>Create Missing Models</em>' operation.
@@ -204,7 +195,25 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO___CREATE_MISSING_MODELS = 2;
+	int SCENARIO___CREATE_MISSING_MODELS = 0;
+
+	/**
+	 * The operation id for the '<em>Get Or Create Fleet Model</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO___GET_OR_CREATE_FLEET_MODEL = 1;
+
+	/**
+	 * The operation id for the '<em>Get Or Create Schedule Model</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL = 2;
 
 	/**
 	 * The number of operations of the '<em>Scenario</em>' class.
@@ -300,6 +309,44 @@ public interface ScenarioPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.impl.UUIDObjectImpl <em>UUID Object</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.impl.UUIDObjectImpl
+	 * @see scenario.impl.ScenarioPackageImpl#getUUIDObject()
+	 * @generated
+	 */
+	int UUID_OBJECT = 3;
+
+	/**
+	 * The feature id for the '<em><b>UUID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT__UUID = 0;
+
+	/**
+	 * The number of structural features of the '<em>UUID Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>UUID Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT_OPERATION_COUNT = 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.Scenario <em>Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -321,10 +368,10 @@ public interface ScenarioPackage extends EPackage {
 	EReference getScenario_FleetModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link scenario.Scenario#getPortModel <em>Port Model</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.Scenario#getPortModel <em>Port Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Port Model</em>'.
+	 * @return the meta object for the reference '<em>Port Model</em>'.
 	 * @see scenario.Scenario#getPortModel()
 	 * @see #getScenario()
 	 * @generated
@@ -376,10 +423,10 @@ public interface ScenarioPackage extends EPackage {
 	EReference getScenario_MarketModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Distance Model</em>'.
+	 * @return the meta object for the reference '<em>Distance Model</em>'.
 	 * @see scenario.Scenario#getDistanceModel()
 	 * @see #getScenario()
 	 * @generated
@@ -387,10 +434,10 @@ public interface ScenarioPackage extends EPackage {
 	EReference getScenario_DistanceModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}'.
+	 * Returns the meta object for the reference '{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Canal Model</em>'.
+	 * @return the meta object for the reference '<em>Canal Model</em>'.
 	 * @see scenario.Scenario#getCanalModel()
 	 * @see #getScenario()
 	 * @generated
@@ -407,6 +454,17 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getScenario_Optimisation();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.Scenario#getContainedModels <em>Contained Models</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Contained Models</em>'.
+	 * @see scenario.Scenario#getContainedModels()
+	 * @see #getScenario()
+	 * @generated
+	 */
+	EReference getScenario_ContainedModels();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.Scenario#getVersion <em>Version</em>}'.
@@ -502,6 +560,27 @@ public interface ScenarioPackage extends EPackage {
 	EAttribute getNamedObject_Name();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.UUIDObject <em>UUID Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>UUID Object</em>'.
+	 * @see scenario.UUIDObject
+	 * @generated
+	 */
+	EClass getUUIDObject();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.UUIDObject#getUUID <em>UUID</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>UUID</em>'.
+	 * @see scenario.UUIDObject#getUUID()
+	 * @see #getUUIDObject()
+	 * @generated
+	 */
+	EAttribute getUUIDObject_UUID();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -543,7 +622,7 @@ public interface ScenarioPackage extends EPackage {
 		EReference SCENARIO__FLEET_MODEL = eINSTANCE.getScenario_FleetModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Port Model</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Port Model</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -583,7 +662,7 @@ public interface ScenarioPackage extends EPackage {
 		EReference SCENARIO__MARKET_MODEL = eINSTANCE.getScenario_MarketModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Distance Model</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Distance Model</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -591,7 +670,7 @@ public interface ScenarioPackage extends EPackage {
 		EReference SCENARIO__DISTANCE_MODEL = eINSTANCE.getScenario_DistanceModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Canal Model</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Canal Model</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -605,6 +684,14 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCENARIO__OPTIMISATION = eINSTANCE.getScenario_Optimisation();
+
+		/**
+		 * The meta object literal for the '<em><b>Contained Models</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO__CONTAINED_MODELS = eINSTANCE.getScenario_ContainedModels();
 
 		/**
 		 * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
@@ -681,6 +768,24 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NAMED_OBJECT__NAME = eINSTANCE.getNamedObject_Name();
+
+		/**
+		 * The meta object literal for the '{@link scenario.impl.UUIDObjectImpl <em>UUID Object</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.impl.UUIDObjectImpl
+		 * @see scenario.impl.ScenarioPackageImpl#getUUIDObject()
+		 * @generated
+		 */
+		EClass UUID_OBJECT = eINSTANCE.getUUIDObject();
+
+		/**
+		 * The meta object literal for the '<em><b>UUID</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UUID_OBJECT__UUID = eINSTANCE.getUUIDObject_UUID();
 
 	}
 

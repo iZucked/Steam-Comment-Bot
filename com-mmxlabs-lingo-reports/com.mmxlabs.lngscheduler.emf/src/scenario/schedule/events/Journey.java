@@ -18,13 +18,13 @@ import scenario.port.Port;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.schedule.events.Journey#getToPort <em>To Port</em>}</li>
  *   <li>{@link scenario.schedule.events.Journey#getVesselState <em>Vessel State</em>}</li>
  *   <li>{@link scenario.schedule.events.Journey#getRoute <em>Route</em>}</li>
  *   <li>{@link scenario.schedule.events.Journey#getSpeed <em>Speed</em>}</li>
  *   <li>{@link scenario.schedule.events.Journey#getDistance <em>Distance</em>}</li>
- *   <li>{@link scenario.schedule.events.Journey#getFromPort <em>From Port</em>}</li>
  *   <li>{@link scenario.schedule.events.Journey#getRouteCost <em>Route Cost</em>}</li>
+ *   <li>{@link scenario.schedule.events.Journey#getToPort <em>To Port</em>}</li>
+ *   <li>{@link scenario.schedule.events.Journey#getFromPort <em>From Port</em>}</li>
  * </ul>
  * </p>
  *

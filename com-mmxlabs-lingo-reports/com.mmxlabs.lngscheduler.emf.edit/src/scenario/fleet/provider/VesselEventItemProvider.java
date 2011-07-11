@@ -70,9 +70,9 @@ public class VesselEventItemProvider
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
-			addStartPortPropertyDescriptor(object);
 			addVesselsPropertyDescriptor(object);
 			addVesselClassesPropertyDescriptor(object);
+			addStartPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

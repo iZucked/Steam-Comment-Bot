@@ -17,9 +17,9 @@ import scenario.port.Port;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getMaxHeelOut <em>Max Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getHeelCVValue <em>Heel CV Value</em>}</li>
+ *   <li>{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}</li>
  * </ul>
  * </p>
  *

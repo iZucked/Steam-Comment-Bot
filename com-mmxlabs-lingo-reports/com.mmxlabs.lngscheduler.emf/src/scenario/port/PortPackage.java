@@ -44,7 +44,7 @@ public interface PortPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf1/port";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/port";
 
 	/**
 	 * The package namespace name.
@@ -110,22 +110,22 @@ public interface PortPackage extends EPackage {
 	int PORT = 1;
 
 	/**
+	 * The feature id for the '<em><b>UUID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__UUID = ScenarioPackage.UUID_OBJECT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Default Index</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__DEFAULT_INDEX = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+	int PORT__NAME = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Time Zone</b></em>' attribute.
@@ -134,16 +134,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__TIME_ZONE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Default Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__DEFAULT_CONTRACT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int PORT__TIME_ZONE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Regas Efficiency</b></em>' attribute.
@@ -152,7 +143,25 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__REGAS_EFFICIENCY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int PORT__REGAS_EFFICIENCY = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Default Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_CONTRACT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Default Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_INDEX = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -161,7 +170,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -170,7 +179,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+	int PORT___GET_CONTAINER = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Port</em>' class.
@@ -179,7 +188,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+	int PORT_OPERATION_COUNT = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
@@ -293,22 +302,13 @@ public interface PortPackage extends EPackage {
 	int CANAL__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Class Costs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL__CLASS_COSTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Default Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__DEFAULT_COST = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+	int CANAL__DEFAULT_COST = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Distance Model</b></em>' containment reference.
@@ -317,7 +317,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__DISTANCE_MODEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int CANAL__DISTANCE_MODEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Class Costs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL__CLASS_COSTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Canal</em>' class.

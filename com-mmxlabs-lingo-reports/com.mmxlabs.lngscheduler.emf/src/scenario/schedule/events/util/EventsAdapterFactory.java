@@ -86,10 +86,6 @@ public class EventsAdapterFactory extends AdapterFactoryImpl {
 				return createScheduledEventAdapter();
 			}
 			@Override
-			public Adapter caseIdle(Idle object) {
-				return createIdleAdapter();
-			}
-			@Override
 			public Adapter caseJourney(Journey object) {
 				return createJourneyAdapter();
 			}
@@ -98,16 +94,20 @@ public class EventsAdapterFactory extends AdapterFactoryImpl {
 				return createPortVisitAdapter();
 			}
 			@Override
+			public Adapter caseIdle(Idle object) {
+				return createIdleAdapter();
+			}
+			@Override
 			public Adapter caseSlotVisit(SlotVisit object) {
 				return createSlotVisitAdapter();
 			}
 			@Override
-			public Adapter caseCharterOutVisit(CharterOutVisit object) {
-				return createCharterOutVisitAdapter();
-			}
-			@Override
 			public Adapter caseVesselEventVisit(VesselEventVisit object) {
 				return createVesselEventVisitAdapter();
+			}
+			@Override
+			public Adapter caseCharterOutVisit(CharterOutVisit object) {
+				return createCharterOutVisitAdapter();
 			}
 			@Override
 			public Adapter caseScenarioObject(ScenarioObject object) {

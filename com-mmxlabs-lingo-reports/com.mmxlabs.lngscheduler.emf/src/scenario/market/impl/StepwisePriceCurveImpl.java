@@ -36,24 +36,14 @@ import scenario.market.StepwisePriceCurve;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.market.impl.StepwisePriceCurveImpl#getPrices <em>Prices</em>}</li>
  *   <li>{@link scenario.market.impl.StepwisePriceCurveImpl#getDefaultValue <em>Default Value</em>}</li>
+ *   <li>{@link scenario.market.impl.StepwisePriceCurveImpl#getPrices <em>Prices</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePriceCurve {
-	/**
-	 * The cached value of the '{@link #getPrices() <em>Prices</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPrices()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<StepwisePrice> prices;
-
 	/**
 	 * The default value of the '{@link #getDefaultValue() <em>Default Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -73,6 +63,16 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 * @ordered
 	 */
 	protected float defaultValue = DEFAULT_VALUE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getPrices() <em>Prices</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrices()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<StepwisePrice> prices;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -100,7 +100,7 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	 */
 	public EList<StepwisePrice> getPrices() {
 		if (prices == null) {
-			prices = new EObjectContainmentEList<StepwisePrice>(StepwisePrice.class, this, MarketPackage.STEPWISE_PRICE_CURVE__PRICES);
+			prices = new EObjectContainmentEList.Resolving<StepwisePrice>(StepwisePrice.class, this, MarketPackage.STEPWISE_PRICE_CURVE__PRICES);
 		}
 		return prices;
 	}
@@ -173,10 +173,10 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
-				return getPrices();
 			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
 				return getDefaultValue();
+			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
+				return getPrices();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -190,12 +190,12 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
+				setDefaultValue((Float)newValue);
+				return;
 			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
 				getPrices().clear();
 				getPrices().addAll((Collection<? extends StepwisePrice>)newValue);
-				return;
-			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
-				setDefaultValue((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -209,11 +209,11 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
-				getPrices().clear();
-				return;
 			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
 				setDefaultValue(DEFAULT_VALUE_EDEFAULT);
+				return;
+			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
+				getPrices().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -227,10 +227,10 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
-				return prices != null && !prices.isEmpty();
 			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
 				return defaultValue != DEFAULT_VALUE_EDEFAULT;
+			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
+				return prices != null && !prices.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

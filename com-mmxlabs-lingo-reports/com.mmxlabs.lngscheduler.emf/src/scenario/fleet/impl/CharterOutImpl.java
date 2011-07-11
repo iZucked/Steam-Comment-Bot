@@ -22,24 +22,15 @@ import scenario.port.Port;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.CharterOutImpl#getEndPort <em>End Port</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getMaxHeelOut <em>Max Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getHeelCVValue <em>Heel CV Value</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getEndPort <em>End Port</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class CharterOutImpl extends VesselEventImpl implements CharterOut {
-	/**
-	 * The cached value of the '{@link #getEndPort() <em>End Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEndPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port endPort;
 	/**
 	 * The default value of the '{@link #getMaxHeelOut() <em>Max Heel Out</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -77,6 +68,15 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * @ordered
 	 */
 	protected float heelCVValue = HEEL_CV_VALUE_EDEFAULT;
+	/**
+	 * The cached value of the '{@link #getEndPort() <em>End Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port endPort;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -185,13 +185,13 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__END_PORT:
-				if (resolve) return getEndPort();
-				return basicGetEndPort();
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				return getMaxHeelOut();
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				return getHeelCVValue();
+			case FleetPackage.CHARTER_OUT__END_PORT:
+				if (resolve) return getEndPort();
+				return basicGetEndPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -204,14 +204,14 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__END_PORT:
-				setEndPort((Port)newValue);
-				return;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				setMaxHeelOut((Integer)newValue);
 				return;
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				setHeelCVValue((Float)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT__END_PORT:
+				setEndPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -225,14 +225,14 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__END_PORT:
-				setEndPort((Port)null);
-				return;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				setMaxHeelOut(MAX_HEEL_OUT_EDEFAULT);
 				return;
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				setHeelCVValue(HEEL_CV_VALUE_EDEFAULT);
+				return;
+			case FleetPackage.CHARTER_OUT__END_PORT:
+				setEndPort((Port)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -246,12 +246,12 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__END_PORT:
-				return endPort != null;
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 				return maxHeelOut != MAX_HEEL_OUT_EDEFAULT;
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				return heelCVValue != HEEL_CV_VALUE_EDEFAULT;
+			case FleetPackage.CHARTER_OUT__END_PORT:
+				return endPort != null;
 		}
 		return super.eIsSet(featureID);
 	}

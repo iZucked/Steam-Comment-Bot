@@ -16,8 +16,8 @@ import scenario.market.Index;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.contract.SalesContract#getIndex <em>Index</em>}</li>
  *   <li>{@link scenario.contract.SalesContract#getMarkup <em>Markup</em>}</li>
+ *   <li>{@link scenario.contract.SalesContract#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
  *

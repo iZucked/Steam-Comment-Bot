@@ -108,8 +108,8 @@ public class CanalItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PortPackage.Literals.CANAL__CLASS_COSTS);
 			childrenFeatures.add(PortPackage.Literals.CANAL__DISTANCE_MODEL);
+			childrenFeatures.add(PortPackage.Literals.CANAL__CLASS_COSTS);
 		}
 		return childrenFeatures;
 	}
@@ -167,8 +167,8 @@ public class CanalItemProvider
 			case PortPackage.CANAL__DEFAULT_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case PortPackage.CANAL__CLASS_COSTS:
 			case PortPackage.CANAL__DISTANCE_MODEL:
+			case PortPackage.CANAL__CLASS_COSTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -188,13 +188,13 @@ public class CanalItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.CANAL__CLASS_COSTS,
-				 PortFactory.eINSTANCE.createVesselClassCost()));
+				(PortPackage.Literals.CANAL__DISTANCE_MODEL,
+				 PortFactory.eINSTANCE.createDistanceModel()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.CANAL__DISTANCE_MODEL,
-				 PortFactory.eINSTANCE.createDistanceModel()));
+				(PortPackage.Literals.CANAL__CLASS_COSTS,
+				 PortFactory.eINSTANCE.createVesselClassCost()));
 	}
 
 	/**

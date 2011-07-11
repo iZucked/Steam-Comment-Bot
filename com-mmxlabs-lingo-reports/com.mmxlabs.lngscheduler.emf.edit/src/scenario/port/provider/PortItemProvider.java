@@ -25,10 +25,12 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import scenario.ScenarioPackage;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
 import scenario.provider.LngEditPlugin;
+import scenario.provider.UUIDObjectItemProvider;
 import scenario.provider.NamedObjectItemProvider;
 
 /**
@@ -38,7 +40,7 @@ import scenario.provider.NamedObjectItemProvider;
  * @generated
  */
 public class PortItemProvider
-	extends NamedObjectItemProvider
+	extends UUIDObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -66,12 +68,35 @@ public class PortItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addDefaultIndexPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
-			addDefaultContractPropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
+			addDefaultContractPropertyDescriptor(object);
+			addDefaultIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedObject_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 ScenarioPackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -199,6 +224,7 @@ public class PortItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Port.class)) {
+			case PortPackage.PORT__NAME:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

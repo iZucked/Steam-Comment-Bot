@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 
+import scenario.UUIDObject;
 import scenario.port.*;
 
 /**
@@ -101,6 +102,10 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseVesselClassCost(VesselClassCost object) {
 				return createVesselClassCostAdapter();
+			}
+			@Override
+			public Adapter caseUUIDObject(UUIDObject object) {
+				return createUUIDObjectAdapter();
 			}
 			@Override
 			public Adapter caseScenarioObject(ScenarioObject object) {
@@ -225,6 +230,20 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselClassCostAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.UUIDObject <em>UUID Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.UUIDObject
+	 * @generated
+	 */
+	public Adapter createUUIDObjectAdapter() {
 		return null;
 	}
 

@@ -25,37 +25,17 @@ import scenario.market.Index;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getIndex <em>Index</em>}</li>
- *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getReferenceIndex <em>Reference Index</em>}</li>
  *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getAlpha <em>Alpha</em>}</li>
  *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getBeta <em>Beta</em>}</li>
  *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getGamma <em>Gamma</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getReferenceIndex <em>Reference Index</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl implements ProfitSharingPurchaseContract {
-	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getIndex()
-	 * @generated
-	 * @ordered
-	 */
-	protected Index index;
-
-	/**
-	 * The cached value of the '{@link #getReferenceIndex() <em>Reference Index</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReferenceIndex()
-	 * @generated
-	 * @ordered
-	 */
-	protected Index referenceIndex;
-
 	/**
 	 * The default value of the '{@link #getAlpha() <em>Alpha</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -115,6 +95,26 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	 * @ordered
 	 */
 	protected float gamma = GAMMA_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected Index index;
+
+	/**
+	 * The cached value of the '{@link #getReferenceIndex() <em>Reference Index</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferenceIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected Index referenceIndex;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -282,18 +282,18 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
-				if (resolve) return getIndex();
-				return basicGetIndex();
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
-				if (resolve) return getReferenceIndex();
-				return basicGetReferenceIndex();
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
 				return getAlpha();
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
 				return getBeta();
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
 				return getGamma();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				if (resolve) return getIndex();
+				return basicGetIndex();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				if (resolve) return getReferenceIndex();
+				return basicGetReferenceIndex();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -306,12 +306,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
-				setIndex((Index)newValue);
-				return;
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
-				setReferenceIndex((Index)newValue);
-				return;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
 				setAlpha((Float)newValue);
 				return;
@@ -320,6 +314,12 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 				return;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
 				setGamma((Float)newValue);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				setIndex((Index)newValue);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				setReferenceIndex((Index)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -333,12 +333,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
-				setIndex((Index)null);
-				return;
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
-				setReferenceIndex((Index)null);
-				return;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
 				setAlpha(ALPHA_EDEFAULT);
 				return;
@@ -347,6 +341,12 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 				return;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
 				setGamma(GAMMA_EDEFAULT);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				setIndex((Index)null);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				setReferenceIndex((Index)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -360,16 +360,16 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
-				return index != null;
-			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
-				return referenceIndex != null;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
 				return alpha != ALPHA_EDEFAULT;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
 				return beta != BETA_EDEFAULT;
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
 				return gamma != GAMMA_EDEFAULT;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				return index != null;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				return referenceIndex != null;
 		}
 		return super.eIsSet(featureID);
 	}

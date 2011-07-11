@@ -74,7 +74,7 @@ public class CanalModelImpl extends EObjectImpl implements CanalModel {
 	 */
 	public EList<Canal> getCanals() {
 		if (canals == null) {
-			canals = new EObjectContainmentEList<Canal>(Canal.class, this, PortPackage.CANAL_MODEL__CANALS);
+			canals = new EObjectContainmentEList.Resolving<Canal>(Canal.class, this, PortPackage.CANAL_MODEL__CANALS);
 		}
 		return canals;
 	}

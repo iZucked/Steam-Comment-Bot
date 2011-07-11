@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <history:History xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:history="http://www.cs.tum.edu/cope/history/0.1.42">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:history="http://www.cs.tum.edu/cope/history/0.1.42">
   <releases date="2011-07-01T10:35:32.899+0100" label="v1">
     <changes xsi:type="history:CompositeChange">
       <changes xsi:type="history:Create" element="lng.ecore#/">
@@ -3933,5 +3933,169 @@
     <changes xsi:type="history:Set" element="lng.ecore#//optimiser/lso" featureName="nsURI"
         dataValue="http://com.mmxlabs.lng.emf1/optimiser/lso" oldDataValue="http://com.mmxlabs.lng.emf/optimiser/lso"/>
   </releases>
-  <releases/>
+  <releases date="2011-07-07T09:50:06.288+0100" label="com.mmxlabs.lng.emf2">
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Set" element="lng.ecore#//Scenario/portModel" featureName="containment"
+          dataValue="false" oldDataValue="true"/>
+      <changes xsi:type="history:Create" target="lng.ecore#//Scenario" referenceName="eStructuralFeatures"
+          element="#//@releases.2/@changes.3/@changes.0/@element">
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.0/@element"
+            featureName="name" dataValue="containedPortModel"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.0/@element"
+            featureName="upperBound" dataValue="-1" oldDataValue="1"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.0/@element"
+            featureName="containment" dataValue="true" oldDataValue="false"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.0/@element"
+            featureName="eType" referenceValue="lng.ecore#//port/PortModel"/>
+      </changes>
+      <operation name="dropContainment">
+        <parameters name="reference">
+          <referenceValue element="lng.ecore#//Scenario/portModel"/>
+        </parameters>
+        <parameters name="containerClass">
+          <referenceValue element="lng.ecore#//Scenario"/>
+        </parameters>
+        <parameters name="containerReferenceName">
+          <dataValue>containedPortModel</dataValue>
+        </parameters>
+      </operation>
+    </changes>
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Set" element="lng.ecore#//Scenario/distanceModel"
+          featureName="containment" dataValue="false" oldDataValue="true"/>
+      <changes xsi:type="history:Create" target="lng.ecore#//Scenario" referenceName="eStructuralFeatures"
+          element="#//@releases.2/@changes.3/@changes.1/@element">
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.1/@element"
+            featureName="name" dataValue="containedDistanceModel"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.1/@element"
+            featureName="upperBound" dataValue="-1" oldDataValue="1"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.1/@element"
+            featureName="containment" dataValue="true" oldDataValue="false"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.1/@element"
+            featureName="eType" referenceValue="lng.ecore#//port/DistanceModel"/>
+      </changes>
+      <operation name="dropContainment">
+        <parameters name="reference">
+          <referenceValue element="lng.ecore#//Scenario/distanceModel"/>
+        </parameters>
+        <parameters name="containerClass">
+          <referenceValue element="lng.ecore#//Scenario"/>
+        </parameters>
+        <parameters name="containerReferenceName">
+          <dataValue>containedDistanceModel</dataValue>
+        </parameters>
+      </operation>
+    </changes>
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Set" element="lng.ecore#//Scenario/canalModel" featureName="containment"
+          dataValue="false" oldDataValue="true"/>
+      <changes xsi:type="history:Create" target="lng.ecore#//Scenario" referenceName="eStructuralFeatures"
+          element="#//@releases.2/@changes.3/@changes.2/@element">
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.2/@element"
+            featureName="name" dataValue="containedCanalModel"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.2/@element"
+            featureName="upperBound" dataValue="-1" oldDataValue="1"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.2/@element"
+            featureName="containment" dataValue="true" oldDataValue="false"/>
+        <changes xsi:type="history:Set" element="#//@releases.2/@changes.3/@changes.2/@element"
+            featureName="eType" referenceValue="lng.ecore#//port/CanalModel"/>
+      </changes>
+      <operation name="dropContainment">
+        <parameters name="reference">
+          <referenceValue element="lng.ecore#//Scenario/canalModel"/>
+        </parameters>
+        <parameters name="containerClass">
+          <referenceValue element="lng.ecore#//Scenario"/>
+        </parameters>
+        <parameters name="containerReferenceName">
+          <dataValue>containedCanalModel</dataValue>
+        </parameters>
+      </operation>
+    </changes>
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Delete" target="lng.ecore#//Scenario" referenceName="eStructuralFeatures">
+        <element xsi:type="ecore:EReference" name="containedPortModel" upperBound="-1"
+            eType="ecore:EClass lng.ecore#//port/PortModel" containment="true"/>
+      </changes>
+      <changes xsi:type="history:Delete" target="lng.ecore#//Scenario" referenceName="eStructuralFeatures">
+        <element xsi:type="ecore:EReference" name="containedDistanceModel" upperBound="-1"
+            eType="ecore:EClass lng.ecore#//port/DistanceModel" containment="true"/>
+      </changes>
+      <changes xsi:type="history:Delete" target="lng.ecore#//Scenario" referenceName="eStructuralFeatures">
+        <element xsi:type="ecore:EReference" name="containedCanalModel" upperBound="-1"
+            eType="ecore:EClass lng.ecore#//port/CanalModel" containment="true"/>
+      </changes>
+      <changes xsi:type="history:Create" target="lng.ecore#//Scenario" referenceName="eStructuralFeatures"
+          element="lng.ecore#//Scenario/containedModels">
+        <changes xsi:type="history:Set" element="lng.ecore#//Scenario/containedModels"
+            featureName="name" dataValue="containedModels"/>
+        <changes xsi:type="history:Set" element="lng.ecore#//Scenario/containedModels"
+            featureName="upperBound" dataValue="-1" oldDataValue="1"/>
+        <changes xsi:type="history:Set" element="lng.ecore#//Scenario/containedModels"
+            featureName="containment" dataValue="true" oldDataValue="false"/>
+        <changes xsi:type="history:Set" element="lng.ecore#//Scenario/containedModels"
+            featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      </changes>
+      <operation name="uniteReferences">
+        <parameters name="references">
+          <referenceValue element="#//@releases.2/@changes.3/@changes.0/@element"/>
+          <referenceValue element="#//@releases.2/@changes.3/@changes.1/@element"/>
+          <referenceValue element="#//@releases.2/@changes.3/@changes.2/@element"/>
+        </parameters>
+        <parameters name="unitedReferenceName">
+          <dataValue>containedModels</dataValue>
+        </parameters>
+      </operation>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//Scenario/createMissingModels/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (getPortModel() == null) {&#xD;&#xA;&#x9;setPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());&#xD;&#xA;&#x9;getContainedModels().add(getPortModel());&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;if (getDistanceModel() == null) {&#xD;&#xA;&#x9;setDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());&#xD;&#xA;&#x9;getContainedModels().add(getDistanceModel());&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;if (getCanalModel() == null) {&#xD;&#xA;&#x9;setCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());&#xD;&#xA;&#x9;getContainedModels().add(getCanalModel());&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;if (getFleetModel() == null)&#xD;&#xA;&#x9;setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());&#xD;&#xA;&#xD;&#xA;if (getCargoModel() == null)&#xD;&#xA;&#x9;setCargoModel(scenario.cargo.CargoFactory.eINSTANCE.createCargoModel());&#xD;&#xA;&#xD;&#xA;if (getContractModel() == null)&#xD;&#xA;&#x9;setContractModel(scenario.contract.ContractFactory.eINSTANCE.createContractModel());&#xD;&#xA;&#xD;&#xA;if (getScheduleModel() == null)&#xD;&#xA;&#x9;setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());&#xD;&#xA;&#xD;&#xA;if (getMarketModel() == null)&#xD;&#xA;&#x9;setMarketModel(scenario.market.MarketFactory.eINSTANCE.createMarketModel());&#xD;&#xA;&#xD;&#xA;if (getOptimisation() == null)&#xD;&#xA;&#x9;&#x9;&#x9;setOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());"
+        oldDataValue="if (getFleetModel() == null)&#xD;&#xA;&#x9;setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());&#xD;&#xA;&#xD;&#xA;if (getPortModel() == null)&#xD;&#xA;&#x9;setPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());&#xD;&#xA;&#xD;&#xA;if (getCargoModel() == null)&#xD;&#xA;&#x9;setCargoModel(scenario.cargo.CargoFactory.eINSTANCE.createCargoModel());&#xD;&#xA;&#xD;&#xA;if (getContractModel() == null)&#xD;&#xA;&#x9;setContractModel(scenario.contract.ContractFactory.eINSTANCE.createContractModel());&#xD;&#xA;&#xD;&#xA;if (getScheduleModel() == null)&#xD;&#xA;&#x9;setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());&#xD;&#xA;&#xD;&#xA;if (getMarketModel() == null)&#xD;&#xA;&#x9;setMarketModel(scenario.market.MarketFactory.eINSTANCE.createMarketModel());&#xD;&#xA;&#xD;&#xA;if (getDistanceModel() == null)&#xD;&#xA;&#x9;setDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());&#xD;&#xA;&#xD;&#xA;if (getCanalModel() == null)&#xD;&#xA;&#x9;setCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());&#xD;&#xA;&#xD;&#xA;if (getOptimisation() == null)&#xD;&#xA;&#x9;&#x9;&#x9;setOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());"/>
+    <changes xsi:type="history:Set" element="lng.ecore#/" featureName="nsURI" dataValue="http://com.mmxlabs.lng.emf2"
+        oldDataValue="http://com.mmxlabs.lng.emf1"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/fleet" oldDataValue="http://com.mmxlabs.lng.emf1/fleet"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/schedule" oldDataValue="http://com.mmxlabs.lng.emf1/schedule"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/events" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/schedule/events" oldDataValue="http://com.mmxlabs.lng.emf1/schedule/events"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/fleetallocation"
+        featureName="nsURI" dataValue="http://com.mmxlabs.lng.emf2/schedule/fleetallocation"
+        oldDataValue="http://com.mmxlabs.lng.emf1/schedule/fleetallocation"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/port" oldDataValue="http://com.mmxlabs.lng.emf1/port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/cargo" oldDataValue="http://com.mmxlabs.lng.emf1/cargo"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/contract" oldDataValue="http://com.mmxlabs.lng.emf1/contract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//market" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/market" oldDataValue="http://com.mmxlabs.lng.emf1/market"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//optimiser" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/optimiser" oldDataValue="http://com.mmxlabs.lng.emf1/optimiser"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//optimiser/lso" featureName="nsURI"
+        dataValue="http://com.mmxlabs.lng.emf2/optimiser/lso" oldDataValue="http://com.mmxlabs.lng.emf1/optimiser/lso"/>
+  </releases>
+  <releases>
+    <changes xsi:type="history:Create" target="lng.ecore#/" referenceName="eClassifiers"
+        element="lng.ecore#//UUIDObject"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//UUIDObject" featureName="name"
+        dataValue="UUIDObject"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//UUIDObject" featureName="abstract"
+        dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//UUIDObject" referenceName="eStructuralFeatures"
+        element="lng.ecore#//UUIDObject/UUID"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//UUIDObject/UUID" featureName="name"
+        dataValue="uuid"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//UUIDObject/UUID" featureName="name"
+        dataValue="UUID" oldDataValue="uuid"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//UUIDObject/UUID" featureName="iD"
+        dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//UUIDObject/UUID" featureName="lowerBound"
+        dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//UUIDObject/UUID" featureName="defaultValueLiteral"
+        dataValue=""/>
+    <changes xsi:type="history:Set" element="lng.ecore#//UUIDObject/UUID" featureName="eType"
+        referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//port/Port" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//UUIDObject"/>
+  </releases>
 </history:History>

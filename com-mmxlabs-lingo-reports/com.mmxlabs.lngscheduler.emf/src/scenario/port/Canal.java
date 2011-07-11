@@ -18,9 +18,9 @@ import scenario.NamedObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.port.Canal#getClassCosts <em>Class Costs</em>}</li>
  *   <li>{@link scenario.port.Canal#getDefaultCost <em>Default Cost</em>}</li>
  *   <li>{@link scenario.port.Canal#getDistanceModel <em>Distance Model</em>}</li>
+ *   <li>{@link scenario.port.Canal#getClassCosts <em>Class Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -40,7 +40,7 @@ public interface Canal extends NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Class Costs</em>' containment reference list.
 	 * @see scenario.port.PortPackage#getCanal_ClassCosts()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<VesselClassCost> getClassCosts();
@@ -82,7 +82,7 @@ public interface Canal extends NamedObject {
 	 * @return the value of the '<em>Distance Model</em>' containment reference.
 	 * @see #setDistanceModel(DistanceModel)
 	 * @see scenario.port.PortPackage#getCanal_DistanceModel()
-	 * @model containment="true" required="true"
+	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
 	DistanceModel getDistanceModel();

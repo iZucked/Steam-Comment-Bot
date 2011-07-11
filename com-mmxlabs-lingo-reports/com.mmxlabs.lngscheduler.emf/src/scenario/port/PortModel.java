@@ -38,7 +38,7 @@ public interface PortModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ports</em>' containment reference list.
 	 * @see scenario.port.PortPackage#getPortModel_Ports()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Port> getPorts();

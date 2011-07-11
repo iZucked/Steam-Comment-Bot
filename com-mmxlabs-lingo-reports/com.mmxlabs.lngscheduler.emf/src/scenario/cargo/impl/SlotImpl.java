@@ -41,8 +41,8 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getSlotDuration <em>Slot Duration</em>}</li>
- *   <li>{@link scenario.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -180,16 +180,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	protected int slotDuration = SLOT_DURATION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected Contract contract;
-
-	/**
 	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -217,6 +207,16 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean fixedPriceESet;
+
+	/**
+	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected Contract contract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -547,11 +547,11 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getWindowDuration();
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return getSlotDuration();
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return getFixedPrice();
 			case CargoPackage.SLOT__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
-			case CargoPackage.SLOT__FIXED_PRICE:
-				return getFixedPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -585,11 +585,11 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration((Integer)newValue);
 				return;
-			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)newValue);
-				return;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				setFixedPrice((Float)newValue);
+				return;
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -624,11 +624,11 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration(SLOT_DURATION_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)null);
-				return;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				unsetFixedPrice();
+				return;
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -656,10 +656,10 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return windowDuration != WINDOW_DURATION_EDEFAULT;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return slotDuration != SLOT_DURATION_EDEFAULT;
-			case CargoPackage.SLOT__CONTRACT:
-				return contract != null;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				return isSetFixedPrice();
+			case CargoPackage.SLOT__CONTRACT:
+				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -674,10 +674,10 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		switch (operationID) {
 			case CargoPackage.SLOT___GET_LOCAL_WINDOW_START:
 				return getLocalWindowStart();
-			case CargoPackage.SLOT___GET_SLOT_OR_PORT_CONTRACT:
-				return getSlotOrPortContract();
 			case CargoPackage.SLOT___GET_WINDOW_END:
 				return getWindowEnd();
+			case CargoPackage.SLOT___GET_SLOT_OR_PORT_CONTRACT:
+				return getSlotOrPortContract();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

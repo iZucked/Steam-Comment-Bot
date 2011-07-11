@@ -74,7 +74,7 @@ public class ScheduleModelImpl extends EObjectImpl implements ScheduleModel {
 	 */
 	public EList<Schedule> getSchedules() {
 		if (schedules == null) {
-			schedules = new EObjectContainmentEList<Schedule>(Schedule.class, this, SchedulePackage.SCHEDULE_MODEL__SCHEDULES);
+			schedules = new EObjectContainmentEList.Resolving<Schedule>(Schedule.class, this, SchedulePackage.SCHEDULE_MODEL__SCHEDULES);
 		}
 		return schedules;
 	}

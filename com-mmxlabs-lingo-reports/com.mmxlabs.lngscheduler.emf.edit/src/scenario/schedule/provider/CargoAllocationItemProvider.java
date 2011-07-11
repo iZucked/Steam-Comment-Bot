@@ -60,25 +60,25 @@ public class CargoAllocationItemProvider extends ItemProviderAdapter implements
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLoadSlotPropertyDescriptor(object);
-			addDischargeSlotPropertyDescriptor(object);
 			addFuelVolumePropertyDescriptor(object);
 			addDischargeVolumePropertyDescriptor(object);
 			addLoadDatePropertyDescriptor(object);
 			addDischargeDatePropertyDescriptor(object);
 			addLoadPriceM3PropertyDescriptor(object);
 			addDischargePriceM3PropertyDescriptor(object);
-			addVesselPropertyDescriptor(object);
+			addLoadRevenuePropertyDescriptor(object);
+			addShippingRevenuePropertyDescriptor(object);
+			addDischargeRevenuePropertyDescriptor(object);
 			addLadenLegPropertyDescriptor(object);
 			addBallastLegPropertyDescriptor(object);
 			addLadenIdlePropertyDescriptor(object);
 			addBallastIdlePropertyDescriptor(object);
-			addLoadRevenuePropertyDescriptor(object);
-			addShippingRevenuePropertyDescriptor(object);
-			addDischargeRevenuePropertyDescriptor(object);
-			addCargoTypePropertyDescriptor(object);
 			addLoadSlotVisitPropertyDescriptor(object);
 			addDischargeSlotVisitPropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
+			addDischargeSlotPropertyDescriptor(object);
+			addLoadSlotPropertyDescriptor(object);
+			addCargoTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

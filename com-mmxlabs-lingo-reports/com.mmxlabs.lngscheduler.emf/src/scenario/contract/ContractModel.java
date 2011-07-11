@@ -18,11 +18,11 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.contract.ContractModel#getPurchaseContracts <em>Purchase Contracts</em>}</li>
- *   <li>{@link scenario.contract.ContractModel#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link scenario.contract.ContractModel#getVolumeConstraints <em>Volume Constraints</em>}</li>
  *   <li>{@link scenario.contract.ContractModel#getEntities <em>Entities</em>}</li>
  *   <li>{@link scenario.contract.ContractModel#getShippingEntity <em>Shipping Entity</em>}</li>
+ *   <li>{@link scenario.contract.ContractModel#getPurchaseContracts <em>Purchase Contracts</em>}</li>
+ *   <li>{@link scenario.contract.ContractModel#getSalesContracts <em>Sales Contracts</em>}</li>
  * </ul>
  * </p>
  *
@@ -42,7 +42,7 @@ public interface ContractModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Purchase Contracts</em>' containment reference list.
 	 * @see scenario.contract.ContractPackage#getContractModel_PurchaseContracts()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<PurchaseContract> getPurchaseContracts();
@@ -58,7 +58,7 @@ public interface ContractModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Sales Contracts</em>' containment reference list.
 	 * @see scenario.contract.ContractPackage#getContractModel_SalesContracts()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<SalesContract> getSalesContracts();
@@ -74,7 +74,7 @@ public interface ContractModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Volume Constraints</em>' containment reference list.
 	 * @see scenario.contract.ContractPackage#getContractModel_VolumeConstraints()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<TotalVolumeLimit> getVolumeConstraints();
@@ -90,7 +90,7 @@ public interface ContractModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Entities</em>' containment reference list.
 	 * @see scenario.contract.ContractPackage#getContractModel_Entities()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Entity> getEntities();
@@ -106,7 +106,7 @@ public interface ContractModel extends EObject {
 	 * @return the value of the '<em>Shipping Entity</em>' containment reference.
 	 * @see #setShippingEntity(Entity)
 	 * @see scenario.contract.ContractPackage#getContractModel_ShippingEntity()
-	 * @model containment="true" required="true"
+	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
 	Entity getShippingEntity();

@@ -40,7 +40,7 @@ public interface CargoModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargoes</em>' containment reference list.
 	 * @see scenario.cargo.CargoPackage#getCargoModel_Cargoes()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Cargo> getCargoes();
@@ -56,7 +56,7 @@ public interface CargoModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Spare Discharge Slots</em>' containment reference list.
 	 * @see scenario.cargo.CargoPackage#getCargoModel_SpareDischargeSlots()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Slot> getSpareDischargeSlots();
@@ -72,7 +72,7 @@ public interface CargoModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Spare Load Slots</em>' containment reference list.
 	 * @see scenario.cargo.CargoPackage#getCargoModel_SpareLoadSlots()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<LoadSlot> getSpareLoadSlots();

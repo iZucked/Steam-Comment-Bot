@@ -112,9 +112,9 @@ public class ScheduleItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FLEET);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__REVENUE);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FLEET);
 		}
 		return childrenFeatures;
 	}
@@ -174,9 +174,9 @@ public class ScheduleItemProvider
 				return;
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
-			case SchedulePackage.SCHEDULE__FLEET:
 			case SchedulePackage.SCHEDULE__FITNESS:
 			case SchedulePackage.SCHEDULE__REVENUE:
+			case SchedulePackage.SCHEDULE__FLEET:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -206,21 +206,6 @@ public class ScheduleItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetallocationFactory.eINSTANCE.createAllocatedVessel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetallocationFactory.eINSTANCE.createFleetVessel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__FLEET,
-				 FleetallocationFactory.eINSTANCE.createSpotVessel()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__FITNESS,
 				 ScheduleFactory.eINSTANCE.createScheduleFitness()));
 
@@ -238,6 +223,21 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__REVENUE,
 				 ScheduleFactory.eINSTANCE.createCharterOutRevenue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__FLEET,
+				 FleetallocationFactory.eINSTANCE.createAllocatedVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__FLEET,
+				 FleetallocationFactory.eINSTANCE.createFleetVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__FLEET,
+				 FleetallocationFactory.eINSTANCE.createSpotVessel()));
 	}
 
 	/**

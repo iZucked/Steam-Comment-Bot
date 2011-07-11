@@ -41,13 +41,13 @@ import scenario.schedule.events.ScheduledEvent;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getFuelUsage <em>Fuel Usage</em>}</li>
- *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getToPort <em>To Port</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getVesselState <em>Vessel State</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getRoute <em>Route</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getSpeed <em>Speed</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getDistance <em>Distance</em>}</li>
- *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getFromPort <em>From Port</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getRouteCost <em>Route Cost</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getToPort <em>To Port</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.JourneyImpl#getFromPort <em>From Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -63,16 +63,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * @ordered
 	 */
 	protected EList<FuelQuantity> fuelUsage;
-
-	/**
-	 * The cached value of the '{@link #getToPort() <em>To Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getToPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port toPort;
 
 	/**
 	 * The default value of the '{@link #getVesselState() <em>Vessel State</em>}' attribute.
@@ -155,16 +145,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	protected int distance = DISTANCE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getFromPort() <em>From Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFromPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port fromPort;
-
-	/**
 	 * The default value of the '{@link #getRouteCost() <em>Route Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -183,6 +163,26 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 * @ordered
 	 */
 	protected long routeCost = ROUTE_COST_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getToPort() <em>To Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getToPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port toPort;
+
+	/**
+	 * The cached value of the '{@link #getFromPort() <em>From Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFromPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port fromPort;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -210,7 +210,7 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 	 */
 	public EList<FuelQuantity> getFuelUsage() {
 		if (fuelUsage == null) {
-			fuelUsage = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, EventsPackage.JOURNEY__FUEL_USAGE);
+			fuelUsage = new EObjectContainmentEList.Resolving<FuelQuantity>(FuelQuantity.class, this, EventsPackage.JOURNEY__FUEL_USAGE);
 		}
 		return fuelUsage;
 	}
@@ -470,9 +470,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 		switch (featureID) {
 			case EventsPackage.JOURNEY__FUEL_USAGE:
 				return getFuelUsage();
-			case EventsPackage.JOURNEY__TO_PORT:
-				if (resolve) return getToPort();
-				return basicGetToPort();
 			case EventsPackage.JOURNEY__VESSEL_STATE:
 				return getVesselState();
 			case EventsPackage.JOURNEY__ROUTE:
@@ -481,11 +478,14 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 				return getSpeed();
 			case EventsPackage.JOURNEY__DISTANCE:
 				return getDistance();
+			case EventsPackage.JOURNEY__ROUTE_COST:
+				return getRouteCost();
+			case EventsPackage.JOURNEY__TO_PORT:
+				if (resolve) return getToPort();
+				return basicGetToPort();
 			case EventsPackage.JOURNEY__FROM_PORT:
 				if (resolve) return getFromPort();
 				return basicGetFromPort();
-			case EventsPackage.JOURNEY__ROUTE_COST:
-				return getRouteCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -503,9 +503,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 				getFuelUsage().clear();
 				getFuelUsage().addAll((Collection<? extends FuelQuantity>)newValue);
 				return;
-			case EventsPackage.JOURNEY__TO_PORT:
-				setToPort((Port)newValue);
-				return;
 			case EventsPackage.JOURNEY__VESSEL_STATE:
 				setVesselState((VesselState)newValue);
 				return;
@@ -518,11 +515,14 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 			case EventsPackage.JOURNEY__DISTANCE:
 				setDistance((Integer)newValue);
 				return;
-			case EventsPackage.JOURNEY__FROM_PORT:
-				setFromPort((Port)newValue);
-				return;
 			case EventsPackage.JOURNEY__ROUTE_COST:
 				setRouteCost((Long)newValue);
+				return;
+			case EventsPackage.JOURNEY__TO_PORT:
+				setToPort((Port)newValue);
+				return;
+			case EventsPackage.JOURNEY__FROM_PORT:
+				setFromPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -539,9 +539,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 			case EventsPackage.JOURNEY__FUEL_USAGE:
 				getFuelUsage().clear();
 				return;
-			case EventsPackage.JOURNEY__TO_PORT:
-				setToPort((Port)null);
-				return;
 			case EventsPackage.JOURNEY__VESSEL_STATE:
 				setVesselState(VESSEL_STATE_EDEFAULT);
 				return;
@@ -554,11 +551,14 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 			case EventsPackage.JOURNEY__DISTANCE:
 				setDistance(DISTANCE_EDEFAULT);
 				return;
-			case EventsPackage.JOURNEY__FROM_PORT:
-				setFromPort((Port)null);
-				return;
 			case EventsPackage.JOURNEY__ROUTE_COST:
 				setRouteCost(ROUTE_COST_EDEFAULT);
+				return;
+			case EventsPackage.JOURNEY__TO_PORT:
+				setToPort((Port)null);
+				return;
+			case EventsPackage.JOURNEY__FROM_PORT:
+				setFromPort((Port)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -574,8 +574,6 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 		switch (featureID) {
 			case EventsPackage.JOURNEY__FUEL_USAGE:
 				return fuelUsage != null && !fuelUsage.isEmpty();
-			case EventsPackage.JOURNEY__TO_PORT:
-				return toPort != null;
 			case EventsPackage.JOURNEY__VESSEL_STATE:
 				return vesselState != VESSEL_STATE_EDEFAULT;
 			case EventsPackage.JOURNEY__ROUTE:
@@ -584,10 +582,12 @@ public class JourneyImpl extends ScheduledEventImpl implements Journey {
 				return speed != SPEED_EDEFAULT;
 			case EventsPackage.JOURNEY__DISTANCE:
 				return distance != DISTANCE_EDEFAULT;
-			case EventsPackage.JOURNEY__FROM_PORT:
-				return fromPort != null;
 			case EventsPackage.JOURNEY__ROUTE_COST:
 				return routeCost != ROUTE_COST_EDEFAULT;
+			case EventsPackage.JOURNEY__TO_PORT:
+				return toPort != null;
+			case EventsPackage.JOURNEY__FROM_PORT:
+				return fromPort != null;
 		}
 		return super.eIsSet(featureID);
 	}

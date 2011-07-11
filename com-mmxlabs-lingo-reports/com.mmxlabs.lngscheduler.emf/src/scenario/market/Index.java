@@ -36,7 +36,7 @@ public interface Index extends NamedObject {
 	 * @return the value of the '<em>Price Curve</em>' containment reference.
 	 * @see #setPriceCurve(StepwisePriceCurve)
 	 * @see scenario.market.MarketPackage#getIndex_PriceCurve()
-	 * @model containment="true" required="true"
+	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
 	StepwisePriceCurve getPriceCurve();

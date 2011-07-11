@@ -35,24 +35,14 @@ import scenario.optimiser.OptimiserPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.optimiser.impl.DiscountCurveImpl#getDiscounts <em>Discounts</em>}</li>
  *   <li>{@link scenario.optimiser.impl.DiscountCurveImpl#getStartDate <em>Start Date</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.DiscountCurveImpl#getDiscounts <em>Discounts</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve {
-	/**
-	 * The cached value of the '{@link #getDiscounts() <em>Discounts</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDiscounts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Discount> discounts;
-
 	/**
 	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -83,6 +73,16 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	protected boolean startDateESet;
 
 	/**
+	 * The cached value of the '{@link #getDiscounts() <em>Discounts</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDiscounts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Discount> discounts;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -108,7 +108,7 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	 */
 	public EList<Discount> getDiscounts() {
 		if (discounts == null) {
-			discounts = new EObjectContainmentEList<Discount>(Discount.class, this, OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS);
+			discounts = new EObjectContainmentEList.Resolving<Discount>(Discount.class, this, OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS);
 		}
 		return discounts;
 	}
@@ -181,10 +181,10 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
-				return getDiscounts();
 			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
 				return getStartDate();
+			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
+				return getDiscounts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -198,12 +198,12 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
+				setStartDate((Date)newValue);
+				return;
 			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
 				getDiscounts().clear();
 				getDiscounts().addAll((Collection<? extends Discount>)newValue);
-				return;
-			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
-				setStartDate((Date)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -217,11 +217,11 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
-				getDiscounts().clear();
-				return;
 			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
 				unsetStartDate();
+				return;
+			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
+				getDiscounts().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -235,10 +235,10 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
-				return discounts != null && !discounts.isEmpty();
 			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
 				return isSetStartDate();
+			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
+				return discounts != null && !discounts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

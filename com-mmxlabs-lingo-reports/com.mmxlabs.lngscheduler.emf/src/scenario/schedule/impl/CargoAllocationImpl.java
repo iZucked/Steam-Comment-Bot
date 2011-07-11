@@ -41,51 +41,31 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadSlot <em>Load Slot</em>}</li>
- *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getFuelVolume <em>Fuel Volume</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeVolume <em>Discharge Volume</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadDate <em>Load Date</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeDate <em>Discharge Date</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadPriceM3 <em>Load Price M3</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargePriceM3 <em>Discharge Price M3</em>}</li>
- *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadRevenue <em>Load Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getShippingRevenue <em>Shipping Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeRevenue <em>Discharge Revenue</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLadenLeg <em>Laden Leg</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getBallastLeg <em>Ballast Leg</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLadenIdle <em>Laden Idle</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getBallastIdle <em>Ballast Idle</em>}</li>
- *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadRevenue <em>Load Revenue</em>}</li>
- *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getShippingRevenue <em>Shipping Revenue</em>}</li>
- *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeRevenue <em>Discharge Revenue</em>}</li>
- *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getCargoType <em>Cargo Type</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadSlotVisit <em>Load Slot Visit</em>}</li>
  *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeSlotVisit <em>Discharge Slot Visit</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getLoadSlot <em>Load Slot</em>}</li>
+ *   <li>{@link scenario.schedule.impl.CargoAllocationImpl#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation {
-	/**
-	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot()
-	 * @generated
-	 * @ordered
-	 */
-	protected LoadSlot loadSlot;
-
-	/**
-	 * The cached value of the '{@link #getDischargeSlot() <em>Discharge Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDischargeSlot()
-	 * @generated
-	 * @ordered
-	 */
-	protected Slot dischargeSlot;
-
 	/**
 	 * The default value of the '{@link #getFuelVolume() <em>Fuel Volume</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -207,14 +187,34 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	protected int dischargePriceM3 = DISCHARGE_PRICE_M3_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
+	 * The cached value of the '{@link #getLoadRevenue() <em>Load Revenue</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVessel()
+	 * @see #getLoadRevenue()
 	 * @generated
 	 * @ordered
 	 */
-	protected AllocatedVessel vessel;
+	protected BookedRevenue loadRevenue;
+
+	/**
+	 * The cached value of the '{@link #getShippingRevenue() <em>Shipping Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected BookedRevenue shippingRevenue;
+
+	/**
+	 * The cached value of the '{@link #getDischargeRevenue() <em>Discharge Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDischargeRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected BookedRevenue dischargeRevenue;
 
 	/**
 	 * The cached value of the '{@link #getLadenLeg() <em>Laden Leg</em>}' reference.
@@ -257,34 +257,54 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	protected Idle ballastIdle;
 
 	/**
-	 * The cached value of the '{@link #getLoadRevenue() <em>Load Revenue</em>}' reference.
+	 * The cached value of the '{@link #getLoadSlotVisit() <em>Load Slot Visit</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLoadRevenue()
+	 * @see #getLoadSlotVisit()
 	 * @generated
 	 * @ordered
 	 */
-	protected BookedRevenue loadRevenue;
+	protected SlotVisit loadSlotVisit;
 
 	/**
-	 * The cached value of the '{@link #getShippingRevenue() <em>Shipping Revenue</em>}' reference.
+	 * The cached value of the '{@link #getDischargeSlotVisit() <em>Discharge Slot Visit</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getShippingRevenue()
+	 * @see #getDischargeSlotVisit()
 	 * @generated
 	 * @ordered
 	 */
-	protected BookedRevenue shippingRevenue;
+	protected SlotVisit dischargeSlotVisit;
 
 	/**
-	 * The cached value of the '{@link #getDischargeRevenue() <em>Discharge Revenue</em>}' reference.
+	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDischargeRevenue()
+	 * @see #getVessel()
 	 * @generated
 	 * @ordered
 	 */
-	protected BookedRevenue dischargeRevenue;
+	protected AllocatedVessel vessel;
+
+	/**
+	 * The cached value of the '{@link #getDischargeSlot() <em>Discharge Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDischargeSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected Slot dischargeSlot;
+
+	/**
+	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLoadSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected LoadSlot loadSlot;
 
 	/**
 	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
@@ -305,26 +325,6 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	 * @ordered
 	 */
 	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getLoadSlotVisit() <em>Load Slot Visit</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLoadSlotVisit()
-	 * @generated
-	 * @ordered
-	 */
-	protected SlotVisit loadSlotVisit;
-
-	/**
-	 * The cached value of the '{@link #getDischargeSlotVisit() <em>Discharge Slot Visit</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDischargeSlotVisit()
-	 * @generated
-	 * @ordered
-	 */
-	protected SlotVisit dischargeSlotVisit;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1014,12 +1014,6 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT:
-				if (resolve) return getLoadSlot();
-				return basicGetLoadSlot();
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT:
-				if (resolve) return getDischargeSlot();
-				return basicGetDischargeSlot();
 			case SchedulePackage.CARGO_ALLOCATION__FUEL_VOLUME:
 				return getFuelVolume();
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
@@ -1032,9 +1026,15 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return getLoadPriceM3();
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
 				return getDischargePriceM3();
-			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
-				if (resolve) return getVessel();
-				return basicGetVessel();
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
+				if (resolve) return getLoadRevenue();
+				return basicGetLoadRevenue();
+			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
+				if (resolve) return getShippingRevenue();
+				return basicGetShippingRevenue();
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
+				if (resolve) return getDischargeRevenue();
+				return basicGetDischargeRevenue();
 			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
 				if (resolve) return getLadenLeg();
 				return basicGetLadenLeg();
@@ -1047,23 +1047,23 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
 				if (resolve) return getBallastIdle();
 				return basicGetBallastIdle();
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
-				if (resolve) return getLoadRevenue();
-				return basicGetLoadRevenue();
-			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
-				if (resolve) return getShippingRevenue();
-				return basicGetShippingRevenue();
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
-				if (resolve) return getDischargeRevenue();
-				return basicGetDischargeRevenue();
-			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
-				return getCargoType();
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT:
 				if (resolve) return getLoadSlotVisit();
 				return basicGetLoadSlotVisit();
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT:
 				if (resolve) return getDischargeSlotVisit();
 				return basicGetDischargeSlotVisit();
+			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
+				if (resolve) return getVessel();
+				return basicGetVessel();
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT:
+				if (resolve) return getDischargeSlot();
+				return basicGetDischargeSlot();
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT:
+				if (resolve) return getLoadSlot();
+				return basicGetLoadSlot();
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				return getCargoType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1076,12 +1076,6 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT:
-				setLoadSlot((LoadSlot)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT:
-				setDischargeSlot((Slot)newValue);
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__FUEL_VOLUME:
 				setFuelVolume((Long)newValue);
 				return;
@@ -1100,8 +1094,14 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
 				setDischargePriceM3((Integer)newValue);
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
-				setVessel((AllocatedVessel)newValue);
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
+				setLoadRevenue((BookedRevenue)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
+				setShippingRevenue((BookedRevenue)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
+				setDischargeRevenue((BookedRevenue)newValue);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
 				setLadenLeg((Journey)newValue);
@@ -1115,23 +1115,23 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
 				setBallastIdle((Idle)newValue);
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
-				setLoadRevenue((BookedRevenue)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
-				setShippingRevenue((BookedRevenue)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
-				setDischargeRevenue((BookedRevenue)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
-				setCargoType((CargoType)newValue);
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT:
 				setLoadSlotVisit((SlotVisit)newValue);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT:
 				setDischargeSlotVisit((SlotVisit)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
+				setVessel((AllocatedVessel)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT:
+				setDischargeSlot((Slot)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT:
+				setLoadSlot((LoadSlot)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				setCargoType((CargoType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1145,12 +1145,6 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT:
-				setLoadSlot((LoadSlot)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT:
-				setDischargeSlot((Slot)null);
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__FUEL_VOLUME:
 				setFuelVolume(FUEL_VOLUME_EDEFAULT);
 				return;
@@ -1169,8 +1163,14 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
 				setDischargePriceM3(DISCHARGE_PRICE_M3_EDEFAULT);
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
-				setVessel((AllocatedVessel)null);
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
+				setLoadRevenue((BookedRevenue)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
+				setShippingRevenue((BookedRevenue)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
+				setDischargeRevenue((BookedRevenue)null);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
 				setLadenLeg((Journey)null);
@@ -1184,23 +1184,23 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
 				setBallastIdle((Idle)null);
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
-				setLoadRevenue((BookedRevenue)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
-				setShippingRevenue((BookedRevenue)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
-				setDischargeRevenue((BookedRevenue)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
-				setCargoType(CARGO_TYPE_EDEFAULT);
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT:
 				setLoadSlotVisit((SlotVisit)null);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT:
 				setDischargeSlotVisit((SlotVisit)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
+				setVessel((AllocatedVessel)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT:
+				setDischargeSlot((Slot)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT:
+				setLoadSlot((LoadSlot)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				setCargoType(CARGO_TYPE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -1214,10 +1214,6 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT:
-				return loadSlot != null;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT:
-				return dischargeSlot != null;
 			case SchedulePackage.CARGO_ALLOCATION__FUEL_VOLUME:
 				return fuelVolume != FUEL_VOLUME_EDEFAULT;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
@@ -1230,8 +1226,12 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return loadPriceM3 != LOAD_PRICE_M3_EDEFAULT;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_PRICE_M3:
 				return dischargePriceM3 != DISCHARGE_PRICE_M3_EDEFAULT;
-			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
-				return vessel != null;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
+				return loadRevenue != null;
+			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
+				return shippingRevenue != null;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
+				return dischargeRevenue != null;
 			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
 				return ladenLeg != null;
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
@@ -1240,18 +1240,18 @@ public class CargoAllocationImpl extends EObjectImpl implements CargoAllocation 
 				return ladenIdle != null;
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
 				return ballastIdle != null;
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_REVENUE:
-				return loadRevenue != null;
-			case SchedulePackage.CARGO_ALLOCATION__SHIPPING_REVENUE:
-				return shippingRevenue != null;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_REVENUE:
-				return dischargeRevenue != null;
-			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
-				return cargoType != CARGO_TYPE_EDEFAULT;
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT_VISIT:
 				return loadSlotVisit != null;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT:
 				return dischargeSlotVisit != null;
+			case SchedulePackage.CARGO_ALLOCATION__VESSEL:
+				return vessel != null;
+			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_SLOT:
+				return dischargeSlot != null;
+			case SchedulePackage.CARGO_ALLOCATION__LOAD_SLOT:
+				return loadSlot != null;
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				return cargoType != CARGO_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

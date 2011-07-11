@@ -31,7 +31,7 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	 */
 	public static FleetallocationFactory init() {
 		try {
-			FleetallocationFactory theFleetallocationFactory = (FleetallocationFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf1/schedule/fleetallocation"); 
+			FleetallocationFactory theFleetallocationFactory = (FleetallocationFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/schedule/fleetallocation"); 
 			if (theFleetallocationFactory != null) {
 				return theFleetallocationFactory;
 			}
