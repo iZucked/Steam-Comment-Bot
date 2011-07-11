@@ -335,7 +335,7 @@ public class JobManagerView extends ViewPart {
 								if (job != null) {
 
 									// Adapter may return an existing job for the resource .. so skip it
-									if (jobManager.getSelectedJobs().contains(job)) {
+									if (jobManager.getJobs().contains(job)) {
 										monitor.worked(1);
 										continue;
 									}
