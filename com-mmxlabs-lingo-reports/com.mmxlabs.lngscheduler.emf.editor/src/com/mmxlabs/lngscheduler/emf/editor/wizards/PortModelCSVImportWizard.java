@@ -8,8 +8,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import scenario.Scenario;
-import scenario.contract.ContractPackage;
-import scenario.market.MarketPackage;
 import scenario.port.PortPackage;
 
 /**
