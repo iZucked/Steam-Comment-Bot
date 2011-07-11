@@ -1314,22 +1314,32 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		// Only creates the other pages if there is something that can be edited
 		//
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
+			final Scenario scenario = getScenario();
+			if (scenario.getCargoModel() != null)
+				createCargoEditor(portProvider, contractProvider,
+						contractProvider);
 
-			createCargoEditor(portProvider, contractProvider, contractProvider);
+			if (scenario.getFleetModel() != null) {
+				createFleetEditor(vesselClassProvider, portProvider);
 
-			createFleetEditor(vesselClassProvider, portProvider);
+				// TODO events shouldn't be in the fleet model but in another
+				// model really
+				createEventsEditor();
+			}
 
-			createEventsEditor();
+			if (scenario.getPortModel() != null)
+				createPortEditor(contractProvider, indexProvider);
 
-			createPortEditor(contractProvider, indexProvider);
+			if (scenario.getMarketModel() != null)
+				createIndexEditor();
 
-			createIndexEditor();
-
-			createContractEditor();
+			if (scenario.getContractModel() != null)
+				createContractEditor();
 
 			// add autocorrector
 
-			createScheduleEditor();
+			if (scenario.getScheduleModel() != null)
+				createScheduleEditor();
 
 			autoCorrector = new AutoCorrector(getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());

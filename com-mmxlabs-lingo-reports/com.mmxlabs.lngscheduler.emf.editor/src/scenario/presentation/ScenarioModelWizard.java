@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.ScenarioPackage;
 import scenario.provider.LngEditPlugin;
@@ -164,11 +165,13 @@ public class ScenarioModelWizard extends Wizard implements INewWizard {
 	 * Create a new model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	protected EObject createInitialModel() {
 		EClass eClass = (EClass)scenarioPackage.getEClassifier(initialObjectCreationPage.getInitialObjectName());
 		EObject rootObject = scenarioFactory.create(eClass);
+		if (rootObject instanceof Scenario)
+			((Scenario) rootObject).createMissingModels();
 		return rootObject;
 	}
 

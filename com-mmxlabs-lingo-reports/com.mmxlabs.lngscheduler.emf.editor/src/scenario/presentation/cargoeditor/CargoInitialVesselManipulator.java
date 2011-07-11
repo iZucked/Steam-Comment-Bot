@@ -317,7 +317,7 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 			final CargoAllocation allocation = getCargoAllocation(schedule, cargo);
 			
 			final LinkedList<Pair<Notifier, List<Object>>> result = new LinkedList<Pair<Notifier, List<Object>>>();
-			if (allocation != null) result.add(new Pair<Notifier, List<Object>>(allocation, null));
+		 	if (allocation != null) result.add(new Pair<Notifier, List<Object>>(allocation, null));
 			if (scenario != null) result.add(new Pair<Notifier, List<Object>>(scenario.getScheduleModel(), null));
 			if (schedule != null) result.add(new Pair<Notifier, List<Object>>(schedule, null));
 			if (scenario != null) result.add(new Pair<Notifier, List<Object>>(scenario.getOptimisation().getCurrentSettings(), null));

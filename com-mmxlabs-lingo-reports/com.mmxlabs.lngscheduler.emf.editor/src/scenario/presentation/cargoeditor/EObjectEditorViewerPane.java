@@ -174,6 +174,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			for (final Pair<Notifier, List<Object>> notifierAndFeatures : newNotifiers) {
 				// get the notifier we are interested in
 				final Notifier n = notifierAndFeatures.getFirst();
+				if (n == null) {
+					System.err.println(pathAndRenderer + " has given a null notifier for " + object);
+					continue;
+				}
 				notifiers.add(n); // add it to the notifiers for this object
 
 				// relate this object to this notifier, so we can disconnect it
@@ -204,11 +208,13 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		}
 
 		for (final Notifier n : dropNotifiers) {
-			n.eAdapters().remove(externalAdapter);
+			if (n != null)
+				n.eAdapters().remove(externalAdapter);
 		}
 
 		for (final Notifier n : addNotifiers) {
-			n.eAdapters().add(externalAdapter);
+			if (n != null)
+				n.eAdapters().add(externalAdapter);
 		}
 	}
 
