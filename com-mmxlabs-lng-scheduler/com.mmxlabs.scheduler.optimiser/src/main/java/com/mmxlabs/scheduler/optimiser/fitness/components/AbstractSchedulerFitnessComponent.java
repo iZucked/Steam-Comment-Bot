@@ -14,8 +14,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 
 /**
- * 
- * TODO add future discount curve support.
+ * Base class for cargo scheduler fitness components. Provides a name, a
+ * reference to the core, evaluated & accepted fitness tracking, and a discount
+ * curve usable via {@link #getDiscountedValue(int, long)}.
  * 
  * @author hinton
  * 
