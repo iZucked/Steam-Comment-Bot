@@ -1798,7 +1798,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final IReferenceValueProvider marketProvider) {
 		final PortEVP portEditor = new PortEVP(getSite().getPage(), this);
 
-		final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
+		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 
 		portEditor.createControl(sash);
 
