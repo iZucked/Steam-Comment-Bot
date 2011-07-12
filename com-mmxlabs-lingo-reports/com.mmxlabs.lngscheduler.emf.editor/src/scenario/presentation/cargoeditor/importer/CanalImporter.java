@@ -26,22 +26,7 @@ import scenario.port.VesselClassCost;
  * 
  */
 public class CanalImporter extends EObjectImporter {
-	/**
-	 * 
-	 */
-	private static final String TRANSIT_FUEL = "transitFuel";
-	/**
-	 * 
-	 */
-	private static final String TRANSIT_TIME = "transitTime";
-	/**
-	 * 
-	 */
-	private static final String UNLADEN_COST = "unladenCost";
-	/**
-	 * 
-	 */
-	private static final String LADEN_COST = "ladenCost";
+	
 
 	@Override
 	protected void populateContainment(final String prefix,
@@ -70,62 +55,9 @@ public class CanalImporter extends EObjectImporter {
 							+ e.getMessage());
 				}
 			}
-
-		} else if (reference == PortPackage.eINSTANCE.getCanal_ClassCosts()) {
-			// class costs are populated from columns like "DFDE-117.xxx
-			final Map<String, VesselClassCost> costs = new HashMap<String, VesselClassCost>();
-			for (final Map.Entry<String, String> entry : fields.entrySet()) {
-				final String[] parts = entry.getKey().split(SEPARATOR);
-				if (parts.length == 2) {
-					if (parts[1].equalsIgnoreCase(LADEN_COST)) {
-						final VesselClassCost vcc = getClassCost(costs,
-								parts[1]);
-						vcc.setLadenCost(Integer.parseInt(entry.getValue()));
-					} else if (parts[1].equalsIgnoreCase(UNLADEN_COST)) {
-						final VesselClassCost vcc = getClassCost(costs,
-								parts[1]);
-						vcc.setUnladenCost(Integer.parseInt(entry.getValue()));
-					} else if (parts[1].equalsIgnoreCase(TRANSIT_TIME)) {
-						final VesselClassCost vcc = getClassCost(costs,
-								parts[1]);
-						vcc.setTransitTime(Integer.parseInt(entry.getValue()));
-					} else if (parts[1].equalsIgnoreCase(TRANSIT_FUEL)) {
-						final VesselClassCost vcc = getClassCost(costs,
-								parts[1]);
-						vcc.setTransitFuel(Float.parseFloat(entry.getValue()));
-					}
-				}
-			}
-			final EList<EObject> container = (EList<EObject>) result
-					.eGet(reference);
-			for (final Map.Entry<String, VesselClassCost> entry : costs
-					.entrySet()) {
-				container.add(entry.getValue());
-				deferredReferences.add(new DeferredReference(entry.getValue(),
-						PortPackage.eINSTANCE.getVesselClassCost_VesselClass(),
-						entry.getKey()));
-			}
 		} else {
 			super.populateContainment(prefix, result, reference, fields,
 					deferredReferences, registry);
-		}
-	}
-
-	@Override
-	protected void flattenMultiContainment(final EObject object,
-			final String prefix, final EReference reference,
-			Map<String, String> output) {
-		if (reference == PortPackage.eINSTANCE.getCanal_ClassCosts()) {
-			for (final VesselClassCost vcc : ((Canal) object).getClassCosts()) {
-				final String s = vcc.getVesselClass().getName() + SEPARATOR;
-				output.put(s + LADEN_COST, vcc.getLadenCost() + "");
-				output.put(s + UNLADEN_COST, vcc.getUnladenCost() + "");
-				output.put(s + TRANSIT_TIME, vcc.getTransitTime() + "");
-				output.put(s + TRANSIT_FUEL,
-						String.format("%3g", vcc.getTransitFuel()));
-			}
-		} else {
-			super.flattenMultiContainment(object, prefix, reference, output);
 		}
 	}
 
@@ -148,26 +80,6 @@ public class CanalImporter extends EObjectImporter {
 					((Canal) object).getName() + "-distances.csv");
 		} else {
 			super.flattenSingleContainment(object, prefix, output, reference);
-		}
-	}
-
-	/**
-	 * Get a vessel class cost for the given vessel class name, creating one if
-	 * it's not already in the map.
-	 * 
-	 * @param costs
-	 * @param className
-	 * @return
-	 */
-	private static VesselClassCost getClassCost(Map<String, VesselClassCost> costs,
-			String className) {
-		if (costs.containsKey(className)) {
-			return costs.get(className);
-		} else {
-			final VesselClassCost vcc = PortFactory.eINSTANCE
-					.createVesselClassCost();
-			costs.put(className, vcc);
-			return vcc;
 		}
 	}
 }

@@ -27,13 +27,12 @@ import scenario.fleet.VesselStateAttributes;
  */
 public class VesselClassImporter extends EObjectImporter {
 
-	private static final String TRANSIT_FUEL = "transitFuel";
-
-	private static final String TRANSIT_TIME = "transitTime";
-
-	private static final String UNLADEN_COST = "unladenCost";
-
-	private static final String LADEN_COST = "ladenCost";
+	/**
+	 * Used in canal column headers, like
+	 * 
+	 * canal.Suez.ladenCost
+	 */
+	private static final String CANAL = "canal";
 
 	@Override
 	public Map<String, Collection<Map<String, String>>> exportObjects(
@@ -87,9 +86,9 @@ public class VesselClassImporter extends EObjectImporter {
 			for (final VesselClassCost vcc : ((VesselClass) object)
 					.getCanalCosts()) {
 				final Map<String, String> map = importer.exportObject((EObject) vcc);
-				final String p2 = prefix + vcc.getCanal().getName() + SEPARATOR;
+				final String p2 = prefix + CANAL + SEPARATOR + vcc.getCanal().getName() + SEPARATOR;
 				for (final Map.Entry<String, String> e : map.entrySet()) {
-					if (e.getKey().equalsIgnoreCase("canal")) continue;
+					if (e.getKey().equalsIgnoreCase(CANAL)) continue;
 					output.put(p2 + e.getKey(), e.getValue());
 				}
 			}
@@ -106,10 +105,10 @@ public class VesselClassImporter extends EObjectImporter {
 		if (reference == FleetPackage.eINSTANCE.getVesselClass_CanalCosts()) {
 			final Map<String, Map<String, String>> canalCosts = new HashMap<String, Map<String, String>>();
 			for (final String fieldName : fields.keySet()) {
-				if (fieldName.startsWith(prefix + SEPARATOR + "canal")) {
+				if (fieldName.startsWith(prefix + CANAL)) {
 					final String fn2 = getCurrentReader().getCasedColumnName(
 							fieldName).substring(
-							(prefix + SEPARATOR + "canal").length());
+							(prefix + CANAL).length());
 					final String canalName = fn2.substring(0,
 							fn2.indexOf(SEPARATOR));
 					final String rest = fn2
@@ -118,7 +117,7 @@ public class VesselClassImporter extends EObjectImporter {
 					if (vals == null) {
 						vals = new HashMap<String, String>();
 						canalCosts.put(canalName, vals);
-						vals.put("canal", canalName);
+						vals.put(CANAL, canalName);
 					}
 					vals.put(rest.toLowerCase(), fields.get(fieldName));
 				}
