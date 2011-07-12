@@ -6,6 +6,7 @@
  */
 package scenario.contract.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -22,12 +23,14 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import scenario.contract.Contract;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.contract.TotalVolumeLimit;
+import scenario.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -138,6 +141,23 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 			salesContracts = new EObjectContainmentEList.Resolving<SalesContract>(SalesContract.class, this, ContractPackage.CONTRACT_MODEL__SALES_CONTRACTS);
 		}
 		return salesContracts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Contract getDefaultContract(Port port) {
+		for (final Contract c : getPurchaseContracts()) {
+		   if (c.getDefaultPorts().contains(port)) return c;
+		}
+		
+		for (final Contract c : getSalesContracts()) {
+		   if (c.getDefaultPorts().contains(port)) return c;
+		}
+		
+		return null;
 	}
 
 	/**
@@ -354,6 +374,20 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				return salesContracts != null && !salesContracts.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ContractPackage.CONTRACT_MODEL___GET_DEFAULT_CONTRACT__PORT:
+				return getDefaultContract((Port)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //ContractModelImpl

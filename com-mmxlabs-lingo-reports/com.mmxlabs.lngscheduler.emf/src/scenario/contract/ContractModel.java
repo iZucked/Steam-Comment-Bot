@@ -9,6 +9,7 @@ package scenario.contract;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import scenario.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -62,6 +63,15 @@ public interface ContractModel extends EObject {
 	 * @generated
 	 */
 	EList<SalesContract> getSalesContracts();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" portRequired="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (final Contract c : getPurchaseContracts()) {\r\n   if (c.getDefaultPorts().contains(port)) return c;\r\n}\r\n\r\nfor (final Contract c : getSalesContracts()) {\r\n   if (c.getDefaultPorts().contains(port)) return c;\r\n}\r\n\r\nreturn null;'"
+	 * @generated
+	 */
+	Contract getDefaultContract(Port port);
 
 	/**
 	 * Returns the value of the '<em><b>Volume Constraints</b></em>' containment reference list.

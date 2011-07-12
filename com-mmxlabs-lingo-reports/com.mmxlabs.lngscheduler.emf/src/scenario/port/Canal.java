@@ -9,6 +9,7 @@ package scenario.port;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
+import scenario.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +29,7 @@ import scenario.NamedObject;
  * @model
  * @generated
  */
-public interface Canal extends NamedObject {
+public interface Canal extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Class Costs</b></em>' containment reference list.
 	 * The list contents are of type {@link scenario.port.VesselClassCost}.

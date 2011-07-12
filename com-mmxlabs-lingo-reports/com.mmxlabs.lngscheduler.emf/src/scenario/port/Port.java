@@ -23,8 +23,7 @@ import scenario.market.Index;
  * <ul>
  *   <li>{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}</li>
- *   <li>{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}</li>
- *   <li>{@link scenario.port.Port#getDefaultIndex <em>Default Index</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultCVValue <em>Default CV Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -33,32 +32,6 @@ import scenario.market.Index;
  * @generated
  */
 public interface Port extends UUIDObject, NamedObject {
-	/**
-	 * Returns the value of the '<em><b>Default Index</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Default Index</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Default Index</em>' reference.
-	 * @see #setDefaultIndex(Index)
-	 * @see scenario.port.PortPackage#getPort_DefaultIndex()
-	 * @model
-	 * @generated
-	 */
-	Index getDefaultIndex();
-
-	/**
-	 * Sets the value of the '{@link scenario.port.Port#getDefaultIndex <em>Default Index</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Default Index</em>' reference.
-	 * @see #getDefaultIndex()
-	 * @generated
-	 */
-	void setDefaultIndex(Index value);
-
 	/**
 	 * Returns the value of the '<em><b>Time Zone</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -86,32 +59,6 @@ public interface Port extends UUIDObject, NamedObject {
 	void setTimeZone(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Default Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Default Contract</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Default Contract</em>' reference.
-	 * @see #setDefaultContract(Contract)
-	 * @see scenario.port.PortPackage#getPort_DefaultContract()
-	 * @model required="true"
-	 * @generated
-	 */
-	Contract getDefaultContract();
-
-	/**
-	 * Sets the value of the '{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Default Contract</em>' reference.
-	 * @see #getDefaultContract()
-	 * @generated
-	 */
-	void setDefaultContract(Contract value);
-
-	/**
 	 * Returns the value of the '<em><b>Regas Efficiency</b></em>' attribute.
 	 * The default value is <code>"1.0"</code>.
 	 * <!-- begin-user-doc -->
@@ -137,5 +84,32 @@ public interface Port extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setRegasEfficiency(float value);
+
+	/**
+	 * Returns the value of the '<em><b>Default CV Value</b></em>' attribute.
+	 * The default value is <code>"22.8"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default CV Value</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default CV Value</em>' attribute.
+	 * @see #setDefaultCVValue(float)
+	 * @see scenario.port.PortPackage#getPort_DefaultCVValue()
+	 * @model default="22.8" required="true"
+	 * @generated
+	 */
+	float getDefaultCVValue();
+
+	/**
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultCVValue <em>Default CV Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default CV Value</em>' attribute.
+	 * @see #getDefaultCVValue()
+	 * @generated
+	 */
+	void setDefaultCVValue(float value);
 
 } // Port

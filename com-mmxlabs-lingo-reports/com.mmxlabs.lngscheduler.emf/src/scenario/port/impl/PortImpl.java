@@ -39,8 +39,7 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
- *   <li>{@link scenario.port.impl.PortImpl#getDefaultContract <em>Default Contract</em>}</li>
- *   <li>{@link scenario.port.impl.PortImpl#getDefaultIndex <em>Default Index</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVValue <em>Default CV Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -108,24 +107,24 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected float regasEfficiency = REGAS_EFFICIENCY_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getDefaultContract() <em>Default Contract</em>}' reference.
+	 * The default value of the '{@link #getDefaultCVValue() <em>Default CV Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDefaultContract()
+	 * @see #getDefaultCVValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected Contract defaultContract;
+	protected static final float DEFAULT_CV_VALUE_EDEFAULT = 22.8F;
 
 	/**
-	 * The cached value of the '{@link #getDefaultIndex() <em>Default Index</em>}' reference.
+	 * The cached value of the '{@link #getDefaultCVValue() <em>Default CV Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDefaultIndex()
+	 * @see #getDefaultCVValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected Index defaultIndex;
+	protected float defaultCVValue = DEFAULT_CV_VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -172,44 +171,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index getDefaultIndex() {
-		if (defaultIndex != null && defaultIndex.eIsProxy()) {
-			InternalEObject oldDefaultIndex = (InternalEObject)defaultIndex;
-			defaultIndex = (Index)eResolveProxy(oldDefaultIndex);
-			if (defaultIndex != oldDefaultIndex) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.PORT__DEFAULT_INDEX, oldDefaultIndex, defaultIndex));
-			}
-		}
-		return defaultIndex;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Index basicGetDefaultIndex() {
-		return defaultIndex;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDefaultIndex(Index newDefaultIndex) {
-		Index oldDefaultIndex = defaultIndex;
-		defaultIndex = newDefaultIndex;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_INDEX, oldDefaultIndex, defaultIndex));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EObject getContainer() {
 		return eContainer();
 	}
@@ -240,44 +201,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Contract getDefaultContract() {
-		if (defaultContract != null && defaultContract.eIsProxy()) {
-			InternalEObject oldDefaultContract = (InternalEObject)defaultContract;
-			defaultContract = (Contract)eResolveProxy(oldDefaultContract);
-			if (defaultContract != oldDefaultContract) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.PORT__DEFAULT_CONTRACT, oldDefaultContract, defaultContract));
-			}
-		}
-		return defaultContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Contract basicGetDefaultContract() {
-		return defaultContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDefaultContract(Contract newDefaultContract) {
-		Contract oldDefaultContract = defaultContract;
-		defaultContract = newDefaultContract;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_CONTRACT, oldDefaultContract, defaultContract));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public float getRegasEfficiency() {
 		return regasEfficiency;
 	}
@@ -299,6 +222,27 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public float getDefaultCVValue() {
+		return defaultCVValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefaultCVValue(float newDefaultCVValue) {
+		float oldDefaultCVValue = defaultCVValue;
+		defaultCVValue = newDefaultCVValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_CV_VALUE, oldDefaultCVValue, defaultCVValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -308,12 +252,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return getTimeZone();
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				return getRegasEfficiency();
-			case PortPackage.PORT__DEFAULT_CONTRACT:
-				if (resolve) return getDefaultContract();
-				return basicGetDefaultContract();
-			case PortPackage.PORT__DEFAULT_INDEX:
-				if (resolve) return getDefaultIndex();
-				return basicGetDefaultIndex();
+			case PortPackage.PORT__DEFAULT_CV_VALUE:
+				return getDefaultCVValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -335,11 +275,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				setRegasEfficiency((Float)newValue);
 				return;
-			case PortPackage.PORT__DEFAULT_CONTRACT:
-				setDefaultContract((Contract)newValue);
-				return;
-			case PortPackage.PORT__DEFAULT_INDEX:
-				setDefaultIndex((Index)newValue);
+			case PortPackage.PORT__DEFAULT_CV_VALUE:
+				setDefaultCVValue((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -362,11 +299,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				setRegasEfficiency(REGAS_EFFICIENCY_EDEFAULT);
 				return;
-			case PortPackage.PORT__DEFAULT_CONTRACT:
-				setDefaultContract((Contract)null);
-				return;
-			case PortPackage.PORT__DEFAULT_INDEX:
-				setDefaultIndex((Index)null);
+			case PortPackage.PORT__DEFAULT_CV_VALUE:
+				setDefaultCVValue(DEFAULT_CV_VALUE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -386,10 +320,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				return regasEfficiency != REGAS_EFFICIENCY_EDEFAULT;
-			case PortPackage.PORT__DEFAULT_CONTRACT:
-				return defaultContract != null;
-			case PortPackage.PORT__DEFAULT_INDEX:
-				return defaultIndex != null;
+			case PortPackage.PORT__DEFAULT_CV_VALUE:
+				return defaultCVValue != DEFAULT_CV_VALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -487,6 +419,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		result.append(timeZone);
 		result.append(", regasEfficiency: ");
 		result.append(regasEfficiency);
+		result.append(", defaultCVValue: ");
+		result.append(defaultCVValue);
 		result.append(')');
 		return result.toString();
 	}

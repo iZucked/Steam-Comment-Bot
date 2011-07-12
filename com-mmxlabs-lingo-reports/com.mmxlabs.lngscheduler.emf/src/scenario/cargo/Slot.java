@@ -10,6 +10,7 @@ import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.Scenario;
 import scenario.contract.Contract;
 
 import scenario.port.Port;
@@ -316,18 +317,18 @@ public interface Slot extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getContract() != null)\n\treturn getContract();\nelse if (getPort() != null)\n\treturn getPort().getDefaultContract();\nelse\n\treturn null;'"
-	 * @generated
-	 */
-	Contract getSlotOrPortContract();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return new Date(getWindowStart()\r\n\t\t\t\t\t\t.getTime()\r\n\t\t\t\t\t\t+ javax.management.timer.Timer.ONE_HOUR\r\n\t\t\t\t\t\t* getWindowDuration());'"
 	 * @generated
 	 */
 	Date getWindowEnd();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getContract() != null)\r\n\t\t\treturn getContract();\r\nelse if (getPort() != null) {\r\n\t\t\tfinal scenario.port.Port p = getPort();\r\n\t\t\tif (scenario instanceof scenario.Scenario) {\r\nfinal scenario.Scenario scenario2 = (scenario.Scenario) scenario;\r\n\t\t\tif (scenario2.getContractModel() != null) {\r\n\t\t\t\tfinal scenario.contract.ContractModel cm = scenario2.getContractModel();\r\n\t\t\t\treturn cm.getDefaultContract(p);\r\n\t\t\t}\r\n}\r\n\t\t\treturn null;\r\n\r\n} else\r\n\t\t\treturn null;'"
+	 * @generated
+	 */
+	Contract getSlotOrPortContract(Object scenario);
 
 } // Slot

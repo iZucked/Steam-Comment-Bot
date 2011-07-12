@@ -120,9 +120,9 @@ public class ProfitAndLossCalculator {
 			final LoadSlot loadSlot = allocation.getLoadSlot();
 			final Slot dischargeSlot = allocation.getDischargeSlot();
 
-			final Contract loadContract = loadSlot.getSlotOrPortContract();
+			final Contract loadContract = loadSlot.getSlotOrPortContract(scenario);
 			final SalesContract dischargeContract = (SalesContract) dischargeSlot
-					.getSlotOrPortContract();
+					.getSlotOrPortContract(scenario);
 
 			final Entity loadEntity = loadContract.getEntity();
 			final Entity dischargeEntity = dischargeContract.getEntity();

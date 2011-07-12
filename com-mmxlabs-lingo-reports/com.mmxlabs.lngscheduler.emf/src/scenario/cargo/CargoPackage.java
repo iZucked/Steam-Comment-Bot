@@ -315,7 +315,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_PORT_CONTRACT = 2;
+	int SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = 2;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -460,7 +460,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT = SLOT___GET_SLOT_OR_PORT_CONTRACT;
+	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT;
 
 	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
@@ -710,16 +710,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetLocalWindowStart();
 
 	/**
-	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrPortContract() <em>Get Slot Or Port Contract</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Port Contract</em>' operation.
-	 * @see scenario.cargo.Slot#getSlotOrPortContract()
-	 * @generated
-	 */
-	EOperation getSlot__GetSlotOrPortContract();
-
-	/**
 	 * Returns the meta object for the '{@link scenario.cargo.Slot#getWindowEnd() <em>Get Window End</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -728,6 +718,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetWindowEnd();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrPortContract(java.lang.Object) <em>Get Slot Or Port Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * @see scenario.cargo.Slot#getSlotOrPortContract(java.lang.Object)
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrPortContract__Object();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -958,20 +958,20 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_LOCAL_WINDOW_START = eINSTANCE.getSlot__GetLocalWindowStart();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Port Contract</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_SLOT_OR_PORT_CONTRACT = eINSTANCE.getSlot__GetSlotOrPortContract();
-
-		/**
 		 * The meta object literal for the '<em><b>Get Window End</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EOperation SLOT___GET_WINDOW_END = eINSTANCE.getSlot__GetWindowEnd();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Port Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = eINSTANCE.getSlot__GetSlotOrPortContract__Object();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

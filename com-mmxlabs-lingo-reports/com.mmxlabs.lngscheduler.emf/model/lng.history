@@ -3137,12 +3137,12 @@
             referenceValue="lng.ecore#//NamedObject"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
-          element="lng.ecore#//port/Port/defaultContract">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultContract"
+          element="#//@releases.3/@changes.11/@changes.0/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.11/@changes.0/@element"
             featureName="name" dataValue="defaultContract"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultContract"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.11/@changes.0/@element"
             featureName="lowerBound" dataValue="1" oldDataValue="0"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultContract"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.11/@changes.0/@element"
             featureName="eType" referenceValue="lng.ecore#//contract/Contract"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot" referenceName="eOperations"
@@ -3330,10 +3330,10 @@
             referenceValue="lng.ecore#//NamedObject"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
-          element="lng.ecore#//port/Port/defaultIndex">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultIndex"
+          element="#//@releases.3/@changes.12/@changes.0/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.12/@changes.0/@element"
             featureName="name" dataValue="defaultIndex"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultIndex"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.12/@changes.0/@element"
             featureName="eType" referenceValue="lng.ecore#//market/Index"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//contract/SalesContract"
@@ -4097,5 +4097,153 @@
         referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <changes xsi:type="history:Add" element="lng.ecore#//port/Port" featureName="eSuperTypes"
         referenceValue="lng.ecore#//UUIDObject"/>
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Delete" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures">
+        <element xsi:type="ecore:EReference" name="defaultContract" lowerBound="1"
+            eType="ecore:EClass lng.ecore#//contract/Contract"/>
+      </changes>
+      <operation name="deleteFeature2">
+        <parameters name="feature">
+          <referenceValue element="#//@releases.3/@changes.11/@changes.0/@element"/>
+        </parameters>
+      </operation>
+    </changes>
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Delete" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures">
+        <element xsi:type="ecore:EReference" name="defaultIndex" eType="ecore:EClass lng.ecore#//market/Index"/>
+      </changes>
+      <operation name="deleteFeature2">
+        <parameters name="feature">
+          <referenceValue element="#//@releases.3/@changes.12/@changes.0/@element"/>
+        </parameters>
+      </operation>
+    </changes>
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Create" target="lng.ecore#//contract/Contract" referenceName="eStructuralFeatures"
+          element="lng.ecore#//contract/Contract/defaultPorts">
+        <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/defaultPorts"
+            featureName="name" dataValue="defaultPorts"/>
+        <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/defaultPorts"
+            featureName="upperBound" dataValue="-1" oldDataValue="1"/>
+        <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/defaultPorts"
+            featureName="eType" referenceValue="lng.ecore#//port/Port"/>
+      </changes>
+      <operation name="newReference">
+        <parameters name="eClass">
+          <referenceValue element="lng.ecore#//contract/Contract"/>
+        </parameters>
+        <parameters name="name">
+          <dataValue>defaultPorts</dataValue>
+        </parameters>
+        <parameters name="type">
+          <referenceValue element="lng.ecore#//port/Port"/>
+        </parameters>
+        <parameters name="lowerBound">
+          <dataValue>0</dataValue>
+        </parameters>
+        <parameters name="upperBound">
+          <dataValue>-1</dataValue>
+        </parameters>
+        <parameters name="containment">
+          <dataValue>false</dataValue>
+        </parameters>
+        <parameters name="opposite"/>
+      </operation>
+    </changes>
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
+          element="lng.ecore#//port/Port/defaultCVValue">
+        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVValue"
+            featureName="name" dataValue="defaultCVValue"/>
+        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVValue"
+            featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVValue"
+            featureName="defaultValueLiteral" dataValue="22.8"/>
+        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVValue"
+            featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      </changes>
+      <operation name="newAttribute">
+        <parameters name="eClass">
+          <referenceValue element="lng.ecore#//port/Port"/>
+        </parameters>
+        <parameters name="name">
+          <dataValue>defaultCVValue</dataValue>
+        </parameters>
+        <parameters name="type">
+          <referenceValue element="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+        </parameters>
+        <parameters name="lowerBound">
+          <dataValue>1</dataValue>
+        </parameters>
+        <parameters name="upperBound">
+          <dataValue>1</dataValue>
+        </parameters>
+        <parameters name="defaultValue">
+          <dataValue>22.8</dataValue>
+        </parameters>
+      </operation>
+    </changes>
+    <changes xsi:type="history:Add" element="lng.ecore#//port/Canal" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//UUIDObject"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;&#x9;&#x9;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#x9;&#x9;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"
+        oldDataValue="if (getContract() != null)&#xA;&#x9;return getContract();&#xA;else if (getPort() != null)&#xA;&#x9;return getPort().getDefaultContract();&#xA;else&#xA;&#x9;return null;"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrPortContract"
+        referenceName="eParameters" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/scenario"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/scenario"
+        featureName="eType" referenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/scenario"
+        featureName="name" dataValue="scenario"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/scenario"
+        featureName="eType" oldReferenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/scenario"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"
+        oldDataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;&#x9;&#x9;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#x9;&#x9;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"
+        oldDataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/defaultPorts"
+        featureName="ordered" dataValue="false" oldDataValue="true"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(p)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(p)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"
+        oldDataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(this)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/ContractModel"
+        referenceName="eOperations" element="lng.ecore#//contract/ContractModel/getDefaultContract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract"
+        featureName="eType" referenceValue="lng.ecore#//port/Port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract"
+        featureName="name" dataValue="getDefaultContract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/ContractModel/getDefaultContract"
+        referenceName="eParameters" element="lng.ecore#//contract/ContractModel/getDefaultContract/port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract/port"
+        featureName="name" dataValue="port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract/port"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract/port"
+        featureName="eType" referenceValue="lng.ecore#//port/Port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract"
+        featureName="eType" referenceValue="lng.ecore#//contract/Contract" oldReferenceValue="lng.ecore#//port/Port"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/ContractModel/getDefaultContract"
+        referenceName="eAnnotations" element="lng.ecore#//contract/ContractModel/getDefaultContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/ContractModel/getDefaultContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//contract/ContractModel/getDefaultContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="body"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="return new Date(getWindowStart()&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;.getTime()&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;+ javax.management.timer.Timer.ONE_HOUR&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;* getWindowDuration());"/>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getDefaultContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="for (final Contract c : getPurchaseContracts()) {&#xD;&#xA;   if (c.getDefaultPorts().contains(port)) return c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;for (final Contract c : getSalesContracts()) {&#xD;&#xA;   if (c.getDefaultPorts().contains(port)) return c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;return null;"
+        oldDataValue="return new Date(getWindowStart()&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;.getTime()&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;+ javax.management.timer.Timer.ONE_HOUR&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;* getWindowDuration());"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return cm.getDefaultContract(p);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"
+        oldDataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(p)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(p)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
   </releases>
 </history:History>

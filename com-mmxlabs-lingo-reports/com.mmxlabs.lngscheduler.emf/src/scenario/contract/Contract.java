@@ -6,7 +6,9 @@
  */
 package scenario.contract;
 
+import org.eclipse.emf.common.util.EList;
 import scenario.NamedObject;
+import scenario.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,6 +19,7 @@ import scenario.NamedObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.contract.Contract#getEntity <em>Entity</em>}</li>
+ *   <li>{@link scenario.contract.Contract#getDefaultPorts <em>Default Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,5 +53,21 @@ public interface Contract extends NamedObject {
 	 * @generated
 	 */
 	void setEntity(Entity value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Ports</b></em>' reference list.
+	 * The list contents are of type {@link scenario.port.Port}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Ports</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Ports</em>' reference list.
+	 * @see scenario.contract.ContractPackage#getContract_DefaultPorts()
+	 * @model ordered="false"
+	 * @generated
+	 */
+	EList<Port> getDefaultPorts();
 
 } // Contract

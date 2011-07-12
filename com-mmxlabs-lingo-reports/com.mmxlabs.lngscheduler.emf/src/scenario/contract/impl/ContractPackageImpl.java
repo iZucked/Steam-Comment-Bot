@@ -8,6 +8,7 @@ package scenario.contract.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -261,6 +262,15 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 */
 	public EReference getContractModel_SalesContracts() {
 		return (EReference)contractModelEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getContractModel__GetDefaultContract__Port() {
+		return contractModelEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -547,6 +557,15 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getContract_DefaultPorts() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ContractFactory getContractFactory() {
 		return (ContractFactory)getEFactoryInstance();
 	}
@@ -576,6 +595,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		createEReference(contractModelEClass, CONTRACT_MODEL__SHIPPING_ENTITY);
 		createEReference(contractModelEClass, CONTRACT_MODEL__PURCHASE_CONTRACTS);
 		createEReference(contractModelEClass, CONTRACT_MODEL__SALES_CONTRACTS);
+		createEOperation(contractModelEClass, CONTRACT_MODEL___GET_DEFAULT_CONTRACT__PORT);
 
 		totalVolumeLimitEClass = createEClass(TOTAL_VOLUME_LIMIT);
 		createEReference(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__PORTS);
@@ -590,6 +610,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 
 		contractEClass = createEClass(CONTRACT);
 		createEReference(contractEClass, CONTRACT__ENTITY);
+		createEReference(contractEClass, CONTRACT__DEFAULT_PORTS);
 
 		purchaseContractEClass = createEClass(PURCHASE_CONTRACT);
 
@@ -665,6 +686,9 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		initEReference(getContractModel_PurchaseContracts(), this.getPurchaseContract(), null, "purchaseContracts", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContractModel_SalesContracts(), this.getSalesContract(), null, "salesContracts", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		EOperation op = initEOperation(getContractModel__GetDefaultContract__Port(), this.getContract(), "getDefaultContract", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, thePortPackage.getPort(), "port", 1, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(totalVolumeLimitEClass, TotalVolumeLimit.class, "TotalVolumeLimit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTotalVolumeLimit_Ports(), thePortPackage.getPort(), null, "ports", null, 0, -1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTotalVolumeLimit_MaximumVolume(), ecorePackage.getELong(), "maximumVolume", null, 0, 1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -678,6 +702,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 
 		initEClass(contractEClass, Contract.class, "Contract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContract_Entity(), this.getEntity(), null, "entity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContract_DefaultPorts(), thePortPackage.getPort(), null, "defaultPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(purchaseContractEClass, PurchaseContract.class, "PurchaseContract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

@@ -320,14 +320,14 @@ public class AnnotatedSolutionExporter {
 						.getMaxQuantity());
 				// find discharge price per mmbtu
 				final SalesContract dischargeContract = (SalesContract) cargo
-						.getDischargeSlot().getSlotOrPortContract();
+						.getDischargeSlot().getSlotOrPortContract(inputScenario);
 				final float salesPricePerMMBTU = dischargeContract.getIndex()
 						.getPriceCurve()
 						.getValueAtDate(allocation.getDischargeDate());
 				// * dischargeContract.getRegasEfficiency();
 
 				final PurchaseContract purchaseContract = (PurchaseContract) cargo
-						.getLoadSlot().getSlotOrPortContract();
+						.getLoadSlot().getSlotOrPortContract(inputScenario);
 				final float purchasePricePerMMBTU;
 				if (purchaseContract instanceof FixedPricePurchaseContract) {
 					purchasePricePerMMBTU = ((FixedPricePurchaseContract) purchaseContract)

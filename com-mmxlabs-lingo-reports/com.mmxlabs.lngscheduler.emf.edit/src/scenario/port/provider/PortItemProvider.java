@@ -71,8 +71,7 @@ public class PortItemProvider
 			addNamePropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
-			addDefaultContractPropertyDescriptor(object);
-			addDefaultIndexPropertyDescriptor(object);
+			addDefaultCVValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -100,28 +99,6 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Default Index feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDefaultIndexPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_defaultIndex_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultIndex_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__DEFAULT_INDEX,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Time Zone feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -144,28 +121,6 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Default Contract feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDefaultContractPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_defaultContract_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultContract_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__DEFAULT_CONTRACT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Regas Efficiency feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -179,6 +134,28 @@ public class PortItemProvider
 				 getString("_UI_Port_regasEfficiency_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Port_regasEfficiency_feature", "_UI_Port_type"),
 				 PortPackage.Literals.PORT__REGAS_EFFICIENCY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default CV Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultCVValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_defaultCVValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultCVValue_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_CV_VALUE,
 				 true,
 				 false,
 				 false,
@@ -227,6 +204,7 @@ public class PortItemProvider
 			case PortPackage.PORT__NAME:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__REGAS_EFFICIENCY:
+			case PortPackage.PORT__DEFAULT_CV_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

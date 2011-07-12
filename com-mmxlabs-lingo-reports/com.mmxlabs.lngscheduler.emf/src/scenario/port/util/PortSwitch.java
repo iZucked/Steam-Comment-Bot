@@ -121,6 +121,7 @@ public class PortSwitch<T> {
 			case PortPackage.CANAL: {
 				Canal canal = (Canal)theEObject;
 				T result = caseCanal(canal);
+				if (result == null) result = caseUUIDObject(canal);
 				if (result == null) result = caseNamedObject(canal);
 				if (result == null) result = caseScenarioObject(canal);
 				if (result == null) result = defaultCase(theEObject);

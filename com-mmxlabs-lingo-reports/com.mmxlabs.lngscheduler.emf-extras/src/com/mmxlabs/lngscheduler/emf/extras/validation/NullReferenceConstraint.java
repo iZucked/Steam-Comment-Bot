@@ -35,7 +35,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil
 			.makeArrayList(PortPackage.eINSTANCE.getDistanceLine_FromPort(),
 					PortPackage.eINSTANCE.getDistanceLine_ToPort(),
-					PortPackage.eINSTANCE.getPort_DefaultContract(),
+//					PortPackage.eINSTANCE.getPort_DefaultContract(),
 					CargoPackage.eINSTANCE.getCargo_LoadSlot(),
 					CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
 					CargoPackage.eINSTANCE.getSlot_Port(),

@@ -489,7 +489,7 @@ public class LNGScenarioTransformer {
 				};
 			} else {
 				final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot
-						.getSlotOrPortContract());
+						.getSlotOrPortContract(scenario));
 				loadPriceCalculator = purchaseContractAssociation
 						.lookup(purchaseContract);
 			}
@@ -509,7 +509,7 @@ public class LNGScenarioTransformer {
 						Calculator.scaleToInt(dischargeSlot.getFixedPrice()));
 			} else {
 				final Index dischargeIndex = ((SalesContract) dischargeSlot
-						.getSlotOrPortContract()).getIndex();
+						.getSlotOrPortContract(scenario)).getIndex();
 
 				final float regasEfficiency = (dischargeSlot.getPort())
 						.getRegasEfficiency();

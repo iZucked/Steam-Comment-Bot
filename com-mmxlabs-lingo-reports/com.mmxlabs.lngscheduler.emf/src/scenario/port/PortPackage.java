@@ -146,22 +146,13 @@ public interface PortPackage extends EPackage {
 	int PORT__REGAS_EFFICIENCY = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Default Contract</b></em>' reference.
+	 * The feature id for the '<em><b>Default CV Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_CONTRACT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Default Index</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__DEFAULT_INDEX = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int PORT__DEFAULT_CV_VALUE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -170,7 +161,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -293,13 +284,22 @@ public interface PortPackage extends EPackage {
 	int CANAL = 4;
 
 	/**
+	 * The feature id for the '<em><b>UUID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL__UUID = ScenarioPackage.UUID_OBJECT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
+	int CANAL__NAME = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Default Cost</b></em>' attribute.
@@ -308,7 +308,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__DEFAULT_COST = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+	int CANAL__DEFAULT_COST = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Distance Model</b></em>' containment reference.
@@ -317,7 +317,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__DISTANCE_MODEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+	int CANAL__DISTANCE_MODEL = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Class Costs</b></em>' containment reference list.
@@ -326,7 +326,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__CLASS_COSTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int CANAL__CLASS_COSTS = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Canal</em>' class.
@@ -335,7 +335,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int CANAL_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -344,7 +344,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+	int CANAL___GET_CONTAINER = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Canal</em>' class.
@@ -353,7 +353,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+	int CANAL_OPERATION_COUNT = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link scenario.port.impl.CanalModelImpl <em>Canal Model</em>}' class.
@@ -498,17 +498,6 @@ public interface PortPackage extends EPackage {
 	EClass getPort();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.port.Port#getDefaultIndex <em>Default Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Default Index</em>'.
-	 * @see scenario.port.Port#getDefaultIndex()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EReference getPort_DefaultIndex();
-
-	/**
 	 * Returns the meta object for the attribute '{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -520,17 +509,6 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_TimeZone();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.port.Port#getDefaultContract <em>Default Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Default Contract</em>'.
-	 * @see scenario.port.Port#getDefaultContract()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EReference getPort_DefaultContract();
-
-	/**
 	 * Returns the meta object for the attribute '{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -540,6 +518,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_RegasEfficiency();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#getDefaultCVValue <em>Default CV Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default CV Value</em>'.
+	 * @see scenario.port.Port#getDefaultCVValue()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultCVValue();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
@@ -786,14 +775,6 @@ public interface PortPackage extends EPackage {
 		EClass PORT = eINSTANCE.getPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Default Index</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT__DEFAULT_INDEX = eINSTANCE.getPort_DefaultIndex();
-
-		/**
 		 * The meta object literal for the '<em><b>Time Zone</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -802,20 +783,20 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__TIME_ZONE = eINSTANCE.getPort_TimeZone();
 
 		/**
-		 * The meta object literal for the '<em><b>Default Contract</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT__DEFAULT_CONTRACT = eINSTANCE.getPort_DefaultContract();
-
-		/**
 		 * The meta object literal for the '<em><b>Regas Efficiency</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute PORT__REGAS_EFFICIENCY = eINSTANCE.getPort_RegasEfficiency();
+
+		/**
+		 * The meta object literal for the '<em><b>Default CV Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_CV_VALUE = eINSTANCE.getPort_DefaultCVValue();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
