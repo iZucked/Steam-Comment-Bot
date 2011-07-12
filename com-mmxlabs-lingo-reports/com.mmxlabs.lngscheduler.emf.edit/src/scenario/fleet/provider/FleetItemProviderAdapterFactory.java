@@ -306,6 +306,29 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.fleet.VesselClassCost} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselClassCostItemProvider vesselClassCostItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.fleet.VesselClassCost}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselClassCostAdapter() {
+		if (vesselClassCostItemProvider == null) {
+			vesselClassCostItemProvider = new VesselClassCostItemProvider(this);
+		}
+
+		return vesselClassCostItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -414,6 +437,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (drydockItemProvider != null) drydockItemProvider.dispose();
 		if (vesselFuelItemProvider != null) vesselFuelItemProvider.dispose();
 		if (portExclusionItemProvider != null) portExclusionItemProvider.dispose();
+		if (vesselClassCostItemProvider != null) vesselClassCostItemProvider.dispose();
 	}
 
 }

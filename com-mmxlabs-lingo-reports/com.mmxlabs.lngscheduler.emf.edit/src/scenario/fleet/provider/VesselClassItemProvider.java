@@ -318,6 +318,7 @@ public class VesselClassItemProvider
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__LADEN_ATTRIBUTES);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__PORT_EXCLUSIONS);
+			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__CANAL_COSTS);
 		}
 		return childrenFeatures;
 	}
@@ -385,6 +386,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -416,6 +418,11 @@ public class VesselClassItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL_CLASS__PORT_EXCLUSIONS,
 				 FleetFactory.eINSTANCE.createPortExclusion()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL_CLASS__CANAL_COSTS,
+				 FleetFactory.eINSTANCE.createVesselClassCost()));
 	}
 
 	/**

@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.ScenarioPackage;
+import scenario.fleet.FleetFactory;
 import scenario.port.Canal;
 import scenario.port.PortFactory;
 import scenario.port.PortPackage;
@@ -220,7 +221,7 @@ public class CanalItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(PortPackage.Literals.CANAL__CLASS_COSTS,
-				 PortFactory.eINSTANCE.createVesselClassCost()));
+				 FleetFactory.eINSTANCE.createVesselClassCost()));
 	}
 
 	/**

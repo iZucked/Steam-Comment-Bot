@@ -214,29 +214,6 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.port.VesselClassCost} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected VesselClassCostItemProvider vesselClassCostItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.port.VesselClassCost}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createVesselClassCostAdapter() {
-		if (vesselClassCostItemProvider == null) {
-			vesselClassCostItemProvider = new VesselClassCostItemProvider(this);
-		}
-
-		return vesselClassCostItemProvider;
-	}
-
-	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -341,7 +318,6 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (distanceLineItemProvider != null) distanceLineItemProvider.dispose();
 		if (canalItemProvider != null) canalItemProvider.dispose();
 		if (canalModelItemProvider != null) canalModelItemProvider.dispose();
-		if (vesselClassCostItemProvider != null) vesselClassCostItemProvider.dispose();
 	}
 
 }

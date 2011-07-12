@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.port.provider;
+package scenario.fleet.provider;
 
 
 import java.util.Collection;
@@ -26,13 +26,13 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.port.PortPackage;
-import scenario.port.VesselClassCost;
+import scenario.fleet.FleetPackage;
+import scenario.fleet.VesselClassCost;
 
 import scenario.provider.LngEditPlugin;
 
 /**
- * This is the item provider adapter for a {@link scenario.port.VesselClassCost} object.
+ * This is the item provider adapter for a {@link scenario.fleet.VesselClassCost} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -66,7 +66,7 @@ public class VesselClassCostItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVesselClassPropertyDescriptor(object);
+			addCanalPropertyDescriptor(object);
 			addLadenCostPropertyDescriptor(object);
 			addUnladenCostPropertyDescriptor(object);
 			addTransitTimePropertyDescriptor(object);
@@ -76,19 +76,19 @@ public class VesselClassCostItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel Class feature.
+	 * This adds a property descriptor for the Canal feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselClassPropertyDescriptor(Object object) {
+	protected void addCanalPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselClassCost_vesselClass_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_vesselClass_feature", "_UI_VesselClassCost_type"),
-				 PortPackage.Literals.VESSEL_CLASS_COST__VESSEL_CLASS,
+				 getString("_UI_VesselClassCost_canal_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_canal_feature", "_UI_VesselClassCost_type"),
+				 FleetPackage.Literals.VESSEL_CLASS_COST__CANAL,
 				 true,
 				 false,
 				 true,
@@ -110,7 +110,7 @@ public class VesselClassCostItemProvider
 				 getResourceLocator(),
 				 getString("_UI_VesselClassCost_ladenCost_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_ladenCost_feature", "_UI_VesselClassCost_type"),
-				 PortPackage.Literals.VESSEL_CLASS_COST__LADEN_COST,
+				 FleetPackage.Literals.VESSEL_CLASS_COST__LADEN_COST,
 				 true,
 				 false,
 				 false,
@@ -132,7 +132,7 @@ public class VesselClassCostItemProvider
 				 getResourceLocator(),
 				 getString("_UI_VesselClassCost_unladenCost_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_unladenCost_feature", "_UI_VesselClassCost_type"),
-				 PortPackage.Literals.VESSEL_CLASS_COST__UNLADEN_COST,
+				 FleetPackage.Literals.VESSEL_CLASS_COST__UNLADEN_COST,
 				 true,
 				 false,
 				 false,
@@ -154,7 +154,7 @@ public class VesselClassCostItemProvider
 				 getResourceLocator(),
 				 getString("_UI_VesselClassCost_transitTime_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_transitTime_feature", "_UI_VesselClassCost_type"),
-				 PortPackage.Literals.VESSEL_CLASS_COST__TRANSIT_TIME,
+				 FleetPackage.Literals.VESSEL_CLASS_COST__TRANSIT_TIME,
 				 true,
 				 false,
 				 false,
@@ -176,7 +176,7 @@ public class VesselClassCostItemProvider
 				 getResourceLocator(),
 				 getString("_UI_VesselClassCost_transitFuel_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassCost_transitFuel_feature", "_UI_VesselClassCost_type"),
-				 PortPackage.Literals.VESSEL_CLASS_COST__TRANSIT_FUEL,
+				 FleetPackage.Literals.VESSEL_CLASS_COST__TRANSIT_FUEL,
 				 true,
 				 false,
 				 false,
@@ -220,10 +220,10 @@ public class VesselClassCostItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselClassCost.class)) {
-			case PortPackage.VESSEL_CLASS_COST__LADEN_COST:
-			case PortPackage.VESSEL_CLASS_COST__UNLADEN_COST:
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
+			case FleetPackage.VESSEL_CLASS_COST__LADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__UNLADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
