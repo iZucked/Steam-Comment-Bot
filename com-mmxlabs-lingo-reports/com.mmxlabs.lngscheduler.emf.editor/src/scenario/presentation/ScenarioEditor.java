@@ -114,6 +114,7 @@ import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.Contract;
+import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
 import scenario.fleet.FleetPackage;
@@ -441,8 +442,15 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			if (target == null) {
 				if (referer instanceof Slot) {
 					final Port port = ((Slot) referer).getPort();
-					final Contract portContract = port == null ? null : port
-							.getDefaultContract();
+					Contract portContract = null;
+					final Scenario scenario = getScenario();
+					if (scenario != null) {
+						final ContractModel cm = scenario.getContractModel();
+						if (cm != null) {
+							portContract = cm.getDefaultContract(port);
+						}
+					}
+
 					if (portContract != null) {
 						return portContract.getName() + " [from "
 								+ port.getName() + "]";
@@ -489,9 +497,29 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				if (port == null)
 					return Collections.emptySet();
 
-				return Collections.singleton(new Pair<Notifier, List<Object>>(
+				final List<Pair<Notifier, List<Object>>> notifiers = new LinkedList<Pair<Notifier, List<Object>>>();
+				final Scenario s = getScenario();
+				if (s != null) {
+					final ContractModel cm = s.getContractModel();
+					if (cm != null) {
+						final List<Object> features = new LinkedList<Object>();
+						features.add(ContractPackage.eINSTANCE.getContract_DefaultPorts());
+						features.add(namedObjectName);
+						for (final Contract c : cm.getPurchaseContracts()) {
+							notifiers.add(new Pair<Notifier, List<Object>>
+								(c, features));
+						}
+						for (final Contract c : cm.getSalesContracts()) {
+							notifiers.add(new Pair<Notifier, List<Object>>
+								(c, features));
+						}
+					}
+				}
+				notifiers.add(new Pair<Notifier, List<Object>>(
 						port, Collections
-								.singletonList((Object) namedObjectName)));
+						.singletonList((Object) namedObjectName)));
+				
+				return notifiers;
 			}
 			return super.getNotifiers(referer, feature, referenceValue);
 		}
