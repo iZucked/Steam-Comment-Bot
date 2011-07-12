@@ -619,19 +619,21 @@ public class LNGScenarioTransformer {
 				}
 
 				// set vessel class costs
-				for (final VesselClassCost classCost : canal.getClassCosts()) {
-					final IVesselClass vc = vesselAssociation.lookup(classCost
-							.getVesselClass());
-					builder.setVesselClassRouteCost(name, vc,
-							VesselState.Laden,
-							Calculator.scale(classCost.getLadenCost()));
-					builder.setVesselClassRouteCost(name, vc,
-							VesselState.Ballast,
-							Calculator.scale(classCost.getUnladenCost()));
+				for (final VesselClass evc : scenario.getFleetModel().getVesselClasses()) {
+					for (final scenario.fleet.VesselClassCost classCost : evc.getCanalCosts()) {
+						if (classCost.getCanal() != canal) continue;
+						final IVesselClass vc = vesselAssociation.lookup(evc);
+						builder.setVesselClassRouteCost(name, vc,
+								VesselState.Laden,
+								Calculator.scale(classCost.getLadenCost()));
+						builder.setVesselClassRouteCost(name, vc,
+								VesselState.Ballast,
+								Calculator.scale(classCost.getUnladenCost()));
 
-					builder.setVesselClassRouteTimeAndFuel(name, vc,
-							classCost.getTransitTime(),
-							Calculator.scale(classCost.getTransitFuel() / 24));
+						builder.setVesselClassRouteTimeAndFuel(name, vc,
+								classCost.getTransitTime(),
+								Calculator.scale(classCost.getTransitFuel() / 24));
+					}
 				}
 			}
 		}
