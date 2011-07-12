@@ -20,9 +20,9 @@ public class DateTreeSetTest {
 	@Test
 	public void testDateTreeSet() {
 		
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
+		final Object obj1 = "First";
+		final Object obj2 = "Second";
+		final Object obj3 = "Third";
 		
 		final Date date1 = createDate(2011, 01, 01); 
 		final Date date2 = createDate(2011, 01, 01);

@@ -37,7 +37,16 @@ public final class DateTreeSetComparator<T> implements Comparator<Object> {
 		final Date d1 = toDate(o1);
 		final Date d2 = toDate(o2);
 
-		return compare(d1, d2);
+		final int value = compare(d1, d2);
+		
+		if (value == 0) {
+			final int h1 = System.identityHashCode(o1);
+			final int h2 = System.identityHashCode(o2);
+			if (h1 < h2) return -1;
+			else if (h2 > h1) return 1;
+			else return 0;
+		}
+		return value;
 	}
 
 	/**
