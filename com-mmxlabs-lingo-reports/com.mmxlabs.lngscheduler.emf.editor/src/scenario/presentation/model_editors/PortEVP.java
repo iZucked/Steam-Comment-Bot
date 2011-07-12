@@ -4,18 +4,23 @@
  */
 package scenario.presentation.model_editors;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
@@ -23,6 +28,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import scenario.Scenario;
 import scenario.contract.Contract;
 import scenario.contract.ContractModel;
+import scenario.contract.ContractPackage;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortPackage;
@@ -30,6 +36,7 @@ import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.ICellManipulator;
 import scenario.presentation.cargoeditor.ICellRenderer;
+import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.importer.ExportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportCSVAction;
@@ -49,32 +56,98 @@ public class PortEVP extends NamedObjectEVP {
 	}
 
 	/**
-	 * A special-case column for specifying default contract from the port even though
-	 * it's an attribute on the contract really.
+	 * A special-case column for specifying default contract from the port even
+	 * though it's an attribute on the contract really.
 	 * 
 	 * @author Tom Hinton
-	 *
+	 * 
 	 */
-	private class DefaultContractManipulator implements ICellRenderer, ICellManipulator {
-		@Override
-		public void setValue(final Object object, final Object value) {
-			
+	private class DefaultContractManipulator implements ICellRenderer,
+			ICellManipulator {
+		public DefaultContractManipulator(final EditingDomain editingDomain,
+				final IReferenceValueProvider valueProvider) {
+			super();
+			this.editingDomain = editingDomain;
+			this.valueProvider = valueProvider;
 		}
+
+		private ComboBoxCellEditor editor;
+		private final EditingDomain editingDomain;
+		private final IReferenceValueProvider valueProvider;
 
 		@Override
 		public CellEditor getCellEditor(Composite parent, Object object) {
-			return null;
+			editor = new ComboBoxCellEditor(parent, new String[] { "empty" });
+			setEditorNames(editor);
+			return editor;
+		}
+
+		private void setEditorNames(final ComboBoxCellEditor editor) {
+			if (editor != null)
+				editor.setItems(names.toArray(new String[names.size()]));
 		}
 
 		@Override
 		public Object getValue(final Object object) {
-			
-			return null;
+			Contract c = null;
+			if (object instanceof Port) {
+				final Port p = (Port) object;
+
+				if (part.getScenario().getContractModel() != null) {
+					c = part.getScenario().getContractModel()
+							.getDefaultContract(p);
+				}
+			}
+
+			return values.indexOf(c);
 		}
 
 		@Override
-		public boolean canEdit(Object object) {
-			return false;
+		public void setValue(final Object object, final Object value) {
+			if (object instanceof Port && value instanceof Integer) {
+				final Port port = (Port) object;
+				final int index = (Integer) value;
+				if (index != -1) {
+					final Contract c2 = (Contract) values.get(index);
+					final ContractModel cm = part.getScenario()
+							.getContractModel();
+					if (cm != null) {
+						final CompoundCommand cc = new CompoundCommand();
+						final Contract c1 = cm.getDefaultContract(port);
+						if (c1 == c2)
+							return;
+						if (c1 != null) {
+							cc.append(RemoveCommand.create(editingDomain, c1,
+									ContractPackage.eINSTANCE
+											.getContract_DefaultPorts(), port));
+						}
+						cc.append(AddCommand.create(editingDomain, c2,
+								ContractPackage.eINSTANCE
+										.getContract_DefaultPorts(), port));
+						editingDomain.getCommandStack().execute(cc);
+					}
+				}
+			}
+		}
+
+		final ArrayList<String> names = new ArrayList<String>();
+		final ArrayList<EObject> values = new ArrayList<EObject>();
+
+		@Override
+		public boolean canEdit(final Object object) {
+			final List<Pair<String, EObject>> both = valueProvider
+					.getAllowedValues(null, null);
+
+			names.clear();
+			values.clear();
+			for (final Pair<String, EObject> nameAndValue : both) {
+				names.add(nameAndValue.getFirst());
+				values.add(nameAndValue.getSecond());
+			}
+
+			setEditorNames(editor);
+
+			return true;
 		}
 
 		@Override
@@ -85,7 +158,8 @@ public class PortEVP extends NamedObjectEVP {
 				if (scenario.getContractModel() != null) {
 					final ContractModel cm = scenario.getContractModel();
 					final Contract c = cm.getDefaultContract(p);
-					if (c != null) return c.getName();
+					if (c != null)
+						return c.getName();
 				}
 			}
 			return "empty";
@@ -101,9 +175,9 @@ public class PortEVP extends NamedObjectEVP {
 				Object object) {
 			return Collections.emptySet();
 		}
-		
+
 	}
-	
+
 	@Override
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
@@ -118,9 +192,11 @@ public class PortEVP extends NamedObjectEVP {
 				"Regas Efficiency",
 				new NumericAttributeManipulator(PortPackage.eINSTANCE
 						.getPort_RegasEfficiency(), part.getEditingDomain()));
-		
+
 		if (part.getScenario().getContractModel() != null) {
-			addTypicalColumn("Default Contract", new DefaultContractManipulator());
+			addTypicalColumn("Default Contract",
+					new DefaultContractManipulator(part.getEditingDomain(),
+							part.getContractProvider()));
 		}
 	}
 
