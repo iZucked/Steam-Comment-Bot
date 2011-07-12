@@ -22,7 +22,8 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	private final SimplexCargoAllocator<T> simplexAllocator = new SimplexCargoAllocator<T>();
 
 	@Override
-	public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider<T> tvlp) {
+	public void setTotalVolumeLimitProvider(
+			final ITotalVolumeLimitProvider<T> tvlp) {
 		fastAllocator.setTotalVolumeLimitProvider(tvlp);
 //		simplexAllocator.setTotalVolumeLimitProvider(tvlp);
 	}
@@ -116,8 +117,8 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	 * #getAllocation(com.mmxlabs.scheduler.optimiser.components.IPortSlot)
 	 */
 	@Override
-	public long getAllocation(IPortSlot slot) {
-		// TODO Auto-generated method stub
+	public long getAllocation(final IPortSlot slot) {
+
 		return fastAllocator.getAllocation(slot);
 	}
 
