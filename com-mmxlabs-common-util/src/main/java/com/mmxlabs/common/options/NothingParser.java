@@ -20,7 +20,7 @@ public class NothingParser implements OptionParser {
 
 	@Override
 	public boolean hasDefaultValue() {
-		// TODO Auto-generated method stub
+
 		return true;
 	}
 }
