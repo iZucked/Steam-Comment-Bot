@@ -32,7 +32,7 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 */
 	public static EventsFactory init() {
 		try {
-			EventsFactory theEventsFactory = (EventsFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/schedule/events"); 
+			EventsFactory theEventsFactory = (EventsFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/schedule/events"); 
 			if (theEventsFactory != null) {
 				return theEventsFactory;
 			}
@@ -64,12 +64,12 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 			case EventsPackage.FUEL_MIXTURE: return createFuelMixture();
 			case EventsPackage.FUEL_QUANTITY: return createFuelQuantity();
 			case EventsPackage.SCHEDULED_EVENT: return createScheduledEvent();
-			case EventsPackage.IDLE: return createIdle();
 			case EventsPackage.JOURNEY: return createJourney();
 			case EventsPackage.PORT_VISIT: return createPortVisit();
+			case EventsPackage.IDLE: return createIdle();
 			case EventsPackage.SLOT_VISIT: return createSlotVisit();
-			case EventsPackage.CHARTER_OUT_VISIT: return createCharterOutVisit();
 			case EventsPackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
+			case EventsPackage.CHARTER_OUT_VISIT: return createCharterOutVisit();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}

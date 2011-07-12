@@ -38,7 +38,7 @@ public interface MarketModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Indices</em>' containment reference list.
 	 * @see scenario.market.MarketPackage#getMarketModel_Indices()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Index> getIndices();

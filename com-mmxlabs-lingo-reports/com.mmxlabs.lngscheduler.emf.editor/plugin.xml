@@ -110,6 +110,22 @@
                toolbarPath="scenarioGroup"
                tooltip="Removes all solutions and vessel assignments from this scenario">
          </action>
+         <action
+               class="com.mmxlabs.lngscheduler.emf.editor.actions.LinkStaticDataAction"
+               id="com.mmxlabs.lngscheduler.emf.editor.actions.LinkStaticDataAction"
+               label="Link to Static Data"
+               menubarPath="scenarioMenuID/actions"
+               toolbarPath="scenarioGroup"
+               tooltip="Links the non-static data in this scenario to a static data set">
+         </action>
+         <action
+               class="com.mmxlabs.lngscheduler.emf.editor.actions.ExtractStaticDataAction"
+               id="com.mmxlabs.lngscheduler.emf.editor.actions.ExtractStaticDataAction"
+               label="Extract Static Data"
+               menubarPath="scenarioMenuID/actions"
+               toolbarPath="scenarioGroup"
+               tooltip="Extract the static data from this scenario into a separate model">
+         </action>
       </actionSet>
    </extension>
 
@@ -131,7 +147,7 @@
             id="scenario.presentation.ScenarioEditorID"
             name="%_UI_ScenarioEditor_label"
             icon="icons/full/obj16/ScenarioModelFile.gif"
-            extensions="scenario"
+            extensions="scenario,portmodel"
             class="scenario.presentation.ScenarioEditor"
             contributorClass="scenario.presentation.ScenarioActionBarContributor">
       </editor>
@@ -295,6 +311,16 @@
             icon="icons/sample.gif"
             id="com.mmxlabs.lngscheduler.emf.editor.importer.CSVImportWizard"
             name="Import Scenario from CSV Files">
+         <description>
+            Import a file from the local file system into the workspace.
+         </description>
+      </wizard>
+      <wizard
+            category="com.mmxlabs.lngscheduler.emf.editor.importer.sampleCategory"
+            class="com.mmxlabs.lngscheduler.emf.editor.wizards.PortModelCSVImportWizard"
+            icon="icons/sample.gif"
+            id="com.mmxlabs.lngscheduler.emf.editor.importer.PortModelCSVImportWizard"
+            name="Import Port Model from CSV Files">
          <description>
             Import a file from the local file system into the workspace.
          </description>

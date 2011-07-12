@@ -1,0 +1,24 @@
+eStringToStringMapEntry = scenario.Scenario.createMissingModels.eAnnotations[0].details[0]
+eStringToStringMapEntry.value = "if (getPortModel() == null) {\r\n\tsetPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());\r\n\tgetContainedModels().add(getPortModel());\r\n}\r\n\r\nif (getDistanceModel() == null) {\r\n\tsetDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());\r\n\tgetContainedModels().add(getDistanceModel());\r\n}\r\n\r\nif (getCanalModel() == null) {\r\n\tsetCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());\r\n\tgetContainedModels().add(getCanalModel());\r\n}\r\n\r\nif (getFleetModel() == null)\r\n\tsetFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());\r\n\r\nif (getCargoModel() == null)\r\n\tsetCargoModel(scenario.cargo.CargoFactory.eINSTANCE.createCargoModel());\r\n\r\nif (getContractModel() == null)\r\n\tsetContractModel(scenario.contract.ContractFactory.eINSTANCE.createContractModel());\r\n\r\nif (getScheduleModel() == null)\r\n\tsetScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());\r\n\r\nif (getMarketModel() == null)\r\n\tsetMarketModel(scenario.market.MarketFactory.eINSTANCE.createMarketModel());\r\n\r\nif (getOptimisation() == null)\r\n\t\t\tsetOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());"
+scenarioPackage = scenario
+scenarioPackage.nsURI = "http://com.mmxlabs.lng.emf2"
+fleetPackage = scenario.fleet
+fleetPackage.nsURI = "http://com.mmxlabs.lng.emf2/fleet"
+schedulePackage = scenario.schedule
+schedulePackage.nsURI = "http://com.mmxlabs.lng.emf2/schedule"
+eventsPackage = scenario.schedule.events
+eventsPackage.nsURI = "http://com.mmxlabs.lng.emf2/schedule/events"
+fleetallocationPackage = scenario.schedule.fleetallocation
+fleetallocationPackage.nsURI = "http://com.mmxlabs.lng.emf2/schedule/fleetallocation"
+portPackage = scenario.port
+portPackage.nsURI = "http://com.mmxlabs.lng.emf2/port"
+cargoPackage = scenario.cargo
+cargoPackage.nsURI = "http://com.mmxlabs.lng.emf2/cargo"
+contractPackage = scenario.contract
+contractPackage.nsURI = "http://com.mmxlabs.lng.emf2/contract"
+marketPackage = scenario.market
+marketPackage.nsURI = "http://com.mmxlabs.lng.emf2/market"
+optimiserPackage = scenario.optimiser
+optimiserPackage.nsURI = "http://com.mmxlabs.lng.emf2/optimiser"
+lsoPackage = scenario.optimiser.lso
+lsoPackage.nsURI = "http://com.mmxlabs.lng.emf2/optimiser/lso"

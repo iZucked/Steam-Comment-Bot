@@ -96,6 +96,28 @@ public class ContractSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ContractPackage.TOTAL_VOLUME_LIMIT: {
+				TotalVolumeLimit totalVolumeLimit = (TotalVolumeLimit)theEObject;
+				T result = caseTotalVolumeLimit(totalVolumeLimit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.ENTITY: {
+				Entity entity = (Entity)theEObject;
+				T result = caseEntity(entity);
+				if (result == null) result = caseNamedObject(entity);
+				if (result == null) result = caseScenarioObject(entity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.CONTRACT: {
+				Contract contract = (Contract)theEObject;
+				T result = caseContract(contract);
+				if (result == null) result = caseNamedObject(contract);
+				if (result == null) result = caseScenarioObject(contract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ContractPackage.PURCHASE_CONTRACT: {
 				PurchaseContract purchaseContract = (PurchaseContract)theEObject;
 				T result = casePurchaseContract(purchaseContract);
@@ -111,20 +133,6 @@ public class ContractSwitch<T> {
 				if (result == null) result = caseContract(salesContract);
 				if (result == null) result = caseNamedObject(salesContract);
 				if (result == null) result = caseScenarioObject(salesContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ContractPackage.TOTAL_VOLUME_LIMIT: {
-				TotalVolumeLimit totalVolumeLimit = (TotalVolumeLimit)theEObject;
-				T result = caseTotalVolumeLimit(totalVolumeLimit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ContractPackage.ENTITY: {
-				Entity entity = (Entity)theEObject;
-				T result = caseEntity(entity);
-				if (result == null) result = caseNamedObject(entity);
-				if (result == null) result = caseScenarioObject(entity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -165,14 +173,6 @@ public class ContractSwitch<T> {
 				if (result == null) result = caseContract(profitSharingPurchaseContract);
 				if (result == null) result = caseNamedObject(profitSharingPurchaseContract);
 				if (result == null) result = caseScenarioObject(profitSharingPurchaseContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ContractPackage.CONTRACT: {
-				Contract contract = (Contract)theEObject;
-				T result = caseContract(contract);
-				if (result == null) result = caseNamedObject(contract);
-				if (result == null) result = caseScenarioObject(contract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

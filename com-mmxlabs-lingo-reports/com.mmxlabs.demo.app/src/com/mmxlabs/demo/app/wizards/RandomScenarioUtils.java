@@ -112,13 +112,8 @@ public class RandomScenarioUtils {
 	public Scenario createScenario() {
 		final Scenario scenario = scenarioFactory.createScenario();
 
-		scenario.setCanalModel(portFactory.createCanalModel());
-		scenario.setCargoModel(cargoFactory.createCargoModel());
-		scenario.setDistanceModel(portFactory.createDistanceModel());
-		scenario.setFleetModel(fleetFactory.createFleetModel());
-		scenario.setPortModel(portFactory.createPortModel());
-		scenario.setScheduleModel(scheduleFactory.createScheduleModel());
-
+		scenario.createMissingModels();
+		
 		return scenario;
 	}
 

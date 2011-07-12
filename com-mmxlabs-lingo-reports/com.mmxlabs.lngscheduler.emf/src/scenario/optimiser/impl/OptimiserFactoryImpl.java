@@ -31,7 +31,7 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 	 */
 	public static OptimiserFactory init() {
 		try {
-			OptimiserFactory theOptimiserFactory = (OptimiserFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/optimiser"); 
+			OptimiserFactory theOptimiserFactory = (OptimiserFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/optimiser"); 
 			if (theOptimiserFactory != null) {
 				return theOptimiserFactory;
 			}

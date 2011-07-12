@@ -24,8 +24,8 @@ import scenario.NamedObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.optimiser.DiscountCurve#getDiscounts <em>Discounts</em>}</li>
  *   <li>{@link scenario.optimiser.DiscountCurve#getStartDate <em>Start Date</em>}</li>
+ *   <li>{@link scenario.optimiser.DiscountCurve#getDiscounts <em>Discounts</em>}</li>
  * </ul>
  * </p>
  *
@@ -45,7 +45,7 @@ public interface DiscountCurve extends NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Discounts</em>' containment reference list.
 	 * @see scenario.optimiser.OptimiserPackage#getDiscountCurve_Discounts()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Discount> getDiscounts();

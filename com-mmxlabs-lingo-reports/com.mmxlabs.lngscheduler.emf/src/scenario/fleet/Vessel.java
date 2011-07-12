@@ -18,12 +18,12 @@ import scenario.NamedObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link scenario.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}</li>
+ *   <li>{@link scenario.fleet.Vessel#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getClass_ <em>Class</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getStartRequirement <em>Start Requirement</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getEndRequirement <em>End Requirement</em>}</li>
- *   <li>{@link scenario.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getPortExclusions <em>Port Exclusions</em>}</li>
- *   <li>{@link scenario.fleet.Vessel#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,7 +69,7 @@ public interface Vessel extends NamedObject {
 	 * @return the value of the '<em>Start Requirement</em>' containment reference.
 	 * @see #setStartRequirement(PortAndTime)
 	 * @see scenario.fleet.FleetPackage#getVessel_StartRequirement()
-	 * @model containment="true" required="true"
+	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
 	PortAndTime getStartRequirement();
@@ -95,7 +95,7 @@ public interface Vessel extends NamedObject {
 	 * @return the value of the '<em>End Requirement</em>' containment reference.
 	 * @see #setEndRequirement(PortAndTime)
 	 * @see scenario.fleet.FleetPackage#getVessel_EndRequirement()
-	 * @model containment="true" required="true"
+	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
 	PortAndTime getEndRequirement();
@@ -147,7 +147,7 @@ public interface Vessel extends NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Port Exclusions</em>' containment reference list.
 	 * @see scenario.fleet.FleetPackage#getVessel_PortExclusions()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<PortExclusion> getPortExclusions();

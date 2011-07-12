@@ -71,9 +71,9 @@ public class OptimisationSettingsItemProvider
 
 			addRandomSeedPropertyDescriptor(object);
 			addInitialSchedulePropertyDescriptor(object);
-			addDefaultDiscountCurvePropertyDescriptor(object);
 			addFreezeDaysFromStartPropertyDescriptor(object);
 			addIgnoreElementsAfterPropertyDescriptor(object);
+			addDefaultDiscountCurvePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

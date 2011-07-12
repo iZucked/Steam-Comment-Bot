@@ -45,7 +45,7 @@ public interface FleetPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/fleet";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/fleet";
 
 	/**
 	 * The package namespace name.
@@ -147,49 +147,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Class</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__CLASS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Start Requirement</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__START_REQUIREMENT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>End Requirement</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__END_REQUIREMENT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Time Chartered</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__TIME_CHARTERED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Port Exclusions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__PORT_EXCLUSIONS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int VESSEL__TIME_CHARTERED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Daily Charter Out Price</b></em>' attribute.
@@ -198,7 +162,43 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__DAILY_CHARTER_OUT_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL__DAILY_CHARTER_OUT_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Class</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__CLASS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Start Requirement</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__START_REQUIREMENT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>End Requirement</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__END_REQUIREMENT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Port Exclusions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__PORT_EXCLUSIONS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -274,31 +274,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__MAX_SPEED = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__LADEN_ATTRIBUTES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__BALLAST_ATTRIBUTES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Min Heel Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL_VOLUME = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_CLASS__MIN_HEEL_VOLUME = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -307,7 +289,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__FILL_CAPACITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_CLASS__FILL_CAPACITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -316,7 +298,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__SPOT_CHARTER_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int VESSEL_CLASS__SPOT_CHARTER_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Daily Charter Price</b></em>' attribute.
@@ -325,7 +307,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__DAILY_CHARTER_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+	int VESSEL_CLASS__DAILY_CHARTER_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Daily Charter Out Price</b></em>' attribute.
@@ -334,16 +316,25 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+	int VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
+	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__INACCESSIBLE_PORTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+	int VESSEL_CLASS__LADEN_ATTRIBUTES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__BALLAST_ATTRIBUTES = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
@@ -352,7 +343,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BASE_FUEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+	int VESSEL_CLASS__BASE_FUEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Port Exclusions</b></em>' containment reference list.
@@ -361,7 +352,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__PORT_EXCLUSIONS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 12;
+	int VESSEL_CLASS__PORT_EXCLUSIONS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__INACCESSIBLE_PORTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -447,22 +447,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES = 4;
 
 	/**
-	 * The feature id for the '<em><b>Vessel State</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__VESSEL_STATE = 0;
-
-	/**
 	 * The feature id for the '<em><b>Nbo Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__NBO_RATE = 1;
+	int VESSEL_STATE_ATTRIBUTES__NBO_RATE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Idle NBO Rate</b></em>' attribute.
@@ -471,7 +462,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE = 2;
+	int VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Idle Consumption Rate</b></em>' attribute.
@@ -480,7 +471,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__IDLE_CONSUMPTION_RATE = 3;
+	int VESSEL_STATE_ATTRIBUTES__IDLE_CONSUMPTION_RATE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Fuel Consumption Curve</b></em>' containment reference list.
@@ -489,7 +480,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE = 4;
+	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Vessel State</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__VESSEL_STATE = 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
@@ -520,22 +520,13 @@ public interface FleetPackage extends EPackage {
 	int PORT_AND_TIME = 5;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_AND_TIME__PORT = 0;
-
-	/**
 	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_AND_TIME__START_TIME = 1;
+	int PORT_AND_TIME__START_TIME = 0;
 
 	/**
 	 * The feature id for the '<em><b>End Time</b></em>' attribute.
@@ -544,7 +535,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_AND_TIME__END_TIME = 2;
+	int PORT_AND_TIME__END_TIME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_AND_TIME__PORT = 2;
 
 	/**
 	 * The number of structural features of the '<em>Port And Time</em>' class.
@@ -611,22 +611,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_EVENT__DURATION = 3;
 
 	/**
-	 * The feature id for the '<em><b>Start Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT__START_PORT = 4;
-
-	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__VESSELS = 5;
+	int VESSEL_EVENT__VESSELS = 4;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Classes</b></em>' reference list.
@@ -635,7 +626,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__VESSEL_CLASSES = 6;
+	int VESSEL_EVENT__VESSEL_CLASSES = 5;
+
+	/**
+	 * The feature id for the '<em><b>Start Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__START_PORT = 6;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
@@ -702,15 +702,6 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__DURATION = VESSEL_EVENT__DURATION;
 
 	/**
-	 * The feature id for the '<em><b>Start Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT__START_PORT = VESSEL_EVENT__START_PORT;
-
-	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -729,13 +720,13 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__VESSEL_CLASSES = VESSEL_EVENT__VESSEL_CLASSES;
 
 	/**
-	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * The feature id for the '<em><b>Start Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__END_PORT = VESSEL_EVENT_FEATURE_COUNT + 0;
+	int CHARTER_OUT__START_PORT = VESSEL_EVENT__START_PORT;
 
 	/**
 	 * The feature id for the '<em><b>Max Heel Out</b></em>' attribute.
@@ -744,7 +735,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__MAX_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 1;
+	int CHARTER_OUT__MAX_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Heel CV Value</b></em>' attribute.
@@ -753,7 +744,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__HEEL_CV_VALUE = VESSEL_EVENT_FEATURE_COUNT + 2;
+	int CHARTER_OUT__HEEL_CV_VALUE = VESSEL_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__END_PORT = VESSEL_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
@@ -820,15 +820,6 @@ public interface FleetPackage extends EPackage {
 	int DRYDOCK__DURATION = VESSEL_EVENT__DURATION;
 
 	/**
-	 * The feature id for the '<em><b>Start Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DRYDOCK__START_PORT = VESSEL_EVENT__START_PORT;
-
-	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -845,6 +836,15 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRYDOCK__VESSEL_CLASSES = VESSEL_EVENT__VESSEL_CLASSES;
+
+	/**
+	 * The feature id for the '<em><b>Start Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRYDOCK__START_PORT = VESSEL_EVENT__START_PORT;
 
 	/**
 	 * The number of structural features of the '<em>Drydock</em>' class.
@@ -939,22 +939,13 @@ public interface FleetPackage extends EPackage {
 	int PORT_EXCLUSION = 10;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_EXCLUSION__PORT = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_EXCLUSION__START_DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
+	int PORT_EXCLUSION__START_DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>End Date</b></em>' attribute.
@@ -963,7 +954,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_EXCLUSION__END_DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
+	int PORT_EXCLUSION__END_DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_EXCLUSION__PORT = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Port Exclusion</em>' class.

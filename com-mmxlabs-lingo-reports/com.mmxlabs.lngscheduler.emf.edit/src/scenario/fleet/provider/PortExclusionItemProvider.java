@@ -67,9 +67,9 @@ public class PortExclusionItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortPropertyDescriptor(object);
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

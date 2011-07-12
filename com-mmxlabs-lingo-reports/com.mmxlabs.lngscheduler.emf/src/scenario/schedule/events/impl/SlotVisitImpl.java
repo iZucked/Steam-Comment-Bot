@@ -31,24 +31,14 @@ import scenario.schedule.events.SlotVisit;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.schedule.events.impl.SlotVisitImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.SlotVisitImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.SlotVisitImpl#getSlot <em>Slot</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
-	/**
-	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSlot()
-	 * @generated
-	 * @ordered
-	 */
-	protected Slot slot;
-
 	/**
 	 * The cached value of the '{@link #getCargoAllocation() <em>Cargo Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -58,6 +48,16 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	 * @ordered
 	 */
 	protected CargoAllocation cargoAllocation;
+
+	/**
+	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected Slot slot;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -190,12 +190,12 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case EventsPackage.SLOT_VISIT__SLOT:
-				if (resolve) return getSlot();
-				return basicGetSlot();
 			case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
 				if (resolve) return getCargoAllocation();
 				return basicGetCargoAllocation();
+			case EventsPackage.SLOT_VISIT__SLOT:
+				if (resolve) return getSlot();
+				return basicGetSlot();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -208,11 +208,11 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case EventsPackage.SLOT_VISIT__SLOT:
-				setSlot((Slot)newValue);
-				return;
 			case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)newValue);
+				return;
+			case EventsPackage.SLOT_VISIT__SLOT:
+				setSlot((Slot)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -226,11 +226,11 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case EventsPackage.SLOT_VISIT__SLOT:
-				setSlot((Slot)null);
-				return;
 			case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)null);
+				return;
+			case EventsPackage.SLOT_VISIT__SLOT:
+				setSlot((Slot)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -244,10 +244,10 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case EventsPackage.SLOT_VISIT__SLOT:
-				return slot != null;
 			case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
 				return cargoAllocation != null;
+			case EventsPackage.SLOT_VISIT__SLOT:
+				return slot != null;
 		}
 		return super.eIsSet(featureID);
 	}

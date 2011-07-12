@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.Scenario;
+import scenario.ScenarioFactory;
 import scenario.ScenarioPackage;
 
 import scenario.cargo.CargoFactory;
@@ -41,9 +42,12 @@ import scenario.market.MarketFactory;
 
 import scenario.optimiser.OptimiserFactory;
 
+import scenario.optimiser.lso.LsoFactory;
 import scenario.port.PortFactory;
 
 import scenario.schedule.ScheduleFactory;
+import scenario.schedule.events.EventsFactory;
+import scenario.schedule.fleetallocation.FleetallocationFactory;
 
 /**
  * This is the item provider adapter for a {@link scenario.Scenario} object.
@@ -143,14 +147,15 @@ public class ScenarioItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__FLEET_MODEL);
-			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__PORT_MODEL);
-			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__CARGO_MODEL);
-			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__CONTRACT_MODEL);
 			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__SCHEDULE_MODEL);
-			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__MARKET_MODEL);
+			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__PORT_MODEL);
 			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__DISTANCE_MODEL);
 			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__CANAL_MODEL);
+			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__CARGO_MODEL);
+			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__CONTRACT_MODEL);
+			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__MARKET_MODEL);
 			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__OPTIMISATION);
+			childrenFeatures.add(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS);
 		}
 		return childrenFeatures;
 	}
@@ -210,14 +215,15 @@ public class ScenarioItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ScenarioPackage.SCENARIO__FLEET_MODEL:
-			case ScenarioPackage.SCENARIO__PORT_MODEL:
-			case ScenarioPackage.SCENARIO__CARGO_MODEL:
-			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
 			case ScenarioPackage.SCENARIO__SCHEDULE_MODEL:
-			case ScenarioPackage.SCENARIO__MARKET_MODEL:
+			case ScenarioPackage.SCENARIO__PORT_MODEL:
 			case ScenarioPackage.SCENARIO__DISTANCE_MODEL:
 			case ScenarioPackage.SCENARIO__CANAL_MODEL:
+			case ScenarioPackage.SCENARIO__CARGO_MODEL:
+			case ScenarioPackage.SCENARIO__CONTRACT_MODEL:
+			case ScenarioPackage.SCENARIO__MARKET_MODEL:
 			case ScenarioPackage.SCENARIO__OPTIMISATION:
+			case ScenarioPackage.SCENARIO__CONTAINED_MODELS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -242,28 +248,13 @@ public class ScenarioItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ScenarioPackage.Literals.SCENARIO__PORT_MODEL,
-				 PortFactory.eINSTANCE.createPortModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ScenarioPackage.Literals.SCENARIO__CARGO_MODEL,
-				 CargoFactory.eINSTANCE.createCargoModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ScenarioPackage.Literals.SCENARIO__CONTRACT_MODEL,
-				 ContractFactory.eINSTANCE.createContractModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__SCHEDULE_MODEL,
 				 ScheduleFactory.eINSTANCE.createScheduleModel()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ScenarioPackage.Literals.SCENARIO__MARKET_MODEL,
-				 MarketFactory.eINSTANCE.createMarketModel()));
+				(ScenarioPackage.Literals.SCENARIO__PORT_MODEL,
+				 PortFactory.eINSTANCE.createPortModel()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -277,8 +268,384 @@ public class ScenarioItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CARGO_MODEL,
+				 CargoFactory.eINSTANCE.createCargoModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTRACT_MODEL,
+				 ContractFactory.eINSTANCE.createContractModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__MARKET_MODEL,
+				 MarketFactory.eINSTANCE.createMarketModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__OPTIMISATION,
 				 OptimiserFactory.eINSTANCE.createOptimisation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScenarioFactory.eINSTANCE.createScenario()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createFleetModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createVesselClass()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createFuelConsumptionLine()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createVesselStateAttributes()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createPortAndTime()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createCharterOut()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createDrydock()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createVesselFuel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createPortExclusion()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createScheduleModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createSchedule()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createSequence()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createCargoAllocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createScheduleFitness()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createLineItem()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createBookedRevenue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createCargoRevenue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScheduleFactory.eINSTANCE.createCharterOutRevenue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createFuelMixture()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createFuelQuantity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createScheduledEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createJourney()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createPortVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createIdle()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createSlotVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createVesselEventVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 EventsFactory.eINSTANCE.createCharterOutVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetallocationFactory.eINSTANCE.createAllocatedVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetallocationFactory.eINSTANCE.createFleetVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetallocationFactory.eINSTANCE.createSpotVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 PortFactory.eINSTANCE.createPortModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 PortFactory.eINSTANCE.createPort()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 PortFactory.eINSTANCE.createDistanceModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 PortFactory.eINSTANCE.createDistanceLine()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 PortFactory.eINSTANCE.createCanal()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 PortFactory.eINSTANCE.createCanalModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 PortFactory.eINSTANCE.createVesselClassCost()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 CargoFactory.eINSTANCE.createCargoModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 CargoFactory.eINSTANCE.createCargo()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 CargoFactory.eINSTANCE.createSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 CargoFactory.eINSTANCE.createLoadSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createContractModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createTotalVolumeLimit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createEntity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createSalesContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createFixedPricePurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createIndexPricePurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createNetbackPurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createProfitSharingPurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 MarketFactory.eINSTANCE.createIndex()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 MarketFactory.eINSTANCE.createMarketModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 MarketFactory.eINSTANCE.createStepwisePriceCurve()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 MarketFactory.eINSTANCE.createStepwisePrice()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 OptimiserFactory.eINSTANCE.createOptimisationSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 OptimiserFactory.eINSTANCE.createOptimisation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 OptimiserFactory.eINSTANCE.createConstraint()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 OptimiserFactory.eINSTANCE.createObjective()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 OptimiserFactory.eINSTANCE.createDiscountCurve()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 OptimiserFactory.eINSTANCE.createDiscount()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 LsoFactory.eINSTANCE.createLSOSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 LsoFactory.eINSTANCE.createThresholderSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 LsoFactory.eINSTANCE.createMoveGeneratorSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 LsoFactory.eINSTANCE.createRandomMoveGeneratorSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 LsoFactory.eINSTANCE.createConstrainedMoveGeneratorSettings()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == ScenarioPackage.Literals.SCENARIO__FLEET_MODEL ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__SCHEDULE_MODEL ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__PORT_MODEL ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__DISTANCE_MODEL ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__CANAL_MODEL ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__CARGO_MODEL ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__CONTRACT_MODEL ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__MARKET_MODEL ||
+			childFeature == ScenarioPackage.Literals.SCENARIO__OPTIMISATION;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

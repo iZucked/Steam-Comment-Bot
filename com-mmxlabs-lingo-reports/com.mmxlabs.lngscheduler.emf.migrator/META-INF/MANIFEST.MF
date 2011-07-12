@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: com.mmxlabs.lngscheduler.emf.migrator
+Bundle-SymbolicName: com.mmxlabs.lngscheduler.emf.migrator; singleton:=true
+Bundle-Version: 1.0.0
+Require-Bundle: edu.tum.cs.cope.migration.execution

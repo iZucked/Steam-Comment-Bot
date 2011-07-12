@@ -44,7 +44,7 @@ public interface CargoPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/cargo";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/cargo";
 
 	/**
 	 * The package namespace name.
@@ -137,13 +137,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO__ID = 0;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot</b></em>' containment reference.
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__LOAD_SLOT = 1;
+	int CARGO__ALLOWED_VESSELS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Slot</b></em>' containment reference.
@@ -155,13 +155,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO__DISCHARGE_SLOT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * The feature id for the '<em><b>Load Slot</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = 3;
+	int CARGO__LOAD_SLOT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
@@ -264,22 +264,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__SLOT_DURATION = 6;
 
 	/**
-	 * The feature id for the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__CONTRACT = 7;
-
-	/**
 	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__FIXED_PRICE = 8;
+	int SLOT__FIXED_PRICE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__CONTRACT = 8;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -300,22 +300,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_LOCAL_WINDOW_START = 0;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Port Contract</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_SLOT_OR_PORT_CONTRACT = 1;
-
-	/**
 	 * The operation id for the '<em>Get Window End</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_WINDOW_END = 2;
+	int SLOT___GET_WINDOW_END = 1;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = 2;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -400,15 +400,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__SLOT_DURATION = SLOT__SLOT_DURATION;
 
 	/**
-	 * The feature id for the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__CONTRACT = SLOT__CONTRACT;
-
-	/**
 	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -416,6 +407,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__FIXED_PRICE = SLOT__FIXED_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CONTRACT = SLOT__CONTRACT;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CVvalue</b></em>' attribute.
@@ -445,15 +445,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_LOCAL_WINDOW_START = SLOT___GET_LOCAL_WINDOW_START;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Port Contract</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT = SLOT___GET_SLOT_OR_PORT_CONTRACT;
-
-	/**
 	 * The operation id for the '<em>Get Window End</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -461,6 +452,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_WINDOW_END = SLOT___GET_WINDOW_END;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT;
 
 	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
@@ -710,16 +710,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetLocalWindowStart();
 
 	/**
-	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrPortContract() <em>Get Slot Or Port Contract</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Port Contract</em>' operation.
-	 * @see scenario.cargo.Slot#getSlotOrPortContract()
-	 * @generated
-	 */
-	EOperation getSlot__GetSlotOrPortContract();
-
-	/**
 	 * Returns the meta object for the '{@link scenario.cargo.Slot#getWindowEnd() <em>Get Window End</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -728,6 +718,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetWindowEnd();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrPortContract(java.lang.Object) <em>Get Slot Or Port Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Port Contract</em>' operation.
+	 * @see scenario.cargo.Slot#getSlotOrPortContract(java.lang.Object)
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrPortContract__Object();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -958,20 +958,20 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_LOCAL_WINDOW_START = eINSTANCE.getSlot__GetLocalWindowStart();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Port Contract</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_SLOT_OR_PORT_CONTRACT = eINSTANCE.getSlot__GetSlotOrPortContract();
-
-		/**
 		 * The meta object literal for the '<em><b>Get Window End</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EOperation SLOT___GET_WINDOW_END = eINSTANCE.getSlot__GetWindowEnd();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Port Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = eINSTANCE.getSlot__GetSlotOrPortContract__Object();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 
+import scenario.UUIDObject;
 import scenario.port.*;
 
 /**
@@ -99,6 +100,7 @@ public class PortSwitch<T> {
 			case PortPackage.PORT: {
 				Port port = (Port)theEObject;
 				T result = casePort(port);
+				if (result == null) result = caseUUIDObject(port);
 				if (result == null) result = caseNamedObject(port);
 				if (result == null) result = caseScenarioObject(port);
 				if (result == null) result = defaultCase(theEObject);
@@ -119,6 +121,7 @@ public class PortSwitch<T> {
 			case PortPackage.CANAL: {
 				Canal canal = (Canal)theEObject;
 				T result = caseCanal(canal);
+				if (result == null) result = caseUUIDObject(canal);
 				if (result == null) result = caseNamedObject(canal);
 				if (result == null) result = caseScenarioObject(canal);
 				if (result == null) result = defaultCase(theEObject);
@@ -242,6 +245,21 @@ public class PortSwitch<T> {
 	 * @generated
 	 */
 	public T caseVesselClassCost(VesselClassCost object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>UUID Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>UUID Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseUUIDObject(UUIDObject object) {
 		return null;
 	}
 

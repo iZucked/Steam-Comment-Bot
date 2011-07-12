@@ -46,7 +46,7 @@ public interface EventsPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/schedule/events";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/schedule/events";
 
 	/**
 	 * The package namespace name.
@@ -300,7 +300,216 @@ public interface EventsPackage extends EPackage {
 	 * @see scenario.schedule.events.impl.EventsPackageImpl#getPortVisit()
 	 * @generated
 	 */
-	int PORT_VISIT = 5;
+	int PORT_VISIT = 4;
+
+	/**
+	 * The meta object id for the '{@link scenario.schedule.events.impl.IdleImpl <em>Idle</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.events.impl.IdleImpl
+	 * @see scenario.schedule.events.impl.EventsPackageImpl#getIdle()
+	 * @generated
+	 */
+	int IDLE = 5;
+
+	/**
+	 * The meta object id for the '{@link scenario.schedule.events.impl.JourneyImpl <em>Journey</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.events.impl.JourneyImpl
+	 * @see scenario.schedule.events.impl.EventsPackageImpl#getJourney()
+	 * @generated
+	 */
+	int JOURNEY = 3;
+
+	/**
+	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__START_TIME = SCHEDULED_EVENT__START_TIME;
+
+	/**
+	 * The feature id for the '<em><b>End Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__END_TIME = SCHEDULED_EVENT__END_TIME;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Usage</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__FUEL_USAGE = SCHEDULED_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Vessel State</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__VESSEL_STATE = SCHEDULED_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Route</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__ROUTE = SCHEDULED_EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__SPEED = SCHEDULED_EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__DISTANCE = SCHEDULED_EVENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Route Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__ROUTE_COST = SCHEDULED_EVENT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>To Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__TO_PORT = SCHEDULED_EVENT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>From Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__FROM_PORT = SCHEDULED_EVENT_FEATURE_COUNT + 7;
+
+	/**
+	 * The number of structural features of the '<em>Journey</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY_FEATURE_COUNT = SCHEDULED_EVENT_FEATURE_COUNT + 8;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_CONTAINER = SCHEDULED_EVENT___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Event Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_EVENT_DURATION = SCHEDULED_EVENT___GET_EVENT_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_HIRE_COST = SCHEDULED_EVENT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_NAME = SCHEDULED_EVENT___GET_NAME;
+
+	/**
+	 * The operation id for the '<em>Get Display Type Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_DISPLAY_TYPE_NAME = SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME;
+
+	/**
+	 * The operation id for the '<em>Get Total Fuel Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_TOTAL_FUEL_COST = SCHEDULED_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Total Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_TOTAL_COST = SCHEDULED_EVENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Local Start Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_LOCAL_START_TIME = SCHEDULED_EVENT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Local End Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY___GET_LOCAL_END_TIME = SCHEDULED_EVENT_OPERATION_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Journey</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY_OPERATION_COUNT = SCHEDULED_EVENT_OPERATION_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
@@ -418,16 +627,6 @@ public interface EventsPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_VISIT_OPERATION_COUNT = SCHEDULED_EVENT_OPERATION_COUNT + 4;
-
-	/**
-	 * The meta object id for the '{@link scenario.schedule.events.impl.IdleImpl <em>Idle</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see scenario.schedule.events.impl.IdleImpl
-	 * @see scenario.schedule.events.impl.EventsPackageImpl#getIdle()
-	 * @generated
-	 */
-	int IDLE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
@@ -583,205 +782,6 @@ public interface EventsPackage extends EPackage {
 	int IDLE_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link scenario.schedule.events.impl.JourneyImpl <em>Journey</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see scenario.schedule.events.impl.JourneyImpl
-	 * @see scenario.schedule.events.impl.EventsPackageImpl#getJourney()
-	 * @generated
-	 */
-	int JOURNEY = 4;
-
-	/**
-	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__START_TIME = SCHEDULED_EVENT__START_TIME;
-
-	/**
-	 * The feature id for the '<em><b>End Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__END_TIME = SCHEDULED_EVENT__END_TIME;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Usage</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__FUEL_USAGE = SCHEDULED_EVENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>To Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__TO_PORT = SCHEDULED_EVENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Vessel State</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__VESSEL_STATE = SCHEDULED_EVENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Route</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__ROUTE = SCHEDULED_EVENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__SPEED = SCHEDULED_EVENT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Distance</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__DISTANCE = SCHEDULED_EVENT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>From Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__FROM_PORT = SCHEDULED_EVENT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Route Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__ROUTE_COST = SCHEDULED_EVENT_FEATURE_COUNT + 7;
-
-	/**
-	 * The number of structural features of the '<em>Journey</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY_FEATURE_COUNT = SCHEDULED_EVENT_FEATURE_COUNT + 8;
-
-	/**
-	 * The operation id for the '<em>Get Container</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_CONTAINER = SCHEDULED_EVENT___GET_CONTAINER;
-
-	/**
-	 * The operation id for the '<em>Get Event Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_EVENT_DURATION = SCHEDULED_EVENT___GET_EVENT_DURATION;
-
-	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_HIRE_COST = SCHEDULED_EVENT___GET_HIRE_COST;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_NAME = SCHEDULED_EVENT___GET_NAME;
-
-	/**
-	 * The operation id for the '<em>Get Display Type Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_DISPLAY_TYPE_NAME = SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME;
-
-	/**
-	 * The operation id for the '<em>Get Total Fuel Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_TOTAL_FUEL_COST = SCHEDULED_EVENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Total Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_TOTAL_COST = SCHEDULED_EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Local Start Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_LOCAL_START_TIME = SCHEDULED_EVENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Local End Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_LOCAL_END_TIME = SCHEDULED_EVENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The number of operations of the '<em>Journey</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY_OPERATION_COUNT = SCHEDULED_EVENT_OPERATION_COUNT + 4;
-
-	/**
 	 * The meta object id for the '{@link scenario.schedule.events.impl.SlotVisitImpl <em>Slot Visit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -819,22 +819,22 @@ public interface EventsPackage extends EPackage {
 	int SLOT_VISIT__PORT = PORT_VISIT__PORT;
 
 	/**
-	 * The feature id for the '<em><b>Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT__SLOT = PORT_VISIT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Cargo Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__CARGO_ALLOCATION = PORT_VISIT_FEATURE_COUNT + 1;
+	int SLOT_VISIT__CARGO_ALLOCATION = PORT_VISIT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__SLOT = PORT_VISIT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Slot Visit</em>' class.
@@ -934,7 +934,7 @@ public interface EventsPackage extends EPackage {
 	 * @see scenario.schedule.events.impl.EventsPackageImpl#getVesselEventVisit()
 	 * @generated
 	 */
-	int VESSEL_EVENT_VISIT = 8;
+	int VESSEL_EVENT_VISIT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
@@ -1070,7 +1070,7 @@ public interface EventsPackage extends EPackage {
 	 * @see scenario.schedule.events.impl.EventsPackageImpl#getCharterOutVisit()
 	 * @generated
 	 */
-	int CHARTER_OUT_VISIT = 7;
+	int CHARTER_OUT_VISIT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Start Time</b></em>' attribute.

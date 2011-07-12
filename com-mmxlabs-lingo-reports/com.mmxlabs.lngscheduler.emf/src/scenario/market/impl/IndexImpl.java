@@ -69,6 +69,29 @@ public class IndexImpl extends NamedObjectImpl implements Index {
 	 * @generated
 	 */
 	public StepwisePriceCurve getPriceCurve() {
+		if (priceCurve != null && priceCurve.eIsProxy()) {
+			InternalEObject oldPriceCurve = (InternalEObject)priceCurve;
+			priceCurve = (StepwisePriceCurve)eResolveProxy(oldPriceCurve);
+			if (priceCurve != oldPriceCurve) {
+				InternalEObject newPriceCurve = (InternalEObject)priceCurve;
+				NotificationChain msgs = oldPriceCurve.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, null);
+				if (newPriceCurve.eInternalContainer() == null) {
+					msgs = newPriceCurve.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MarketPackage.INDEX__PRICE_CURVE, oldPriceCurve, priceCurve));
+			}
+		}
+		return priceCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StepwisePriceCurve basicGetPriceCurve() {
 		return priceCurve;
 	}
 
@@ -129,7 +152,8 @@ public class IndexImpl extends NamedObjectImpl implements Index {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case MarketPackage.INDEX__PRICE_CURVE:
-				return getPriceCurve();
+				if (resolve) return getPriceCurve();
+				return basicGetPriceCurve();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}

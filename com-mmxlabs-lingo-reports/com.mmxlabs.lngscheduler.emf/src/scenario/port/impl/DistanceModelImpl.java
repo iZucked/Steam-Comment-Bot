@@ -74,7 +74,7 @@ public class DistanceModelImpl extends EObjectImpl implements DistanceModel {
 	 */
 	public EList<DistanceLine> getDistances() {
 		if (distances == null) {
-			distances = new EObjectContainmentEList<DistanceLine>(DistanceLine.class, this, PortPackage.DISTANCE_MODEL__DISTANCES);
+			distances = new EObjectContainmentEList.Resolving<DistanceLine>(DistanceLine.class, this, PortPackage.DISTANCE_MODEL__DISTANCES);
 		}
 		return distances;
 	}

@@ -40,12 +40,12 @@ import scenario.schedule.Schedule;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getRandomSeed <em>Random Seed</em>}</li>
- *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getConstraints <em>Constraints</em>}</li>
- *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getInitialSchedule <em>Initial Schedule</em>}</li>
- *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getFreezeDaysFromStart <em>Freeze Days From Start</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getIgnoreElementsAfter <em>Ignore Elements After</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getConstraints <em>Constraints</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getObjectives <em>Objectives</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,26 +73,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	protected long randomSeed = RANDOM_SEED_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getConstraints() <em>Constraints</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getConstraints()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Constraint> constraints;
-
-	/**
-	 * The cached value of the '{@link #getObjectives() <em>Objectives</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getObjectives()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Objective> objectives;
-
-	/**
 	 * The cached value of the '{@link #getInitialSchedule() <em>Initial Schedule</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -101,25 +81,6 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * @ordered
 	 */
 	protected Schedule initialSchedule;
-
-	/**
-	 * The cached value of the '{@link #getDefaultDiscountCurve() <em>Default Discount Curve</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDefaultDiscountCurve()
-	 * @generated
-	 * @ordered
-	 */
-	protected DiscountCurve defaultDiscountCurve;
-
-	/**
-	 * This is true if the Default Discount Curve containment reference has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean defaultDiscountCurveESet;
 
 	/**
 	 * The default value of the '{@link #getFreezeDaysFromStart() <em>Freeze Days From Start</em>}' attribute.
@@ -171,6 +132,45 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	protected boolean ignoreElementsAfterESet;
 
 	/**
+	 * The cached value of the '{@link #getConstraints() <em>Constraints</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getConstraints()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Constraint> constraints;
+
+	/**
+	 * The cached value of the '{@link #getObjectives() <em>Objectives</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getObjectives()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Objective> objectives;
+
+	/**
+	 * The cached value of the '{@link #getDefaultDiscountCurve() <em>Default Discount Curve</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultDiscountCurve()
+	 * @generated
+	 * @ordered
+	 */
+	protected DiscountCurve defaultDiscountCurve;
+
+	/**
+	 * This is true if the Default Discount Curve containment reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean defaultDiscountCurveESet;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -217,7 +217,7 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 */
 	public EList<Constraint> getConstraints() {
 		if (constraints == null) {
-			constraints = new EObjectContainmentEList<Constraint>(Constraint.class, this, OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS);
+			constraints = new EObjectContainmentEList.Resolving<Constraint>(Constraint.class, this, OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS);
 		}
 		return constraints;
 	}
@@ -229,7 +229,7 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 */
 	public EList<Objective> getObjectives() {
 		if (objectives == null) {
-			objectives = new EObjectContainmentEList<Objective>(Objective.class, this, OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES);
+			objectives = new EObjectContainmentEList.Resolving<Objective>(Objective.class, this, OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES);
 		}
 		return objectives;
 	}
@@ -278,6 +278,29 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * @generated
 	 */
 	public DiscountCurve getDefaultDiscountCurve() {
+		if (defaultDiscountCurve != null && defaultDiscountCurve.eIsProxy()) {
+			InternalEObject oldDefaultDiscountCurve = (InternalEObject)defaultDiscountCurve;
+			defaultDiscountCurve = (DiscountCurve)eResolveProxy(oldDefaultDiscountCurve);
+			if (defaultDiscountCurve != oldDefaultDiscountCurve) {
+				InternalEObject newDefaultDiscountCurve = (InternalEObject)defaultDiscountCurve;
+				NotificationChain msgs = oldDefaultDiscountCurve.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, null, null);
+				if (newDefaultDiscountCurve.eInternalContainer() == null) {
+					msgs = newDefaultDiscountCurve.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE, oldDefaultDiscountCurve, defaultDiscountCurve));
+			}
+		}
+		return defaultDiscountCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DiscountCurve basicGetDefaultDiscountCurve() {
 		return defaultDiscountCurve;
 	}
 
@@ -462,19 +485,20 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 		switch (featureID) {
 			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
 				return getRandomSeed();
-			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
-				return getConstraints();
-			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
-				return getObjectives();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
 				if (resolve) return getInitialSchedule();
 				return basicGetInitialSchedule();
-			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
-				return getDefaultDiscountCurve();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 				return getFreezeDaysFromStart();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
 				return getIgnoreElementsAfter();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
+				return getConstraints();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
+				return getObjectives();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
+				if (resolve) return getDefaultDiscountCurve();
+				return basicGetDefaultDiscountCurve();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -491,6 +515,15 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
 				setRandomSeed((Long)newValue);
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
+				setInitialSchedule((Schedule)newValue);
+				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
+				setFreezeDaysFromStart((Integer)newValue);
+				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
+				setIgnoreElementsAfter((Date)newValue);
+				return;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
 				getConstraints().clear();
 				getConstraints().addAll((Collection<? extends Constraint>)newValue);
@@ -499,17 +532,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 				getObjectives().clear();
 				getObjectives().addAll((Collection<? extends Objective>)newValue);
 				return;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
-				setInitialSchedule((Schedule)newValue);
-				return;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				setDefaultDiscountCurve((DiscountCurve)newValue);
-				return;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
-				setFreezeDaysFromStart((Integer)newValue);
-				return;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
-				setIgnoreElementsAfter((Date)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -526,23 +550,23 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
 				setRandomSeed(RANDOM_SEED_EDEFAULT);
 				return;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
-				getConstraints().clear();
-				return;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
-				getObjectives().clear();
-				return;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
 				setInitialSchedule((Schedule)null);
-				return;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
-				unsetDefaultDiscountCurve();
 				return;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 				setFreezeDaysFromStart(FREEZE_DAYS_FROM_START_EDEFAULT);
 				return;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
 				unsetIgnoreElementsAfter();
+				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
+				getConstraints().clear();
+				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
+				getObjectives().clear();
+				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
+				unsetDefaultDiscountCurve();
 				return;
 		}
 		super.eUnset(featureID);
@@ -558,18 +582,18 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 		switch (featureID) {
 			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
 				return randomSeed != RANDOM_SEED_EDEFAULT;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
-				return constraints != null && !constraints.isEmpty();
-			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
-				return objectives != null && !objectives.isEmpty();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__INITIAL_SCHEDULE:
 				return initialSchedule != null;
-			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
-				return isSetDefaultDiscountCurve();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 				return freezeDaysFromStart != FREEZE_DAYS_FROM_START_EDEFAULT;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
 				return isSetIgnoreElementsAfter();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:
+				return constraints != null && !constraints.isEmpty();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__OBJECTIVES:
+				return objectives != null && !objectives.isEmpty();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
+				return isSetDefaultDiscountCurve();
 		}
 		return super.eIsSet(featureID);
 	}

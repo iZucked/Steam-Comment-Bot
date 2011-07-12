@@ -20,9 +20,9 @@ import scenario.port.Port;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.fleet.PortAndTime#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.fleet.PortAndTime#getStartTime <em>Start Time</em>}</li>
  *   <li>{@link scenario.fleet.PortAndTime#getEndTime <em>End Time</em>}</li>
+ *   <li>{@link scenario.fleet.PortAndTime#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
  *

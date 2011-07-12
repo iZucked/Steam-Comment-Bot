@@ -21,9 +21,9 @@ import scenario.fleet.Vessel;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.cargo.Cargo#getId <em>Id</em>}</li>
- *   <li>{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
- *   <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
@@ -70,7 +70,7 @@ public interface Cargo extends EObject {
 	 * @return the value of the '<em>Load Slot</em>' containment reference.
 	 * @see #setLoadSlot(LoadSlot)
 	 * @see scenario.cargo.CargoPackage#getCargo_LoadSlot()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	LoadSlot getLoadSlot();
@@ -96,7 +96,7 @@ public interface Cargo extends EObject {
 	 * @return the value of the '<em>Discharge Slot</em>' containment reference.
 	 * @see #setDischargeSlot(Slot)
 	 * @see scenario.cargo.CargoPackage#getCargo_DischargeSlot()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	Slot getDischargeSlot();

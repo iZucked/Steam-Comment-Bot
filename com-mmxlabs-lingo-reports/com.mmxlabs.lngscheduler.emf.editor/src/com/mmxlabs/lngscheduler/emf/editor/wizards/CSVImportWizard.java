@@ -207,7 +207,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 					scenario = ScenarioFactory.eINSTANCE.createScenario();
 
-					scenario.createMissingModels();
+					createScenarioModels(scenario);
 
 					// and last of all put all the results into a new scenario
 					// according to
@@ -257,18 +257,12 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 						}
 					}
 
-					addDefaultSettings(scenario);
+					postProcess(scenario);
 
-					// copy shipping entity from last entity.
-					if (scenario.getContractModel().getEntities().isEmpty() == false)
-						scenario.getContractModel().setShippingEntity(
-								scenario.getContractModel()
-										.getEntities()
-										.get(scenario.getContractModel()
-												.getEntities().size() - 1));
-
-					if (scenario.getOptimisation().getCurrentSettings()
-							.getInitialSchedule() != null) {
+					if (scenario.getOptimisation() != null
+							&& scenario.getOptimisation().getCurrentSettings() != null
+							&& scenario.getOptimisation().getCurrentSettings()
+									.getInitialSchedule() != null) {
 						// evaluate initial schedule
 						monitor.subTask("Evaluating initial schedule...");
 						try {
@@ -366,6 +360,190 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		return true;
 	}
 
+	/**
+	 * Subclasses can override to prevent default settings being added or
+	 * contract model being manipulated.
+	 * 
+	 * @param scenario2
+	 */
+	protected void postProcess(Scenario scenario2) {
+		addDefaultSettings(scenario);
+
+		// copy shipping entity from last entity.
+		if (scenario.getContractModel().getEntities().isEmpty() == false)
+			scenario.getContractModel().setShippingEntity(
+					scenario.getContractModel()
+							.getEntities()
+							.get(scenario.getContractModel().getEntities()
+									.size() - 1));
+	}
+
+	/**
+	 * Subclasses can override in case they want to create a scenario with fewer
+	 * models.
+	 * 
+	 * @param createMissingModels
+	 */
+	protected void createScenarioModels(final Scenario scenario) {
+		scenario.createMissingModels();
+	}
+
+	protected void createWizardPageControls(final CSVWizardPage page,
+			final Composite topLevel) {
+		final String[] extensions = new String[] { "*.csv" };
+
+		{
+			final Group group = page.createGroup(topLevel,
+					"Ports and Distances");
+
+			page.makeEditor(group, "Ports", PortPackage.eINSTANCE.getPort(),
+					extensions);
+			page.makeEditor(group, "Distance Matrix",
+					PortPackage.eINSTANCE.getDistanceModel(), extensions);
+			page.makeEditor(group, "Canals", PortPackage.eINSTANCE.getCanal(),
+					extensions);
+		}
+
+		{
+			final Group group = page.createGroup(topLevel, "Fleet");
+
+			page.makeEditor(group, "Vessel Classes",
+					FleetPackage.eINSTANCE.getVesselClass(), extensions);
+			page.makeEditor(group, "Fuel Curves",
+					FleetPackage.eINSTANCE.getFuelConsumptionLine(), extensions);
+			page.makeEditor(group, "Vessels",
+					FleetPackage.eINSTANCE.getVessel(), extensions);
+			page.makeEditor(group, "Base Fuels",
+					FleetPackage.eINSTANCE.getVesselFuel(), extensions);
+		}
+
+		{
+			final Group group = page.createGroup(topLevel,
+					"Indices and Contracts");
+
+			page.makeEditor(group, "Indices",
+					MarketPackage.eINSTANCE.getIndex(), extensions);
+			page.makeEditor(group, "Purchase Contracts",
+					ContractPackage.eINSTANCE.getPurchaseContract(), extensions);
+			page.makeEditor(group, "Sales Contracts",
+					ContractPackage.eINSTANCE.getSalesContract(), extensions);
+			page.makeEditor(group, "Entities",
+					ContractPackage.eINSTANCE.getEntity(), extensions);
+		}
+
+		{
+			final Group group = page
+					.createGroup(topLevel, "Cargoes and Events");
+
+			page.makeEditor(group, "Cargoes",
+					CargoPackage.eINSTANCE.getCargo(), extensions);
+			page.makeEditor(group, "Events",
+					FleetPackage.eINSTANCE.getVesselEvent(), extensions);
+			page.makeEditor(group, "Sequence",
+					SchedulePackage.eINSTANCE.getSchedule(), extensions);
+		}
+	}
+
+	class CSVWizardPage extends WizardPage {
+		protected CSVWizardPage(final String pageName) {
+			super(pageName);
+		}
+
+		/**
+		 * Used to let the directory picker set the default file names where
+		 * they exist.
+		 */
+		private Map<EClass, Pair<FileFieldEditor, Composite>> editorMap = new HashMap<EClass, Pair<FileFieldEditor, Composite>>();
+
+		{
+			setTitle("Choose Input Data");
+			setDescription("Choose the various files from which data should be imported; blank fields will be ignored.");
+		}
+
+		private ModifyListener listener(final EClass key) {
+			return new ModifyListener() {
+				@Override
+				public void modifyText(final ModifyEvent e) {
+					final Text text = (Text) e.widget;
+					inputFilePaths.put(key, text.getText());
+				}
+			};
+		}
+
+		public Group createGroup(final Composite parent, final String name) {
+			final Group group = new Group(parent, SWT.NONE);
+			group.setLayout(new RowLayout(SWT.VERTICAL));
+			group.setText(name);
+			group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			return group;
+		}
+
+		@Override
+		public void createControl(final Composite parent) {
+			final Composite topLevel = new Composite(parent, SWT.NONE);
+			topLevel.setLayout(new GridLayout(1, false));
+
+			CSVImportWizard.this.createWizardPageControls(this, topLevel);
+
+			final Button pickAll = new Button(topLevel, SWT.NONE);
+			pickAll.setText("Use Default Filenames");
+			pickAll.setLayoutData(new GridData(SWT.END, SWT.CENTER, false,
+					false));
+
+			pickAll.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					final DirectoryDialog dd = new DirectoryDialog(getShell());
+					final String s = dd.open();
+					if (s == null) {
+						return;
+					}
+					for (final Map.Entry<EClass, Pair<FileFieldEditor, Composite>> entry : editorMap
+							.entrySet()) {
+						final String defaultName = getDefaultName(entry
+								.getKey());
+						final File f = new File(s + "/" + defaultName + ".csv");
+						if (f.exists()) {
+
+							entry.getValue()
+									.getFirst()
+									.getTextControl(
+											entry.getValue().getSecond())
+									.setText(f.getAbsolutePath());
+						}
+					}
+				}
+
+				private String getDefaultName(final EClass key) {
+					if (key == FleetPackage.eINSTANCE.getFuelConsumptionLine()) {
+						return "Fuel Curve";
+					}
+					if (key == PortPackage.eINSTANCE.getDistanceModel()) {
+						return "Default-Distances";
+					}
+					if (key == SchedulePackage.eINSTANCE.getSchedule()) {
+						return "Schedule-Start State";
+					}
+					return key.getName();
+				}
+			});
+			setControl(topLevel);
+		}
+
+		void makeEditor(Group group, String name, EClass ec,
+				String[] extensions) {
+			final FileFieldEditor portsEditor = new FileFieldEditor(name
+					+ "Select", name, group);
+			portsEditor.setFileExtensions(extensions);
+			portsEditor.setEmptyStringAllowed(true);
+			portsEditor.getTextControl(group).addModifyListener(listener(ec));
+
+			portsEditor.setPreferenceStore(PlatformUI.getPreferenceStore());
+			editorMap.put(ec, new Pair<FileFieldEditor, Composite>(portsEditor,
+					group));
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -386,163 +564,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		destinationPage.setTitle("Choose scenario destination");
 		destinationPage
 				.setDescription("Select a location in the workspace where the new scenario will be created and provide a name for it.");
-		inputPage = new WizardPage("Choose CSV Data to Import") {
-
-			/**
-			 * Used to let the directory picker set the default file names where
-			 * they exist.
-			 */
-			private Map<EClass, Pair<FileFieldEditor, Composite>> editorMap = new HashMap<EClass, Pair<FileFieldEditor, Composite>>();
-
-			{
-				setTitle("Choose Input Data");
-				setDescription("Choose the various files from which data should be imported; blank fields will be ignored.");
-			}
-
-			private ModifyListener listener(final EClass key) {
-				return new ModifyListener() {
-					@Override
-					public void modifyText(final ModifyEvent e) {
-						final Text text = (Text) e.widget;
-						inputFilePaths.put(key, text.getText());
-					}
-				};
-			}
-
-			@Override
-			public void createControl(final Composite parent) {
-				final Composite topLevel = new Composite(parent, SWT.NONE);
-				topLevel.setLayout(new GridLayout(1, false));
-
-				final String[] extensions = new String[] { "*.csv" };
-				{
-					final Group group = new Group(topLevel, SWT.NONE);
-					group.setLayout(new RowLayout(SWT.VERTICAL));
-					group.setText("Ports and Distances");
-					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-							false));
-
-					makeEditor(group, "Ports", PortPackage.eINSTANCE.getPort(),
-							extensions);
-					makeEditor(group, "Distance Matrix",
-							PortPackage.eINSTANCE.getDistanceModel(),
-							extensions);
-					makeEditor(group, "Canals",
-							PortPackage.eINSTANCE.getCanal(), extensions);
-				}
-
-				{
-					final Group group = new Group(topLevel, SWT.NONE);
-					group.setLayout(new RowLayout(SWT.VERTICAL));
-					group.setText("Fleet");
-					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-							false));
-					makeEditor(group, "Vessel Classes",
-							FleetPackage.eINSTANCE.getVesselClass(), extensions);
-					makeEditor(group, "Fuel Curves",
-							FleetPackage.eINSTANCE.getFuelConsumptionLine(),
-							extensions);
-					makeEditor(group, "Vessels",
-							FleetPackage.eINSTANCE.getVessel(), extensions);
-					makeEditor(group, "Base Fuels",
-							FleetPackage.eINSTANCE.getVesselFuel(), extensions);
-				}
-
-				{
-					final Group group = new Group(topLevel, SWT.NONE);
-					group.setLayout(new RowLayout(SWT.VERTICAL));
-					group.setText("Indices and Contracts");
-					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-							false));
-
-					makeEditor(group, "Indices",
-							MarketPackage.eINSTANCE.getIndex(), extensions);
-					makeEditor(group, "Purchase Contracts",
-							ContractPackage.eINSTANCE.getPurchaseContract(),
-							extensions);
-					makeEditor(group, "Sales Contracts",
-							ContractPackage.eINSTANCE.getSalesContract(),
-							extensions);
-					makeEditor(group, "Entities",
-							ContractPackage.eINSTANCE.getEntity(), extensions);
-				}
-
-				{
-					final Group group = new Group(topLevel, SWT.NONE);
-					group.setLayout(new RowLayout(SWT.VERTICAL));
-					group.setText("Cargoes and Events");
-					group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-							false));
-					makeEditor(group, "Cargoes",
-							CargoPackage.eINSTANCE.getCargo(), extensions);
-					makeEditor(group, "Events",
-							FleetPackage.eINSTANCE.getVesselEvent(), extensions);
-					makeEditor(group, "Sequence",
-							SchedulePackage.eINSTANCE.getSchedule(), extensions);
-				}
-
-				final Button pickAll = new Button(topLevel, SWT.NONE);
-				pickAll.setText("Use Default Filenames");
-				pickAll.setLayoutData(new GridData(SWT.END, SWT.CENTER, false,
-						false));
-
-				pickAll.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						final DirectoryDialog dd = new DirectoryDialog(
-								getShell());
-						final String s = dd.open();
-						if (s == null) {
-							return;
-						}
-						for (final Map.Entry<EClass, Pair<FileFieldEditor, Composite>> entry : editorMap
-								.entrySet()) {
-							final String defaultName = getDefaultName(entry
-									.getKey());
-							final File f = new File(s + "/" + defaultName
-									+ ".csv");
-							if (f.exists()) {
-
-								entry.getValue()
-										.getFirst()
-										.getTextControl(
-												entry.getValue().getSecond())
-										.setText(f.getAbsolutePath());
-							}
-						}
-					}
-
-					private String getDefaultName(final EClass key) {
-						if (key == FleetPackage.eINSTANCE
-								.getFuelConsumptionLine()) {
-							return "Fuel Curve";
-						}
-						if (key == PortPackage.eINSTANCE.getDistanceModel()) {
-							return "Default-Distances";
-						}
-						if (key == SchedulePackage.eINSTANCE.getSchedule()) {
-							return "Schedule-Start State";
-						}
-						return key.getName();
-					}
-				});
-				setControl(topLevel);
-			}
-
-			private void makeEditor(Group group, String name, EClass ec,
-					String[] extensions) {
-				final FileFieldEditor portsEditor = new FileFieldEditor(name
-						+ "Select", name, group);
-				portsEditor.setFileExtensions(extensions);
-				portsEditor.setEmptyStringAllowed(true);
-				portsEditor.getTextControl(group).addModifyListener(
-						listener(ec));
-
-				portsEditor.setPreferenceStore(PlatformUI.getPreferenceStore());
-				editorMap.put(ec, new Pair<FileFieldEditor, Composite>(
-						portsEditor, group));
-			}
-		};
+		inputPage = new CSVWizardPage("Choose CSV Data to Import");
 	}
 
 	/*
@@ -565,7 +587,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 	 * 
 	 * @param scenario
 	 */
-	private void addDefaultSettings(Scenario scenario) {
+	protected void addDefaultSettings(Scenario scenario) {
 		final OptimiserFactory of = OptimiserPackage.eINSTANCE
 				.getOptimiserFactory();
 		final LsoFactory lsof = LsoPackage.eINSTANCE.getLsoFactory();

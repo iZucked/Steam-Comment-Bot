@@ -79,20 +79,24 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 				return createContractModelAdapter();
 			}
 			@Override
-			public Adapter casePurchaseContract(PurchaseContract object) {
-				return createPurchaseContractAdapter();
-			}
-			@Override
-			public Adapter caseSalesContract(SalesContract object) {
-				return createSalesContractAdapter();
-			}
-			@Override
 			public Adapter caseTotalVolumeLimit(TotalVolumeLimit object) {
 				return createTotalVolumeLimitAdapter();
 			}
 			@Override
 			public Adapter caseEntity(Entity object) {
 				return createEntityAdapter();
+			}
+			@Override
+			public Adapter caseContract(Contract object) {
+				return createContractAdapter();
+			}
+			@Override
+			public Adapter casePurchaseContract(PurchaseContract object) {
+				return createPurchaseContractAdapter();
+			}
+			@Override
+			public Adapter caseSalesContract(SalesContract object) {
+				return createSalesContractAdapter();
 			}
 			@Override
 			public Adapter caseFixedPricePurchaseContract(FixedPricePurchaseContract object) {
@@ -109,10 +113,6 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseProfitSharingPurchaseContract(ProfitSharingPurchaseContract object) {
 				return createProfitSharingPurchaseContractAdapter();
-			}
-			@Override
-			public Adapter caseContract(Contract object) {
-				return createContractAdapter();
 			}
 			@Override
 			public Adapter caseScenarioObject(ScenarioObject object) {

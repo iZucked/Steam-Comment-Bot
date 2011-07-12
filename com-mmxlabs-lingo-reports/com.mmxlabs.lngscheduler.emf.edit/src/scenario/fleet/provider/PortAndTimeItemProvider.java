@@ -67,9 +67,9 @@ public class PortAndTimeItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortPropertyDescriptor(object);
 			addStartTimePropertyDescriptor(object);
 			addEndTimePropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

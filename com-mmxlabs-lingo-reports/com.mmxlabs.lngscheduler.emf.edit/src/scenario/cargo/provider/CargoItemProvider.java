@@ -154,8 +154,8 @@ public class CargoItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(CargoPackage.Literals.CARGO__LOAD_SLOT);
 			childrenFeatures.add(CargoPackage.Literals.CARGO__DISCHARGE_SLOT);
+			childrenFeatures.add(CargoPackage.Literals.CARGO__LOAD_SLOT);
 		}
 		return childrenFeatures;
 	}
@@ -214,8 +214,8 @@ public class CargoItemProvider
 			case CargoPackage.CARGO__CARGO_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case CargoPackage.CARGO__LOAD_SLOT:
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
+			case CargoPackage.CARGO__LOAD_SLOT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -235,17 +235,17 @@ public class CargoItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CargoPackage.Literals.CARGO__LOAD_SLOT,
-				 CargoFactory.eINSTANCE.createLoadSlot()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(CargoPackage.Literals.CARGO__DISCHARGE_SLOT,
 				 CargoFactory.eINSTANCE.createSlot()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.CARGO__DISCHARGE_SLOT,
+				 CargoFactory.eINSTANCE.createLoadSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO__LOAD_SLOT,
 				 CargoFactory.eINSTANCE.createLoadSlot()));
 	}
 
@@ -261,8 +261,8 @@ public class CargoItemProvider
 		Object childObject = child;
 
 		boolean qualify =
-			childFeature == CargoPackage.Literals.CARGO__LOAD_SLOT ||
-			childFeature == CargoPackage.Literals.CARGO__DISCHARGE_SLOT;
+			childFeature == CargoPackage.Literals.CARGO__DISCHARGE_SLOT ||
+			childFeature == CargoPackage.Literals.CARGO__LOAD_SLOT;
 
 		if (qualify) {
 			return getString

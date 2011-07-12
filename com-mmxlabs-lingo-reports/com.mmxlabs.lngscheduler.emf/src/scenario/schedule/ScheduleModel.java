@@ -38,7 +38,7 @@ public interface ScheduleModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Schedules</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getScheduleModel_Schedules()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Schedule> getSchedules();

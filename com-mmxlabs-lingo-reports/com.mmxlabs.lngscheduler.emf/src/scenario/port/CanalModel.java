@@ -38,7 +38,7 @@ public interface CanalModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Canals</em>' containment reference list.
 	 * @see scenario.port.PortPackage#getCanalModel_Canals()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Canal> getCanals();

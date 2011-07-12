@@ -384,12 +384,12 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 		if (fuelMixtureItemProvider != null) fuelMixtureItemProvider.dispose();
 		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
 		if (scheduledEventItemProvider != null) scheduledEventItemProvider.dispose();
-		if (idleItemProvider != null) idleItemProvider.dispose();
 		if (journeyItemProvider != null) journeyItemProvider.dispose();
 		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
+		if (idleItemProvider != null) idleItemProvider.dispose();
 		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
-		if (charterOutVisitItemProvider != null) charterOutVisitItemProvider.dispose();
 		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
+		if (charterOutVisitItemProvider != null) charterOutVisitItemProvider.dispose();
 	}
 
 }

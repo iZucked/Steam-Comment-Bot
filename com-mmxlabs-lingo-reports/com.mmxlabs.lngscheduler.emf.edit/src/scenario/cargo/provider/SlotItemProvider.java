@@ -73,8 +73,8 @@ public class SlotItemProvider
 			addWindowStartPropertyDescriptor(object);
 			addWindowDurationPropertyDescriptor(object);
 			addSlotDurationPropertyDescriptor(object);
-			addContractPropertyDescriptor(object);
 			addFixedPricePropertyDescriptor(object);
+			addContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

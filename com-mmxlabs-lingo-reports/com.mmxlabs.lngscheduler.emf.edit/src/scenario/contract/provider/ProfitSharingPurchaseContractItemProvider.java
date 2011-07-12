@@ -61,11 +61,11 @@ public class ProfitSharingPurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIndexPropertyDescriptor(object);
-			addReferenceIndexPropertyDescriptor(object);
 			addAlphaPropertyDescriptor(object);
 			addBetaPropertyDescriptor(object);
 			addGammaPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
+			addReferenceIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

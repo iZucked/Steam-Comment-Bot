@@ -20,6 +20,7 @@ import scenario.ScenarioFactory;
 import scenario.ScenarioObject;
 import scenario.ScenarioPackage;
 
+import scenario.UUIDObject;
 import scenario.cargo.CargoPackage;
 
 import scenario.cargo.impl.CargoPackageImpl;
@@ -87,6 +88,13 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	private EClass namedObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass uuidObjectEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -196,24 +204,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	public EReference getScenario_FleetModel() {
-		return (EReference)scenarioEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenario_PortModel() {
-		return (EReference)scenarioEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenario_CargoModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -222,16 +212,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getScenario_ContractModel() {
-		return (EReference)scenarioEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenario_ScheduleModel() {
+	public EReference getScenario_PortModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -240,25 +221,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getScenario_MarketModel() {
-		return (EReference)scenarioEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenario_DistanceModel() {
-		return (EReference)scenarioEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenario_CanalModel() {
+	public EReference getScenario_CargoModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -267,7 +230,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getScenario_Optimisation() {
+	public EReference getScenario_ContractModel() {
 		return (EReference)scenarioEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -276,8 +239,62 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getScenario_ScheduleModel() {
+		return (EReference)scenarioEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenario_MarketModel() {
+		return (EReference)scenarioEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenario_DistanceModel() {
+		return (EReference)scenarioEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenario_CanalModel() {
+		return (EReference)scenarioEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenario_Optimisation() {
+		return (EReference)scenarioEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenario_ContainedModels() {
+		return (EReference)scenarioEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getScenario_Version() {
-		return (EAttribute)scenarioEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)scenarioEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -286,7 +303,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	public EAttribute getScenario_Name() {
-		return (EAttribute)scenarioEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)scenarioEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -295,15 +312,6 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	public EOperation getScenario__GetOrCreateFleetModel() {
-		return scenarioEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getScenario__GetOrCreateScheduleModel() {
 		return scenarioEClass.getEOperations().get(1);
 	}
 
@@ -312,8 +320,17 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getScenario__CreateMissingModels() {
+	public EOperation getScenario__GetOrCreateScheduleModel() {
 		return scenarioEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getScenario__CreateMissingModels() {
+		return scenarioEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -357,6 +374,24 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getUUIDObject() {
+		return uuidObjectEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUUIDObject_UUID() {
+		return (EAttribute)uuidObjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
 	}
@@ -381,26 +416,30 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		// Create classes and their features
 		scenarioEClass = createEClass(SCENARIO);
-		createEReference(scenarioEClass, SCENARIO__FLEET_MODEL);
-		createEReference(scenarioEClass, SCENARIO__PORT_MODEL);
-		createEReference(scenarioEClass, SCENARIO__CARGO_MODEL);
-		createEReference(scenarioEClass, SCENARIO__CONTRACT_MODEL);
-		createEReference(scenarioEClass, SCENARIO__SCHEDULE_MODEL);
-		createEReference(scenarioEClass, SCENARIO__MARKET_MODEL);
-		createEReference(scenarioEClass, SCENARIO__DISTANCE_MODEL);
-		createEReference(scenarioEClass, SCENARIO__CANAL_MODEL);
-		createEReference(scenarioEClass, SCENARIO__OPTIMISATION);
 		createEAttribute(scenarioEClass, SCENARIO__VERSION);
 		createEAttribute(scenarioEClass, SCENARIO__NAME);
+		createEReference(scenarioEClass, SCENARIO__FLEET_MODEL);
+		createEReference(scenarioEClass, SCENARIO__SCHEDULE_MODEL);
+		createEReference(scenarioEClass, SCENARIO__PORT_MODEL);
+		createEReference(scenarioEClass, SCENARIO__DISTANCE_MODEL);
+		createEReference(scenarioEClass, SCENARIO__CANAL_MODEL);
+		createEReference(scenarioEClass, SCENARIO__CARGO_MODEL);
+		createEReference(scenarioEClass, SCENARIO__CONTRACT_MODEL);
+		createEReference(scenarioEClass, SCENARIO__MARKET_MODEL);
+		createEReference(scenarioEClass, SCENARIO__OPTIMISATION);
+		createEReference(scenarioEClass, SCENARIO__CONTAINED_MODELS);
+		createEOperation(scenarioEClass, SCENARIO___CREATE_MISSING_MODELS);
 		createEOperation(scenarioEClass, SCENARIO___GET_OR_CREATE_FLEET_MODEL);
 		createEOperation(scenarioEClass, SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL);
-		createEOperation(scenarioEClass, SCENARIO___CREATE_MISSING_MODELS);
 
 		scenarioObjectEClass = createEClass(SCENARIO_OBJECT);
 		createEOperation(scenarioObjectEClass, SCENARIO_OBJECT___GET_CONTAINER);
 
 		namedObjectEClass = createEClass(NAMED_OBJECT);
 		createEAttribute(namedObjectEClass, NAMED_OBJECT__NAME);
+
+		uuidObjectEClass = createEClass(UUID_OBJECT);
+		createEAttribute(uuidObjectEClass, UUID_OBJECT__UUID);
 	}
 
 	/**
@@ -453,23 +492,24 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scenarioEClass, Scenario.class, "Scenario", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getScenario_FleetModel(), theFleetPackage.getFleetModel(), null, "fleetModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenario_PortModel(), thePortPackage.getPortModel(), null, "portModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenario_CargoModel(), theCargoPackage.getCargoModel(), null, "cargoModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenario_ContractModel(), theContractPackage.getContractModel(), null, "contractModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenario_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenario_MarketModel(), theMarketPackage.getMarketModel(), null, "marketModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenario_DistanceModel(), thePortPackage.getDistanceModel(), null, "distanceModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenario_CanalModel(), thePortPackage.getCanalModel(), null, "canalModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenario_Optimisation(), theOptimiserPackage.getOptimisation(), null, "optimisation", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getScenario_Version(), ecorePackage.getEInt(), "version", "1", 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenario_Version(), ecorePackage.getEInt(), "version", "2", 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenario_Name(), ecorePackage.getEString(), "name", "Default name", 1, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_FleetModel(), theFleetPackage.getFleetModel(), null, "fleetModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_PortModel(), thePortPackage.getPortModel(), null, "portModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_DistanceModel(), thePortPackage.getDistanceModel(), null, "distanceModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_CanalModel(), thePortPackage.getCanalModel(), null, "canalModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_CargoModel(), theCargoPackage.getCargoModel(), null, "cargoModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_ContractModel(), theContractPackage.getContractModel(), null, "contractModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_MarketModel(), theMarketPackage.getMarketModel(), null, "marketModel", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_Optimisation(), theOptimiserPackage.getOptimisation(), null, "optimisation", null, 0, 1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenario_ContainedModels(), ecorePackage.getEObject(), null, "containedModels", null, 0, -1, Scenario.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getScenario__CreateMissingModels(), null, "createMissingModels", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getScenario__GetOrCreateFleetModel(), theFleetPackage.getFleetModel(), "getOrCreateFleetModel", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getScenario__GetOrCreateScheduleModel(), theSchedulePackage.getScheduleModel(), "getOrCreateScheduleModel", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getScenario__CreateMissingModels(), null, "createMissingModels", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(scenarioObjectEClass, ScenarioObject.class, "ScenarioObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -477,6 +517,9 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		initEClass(namedObjectEClass, NamedObject.class, "NamedObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNamedObject_Name(), ecorePackage.getEString(), "name", null, 1, 1, NamedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(uuidObjectEClass, UUIDObject.class, "UUIDObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getUUIDObject_UUID(), ecorePackage.getEString(), "UUID", "", 1, 1, UUIDObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

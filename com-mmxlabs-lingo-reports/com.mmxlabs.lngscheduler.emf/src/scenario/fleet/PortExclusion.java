@@ -20,9 +20,9 @@ import scenario.port.Port;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.fleet.PortExclusion#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.fleet.PortExclusion#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link scenario.fleet.PortExclusion#getEndDate <em>End Date</em>}</li>
+ *   <li>{@link scenario.fleet.PortExclusion#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
  *

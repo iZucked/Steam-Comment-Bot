@@ -28,25 +28,25 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.schedule.CargoAllocation#getLoadSlot <em>Load Slot</em>}</li>
- *   <li>{@link scenario.schedule.CargoAllocation#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getFuelVolume <em>Fuel Volume</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargeVolume <em>Discharge Volume</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getLoadDate <em>Load Date</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargeDate <em>Discharge Date</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getLoadPriceM3 <em>Load Price M3</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargePriceM3 <em>Discharge Price M3</em>}</li>
- *   <li>{@link scenario.schedule.CargoAllocation#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getLoadRevenue <em>Load Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getShippingRevenue <em>Shipping Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getDischargeRevenue <em>Discharge Revenue</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}</li>
- *   <li>{@link scenario.schedule.CargoAllocation#getLoadRevenue <em>Load Revenue</em>}</li>
- *   <li>{@link scenario.schedule.CargoAllocation#getShippingRevenue <em>Shipping Revenue</em>}</li>
- *   <li>{@link scenario.schedule.CargoAllocation#getDischargeRevenue <em>Discharge Revenue</em>}</li>
- *   <li>{@link scenario.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getLoadSlotVisit <em>Load Slot Visit</em>}</li>
  *   <li>{@link scenario.schedule.CargoAllocation#getDischargeSlotVisit <em>Discharge Slot Visit</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getLoadSlot <em>Load Slot</em>}</li>
+ *   <li>{@link scenario.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
  *

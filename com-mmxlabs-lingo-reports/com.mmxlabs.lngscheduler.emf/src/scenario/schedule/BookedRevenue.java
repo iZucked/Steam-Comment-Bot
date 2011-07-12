@@ -22,9 +22,9 @@ import scenario.contract.Entity;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.schedule.BookedRevenue#getEntity <em>Entity</em>}</li>
  *   <li>{@link scenario.schedule.BookedRevenue#getDate <em>Date</em>}</li>
  *   <li>{@link scenario.schedule.BookedRevenue#getLineItems <em>Line Items</em>}</li>
+ *   <li>{@link scenario.schedule.BookedRevenue#getEntity <em>Entity</em>}</li>
  * </ul>
  * </p>
  *
@@ -96,7 +96,7 @@ public interface BookedRevenue extends ScenarioObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Line Items</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getBookedRevenue_LineItems()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<LineItem> getLineItems();

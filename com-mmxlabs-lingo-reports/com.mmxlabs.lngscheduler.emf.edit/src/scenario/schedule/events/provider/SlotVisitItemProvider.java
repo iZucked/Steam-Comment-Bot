@@ -61,8 +61,8 @@ public class SlotVisitItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addSlotPropertyDescriptor(object);
 			addCargoAllocationPropertyDescriptor(object);
+			addSlotPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

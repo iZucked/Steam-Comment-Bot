@@ -240,7 +240,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * @generated
 	 */
 	public EReference getStepwisePriceCurve_Prices() {
-		return (EReference)stepwisePriceCurveEClass.getEStructuralFeatures().get(0);
+		return (EReference)stepwisePriceCurveEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 	 * @generated
 	 */
 	public EAttribute getStepwisePriceCurve_DefaultValue() {
-		return (EAttribute)stepwisePriceCurveEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)stepwisePriceCurveEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -323,8 +323,8 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 		createEReference(marketModelEClass, MARKET_MODEL__INDICES);
 
 		stepwisePriceCurveEClass = createEClass(STEPWISE_PRICE_CURVE);
-		createEReference(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE__PRICES);
 		createEAttribute(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE__DEFAULT_VALUE);
+		createEReference(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE__PRICES);
 		createEOperation(stepwisePriceCurveEClass, STEPWISE_PRICE_CURVE___GET_VALUE_AT_DATE__DATE);
 
 		stepwisePriceEClass = createEClass(STEPWISE_PRICE);
@@ -367,14 +367,14 @@ public class MarketPackageImpl extends EPackageImpl implements MarketPackage {
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(indexEClass, Index.class, "Index", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getIndex_PriceCurve(), this.getStepwisePriceCurve(), null, "priceCurve", null, 1, 1, Index.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIndex_PriceCurve(), this.getStepwisePriceCurve(), null, "priceCurve", null, 1, 1, Index.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketModelEClass, MarketModel.class, "MarketModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMarketModel_Indices(), this.getIndex(), null, "indices", null, 0, -1, MarketModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketModel_Indices(), this.getIndex(), null, "indices", null, 0, -1, MarketModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(stepwisePriceCurveEClass, StepwisePriceCurve.class, "StepwisePriceCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getStepwisePriceCurve_Prices(), this.getStepwisePrice(), null, "prices", null, 0, -1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStepwisePriceCurve_DefaultValue(), ecorePackage.getEFloat(), "defaultValue", null, 0, 1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getStepwisePriceCurve_Prices(), this.getStepwisePrice(), null, "prices", null, 0, -1, StepwisePriceCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getStepwisePriceCurve__GetValueAtDate__Date(), ecorePackage.getEFloat(), "getValueAtDate", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEDate(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);

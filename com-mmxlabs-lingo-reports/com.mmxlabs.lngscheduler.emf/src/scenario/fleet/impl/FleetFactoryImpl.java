@@ -32,7 +32,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 */
 	public static FleetFactory init() {
 		try {
-			FleetFactory theFleetFactory = (FleetFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/fleet"); 
+			FleetFactory theFleetFactory = (FleetFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/fleet"); 
 			if (theFleetFactory != null) {
 				return theFleetFactory;
 			}

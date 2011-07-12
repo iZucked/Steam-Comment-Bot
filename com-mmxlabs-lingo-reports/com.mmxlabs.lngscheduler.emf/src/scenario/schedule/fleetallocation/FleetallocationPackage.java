@@ -43,7 +43,7 @@ public interface FleetallocationPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/schedule/fleetallocation";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/schedule/fleetallocation";
 
 	/**
 	 * The package namespace name.

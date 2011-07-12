@@ -27,11 +27,13 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import scenario.ScenarioPackage;
 import scenario.port.Canal;
 import scenario.port.PortFactory;
 import scenario.port.PortPackage;
 
 import scenario.provider.LngEditPlugin;
+import scenario.provider.UUIDObjectItemProvider;
 import scenario.provider.NamedObjectItemProvider;
 
 /**
@@ -41,7 +43,7 @@ import scenario.provider.NamedObjectItemProvider;
  * @generated
  */
 public class CanalItemProvider
-	extends NamedObjectItemProvider
+	extends UUIDObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -69,9 +71,32 @@ public class CanalItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNamePropertyDescriptor(object);
 			addDefaultCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedObject_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 ScenarioPackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -108,8 +133,8 @@ public class CanalItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PortPackage.Literals.CANAL__CLASS_COSTS);
 			childrenFeatures.add(PortPackage.Literals.CANAL__DISTANCE_MODEL);
+			childrenFeatures.add(PortPackage.Literals.CANAL__CLASS_COSTS);
 		}
 		return childrenFeatures;
 	}
@@ -164,11 +189,12 @@ public class CanalItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Canal.class)) {
+			case PortPackage.CANAL__NAME:
 			case PortPackage.CANAL__DEFAULT_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case PortPackage.CANAL__CLASS_COSTS:
 			case PortPackage.CANAL__DISTANCE_MODEL:
+			case PortPackage.CANAL__CLASS_COSTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -188,13 +214,13 @@ public class CanalItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.CANAL__CLASS_COSTS,
-				 PortFactory.eINSTANCE.createVesselClassCost()));
+				(PortPackage.Literals.CANAL__DISTANCE_MODEL,
+				 PortFactory.eINSTANCE.createDistanceModel()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.CANAL__DISTANCE_MODEL,
-				 PortFactory.eINSTANCE.createDistanceModel()));
+				(PortPackage.Literals.CANAL__CLASS_COSTS,
+				 PortFactory.eINSTANCE.createVesselClassCost()));
 	}
 
 	/**

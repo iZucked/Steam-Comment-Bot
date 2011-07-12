@@ -108,16 +108,6 @@ public class EventsSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case EventsPackage.IDLE: {
-				Idle idle = (Idle)theEObject;
-				T result = caseIdle(idle);
-				if (result == null) result = casePortVisit(idle);
-				if (result == null) result = caseFuelMixture(idle);
-				if (result == null) result = caseScheduledEvent(idle);
-				if (result == null) result = caseScenarioObject(idle);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case EventsPackage.JOURNEY: {
 				Journey journey = (Journey)theEObject;
 				T result = caseJourney(journey);
@@ -135,12 +125,31 @@ public class EventsSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case EventsPackage.IDLE: {
+				Idle idle = (Idle)theEObject;
+				T result = caseIdle(idle);
+				if (result == null) result = casePortVisit(idle);
+				if (result == null) result = caseFuelMixture(idle);
+				if (result == null) result = caseScheduledEvent(idle);
+				if (result == null) result = caseScenarioObject(idle);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case EventsPackage.SLOT_VISIT: {
 				SlotVisit slotVisit = (SlotVisit)theEObject;
 				T result = caseSlotVisit(slotVisit);
 				if (result == null) result = casePortVisit(slotVisit);
 				if (result == null) result = caseScheduledEvent(slotVisit);
 				if (result == null) result = caseScenarioObject(slotVisit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EventsPackage.VESSEL_EVENT_VISIT: {
+				VesselEventVisit vesselEventVisit = (VesselEventVisit)theEObject;
+				T result = caseVesselEventVisit(vesselEventVisit);
+				if (result == null) result = casePortVisit(vesselEventVisit);
+				if (result == null) result = caseScheduledEvent(vesselEventVisit);
+				if (result == null) result = caseScenarioObject(vesselEventVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -151,15 +160,6 @@ public class EventsSwitch<T> {
 				if (result == null) result = casePortVisit(charterOutVisit);
 				if (result == null) result = caseScheduledEvent(charterOutVisit);
 				if (result == null) result = caseScenarioObject(charterOutVisit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case EventsPackage.VESSEL_EVENT_VISIT: {
-				VesselEventVisit vesselEventVisit = (VesselEventVisit)theEObject;
-				T result = caseVesselEventVisit(vesselEventVisit);
-				if (result == null) result = casePortVisit(vesselEventVisit);
-				if (result == null) result = caseScheduledEvent(vesselEventVisit);
-				if (result == null) result = caseScenarioObject(vesselEventVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

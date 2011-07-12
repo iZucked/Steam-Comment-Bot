@@ -1,36 +1,21 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
 package scenario.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.Date;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
-
 import scenario.contract.Contract;
-
 import scenario.port.Port;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Slot</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '
+ * <em><b>Slot</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
@@ -41,8 +26,8 @@ import scenario.port.Port;
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getSlotDuration <em>Slot Duration</em>}</li>
- *   <li>{@link scenario.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,9 +35,9 @@ import scenario.port.Port;
  */
 public class SlotImpl extends EObjectImpl implements Slot {
 	/**
-	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -60,9 +45,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	protected static final String ID_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -71,8 +56,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinQuantity()
 	 * @generated
 	 * @ordered
@@ -81,8 +65,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The cached value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinQuantity()
 	 * @generated
 	 * @ordered
@@ -91,8 +74,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The default value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxQuantity()
 	 * @generated
 	 * @ordered
@@ -101,8 +83,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxQuantity()
 	 * @generated
 	 * @ordered
@@ -111,8 +92,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPort()
 	 * @generated
 	 * @ordered
@@ -121,8 +101,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The default value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWindowStart()
 	 * @generated
 	 * @ordered
@@ -131,8 +110,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWindowStart()
 	 * @generated
 	 * @ordered
@@ -141,8 +119,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The default value of the '{@link #getWindowDuration() <em>Window Duration</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getWindowDuration()
 	 * @generated
 	 * @ordered
@@ -151,8 +129,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The cached value of the '{@link #getWindowDuration() <em>Window Duration</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getWindowDuration()
 	 * @generated
 	 * @ordered
@@ -161,8 +139,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The default value of the '{@link #getSlotDuration() <em>Slot Duration</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getSlotDuration()
 	 * @generated
 	 * @ordered
@@ -171,8 +149,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The cached value of the '{@link #getSlotDuration() <em>Slot Duration</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getSlotDuration()
 	 * @generated
 	 * @ordered
@@ -180,19 +158,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	protected int slotDuration = SLOT_DURATION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected Contract contract;
-
-	/**
 	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFixedPrice()
 	 * @generated
 	 * @ordered
@@ -201,8 +168,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 
 	/**
 	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFixedPrice()
 	 * @generated
 	 * @ordered
@@ -210,17 +176,25 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	protected float fixedPrice = FIXED_PRICE_EDEFAULT;
 
 	/**
-	 * This is true if the Fixed Price attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is true if the Fixed Price attribute has been set. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean fixedPriceESet;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected Contract contract;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected SlotImpl() {
@@ -228,8 +202,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -238,8 +211,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public String getId() {
@@ -247,8 +219,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setId(String newId) {
@@ -259,8 +230,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public int getMinQuantity() {
@@ -268,8 +238,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setMinQuantity(int newMinQuantity) {
@@ -280,8 +249,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public int getMaxQuantity() {
@@ -289,8 +257,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setMaxQuantity(int newMaxQuantity) {
@@ -301,8 +268,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Port getPort() {
@@ -318,8 +284,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Port basicGetPort() {
@@ -327,8 +292,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setPort(Port newPort) {
@@ -339,8 +303,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Date getWindowStart() {
@@ -348,8 +311,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setWindowStart(Date newWindowStart) {
@@ -360,8 +322,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public int getWindowDuration() {
@@ -369,8 +330,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setWindowDuration(int newWindowDuration) {
@@ -381,8 +341,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public int getSlotDuration() {
@@ -390,8 +349,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setSlotDuration(int newSlotDuration) {
@@ -402,8 +360,49 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public float getFixedPrice() {
+		return fixedPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFixedPrice(float newFixedPrice) {
+		float oldFixedPrice = fixedPrice;
+		fixedPrice = newFixedPrice;
+		boolean oldFixedPriceESet = fixedPriceESet;
+		fixedPriceESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__FIXED_PRICE, oldFixedPrice, fixedPrice, !oldFixedPriceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetFixedPrice() {
+		float oldFixedPrice = fixedPrice;
+		boolean oldFixedPriceESet = fixedPriceESet;
+		fixedPrice = FIXED_PRICE_EDEFAULT;
+		fixedPriceESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__FIXED_PRICE, oldFixedPrice, FIXED_PRICE_EDEFAULT, oldFixedPriceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetFixedPrice() {
+		return fixedPriceESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Contract getContract() {
@@ -419,8 +418,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Contract basicGetContract() {
@@ -428,8 +426,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setContract(Contract newContract) {
@@ -440,54 +437,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public float getFixedPrice() {
-		return fixedPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setFixedPrice(float newFixedPrice) {
-		float oldFixedPrice = fixedPrice;
-		fixedPrice = newFixedPrice;
-		boolean oldFixedPriceESet = fixedPriceESet;
-		fixedPriceESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__FIXED_PRICE, oldFixedPrice, fixedPrice, !oldFixedPriceESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetFixedPrice() {
-		float oldFixedPrice = fixedPrice;
-		boolean oldFixedPriceESet = fixedPriceESet;
-		fixedPrice = FIXED_PRICE_EDEFAULT;
-		fixedPriceESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__FIXED_PRICE, oldFixedPrice, FIXED_PRICE_EDEFAULT, oldFixedPriceESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetFixedPrice() {
-		return fixedPriceESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Object getLocalWindowStart() {
@@ -499,22 +449,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Contract getSlotOrPortContract() {
-		if (getContract() != null)
-			return getContract();
-		else if (getPort() != null)
-			return getPort().getDefaultContract();
-		else
-			return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Date getWindowEnd() {
@@ -525,8 +460,29 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Contract getSlotOrPortContract(Object scenario) {
+		if (getContract() != null)
+					return getContract();
+		else if (getPort() != null) {
+					final scenario.port.Port p = getPort();
+					if (scenario instanceof scenario.Scenario) {
+		final scenario.Scenario scenario2 = (scenario.Scenario) scenario;
+					if (scenario2.getContractModel() != null) {
+						final scenario.contract.ContractModel cm = scenario2.getContractModel();
+						return cm.getDefaultContract(p);
+					}
+		}
+					return null;
+		
+		} else
+					return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -547,18 +503,17 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getWindowDuration();
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return getSlotDuration();
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return getFixedPrice();
 			case CargoPackage.SLOT__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
-			case CargoPackage.SLOT__FIXED_PRICE:
-				return getFixedPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -585,19 +540,18 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration((Integer)newValue);
 				return;
-			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)newValue);
-				return;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				setFixedPrice((Float)newValue);
+				return;
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -624,19 +578,18 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration(SLOT_DURATION_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)null);
-				return;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				unsetFixedPrice();
+				return;
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)null);
 				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -656,35 +609,34 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return windowDuration != WINDOW_DURATION_EDEFAULT;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return slotDuration != SLOT_DURATION_EDEFAULT;
-			case CargoPackage.SLOT__CONTRACT:
-				return contract != null;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				return isSetFixedPrice();
+			case CargoPackage.SLOT__CONTRACT:
+				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments)
+			throws InvocationTargetException {
 		switch (operationID) {
 			case CargoPackage.SLOT___GET_LOCAL_WINDOW_START:
 				return getLocalWindowStart();
-			case CargoPackage.SLOT___GET_SLOT_OR_PORT_CONTRACT:
-				return getSlotOrPortContract();
 			case CargoPackage.SLOT___GET_WINDOW_END:
 				return getWindowEnd();
+			case CargoPackage.SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT:
+				return getSlotOrPortContract(arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -710,4 +662,4 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		return result.toString();
 	}
 
-} //SlotImpl
+} // SlotImpl

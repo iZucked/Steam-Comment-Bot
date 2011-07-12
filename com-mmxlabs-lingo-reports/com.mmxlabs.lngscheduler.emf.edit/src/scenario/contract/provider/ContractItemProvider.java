@@ -65,6 +65,7 @@ public class ContractItemProvider
 			super.getPropertyDescriptors(object);
 
 			addEntityPropertyDescriptor(object);
+			addDefaultPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -83,6 +84,28 @@ public class ContractItemProvider
 				 getString("_UI_Contract_entity_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_entity_feature", "_UI_Contract_type"),
 				 ContractPackage.Literals.CONTRACT__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_defaultPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_defaultPorts_feature", "_UI_Contract_type"),
+				 ContractPackage.Literals.CONTRACT__DEFAULT_PORTS,
 				 true,
 				 false,
 				 true,

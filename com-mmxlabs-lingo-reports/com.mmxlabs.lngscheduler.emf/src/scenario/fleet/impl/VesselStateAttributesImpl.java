@@ -34,37 +34,17 @@ import scenario.fleet.VesselStateAttributes;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.VesselStateAttributesImpl#getVesselState <em>Vessel State</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselStateAttributesImpl#getNboRate <em>Nbo Rate</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselStateAttributesImpl#getIdleNBORate <em>Idle NBO Rate</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselStateAttributesImpl#getIdleConsumptionRate <em>Idle Consumption Rate</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselStateAttributesImpl#getFuelConsumptionCurve <em>Fuel Consumption Curve</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselStateAttributesImpl#getVesselState <em>Vessel State</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class VesselStateAttributesImpl extends EObjectImpl implements VesselStateAttributes {
-	/**
-	 * The default value of the '{@link #getVesselState() <em>Vessel State</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselState()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final VesselState VESSEL_STATE_EDEFAULT = VesselState.LADEN;
-
-	/**
-	 * The cached value of the '{@link #getVesselState() <em>Vessel State</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselState()
-	 * @generated
-	 * @ordered
-	 */
-	protected VesselState vesselState = VESSEL_STATE_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getNboRate() <em>Nbo Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -134,6 +114,26 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 * @ordered
 	 */
 	protected EList<FuelConsumptionLine> fuelConsumptionCurve;
+
+	/**
+	 * The default value of the '{@link #getVesselState() <em>Vessel State</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselState()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VesselState VESSEL_STATE_EDEFAULT = VesselState.LADEN;
+
+	/**
+	 * The cached value of the '{@link #getVesselState() <em>Vessel State</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselState()
+	 * @generated
+	 * @ordered
+	 */
+	protected VesselState vesselState = VESSEL_STATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -245,7 +245,7 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	 */
 	public EList<FuelConsumptionLine> getFuelConsumptionCurve() {
 		if (fuelConsumptionCurve == null) {
-			fuelConsumptionCurve = new EObjectContainmentEList<FuelConsumptionLine>(FuelConsumptionLine.class, this, FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE);
+			fuelConsumptionCurve = new EObjectContainmentEList.Resolving<FuelConsumptionLine>(FuelConsumptionLine.class, this, FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE);
 		}
 		return fuelConsumptionCurve;
 	}
@@ -272,8 +272,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
-				return getVesselState();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE:
 				return getNboRate();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE:
@@ -282,6 +280,8 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 				return getIdleConsumptionRate();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE:
 				return getFuelConsumptionCurve();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
+				return getVesselState();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -295,9 +295,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
-				setVesselState((VesselState)newValue);
-				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE:
 				setNboRate((Float)newValue);
 				return;
@@ -311,6 +308,9 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 				getFuelConsumptionCurve().clear();
 				getFuelConsumptionCurve().addAll((Collection<? extends FuelConsumptionLine>)newValue);
 				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
+				setVesselState((VesselState)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -323,9 +323,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
-				setVesselState(VESSEL_STATE_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE:
 				setNboRate(NBO_RATE_EDEFAULT);
 				return;
@@ -337,6 +334,9 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE:
 				getFuelConsumptionCurve().clear();
+				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
+				setVesselState(VESSEL_STATE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -350,8 +350,6 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
-				return vesselState != VESSEL_STATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE:
 				return nboRate != NBO_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE:
@@ -360,6 +358,8 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 				return idleConsumptionRate != IDLE_CONSUMPTION_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_CURVE:
 				return fuelConsumptionCurve != null && !fuelConsumptionCurve.isEmpty();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__VESSEL_STATE:
+				return vesselState != VESSEL_STATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -374,14 +374,14 @@ public class VesselStateAttributesImpl extends EObjectImpl implements VesselStat
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (vesselState: ");
-		result.append(vesselState);
-		result.append(", nboRate: ");
+		result.append(" (nboRate: ");
 		result.append(nboRate);
 		result.append(", idleNBORate: ");
 		result.append(idleNBORate);
 		result.append(", idleConsumptionRate: ");
 		result.append(idleConsumptionRate);
+		result.append(", vesselState: ");
+		result.append(vesselState);
 		result.append(')');
 		return result.toString();
 	}

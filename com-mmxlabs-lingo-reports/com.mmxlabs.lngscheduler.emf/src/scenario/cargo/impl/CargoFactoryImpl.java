@@ -32,7 +32,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 */
 	public static CargoFactory init() {
 		try {
-			CargoFactory theCargoFactory = (CargoFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf/cargo"); 
+			CargoFactory theCargoFactory = (CargoFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/cargo"); 
 			if (theCargoFactory != null) {
 				return theCargoFactory;
 			}

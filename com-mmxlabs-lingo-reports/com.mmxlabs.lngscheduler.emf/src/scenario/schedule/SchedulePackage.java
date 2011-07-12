@@ -45,7 +45,7 @@ public interface SchedulePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/schedule";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/schedule";
 
 	/**
 	 * The package namespace name.
@@ -111,22 +111,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Sequences</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE__SEQUENCES = 0;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__NAME = 1;
+	int SCHEDULE__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Sequences</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__SEQUENCES = 1;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Allocations</b></em>' containment reference list.
@@ -138,22 +138,13 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__CARGO_ALLOCATIONS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Fleet</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE__FLEET = 3;
-
-	/**
 	 * The feature id for the '<em><b>Fitness</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__FITNESS = 4;
+	int SCHEDULE__FITNESS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' containment reference list.
@@ -162,7 +153,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__REVENUE = 5;
+	int SCHEDULE__REVENUE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Fleet</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__FLEET = 5;
 
 	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
@@ -193,13 +193,22 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEQUENCE__FITNESS = 0;
+
+	/**
 	 * The feature id for the '<em><b>Events</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__EVENTS = 0;
+	int SEQUENCE__EVENTS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -208,16 +217,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__VESSEL = 1;
-
-	/**
-	 * The feature id for the '<em><b>Fitness</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE__FITNESS = 2;
+	int SEQUENCE__VESSEL = 2;
 
 	/**
 	 * The number of structural features of the '<em>Sequence</em>' class.
@@ -248,31 +248,13 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION = 3;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__LOAD_SLOT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__DISCHARGE_SLOT = 1;
-
-	/**
 	 * The feature id for the '<em><b>Fuel Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__FUEL_VOLUME = 2;
+	int CARGO_ALLOCATION__FUEL_VOLUME = 0;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Volume</b></em>' attribute.
@@ -281,7 +263,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__DISCHARGE_VOLUME = 3;
+	int CARGO_ALLOCATION__DISCHARGE_VOLUME = 1;
 
 	/**
 	 * The feature id for the '<em><b>Load Date</b></em>' attribute.
@@ -290,7 +272,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LOAD_DATE = 4;
+	int CARGO_ALLOCATION__LOAD_DATE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Date</b></em>' attribute.
@@ -299,7 +281,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__DISCHARGE_DATE = 5;
+	int CARGO_ALLOCATION__DISCHARGE_DATE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Load Price M3</b></em>' attribute.
@@ -308,7 +290,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LOAD_PRICE_M3 = 6;
+	int CARGO_ALLOCATION__LOAD_PRICE_M3 = 4;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Price M3</b></em>' attribute.
@@ -317,16 +299,34 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__DISCHARGE_PRICE_M3 = 7;
+	int CARGO_ALLOCATION__DISCHARGE_PRICE_M3 = 5;
 
 	/**
-	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * The feature id for the '<em><b>Load Revenue</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__VESSEL = 8;
+	int CARGO_ALLOCATION__LOAD_REVENUE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__SHIPPING_REVENUE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__DISCHARGE_REVENUE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Laden Leg</b></em>' reference.
@@ -365,49 +365,13 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__BALLAST_IDLE = 12;
 
 	/**
-	 * The feature id for the '<em><b>Load Revenue</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__LOAD_REVENUE = 13;
-
-	/**
-	 * The feature id for the '<em><b>Shipping Revenue</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__SHIPPING_REVENUE = 14;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Revenue</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__DISCHARGE_REVENUE = 15;
-
-	/**
-	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__CARGO_TYPE = 16;
-
-	/**
 	 * The feature id for the '<em><b>Load Slot Visit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LOAD_SLOT_VISIT = 17;
+	int CARGO_ALLOCATION__LOAD_SLOT_VISIT = 13;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Slot Visit</b></em>' reference.
@@ -416,7 +380,43 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT = 18;
+	int CARGO_ALLOCATION__DISCHARGE_SLOT_VISIT = 14;
+
+	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__VESSEL = 15;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__DISCHARGE_SLOT = 16;
+
+	/**
+	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__LOAD_SLOT = 17;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__CARGO_TYPE = 18;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -620,22 +620,13 @@ public interface SchedulePackage extends EPackage {
 	int BOOKED_REVENUE = 6;
 
 	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOKED_REVENUE__ENTITY = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BOOKED_REVENUE__DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
+	int BOOKED_REVENUE__DATE = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Line Items</b></em>' containment reference list.
@@ -644,7 +635,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BOOKED_REVENUE__LINE_ITEMS = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
+	int BOOKED_REVENUE__LINE_ITEMS = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOKED_REVENUE__ENTITY = ScenarioPackage.SCENARIO_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Booked Revenue</em>' class.
@@ -738,15 +738,6 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_REVENUE = 7;
 
 	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_REVENUE__ENTITY = BOOKED_REVENUE__ENTITY;
-
-	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -763,6 +754,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_REVENUE__LINE_ITEMS = BOOKED_REVENUE__LINE_ITEMS;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_REVENUE__ENTITY = BOOKED_REVENUE__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -865,15 +865,6 @@ public interface SchedulePackage extends EPackage {
 	int CHARTER_OUT_REVENUE = 8;
 
 	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT_REVENUE__ENTITY = BOOKED_REVENUE__ENTITY;
-
-	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -890,6 +881,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_REVENUE__LINE_ITEMS = BOOKED_REVENUE__LINE_ITEMS;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_REVENUE__ENTITY = BOOKED_REVENUE__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Charter Out</b></em>' reference.

@@ -76,7 +76,7 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 	 */
 	public EList<FuelQuantity> getFuelUsage() {
 		if (fuelUsage == null) {
-			fuelUsage = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, EventsPackage.FUEL_MIXTURE__FUEL_USAGE);
+			fuelUsage = new EObjectContainmentEList.Resolving<FuelQuantity>(FuelQuantity.class, this, EventsPackage.FUEL_MIXTURE__FUEL_USAGE);
 		}
 		return fuelUsage;
 	}

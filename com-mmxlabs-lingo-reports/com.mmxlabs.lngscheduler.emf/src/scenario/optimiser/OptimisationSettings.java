@@ -22,12 +22,12 @@ import scenario.schedule.Schedule;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getRandomSeed <em>Random Seed</em>}</li>
- *   <li>{@link scenario.optimiser.OptimisationSettings#getConstraints <em>Constraints</em>}</li>
- *   <li>{@link scenario.optimiser.OptimisationSettings#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getInitialSchedule <em>Initial Schedule</em>}</li>
- *   <li>{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getFreezeDaysFromStart <em>Freeze Days From Start</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getIgnoreElementsAfter <em>Ignore Elements After</em>}</li>
+ *   <li>{@link scenario.optimiser.OptimisationSettings#getConstraints <em>Constraints</em>}</li>
+ *   <li>{@link scenario.optimiser.OptimisationSettings#getObjectives <em>Objectives</em>}</li>
+ *   <li>{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,7 +73,7 @@ public interface OptimisationSettings extends NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Constraints</em>' containment reference list.
 	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_Constraints()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Constraint> getConstraints();
@@ -89,7 +89,7 @@ public interface OptimisationSettings extends NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Objectives</em>' containment reference list.
 	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_Objectives()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Objective> getObjectives();
@@ -132,7 +132,7 @@ public interface OptimisationSettings extends NamedObject {
 	 * @see #unsetDefaultDiscountCurve()
 	 * @see #setDefaultDiscountCurve(DiscountCurve)
 	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_DefaultDiscountCurve()
-	 * @model containment="true" unsettable="true" required="true"
+	 * @model containment="true" resolveProxies="true" unsettable="true" required="true"
 	 * @generated
 	 */
 	DiscountCurve getDefaultDiscountCurve();

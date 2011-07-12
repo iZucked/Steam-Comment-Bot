@@ -38,7 +38,7 @@ public interface DistanceModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Distances</em>' containment reference list.
 	 * @see scenario.port.PortPackage#getDistanceModel_Distances()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<DistanceLine> getDistances();

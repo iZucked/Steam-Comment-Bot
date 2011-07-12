@@ -64,7 +64,7 @@ public interface LSOSettings extends OptimisationSettings {
 	 * @return the value of the '<em>Thresholder Settings</em>' containment reference.
 	 * @see #setThresholderSettings(ThresholderSettings)
 	 * @see scenario.optimiser.lso.LsoPackage#getLSOSettings_ThresholderSettings()
-	 * @model containment="true" required="true"
+	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
 	ThresholderSettings getThresholderSettings();
@@ -90,7 +90,7 @@ public interface LSOSettings extends OptimisationSettings {
 	 * @return the value of the '<em>Move Generator Settings</em>' containment reference.
 	 * @see #setMoveGeneratorSettings(MoveGeneratorSettings)
 	 * @see scenario.optimiser.lso.LsoPackage#getLSOSettings_MoveGeneratorSettings()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	MoveGeneratorSettings getMoveGeneratorSettings();

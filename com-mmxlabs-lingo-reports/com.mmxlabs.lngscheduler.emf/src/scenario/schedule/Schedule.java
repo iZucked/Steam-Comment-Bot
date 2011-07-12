@@ -20,12 +20,12 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.schedule.Schedule#getSequences <em>Sequences</em>}</li>
  *   <li>{@link scenario.schedule.Schedule#getName <em>Name</em>}</li>
+ *   <li>{@link scenario.schedule.Schedule#getSequences <em>Sequences</em>}</li>
  *   <li>{@link scenario.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
- *   <li>{@link scenario.schedule.Schedule#getFleet <em>Fleet</em>}</li>
  *   <li>{@link scenario.schedule.Schedule#getFitness <em>Fitness</em>}</li>
  *   <li>{@link scenario.schedule.Schedule#getRevenue <em>Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.Schedule#getFleet <em>Fleet</em>}</li>
  * </ul>
  * </p>
  *
@@ -45,7 +45,7 @@ public interface Schedule extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Sequences</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getSchedule_Sequences()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Sequence> getSequences();
@@ -87,7 +87,7 @@ public interface Schedule extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargo Allocations</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getSchedule_CargoAllocations()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<CargoAllocation> getCargoAllocations();
@@ -103,7 +103,7 @@ public interface Schedule extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fleet</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getSchedule_Fleet()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<AllocatedVessel> getFleet();
@@ -119,7 +119,7 @@ public interface Schedule extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fitness</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getSchedule_Fitness()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<ScheduleFitness> getFitness();
@@ -135,7 +135,7 @@ public interface Schedule extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Revenue</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getSchedule_Revenue()
-	 * @model containment="true" required="true"
+	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
 	EList<BookedRevenue> getRevenue();

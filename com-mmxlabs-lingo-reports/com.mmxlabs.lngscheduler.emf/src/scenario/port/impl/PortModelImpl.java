@@ -74,7 +74,7 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 	 */
 	public EList<Port> getPorts() {
 		if (ports == null) {
-			ports = new EObjectContainmentEList<Port>(Port.class, this, PortPackage.PORT_MODEL__PORTS);
+			ports = new EObjectContainmentEList.Resolving<Port>(Port.class, this, PortPackage.PORT_MODEL__PORTS);
 		}
 		return ports;
 	}

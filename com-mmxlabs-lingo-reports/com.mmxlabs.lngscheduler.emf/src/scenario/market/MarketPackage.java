@@ -45,7 +45,7 @@ public interface MarketPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/market";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/market";
 
 	/**
 	 * The package namespace name.
@@ -166,22 +166,22 @@ public interface MarketPackage extends EPackage {
 	int STEPWISE_PRICE_CURVE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Prices</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int STEPWISE_PRICE_CURVE__PRICES = 0;
-
-	/**
 	 * The feature id for the '<em><b>Default Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STEPWISE_PRICE_CURVE__DEFAULT_VALUE = 1;
+	int STEPWISE_PRICE_CURVE__DEFAULT_VALUE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Prices</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STEPWISE_PRICE_CURVE__PRICES = 1;
 
 	/**
 	 * The number of structural features of the '<em>Stepwise Price Curve</em>' class.

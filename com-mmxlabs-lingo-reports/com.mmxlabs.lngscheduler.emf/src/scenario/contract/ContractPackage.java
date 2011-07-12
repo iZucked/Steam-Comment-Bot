@@ -8,6 +8,7 @@ package scenario.contract;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -44,7 +45,7 @@ public interface ContractPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://com.mmxlabs.lng.emf/contract";
+	String eNS_URI = "http://com.mmxlabs.lng.emf2/contract";
 
 	/**
 	 * The package namespace name.
@@ -73,31 +74,13 @@ public interface ContractPackage extends EPackage {
 	int CONTRACT_MODEL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Purchase Contracts</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT_MODEL__PURCHASE_CONTRACTS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Sales Contracts</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT_MODEL__SALES_CONTRACTS = 1;
-
-	/**
 	 * The feature id for the '<em><b>Volume Constraints</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_MODEL__VOLUME_CONSTRAINTS = 2;
+	int CONTRACT_MODEL__VOLUME_CONSTRAINTS = 0;
 
 	/**
 	 * The feature id for the '<em><b>Entities</b></em>' containment reference list.
@@ -106,7 +89,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_MODEL__ENTITIES = 3;
+	int CONTRACT_MODEL__ENTITIES = 1;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Entity</b></em>' containment reference.
@@ -115,7 +98,25 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_MODEL__SHIPPING_ENTITY = 4;
+	int CONTRACT_MODEL__SHIPPING_ENTITY = 2;
+
+	/**
+	 * The feature id for the '<em><b>Purchase Contracts</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_MODEL__PURCHASE_CONTRACTS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Sales Contracts</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_MODEL__SALES_CONTRACTS = 4;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -127,13 +128,22 @@ public interface ContractPackage extends EPackage {
 	int CONTRACT_MODEL_FEATURE_COUNT = 5;
 
 	/**
+	 * The operation id for the '<em>Get Default Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_MODEL___GET_DEFAULT_CONTRACT__PORT = 0;
+
+	/**
 	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_MODEL_OPERATION_COUNT = 0;
+	int CONTRACT_MODEL_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.ContractImpl <em>Contract</em>}' class.
@@ -143,52 +153,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getContract()
 	 * @generated
 	 */
-	int CONTRACT = 9;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__ENTITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Container</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
-
-	/**
-	 * The number of operations of the '<em>Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+	int CONTRACT = 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
@@ -198,52 +163,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getPurchaseContract()
 	 * @generated
 	 */
-	int PURCHASE_CONTRACT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__NAME = CONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__ENTITY = CONTRACT__ENTITY;
-
-	/**
-	 * The number of structural features of the '<em>Purchase Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Container</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT___GET_CONTAINER = CONTRACT___GET_CONTAINER;
-
-	/**
-	 * The number of operations of the '<em>Purchase Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT_OPERATION_COUNT = CONTRACT_OPERATION_COUNT + 0;
+	int PURCHASE_CONTRACT = 4;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -253,70 +173,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getSalesContract()
 	 * @generated
 	 */
-	int SALES_CONTRACT = 2;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__NAME = CONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__ENTITY = CONTRACT__ENTITY;
-
-	/**
-	 * The feature id for the '<em><b>Index</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__INDEX = CONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Markup</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__MARKUP = CONTRACT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Sales Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Container</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT___GET_CONTAINER = CONTRACT___GET_CONTAINER;
-
-	/**
-	 * The number of operations of the '<em>Sales Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT_OPERATION_COUNT = CONTRACT_OPERATION_COUNT + 0;
+	int SALES_CONTRACT = 5;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.TotalVolumeLimitImpl <em>Total Volume Limit</em>}' class.
@@ -326,7 +183,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getTotalVolumeLimit()
 	 * @generated
 	 */
-	int TOTAL_VOLUME_LIMIT = 3;
+	int TOTAL_VOLUME_LIMIT = 1;
 
 	/**
 	 * The feature id for the '<em><b>Ports</b></em>' reference list.
@@ -399,7 +256,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getEntity()
 	 * @generated
 	 */
-	int ENTITY = 4;
+	int ENTITY = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -456,6 +313,186 @@ public interface ContractPackage extends EPackage {
 	int ENTITY_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__ENTITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__DEFAULT_PORTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT___GET_CONTAINER = ScenarioPackage.NAMED_OBJECT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_OPERATION_COUNT = ScenarioPackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__NAME = CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__ENTITY = CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__DEFAULT_PORTS = CONTRACT__DEFAULT_PORTS;
+
+	/**
+	 * The number of structural features of the '<em>Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT___GET_CONTAINER = CONTRACT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT_OPERATION_COUNT = CONTRACT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__NAME = CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__ENTITY = CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__DEFAULT_PORTS = CONTRACT__DEFAULT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Markup</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MARKUP = CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__INDEX = CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Sales Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT___GET_CONTAINER = CONTRACT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Sales Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT_OPERATION_COUNT = CONTRACT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.contract.impl.FixedPricePurchaseContractImpl <em>Fixed Price Purchase Contract</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -463,7 +500,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getFixedPricePurchaseContract()
 	 * @generated
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT = 5;
+	int FIXED_PRICE_PURCHASE_CONTRACT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -482,6 +519,15 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int FIXED_PRICE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
@@ -527,7 +573,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getIndexPricePurchaseContract()
 	 * @generated
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT = 6;
+	int INDEX_PRICE_PURCHASE_CONTRACT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -546,6 +592,15 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int INDEX_PRICE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
@@ -591,7 +646,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getNetbackPurchaseContract()
 	 * @generated
 	 */
-	int NETBACK_PURCHASE_CONTRACT = 7;
+	int NETBACK_PURCHASE_CONTRACT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -610,6 +665,15 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int NETBACK_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Lower Bound</b></em>' attribute.
@@ -664,7 +728,7 @@ public interface ContractPackage extends EPackage {
 	 * @see scenario.contract.impl.ContractPackageImpl#getProfitSharingPurchaseContract()
 	 * @generated
 	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT = 8;
+	int PROFIT_SHARING_PURCHASE_CONTRACT = 9;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -685,22 +749,13 @@ public interface ContractPackage extends EPackage {
 	int PROFIT_SHARING_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
 
 	/**
-	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT__INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Reference Index</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+	int PROFIT_SHARING_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Alpha</b></em>' attribute.
@@ -709,7 +764,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+	int PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Beta</b></em>' attribute.
@@ -718,7 +773,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT__BETA = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
+	int PROFIT_SHARING_PURCHASE_CONTRACT__BETA = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Gamma</b></em>' attribute.
@@ -727,7 +782,25 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
+	int PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Reference Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Profit Sharing Purchase Contract</em>' class.
@@ -788,6 +861,16 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getContractModel_SalesContracts();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.contract.ContractModel#getDefaultContract(scenario.port.Port) <em>Get Default Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Default Contract</em>' operation.
+	 * @see scenario.contract.ContractModel#getDefaultContract(scenario.port.Port)
+	 * @generated
+	 */
+	EOperation getContractModel__GetDefaultContract__Port();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link scenario.contract.ContractModel#getVolumeConstraints <em>Volume Constraints</em>}'.
@@ -1122,6 +1205,17 @@ public interface ContractPackage extends EPackage {
 	EReference getContract_Entity();
 
 	/**
+	 * Returns the meta object for the reference list '{@link scenario.contract.Contract#getDefaultPorts <em>Default Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Default Ports</em>'.
+	 * @see scenario.contract.Contract#getDefaultPorts()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_DefaultPorts();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1169,6 +1263,14 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTRACT_MODEL__SALES_CONTRACTS = eINSTANCE.getContractModel_SalesContracts();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Default Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CONTRACT_MODEL___GET_DEFAULT_CONTRACT__PORT = eINSTANCE.getContractModel__GetDefaultContract__Port();
 
 		/**
 		 * The meta object literal for the '<em><b>Volume Constraints</b></em>' containment reference list feature.
@@ -1435,6 +1537,14 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTRACT__ENTITY = eINSTANCE.getContract_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__DEFAULT_PORTS = eINSTANCE.getContract_DefaultPorts();
 
 	}
 

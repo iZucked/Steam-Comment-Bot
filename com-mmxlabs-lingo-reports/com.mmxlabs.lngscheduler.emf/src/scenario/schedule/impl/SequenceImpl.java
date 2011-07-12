@@ -37,15 +37,25 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link scenario.schedule.impl.SequenceImpl#getFitness <em>Fitness</em>}</li>
  *   <li>{@link scenario.schedule.impl.SequenceImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link scenario.schedule.impl.SequenceImpl#getVessel <em>Vessel</em>}</li>
- *   <li>{@link scenario.schedule.impl.SequenceImpl#getFitness <em>Fitness</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class SequenceImpl extends EObjectImpl implements Sequence {
+	/**
+	 * The cached value of the '{@link #getFitness() <em>Fitness</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFitness()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ScheduleFitness> fitness;
+
 	/**
 	 * The cached value of the '{@link #getEvents() <em>Events</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -65,16 +75,6 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	 * @ordered
 	 */
 	protected AllocatedVessel vessel;
-
-	/**
-	 * The cached value of the '{@link #getFitness() <em>Fitness</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFitness()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ScheduleFitness> fitness;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -102,7 +102,7 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	 */
 	public EList<ScheduledEvent> getEvents() {
 		if (events == null) {
-			events = new EObjectContainmentEList<ScheduledEvent>(ScheduledEvent.class, this, SchedulePackage.SEQUENCE__EVENTS);
+			events = new EObjectContainmentEList.Resolving<ScheduledEvent>(ScheduledEvent.class, this, SchedulePackage.SEQUENCE__EVENTS);
 		}
 		return events;
 	}
@@ -152,7 +152,7 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	 */
 	public EList<ScheduleFitness> getFitness() {
 		if (fitness == null) {
-			fitness = new EObjectContainmentEList<ScheduleFitness>(ScheduleFitness.class, this, SchedulePackage.SEQUENCE__FITNESS);
+			fitness = new EObjectContainmentEList.Resolving<ScheduleFitness>(ScheduleFitness.class, this, SchedulePackage.SEQUENCE__FITNESS);
 		}
 		return fitness;
 	}
@@ -165,10 +165,10 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case SchedulePackage.SEQUENCE__EVENTS:
-				return ((InternalEList<?>)getEvents()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SEQUENCE__FITNESS:
 				return ((InternalEList<?>)getFitness()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SEQUENCE__EVENTS:
+				return ((InternalEList<?>)getEvents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -181,13 +181,13 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case SchedulePackage.SEQUENCE__FITNESS:
+				return getFitness();
 			case SchedulePackage.SEQUENCE__EVENTS:
 				return getEvents();
 			case SchedulePackage.SEQUENCE__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
-			case SchedulePackage.SEQUENCE__FITNESS:
-				return getFitness();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -201,16 +201,16 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case SchedulePackage.SEQUENCE__FITNESS:
+				getFitness().clear();
+				getFitness().addAll((Collection<? extends ScheduleFitness>)newValue);
+				return;
 			case SchedulePackage.SEQUENCE__EVENTS:
 				getEvents().clear();
 				getEvents().addAll((Collection<? extends ScheduledEvent>)newValue);
 				return;
 			case SchedulePackage.SEQUENCE__VESSEL:
 				setVessel((AllocatedVessel)newValue);
-				return;
-			case SchedulePackage.SEQUENCE__FITNESS:
-				getFitness().clear();
-				getFitness().addAll((Collection<? extends ScheduleFitness>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -224,14 +224,14 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.SEQUENCE__FITNESS:
+				getFitness().clear();
+				return;
 			case SchedulePackage.SEQUENCE__EVENTS:
 				getEvents().clear();
 				return;
 			case SchedulePackage.SEQUENCE__VESSEL:
 				setVessel((AllocatedVessel)null);
-				return;
-			case SchedulePackage.SEQUENCE__FITNESS:
-				getFitness().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -245,12 +245,12 @@ public class SequenceImpl extends EObjectImpl implements Sequence {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.SEQUENCE__FITNESS:
+				return fitness != null && !fitness.isEmpty();
 			case SchedulePackage.SEQUENCE__EVENTS:
 				return events != null && !events.isEmpty();
 			case SchedulePackage.SEQUENCE__VESSEL:
 				return vessel != null;
-			case SchedulePackage.SEQUENCE__FITNESS:
-				return fitness != null && !fitness.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -25,24 +25,14 @@ import scenario.market.Index;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.contract.impl.SalesContractImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link scenario.contract.impl.SalesContractImpl#getMarkup <em>Markup</em>}</li>
+ *   <li>{@link scenario.contract.impl.SalesContractImpl#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class SalesContractImpl extends ContractImpl implements SalesContract {
-	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getIndex()
-	 * @generated
-	 * @ordered
-	 */
-	protected Index index;
-
 	/**
 	 * The default value of the '{@link #getMarkup() <em>Markup</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -62,6 +52,16 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	 * @ordered
 	 */
 	protected float markup = MARKUP_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected Index index;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -149,11 +149,11 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ContractPackage.SALES_CONTRACT__MARKUP:
+				return getMarkup();
 			case ContractPackage.SALES_CONTRACT__INDEX:
 				if (resolve) return getIndex();
 				return basicGetIndex();
-			case ContractPackage.SALES_CONTRACT__MARKUP:
-				return getMarkup();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -166,11 +166,11 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__INDEX:
-				setIndex((Index)newValue);
-				return;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				setMarkup((Float)newValue);
+				return;
+			case ContractPackage.SALES_CONTRACT__INDEX:
+				setIndex((Index)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -184,11 +184,11 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__INDEX:
-				setIndex((Index)null);
-				return;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				setMarkup(MARKUP_EDEFAULT);
+				return;
+			case ContractPackage.SALES_CONTRACT__INDEX:
+				setIndex((Index)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -202,10 +202,10 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__INDEX:
-				return index != null;
 			case ContractPackage.SALES_CONTRACT__MARKUP:
 				return markup != MARKUP_EDEFAULT;
+			case ContractPackage.SALES_CONTRACT__INDEX:
+				return index != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -25,10 +25,12 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import scenario.ScenarioPackage;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
 import scenario.provider.LngEditPlugin;
+import scenario.provider.UUIDObjectItemProvider;
 import scenario.provider.NamedObjectItemProvider;
 
 /**
@@ -38,7 +40,7 @@ import scenario.provider.NamedObjectItemProvider;
  * @generated
  */
 public class PortItemProvider
-	extends NamedObjectItemProvider
+	extends UUIDObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -66,32 +68,32 @@ public class PortItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addDefaultIndexPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
-			addDefaultContractPropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
+			addDefaultCVValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Default Index feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDefaultIndexPropertyDescriptor(Object object) {
+	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Port_defaultIndex_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultIndex_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__DEFAULT_INDEX,
+				 getString("_UI_NamedObject_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 ScenarioPackage.Literals.NAMED_OBJECT__NAME,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -119,28 +121,6 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Default Contract feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDefaultContractPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_defaultContract_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultContract_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__DEFAULT_CONTRACT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Regas Efficiency feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -154,6 +134,28 @@ public class PortItemProvider
 				 getString("_UI_Port_regasEfficiency_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Port_regasEfficiency_feature", "_UI_Port_type"),
 				 PortPackage.Literals.PORT__REGAS_EFFICIENCY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default CV Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultCVValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_defaultCVValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultCVValue_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_CV_VALUE,
 				 true,
 				 false,
 				 false,
@@ -199,8 +201,10 @@ public class PortItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Port.class)) {
+			case PortPackage.PORT__NAME:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__REGAS_EFFICIENCY:
+			case PortPackage.PORT__DEFAULT_CV_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

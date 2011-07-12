@@ -22,9 +22,9 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link scenario.schedule.Sequence#getFitness <em>Fitness</em>}</li>
  *   <li>{@link scenario.schedule.Sequence#getEvents <em>Events</em>}</li>
  *   <li>{@link scenario.schedule.Sequence#getVessel <em>Vessel</em>}</li>
- *   <li>{@link scenario.schedule.Sequence#getFitness <em>Fitness</em>}</li>
  * </ul>
  * </p>
  *
@@ -44,7 +44,7 @@ public interface Sequence extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Events</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getSequence_Events()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<ScheduledEvent> getEvents();
@@ -86,7 +86,7 @@ public interface Sequence extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fitness</em>' containment reference list.
 	 * @see scenario.schedule.SchedulePackage#getSequence_Fitness()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<ScheduleFitness> getFitness();

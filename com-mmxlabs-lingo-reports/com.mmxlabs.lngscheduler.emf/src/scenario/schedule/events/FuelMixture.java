@@ -38,7 +38,7 @@ public interface FuelMixture extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fuel Usage</em>' containment reference list.
 	 * @see scenario.schedule.events.EventsPackage#getFuelMixture_FuelUsage()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<FuelQuantity> getFuelUsage();

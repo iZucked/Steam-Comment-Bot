@@ -37,9 +37,9 @@ import scenario.fleet.Vessel;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getId <em>Id</em>}</li>
- *   <li>{@link scenario.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
- *   <li>{@link scenario.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link scenario.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link scenario.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
@@ -68,14 +68,14 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	protected String id = ID_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' containment reference.
+	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot()
+	 * @see #getAllowedVessels()
 	 * @generated
 	 * @ordered
 	 */
-	protected LoadSlot loadSlot;
+	protected EList<Vessel> allowedVessels;
 
 	/**
 	 * The cached value of the '{@link #getDischargeSlot() <em>Discharge Slot</em>}' containment reference.
@@ -88,14 +88,14 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	protected Slot dischargeSlot;
 
 	/**
-	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
+	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAllowedVessels()
+	 * @see #getLoadSlot()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Vessel> allowedVessels;
+	protected LoadSlot loadSlot;
 
 	/**
 	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
@@ -163,6 +163,29 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * @generated
 	 */
 	public LoadSlot getLoadSlot() {
+		if (loadSlot != null && loadSlot.eIsProxy()) {
+			InternalEObject oldLoadSlot = (InternalEObject)loadSlot;
+			loadSlot = (LoadSlot)eResolveProxy(oldLoadSlot);
+			if (loadSlot != oldLoadSlot) {
+				InternalEObject newLoadSlot = (InternalEObject)loadSlot;
+				NotificationChain msgs = oldLoadSlot.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__LOAD_SLOT, null, null);
+				if (newLoadSlot.eInternalContainer() == null) {
+					msgs = newLoadSlot.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__LOAD_SLOT, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, loadSlot));
+			}
+		}
+		return loadSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LoadSlot basicGetLoadSlot() {
 		return loadSlot;
 	}
 
@@ -206,6 +229,29 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	 * @generated
 	 */
 	public Slot getDischargeSlot() {
+		if (dischargeSlot != null && dischargeSlot.eIsProxy()) {
+			InternalEObject oldDischargeSlot = (InternalEObject)dischargeSlot;
+			dischargeSlot = (Slot)eResolveProxy(oldDischargeSlot);
+			if (dischargeSlot != oldDischargeSlot) {
+				InternalEObject newDischargeSlot = (InternalEObject)dischargeSlot;
+				NotificationChain msgs = oldDischargeSlot.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__DISCHARGE_SLOT, null, null);
+				if (newDischargeSlot.eInternalContainer() == null) {
+					msgs = newDischargeSlot.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__DISCHARGE_SLOT, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, dischargeSlot));
+			}
+		}
+		return dischargeSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Slot basicGetDischargeSlot() {
 		return dischargeSlot;
 	}
 
@@ -284,10 +330,10 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case CargoPackage.CARGO__LOAD_SLOT:
-				return basicSetLoadSlot(null, msgs);
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				return basicSetDischargeSlot(null, msgs);
+			case CargoPackage.CARGO__LOAD_SLOT:
+				return basicSetLoadSlot(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -302,12 +348,14 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 		switch (featureID) {
 			case CargoPackage.CARGO__ID:
 				return getId();
-			case CargoPackage.CARGO__LOAD_SLOT:
-				return getLoadSlot();
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				return getDischargeSlot();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return getAllowedVessels();
+			case CargoPackage.CARGO__DISCHARGE_SLOT:
+				if (resolve) return getDischargeSlot();
+				return basicGetDischargeSlot();
+			case CargoPackage.CARGO__LOAD_SLOT:
+				if (resolve) return getLoadSlot();
+				return basicGetLoadSlot();
 			case CargoPackage.CARGO__CARGO_TYPE:
 				return getCargoType();
 		}
@@ -326,15 +374,15 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 			case CargoPackage.CARGO__ID:
 				setId((String)newValue);
 				return;
-			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((LoadSlot)newValue);
+			case CargoPackage.CARGO__ALLOWED_VESSELS:
+				getAllowedVessels().clear();
+				getAllowedVessels().addAll((Collection<? extends Vessel>)newValue);
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((Slot)newValue);
 				return;
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				getAllowedVessels().addAll((Collection<? extends Vessel>)newValue);
+			case CargoPackage.CARGO__LOAD_SLOT:
+				setLoadSlot((LoadSlot)newValue);
 				return;
 			case CargoPackage.CARGO__CARGO_TYPE:
 				setCargoType((CargoType)newValue);
@@ -354,14 +402,14 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 			case CargoPackage.CARGO__ID:
 				setId(ID_EDEFAULT);
 				return;
-			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((LoadSlot)null);
+			case CargoPackage.CARGO__ALLOWED_VESSELS:
+				getAllowedVessels().clear();
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((Slot)null);
 				return;
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
+			case CargoPackage.CARGO__LOAD_SLOT:
+				setLoadSlot((LoadSlot)null);
 				return;
 			case CargoPackage.CARGO__CARGO_TYPE:
 				setCargoType(CARGO_TYPE_EDEFAULT);
@@ -380,12 +428,12 @@ public class CargoImpl extends EObjectImpl implements Cargo {
 		switch (featureID) {
 			case CargoPackage.CARGO__ID:
 				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
-			case CargoPackage.CARGO__LOAD_SLOT:
-				return loadSlot != null;
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				return dischargeSlot != null;
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
+			case CargoPackage.CARGO__DISCHARGE_SLOT:
+				return dischargeSlot != null;
+			case CargoPackage.CARGO__LOAD_SLOT:
+				return loadSlot != null;
 			case CargoPackage.CARGO__CARGO_TYPE:
 				return cargoType != CARGO_TYPE_EDEFAULT;
 		}

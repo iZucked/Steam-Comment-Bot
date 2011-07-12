@@ -98,7 +98,7 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 */
 	public EList<Cargo> getCargoes() {
 		if (cargoes == null) {
-			cargoes = new EObjectContainmentEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES);
+			cargoes = new EObjectContainmentEList.Resolving<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES);
 		}
 		return cargoes;
 	}
@@ -110,7 +110,7 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 */
 	public EList<Slot> getSpareDischargeSlots() {
 		if (spareDischargeSlots == null) {
-			spareDischargeSlots = new EObjectContainmentEList<Slot>(Slot.class, this, CargoPackage.CARGO_MODEL__SPARE_DISCHARGE_SLOTS);
+			spareDischargeSlots = new EObjectContainmentEList.Resolving<Slot>(Slot.class, this, CargoPackage.CARGO_MODEL__SPARE_DISCHARGE_SLOTS);
 		}
 		return spareDischargeSlots;
 	}
@@ -122,7 +122,7 @@ public class CargoModelImpl extends EObjectImpl implements CargoModel {
 	 */
 	public EList<LoadSlot> getSpareLoadSlots() {
 		if (spareLoadSlots == null) {
-			spareLoadSlots = new EObjectContainmentEList<LoadSlot>(LoadSlot.class, this, CargoPackage.CARGO_MODEL__SPARE_LOAD_SLOTS);
+			spareLoadSlots = new EObjectContainmentEList.Resolving<LoadSlot>(LoadSlot.class, this, CargoPackage.CARGO_MODEL__SPARE_LOAD_SLOTS);
 		}
 		return spareLoadSlots;
 	}
