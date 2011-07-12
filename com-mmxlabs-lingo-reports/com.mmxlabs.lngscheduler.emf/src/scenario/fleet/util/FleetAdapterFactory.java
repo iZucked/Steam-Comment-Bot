@@ -119,6 +119,10 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createPortExclusionAdapter();
 			}
 			@Override
+			public Adapter caseVesselClassCost(VesselClassCost object) {
+				return createVesselClassCostAdapter();
+			}
+			@Override
 			public Adapter caseScenarioObject(ScenarioObject object) {
 				return createScenarioObjectAdapter();
 			}
@@ -297,6 +301,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortExclusionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.VesselClassCost <em>Vessel Class Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.VesselClassCost
+	 * @generated
+	 */
+	public Adapter createVesselClassCostAdapter() {
 		return null;
 	}
 

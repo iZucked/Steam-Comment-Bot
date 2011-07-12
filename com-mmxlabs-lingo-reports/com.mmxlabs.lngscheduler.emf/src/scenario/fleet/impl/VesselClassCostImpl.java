@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.port.impl;
+package scenario.fleet.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -14,10 +14,10 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import scenario.fleet.VesselClass;
+import scenario.fleet.FleetPackage;
+import scenario.fleet.VesselClassCost;
 
-import scenario.port.PortPackage;
-import scenario.port.VesselClassCost;
+import scenario.port.Canal;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,11 +26,11 @@ import scenario.port.VesselClassCost;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.port.impl.VesselClassCostImpl#getVesselClass <em>Vessel Class</em>}</li>
- *   <li>{@link scenario.port.impl.VesselClassCostImpl#getLadenCost <em>Laden Cost</em>}</li>
- *   <li>{@link scenario.port.impl.VesselClassCostImpl#getUnladenCost <em>Unladen Cost</em>}</li>
- *   <li>{@link scenario.port.impl.VesselClassCostImpl#getTransitTime <em>Transit Time</em>}</li>
- *   <li>{@link scenario.port.impl.VesselClassCostImpl#getTransitFuel <em>Transit Fuel</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassCostImpl#getCanal <em>Canal</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassCostImpl#getLadenCost <em>Laden Cost</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassCostImpl#getUnladenCost <em>Unladen Cost</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassCostImpl#getTransitTime <em>Transit Time</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassCostImpl#getTransitFuel <em>Transit Fuel</em>}</li>
  * </ul>
  * </p>
  *
@@ -38,14 +38,14 @@ import scenario.port.VesselClassCost;
  */
 public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost {
 	/**
-	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
+	 * The cached value of the '{@link #getCanal() <em>Canal</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVesselClass()
+	 * @see #getCanal()
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselClass vesselClass;
+	protected Canal canal;
 
 	/**
 	 * The default value of the '{@link #getLadenCost() <em>Laden Cost</em>}' attribute.
@@ -143,7 +143,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return PortPackage.Literals.VESSEL_CLASS_COST;
+		return FleetPackage.Literals.VESSEL_CLASS_COST;
 	}
 
 	/**
@@ -151,16 +151,16 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselClass getVesselClass() {
-		if (vesselClass != null && vesselClass.eIsProxy()) {
-			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
-			vesselClass = (VesselClass)eResolveProxy(oldVesselClass);
-			if (vesselClass != oldVesselClass) {
+	public Canal getCanal() {
+		if (canal != null && canal.eIsProxy()) {
+			InternalEObject oldCanal = (InternalEObject)canal;
+			canal = (Canal)eResolveProxy(oldCanal);
+			if (canal != oldCanal) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.VESSEL_CLASS_COST__VESSEL_CLASS, oldVesselClass, vesselClass));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_CLASS_COST__CANAL, oldCanal, canal));
 			}
 		}
-		return vesselClass;
+		return canal;
 	}
 
 	/**
@@ -168,8 +168,8 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselClass basicGetVesselClass() {
-		return vesselClass;
+	public Canal basicGetCanal() {
+		return canal;
 	}
 
 	/**
@@ -177,11 +177,11 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setVesselClass(VesselClass newVesselClass) {
-		VesselClass oldVesselClass = vesselClass;
-		vesselClass = newVesselClass;
+	public void setCanal(Canal newCanal) {
+		Canal oldCanal = canal;
+		canal = newCanal;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.VESSEL_CLASS_COST__VESSEL_CLASS, oldVesselClass, vesselClass));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_COST__CANAL, oldCanal, canal));
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 		int oldLadenCost = ladenCost;
 		ladenCost = newLadenCost;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.VESSEL_CLASS_COST__LADEN_COST, oldLadenCost, ladenCost));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_COST__LADEN_COST, oldLadenCost, ladenCost));
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 		int oldUnladenCost = unladenCost;
 		unladenCost = newUnladenCost;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.VESSEL_CLASS_COST__UNLADEN_COST, oldUnladenCost, unladenCost));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_COST__UNLADEN_COST, oldUnladenCost, unladenCost));
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 		int oldTransitTime = transitTime;
 		transitTime = newTransitTime;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.VESSEL_CLASS_COST__TRANSIT_TIME, oldTransitTime, transitTime));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_COST__TRANSIT_TIME, oldTransitTime, transitTime));
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 		float oldTransitFuel = transitFuel;
 		transitFuel = newTransitFuel;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.VESSEL_CLASS_COST__TRANSIT_FUEL, oldTransitFuel, transitFuel));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_COST__TRANSIT_FUEL, oldTransitFuel, transitFuel));
 	}
 
 	/**
@@ -276,16 +276,16 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PortPackage.VESSEL_CLASS_COST__VESSEL_CLASS:
-				if (resolve) return getVesselClass();
-				return basicGetVesselClass();
-			case PortPackage.VESSEL_CLASS_COST__LADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__CANAL:
+				if (resolve) return getCanal();
+				return basicGetCanal();
+			case FleetPackage.VESSEL_CLASS_COST__LADEN_COST:
 				return getLadenCost();
-			case PortPackage.VESSEL_CLASS_COST__UNLADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__UNLADEN_COST:
 				return getUnladenCost();
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
 				return getTransitTime();
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
 				return getTransitFuel();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -299,19 +299,19 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PortPackage.VESSEL_CLASS_COST__VESSEL_CLASS:
-				setVesselClass((VesselClass)newValue);
+			case FleetPackage.VESSEL_CLASS_COST__CANAL:
+				setCanal((Canal)newValue);
 				return;
-			case PortPackage.VESSEL_CLASS_COST__LADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__LADEN_COST:
 				setLadenCost((Integer)newValue);
 				return;
-			case PortPackage.VESSEL_CLASS_COST__UNLADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__UNLADEN_COST:
 				setUnladenCost((Integer)newValue);
 				return;
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
 				setTransitTime((Integer)newValue);
 				return;
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
 				setTransitFuel((Float)newValue);
 				return;
 		}
@@ -326,19 +326,19 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PortPackage.VESSEL_CLASS_COST__VESSEL_CLASS:
-				setVesselClass((VesselClass)null);
+			case FleetPackage.VESSEL_CLASS_COST__CANAL:
+				setCanal((Canal)null);
 				return;
-			case PortPackage.VESSEL_CLASS_COST__LADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__LADEN_COST:
 				setLadenCost(LADEN_COST_EDEFAULT);
 				return;
-			case PortPackage.VESSEL_CLASS_COST__UNLADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__UNLADEN_COST:
 				setUnladenCost(UNLADEN_COST_EDEFAULT);
 				return;
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
 				setTransitTime(TRANSIT_TIME_EDEFAULT);
 				return;
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
 				setTransitFuel(TRANSIT_FUEL_EDEFAULT);
 				return;
 		}
@@ -353,15 +353,15 @@ public class VesselClassCostImpl extends EObjectImpl implements VesselClassCost 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PortPackage.VESSEL_CLASS_COST__VESSEL_CLASS:
-				return vesselClass != null;
-			case PortPackage.VESSEL_CLASS_COST__LADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__CANAL:
+				return canal != null;
+			case FleetPackage.VESSEL_CLASS_COST__LADEN_COST:
 				return ladenCost != LADEN_COST_EDEFAULT;
-			case PortPackage.VESSEL_CLASS_COST__UNLADEN_COST:
+			case FleetPackage.VESSEL_CLASS_COST__UNLADEN_COST:
 				return unladenCost != UNLADEN_COST_EDEFAULT;
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_TIME:
 				return transitTime != TRANSIT_TIME_EDEFAULT;
-			case PortPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
+			case FleetPackage.VESSEL_CLASS_COST__TRANSIT_FUEL:
 				return transitFuel != TRANSIT_FUEL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);

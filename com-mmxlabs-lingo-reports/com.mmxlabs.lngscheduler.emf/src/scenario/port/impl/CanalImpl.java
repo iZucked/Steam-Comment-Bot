@@ -11,28 +11,22 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 import scenario.ScenarioPackage;
+import scenario.fleet.VesselClassCost;
 import scenario.impl.UUIDObjectImpl;
-import scenario.impl.NamedObjectImpl;
-
 import scenario.port.Canal;
 import scenario.port.DistanceModel;
 import scenario.port.PortPackage;
-import scenario.port.VesselClassCost;
 
 /**
  * <!-- begin-user-doc -->

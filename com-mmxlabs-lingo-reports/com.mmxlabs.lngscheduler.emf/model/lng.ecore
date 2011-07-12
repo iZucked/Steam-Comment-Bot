@@ -125,6 +125,8 @@
           <details key="documentation" value="A list of ports where this vessel can't dock because it is too large in some way."/>
         </eAnnotations>
       </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="canalCosts" upperBound="-1"
+          eType="#//fleet/VesselClassCost" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FuelConsumptionLine">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -188,6 +190,39 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1"
           eType="#//port/Port"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VesselClassCost">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Describes the various costs and delays associated with a given vessel class for a given canal."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="canal" lowerBound="1"
+          eType="#//port/Canal">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The vessel class to which these costs apply, for this canal"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The toll in dollars paid for letting a laden vessel of this class pass through this canal"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unladenCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The toll in dollars for an unladen vessel of this class to pass through this canal."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitTime" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="24">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The time in hours required for vessels of this class to pass through this canal"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitFuel" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="50">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The amount of base fuel or base fuel equivalent, in metric tonnes per day (MT/day), consumed by vessels of this class during their passage through the canal. The total fuel consumption for a journey through the canal is then given by transitTime * (transitFuel / 24)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf2/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
@@ -596,44 +631,11 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="distanceModel" lowerBound="1"
           eType="#//port/DistanceModel" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="classCosts" upperBound="-1"
-          eType="#//port/VesselClassCost" containment="true"/>
+          eType="#//fleet/VesselClassCost" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CanalModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="canals" upperBound="-1"
           eType="#//port/Canal" containment="true"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="VesselClassCost">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Describes the various costs and delays associated with a given vessel class for a given canal."/>
-      </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
-          eType="#//fleet/VesselClass">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="The vessel class to which these costs apply, for this canal"/>
-        </eAnnotations>
-      </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="The toll in dollars paid for letting a laden vessel of this class pass through this canal"/>
-        </eAnnotations>
-      </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unladenCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="The toll in dollars for an unladen vessel of this class to pass through this canal."/>
-        </eAnnotations>
-      </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitTime" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="24">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="The time in hours required for vessels of this class to pass through this canal"/>
-        </eAnnotations>
-      </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitFuel" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="50">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="The amount of base fuel or base fuel equivalent, in metric tonnes per day (MT/day), consumed by vessels of this class during their passage through the canal. The total fuel consumption for a journey through the canal is then given by transitTime * (transitFuel / 24)."/>
-        </eAnnotations>
-      </eStructuralFeatures>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="cargo" nsURI="http://com.mmxlabs.lng.emf2/cargo" nsPrefix="com.mmxlabs.lng.emf.cargo">

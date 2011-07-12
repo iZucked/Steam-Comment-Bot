@@ -2535,8 +2535,8 @@
             featureName="eType" referenceValue="lng.ecore#//port/Canal"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port" referenceName="eClassifiers"
-          element="lng.ecore#//port/VesselClassCost">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost"
+          element="lng.ecore#//fleet/VesselClassCost">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost"
             featureName="name" dataValue="VesselClassCost"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures"
@@ -2548,123 +2548,123 @@
         <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/classCosts"
             featureName="containment" dataValue="true" oldDataValue="false"/>
         <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/classCosts"
-            featureName="eType" referenceValue="lng.ecore#//port/VesselClassCost"/>
+            featureName="eType" referenceValue="lng.ecore#//fleet/VesselClassCost"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost"
-          referenceName="eAnnotations" element="lng.ecore#//port/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+          referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
             featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
-          referenceName="details" element="lng.ecore#//port/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          referenceName="details" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="key" dataValue="documentation"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="value" dataValue="Describes the various costs and delays associated with a given vessel class for a given canal."/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost"
-          referenceName="eStructuralFeatures" element="lng.ecore#//port/VesselClassCost/vesselClass">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/vesselClass"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+          referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/canal">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal"
             featureName="name" dataValue="vesselClass"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/vesselClass"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal"
             featureName="lowerBound" dataValue="1" oldDataValue="0"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/vesselClass"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal"
             featureName="eType" referenceValue="lng.ecore#//fleet/VesselClass"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/vesselClass"
-          referenceName="eAnnotations" element="lng.ecore#//port/VesselClassCost/vesselClass/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/vesselClass/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/canal"
+          referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
             featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/vesselClass/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
-          referenceName="details" element="lng.ecore#//port/VesselClassCost/vesselClass/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/vesselClass/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          referenceName="details" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="key" dataValue="documentation"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/vesselClass/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="value" dataValue="The vessel class to which these costs apply, for this canal"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost"
-          referenceName="eStructuralFeatures" element="lng.ecore#//port/VesselClassCost/ladenCost">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/ladenCost"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+          referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/ladenCost">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost"
             featureName="name" dataValue="ladenCost"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/ladenCost"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/ladenCost"
-          referenceName="eAnnotations" element="lng.ecore#//port/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/ladenCost"
+          referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
             featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
-          referenceName="details" element="lng.ecore#//port/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          referenceName="details" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="key" dataValue="documentation"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="value" dataValue="The toll in dollars paid for letting a laden vessel of this class pass through this canal"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost"
-          referenceName="eStructuralFeatures" element="lng.ecore#//port/VesselClassCost/unladenCost">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/unladenCost"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+          referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/unladenCost">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost"
             featureName="name" dataValue="unladenCost"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/unladenCost"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/unladenCost"
-          referenceName="eAnnotations" element="lng.ecore#//port/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/unladenCost"
+          referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
             featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
-          referenceName="details" element="lng.ecore#//port/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          referenceName="details" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="key" dataValue="documentation"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="value" dataValue="The toll in dollars for an unladen vessel of this class to pass through this canal."/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost"
-          referenceName="eStructuralFeatures" element="lng.ecore#//port/VesselClassCost/transitTime">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitTime"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+          referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/transitTime">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime"
             featureName="name" dataValue="transitTime"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitTime"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime"
             featureName="lowerBound" dataValue="1" oldDataValue="0"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitTime"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime"
             featureName="defaultValueLiteral" dataValue="24"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitTime"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/transitTime"
-          referenceName="eAnnotations" element="lng.ecore#//port/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/transitTime"
+          referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
             featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
-          referenceName="details" element="lng.ecore#//port/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          referenceName="details" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="key" dataValue="documentation"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="value" dataValue="The time in hours required for vessels of this class to pass through this canal"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost"
-          referenceName="eStructuralFeatures" element="lng.ecore#//port/VesselClassCost/transitFuel">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitFuel"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+          referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/transitFuel">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel"
             featureName="name" dataValue="transitFuel"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitFuel"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel"
             featureName="lowerBound" dataValue="1" oldDataValue="0"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitFuel"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel"
             featureName="defaultValueLiteral" dataValue="50"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitFuel"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/transitFuel"
-          referenceName="eAnnotations" element="lng.ecore#//port/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/transitFuel"
+          referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
             featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//port/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
-          referenceName="details" element="lng.ecore#//port/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          referenceName="details" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="key" dataValue="documentation"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="value" dataValue="The amount of base fuel or base fuel equivalent, in metric tonnes per day (MT/day), consumed by vessels of this class during their passage through the canal. The total fuel consumption for a journey through the canal is then given by transitTime * (transitFuel / 24)."/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#/" referenceName="eSubpackages"
@@ -4245,5 +4245,146 @@
     <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
         featureName="value" dataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return cm.getDefaultContract(p);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"
         oldDataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getSalesContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(p)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;for (final scenario.contract.Contract c : cm.getPurchaseContracts()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (c.getDefaultPorts().contains(p)) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return c;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//port" referenceName="eClassifiers"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet" referenceName="eClassifiers"
+        element="lng.ecore#//fleet/VesselClassCost">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost"
+          featureName="name" dataValue="VesselClassCost"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+        referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="documentation"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="Describes the various costs and delays associated with a given vessel class for a given canal."/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+        referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/canal">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal"
+          featureName="name" dataValue="vesselClass"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal"
+          featureName="eType" referenceValue="lng.ecore#//fleet/VesselClass"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/canal"
+        referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="documentation"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="The vessel class to which these costs apply, for this canal"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+        referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/ladenCost">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost"
+          featureName="name" dataValue="ladenCost"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/ladenCost"
+        referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="documentation"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/ladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="The toll in dollars paid for letting a laden vessel of this class pass through this canal"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+        referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/unladenCost">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost"
+          featureName="name" dataValue="unladenCost"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/unladenCost"
+        referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="documentation"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/unladenCost/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="The toll in dollars for an unladen vessel of this class to pass through this canal."/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+        referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/transitTime">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime"
+          featureName="name" dataValue="transitTime"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime"
+          featureName="defaultValueLiteral" dataValue="24"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/transitTime"
+        referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="documentation"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitTime/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="The time in hours required for vessels of this class to pass through this canal"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
+        referenceName="eStructuralFeatures" element="lng.ecore#//fleet/VesselClassCost/transitFuel">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel"
+          featureName="name" dataValue="transitFuel"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel"
+          featureName="defaultValueLiteral" dataValue="50"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/transitFuel"
+        referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="documentation"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/transitFuel/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="The amount of base fuel or base fuel equivalent, in metric tonnes per day (MT/day), consumed by vessels of this class during their passage through the canal. The total fuel consumption for a journey through the canal is then given by transitTime * (transitFuel / 24)."/>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal"
+        featureName="name" dataValue="canal" oldDataValue="vesselClass"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClassCost/canal"
+        featureName="eType" referenceValue="lng.ecore#//port/Canal" oldReferenceValue="lng.ecore#//fleet/VesselClass"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/VesselClass/canalCosts"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/canalCosts"
+        featureName="name" dataValue="canalCosts"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/canalCosts"
+        featureName="lowerBound" dataValue="-1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/canalCosts"
+        featureName="containment" dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/canalCosts"
+        featureName="eType" referenceValue="lng.ecore#//fleet/VesselClassCost"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/canalCosts"
+        featureName="upperBound" dataValue="-1" oldDataValue="1"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/canalCosts"
+        featureName="lowerBound" dataValue="0" oldDataValue="-1"/>
   </releases>
 </history:History>

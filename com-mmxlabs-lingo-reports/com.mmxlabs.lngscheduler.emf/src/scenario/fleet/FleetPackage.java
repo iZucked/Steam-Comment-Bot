@@ -364,13 +364,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__INACCESSIBLE_PORTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Canal Costs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__CANAL_COSTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 13;
+	int VESSEL_CLASS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -993,6 +1002,79 @@ public interface FleetPackage extends EPackage {
 	int PORT_EXCLUSION_OPERATION_COUNT = ScenarioPackage.SCENARIO_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link scenario.fleet.impl.VesselClassCostImpl <em>Vessel Class Cost</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.fleet.impl.VesselClassCostImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselClassCost()
+	 * @generated
+	 */
+	int VESSEL_CLASS_COST = 11;
+
+	/**
+	 * The feature id for the '<em><b>Canal</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST__CANAL = 0;
+
+	/**
+	 * The feature id for the '<em><b>Laden Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST__LADEN_COST = 1;
+
+	/**
+	 * The feature id for the '<em><b>Unladen Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST__UNLADEN_COST = 2;
+
+	/**
+	 * The feature id for the '<em><b>Transit Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST__TRANSIT_TIME = 3;
+
+	/**
+	 * The feature id for the '<em><b>Transit Fuel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST__TRANSIT_FUEL = 4;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Class Cost</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST_FEATURE_COUNT = 5;
+
+	/**
+	 * The number of operations of the '<em>Vessel Class Cost</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_COST_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1000,7 +1082,7 @@ public interface FleetPackage extends EPackage {
 	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselState()
 	 * @generated
 	 */
-	int VESSEL_STATE = 11;
+	int VESSEL_STATE = 12;
 
 
 	/**
@@ -1263,6 +1345,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselClass_InaccessiblePorts();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.fleet.VesselClass#getCanalCosts <em>Canal Costs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Canal Costs</em>'.
+	 * @see scenario.fleet.VesselClass#getCanalCosts()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_CanalCosts();
 
 	/**
 	 * Returns the meta object for the reference '{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}'.
@@ -1620,6 +1713,71 @@ public interface FleetPackage extends EPackage {
 	EReference getPortExclusion_Port();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.fleet.VesselClassCost <em>Vessel Class Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Class Cost</em>'.
+	 * @see scenario.fleet.VesselClassCost
+	 * @generated
+	 */
+	EClass getVesselClassCost();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.fleet.VesselClassCost#getCanal <em>Canal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Canal</em>'.
+	 * @see scenario.fleet.VesselClassCost#getCanal()
+	 * @see #getVesselClassCost()
+	 * @generated
+	 */
+	EReference getVesselClassCost_Canal();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClassCost#getLadenCost <em>Laden Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden Cost</em>'.
+	 * @see scenario.fleet.VesselClassCost#getLadenCost()
+	 * @see #getVesselClassCost()
+	 * @generated
+	 */
+	EAttribute getVesselClassCost_LadenCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClassCost#getUnladenCost <em>Unladen Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unladen Cost</em>'.
+	 * @see scenario.fleet.VesselClassCost#getUnladenCost()
+	 * @see #getVesselClassCost()
+	 * @generated
+	 */
+	EAttribute getVesselClassCost_UnladenCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClassCost#getTransitTime <em>Transit Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Transit Time</em>'.
+	 * @see scenario.fleet.VesselClassCost#getTransitTime()
+	 * @see #getVesselClassCost()
+	 * @generated
+	 */
+	EAttribute getVesselClassCost_TransitTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClassCost#getTransitFuel <em>Transit Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Transit Fuel</em>'.
+	 * @see scenario.fleet.VesselClassCost#getTransitFuel()
+	 * @see #getVesselClassCost()
+	 * @generated
+	 */
+	EAttribute getVesselClassCost_TransitFuel();
+
+	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.PortExclusion#getStartDate <em>Start Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1871,6 +2029,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_CLASS__INACCESSIBLE_PORTS = eINSTANCE.getVesselClass_InaccessiblePorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Costs</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__CANAL_COSTS = eINSTANCE.getVesselClass_CanalCosts();
 
 		/**
 		 * The meta object literal for the '<em><b>Base Fuel</b></em>' reference feature.
@@ -2151,6 +2317,56 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT_EXCLUSION__PORT = eINSTANCE.getPortExclusion_Port();
+
+		/**
+		 * The meta object literal for the '{@link scenario.fleet.impl.VesselClassCostImpl <em>Vessel Class Cost</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.fleet.impl.VesselClassCostImpl
+		 * @see scenario.fleet.impl.FleetPackageImpl#getVesselClassCost()
+		 * @generated
+		 */
+		EClass VESSEL_CLASS_COST = eINSTANCE.getVesselClassCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS_COST__CANAL = eINSTANCE.getVesselClassCost_Canal();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_COST__LADEN_COST = eINSTANCE.getVesselClassCost_LadenCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Unladen Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_COST__UNLADEN_COST = eINSTANCE.getVesselClassCost_UnladenCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Transit Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_COST__TRANSIT_TIME = eINSTANCE.getVesselClassCost_TransitTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Transit Fuel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_COST__TRANSIT_FUEL = eINSTANCE.getVesselClassCost_TransitFuel();
 
 		/**
 		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.

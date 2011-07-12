@@ -34,6 +34,7 @@ import scenario.fleet.PortAndTime;
 import scenario.fleet.PortExclusion;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselClassCost;
 import scenario.fleet.VesselEvent;
 import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselState;
@@ -152,6 +153,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	private EClass portExclusionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselClassCostEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -474,6 +482,15 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getVesselClass_CanalCosts() {
+		return (EReference)vesselClassEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getVesselClass_BaseFuel() {
 		return (EReference)vesselClassEClass.getEStructuralFeatures().get(10);
 	}
@@ -771,6 +788,60 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getVesselClassCost() {
+		return vesselClassCostEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselClassCost_Canal() {
+		return (EReference)vesselClassCostEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselClassCost_LadenCost() {
+		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselClassCost_UnladenCost() {
+		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselClassCost_TransitTime() {
+		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselClassCost_TransitFuel() {
+		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getPortExclusion_StartDate() {
 		return (EAttribute)portExclusionEClass.getEStructuralFeatures().get(0);
 	}
@@ -849,6 +920,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEReference(vesselClassEClass, VESSEL_CLASS__BASE_FUEL);
 		createEReference(vesselClassEClass, VESSEL_CLASS__PORT_EXCLUSIONS);
 		createEReference(vesselClassEClass, VESSEL_CLASS__INACCESSIBLE_PORTS);
+		createEReference(vesselClassEClass, VESSEL_CLASS__CANAL_COSTS);
 
 		fuelConsumptionLineEClass = createEClass(FUEL_CONSUMPTION_LINE);
 		createEAttribute(fuelConsumptionLineEClass, FUEL_CONSUMPTION_LINE__SPEED);
@@ -890,6 +962,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(portExclusionEClass, PORT_EXCLUSION__START_DATE);
 		createEAttribute(portExclusionEClass, PORT_EXCLUSION__END_DATE);
 		createEReference(portExclusionEClass, PORT_EXCLUSION__PORT);
+
+		vesselClassCostEClass = createEClass(VESSEL_CLASS_COST);
+		createEReference(vesselClassCostEClass, VESSEL_CLASS_COST__CANAL);
+		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__LADEN_COST);
+		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__UNLADEN_COST);
+		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__TRANSIT_TIME);
+		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__TRANSIT_FUEL);
 
 		// Create enums
 		vesselStateEEnum = createEEnum(VESSEL_STATE);
@@ -963,6 +1042,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVesselClass_BaseFuel(), this.getVesselFuel(), null, "baseFuel", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_PortExclusions(), this.getPortExclusion(), null, "portExclusions", null, 0, -1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_InaccessiblePorts(), thePortPackage.getPort(), null, "inaccessiblePorts", null, 0, -1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselClass_CanalCosts(), this.getVesselClassCost(), null, "canalCosts", null, 0, -1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelConsumptionLineEClass, FuelConsumptionLine.class, "FuelConsumptionLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFuelConsumptionLine_Speed(), ecorePackage.getEFloat(), "speed", null, 0, 1, FuelConsumptionLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1004,6 +1084,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getPortExclusion_StartDate(), ecorePackage.getEDate(), "startDate", null, 1, 1, PortExclusion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortExclusion_EndDate(), ecorePackage.getEDate(), "endDate", null, 1, 1, PortExclusion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortExclusion_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, PortExclusion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselClassCostEClass, VesselClassCost.class, "VesselClassCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselClassCost_Canal(), thePortPackage.getCanal(), null, "canal", null, 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClassCost_LadenCost(), ecorePackage.getEInt(), "ladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClassCost_UnladenCost(), ecorePackage.getEInt(), "unladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClassCost_TransitTime(), ecorePackage.getEInt(), "transitTime", "24", 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClassCost_TransitFuel(), ecorePackage.getEFloat(), "transitFuel", "50", 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(vesselStateEEnum, VesselState.class, "VesselState");

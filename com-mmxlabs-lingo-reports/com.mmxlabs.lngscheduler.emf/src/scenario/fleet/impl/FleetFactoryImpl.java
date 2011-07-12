@@ -71,6 +71,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.DRYDOCK: return createDrydock();
 			case FleetPackage.VESSEL_FUEL: return createVesselFuel();
 			case FleetPackage.PORT_EXCLUSION: return createPortExclusion();
+			case FleetPackage.VESSEL_CLASS_COST: return createVesselClassCost();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -204,6 +205,16 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public PortExclusion createPortExclusion() {
 		PortExclusionImpl portExclusion = new PortExclusionImpl();
 		return portExclusion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselClassCost createVesselClassCost() {
+		VesselClassCostImpl vesselClassCost = new VesselClassCostImpl();
+		return vesselClassCost;
 	}
 
 	/**

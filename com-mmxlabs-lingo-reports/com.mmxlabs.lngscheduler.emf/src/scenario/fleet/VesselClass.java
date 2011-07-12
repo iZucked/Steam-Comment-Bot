@@ -33,6 +33,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getPortExclusions <em>Port Exclusions</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getCanalCosts <em>Canal Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -339,6 +340,22 @@ public interface VesselClass extends NamedObject {
 	 * @generated
 	 */
 	EList<Port> getInaccessiblePorts();
+
+	/**
+	 * Returns the value of the '<em><b>Canal Costs</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.fleet.VesselClassCost}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Costs</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Costs</em>' containment reference list.
+	 * @see scenario.fleet.FleetPackage#getVesselClass_CanalCosts()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<VesselClassCost> getCanalCosts();
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference.

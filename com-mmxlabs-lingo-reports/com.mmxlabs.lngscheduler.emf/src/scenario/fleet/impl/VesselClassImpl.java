@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortExclusion;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselClassCost;
 import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselStateAttributes;
 
@@ -52,6 +53,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getPortExclusions <em>Port Exclusions</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCanalCosts <em>Canal Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -276,6 +278,16 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected EList<Port> inaccessiblePorts;
+
+	/**
+	 * The cached value of the '{@link #getCanalCosts() <em>Canal Costs</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselClassCost> canalCosts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -638,6 +650,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<VesselClassCost> getCanalCosts() {
+		if (canalCosts == null) {
+			canalCosts = new EObjectContainmentEList.Resolving<VesselClassCost>(VesselClassCost.class, this, FleetPackage.VESSEL_CLASS__CANAL_COSTS);
+		}
+		return canalCosts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public VesselFuel getBaseFuel() {
 		if (baseFuel != null && baseFuel.eIsProxy()) {
 			InternalEObject oldBaseFuel = (InternalEObject)baseFuel;
@@ -697,6 +721,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return basicSetBallastAttributes(null, msgs);
 			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
 				return ((InternalEList<?>)getPortExclusions()).basicRemove(otherEnd, msgs);
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				return ((InternalEList<?>)getCanalCosts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -738,6 +764,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return getPortExclusions();
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				return getCanalCosts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -792,6 +820,10 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				getInaccessiblePorts().clear();
 				getInaccessiblePorts().addAll((Collection<? extends Port>)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				getCanalCosts().clear();
+				getCanalCosts().addAll((Collection<? extends VesselClassCost>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -843,6 +875,9 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				return;
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				getCanalCosts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -881,6 +916,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return portExclusions != null && !portExclusions.isEmpty();
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				return canalCosts != null && !canalCosts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

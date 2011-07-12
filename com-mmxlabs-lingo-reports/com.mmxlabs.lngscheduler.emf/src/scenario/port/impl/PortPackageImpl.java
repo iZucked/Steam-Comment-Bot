@@ -113,13 +113,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	private EClass canalModelEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass vesselClassCostEClass = null;
-
-	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -379,60 +372,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getVesselClassCost() {
-		return vesselClassCostEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselClassCost_VesselClass() {
-		return (EReference)vesselClassCostEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getVesselClassCost_LadenCost() {
-		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getVesselClassCost_UnladenCost() {
-		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getVesselClassCost_TransitTime() {
-		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getVesselClassCost_TransitFuel() {
-		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}
@@ -479,13 +418,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		canalModelEClass = createEClass(CANAL_MODEL);
 		createEReference(canalModelEClass, CANAL_MODEL__CANALS);
-
-		vesselClassCostEClass = createEClass(VESSEL_CLASS_COST);
-		createEReference(vesselClassCostEClass, VESSEL_CLASS_COST__VESSEL_CLASS);
-		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__LADEN_COST);
-		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__UNLADEN_COST);
-		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__TRANSIT_TIME);
-		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__TRANSIT_FUEL);
 	}
 
 	/**
@@ -545,17 +477,10 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEClass(canalEClass, Canal.class, "Canal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCanal_DefaultCost(), ecorePackage.getEInt(), "defaultCost", null, 0, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanal_DistanceModel(), this.getDistanceModel(), null, "distanceModel", null, 1, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCanal_ClassCosts(), this.getVesselClassCost(), null, "classCosts", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanal_ClassCosts(), theFleetPackage.getVesselClassCost(), null, "classCosts", null, 0, -1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalModelEClass, CanalModel.class, "CanalModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalModel_Canals(), this.getCanal(), null, "canals", null, 0, -1, CanalModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(vesselClassCostEClass, VesselClassCost.class, "VesselClassCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getVesselClassCost_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselClassCost_LadenCost(), ecorePackage.getEInt(), "ladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselClassCost_UnladenCost(), ecorePackage.getEInt(), "unladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselClassCost_TransitTime(), ecorePackage.getEInt(), "transitTime", "24", 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselClassCost_TransitFuel(), ecorePackage.getEFloat(), "transitFuel", "50", 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //PortPackageImpl

@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
 import scenario.UUIDObject;
+import scenario.fleet.VesselClassCost;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +33,7 @@ import scenario.UUIDObject;
 public interface Canal extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Class Costs</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.port.VesselClassCost}.
+	 * The list contents are of type {@link scenario.fleet.VesselClassCost}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Class Costs</em>' containment reference list isn't clear,
