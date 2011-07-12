@@ -17,9 +17,7 @@ package com.mmxlabs.lngscheduler.emf.extras.plugin;
  * $Id$
  */
 
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory;
-import org.eclipse.emf.ecore.resource.Resource.Factory.Descriptor;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -48,22 +46,6 @@ public class ExtrasPlugin extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		// register upgrading resource factory
-		final Object current = Factory.Registry.INSTANCE
-				.getExtensionToFactoryMap().get(
-						Resource.Factory.Registry.DEFAULT_EXTENSION);
-		final Factory delegate;
-		if (current instanceof Descriptor) {
-			delegate = ((Descriptor) current).createFactory();
-		} else {
-			delegate = (Factory) current;
-		}
-
-		// this only works once per runtime.
-//		Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
-//				Resource.Factory.Registry.DEFAULT_EXTENSION,
-//				new UpgradingResourceFactory(delegate));
-
 
 		Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("scenario",
 				new UpgradingResourceFactory(new XMIResourceFactoryImpl()));
