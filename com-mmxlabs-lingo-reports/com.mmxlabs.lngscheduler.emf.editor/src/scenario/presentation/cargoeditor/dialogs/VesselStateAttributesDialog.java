@@ -464,7 +464,18 @@ public class VesselStateAttributesDialog extends Dialog {
 
 				series.setXSeries(speedValues);
 				series.setYSeries(consumptionValues);
-
+				if (minSpeed == Double.MAX_VALUE) {
+					minSpeed = 0;
+				}
+				if (maxSpeed == -Double.MAX_VALUE) {
+					maxSpeed = 19.5;
+				}
+				if (minConsumption == Double.MAX_VALUE) {
+					minConsumption = 0;
+				}
+				if (maxConsumption == -Double.MAX_VALUE) {
+					maxConsumption = 100;
+				}
 				chart.getAxisSet().getXAxis(0)
 						.setRange(new Range(minSpeed, maxSpeed));
 				chart.getAxisSet().getYAxis(0)
