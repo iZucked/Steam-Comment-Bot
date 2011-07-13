@@ -140,10 +140,13 @@ import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandPr
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IMultiInlineEditorFactory;
+import scenario.presentation.cargoeditor.detailview.DialogInlineEditor;
 import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
 import scenario.presentation.cargoeditor.detailview.MultiReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
+import scenario.presentation.cargoeditor.detailview.VesselClassCostEditor;
+import scenario.presentation.cargoeditor.dialogs.CanalCostsDialog;
 import scenario.presentation.model_editors.CargoEVP;
 import scenario.presentation.model_editors.EntityEVP;
 import scenario.presentation.model_editors.IndexEVP;
@@ -503,22 +506,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					final ContractModel cm = s.getContractModel();
 					if (cm != null) {
 						final List<Object> features = new LinkedList<Object>();
-						features.add(ContractPackage.eINSTANCE.getContract_DefaultPorts());
+						features.add(ContractPackage.eINSTANCE
+								.getContract_DefaultPorts());
 						features.add(namedObjectName);
 						for (final Contract c : cm.getPurchaseContracts()) {
-							notifiers.add(new Pair<Notifier, List<Object>>
-								(c, features));
+							notifiers.add(new Pair<Notifier, List<Object>>(c,
+									features));
 						}
 						for (final Contract c : cm.getSalesContracts()) {
-							notifiers.add(new Pair<Notifier, List<Object>>
-								(c, features));
+							notifiers.add(new Pair<Notifier, List<Object>>(c,
+									features));
 						}
 					}
 				}
-				notifiers.add(new Pair<Notifier, List<Object>>(
-						port, Collections
-						.singletonList((Object) namedObjectName)));
-				
+				notifiers.add(new Pair<Notifier, List<Object>>(port,
+						Collections.singletonList((Object) namedObjectName)));
+
 				return notifiers;
 			}
 			return super.getNotifiers(referer, feature, referenceValue);
@@ -2171,6 +2174,26 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE
 				.getVesselClass(), new MultiReferenceEditorFactory(
 				getEditingDomain(), vesselClassProvider));
+
+		page.setEditorFactoryForFeature(
+				FleetPackage.eINSTANCE.getVesselClass_CanalCosts(),
+				new IMultiInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(EMFPath path,
+							EStructuralFeature feature,
+							ICommandProcessor commandProcessor) {
+						throw new RuntimeException(
+								"There should be no single references to vessel class costs in the model");
+					}
+
+					@Override
+					public IInlineEditor createMultiEditor(EMFPath path,
+							EStructuralFeature feature,
+							ICommandProcessor commandProcessor) {
+						return new VesselClassCostEditor(path, feature,
+								commandProcessor, ScenarioEditor.this);
+					}
+				});
 
 		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE.getVessel(),
 				new MultiReferenceEditorFactory(getEditingDomain(),
