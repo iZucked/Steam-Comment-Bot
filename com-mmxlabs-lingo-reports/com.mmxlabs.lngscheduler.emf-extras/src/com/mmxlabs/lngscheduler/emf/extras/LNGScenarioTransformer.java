@@ -55,7 +55,6 @@ import scenario.optimiser.OptimisationSettings;
 import scenario.port.Canal;
 import scenario.port.DistanceLine;
 import scenario.port.Port;
-import scenario.port.VesselClassCost;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.ScheduledEvent;
