@@ -22,7 +22,6 @@ public abstract class AbstractScenarioHandler extends AbstractHandler {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 
 		ISelection selection = window.getSelectionService().getSelection();
-		System.out.println("Selection = " + selection);
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection items = (IStructuredSelection) selection;
 
