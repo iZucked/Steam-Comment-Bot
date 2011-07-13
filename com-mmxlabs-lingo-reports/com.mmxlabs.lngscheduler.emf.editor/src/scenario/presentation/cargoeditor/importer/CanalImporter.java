@@ -7,17 +7,13 @@ package scenario.presentation.cargoeditor.importer;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import scenario.port.Canal;
-import scenario.port.PortFactory;
 import scenario.port.PortPackage;
-import scenario.port.VesselClassCost;
 
 /**
  * Canal cost importer. Uses linked files for distance model, I'm afraid.

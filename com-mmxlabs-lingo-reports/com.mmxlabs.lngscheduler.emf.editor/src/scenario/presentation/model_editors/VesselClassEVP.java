@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
@@ -23,12 +24,14 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import scenario.fleet.FleetPackage;
+import scenario.fleet.VesselClassCost;
 import scenario.fleet.VesselStateAttributes;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
+import scenario.presentation.cargoeditor.dialogs.CanalCostsDialog;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.importer.CSVReader;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
@@ -161,7 +164,8 @@ public class VesselClassEVP extends NamedObjectEVP {
 		{
 			final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(
 					FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts(),
-					part.getEditingDomain(), part.getPortProvider(), namedObjectName);
+					part.getEditingDomain(), part.getPortProvider(),
+					namedObjectName);
 			addColumn("Inaccessible Ports", capacity, capacity);
 		}
 
@@ -222,6 +226,34 @@ public class VesselClassEVP extends NamedObjectEVP {
 
 			};
 			addColumn("Ballast Fuel Usage", laden, laden);
+		}
+
+		{
+			final DialogFeatureManipulator canals = new DialogFeatureManipulator(
+					FleetPackage.eINSTANCE.getVesselClass_CanalCosts(),
+					part.getEditingDomain()) {
+
+				@Override
+				protected String renderValue(Object value) {
+					return "";
+				}
+
+				@Override
+				protected Object openDialogBox(Control cellEditorWindow,
+						Object object) {
+					final CanalCostsDialog ccd = new CanalCostsDialog(
+							cellEditorWindow.getShell());
+					if (ccd.open(part.getAdapterFactory(), part
+							.getEditingDomain(), part.getScenario()
+							.getCanalModel(),
+							(EObject)object, (EReference) this.field) == Window.OK) {
+						return ccd.getResult(); //????
+					}
+
+					return null;
+				}
+			};
+			addColumn("Canal Costs", canals, canals);
 		}
 	}
 }
