@@ -17,7 +17,6 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import scenario.fleet.Vessel;
-import scenario.port.VesselClassCost;
 import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
@@ -66,8 +65,7 @@ public class DeleteVesselClassCommand extends Deleter {
 			for (final EStructuralFeature.Setting setting : entry.getValue()) {
 				final EObject referer = setting.getEObject();
 
-				if (referer instanceof Vessel || referer instanceof SpotVessel
-						|| referer instanceof VesselClassCost) {
+				if (referer instanceof Vessel || referer instanceof SpotVessel) {
 					t.addAll(DeleteHelper.createDeleter(domain,
 							referer).getObjectsToDelete());
 				}
