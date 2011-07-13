@@ -1840,7 +1840,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final IReferenceValueProvider vesselClassProvider,
 			final IReferenceValueProvider portProvider) {
 		{
-			final SashForm sash = new SashForm(getContainer(), SWT.VERTICAL);
+			final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 
 			final VesselClassEVP vcePane = new VesselClassEVP(getSite()
 					.getPage(), this);
