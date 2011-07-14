@@ -37,7 +37,6 @@ import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
 public class CargoEVP extends ScenarioObjectEditorViewerPane {
 	public CargoEVP(IWorkbenchPage page, ScenarioEditor part) {
 		super(page, part);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
