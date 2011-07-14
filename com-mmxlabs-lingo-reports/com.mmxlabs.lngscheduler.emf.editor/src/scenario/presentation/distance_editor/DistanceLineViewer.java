@@ -13,7 +13,6 @@ import java.util.Map;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.CellEditor;
@@ -146,6 +145,9 @@ public class DistanceLineViewer extends TableViewer {
 
 			final TableViewerColumn toColumn = new TableViewerColumn(this,
 					SWT.NONE);
+			
+			toColumn.getColumn().setText(p.getName());
+			
 			toColumn.setLabelProvider(new ColumnLabelProvider() {
 				@Override
 				public String getText(Object element) {
@@ -172,6 +174,7 @@ public class DistanceLineViewer extends TableViewer {
 							return;
 						command = RemoveCommand.create(part.getEditingDomain(),
 								dl);
+						e.getSecond().remove(p);
 					} else {
 						if (dl == null) {
 							dl = PortFactory.eINSTANCE.createDistanceLine();
@@ -192,6 +195,7 @@ public class DistanceLineViewer extends TableViewer {
 						}
 					}
 					part.getEditingDomain().getCommandStack().execute(command);
+					refresh(element);
 				}
 
 				@Override
@@ -204,7 +208,7 @@ public class DistanceLineViewer extends TableViewer {
 
 				@Override
 				protected CellEditor getCellEditor(Object element) {
-					final TextCellEditor tce = new TextCellEditor();
+					final TextCellEditor tce = new TextCellEditor(getTable());
 					
 					tce.setValidator(new ICellEditorValidator() {
 						@Override
@@ -212,7 +216,8 @@ public class DistanceLineViewer extends TableViewer {
 							final String s = value.toString();
 							if (s.isEmpty()) return null;
 							try {
-								Integer.parseInt(s);
+								int i = Integer.parseInt(s);
+								if (i < 0) return s + " is negative";
 								return null;
 							} catch (NumberFormatException nfe) {
 								return s + " is not an integer";
