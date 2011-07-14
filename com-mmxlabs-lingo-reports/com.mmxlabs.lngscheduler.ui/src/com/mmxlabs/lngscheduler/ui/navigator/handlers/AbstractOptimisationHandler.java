@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lngscheduler.ui.navigator.handlers;
 
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.HandlerEvent;
 import org.eclipse.core.commands.IHandler;
@@ -14,7 +15,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IJobManager;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
@@ -22,6 +22,7 @@ import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
 import com.mmxlabs.jobcontroller.core.IManagedJobListener;
 import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
 import com.mmxlabs.jobcontroller.core.impl.ManagedJobListener;
+import com.mmxlabs.lngscheduler.ui.Activator;
 
 /**
  * Base {@link IHandler} implementation to cause enabled state to be refreshed

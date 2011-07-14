@@ -7,6 +7,21 @@
             class="com.mmxlabs.lngscheduler.ui.jobmanager.handlers.ScheduleFitnessExportHandler"
             commandId="com.mmxlabs.lngscheduler.ui.commands.exportTrace">
       </handler>
+       <handler
+             class="com.mmxlabs.lngscheduler.ui.jobmanager.handlers.SaveOptimisationJobHandler"
+             commandId="com.mmxlabs.lngscheduler.ui.commands.SaveOptimisationJob">
+          <enabledWhen>
+             <or>
+                <iterate
+                      ifEmpty="false"
+                      operator="or">
+                   <instanceof
+                         value="com.mmxlabs.lngscheduler.ui.LNGSchedulerJob">
+                   </instanceof>
+                </iterate>
+             </or>
+          </enabledWhen>
+       </handler>
    </extension>
 <extension
             point="org.eclipse.ui.handlers">
@@ -139,9 +154,15 @@
             id="com.mmxlabs.lngscheduler.ui.commands.exportTrace"
             name="Export Fitness Trace">
       </command>
+      <command
+            categoryId="com.mmxlabs.lngscheduler.ui.commands.category"
+            id="com.mmxlabs.lngscheduler.ui.commands.SaveOptimisationJob"
+            name="Save Optimisation Job">
+      </command>
    </extension>
    
    <extension
+         id="toolbar:com.mmxlabs.jobcontroller.views.JobManager"
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
@@ -156,6 +177,18 @@
                   mnemonic="E">
             </command>
          </menu>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.mmxlabs.jobcontroller.views.JobManager">
+         <command
+               commandId="com.mmxlabs.lngscheduler.ui.commands.SaveOptimisationJob"
+               disabledIcon="icons/dtool16/saveas_edit.gif"
+               icon="icons/etool16/saveas_edit.gif"
+               label="Save"
+               style="push"
+               tooltip="Save selected optimisation">
+         </command>
       </menuContribution>
       
       

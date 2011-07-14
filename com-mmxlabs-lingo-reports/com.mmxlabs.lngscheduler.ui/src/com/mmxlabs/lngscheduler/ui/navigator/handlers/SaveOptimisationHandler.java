@@ -4,11 +4,7 @@
  */
 package com.mmxlabs.lngscheduler.ui.navigator.handlers;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -18,21 +14,15 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import scenario.Scenario;
-
 import com.mmxlabs.jobcontoller.Activator;
 import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
+import com.mmxlabs.lngscheduler.ui.SaveJobUtil;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -50,14 +40,12 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 	}
 
 	/**
-	 * the command has been executed, so extract extract the needed information
-	 * from the application context.
+	 * the command has been executed, so extract extract the needed information from the application context.
 	 */
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final ISelection selection = HandlerUtil
-				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
+		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
@@ -68,70 +56,21 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
 
-					final IManagedJob job = Activator.getDefault()
-							.getJobManager().findJobForResource(resource);
+					final IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
 
 					if (job instanceof LNGSchedulerJob) {
 
 						final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
 
 							@Override
-							public void run(final IProgressMonitor monitor)
-									throws CoreException {
+							public void run(final IProgressMonitor monitor) throws CoreException {
+
 								monitor.beginTask("Save Scenario", 2);
-
 								try {
-									// Take copy of scenario
-									final Scenario scenario = EcoreUtil
-											.copy(((LNGSchedulerJob) job)
-													.getScenario());
-
-									// Process scenario - prune out intermediate schedules .... 
-									int numSchedules = scenario.getScheduleModel().getSchedules().size();
-									while (numSchedules > 1) {
-										scenario.getScheduleModel().getSchedules().remove(0);
-										--numSchedules;
+									SaveJobUtil.saveLNGSchedulerJob((LNGSchedulerJob) job, resource);
+									if (resource != null) {
+										resource.getParent().refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
 									}
-									// .. and set remaining schedule to the new initial state
-									if (numSchedules == 1) {
-										scenario.getOptimisation().getCurrentSettings().setInitialSchedule(scenario.getScheduleModel().getSchedules().get(0));
-									} else {
-										// TODO: Necessary?
-//										scenario.getOptimisation().getCurrentSettings().setInitialSchedule(null);
-									}
-									
-									// Create resource set to save into
-									final ResourceSetImpl resourceSet = new ResourceSetImpl();
-
-									final String fileExtension = resource
-											.getFileExtension();
-									// Create a new filename with timestamp
-									final String newPath = resource
-											.getLocation()
-											.removeFileExtension().toString()
-											+ "-"
-											+ new Date().getTime()
-											+ "."
-											+ fileExtension;
-									final URI uri = URI.createFileURI(newPath);
-
-									final Resource nResource = resourceSet
-											.createResource(uri);
-
-									// Add copied scenario to this resource
-									nResource.getContents().add(scenario);
-
-									final Map<String, String> options = new HashMap<String, String>();
-									options.put(XMLResource.OPTION_ENCODING, "UTF-8");
-									try {
-										nResource.save(options);
-									} catch (final IOException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-									resource.getParent().refreshLocal(
-											IResource.DEPTH_ONE,
-											new SubProgressMonitor(monitor, 1));
 								} finally {
 									monitor.done();
 								}
@@ -140,8 +79,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 						try {
 							ResourcesPlugin.getWorkspace().run(runnable, null);
 						} catch (final CoreException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							Activator.error(e.getMessage(), e);
 						}
 					}
 				}
@@ -164,9 +102,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 			return false;
 		}
 
-		final ISelection selection = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getSelectionService()
-				.getSelection();
+		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
@@ -176,8 +112,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 				final Object obj = itr.next();
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
-					final IManagedJob job = Activator.getDefault()
-							.getJobManager().findJobForResource(resource);
+					final IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
 					return job != null;
 
 				}

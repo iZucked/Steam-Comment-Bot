@@ -19,11 +19,9 @@ public abstract class AbstractScenarioHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = HandlerUtil
-				.getActiveWorkbenchWindowChecked(event);
+		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 
 		ISelection selection = window.getSelectionService().getSelection();
-		System.out.println("Selection = " + selection);
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection items = (IStructuredSelection) selection;
 
@@ -45,6 +43,5 @@ public abstract class AbstractScenarioHandler extends AbstractHandler {
 		return null;
 	}
 
-	public abstract void handleScenario(final ExecutionEvent event,
-			final String filename, final Scenario scenario);
+	public abstract void handleScenario(final ExecutionEvent event, final String filename, final Scenario scenario);
 }

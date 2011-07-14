@@ -302,6 +302,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			SchedulePackage.eINSTANCE.getScheduleModel_Schedules(),
 			SchedulePackage.eINSTANCE.getSchedule_Name()) {
 
+		@Override
 		protected void install() {
 			getScenario().getScheduleModel().eAdapters().add(this);
 		}
@@ -327,6 +328,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP fuelProvider = new SimpleRVP(
 			FleetPackage.eINSTANCE.getFleetModel_Fuels()) {
+		@Override
 		protected void install() {
 			getScenario().getFleetModel().eAdapters().add(this);
 		}
@@ -339,6 +341,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP vesselProvider = new SimpleRVP(
 			FleetPackage.eINSTANCE.getFleetModel_Fleet()) {
+		@Override
 		protected void install() {
 			getScenario().getFleetModel().eAdapters().add(this);
 		}
@@ -351,6 +354,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP vesselClassProvider = new SimpleRVP(
 			FleetPackage.eINSTANCE.getFleetModel_VesselClasses()) {
+		@Override
 		protected void install() {
 			getScenario().getFleetModel().eAdapters().add(this);
 		}
@@ -363,6 +367,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP entityProvider = new SimpleRVP(
 			ContractPackage.eINSTANCE.getContractModel_Entities()) {
+		@Override
 		protected void install() {
 			getScenario().getContractModel().eAdapters().add(this);
 		}
@@ -375,6 +380,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP portProvider = new SimpleRVP(
 			PortPackage.eINSTANCE.getPortModel_Ports()) {
+		@Override
 		protected void install() {
 			getScenario().getPortModel().eAdapters().add(this);
 		}
@@ -387,6 +393,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final ScenarioRVP indexProvider = new SimpleRVP(
 			MarketPackage.eINSTANCE.getMarketModel_Indices()) {
+		@Override
 		protected void install() {
 			getScenario().getMarketModel().eAdapters().add(this);
 		}
@@ -804,6 +811,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					if (updateProblemIndication) {
 						getSite().getShell().getDisplay()
 								.asyncExec(new Runnable() {
+									@Override
 									public void run() {
 										updateProblemIndication();
 									}
@@ -2016,6 +2024,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					.addSelectionChangedListener(new ISelectionChangedListener() {
 						// This ensures that we handle selections correctly.
 						//
+						@Override
 						public void selectionChanged(
 								final SelectionChangedEvent event) {
 							handleContentOutlineSelection(event.getSelection());
@@ -2305,6 +2314,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		final IRunnableWithProgress operation = new IRunnableWithProgress() {
 			// This is the method that gets invoked when the operation runs.
 			//
+			@Override
 			public void run(final IProgressMonitor monitor) {
 				// Save the resources to the file system.
 				//

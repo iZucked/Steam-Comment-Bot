@@ -35,7 +35,6 @@ import scenario.provider.LngEditPlugin;
 
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
-import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 /**
  * A reflectively self-constructing detail view for EObjects. Displays a group
