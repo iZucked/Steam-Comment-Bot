@@ -463,13 +463,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT;
 
 	/**
+	 * The operation id for the '<em>Get Cargo Or Port CV Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE = SLOT_OPERATION_COUNT + 0;
+
+	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 0;
+	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.CargoType <em>Type</em>}' enum.
@@ -751,6 +760,16 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_CargoCVvalue();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.cargo.LoadSlot#getCargoOrPortCVValue() <em>Get Cargo Or Port CV Value</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Cargo Or Port CV Value</em>' operation.
+	 * @see scenario.cargo.LoadSlot#getCargoOrPortCVValue()
+	 * @generated
+	 */
+	EOperation getLoadSlot__GetCargoOrPortCVValue();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -990,6 +1009,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOAD_SLOT__CARGO_CVVALUE = eINSTANCE.getLoadSlot_CargoCVvalue();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Cargo Or Port CV Value</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE = eINSTANCE.getLoadSlot__GetCargoOrPortCVValue();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.CargoType <em>Type</em>}' enum.

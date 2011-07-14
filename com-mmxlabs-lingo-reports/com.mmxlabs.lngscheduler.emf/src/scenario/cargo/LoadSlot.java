@@ -32,9 +32,11 @@ public interface LoadSlot extends Slot {
 	 * The energy content conversion factor for this cargo; because LNG is priced by MMBTU but measured by volume, we need to know both the energy content and volume. This value lets us derive the former from the latter.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Cargo CVvalue</em>' attribute.
+	 * @see #isSetCargoCVvalue()
+	 * @see #unsetCargoCVvalue()
 	 * @see #setCargoCVvalue(float)
 	 * @see scenario.cargo.CargoPackage#getLoadSlot_CargoCVvalue()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	float getCargoCVvalue();
@@ -44,9 +46,43 @@ public interface LoadSlot extends Slot {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Cargo CVvalue</em>' attribute.
+	 * @see #isSetCargoCVvalue()
+	 * @see #unsetCargoCVvalue()
 	 * @see #getCargoCVvalue()
 	 * @generated
 	 */
 	void setCargoCVvalue(float value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCargoCVvalue()
+	 * @see #getCargoCVvalue()
+	 * @see #setCargoCVvalue(float)
+	 * @generated
+	 */
+	void unsetCargoCVvalue();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Cargo CVvalue</em>' attribute is set.
+	 * @see #unsetCargoCVvalue()
+	 * @see #getCargoCVvalue()
+	 * @see #setCargoCVvalue(float)
+	 * @generated
+	 */
+	boolean isSetCargoCVvalue();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetCargoCVvalue()) \r\n\treturn getCargoCVvalue();\r\nelse if (getPort()!=null)\r\n\treturn getPort().getDefaultCVvalue();\r\nelse\r\n\treturn 0;'"
+	 * @generated
+	 */
+	float getCargoOrPortCVValue();
 
 } // LoadSlot

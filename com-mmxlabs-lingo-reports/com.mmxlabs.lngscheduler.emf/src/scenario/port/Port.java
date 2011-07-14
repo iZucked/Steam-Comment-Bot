@@ -23,7 +23,7 @@ import scenario.market.Index;
  * <ul>
  *   <li>{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}</li>
- *   <li>{@link scenario.port.Port#getDefaultCVValue <em>Default CV Value</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultCVvalue <em>Default CVvalue</em>}</li>
  * </ul>
  * </p>
  *
@@ -86,30 +86,30 @@ public interface Port extends UUIDObject, NamedObject {
 	void setRegasEfficiency(float value);
 
 	/**
-	 * Returns the value of the '<em><b>Default CV Value</b></em>' attribute.
+	 * Returns the value of the '<em><b>Default CVvalue</b></em>' attribute.
 	 * The default value is <code>"22.8"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Default CV Value</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Default CVvalue</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Default CV Value</em>' attribute.
-	 * @see #setDefaultCVValue(float)
-	 * @see scenario.port.PortPackage#getPort_DefaultCVValue()
+	 * @return the value of the '<em>Default CVvalue</em>' attribute.
+	 * @see #setDefaultCVvalue(float)
+	 * @see scenario.port.PortPackage#getPort_DefaultCVvalue()
 	 * @model default="22.8" required="true"
 	 * @generated
 	 */
-	float getDefaultCVValue();
+	float getDefaultCVvalue();
 
 	/**
-	 * Sets the value of the '{@link scenario.port.Port#getDefaultCVValue <em>Default CV Value</em>}' attribute.
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultCVvalue <em>Default CVvalue</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Default CV Value</em>' attribute.
-	 * @see #getDefaultCVValue()
+	 * @param value the new value of the '<em>Default CVvalue</em>' attribute.
+	 * @see #getDefaultCVvalue()
 	 * @generated
 	 */
-	void setDefaultCVValue(float value);
+	void setDefaultCVvalue(float value);
 
 } // Port

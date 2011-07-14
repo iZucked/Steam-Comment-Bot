@@ -146,13 +146,13 @@ public interface PortPackage extends EPackage {
 	int PORT__REGAS_EFFICIENCY = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Default CV Value</b></em>' attribute.
+	 * The feature id for the '<em><b>Default CVvalue</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_CV_VALUE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int PORT__DEFAULT_CVVALUE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -446,15 +446,15 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_RegasEfficiency();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.port.Port#getDefaultCVValue <em>Default CV Value</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#getDefaultCVvalue <em>Default CVvalue</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Default CV Value</em>'.
-	 * @see scenario.port.Port#getDefaultCVValue()
+	 * @return the meta object for the attribute '<em>Default CVvalue</em>'.
+	 * @see scenario.port.Port#getDefaultCVvalue()
 	 * @see #getPort()
 	 * @generated
 	 */
-	EAttribute getPort_DefaultCVValue();
+	EAttribute getPort_DefaultCVvalue();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
@@ -652,12 +652,12 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__REGAS_EFFICIENCY = eINSTANCE.getPort_RegasEfficiency();
 
 		/**
-		 * The meta object literal for the '<em><b>Default CV Value</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Default CVvalue</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute PORT__DEFAULT_CV_VALUE = eINSTANCE.getPort_DefaultCVValue();
+		EAttribute PORT__DEFAULT_CVVALUE = eINSTANCE.getPort_DefaultCVvalue();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
