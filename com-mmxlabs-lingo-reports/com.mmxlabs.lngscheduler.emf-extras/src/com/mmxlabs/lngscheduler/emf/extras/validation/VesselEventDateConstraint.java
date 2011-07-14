@@ -35,7 +35,7 @@ public class VesselEventDateConstraint extends AbstractModelConstraint {
 
 			if (start == null || end == null) {
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus());
+						(IConstraintStatus) ctx.createFailureStatus(vesselEvent.getId()));
 				if (start == null) {
 					dcsd.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_StartDate());
 				}
@@ -46,7 +46,7 @@ public class VesselEventDateConstraint extends AbstractModelConstraint {
 			} else {
 				if (start.after(end)) {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus());
+							(IConstraintStatus) ctx.createFailureStatus(vesselEvent.getId()));
 					dcsd.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_StartDate());
 					dcsd.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_EndDate());
 					return dcsd;
