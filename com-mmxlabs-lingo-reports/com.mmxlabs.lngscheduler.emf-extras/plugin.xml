@@ -12,13 +12,13 @@
          <!-- 
          	Multiple package statements are required because there's no recursive package inclusion  -->
          <package namespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
-         <package namespaceUri="http://com.mmxlabs.lng.emf" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/fleet" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/cargo" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/port" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/schedule" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/contract" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/market" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/fleet" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/cargo" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/port" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/schedule" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/contract" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/market" />
          
          <constraints
                categories="com.mmxlabs.lngscheduler.emf-extras.constraints">
