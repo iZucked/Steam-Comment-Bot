@@ -25,6 +25,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
 	private Object lastSetValue;
+	private Control inner;
 
 	public UnsettableInlineEditor(final EMFPath path, final EStructuralFeature feature,
 			final EditingDomain editingDomain, final ICommandProcessor processor) {
@@ -39,6 +40,16 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 	}
 
+	private void setControlEnabled(final Control c, final boolean enabled) {
+		if (c == null) return;
+		c.setEnabled(enabled);
+		if (c instanceof Composite) {
+			for (final Control c2 : ((Composite) c).getChildren()) {
+				setControlEnabled(c2, enabled);
+			}
+		}
+	}
+	
 	@Override
 	public Control createControl(final Composite parent) {
 
@@ -48,6 +59,8 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			sub.setLayout(new GridLayout(2, false));
 			final Button setButton = new Button(sub, SWT.CHECK);
 			this.setButton = setButton;
+			final Control inner = createValueControl(sub);
+			this.inner = inner;
 			setButton.addSelectionListener(new SelectionAdapter() {
 				{
 					final SelectionAdapter self = this;
@@ -63,15 +76,17 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 				public void widgetSelected(final SelectionEvent e) {
 					if (setButton.getSelection()) {
 						doSetValue(lastSetValue);
+						setControlEnabled(inner, true);
 					} else {
 						// unset value
 						unsetValue();
+						setControlEnabled(inner, false);
 					}
 				}
 			});
 			setButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,
 					false));
-			final Control inner = createValueControl(sub);
+			
 			inner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			c = sub;
 		} else {
@@ -112,7 +127,9 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (setButton == null || value != null) {
 			updateValueDisplay(value);
 		}
-		if (setButton != null && !setButton.isDisposed())
+		if (setButton != null && !setButton.isDisposed()) {
 			setButton.setSelection(value != null);
+		}
+		setControlEnabled(inner, setButton == null || setButton.getSelection());
 	}
 }
