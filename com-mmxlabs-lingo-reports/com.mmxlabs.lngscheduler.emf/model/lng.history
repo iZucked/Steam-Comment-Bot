@@ -4152,14 +4152,14 @@
     </changes>
     <changes xsi:type="history:OperationChange">
       <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
-          element="lng.ecore#//port/Port/defaultCVValue">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVValue"
+          element="lng.ecore#//port/Port/defaultCVvalue">
+        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVvalue"
             featureName="name" dataValue="defaultCVValue"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVValue"
+        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVvalue"
             featureName="lowerBound" dataValue="1" oldDataValue="0"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVValue"
+        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVvalue"
             featureName="defaultValueLiteral" dataValue="22.8"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVValue"
+        <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVvalue"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       </changes>
       <operation name="newAttribute">
@@ -4386,5 +4386,35 @@
         featureName="upperBound" dataValue="-1" oldDataValue="1"/>
     <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/canalCosts"
         featureName="lowerBound" dataValue="0" oldDataValue="-1"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/cargoCVvalue"
+        featureName="unsettable" dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/LoadSlot" referenceName="eOperations"
+        element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue"
+        featureName="name" dataValue="getCargoOrPortCVValue"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue"
+        referenceName="eAnnotations" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="body"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return cm.getDefaultContract(p);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetCargoCVvalue()) &#xD;&#xA;&#x9;return getCargoCVvalue();&#xD;&#xA;else if (getPort()!=null)&#xD;&#xA;&#x9;return getPort().getCargoCVvalue();&#xD;&#xA;else&#xD;&#xA;&#x9;return 0;"
+        oldDataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return cm.getDefaultContract(p);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetCargoCVvalue()) &#xD;&#xA;&#x9;return getCargoCVvalue();&#xD;&#xA;else if (getPort()!=null)&#xD;&#xA;&#x9;return getPort().getDefaultCVvalue();&#xD;&#xA;else&#xD;&#xA;&#x9;return 0;"
+        oldDataValue="if (isSetCargoCVvalue()) &#xD;&#xA;&#x9;return getCargoCVvalue();&#xD;&#xA;else if (getPort()!=null)&#xD;&#xA;&#x9;return getPort().getCargoCVvalue();&#xD;&#xA;else&#xD;&#xA;&#x9;return 0;"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVvalue"
+        featureName="name" dataValue="defaultCVvalue" oldDataValue="defaultCVValue"/>
   </releases>
 </history:History>

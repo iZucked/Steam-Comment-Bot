@@ -233,7 +233,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultCVValue() {
+	public EAttribute getPort_DefaultCVvalue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -379,7 +379,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__TIME_ZONE);
 		createEAttribute(portEClass, PORT__REGAS_EFFICIENCY);
-		createEAttribute(portEClass, PORT__DEFAULT_CV_VALUE);
+		createEAttribute(portEClass, PORT__DEFAULT_CVVALUE);
 
 		distanceModelEClass = createEClass(DISTANCE_MODEL);
 		createEReference(distanceModelEClass, DISTANCE_MODEL__DISTANCES);
@@ -442,7 +442,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_TimeZone(), ecorePackage.getEString(), "timeZone", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_RegasEfficiency(), ecorePackage.getEFloat(), "regasEfficiency", "1.0", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_DefaultCVValue(), ecorePackage.getEFloat(), "defaultCVValue", "22.8", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_DefaultCVvalue(), ecorePackage.getEFloat(), "defaultCVvalue", "22.8", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(distanceModelEClass, DistanceModel.class, "DistanceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDistanceModel_Distances(), this.getDistanceLine(), null, "distances", null, 0, -1, DistanceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

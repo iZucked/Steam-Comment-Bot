@@ -71,7 +71,7 @@ public class PortItemProvider
 			addNamePropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
-			addDefaultCVValuePropertyDescriptor(object);
+			addDefaultCVvaluePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -143,19 +143,19 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Default CV Value feature.
+	 * This adds a property descriptor for the Default CVvalue feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDefaultCVValuePropertyDescriptor(Object object) {
+	protected void addDefaultCVvaluePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Port_defaultCVValue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultCVValue_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__DEFAULT_CV_VALUE,
+				 getString("_UI_Port_defaultCVvalue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultCVvalue_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_CVVALUE,
 				 true,
 				 false,
 				 false,
@@ -204,7 +204,7 @@ public class PortItemProvider
 			case PortPackage.PORT__NAME:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__REGAS_EFFICIENCY:
-			case PortPackage.PORT__DEFAULT_CV_VALUE:
+			case PortPackage.PORT__DEFAULT_CVVALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

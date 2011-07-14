@@ -497,7 +497,7 @@ public class LNGScenarioTransformer {
 					Calculator.scale(loadSlot.getMinQuantity()),
 					Calculator.scale(loadSlot.getMaxQuantity()),
 					loadPriceCalculator,
-					(int) Calculator.scale(loadSlot.getCargoCVvalue()),
+					(int) Calculator.scale(loadSlot.getCargoOrPortCVValue()),
 					dischargeSlot.getSlotDuration());
 
 			final ICurve dischargeCurve;

@@ -428,6 +428,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getLoadSlot__GetCargoOrPortCVValue() {
+		return loadSlotEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -488,6 +497,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CVVALUE);
+		createEOperation(loadSlotEClass, LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE);
 
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
@@ -560,7 +570,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		addEParameter(op, ecorePackage.getEJavaObject(), "scenario", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLoadSlot_CargoCVvalue(), ecorePackage.getEFloat(), "cargoCVvalue", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadSlot_CargoCVvalue(), ecorePackage.getEFloat(), "cargoCVvalue", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getLoadSlot__GetCargoOrPortCVValue(), ecorePackage.getEFloat(), "getCargoOrPortCVValue", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");

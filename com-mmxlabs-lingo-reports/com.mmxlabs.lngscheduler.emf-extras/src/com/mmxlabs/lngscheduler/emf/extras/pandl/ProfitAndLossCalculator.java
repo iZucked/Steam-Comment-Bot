@@ -149,9 +149,9 @@ public class ProfitAndLossCalculator {
 
 			// divide by CV value to get mmbtu
 			final long saleableMMBTU = (long) Math.floor(saleableM3
-					* loadSlot.getCargoCVvalue());
+					* loadSlot.getCargoOrPortCVValue());
 			final long lostMMBTU = (long) (dischargedM3 * loadSlot
-					.getCargoCVvalue()) - saleableMMBTU;
+					.getCargoOrPortCVValue()) - saleableMMBTU;
 
 			// lookup the final market sales price
 			final float salesPricePerMMBTU = dischargeContract.getIndex()

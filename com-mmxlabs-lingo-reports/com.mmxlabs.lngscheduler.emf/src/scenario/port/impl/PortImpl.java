@@ -39,7 +39,7 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
- *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVValue <em>Default CV Value</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVvalue <em>Default CVvalue</em>}</li>
  * </ul>
  * </p>
  *
@@ -107,24 +107,24 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected float regasEfficiency = REGAS_EFFICIENCY_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDefaultCVValue() <em>Default CV Value</em>}' attribute.
+	 * The default value of the '{@link #getDefaultCVvalue() <em>Default CVvalue</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDefaultCVValue()
+	 * @see #getDefaultCVvalue()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final float DEFAULT_CV_VALUE_EDEFAULT = 22.8F;
+	protected static final float DEFAULT_CVVALUE_EDEFAULT = 22.8F;
 
 	/**
-	 * The cached value of the '{@link #getDefaultCVValue() <em>Default CV Value</em>}' attribute.
+	 * The cached value of the '{@link #getDefaultCVvalue() <em>Default CVvalue</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDefaultCVValue()
+	 * @see #getDefaultCVvalue()
 	 * @generated
 	 * @ordered
 	 */
-	protected float defaultCVValue = DEFAULT_CV_VALUE_EDEFAULT;
+	protected float defaultCVvalue = DEFAULT_CVVALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -222,8 +222,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public float getDefaultCVValue() {
-		return defaultCVValue;
+	public float getDefaultCVvalue() {
+		return defaultCVvalue;
 	}
 
 	/**
@@ -231,11 +231,11 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDefaultCVValue(float newDefaultCVValue) {
-		float oldDefaultCVValue = defaultCVValue;
-		defaultCVValue = newDefaultCVValue;
+	public void setDefaultCVvalue(float newDefaultCVvalue) {
+		float oldDefaultCVvalue = defaultCVvalue;
+		defaultCVvalue = newDefaultCVvalue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_CV_VALUE, oldDefaultCVValue, defaultCVValue));
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_CVVALUE, oldDefaultCVvalue, defaultCVvalue));
 	}
 
 	/**
@@ -252,8 +252,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return getTimeZone();
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				return getRegasEfficiency();
-			case PortPackage.PORT__DEFAULT_CV_VALUE:
-				return getDefaultCVValue();
+			case PortPackage.PORT__DEFAULT_CVVALUE:
+				return getDefaultCVvalue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -275,8 +275,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				setRegasEfficiency((Float)newValue);
 				return;
-			case PortPackage.PORT__DEFAULT_CV_VALUE:
-				setDefaultCVValue((Float)newValue);
+			case PortPackage.PORT__DEFAULT_CVVALUE:
+				setDefaultCVvalue((Float)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -299,8 +299,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				setRegasEfficiency(REGAS_EFFICIENCY_EDEFAULT);
 				return;
-			case PortPackage.PORT__DEFAULT_CV_VALUE:
-				setDefaultCVValue(DEFAULT_CV_VALUE_EDEFAULT);
+			case PortPackage.PORT__DEFAULT_CVVALUE:
+				setDefaultCVvalue(DEFAULT_CVVALUE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -320,8 +320,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 				return regasEfficiency != REGAS_EFFICIENCY_EDEFAULT;
-			case PortPackage.PORT__DEFAULT_CV_VALUE:
-				return defaultCVValue != DEFAULT_CV_VALUE_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_CVVALUE:
+				return defaultCVvalue != DEFAULT_CVVALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -419,8 +419,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		result.append(timeZone);
 		result.append(", regasEfficiency: ");
 		result.append(regasEfficiency);
-		result.append(", defaultCVValue: ");
-		result.append(defaultCVValue);
+		result.append(", defaultCVvalue: ");
+		result.append(defaultCVvalue);
 		result.append(')');
 		return result.toString();
 	}

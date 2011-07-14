@@ -350,9 +350,9 @@ public class AnnotatedSolutionExporter {
 				// TODO this may not be a sensible way of doing a DES cargo
 
 				final float salesPricePerM3 = salesPricePerMMBTU
-						/ cargo.getLoadSlot().getCargoCVvalue();
+						/ cargo.getLoadSlot().getCargoOrPortCVValue();
 				final float purchasePricePerM3 = purchasePricePerMMBTU
-						/ cargo.getLoadSlot().getCargoCVvalue();
+						/ cargo.getLoadSlot().getCargoOrPortCVValue();
 
 				allocation.setDischargePriceM3(Calculator
 						.scaleToInt(salesPricePerM3));

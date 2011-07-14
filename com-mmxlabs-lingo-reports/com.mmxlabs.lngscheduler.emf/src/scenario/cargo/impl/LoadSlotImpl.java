@@ -1,7 +1,9 @@
 package scenario.cargo.impl;
 
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import scenario.cargo.CargoPackage;
@@ -42,6 +44,15 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	protected float cargoCVvalue = CARGO_CVVALUE_EDEFAULT;
 
 	/**
+	 * This is true if the Cargo CVvalue attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean cargoCVvalueESet;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -77,8 +88,47 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	public void setCargoCVvalue(float newCargoCVvalue) {
 		float oldCargoCVvalue = cargoCVvalue;
 		cargoCVvalue = newCargoCVvalue;
+		boolean oldCargoCVvalueESet = cargoCVvalueESet;
+		cargoCVvalueESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__CARGO_CVVALUE, oldCargoCVvalue, cargoCVvalue));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__CARGO_CVVALUE, oldCargoCVvalue, cargoCVvalue, !oldCargoCVvalueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCargoCVvalue() {
+		float oldCargoCVvalue = cargoCVvalue;
+		boolean oldCargoCVvalueESet = cargoCVvalueESet;
+		cargoCVvalue = CARGO_CVVALUE_EDEFAULT;
+		cargoCVvalueESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.LOAD_SLOT__CARGO_CVVALUE, oldCargoCVvalue, CARGO_CVVALUE_EDEFAULT, oldCargoCVvalueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCargoCVvalue() {
+		return cargoCVvalueESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public float getCargoOrPortCVValue() {
+		if (isSetCargoCVvalue()) 
+			return getCargoCVvalue();
+		else if (getPort()!=null)
+			return getPort().getDefaultCVvalue();
+		else
+			return 0;
 	}
 
 	/**
@@ -119,7 +169,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CVVALUE:
-				setCargoCVvalue(CARGO_CVVALUE_EDEFAULT);
+				unsetCargoCVvalue();
 				return;
 		}
 		super.eUnset(featureID);
@@ -134,9 +184,23 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CVVALUE:
-				return cargoCVvalue != CARGO_CVVALUE_EDEFAULT;
+				return isSetCargoCVvalue();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE:
+				return getCargoOrPortCVValue();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
@@ -150,7 +214,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (cargoCVvalue: ");
-		result.append(cargoCVvalue);
+		if (cargoCVvalueESet) result.append(cargoCVvalue); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
