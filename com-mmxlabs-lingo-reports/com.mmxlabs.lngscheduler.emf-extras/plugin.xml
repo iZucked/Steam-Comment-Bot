@@ -285,6 +285,40 @@
             	</description>
             	<target class="VesselEvent" />
             </constraint>
+            
+			<constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.CanalCostConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.canal_costs_present"
+            	lang="Java"
+            	mode="Batch"
+            	name="Canal Costs Specified"
+            	severity="WARNING"
+            	statusCode="1">
+            	<message>
+            		Vessel class {0} has no canal costs specified for canal {1}.
+            	</message>
+            	<description>
+            		All vessel classes should probably have canal costs set.
+            	</description>
+            	<target class="VesselClass" />
+            </constraint>
+			<constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.CanalCostConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.canal_costs_positive"
+            	lang="Java"
+            	mode="Batch"
+            	name="Canal Costs Sensible"
+            	severity="WARNING"
+            	statusCode="1">
+            	<message>
+            		Vessel class {0} has non-positive costs specified for canal {1}.
+            	</message>
+            	<description>
+            		All vessel classes should probably have positive canal costs for all canals.
+            	</description>
+            	<target class="VesselClassCost" />
+            </constraint>
+            
          </constraints>
       </constraintProvider>
    </extension>
