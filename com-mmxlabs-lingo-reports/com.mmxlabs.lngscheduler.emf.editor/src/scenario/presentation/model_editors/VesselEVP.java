@@ -5,10 +5,13 @@
 package scenario.presentation.model_editors;
 
 import java.text.DateFormat;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -20,12 +23,14 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
+import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
+import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
 import scenario.presentation.cargoeditor.dialogs.PortAndTimeDialog;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public class VesselEVP extends NamedObjectEVP {
 	public VesselEVP(IWorkbenchPage page, ScenarioEditor part) {
@@ -97,12 +102,17 @@ public class VesselEVP extends NamedObjectEVP {
 				@Override
 				protected Object openDialogBox(
 						final Control cellEditorWindow, final Object object) {
-					final PortAndTimeDialog patDialog = new PortAndTimeDialog(
-							cellEditorWindow.getShell(),
-							(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-									| SWT.APPLICATION_MODAL);
-
-					return patDialog.open((PortAndTime) getValue(object));
+					
+					final EObjectDetailDialog eodd = 
+							new EObjectDetailDialog(cellEditorWindow.getShell(), ((SWT.DIALOG_TRIM & ~SWT.CLOSE)
+									| SWT.APPLICATION_MODAL), part.getEditingDomain());
+					
+					
+					part.setupDetailViewContainer(eodd);
+					
+					final Collection<EObject> result = eodd.open(Collections.singletonList((EObject) getValue(object)));
+					if (result.isEmpty()) return null;
+					else return result.iterator().next();
 				}
 			}
 			final DialogFeatureManipulator startRequirement = new RequirementFeatureManipulator(
@@ -121,6 +131,4 @@ public class VesselEVP extends NamedObjectEVP {
 		}
 
 	}
-	
-	
 }
