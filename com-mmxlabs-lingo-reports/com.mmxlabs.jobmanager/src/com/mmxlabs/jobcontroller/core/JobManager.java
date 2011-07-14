@@ -263,12 +263,6 @@ public final class JobManager implements IJobManager {
 		if (selectedResources.contains(resource)) {
 			deselectResource(resource);
 		} else {
-			// Ensure only one job is active.
-			// TODO: Fix up various views to handle multiple jobs
-			while (selectedResources.isEmpty() == false) {
-				deselectResource(selectedResources.get(0));
-			}
-
 			selectResource(resource);
 		}
 	}
