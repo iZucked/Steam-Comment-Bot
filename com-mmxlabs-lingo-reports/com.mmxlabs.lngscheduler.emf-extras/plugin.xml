@@ -268,6 +268,23 @@
                      class="VesselClass">
                </target>
             </constraint>
+            
+             <constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDateConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.vessel_event_date_order"
+            	lang="Java"
+            	mode="Batch"
+            	name="Vessel Event Date Consistency"
+            	severity="ERROR"
+            	statusCode="1">
+            	<message>
+            		Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must be before the end date.
+            	</message>
+            	<description>
+            		The start end end window of a vessel event must be set and consistent.
+            	</description>
+            	<target class="VesselEvent" />
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
