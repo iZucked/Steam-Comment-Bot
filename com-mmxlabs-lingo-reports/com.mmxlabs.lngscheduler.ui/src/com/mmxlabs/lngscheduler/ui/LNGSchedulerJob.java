@@ -63,41 +63,34 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 
 		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
 
-		final OptimisationTransformer ot = new OptimisationTransformer(
-				lst.getOptimisationSettings());
+		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 
 		IOptimisationData<ISequenceElement> data;
 		try {
 			data = lst.createOptimisationData(entities);
-		} catch (IncompleteScenarioException e) {
+		} catch (final IncompleteScenarioException e) {
 			// Wrap up exception
 			throw new RuntimeException(e);
 		}
 
-		final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
-				.createOptimiserAndContext(data, entities);
+		final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot.createOptimiserAndContext(data, entities);
 
-		final IOptimisationContext<ISequenceElement> context = optAndContext
-				.getFirst();
+		final IOptimisationContext<ISequenceElement> context = optAndContext.getFirst();
 		optimiser = optAndContext.getSecond();
 
 		// because we are driving the optimiser ourself, so we can be paused, we
 		// don't actually get progress callbacks.
-		optimiser
-				.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
+		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
 
 		optimiser.init();
-		IAnnotatedSolution<ISequenceElement> startSolution = optimiser
-				.start(context);
+		final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
 
 		saveSolution("start state", startSolution);
 	}
 
-	private Schedule saveSolution(final String name,
-			final IAnnotatedSolution<ISequenceElement> solution) {
+	private Schedule saveSolution(final String name, final IAnnotatedSolution<ISequenceElement> solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		final Schedule schedule = exporter.exportAnnotatedSolution(scenario,
-				entities, solution);
+		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 
 		schedule.setName(scenario.getName() + " " + name);
 
@@ -118,12 +111,11 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 
 		if ((currentProgress % 5) == 0) {
 			if (intermediateSchedule != null) {
-//				((EList<EObject>) intermediateSchedule.eContainer().eGet(
-//						intermediateSchedule.eContainingFeature()))
-//						.remove(intermediateSchedule);
+				// ((EList<EObject>) intermediateSchedule.eContainer().eGet(
+				// intermediateSchedule.eContainingFeature()))
+				// .remove(intermediateSchedule);
 			}
-			intermediateSchedule = saveSolution(currentProgress + "%",
-					optimiser.getBestSolution(false));
+			intermediateSchedule = saveSolution(currentProgress + "%", optimiser.getBestSolution(false));
 		}
 
 		// System.err.println("current fitness " +
@@ -134,9 +126,7 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		if (optimiser.isFinished()) {
 			// export final state
 			if (intermediateSchedule != null) {
-				((EList<EObject>) intermediateSchedule.eContainer().eGet(
-						intermediateSchedule.eContainingFeature()))
-						.remove(intermediateSchedule);
+				((EList<EObject>) intermediateSchedule.eContainer().eGet(intermediateSchedule.eContainingFeature())).remove(intermediateSchedule);
 			}
 			intermediateSchedule = null;
 			saveSolution("optimised", optimiser.getBestSolution(true));
