@@ -12,17 +12,14 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
 import com.mmxlabs.lngscheduler.ui.Activator;
 import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
 import com.mmxlabs.lngscheduler.ui.SaveJobUtil;
@@ -50,7 +47,7 @@ public class SaveOptimisationJobHandler extends AbstractOptimisationHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-		IJobManager jobManager = Activator.getDefault().getJobManager();
+		final IJobManager jobManager = Activator.getDefault().getJobManager();
 
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
@@ -70,9 +67,15 @@ public class SaveOptimisationJobHandler extends AbstractOptimisationHandler {
 						public void run(final IProgressMonitor monitor) throws CoreException {
 							monitor.beginTask("Save Scenario", 2);
 							try {
-								SaveJobUtil.saveLNGSchedulerJob(job, resource);
-								if (resource != null) {
-									resource.getParent().refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
+								// Attempt to save job
+								final IPath path = SaveJobUtil.saveLNGSchedulerJob(job, resource);
+								if (path != null) {
+									// An IPath has been returned, try and find the IResource that it corresponds to
+									final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+									if (resource != null) {
+										// A resource exists!, refresh the parent so that the navigator will find it.
+										resource.getParent().refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
+									}
 								}
 							} finally {
 								monitor.done();
@@ -93,37 +96,37 @@ public class SaveOptimisationJobHandler extends AbstractOptimisationHandler {
 		return null;
 	}
 
-//	@Override
-//	public boolean isEnabled() {
-//
-//		// We could do some of this in plugin.xml - but not been able to
-//		// configure it properly.
-//		// Plugin.xml will make it enabled if the resource can be a Scenario.
-//		// But need finer grained control depending on optimisation state.
-//		if (!super.isEnabled()) {
-//			return false;
-//		}
-//
-//		final IWorkbench workbench = PlatformUI.getWorkbench();
-//		if (workbench == null) {
-//			return false;
-//		}
-//		final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-//		if (activeWorkbenchWindow == null) {
-//			return false;
-//		}
-//		final ISelection selection = activeWorkbenchWindow.getSelectionService().getSelection();
-//
-//		if (selection != null && selection instanceof IStructuredSelection) {
-//			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
-//
-//			final Iterator<?> itr = strucSelection.iterator();
-//			while (itr.hasNext()) {
-//				final Object obj = itr.next();
-//				return (obj instanceof LNGSchedulerJob);
-//			}
-//		}
-//
-//		return false;
-//	}
+	// @Override
+	// public boolean isEnabled() {
+	//
+	// // We could do some of this in plugin.xml - but not been able to
+	// // configure it properly.
+	// // Plugin.xml will make it enabled if the resource can be a Scenario.
+	// // But need finer grained control depending on optimisation state.
+	// if (!super.isEnabled()) {
+	// return false;
+	// }
+	//
+	// final IWorkbench workbench = PlatformUI.getWorkbench();
+	// if (workbench == null) {
+	// return false;
+	// }
+	// final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+	// if (activeWorkbenchWindow == null) {
+	// return false;
+	// }
+	// final ISelection selection = activeWorkbenchWindow.getSelectionService().getSelection();
+	//
+	// if (selection != null && selection instanceof IStructuredSelection) {
+	// final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+	//
+	// final Iterator<?> itr = strucSelection.iterator();
+	// while (itr.hasNext()) {
+	// final Object obj = itr.next();
+	// return (obj instanceof LNGSchedulerJob);
+	// }
+	// }
+	//
+	// return false;
+	// }
 }

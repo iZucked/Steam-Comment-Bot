@@ -12,6 +12,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
@@ -67,9 +68,15 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 
 								monitor.beginTask("Save Scenario", 2);
 								try {
-									SaveJobUtil.saveLNGSchedulerJob((LNGSchedulerJob) job, resource);
-									if (resource != null) {
-										resource.getParent().refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
+									// Attempt to save job
+									final IPath path = SaveJobUtil.saveLNGSchedulerJob((LNGSchedulerJob) job, resource);
+									if (path != null) {
+										// An IPath has been returned, try and find the IResource that it corresponds to
+										final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+										if (resource != null) {
+											// A resource exists!, refresh the parent so that the navigator will find it.
+											resource.getParent().refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
+										}
 									}
 								} finally {
 									monitor.done();
