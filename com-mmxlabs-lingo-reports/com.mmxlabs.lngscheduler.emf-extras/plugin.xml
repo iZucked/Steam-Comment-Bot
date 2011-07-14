@@ -185,6 +185,7 @@
             	<target class="VesselClass" />
             	<target class="CharterOut" />
             	<target class="VesselEvent" />
+            	<target class="PortAndTime" />
              <target
                    class="VesselEvent">
              </target>
