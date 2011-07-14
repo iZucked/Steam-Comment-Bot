@@ -23,10 +23,8 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.DialogFeatureManipulator;
-import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
-import scenario.presentation.cargoeditor.dialogs.PortAndTimeDialog;
 
 /**
  * @author Tom Hinton
