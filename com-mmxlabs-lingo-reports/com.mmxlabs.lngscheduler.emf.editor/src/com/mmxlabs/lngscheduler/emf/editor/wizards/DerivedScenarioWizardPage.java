@@ -162,9 +162,12 @@ public class DerivedScenarioWizardPage extends WizardPage {
 					if (e2 != null) {
 						// insert e2
 						for (final EReference ref : result.eClass()
-								.getEAllContainments()) {
+								.getEAllReferences()) {
 							if (ref.getEType().equals(entry.getKey())) {
 								result.eSet(ref, e2);
+							}
+							if (ref.isContainment() == false) {
+								result.getContainedModels().add(e2);
 							}
 						}
 						continue here;

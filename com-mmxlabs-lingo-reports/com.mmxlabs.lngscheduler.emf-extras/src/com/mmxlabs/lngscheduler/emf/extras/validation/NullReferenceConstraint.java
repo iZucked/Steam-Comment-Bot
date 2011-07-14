@@ -33,9 +33,10 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil
-			.makeArrayList(PortPackage.eINSTANCE.getDistanceLine_FromPort(),
+			.makeArrayList(
+					PortPackage.eINSTANCE.getDistanceLine_FromPort(),
 					PortPackage.eINSTANCE.getDistanceLine_ToPort(),
-//					PortPackage.eINSTANCE.getPort_DefaultContract(),
+					// PortPackage.eINSTANCE.getPort_DefaultContract(),
 					CargoPackage.eINSTANCE.getCargo_LoadSlot(),
 					CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
 					CargoPackage.eINSTANCE.getSlot_Port(),
@@ -44,7 +45,8 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 					FleetPackage.eINSTANCE.getCharterOut_EndPort(),
 					FleetPackage.eINSTANCE.getVesselEvent_StartPort(),
 					FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(),
-					FleetPackage.eINSTANCE.getVesselClass_BallastAttributes()
+					FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(),
+					FleetPackage.eINSTANCE.getPortAndTime_Port()
 			// TODO add any more refs to check here
 			);
 
@@ -69,7 +71,8 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 		final LinkedList<EReference> errors = new LinkedList<EReference>();
 		final Set<EReference> targetRefs = getReferencesToCheck(target.eClass());
 		for (final EReference ref : targetRefs) {
-			if (target.eGet(ref) == null)
+			if (target.eGet(ref) == null
+					&& !(ref.isUnsettable() && target.eIsSet(ref) == false))
 				errors.add(ref);
 		}
 

@@ -162,7 +162,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		}
 		currentlySettingValue = true;
 		final Object currentValue = getValue();
-		if (!((currentValue == null && value == null) || ((currentValue != null && value != null) && currentValue
+		if (!(/*(currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue
 				.equals(value)))) {
 			final Command command = createSetCommand(value);
 			commandProcessor.processCommand(command, input, feature);

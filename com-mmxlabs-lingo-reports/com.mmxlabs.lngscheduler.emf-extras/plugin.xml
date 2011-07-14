@@ -12,13 +12,13 @@
          <!-- 
          	Multiple package statements are required because there's no recursive package inclusion  -->
          <package namespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
-         <package namespaceUri="http://com.mmxlabs.lng.emf" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/fleet" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/cargo" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/port" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/schedule" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/contract" />
-         <package namespaceUri="http://com.mmxlabs.lng.emf/market" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/fleet" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/cargo" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/port" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/schedule" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/contract" />
+         <package namespaceUri="http://com.mmxlabs.lng.emf2/market" />
          
          <constraints
                categories="com.mmxlabs.lngscheduler.emf-extras.constraints">
@@ -185,6 +185,7 @@
             	<target class="VesselClass" />
             	<target class="CharterOut" />
             	<target class="VesselEvent" />
+            	<target class="PortAndTime" />
              <target
                    class="VesselEvent">
              </target>
@@ -266,6 +267,23 @@
                <target
                      class="VesselClass">
                </target>
+            </constraint>
+            
+             <constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDateConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.vessel_event_date_order"
+            	lang="Java"
+            	mode="Batch"
+            	name="Vessel Event Date Consistency"
+            	severity="ERROR"
+            	statusCode="1">
+            	<message>
+            		Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must be before the end date.
+            	</message>
+            	<description>
+            		The start end end window of a vessel event must be set and consistent.
+            	</description>
+            	<target class="VesselEvent" />
             </constraint>
          </constraints>
       </constraintProvider>

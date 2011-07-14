@@ -24,7 +24,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import scenario.fleet.FleetPackage;
-import scenario.fleet.VesselClassCost;
 import scenario.fleet.VesselStateAttributes;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;

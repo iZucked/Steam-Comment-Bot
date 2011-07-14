@@ -10,12 +10,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
@@ -33,12 +29,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.fleet.FleetPackage;
-import scenario.presentation.EditorUtils;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView;
 import scenario.presentation.cargoeditor.detailview.EObjectMultiDialog;
 import scenario.presentation.cargoeditor.handlers.AddAction;
 

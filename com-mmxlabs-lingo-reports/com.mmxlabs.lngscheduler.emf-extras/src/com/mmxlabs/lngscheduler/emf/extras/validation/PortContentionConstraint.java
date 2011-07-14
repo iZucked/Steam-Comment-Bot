@@ -116,8 +116,10 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 			final StringBuffer message = new StringBuffer();
 
 			// iterate over slots and check for overlap
-			// we could make this faster by having a second set reverse-ordered on end
-			// date and using that to find a suitable starting point in slotsAtPort?
+			// we could make this faster by having a second set reverse-ordered
+			// on end
+			// date and using that to find a suitable starting point in
+			// slotsAtPort?
 			for (final Slot s : slotsAtPort) {
 				final int order = overlaps(s, slot);
 				if (order == 0) {
@@ -125,7 +127,9 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 						message.append((message.length() > 0 ? ", " : "")
 								+ s.getId());
 					}
-					if (s.getWindowStart().after(slot.getWindowEnd()))
+					if (s.getWindowStart() != null
+							&& slot.getWindowEnd() != null
+							&& s.getWindowStart().after(slot.getWindowEnd()))
 						break;
 				} // else {
 					// break;
@@ -146,5 +150,4 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 
 		return ctx.createSuccessStatus();
 	}
-
 }

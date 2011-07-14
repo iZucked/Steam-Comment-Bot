@@ -145,10 +145,10 @@ import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
 import scenario.presentation.cargoeditor.detailview.MultiReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.VesselClassCostEditor;
+import scenario.presentation.model_editors.CanalEVP;
 import scenario.presentation.model_editors.CargoEVP;
 import scenario.presentation.model_editors.EntityEVP;
 import scenario.presentation.model_editors.IndexEVP;
-import scenario.presentation.model_editors.NamedObjectEVP;
 import scenario.presentation.model_editors.PortEVP;
 import scenario.presentation.model_editors.PurchaseContractEVP;
 import scenario.presentation.model_editors.SalesContractEVP;
@@ -1827,7 +1827,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		createContextMenuFor(portEditor.getViewer());
 
-		final NamedObjectEVP canalEVP = new NamedObjectEVP(getSite().getPage(),
+		final CanalEVP canalEVP = new CanalEVP(getSite().getPage(),
 				this);
 
 		canalEVP.createControl(sash);
