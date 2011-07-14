@@ -234,7 +234,12 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 										.getPurchaseContracts()
 										.add((PurchaseContract) object);
 							} else if (object instanceof DistanceModel) {
-								scenario.setDistanceModel((DistanceModel) object);
+								// don't add distance model, because of
+								// containment relationship.
+								scenario.getDistanceModel()
+										.getDistances()
+										.addAll(((DistanceModel) object)
+												.getDistances());
 							} else if (object instanceof Port) {
 								scenario.getPortModel().getPorts()
 										.add((Port) object);
@@ -530,8 +535,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 			setControl(topLevel);
 		}
 
-		void makeEditor(Group group, String name, EClass ec,
-				String[] extensions) {
+		void makeEditor(Group group, String name, EClass ec, String[] extensions) {
 			final FileFieldEditor portsEditor = new FileFieldEditor(name
 					+ "Select", name, group);
 			portsEditor.setFileExtensions(extensions);
