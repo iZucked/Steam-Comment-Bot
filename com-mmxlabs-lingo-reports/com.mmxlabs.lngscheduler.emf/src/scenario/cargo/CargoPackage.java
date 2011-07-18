@@ -146,22 +146,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO__ALLOWED_VESSELS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Discharge Slot</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__DISCHARGE_SLOT = 2;
-
-	/**
 	 * The feature id for the '<em><b>Load Slot</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__LOAD_SLOT = 3;
+	int CARGO__LOAD_SLOT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Slot</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__DISCHARGE_SLOT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.

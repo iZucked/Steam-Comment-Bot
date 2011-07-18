@@ -4416,5 +4416,23 @@
         oldDataValue="if (isSetCargoCVvalue()) &#xD;&#xA;&#x9;return getCargoCVvalue();&#xD;&#xA;else if (getPort()!=null)&#xD;&#xA;&#x9;return getPort().getCargoCVvalue();&#xD;&#xA;else&#xD;&#xA;&#x9;return 0;"/>
     <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVvalue"
         featureName="name" dataValue="defaultCVvalue" oldDataValue="defaultCVValue"/>
+    <changes xsi:type="history:Create" target="lng.ecore#/" referenceName="eClassifiers"
+        element="lng.ecore#//DateAndOptionalHour"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceClassName"
+        dataValue="java.lang.Object"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceTypeName"
+        dataValue="DateAndOptionalTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="name"
+        dataValue="DateAndOptionalTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="name"
+        dataValue="DateAndOptionalHour" oldDataValue="DateAndOptionalTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceTypeName"
+        dataValue="DateAndOptionalHour" oldDataValue="DateAndOptionalTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/windowStart" featureName="eType"
+        referenceValue="lng.ecore#//DateAndOptionalHour" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceClassName"
+        dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour" oldDataValue="java.lang.Object"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceTypeName"
+        dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour" oldDataValue="DateAndOptionalHour"/>
   </releases>
 </history:History>

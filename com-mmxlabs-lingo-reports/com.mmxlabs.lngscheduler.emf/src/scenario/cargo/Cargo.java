@@ -22,8 +22,8 @@ import scenario.fleet.Vessel;
  * <ul>
  *   <li>{@link scenario.cargo.Cargo#getId <em>Id</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
- *   <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>

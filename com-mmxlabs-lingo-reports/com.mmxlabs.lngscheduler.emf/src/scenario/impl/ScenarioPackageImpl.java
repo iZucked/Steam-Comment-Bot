@@ -6,8 +6,10 @@
  */
 package scenario.impl;
 
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -95,6 +97,13 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	private EClass uuidObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType dateAndOptionalHourEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -392,6 +401,15 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getDateAndOptionalHour() {
+		return dateAndOptionalHourEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
 	}
@@ -440,6 +458,9 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		uuidObjectEClass = createEClass(UUID_OBJECT);
 		createEAttribute(uuidObjectEClass, UUID_OBJECT__UUID);
+
+		// Create data types
+		dateAndOptionalHourEDataType = createEDataType(DATE_AND_OPTIONAL_HOUR);
 	}
 
 	/**
@@ -520,6 +541,9 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		initEClass(uuidObjectEClass, UUIDObject.class, "UUIDObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUUIDObject_UUID(), ecorePackage.getEString(), "UUID", "", 1, 1, UUIDObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize data types
+		initEDataType(dateAndOptionalHourEDataType, DateAndOptionalHour.class, "DateAndOptionalHour", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

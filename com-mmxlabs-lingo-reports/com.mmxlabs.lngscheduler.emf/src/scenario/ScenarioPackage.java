@@ -8,6 +8,7 @@ package scenario;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -347,6 +348,17 @@ public interface ScenarioPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>Date And Optional Hour</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour
+	 * @see scenario.impl.ScenarioPackageImpl#getDateAndOptionalHour()
+	 * @generated
+	 */
+	int DATE_AND_OPTIONAL_HOUR = 4;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.Scenario <em>Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -581,6 +593,17 @@ public interface ScenarioPackage extends EPackage {
 	EAttribute getUUIDObject_UUID();
 
 	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour <em>Date And Optional Hour</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Date And Optional Hour</em>'.
+	 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour
+	 * @model instanceClass="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour"
+	 * @generated
+	 */
+	EDataType getDateAndOptionalHour();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -786,6 +809,16 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute UUID_OBJECT__UUID = eINSTANCE.getUUIDObject_UUID();
+
+		/**
+		 * The meta object literal for the '<em>Date And Optional Hour</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour
+		 * @see scenario.impl.ScenarioPackageImpl#getDateAndOptionalHour()
+		 * @generated
+		 */
+		EDataType DATE_AND_OPTIONAL_HOUR = eINSTANCE.getDateAndOptionalHour();
 
 	}
 
