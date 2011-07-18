@@ -111,6 +111,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 						.getInstance().getContainer(objects.get(0));
 				ValidationSupport.getInstance().setContainers(duplicates,
 						p.getFirst(), p.getSecond());
+				ValidationSupport.getInstance().ignoreObjects(objects);
 			}
 
 			selectedObjectIndex = 0;
@@ -160,6 +161,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			}
 		} finally {
 			ValidationSupport.getInstance().clearContainers(duplicates);
+			ValidationSupport.getInstance().unignoreObjects(objects);
 		}
 	}
 
