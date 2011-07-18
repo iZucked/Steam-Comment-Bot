@@ -17,10 +17,18 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 
 import scenario.Scenario;
+import scenario.schedule.Schedule;
 
 public class SaveJobUtil {
 
-	public static void saveLNGSchedulerJob(final LNGSchedulerJob job, final IResource resource) {
+	/**
+	 * Save the current {@link Schedule} & {@link Scenario} from the optimisation job into a new resource determined by the user.
+	 * 
+	 * @param job
+	 * @param resource Existing resource to base UI on
+	 * @return New resource {@link IPath}.
+	 */
+	public static IPath saveLNGSchedulerJob(final LNGSchedulerJob job, final IResource resource) {
 
 		// Generate a prompt to ask the user for the new resource string
 		final SaveAsDialog dialog = new SaveAsDialog(Display.getDefault().getActiveShell());
@@ -31,17 +39,17 @@ public class SaveJobUtil {
 		// Need to create the dialog before setting strings....
 		dialog.create();
 		dialog.setTitle("Save As...");
-		
+
 		if (dialog.open() != Window.OK) {
-			return;
+			return null;
 		}
-		
+
 		IPath newFile = dialog.getResult();
 		// FIXME: Do not hardcode extension
 		if ("scenario".equals(newFile.getFileExtension()) == false) {
 			newFile = newFile.addFileExtension("scenario");
 		}
-		
+
 		// Take copy of scenario
 		final Scenario scenario = EcoreUtil.copy((job).getScenario());
 
@@ -73,9 +81,11 @@ public class SaveJobUtil {
 		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
 		try {
 			nResource.save(options);
+			return newFile;
 		} catch (final IOException e) {
 			Activator.error(e.getMessage(), e);
 		}
+		return null;
 
 	}
 }
