@@ -17,6 +17,7 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselClassCost;
+import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
 
 /**
@@ -137,7 +138,20 @@ public class VesselClassImporter extends EObjectImporter {
 		} else {
 			super.populateContainment(prefix, result, reference, fields,
 					deferredReferences, registry);
+			// force vessel state to match up - why is there even a vessel state field, given that it's implied?
+			if (reference == FleetPackage.eINSTANCE.getVesselClass_LadenAttributes() &&
+					result.eGet(reference)!=null
+					) {
+				((VesselStateAttributes)result.eGet(reference)).setVesselState(VesselState.LADEN);
+			}
+			if (reference == FleetPackage.eINSTANCE.getVesselClass_BallastAttributes() &&
+					result.eGet(reference)!=null
+					) {
+				((VesselStateAttributes)result.eGet(reference)).setVesselState(VesselState.BALLAST);
+			}
 		}
 	}
+	
+	
 
 }
