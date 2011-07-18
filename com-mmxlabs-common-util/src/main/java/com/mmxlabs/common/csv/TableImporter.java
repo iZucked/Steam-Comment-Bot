@@ -25,14 +25,14 @@ public class TableImporter {
 		contents = new HashMap<String, Map<String, String>>();
 		load(is);
 	}
-	
-	protected void load(InputStream is) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		
+
+	protected void load(final InputStream is) throws IOException {
+		final BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
 		String line = null;
 		boolean firstRow = true;
 		while ((line = br.readLine()) != null) {
-			String[] cells = line.split(",");
+			final String[] cells = line.split(",");
 			if (firstRow) {
 				for (int i = 1; i<cells.length; i++) {
 					colKeys.add(cells[i].trim());
@@ -49,8 +49,8 @@ public class TableImporter {
 		}
 		br.close();
 	}
-	
-	public String getCell(String row, String column) {
+
+	public String getCell(final String row, final String column) {
 		return contents.get(row).get(column);
 	}
 
@@ -62,7 +62,7 @@ public class TableImporter {
 		return Collections.unmodifiableList(colKeys);
 	}
 
-	public boolean contains(String a, String b) {
+	public boolean contains(final String a, final String b) {
 		return contents.containsKey(a) && contents.get(a).containsKey(b);
 	}
 }
