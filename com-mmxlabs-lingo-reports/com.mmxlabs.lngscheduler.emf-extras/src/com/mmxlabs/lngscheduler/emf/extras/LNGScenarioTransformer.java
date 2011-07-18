@@ -678,7 +678,7 @@ public class LNGScenarioTransformer {
 							Calculator.scaleToInt(eVc.getBaseFuel()
 									.getEquivalenceFactor()),
 							// This should be divide?
-							Calculator.scaleToInt(eVc.getDailyCharterPrice() / 24.0));
+							Calculator.scaleToInt(eVc.getDailyCharterInPrice() / 24.0));
 			vesselClassAssociation.add(eVc, vc);
 
 			/*
@@ -725,7 +725,7 @@ public class LNGScenarioTransformer {
 					.getDailyCharterOutPrice() : (eV.getClass_()
 					.isSetDailyCharterOutPrice() ? eV.getClass_()
 					.getDailyCharterOutPrice() : eV.getClass_()
-					.getDailyCharterPrice());
+					.getDailyCharterInPrice());
 
 			final IVessel vessel = builder.createVessel(eV.getName(),
 					vesselClassAssociation.lookup(eV.getClass_()), Calculator

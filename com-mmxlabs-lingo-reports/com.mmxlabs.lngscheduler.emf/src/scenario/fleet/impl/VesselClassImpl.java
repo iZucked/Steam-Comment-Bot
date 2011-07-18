@@ -46,7 +46,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinHeelVolume <em>Min Heel Volume</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getFillCapacity <em>Fill Capacity</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterInPrice <em>Daily Charter In Price</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
@@ -181,24 +181,24 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected int spotCharterCount = SPOT_CHARTER_COUNT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDailyCharterPrice() <em>Daily Charter Price</em>}' attribute.
+	 * The default value of the '{@link #getDailyCharterInPrice() <em>Daily Charter In Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDailyCharterPrice()
+	 * @see #getDailyCharterInPrice()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int DAILY_CHARTER_PRICE_EDEFAULT = 0;
+	protected static final int DAILY_CHARTER_IN_PRICE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDailyCharterPrice() <em>Daily Charter Price</em>}' attribute.
+	 * The cached value of the '{@link #getDailyCharterInPrice() <em>Daily Charter In Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDailyCharterPrice()
+	 * @see #getDailyCharterInPrice()
 	 * @generated
 	 * @ordered
 	 */
-	protected int dailyCharterPrice = DAILY_CHARTER_PRICE_EDEFAULT;
+	protected int dailyCharterInPrice = DAILY_CHARTER_IN_PRICE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute.
@@ -550,27 +550,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getDailyCharterPrice() {
-		return dailyCharterPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDailyCharterPrice(int newDailyCharterPrice) {
-		int oldDailyCharterPrice = dailyCharterPrice;
-		dailyCharterPrice = newDailyCharterPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE, oldDailyCharterPrice, dailyCharterPrice));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getDailyCharterOutPrice() {
 		return dailyCharterOutPrice;
 	}
@@ -631,6 +610,27 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 		spotCharterCount = newSpotCharterCount;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT, oldSpotCharterCount, spotCharterCount));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getDailyCharterInPrice() {
+		return dailyCharterInPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDailyCharterInPrice(int newDailyCharterInPrice) {
+		int oldDailyCharterInPrice = dailyCharterInPrice;
+		dailyCharterInPrice = newDailyCharterInPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE, oldDailyCharterInPrice, dailyCharterInPrice));
 	}
 
 	/**
@@ -747,8 +747,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return getFillCapacity();
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				return getSpotCharterCount();
-			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
-				return getDailyCharterPrice();
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
+				return getDailyCharterInPrice();
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
 				return getDailyCharterOutPrice();
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
@@ -797,8 +797,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				setSpotCharterCount((Integer)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
-				setDailyCharterPrice((Integer)newValue);
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
+				setDailyCharterInPrice((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
 				setDailyCharterOutPrice((Integer)newValue);
@@ -854,8 +854,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
-				setDailyCharterPrice(DAILY_CHARTER_PRICE_EDEFAULT);
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
+				setDailyCharterInPrice(DAILY_CHARTER_IN_PRICE_EDEFAULT);
 				return;
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
 				unsetDailyCharterOutPrice();
@@ -902,8 +902,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return fillCapacity != FILL_CAPACITY_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
-				return dailyCharterPrice != DAILY_CHARTER_PRICE_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
+				return dailyCharterInPrice != DAILY_CHARTER_IN_PRICE_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
 				return isSetDailyCharterOutPrice();
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
@@ -944,8 +944,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 		result.append(fillCapacity);
 		result.append(", spotCharterCount: ");
 		result.append(spotCharterCount);
-		result.append(", dailyCharterPrice: ");
-		result.append(dailyCharterPrice);
+		result.append(", dailyCharterInPrice: ");
+		result.append(dailyCharterInPrice);
 		result.append(", dailyCharterOutPrice: ");
 		if (dailyCharterOutPriceESet) result.append(dailyCharterOutPrice); else result.append("<unset>");
 		result.append(')');

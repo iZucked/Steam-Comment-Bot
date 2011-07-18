@@ -75,7 +75,7 @@ public class VesselClassItemProvider
 			addMinHeelVolumePropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
-			addDailyCharterPricePropertyDescriptor(object);
+			addDailyCharterInPricePropertyDescriptor(object);
 			addDailyCharterOutPricePropertyDescriptor(object);
 			addBaseFuelPropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
@@ -194,28 +194,6 @@ public class VesselClassItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Daily Charter Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDailyCharterPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselClass_dailyCharterPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_dailyCharterPrice_feature", "_UI_VesselClass_type"),
-				 FleetPackage.Literals.VESSEL_CLASS__DAILY_CHARTER_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Daily Charter Out Price feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -251,6 +229,28 @@ public class VesselClassItemProvider
 				 getString("_UI_VesselClass_spotCharterCount_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_spotCharterCount_feature", "_UI_VesselClass_type"),
 				 FleetPackage.Literals.VESSEL_CLASS__SPOT_CHARTER_COUNT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Daily Charter In Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDailyCharterInPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_dailyCharterInPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_dailyCharterInPrice_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE,
 				 true,
 				 false,
 				 false,
@@ -379,7 +379,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_PRICE:
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

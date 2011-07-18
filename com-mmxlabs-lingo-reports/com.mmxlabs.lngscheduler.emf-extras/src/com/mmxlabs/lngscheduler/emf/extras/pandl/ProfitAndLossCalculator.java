@@ -85,7 +85,7 @@ public class ProfitAndLossCalculator {
 									.getVessel().getClass_()
 									.getDailyCharterOutPrice() : fleetVessel
 									.getVessel().getClass_()
-									.getDailyCharterPrice());
+									.getDailyCharterInPrice());
 
 					li.setValue((evt.getEventDuration() * dailyCharterPrice) / 24);
 							

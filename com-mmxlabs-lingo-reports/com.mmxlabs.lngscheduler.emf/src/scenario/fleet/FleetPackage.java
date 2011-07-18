@@ -301,13 +301,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__SPOT_CHARTER_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Daily Charter Price</b></em>' attribute.
+	 * The feature id for the '<em><b>Daily Charter In Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__DAILY_CHARTER_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_CLASS__DAILY_CHARTER_IN_PRICE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Daily Charter Out Price</b></em>' attribute.
@@ -1303,17 +1303,6 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_FillCapacity();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Daily Charter Price</em>'.
-	 * @see scenario.fleet.VesselClass#getDailyCharterPrice()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_DailyCharterPrice();
-
-	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1334,6 +1323,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselClass_SpotCharterCount();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getDailyCharterInPrice <em>Daily Charter In Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Daily Charter In Price</em>'.
+	 * @see scenario.fleet.VesselClass#getDailyCharterInPrice()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_DailyCharterInPrice();
 
 	/**
 	 * Returns the meta object for the reference list '{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}'.
@@ -1999,14 +1999,6 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_CLASS__FILL_CAPACITY = eINSTANCE.getVesselClass_FillCapacity();
 
 		/**
-		 * The meta object literal for the '<em><b>Daily Charter Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__DAILY_CHARTER_PRICE = eINSTANCE.getVesselClass_DailyCharterPrice();
-
-		/**
 		 * The meta object literal for the '<em><b>Daily Charter Out Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2021,6 +2013,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__SPOT_CHARTER_COUNT = eINSTANCE.getVesselClass_SpotCharterCount();
+
+		/**
+		 * The meta object literal for the '<em><b>Daily Charter In Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__DAILY_CHARTER_IN_PRICE = eINSTANCE.getVesselClass_DailyCharterInPrice();
 
 		/**
 		 * The meta object literal for the '<em><b>Inaccessible Ports</b></em>' reference list feature.

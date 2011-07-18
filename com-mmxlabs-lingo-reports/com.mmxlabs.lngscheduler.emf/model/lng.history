@@ -292,22 +292,22 @@
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures"
-          element="lng.ecore#//fleet/VesselClass/dailyCharterPrice">
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterPrice"
+          element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice"
             featureName="name" dataValue="dailyCharterPrice"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterPrice"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass/dailyCharterPrice"
-          referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClass/dailyCharterPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass/dailyCharterInPrice"
+          referenceName="eAnnotations" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
             featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
       </changes>
-      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass/dailyCharterPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
-          referenceName="details" element="lng.ecore#//fleet/VesselClass/dailyCharterPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+      <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass/dailyCharterInPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          referenceName="details" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="key" dataValue="documentation"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
             featureName="value" dataValue="The cost per day of spot chartering vessels of this class, expressed in dollars"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures"
@@ -4436,5 +4436,10 @@
         dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour" oldDataValue="DateAndOptionalHour"/>
     <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/windowStart" featureName="eType"
         referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate" oldReferenceValue="lng.ecore#//DateAndOptionalHour"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice"
+        featureName="name" dataValue="dailyCharterInPrice" oldDataValue="dailyCharterPrice"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/fleetallocation/SpotVessel/getHourlyCharterPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="return &#xD;&#xA;((getVesselClass().getDailyCharterInPrice() * 1000) / 24) / 1000.0;"
+        oldDataValue="return &#xD;&#xA;((getVesselClass().getDailyCharterPrice() * 1000) / 24) / 1000.0;"/>
   </releases>
 </history:History>

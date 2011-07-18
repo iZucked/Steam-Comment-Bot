@@ -101,7 +101,8 @@
         </eAnnotations>
       </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotCharterCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyCharterPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyCharterInPrice"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation" value="The cost per day of spot chartering vessels of this class, expressed in dollars"/>
         </eAnnotations>
@@ -591,7 +592,7 @@
       <eClassifiers xsi:type="ecore:EClass" name="SpotVessel" eSuperTypes="#//schedule/fleetallocation/AllocatedVessel">
         <eOperations name="getHourlyCharterPrice" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
           <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="body" value="return &#xD;&#xA;((getVesselClass().getDailyCharterPrice() * 1000) / 24) / 1000.0;"/>
+            <details key="body" value="return &#xD;&#xA;((getVesselClass().getDailyCharterInPrice() * 1000) / 24) / 1000.0;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">

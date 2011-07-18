@@ -26,7 +26,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getDailyCharterInPrice <em>Daily Charter In Price</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
@@ -224,31 +224,6 @@ public interface VesselClass extends NamedObject {
 	void setFillCapacity(float value);
 
 	/**
-	 * Returns the value of the '<em><b>Daily Charter Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The cost per day of spot chartering vessels of this class, expressed in dollars
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Daily Charter Price</em>' attribute.
-	 * @see #setDailyCharterPrice(int)
-	 * @see scenario.fleet.FleetPackage#getVesselClass_DailyCharterPrice()
-	 * @model
-	 * @generated
-	 */
-	int getDailyCharterPrice();
-
-	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterPrice <em>Daily Charter Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Daily Charter Price</em>' attribute.
-	 * @see #getDailyCharterPrice()
-	 * @generated
-	 */
-	void setDailyCharterPrice(int value);
-
-	/**
 	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -325,6 +300,31 @@ public interface VesselClass extends NamedObject {
 	 * @generated
 	 */
 	void setSpotCharterCount(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Daily Charter In Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The cost per day of spot chartering vessels of this class, expressed in dollars
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Daily Charter In Price</em>' attribute.
+	 * @see #setDailyCharterInPrice(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_DailyCharterInPrice()
+	 * @model
+	 * @generated
+	 */
+	int getDailyCharterInPrice();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterInPrice <em>Daily Charter In Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Daily Charter In Price</em>' attribute.
+	 * @see #getDailyCharterInPrice()
+	 * @generated
+	 */
+	void setDailyCharterInPrice(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list.
