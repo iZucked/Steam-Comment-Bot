@@ -38,6 +38,7 @@ public class CSVReader {
 		filename = new File(inputFileName).getName();
 		reader = new BufferedReader(new FileReader(inputFileName));
 		headerLine = readLine();
+		if (headerLine == null) return;
 		for (int i = 0; i < headerLine.length; i++) {
 			final String lc = headerLine[i].toLowerCase();
 			originalHeaderLine.put(lc, headerLine[i]);
