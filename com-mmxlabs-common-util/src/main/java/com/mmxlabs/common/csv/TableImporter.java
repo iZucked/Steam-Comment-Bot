@@ -53,11 +53,11 @@ public class TableImporter {
 	public String getCell(String row, String column) {
 		return contents.get(row).get(column);
 	}
-	
+
 	public Iterable<String> getRowKeys() {
 		return Collections.unmodifiableList(rowKeys);
 	}
-	
+
 	public Iterable<String> getColumnKeys() {
 		return Collections.unmodifiableList(colKeys);
 	}

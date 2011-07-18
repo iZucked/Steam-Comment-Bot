@@ -69,7 +69,7 @@ public final class CollectionsUtil {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * A workaround for the horrible effect of autoboxing on collections.
 	 * Convert an array of shorts to an {@link ArrayList} of {@link Short}s.
