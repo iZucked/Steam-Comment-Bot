@@ -46,6 +46,9 @@ public class VesselClassImporter extends EObjectImporter {
 		for (final EObject o : objects) {
 			if (o instanceof VesselClass) {
 				final VesselClass vc = (VesselClass) o;
+				vc.getBallastAttributes().setVesselState(VesselState.BALLAST);
+				vc.getLadenAttributes().setVesselState(VesselState.LADEN);
+				
 				lines.add(convertLines(vc.getName(), vc.getBallastAttributes()));
 				lines.add(convertLines(vc.getName(), vc.getLadenAttributes()));
 			}
