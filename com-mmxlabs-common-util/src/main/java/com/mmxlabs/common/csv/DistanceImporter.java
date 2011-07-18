@@ -19,18 +19,18 @@ public class DistanceImporter {
 
 	}
 
-	public DistanceImporter(InputStream is) throws IOException {
+	public DistanceImporter(final InputStream is) throws IOException {
 		this();
 		importDistances(is);
 	}
 
-	public DistanceImporter(String s) throws FileNotFoundException, IOException {
+	public DistanceImporter(final String s) throws FileNotFoundException, IOException {
 		this(new FileInputStream(new File(s)));
 	}
 
 	//	Map<String, Map<String, Integer>> distanceMap = new HashMap<String, Map<String, Integer>>();
 
-	public void importDistances(InputStream is) throws IOException {
+	public void importDistances(final InputStream is) throws IOException {
 		ti = new TableImporter(is);
 	}
 
@@ -50,7 +50,7 @@ public class DistanceImporter {
 	//		m.put(B, D);
 	//	}
 
-	public Integer getDistance(String A, String B) {
+	public Integer getDistance(final String A, final String B) {
 		//		if (distanceMap.containsKey(A)) {
 		//			Map<String, Integer> m = distanceMap.get(A);
 		//			if (m.containsKey(B)) {
@@ -64,7 +64,7 @@ public class DistanceImporter {
 			} else if (ti.contains(B, A)) {
 				return Integer.parseInt(ti.getCell(B, A));
 			}
-		} catch (NumberFormatException nfe) {
+		} catch (final NumberFormatException nfe) {
 
 		}
 
