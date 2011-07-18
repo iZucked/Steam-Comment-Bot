@@ -36,6 +36,7 @@ import scenario.presentation.cargoeditor.detailview.EObjectMultiDialog;
 import scenario.presentation.cargoeditor.handlers.AddAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 
 /**
  * This extension of {@link EObjectEditorViewerPane} adds the following
@@ -91,15 +92,26 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 			public EObject createObject(final boolean usingSelection) {
 				final EObject newObject = delegate.createObject(usingSelection);
 
-				final EObjectDetailDialog dialog = new EObjectDetailDialog(
-						viewer.getControl().getShell(), SWT.NONE, editingDomain);
+				try {
+					ValidationSupport.getInstance().setContainers(
+							Collections.singletonList(newObject),
+							(EObject) getOwner(), (EReference) getFeature());
 
-				part.setupDetailViewContainer(dialog);
+					final EObjectDetailDialog dialog = new EObjectDetailDialog(
+							viewer.getControl().getShell(), SWT.NONE,
+							editingDomain);
 
-				if (dialog.open(Collections.singletonList(newObject)).size() > 0) {
-					return newObject;
-				} else {
-					return null;
+					part.setupDetailViewContainer(dialog);
+
+					if (dialog.open(Collections.singletonList(newObject))
+							.size() > 0) {
+						return newObject;
+					} else {
+						return null;
+					}
+				} finally {
+					ValidationSupport.getInstance().clearContainers(
+							Collections.singletonList(newObject));
 				}
 			}
 

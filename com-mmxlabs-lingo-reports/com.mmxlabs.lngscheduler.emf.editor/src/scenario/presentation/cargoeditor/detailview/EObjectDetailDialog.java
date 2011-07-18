@@ -38,6 +38,7 @@ import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandPr
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.editor.util.CommandUtil;
 import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 
@@ -106,11 +107,10 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		}
 		try {
 			{
-				final EObject container = objects.get(0).eContainer();
-				final EReference containingFeature = (EReference) objects
-						.get(0).eContainingFeature();
+				final Pair<EObject, EReference> p = ValidationSupport
+						.getInstance().getContainer(objects.get(0));
 				ValidationSupport.getInstance().setContainers(duplicates,
-						container, containingFeature);
+						p.getFirst(), p.getSecond());
 			}
 
 			selectedObjectIndex = 0;
