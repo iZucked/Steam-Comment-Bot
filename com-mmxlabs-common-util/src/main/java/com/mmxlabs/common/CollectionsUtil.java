@@ -31,8 +31,7 @@ public final class CollectionsUtil {
 	 * @param integers
 	 * @return
 	 */
-	public static final int[] integersToIntArray(
-			final Collection<Integer> integers) {
+	public static int[] integersToIntArray(final Collection<Integer> integers) {
 		final int[] result = new int[integers.size()];
 		int ix = 0;
 		for (final int x : integers) {
@@ -48,7 +47,7 @@ public final class CollectionsUtil {
 	 * @param a
 	 * @return
 	 */
-	public static final ArrayList<Integer> toArrayList(final int[] a) {
+	public static ArrayList<Integer> toArrayList(final int[] a) {
 		final ArrayList<Integer> list = new ArrayList<Integer>(a.length);
 		for (final int v : a) {
 			list.add(v);
@@ -78,7 +77,7 @@ public final class CollectionsUtil {
 	 * @param a
 	 * @return
 	 */
-	public static final ArrayList<Short> toArrayList(final short[] a) {
+	public static ArrayList<Short> toArrayList(final short[] a) {
 		final ArrayList<Short> list = new ArrayList<Short>(a.length);
 		for (final short v : a) {
 			list.add(v);
@@ -138,8 +137,7 @@ public final class CollectionsUtil {
 	 * @param defaultValue
 	 * @return
 	 */
-	public static <K, T> T getValue(final Map<K, T> map, final K key,
-			final T defaultValue) {
+	public static <K, T> T getValue(final Map<K, T> map, final K key, final T defaultValue) {
 		if (map.containsKey(key)) {
 			return map.get(key);
 		}
