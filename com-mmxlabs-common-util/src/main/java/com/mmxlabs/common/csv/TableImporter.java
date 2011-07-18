@@ -34,15 +34,15 @@ public class TableImporter {
 		while ((line = br.readLine()) != null) {
 			final String[] cells = line.split(",");
 			if (firstRow) {
-				for (int i = 1; i<cells.length; i++) {
+				for (int i = 1; i < cells.length; i++) {
 					colKeys.add(cells[i].trim());
 				}
 				firstRow = false;
 			} else {
 				rowKeys.add(cells[0].trim());
-				HashMap<String, String> map = new HashMap<String, String>();
-				for (int i = 1; i<cells.length; i++) {
-					map.put(colKeys.get(i-1), cells[i].trim());
+				final HashMap<String, String> map = new HashMap<String, String>();
+				for (int i = 1; i < cells.length; i++) {
+					map.put(colKeys.get(i - 1), cells[i].trim());
 				}
 				contents.put(cells[0], map);
 			}
