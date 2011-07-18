@@ -57,7 +57,8 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof IFile) {
 			final IFile file = (IFile) parentElement;
-			if (file.getFileExtension().equals("scenario")) {
+			final String fileExtension = file.getFileExtension();
+			if (fileExtension != null && fileExtension.equals("scenario")) {
 				final String path = file.getFullPath().toString();
 				final URI uri = URI.createPlatformResourceURI(path, true);
 				parentElement = resourceSet.getResource(uri, true);
