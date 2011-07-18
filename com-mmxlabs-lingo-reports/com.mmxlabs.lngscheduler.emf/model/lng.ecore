@@ -56,7 +56,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="UUID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="" iD="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="DateAndOptionalHour" instanceClassName="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="DateAndOptionalTime" instanceClassName="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime"/>
   <eSubpackages name="fleet" nsURI="http://com.mmxlabs.lng.emf2/fleet" nsPrefix="com.mmxlabs.lng.emf.fleet">
     <eClassifiers xsi:type="ecore:EClass" name="FleetModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="fleet" upperBound="-1"
@@ -682,7 +682,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           defaultValueLiteral="2147483647"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" eType="#//DateAndOptionalTime"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           defaultValueLiteral="24"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"

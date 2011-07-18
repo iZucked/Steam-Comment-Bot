@@ -1,6 +1,6 @@
 package scenario.cargo.impl;
 
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour;
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import org.eclipse.emf.common.notify.Notification;

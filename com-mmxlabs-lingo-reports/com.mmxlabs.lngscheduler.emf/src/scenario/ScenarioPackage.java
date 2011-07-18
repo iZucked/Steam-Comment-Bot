@@ -348,15 +348,14 @@ public interface ScenarioPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '<em>Date And Optional Hour</em>' data type.
+	 * The meta object id for the '<em>Date And Optional Time</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour
-	 * @see scenario.impl.ScenarioPackageImpl#getDateAndOptionalHour()
+	 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime
+	 * @see scenario.impl.ScenarioPackageImpl#getDateAndOptionalTime()
 	 * @generated
 	 */
-	int DATE_AND_OPTIONAL_HOUR = 4;
-
+	int DATE_AND_OPTIONAL_TIME = 4;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.Scenario <em>Scenario</em>}'.
@@ -593,15 +592,15 @@ public interface ScenarioPackage extends EPackage {
 	EAttribute getUUIDObject_UUID();
 
 	/**
-	 * Returns the meta object for data type '{@link com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour <em>Date And Optional Hour</em>}'.
+	 * Returns the meta object for data type '{@link com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime <em>Date And Optional Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Date And Optional Hour</em>'.
-	 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour
-	 * @model instanceClass="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour"
+	 * @return the meta object for data type '<em>Date And Optional Time</em>'.
+	 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime
+	 * @model instanceClass="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime"
 	 * @generated
 	 */
-	EDataType getDateAndOptionalHour();
+	EDataType getDateAndOptionalTime();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -811,14 +810,14 @@ public interface ScenarioPackage extends EPackage {
 		EAttribute UUID_OBJECT__UUID = eINSTANCE.getUUIDObject_UUID();
 
 		/**
-		 * The meta object literal for the '<em>Date And Optional Hour</em>' data type.
+		 * The meta object literal for the '<em>Date And Optional Time</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour
-		 * @see scenario.impl.ScenarioPackageImpl#getDateAndOptionalHour()
+		 * @see com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime
+		 * @see scenario.impl.ScenarioPackageImpl#getDateAndOptionalTime()
 		 * @generated
 		 */
-		EDataType DATE_AND_OPTIONAL_HOUR = eINSTANCE.getDateAndOptionalHour();
+		EDataType DATE_AND_OPTIONAL_TIME = eINSTANCE.getDateAndOptionalTime();
 
 	}
 

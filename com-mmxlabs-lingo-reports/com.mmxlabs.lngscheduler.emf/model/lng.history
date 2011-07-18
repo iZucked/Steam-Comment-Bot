@@ -4417,29 +4417,37 @@
     <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultCVvalue"
         featureName="name" dataValue="defaultCVvalue" oldDataValue="defaultCVValue"/>
     <changes xsi:type="history:Create" target="lng.ecore#/" referenceName="eClassifiers"
-        element="lng.ecore#//DateAndOptionalHour"/>
-    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceClassName"
+        element="lng.ecore#//DateAndOptionalTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="instanceClassName"
         dataValue="java.lang.Object"/>
-    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceTypeName"
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="instanceTypeName"
         dataValue="DateAndOptionalTime"/>
-    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="name"
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="name"
         dataValue="DateAndOptionalTime"/>
-    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="name"
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="name"
         dataValue="DateAndOptionalHour" oldDataValue="DateAndOptionalTime"/>
-    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceTypeName"
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="instanceTypeName"
         dataValue="DateAndOptionalHour" oldDataValue="DateAndOptionalTime"/>
     <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/windowStart" featureName="eType"
-        referenceValue="lng.ecore#//DateAndOptionalHour" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceClassName"
+        referenceValue="lng.ecore#//DateAndOptionalTime" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="instanceClassName"
         dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour" oldDataValue="java.lang.Object"/>
-    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceTypeName"
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="instanceTypeName"
         dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour" oldDataValue="DateAndOptionalHour"/>
     <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/windowStart" featureName="eType"
-        referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate" oldReferenceValue="lng.ecore#//DateAndOptionalHour"/>
+        referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate" oldReferenceValue="lng.ecore#//DateAndOptionalTime"/>
     <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/dailyCharterInPrice"
         featureName="name" dataValue="dailyCharterInPrice" oldDataValue="dailyCharterPrice"/>
     <changes xsi:type="history:Set" element="lng.ecore#//schedule/fleetallocation/SpotVessel/getHourlyCharterPrice/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
         featureName="value" dataValue="return &#xD;&#xA;((getVesselClass().getDailyCharterInPrice() * 1000) / 24) / 1000.0;"
         oldDataValue="return &#xD;&#xA;((getVesselClass().getDailyCharterPrice() * 1000) / 24) / 1000.0;"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="name"
+        dataValue="DateAndOptionalTime" oldDataValue="DateAndOptionalHour"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="instanceClassName"
+        dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime" oldDataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalTime" featureName="instanceTypeName"
+        dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime" oldDataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/windowStart" featureName="eType"
+        referenceValue="lng.ecore#//DateAndOptionalTime" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
   </releases>
 </history:History>

@@ -6,7 +6,7 @@
  */
 package scenario.cargo;
 
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour;
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;

@@ -6,7 +6,7 @@
  */
 package scenario.impl;
 
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour;
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -103,7 +103,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EDataType dateAndOptionalHourEDataType = null;
+	private EDataType dateAndOptionalTimeEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -401,8 +401,8 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EDataType getDateAndOptionalHour() {
-		return dateAndOptionalHourEDataType;
+	public EDataType getDateAndOptionalTime() {
+		return dateAndOptionalTimeEDataType;
 	}
 
 	/**
@@ -460,7 +460,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		createEAttribute(uuidObjectEClass, UUID_OBJECT__UUID);
 
 		// Create data types
-		dateAndOptionalHourEDataType = createEDataType(DATE_AND_OPTIONAL_HOUR);
+		dateAndOptionalTimeEDataType = createEDataType(DATE_AND_OPTIONAL_TIME);
 	}
 
 	/**
@@ -543,7 +543,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		initEAttribute(getUUIDObject_UUID(), ecorePackage.getEString(), "UUID", "", 1, 1, UUIDObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
-		initEDataType(dateAndOptionalHourEDataType, DateAndOptionalHour.class, "DateAndOptionalHour", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(dateAndOptionalTimeEDataType, DateAndOptionalTime.class, "DateAndOptionalTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

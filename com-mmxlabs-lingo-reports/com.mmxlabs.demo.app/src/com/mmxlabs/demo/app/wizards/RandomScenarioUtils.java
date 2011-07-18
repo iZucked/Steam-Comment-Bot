@@ -747,7 +747,7 @@ public class RandomScenarioUtils {
 		vc.setMinSpeed(minSpeed);
 		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
-		vc.setDailyCharterPrice(40000);
+		vc.setDailyCharterInPrice(40000);
 
 		scenario.getFleetModel().getVesselClasses().add(vc);
 
