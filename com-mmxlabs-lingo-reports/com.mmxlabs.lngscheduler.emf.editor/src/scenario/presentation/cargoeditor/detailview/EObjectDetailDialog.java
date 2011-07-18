@@ -14,6 +14,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -38,6 +39,7 @@ import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEdi
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.lngscheduler.emf.editor.util.CommandUtil;
+import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 
 /**
  * Why does tidy imports keep stripping my class comments? A dialog based
@@ -102,50 +104,62 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		for (final EObject original : objects) {
 			duplicates.add(EcoreUtil.copy(original));
 		}
-
-		selectedObjectIndex = 0;
-
-		final Shell shell = createShell(duplicates);
-
-		shell.pack();
-		shell.layout();
-
-		// center in parent window
-		final Rectangle shellBounds = getParent().getBounds();
-		final Point dialogSize = shell.getSize();
-
-		shell.setLocation(shellBounds.x + (shellBounds.width - dialogSize.x)
-				/ 2, shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
-
-		shell.open();
-		// run event loop and then close
-		final Display display = getParent().getDisplay();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
+		try {
+			{
+				final EObject container = objects.get(0).eContainer();
+				final EReference containingFeature = (EReference) objects
+						.get(0).eContainingFeature();
+				ValidationSupport.getInstance().setContainers(duplicates,
+						container, containingFeature);
 			}
-		}
 
-		if (performActions) {
-			final CompoundCommand cc = new CompoundCommand();
-			for (int i = 0; i < objects.size(); i++) {
-				final EObject original = objects.get(i);
-				final EObject duplicate = duplicates.get(i);
-				if (!original.equals(duplicate)) {
-					cc.append(makeEqualizer(original, duplicate));
+			selectedObjectIndex = 0;
+
+			final Shell shell = createShell(duplicates);
+
+			shell.pack();
+			shell.layout();
+
+			// center in parent window
+			final Rectangle shellBounds = getParent().getBounds();
+			final Point dialogSize = shell.getSize();
+
+			shell.setLocation(shellBounds.x
+					+ (shellBounds.width - dialogSize.x) / 2, shellBounds.y
+					+ (shellBounds.height - dialogSize.y) / 2);
+
+			shell.open();
+			// run event loop and then close
+			final Display display = getParent().getDisplay();
+			while (!shell.isDisposed()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
 				}
 			}
-			final boolean isExecutable = cc.canExecute();
-			if (isExecutable) {
-				editingDomain.getCommandStack().execute(cc);
+
+			if (performActions) {
+				final CompoundCommand cc = new CompoundCommand();
+				for (int i = 0; i < objects.size(); i++) {
+					final EObject original = objects.get(i);
+					final EObject duplicate = duplicates.get(i);
+					if (!original.equals(duplicate)) {
+						cc.append(makeEqualizer(original, duplicate));
+					}
+				}
+				final boolean isExecutable = cc.canExecute();
+				if (isExecutable) {
+					editingDomain.getCommandStack().execute(cc);
+				} else {
+					System.err
+							.println("Something is wrong with the equalizing command");
+				}
+				// TODO this is wrong, return only modified objects
+				return objects;
 			} else {
-				System.err
-						.println("Something is wrong with the equalizing command");
+				return Collections.emptySet();
 			}
-			// TODO this is wrong, return only modified objects
-			return objects;
-		} else {
-			return Collections.emptySet();
+		} finally {
+			ValidationSupport.getInstance().clearContainers(duplicates);
 		}
 	}
 
@@ -193,7 +207,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 									original, feature,
 									(Collection) duplicate.eGet(feature));
 					if (mas.canExecute() == false) {
-						System.err.println("Problem on multi-value containment setter");
+						System.err
+								.println("Problem on multi-value containment setter");
 					}
 					compound.append(mas);
 				} else {
@@ -222,7 +237,8 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 				}
 				compound.append(mas);
 			} else {
-				if (feature.isUnsettable() && duplicate.eIsSet(feature) == false) {
+				if (feature.isUnsettable()
+						&& duplicate.eIsSet(feature) == false) {
 					compound.append(SetCommand.create(editingDomain, original,
 							feature, SetCommand.UNSET_VALUE));
 				} else {
@@ -287,7 +303,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 				} else {
 					btnPrev.setEnabled(true);
 				}
-				
+
 				if (selectedObjectIndex == objects.size() - 1) {
 					btnNext.setEnabled(false);
 				} else {
@@ -295,28 +311,28 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 				}
 			}
 		};
-		
+
 		btnPrev.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				selectedObjectIndex--;
-				
+
 				updateButtonEnablement.run();
-				
+
 				displaySelectedObject(composite,
 						objects.get(selectedObjectIndex));
 				shell.setText("Editing (" + (selectedObjectIndex + 1) + "/"
 						+ objects.size() + ")");
 			}
 		});
-		
+
 		btnNext.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				selectedObjectIndex++;
 
 				updateButtonEnablement.run();
-				
+
 				displaySelectedObject(composite,
 						objects.get(selectedObjectIndex));
 
@@ -365,7 +381,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		displaySelectedObject(composite, objects.get(selectedObjectIndex));
 
 		updateButtonEnablement.run();
-		
+
 		return shell;
 	}
 

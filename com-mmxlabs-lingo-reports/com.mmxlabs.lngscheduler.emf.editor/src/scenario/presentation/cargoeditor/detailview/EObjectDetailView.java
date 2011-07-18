@@ -68,7 +68,7 @@ public class EObjectDetailView extends Composite {
 			public void processCommand(final Command command, final EObject target,
 					final EStructuralFeature feature) {
 				
-				processor .processCommand(command, target, feature);
+				processor.processCommand(command, target, feature);
 				
 				final IStatus status = validator.validate(input);
 				

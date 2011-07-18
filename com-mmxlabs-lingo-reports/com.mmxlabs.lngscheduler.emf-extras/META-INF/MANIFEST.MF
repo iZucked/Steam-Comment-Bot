@@ -21,6 +21,7 @@ Require-Bundle: com.mmxlabs.lngscheduler.emf;bundle-version="1.0.0",
 Export-Package: com.mmxlabs.lngscheduler.emf.extras,
  com.mmxlabs.lngscheduler.emf.extras.export,
  com.mmxlabs.lngscheduler.emf.extras.validation,
+ com.mmxlabs.lngscheduler.emf.extras.validation.context,
  com.mmxlabs.lngscheduler.emf.extras.validation.status
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngscheduler.emf.extras.plugin.ExtrasPlugin

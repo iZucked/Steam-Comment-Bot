@@ -26,6 +26,8 @@ import scenario.cargo.CargoPackage;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselEvent;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
@@ -42,9 +44,12 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 			final EAttribute nameAttribute) {
 		final EObject target = ctx.getTarget();
 
-		final EObject container = target.eContainer();
+		final Pair<EObject, EReference> containerAndFeature = ValidationSupport.getInstance()
+				.getContainer(target);
+		
+		final EObject container = containerAndFeature.getFirst() ; //target.eContainer();
 		if (container == null) return ctx.createSuccessStatus(); //TODO sort out this issue
-		final EStructuralFeature feature = target.eContainingFeature();
+		final EStructuralFeature feature = containerAndFeature.getSecond();
 		if (feature != null && feature.isMany()
 				&& feature instanceof EReference
 				&& ((EReference) feature).getEReferenceType()

@@ -22,6 +22,7 @@ import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 import scenario.port.Port;
 
+import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
@@ -90,7 +91,8 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 					}
 				});
 				// locate other slots
-				EObject container = slot.eContainer();
+				EObject container = ValidationSupport.getInstance()
+						.getContainer(slot).getFirst();
 				while (container != null && !(container instanceof CargoModel)) {
 					container = container.eContainer();
 				}

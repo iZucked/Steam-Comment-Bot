@@ -10,6 +10,7 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 import scenario.Scenario;
@@ -35,7 +36,8 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 			final Scenario scenario;
 
 			{
-				EObject container = vesselClass;
+				EObject container = ValidationSupport.getInstance()
+						.getContainer(vesselClass).getFirst();
 				while (container != null && !(container instanceof Scenario))
 					container = container.eContainer();
 				scenario = (Scenario) container;
@@ -87,18 +89,17 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 
 				dcsd.addEObjectAndFeature(vesselClass,
 						FleetPackage.eINSTANCE.getVesselClass_CanalCosts());
-				
-				if (vesselClassCost.getLadenCost() == 0) 
+
+				if (vesselClassCost.getLadenCost() == 0)
 					dcsd.addEObjectAndFeature(vesselClassCost,
 							FleetPackage.eINSTANCE
 									.getVesselClassCost_LadenCost());
-				
 
 				if (vesselClassCost.getUnladenCost() == 0)
 					dcsd.addEObjectAndFeature(vesselClassCost,
 							FleetPackage.eINSTANCE
 									.getVesselClassCost_UnladenCost());
-				
+
 				return dcsd;
 			}
 		}
