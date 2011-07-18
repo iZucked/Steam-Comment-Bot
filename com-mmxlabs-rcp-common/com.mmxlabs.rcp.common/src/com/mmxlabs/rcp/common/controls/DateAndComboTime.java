@@ -45,9 +45,9 @@ public class DateAndComboTime extends Composite {
 			layout.spacing = 1;
 		}
 		setLayout(layout);
-		date = new DateTime(this, bigDate ? SWT.CALENDAR | SWT.BORDER
-				: SWT.DATE | SWT.MEDIUM);
-		time = new Combo(this, SWT.BORDER);
+		date = new DateTime(this, (bigDate ? SWT.CALENDAR | SWT.BORDER
+				: SWT.DATE | SWT.MEDIUM) | style);
+		time = new Combo(this, SWT.BORDER | style);
 		this.offset = offset;
 		createHourItems(time, offset);
 
