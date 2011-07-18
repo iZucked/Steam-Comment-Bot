@@ -6,6 +6,7 @@ package com.mmxlabs.lngscheduler.emf.extras.validation;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -97,7 +98,13 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 					container = container.eContainer();
 				}
 				if (container instanceof CargoModel) {
-					for (final Cargo c : ((CargoModel) container).getCargoes()) {
+					final List<EObject> objects = ValidationSupport
+							.getInstance().getContents(
+									container,
+									CargoPackage.eINSTANCE
+											.getCargoModel_Cargoes());
+					for (final EObject o : objects) {
+						final Cargo c = (Cargo) o;
 						if (c.getLoadSlot() != null
 								&& c.getLoadSlot().getPort() == port) {
 							slotsAtPort.add(c.getLoadSlot());

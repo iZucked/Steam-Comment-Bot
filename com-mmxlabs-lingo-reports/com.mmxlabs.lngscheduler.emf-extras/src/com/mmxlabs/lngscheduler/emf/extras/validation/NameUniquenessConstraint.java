@@ -6,11 +6,11 @@ package com.mmxlabs.lngscheduler.emf.extras.validation;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -44,13 +44,15 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 			final EAttribute nameAttribute) {
 		final EObject target = ctx.getTarget();
 
-		final Pair<EObject, EReference> containerAndFeature = ValidationSupport.getInstance()
-				.getContainer(target);
-		
-		final EObject container = containerAndFeature.getFirst() ; //target.eContainer();
-		if (container == null) return ctx.createSuccessStatus(); //TODO sort out this issue
+		final Pair<EObject, EReference> containerAndFeature = ValidationSupport
+				.getInstance().getContainer(target);
+
+		final EObject container = containerAndFeature.getFirst(); // target.eContainer();
+		if (container == null)
+			return ctx.createSuccessStatus(); // TODO sort out this issue
 		final EStructuralFeature feature = containerAndFeature.getSecond();
-		if (feature != null && feature.isMany()
+		if (feature != null
+				&& feature.isMany()
 				&& feature instanceof EReference
 				&& ((EReference) feature).getEReferenceType()
 						.getEAllAttributes().contains(nameAttribute)) {
@@ -66,8 +68,10 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 			if (bad == null) {
 				bad = new HashSet<String>();
 				badNames.put(container, bad);
-				final EList<EObject> objects = (EList<EObject>) container
-						.eGet(feature);
+				final List<EObject> objects = ValidationSupport.getInstance()
+						.getContents(container, (EReference) feature);
+				// container
+				// .eGet(feature);
 				final Set<String> temp = new HashSet<String>();
 				for (final EObject no : objects) {
 					final String n = (String) no.eGet(nameAttribute);
@@ -83,8 +87,8 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(target
 								.eClass().getName(), name));
-					dsd.addEObjectAndFeature(target, nameAttribute);
-						return dsd;
+				dsd.addEObjectAndFeature(target, nameAttribute);
+				return dsd;
 			}
 		}
 		return ctx.createSuccessStatus();
@@ -94,7 +98,8 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof NamedObject) {
-			return validate(ctx, ScenarioPackage.eINSTANCE.getNamedObject_Name());
+			return validate(ctx,
+					ScenarioPackage.eINSTANCE.getNamedObject_Name());
 		} else if (target instanceof Cargo) {
 			return validate(ctx, CargoPackage.eINSTANCE.getCargo_Id());
 		} else if (target instanceof VesselEvent) {
