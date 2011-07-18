@@ -107,7 +107,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final DateAndOptionalHour WINDOW_START_EDEFAULT = null;
+	protected static final Date WINDOW_START_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
@@ -116,7 +116,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected DateAndOptionalHour windowStart = WINDOW_START_EDEFAULT;
+	protected Date windowStart = WINDOW_START_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getWindowDuration() <em>Window Duration</em>}' attribute.
@@ -307,7 +307,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DateAndOptionalHour getWindowStart() {
+	public Date getWindowStart() {
 		return windowStart;
 	}
 
@@ -316,8 +316,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setWindowStart(DateAndOptionalHour newWindowStart) {
-		DateAndOptionalHour oldWindowStart = windowStart;
+	public void setWindowStart(Date newWindowStart) {
+		Date oldWindowStart = windowStart;
 		windowStart = newWindowStart;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_START, oldWindowStart, windowStart));
@@ -534,7 +534,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				setPort((Port)newValue);
 				return;
 			case CargoPackage.SLOT__WINDOW_START:
-				setWindowStart((DateAndOptionalHour)newValue);
+				setWindowStart((Date)newValue);
 				return;
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				setWindowDuration((Integer)newValue);

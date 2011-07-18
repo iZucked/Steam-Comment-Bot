@@ -4434,5 +4434,7 @@
         dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour" oldDataValue="java.lang.Object"/>
     <changes xsi:type="history:Set" element="lng.ecore#//DateAndOptionalHour" featureName="instanceTypeName"
         dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour" oldDataValue="DateAndOptionalHour"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/windowStart" featureName="eType"
+        referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate" oldReferenceValue="lng.ecore#//DateAndOptionalHour"/>
   </releases>
 </history:History>
