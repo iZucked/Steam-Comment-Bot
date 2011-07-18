@@ -16,6 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import scenario.ScenarioPackage;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
@@ -24,17 +25,19 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
-public abstract class EObjectDetailViewContainer implements IDetailViewContainer {
+public abstract class EObjectDetailViewContainer implements
+		IDetailViewContainer {
 	protected final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
 	protected final Map<EStructuralFeature, IInlineEditorFactory> editorFactoriesByFeature = new HashMap<EStructuralFeature, IInlineEditorFactory>();
 	protected final HashMap<EClass, EObjectDetailView> detailViewsByClass = new HashMap<EClass, EObjectDetailView>();
 	protected Map<EStructuralFeature, String> nameByFeature = new HashMap<EStructuralFeature, String>();
-	
+
 	protected abstract EditingDomain getEditingDomain();
+
 	protected abstract ICommandProcessor getProcessor();
-	
+
 	@Override
 	public void addDefaultEditorFactories() {
 		editorFactories.put(EcorePackage.eINSTANCE.getEString(),
@@ -53,8 +56,8 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 			public IInlineEditor createEditor(EMFPath path,
 					EStructuralFeature feature,
 					final ICommandProcessor processor) {
-				return new NumberInlineEditor(path, feature, getEditingDomain(),
-						processor);
+				return new NumberInlineEditor(path, feature,
+						getEditingDomain(), processor);
 			}
 		});
 
@@ -66,17 +69,23 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 				numberEditorFactory);
 		editorFactories.put(EcorePackage.eINSTANCE.getEDouble(),
 				numberEditorFactory);
-		editorFactories.put(EcorePackage.eINSTANCE.getEDate(),
-				wrapEditorFactory(new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new LocalDateInlineEditor(path, feature,
-								getEditingDomain(), processor);
-					}
-				}));
 
+		final IInlineEditorFactory dateEditorFactory = wrapEditorFactory(new IInlineEditorFactory() {
+			@Override
+			public IInlineEditor createEditor(EMFPath path,
+					EStructuralFeature feature,
+					final ICommandProcessor processor) {
+				return new LocalDateInlineEditor(path, feature,
+						getEditingDomain(), processor);
+			}
+		});
+
+		editorFactories.put(EcorePackage.eINSTANCE.getEDate(),
+				dateEditorFactory);
+
+		editorFactories.put(ScenarioPackage.eINSTANCE.getDateAndOptionalTime(),
+				dateEditorFactory);
+		
 		editorFactories.put(EcorePackage.eINSTANCE.getEBoolean(),
 				wrapEditorFactory(new IInlineEditorFactory() {
 					@Override
@@ -88,12 +97,14 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 					}
 				}));
 	}
-	
-	protected IInlineEditorFactory wrapEditorFactory(final IInlineEditorFactory factory) {
+
+	protected IInlineEditorFactory wrapEditorFactory(
+			final IInlineEditorFactory factory) {
 		return factory;
 	}
-	
-	protected EObjectDetailView getDetailView(final EClass eClass, final Composite control) {
+
+	protected EObjectDetailView getDetailView(final EClass eClass,
+			final Composite control) {
 		if (detailViewsByClass.containsKey(eClass)) {
 			return detailViewsByClass.get(eClass);
 		} else {
@@ -123,13 +134,13 @@ public abstract class EObjectDetailViewContainer implements IDetailViewContainer
 			return eodv;
 		}
 	}
-	
+
 	@Override
 	public void setNameForFeature(final EStructuralFeature feature,
 			final String string) {
 		nameByFeature.put(feature, string);
 	}
-	
+
 	@Override
 	public void setEditorFactoryForClassifier(final EClassifier classifier,
 			final IInlineEditorFactory factory) {

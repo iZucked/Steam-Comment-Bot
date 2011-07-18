@@ -50,7 +50,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Control createValueControl(Composite parent) {
-		final DateAndComboTime dateAndTime = new DateAndComboTime(parent, SWT.NONE, false, 0);
+		final DateAndComboTime dateAndTime = new DateAndComboTime(parent, SWT.DROP_DOWN, false, 0);
 		this.dateAndTime = dateAndTime;
 		
 		final Listener listener = new Listener() {

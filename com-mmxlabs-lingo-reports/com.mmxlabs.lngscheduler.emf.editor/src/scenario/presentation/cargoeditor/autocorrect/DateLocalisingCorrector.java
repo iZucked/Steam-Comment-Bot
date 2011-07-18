@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import scenario.ScenarioPackage;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
@@ -61,7 +62,10 @@ public class DateLocalisingCorrector extends BaseCorrector {
 					for (final EAttribute attribute : parent
 							.getEAllAttributes()) {
 						if (attribute.getEAttributeType().equals(
-								EcorePackage.eINSTANCE.getEDate())) {
+								EcorePackage.eINSTANCE.getEDate())
+								|| attribute.getEAttributeType().equals(
+										ScenarioPackage.eINSTANCE
+												.getDateAndOptionalTime())) {
 							// localize this date
 							final Date date = (Date) ((EObject) notification
 									.getNotifier()).eGet(attribute);
