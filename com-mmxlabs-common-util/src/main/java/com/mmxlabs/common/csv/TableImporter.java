@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 public class TableImporter {
-	List<String> rowKeys, colKeys;
-	
-	Map<String, Map<String, String>> contents;
-	
-	public TableImporter(InputStream is) throws IOException {
+	private List<String> rowKeys, colKeys;
+
+	private Map<String, Map<String, String>> contents;
+
+	public TableImporter(final InputStream is) throws IOException {
 		rowKeys = new ArrayList<String>();
 		colKeys = new ArrayList<String>();
 		contents = new HashMap<String, Map<String, String>>();
