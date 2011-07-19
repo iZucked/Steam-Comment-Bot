@@ -5,14 +5,12 @@
 package scenario.presentation.model_editors;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -24,7 +22,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
@@ -38,19 +35,16 @@ import scenario.contract.ContractPackage;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortPackage;
+import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.ICellManipulator;
 import scenario.presentation.cargoeditor.ICellRenderer;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
-import scenario.presentation.cargoeditor.importer.ExportCSVAction;
-import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 import scenario.presentation.distance_editor.DistanceEditorDialog;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
-import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
  * A {@link ScenarioObjectEditorViewerPane} for editing a port model
@@ -192,6 +186,13 @@ public class PortEVP extends NamedObjectEVP {
 		{
 			//TODO find image for editor.
 			final Action a = new Action() {
+				{
+					setImageDescriptor(LngEditorPlugin.Implementation
+							.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin()
+									.getSymbolicName(), "/icons/table.gif"));
+					setToolTipText("Edit distance matrix");
+					setText("Edit distance matrix");
+				}
 				@Override
 				public void run() {
 					final DistanceModel currentModel = part.getScenario()
