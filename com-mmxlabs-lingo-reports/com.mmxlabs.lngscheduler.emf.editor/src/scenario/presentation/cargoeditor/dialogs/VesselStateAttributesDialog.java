@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -53,6 +54,7 @@ import org.swtchart.Range;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.VesselStateAttributes;
+import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 
 import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
 
@@ -266,6 +268,8 @@ public class VesselStateAttributesDialog extends Dialog {
 				false, 1, 1));
 		fuelCurveTable.setLinesVisible(true);
 		fuelCurveTable.setHeaderVisible(true);
+		
+		fuelCurveTable.setLayout(new TableLayout());
 
 		TableViewerColumn speedColumn = new TableViewerColumn(tableViewer,
 				SWT.NONE);
