@@ -183,7 +183,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_fillCapacity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_fillCapacity_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_fillCapacity_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__FILL_CAPACITY,
 				 true,
 				 false,

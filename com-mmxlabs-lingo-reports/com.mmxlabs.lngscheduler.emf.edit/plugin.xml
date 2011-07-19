@@ -31,7 +31,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/fleet"
+            uri="http://com.mmxlabs.lng.emf2/fleet"
             class="scenario.fleet.provider.FleetItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
