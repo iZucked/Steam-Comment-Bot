@@ -4,19 +4,10 @@
  */
 package scenario.presentation.cargoeditor.detailview;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 
-import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.VesselStateAttributes;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
