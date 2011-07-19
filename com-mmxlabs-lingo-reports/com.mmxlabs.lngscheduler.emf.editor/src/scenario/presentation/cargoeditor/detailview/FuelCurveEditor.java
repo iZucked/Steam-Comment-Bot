@@ -39,39 +39,11 @@ public class FuelCurveEditor extends DialogInlineEditor {
 		final VesselStateAttributes output = vsaDialog.open((VesselStateAttributes) input, true);
 		
 		if (output == null) return null;
-		final ArrayList<FuelConsumptionLine> result = new ArrayList<FuelConsumptionLine>();
-		
-		for (final FuelConsumptionLine fcl : output.getFuelConsumptionCurve()) {
-			result.add(fcl);
-		}
-		
-		output.getFuelConsumptionCurve().removeAll(result);
-		
-		return result;
+		return output.getFuelConsumptionCurve();
 	}
 
 	@Override
 	protected String render(Object value) {
 		return "";
 	}
-
-	@Override
-	protected Command createSetCommand(final Object value) {
-		final CompoundCommand cc = new CompoundCommand(
-				CompoundCommand.LAST_COMMAND_ALL);
-//		for (final Object o : (EList)getValue()) {
-			Command remove = editingDomain.createCommand(
-					DeleteCommand.class,
-					new CommandParameter(input, feature, (Collection) getValue())
-					);
-			cc.append(remove);
-//		}
-		
-		Command add = editingDomain.createCommand(AddCommand.class,
-				new CommandParameter(input, feature, (Collection<?>) value));
-		
-		cc.append(add);
-		
-		return cc;
-	}	
 }
