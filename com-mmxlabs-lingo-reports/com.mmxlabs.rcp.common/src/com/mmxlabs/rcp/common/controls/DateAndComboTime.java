@@ -109,8 +109,10 @@ public class DateAndComboTime extends Composite {
 
 		c.clear();
 	
+		final int index = time.getSelectionIndex();
+		
 		c.set(date.getYear(), date.getMonth(), date.getDay(),
-				time.getSelectionIndex(), offset);
+				index, offset);
 		
 		return c;
 	}
@@ -135,7 +137,8 @@ public class DateAndComboTime extends Composite {
 			date.setMonth(newValue.get(Calendar.MONTH));
 			date.setDay(newValue.get(Calendar.DAY_OF_MONTH));
 
-			time.setText(time.getItem(newValue.get(Calendar.HOUR_OF_DAY)));
+//			time.setText(time.getItem(newValue.get(Calendar.HOUR_OF_DAY)));
+			time.select(newValue.get(Calendar.HOUR_OF_DAY));
 			// time.setMinutes(newValue.get(Calendar.MINUTE));
 		}
 		settingValue = false;
@@ -158,7 +161,7 @@ public class DateAndComboTime extends Composite {
 		}
 	}
 
-	private void	createHourItems(Combo c, int offset) {
+	private void createHourItems(Combo c, int offset) {
 		if (offset > 59 || offset < 0) {
 			throw new IllegalArgumentException("Time offset should be in the range 0 to 59");
 		}
