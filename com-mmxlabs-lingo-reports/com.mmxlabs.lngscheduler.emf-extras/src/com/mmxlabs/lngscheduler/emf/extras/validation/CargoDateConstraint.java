@@ -26,6 +26,7 @@ import scenario.port.DistanceModel;
 import scenario.port.Port;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
@@ -80,9 +81,12 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 		if (availableTime >= 0) {
 			final Slot loadSlot = cargo.getLoadSlot();
 			final Slot dischargeSlot = cargo.getDischargeSlot();
-			EObject container = cargo.eContainer();
+			
+			final ValidationSupport validationSupport = ValidationSupport.getInstance();
+			
+			EObject container = validationSupport.getContainer(cargo).getFirst();
 			while (container != null && !(container instanceof Scenario)) {
-				container = container.eContainer();
+				container = validationSupport.getContainer(container).getFirst();
 			}
 			if (container instanceof Scenario) {
 				final Scenario scenario = (Scenario) container;
