@@ -36,10 +36,13 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 			final Scenario scenario;
 
 			{
-				EObject container = ValidationSupport.getInstance()
+				final ValidationSupport validationSupport = ValidationSupport
+						.getInstance();
+				EObject container = validationSupport
 						.getContainer(vesselClass).getFirst();
 				while (container != null && !(container instanceof Scenario))
-					container = container.eContainer();
+					container = validationSupport
+							.getContainer(container).getFirst();
 				scenario = (Scenario) container;
 			}
 
@@ -72,6 +75,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 
 					result.addEObjectAndFeature(vesselClass,
 							FleetPackage.eINSTANCE.getVesselClass_CanalCosts());
+					return result;
 				}
 			}
 		} else if (target instanceof VesselClassCost) {
