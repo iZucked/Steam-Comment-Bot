@@ -44,7 +44,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/schedule"
+            uri="http://com.mmxlabs.lng.emf2/schedule"
             class="scenario.schedule.provider.ScheduleItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -57,7 +57,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/schedule/events"
+            uri="http://com.mmxlabs.lng.emf2/schedule/events"
             class="scenario.schedule.events.provider.EventsItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -70,7 +70,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/schedule/fleet"
+            uri="http://com.mmxlabs.lng.emf2/schedule/fleet"
             class="scenario.schedule.fleet.provider.FleetItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -83,7 +83,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/port"
+            uri="http://com.mmxlabs.lng.emf2/port"
             class="scenario.port.provider.PortItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -96,7 +96,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/cargo"
+            uri="http://com.mmxlabs.lng.emf2/cargo"
             class="scenario.cargo.provider.CargoItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -109,7 +109,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/contract"
+            uri="http://com.mmxlabs.lng.emf2/contract"
             class="scenario.contract.provider.ContractItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -122,7 +122,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/market"
+            uri="http://com.mmxlabs.lng.emf2/market"
             class="scenario.market.provider.MarketItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -135,7 +135,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/optimiser"
+            uri="http://com.mmxlabs.lng.emf2/optimiser"
             class="scenario.optimiser.provider.OptimiserItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -148,7 +148,7 @@
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
-            uri="http://com.mmxlabs.lng.emf/optimiser/lso"
+            uri="http://com.mmxlabs.lng.emf2/optimiser/lso"
             class="scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
