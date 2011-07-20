@@ -98,7 +98,7 @@ public class VoyagePlanAnnotatorTest {
 		options1.setFromPortSlot(loadSlot1);
 		options1.setToPortSlot(dischargeSlot1);
 		options1.setDistance(500);
-
+		options1.setAvailableTime(90);
 		options1.setVesselState(VesselState.Laden);
 
 		voyageDetails1.setFuelUnitPrice(FuelComponent.Base, 1000);
@@ -111,7 +111,7 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails1.setOptions(options1);
 
 		voyageDetails1.setSpeed(15000);
-		voyageDetails1.setStartTime(110);
+//		voyageDetails1.setStartTime(110);
 		voyageDetails1.setTravelTime(50);
 		voyageDetails1.setIdleTime(40);
 
@@ -129,7 +129,7 @@ public class VoyagePlanAnnotatorTest {
 		options2.setFromPortSlot(dischargeSlot1);
 		options2.setToPortSlot(loadSlot2);
 		options2.setDistance(1000);
-
+		options2.setAvailableTime(80);
 		options2.setVesselState(VesselState.Ballast);
 
 		voyageDetails2.setFuelUnitPrice(FuelComponent.Base, 1100);
@@ -142,7 +142,7 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails2.setOptions(options2);
 
 		voyageDetails2.setSpeed(16000);
-		voyageDetails2.setStartTime(220);
+//		voyageDetails2.setStartTime(220);
 		voyageDetails2.setTravelTime(50);
 		voyageDetails2.setIdleTime(30);
 		
@@ -160,7 +160,7 @@ public class VoyagePlanAnnotatorTest {
 		options3.setFromPortSlot(loadSlot2);
 		options3.setToPortSlot(dischargeSlot2);
 		options3.setDistance(1500);
-
+		options3.setAvailableTime(70);
 		options3.setVesselState(VesselState.Laden);
 
 		voyageDetails3.setFuelUnitPrice(FuelComponent.Base, 1200);
@@ -173,7 +173,7 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails3.setOptions(options3);
 
 		voyageDetails3.setSpeed(17000);
-		voyageDetails3.setStartTime(330);
+//		voyageDetails3.setStartTime(330);
 		voyageDetails3.setTravelTime(50);
 		voyageDetails3.setIdleTime(20);
 
@@ -226,8 +226,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertNotNull(portVisit);
 			Assert.assertSame(element1, portVisit.getSequenceElement());
 			Assert.assertSame(loadSlot1, portVisit.getPortSlot());
-			Assert.assertEquals(100, portVisit.getStartTime());
-			Assert.assertEquals(110, portVisit.getEndTime());
+			Assert.assertEquals(0, portVisit.getStartTime());
+			Assert.assertEquals(10, portVisit.getEndTime());
 			Assert.assertEquals(10, portVisit.getDuration());
 
 			Assert.assertTrue(portVisit instanceof ILoadEvent<?>);
@@ -243,8 +243,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertSame(element2, journey.getSequenceElement());
 			Assert.assertSame(port1, journey.getFromPort());
 			Assert.assertSame(port2, journey.getToPort());
-			Assert.assertEquals(110, journey.getStartTime());
-			Assert.assertEquals(160, journey.getEndTime());
+			Assert.assertEquals(10, journey.getStartTime());
+			Assert.assertEquals(60, journey.getEndTime());
 			Assert.assertEquals(50, journey.getDuration());
 			Assert.assertEquals(500, journey.getDistance());
 
@@ -279,8 +279,8 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertSame(element2, idle.getSequenceElement());
 			Assert.assertSame(port2, idle.getPort());
-			Assert.assertEquals(160, idle.getStartTime());
-			Assert.assertEquals(200, idle.getEndTime());
+			Assert.assertEquals(60, idle.getStartTime());
+			Assert.assertEquals(100, idle.getEndTime());
 			Assert.assertEquals(40, idle.getDuration());
 
 			Assert.assertEquals(VesselState.Laden, idle.getVesselState());
@@ -311,8 +311,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertNotNull(portVisit);
 			Assert.assertSame(element2, portVisit.getSequenceElement());
 			Assert.assertSame(dischargeSlot1, portVisit.getPortSlot());
-			Assert.assertEquals(200, portVisit.getStartTime());
-			Assert.assertEquals(220, portVisit.getEndTime());
+			Assert.assertEquals(100, portVisit.getStartTime());
+			Assert.assertEquals(120, portVisit.getEndTime());
 			Assert.assertEquals(20, portVisit.getDuration());
 
 			Assert.assertTrue(portVisit instanceof IDischargeEvent<?>);
@@ -329,8 +329,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertSame(element3, journey.getSequenceElement());
 			Assert.assertSame(port2, journey.getFromPort());
 			Assert.assertSame(port1, journey.getToPort());
-			Assert.assertEquals(220, journey.getStartTime());
-			Assert.assertEquals(270, journey.getEndTime());
+			Assert.assertEquals(120, journey.getStartTime());
+			Assert.assertEquals(170, journey.getEndTime());
 			Assert.assertEquals(50, journey.getDuration());
 			Assert.assertEquals(1000, journey.getDistance());
 
@@ -365,8 +365,8 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertSame(element3, idle.getSequenceElement());
 			Assert.assertSame(port1, idle.getPort());
-			Assert.assertEquals(270, idle.getStartTime());
-			Assert.assertEquals(300, idle.getEndTime());
+			Assert.assertEquals(170, idle.getStartTime());
+			Assert.assertEquals(200, idle.getEndTime());
 			Assert.assertEquals(30, idle.getDuration());
 
 			Assert.assertEquals(VesselState.Ballast, idle.getVesselState());
@@ -397,8 +397,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertNotNull(portVisit);
 			Assert.assertSame(element3, portVisit.getSequenceElement());
 			Assert.assertSame(loadSlot2, portVisit.getPortSlot());
-			Assert.assertEquals(300, portVisit.getStartTime());
-			Assert.assertEquals(330, portVisit.getEndTime());
+			Assert.assertEquals(200, portVisit.getStartTime());
+			Assert.assertEquals(230, portVisit.getEndTime());
 			Assert.assertEquals(30, portVisit.getDuration());
 
 			Assert.assertTrue(portVisit instanceof ILoadEvent<?>);
@@ -415,8 +415,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertSame(element4, journey.getSequenceElement());
 			Assert.assertSame(port1, journey.getFromPort());
 			Assert.assertSame(port2, journey.getToPort());
-			Assert.assertEquals(330, journey.getStartTime());
-			Assert.assertEquals(380, journey.getEndTime());
+			Assert.assertEquals(230, journey.getStartTime());
+			Assert.assertEquals(280, journey.getEndTime());
 			Assert.assertEquals(50, journey.getDuration());
 			Assert.assertEquals(1500, journey.getDistance());
 
@@ -451,8 +451,8 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertSame(element4, idle.getSequenceElement());
 			Assert.assertSame(port2, idle.getPort());
-			Assert.assertEquals(380, idle.getStartTime());
-			Assert.assertEquals(400, idle.getEndTime());
+			Assert.assertEquals(280, idle.getStartTime());
+			Assert.assertEquals(300, idle.getEndTime());
 			Assert.assertEquals(20, idle.getDuration());
 
 			Assert.assertEquals(VesselState.Laden, idle.getVesselState());
@@ -483,8 +483,8 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertNotNull(portVisit);
 			Assert.assertSame(element4, portVisit.getSequenceElement());
 			Assert.assertSame(dischargeSlot2, portVisit.getPortSlot());
-			Assert.assertEquals(400, portVisit.getStartTime());
-			Assert.assertEquals(440, portVisit.getEndTime());
+			Assert.assertEquals(300, portVisit.getStartTime());
+			Assert.assertEquals(340, portVisit.getEndTime());
 			Assert.assertEquals(40, portVisit.getDuration());
 
 			Assert.assertTrue(portVisit instanceof IDischargeEvent<?>);
