@@ -7,10 +7,13 @@
  */
 package scenario.presentation.cargoeditor.detailview;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
@@ -18,6 +21,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -32,14 +39,17 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.IDetailConstraintSt
 
 /**
  * 
- * TODO sometimes field B should be refreshed when field A changes; currently
- * only field A knows about changes because they happen in here.
+ * TODO sometimes field B should be refreshed when field A changes; currently only field A knows about changes because they happen in here.
  * 
  * @author Tom Hinton
  * 
  */
-public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
-		IInlineEditor {
+public abstract class BasicAttributeInlineEditor extends AdapterImpl implements IInlineEditor {
+
+	/**
+	 * Adapter factory instance. This contains all factories registered in the global registry.
+	 */
+	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	/**
 	 * Object being edited
@@ -64,32 +74,29 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	/**
 	 * {@link ControlDecoration} used to show validation messages.
 	 */
-	private ControlDecoration decoration;
+	private ControlDecoration validationDecoration;
+
+	/**
+	 * Reference to the {@link Control} to use to display tool tips.
+	 */
+	private Control tooltipControl;
 
 	/**
 	 * Cached reference to the Information icon
 	 */
-	protected final FieldDecoration decorationInfo = FieldDecorationRegistry
-			.getDefault().getFieldDecoration(
-					FieldDecorationRegistry.DEC_INFORMATION);
+	protected final FieldDecoration decorationInfo = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION);
 
 	/**
 	 * Cached reference to the Warning icon
 	 */
-	protected final FieldDecoration decorationWarning = FieldDecorationRegistry
-			.getDefault().getFieldDecoration(
-					FieldDecorationRegistry.DEC_WARNING);
+	protected final FieldDecoration decorationWarning = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_WARNING);
 
 	/**
 	 * Cached reference to the Error icon
 	 */
-	protected final FieldDecoration decorationError = FieldDecorationRegistry
-			.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+	protected final FieldDecoration decorationError = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 
-	public BasicAttributeInlineEditor(final EMFPath path,
-			final EStructuralFeature feature,
-			final EditingDomain editingDomain,
-			final ICommandProcessor commandProcessor) {
+	public BasicAttributeInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor commandProcessor) {
 		this.path = path;
 		this.feature = feature;
 		this.editingDomain = editingDomain;
@@ -108,6 +115,28 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 			input.eAdapters().add(this);
 			doUpdateDisplayWithValue();
 		}
+
+		// Update control tool-tips using IItemPropertyDescriptor
+		if (input != null && tooltipControl != null) {
+
+			// Set to blank by default - and replace below if the feature is found
+			String toolTip = "";
+
+			// This will fetch the property source of the input object
+			final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY.adapt(input, IItemPropertySource.class);
+
+			// Iterate through the property descriptors to find a matching descriptor for the feature
+			for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(input)) {
+
+				if (feature.equals(descriptor.getFeature(input))) {
+					// Found match
+					toolTip = descriptor.getDescription(input);
+					break;
+				}
+			}
+			// Update tooltip text
+			tooltipControl.setToolTipText(toolTip);
+		}
 	}
 
 	private synchronized void doUpdateDisplayWithValue() {
@@ -120,8 +149,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	}
 
 	/**
-	 * Subclasses can override this to trigger a redisplay when other fields
-	 * change
+	 * Subclasses can override this to trigger a redisplay when other fields change
 	 * 
 	 * @param changedFeature
 	 * @return
@@ -134,8 +162,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	public void notifyChanged(final Notification msg) {
 		super.notifyChanged(msg);
 		// check if msg is relevant
-		if (msg.getFeature() != null
-				&& updateOnChangeToFeature(msg.getFeature())) {
+		if (msg.getFeature() != null && updateOnChangeToFeature(msg.getFeature())) {
 			doUpdateDisplayWithValue();
 		}
 		if (msg.getFeature() != null && msg.getFeature().equals(feature)) {
@@ -162,8 +189,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		}
 		currentlySettingValue = true;
 		final Object currentValue = getValue();
-		if (!(/*(currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue
-				.equals(value)))) {
+		if (!(/* (currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue.equals(value)))) {
 			final Command command = createSetCommand(value);
 			commandProcessor.processCommand(command, input, feature);
 			// editingDomain.getCommandStack().execute(command);
@@ -177,7 +203,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	public void processValidation(final IStatus status) {
 		if (status.isOK()) {
 			// No problems, so hide decoration
-			decoration.hide();
+			validationDecoration.hide();
 		} else {
 			// Default severity
 			int severity = IStatus.INFO;
@@ -213,29 +239,29 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 
 			if (sb.toString().isEmpty()) {
 				// No problems, so hide decoration
-				decoration.hide();
+				validationDecoration.hide();
 				return;
 			}
 
 			// Update description text
-			decoration.setDescriptionText(sb.toString());
+			validationDecoration.setDescriptionText(sb.toString());
 
 			// Update icon
 			switch (severity) {
 			case IStatus.INFO:
-				decoration.setImage(decorationInfo.getImage());
+				validationDecoration.setImage(decorationInfo.getImage());
 				break;
 			case IStatus.WARNING:
-				decoration.setImage(decorationWarning.getImage());
+				validationDecoration.setImage(decorationWarning.getImage());
 				break;
 			case IStatus.ERROR:
 			default:
-				decoration.setImage(decorationError.getImage());
+				validationDecoration.setImage(decorationError.getImage());
 				break;
 			}
 
 			// Show the decoration.
-			decoration.show();
+			validationDecoration.show();
 		}
 	}
 
@@ -249,7 +275,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 
 		if (status instanceof IDetailConstraintStatus) {
 			final IDetailConstraintStatus s = (IDetailConstraintStatus) status;
-			
+
 			final Collection<EObject> objects = s.getObjects();
 			if (objects.contains(input)) {
 				if (s.getFeaturesForEObject(input).contains(feature)) {
@@ -264,13 +290,11 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	protected Command createSetCommand(final Object value) {
 		// System.err.println("Creating set command (" + input + "." +
 		// feature.getName() + " <- " + value + ")");
-		final Command command = editingDomain.createCommand(SetCommand.class,
-				new CommandParameter(input, feature, value));
+		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(input, feature, value));
 		if (value == null) {
 			((SetCommand) command).setLabel("Clear " + feature.getName());
 		} else {
-			((SetCommand) command).setLabel("Set " + feature.getName() + " to "
-					+ value.toString());
+			((SetCommand) command).setLabel("Set " + feature.getName() + " to " + value.toString());
 		}
 
 		return command;
@@ -281,18 +305,35 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	}
 
 	public Control wrapControl(final Control c) {
-		decoration = new ControlDecoration(c, SWT.LEFT | SWT.TOP);
+		// Create decorator for validation items
+		{
+			validationDecoration = new ControlDecoration(c, SWT.LEFT | SWT.TOP);
 
-		// These should be the defaults...
-		decoration.setShowHover(true);
-		decoration.setShowOnlyOnFocus(false);
+			// These should be the defaults...
+			validationDecoration.setShowHover(true);
+			validationDecoration.setShowOnlyOnFocus(false);
 
-		// Set a default image
-		decoration.setImage(decorationInfo.getImage());
+			// Set a default image
+			validationDecoration.setImage(decorationInfo.getImage());
 
-		// Hide by default
-		decoration.hide();
+			// Hide by default
+			validationDecoration.hide();
+		}
 
+		// Store reference to this control so we can display tool tips.
+		tooltipControl = c;
 		return c;
+	}
+
+	/**
+	 * Utility method to create a {@link ComposedAdapterFactory}. Taken from org.eclipse.emf.compare.util.AdapterUtils.
+	 * 
+	 * @return
+	 */
+	private static ComposedAdapterFactory createAdapterFactory() {
+		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
+		factories.add(new ReflectiveItemProviderAdapterFactory());
+		return new ComposedAdapterFactory(factories);
 	}
 }

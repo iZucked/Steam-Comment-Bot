@@ -288,6 +288,7 @@ public class EObjectDetailView extends Composite {
 			try {
 				editor.setInput(object);
 			} catch (final Exception ex) {
+				// FIXME: Use logging service
 				System.err.println("Error setting input on " + editor);
 				ex.printStackTrace();
 			}
