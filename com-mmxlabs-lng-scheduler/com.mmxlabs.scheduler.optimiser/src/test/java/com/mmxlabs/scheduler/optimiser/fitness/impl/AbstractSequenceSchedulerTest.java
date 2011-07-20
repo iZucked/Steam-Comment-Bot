@@ -280,17 +280,17 @@ public final class AbstractSequenceSchedulerTest {
 
 		final VoyageDetails<ISequenceElement> expectedVoyageDetails1 = new VoyageDetails<ISequenceElement>();
 		expectedVoyageDetails1.setOptions(expectedOptions1);
-		expectedVoyageDetails1.setStartTime(6);
+//		expectedVoyageDetails1.setStartTime(6);
 		expectedVoyageDetails1.setTravelTime(4);
 
 		final VoyageDetails<ISequenceElement> expectedVoyageDetails2 = new VoyageDetails<ISequenceElement>();
 		expectedVoyageDetails2.setOptions(expectedOptions2);
-		expectedVoyageDetails2.setStartTime(11);
+//		expectedVoyageDetails2.setStartTime(11);
 		expectedVoyageDetails2.setTravelTime(4);
 
 		final VoyageDetails<ISequenceElement> expectedVoyageDetails3 = new VoyageDetails<ISequenceElement>();
 		expectedVoyageDetails3.setOptions(expectedOptions3);
-		expectedVoyageDetails3.setStartTime(16);
+//		expectedVoyageDetails3.setStartTime(16);
 		expectedVoyageDetails3.setTravelTime(4);
 
 		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
@@ -556,12 +556,12 @@ public final class AbstractSequenceSchedulerTest {
 
 		final VoyageDetails<ISequenceElement> expectedVoyageDetails1 = new VoyageDetails<ISequenceElement>();
 		expectedVoyageDetails1.setOptions(expectedOptions1);
-		expectedVoyageDetails1.setStartTime(6);
+//		expectedVoyageDetails1.setStartTime(6);
 		expectedVoyageDetails1.setTravelTime(4);
 
 		final VoyageDetails<ISequenceElement> expectedVoyageDetails2 = new VoyageDetails<ISequenceElement>();
 		expectedVoyageDetails2.setOptions(expectedOptions2);
-		expectedVoyageDetails2.setStartTime(11);
+//		expectedVoyageDetails2.setStartTime(11);
 		expectedVoyageDetails2.setTravelTime(4);
 
 		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
@@ -655,14 +655,14 @@ public final class AbstractSequenceSchedulerTest {
 		// ((PortDetails) outputSequence[0]).getStartTime());
 		Assert.assertEquals(1,
 				((PortDetails) outputSequence[0]).getVisitDuration());
-		Assert.assertEquals(6,
-				((VoyageDetails) outputSequence[1]).getStartTime());
+//		Assert.assertEquals(6,
+//				((VoyageDetails) outputSequence[1]).getStartTime());
 		// Assert.assertEquals(10,
 		// ((PortDetails) outputSequence[2]).getStartTime());
 		Assert.assertEquals(1,
 				((PortDetails) outputSequence[2]).getVisitDuration());
-		Assert.assertEquals(11,
-				((VoyageDetails) outputSequence[3]).getStartTime());
+//		Assert.assertEquals(11,
+//				((VoyageDetails) outputSequence[3]).getStartTime());
 		// Assert.assertEquals(15,
 		// ((PortDetails) outputSequence[4]).getStartTime());
 		Assert.assertEquals(1,
