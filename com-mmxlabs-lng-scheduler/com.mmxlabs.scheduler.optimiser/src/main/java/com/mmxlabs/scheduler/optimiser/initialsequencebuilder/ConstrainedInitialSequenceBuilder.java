@@ -140,7 +140,10 @@ public class ConstrainedInitialSequenceBuilder<T> implements
 	@Override
 	public ISequences<T> createInitialSequences(
 			final IOptimisationData<T> data, final ISequences<T> suggestion,
-			final Map<T, IResource> resourceSuggestion) {
+			Map<T, IResource> resourceSuggestion) {
+		
+		if (resourceSuggestion == null) resourceSuggestion = Collections.emptyMap();
+		
 		@SuppressWarnings("unchecked")
 		final IPortTypeProvider<T> portTypeProvider = data
 				.getDataComponentProvider(
