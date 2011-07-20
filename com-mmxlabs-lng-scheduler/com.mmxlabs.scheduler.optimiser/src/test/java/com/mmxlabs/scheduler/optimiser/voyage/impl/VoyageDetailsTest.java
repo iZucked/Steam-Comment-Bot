@@ -121,7 +121,7 @@ public class VoyageDetailsTest {
 		Assert.assertFalse(details1.equals(details3));
 		Assert.assertFalse(details1.equals(details4));
 		Assert.assertFalse(details1.equals(details5));
-		Assert.assertFalse(details1.equals(details6));
+
 		Assert.assertFalse(details1.equals(details7));
 		Assert.assertFalse(details1.equals(details8));
 		Assert.assertFalse(details1.equals(details9));
@@ -131,7 +131,6 @@ public class VoyageDetailsTest {
 		Assert.assertFalse(details3.equals(details1));
 		Assert.assertFalse(details4.equals(details1));
 		Assert.assertFalse(details5.equals(details1));
-		Assert.assertFalse(details6.equals(details1));
 		Assert.assertFalse(details7.equals(details1));
 		Assert.assertFalse(details8.equals(details1));
 		Assert.assertFalse(details9.equals(details1));
