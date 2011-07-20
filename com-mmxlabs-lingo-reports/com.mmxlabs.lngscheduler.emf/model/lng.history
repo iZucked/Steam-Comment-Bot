@@ -2540,14 +2540,14 @@
             featureName="name" dataValue="VesselClassCost"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures"
-          element="lng.ecore#//port/Canal/classCosts">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/classCosts"
+          element="#//@releases.3/@changes.93/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.93/@element"
             featureName="name" dataValue="classCosts"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/classCosts"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.93/@element"
             featureName="upperBound" dataValue="-1" oldDataValue="1"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/classCosts"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.93/@element"
             featureName="containment" dataValue="true" oldDataValue="false"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/classCosts"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.93/@element"
             featureName="eType" referenceValue="lng.ecore#//fleet/VesselClassCost"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClassCost"
@@ -4449,5 +4449,9 @@
         dataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime" oldDataValue="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalHour"/>
     <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/windowStart" featureName="eType"
         referenceValue="lng.ecore#//DateAndOptionalTime" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EReference" name="classCosts" upperBound="-1" eType="ecore:EClass lng.ecore#//fleet/VesselClassCost"
+          containment="true"/>
+    </changes>
   </releases>
 </history:History>

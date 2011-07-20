@@ -90,7 +90,7 @@ public class CanalItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_NamedObject_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 getString("_UI_NamedObject_name_description"),
 				 ScenarioPackage.Literals.NAMED_OBJECT__NAME,
 				 true,
 				 false,
@@ -135,7 +135,6 @@ public class CanalItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(PortPackage.Literals.CANAL__DISTANCE_MODEL);
-			childrenFeatures.add(PortPackage.Literals.CANAL__CLASS_COSTS);
 		}
 		return childrenFeatures;
 	}
@@ -195,7 +194,6 @@ public class CanalItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.CANAL__DISTANCE_MODEL:
-			case PortPackage.CANAL__CLASS_COSTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -217,11 +215,6 @@ public class CanalItemProvider
 			(createChildParameter
 				(PortPackage.Literals.CANAL__DISTANCE_MODEL,
 				 PortFactory.eINSTANCE.createDistanceModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PortPackage.Literals.CANAL__CLASS_COSTS,
-				 FleetFactory.eINSTANCE.createVesselClassCost()));
 	}
 
 	/**

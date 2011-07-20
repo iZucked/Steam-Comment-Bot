@@ -78,7 +78,7 @@ public class LoadSlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_LoadSlot_cargoCVvalue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_cargoCVvalue_feature", "_UI_LoadSlot_type"),
+				 getString("_UI_LoadSlot_cargoCVvalue_description"),
 				 CargoPackage.Literals.LOAD_SLOT__CARGO_CVVALUE,
 				 true,
 				 false,
