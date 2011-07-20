@@ -3,7 +3,6 @@
 
 <product name="ShipLiNGO" uid="com.mmxlabs.demo.app.product.id" id="com.mmxlabs.demo.app.product" application="com.mmxlabs.demo.app.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -30,7 +29,6 @@
    <vm>
    </vm>
 
-
    <plugins>
    </plugins>
 
@@ -40,7 +38,7 @@
    </features>
 
    <configurations>
-      <plugin id="com.mmxlabs.lngscheduler.emf-extras" autoStart="true" startLevel="1" />
+      <plugin id="com.mmxlabs.lngscheduler.emf-extras" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="0" />
    </configurations>
