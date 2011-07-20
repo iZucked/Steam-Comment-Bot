@@ -63,9 +63,16 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 		// for (final VoyagePlan plan : plans) {
 		// for (final Object e : plan.getSequence()) {
+		int lastTime = startTime;
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
 			final VoyagePlan plan = vpi.getCurrentPlan();
+
+			final int currentTime = vpi.getCurrentTime();
+
+			assert currentTime >= lastTime;
+			lastTime = currentTime;
+
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
 				final IPortSlot currentPortSlot = details.getPortSlot();
@@ -110,8 +117,8 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 				solution.getElementAnnotations().setAnnotation(element,
 						SchedulerConstants.AI_visitInfo, visit);
 
-				visit.setStartTime(vpi.getCurrentTime()); // details.getStartTime()
-				visit.setEndTime(vpi.getCurrentTime() + visitDuration);
+				visit.setStartTime(currentTime); // details.getStartTime()
+				visit.setEndTime(currentTime + visitDuration);
 
 			} else if (e instanceof VoyageDetails<?>) {
 				@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -130,8 +137,6 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 				final JourneyEventImpl<T> journey = new JourneyEventImpl<T>();
 
-				final int currentTime = vpi.getCurrentTime();
-
 				journey.setName("journey");
 				journey.setFromPort(prevPortSlot.getPort());
 				journey.setToPort(currentPortSlot.getPort());
@@ -143,7 +148,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 				journey.setDistance(options.getDistance());
 				journey.setRoute(options.getRoute());
 				journey.setRouteCost(details.getRouteCost());
-				
+
 				journey.setDuration(travelTime);
 
 				journey.setSpeed(details.getSpeed());
@@ -167,8 +172,7 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 
 				// solution.getElementAnnotations().setAnnotation(element,
 				// SchedulerConstants.AI_journeyInfo, journey);
-				solution.getElementAnnotations().setAnnotation(
-						element,
+				solution.getElementAnnotations().setAnnotation(element,
 						SchedulerConstants.AI_journeyInfo, journey);
 				final int idleTime = details.getIdleTime();
 

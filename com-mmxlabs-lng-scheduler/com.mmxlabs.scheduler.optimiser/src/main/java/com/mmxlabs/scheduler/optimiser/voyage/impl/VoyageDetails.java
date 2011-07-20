@@ -107,13 +107,13 @@ public final class VoyageDetails<T> implements Cloneable {
 		this.travelTime = travelTime;
 	}
 
-	public final int getStartTime() {
-		return startTime;
-	}
-
-	public final void setStartTime(final int startTime) {
-		this.startTime = startTime;
-	}
+//	public final int getStartTime() {
+//		return startTime;
+//	}
+//
+//	public final void setStartTime(final int startTime) {
+//		this.startTime = startTime;
+//	}
 
 	public final int getFuelUnitPrice(final FuelComponent fuel) {
 
