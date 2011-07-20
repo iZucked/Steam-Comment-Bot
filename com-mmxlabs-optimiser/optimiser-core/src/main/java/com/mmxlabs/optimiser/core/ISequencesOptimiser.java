@@ -6,11 +6,6 @@ package com.mmxlabs.optimiser.core;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.IOptimiser;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 
 /**

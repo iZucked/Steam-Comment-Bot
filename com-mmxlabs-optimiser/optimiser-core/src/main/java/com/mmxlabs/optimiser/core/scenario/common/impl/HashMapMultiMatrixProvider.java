@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
