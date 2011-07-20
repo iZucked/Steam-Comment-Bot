@@ -21,10 +21,10 @@ import com.mmxlabs.common.Pair;
  */
 public class DeferredReference implements Runnable {
 	private final Pair<EClass, String> key;
-	private final EObject target;
+	protected EObject target;
 	private final EReference reference;
 
-	private Map<Pair<EClass, String>, EObject> registry;
+	protected Map<Pair<EClass, String>, EObject> registry;
 
 	public DeferredReference(final EObject target, final EReference reference,
 			final String key) {
