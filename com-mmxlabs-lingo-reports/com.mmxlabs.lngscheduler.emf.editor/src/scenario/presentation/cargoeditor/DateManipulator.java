@@ -67,10 +67,11 @@ public class DateManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public void setValue(Object object, Object value) {
-		if (value == null)
+		if (value == null) {
 			super.setValue(object, null);
-		else
+		} else {
 			super.setValue(object, ((Calendar) value).getTime());
+		}
 	}
 
 	@Override
@@ -93,6 +94,7 @@ public class DateManipulator extends BasicAttributeManipulator {
 		
 		final Calendar cal = Calendar.getInstance(zone);
 		cal.setTime(date);
+		
 		return cal;
 	}
 

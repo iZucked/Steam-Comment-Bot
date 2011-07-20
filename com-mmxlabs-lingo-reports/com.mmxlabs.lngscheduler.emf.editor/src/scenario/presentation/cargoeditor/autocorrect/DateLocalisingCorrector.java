@@ -79,6 +79,7 @@ public class DateLocalisingCorrector extends BaseCorrector {
 									c.get(Calendar.HOUR_OF_DAY),
 									c.get(Calendar.MINUTE),
 									c.get(Calendar.SECOND));
+							
 							return new Pair<String, Command>(
 									"Adjust date to local time", makeSetter(
 											editingDomain,
