@@ -53,6 +53,7 @@ public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 		context = null;
 		sequences = null;
 		elementAnnotations = null;
+		generalAnnotations = null;
 	}
 
 	@Override
@@ -62,12 +63,14 @@ public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 	
 	@Override
 	public void setGeneralAnnotation(final String key, final Object value) {
+		if (generalAnnotations == null) throw new RuntimeException("Attempted to set an annotation after dispose()");
 		generalAnnotations.put(key, value);
 	}
 
 
 	@Override
 	public <U> U getGeneralAnnotation(String key, Class<U> clz) {
+		if (generalAnnotations == null) return null;
 		return clz.cast(generalAnnotations.get(key));
 	}
 }
