@@ -12,6 +12,8 @@ import java.util.TimeZone;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
+
 /**
  * Attempts to parse a date/time automatically
  * 
@@ -73,9 +75,45 @@ public class DateTimeParser {
 	}
 
 	public String formatDate(final Date date, final String zone) {
-		final SimpleDateFormat c = (SimpleDateFormat) consistentDateTime
+		SimpleDateFormat c = (SimpleDateFormat) consistentDateTime
 				.clone();
+		
+		if (date instanceof DateAndOptionalTime) {
+			if (((DateAndOptionalTime) date).isOnlyDate()) {
+				c = (SimpleDateFormat) consistentDate.clone();
+			}
+		}
+		
 		c.setTimeZone(TimeZone.getTimeZone(zone));
 		return c.format(date);
+	}
+
+	public DateAndOptionalTime parseDateAndOptionalTime(final String dateString) {
+		// try parsing as a date and time
+				try {
+					final Date result = consistentDateTime.parse(dateString);
+					return new DateAndOptionalTime(result, false);
+				} catch (ParseException ex) {
+				}
+
+				try {
+					final Date result = dateWithShortTime.parse(dateString);
+					return new DateAndOptionalTime(result, false);
+				} catch (ParseException ex) {
+				}
+
+				try {
+					final Date result = consistentDate.parse(dateString);
+					return new DateAndOptionalTime(result, true);
+				} catch (ParseException ex) {
+				}
+
+				// last try - use ECore
+				try {
+					return new DateAndOptionalTime((Date) EcoreFactory.eINSTANCE.createFromString(
+							EcorePackage.eINSTANCE.getEDate(), dateString), false);
+				} catch (final Exception ex) {
+					return null;
+				}
 	}
 }
