@@ -17,9 +17,13 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 
+import scenario.ScenarioPackage;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
+import com.mmxlabs.rcp.common.celleditors.DateAndOptionalTimeCellEditor;
 import com.mmxlabs.rcp.common.celleditors.DateTimeCellEditor;
 
 /**
@@ -28,6 +32,8 @@ import com.mmxlabs.rcp.common.celleditors.DateTimeCellEditor;
  */
 public class DateManipulator extends BasicAttributeManipulator {
 	final EReference portReference;
+
+	private final boolean optionalTime;
 
 	/**
 	 * @param field
@@ -39,6 +45,10 @@ public class DateManipulator extends BasicAttributeManipulator {
 		// check for port
 		final EClass container = field.getEContainingClass();
 		// check for associated port reference
+
+		optionalTime = field.getEType() == ScenarioPackage.eINSTANCE
+				.getDateAndOptionalTime();
+
 		EReference portReference = null;
 		for (final EReference ref : container.getEAllReferences()) {
 			if (ref.isMany())
@@ -53,12 +63,20 @@ public class DateManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-		if (object == null) return "";
-		final Calendar calendar = (Calendar) getValue(object);
+		if (object == null)
+			return "";
+		final Calendar calendar;
+		if (optionalTime) {
+			calendar = ((Pair<Calendar, Boolean>) getValue(object)).getFirst();
+		} else {
+			calendar = (Calendar) getValue(object);
+		}
+		
 		final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT,
 				DateFormat.SHORT);
 		df.setCalendar(calendar);
-		if (calendar == null) return "";
+		if (calendar == null)
+			return "";
 		return df.format(calendar.getTime()) + " ("
 				+ calendar.getTimeZone().getDisplayName(false, TimeZone.SHORT)
 				+ ")";
@@ -70,31 +88,54 @@ public class DateManipulator extends BasicAttributeManipulator {
 		if (value == null) {
 			super.setValue(object, null);
 		} else {
-			super.setValue(object, ((Calendar) value).getTime());
+			if (optionalTime) {
+				final Pair<Calendar, Boolean> p = (Pair<Calendar, Boolean>) value;
+				super.setValue(object, new DateAndOptionalTime(p.getFirst()
+						.getTime(), !(p.getSecond())));
+			} else {
+				super.setValue(object, ((Calendar) value).getTime());
+			}
 		}
 	}
 
 	@Override
 	public CellEditor getCellEditor(final Composite c, Object object) {
-		return new DateTimeCellEditor(c);
+		if (optionalTime) {
+			return new DateAndOptionalTimeCellEditor(c);
+		} else {
+			return new DateTimeCellEditor(c);
+		}
 	}
 
 	@Override
 	public Object getValue(Object object) {
-		if (object == null) return null;
+		if (object == null)
+			return null;
+
 		final Date date = (Date) super.getValue(object);
-	
-		if (date == null) return null;
-		
+
+		if (date == null)
+			return null;
+
 		final EObject obj = (EObject) object;
-		final Port port = (Port) obj.eGet(portReference);
-		final TimeZone zone = TimeZone.getTimeZone(portReference == null
-				|| port == null || port.getTimeZone() == null ? "UTC" : port
-				.getTimeZone());
-		
+		final Port port = portReference == null ? null : ((Port) obj
+				.eGet(portReference));
+		final TimeZone zone = TimeZone.getTimeZone(port == null
+				|| port.getTimeZone() == null ? "UTC" : port.getTimeZone());
+
 		final Calendar cal = Calendar.getInstance(zone);
 		cal.setTime(date);
-		
+
+		if (optionalTime) {
+			if (((DateAndOptionalTime) date).isOnlyDate()) {
+				if (port != null) {
+					cal.set(Calendar.HOUR_OF_DAY, port.getDefaultWindowStart());
+				}
+			}
+			return new Pair<Calendar, Boolean>(cal,
+					!((DateAndOptionalTime) date).isOnlyDate());
+		}
+
 		return cal;
 	}
 
