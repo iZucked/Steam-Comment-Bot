@@ -72,6 +72,7 @@ public class PortItemProvider
 			addTimeZonePropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
 			addDefaultCVvaluePropertyDescriptor(object);
+			addDefaultWindowStartPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -165,6 +166,28 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Default Window Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultWindowStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_defaultWindowStart_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultWindowStart_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_WINDOW_START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Port.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -205,6 +228,7 @@ public class PortItemProvider
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 			case PortPackage.PORT__DEFAULT_CVVALUE:
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
