@@ -8,11 +8,15 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
@@ -28,12 +32,20 @@ import org.eclipse.swt.widgets.Event;
 public class DateAndComboTime extends Composite {
 	private final DateTime date;
 	private final Combo time;
+	private final Button setTime;
 	private int offset;
 	boolean settingValue = false;
+	private final boolean optionalTime;
 
 	public DateAndComboTime(final Composite parent, final int style,
 			final boolean bigDate, int offset) {
+		this(parent, style, bigDate, offset, false);
+	}
+
+	public DateAndComboTime(final Composite parent, final int style,
+			final boolean bigDate, int offset, final boolean optionalTime) {
 		super(parent, style);
+		this.optionalTime = optionalTime;
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		final RowLayout layout = new RowLayout(bigDate ? SWT.VERTICAL
 				: SWT.HORIZONTAL);
@@ -47,9 +59,34 @@ public class DateAndComboTime extends Composite {
 		setLayout(layout);
 		date = new DateTime(this, (bigDate ? SWT.CALENDAR | SWT.BORDER
 				: SWT.DATE | SWT.MEDIUM) | style);
-		time = new Combo(this, SWT.BORDER | style);
+
+		if (optionalTime) {
+			setTime = new Button(this, SWT.CHECK);
+			final SelectionListener sl = new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					time.setEnabled(setTime.getSelection());
+					notifyNewSelection(false);
+				}
+			};
+			setTime.addSelectionListener(sl);
+			setTime.addDisposeListener(new DisposeListener() {
+				@Override
+				public void widgetDisposed(DisposeEvent e) {
+					setTime.removeSelectionListener(sl);
+				}
+			});
+		} else {
+			setTime = null;
+		}
+
+		time = new Combo(this, SWT.BORDER | style | SWT.READ_ONLY);
 		this.offset = offset;
 		createHourItems(time, offset);
+
+		if (optionalTime) {
+			time.setEnabled(false);
+		}
 
 		final SelectionListener listener = new SelectionListener() {
 			@Override
@@ -100,7 +137,11 @@ public class DateAndComboTime extends Composite {
 		this.timeZone = timeZone;
 	}
 
-	public Calendar getValue() {
+	public boolean isTimeSet() {
+		return setTime.getSelection();
+	}
+	
+	public synchronized Calendar getValue() {
 		final Calendar c = Calendar.getInstance(timeZone); // TODO this is a bit
 															// dodgy
 
@@ -108,12 +149,11 @@ public class DateAndComboTime extends Composite {
 		// value. grar.
 
 		c.clear();
-	
+
 		final int index = time.getSelectionIndex();
-		
-		c.set(date.getYear(), date.getMonth(), date.getDay(),
-				index, offset);
-		
+
+		c.set(date.getYear(), date.getMonth(), date.getDay(), index, offset);
+
 		return c;
 	}
 
@@ -128,6 +168,11 @@ public class DateAndComboTime extends Composite {
 	}
 
 	public synchronized void setValue(final Calendar newValue) {
+		setValue(newValue, true);
+	}
+
+	public synchronized void setValue(final Calendar newValue,
+			final boolean isTimeSet) {
 		settingValue = true;
 
 		if (newValue != null) {
@@ -137,9 +182,11 @@ public class DateAndComboTime extends Composite {
 			date.setMonth(newValue.get(Calendar.MONTH));
 			date.setDay(newValue.get(Calendar.DAY_OF_MONTH));
 
-//			time.setText(time.getItem(newValue.get(Calendar.HOUR_OF_DAY)));
 			time.select(newValue.get(Calendar.HOUR_OF_DAY));
-			// time.setMinutes(newValue.get(Calendar.MINUTE));
+			if (optionalTime) {
+				time.setEnabled(isTimeSet);
+				setTime.setSelection(isTimeSet);
+			}
 		}
 		settingValue = false;
 		notifyNewSelection(false);
@@ -163,13 +210,14 @@ public class DateAndComboTime extends Composite {
 
 	private void createHourItems(Combo c, int offset) {
 		if (offset > 59 || offset < 0) {
-			throw new IllegalArgumentException("Time offset should be in the range 0 to 59");
+			throw new IllegalArgumentException(
+					"Time offset should be in the range 0 to 59");
 		}
 		String[] items = new String[24];
 		for (int i = 0; i < 24; ++i) {
 			final String offsetStr = String.format("%02d:%02d", i, offset);
 			items[i] = offsetStr;
-		}	
+		}
 		c.setItems(items);
 	}
 }
