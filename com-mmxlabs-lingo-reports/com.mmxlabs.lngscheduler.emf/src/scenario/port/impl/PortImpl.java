@@ -40,6 +40,7 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVvalue <em>Default CVvalue</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultWindowStart <em>Default Window Start</em>}</li>
  * </ul>
  * </p>
  *
@@ -125,6 +126,26 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * @ordered
 	 */
 	protected float defaultCVvalue = DEFAULT_CVVALUE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDefaultWindowStart() <em>Default Window Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultWindowStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DEFAULT_WINDOW_START_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDefaultWindowStart() <em>Default Window Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultWindowStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected int defaultWindowStart = DEFAULT_WINDOW_START_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -243,6 +264,27 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getDefaultWindowStart() {
+		return defaultWindowStart;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefaultWindowStart(int newDefaultWindowStart) {
+		int oldDefaultWindowStart = defaultWindowStart;
+		defaultWindowStart = newDefaultWindowStart;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_WINDOW_START, oldDefaultWindowStart, defaultWindowStart));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -254,6 +296,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return getRegasEfficiency();
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				return getDefaultCVvalue();
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
+				return getDefaultWindowStart();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -277,6 +321,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				setDefaultCVvalue((Float)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
+				setDefaultWindowStart((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -302,6 +349,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				setDefaultCVvalue(DEFAULT_CVVALUE_EDEFAULT);
 				return;
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
+				setDefaultWindowStart(DEFAULT_WINDOW_START_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -322,6 +372,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return regasEfficiency != REGAS_EFFICIENCY_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				return defaultCVvalue != DEFAULT_CVVALUE_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
+				return defaultWindowStart != DEFAULT_WINDOW_START_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -421,6 +473,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		result.append(regasEfficiency);
 		result.append(", defaultCVvalue: ");
 		result.append(defaultCVvalue);
+		result.append(", defaultWindowStart: ");
+		result.append(defaultWindowStart);
 		result.append(')');
 		return result.toString();
 	}

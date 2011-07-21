@@ -38,7 +38,6 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.CanalImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.impl.CanalImpl#getDefaultCost <em>Default Cost</em>}</li>
  *   <li>{@link scenario.port.impl.CanalImpl#getDistanceModel <em>Distance Model</em>}</li>
- *   <li>{@link scenario.port.impl.CanalImpl#getClassCosts <em>Class Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -96,16 +95,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 	protected DistanceModel distanceModel;
 
 	/**
-	 * The cached value of the '{@link #getClassCosts() <em>Class Costs</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getClassCosts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<VesselClassCost> classCosts;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -143,18 +132,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.CANAL__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<VesselClassCost> getClassCosts() {
-		if (classCosts == null) {
-			classCosts = new EObjectContainmentEList.Resolving<VesselClassCost>(VesselClassCost.class, this, PortPackage.CANAL__CLASS_COSTS);
-		}
-		return classCosts;
 	}
 
 	/**
@@ -263,8 +240,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 		switch (featureID) {
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				return basicSetDistanceModel(null, msgs);
-			case PortPackage.CANAL__CLASS_COSTS:
-				return ((InternalEList<?>)getClassCosts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -284,8 +259,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				if (resolve) return getDistanceModel();
 				return basicGetDistanceModel();
-			case PortPackage.CANAL__CLASS_COSTS:
-				return getClassCosts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -308,10 +281,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				setDistanceModel((DistanceModel)newValue);
 				return;
-			case PortPackage.CANAL__CLASS_COSTS:
-				getClassCosts().clear();
-				getClassCosts().addAll((Collection<? extends VesselClassCost>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -333,9 +302,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				setDistanceModel((DistanceModel)null);
 				return;
-			case PortPackage.CANAL__CLASS_COSTS:
-				getClassCosts().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -354,8 +320,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 				return defaultCost != DEFAULT_COST_EDEFAULT;
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				return distanceModel != null;
-			case PortPackage.CANAL__CLASS_COSTS:
-				return classCosts != null && !classCosts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

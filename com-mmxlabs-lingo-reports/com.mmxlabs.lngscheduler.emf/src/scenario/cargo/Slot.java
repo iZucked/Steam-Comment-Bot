@@ -155,12 +155,12 @@ public interface Slot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Window Start</em>' attribute.
-	 * @see #setWindowStart(Date)
+	 * @see #setWindowStart(DateAndOptionalTime)
 	 * @see scenario.cargo.CargoPackage#getSlot_WindowStart()
-	 * @model
+	 * @model dataType="scenario.DateAndOptionalTime"
 	 * @generated
 	 */
-	Date getWindowStart();
+	DateAndOptionalTime getWindowStart();
 
 	/**
 	 * Sets the value of the '{@link scenario.cargo.Slot#getWindowStart <em>Window Start</em>}' attribute.
@@ -170,7 +170,7 @@ public interface Slot extends EObject {
 	 * @see #getWindowStart()
 	 * @generated
 	 */
-	void setWindowStart(Date value);
+	void setWindowStart(DateAndOptionalTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Window Duration</b></em>' attribute.

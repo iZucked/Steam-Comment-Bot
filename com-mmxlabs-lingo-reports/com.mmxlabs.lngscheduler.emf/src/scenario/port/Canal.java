@@ -22,7 +22,6 @@ import scenario.fleet.VesselClassCost;
  * <ul>
  *   <li>{@link scenario.port.Canal#getDefaultCost <em>Default Cost</em>}</li>
  *   <li>{@link scenario.port.Canal#getDistanceModel <em>Distance Model</em>}</li>
- *   <li>{@link scenario.port.Canal#getClassCosts <em>Class Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -31,22 +30,6 @@ import scenario.fleet.VesselClassCost;
  * @generated
  */
 public interface Canal extends UUIDObject, NamedObject {
-	/**
-	 * Returns the value of the '<em><b>Class Costs</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.fleet.VesselClassCost}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Class Costs</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Class Costs</em>' containment reference list.
-	 * @see scenario.port.PortPackage#getCanal_ClassCosts()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	EList<VesselClassCost> getClassCosts();
-
 	/**
 	 * Returns the value of the '<em><b>Default Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->

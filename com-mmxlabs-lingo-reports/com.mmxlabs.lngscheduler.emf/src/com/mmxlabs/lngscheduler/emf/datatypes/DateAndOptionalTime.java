@@ -28,4 +28,13 @@ public class DateAndOptionalTime extends Date {
 	public boolean isOnlyDate() {
 		return onlyDate;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DateAndOptionalTime) {
+			final DateAndOptionalTime daot = (DateAndOptionalTime) obj;
+			return super.equals(obj) && daot.isOnlyDate() == isOnlyDate();
+		}
+		return super.equals(obj);
+	}
 }

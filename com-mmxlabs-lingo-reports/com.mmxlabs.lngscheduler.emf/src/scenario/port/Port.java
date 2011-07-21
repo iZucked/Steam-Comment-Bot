@@ -24,6 +24,7 @@ import scenario.market.Index;
  *   <li>{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultCVvalue <em>Default CVvalue</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultWindowStart <em>Default Window Start</em>}</li>
  * </ul>
  * </p>
  *
@@ -111,5 +112,32 @@ public interface Port extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setDefaultCVvalue(float value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Window Start</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Window Start</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Window Start</em>' attribute.
+	 * @see #setDefaultWindowStart(int)
+	 * @see scenario.port.PortPackage#getPort_DefaultWindowStart()
+	 * @model default="0" required="true"
+	 * @generated
+	 */
+	int getDefaultWindowStart();
+
+	/**
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultWindowStart <em>Default Window Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default Window Start</em>' attribute.
+	 * @see #getDefaultWindowStart()
+	 * @generated
+	 */
+	void setDefaultWindowStart(int value);
 
 } // Port

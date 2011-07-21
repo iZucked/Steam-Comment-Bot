@@ -4453,5 +4453,15 @@
       <element xsi:type="ecore:EReference" name="classCosts" upperBound="-1" eType="ecore:EClass lng.ecore#//fleet/VesselClassCost"
           containment="true"/>
     </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
+        element="lng.ecore#//port/Port/defaultWindowStart"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultWindowStart"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultWindowStart"
+        featureName="name" dataValue="defaultWindowStart"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultWindowStart"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultWindowStart"
+        featureName="defaultValueLiteral" dataValue="0"/>
   </releases>
 </history:History>

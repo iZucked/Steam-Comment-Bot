@@ -155,13 +155,22 @@ public interface PortPackage extends EPackage {
 	int PORT__DEFAULT_CVVALUE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Default Window Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_WINDOW_START = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -320,22 +329,13 @@ public interface PortPackage extends EPackage {
 	int CANAL__DISTANCE_MODEL = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Class Costs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL__CLASS_COSTS = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The number of structural features of the '<em>Canal</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int CANAL_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -457,6 +457,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_DefaultCVvalue();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#getDefaultWindowStart <em>Default Window Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Window Start</em>'.
+	 * @see scenario.port.Port#getDefaultWindowStart()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultWindowStart();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -529,17 +540,6 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getCanal();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.port.Canal#getClassCosts <em>Class Costs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Class Costs</em>'.
-	 * @see scenario.port.Canal#getClassCosts()
-	 * @see #getCanal()
-	 * @generated
-	 */
-	EReference getCanal_ClassCosts();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.port.Canal#getDefaultCost <em>Default Cost</em>}'.
@@ -660,6 +660,14 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__DEFAULT_CVVALUE = eINSTANCE.getPort_DefaultCVvalue();
 
 		/**
+		 * The meta object literal for the '<em><b>Default Window Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_WINDOW_START = eINSTANCE.getPort_DefaultWindowStart();
+
+		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -720,14 +728,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CANAL = eINSTANCE.getCanal();
-
-		/**
-		 * The meta object literal for the '<em><b>Class Costs</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CANAL__CLASS_COSTS = eINSTANCE.getCanal_ClassCosts();
 
 		/**
 		 * The meta object literal for the '<em><b>Default Cost</b></em>' attribute feature.
