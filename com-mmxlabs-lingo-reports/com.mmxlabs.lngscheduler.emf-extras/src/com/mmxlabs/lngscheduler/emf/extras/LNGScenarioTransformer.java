@@ -70,6 +70,7 @@ import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.InterpolatingDiscountCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -274,7 +275,7 @@ public class LNGScenarioTransformer {
 				.getCurrentSettings().isSetDefaultDiscountCurve() ? scenario
 				.getOptimisation().getCurrentSettings()
 				.getDefaultDiscountCurve() : null;
-			
+
 		final ICurve realDefaultCurve;
 		if (defaultCurve == null) {
 			realDefaultCurve = new ConstantValueCurve(1);
@@ -387,16 +388,17 @@ public class LNGScenarioTransformer {
 			Association<Port, IPort> portAssociation,
 			Association<VesselClass, IVesselClass> classes,
 			Association<Vessel, IVessel> vessels, ModelEntityMap entities) {
-		
-		final Date latestDate = scenario.getOptimisation().getCurrentSettings().isSetIgnoreElementsAfter() ?
-				scenario.getOptimisation().getCurrentSettings().getIgnoreElementsAfter() : latestTime;
-		
+
+		final Date latestDate = scenario.getOptimisation().getCurrentSettings()
+				.isSetIgnoreElementsAfter() ? scenario.getOptimisation()
+				.getCurrentSettings().getIgnoreElementsAfter() : latestTime;
+
 		for (final VesselEvent event : scenario.getFleetModel()
 				.getVesselEvents()) {
-			
+
 			if (event.getStartDate().after(latestDate))
 				continue;
-			
+
 			final ITimeWindow window = builder.createTimeWindow(
 					convertTime(event.getStartDate()),
 					convertTime(event.getEndDate()));
@@ -447,24 +449,25 @@ public class LNGScenarioTransformer {
 			final Association<Vessel, IVessel> vesselAssociation,
 			final ModelEntityMap entities,
 			final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation) {
-		
-		final Date latestDate = scenario.getOptimisation().getCurrentSettings().isSetIgnoreElementsAfter() ?
-				scenario.getOptimisation().getCurrentSettings().getIgnoreElementsAfter() : latestTime;
+
+		final Date latestDate = scenario.getOptimisation().getCurrentSettings()
+				.isSetIgnoreElementsAfter() ? scenario.getOptimisation()
+				.getCurrentSettings().getIgnoreElementsAfter() : latestTime;
 		for (final Cargo eCargo : scenario.getCargoModel().getCargoes()) {
 			// ignore all non-fleet cargoes, as far as optimisation goes.
 			if (eCargo.getCargoType().equals(CargoType.FLEET) == false)
 				continue;
-			
+
 			if (eCargo.getLoadSlot().getWindowStart().after(latestDate))
 				continue;
-			
+
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
 			final int loadStart = convertTime(earliestTime,
-					loadSlot.getWindowStart());
+					loadSlot.getWindowStart(), loadSlot.getPort());
 			final int dischargeStart = convertTime(earliestTime,
-					dischargeSlot.getWindowStart());
+					dischargeSlot.getWindowStart(), dischargeSlot.getPort());
 
 			// TODO check units again
 			final ITimeWindow loadWindow = builder.createTimeWindow(loadStart,
@@ -539,6 +542,30 @@ public class LNGScenarioTransformer {
 				}
 				builder.setCargoVesselRestriction(cargo, vesselsForCargo);
 			}
+		}
+	}
+
+	/**
+	 * Convert a date with optional time into a time in hours at a given port
+	 * 
+	 * @param earliestTime2
+	 * @param windowStart
+	 * @param port
+	 * @return
+	 */
+	private int convertTime(final Date earliest,
+			final DateAndOptionalTime windowStart, final Port port) {
+		if (windowStart.isOnlyDate()) {
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(port
+					.getTimeZone()));
+
+			c.setTime(windowStart);
+
+			c.set(Calendar.HOUR_OF_DAY, port.getDefaultWindowStart());
+
+			return convertTime(earliest, c.getTime());
+		} else {
+			return convertTime(earliest, windowStart);
 		}
 	}
 
@@ -618,9 +645,12 @@ public class LNGScenarioTransformer {
 				}
 
 				// set vessel class costs
-				for (final VesselClass evc : scenario.getFleetModel().getVesselClasses()) {
-					for (final scenario.fleet.VesselClassCost classCost : evc.getCanalCosts()) {
-						if (classCost.getCanal() != canal) continue;
+				for (final VesselClass evc : scenario.getFleetModel()
+						.getVesselClasses()) {
+					for (final scenario.fleet.VesselClassCost classCost : evc
+							.getCanalCosts()) {
+						if (classCost.getCanal() != canal)
+							continue;
 						final IVesselClass vc = vesselAssociation.lookup(evc);
 						builder.setVesselClassRouteCost(name, vc,
 								VesselState.Laden,
@@ -630,8 +660,8 @@ public class LNGScenarioTransformer {
 								Calculator.scale(classCost.getUnladenCost()));
 
 						builder.setVesselClassRouteTimeAndFuel(name, vc,
-								classCost.getTransitTime(),
-								Calculator.scale(classCost.getTransitFuel() / 24));
+								classCost.getTransitTime(), Calculator
+										.scale(classCost.getTransitFuel() / 24));
 					}
 				}
 			}
@@ -880,7 +910,8 @@ public class LNGScenarioTransformer {
 			// post-hoc changes to same it has to be this way.
 
 			final Date freezeDate = entities.getDateFromHours(freezeHours);
-			System.err.println("Freezing sequencing decisions before " + freezeDate);
+			System.err.println("Freezing sequencing decisions before "
+					+ freezeDate);
 			for (final Sequence sequence : initialSchedule.getSequences()) {
 				final AllocatedVessel av = sequence.getVessel();
 				final IVessel builderVessel;
@@ -901,11 +932,13 @@ public class LNGScenarioTransformer {
 
 				IPortSlot previousSlot = null;
 				/**
-				 * Used to ensure that if we freeze a load we also freeze the next discharge.
+				 * Used to ensure that if we freeze a load we also freeze the
+				 * next discharge.
 				 */
 				boolean waitingForDischargeSlot = false;
 				for (final ScheduledEvent event : sequence.getEvents()) {
-					if (event.getStartTime().before(freezeDate) || waitingForDischargeSlot) {
+					if (event.getStartTime().before(freezeDate)
+							|| waitingForDischargeSlot) {
 						final IPortSlot currentSlot;
 						if (event instanceof SlotVisit) {
 							final SlotVisit slotVisit = (SlotVisit) event;
