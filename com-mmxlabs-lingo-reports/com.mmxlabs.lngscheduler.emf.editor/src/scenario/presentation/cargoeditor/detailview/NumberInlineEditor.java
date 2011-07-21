@@ -112,4 +112,9 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 		}
 	}
 
+	@Override
+	protected Object getInitialUnsetValue() {
+		return (Integer) 0;
+	}
+
 }

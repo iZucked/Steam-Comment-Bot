@@ -105,4 +105,9 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		if (curIndex == -1) combo.setText(""); 
 		else combo.setText(nameList.get(curIndex));
 	}
+
+	@Override
+	protected Object getInitialUnsetValue() {
+		return null;
+	}
 }

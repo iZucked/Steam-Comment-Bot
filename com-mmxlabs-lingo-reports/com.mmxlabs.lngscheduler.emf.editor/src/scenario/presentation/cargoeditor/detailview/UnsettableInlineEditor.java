@@ -24,7 +24,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
-	private Object lastSetValue;
+	private Object lastSetValue = getInitialUnsetValue();
 	private Control inner;
 
 	public UnsettableInlineEditor(final EMFPath path, final EStructuralFeature feature,
@@ -40,6 +40,13 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 	}
 
+	/**
+	 * Subclasses must return a value which should be set when there was
+	 * no value set, and then the set box was ticked.
+	 * @return A suitable value
+	 */
+	protected abstract Object getInitialUnsetValue();
+	
 	private void setControlEnabled(final Control c, final boolean enabled) {
 		if (c == null) return;
 		c.setEnabled(enabled);

@@ -113,5 +113,8 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 			changedFeature.equals(portReference); //update if port changes
 	}
 
-	
+	@Override
+	protected Object getInitialUnsetValue() {
+		return new Date();
+	}	
 }
