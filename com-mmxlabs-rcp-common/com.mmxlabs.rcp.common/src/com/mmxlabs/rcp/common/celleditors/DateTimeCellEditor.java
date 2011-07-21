@@ -70,17 +70,6 @@ public class DateTimeCellEditor extends CellEditor {
 	private Listener getSelectionListener() {
 		if (selectionListener == null) {
 			selectionListener = new Listener() {
-				
-//				@Override
-//				public void widgetSelected(SelectionEvent e) {
-//					markDirty();			
-//				}
-//
-//				@Override
-//				public void widgetDefaultSelected(SelectionEvent e) {
-//					handleDefaultSelection(e);
-//				}
-
 				@Override
 				public void handleEvent(Event event) {
 					markDirty();
@@ -89,23 +78,6 @@ public class DateTimeCellEditor extends CellEditor {
 		}
 		return selectionListener;
 	}
-	
-//	private FocusListener focusListener = null;
-//	private FocusListener getFocusListener() {
-//		if (focusListener == null) {
-//			focusListener = new FocusListener() {
-//				@Override
-//				public void focusLost(final FocusEvent e) {
-//					DateTimeCellEditor.this.focusLost();
-//				}
-//				
-//				@Override
-//				public void focusGained(final FocusEvent e) {
-//				}
-//			};
-//		}
-//		return focusListener;
-//	}
 	
 	private KeyListener keyListener = null;
 	private KeyListener getKeyListener() {
@@ -123,16 +95,8 @@ public class DateTimeCellEditor extends CellEditor {
 	@Override
 	protected void doSetFocus() {
 		popup.setFocus();
-//		popup.addFocusListener(getFocusListener());
 	}
 
-//	@Override
-//	public void deactivate() {
-//		if (popup != null && !popup.isDisposed()) {
-//			popup.removeFocusListener(getFocusListener());
-//		}
-//		super.deactivate();
-//	}
 
 	@Override
 	protected Object doGetValue() {
@@ -148,25 +112,4 @@ public class DateTimeCellEditor extends CellEditor {
 	protected boolean dependsOnExternalFocusListener() {
 		return false;
 	}
-	
-//	   /**
-//     * Handles a default selection event from the text control by applying the editor
-//     * value and deactivating this cell editor.
-//     * 
-//     * @param event the selection event
-//     * 
-//     * @since 3.0
-//     */
-//    protected void handleDefaultSelection(SelectionEvent event) {
-//        fireApplyEditorValue();
-//        deactivate();
-//    }
-    
-//    @Override
-//	protected void keyReleaseOccured(KeyEvent keyEvent) {
-//		if (keyEvent.character == '\r') { // Return key
-//			return;
-//		}
-//		super.keyReleaseOccured(keyEvent);
-//	}
 }
