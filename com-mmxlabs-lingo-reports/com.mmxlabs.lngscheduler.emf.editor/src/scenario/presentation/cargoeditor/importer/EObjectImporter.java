@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
 
+import scenario.ScenarioPackage;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
@@ -439,6 +440,8 @@ public class EObjectImporter {
 			try {
 				if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
 					obj = DateTimeParser.getInstance().parseDate(value);
+				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getDateAndOptionalTime())) {
+					obj = DateTimeParser.getInstance().parseDateAndOptionalTime(value);
 				} else {
 					obj = dataType.getEPackage().getEFactoryInstance()
 							.createFromString(dataType, value);
