@@ -54,7 +54,6 @@ import org.swtchart.Range;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.VesselStateAttributes;
-import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 
 import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
 

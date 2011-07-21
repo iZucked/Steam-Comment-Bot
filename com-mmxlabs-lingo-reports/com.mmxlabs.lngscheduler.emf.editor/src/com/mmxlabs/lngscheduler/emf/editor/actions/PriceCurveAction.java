@@ -1,7 +1,6 @@
 package com.mmxlabs.lngscheduler.emf.editor.actions;
 
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;

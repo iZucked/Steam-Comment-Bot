@@ -8,6 +8,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 
+import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
+
 /**
  * An action for opening the @link {@link WiringDialog}
  * 

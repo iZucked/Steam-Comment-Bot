@@ -36,7 +36,6 @@ import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandPr
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
-import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.IDetailConstraintStatus;
 
 /**

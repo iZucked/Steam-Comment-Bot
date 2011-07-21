@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.ListSelectionDialog;
+
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
