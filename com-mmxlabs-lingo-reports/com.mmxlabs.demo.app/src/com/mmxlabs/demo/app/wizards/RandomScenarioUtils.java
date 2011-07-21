@@ -72,6 +72,7 @@ import scenario.schedule.SchedulePackage;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.common.csv.DistanceImporter;
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -562,8 +563,8 @@ public class RandomScenarioUtils {
 		loadSlot.setWindowDuration(loadWindow);
 		dischargeSlot.setWindowDuration(dischargeWindow);
 
-		loadSlot.setWindowStart(createHourlyDate(now + Timer.ONE_DAY * startDay));
-		dischargeSlot.setWindowStart(createHourlyDate(now + Timer.ONE_DAY * endDay));
+		loadSlot.setWindowStart(new DateAndOptionalTime(createHourlyDate(now + Timer.ONE_DAY * startDay), false));
+		dischargeSlot.setWindowStart(new DateAndOptionalTime(createHourlyDate(now + Timer.ONE_DAY * endDay), false));
 
 		// dischargeSlot.setMarket(dischargeMarket);
 		// loadSlot.setMarket(loadMarket);
