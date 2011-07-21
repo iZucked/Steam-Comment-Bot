@@ -707,6 +707,8 @@ public class LNGVoyageCalculatorTest {
 		options.setVessel(vessel);
 		options.setVesselState(VesselState.Laden);
 
+		options.setAvailableLNG(Long.MAX_VALUE);
+		
 		return options;
 	}
 
