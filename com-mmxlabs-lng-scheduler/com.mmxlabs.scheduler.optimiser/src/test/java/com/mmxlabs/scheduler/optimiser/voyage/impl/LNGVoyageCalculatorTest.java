@@ -965,6 +965,7 @@ public class LNGVoyageCalculatorTest {
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		final VoyageOptions options = new VoyageOptions();
+		options.setVesselState(VesselState.Laden);
 		details.setOptions(options);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
@@ -1030,6 +1031,7 @@ public class LNGVoyageCalculatorTest {
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		final VoyageOptions options = new VoyageOptions();
+		options.setVesselState(VesselState.Laden);
 		details.setOptions(options);
 
 		details.setFuelConsumption(FuelComponent.Base,
@@ -1323,10 +1325,12 @@ public class LNGVoyageCalculatorTest {
 
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();
 		final VoyageOptions options1 = new VoyageOptions();
+		options1.setVesselState(VesselState.Ballast);
 		details1.setOptions(options1);
 
 		final VoyageDetails<Object> details2 = new VoyageDetails<Object>();
 		final VoyageOptions options2 = new VoyageOptions();
+		options2.setVesselState(VesselState.Laden);
 		details2.setOptions(options2);
 
 		final LNGVoyageCalculator<Object> calc = new LNGVoyageCalculator<Object>();
