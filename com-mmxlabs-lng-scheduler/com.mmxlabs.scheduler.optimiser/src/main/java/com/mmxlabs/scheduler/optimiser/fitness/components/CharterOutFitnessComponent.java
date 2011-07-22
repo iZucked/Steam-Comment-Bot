@@ -115,11 +115,10 @@ public class CharterOutFitnessComponent<T> extends
 		} else if (object instanceof PortDetails) {
 			final PortDetails portDetails = (PortDetails) object;
 			if (portDetails.getPortSlot().getPortType()
-					.equals(PortType.CharterOut)) {
+					.equals(PortType.CharterOut)) 
 				fitnessAccumulator += getDiscountedValue(time,
 						Calculator.multiply(portDetails.getVisitDuration(),
 								charterOutPrice));
-			}
 		}
 		return true;
 	}
