@@ -144,6 +144,7 @@ import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
 import scenario.presentation.cargoeditor.detailview.MultiReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
+import scenario.presentation.cargoeditor.detailview.TimezoneInlineEditor;
 import scenario.presentation.cargoeditor.detailview.VesselClassCostEditor;
 import scenario.presentation.model_editors.CanalEVP;
 import scenario.presentation.model_editors.CargoEVP;
@@ -2081,6 +2082,18 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	public void setupDetailViewContainer(final IDetailViewContainer page) {
 		page.addDefaultEditorFactories();
+
+		page.setEditorFactoryForFeature(
+				PortPackage.eINSTANCE.getPort_TimeZone(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature,
+							final ICommandProcessor commandProcessor) {
+						return new TimezoneInlineEditor(path, feature,
+								editingDomain, commandProcessor);
+					}
+				});
 
 		page.setEditorFactoryForFeature(
 				ScenarioPackage.eINSTANCE.getUUIDObject_UUID(), null);

@@ -24,7 +24,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
-	private Object lastSetValue = getInitialUnsetValue();
+	private Object lastSetValue;
 	private Control inner;
 
 	public UnsettableInlineEditor(final EMFPath path, final EStructuralFeature feature,
@@ -62,6 +62,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 		final Control c;
 		if (feature.isUnsettable()) {
+			this.lastSetValue = getInitialUnsetValue();
 			final Composite sub = new Composite(parent, SWT.NONE);
 			sub.setLayout(new GridLayout(2, false));
 			final Button setButton = new Button(sub, SWT.CHECK);
