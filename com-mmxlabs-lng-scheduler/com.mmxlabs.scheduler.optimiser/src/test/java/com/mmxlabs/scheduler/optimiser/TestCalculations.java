@@ -84,8 +84,8 @@ public class TestCalculations {
 
 		final IPort port1 = builder.createPort("port-1");
 		final IPort port2 = builder.createPort("port-2");
-		final IPort port3 = builder.createPort("port-2");
-		final IPort port4 = builder.createPort("port-2");
+		final IPort port3 = builder.createPort("port-3");
+		final IPort port4 = builder.createPort("port-4");
 
 		final int minSpeed = 12000;
 		final int maxSpeed = 20000;
