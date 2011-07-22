@@ -41,6 +41,7 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.PortImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVvalue <em>Default CVvalue</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultWindowStart <em>Default Window Start</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
  * </ul>
  * </p>
  *
@@ -146,6 +147,26 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * @ordered
 	 */
 	protected int defaultWindowStart = DEFAULT_WINDOW_START_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDefaultSlotDuration() <em>Default Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultSlotDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DEFAULT_SLOT_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDefaultSlotDuration() <em>Default Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultSlotDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int defaultSlotDuration = DEFAULT_SLOT_DURATION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -285,6 +306,27 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getDefaultSlotDuration() {
+		return defaultSlotDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefaultSlotDuration(int newDefaultSlotDuration) {
+		int oldDefaultSlotDuration = defaultSlotDuration;
+		defaultSlotDuration = newDefaultSlotDuration;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_SLOT_DURATION, oldDefaultSlotDuration, defaultSlotDuration));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -298,6 +340,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return getDefaultCVvalue();
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
 				return getDefaultWindowStart();
+			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+				return getDefaultSlotDuration();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -324,6 +368,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
 				setDefaultWindowStart((Integer)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+				setDefaultSlotDuration((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -352,6 +399,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
 				setDefaultWindowStart(DEFAULT_WINDOW_START_EDEFAULT);
 				return;
+			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+				setDefaultSlotDuration(DEFAULT_SLOT_DURATION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -374,6 +424,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return defaultCVvalue != DEFAULT_CVVALUE_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
 				return defaultWindowStart != DEFAULT_WINDOW_START_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+				return defaultSlotDuration != DEFAULT_SLOT_DURATION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -475,6 +527,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		result.append(defaultCVvalue);
 		result.append(", defaultWindowStart: ");
 		result.append(defaultWindowStart);
+		result.append(", defaultSlotDuration: ");
+		result.append(defaultSlotDuration);
 		result.append(')');
 		return result.toString();
 	}
