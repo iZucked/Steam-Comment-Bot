@@ -70,6 +70,9 @@ public abstract class EObjectDetailViewContainer implements
 		editorFactories.put(EcorePackage.eINSTANCE.getEDouble(),
 				numberEditorFactory);
 
+		editorFactories.put(ScenarioPackage.eINSTANCE.getPercentage(),
+				numberEditorFactory);
+
 		final IInlineEditorFactory dateEditorFactory = wrapEditorFactory(new IInlineEditorFactory() {
 			@Override
 			public IInlineEditor createEditor(EMFPath path,
@@ -85,7 +88,7 @@ public abstract class EObjectDetailViewContainer implements
 
 		editorFactories.put(ScenarioPackage.eINSTANCE.getDateAndOptionalTime(),
 				dateEditorFactory);
-		
+
 		editorFactories.put(EcorePackage.eINSTANCE.getEBoolean(),
 				wrapEditorFactory(new IInlineEditorFactory() {
 					@Override
