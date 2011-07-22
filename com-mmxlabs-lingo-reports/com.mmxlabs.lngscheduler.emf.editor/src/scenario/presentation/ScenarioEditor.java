@@ -1794,7 +1794,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-//			createContextMenuFor(cargoPane.getViewer());
+			// createContextMenuFor(cargoPane.getViewer());
 
 			final int pageIndex = addPage(cargoPane.getControl());
 			setPageText(pageIndex, "Cargoes"); // TODO localize this
@@ -1825,10 +1825,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
-//		createContextMenuFor(portEditor.getViewer());
+		// createContextMenuFor(portEditor.getViewer());
 
-		final CanalEVP canalEVP = new CanalEVP(getSite().getPage(),
-				this);
+		final CanalEVP canalEVP = new CanalEVP(getSite().getPage(), this);
 
 		canalEVP.createControl(sash);
 		canalEVP.setTitle("Canals", getTitleImage());
@@ -1838,7 +1837,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				PortPackage.eINSTANCE.getCanalModel_Canals());
 
 		canalEVP.getViewer().setInput(getScenario());
-//		createContextMenuFor(canalEVP.getViewer());
+		// createContextMenuFor(canalEVP.getViewer());
 
 		final int pageIndex = addPage(sash);
 		setPageText(pageIndex, "Ports and Distances");
@@ -1866,7 +1865,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			vcePane.setTitle("Vessel Classes", getTitleImage());
 
-//			createContextMenuFor(vcePane.getViewer());
+			// createContextMenuFor(vcePane.getViewer());
 
 			final VesselEVP fleetPane = new VesselEVP(getSite().getPage(), this);
 
@@ -1882,7 +1881,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-//			createContextMenuFor(fleetPane.getViewer());
+			// createContextMenuFor(fleetPane.getViewer());
 
 			final int pageIndex = addPage(sash);
 			setPageText(pageIndex, "Fleet");
@@ -2082,6 +2081,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	public void setupDetailViewContainer(final IDetailViewContainer page) {
 		page.addDefaultEditorFactories();
+
+		page.setEditorFactoryForFeature(
+				ScenarioPackage.eINSTANCE.getUUIDObject_UUID(), null);
 
 		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
 				new MultiReferenceEditorFactory(getEditingDomain(),
