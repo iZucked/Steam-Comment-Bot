@@ -436,12 +436,23 @@ public class EObjectImporter {
 			// TODO better parsing here, especially for date values.
 			// TODO local dates are especially tricky, maybe do a second pass to
 			// fix them.
-			final Object obj;
+			Object obj;
 			try {
 				if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
 					obj = DateTimeParser.getInstance().parseDate(value);
 				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getDateAndOptionalTime())) {
 					obj = DateTimeParser.getInstance().parseDateAndOptionalTime(value);
+				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getPercentage())) {
+					obj = dataType.getEPackage().getEFactoryInstance()
+							.createFromString(dataType, value);
+					double d = (Double) obj;
+					d /= 100.0;
+					if (d < 0) {
+						d = 0d;
+					} else if (d > 1) {
+						d = 1d;
+					}
+					obj = d;
 				} else {
 					obj = dataType.getEPackage().getEFactoryInstance()
 							.createFromString(dataType, value);
