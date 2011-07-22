@@ -42,6 +42,7 @@ import scenario.presentation.cargoeditor.ICellManipulator;
 import scenario.presentation.cargoeditor.ICellRenderer;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
+import scenario.presentation.cargoeditor.PercentageAttributeManipulator;
 import scenario.presentation.cargoeditor.ValueListAttributeManipulator;
 import scenario.presentation.cargoeditor.detailview.TimezoneInlineEditor;
 import scenario.presentation.distance_editor.DistanceEditorDialog;
@@ -256,7 +257,7 @@ public class PortEVP extends NamedObjectEVP {
 
 		addTypicalColumn(
 				"Regas Efficiency",
-				new NumericAttributeManipulator(PortPackage.eINSTANCE
+				new PercentageAttributeManipulator(PortPackage.eINSTANCE
 						.getPort_RegasEfficiency(), part.getEditingDomain()));
 
 		if (part.getScenario().getContractModel() != null) {

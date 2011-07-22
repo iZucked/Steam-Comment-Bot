@@ -19,7 +19,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import scenario.Scenario;
 import scenario.contract.ContractPackage;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.NumericAttributeManipulator;
+import scenario.presentation.cargoeditor.PercentageAttributeManipulator;
 import scenario.presentation.cargoeditor.importer.ExportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 
@@ -41,12 +41,12 @@ public class EntityEVP extends NamedObjectEVP {
 		super.init(path, adapterFactory);
 		addTypicalColumn(
 				"Tax Rate",
-				new NumericAttributeManipulator(ContractPackage.eINSTANCE
+				new PercentageAttributeManipulator(ContractPackage.eINSTANCE
 						.getEntity_TaxRate(), part.getEditingDomain()));
 
 		addTypicalColumn(
 				"Ownership",
-				new NumericAttributeManipulator(ContractPackage.eINSTANCE
+				new PercentageAttributeManipulator(ContractPackage.eINSTANCE
 						.getEntity_Ownership(), part.getEditingDomain()));
 
 	}
