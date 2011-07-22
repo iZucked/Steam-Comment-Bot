@@ -23,7 +23,7 @@ public class TimezoneInlineEditor extends ValueListInlineEditor {
 		super(path, feature, editingDomain, processor, getTimezones());
 	}
 
-	private static List<Pair<String, Object>> getTimezones() {
+	public static List<Pair<String, Object>> getTimezones() {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 
 		for (final String s : TimeZone.getAvailableIDs()) {

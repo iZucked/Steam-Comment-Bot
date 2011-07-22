@@ -42,6 +42,8 @@ import scenario.presentation.cargoeditor.ICellManipulator;
 import scenario.presentation.cargoeditor.ICellRenderer;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
+import scenario.presentation.cargoeditor.ValueListAttributeManipulator;
+import scenario.presentation.cargoeditor.detailview.TimezoneInlineEditor;
 import scenario.presentation.distance_editor.DistanceEditorDialog;
 
 import com.mmxlabs.common.Pair;
@@ -239,15 +241,17 @@ public class PortEVP extends NamedObjectEVP {
 		}
 		return v;
 	}
-
+	
 	@Override
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		// add columns
 		final PortPackage pp = PortPackage.eINSTANCE;
 
-		final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(
-				pp.getPort_TimeZone(), part.getEditingDomain());
+		final BasicAttributeManipulator manipulator = new ValueListAttributeManipulator(
+				pp.getPort_TimeZone(), part.getEditingDomain(),
+				TimezoneInlineEditor.getTimezones()
+				);
 		addColumn("Timezone", manipulator, manipulator);
 
 		addTypicalColumn(
