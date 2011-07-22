@@ -165,16 +165,17 @@ public abstract class AbstractSequenceScheduler<T> implements
 				options.setAvailableTime(availableTime);
 
 				if (prevPortType == PortType.CharterOut) {
-					options.setAvailableLNG(
-							((IVesselEventPortSlot) prevPortSlot).getVesselEvent().getMaxHeelOut()
-							);
+					options.setAvailableLNG(((IVesselEventPortSlot) prevPortSlot)
+							.getVesselEvent().getMaxHeelOut());
+
+				} else if (prevPortType == PortType.Load
+						|| prevPortType == PortType.Discharge) {
+					options.setAvailableLNG(vessel.getVesselClass()
+							.getCargoCapacity());
 				} else {
-//				} else (prevPortType == PortType.Load) {
-					options.setAvailableLNG(vessel.getVesselClass().getCargoCapacity());
-//				} else {
-//					options.setAvailableLNG(0);
+					options.setAvailableLNG(0);
 				}
-				
+
 				// Determined by voyage plan optimiser
 				options.setUseNBOForTravel(useNBO);
 				options.setUseFBOForSupplement(false);
