@@ -6,17 +6,25 @@
  */
 package scenario.fleet.util;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
-import scenario.fleet.*;
+import scenario.fleet.CharterOut;
+import scenario.fleet.Drydock;
+import scenario.fleet.FleetModel;
+import scenario.fleet.FleetPackage;
+import scenario.fleet.FuelConsumptionLine;
+import scenario.fleet.PortAndTime;
+import scenario.fleet.PortExclusion;
+import scenario.fleet.Vessel;
+import scenario.fleet.VesselClass;
+import scenario.fleet.VesselClassCost;
+import scenario.fleet.VesselEvent;
+import scenario.fleet.VesselFuel;
+import scenario.fleet.VesselStateAttributes;
 
 /**
  * <!-- begin-user-doc -->

@@ -6,17 +6,23 @@
  */
 package scenario.contract.util;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
-import scenario.contract.*;
+import scenario.contract.Contract;
+import scenario.contract.ContractModel;
+import scenario.contract.ContractPackage;
+import scenario.contract.Entity;
+import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
+import scenario.contract.NetbackPurchaseContract;
+import scenario.contract.ProfitSharingPurchaseContract;
+import scenario.contract.PurchaseContract;
+import scenario.contract.SalesContract;
+import scenario.contract.TotalVolumeLimit;
 
 /**
  * <!-- begin-user-doc -->

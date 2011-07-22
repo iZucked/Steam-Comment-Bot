@@ -9,12 +9,17 @@ package scenario.optimiser.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.optimiser.*;
+import scenario.optimiser.Constraint;
+import scenario.optimiser.Discount;
+import scenario.optimiser.DiscountCurve;
+import scenario.optimiser.Objective;
+import scenario.optimiser.Optimisation;
+import scenario.optimiser.OptimisationSettings;
+import scenario.optimiser.OptimiserFactory;
+import scenario.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc -->

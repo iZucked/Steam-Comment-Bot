@@ -7,7 +7,6 @@
 package scenario.schedule;
 
 import scenario.NamedObject;
-
 import scenario.contract.Entity;
 
 /**

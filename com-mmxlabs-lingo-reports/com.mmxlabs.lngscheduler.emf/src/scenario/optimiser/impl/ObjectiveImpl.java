@@ -7,15 +7,12 @@
 package scenario.optimiser.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.impl.NamedObjectImpl;
-
 import scenario.optimiser.DiscountCurve;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimiserPackage;

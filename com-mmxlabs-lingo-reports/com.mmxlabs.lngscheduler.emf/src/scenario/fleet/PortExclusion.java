@@ -9,7 +9,6 @@ package scenario.fleet;
 import java.util.Date;
 
 import scenario.ScenarioObject;
-
 import scenario.port.Port;
 
 /**

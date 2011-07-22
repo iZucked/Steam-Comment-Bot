@@ -6,14 +6,12 @@
  */
 package scenario.impl;
 
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.NamedObject;
@@ -21,47 +19,29 @@ import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.ScenarioObject;
 import scenario.ScenarioPackage;
-
 import scenario.UUIDObject;
 import scenario.cargo.CargoPackage;
-
 import scenario.cargo.impl.CargoPackageImpl;
-
 import scenario.contract.ContractPackage;
-
 import scenario.contract.impl.ContractPackageImpl;
-
 import scenario.fleet.FleetPackage;
-
 import scenario.fleet.impl.FleetPackageImpl;
-
 import scenario.market.MarketPackage;
-
 import scenario.market.impl.MarketPackageImpl;
-
 import scenario.optimiser.OptimiserPackage;
-
 import scenario.optimiser.impl.OptimiserPackageImpl;
-
 import scenario.optimiser.lso.LsoPackage;
-
 import scenario.optimiser.lso.impl.LsoPackageImpl;
-
 import scenario.port.PortPackage;
-
 import scenario.port.impl.PortPackageImpl;
-
 import scenario.schedule.SchedulePackage;
-
 import scenario.schedule.events.EventsPackage;
-
 import scenario.schedule.events.impl.EventsPackageImpl;
-
 import scenario.schedule.fleetallocation.FleetallocationPackage;
-
 import scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl;
-
 import scenario.schedule.impl.SchedulePackageImpl;
+
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -104,6 +84,13 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	private EDataType dateAndOptionalTimeEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType percentageEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -410,6 +397,15 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getPercentage() {
+		return percentageEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScenarioFactory getScenarioFactory() {
 		return (ScenarioFactory)getEFactoryInstance();
 	}
@@ -461,6 +457,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		// Create data types
 		dateAndOptionalTimeEDataType = createEDataType(DATE_AND_OPTIONAL_TIME);
+		percentageEDataType = createEDataType(PERCENTAGE);
 	}
 
 	/**
@@ -544,6 +541,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		// Initialize data types
 		initEDataType(dateAndOptionalTimeEDataType, DateAndOptionalTime.class, "DateAndOptionalTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(percentageEDataType, Double.class, "Percentage", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

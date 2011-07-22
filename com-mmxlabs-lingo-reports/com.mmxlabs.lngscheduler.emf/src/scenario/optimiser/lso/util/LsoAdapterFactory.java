@@ -8,17 +8,18 @@ package scenario.optimiser.lso.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
 import scenario.optimiser.OptimisationSettings;
-
-import scenario.optimiser.lso.*;
+import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.MoveGeneratorSettings;
+import scenario.optimiser.lso.RandomMoveGeneratorSettings;
+import scenario.optimiser.lso.ThresholderSettings;
 
 /**
  * <!-- begin-user-doc -->

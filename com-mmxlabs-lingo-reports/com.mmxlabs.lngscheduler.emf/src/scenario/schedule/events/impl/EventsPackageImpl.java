@@ -12,43 +12,25 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.ScenarioPackage;
-
 import scenario.cargo.CargoPackage;
-
 import scenario.cargo.impl.CargoPackageImpl;
-
 import scenario.contract.ContractPackage;
-
 import scenario.contract.impl.ContractPackageImpl;
-
 import scenario.fleet.FleetPackage;
-
 import scenario.fleet.impl.FleetPackageImpl;
-
 import scenario.impl.ScenarioPackageImpl;
-
 import scenario.market.MarketPackage;
-
 import scenario.market.impl.MarketPackageImpl;
-
 import scenario.optimiser.OptimiserPackage;
-
 import scenario.optimiser.impl.OptimiserPackageImpl;
-
 import scenario.optimiser.lso.LsoPackage;
-
 import scenario.optimiser.lso.impl.LsoPackageImpl;
-
 import scenario.port.PortPackage;
-
 import scenario.port.impl.PortPackageImpl;
-
 import scenario.schedule.SchedulePackage;
-
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsFactory;
 import scenario.schedule.events.EventsPackage;
@@ -62,11 +44,8 @@ import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 import scenario.schedule.events.VesselEventVisit;
-
 import scenario.schedule.fleetallocation.FleetallocationPackage;
-
 import scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl;
-
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**

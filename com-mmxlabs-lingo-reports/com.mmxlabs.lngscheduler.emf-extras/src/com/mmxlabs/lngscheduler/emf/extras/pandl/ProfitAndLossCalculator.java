@@ -88,7 +88,7 @@ public class ProfitAndLossCalculator {
 									.getDailyCharterInPrice());
 
 					li.setValue((evt.getEventDuration() * dailyCharterPrice) / 24);
-							
+
 					// TODO onward ballast leg costs - we pay or renter pays?
 					// at the moment I'm saying we pay.
 					revenue.getLineItems().add(li);
@@ -120,7 +120,8 @@ public class ProfitAndLossCalculator {
 			final LoadSlot loadSlot = allocation.getLoadSlot();
 			final Slot dischargeSlot = allocation.getDischargeSlot();
 
-			final Contract loadContract = loadSlot.getSlotOrPortContract(scenario);
+			final Contract loadContract = loadSlot
+					.getSlotOrPortContract(scenario);
 			final SalesContract dischargeContract = (SalesContract) dischargeSlot
 					.getSlotOrPortContract(scenario);
 
@@ -143,9 +144,10 @@ public class ProfitAndLossCalculator {
 
 			// item 1; value of selling LNG
 			final long dischargedM3 = allocation.getDischargeVolume();
-			final long saleableM3 = (long) Math.floor(allocation
-					.getDischargeVolume()
-					* dischargeSlot.getPort().getRegasEfficiency());
+			final long saleableM3 = (long) Math.floor(dischargeSlot.getPort()
+					.getRegasEfficiency() * allocation.getDischargeVolume());
+
+			// * dischargeSlot.getPort().getRegasEfficiency());
 
 			// divide by CV value to get mmbtu
 			final long saleableMMBTU = (long) Math.floor(saleableM3

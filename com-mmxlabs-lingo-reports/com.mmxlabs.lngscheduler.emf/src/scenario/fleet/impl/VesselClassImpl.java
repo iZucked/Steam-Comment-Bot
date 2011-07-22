@@ -10,14 +10,10 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -28,9 +24,7 @@ import scenario.fleet.VesselClass;
 import scenario.fleet.VesselClassCost;
 import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselStateAttributes;
-
 import scenario.impl.NamedObjectImpl;
-
 import scenario.port.Port;
 
 /**
@@ -148,7 +142,7 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final float FILL_CAPACITY_EDEFAULT = 0.958F;
+	protected static final Double FILL_CAPACITY_EDEFAULT = new Double(0.958);
 
 	/**
 	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
@@ -158,7 +152,7 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected float fillCapacity = FILL_CAPACITY_EDEFAULT;
+	protected Double fillCapacity = FILL_CAPACITY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
@@ -529,7 +523,7 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public float getFillCapacity() {
+	public Double getFillCapacity() {
 		return fillCapacity;
 	}
 
@@ -538,8 +532,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setFillCapacity(float newFillCapacity) {
-		float oldFillCapacity = fillCapacity;
+	public void setFillCapacity(Double newFillCapacity) {
+		Double oldFillCapacity = fillCapacity;
 		fillCapacity = newFillCapacity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__FILL_CAPACITY, oldFillCapacity, fillCapacity));
@@ -792,7 +786,7 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				setMinHeelVolume((Long)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
-				setFillCapacity((Float)newValue);
+				setFillCapacity((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				setSpotCharterCount((Integer)newValue);
@@ -899,7 +893,7 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
 				return minHeelVolume != MIN_HEEL_VOLUME_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
-				return fillCapacity != FILL_CAPACITY_EDEFAULT;
+				return FILL_CAPACITY_EDEFAULT == null ? fillCapacity != null : !FILL_CAPACITY_EDEFAULT.equals(fillCapacity);
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:

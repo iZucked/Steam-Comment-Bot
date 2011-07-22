@@ -6,17 +6,22 @@
  */
 package scenario.schedule.util;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
-import scenario.schedule.*;
+import scenario.schedule.BookedRevenue;
+import scenario.schedule.CargoAllocation;
+import scenario.schedule.CargoRevenue;
+import scenario.schedule.CharterOutRevenue;
+import scenario.schedule.LineItem;
+import scenario.schedule.Schedule;
+import scenario.schedule.ScheduleFitness;
+import scenario.schedule.ScheduleModel;
+import scenario.schedule.SchedulePackage;
+import scenario.schedule.Sequence;
 
 /**
  * <!-- begin-user-doc -->

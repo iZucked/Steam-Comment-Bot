@@ -10,33 +10,20 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.ScenarioPackage;
-
 import scenario.cargo.CargoPackage;
-
 import scenario.cargo.impl.CargoPackageImpl;
-
 import scenario.contract.ContractPackage;
-
 import scenario.contract.impl.ContractPackageImpl;
-
 import scenario.fleet.FleetPackage;
-
 import scenario.fleet.impl.FleetPackageImpl;
-
 import scenario.impl.ScenarioPackageImpl;
-
 import scenario.market.MarketPackage;
-
 import scenario.market.impl.MarketPackageImpl;
-
 import scenario.optimiser.OptimiserPackage;
-
 import scenario.optimiser.impl.OptimiserPackageImpl;
-
 import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoFactory;
@@ -44,21 +31,13 @@ import scenario.optimiser.lso.LsoPackage;
 import scenario.optimiser.lso.MoveGeneratorSettings;
 import scenario.optimiser.lso.RandomMoveGeneratorSettings;
 import scenario.optimiser.lso.ThresholderSettings;
-
 import scenario.port.PortPackage;
-
 import scenario.port.impl.PortPackageImpl;
-
 import scenario.schedule.SchedulePackage;
-
 import scenario.schedule.events.EventsPackage;
-
 import scenario.schedule.events.impl.EventsPackageImpl;
-
 import scenario.schedule.fleetallocation.FleetallocationPackage;
-
 import scenario.schedule.fleetallocation.impl.FleetallocationPackageImpl;
-
 import scenario.schedule.impl.SchedulePackageImpl;
 
 /**

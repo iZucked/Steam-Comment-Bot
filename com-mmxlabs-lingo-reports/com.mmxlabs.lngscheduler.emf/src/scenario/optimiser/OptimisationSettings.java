@@ -7,10 +7,10 @@
 package scenario.optimiser;
 
 import java.util.Date;
+
 import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
-
 import scenario.schedule.Schedule;
 
 /**

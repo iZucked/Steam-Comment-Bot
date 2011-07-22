@@ -7,19 +7,14 @@
 package scenario.schedule.events.impl;
 
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.impl.ScenarioObjectImpl;
-
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.ScheduledEvent;
 

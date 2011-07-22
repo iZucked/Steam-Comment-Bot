@@ -1,18 +1,21 @@
 package scenario.cargo.impl;
 
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 import scenario.contract.Contract;
 import scenario.port.Port;
+
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '

@@ -6,18 +6,20 @@
  */
 package scenario.port.util;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
 import scenario.UUIDObject;
-import scenario.port.*;
+import scenario.port.Canal;
+import scenario.port.CanalModel;
+import scenario.port.DistanceLine;
+import scenario.port.DistanceModel;
+import scenario.port.Port;
+import scenario.port.PortModel;
+import scenario.port.PortPackage;
 
 /**
  * <!-- begin-user-doc -->

@@ -11,7 +11,6 @@ import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.ScenarioObject;
-
 import scenario.contract.Entity;
 
 /**
@@ -123,7 +122,7 @@ public interface BookedRevenue extends ScenarioObject {
 	 * Returns the total revenue after tax associated with this line item.
 	 * <!-- end-model-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final int untaxedRevenue = getUntaxedValue();\n\nif (untaxedRevenue <= 0) {\n\treturn untaxedRevenue;\n} else {\n\treturn (int) (untaxedRevenue * (1.0 - getEntity().getTaxRate()));\n}'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final int untaxedRevenue = getUntaxedValue();\n\nif (untaxedRevenue <= 0) {\n\treturn untaxedRevenue;\n} else {\nreturn untaxedRevenue - getEntity().getTaxRate().scaleInt(untaxedRevenue);\n}'"
 	 * @generated
 	 */
 	int getTaxedValue();

@@ -8,15 +8,21 @@ package scenario.schedule.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
-import scenario.schedule.*;
+import scenario.schedule.BookedRevenue;
+import scenario.schedule.CargoAllocation;
+import scenario.schedule.CargoRevenue;
+import scenario.schedule.CharterOutRevenue;
+import scenario.schedule.LineItem;
+import scenario.schedule.Schedule;
+import scenario.schedule.ScheduleFitness;
+import scenario.schedule.ScheduleModel;
+import scenario.schedule.SchedulePackage;
+import scenario.schedule.Sequence;
 
 /**
  * <!-- begin-user-doc -->

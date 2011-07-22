@@ -7,25 +7,17 @@
 package scenario.port.impl;
 
 import java.lang.reflect.InvocationTargetException;
-import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 import scenario.ScenarioPackage;
-import scenario.contract.Contract;
-
 import scenario.impl.UUIDObjectImpl;
-import scenario.impl.NamedObjectImpl;
-
-import scenario.market.Index;
-
 import scenario.port.Port;
 import scenario.port.PortPackage;
 
@@ -96,7 +88,7 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final float REGAS_EFFICIENCY_EDEFAULT = 1.0F;
+	protected static final Double REGAS_EFFICIENCY_EDEFAULT = new Double(1.0);
 
 	/**
 	 * The cached value of the '{@link #getRegasEfficiency() <em>Regas Efficiency</em>}' attribute.
@@ -106,7 +98,7 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * @generated
 	 * @ordered
 	 */
-	protected float regasEfficiency = REGAS_EFFICIENCY_EDEFAULT;
+	protected Double regasEfficiency = REGAS_EFFICIENCY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDefaultCVvalue() <em>Default CVvalue</em>}' attribute.
@@ -243,7 +235,7 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public float getRegasEfficiency() {
+	public Double getRegasEfficiency() {
 		return regasEfficiency;
 	}
 
@@ -252,8 +244,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setRegasEfficiency(float newRegasEfficiency) {
-		float oldRegasEfficiency = regasEfficiency;
+	public void setRegasEfficiency(Double newRegasEfficiency) {
+		Double oldRegasEfficiency = regasEfficiency;
 		regasEfficiency = newRegasEfficiency;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__REGAS_EFFICIENCY, oldRegasEfficiency, regasEfficiency));
@@ -361,7 +353,7 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				setTimeZone((String)newValue);
 				return;
 			case PortPackage.PORT__REGAS_EFFICIENCY:
-				setRegasEfficiency((Float)newValue);
+				setRegasEfficiency((Double)newValue);
 				return;
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				setDefaultCVvalue((Float)newValue);
@@ -419,7 +411,7 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__TIME_ZONE:
 				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
 			case PortPackage.PORT__REGAS_EFFICIENCY:
-				return regasEfficiency != REGAS_EFFICIENCY_EDEFAULT;
+				return REGAS_EFFICIENCY_EDEFAULT == null ? regasEfficiency != null : !REGAS_EFFICIENCY_EDEFAULT.equals(regasEfficiency);
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				return defaultCVvalue != DEFAULT_CVVALUE_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_WINDOW_START:

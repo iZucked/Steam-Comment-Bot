@@ -4535,5 +4535,31 @@
         oldDataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return cm.getDefaultContract(p);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
     <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultSlotDuration"
         featureName="name" dataValue="defaultSlotDuration" oldDataValue="defaultVisitDuration"/>
+    <changes xsi:type="history:Create" target="lng.ecore#/" referenceName="eClassifiers"
+        element="lng.ecore#//Percentage"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//Percentage" featureName="name"
+        dataValue="Percentage"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//Percentage" featureName="instanceClassName"
+        dataValue="com.mmxlabs.lngscheduler.emf.datatypes.Percentage"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//Percentage" featureName="instanceTypeName"
+        dataValue="com.mmxlabs.lngscheduler.emf.datatypes.Percentage"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/fillCapacity"
+        featureName="eType" referenceValue="lng.ecore#//Percentage" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/regasEfficiency"
+        featureName="eType" referenceValue="lng.ecore#//Percentage" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Entity/ownership"
+        featureName="eType" referenceValue="lng.ecore#//Percentage" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Entity/taxRate"
+        featureName="eType" referenceValue="lng.ecore#//Percentage" oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/BookedRevenue/getTaxedValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="final int untaxedRevenue = getUntaxedValue();&#xA;&#xA;if (untaxedRevenue &lt;= 0) {&#xA;&#x9;return untaxedRevenue;&#xA;} else {&#xA;return untaxedRevenue - getEntity().getTaxRate().scaleInt(untaxedRevenue);&#xA;}"
+        oldDataValue="final int untaxedRevenue = getUntaxedValue();&#xA;&#xA;if (untaxedRevenue &lt;= 0) {&#xA;&#x9;return untaxedRevenue;&#xA;} else {&#xA;&#x9;return (int) (untaxedRevenue * (1.0 - getEntity().getTaxRate()));&#xA;}"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//Percentage" featureName="instanceClassName"
+        dataValue="java.lang.Double" oldDataValue="com.mmxlabs.lngscheduler.emf.datatypes.Percentage"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//Percentage" featureName="instanceTypeName"
+        dataValue="java.lang.Double" oldDataValue="com.mmxlabs.lngscheduler.emf.datatypes.Percentage"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/BookedRevenue/getTaxedValue/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="final int untaxedRevenue = getUntaxedValue();&#xA;&#xA;if (untaxedRevenue &lt;= 0) {&#xA;&#x9;return untaxedRevenue;&#xA;} else {&#xA;         return (int) (untaxedRevenue * (1.0 - getEntity().getTaxRate()));&#xA;}"
+        oldDataValue="final int untaxedRevenue = getUntaxedValue();&#xA;&#xA;if (untaxedRevenue &lt;= 0) {&#xA;&#x9;return untaxedRevenue;&#xA;} else {&#xA;return untaxedRevenue - getEntity().getTaxRate().scaleInt(untaxedRevenue);&#xA;}"/>
   </releases>
 </history:History>

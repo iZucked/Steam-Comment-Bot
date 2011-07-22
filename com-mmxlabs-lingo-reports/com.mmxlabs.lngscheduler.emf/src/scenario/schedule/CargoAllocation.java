@@ -13,10 +13,8 @@ import org.eclipse.emf.ecore.EObject;
 import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
-
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.Journey;
-
 import scenario.schedule.events.SlotVisit;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 

@@ -9,7 +9,6 @@ package scenario.fleet;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
-
 import scenario.port.Port;
 
 /**
@@ -206,12 +205,12 @@ public interface VesselClass extends NamedObject {
 	 * The ship fill capacity, as a proportion (from 0 to 1). Ship fill capacity is the percentage of vessel cargo capacity that can actually be used. Typically this is 98.5%.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Fill Capacity</em>' attribute.
-	 * @see #setFillCapacity(float)
+	 * @see #setFillCapacity(Double)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_FillCapacity()
-	 * @model default="0.958"
+	 * @model default="0.958" dataType="scenario.Percentage"
 	 * @generated
 	 */
-	float getFillCapacity();
+	Double getFillCapacity();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}' attribute.
@@ -221,7 +220,7 @@ public interface VesselClass extends NamedObject {
 	 * @see #getFillCapacity()
 	 * @generated
 	 */
-	void setFillCapacity(float value);
+	void setFillCapacity(Double value);
 
 	/**
 	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.

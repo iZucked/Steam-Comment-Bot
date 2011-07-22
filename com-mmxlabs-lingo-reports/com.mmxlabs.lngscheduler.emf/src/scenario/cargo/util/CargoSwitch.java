@@ -6,14 +6,15 @@
  */
 package scenario.cargo.util;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
-import scenario.cargo.*;
+
+import scenario.cargo.Cargo;
+import scenario.cargo.CargoModel;
+import scenario.cargo.CargoPackage;
+import scenario.cargo.LoadSlot;
+import scenario.cargo.Slot;
 
 /**
  * <!-- begin-user-doc -->

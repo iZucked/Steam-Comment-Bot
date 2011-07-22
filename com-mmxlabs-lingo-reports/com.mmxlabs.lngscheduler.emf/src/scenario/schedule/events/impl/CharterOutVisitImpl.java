@@ -7,16 +7,12 @@
 package scenario.schedule.events.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.CharterOut;
-
 import scenario.schedule.CharterOutRevenue;
-
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
 

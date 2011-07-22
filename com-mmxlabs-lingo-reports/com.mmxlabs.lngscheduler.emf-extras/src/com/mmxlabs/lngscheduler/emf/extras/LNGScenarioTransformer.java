@@ -512,11 +512,11 @@ public class LNGScenarioTransformer {
 				final Index dischargeIndex = ((SalesContract) dischargeSlot
 						.getSlotOrPortContract(scenario)).getIndex();
 
-				final float regasEfficiency = (dischargeSlot.getPort())
+				final double regasEfficiency = (dischargeSlot.getPort())
 						.getRegasEfficiency();
-				if (regasEfficiency != 1.0f) {
+				if (regasEfficiency != 1.0) {
 					dischargeCurve = createCurveForIndex(dischargeIndex,
-							regasEfficiency);
+							(float) regasEfficiency);
 				} else {
 					dischargeCurve = indexAssociation.lookup(dischargeIndex);
 				}
@@ -693,22 +693,19 @@ public class LNGScenarioTransformer {
 		// precision
 
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
-			IVesselClass vc = builder
-					.createVesselClass(
-							eVc.getName(),
-							Calculator.scaleToInt(eVc.getMinSpeed()),
-							Calculator.scaleToInt(eVc.getMaxSpeed()),
-							Calculator.scale(eVc.getCapacity()
-									* eVc.getFillCapacity()), // TODO is
-																// capacity mean
-																// to be scaled?
-							Calculator.scaleToInt(eVc.getMinHeelVolume()),
-							Calculator.scaleToInt(eVc.getBaseFuel()
-									.getUnitPrice()),
-							Calculator.scaleToInt(eVc.getBaseFuel()
-									.getEquivalenceFactor()),
-							// This should be divide?
-							Calculator.scaleToInt(eVc.getDailyCharterInPrice() / 24.0));
+			IVesselClass vc = builder.createVesselClass(eVc.getName(),
+					Calculator.scaleToInt(eVc.getMinSpeed()),
+					Calculator.scaleToInt(eVc.getMaxSpeed()),
+					Calculator.scale((int) (eVc.getFillCapacity()*
+							eVc.getCapacity())), // TODO is
+					// capacity mean
+					// to be scaled?
+					Calculator.scaleToInt(eVc.getMinHeelVolume()), Calculator
+							.scaleToInt(eVc.getBaseFuel().getUnitPrice()),
+					Calculator.scaleToInt(eVc.getBaseFuel()
+							.getEquivalenceFactor()),
+					// This should be divide?
+					Calculator.scaleToInt(eVc.getDailyCharterInPrice() / 24.0));
 			vesselClassAssociation.add(eVc, vc);
 
 			/*

@@ -17,7 +17,9 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.*;
+import scenario.Scenario;
+import scenario.ScenarioFactory;
+import scenario.ScenarioPackage;
 
 import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 
@@ -79,6 +81,8 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements
 		switch (eDataType.getClassifierID()) {
 			case ScenarioPackage.DATE_AND_OPTIONAL_TIME:
 				return createDateAndOptionalTimeFromString(eDataType, initialValue);
+			case ScenarioPackage.PERCENTAGE:
+				return createPercentageFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -93,6 +97,8 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements
 		switch (eDataType.getClassifierID()) {
 			case ScenarioPackage.DATE_AND_OPTIONAL_TIME:
 				return convertDateAndOptionalTimeToString(eDataType, instanceValue);
+			case ScenarioPackage.PERCENTAGE:
+				return convertPercentageToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -139,6 +145,33 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements
 				EcorePackage.eINSTANCE.getEDate(), daot);
 
 		return (daot.isOnlyDate() ? "D" : "") + datePart;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NO
+	 */
+	public Double createPercentageFromString(EDataType eDataType,
+			String initialValue) {
+		// return (Percentage)super.createFromString(eDataType, initialValue);
+
+//		final int t = Integer.parseInt(initialValue);
+		
+		final double d = Double.parseDouble(initialValue);
+		
+		return d;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NO
+	 */
+	public String convertPercentageToString(EDataType eDataType,
+			Object instanceValue) {
+		// return super.convertToString(eDataType, instanceValue);
+		return instanceValue.toString();
 	}
 
 	/**

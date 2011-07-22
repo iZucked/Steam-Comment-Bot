@@ -358,6 +358,16 @@ public interface ScenarioPackage extends EPackage {
 	int DATE_AND_OPTIONAL_TIME = 4;
 
 	/**
+	 * The meta object id for the '<em>Percentage</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.Double
+	 * @see scenario.impl.ScenarioPackageImpl#getPercentage()
+	 * @generated
+	 */
+	int PERCENTAGE = 5;
+
+	/**
 	 * Returns the meta object for class '{@link scenario.Scenario <em>Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -603,6 +613,17 @@ public interface ScenarioPackage extends EPackage {
 	EDataType getDateAndOptionalTime();
 
 	/**
+	 * Returns the meta object for data type '{@link java.lang.Double <em>Percentage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Percentage</em>'.
+	 * @see java.lang.Double
+	 * @model instanceClass="java.lang.Double"
+	 * @generated
+	 */
+	EDataType getPercentage();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -818,6 +839,16 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType DATE_AND_OPTIONAL_TIME = eINSTANCE.getDateAndOptionalTime();
+
+		/**
+		 * The meta object literal for the '<em>Percentage</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.Double
+		 * @see scenario.impl.ScenarioPackageImpl#getPercentage()
+		 * @generated
+		 */
+		EDataType PERCENTAGE = eINSTANCE.getPercentage();
 
 	}
 

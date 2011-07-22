@@ -7,14 +7,11 @@
 package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
-
 import scenario.impl.NamedObjectImpl;
 
 /**
@@ -40,7 +37,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final float TAX_RATE_EDEFAULT = 0.0F;
+	protected static final Double TAX_RATE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getTaxRate() <em>Tax Rate</em>}' attribute.
@@ -50,7 +47,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * @generated
 	 * @ordered
 	 */
-	protected float taxRate = TAX_RATE_EDEFAULT;
+	protected Double taxRate = TAX_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getOwnership() <em>Ownership</em>}' attribute.
@@ -60,7 +57,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final float OWNERSHIP_EDEFAULT = 1.0F;
+	protected static final Double OWNERSHIP_EDEFAULT = new Double(1.0);
 
 	/**
 	 * The cached value of the '{@link #getOwnership() <em>Ownership</em>}' attribute.
@@ -70,7 +67,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * @generated
 	 * @ordered
 	 */
-	protected float ownership = OWNERSHIP_EDEFAULT;
+	protected Double ownership = OWNERSHIP_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -96,7 +93,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public float getTaxRate() {
+	public Double getTaxRate() {
 		return taxRate;
 	}
 
@@ -105,8 +102,8 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTaxRate(float newTaxRate) {
-		float oldTaxRate = taxRate;
+	public void setTaxRate(Double newTaxRate) {
+		Double oldTaxRate = taxRate;
 		taxRate = newTaxRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.ENTITY__TAX_RATE, oldTaxRate, taxRate));
@@ -117,7 +114,7 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public float getOwnership() {
+	public Double getOwnership() {
 		return ownership;
 	}
 
@@ -126,8 +123,8 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOwnership(float newOwnership) {
-		float oldOwnership = ownership;
+	public void setOwnership(Double newOwnership) {
+		Double oldOwnership = ownership;
 		ownership = newOwnership;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.ENTITY__OWNERSHIP, oldOwnership, ownership));
@@ -158,10 +155,10 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ContractPackage.ENTITY__TAX_RATE:
-				setTaxRate((Float)newValue);
+				setTaxRate((Double)newValue);
 				return;
 			case ContractPackage.ENTITY__OWNERSHIP:
-				setOwnership((Float)newValue);
+				setOwnership((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -194,9 +191,9 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case ContractPackage.ENTITY__TAX_RATE:
-				return taxRate != TAX_RATE_EDEFAULT;
+				return TAX_RATE_EDEFAULT == null ? taxRate != null : !TAX_RATE_EDEFAULT.equals(taxRate);
 			case ContractPackage.ENTITY__OWNERSHIP:
-				return ownership != OWNERSHIP_EDEFAULT;
+				return OWNERSHIP_EDEFAULT == null ? ownership != null : !OWNERSHIP_EDEFAULT.equals(ownership);
 		}
 		return super.eIsSet(featureID);
 	}

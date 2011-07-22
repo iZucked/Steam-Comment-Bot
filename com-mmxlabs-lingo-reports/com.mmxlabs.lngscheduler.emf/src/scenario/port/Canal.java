@@ -6,11 +6,8 @@
  */
 package scenario.port;
 
-import org.eclipse.emf.common.util.EList;
-
 import scenario.NamedObject;
 import scenario.UUIDObject;
-import scenario.fleet.VesselClassCost;
 
 /**
  * <!-- begin-user-doc -->

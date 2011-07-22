@@ -7,39 +7,29 @@
 package scenario.impl;
 
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import scenario.Scenario;
 import scenario.ScenarioPackage;
-
 import scenario.cargo.CargoModel;
-
 import scenario.contract.ContractModel;
-
 import scenario.fleet.FleetModel;
-
 import scenario.market.MarketModel;
-
 import scenario.optimiser.Optimisation;
-
 import scenario.port.CanalModel;
 import scenario.port.DistanceModel;
 import scenario.port.PortModel;
-
 import scenario.schedule.ScheduleModel;
 
 /**

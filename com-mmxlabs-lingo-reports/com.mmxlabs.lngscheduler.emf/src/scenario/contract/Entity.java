@@ -35,12 +35,12 @@ public interface Entity extends NamedObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Tax Rate</em>' attribute.
-	 * @see #setTaxRate(float)
+	 * @see #setTaxRate(Double)
 	 * @see scenario.contract.ContractPackage#getEntity_TaxRate()
-	 * @model required="true"
+	 * @model dataType="scenario.Percentage" required="true"
 	 * @generated
 	 */
-	float getTaxRate();
+	Double getTaxRate();
 
 	/**
 	 * Sets the value of the '{@link scenario.contract.Entity#getTaxRate <em>Tax Rate</em>}' attribute.
@@ -50,7 +50,7 @@ public interface Entity extends NamedObject {
 	 * @see #getTaxRate()
 	 * @generated
 	 */
-	void setTaxRate(float value);
+	void setTaxRate(Double value);
 
 	/**
 	 * Returns the value of the '<em><b>Ownership</b></em>' attribute.
@@ -62,12 +62,12 @@ public interface Entity extends NamedObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ownership</em>' attribute.
-	 * @see #setOwnership(float)
+	 * @see #setOwnership(Double)
 	 * @see scenario.contract.ContractPackage#getEntity_Ownership()
-	 * @model default="1" required="true"
+	 * @model default="1" dataType="scenario.Percentage" required="true"
 	 * @generated
 	 */
-	float getOwnership();
+	Double getOwnership();
 
 	/**
 	 * Sets the value of the '{@link scenario.contract.Entity#getOwnership <em>Ownership</em>}' attribute.
@@ -77,6 +77,6 @@ public interface Entity extends NamedObject {
 	 * @see #getOwnership()
 	 * @generated
 	 */
-	void setOwnership(float value);
+	void setOwnership(Double value);
 
 } // Entity

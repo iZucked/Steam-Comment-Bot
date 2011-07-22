@@ -9,12 +9,16 @@ package scenario.optimiser.lso.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.optimiser.lso.*;
+import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
+import scenario.optimiser.lso.LSOSettings;
+import scenario.optimiser.lso.LsoFactory;
+import scenario.optimiser.lso.LsoPackage;
+import scenario.optimiser.lso.MoveGeneratorSettings;
+import scenario.optimiser.lso.RandomMoveGeneratorSettings;
+import scenario.optimiser.lso.ThresholderSettings;
 
 /**
  * <!-- begin-user-doc -->

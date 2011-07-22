@@ -6,17 +6,19 @@
  */
 package scenario.optimiser.util;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
-import scenario.optimiser.*;
+import scenario.optimiser.Constraint;
+import scenario.optimiser.Discount;
+import scenario.optimiser.DiscountCurve;
+import scenario.optimiser.Objective;
+import scenario.optimiser.Optimisation;
+import scenario.optimiser.OptimisationSettings;
+import scenario.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc -->

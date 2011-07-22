@@ -7,15 +7,12 @@
 package scenario.contract.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.contract.ContractPackage;
 import scenario.contract.ProfitSharingPurchaseContract;
-
 import scenario.market.Index;
 
 /**

@@ -7,6 +7,7 @@
 package scenario.contract;
 
 import org.eclipse.emf.common.util.EList;
+
 import scenario.NamedObject;
 import scenario.port.Port;
 

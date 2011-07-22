@@ -10,12 +10,23 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.fleet.*;
+import scenario.fleet.CharterOut;
+import scenario.fleet.Drydock;
+import scenario.fleet.FleetFactory;
+import scenario.fleet.FleetModel;
+import scenario.fleet.FleetPackage;
+import scenario.fleet.FuelConsumptionLine;
+import scenario.fleet.PortAndTime;
+import scenario.fleet.PortExclusion;
+import scenario.fleet.Vessel;
+import scenario.fleet.VesselClass;
+import scenario.fleet.VesselClassCost;
+import scenario.fleet.VesselFuel;
+import scenario.fleet.VesselState;
+import scenario.fleet.VesselStateAttributes;
 
 /**
  * <!-- begin-user-doc -->

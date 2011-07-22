@@ -8,16 +8,19 @@ package scenario.port.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
 import scenario.UUIDObject;
-import scenario.port.*;
+import scenario.port.Canal;
+import scenario.port.CanalModel;
+import scenario.port.DistanceLine;
+import scenario.port.DistanceModel;
+import scenario.port.Port;
+import scenario.port.PortModel;
+import scenario.port.PortPackage;
 
 /**
  * <!-- begin-user-doc -->

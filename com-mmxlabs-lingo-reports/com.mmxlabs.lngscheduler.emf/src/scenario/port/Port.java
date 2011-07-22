@@ -7,11 +7,7 @@
 package scenario.port;
 
 import scenario.NamedObject;
-
 import scenario.UUIDObject;
-import scenario.contract.Contract;
-
-import scenario.market.Index;
 
 /**
  * <!-- begin-user-doc -->
@@ -70,12 +66,12 @@ public interface Port extends UUIDObject, NamedObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Regas Efficiency</em>' attribute.
-	 * @see #setRegasEfficiency(float)
+	 * @see #setRegasEfficiency(Double)
 	 * @see scenario.port.PortPackage#getPort_RegasEfficiency()
-	 * @model default="1.0" required="true"
+	 * @model default="1.0" dataType="scenario.Percentage" required="true"
 	 * @generated
 	 */
-	float getRegasEfficiency();
+	Double getRegasEfficiency();
 
 	/**
 	 * Sets the value of the '{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}' attribute.
@@ -85,7 +81,7 @@ public interface Port extends UUIDObject, NamedObject {
 	 * @see #getRegasEfficiency()
 	 * @generated
 	 */
-	void setRegasEfficiency(float value);
+	void setRegasEfficiency(Double value);
 
 	/**
 	 * Returns the value of the '<em><b>Default CVvalue</b></em>' attribute.

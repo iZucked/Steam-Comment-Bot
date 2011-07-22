@@ -7,7 +7,6 @@
 package scenario.schedule.events;
 
 import scenario.cargo.Slot;
-
 import scenario.schedule.CargoAllocation;
 
 /**

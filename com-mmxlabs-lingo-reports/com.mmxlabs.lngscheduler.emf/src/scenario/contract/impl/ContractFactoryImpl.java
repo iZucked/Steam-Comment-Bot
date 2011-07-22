@@ -9,12 +9,19 @@ package scenario.contract.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.contract.*;
+import scenario.contract.ContractFactory;
+import scenario.contract.ContractModel;
+import scenario.contract.ContractPackage;
+import scenario.contract.Entity;
+import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.IndexPricePurchaseContract;
+import scenario.contract.NetbackPurchaseContract;
+import scenario.contract.ProfitSharingPurchaseContract;
+import scenario.contract.SalesContract;
+import scenario.contract.TotalVolumeLimit;
 
 /**
  * <!-- begin-user-doc -->

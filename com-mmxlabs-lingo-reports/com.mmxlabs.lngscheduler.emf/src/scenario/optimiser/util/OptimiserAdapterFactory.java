@@ -8,15 +8,18 @@ package scenario.optimiser.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
-import scenario.optimiser.*;
+import scenario.optimiser.Constraint;
+import scenario.optimiser.Discount;
+import scenario.optimiser.DiscountCurve;
+import scenario.optimiser.Objective;
+import scenario.optimiser.Optimisation;
+import scenario.optimiser.OptimisationSettings;
+import scenario.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc -->

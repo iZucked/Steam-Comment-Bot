@@ -6,16 +6,21 @@
  */
 package scenario.schedule.events.util;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
-import scenario.ScenarioObject;
 
-import scenario.schedule.events.*;
+import scenario.ScenarioObject;
+import scenario.schedule.events.CharterOutVisit;
+import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.FuelMixture;
+import scenario.schedule.events.FuelQuantity;
+import scenario.schedule.events.Idle;
+import scenario.schedule.events.Journey;
+import scenario.schedule.events.PortVisit;
+import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.SlotVisit;
+import scenario.schedule.events.VesselEventVisit;
 
 /**
  * <!-- begin-user-doc -->

@@ -6,17 +6,17 @@
  */
 package scenario.market.util;
 
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-
-import scenario.market.*;
+import scenario.market.Index;
+import scenario.market.MarketModel;
+import scenario.market.MarketPackage;
+import scenario.market.StepwisePrice;
+import scenario.market.StepwisePriceCurve;
 
 /**
  * <!-- begin-user-doc -->
