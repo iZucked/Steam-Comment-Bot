@@ -36,18 +36,17 @@ import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.BasicAttributeManipulator;
-import scenario.presentation.cargoeditor.EObjectTableViewer;
-import scenario.presentation.cargoeditor.ICellManipulator;
-import scenario.presentation.cargoeditor.ICellRenderer;
-import scenario.presentation.cargoeditor.IReferenceValueProvider;
-import scenario.presentation.cargoeditor.NumericAttributeManipulator;
-import scenario.presentation.cargoeditor.PercentageAttributeManipulator;
-import scenario.presentation.cargoeditor.ValueListAttributeManipulator;
-import scenario.presentation.cargoeditor.detailview.TimezoneInlineEditor;
-import scenario.presentation.distance_editor.DistanceEditorDialog;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
+import com.mmxlabs.shiplingo.ui.detailview.editors.TimezoneInlineEditor;
+import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.DistanceEditorDialog;
+import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
+import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
+import com.mmxlabs.shiplingo.ui.tableview.PercentageAttributeManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.ValueListAttributeManipulator;
 
 /**
  * A {@link ScenarioObjectEditorViewerPane} for editing a port model
@@ -206,7 +205,7 @@ public class PortEVP extends NamedObjectEVP {
 						final DistanceEditorDialog ded = new DistanceEditorDialog(
 								v.getControl().getShell());
 
-						if (ded.open(part, currentModel) == Window.OK) {
+						if (ded.open(part,part.getEditingDomain(),currentModel) == Window.OK) {
 							final DistanceModel newModel = ded.getResult();
 
 							final CompoundCommand cc = new CompoundCommand();
