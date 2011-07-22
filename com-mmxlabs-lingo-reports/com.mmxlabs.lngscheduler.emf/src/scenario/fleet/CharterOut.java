@@ -20,6 +20,8 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.CharterOut#getMaxHeelOut <em>Max Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getHeelCVValue <em>Heel CV Value</em>}</li>
  *   <li>{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}</li>
+ *   <li>{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
+ *   <li>{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,6 +56,112 @@ public interface CharterOut extends VesselEvent {
 	 * @generated
 	 */
 	void setEndPort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Daily Charter Out Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Daily Charter Out Price</em>' attribute.
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @see scenario.fleet.FleetPackage#getCharterOut_DailyCharterOutPrice()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	int getDailyCharterOutPrice();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Daily Charter Out Price</em>' attribute.
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @generated
+	 */
+	void setDailyCharterOutPrice(int value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @generated
+	 */
+	void unsetDailyCharterOutPrice();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Daily Charter Out Price</em>' attribute is set.
+	 * @see #unsetDailyCharterOutPrice()
+	 * @see #getDailyCharterOutPrice()
+	 * @see #setDailyCharterOutPrice(int)
+	 * @generated
+	 */
+	boolean isSetDailyCharterOutPrice();
+
+	/**
+	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Repositioning Fee</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #isSetRepositioningFee()
+	 * @see #unsetRepositioningFee()
+	 * @see #setRepositioningFee(int)
+	 * @see scenario.fleet.FleetPackage#getCharterOut_RepositioningFee()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	int getRepositioningFee();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #isSetRepositioningFee()
+	 * @see #unsetRepositioningFee()
+	 * @see #getRepositioningFee()
+	 * @generated
+	 */
+	void setRepositioningFee(int value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRepositioningFee()
+	 * @see #getRepositioningFee()
+	 * @see #setRepositioningFee(int)
+	 * @generated
+	 */
+	void unsetRepositioningFee();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Repositioning Fee</em>' attribute is set.
+	 * @see #unsetRepositioningFee()
+	 * @see #getRepositioningFee()
+	 * @see #setRepositioningFee(int)
+	 * @generated
+	 */
+	boolean isSetRepositioningFee();
 
 	/**
 	 * Returns the value of the '<em><b>Max Heel Out</b></em>' attribute.

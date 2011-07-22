@@ -64,6 +64,8 @@ public class CharterOutItemProvider
 			addMaxHeelOutPropertyDescriptor(object);
 			addHeelCVValuePropertyDescriptor(object);
 			addEndPortPropertyDescriptor(object);
+			addDailyCharterOutPricePropertyDescriptor(object);
+			addRepositioningFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -86,6 +88,50 @@ public class CharterOutItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Daily Charter Out Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDailyCharterOutPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOut_dailyCharterOutPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_dailyCharterOutPrice_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Repositioning Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRepositioningFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOut_repositioningFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOut_repositioningFee_feature", "_UI_CharterOut_type"),
+				 FleetPackage.Literals.CHARTER_OUT__REPOSITIONING_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -173,6 +219,8 @@ public class CharterOutItemProvider
 		switch (notification.getFeatureID(CharterOut.class)) {
 			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
+			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
+			case FleetPackage.CHARTER_OUT__REPOSITIONING_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

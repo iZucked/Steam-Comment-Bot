@@ -716,6 +716,24 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCharterOut_DailyCharterOutPrice() {
+		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterOut_RepositioningFee() {
+		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getCharterOut_MaxHeelOut() {
 		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(0);
 	}
@@ -951,6 +969,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(charterOutEClass, CHARTER_OUT__MAX_HEEL_OUT);
 		createEAttribute(charterOutEClass, CHARTER_OUT__HEEL_CV_VALUE);
 		createEReference(charterOutEClass, CHARTER_OUT__END_PORT);
+		createEAttribute(charterOutEClass, CHARTER_OUT__DAILY_CHARTER_OUT_PRICE);
+		createEAttribute(charterOutEClass, CHARTER_OUT__REPOSITIONING_FEE);
 
 		drydockEClass = createEClass(DRYDOCK);
 
@@ -1073,6 +1093,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getCharterOut_MaxHeelOut(), ecorePackage.getEInt(), "maxHeelOut", "2147483647", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOut_HeelCVValue(), ecorePackage.getEFloat(), "heelCVValue", "22.8", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOut_EndPort(), thePortPackage.getPort(), null, "endPort", null, 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOut_DailyCharterOutPrice(), ecorePackage.getEInt(), "dailyCharterOutPrice", null, 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOut_RepositioningFee(), ecorePackage.getEInt(), "repositioningFee", null, 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(drydockEClass, Drydock.class, "Drydock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

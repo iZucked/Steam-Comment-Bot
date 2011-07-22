@@ -177,6 +177,11 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="22.8"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" lowerBound="1"
           eType="#//port/Port"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyCharterOutPrice"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Drydock" eSuperTypes="#//fleet/VesselEvent"/>
     <eClassifiers xsi:type="ecore:EClass" name="VesselFuel" eSuperTypes="#//NamedObject">

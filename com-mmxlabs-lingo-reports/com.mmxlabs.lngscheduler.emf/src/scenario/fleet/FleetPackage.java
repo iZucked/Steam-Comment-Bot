@@ -765,13 +765,31 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__END_PORT = VESSEL_EVENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Daily Charter Out Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__DAILY_CHARTER_OUT_PRICE = VESSEL_EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 3;
+	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Charter Out</em>' class.
@@ -1628,6 +1646,28 @@ public interface FleetPackage extends EPackage {
 	EReference getCharterOut_EndPort();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Daily Charter Out Price</em>'.
+	 * @see scenario.fleet.CharterOut#getDailyCharterOutPrice()
+	 * @see #getCharterOut()
+	 * @generated
+	 */
+	EAttribute getCharterOut_DailyCharterOutPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
+	 * @see scenario.fleet.CharterOut#getRepositioningFee()
+	 * @see #getCharterOut()
+	 * @generated
+	 */
+	EAttribute getCharterOut_RepositioningFee();
+
+	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getMaxHeelOut <em>Max Heel Out</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2247,6 +2287,22 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_OUT__END_PORT = eINSTANCE.getCharterOut_EndPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Daily Charter Out Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT__DAILY_CHARTER_OUT_PRICE = eINSTANCE.getCharterOut_DailyCharterOutPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT__REPOSITIONING_FEE = eINSTANCE.getCharterOut_RepositioningFee();
 
 		/**
 		 * The meta object literal for the '<em><b>Max Heel Out</b></em>' attribute feature.

@@ -131,6 +131,10 @@
             ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/heelCVValue"/>
         <genFeatures notify="false" createChild="false" propertyDescription="A port to which the vessel will be returned once the charter out is completed."
             propertySortChoices="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/CharterOut/endPort"/>
+        <genFeatures createChild="false" propertyDescription="If set, this will be used to calculate the price for this charter out. Otherwise, the daily rate on the vessel or vessel class will be used."
+            ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/dailyCharterOutPrice"/>
+        <genFeatures createChild="false" propertyDescription="If set, this amount will be incurred as a cost for repositioning the vessel after the charter out."
+            ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/repositioningFee"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//fleet/Drydock"/>
       <genClasses ecoreClass="lng.ecore#//fleet/VesselFuel">
@@ -359,6 +363,7 @@
             ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/regasEfficiency"/>
         <genFeatures createChild="false" propertyDescription="The default CV value for cargoes loaded at this port."
             ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultCVvalue"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultWindowStart"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//port/DistanceModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//port/DistanceModel/distances"/>
