@@ -187,6 +187,8 @@ public class DateAndComboTime extends Composite {
 				time.setEnabled(isTimeSet);
 				setTime.setSelection(isTimeSet);
 			}
+		} else {
+			time.select(0);
 		}
 		settingValue = false;
 		notifyNewSelection(false);
