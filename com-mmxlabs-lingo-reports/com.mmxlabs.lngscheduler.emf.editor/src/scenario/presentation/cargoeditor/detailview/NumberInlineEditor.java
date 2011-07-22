@@ -13,16 +13,106 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import scenario.ScenarioPackage;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class NumberInlineEditor extends UnsettableInlineEditor {
 	private EDataType type;
+
+	private final static class NumberTypes {
+		public final static EDataType l = EcorePackage.eINSTANCE.getELong();
+		public final static EDataType f = EcorePackage.eINSTANCE.getEFloat();
+		public final static EDataType d = EcorePackage.eINSTANCE.getEDouble();
+		public final static EDataType i = EcorePackage.eINSTANCE.getEInt();
+		public final static EDataType p = ScenarioPackage.eINSTANCE
+				.getPercentage();
+
+		public static Object create(final EDataType type, int spinnerValue) {
+			int digits = getDigits(type);
+			if (type == l) {
+				return Long.valueOf(spinnerValue);
+			} else if (type == i) {
+				return Integer.valueOf(spinnerValue);
+			} else if (type == p) {
+				return (Double) ((double) (spinnerValue * Math.pow(10, -(digits + 2))));
+			} else if (type == f) {
+				return (Float) ((float) (spinnerValue * Math.pow(10, -digits)));
+			} else if (type == d) {
+				return (Double) ((double) (spinnerValue * Math.pow(10, -digits)));
+			} else {
+				throw new RuntimeException("Unknown type of numeric field");
+			}
+		}
+
+		public static int convert(final EDataType type, final Object value) {
+			int digits = getDigits(type);
+			if (type == l || type == i) {
+				return ((Number) value).intValue();
+			} else if (type == f) {
+				return ((int) (((Number) value).floatValue() * Math.pow(10,
+						digits)));
+			} else if (type == d) {
+				return ((int) (((Number) value).doubleValue() * Math.pow(10,
+						digits)));
+			} else if (type == p) {
+				return ((int) (((Number) value).doubleValue() * Math.pow(10,
+						digits + 2)));
+			} else {
+				throw new RuntimeException("Unknown type of numeric field");
+			}
+		}
+
+		public static int getDigits(final EDataType type) {
+			if (type == l || type == i) {
+				return 0;
+			} else if (type == f || type == d) {
+				return 2;
+			} else if (type == p) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+
+		public static void setupSpinner(final EDataType type,
+				final Spinner spinner) {
+			if (type == l || type == i) {
+				spinner.setDigits(0);
+				spinner.setMaximum(Integer.MAX_VALUE);
+				spinner.setMinimum(0);
+			} else if (type == f || type == d) {
+				spinner.setDigits(2);
+				spinner.setMaximum(Integer.MAX_VALUE);
+				spinner.setMinimum(0);
+			} else if (type == p) {
+				spinner.setDigits(1);
+				spinner.setMaximum(1000);
+				spinner.setMinimum(0);
+			}
+		}
+
+		public static Object getDefaultValue(EDataType type) {
+			if (type == i)
+				return ((Integer) 0);
+			if (type == l)
+				return ((Long) 0l);
+			if (type == d || type == p)
+				return ((Double) 0d);
+			if (type == f)
+				return ((Float) 0f);
+				
+			return null;
+		}
+	}
 
 	public NumberInlineEditor(EMFPath path, EStructuralFeature feature,
 			EditingDomain editingDomain, final ICommandProcessor processor) {
@@ -33,7 +123,13 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public Control createValueControl(Composite parent) {
-		final Spinner spinner = new Spinner(parent, SWT.BORDER);
+		type = (EDataType) feature.getEType();
+		final Composite box = new Composite(parent, SWT.NONE);
+		final GridLayout boxLayout = new GridLayout(1, false);
+		boxLayout.marginHeight = 0;
+		boxLayout.marginWidth = 0;
+		box.setLayout(boxLayout);
+		final Spinner spinner = new Spinner(box, SWT.BORDER);
 
 		spinner.addSelectionListener(new SelectionListener() {
 			{
@@ -48,58 +144,26 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doSetValue(getSpinnerValue());
+				doSetValue(NumberTypes.create(type, spinner.getSelection()));
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				doSetValue(getSpinnerValue());
+				doSetValue(NumberTypes.create(type, spinner.getSelection()));
 			}
 		});
 
-		if (feature.getEType().equals(EcorePackage.eINSTANCE.getEInt())
-				|| feature.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
-			spinner.setDigits(0);
-			spinner.setMaximum(Integer.MAX_VALUE);
-			spinner.setMinimum(0);
-		} else {
-			spinner.setDigits(2);
-			spinner.setMaximum(Integer.MAX_VALUE);
-			spinner.setMinimum(0);
-		}
-
-		type = (EDataType) feature.getEType();
+		NumberTypes.setupSpinner(type, spinner);
 
 		this.spinner = spinner;
-		return spinner;
-	}
+		spinner.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-	private Number getSpinnerValue() {
-		if (spinner.getDigits() == 0) {
-			if (type.equals(EcorePackage.eINSTANCE.getELong())) {
-				return Long.valueOf(spinner.getSelection());
-			} else {
-				return Integer.valueOf(spinner.getSelection());
-			}
-		} else {
-			if (type.equals(EcorePackage.eINSTANCE.getEFloat())) {
-				return (Float) ((float) (spinner.getSelection() * Math.pow(10,
-						-spinner.getDigits())));
-			} else {
-				return (Double) ((spinner.getSelection() * Math.pow(10,
-						-spinner.getDigits())));
-			}
+		if (type == NumberTypes.p) {
+			boxLayout.numColumns = 2;
+			new Label(box, SWT.NONE).setText("%");
 		}
-	}
 
-	private int numberToSelection(final Number number) {
-		final int d = spinner.getDigits();
-
-		if (d == 0) {
-			return number.intValue();
-		} else {
-			return ((int) (number.floatValue() * Math.pow(10, d)));
-		}
+		return box;
 	}
 
 	@Override
@@ -109,23 +173,12 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 		if (value == null) {
 			spinner.setSelection(0);
 		} else {
-			spinner.setSelection(numberToSelection((Number) value));
+			spinner.setSelection(NumberTypes.convert(type, value));
 		}
 	}
 
 	@Override
 	protected Object getInitialUnsetValue() {
-		if (type == EcorePackage.eINSTANCE.getEInt()) {
-			return (Integer) 0;
-		} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
-			return (Double) 0d;
-		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
-			return (Float) 0f;
-		} else if (type == EcorePackage.eINSTANCE.getELong()) {
-			return (Long) 0l;
-		} else {
-			return null;
-		}
+		return NumberTypes.getDefaultValue(type);
 	}
-
 }
