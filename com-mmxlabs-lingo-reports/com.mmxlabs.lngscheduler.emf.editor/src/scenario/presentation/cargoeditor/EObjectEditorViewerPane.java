@@ -82,7 +82,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	}
 
 	@Override
-	public Viewer createViewer(final Composite parent) {
+	public EObjectTableViewer createViewer(final Composite parent) {
 		viewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI);
 
 		getToolBarManager().add(new GroupMarker("pack"));

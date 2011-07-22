@@ -11,7 +11,6 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +21,7 @@ import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
 import scenario.presentation.cargoeditor.CargoInitialVesselManipulator;
 import scenario.presentation.cargoeditor.DateManipulator;
+import scenario.presentation.cargoeditor.EObjectTableViewer;
 import scenario.presentation.cargoeditor.EnumAttributeManipulator;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.SingleReferenceManipulator;
@@ -121,8 +121,8 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 	final SwapDischargeSlotsAction swapAction = new SwapDischargeSlotsAction();
 
 	@Override
-	public Viewer createViewer(final Composite parent) {
-		final Viewer v = super.createViewer(parent);
+	public EObjectTableViewer createViewer(final Composite parent) {
+		final EObjectTableViewer v = super.createViewer(parent);
 
 		getToolBarManager().appendToGroup("edit", swapAction);
 		getToolBarManager().update(true);

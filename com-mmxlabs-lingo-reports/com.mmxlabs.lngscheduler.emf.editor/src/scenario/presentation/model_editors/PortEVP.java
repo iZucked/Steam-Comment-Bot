@@ -22,7 +22,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
@@ -38,6 +37,7 @@ import scenario.port.PortPackage;
 import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.BasicAttributeManipulator;
+import scenario.presentation.cargoeditor.EObjectTableViewer;
 import scenario.presentation.cargoeditor.ICellManipulator;
 import scenario.presentation.cargoeditor.ICellRenderer;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
@@ -181,8 +181,8 @@ public class PortEVP extends NamedObjectEVP {
 	}
 
 	@Override
-	public Viewer createViewer(Composite parent) {
-		final Viewer v = super.createViewer(parent);
+	public EObjectTableViewer createViewer(Composite parent) {
+		final EObjectTableViewer v = super.createViewer(parent);
 		{
 			//TODO find image for editor.
 			final Action a = new Action() {
