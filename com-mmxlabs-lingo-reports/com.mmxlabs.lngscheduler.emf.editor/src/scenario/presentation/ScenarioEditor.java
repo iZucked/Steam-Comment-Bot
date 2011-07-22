@@ -145,6 +145,7 @@ import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
 import scenario.presentation.cargoeditor.detailview.MultiReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.TimezoneInlineEditor;
+import scenario.presentation.cargoeditor.detailview.ValueListInlineEditor;
 import scenario.presentation.cargoeditor.detailview.VesselClassCostEditor;
 import scenario.presentation.model_editors.CanalEVP;
 import scenario.presentation.model_editors.CargoEVP;
@@ -2082,6 +2083,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	public void setupDetailViewContainer(final IDetailViewContainer page) {
 		page.addDefaultEditorFactories();
+
+		page.setEditorFactoryForFeature(
+				PortPackage.eINSTANCE.getPort_DefaultWindowStart(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature,
+							final ICommandProcessor commandProcessor) {
+						final List<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
+						for (int i = 0; i<24; i++) {
+							values.add(new Pair<String, Object>(String.format("%02d:00", i), i));
+						}
+						return new ValueListInlineEditor(path, feature,
+								editingDomain, commandProcessor, values);
+					}
+				});
 
 		page.setEditorFactoryForFeature(
 				PortPackage.eINSTANCE.getPort_TimeZone(),
