@@ -104,7 +104,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(Object value) {
-		if (spinner.isDisposed()) return;
+		if (spinner.isDisposed())
+			return;
 		if (value == null) {
 			spinner.setSelection(0);
 		} else {
@@ -114,7 +115,17 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Object getInitialUnsetValue() {
-		return (Integer) 0;
+		if (type == EcorePackage.eINSTANCE.getEInt()) {
+			return (Integer) 0;
+		} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
+			return (Double) 0d;
+		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
+			return (Float) 0f;
+		} else if (type == EcorePackage.eINSTANCE.getELong()) {
+			return (Long) 0l;
+		} else {
+			return null;
+		}
 	}
 
 }

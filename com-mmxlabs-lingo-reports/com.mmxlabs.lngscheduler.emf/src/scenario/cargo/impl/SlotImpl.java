@@ -159,6 +159,15 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	protected int slotDuration = SLOT_DURATION_EDEFAULT;
 
 	/**
+	 * This is true if the Slot Duration attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean slotDurationESet;
+
+	/**
 	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFixedPrice()
@@ -357,8 +366,33 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	public void setSlotDuration(int newSlotDuration) {
 		int oldSlotDuration = slotDuration;
 		slotDuration = newSlotDuration;
+		boolean oldSlotDurationESet = slotDurationESet;
+		slotDurationESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SLOT_DURATION, oldSlotDuration, slotDuration));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SLOT_DURATION, oldSlotDuration, slotDuration, !oldSlotDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetSlotDuration() {
+		int oldSlotDuration = slotDuration;
+		boolean oldSlotDurationESet = slotDurationESet;
+		slotDuration = SLOT_DURATION_EDEFAULT;
+		slotDurationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__SLOT_DURATION, oldSlotDuration, SLOT_DURATION_EDEFAULT, oldSlotDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetSlotDuration() {
+		return slotDurationESet;
 	}
 
 	/**
@@ -484,6 +518,18 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getSlotOrPortDuration() {
+		if (isSetSlotDuration())
+			return getSlotDuration();
+		else
+			return getPort().getDefaultSlotDuration();
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -578,7 +624,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				setWindowDuration(WINDOW_DURATION_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__SLOT_DURATION:
-				setSlotDuration(SLOT_DURATION_EDEFAULT);
+				unsetSlotDuration();
 				return;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				unsetFixedPrice();
@@ -610,7 +656,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				return windowDuration != WINDOW_DURATION_EDEFAULT;
 			case CargoPackage.SLOT__SLOT_DURATION:
-				return slotDuration != SLOT_DURATION_EDEFAULT;
+				return isSetSlotDuration();
 			case CargoPackage.SLOT__FIXED_PRICE:
 				return isSetFixedPrice();
 			case CargoPackage.SLOT__CONTRACT:
@@ -633,6 +679,8 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getWindowEnd();
 			case CargoPackage.SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT:
 				return getSlotOrPortContract(arguments.get(0));
+			case CargoPackage.SLOT___GET_SLOT_OR_PORT_DURATION:
+				return getSlotOrPortDuration();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -657,7 +705,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		result.append(", windowDuration: ");
 		result.append(windowDuration);
 		result.append(", slotDuration: ");
-		result.append(slotDuration);
+		if (slotDurationESet) result.append(slotDuration); else result.append("<unset>");
 		result.append(", fixedPrice: ");
 		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
 		result.append(')');

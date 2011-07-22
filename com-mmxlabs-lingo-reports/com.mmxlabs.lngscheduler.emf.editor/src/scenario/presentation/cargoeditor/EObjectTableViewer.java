@@ -36,6 +36,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -222,7 +223,7 @@ public class EObjectTableViewer extends TableViewer {
 		this.addColumn(columnName, manipulatorAndRenderer,
 				manipulatorAndRenderer, path);
 	}
-	
+
 	protected void removeAdapters() {
 		if (currentContainer != null) {
 			if (currentContainer.eAdapters().contains(adapter)) {
@@ -520,7 +521,7 @@ public class EObjectTableViewer extends TableViewer {
 			}
 		});
 	}
-	
+
 	public void dispose() {
 		removeAdapters();
 		cellRenderers.clear();

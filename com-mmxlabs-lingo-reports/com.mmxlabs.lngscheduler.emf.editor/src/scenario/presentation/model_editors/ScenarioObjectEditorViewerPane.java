@@ -31,6 +31,7 @@ import scenario.cargo.CargoPackage;
 import scenario.fleet.FleetPackage;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
+import scenario.presentation.cargoeditor.EObjectTableViewer;
 import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
 import scenario.presentation.cargoeditor.detailview.EObjectMultiDialog;
 import scenario.presentation.cargoeditor.handlers.AddAction;
@@ -134,20 +135,19 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 	 * 
 	 * TODO cache editors for efficiency.
 	 */
-	public Viewer createViewer(final Composite parent) {
-		final Viewer v = super.createViewer(parent);
+	public EObjectTableViewer createViewer(final Composite parent) {
+		final EObjectTableViewer v = super.createViewer(parent);
 		v.getControl().addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(final org.eclipse.swt.events.KeyEvent e) {
+				
+			}
 
+			@Override
+			public void keyPressed(final org.eclipse.swt.events.KeyEvent e) {
 				// TODO: Wrap up in a command with keybindings
-				// TODO if you edit a cell and then press return to finish
-				// editing,
-				// this listener still happens. Either we need to cancel the
-				// event,
-				// or detect editing from the viewer, or set our own flags
-				// to prevent this problem.
 				if (e.keyCode == '\r') {
+					if (v.isCellEditorActive()) return;
 					final ISelection selection = getViewer().getSelection();
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection ssel = (IStructuredSelection) selection;
@@ -189,10 +189,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 						}
 					}
 				}
-			}
-
-			@Override
-			public void keyPressed(final org.eclipse.swt.events.KeyEvent e) {
+			
 			}
 		});
 		return v;

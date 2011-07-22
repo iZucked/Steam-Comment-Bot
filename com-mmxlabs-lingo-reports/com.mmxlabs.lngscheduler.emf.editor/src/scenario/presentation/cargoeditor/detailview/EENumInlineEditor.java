@@ -4,70 +4,32 @@
  */
 package scenario.presentation.cargoeditor.detailview;
 
-import org.eclipse.emf.common.util.Enumerator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
-public class EENumInlineEditor extends BasicAttributeInlineEditor {
-	private final EEnum eenum;
-	private Combo combo;
-
+public class EENumInlineEditor extends ValueListInlineEditor {
 	public EENumInlineEditor(EMFPath path, EAttribute feature,
 			EditingDomain editingDomain, final ICommandProcessor processor) {
-		super(path, feature, editingDomain, processor);
-		this.eenum = (EEnum) feature.getEAttributeType();	}
+		super(path, feature, editingDomain, processor,
+				getValues((EEnum) feature.getEAttributeType()));
+	}
 
-	@Override
-	public Control createControl(Composite parent) {
-		final Combo combo = new Combo(parent, SWT.READ_ONLY);
+	private static List<Pair<String, Object>> getValues(final EEnum eenum) {
+		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
-			combo.add(literal.getName());
+			values.add(new Pair<String, Object>(literal.getName(), literal
+					.getInstance()));
 		}
-		
-		this.combo = combo;
-		
-		combo.addSelectionListener(
-				new SelectionListener() {
-					{
-						final SelectionListener sl = this;
-						combo.addDisposeListener(
-								new DisposeListener() {									
-									@Override
-									public void widgetDisposed(final DisposeEvent e) {
-										combo.removeSelectionListener(sl);
-									}
-								});
-					}
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						doSetValue(eenum.getEEnumLiteral(combo.getText()).getInstance());
-					}
-					
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {}
-				});
-		
-		return super.wrapControl(combo);
+		return values;
 	}
-
-	@Override
-	protected void updateDisplay(Object value) {
-		if (combo.isDisposed()) return;
-		combo.setText(((Enumerator) value).getName());
-	}
-
 }

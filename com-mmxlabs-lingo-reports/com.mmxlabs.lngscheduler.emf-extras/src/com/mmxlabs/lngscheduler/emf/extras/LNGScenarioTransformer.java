@@ -501,7 +501,7 @@ public class LNGScenarioTransformer {
 					Calculator.scale(loadSlot.getMaxQuantity()),
 					loadPriceCalculator,
 					(int) Calculator.scale(loadSlot.getCargoOrPortCVValue()),
-					dischargeSlot.getSlotDuration());
+					dischargeSlot.getSlotOrPortDuration());
 
 			final ICurve dischargeCurve;
 
@@ -527,7 +527,7 @@ public class LNGScenarioTransformer {
 					ports.lookup(dischargeSlot.getPort()), dischargeWindow,
 					Calculator.scale(dischargeSlot.getMinQuantity()),
 					Calculator.scale(dischargeSlot.getMaxQuantity()),
-					dischargeCurve, dischargeSlot.getSlotDuration());
+					dischargeCurve, dischargeSlot.getSlotOrPortDuration());
 
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);

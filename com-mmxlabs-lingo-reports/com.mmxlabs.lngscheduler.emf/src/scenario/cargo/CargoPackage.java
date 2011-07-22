@@ -318,13 +318,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = 2;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_PORT_DURATION = 3;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = 3;
+	int SLOT_OPERATION_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -461,6 +470,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Port Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_PORT_DURATION = SLOT___GET_SLOT_OR_PORT_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Cargo Or Port CV Value</em>' operation.
@@ -739,6 +757,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrPortContract__Object();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Port Duration</em>' operation.
+	 * @see scenario.cargo.Slot#getSlotOrPortDuration()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrPortDuration();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -991,6 +1019,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = eINSTANCE.getSlot__GetSlotOrPortContract__Object();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_PORT_DURATION = eINSTANCE.getSlot__GetSlotOrPortDuration();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

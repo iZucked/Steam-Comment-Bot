@@ -144,6 +144,8 @@ import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
 import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
 import scenario.presentation.cargoeditor.detailview.MultiReferenceInlineEditor;
 import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
+import scenario.presentation.cargoeditor.detailview.TimezoneInlineEditor;
+import scenario.presentation.cargoeditor.detailview.ValueListInlineEditor;
 import scenario.presentation.cargoeditor.detailview.VesselClassCostEditor;
 import scenario.presentation.model_editors.CanalEVP;
 import scenario.presentation.model_editors.CargoEVP;
@@ -1794,7 +1796,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-//			createContextMenuFor(cargoPane.getViewer());
+			// createContextMenuFor(cargoPane.getViewer());
 
 			final int pageIndex = addPage(cargoPane.getControl());
 			setPageText(pageIndex, "Cargoes"); // TODO localize this
@@ -1825,10 +1827,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
-//		createContextMenuFor(portEditor.getViewer());
+		// createContextMenuFor(portEditor.getViewer());
 
-		final CanalEVP canalEVP = new CanalEVP(getSite().getPage(),
-				this);
+		final CanalEVP canalEVP = new CanalEVP(getSite().getPage(), this);
 
 		canalEVP.createControl(sash);
 		canalEVP.setTitle("Canals", getTitleImage());
@@ -1838,7 +1839,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				PortPackage.eINSTANCE.getCanalModel_Canals());
 
 		canalEVP.getViewer().setInput(getScenario());
-//		createContextMenuFor(canalEVP.getViewer());
+		// createContextMenuFor(canalEVP.getViewer());
 
 		final int pageIndex = addPage(sash);
 		setPageText(pageIndex, "Ports and Distances");
@@ -1866,7 +1867,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			vcePane.setTitle("Vessel Classes", getTitleImage());
 
-//			createContextMenuFor(vcePane.getViewer());
+			// createContextMenuFor(vcePane.getViewer());
 
 			final VesselEVP fleetPane = new VesselEVP(getSite().getPage(), this);
 
@@ -1882,7 +1883,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-//			createContextMenuFor(fleetPane.getViewer());
+			// createContextMenuFor(fleetPane.getViewer());
 
 			final int pageIndex = addPage(sash);
 			setPageText(pageIndex, "Fleet");
@@ -2082,6 +2083,37 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	public void setupDetailViewContainer(final IDetailViewContainer page) {
 		page.addDefaultEditorFactories();
+
+		page.setEditorFactoryForFeature(
+				PortPackage.eINSTANCE.getPort_DefaultWindowStart(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature,
+							final ICommandProcessor commandProcessor) {
+						final List<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
+						for (int i = 0; i<24; i++) {
+							values.add(new Pair<String, Object>(String.format("%02d:00", i), i));
+						}
+						return new ValueListInlineEditor(path, feature,
+								editingDomain, commandProcessor, values);
+					}
+				});
+
+		page.setEditorFactoryForFeature(
+				PortPackage.eINSTANCE.getPort_TimeZone(),
+				new IInlineEditorFactory() {
+					@Override
+					public IInlineEditor createEditor(final EMFPath path,
+							final EStructuralFeature feature,
+							final ICommandProcessor commandProcessor) {
+						return new TimezoneInlineEditor(path, feature,
+								editingDomain, commandProcessor);
+					}
+				});
+
+		page.setEditorFactoryForFeature(
+				ScenarioPackage.eINSTANCE.getUUIDObject_UUID(), null);
 
 		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
 				new MultiReferenceEditorFactory(getEditingDomain(),

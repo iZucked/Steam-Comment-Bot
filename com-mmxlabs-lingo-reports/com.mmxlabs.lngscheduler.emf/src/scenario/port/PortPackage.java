@@ -164,13 +164,22 @@ public interface PortPackage extends EPackage {
 	int PORT__DEFAULT_WINDOW_START = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Default Slot Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_SLOT_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -468,6 +477,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_DefaultWindowStart();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#getDefaultSlotDuration <em>Default Slot Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Slot Duration</em>'.
+	 * @see scenario.port.Port#getDefaultSlotDuration()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultSlotDuration();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -666,6 +686,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__DEFAULT_WINDOW_START = eINSTANCE.getPort_DefaultWindowStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Slot Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_SLOT_DURATION = eINSTANCE.getPort_DefaultSlotDuration();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.

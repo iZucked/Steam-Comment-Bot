@@ -25,6 +25,8 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getMaxHeelOut <em>Max Heel Out</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getHeelCVValue <em>Heel CV Value</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getEndPort <em>End Port</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -77,6 +79,59 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * @ordered
 	 */
 	protected Port endPort;
+
+	/**
+	 * The default value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyCharterOutPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DAILY_CHARTER_OUT_PRICE_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyCharterOutPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected int dailyCharterOutPrice = DAILY_CHARTER_OUT_PRICE_EDEFAULT;
+	/**
+	 * This is true if the Daily Charter Out Price attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dailyCharterOutPriceESet;
+	/**
+	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int REPOSITIONING_FEE_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected int repositioningFee = REPOSITIONING_FEE_EDEFAULT;
+	/**
+	 * This is true if the Repositioning Fee attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean repositioningFeeESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -140,6 +195,98 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getDailyCharterOutPrice() {
+		return dailyCharterOutPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDailyCharterOutPrice(int newDailyCharterOutPrice) {
+		int oldDailyCharterOutPrice = dailyCharterOutPrice;
+		dailyCharterOutPrice = newDailyCharterOutPrice;
+		boolean oldDailyCharterOutPriceESet = dailyCharterOutPriceESet;
+		dailyCharterOutPriceESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE, oldDailyCharterOutPrice, dailyCharterOutPrice, !oldDailyCharterOutPriceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetDailyCharterOutPrice() {
+		int oldDailyCharterOutPrice = dailyCharterOutPrice;
+		boolean oldDailyCharterOutPriceESet = dailyCharterOutPriceESet;
+		dailyCharterOutPrice = DAILY_CHARTER_OUT_PRICE_EDEFAULT;
+		dailyCharterOutPriceESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE, oldDailyCharterOutPrice, DAILY_CHARTER_OUT_PRICE_EDEFAULT, oldDailyCharterOutPriceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetDailyCharterOutPrice() {
+		return dailyCharterOutPriceESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getRepositioningFee() {
+		return repositioningFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRepositioningFee(int newRepositioningFee) {
+		int oldRepositioningFee = repositioningFee;
+		repositioningFee = newRepositioningFee;
+		boolean oldRepositioningFeeESet = repositioningFeeESet;
+		repositioningFeeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee, !oldRepositioningFeeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetRepositioningFee() {
+		int oldRepositioningFee = repositioningFee;
+		boolean oldRepositioningFeeESet = repositioningFeeESet;
+		repositioningFee = REPOSITIONING_FEE_EDEFAULT;
+		repositioningFeeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.CHARTER_OUT__REPOSITIONING_FEE, oldRepositioningFee, REPOSITIONING_FEE_EDEFAULT, oldRepositioningFeeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetRepositioningFee() {
+		return repositioningFeeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getMaxHeelOut() {
 		return maxHeelOut;
 	}
@@ -192,6 +339,10 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 			case FleetPackage.CHARTER_OUT__END_PORT:
 				if (resolve) return getEndPort();
 				return basicGetEndPort();
+			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
+				return getDailyCharterOutPrice();
+			case FleetPackage.CHARTER_OUT__REPOSITIONING_FEE:
+				return getRepositioningFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -212,6 +363,12 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 				return;
 			case FleetPackage.CHARTER_OUT__END_PORT:
 				setEndPort((Port)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
+				setDailyCharterOutPrice((Integer)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT__REPOSITIONING_FEE:
+				setRepositioningFee((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -234,6 +391,12 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 			case FleetPackage.CHARTER_OUT__END_PORT:
 				setEndPort((Port)null);
 				return;
+			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
+				unsetDailyCharterOutPrice();
+				return;
+			case FleetPackage.CHARTER_OUT__REPOSITIONING_FEE:
+				unsetRepositioningFee();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -252,6 +415,10 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 				return heelCVValue != HEEL_CV_VALUE_EDEFAULT;
 			case FleetPackage.CHARTER_OUT__END_PORT:
 				return endPort != null;
+			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
+				return isSetDailyCharterOutPrice();
+			case FleetPackage.CHARTER_OUT__REPOSITIONING_FEE:
+				return isSetRepositioningFee();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -270,6 +437,10 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 		result.append(maxHeelOut);
 		result.append(", heelCVValue: ");
 		result.append(heelCVValue);
+		result.append(", dailyCharterOutPrice: ");
+		if (dailyCharterOutPriceESet) result.append(dailyCharterOutPrice); else result.append("<unset>");
+		result.append(", repositioningFee: ");
+		if (repositioningFeeESet) result.append(repositioningFee); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

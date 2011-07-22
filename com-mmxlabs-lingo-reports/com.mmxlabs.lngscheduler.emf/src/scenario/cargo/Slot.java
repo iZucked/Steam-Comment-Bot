@@ -209,9 +209,11 @@ public interface Slot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Slot Duration</em>' attribute.
+	 * @see #isSetSlotDuration()
+	 * @see #unsetSlotDuration()
 	 * @see #setSlotDuration(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_SlotDuration()
-	 * @model default="6"
+	 * @model default="6" unsettable="true"
 	 * @generated
 	 */
 	int getSlotDuration();
@@ -221,10 +223,35 @@ public interface Slot extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Slot Duration</em>' attribute.
+	 * @see #isSetSlotDuration()
+	 * @see #unsetSlotDuration()
 	 * @see #getSlotDuration()
 	 * @generated
 	 */
 	void setSlotDuration(int value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSlotDuration()
+	 * @see #getSlotDuration()
+	 * @see #setSlotDuration(int)
+	 * @generated
+	 */
+	void unsetSlotDuration();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Slot Duration</em>' attribute is set.
+	 * @see #unsetSlotDuration()
+	 * @see #getSlotDuration()
+	 * @see #setSlotDuration(int)
+	 * @generated
+	 */
+	boolean isSetSlotDuration();
 
 	/**
 	 * Returns the value of the '<em><b>Contract</b></em>' reference.
@@ -331,5 +358,14 @@ public interface Slot extends EObject {
 	 * @generated
 	 */
 	Contract getSlotOrPortContract(Object scenario);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetSlotDuration())\n\treturn getSlotDuration();\nelse\n\treturn getPort().getDefaultSlotDuration();'"
+	 * @generated
+	 */
+	int getSlotOrPortDuration();
 
 } // Slot

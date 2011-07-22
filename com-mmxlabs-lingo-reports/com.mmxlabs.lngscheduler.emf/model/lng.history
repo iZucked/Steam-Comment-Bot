@@ -4463,5 +4463,77 @@
         featureName="lowerBound" dataValue="1" oldDataValue="0"/>
     <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultWindowStart"
         featureName="defaultValueLiteral" dataValue="0"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/CharterOut" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/CharterOut/dailyCharterOutPrice"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/dailyCharterOutPrice"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/dailyCharterOutPrice"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/dailyCharterOutPrice"
+        featureName="unsettable" dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/dailyCharterOutPrice"
+        featureName="name" dataValue="dailyCharterOutPrice"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/CharterOut" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/CharterOut/repositioningFee"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/repositioningFee"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/repositioningFee"
+        featureName="name" dataValue="repositioningFee"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/repositioningFee"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/repositioningFee"
+        featureName="unsettable" dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/slotDuration"
+        featureName="unsettable" dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
+        element="lng.ecore#//port/Port/defaultSlotDuration"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultSlotDuration"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultSlotDuration"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultSlotDuration"
+        featureName="name" dataValue="defaultVisitDuration"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot" referenceName="eOperations"
+        element="lng.ecore#//cargo/Slot/getSlotOrPortDuration">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration"
+          featureName="name" dataValue="getSlotOrPortContract"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration"
+          featureName="eType" referenceValue="lng.ecore#//contract/Contract"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrPortDuration"
+        referenceName="eAnnotations" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="body"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return cm.getDefaultContract(p);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrPortDuration"
+        referenceName="eParameters" element="#//@releases.3/@changes.120/@element">
+      <changes xsi:type="history:Set" element="#//@releases.3/@changes.120/@element"
+          featureName="name" dataValue="scenario"/>
+      <changes xsi:type="history:Set" element="#//@releases.3/@changes.120/@element"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration"
+        featureName="name" dataValue="getSlotOrPortDuration" oldDataValue="getSlotOrPortContract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        oldReferenceValue="lng.ecore#//contract/Contract"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//cargo/Slot/getSlotOrPortDuration"
+        referenceName="eParameters">
+      <element xsi:type="ecore:EParameter" name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultSlotDuration();"
+        oldDataValue="if (getContract() != null)&#xD;&#xA;&#x9;&#x9;&#x9;return getContract();&#xD;&#xA;else if (getPort() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;final scenario.port.Port p = getPort();&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario instanceof scenario.Scenario) {&#xD;&#xA;final scenario.Scenario scenario2 = (scenario.Scenario) scenario;&#xD;&#xA;&#x9;&#x9;&#x9;if (scenario2.getContractModel() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;final scenario.contract.ContractModel cm = scenario2.getContractModel();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return cm.getDefaultContract(p);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;}&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#xD;&#xA;} else&#xD;&#xA;&#x9;&#x9;&#x9;return null;"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultSlotDuration"
+        featureName="name" dataValue="defaultSlotDuration" oldDataValue="defaultVisitDuration"/>
   </releases>
 </history:History>

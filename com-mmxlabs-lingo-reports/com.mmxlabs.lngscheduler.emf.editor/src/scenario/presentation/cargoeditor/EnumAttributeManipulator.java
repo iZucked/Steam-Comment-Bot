@@ -4,59 +4,32 @@
  */
 package scenario.presentation.cargoeditor;
 
-import org.eclipse.emf.common.util.Enumerator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.swt.widgets.Composite;
+
+import com.mmxlabs.common.Pair;
 
 /**
  * Editor for enums
  * @author hinton
  *
  */
-public class EnumAttributeManipulator extends BasicAttributeManipulator {
-	private final EEnum eenum;
-
+public class EnumAttributeManipulator extends ValueListAttributeManipulator {
 	public EnumAttributeManipulator(final EAttribute field,
 			final EditingDomain editingDomain) {
-		super(field, editingDomain);
-		
-		// get the enum 
-		this.eenum = (EEnum) field.getEAttributeType();
-		
+		super(field, editingDomain, getValues((EEnum) field.getEAttributeType()));
 	}
-
-	@Override
-	public CellEditor getCellEditor(final Composite c, final Object object) {
-		final String [] values = new String[eenum.getELiterals().size()];
+	private static List<Pair<String, Object>> getValues(final EEnum eenum) {
+		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
-			values[literal.getValue()] = literal.getName();
+			values.add(new Pair<String, Object>(literal.getName(), literal
+					.getInstance()));
 		}
-		return new ComboBoxCellEditor(c, values);
-	}
-
-	@Override
-	public void setValue(final Object object, final Object value) {
-		// value is an Integer
-		final int intValue = ((Integer)value).intValue();
-		final EEnumLiteral literal = eenum.getEEnumLiteral(intValue);
-		// lookup enum value for int value
-		super.setValue(object, literal.getInstance());
-	}
-
-	@Override
-	public Object getValue(final Object object) {
-		return ((Enumerator)(super.getValue(object))).getValue();
-	}
-
-	@Override
-	public String render(final Object object) {
-		return eenum.getEEnumLiteral((Integer) getValue(object)).getName();
-	}
-	
-	
+		return values;
+	}	
 }

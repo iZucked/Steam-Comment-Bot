@@ -25,6 +25,7 @@ import scenario.market.Index;
  *   <li>{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultCVvalue <em>Default CVvalue</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultWindowStart <em>Default Window Start</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
  * </ul>
  * </p>
  *
@@ -139,5 +140,31 @@ public interface Port extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setDefaultWindowStart(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Slot Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Slot Duration</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Slot Duration</em>' attribute.
+	 * @see #setDefaultSlotDuration(int)
+	 * @see scenario.port.PortPackage#getPort_DefaultSlotDuration()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getDefaultSlotDuration();
+
+	/**
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultSlotDuration <em>Default Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default Slot Duration</em>' attribute.
+	 * @see #getDefaultSlotDuration()
+	 * @generated
+	 */
+	void setDefaultSlotDuration(int value);
 
 } // Port
