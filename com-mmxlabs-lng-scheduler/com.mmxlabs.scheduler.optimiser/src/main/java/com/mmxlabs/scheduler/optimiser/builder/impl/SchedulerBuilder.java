@@ -658,8 +658,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		sequenceElements.add(startElement);
 		sequenceElements.add(endElement);
-		elementDurationsProvider.setElementDuration(endElement, 1);
-		elementDurationsProvider.setElementDuration(startElement, 1);
+		elementDurationsProvider.setElementDuration(endElement, 0);
+		elementDurationsProvider.setElementDuration(startElement, 0);
 
 		if (end.hasTimeRequirement() == false) {
 			// put end slot into list of slots to patch up later.
