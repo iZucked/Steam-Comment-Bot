@@ -178,6 +178,8 @@ public class EObjectImporter {
 			if (value instanceof Date) {
 				svalue = DateTimeParser.getInstance().formatDate((Date) value,
 						timezone);
+			} else if (attribute.getEType() == ScenarioPackage.eINSTANCE.getPercentage()) {
+				svalue = String.format("%.1g", ((Number) value).doubleValue() * 100.0);
 			} else if (value instanceof Float || value instanceof Double) {
 				svalue = String.format("%3g", ((Number) value).doubleValue());
 			} else if (value != null) {
