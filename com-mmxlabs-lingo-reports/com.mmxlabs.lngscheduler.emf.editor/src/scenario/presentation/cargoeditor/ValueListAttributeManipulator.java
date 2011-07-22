@@ -70,7 +70,7 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 	public String render(final Object object) {
 		final int index = values.indexOf(super.getValue(object));
 		if (index == -1)
-			return "";
+			return super.render(object); //fallback to superclass?
 		return names.get(index);
 	}
 
