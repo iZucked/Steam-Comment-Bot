@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Exporter for getting out the details of {@link IPortVisitEvent}
@@ -71,7 +72,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		PortVisit portVisit = null;
 
 		lastPortVisited = ePort;
-		
+
 		if (slot instanceof IDischargeSlot || slot instanceof ILoadSlot) {
 			final SlotVisit sv = factory.createSlotVisit();
 			sv.setSlot(entities.getModelObject(slot, Slot.class));
@@ -126,8 +127,10 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			final VesselEventVisit vev;
 			if (event instanceof CharterOut) {
 				final CharterOut charterOut = (CharterOut) event;
-				// filter out the charter out slots at the start port (these will have duration zero anyway)
-				if (ePort != charterOut.getEndPort()) return null;
+				// filter out the charter out slots at the start port (these
+				// will have duration zero anyway)
+				if (ePort != charterOut.getEndPort())
+					return null;
 				final CharterOutVisit cov = factory.createCharterOutVisit();
 				vev = cov;
 				cov.setCharterOut(charterOut);
@@ -148,12 +151,20 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
 
-		portVisit.setStartTime(entities.getDateFromHours(visitEvent
-				.getStartTime()));
-
-		portVisit
-				.setEndTime(entities.getDateFromHours(visitEvent.getEndTime()));
-
+		if (slot.getPortType() == PortType.Start) {
+			portVisit.setStartTime(entities.getDateFromHours(visitEvent
+					.getStartTime() - 1));
+		} else {
+			portVisit.setStartTime(entities.getDateFromHours(visitEvent
+					.getStartTime()));
+		}
+		if (slot.getPortType() == PortType.End) {
+			portVisit.setEndTime(entities.getDateFromHours(visitEvent
+					.getEndTime() + 1));
+		} else {
+			portVisit.setEndTime(entities.getDateFromHours(visitEvent
+					.getEndTime()));
+		}
 		return portVisit;
 	}
 
@@ -161,6 +172,6 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 	 * @return
 	 */
 	public Port getLastPortVisited() {
-		return lastPortVisited ;
+		return lastPortVisited;
 	}
 }
