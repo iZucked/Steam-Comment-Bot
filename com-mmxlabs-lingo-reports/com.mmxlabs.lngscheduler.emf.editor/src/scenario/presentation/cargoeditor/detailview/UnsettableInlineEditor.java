@@ -85,6 +85,9 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 					if (setButton.getSelection()) {
 						doSetValue(lastSetValue);
 						setControlEnabled(inner, true);
+						currentlySettingValue = true;
+						updateValueDisplay(lastSetValue);
+						currentlySettingValue = false;
 					} else {
 						// unset value
 						unsetValue();
