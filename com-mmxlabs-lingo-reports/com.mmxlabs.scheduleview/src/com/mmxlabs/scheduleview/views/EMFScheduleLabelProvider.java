@@ -93,13 +93,11 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 							+ svisit.getSlot().getWindowStart() + "\n");
 					sb.append("Window End Time: "
 							+ svisit.getSlot().getWindowEnd() + "\n");
+				} else if (element instanceof Idle) {
+					final Idle idle = (Idle) element;
+					sb.append("Vessel State: "
+							+ idle.getVesselState().getName() + "\n");
 				}
-			} else if (element instanceof Idle) {
-				final Idle idle = (Idle) element;
-
-				sb.append("Port: " + idle.getPort().getName() + "\n");
-				sb.append("Vessel State: " + idle.getVesselState().getName()
-						+ "\n");
 			} else if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
 				sb.append("From: " + journey.getFromPort().getName() + "\n");
