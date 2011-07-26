@@ -165,8 +165,10 @@ public abstract class AbstractSequenceScheduler<T> implements
 				options.setAvailableTime(availableTime);
 
 				if (prevPortType == PortType.CharterOut) {
-					options.setAvailableLNG(((IVesselEventPortSlot) prevPortSlot)
-							.getVesselEvent().getMaxHeelOut());
+					options.setAvailableLNG(Math.min(vessel.getVesselClass()
+							.getCargoCapacity(),
+							((IVesselEventPortSlot) prevPortSlot)
+									.getVesselEvent().getMaxHeelOut()));
 
 				} else if (prevPortType == PortType.Load
 						|| prevPortType == PortType.Discharge) {
@@ -303,7 +305,9 @@ public abstract class AbstractSequenceScheduler<T> implements
 				final int duration = details.getTravelTime()
 						+ details.getIdleTime();
 
-				assert duration >= (availableTime - 1); // hack
+				// assert duration >= (availableTime - 1) :
+				// "Duration should exceed available time less one, but is "
+				// + duration + " vs " + availableTime; // hack
 				if (duration > availableTime) {
 					return false;
 				}
