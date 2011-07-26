@@ -40,9 +40,11 @@ public interface CharterOut extends VesselEvent {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End Port</em>' reference.
+	 * @see #isSetEndPort()
+	 * @see #unsetEndPort()
 	 * @see #setEndPort(Port)
 	 * @see scenario.fleet.FleetPackage#getCharterOut_EndPort()
-	 * @model required="true"
+	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
 	Port getEndPort();
@@ -52,10 +54,35 @@ public interface CharterOut extends VesselEvent {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>End Port</em>' reference.
+	 * @see #isSetEndPort()
+	 * @see #unsetEndPort()
 	 * @see #getEndPort()
 	 * @generated
 	 */
 	void setEndPort(Port value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetEndPort()
+	 * @see #getEndPort()
+	 * @see #setEndPort(Port)
+	 * @generated
+	 */
+	void unsetEndPort();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>End Port</em>' reference is set.
+	 * @see #unsetEndPort()
+	 * @see #getEndPort()
+	 * @see #setEndPort(Port)
+	 * @generated
+	 */
+	boolean isSetEndPort();
 
 	/**
 	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.
@@ -162,6 +189,15 @@ public interface CharterOut extends VesselEvent {
 	 * @generated
 	 */
 	boolean isSetRepositioningFee();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetEndPort()) return getEndPort();\nelse return getStartPort();'"
+	 * @generated
+	 */
+	Port getEffectiveEndPort();
 
 	/**
 	 * Returns the value of the '<em><b>Max Heel Out</b></em>' attribute.

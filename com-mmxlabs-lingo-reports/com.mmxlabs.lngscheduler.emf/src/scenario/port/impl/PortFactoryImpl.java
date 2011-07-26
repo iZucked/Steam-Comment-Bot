@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.port.*;
 import scenario.port.Canal;
 import scenario.port.CanalModel;
 import scenario.port.DistanceLine;

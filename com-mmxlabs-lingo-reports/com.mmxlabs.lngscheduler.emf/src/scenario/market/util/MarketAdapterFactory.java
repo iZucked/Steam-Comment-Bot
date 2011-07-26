@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+import scenario.market.*;
 import scenario.market.Index;
 import scenario.market.MarketModel;
 import scenario.market.MarketPackage;

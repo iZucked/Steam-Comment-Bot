@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+import scenario.contract.*;
 import scenario.contract.Contract;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;

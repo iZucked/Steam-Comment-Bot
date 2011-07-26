@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+import scenario.fleet.*;
 import scenario.fleet.CharterOut;
 import scenario.fleet.Drydock;
 import scenario.fleet.FleetModel;

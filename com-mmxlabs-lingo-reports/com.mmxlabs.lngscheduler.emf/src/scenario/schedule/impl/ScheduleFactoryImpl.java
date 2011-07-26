@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.schedule.*;
 import scenario.schedule.BookedRevenue;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.CargoRevenue;

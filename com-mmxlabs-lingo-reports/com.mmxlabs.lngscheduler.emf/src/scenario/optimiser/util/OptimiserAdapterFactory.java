@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+import scenario.optimiser.*;
 import scenario.optimiser.Constraint;
 import scenario.optimiser.Discount;
 import scenario.optimiser.DiscountCurve;

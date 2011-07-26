@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 import scenario.optimiser.OptimisationSettings;
+import scenario.optimiser.lso.*;
 import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoPackage;

@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
+import scenario.schedule.*;
 import scenario.schedule.BookedRevenue;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.CargoRevenue;

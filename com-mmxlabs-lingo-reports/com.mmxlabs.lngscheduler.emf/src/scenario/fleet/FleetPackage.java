@@ -9,6 +9,7 @@ package scenario.fleet;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -792,13 +793,22 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 5;
 
 	/**
+	 * The operation id for the '<em>Get Effective End Port</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT___GET_EFFECTIVE_END_PORT = VESSEL_EVENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The number of operations of the '<em>Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
+	int CHARTER_OUT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link scenario.fleet.impl.DrydockImpl <em>Drydock</em>}' class.
@@ -1668,6 +1678,16 @@ public interface FleetPackage extends EPackage {
 	EAttribute getCharterOut_RepositioningFee();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.fleet.CharterOut#getEffectiveEndPort() <em>Get Effective End Port</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Effective End Port</em>' operation.
+	 * @see scenario.fleet.CharterOut#getEffectiveEndPort()
+	 * @generated
+	 */
+	EOperation getCharterOut__GetEffectiveEndPort();
+
+	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getMaxHeelOut <em>Max Heel Out</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2303,6 +2323,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_OUT__REPOSITIONING_FEE = eINSTANCE.getCharterOut_RepositioningFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Effective End Port</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHARTER_OUT___GET_EFFECTIVE_END_PORT = eINSTANCE.getCharterOut__GetEffectiveEndPort();
 
 		/**
 		 * The meta object literal for the '<em><b>Max Heel Out</b></em>' attribute feature.

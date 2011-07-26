@@ -197,7 +197,7 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 		if (untaxedRevenue <= 0) {
 			return untaxedRevenue;
 		} else {
-			return (int) (untaxedRevenue * (1.0 - getEntity().getTaxRate()));
+		         return (int) (untaxedRevenue * (1.0 - getEntity().getTaxRate()));
 		}
 	}
 

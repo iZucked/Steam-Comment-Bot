@@ -6,7 +6,9 @@
  */
 package scenario.fleet.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -80,6 +82,14 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 */
 	protected Port endPort;
 
+	/**
+	 * This is true if the End Port reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean endPortESet;
 	/**
 	 * The default value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -186,8 +196,33 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	public void setEndPort(Port newEndPort) {
 		Port oldEndPort = endPort;
 		endPort = newEndPort;
+		boolean oldEndPortESet = endPortESet;
+		endPortESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__END_PORT, oldEndPort, endPort));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__END_PORT, oldEndPort, endPort, !oldEndPortESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetEndPort() {
+		Port oldEndPort = endPort;
+		boolean oldEndPortESet = endPortESet;
+		endPort = null;
+		endPortESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.CHARTER_OUT__END_PORT, oldEndPort, null, oldEndPortESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetEndPort() {
+		return endPortESet;
 	}
 
 	/**
@@ -280,6 +315,16 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 */
 	public boolean isSetRepositioningFee() {
 		return repositioningFeeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port getEffectiveEndPort() {
+		if (isSetEndPort()) return getEndPort();
+		else return getStartPort();
 	}
 
 	/**
@@ -389,7 +434,7 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 				setHeelCVValue(HEEL_CV_VALUE_EDEFAULT);
 				return;
 			case FleetPackage.CHARTER_OUT__END_PORT:
-				setEndPort((Port)null);
+				unsetEndPort();
 				return;
 			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
 				unsetDailyCharterOutPrice();
@@ -414,13 +459,27 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				return heelCVValue != HEEL_CV_VALUE_EDEFAULT;
 			case FleetPackage.CHARTER_OUT__END_PORT:
-				return endPort != null;
+				return isSetEndPort();
 			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
 				return isSetDailyCharterOutPrice();
 			case FleetPackage.CHARTER_OUT__REPOSITIONING_FEE:
 				return isSetRepositioningFee();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case FleetPackage.CHARTER_OUT___GET_EFFECTIVE_END_PORT:
+				return getEffectiveEndPort();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
