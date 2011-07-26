@@ -117,13 +117,13 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 	public NumberInlineEditor(EMFPath path, EStructuralFeature feature,
 			EditingDomain editingDomain, final ICommandProcessor processor) {
 		super(path, feature, editingDomain, processor);
+		type = (EDataType) feature.getEType();
 	}
 
 	private Spinner spinner;
 
 	@Override
 	public Control createValueControl(Composite parent) {
-		type = (EDataType) feature.getEType();
 		final Composite box = new Composite(parent, SWT.NONE);
 		final GridLayout boxLayout = new GridLayout(1, false);
 		boxLayout.marginHeight = 0;
