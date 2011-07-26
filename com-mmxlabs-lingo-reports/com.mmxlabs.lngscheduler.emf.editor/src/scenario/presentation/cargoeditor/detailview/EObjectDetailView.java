@@ -52,11 +52,21 @@ public class EObjectDetailView extends Composite {
 	private final Map<EClassifier, IInlineEditorFactory> editorFactories = new HashMap<EClassifier, IInlineEditorFactory>();
 	private final List<IInlineEditor> editors = new ArrayList<IInlineEditor>();
 	private final ICommandProcessor processor;
-	
+
 	private final IBatchValidator validator;
 	private EObject input;
-	
 
+	private boolean currentStateValid = true;
+
+	public boolean isCurrentStateValid() {
+		return currentStateValid;
+	}
+
+	private Runnable postValidationRunnable = null;
+
+	public void setPostValidationRunnable(final Runnable runnable) {
+		this.postValidationRunnable = runnable;
+	}
 
 	public EObjectDetailView(final Composite parent, final int style,
 			final ICommandProcessor processor, final EditingDomain editingDomain) {
@@ -65,25 +75,40 @@ public class EObjectDetailView extends Composite {
 		this.processor = new ICommandProcessor() {
 
 			@Override
-			public void processCommand(final Command command, final EObject target,
-					final EStructuralFeature feature) {
-				
+			public void processCommand(final Command command,
+					final EObject target, final EStructuralFeature feature) {
+
 				processor.processCommand(command, target, feature);
-				
-				final IStatus status = validator.validate(input);
-				
-				for (final IInlineEditor e : editors) {
-					e.processValidation(status);
-				}
+
+				validate();
 			}
 		};
-		
+
 		validator = ModelValidationService.getInstance().newValidator(
 				EvaluationMode.BATCH);
 
 		// include live constraints, also, in batch validation
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS,
 				true);
+	}
+
+	/**
+	 * Trigger a validation, and tell the {@link #postValidationRunnable} that
+	 * validation has happened.
+	 */
+	protected void validate() {
+		final IStatus status = input == null ? Status.OK_STATUS : validator
+				.validate(input);
+
+		for (final IInlineEditor e : editors) {
+			e.processValidation(status);
+		}
+
+		currentStateValid = status.matches(Status.ERROR) == false;
+
+		if (postValidationRunnable != null) {
+			postValidationRunnable.run();
+		}
 	}
 
 	/**
@@ -118,7 +143,7 @@ public class EObjectDetailView extends Composite {
 		public void setInput(final EObject object);
 
 		public Control createControl(final Composite parent);
-		
+
 		void processValidation(IStatus status);
 	}
 
@@ -156,7 +181,8 @@ public class EObjectDetailView extends Composite {
 
 	public void initForEClass(final EClass objectClass) {
 		int groupCount = 1;
-		addGroupForEClass(objectClass, EditorUtils.unmangle(objectClass.getName()),
+		addGroupForEClass(objectClass,
+				EditorUtils.unmangle(objectClass.getName()),
 				new CompiledEMFPath(true));
 		for (final EReference reference : objectClass.getEAllContainments()) {
 			if (reference.isMany()) {
@@ -278,11 +304,10 @@ public class EObjectDetailView extends Composite {
 		controls.pack();
 	}
 
-
 	public void setInput(final EObject object) {
-		
+
 		this.input = object;
-		
+
 		// release any reference to old input and handle new input
 		for (final IInlineEditor editor : editors) {
 			try {
@@ -295,10 +320,7 @@ public class EObjectDetailView extends Composite {
 		}
 
 		// Set initial validation status
-		final IStatus status = (input == null) ? Status.OK_STATUS : validator.validate(input);
-		for (final IInlineEditor e : editors) {
-			e.processValidation(status);
-		}
+		validate();
 	}
 
 	private final Map<EStructuralFeature, IInlineEditorFactory> editorFactoriesByFeature = new HashMap<EStructuralFeature, IInlineEditorFactory>();

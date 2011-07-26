@@ -5,10 +5,13 @@
 package scenario.presentation.cargoeditor.detailview;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
@@ -19,6 +22,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.IValidator;
+import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -41,6 +48,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.editor.util.CommandUtil;
 import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
+import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
  * Why does tidy imports keep stripping my class comments? A dialog based
@@ -63,6 +71,10 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	final ICommandProcessor processor;
 	final EditingDomain editingDomain;
 
+	// perform initial validation and copy objects
+	final IValidator<EObject> validator = ModelValidationService.getInstance()
+			.newValidator(EvaluationMode.BATCH);
+
 	final EObjectDetailViewContainer viewContainerDelegate = new EObjectDetailViewContainer() {
 		@Override
 		protected ICommandProcessor getProcessor() {
@@ -74,10 +86,14 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			return editingDomain;
 		}
 	};
+	protected List<EObject> duplicates;
 
 	public EObjectDetailDialog(final Shell parent, final int style,
 			final EditingDomain editingDomain) {
 		super(parent, style);
+		// include live constraints, also, in batch validation
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS,
+				true);
 		this.editingDomain = editingDomain;
 		processor = new ICommandProcessor() {
 			@Override
@@ -92,6 +108,46 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		// viewContainerDelegate.addDefaultEditorFactories();
 	}
 
+	final Runnable postValidationRunnable = new Runnable() {
+		@Override
+		public void run() {
+			final boolean isNowValid = activeDetailView.isCurrentStateValid();
+			if (isNowValid && !objectValidity[selectedObjectIndex]) {
+				// has become valid, revalidate other objects.
+				// this is based on an assumption that all sibling-related constraints
+				// are symmetrically invalidating.
+				Arrays.fill(objectValidity, true);
+				final IStatus globalValidity = validator.validate(duplicates);
+				for (final IStatus s : globalValidity.getChildren()) {
+					if (s.matches(Status.ERROR) == false) continue;
+					if (s instanceof DetailConstraintStatusDecorator) {
+						for (final EObject o : ((DetailConstraintStatusDecorator) s).getObjects()) {
+							objectValidity[duplicates.indexOf(o)] = false;
+						}
+					}
+				}
+			} else {
+				objectValidity[selectedObjectIndex] = isNowValid;
+			}
+
+			checkValidity();
+		}
+	};
+
+	/**
+	 * Check all the validity flags and enable/disable the OK button
+	 */
+	protected void checkValidity() {
+		for (final boolean b : objectValidity) {
+			if (!b) {
+				// validity is false
+				btnOk.setEnabled(false);
+				return;
+			}
+		}
+		btnOk.setEnabled(true);
+	}
+
 	/**
 	 * Open and edit the given objects modally, returning a collection of
 	 * changed objects
@@ -101,9 +157,17 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 	 */
 	public Collection<EObject> open(final List<EObject> objects) {
 		final List<EObject> duplicates = new ArrayList<EObject>(objects.size());
+		this.duplicates = duplicates;
+		objectValidity = new boolean[objects.size()];
 
-		for (final EObject original : objects) {
-			duplicates.add(EcoreUtil.copy(original));
+		{
+			int objectIndex = 0;
+			for (final EObject original : objects) {
+				final EObject duplicate = EcoreUtil.copy(original);
+				duplicates.add(duplicate);
+				objectValidity[objectIndex++] = validator.validate(duplicate)
+						.isOK();
+			}
 		}
 		try {
 			{
@@ -253,7 +317,9 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 		return compound;
 	}
 
+	boolean[] objectValidity = null;
 	int selectedObjectIndex = 0;
+	private Button btnOk;
 
 	/**
 	 * @return
@@ -343,7 +409,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 			}
 		});
 
-		final Button btnOk = new Button(composite_1, SWT.NONE);
+		btnOk = new Button(composite_1, SWT.NONE);
 		shell.setDefaultButton(btnOk);
 
 		final GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false,
@@ -399,7 +465,7 @@ public class EObjectDetailDialog extends Dialog implements IDetailViewContainer 
 
 		final EObjectDetailView eodv = viewContainerDelegate.getDetailView(
 				selection.eClass(), composite);
-
+		eodv.setPostValidationRunnable(postValidationRunnable);
 		boolean changed = false;
 		// hide other views and display the new one
 		if (eodv != activeDetailView) {
