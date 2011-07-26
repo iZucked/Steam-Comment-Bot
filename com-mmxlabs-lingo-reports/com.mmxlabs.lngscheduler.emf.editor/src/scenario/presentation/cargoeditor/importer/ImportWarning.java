@@ -30,10 +30,10 @@ public class ImportWarning {
 	public ImportWarning(String warning, String filename, int lineNumber,
 			String columnName) {
 		super();
-		this.warning = warning;
-		this.filename = filename;
+		this.warning = warning == null ? "" : warning;
+		this.filename = filename == null ? "" : filename;
 		this.lineNumber = lineNumber;
-		this.columnName = columnName;
+		this.columnName = columnName == null ? "" : columnName;
 	}
 
 	@Override
@@ -41,5 +41,47 @@ public class ImportWarning {
 		return "In " + filename + (lineNumber > 0 ? (":" + lineNumber) : "")
 				+ (columnName.isEmpty() ? "" : ("/" + columnName)) + " - "
 				+ warning;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((columnName == null) ? 0 : columnName.hashCode());
+		result = prime * result
+				+ ((filename == null) ? 0 : filename.hashCode());
+		result = prime * result + lineNumber;
+		result = prime * result + ((warning == null) ? 0 : warning.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ImportWarning other = (ImportWarning) obj;
+		if (columnName == null) {
+			if (other.columnName != null)
+				return false;
+		} else if (!columnName.equals(other.columnName))
+			return false;
+		if (filename == null) {
+			if (other.filename != null)
+				return false;
+		} else if (!filename.equals(other.filename))
+			return false;
+		if (lineNumber != other.lineNumber)
+			return false;
+		if (warning == null) {
+			if (other.warning != null)
+				return false;
+		} else if (!warning.equals(other.warning))
+			return false;
+		return true;
 	}
 }
