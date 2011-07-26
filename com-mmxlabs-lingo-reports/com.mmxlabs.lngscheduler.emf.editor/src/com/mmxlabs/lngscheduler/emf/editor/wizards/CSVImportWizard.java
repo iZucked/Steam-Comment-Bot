@@ -80,6 +80,7 @@ import scenario.port.Canal;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortPackage;
+import scenario.presentation.cargoeditor.dialogs.ImportWarningDialog;
 import scenario.presentation.cargoeditor.importer.CSVReader;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
 import scenario.presentation.cargoeditor.importer.EObjectImporter;
@@ -88,6 +89,7 @@ import scenario.presentation.cargoeditor.importer.IImportWarningListener;
 import scenario.presentation.cargoeditor.importer.ImportWarning;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
+import scenario.presentation.cargoeditor.importer.WarningCollector;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
 
@@ -134,13 +136,15 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		final LinkedList<DeferredReference> refs = new LinkedList<DeferredReference>();
 
 		final LinkedList<EObject> importedObjects = new LinkedList<EObject>();
-
+		final WarningCollector warningCollector = new WarningCollector();
+		
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
 
+					
 					monitor.beginTask("Import CSV Files",
 							inputFilePaths.size() + 6);
 
@@ -158,12 +162,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							monitor.worked(1);
 							final EObjectImporter importer = EObjectImporterFactory
 									.getInstance().getImporter(job.getKey());
-							importer.addImportWarningListener(new IImportWarningListener() {
-								@Override
-								public void importWarning(ImportWarning iw) {
-									System.err.println(iw);
-								}
-							});
+							importer.addImportWarningListener(warningCollector);
 							final CSVReader reader = new CSVReader(job
 									.getValue());
 
@@ -370,6 +369,14 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		if (file == null)
 			return false;
 
+		if (warningCollector.getWarnings().isEmpty() == false) {
+			// TODO is it OK to use getShell() or should it be the parent shell?
+			// since you're not supposed to have nested modal shells
+			final ImportWarningDialog dialog = new ImportWarningDialog(getShell());
+			dialog.setWarnings(warningCollector.getWarnings());
+			dialog.open();
+		}
+		
 		return true;
 	}
 
