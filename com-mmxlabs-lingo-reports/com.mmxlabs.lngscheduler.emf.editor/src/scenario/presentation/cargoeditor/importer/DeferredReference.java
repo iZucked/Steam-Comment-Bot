@@ -73,6 +73,7 @@ public class DeferredReference implements Runnable {
 			}
 		} else {
 			if (key.getSecond().isEmpty() == false) {
+				//TODO generate proper warning, with line # and filename.
 				System.err.println("Warning: no value for "
 						+ key.getFirst().getName() + " named "
 						+ key.getSecond() + " (setting " + reference.getName()

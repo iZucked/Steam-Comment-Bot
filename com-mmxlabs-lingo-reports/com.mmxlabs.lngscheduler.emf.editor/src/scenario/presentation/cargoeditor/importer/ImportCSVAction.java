@@ -38,7 +38,7 @@ import com.mmxlabs.common.Pair;
  * @author Tom Hinton
  * 
  */
-public abstract class ImportCSVAction extends Action {
+public abstract class ImportCSVAction extends Action implements IImportWarningListener {
 	public ImportCSVAction() {
 		super("Import from CSV", AbstractUIPlugin.imageDescriptorFromPlugin(
 				"org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
@@ -89,6 +89,7 @@ public abstract class ImportCSVAction extends Action {
 					monitor.subTask("Read CSV");
 					final EObjectImporter importer = EObjectImporterFactory
 							.getInstance().getImporter(getImportClass());
+					importer.addImportWarningListener(ImportCSVAction.this);
 					final CSVReader reader = new CSVReader(inputFileName);
 					final Collection<EObject> importedObjects = importer
 							.importObjects(reader, deferments, registry);
@@ -149,5 +150,10 @@ public abstract class ImportCSVAction extends Action {
 		} else {
 			return importClass.getName() + "s";
 		}
+	}
+
+	@Override
+	public void importWarning(ImportWarning iw) {
+		System.err.println(iw);
 	}
 }

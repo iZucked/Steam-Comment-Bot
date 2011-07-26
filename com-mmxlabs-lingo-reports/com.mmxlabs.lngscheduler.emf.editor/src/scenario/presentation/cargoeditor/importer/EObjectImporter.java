@@ -178,8 +178,10 @@ public class EObjectImporter {
 			if (value instanceof Date) {
 				svalue = DateTimeParser.getInstance().formatDate((Date) value,
 						timezone);
-			} else if (attribute.getEType() == ScenarioPackage.eINSTANCE.getPercentage()) {
-				svalue = String.format("%.1g", ((Number) value).doubleValue() * 100.0);
+			} else if (attribute.getEType() == ScenarioPackage.eINSTANCE
+					.getPercentage()) {
+				svalue = String.format("%.1g",
+						((Number) value).doubleValue() * 100.0);
 			} else if (value instanceof Float || value instanceof Double) {
 				svalue = String.format("%3g", ((Number) value).doubleValue());
 			} else if (value != null) {
@@ -297,7 +299,33 @@ public class EObjectImporter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		for (final String s : reader.getUnusedHeaders()) {
+			warn("The field " + s + " was never used.", false, s);
+		}
+		
 		return importedObjects;
+	}
+
+	private LinkedList<IImportWarningListener> warningListeners = new LinkedList<IImportWarningListener>();
+
+	public void addImportWarningListener(final IImportWarningListener listener) {
+		warningListeners.add(listener);
+	}
+
+	public void removeImportWarningListener(
+			final IImportWarningListener listener) {
+		warningListeners.remove(listener);
+	}
+
+	protected void warn(final String message, final boolean includeLine,
+			final String field) {
+		final ImportWarning iw = new ImportWarning(message, getCurrentReader()
+				.getFileName(), includeLine ? getCurrentReader()
+				.getLineNumber() : 0, field);
+		for (final IImportWarningListener listener : warningListeners) {
+			listener.importWarning(iw);
+		}
 	}
 
 	/**
@@ -442,17 +470,27 @@ public class EObjectImporter {
 			try {
 				if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
 					obj = DateTimeParser.getInstance().parseDate(value);
-				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getDateAndOptionalTime())) {
-					obj = DateTimeParser.getInstance().parseDateAndOptionalTime(value);
-				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getPercentage())) {
+				} else if (dataType.equals(ScenarioPackage.eINSTANCE
+						.getDateAndOptionalTime())) {
+					obj = DateTimeParser.getInstance()
+							.parseDateAndOptionalTime(value);
+				} else if (dataType.equals(ScenarioPackage.eINSTANCE
+						.getPercentage())) {
 					obj = dataType.getEPackage().getEFactoryInstance()
 							.createFromString(dataType, value);
 					double d = (Double) obj;
 					d /= 100.0;
 					if (d < 0) {
 						d = 0d;
+						warn("Percentage value " + value
+								+ " is negative. It has been clamped to zero.",
+								true, attributeName);
 					} else if (d > 1) {
 						d = 1d;
+						warn("Percentage value "
+								+ value
+								+ " is more than 100%. It has been clamped to 100%.",
+								true, attributeName);
 					}
 					obj = d;
 				} else {
@@ -465,7 +503,12 @@ public class EObjectImporter {
 					target.eUnset(attribute);
 				}
 			} catch (final Exception ex) {
+				warn("Error parsing value \"" + value + "\" - "
+						+ ex.getMessage(), true, attributeName);
 			}
+		} else {
+			warn("No column is given, so a default value is being assumed.",
+					true, attributeName);
 		}
 	}
 }
