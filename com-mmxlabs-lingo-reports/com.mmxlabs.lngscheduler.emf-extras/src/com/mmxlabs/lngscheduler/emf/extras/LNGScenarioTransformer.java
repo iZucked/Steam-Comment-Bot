@@ -408,7 +408,7 @@ public class LNGScenarioTransformer {
 			if (event instanceof CharterOut) {
 				final CharterOut charterOut = (CharterOut) event;
 				final IPort endPort = portAssociation.lookup(charterOut
-						.getEndPort());
+						.getEffectiveEndPort());
 				builderSlot = builder.createCharterOutEvent(event.getId(),
 						window, port, endPort, durationHours,
 						charterOut.getMaxHeelOut()

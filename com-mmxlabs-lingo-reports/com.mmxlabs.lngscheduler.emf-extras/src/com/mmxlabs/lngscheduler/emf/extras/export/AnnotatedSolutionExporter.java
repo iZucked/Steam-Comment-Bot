@@ -237,7 +237,25 @@ public class AnnotatedSolutionExporter {
 				eventsForElement.clear();
 			}
 		}
-
+		
+		// patch up idle events with no port
+		for (final Sequence eSequence : output.getSequences()) {
+			Idle firstIdle = null;
+			for (final ScheduledEvent event : eSequence.getEvents()) {
+				if (firstIdle != null && firstIdle.getPort() != null)
+					break;
+				if (event instanceof Idle) {
+					firstIdle = (Idle) event;
+				}
+				if (event instanceof PortVisit) {
+					final PortVisit pv = (PortVisit) event;
+					if (firstIdle != null && firstIdle.getPort() == null && pv.getPort() != null) {
+						firstIdle.setPort(pv.getPort());
+					}
+				}
+			}
+		}
+		
 		// now patch up laden/ballast journey references in the cargos
 		for (final Sequence eSequence : output.getSequences()) {
 			CargoAllocation allocation = null;

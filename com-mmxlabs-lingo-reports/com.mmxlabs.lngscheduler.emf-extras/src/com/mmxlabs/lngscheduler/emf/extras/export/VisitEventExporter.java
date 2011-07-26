@@ -129,7 +129,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				final CharterOut charterOut = (CharterOut) event;
 				// filter out the charter out slots at the start port (these
 				// will have duration zero anyway)
-				if (ePort != charterOut.getEndPort())
+				if (ePort != charterOut.getEffectiveEndPort())
 					return null;
 				final CharterOutVisit cov = factory.createCharterOutVisit();
 				vev = cov;

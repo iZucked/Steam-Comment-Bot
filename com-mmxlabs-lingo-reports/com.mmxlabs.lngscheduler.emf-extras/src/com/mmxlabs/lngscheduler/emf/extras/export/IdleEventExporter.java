@@ -82,9 +82,9 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 					event.getFuelCost(fc));
 		}
 
-		if (idle.getPort() == null) {
-			System.err.println("This shouldn't have happened");
-		}
+//		if (idle.getPort() == null) {
+//			System.err.println("This shouldn't have happened");
+//		}
 
 		return idle;
 	}
