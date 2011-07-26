@@ -299,11 +299,11 @@ public class EObjectImporter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		for (final String s : reader.getUnusedHeaders()) {
 			warn("The field " + s + " was never used.", false, s);
 		}
-		
+
 		return importedObjects;
 	}
 
@@ -320,9 +320,11 @@ public class EObjectImporter {
 
 	protected void warn(final String message, final boolean includeLine,
 			final String field) {
+		final String casedField = getCurrentReader().getCasedColumnName(
+				field);
 		final ImportWarning iw = new ImportWarning(message, getCurrentReader()
 				.getFileName(), includeLine ? getCurrentReader()
-				.getLineNumber() : 0, field);
+				.getLineNumber() : 0, casedField == null ? field : casedField);
 		for (final IImportWarningListener listener : warningListeners) {
 			listener.importWarning(iw);
 		}
@@ -507,8 +509,11 @@ public class EObjectImporter {
 						+ ex.getMessage(), true, attributeName);
 			}
 		} else {
-			warn("No column is given, so a default value is being assumed.",
-					true, attributeName);
+			// warn that the column is missing; ignore line number
+			// because it will be omitted on all lines
+			final String attributeNameCased = prefix + attribute.getName();
+			warn("Column " + attributeNameCased + " omitted",
+					false, attributeNameCased);
 		}
 	}
 }
