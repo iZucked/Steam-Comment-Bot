@@ -110,7 +110,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 			if (type == f)
 				return ((Float) 0f);
 				
-			return null;
+			throw new RuntimeException("Unknown type for number : " + type.getName());
 		}
 	}
 
