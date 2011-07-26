@@ -84,6 +84,8 @@ import scenario.presentation.cargoeditor.importer.CSVReader;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
 import scenario.presentation.cargoeditor.importer.EObjectImporter;
 import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
+import scenario.presentation.cargoeditor.importer.IImportWarningListener;
+import scenario.presentation.cargoeditor.importer.ImportWarning;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
 import scenario.schedule.Schedule;
@@ -156,6 +158,12 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							monitor.worked(1);
 							final EObjectImporter importer = EObjectImporterFactory
 									.getInstance().getImporter(job.getKey());
+							importer.addImportWarningListener(new IImportWarningListener() {
+								@Override
+								public void importWarning(ImportWarning iw) {
+									System.err.println(iw);
+								}
+							});
 							final CSVReader reader = new CSVReader(job
 									.getValue());
 
