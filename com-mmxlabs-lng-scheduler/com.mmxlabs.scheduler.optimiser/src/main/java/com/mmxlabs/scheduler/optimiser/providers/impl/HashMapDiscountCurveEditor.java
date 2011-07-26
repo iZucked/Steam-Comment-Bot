@@ -1,5 +1,5 @@
 /**
- * Copyrightom (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
