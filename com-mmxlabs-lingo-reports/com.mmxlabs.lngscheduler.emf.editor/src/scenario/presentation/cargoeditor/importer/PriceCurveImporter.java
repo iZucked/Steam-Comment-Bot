@@ -4,6 +4,7 @@
  */
 package scenario.presentation.cargoeditor.importer;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,8 +29,9 @@ import scenario.market.StepwisePriceCurve;
  */
 public class PriceCurveImporter extends EObjectImporter {
 	@Override
-	protected void populateContainment(final String prefix, final EObject result,
-			final EReference reference, final Map<String, String> fields,
+	protected void populateContainment(final String prefix,
+			final EObject result, final EReference reference,
+			final Map<String, String> fields,
 			final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
 		if (reference.equals(MarketPackage.eINSTANCE
@@ -40,15 +42,20 @@ public class PriceCurveImporter extends EObjectImporter {
 			final DateTimeParser dtp = DateTimeParser.getInstance();
 			final List<StepwisePrice> prices = new ArrayList<StepwisePrice>();
 			for (final String field : fields.keySet()) {
-				final Date dt = dtp.parseDate(field);
-				if (dt != null) {
-					final String value = fields.get(field);
-					if (value == null || value.isEmpty()) continue;
-					final StepwisePrice price = MarketPackage.eINSTANCE
-							.getMarketFactory().createStepwisePrice();
-					price.setDate(dt);
-					price.setPriceFromDate(Float.parseFloat(value));
-					prices.add(price);
+				try {
+					final Date dt = dtp.parseDate(field);
+					if (dt != null) {
+						final String value = fields.get(field);
+						if (value == null || value.isEmpty())
+							continue;
+						final StepwisePrice price = MarketPackage.eINSTANCE
+								.getMarketFactory().createStepwisePrice();
+						price.setDate(dt);
+						price.setPriceFromDate(Float.parseFloat(value));
+						prices.add(price);
+					}
+				} catch (ParseException pe) {
+
 				}
 			}
 
@@ -67,12 +74,16 @@ public class PriceCurveImporter extends EObjectImporter {
 	}
 
 	@Override
-	protected void flattenMultiContainment(final EObject object, final String prefix,
-			final EReference reference, final Map<String, String> output) {		
+	protected void flattenMultiContainment(final EObject object,
+			final String prefix, final EReference reference,
+			final Map<String, String> output) {
 		if (reference.equals(MarketPackage.eINSTANCE
 				.getStepwisePriceCurve_Prices())) {
-			for (final StepwisePrice price : ((StepwisePriceCurve) object).getPrices()) {
-				output.put(DateTimeParser.getInstance().formatDate(price.getDate(), "UTC"),
+			for (final StepwisePrice price : ((StepwisePriceCurve) object)
+					.getPrices()) {
+				output.put(
+						DateTimeParser.getInstance().formatDate(
+								price.getDate(), "UTC"),
 						String.format("%3g", price.getPriceFromDate()));
 			}
 		} else {
