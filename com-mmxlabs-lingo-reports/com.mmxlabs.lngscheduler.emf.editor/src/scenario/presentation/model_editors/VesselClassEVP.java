@@ -31,6 +31,7 @@ import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
 import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.dialogs.CanalCostsDialog;
+import scenario.presentation.cargoeditor.dialogs.ImportWarningDialog;
 import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
 import scenario.presentation.cargoeditor.importer.CSVReader;
 import scenario.presentation.cargoeditor.importer.DeferredReference;
@@ -40,6 +41,7 @@ import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 import scenario.presentation.cargoeditor.importer.ImportUI;
 import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
 import scenario.presentation.cargoeditor.importer.Postprocessor;
+import scenario.presentation.cargoeditor.importer.WarningCollector;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
@@ -70,6 +72,7 @@ public class VesselClassEVP extends NamedObjectEVP {
 		return new ImportCSVAction() {
 			@Override
 			public void run() {
+				final WarningCollector warningCollector = new WarningCollector();
 				try {
 					ImportUI.beginImport();
 					final FileDialog dialog = new FileDialog(PlatformUI
@@ -93,7 +96,7 @@ public class VesselClassEVP extends NamedObjectEVP {
 					final EObjectImporter vci = EObjectImporterFactory
 							.getInstance().getImporter(
 									FleetPackage.eINSTANCE.getVesselClass());
-
+					vci.addImportWarningListener(warningCollector);
 					final CSVReader reader = new CSVReader(vcFile);
 					final Collection<EObject> vesselClasses = vci
 							.importObjects(reader, defer, reg);
@@ -108,7 +111,7 @@ public class VesselClassEVP extends NamedObjectEVP {
 							.getInstance().getImporter(
 									FleetPackage.eINSTANCE
 											.getFuelConsumptionLine());
-
+					fcImporter.addImportWarningListener(warningCollector);
 					final CSVReader reader2 = new CSVReader(fcFile);
 					fcImporter.importObjects(reader2, defer, reg);
 
@@ -125,6 +128,14 @@ public class VesselClassEVP extends NamedObjectEVP {
 					ImportUI.endImport();
 				} catch (final IOException ex) {
 					ImportUI.endImport();
+				}
+				
+				if (warningCollector.getWarnings().isEmpty() == false) {
+					final ImportWarningDialog iwd = new ImportWarningDialog(
+							PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+									.getShell());
+					iwd.setWarnings(warningCollector.getWarnings());
+					iwd.open();
 				}
 			}
 

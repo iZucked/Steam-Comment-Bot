@@ -28,6 +28,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import scenario.fleet.FleetPackage;
 import scenario.port.PortPackage;
+import scenario.presentation.cargoeditor.dialogs.ImportWarningDialog;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
@@ -38,7 +39,7 @@ import com.mmxlabs.common.Pair;
  * @author Tom Hinton
  * 
  */
-public abstract class ImportCSVAction extends Action implements IImportWarningListener {
+public abstract class ImportCSVAction extends Action {
 	public ImportCSVAction() {
 		super("Import from CSV", AbstractUIPlugin.imageDescriptorFromPlugin(
 				"org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
@@ -62,6 +63,8 @@ public abstract class ImportCSVAction extends Action implements IImportWarningLi
 		final String inputFileName = openDialog.open();
 		if (inputFileName == null)
 			return;
+
+		final WarningCollector warningCollector = new WarningCollector();
 
 		final WorkspaceJob job = new WorkspaceJob("Import CSV from "
 				+ inputFileName) {
@@ -89,7 +92,7 @@ public abstract class ImportCSVAction extends Action implements IImportWarningLi
 					monitor.subTask("Read CSV");
 					final EObjectImporter importer = EObjectImporterFactory
 							.getInstance().getImporter(getImportClass());
-					importer.addImportWarningListener(ImportCSVAction.this);
+					importer.addImportWarningListener(warningCollector);
 					final CSVReader reader = new CSVReader(inputFileName);
 					final Collection<EObject> importedObjects = importer
 							.importObjects(reader, deferments, registry);
@@ -133,6 +136,17 @@ public abstract class ImportCSVAction extends Action implements IImportWarningLi
 		job.setUser(true);
 		// Schedule job for launching
 		job.schedule();
+		try {
+			job.join();
+			if (warningCollector.getWarnings().isEmpty() == false) {
+				final ImportWarningDialog iwd = new ImportWarningDialog(
+						PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+								.getShell());
+				iwd.setWarnings(warningCollector.getWarnings());
+				iwd.open();
+			}
+		} catch (InterruptedException e) {
+		}
 	}
 
 	private final Map<EClass, String> niceNames = CollectionsUtil.makeHashMap(
@@ -150,10 +164,5 @@ public abstract class ImportCSVAction extends Action implements IImportWarningLi
 		} else {
 			return importClass.getName() + "s";
 		}
-	}
-
-	@Override
-	public void importWarning(ImportWarning iw) {
-		System.err.println(iw);
 	}
 }
