@@ -44,8 +44,9 @@ public class DateTimeParser {
 	 * 
 	 * @param dateString
 	 * @return
+	 * @throws ParseException 
 	 */
-	public Date parseDate(final String dateString) {
+	public Date parseDate(final String dateString) throws ParseException {
 		// try parsing as a date and time
 		try {
 			final Date result = consistentDateTime.parse(dateString);
@@ -70,7 +71,7 @@ public class DateTimeParser {
 			return (Date) EcoreFactory.eINSTANCE.createFromString(
 					EcorePackage.eINSTANCE.getEDate(), dateString);
 		} catch (final Exception ex) {
-			return null;
+			throw new ParseException("Could not parse date value " + dateString, 0);
 		}
 	}
 
