@@ -5,7 +5,6 @@
 package scenario.presentation.cargoeditor;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -51,7 +50,7 @@ public class PercentageAttributeManipulator extends NumericAttributeManipulator 
 	@Override
 	public Object getValue(Object object) {
 		final Number n = (Number) super.getValue(object);
-		return (n.doubleValue()) * 100.0;
+		return n == null ? 0d : (n.doubleValue()) * 100.0;
 	}
 
 	@Override
