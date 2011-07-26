@@ -137,7 +137,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 		// date. Same as in the other date editors.
 		if (optionalDate) {
 			final DateAndOptionalTime utcDate = (DateAndOptionalTime) value;
-			dateAndTime.setValue(getCalendar(utcDate), !utcDate.isOnlyDate());
+			dateAndTime.setValue(getCalendar(utcDate), value == null ? false : (!utcDate.isOnlyDate()));
 		} else {
 			final Date utcDate = (Date) value;
 			dateAndTime.setValue(getCalendar(utcDate));
