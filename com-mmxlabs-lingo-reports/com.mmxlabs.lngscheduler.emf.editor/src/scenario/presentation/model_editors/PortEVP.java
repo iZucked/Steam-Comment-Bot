@@ -41,7 +41,6 @@ import scenario.presentation.cargoeditor.EObjectTableViewer;
 import scenario.presentation.cargoeditor.ICellManipulator;
 import scenario.presentation.cargoeditor.ICellRenderer;
 import scenario.presentation.cargoeditor.IReferenceValueProvider;
-import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.PercentageAttributeManipulator;
 import scenario.presentation.cargoeditor.ValueListAttributeManipulator;
 import scenario.presentation.cargoeditor.detailview.TimezoneInlineEditor;
