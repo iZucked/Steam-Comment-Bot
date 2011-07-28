@@ -29,6 +29,7 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import scenario.presentation.EditorUtils;
@@ -154,7 +155,22 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 				}
 			}
 			// Update tooltip text
-			tooltipControl.setToolTipText(toolTip);
+//			tooltipControl.setToolTipText(toolTip);
+			setToolTipText(tooltipControl, toolTip);
+		}
+	}
+	
+	/**
+	 * Set the tooltip on control, and any child controls if it's a composite
+	 * @param control
+	 * @param toolTipText
+	 */
+	private void setToolTipText(final Control control, final String toolTipText) {
+		control.setToolTipText(toolTipText);
+		if (control instanceof Composite) {
+			for (final Control sub : ((Composite) control).getChildren()) {
+				setToolTipText(sub, toolTipText);
+			}
 		}
 	}
 
