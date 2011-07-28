@@ -2492,10 +2492,10 @@
             referenceValue="lng.ecore#//NamedObject"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures"
-          element="lng.ecore#//port/Canal/defaultCost">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/defaultCost"
+          element="#//@releases.3/@changes.145/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.145/@element"
             featureName="name" dataValue="defaultCost"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/defaultCost"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.145/@element"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures"
@@ -4581,5 +4581,8 @@
         featureName="key" dataValue="body"/>
     <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/getEffectiveEndPort/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
         featureName="value" dataValue="if (isSetEndPort()) return getEndPort();&#xA;else return getStartPort();"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EAttribute" name="defaultCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
   </releases>
 </history:History>

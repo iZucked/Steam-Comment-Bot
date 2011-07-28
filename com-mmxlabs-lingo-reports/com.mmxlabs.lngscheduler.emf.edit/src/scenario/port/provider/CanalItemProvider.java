@@ -73,7 +73,6 @@ public class CanalItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addDefaultCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -96,28 +95,6 @@ public class CanalItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Default Cost feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDefaultCostPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Canal_defaultCost_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Canal_defaultCost_feature", "_UI_Canal_type"),
-				 PortPackage.Literals.CANAL__DEFAULT_COST,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -190,7 +167,6 @@ public class CanalItemProvider
 
 		switch (notification.getFeatureID(Canal.class)) {
 			case PortPackage.CANAL__NAME:
-			case PortPackage.CANAL__DEFAULT_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.CANAL__DISTANCE_MODEL:

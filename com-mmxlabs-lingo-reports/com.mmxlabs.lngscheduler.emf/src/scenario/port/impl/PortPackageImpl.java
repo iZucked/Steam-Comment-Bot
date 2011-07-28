@@ -323,17 +323,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCanal_DefaultCost() {
-		return (EAttribute)canalEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getCanal_DistanceModel() {
-		return (EReference)canalEClass.getEStructuralFeatures().get(1);
+		return (EReference)canalEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -401,7 +392,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(distanceLineEClass, DISTANCE_LINE__DISTANCE);
 
 		canalEClass = createEClass(CANAL);
-		createEAttribute(canalEClass, CANAL__DEFAULT_COST);
 		createEReference(canalEClass, CANAL__DISTANCE_MODEL);
 
 		canalModelEClass = createEClass(CANAL_MODEL);
@@ -464,7 +454,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getDistanceLine_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, DistanceLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalEClass, Canal.class, "Canal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCanal_DefaultCost(), ecorePackage.getEInt(), "defaultCost", null, 0, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanal_DistanceModel(), this.getDistanceModel(), null, "distanceModel", null, 1, 1, Canal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalModelEClass, CanalModel.class, "CanalModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
