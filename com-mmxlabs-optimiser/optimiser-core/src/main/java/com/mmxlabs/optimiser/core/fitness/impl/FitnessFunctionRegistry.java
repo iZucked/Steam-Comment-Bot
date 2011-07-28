@@ -33,19 +33,26 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 	public void registerFitnessCoreFactory(final IFitnessCoreFactory factory) {
 
 		if (coreFactoriesByCoreName.containsKey(factory.getFitnessCoreName())) {
-			throw new RuntimeException("Fitness core name already registered: "
-					+ factory.getFitnessCoreName());
+			throw new RuntimeException("Fitness core name already registered: " + factory.getFitnessCoreName());
 		}
 
 		coreFactoriesByCoreName.put(factory.getFitnessCoreName(), factory);
 
 		for (final String componentName : factory.getFitnessComponentNames()) {
 			if (coreFactoriesByComponentName.containsKey(componentName)) {
-				throw new RuntimeException(
-						"Fitness component name already registered: "
-								+ componentName);
+				throw new RuntimeException("Fitness component name already registered: " + componentName);
 			}
 			coreFactoriesByComponentName.put(componentName, factory);
+		}
+	}
+
+	@Override
+	public void deregisterFitnessCoreFactory(final IFitnessCoreFactory factory) {
+
+		coreFactoriesByCoreName.remove(factory.getFitnessCoreName());
+
+		for (final String componentName : factory.getFitnessComponentNames()) {
+			coreFactoriesByComponentName.remove(componentName);
 		}
 	}
 
@@ -65,17 +72,14 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 	}
 
 	@Override
-	public Set<IFitnessCoreFactory> getFitnessCoreFactories(
-			final Collection<String> names) {
+	public Set<IFitnessCoreFactory> getFitnessCoreFactories(final Collection<String> names) {
 
-		final Set<IFitnessCoreFactory> factories = new HashSet<IFitnessCoreFactory>(
-				names.size());
+		final Set<IFitnessCoreFactory> factories = new HashSet<IFitnessCoreFactory>(names.size());
 
 		for (final String name : names) {
 
 			if (coreFactoriesByComponentName.containsKey(name)) {
-				final IFitnessCoreFactory factory = coreFactoriesByComponentName
-						.get(name);
+				final IFitnessCoreFactory factory = coreFactoriesByComponentName.get(name);
 				factories.add(factory);
 			}
 		}
@@ -84,13 +88,11 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 	}
 
 	/**
-	 * Setter to register a {@link Collection} of {@link IFitnessCoreFactory}
-	 * instances.
+	 * Setter to register a {@link Collection} of {@link IFitnessCoreFactory} instances.
 	 * 
 	 * @param factories
 	 */
-	public void setFitnessCoreFactories(
-			final Collection<IFitnessCoreFactory> factories) {
+	public void setFitnessCoreFactories(final Collection<IFitnessCoreFactory> factories) {
 
 		for (final IFitnessCoreFactory factory : factories) {
 			registerFitnessCoreFactory(factory);
