@@ -185,7 +185,7 @@ public class EObjectDetailView extends Composite {
 				EditorUtils.unmangle(objectClass.getName()),
 				new CompiledEMFPath(true));
 		for (final EReference reference : objectClass.getEAllContainments()) {
-			if (reference.isMany()) {
+			if (reference.isMany() || editorFactoriesByFeature.containsKey(reference)) {
 				continue;
 			}
 			String groupName = nameByFeature.get(reference);
