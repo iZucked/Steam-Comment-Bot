@@ -176,6 +176,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	private abstract class ScenarioRVP extends EContentAdapter implements
 			IReferenceValueProvider {
 		final EAttribute nameAttribute;
+		
+		@Override
+		public boolean updateOnChangeToFeature(Object changedFeature) {
+			return false;
+		}
 
 		public ScenarioRVP(EAttribute nameAttribute) {
 			super();
@@ -486,6 +491,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 							.getContractModel_PurchaseContracts()
 					|| feature == ContractPackage.eINSTANCE
 							.getContractModel_SalesContracts();
+		}
+
+		@Override
+		public boolean updateOnChangeToFeature(Object changedFeature) {
+			return changedFeature == CargoPackage.eINSTANCE.getSlot_Port();
 		}
 
 		@Override
