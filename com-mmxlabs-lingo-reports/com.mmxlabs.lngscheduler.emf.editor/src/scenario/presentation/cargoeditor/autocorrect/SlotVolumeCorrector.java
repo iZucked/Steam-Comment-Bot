@@ -28,15 +28,15 @@ public class SlotVolumeCorrector extends BaseCorrector {
 		if (minQuantity.equals(feature)) {
 			final Slot slot = (Slot) target;
 			// min has changed
-			if (slot.getMaxQuantity() < slot.getMinQuantity()) {
+			if (slot.getSlotOrContractMaxQuantity() < slot.getSlotOrContractMinQuantity()) {
 				return new Pair<String, Command>(
 						"Adjust maximum quantity to match minimum quantity",
 						makeSetter(editingDomain, slot, maxQuantity,
-								slot.getMinQuantity()));
+								slot.getSlotOrContractMinQuantity()));
 			}
 		} else if (maxQuantity.equals(feature)) {
 			final Slot slot = (Slot) target;
-			if (slot.getMaxQuantity() < slot.getMinQuantity()) {
+			if (slot.getSlotOrContractMaxQuantity() < slot.getSlotOrContractMinQuantity()) {
 				return new Pair<String, Command>(
 						"Adjust minimum quantity to match maximum quantity",
 						makeSetter(editingDomain, slot, minQuantity,
