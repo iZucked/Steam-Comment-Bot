@@ -19,11 +19,11 @@ import org.eclipse.ui.IWorkbenchPage;
 import scenario.Scenario;
 import scenario.contract.ContractPackage;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.PercentageAttributeManipulator;
-import scenario.presentation.cargoeditor.importer.ExportCSVAction;
-import scenario.presentation.cargoeditor.importer.ImportCSVAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
+import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
+import com.mmxlabs.shiplingo.ui.tableview.PercentageAttributeManipulator;
 
 /**
  * EVP for entities

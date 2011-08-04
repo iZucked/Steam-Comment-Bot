@@ -14,30 +14,25 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.ScenarioPackage;
-import scenario.cargo.CargoPackage;
-import scenario.fleet.FleetPackage;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
-import scenario.presentation.cargoeditor.EObjectTableViewer;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailDialog;
-import scenario.presentation.cargoeditor.detailview.EObjectMultiDialog;
 import scenario.presentation.cargoeditor.handlers.AddAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
+import com.mmxlabs.shiplingo.ui.detailview.containers.DetailCompositeDialog;
+import com.mmxlabs.shiplingo.ui.detailview.containers.MultiDetailDialog;
+import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
 
 /**
  * This extension of {@link EObjectEditorViewerPane} adds the following
@@ -98,18 +93,16 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 							Collections.singletonList(newObject),
 							(EObject) getOwner(), (EReference) getFeature());
 
-					final EObjectDetailDialog dialog = new EObjectDetailDialog(
-							viewer.getControl().getShell(), SWT.NONE,
-							editingDomain);
-
-					part.setupDetailViewContainer(dialog);
-
-					if (dialog.open(Collections.singletonList(newObject))
-							.size() > 0) {
+					final DetailCompositeDialog dcd = new DetailCompositeDialog(
+							viewer.getControl().getShell(), part,
+							part.getEditingDomain());
+					
+					if (dcd.open(Collections.singletonList(newObject)) == Window.OK) {
 						return newObject;
 					} else {
 						return null;
 					}
+					
 				} finally {
 					ValidationSupport.getInstance().clearContainers(
 							Collections.singletonList(newObject));
@@ -140,56 +133,66 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 		v.getControl().addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(final org.eclipse.swt.events.KeyEvent e) {
-				
+
 			}
 
 			@Override
 			public void keyPressed(final org.eclipse.swt.events.KeyEvent e) {
 				// TODO: Wrap up in a command with keybindings
 				if (e.keyCode == '\r') {
-					if (v.isCellEditorActive()) return;
+					if (v.isCellEditorActive())
+						return;
 					final ISelection selection = getViewer().getSelection();
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection ssel = (IStructuredSelection) selection;
 						final List l = Arrays.asList(ssel.toArray());
 
 						if (l.size() > 1 && (e.stateMask & SWT.CONTROL) == 0) {
-							final EObjectMultiDialog multiDialog = new EObjectMultiDialog(
-									new IShellProvider() {
-										@Override
-										public Shell getShell() {
-											return v.getControl().getShell();
-										}
-									});
-							part.setupDetailViewContainer(multiDialog);
-							multiDialog.setEditorFactoryForFeature(
-									CargoPackage.eINSTANCE.getCargo_Id(), null);
-							multiDialog.setEditorFactoryForFeature(
-									ScenarioPackage.eINSTANCE
-											.getNamedObject_Name(), null);
-
-							multiDialog.setEditorFactoryForFeature(
-									FleetPackage.eINSTANCE.getVesselEvent_Id(),
-									null);
-							if (multiDialog.open(l, part.getEditingDomain()) == Dialog.OK) {
-								part.getEditingDomain().getCommandStack()
-										.execute(multiDialog.createCommand());
+							final MultiDetailDialog multiDialog = new MultiDetailDialog(
+									v.getControl().getShell(),
+									part,
+									part.getEditingDomain());
+							
+//							final EObjectMultiDialog multiDialog = new EObjectMultiDialog(
+//									new IShellProvider() {
+//										@Override
+//										public Shell getShell() {
+//											return v.getControl().getShell();
+//										}
+//									});
+//							part.setupDetailViewContainer(multiDialog);
+//							multiDialog.setEditorFactoryForFeature(
+//									CargoPackage.eINSTANCE.getCargo_Id(), null);
+//							multiDialog.setEditorFactoryForFeature(
+//									ScenarioPackage.eINSTANCE
+//											.getNamedObject_Name(), null);
+//
+//							multiDialog.setEditorFactoryForFeature(
+//									FleetPackage.eINSTANCE.getVesselEvent_Id(),
+//									null);
+//							if (multiDialog.open(l, part.getEditingDomain()) == Dialog.OK) {
+//								part.getEditingDomain().getCommandStack()
+//										.execute(multiDialog.createCommand());
+//							}
+							
+							if (multiDialog.open(l) == Window.OK) {
+								getViewer().refresh();
 							}
 						} else {
 							if (l.size() == 0)
 								return;
-							final EObjectDetailDialog dialog = new EObjectDetailDialog(
-									v.getControl().getShell(), SWT.NONE, part
-											.getEditingDomain());
 
-							part.setupDetailViewContainer(dialog);
+							final DetailCompositeDialog dcd = new DetailCompositeDialog(
+									v.getControl().getShell(), part,
+									part.getEditingDomain());
 
-							if (dialog.open(l).size() > 0)
+							if (dcd.open(l) == Window.OK) {
 								getViewer().refresh();
+							}
 						}
 					}
 				}
-			
+
 			}
 		});
 		return v;

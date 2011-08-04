@@ -12,7 +12,8 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.NamedObject;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.BasicAttributeManipulator;
+
+import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
 
 /**
  * An editor for {@link NamedObject}s, which just has a name column,

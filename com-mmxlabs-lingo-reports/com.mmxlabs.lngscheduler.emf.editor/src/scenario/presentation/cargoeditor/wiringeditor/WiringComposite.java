@@ -43,9 +43,9 @@ import scenario.cargo.CargoPackage;
 import scenario.cargo.CargoType;
 import scenario.cargo.Slot;
 import scenario.port.Port;
-import scenario.presentation.cargoeditor.IReferenceValueProvider;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
 
 /**
  * A composite for displaying a wiring editor. Contains a {@link WiringDiagram},

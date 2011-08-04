@@ -12,7 +12,8 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.market.MarketPackage;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.NumericAttributeManipulator;
+
+import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
 
 /**
  * EVP for indices.

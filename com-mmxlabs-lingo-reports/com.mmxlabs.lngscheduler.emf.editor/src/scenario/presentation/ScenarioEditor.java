@@ -37,6 +37,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -79,7 +80,6 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.SashForm;
@@ -126,31 +126,14 @@ import scenario.market.StepwisePriceCurve;
 import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
-import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.ChartViewer.IChartContentProvider;
-import scenario.presentation.cargoeditor.IReferenceValueProvider;
 import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
 import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotIdCorrector;
 import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
-import scenario.presentation.cargoeditor.detailview.DialogInlineEditor;
-import scenario.presentation.cargoeditor.detailview.EENumInlineEditor;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailPropertySheetPage;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditorFactory;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IMultiInlineEditorFactory;
-import scenario.presentation.cargoeditor.detailview.FuelCurveEditor;
-import scenario.presentation.cargoeditor.detailview.IDetailViewContainer;
-import scenario.presentation.cargoeditor.detailview.MultiReferenceInlineEditor;
-import scenario.presentation.cargoeditor.detailview.ReferenceInlineEditor;
-import scenario.presentation.cargoeditor.detailview.TimezoneInlineEditor;
-import scenario.presentation.cargoeditor.detailview.ValueListInlineEditor;
-import scenario.presentation.cargoeditor.detailview.VesselClassCostEditor;
-import scenario.presentation.distance_editor.DistanceEditorDialog;
 import scenario.presentation.model_editors.CanalEVP;
 import scenario.presentation.model_editors.CargoEVP;
 import scenario.presentation.model_editors.EntityEVP;
@@ -169,7 +152,9 @@ import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAda
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
+import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
+import com.mmxlabs.shiplingo.ui.detailview.containers.DetailCompositePropertySheetPage;
 
 /**
  * k EObjectEditorViewerPane}, which displays general-purpose reflectively
@@ -183,7 +168,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
  */
 public class ScenarioEditor extends MultiPageEditorPart implements
 		IEditingDomainProvider, ISelectionProvider, IMenuListener,
-		IViewerProvider {
+		IViewerProvider, IValueProviderProvider {
 
 	final static EAttribute namedObjectName = ScenarioPackage.eINSTANCE
 			.getNamedObject_Name();
@@ -2026,264 +2011,292 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated NO
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		final EObjectDetailPropertySheetPage page = new EObjectDetailPropertySheetPage(
-				getEditingDomain());
-		setupDetailViewContainer(page);
+		// final EObjectDetailPropertySheetPage page = new
+		// EObjectDetailPropertySheetPage(
+		// getEditingDomain());
+		// setupDetailViewContainer(page);
+
+		final DetailCompositePropertySheetPage page = new DetailCompositePropertySheetPage(
+				getEditingDomain(), this);
+
 		return page;
 	}
-
-	private class MultiReferenceEditorFactory implements
-			IMultiInlineEditorFactory {
-		private final EditingDomain editingDomain;
-		private final IReferenceValueProvider valueProvider;
-
-		public MultiReferenceEditorFactory(EditingDomain editingDomain,
-				IReferenceValueProvider valueProvider) {
-			super();
-			this.editingDomain = editingDomain;
-			this.valueProvider = valueProvider;
-		}
-
-		@Override
-		public IInlineEditor createEditor(EMFPath path,
-				EStructuralFeature feature, ICommandProcessor commandProcessor) {
-			return new ReferenceInlineEditor(path, feature, editingDomain,
-					commandProcessor, valueProvider);
-		}
-
-		@Override
-		public IInlineEditor createMultiEditor(EMFPath path,
-				EStructuralFeature feature, ICommandProcessor commandProcessor) {
-			return new MultiReferenceInlineEditor(path, feature, editingDomain,
-					commandProcessor, valueProvider);
+	
+	@Override
+	public IReferenceValueProvider getValueProvider(
+			final EClass c) {
+		if (c == PortPackage.eINSTANCE.getPort()) {
+			return getPortProvider();
+		} else if (c == FleetPackage.eINSTANCE.getVessel()) {
+			return getVesselProvider();
+		} else if (c == FleetPackage.eINSTANCE.getVesselClass()) {
+			return getVesselClassProvider();
+		} else if (c == MarketPackage.eINSTANCE.getIndex()) {
+			return getIndexProvider();
+		} else if (c == ContractPackage.eINSTANCE.getContract()) {
+			return getContractProvider();
+		} else if (c == ContractPackage.eINSTANCE.getEntity()) {
+			return getEntityProvider();
+		} else if (c == FleetPackage.eINSTANCE.getVesselFuel()) {
+			return fuelProvider;
+		} else {
+			return null;
 		}
 	}
 
-	/**
-	 * Add editors to any detail view container
-	 * 
-	 * @param page
-	 */
-	public void setupDetailViewContainer(final IDetailViewContainer page) {
-		page.addDefaultEditorFactories();
+//	private class MultiReferenceEditorFactory implements
+//			IMultiInlineEditorFactory {
+//		private final EditingDomain editingDomain;
+//		private final IReferenceValueProvider valueProvider;
+//
+//		public MultiReferenceEditorFactory(EditingDomain editingDomain,
+//				IReferenceValueProvider valueProvider) {
+//			super();
+//			this.editingDomain = editingDomain;
+//			this.valueProvider = valueProvider;
+//		}
+//
+//		@Override
+//		public IInlineEditor createEditor(EMFPath path,
+//				EStructuralFeature feature, ICommandProcessor commandProcessor) {
+//			return new ReferenceInlineEditor(path, feature, editingDomain,
+//					commandProcessor, valueProvider);
+//		}
+//
+//		@Override
+//		public IInlineEditor createMultiEditor(EMFPath path,
+//				EStructuralFeature feature, ICommandProcessor commandProcessor) {
+//			return new MultiReferenceInlineEditor(path, feature, editingDomain,
+//					commandProcessor, valueProvider);
+//		}
+//	}
 
-		page.setEditorFactoryForFeature(
-				PortPackage.eINSTANCE.getPort_DefaultWindowStart(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor commandProcessor) {
-						final List<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
-						for (int i = 0; i < 24; i++) {
-							values.add(new Pair<String, Object>(String.format(
-									"%02d:00", i), i));
-						}
-						return new ValueListInlineEditor(path, feature,
-								editingDomain, commandProcessor, values);
-					}
-				});
-
-		page.setEditorFactoryForFeature(
-				PortPackage.eINSTANCE.getPort_TimeZone(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor commandProcessor) {
-						return new TimezoneInlineEditor(path, feature,
-								editingDomain, commandProcessor);
-					}
-				});
-
-		page.setEditorFactoryForFeature(
-				ScenarioPackage.eINSTANCE.getUUIDObject_UUID(), null);
-
-		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
-				new MultiReferenceEditorFactory(getEditingDomain(),
-						portProvider));
-
-		page.setEditorFactoryForClassifier(
-				FleetPackage.eINSTANCE.getVesselFuel(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new ReferenceInlineEditor(path, feature,
-								editingDomain, processor, fuelProvider);
-					}
-				});
-
-		page.setEditorFactoryForClassifier(
-				ContractPackage.eINSTANCE.getContract(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new ReferenceInlineEditor(path, feature,
-								editingDomain, processor, contractProvider) {
-							@Override
-							protected boolean updateOnChangeToFeature(
-									final Object changedFeature) {
-								// update contract display when port is changed
-								// on a load slot.
-								return super
-										.updateOnChangeToFeature(changedFeature)
-										|| ((changedFeature instanceof EReference) && ((EReference) changedFeature)
-												.getEReferenceType().equals(
-														PortPackage.eINSTANCE
-																.getPort()));
-							}
-						};
-					}
-				});
-
-		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getIndex(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new ReferenceInlineEditor(path, feature,
-								editingDomain, processor, indexProvider);
-					}
-				});
-
-		page.setEditorFactoryForClassifier(
-				CargoPackage.eINSTANCE.getCargoType(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new EENumInlineEditor(path,
-								(EAttribute) feature, editingDomain, processor);
-					}
-				});
-
-		page.setEditorFactoryForClassifier(
-				ContractPackage.eINSTANCE.getEntity(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new ReferenceInlineEditor(path, feature,
-								editingDomain, processor, entityProvider);
-					}
-				});
-
-		page.setEditorFactoryForFeature(FleetPackage.eINSTANCE
-				.getVesselStateAttributes_FuelConsumptionCurve(),
-				new IMultiInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new FuelCurveEditor(path, feature,
-								editingDomain, processor);
-					}
-
-					@Override
-					public IInlineEditor createMultiEditor(EMFPath path,
-							EStructuralFeature feature,
-							ICommandProcessor commandProcessor) {
-						return createEditor(path, feature, commandProcessor);
-					}
-				});
-
-		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE
-				.getVesselClass(), new MultiReferenceEditorFactory(
-				getEditingDomain(), vesselClassProvider));
-
-		page.setEditorFactoryForFeature(
-				FleetPackage.eINSTANCE.getVesselClass_CanalCosts(),
-				new IMultiInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(EMFPath path,
-							EStructuralFeature feature,
-							ICommandProcessor commandProcessor) {
-						throw new RuntimeException(
-								"There should be no single references to vessel class costs in the model");
-					}
-
-					@Override
-					public IInlineEditor createMultiEditor(EMFPath path,
-							EStructuralFeature feature,
-							ICommandProcessor commandProcessor) {
-						return new VesselClassCostEditor(path, feature,
-								commandProcessor, ScenarioEditor.this);
-					}
-				});
-
-		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE.getVessel(),
-				new MultiReferenceEditorFactory(getEditingDomain(),
-						vesselProvider));
-
-		page.setEditorFactoryForClassifier(
-				SchedulePackage.eINSTANCE.getSchedule(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor processor) {
-						return new ReferenceInlineEditor(path, feature,
-								editingDomain, processor, scheduleProvider);
-					}
-				});
-
-		page.setEditorFactoryForFeature(PortPackage.eINSTANCE.getCanal_DistanceModel(),
-				new IInlineEditorFactory() {
-					@Override
-					public IInlineEditor createEditor(final EMFPath path,
-							final EStructuralFeature feature,
-							final ICommandProcessor commandProcessor) {
-						return new DialogInlineEditor(path, feature,
-								editingDomain, commandProcessor) {
-							@Override
-							protected String render(Object value) {
-								return "Distance Matrix";
-							}
-
-							@Override
-							protected Object displayDialog(
-									final Object currentValue) {
-								final DistanceModel dm = (DistanceModel) currentValue;
-								final DistanceEditorDialog ded = new DistanceEditorDialog(
-										getShell());
-
-								if (ded.open(ScenarioEditor.this, dm) == Window.OK)
-									return ded.getResult();
-
-								return null;
-							}
-						};
-					}
-				});
-
-		// Disable/Hide Slot ID editors
-		page.setEditorFactoryForFeature(CargoPackage.eINSTANCE.getSlot_Id(),
-				null);
-
-		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_LoadSlot(),
-				"Load");
-		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
-				"Discharge");
-		page.setNameForFeature(
-				CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
-
-		page.setNameForFeature(
-				FleetPackage.eINSTANCE.getVesselStateAttributes_NboRate(),
-				"NBO Rate");
-		page.setNameForFeature(
-				FleetPackage.eINSTANCE.getVesselStateAttributes_IdleNBORate(),
-				"Idle NBO Rate");
-
-		page.setNameForFeature(
-				CargoPackage.eINSTANCE.getCargo_AllowedVessels(), "Restrict To");
-	}
+//	/**
+//	 * Add editors to any detail view container
+//	 * 
+//	 * @param page
+//	 */
+//	public void setupDetailViewContainer(final IDetailViewContainer page) {
+//		page.addDefaultEditorFactories();
+//
+//		page.setEditorFactoryForFeature(
+//				PortPackage.eINSTANCE.getPort_DefaultWindowStart(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor commandProcessor) {
+//						final List<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
+//						for (int i = 0; i < 24; i++) {
+//							values.add(new Pair<String, Object>(String.format(
+//									"%02d:00", i), i));
+//						}
+//						return new ValueListInlineEditor(path, feature,
+//								editingDomain, commandProcessor, values);
+//					}
+//				});
+//
+//		page.setEditorFactoryForFeature(
+//				PortPackage.eINSTANCE.getPort_TimeZone(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor commandProcessor) {
+//						return new TimezoneInlineEditor(path, feature,
+//								editingDomain, commandProcessor);
+//					}
+//				});
+//
+//		page.setEditorFactoryForFeature(
+//				ScenarioPackage.eINSTANCE.getUUIDObject_UUID(), null);
+//
+//		page.setEditorFactoryForClassifier(PortPackage.eINSTANCE.getPort(),
+//				new MultiReferenceEditorFactory(getEditingDomain(),
+//						portProvider));
+//
+//		page.setEditorFactoryForClassifier(
+//				FleetPackage.eINSTANCE.getVesselFuel(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor processor) {
+//						return new ReferenceInlineEditor(path, feature,
+//								editingDomain, processor, fuelProvider);
+//					}
+//				});
+//
+//		page.setEditorFactoryForClassifier(
+//				ContractPackage.eINSTANCE.getContract(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor processor) {
+//						return new ReferenceInlineEditor(path, feature,
+//								editingDomain, processor, contractProvider) {
+//							@Override
+//							protected boolean updateOnChangeToFeature(
+//									final Object changedFeature) {
+//								// update contract display when port is changed
+//								// on a load slot.
+//								return super
+//										.updateOnChangeToFeature(changedFeature)
+//										|| ((changedFeature instanceof EReference) && ((EReference) changedFeature)
+//												.getEReferenceType().equals(
+//														PortPackage.eINSTANCE
+//																.getPort()));
+//							}
+//						};
+//					}
+//				});
+//
+//		page.setEditorFactoryForClassifier(MarketPackage.eINSTANCE.getIndex(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor processor) {
+//						return new ReferenceInlineEditor(path, feature,
+//								editingDomain, processor, indexProvider);
+//					}
+//				});
+//
+//		page.setEditorFactoryForClassifier(
+//				CargoPackage.eINSTANCE.getCargoType(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor processor) {
+//						return new EENumInlineEditor(path,
+//								(EAttribute) feature, editingDomain, processor);
+//					}
+//				});
+//
+//		page.setEditorFactoryForClassifier(
+//				ContractPackage.eINSTANCE.getEntity(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor processor) {
+//						return new ReferenceInlineEditor(path, feature,
+//								editingDomain, processor, entityProvider);
+//					}
+//				});
+//
+//		page.setEditorFactoryForFeature(FleetPackage.eINSTANCE
+//				.getVesselStateAttributes_FuelConsumptionCurve(),
+//				new IMultiInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor processor) {
+//						return new FuelCurveEditor(path, feature,
+//								editingDomain, processor);
+//					}
+//
+//					@Override
+//					public IInlineEditor createMultiEditor(EMFPath path,
+//							EStructuralFeature feature,
+//							ICommandProcessor commandProcessor) {
+//						return createEditor(path, feature, commandProcessor);
+//					}
+//				});
+//
+//		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE
+//				.getVesselClass(), new MultiReferenceEditorFactory(
+//				getEditingDomain(), vesselClassProvider));
+//
+//		page.setEditorFactoryForFeature(
+//				FleetPackage.eINSTANCE.getVesselClass_CanalCosts(),
+//				new IMultiInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(EMFPath path,
+//							EStructuralFeature feature,
+//							ICommandProcessor commandProcessor) {
+//						throw new RuntimeException(
+//								"There should be no single references to vessel class costs in the model");
+//					}
+//
+//					@Override
+//					public IInlineEditor createMultiEditor(EMFPath path,
+//							EStructuralFeature feature,
+//							ICommandProcessor commandProcessor) {
+//						return new VesselClassCostEditor(path, feature,
+//								commandProcessor, ScenarioEditor.this);
+//					}
+//				});
+//
+//		page.setEditorFactoryForClassifier(FleetPackage.eINSTANCE.getVessel(),
+//				new MultiReferenceEditorFactory(getEditingDomain(),
+//						vesselProvider));
+//
+//		page.setEditorFactoryForClassifier(
+//				SchedulePackage.eINSTANCE.getSchedule(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor processor) {
+//						return new ReferenceInlineEditor(path, feature,
+//								editingDomain, processor, scheduleProvider);
+//					}
+//				});
+//
+//		page.setEditorFactoryForFeature(
+//				PortPackage.eINSTANCE.getCanal_DistanceModel(),
+//				new IInlineEditorFactory() {
+//					@Override
+//					public IInlineEditor createEditor(final EMFPath path,
+//							final EStructuralFeature feature,
+//							final ICommandProcessor commandProcessor) {
+//						return new DialogInlineEditor(path, feature,
+//								editingDomain, commandProcessor) {
+//							@Override
+//							protected String render(Object value) {
+//								return "Distance Matrix";
+//							}
+//
+//							@Override
+//							protected Object displayDialog(
+//									final Object currentValue) {
+//								final DistanceModel dm = (DistanceModel) currentValue;
+//								final DistanceEditorDialog ded = new DistanceEditorDialog(
+//										getShell());
+//
+//								if (ded.open(ScenarioEditor.this, dm) == Window.OK)
+//									return ded.getResult();
+//
+//								return null;
+//							}
+//						};
+//					}
+//				});
+//
+//		// Disable/Hide Slot ID editors
+//		page.setEditorFactoryForFeature(CargoPackage.eINSTANCE.getSlot_Id(),
+//				null);
+//
+//		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_LoadSlot(),
+//				"Load");
+//		page.setNameForFeature(CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
+//				"Discharge");
+//		page.setNameForFeature(
+//				CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue(), "Cargo CV");
+//
+//		page.setNameForFeature(
+//				FleetPackage.eINSTANCE.getVesselStateAttributes_NboRate(),
+//				"NBO Rate");
+//		page.setNameForFeature(
+//				FleetPackage.eINSTANCE.getVesselStateAttributes_IdleNBORate(),
+//				"Idle NBO Rate");
+//
+//		page.setNameForFeature(
+//				CargoPackage.eINSTANCE.getCargo_AllowedVessels(), "Restrict To");
+//	}
 
 	/**
 	 * This deals with how we want selection in the outliner to affect the other
@@ -2740,5 +2753,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	public IReferenceValueProvider getEntityProvider() {
 		return entityProvider;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider#getModel(org.eclipse.emf.ecore.EClass)
+	 */
+	@Override
+	public EObject getModel() {
+		return getScenario();
 	}
 }

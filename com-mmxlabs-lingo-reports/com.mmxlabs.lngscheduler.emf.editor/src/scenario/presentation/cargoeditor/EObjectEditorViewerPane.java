@@ -40,7 +40,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -54,14 +53,17 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import scenario.NamedObject;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.handlers.AddAction;
-import scenario.presentation.cargoeditor.importer.ExportCSVAction;
-import scenario.presentation.cargoeditor.importer.ImportCSVAction;
-import scenario.presentation.cargoeditor.importer.ImportUI;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
+import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
+import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
+import com.mmxlabs.shiplingo.importer.importers.ImportUI;
+import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
+import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
 
 /**
  * A viewerpane which displays a list of EObjects in a table and lets you edit
@@ -83,7 +85,16 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
-		viewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI);
+		viewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI) {
+			@Override
+			protected boolean refreshOrGiveUp() {
+				if (ImportUI.isImporting()) {
+					ImportUI.refreshLater(viewer);
+					return true;
+				}
+				return false;
+			}
+		};
 
 		getToolBarManager().add(new GroupMarker("pack"));
 		getToolBarManager().add(new GroupMarker("additions"));
