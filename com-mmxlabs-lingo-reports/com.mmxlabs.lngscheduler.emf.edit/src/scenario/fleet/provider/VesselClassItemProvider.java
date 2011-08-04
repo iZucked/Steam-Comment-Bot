@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import scenario.ScenarioPackage;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
@@ -69,6 +70,7 @@ public class VesselClassItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNotesPropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addMinSpeedPropertyDescriptor(object);
 			addMaxSpeedPropertyDescriptor(object);
@@ -81,6 +83,28 @@ public class VesselClassItemProvider
 			addInaccessiblePortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnnotatedObject_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnnotatedObject_notes_feature", "_UI_AnnotatedObject_type"),
+				 ScenarioPackage.Literals.ANNOTATED_OBJECT__NOTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -373,6 +397,7 @@ public class VesselClassItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselClass.class)) {
+			case FleetPackage.VESSEL_CLASS__NOTES:
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:

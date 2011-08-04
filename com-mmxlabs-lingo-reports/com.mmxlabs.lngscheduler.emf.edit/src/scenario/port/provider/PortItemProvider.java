@@ -69,6 +69,7 @@ public class PortItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addNotesPropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
 			addDefaultCVvaluePropertyDescriptor(object);
@@ -92,6 +93,28 @@ public class PortItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_NamedObject_name_description"),
 				 ScenarioPackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnnotatedObject_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnnotatedObject_notes_feature", "_UI_AnnotatedObject_type"),
+				 ScenarioPackage.Literals.ANNOTATED_OBJECT__NOTES,
 				 true,
 				 false,
 				 false,
@@ -248,6 +271,7 @@ public class PortItemProvider
 
 		switch (notification.getFeatureID(Port.class)) {
 			case PortPackage.PORT__NAME:
+			case PortPackage.PORT__NOTES:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 			case PortPackage.PORT__DEFAULT_CVVALUE:
