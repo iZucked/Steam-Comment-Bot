@@ -8,9 +8,12 @@
 package com.mmxlabs.shiplingo.ui.detailview.editors;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
@@ -77,11 +80,13 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	@Override
 	public void setInput(EObject source) {
 		super.setInput(source);
+		
 	}
 
 	@Override
 	protected void updateControl() {
-		if (combo.isDisposed()) return;
+		if (combo.isDisposed())
+			return;
 		final List<Pair<String, EObject>> values = valueProvider
 				.getAllowedValues(input, feature);
 		// update combo contents
@@ -98,14 +103,22 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		if (combo.isDisposed()) return;
+		if (combo.isDisposed())
+			return;
 		final int curIndex = valueList.indexOf(value);
-		if (curIndex == -1) combo.setText(""); 
-		else combo.setText(nameList.get(curIndex));
+		if (curIndex == -1)
+			combo.setText("");
+		else
+			combo.setText(nameList.get(curIndex));
 	}
 
 	@Override
 	protected Object getInitialUnsetValue() {
 		return null;
+	}
+
+	@Override
+	protected boolean updateOnChangeToFeature(Object changedFeature) {
+		return valueProvider.updateOnChangeToFeature(changedFeature);
 	}
 }

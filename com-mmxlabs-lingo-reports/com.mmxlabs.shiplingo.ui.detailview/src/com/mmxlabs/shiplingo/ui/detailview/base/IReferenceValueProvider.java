@@ -19,4 +19,13 @@ public interface IReferenceValueProvider {
 	public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
 			final EObject referer, final EReference feature,
 			final EObject referenceValue);
+
+	/**
+	 * Return true if labels/values for a feature on an object should be updated
+	 * when the given separate feature is changed on that object.
+	 * 
+	 * @param changedFeature a feature which might be changed
+	 * @return whether to update
+	 */
+	public boolean updateOnChangeToFeature(Object changedFeature);
 }
