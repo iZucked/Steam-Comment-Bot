@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import scenario.ScenarioPackage;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.shiplingo.ui.detailview.editors.TextInlineEditor;
 
 /**
@@ -28,9 +29,9 @@ public class AnnotatedObjectComposite extends AbstractDetailComposite {
 	 */
 	public AnnotatedObjectComposite(final Composite container, final int style,
 			final String mainGroupTitle, final boolean validate) {
-		super(container, style, validate);
-		this.mainGroupTitle = mainGroupTitle;
-	}
+    super(container, style, validate);
+    this.mainGroupTitle = mainGroupTitle;
+  }
 
 	public AnnotatedObjectComposite(final Composite container, final int style,
 			final boolean validate) {
@@ -47,27 +48,27 @@ public class AnnotatedObjectComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected void createContents(final Composite group) {
-		final Composite mainGroup;
+    final Composite mainGroup;
 
-		if (group == null) {
-			mainGroup = createGroup(this, mainGroupTitle);
-		} else {
-			mainGroup = group;
-		}
+    if (group == null) {
+      mainGroup = createGroup(this, mainGroupTitle);
+    } else {
+      mainGroup = group;
+    }
+    
+    super.createContents(mainGroup);		
 
-		super.createContents(mainGroup);
-
-		createFields(this, mainGroup);
-	}
+    createFields(this, mainGroup);
+  }
 
 	/**
 	 * @generated
 	 */
 	protected static void createFields(final AbstractDetailComposite composite,
 			final Composite mainGroup) {
-		createFieldsFromSupers(composite, mainGroup);
-		createAnnotatedObjectFields(composite, mainGroup);
-	}
+    createFieldsFromSupers(composite, mainGroup);
+    createAnnotatedObjectFields(composite, mainGroup);
+  }
 
 	/**
 	 * Create fields belonging to all the supertypes of AnnotatedObject.
@@ -76,7 +77,7 @@ public class AnnotatedObjectComposite extends AbstractDetailComposite {
 	 */
 	protected static void createFieldsFromSupers(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-	}
+  }
 
 	/**
 	 * Create fields belonging directly to AnnotatedObject
@@ -85,8 +86,8 @@ public class AnnotatedObjectComposite extends AbstractDetailComposite {
 	 */
 	protected static void createAnnotatedObjectFields(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-		createNotesEditor(composite, mainGroup);
-	}
+    createNotesEditor(composite, mainGroup);
+  }
 
 	/**
 	 * Create an editor for the notes feature on AnnotatedObject

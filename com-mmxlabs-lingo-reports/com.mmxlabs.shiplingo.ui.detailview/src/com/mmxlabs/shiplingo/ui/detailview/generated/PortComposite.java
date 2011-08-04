@@ -1,5 +1,7 @@
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import scenario.port.PortPackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.shiplingo.ui.detailview.editors.TimezoneInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ValueListInlineEditor;
 
@@ -30,9 +33,9 @@ public class PortComposite extends AbstractDetailComposite {
 	 */
 	public PortComposite(final Composite container, final int style,
 			final String mainGroupTitle, final boolean validate) {
-		super(container, style, validate);
-		this.mainGroupTitle = mainGroupTitle;
-	}
+    super(container, style, validate);
+    this.mainGroupTitle = mainGroupTitle;
+  }
 
 	public PortComposite(final Composite container, final int style,
 			final boolean validate) {
@@ -49,18 +52,18 @@ public class PortComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected void createContents(final Composite group) {
-		final Composite mainGroup;
+    final Composite mainGroup;
 
-		if (group == null) {
-			mainGroup = createGroup(this, mainGroupTitle);
-		} else {
-			mainGroup = group;
-		}
+    if (group == null) {
+      mainGroup = createGroup(this, mainGroupTitle);
+    } else {
+      mainGroup = group;
+    }
+    
+    super.createContents(mainGroup);		
 
-		super.createContents(mainGroup);
-
-		createFields(this, mainGroup);
-	}
+    createFields(this, mainGroup);
+  }
 
 	/**
 	 * @generated NO notes last
@@ -91,12 +94,12 @@ public class PortComposite extends AbstractDetailComposite {
 	 */
 	protected static void createPortFields(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-		createTimeZoneEditor(composite, mainGroup);
-		createRegasEfficiencyEditor(composite, mainGroup);
-		createDefaultCVvalueEditor(composite, mainGroup);
-		createDefaultWindowStartEditor(composite, mainGroup);
-		createDefaultSlotDurationEditor(composite, mainGroup);
-	}
+    createTimeZoneEditor(composite, mainGroup);
+    createRegasEfficiencyEditor(composite, mainGroup);
+    createDefaultCVvalueEditor(composite, mainGroup);
+    createDefaultWindowStartEditor(composite, mainGroup);
+    createDefaultSlotDurationEditor(composite, mainGroup);
+  }
 
 	/**
 	 * Create an editor for the timeZone feature on Port
@@ -120,10 +123,10 @@ public class PortComposite extends AbstractDetailComposite {
 	 */
 	protected static void createRegasEfficiencyEditor(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-		composite.createEditorControl(mainGroup, composite
-				.createEditor(PortPackage.eINSTANCE.getPort_RegasEfficiency()),
-				"Regas Efficiency");
-	}
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(PortPackage.eINSTANCE.getPort_RegasEfficiency()),
+      "Regas Efficiency");
+  }
 
 	/**
 	 * Create an editor for the defaultCVvalue feature on Port
@@ -165,9 +168,8 @@ public class PortComposite extends AbstractDetailComposite {
 	 */
 	protected static void createDefaultSlotDurationEditor(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-		composite.createEditorControl(mainGroup, composite
-				.createEditor(PortPackage.eINSTANCE
-						.getPort_DefaultSlotDuration()),
-				"Default Slot Duration");
-	}
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(PortPackage.eINSTANCE.getPort_DefaultSlotDuration()),
+      "Default Slot Duration");
+  }
 }

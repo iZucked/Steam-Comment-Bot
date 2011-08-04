@@ -28,9 +28,9 @@ public class CanalComposite extends AbstractDetailComposite {
 	 */
 	public CanalComposite(final Composite container, final int style,
 			final String mainGroupTitle, final boolean validate) {
-		super(container, style, validate);
-		this.mainGroupTitle = mainGroupTitle;
-	}
+    super(container, style, validate);
+    this.mainGroupTitle = mainGroupTitle;
+  }
 
 	public CanalComposite(final Composite container, final int style,
 			final boolean validate) {
@@ -43,8 +43,8 @@ public class CanalComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	public CanalComposite(final Composite container, final int style) {
-		this(container, style, "Canal", true);
-	}
+    this(container, style, "Canal", true);
+  }
 
 	/**
 	 * Create the main contents
@@ -52,27 +52,27 @@ public class CanalComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected void createContents(final Composite group) {
-		final Composite mainGroup;
+    final Composite mainGroup;
 
-		if (group == null) {
-			mainGroup = createGroup(this, mainGroupTitle);
-		} else {
-			mainGroup = group;
-		}
+    if (group == null) {
+      mainGroup = createGroup(this, mainGroupTitle);
+    } else {
+      mainGroup = group;
+    }
+    
+    super.createContents(mainGroup);		
 
-		super.createContents(mainGroup);
-
-		createFields(this, mainGroup);
-	}
+    createFields(this, mainGroup);
+  }
 
 	/**
 	 * @generated
 	 */
 	protected static void createFields(final AbstractDetailComposite composite,
 			final Composite mainGroup) {
-		createFieldsFromSupers(composite, mainGroup);
-		createCanalFields(composite, mainGroup);
-	}
+    createFieldsFromSupers(composite, mainGroup);
+    createCanalFields(composite, mainGroup);
+  }
 
 	/**
 	 * Create fields belonging to all the supertypes of Canal.
@@ -81,9 +81,9 @@ public class CanalComposite extends AbstractDetailComposite {
 	 */
 	protected static void createFieldsFromSupers(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-		UUIDObjectComposite.createFields(composite, mainGroup);
-		NamedObjectComposite.createFields(composite, mainGroup);
-	}
+      UUIDObjectComposite.createFields(composite, mainGroup);
+      NamedObjectComposite.createFields(composite, mainGroup);
+  }
 
 	/**
 	 * Create fields belonging directly to Canal
@@ -92,8 +92,8 @@ public class CanalComposite extends AbstractDetailComposite {
 	 */
 	protected static void createCanalFields(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-		createDistanceModelEditor(composite, mainGroup);
-	}
+    createDistanceModelEditor(composite, mainGroup);
+  }
 
 	/**
 	 * Create an editor for the distanceModel feature on Canal

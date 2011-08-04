@@ -76,6 +76,8 @@ public abstract class ContractComposite extends AbstractDetailComposite {
 	protected static void createContractFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createEntityEditor(composite, mainGroup);
     createDefaultPortsEditor(composite, mainGroup);
+    createMinQuantityEditor(composite, mainGroup);
+    createMaxQuantityEditor(composite, mainGroup);
   }
 
 		
@@ -97,5 +99,25 @@ public abstract class ContractComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(ContractPackage.eINSTANCE.getContract_DefaultPorts()),
       "Default Ports");
+  }
+
+  /**
+   * Create an editor for the minQuantity feature on Contract
+   * @generated
+   */
+  protected static void createMinQuantityEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(ContractPackage.eINSTANCE.getContract_MinQuantity()),
+      "Min Quantity");
+  }
+
+  /**
+   * Create an editor for the maxQuantity feature on Contract
+   * @generated
+   */
+  protected static void createMaxQuantityEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(ContractPackage.eINSTANCE.getContract_MaxQuantity()),
+      "Max Quantity");
   }
 }
