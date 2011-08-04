@@ -431,6 +431,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Add supertypes to classes
 		portEClass.getESuperTypes().add(theScenarioPackage.getUUIDObject());
 		portEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		portEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
 		canalEClass.getESuperTypes().add(theScenarioPackage.getUUIDObject());
 		canalEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 

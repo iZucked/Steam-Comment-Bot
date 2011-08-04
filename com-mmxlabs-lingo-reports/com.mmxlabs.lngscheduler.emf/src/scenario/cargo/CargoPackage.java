@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -128,13 +129,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO = 1;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__NOTES = ScenarioPackage.ANNOTATED_OBJECT__NOTES;
+
+	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ID = 0;
+	int CARGO__ID = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -143,7 +153,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = 1;
+	int CARGO__ALLOWED_VESSELS = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Load Slot</b></em>' containment reference.
@@ -152,7 +162,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__LOAD_SLOT = 2;
+	int CARGO__LOAD_SLOT = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Slot</b></em>' containment reference.
@@ -161,7 +171,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__DISCHARGE_SLOT = 3;
+	int CARGO__DISCHARGE_SLOT = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
@@ -170,7 +180,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__CARGO_TYPE = 4;
+	int CARGO__CARGO_TYPE = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -179,7 +189,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = 5;
+	int CARGO_FEATURE_COUNT = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Cargo</em>' class.
@@ -188,7 +198,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_OPERATION_COUNT = 0;
+	int CARGO_OPERATION_COUNT = ScenarioPackage.ANNOTATED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.SlotImpl <em>Slot</em>}' class.

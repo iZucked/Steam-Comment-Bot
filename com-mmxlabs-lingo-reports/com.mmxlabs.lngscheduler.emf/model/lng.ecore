@@ -3,7 +3,7 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="scenario"
     nsURI="http://com.mmxlabs.lng.emf2" nsPrefix="com.mmxlabs.lng.emf">
-  <eClassifiers xsi:type="ecore:EClass" name="Scenario">
+  <eClassifiers xsi:type="ecore:EClass" name="Scenario" eSuperTypes="#//AnnotatedObject">
     <eOperations name="createMissingModels">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="if (getPortModel() == null) {&#xD;&#xA;&#x9;setPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());&#xD;&#xA;&#x9;getContainedModels().add(getPortModel());&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;if (getDistanceModel() == null) {&#xD;&#xA;&#x9;setDistanceModel(scenario.port.PortFactory.eINSTANCE.createDistanceModel());&#xD;&#xA;&#x9;getContainedModels().add(getDistanceModel());&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;if (getCanalModel() == null) {&#xD;&#xA;&#x9;setCanalModel(scenario.port.PortFactory.eINSTANCE.createCanalModel());&#xD;&#xA;&#x9;getContainedModels().add(getCanalModel());&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;if (getFleetModel() == null)&#xD;&#xA;&#x9;setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());&#xD;&#xA;&#xD;&#xA;if (getCargoModel() == null)&#xD;&#xA;&#x9;setCargoModel(scenario.cargo.CargoFactory.eINSTANCE.createCargoModel());&#xD;&#xA;&#xD;&#xA;if (getContractModel() == null)&#xD;&#xA;&#x9;setContractModel(scenario.contract.ContractFactory.eINSTANCE.createContractModel());&#xD;&#xA;&#xD;&#xA;if (getScheduleModel() == null)&#xD;&#xA;&#x9;setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());&#xD;&#xA;&#xD;&#xA;if (getMarketModel() == null)&#xD;&#xA;&#x9;setMarketModel(scenario.market.MarketFactory.eINSTANCE.createMarketModel());&#xD;&#xA;&#xD;&#xA;if (getOptimisation() == null)&#xD;&#xA;&#x9;&#x9;&#x9;setOptimisation(scenario.optimiser.OptimiserFactory.eINSTANCE.createOptimisation());"/>
@@ -58,6 +58,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="DateAndOptionalTime" instanceClassName="com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Percentage" instanceClassName="java.lang.Double"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotatedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
   <eSubpackages name="fleet" nsURI="http://com.mmxlabs.lng.emf2/fleet" nsPrefix="com.mmxlabs.lng.emf.fleet">
     <eClassifiers xsi:type="ecore:EClass" name="FleetModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="fleet" upperBound="-1"
@@ -69,7 +73,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="fuels" upperBound="-1"
           eType="#//fleet/VesselFuel" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Vessel" eSuperTypes="#//NamedObject">
+    <eClassifiers xsi:type="ecore:EClass" name="Vessel" eSuperTypes="#//NamedObject #//AnnotatedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeChartered" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyCharterOutPrice"
@@ -86,7 +90,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="portExclusions" upperBound="-1"
           eType="#//fleet/PortExclusion" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="VesselClass" eSuperTypes="#//NamedObject">
+    <eClassifiers xsi:type="ecore:EClass" name="VesselClass" eSuperTypes="#//NamedObject #//AnnotatedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
@@ -159,7 +163,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"
           unsettable="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true">
+    <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true" eSuperTypes="#//AnnotatedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
@@ -623,7 +627,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
           eType="#//port/Port" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//UUIDObject #//NamedObject">
+    <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//UUIDObject #//NamedObject #//AnnotatedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="regasEfficiency" lowerBound="1"
           eType="#//Percentage" defaultValueLiteral="1.0"/>
@@ -661,7 +665,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="spareLoadSlots" upperBound="-1"
           eType="#//cargo/LoadSlot" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Cargo">
+    <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="#//AnnotatedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1"
           eType="#//fleet/Vessel"/>

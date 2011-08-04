@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.Scenario;
 import scenario.ScenarioFactory;
@@ -77,6 +78,13 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	private EClass uuidObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass annotatedObjectEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -388,6 +396,24 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAnnotatedObject() {
+		return annotatedObjectEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAnnotatedObject_Notes() {
+		return (EAttribute)annotatedObjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getDateAndOptionalTime() {
 		return dateAndOptionalTimeEDataType;
 	}
@@ -455,6 +481,9 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		uuidObjectEClass = createEClass(UUID_OBJECT);
 		createEAttribute(uuidObjectEClass, UUID_OBJECT__UUID);
 
+		annotatedObjectEClass = createEClass(ANNOTATED_OBJECT);
+		createEAttribute(annotatedObjectEClass, ANNOTATED_OBJECT__NOTES);
+
 		// Create data types
 		dateAndOptionalTimeEDataType = createEDataType(DATE_AND_OPTIONAL_TIME);
 		percentageEDataType = createEDataType(PERCENTAGE);
@@ -506,6 +535,7 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		scenarioEClass.getESuperTypes().add(this.getAnnotatedObject());
 		namedObjectEClass.getESuperTypes().add(this.getScenarioObject());
 
 		// Initialize classes, features, and operations; add parameters
@@ -538,6 +568,9 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		initEClass(uuidObjectEClass, UUIDObject.class, "UUIDObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUUIDObject_UUID(), ecorePackage.getEString(), "UUID", "", 1, 1, UUIDObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(annotatedObjectEClass, AnnotatedObject.class, "AnnotatedObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAnnotatedObject_Notes(), ecorePackage.getEString(), "notes", "", 1, 1, AnnotatedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(dateAndOptionalTimeEDataType, DateAndOptionalTime.class, "DateAndOptionalTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

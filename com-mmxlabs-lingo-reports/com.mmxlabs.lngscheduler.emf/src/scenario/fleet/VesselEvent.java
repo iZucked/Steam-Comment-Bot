@@ -9,6 +9,7 @@ package scenario.fleet;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
+import scenario.AnnotatedObject;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.port.Port;
@@ -35,7 +36,7 @@ import scenario.port.Port;
  * @model abstract="true"
  * @generated
  */
-public interface VesselEvent extends EObject {
+public interface VesselEvent extends AnnotatedObject {
 	/**
 	 * Returns the value of the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->

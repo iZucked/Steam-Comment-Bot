@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
+import scenario.AnnotatedObject;
 import scenario.cargo.*;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoModel;
@@ -83,6 +84,7 @@ public class CargoSwitch<T> extends Switch<T> {
 			case CargoPackage.CARGO: {
 				Cargo cargo = (Cargo)theEObject;
 				T result = caseCargo(cargo);
+				if (result == null) result = caseAnnotatedObject(cargo);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -160,6 +162,21 @@ public class CargoSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLoadSlot(LoadSlot object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Annotated Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Annotated Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnnotatedObject(AnnotatedObject object) {
 		return null;
 	}
 

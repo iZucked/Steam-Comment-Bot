@@ -4584,5 +4584,33 @@
     <changes xsi:type="history:Delete" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures">
       <element xsi:type="ecore:EAttribute" name="defaultCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#/" referenceName="eClassifiers"
+        element="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject" featureName="name"
+        dataValue="AnnotatedObject"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//AnnotatedObject" referenceName="eStructuralFeatures"
+        element="lng.ecore#//AnnotatedObject/notes"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="name"
+        dataValue="notes"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="lowerBound"
+        dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="eType"
+        referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="defaultValueLiteral"
+        dataValue=" "/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="defaultValueLiteral"
+        dataValue="" oldDataValue=" "/>
+    <changes xsi:type="history:Add" element="lng.ecore#//Scenario" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//cargo/Cargo" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/Vessel" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/VesselClass" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//port/Port" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/VesselEvent" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
   </releases>
 </history:History>

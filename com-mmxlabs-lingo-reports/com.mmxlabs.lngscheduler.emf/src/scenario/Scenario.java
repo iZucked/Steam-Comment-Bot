@@ -46,7 +46,7 @@ import scenario.schedule.ScheduleModel;
  * @model
  * @generated
  */
-public interface Scenario extends EObject {
+public interface Scenario extends AnnotatedObject {
 	/**
 	 * Returns the value of the '<em><b>Fleet Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

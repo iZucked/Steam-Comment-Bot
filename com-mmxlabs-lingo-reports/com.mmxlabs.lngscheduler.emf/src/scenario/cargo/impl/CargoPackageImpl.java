@@ -516,9 +516,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
+		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
-		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
 		ContractPackage theContractPackage = (ContractPackage)EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI);
 
 		// Create type parameters
@@ -526,6 +526,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		cargoEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
 		loadSlotEClass.getESuperTypes().add(this.getSlot());
 
 		// Initialize classes, features, and operations; add parameters

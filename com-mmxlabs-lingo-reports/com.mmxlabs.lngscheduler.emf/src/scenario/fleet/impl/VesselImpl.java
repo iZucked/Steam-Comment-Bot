@@ -17,6 +17,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import scenario.AnnotatedObject;
+import scenario.ScenarioPackage;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.PortExclusion;
@@ -31,6 +33,7 @@ import scenario.impl.NamedObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link scenario.fleet.impl.VesselImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#isTimeChartered <em>Time Chartered</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getClass_ <em>Class</em>}</li>
@@ -43,6 +46,26 @@ import scenario.impl.NamedObjectImpl;
  * @generated
  */
 public class VesselImpl extends NamedObjectImpl implements Vessel {
+	/**
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NOTES_EDEFAULT = "";
+
+	/**
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected String notes = NOTES_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #isTimeChartered() <em>Time Chartered</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -149,6 +172,27 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.VESSEL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
+		notes = newNotes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__NOTES, oldNotes, notes));
 	}
 
 	/**
@@ -426,6 +470,8 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__NOTES:
+				return getNotes();
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				return isTimeChartered();
 			case FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE:
@@ -454,6 +500,9 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__NOTES:
+				setNotes((String)newValue);
+				return;
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				setTimeChartered((Boolean)newValue);
 				return;
@@ -485,6 +534,9 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				setTimeChartered(TIME_CHARTERED_EDEFAULT);
 				return;
@@ -515,6 +567,8 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case FleetPackage.VESSEL__TIME_CHARTERED:
 				return timeChartered != TIME_CHARTERED_EDEFAULT;
 			case FleetPackage.VESSEL__DAILY_CHARTER_OUT_PRICE:
@@ -537,11 +591,45 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == AnnotatedObject.class) {
+			switch (derivedFeatureID) {
+				case FleetPackage.VESSEL__NOTES: return ScenarioPackage.ANNOTATED_OBJECT__NOTES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == AnnotatedObject.class) {
+			switch (baseFeatureID) {
+				case ScenarioPackage.ANNOTATED_OBJECT__NOTES: return FleetPackage.VESSEL__NOTES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (timeChartered: ");
+		result.append(" (notes: ");
+		result.append(notes);
+		result.append(", timeChartered: ");
 		result.append(timeChartered);
 		result.append(", dailyCharterOutPrice: ");
 		if (dailyCharterOutPriceESet) result.append(dailyCharterOutPrice); else result.append("<unset>");

@@ -1017,7 +1017,10 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 
 		// Add supertypes to classes
 		vesselEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		vesselEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
 		vesselClassEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		vesselClassEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
+		vesselEventEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
 		charterOutEClass.getESuperTypes().add(this.getVesselEvent());
 		drydockEClass.getESuperTypes().add(this.getVesselEvent());
 		vesselFuelEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());

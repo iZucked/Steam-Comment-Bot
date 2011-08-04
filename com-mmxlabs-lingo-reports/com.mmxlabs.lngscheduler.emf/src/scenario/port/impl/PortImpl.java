@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 import scenario.ScenarioPackage;
@@ -29,6 +30,7 @@ import scenario.port.PortPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVvalue <em>Default CVvalue</em>}</li>
@@ -59,6 +61,26 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NOTES_EDEFAULT = "";
+
+	/**
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected String notes = NOTES_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
@@ -205,6 +227,27 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
+		notes = newNotes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__NOTES, oldNotes, notes));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EObject getContainer() {
 		return eContainer();
 	}
@@ -324,6 +367,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		switch (featureID) {
 			case PortPackage.PORT__NAME:
 				return getName();
+			case PortPackage.PORT__NOTES:
+				return getNotes();
 			case PortPackage.PORT__TIME_ZONE:
 				return getTimeZone();
 			case PortPackage.PORT__REGAS_EFFICIENCY:
@@ -348,6 +393,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		switch (featureID) {
 			case PortPackage.PORT__NAME:
 				setName((String)newValue);
+				return;
+			case PortPackage.PORT__NOTES:
+				setNotes((String)newValue);
 				return;
 			case PortPackage.PORT__TIME_ZONE:
 				setTimeZone((String)newValue);
@@ -379,6 +427,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case PortPackage.PORT__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
 			case PortPackage.PORT__TIME_ZONE:
 				setTimeZone(TIME_ZONE_EDEFAULT);
 				return;
@@ -408,6 +459,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		switch (featureID) {
 			case PortPackage.PORT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case PortPackage.PORT__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case PortPackage.PORT__TIME_ZONE:
 				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
 			case PortPackage.PORT__REGAS_EFFICIENCY:
@@ -440,6 +493,12 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				default: return -1;
 			}
 		}
+		if (baseClass == AnnotatedObject.class) {
+			switch (derivedFeatureID) {
+				case PortPackage.PORT__NOTES: return ScenarioPackage.ANNOTATED_OBJECT__NOTES;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -461,6 +520,12 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				default: return -1;
 			}
 		}
+		if (baseClass == AnnotatedObject.class) {
+			switch (baseFeatureID) {
+				case ScenarioPackage.ANNOTATED_OBJECT__NOTES: return PortPackage.PORT__NOTES;
+				default: return -1;
+			}
+		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
@@ -478,6 +543,11 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			}
 		}
 		if (baseClass == NamedObject.class) {
+			switch (baseOperationID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == AnnotatedObject.class) {
 			switch (baseOperationID) {
 				default: return -1;
 			}
@@ -511,6 +581,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", notes: ");
+		result.append(notes);
 		result.append(", timeZone: ");
 		result.append(timeZone);
 		result.append(", regasEfficiency: ");

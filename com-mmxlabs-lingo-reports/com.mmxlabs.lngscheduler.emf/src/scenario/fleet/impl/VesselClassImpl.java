@@ -18,6 +18,8 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import scenario.AnnotatedObject;
+import scenario.ScenarioPackage;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortExclusion;
 import scenario.fleet.VesselClass;
@@ -34,6 +36,7 @@ import scenario.port.Port;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
@@ -54,6 +57,26 @@ import scenario.port.Port;
  * @generated
  */
 public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
+	/**
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NOTES_EDEFAULT = "";
+
+	/**
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected String notes = NOTES_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -300,6 +323,27 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.VESSEL_CLASS;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
+		notes = newNotes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__NOTES, oldNotes, notes));
 	}
 
 	/**
@@ -729,6 +773,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_CLASS__NOTES:
+				return getNotes();
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				return getCapacity();
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
@@ -773,6 +819,9 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_CLASS__NOTES:
+				setNotes((String)newValue);
+				return;
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				setCapacity((Long)newValue);
 				return;
@@ -830,6 +879,9 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_CLASS__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				setCapacity(CAPACITY_EDEFAULT);
 				return;
@@ -884,6 +936,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_CLASS__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				return capacity != CAPACITY_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
@@ -922,11 +976,45 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == AnnotatedObject.class) {
+			switch (derivedFeatureID) {
+				case FleetPackage.VESSEL_CLASS__NOTES: return ScenarioPackage.ANNOTATED_OBJECT__NOTES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == AnnotatedObject.class) {
+			switch (baseFeatureID) {
+				case ScenarioPackage.ANNOTATED_OBJECT__NOTES: return FleetPackage.VESSEL_CLASS__NOTES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (capacity: ");
+		result.append(" (notes: ");
+		result.append(notes);
+		result.append(", capacity: ");
 		result.append(capacity);
 		result.append(", minSpeed: ");
 		result.append(minSpeed);

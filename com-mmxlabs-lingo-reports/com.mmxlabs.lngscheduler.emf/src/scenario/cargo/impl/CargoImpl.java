@@ -23,6 +23,7 @@ import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.fleet.Vessel;
+import scenario.impl.AnnotatedObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -41,7 +42,7 @@ import scenario.fleet.Vessel;
  *
  * @generated
  */
-public class CargoImpl extends EObjectImpl implements Cargo {
+public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	/**
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->

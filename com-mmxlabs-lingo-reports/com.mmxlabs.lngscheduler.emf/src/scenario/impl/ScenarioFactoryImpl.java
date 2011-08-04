@@ -68,6 +68,7 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ScenarioPackage.SCENARIO: return createScenario();
+			case ScenarioPackage.ANNOTATED_OBJECT: return createAnnotatedObject();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -112,6 +113,16 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements
 	public Scenario createScenario() {
 		ScenarioImpl scenario = new ScenarioImpl();
 		return scenario;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AnnotatedObject createAnnotatedObject() {
+		AnnotatedObjectImpl annotatedObject = new AnnotatedObjectImpl();
+		return annotatedObject;
 	}
 
 	/**

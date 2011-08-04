@@ -6,6 +6,7 @@
  */
 package scenario.port;
 
+import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.UUIDObject;
 
@@ -29,7 +30,7 @@ import scenario.UUIDObject;
  * @model
  * @generated
  */
-public interface Port extends UUIDObject, NamedObject {
+public interface Port extends UUIDObject, NamedObject, AnnotatedObject {
 	/**
 	 * Returns the value of the '<em><b>Time Zone</b></em>' attribute.
 	 * <!-- begin-user-doc -->

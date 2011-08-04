@@ -8,6 +8,7 @@ package scenario.fleet;
 
 import org.eclipse.emf.common.util.EList;
 
+import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.port.Port;
 
@@ -40,7 +41,7 @@ import scenario.port.Port;
  * @model
  * @generated
  */
-public interface VesselClass extends NamedObject {
+public interface VesselClass extends NamedObject, AnnotatedObject {
 	/**
 	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
