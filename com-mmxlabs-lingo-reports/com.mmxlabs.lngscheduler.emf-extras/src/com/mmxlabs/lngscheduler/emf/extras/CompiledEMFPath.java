@@ -31,6 +31,28 @@ public class CompiledEMFPath extends EMFPath {
 		}
 	}
 
+	/**
+	 * Create a new path by appending to an existing path. 
+	 * @param failSilently
+	 * @param path
+	 * @param append
+	 */
+	public CompiledEMFPath(final EMFPath path,
+			final Object append) {
+		this(path.failSilently, appendPath(path, append));
+	}
+
+	/**
+	 * @param path1
+	 * @param append
+	 * @return
+	 */
+	private static Object[] appendPath(final EMFPath path, final Object append) {
+		final Object[] result = Arrays.copyOf(path.path, path.path.length+1);
+		result[result.length-1] = append;
+		return result;
+	}
+
 	@Override
 	public Object get(final EObject input) {
 		if (delegate == null)
