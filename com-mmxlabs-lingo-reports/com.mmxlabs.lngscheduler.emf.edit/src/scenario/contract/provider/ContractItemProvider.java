@@ -23,6 +23,8 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import scenario.contract.Contract;
 import scenario.contract.ContractPackage;
 
@@ -66,6 +68,8 @@ public class ContractItemProvider
 
 			addEntityPropertyDescriptor(object);
 			addDefaultPortsPropertyDescriptor(object);
+			addMinQuantityPropertyDescriptor(object);
+			addMaxQuantityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -115,6 +119,50 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min Quantity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinQuantityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_minQuantity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_minQuantity_feature", "_UI_Contract_type"),
+				 ContractPackage.Literals.CONTRACT__MIN_QUANTITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Quantity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxQuantityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_maxQuantity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_maxQuantity_feature", "_UI_Contract_type"),
+				 ContractPackage.Literals.CONTRACT__MAX_QUANTITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Contract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -149,6 +197,13 @@ public class ContractItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(Contract.class)) {
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
