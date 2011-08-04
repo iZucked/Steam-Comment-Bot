@@ -340,13 +340,31 @@ public interface ContractPackage extends EPackage {
 	int CONTRACT__DEFAULT_PORTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__MIN_QUANTITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__MAX_QUANTITY = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int CONTRACT_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -392,6 +410,24 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__DEFAULT_PORTS = CONTRACT__DEFAULT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__MIN_QUANTITY = CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__MAX_QUANTITY = CONTRACT__MAX_QUANTITY;
 
 	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
@@ -446,6 +482,24 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__DEFAULT_PORTS = CONTRACT__DEFAULT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MIN_QUANTITY = CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MAX_QUANTITY = CONTRACT__MAX_QUANTITY;
 
 	/**
 	 * The feature id for the '<em><b>Markup</b></em>' attribute.
@@ -530,6 +584,24 @@ public interface ContractPackage extends EPackage {
 	int FIXED_PRICE_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
 	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -603,6 +675,24 @@ public interface ContractPackage extends EPackage {
 	int INDEX_PRICE_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -674,6 +764,24 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int NETBACK_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
 
 	/**
 	 * The feature id for the '<em><b>Lower Bound</b></em>' attribute.
@@ -756,6 +864,24 @@ public interface ContractPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROFIT_SHARING_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARING_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
 
 	/**
 	 * The feature id for the '<em><b>Alpha</b></em>' attribute.
@@ -1216,6 +1342,28 @@ public interface ContractPackage extends EPackage {
 	EReference getContract_DefaultPorts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.Contract#getMinQuantity <em>Min Quantity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Quantity</em>'.
+	 * @see scenario.contract.Contract#getMinQuantity()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_MinQuantity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.Contract#getMaxQuantity <em>Max Quantity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Quantity</em>'.
+	 * @see scenario.contract.Contract#getMaxQuantity()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_MaxQuantity();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1545,6 +1693,22 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTRACT__DEFAULT_PORTS = eINSTANCE.getContract_DefaultPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Quantity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__MIN_QUANTITY = eINSTANCE.getContract_MinQuantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Quantity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__MAX_QUANTITY = eINSTANCE.getContract_MaxQuantity();
 
 	}
 

@@ -21,6 +21,8 @@ import scenario.port.Port;
  * <ul>
  *   <li>{@link scenario.contract.Contract#getEntity <em>Entity</em>}</li>
  *   <li>{@link scenario.contract.Contract#getDefaultPorts <em>Default Ports</em>}</li>
+ *   <li>{@link scenario.contract.Contract#getMinQuantity <em>Min Quantity</em>}</li>
+ *   <li>{@link scenario.contract.Contract#getMaxQuantity <em>Max Quantity</em>}</li>
  * </ul>
  * </p>
  *
@@ -70,5 +72,57 @@ public interface Contract extends NamedObject {
 	 * @generated
 	 */
 	EList<Port> getDefaultPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Min Quantity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Quantity</em>' attribute.
+	 * @see #setMinQuantity(int)
+	 * @see scenario.contract.ContractPackage#getContract_MinQuantity()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getMinQuantity();
+
+	/**
+	 * Sets the value of the '{@link scenario.contract.Contract#getMinQuantity <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Quantity</em>' attribute.
+	 * @see #getMinQuantity()
+	 * @generated
+	 */
+	void setMinQuantity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Max Quantity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Max Quantity</em>' attribute.
+	 * @see #setMaxQuantity(int)
+	 * @see scenario.contract.ContractPackage#getContract_MaxQuantity()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getMaxQuantity();
+
+	/**
+	 * Sets the value of the '{@link scenario.contract.Contract#getMaxQuantity <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Max Quantity</em>' attribute.
+	 * @see #getMaxQuantity()
+	 * @generated
+	 */
+	void setMaxQuantity(int value);
 
 } // Contract

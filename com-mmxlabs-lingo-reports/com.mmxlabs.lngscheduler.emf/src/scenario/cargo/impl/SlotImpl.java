@@ -77,6 +77,15 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	protected int minQuantity = MIN_QUANTITY_EDEFAULT;
 
 	/**
+	 * This is true if the Min Quantity attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean minQuantityESet;
+
+	/**
 	 * The default value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxQuantity()
@@ -93,6 +102,15 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
+
+	/**
+	 * This is true if the Max Quantity attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean maxQuantityESet;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -257,8 +275,33 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	public void setMinQuantity(int newMinQuantity) {
 		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
+		boolean oldMinQuantityESet = minQuantityESet;
+		minQuantityESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MIN_QUANTITY, oldMinQuantity, minQuantity));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MIN_QUANTITY, oldMinQuantity, minQuantity, !oldMinQuantityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMinQuantity() {
+		int oldMinQuantity = minQuantity;
+		boolean oldMinQuantityESet = minQuantityESet;
+		minQuantity = MIN_QUANTITY_EDEFAULT;
+		minQuantityESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__MIN_QUANTITY, oldMinQuantity, MIN_QUANTITY_EDEFAULT, oldMinQuantityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMinQuantity() {
+		return minQuantityESet;
 	}
 
 	/**
@@ -276,8 +319,33 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	public void setMaxQuantity(int newMaxQuantity) {
 		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
+		boolean oldMaxQuantityESet = maxQuantityESet;
+		maxQuantityESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MAX_QUANTITY, oldMaxQuantity, maxQuantity));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MAX_QUANTITY, oldMaxQuantity, maxQuantity, !oldMaxQuantityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMaxQuantity() {
+		int oldMaxQuantity = maxQuantity;
+		boolean oldMaxQuantityESet = maxQuantityESet;
+		maxQuantity = MAX_QUANTITY_EDEFAULT;
+		maxQuantityESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__MAX_QUANTITY, oldMaxQuantity, MAX_QUANTITY_EDEFAULT, oldMaxQuantityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMaxQuantity() {
+		return maxQuantityESet;
 	}
 
 	/**
@@ -533,6 +601,30 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getSlotOrContractMinQuantity() {
+		if (isSetMinQuantity())
+			return getMinQuantity();
+		else
+			return getContract().getMinQuantity();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getSlotOrContractMaxQuantity() {
+		if (isSetMaxQuantity())
+			return getMaxQuantity();
+		else
+			return getContract().getMaxQuantity();
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -612,10 +704,10 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				setId(ID_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__MIN_QUANTITY:
-				setMinQuantity(MIN_QUANTITY_EDEFAULT);
+				unsetMinQuantity();
 				return;
 			case CargoPackage.SLOT__MAX_QUANTITY:
-				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
+				unsetMaxQuantity();
 				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)null);
@@ -649,9 +741,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__ID:
 				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 			case CargoPackage.SLOT__MIN_QUANTITY:
-				return minQuantity != MIN_QUANTITY_EDEFAULT;
+				return isSetMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
-				return maxQuantity != MAX_QUANTITY_EDEFAULT;
+				return isSetMaxQuantity();
 			case CargoPackage.SLOT__PORT:
 				return port != null;
 			case CargoPackage.SLOT__WINDOW_START:
@@ -684,6 +776,10 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getSlotOrPortContract(arguments.get(0));
 			case CargoPackage.SLOT___GET_SLOT_OR_PORT_DURATION:
 				return getSlotOrPortDuration();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY:
+				return getSlotOrContractMinQuantity();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY:
+				return getSlotOrContractMaxQuantity();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -700,9 +796,9 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		result.append(" (id: ");
 		result.append(id);
 		result.append(", minQuantity: ");
-		result.append(minQuantity);
+		if (minQuantityESet) result.append(minQuantity); else result.append("<unset>");
 		result.append(", maxQuantity: ");
-		result.append(maxQuantity);
+		if (maxQuantityESet) result.append(maxQuantity); else result.append("<unset>");
 		result.append(", windowStart: ");
 		result.append(windowStart);
 		result.append(", windowDuration: ");

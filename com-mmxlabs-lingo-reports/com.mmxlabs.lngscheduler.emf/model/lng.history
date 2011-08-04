@@ -4612,5 +4612,66 @@
         referenceValue="lng.ecore#//AnnotatedObject"/>
     <changes xsi:type="history:Add" element="lng.ecore#//fleet/VesselEvent" featureName="eSuperTypes"
         referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/Contract" referenceName="eStructuralFeatures"
+        element="lng.ecore#//contract/Contract/minQuantity"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/minQuantity"
+        featureName="name" dataValue="minimumVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/minQuantity"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/minQuantity"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/Contract" referenceName="eStructuralFeatures"
+        element="lng.ecore#//contract/Contract/maxQuantity"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/maxQuantity"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/maxQuantity"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/maxQuantity"
+        featureName="name" dataValue="maximumVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/minQuantity"
+        featureName="name" dataValue="minQuantity" oldDataValue="minimumVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/maxQuantity"
+        featureName="name" dataValue="maxQuantity" oldDataValue="maximumVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/minQuantity" featureName="unsettable"
+        dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/maxQuantity" featureName="unsettable"
+        dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot" referenceName="eOperations"
+        element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        featureName="name" dataValue="getSlotOrContractMinQuantity"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot" referenceName="eStructuralFeatures"
+        element="#//@releases.3/@changes.175/@element"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//cargo/Slot" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EAttribute"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot" referenceName="eOperations"
+        element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        featureName="name" dataValue="getSlotOrContractMaxQuantity"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        referenceName="eAnnotations" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        referenceName="eAnnotations" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="key" dataValue="body"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getContract().getMinQuantity();"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="key" dataValue="body"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getContract().getMaxQuantity();"/>
   </releases>
 </history:History>
