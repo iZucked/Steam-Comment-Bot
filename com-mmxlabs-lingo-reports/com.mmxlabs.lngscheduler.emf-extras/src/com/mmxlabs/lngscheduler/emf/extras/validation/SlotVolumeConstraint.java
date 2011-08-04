@@ -40,7 +40,7 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 				// This is being triggered by a batch mode validation.
 				final Slot slot = (Slot) object;
 				//TODO return some placeholders for the error message
-				if (slot.getMinQuantity() < 0) {
+				if (slot.getSlotOrContractMinQuantity() < 0) {
 					final DetailConstraintStatusDecorator dsd = 
 						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
 	
@@ -48,14 +48,14 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 					return dsd;
 					
 				}
-				if (slot.getMaxQuantity() < 0) {
+				if (slot.getSlotOrContractMaxQuantity() < 0) {
 					final DetailConstraintStatusDecorator dsd = 
 						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
 
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					return dsd;
 				}
-				if (slot.getMinQuantity() > slot.getMaxQuantity()) {
+				if (slot.getSlotOrContractMinQuantity() > slot.getSlotOrContractMaxQuantity()) {
 					final DetailConstraintStatusDecorator dsd = 
 						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
 
