@@ -1,8 +1,7 @@
-package com.mmxlabs.jobcontroller.jobs.impl;
+package com.mmxlabs.jobcontroller.jobs.eclipse.impl;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.ui.activities.IActivityManager;
 
 import com.mmxlabs.jobcontroller.jobs.IJobControl;
 import com.mmxlabs.jobcontroller.jobs.IJobControlFactory;

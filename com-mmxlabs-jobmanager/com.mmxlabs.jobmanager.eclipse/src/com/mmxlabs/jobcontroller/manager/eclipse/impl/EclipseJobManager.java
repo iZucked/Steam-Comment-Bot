@@ -395,4 +395,10 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	protected void restoreState(final IJobManager jobManager) {
 
 	}
+
+	@Override
+	public IJobControl getControlForJob(IJobDescriptor jobDescriptor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

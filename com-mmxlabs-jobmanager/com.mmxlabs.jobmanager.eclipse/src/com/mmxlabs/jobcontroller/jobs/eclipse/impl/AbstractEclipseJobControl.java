@@ -92,7 +92,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	private EJobState currentState = EJobState.UNKNOWN;
 	private int progress = 0;
 
-	public AbstracteEclipseJobControl(final String jobName) {
+	public AbstractEclipseJobControl(final String jobName) {
 		super();
 		runner = new Runner(jobName);
 		currentState = EJobState.CREATED;
