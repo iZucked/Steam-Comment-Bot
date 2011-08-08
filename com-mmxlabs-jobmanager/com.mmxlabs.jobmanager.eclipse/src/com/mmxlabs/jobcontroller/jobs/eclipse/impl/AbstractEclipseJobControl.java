@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.jobcontroller.jobs.impl;
+package com.mmxlabs.jobcontroller.jobs.eclipse.impl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,9 +14,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.mmxlabs.jobcontroller.jobs.EJobState;
 import com.mmxlabs.jobcontroller.jobs.IJobControl;
 import com.mmxlabs.jobcontroller.jobs.IJobControlListener;
-import com.mmxlabs.jobcontroller.jobs.IJobControl.JobState;
 
 /**
  * An abstract class which provides most of what you want for any job.
@@ -26,39 +26,41 @@ import com.mmxlabs.jobcontroller.jobs.IJobControl.JobState;
  * @author hinton
  * 
  */
-public abstract class AbstractManagedJob implements IJobControl {
+public abstract class AbstractEclipseJobControl implements IJobControl {
 	private class Runner extends Job {
 		public Runner(final String name) {
 			super(name);
 		}
 
 		private boolean paused = false;
+
 		@Override
 		public IStatus run(final IProgressMonitor monitor) {
 			try {
 				while (true) {
 					if (monitor.isCanceled()) {
 						kill();
-						setJobState(JobState.CANCELLED);
+						setJobState(EJobState.CANCELLED);
 						return Status.CANCEL_STATUS;
 					} else if (paused) {
 						synchronized (this) {
 							if (paused) {
-								setJobState(JobState.PAUSED);
+								setJobState(EJobState.PAUSED);
 								wait();
 							}
 						}
 					} else {
-						setJobState(JobState.RUNNING);
+						setJobState(EJobState.RUNNING);
 						final int p0 = getProgress();
 						final boolean more = step();
 						final int p1 = getProgress();
-						if (p1 > p0) monitor.worked(p1 - p0);
+						if (p1 > p0)
+							monitor.worked(p1 - p0);
 						if (more == false) {
-							setJobState(JobState.COMPLETED);
+							setJobState(EJobState.COMPLETED);
 							return Status.OK_STATUS;
 						}
-						
+
 					}
 				}
 			} catch (final InterruptedException e) {
@@ -68,7 +70,7 @@ public abstract class AbstractManagedJob implements IJobControl {
 				monitor.done();
 			}
 		}
-		
+
 		public synchronized void pause() {
 			paused = true;
 		}
@@ -87,33 +89,24 @@ public abstract class AbstractManagedJob implements IJobControl {
 
 	private final LinkedList<IJobControlListener> listeners = new LinkedList<IJobControlListener>();
 	private final Runner runner;
-	private final String jobName;
-	private JobState currentState = JobState.UNKNOWN;
+	private EJobState currentState = EJobState.UNKNOWN;
 	private int progress = 0;
 
-	
-	public AbstractManagedJob(final String jobName) {
+	public AbstracteEclipseJobControl(final String jobName) {
 		super();
-		this.jobName = jobName;
 		runner = new Runner(jobName);
-		currentState = JobState.CREATED;
-	}
-	
-
-	@Override
-	public String getJobName() {
-		return jobName;
+		currentState = EJobState.CREATED;
 	}
 
-	private synchronized void setJobState(final JobState newState) {
-		final JobState oldState = currentState;
+	private synchronized void setJobState(final EJobState newState) {
+		final EJobState oldState = currentState;
 		if (oldState != newState) {
-			
+
 			currentState = newState;
-			
-			// Take copy to avoid concurrent modification exceptions. 
+
+			// Take copy to avoid concurrent modification exceptions.
 			final List<IJobControlListener> copy = new ArrayList<IJobControlListener>(listeners);
-			
+
 			for (final IJobControlListener mjl : copy) {
 				if (!mjl.jobStateChanged(this, oldState, newState)) {
 					listeners.remove(mjl);
@@ -124,28 +117,27 @@ public abstract class AbstractManagedJob implements IJobControl {
 
 	@Override
 	public void prepare() {
-		setJobState(JobState.INITIALISING);
+		setJobState(EJobState.INITIALISING);
 		reallyPrepare();
-		setJobState(JobState.INITIALISED);
+		setJobState(EJobState.INITIALISED);
 	}
 
 	@Override
 	public synchronized void start() {
-		if (currentState != JobState.INITIALISED) {
+		if (currentState != EJobState.INITIALISED) {
 			// we are probably preparing, so add a listener which waits
 			this.addListener(new IJobControlListener() {
 				@Override
-				public boolean jobStateChanged(IJobControl job, JobState oldState,
-						JobState newState) {
-					if (newState == JobState.INITIALISED) {
+				public boolean jobStateChanged(IJobControl jobControl, EJobState oldState, EJobState newState) {
+					if (newState == EJobState.INITIALISED) {
 						runner.schedule();
 						return false; // return false to avoid getting any more events
 					}
 					return true;
 				}
-				
+
 				@Override
-				public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
+				public boolean jobProgressUpdated(IJobControl jobControl, int progressDelta) {
 					return false;
 				}
 			});
@@ -157,23 +149,23 @@ public abstract class AbstractManagedJob implements IJobControl {
 	@Override
 	public void cancel() {
 		runner.cancel();
-		setJobState(JobState.CANCELLING);
+		setJobState(EJobState.CANCELLING);
 	}
 
 	@Override
 	public void pause() {
-		setJobState(JobState.PAUSING);
+		setJobState(EJobState.PAUSING);
 		runner.pause();
 	}
 
 	@Override
 	public void resume() {
-		setJobState(JobState.RESUMING);
+		setJobState(EJobState.RESUMING);
 		runner.resume();
 	}
 
 	@Override
-	public JobState getJobState() {
+	public EJobState getJobState() {
 		return currentState;
 	}
 
@@ -197,9 +189,9 @@ public abstract class AbstractManagedJob implements IJobControl {
 	protected void setProgress(final int newProgress) {
 		final int delta = newProgress - progress;
 		progress = newProgress;
-		// Take copy to avoid concurrent modification exceptions. 
+		// Take copy to avoid concurrent modification exceptions.
 		final List<IJobControlListener> copy = new ArrayList<IJobControlListener>(listeners);
-		
+
 		for (final IJobControlListener mjl : copy) {
 			if (!mjl.jobProgressUpdated(this, delta)) {
 				listeners.remove(mjl);
@@ -209,13 +201,13 @@ public abstract class AbstractManagedJob implements IJobControl {
 
 	@Override
 	public void dispose() {
-		
+
 		runner.cancel();
 		// TODO: this.runner = null;
-		this.currentState = JobState.UNKNOWN;
+		this.currentState = EJobState.UNKNOWN;
 		this.listeners.clear();
 	}
-	
+
 	/**
 	 * This method should prepare the job for execution
 	 */
@@ -224,14 +216,12 @@ public abstract class AbstractManagedJob implements IJobControl {
 	/**
 	 * This method should do a reasonably-sized unit of work
 	 * 
-	 * @return whether there are more units of work to do; return value of false
-	 *         means finished.
+	 * @return whether there are more units of work to do; return value of false means finished.
 	 */
 	protected abstract boolean step();
 
 	/**
-	 * This method will be called if the job gets killed; clean up any
-	 * resources.
+	 * This method will be called if the job gets killed; clean up any resources.
 	 */
 	protected abstract void kill();
 }
