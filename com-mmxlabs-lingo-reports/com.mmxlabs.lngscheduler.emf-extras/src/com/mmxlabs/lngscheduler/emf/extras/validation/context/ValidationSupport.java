@@ -18,6 +18,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
+import scenario.Scenario;
+
 import com.mmxlabs.common.Pair;
 
 /**
@@ -100,6 +102,14 @@ public class ValidationSupport {
 		}
 	}
 
+	public Scenario getScenario(EObject eObject) {
+		while (!(eObject instanceof Scenario)) {
+			eObject = getContainer(eObject).getFirst();
+			if (eObject == null) return null;
+		}
+		return (Scenario) eObject;
+	}
+	
 	public synchronized Pair<EObject, EReference> getContainer(
 			final EObject object) {
 		if (containers.containsKey(object)) {
