@@ -2,12 +2,12 @@ package com.mmxlabs.jobcontroller.jobs.impl;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.jobs.IManagedJob;
+import com.mmxlabs.jobcontroller.jobs.IJobControl;
 import com.mmxlabs.jobcontroller.manager.IJobManager;
 import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
 
 /**
- * A {@link IJobManagerListener} implementation which automatically calls {@link IManagedJob#dispose()} when the job is removed from the {@link IJobManager}. The listener will then remove itself from
+ * A {@link IJobManagerListener} implementation which automatically calls {@link IJobControl#dispose()} when the job is removed from the {@link IJobManager}. The listener will then remove itself from
  * the {@link IJobManager}.
  * 
  * @author Simon Goodall
@@ -15,19 +15,19 @@ import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
  */
 public final class DisposeOnRemoveListener implements IJobManagerListener {
 	
-	private final IManagedJob newJob;
+	private final IJobControl newJob;
 
-	public DisposeOnRemoveListener(final IManagedJob newJob) {
+	public DisposeOnRemoveListener(final IJobControl newJob) {
 		this.newJob = newJob;
 	}
 
 	@Override
-	public void jobSelected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+	public void jobSelected(final IJobManager jobManager, final IJobControl job, final IResource resource) {
 
 	}
 
 	@Override
-	public void jobRemoved(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+	public void jobRemoved(final IJobManager jobManager, final IJobControl job, final IResource resource) {
 
 		// If this is the job being removed, then dispose and remove
 		// references to it
@@ -38,12 +38,12 @@ public final class DisposeOnRemoveListener implements IJobManagerListener {
 	}
 
 	@Override
-	public void jobDeselected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+	public void jobDeselected(final IJobManager jobManager, final IJobControl job, final IResource resource) {
 
 	}
 
 	@Override
-	public void jobAdded(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+	public void jobAdded(final IJobManager jobManager, final IJobControl job, final IResource resource) {
 
 	}
 }

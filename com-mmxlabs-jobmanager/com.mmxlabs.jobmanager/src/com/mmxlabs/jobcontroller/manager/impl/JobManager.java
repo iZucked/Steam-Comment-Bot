@@ -14,7 +14,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.jobs.IManagedJob;
+import com.mmxlabs.jobcontroller.jobs.IJobControl;
 import com.mmxlabs.jobcontroller.manager.IJobManager;
 import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
 
@@ -24,11 +24,11 @@ import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
  */
 public final class JobManager implements IJobManager {
 
-	private final List<IManagedJob> jobs = new LinkedList<IManagedJob>();
+	private final List<IJobControl> jobs = new LinkedList<IJobControl>();
 
-	private final Map<IManagedJob, IResource> jobResourceMap = new HashMap<IManagedJob, IResource>();
+	private final Map<IJobControl, IResource> jobResourceMap = new HashMap<IJobControl, IResource>();
 
-	private final List<IManagedJob> selectedJobs = new LinkedList<IManagedJob>();
+	private final List<IJobControl> selectedJobs = new LinkedList<IJobControl>();
 
 	private final List<IResource> selectedResources = new LinkedList<IResource>();
 
@@ -40,7 +40,7 @@ public final class JobManager implements IJobManager {
 	 * @see com.mmxlabs.jobcontroller.core.IJobManager#getJobs()
 	 */
 	@Override
-	public List<IManagedJob> getJobs() {
+	public List<IJobControl> getJobs() {
 		return Collections.unmodifiableList(jobs);
 	}
 
@@ -52,7 +52,7 @@ public final class JobManager implements IJobManager {
 	 * .core.IManagedJob)
 	 */
 	@Override
-	public void addJob(final IManagedJob job, final IResource resource) {
+	public void addJob(final IJobControl job, final IResource resource) {
 		jobs.add(job);
 		final IResource oldResource = jobResourceMap.put(job, resource);
 		if (oldResource != null) {
@@ -70,7 +70,7 @@ public final class JobManager implements IJobManager {
 	 * jobcontroller.core.IManagedJob)
 	 */
 	@Override
-	public void removeJob(final IManagedJob job) {
+	public void removeJob(final IJobControl job) {
 		if (job == null) return;
 		if (selectedJobs.contains(job)) {
 			deselectJob(job);
@@ -111,7 +111,7 @@ public final class JobManager implements IJobManager {
 	/**
 	 * @param job
 	 */
-	private void fireJobAdded(final IManagedJob job) {
+	private void fireJobAdded(final IJobControl job) {
 		final IResource resource = jobResourceMap.get(job);
 
 		// Take a copy of the set before iterating over it as it is possible
@@ -127,7 +127,7 @@ public final class JobManager implements IJobManager {
 	/**
 	 * @param job
 	 */
-	private void fireJobRemoved(final IManagedJob job) {
+	private void fireJobRemoved(final IJobControl job) {
 
 		final IResource resource = jobResourceMap.get(job);
 
@@ -144,7 +144,7 @@ public final class JobManager implements IJobManager {
 	/**
 	 * @param job
 	 */
-	private void fireJobSelected(final IManagedJob job) {
+	private void fireJobSelected(final IJobControl job) {
 		final IResource resource = jobResourceMap.get(job);
 
 		// Take a copy of the set before iterating over it as it is possible
@@ -160,7 +160,7 @@ public final class JobManager implements IJobManager {
 	/**
 	 * @param job
 	 */
-	private void fireJobDeselected(final IManagedJob job) {
+	private void fireJobDeselected(final IJobControl job) {
 		final IResource resource = jobResourceMap.get(job);
 
 		// Take a copy of the set before iterating over it as it is possible
@@ -179,7 +179,7 @@ public final class JobManager implements IJobManager {
 	 * @see com.mmxlabs.jobcontroller.core.IJobManager#getSelectedJobs()
 	 */
 	@Override
-	public List<IManagedJob> getSelectedJobs() {
+	public List<IJobControl> getSelectedJobs() {
 		return selectedJobs;
 	}
 
@@ -191,7 +191,7 @@ public final class JobManager implements IJobManager {
 	 * .jobcontroller.core.IManagedJob)
 	 */
 	@Override
-	public void toggleJobSelection(final IManagedJob job) {
+	public void toggleJobSelection(final IJobControl job) {
 
 		if (selectedJobs.contains(job)) {
 			deselectJob(job);
@@ -205,7 +205,7 @@ public final class JobManager implements IJobManager {
 	 * 
 	 * @param job
 	 */
-	private void selectJob(final IManagedJob job) {
+	private void selectJob(final IJobControl job) {
 		selectedJobs.add(job);
 		selectedResources.add(jobResourceMap.get(job));
 		fireJobSelected(job);
@@ -216,7 +216,7 @@ public final class JobManager implements IJobManager {
 	 * 
 	 * @param job
 	 */
-	private void deselectJob(final IManagedJob job) {
+	private void deselectJob(final IJobControl job) {
 		selectedJobs.remove(job);
 		selectedResources.remove(jobResourceMap.get(job));
 		fireJobDeselected(job);
@@ -229,7 +229,7 @@ public final class JobManager implements IJobManager {
 	 */
 	private void deselectResource(final IResource resource) {
 		selectedResources.remove(resource);
-		final IManagedJob job = findJobForResource(resource);
+		final IJobControl job = findJobForResource(resource);
 		selectedJobs.remove(job);
 		fireJobDeselected(job);
 	}
@@ -241,14 +241,14 @@ public final class JobManager implements IJobManager {
 	 */
 	private void selectResource(final IResource resource) {
 		selectedResources.add(resource);
-		final IManagedJob job = findJobForResource(resource);
+		final IJobControl job = findJobForResource(resource);
 		selectedJobs.add(job);
 		fireJobSelected(job);
 	}
 
 	@Override
-	public IManagedJob findJobForResource(final IResource resource) {
-		for (final Map.Entry<IManagedJob, IResource> entry : jobResourceMap
+	public IJobControl findJobForResource(final IResource resource) {
+		for (final Map.Entry<IJobControl, IResource> entry : jobResourceMap
 				.entrySet()) {
 			if (entry.getValue().equals(resource)) {
 				return entry.getKey();
@@ -258,7 +258,7 @@ public final class JobManager implements IJobManager {
 	}
 
 	@Override
-	public IResource findResourceForJob(final IManagedJob job) {
+	public IResource findResourceForJob(final IJobControl job) {
 		return jobResourceMap.get(job);
 	}
 
@@ -272,7 +272,7 @@ public final class JobManager implements IJobManager {
 	}
 
 	@Override
-	public void setJobSelection(final IManagedJob job, final boolean selected) {
+	public void setJobSelection(final IJobControl job, final boolean selected) {
 
 		if (selectedJobs.contains(job)) {
 			if (!selected) {

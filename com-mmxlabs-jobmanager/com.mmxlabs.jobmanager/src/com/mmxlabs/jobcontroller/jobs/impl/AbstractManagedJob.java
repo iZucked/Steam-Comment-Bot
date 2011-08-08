@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.jobcontroller.jobs;
+package com.mmxlabs.jobcontroller.jobs.impl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,6 +14,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.mmxlabs.jobcontroller.jobs.IJobControl;
+import com.mmxlabs.jobcontroller.jobs.IJobControlListener;
+import com.mmxlabs.jobcontroller.jobs.IJobControl.JobState;
+
 /**
  * An abstract class which provides most of what you want for any job.
  * 
@@ -22,7 +26,7 @@ import org.eclipse.core.runtime.jobs.Job;
  * @author hinton
  * 
  */
-public abstract class AbstractManagedJob implements IManagedJob {
+public abstract class AbstractManagedJob implements IJobControl {
 	private class Runner extends Job {
 		public Runner(final String name) {
 			super(name);
@@ -81,7 +85,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		}
 	}
 
-	private final LinkedList<IManagedJobListener> listeners = new LinkedList<IManagedJobListener>();
+	private final LinkedList<IJobControlListener> listeners = new LinkedList<IJobControlListener>();
 	private final Runner runner;
 	private final String jobName;
 	private JobState currentState = JobState.UNKNOWN;
@@ -108,9 +112,9 @@ public abstract class AbstractManagedJob implements IManagedJob {
 			currentState = newState;
 			
 			// Take copy to avoid concurrent modification exceptions. 
-			final List<IManagedJobListener> copy = new ArrayList<IManagedJobListener>(listeners);
+			final List<IJobControlListener> copy = new ArrayList<IJobControlListener>(listeners);
 			
-			for (final IManagedJobListener mjl : copy) {
+			for (final IJobControlListener mjl : copy) {
 				if (!mjl.jobStateChanged(this, oldState, newState)) {
 					listeners.remove(mjl);
 				}
@@ -129,9 +133,9 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	public synchronized void start() {
 		if (currentState != JobState.INITIALISED) {
 			// we are probably preparing, so add a listener which waits
-			this.addListener(new IManagedJobListener() {
+			this.addListener(new IJobControlListener() {
 				@Override
-				public boolean jobStateChanged(IManagedJob job, JobState oldState,
+				public boolean jobStateChanged(IJobControl job, JobState oldState,
 						JobState newState) {
 					if (newState == JobState.INITIALISED) {
 						runner.schedule();
@@ -141,7 +145,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 				}
 				
 				@Override
-				public boolean jobProgressUpdated(IManagedJob job, int progressDelta) {
+				public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
 					return false;
 				}
 			});
@@ -174,14 +178,14 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	}
 
 	@Override
-	public void addListener(final IManagedJobListener listener) {
+	public void addListener(final IJobControlListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 
 	@Override
-	public void removeListener(final IManagedJobListener listener) {
+	public void removeListener(final IJobControlListener listener) {
 		listeners.remove(listener);
 	}
 
@@ -194,9 +198,9 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		final int delta = newProgress - progress;
 		progress = newProgress;
 		// Take copy to avoid concurrent modification exceptions. 
-		final List<IManagedJobListener> copy = new ArrayList<IManagedJobListener>(listeners);
+		final List<IJobControlListener> copy = new ArrayList<IJobControlListener>(listeners);
 		
-		for (final IManagedJobListener mjl : copy) {
+		for (final IJobControlListener mjl : copy) {
 			if (!mjl.jobProgressUpdated(this, delta)) {
 				listeners.remove(mjl);
 			}

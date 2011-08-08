@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.jobcontroller.jobs;
 
-import com.mmxlabs.jobcontroller.jobs.IManagedJob.JobState;
+import com.mmxlabs.jobcontroller.jobs.IJobControl.JobState;
 
 
-public interface IManagedJobListener {
+public interface IJobControlListener {
 	/**
 	 * Callback when the specified job state changes. Returns true if the
 	 * listener is to be kept. Return false to de-register listener.
@@ -17,7 +17,7 @@ public interface IManagedJobListener {
 	 * @param newState
 	 * @return
 	 */
-	boolean jobStateChanged(IManagedJob job, JobState oldState,
+	boolean jobStateChanged(IJobControl job, JobState oldState,
 			JobState newState);
 
 	/**
@@ -29,5 +29,5 @@ public interface IManagedJobListener {
 	 * @param newState
 	 * @return
 	 */
-	boolean jobProgressUpdated(IManagedJob job, int progressDelta);
+	boolean jobProgressUpdated(IJobControl job, int progressDelta);
 }

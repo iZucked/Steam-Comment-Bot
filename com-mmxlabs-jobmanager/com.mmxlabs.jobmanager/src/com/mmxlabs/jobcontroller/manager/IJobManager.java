@@ -8,39 +8,39 @@ import java.util.List;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.jobs.IManagedJob;
+import com.mmxlabs.jobcontroller.jobs.IJobControl;
 
 public interface IJobManager {
 
 	/**
-	 * Returns the list of {@link IManagedJob} added to the {@link IJobManager} instance. Will return an ermpty {@link List} if there are no {@link IManagedJob}s.
+	 * Returns the list of {@link IJobControl} added to the {@link IJobManager} instance. Will return an ermpty {@link List} if there are no {@link IJobControl}s.
 	 * 
 	 * @return
 	 */
-	List<IManagedJob> getJobs();
+	List<IJobControl> getJobs();
 
-	void addJob(IManagedJob job, IResource resource);
+	void addJob(IJobControl job, IResource resource);
 
-	void removeJob(IManagedJob job);
+	void removeJob(IJobControl job);
 
 	void addJobManagerListener(IJobManagerListener jobManagerListener);
 
 	void removeJobManagerListener(IJobManagerListener jobManagerListener);
 
-	void toggleJobSelection(IManagedJob job);
+	void toggleJobSelection(IJobControl job);
 
 	void toggleResourceSelection(IResource resource);
 
-	void setJobSelection(IManagedJob job, boolean selected);
+	void setJobSelection(IJobControl job, boolean selected);
 
 	void setResourceSelection(IResource resource, boolean selected);
 
-	List<IManagedJob> getSelectedJobs();
+	List<IJobControl> getSelectedJobs();
 
 	List<IResource> getSelectedResources();
 
-	IManagedJob findJobForResource(IResource resource);
+	IJobControl findJobForResource(IResource resource);
 
-	IResource findResourceForJob(IManagedJob job);
+	IResource findResourceForJob(IJobControl job);
 
 }

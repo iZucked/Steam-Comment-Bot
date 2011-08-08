@@ -2,11 +2,11 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.jobs.impl;
+package com.mmxlabs.jobcontroller.manager.impl;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.jobs.IManagedJob;
+import com.mmxlabs.jobcontroller.jobs.IJobControl;
 import com.mmxlabs.jobcontroller.manager.IJobManager;
 import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
 
@@ -19,26 +19,26 @@ import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
 public class JobManagerListener implements IJobManagerListener {
 
 	@Override
-	public void jobAdded(final IJobManager jobManager, final IManagedJob job,
+	public void jobAdded(final IJobManager jobManager, final IJobControl job,
 			final IResource resource) {
 
 	}
 
 	@Override
-	public void jobRemoved(final IJobManager jobManager, final IManagedJob job,
+	public void jobRemoved(final IJobManager jobManager, final IJobControl job,
 			final IResource resource) {
 
 	}
 
 	@Override
 	public void jobSelected(final IJobManager jobManager,
-			final IManagedJob job, final IResource resource) {
+			final IJobControl job, final IResource resource) {
 
 	}
 
 	@Override
 	public void jobDeselected(final IJobManager jobManager,
-			final IManagedJob job, final IResource resource) {
+			final IJobControl job, final IResource resource) {
 
 	}
 }

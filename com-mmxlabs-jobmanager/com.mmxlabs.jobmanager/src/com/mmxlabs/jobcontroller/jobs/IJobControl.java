@@ -16,7 +16,7 @@ package com.mmxlabs.jobcontroller.jobs;
  * @author hinton
  * 
  */
-public interface IManagedJob {
+public interface IJobControl {
 	public enum JobState {
 		UNKNOWN, CREATED, INITIALISED, RUNNING, PAUSING, PAUSED, RESUMING, COMPLETED, CANCELLING, CANCELLED, INITIALISING
 	}
@@ -45,9 +45,9 @@ public interface IManagedJob {
 	 */
 	int getProgress();
 
-	void addListener(IManagedJobListener listener);
+	void addListener(IJobControlListener listener);
 
-	void removeListener(IManagedJobListener listener);
+	void removeListener(IJobControlListener listener);
 
 	void dispose();
 }
