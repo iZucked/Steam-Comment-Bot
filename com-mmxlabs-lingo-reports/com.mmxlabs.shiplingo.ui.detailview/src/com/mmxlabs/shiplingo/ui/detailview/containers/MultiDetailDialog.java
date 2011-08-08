@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -33,11 +34,11 @@ import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.fleet.FleetPackage;
 
-
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
+import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.shiplingo.ui.detailview.base.IInlineEditorWrapper;
 import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
@@ -70,11 +71,19 @@ public class MultiDetailDialog extends Dialog {
 				new IInlineEditorWrapper() {
 					@Override
 					public IInlineEditor wrap(final IInlineEditor proxy) {
-						if (proxy.getFeature() == ScenarioPackage.eINSTANCE.getNamedObject_Name()) return null;
-						if (proxy.getFeature() == CargoPackage.eINSTANCE.getSlot_Id()) return null;
-						if (proxy.getFeature() == CargoPackage.eINSTANCE.getCargo_Id()) return null;
-						if (proxy.getFeature() == FleetPackage.eINSTANCE.getVesselEvent_Id()) return null;
-						
+						if (proxy.getFeature() == ScenarioPackage.eINSTANCE
+								.getNamedObject_Name())
+							return null;
+						if (proxy.getFeature() == CargoPackage.eINSTANCE
+								.getSlot_Id())
+							return null;
+						if (proxy.getFeature() == CargoPackage.eINSTANCE
+								.getCargo_Id())
+							return null;
+						if (proxy.getFeature() == FleetPackage.eINSTANCE
+								.getVesselEvent_Id())
+							return null;
+
 						return new IInlineEditor() {
 							@Override
 							public void setInput(final EObject object) {
@@ -104,9 +113,10 @@ public class MultiDetailDialog extends Dialog {
 										false);
 								layout2.marginHeight = 0;
 								layout2.marginWidth = 0;
-								
-								c2.setLayoutData(new GridData(GridData.FILL_BOTH));
-								
+
+								c2.setLayoutData(new GridData(
+										GridData.FILL_BOTH));
+
 								c2.setLayout(layout2);
 
 								final Control sub = proxy.createControl(c2);
@@ -202,6 +212,19 @@ public class MultiDetailDialog extends Dialog {
 	public int open(final List<EObject> objects) {
 		final EClass editingClass = EMFUtils.findCommonSuperclass(objects);
 		proxy = EMFUtils.createEObject(editingClass);
+
+		final HashSet<AutoCorrector> correctors = new HashSet<AutoCorrector>();
+		for (final EObject object : objects) {
+			// add autocorrector adapters.
+			for (final Object adapter : object.eAdapters()) {
+				if (adapter instanceof AutoCorrector) {
+					correctors.add((AutoCorrector) adapter);
+				}
+			}
+		}
+		
+		proxy.eAdapters().addAll(correctors);
+
 		setSameValues(proxy, objects);
 
 		final int result = open();

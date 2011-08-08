@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -39,6 +40,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
+import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ICommandProcessor;
@@ -263,6 +265,13 @@ public class DetailCompositeDialog extends Dialog {
 				duplicates.add(duplicate);
 				objectValidity[objectIndex++] = validator.validate(duplicate)
 						.isOK();
+				
+				// add autocorrector adapters.
+				for (final Object adapter : original.eAdapters()) {
+					if (adapter instanceof AutoCorrector) {
+						duplicate.eAdapters().add((Adapter) adapter);
+					}
+				}
 			}
 		}
 		this.duplicates = duplicates;
