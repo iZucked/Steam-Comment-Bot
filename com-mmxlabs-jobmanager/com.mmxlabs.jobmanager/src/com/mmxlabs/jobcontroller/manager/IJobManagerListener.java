@@ -4,18 +4,32 @@
  */
 package com.mmxlabs.jobcontroller.manager;
 
-import org.eclipse.core.resources.IResource;
-
 import com.mmxlabs.jobcontroller.jobs.IJobControl;
+import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
 
-
+/**
+ * A listener for {@link IJobManager} instances to track addition and removal of jobs.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public interface IJobManagerListener {
 
-	void jobAdded(IJobManager jobManager, IJobControl job, IResource resource);
+	/**
+	 * Callback fired when a new {@link IJobDescriptor} has been successfully submitted to the {@link IJobManager}
+	 * 
+	 * @param jobManager
+	 * @param job
+	 * @param control
+	 */
+	void jobAdded(IJobManager jobManager, IJobDescriptor job, IJobControl control);
 
-	void jobRemoved(IJobManager jobManager, IJobControl job, IResource resource);
-	
-	void jobSelected(IJobManager jobManager, IJobControl job, IResource resource);
-	
-	void jobDeselected(IJobManager jobManager, IJobControl job, IResource resource);
+	/**
+	 * Callback fired when a {@link IJobDescriptor} has removed from the {@link IJobManager}
+	 * 
+	 * @param jobManager
+	 * @param job
+	 * @param control
+	 */
+	void jobRemoved(IJobManager jobManager, IJobDescriptor job, IJobControl control);
 }

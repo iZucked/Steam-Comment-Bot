@@ -4,43 +4,63 @@
  */
 package com.mmxlabs.jobcontroller.manager;
 
+import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
-
 import com.mmxlabs.jobcontroller.jobs.IJobControl;
+import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
 
+/**
+ * An {@link IJobManager} manages the execution of {@link IJobDescriptor}s. On Submission of a {@link IJobDescriptor} a {@link IJobControl} will be returned to control execution of the job.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public interface IJobManager {
 
+	IJobManagerDescriptor getDescriptor();
+
 	/**
-	 * Returns the list of {@link IJobControl} added to the {@link IJobManager} instance. Will return an ermpty {@link List} if there are no {@link IJobControl}s.
+	 * Returns the list of {@link IManagedJob} added to the {@link IJobManager} instance. Will return an empty {@link List} if there are no {@link IManagedJob}s.
 	 * 
 	 * @return
 	 */
-	List<IJobControl> getJobs();
+	Collection<IJobDescriptor> getJobs();
 
-	void addJob(IJobControl job, IResource resource);
+	/**
+	 * Submit a new {@link IJobDescriptor} to the manager. An {@link IJobControl} reference is returned.
+	 * 
+	 * @param job
+	 * @return
+	 */
+	IJobControl submitJob(IJobDescriptor job);
 
-	void removeJob(IJobControl job);
+	/**
+	 * Find and return any {@link IJobControl}s for the {@link IJobDescriptor}. Returns null if none are found - indicating that the job has not been successfully submitted.
+	 * 
+	 * @param job
+	 * @return
+	 */
+	IJobControl getJobControl(IJobDescriptor job);
 
+	/**
+	 * Removes the {@link IJobControl} (and cancels associated job) linked to this {@link IJobDescriptor}. {@link IJobControl} instance will be unusable after this call.
+	 * 
+	 * @param job
+	 */
+	void removeJobDescriptor(IJobDescriptor job);
+
+	/**
+	 * Add a listener for {@link IJobManager} instances to track addition and removal of jobs.
+	 * 
+	 * @param listener
+	 */
 	void addJobManagerListener(IJobManagerListener jobManagerListener);
 
+	/**
+	 * Remove a previous registered listener
+	 * 
+	 * @param listener
+	 */
 	void removeJobManagerListener(IJobManagerListener jobManagerListener);
-
-	void toggleJobSelection(IJobControl job);
-
-	void toggleResourceSelection(IResource resource);
-
-	void setJobSelection(IJobControl job, boolean selected);
-
-	void setResourceSelection(IResource resource, boolean selected);
-
-	List<IJobControl> getSelectedJobs();
-
-	List<IResource> getSelectedResources();
-
-	IJobControl findJobForResource(IResource resource);
-
-	IResource findResourceForJob(IJobControl job);
-
 }
