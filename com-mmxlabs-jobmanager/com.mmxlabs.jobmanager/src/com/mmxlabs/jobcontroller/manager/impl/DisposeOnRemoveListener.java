@@ -1,4 +1,4 @@
-package com.mmxlabs.jobcontroller.jobs.impl;
+package com.mmxlabs.jobcontroller.manager.impl;
 
 import org.eclipse.core.resources.IResource;
 
