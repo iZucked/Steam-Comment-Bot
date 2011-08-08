@@ -16,7 +16,7 @@ import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
  * 
  * @author Simon Goodall
  */
-public class JobManagerListener implements IJobManagerListener {
+public class JobManagerAdapter implements IJobManagerListener {
 
 	@Override
 	public void jobAdded(final IJobManager jobManager, final IJobControl job,
