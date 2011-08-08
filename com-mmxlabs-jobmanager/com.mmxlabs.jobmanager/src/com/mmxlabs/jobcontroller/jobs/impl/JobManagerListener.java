@@ -2,13 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.core.impl;
+package com.mmxlabs.jobcontroller.jobs.impl;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
+import com.mmxlabs.jobcontroller.jobs.IJobManager;
+import com.mmxlabs.jobcontroller.jobs.IJobManagerListener;
+import com.mmxlabs.jobcontroller.jobs.IManagedJob;
 
 /**
  * Implementation of {@link IJobManagerListener} with stub methods. Not intended

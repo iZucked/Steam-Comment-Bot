@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.core;
+package com.mmxlabs.jobcontroller.jobs;
 
 /**
  * A managed job. The lifecycle of a managed job goes

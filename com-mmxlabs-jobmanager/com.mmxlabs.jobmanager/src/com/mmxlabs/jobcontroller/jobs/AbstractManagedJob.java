@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.jobcontroller.core;
+package com.mmxlabs.jobcontroller.jobs;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

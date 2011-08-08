@@ -2,9 +2,10 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.core;
+package com.mmxlabs.jobcontroller.jobs;
 
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
+import com.mmxlabs.jobcontroller.jobs.IManagedJob.JobState;
+
 
 public interface IManagedJobListener {
 	/**

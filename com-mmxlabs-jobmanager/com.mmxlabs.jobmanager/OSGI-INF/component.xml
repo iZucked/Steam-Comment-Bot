@@ -6,7 +6,7 @@
 
 -->
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.jobmanager">
-   <implementation class="com.mmxlabs.jobcontroller.core.JobManager"/>
+   <implementation class="com.mmxlabs.jobcontroller.jobs.JobManager"/>
    <service>
       <provide interface="com.mmxlabs.jobcontroller.core.IJobManager"/>
    </service>

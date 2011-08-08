@@ -8,11 +8,10 @@ Bundle-Vendor: MMXLABS
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore.xmi;bundle-version="2.5.0",
- com.mmxlabs.common.util;bundle-version="1.0.0",
  org.eclipse.core.resources;bundle-version="3.6.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.jobcontoller,
- com.mmxlabs.jobcontroller.core,
- com.mmxlabs.jobcontroller.core.impl
+Export-Package: com.mmxlabs.jobcontroller,
+ com.mmxlabs.jobcontroller.jobs,
+ com.mmxlabs.jobcontroller.jobs.impl
 Service-Component: OSGI-INF/*.xml
 Bundle-ActivationPolicy: lazy

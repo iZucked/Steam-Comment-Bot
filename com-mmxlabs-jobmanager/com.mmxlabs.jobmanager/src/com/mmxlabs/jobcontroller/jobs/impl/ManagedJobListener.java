@@ -2,11 +2,11 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.core.impl;
+package com.mmxlabs.jobcontroller.jobs.impl;
 
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.jobcontroller.core.IManagedJobListener;
+import com.mmxlabs.jobcontroller.jobs.IManagedJob;
+import com.mmxlabs.jobcontroller.jobs.IManagedJob.JobState;
+import com.mmxlabs.jobcontroller.jobs.IManagedJobListener;
 
 /**
  * Implementation of {@link IManagedJobListener} with stub methods. Not intended
