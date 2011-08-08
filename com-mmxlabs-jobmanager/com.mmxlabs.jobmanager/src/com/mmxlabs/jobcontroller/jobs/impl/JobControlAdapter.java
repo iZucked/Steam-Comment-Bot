@@ -14,7 +14,7 @@ import com.mmxlabs.jobcontroller.jobs.IJobControlListener;
  * 
  * @author Simon Goodall
  */
-public class ManagedJobListener implements IJobControlListener {
+public class JobControlAdapter implements IJobControlListener {
 
 	@Override
 	public boolean jobStateChanged(final IJobControl job, final JobState oldState,
