@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontoller;
+package com.mmxlabs.jobcontroller;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

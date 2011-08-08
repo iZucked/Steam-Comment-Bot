@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Jobmanager
 Bundle-SymbolicName: com.mmxlabs.jobmanager
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.mmxlabs.jobcontoller.Activator
+Bundle-Activator: com.mmxlabs.jobcontroller.Activator
 Bundle-Vendor: MMXLABS
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
