@@ -605,11 +605,11 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getSlotOrContractMinQuantity() {
+	public int getSlotOrContractMinQuantity(Object scenario) {
 		if (isSetMinQuantity())
 			return getMinQuantity();
 		else
-			return getContract().getMinQuantity();
+			return getSlotOrPortContract(scenario).getMinQuantity();
 	}
 
 	/**
@@ -617,11 +617,11 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getSlotOrContractMaxQuantity() {
+	public int getSlotOrContractMaxQuantity(Object scenario) {
 		if (isSetMaxQuantity())
 			return getMaxQuantity();
 		else
-			return getContract().getMaxQuantity();
+			return getSlotOrPortContract(scenario).getMaxQuantity();
 	}
 
 	/**
@@ -776,10 +776,10 @@ public class SlotImpl extends EObjectImpl implements Slot {
 				return getSlotOrPortContract(arguments.get(0));
 			case CargoPackage.SLOT___GET_SLOT_OR_PORT_DURATION:
 				return getSlotOrPortDuration();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY:
-				return getSlotOrContractMinQuantity();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY:
-				return getSlotOrContractMaxQuantity();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT:
+				return getSlotOrContractMinQuantity(arguments.get(0));
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT:
+				return getSlotOrContractMaxQuantity(arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

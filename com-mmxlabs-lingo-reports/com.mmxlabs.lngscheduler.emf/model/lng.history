@@ -4673,5 +4673,68 @@
         featureName="key" dataValue="body"/>
     <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
         featureName="value" dataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getContract().getMaxQuantity();"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract().getMinQuantity();"
+        oldDataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getContract().getMinQuantity();"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract().getMaxQuantity();"
+        oldDataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getContract().getMaxQuantity();"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        referenceName="eParameters" element="#//@releases.3/@changes.207/@element"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="eType" referenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="name" dataValue="scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        referenceName="eParameters" element="#//@releases.3/@changes.208/@element"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="eType" referenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="name" dataValue="scenario"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract(scenario).getMinQuantity();"
+        oldDataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract().getMinQuantity();"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract(scenario).getMaxQuantity();"
+        oldDataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract().getMaxQuantity();"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        oldReferenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaClass"
+        oldReferenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaClass"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="lowerBound" dataValue="0" oldDataValue="1"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="lowerBound" dataValue="0" oldDataValue="1"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        referenceName="eParameters">
+      <element xsi:type="ecore:EParameter" name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Delete" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        referenceName="eParameters">
+      <element xsi:type="ecore:EParameter" name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        referenceName="eParameters" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/scenario">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/scenario"
+          featureName="name" dataValue="scenario"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/scenario"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        referenceName="eParameters" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/scenario">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/scenario"
+          featureName="name" dataValue="scenario"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/scenario"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
   </releases>
 </history:History>

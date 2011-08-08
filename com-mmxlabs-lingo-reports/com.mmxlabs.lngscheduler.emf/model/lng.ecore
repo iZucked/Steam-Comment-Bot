@@ -700,13 +700,15 @@
       </eOperations>
       <eOperations name="getSlotOrContractMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getContract().getMinQuantity();"/>
+          <details key="body" value="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract(scenario).getMinQuantity();"/>
         </eAnnotations>
+        <eParameters name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eOperations>
       <eOperations name="getSlotOrContractMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getContract().getMaxQuantity();"/>
+          <details key="body" value="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract(scenario).getMaxQuantity();"/>
         </eAnnotations>
+        <eParameters name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"

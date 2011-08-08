@@ -343,7 +343,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY = 4;
+	int SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT = 4;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Max Quantity</em>' operation.
@@ -352,7 +352,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY = 5;
+	int SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT = 5;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -515,7 +515,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY = SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY;
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT = SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Max Quantity</em>' operation.
@@ -524,7 +524,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY = SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY;
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT = SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT;
 
 	/**
 	 * The operation id for the '<em>Get Cargo Or Port CV Value</em>' operation.
@@ -813,24 +813,24 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrPortDuration();
 
 	/**
-	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrContractMinQuantity() <em>Get Slot Or Contract Min Quantity</em>}' operation.
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrContractMinQuantity(java.lang.Object) <em>Get Slot Or Contract Min Quantity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Contract Min Quantity</em>' operation.
-	 * @see scenario.cargo.Slot#getSlotOrContractMinQuantity()
+	 * @see scenario.cargo.Slot#getSlotOrContractMinQuantity(java.lang.Object)
 	 * @generated
 	 */
-	EOperation getSlot__GetSlotOrContractMinQuantity();
+	EOperation getSlot__GetSlotOrContractMinQuantity__Object();
 
 	/**
-	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrContractMaxQuantity() <em>Get Slot Or Contract Max Quantity</em>}' operation.
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrContractMaxQuantity(java.lang.Object) <em>Get Slot Or Contract Max Quantity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Contract Max Quantity</em>' operation.
-	 * @see scenario.cargo.Slot#getSlotOrContractMaxQuantity()
+	 * @see scenario.cargo.Slot#getSlotOrContractMaxQuantity(java.lang.Object)
 	 * @generated
 	 */
-	EOperation getSlot__GetSlotOrContractMaxQuantity();
+	EOperation getSlot__GetSlotOrContractMaxQuantity__Object();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -1100,7 +1100,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY = eINSTANCE.getSlot__GetSlotOrContractMinQuantity();
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT = eINSTANCE.getSlot__GetSlotOrContractMinQuantity__Object();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Max Quantity</b></em>' operation.
@@ -1108,7 +1108,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY = eINSTANCE.getSlot__GetSlotOrContractMaxQuantity();
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT = eINSTANCE.getSlot__GetSlotOrContractMaxQuantity__Object();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

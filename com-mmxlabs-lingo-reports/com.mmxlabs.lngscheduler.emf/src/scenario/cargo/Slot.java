@@ -10,6 +10,7 @@ import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.Scenario;
 import scenario.contract.Contract;
 import scenario.port.Port;
 
@@ -424,19 +425,17 @@ public interface Slot extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMinQuantity())\n\treturn getMinQuantity();\nelse\n\treturn getContract().getMinQuantity();'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMinQuantity())\n\treturn getMinQuantity();\nelse\n\treturn getSlotOrPortContract(scenario).getMinQuantity();'"
 	 * @generated
 	 */
-	int getSlotOrContractMinQuantity();
+	int getSlotOrContractMinQuantity(Object scenario);
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMaxQuantity())\n\treturn getMaxQuantity();\nelse\n\treturn getContract().getMaxQuantity();'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMaxQuantity())\n\treturn getMaxQuantity();\nelse\n\treturn getSlotOrPortContract(scenario).getMaxQuantity();'"
 	 * @generated
 	 */
-	int getSlotOrContractMaxQuantity();
+	int getSlotOrContractMaxQuantity(Object scenario);
 
 } // Slot
