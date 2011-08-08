@@ -130,10 +130,6 @@ import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.ChartViewer.IChartContentProvider;
-import scenario.presentation.cargoeditor.autocorrect.AutoCorrector;
-import scenario.presentation.cargoeditor.autocorrect.DateLocalisingCorrector;
-import scenario.presentation.cargoeditor.autocorrect.SlotIdCorrector;
-import scenario.presentation.cargoeditor.autocorrect.SlotVolumeCorrector;
 import scenario.presentation.model_editors.CanalEVP;
 import scenario.presentation.model_editors.CargoEVP;
 import scenario.presentation.model_editors.EntityEVP;
@@ -152,6 +148,10 @@ import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAda
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
+import com.mmxlabs.shiplingo.ui.autocorrector.DateLocalisingCorrector;
+import com.mmxlabs.shiplingo.ui.autocorrector.SlotIdCorrector;
+import com.mmxlabs.shiplingo.ui.autocorrector.SlotVolumeCorrector;
 import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
 import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
 import com.mmxlabs.shiplingo.ui.detailview.containers.DetailCompositePropertySheetPage;
