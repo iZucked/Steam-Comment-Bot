@@ -6,9 +6,9 @@ package com.mmxlabs.jobcontroller.jobs.impl;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.jobs.IJobManager;
-import com.mmxlabs.jobcontroller.jobs.IJobManagerListener;
 import com.mmxlabs.jobcontroller.jobs.IManagedJob;
+import com.mmxlabs.jobcontroller.manager.IJobManager;
+import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
 
 /**
  * Implementation of {@link IJobManagerListener} with stub methods. Not intended

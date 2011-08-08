@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.jobs;
+package com.mmxlabs.jobcontroller.manager.impl;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +13,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IResource;
+
+import com.mmxlabs.jobcontroller.jobs.IManagedJob;
+import com.mmxlabs.jobcontroller.manager.IJobManager;
+import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
 
 /**
  * @author Simon Goodall

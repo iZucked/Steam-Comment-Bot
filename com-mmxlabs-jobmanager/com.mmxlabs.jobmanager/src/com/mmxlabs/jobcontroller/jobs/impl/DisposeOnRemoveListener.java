@@ -2,9 +2,9 @@ package com.mmxlabs.jobcontroller.jobs.impl;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.jobs.IJobManager;
-import com.mmxlabs.jobcontroller.jobs.IJobManagerListener;
 import com.mmxlabs.jobcontroller.jobs.IManagedJob;
+import com.mmxlabs.jobcontroller.manager.IJobManager;
+import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
 
 /**
  * A {@link IJobManagerListener} implementation which automatically calls {@link IManagedJob#dispose()} when the job is removed from the {@link IJobManager}. The listener will then remove itself from
