@@ -10,3 +10,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.jobcontroller.jobs.eclipse.impl,
  com.mmxlabs.jobcontroller.manager.eclipse,
  com.mmxlabs.jobcontroller.manager.eclipse.impl
+Service-Component: OSGI-INF/*.xml

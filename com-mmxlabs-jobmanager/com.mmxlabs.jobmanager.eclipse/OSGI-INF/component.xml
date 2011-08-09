@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2011
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.jobcontroller.manager.eclipse.impl.EclipseJobManager">
+<implementation class="com.mmxlabs.jobcontroller.manager.eclipse.impl.EclipseJobManager"/>
+<service>
+   <provide interface="com.mmxlabs.jobcontroller.manager.eclipse.IEclipseJobManager"/>
+<reference bind="bind" cardinality="0..n" interface="com.mmxlabs.jobcontroller.manager.IJobManager" name="IJobManager" policy="dynamic" unbind="unbind"/>
+</service>
+</scr:component>
