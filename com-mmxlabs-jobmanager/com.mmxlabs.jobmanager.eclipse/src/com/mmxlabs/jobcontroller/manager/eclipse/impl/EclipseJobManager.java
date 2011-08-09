@@ -29,7 +29,7 @@ import com.mmxlabs.jobcontroller.manager.eclipse.IEclipseJobManagerListener;
 public final class EclipseJobManager implements IEclipseJobManager {
 
 	// Need constructor setter
-	private final IJobMatcher matcher;
+	private IJobMatcher jobMatcher;
 
 	// Need adder/remover methods
 	private final Map<String, IJobManager> jobManagers = new HashMap<String, IJobManager>();
@@ -46,8 +46,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 	private final Set<IEclipseJobManagerListener> jobManagerListeners = new HashSet<IEclipseJobManagerListener>();
 
-	public EclipseJobManager(final IJobMatcher jobMatcher) {
-		this.matcher = jobMatcher;
+	public EclipseJobManager() {
 	}
 
 	/*
@@ -66,7 +65,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	 * @see com.mmxlabs.jobcontroller.core.IJobManager#addJob(com.mmxlabs.jobcontroller .core.IManagedJob)
 	 */
 	@Override
-	public void submitJob(final IJobDescriptor job, final IResource resource) {
+	public IJobControl submitJob(final IJobDescriptor job, final IResource resource) {
 
 		if (jobs.contains(job)) {
 			throw new IllegalStateException("Job already submitted!");
@@ -89,6 +88,8 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		jobResourceMap.put(job, resource);
 
 		fireJobAdded(job, control, resource);
+
+		return control;
 	}
 
 	/*
@@ -338,23 +339,15 @@ public final class EclipseJobManager implements IEclipseJobManager {
 				this.score = score;
 			}
 
-			public final int getScore() {
-				return score;
-			}
-
-			public final IJobManager getManager() {
-				return manager;
-			}
-
 			@Override
-			public int compareTo(final MatchResult o) {
+			public final int compareTo(final MatchResult o) {
 				return score - o.score;
 			}
 		}
 
 		final TreeSet<MatchResult> results = new TreeSet<MatchResult>();
 		for (final IJobManager mgr : jobManagers.values()) {
-			final int score = matcher.matchJob(job, mgr);
+			final int score = jobMatcher.matchJob(job, mgr);
 			results.add(new MatchResult(mgr, score));
 		}
 
@@ -363,6 +356,9 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 	public void init() {
 		// Any init related stuff here.
+		if (jobMatcher == null) {
+			throw new IllegalStateException("Job Matcher has not been specified");
+		}
 	}
 
 	/**
@@ -400,5 +396,13 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	public IJobControl getControlForJob(IJobDescriptor jobDescriptor) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public final IJobMatcher getJobMatcher() {
+		return jobMatcher;
+	}
+
+	public final void setJobMatcher(IJobMatcher jobMatcher) {
+		this.jobMatcher = jobMatcher;
 	}
 }

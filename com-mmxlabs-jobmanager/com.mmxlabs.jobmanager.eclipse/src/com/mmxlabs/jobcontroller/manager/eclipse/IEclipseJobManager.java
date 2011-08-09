@@ -20,7 +20,7 @@ public interface IEclipseJobManager {
 	 */
 	List<IJobDescriptor> getJobs();
 
-	void submitJob(IJobDescriptor job, IResource resource);
+	IJobControl submitJob(IJobDescriptor job, IResource resource);
 
 	void removeJob(IJobDescriptor job);
 	
