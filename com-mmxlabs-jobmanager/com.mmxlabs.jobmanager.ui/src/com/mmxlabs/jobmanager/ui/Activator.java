@@ -13,7 +13,7 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.jobcontroller.core.IJobManager;
+import com.mmxlabs.jobcontroller.manager.IJobManager;
 
 /**
  * The activator class controls the plug-in life cycle
