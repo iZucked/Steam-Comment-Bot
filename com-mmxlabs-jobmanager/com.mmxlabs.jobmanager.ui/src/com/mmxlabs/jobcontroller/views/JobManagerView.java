@@ -51,12 +51,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.impl.DisposeOnRemoveListener;
+import com.mmxlabs.jobcontroller.jobs.EJobState;
+import com.mmxlabs.jobcontroller.jobs.IJobControl;
+import com.mmxlabs.jobcontroller.jobs.IJobControlListener;
+import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
+import com.mmxlabs.jobcontroller.manager.eclipse.IEclipseJobManager;
+import com.mmxlabs.jobcontroller.manager.eclipse.IEclipseJobManagerListener;
+import com.mmxlabs.jobcontroller.manager.eclipse.impl.DisposeOnRemoveEclipseListener;
 import com.mmxlabs.jobmanager.ui.Activator;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
@@ -86,42 +87,42 @@ public class JobManagerView extends ViewPart {
 
 	private Action doubleClickAction;
 
-	private final IJobManagerListener jobManagerListener = new IJobManagerListener() {
+	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
 
 		@Override
-		public void jobRemoved(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
 
-			job.removeListener(jobListener);
+			control.removeListener(jobListener);
 
 			JobManagerView.this.refresh();
 		}
 
 		@Override
-		public void jobAdded(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
 
-			job.addListener(jobListener);
-
-			JobManagerView.this.refresh();
-		}
-
-		@Override
-		public void jobSelected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+			control.addListener(jobListener);
 
 			JobManagerView.this.refresh();
 		}
 
 		@Override
-		public void jobDeselected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+		public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+
+			JobManagerView.this.refresh();
+		}
+
+		@Override
+		public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
 
 			JobManagerView.this.refresh();
 		}
 	};
 
-	private final IJobManager jobManager = Activator.getDefault().getJobManager();
+	private final IEclipseJobManager jobManager = Activator.getDefault().getEclipseJobManager();
 
-	public void addJob(final IManagedJob theJob, final IResource resource) {
-		theJob.prepare();
-		jobManager.addJob(theJob, resource);
+	public void submitJob(final IJobDescriptor theJob, final IResource resource) {
+		IJobControl control = jobManager.submitJob(theJob, resource);
+		control.prepare();
 	}
 
 	private class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -131,15 +132,16 @@ public class JobManagerView extends ViewPart {
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 
-			if (obj instanceof IManagedJob) {
-				final IManagedJob job = (IManagedJob) obj;
+			if (obj instanceof IJobDescriptor) {
+				final IJobDescriptor job = (IJobDescriptor) obj;
+				final IJobControl control = jobManager.getControlForJob(job);
 				switch (index) {
 				case 1:
 					return job.getJobName();
 				case 2:
-					return Integer.toString(job.getProgress()) + "%";
+					return Integer.toString(control.getProgress()) + "%";
 				case 3:
-					return job.getJobState().toString();
+					return control.getJobState().toString();
 				}
 			}
 
@@ -152,8 +154,8 @@ public class JobManagerView extends ViewPart {
 			// TODO: Cache images -- they need to be disposed
 
 			if (index == 0) {
-				if (obj instanceof IManagedJob) {
-					final IManagedJob job = (IManagedJob) obj;
+				if (obj instanceof IJobDescriptor) {
+					final IJobDescriptor job = (IJobDescriptor) obj;
 					if (jobManager.getSelectedJobs().contains(job)) {
 						return getCachedImage("/icons/console_view.gif");
 					} else {
@@ -163,10 +165,11 @@ public class JobManagerView extends ViewPart {
 			}
 
 			if (index == 1) {
-				if (obj instanceof IManagedJob) {
-					final IManagedJob job = (IManagedJob) obj;
+				if (obj instanceof IJobDescriptor) {
+					final IJobDescriptor job = (IJobDescriptor) obj;
+					final IJobControl control = jobManager.getControlForJob(job);
 
-					return getCachedImage(job.getJobState());
+					return getCachedImage(control.getJobState());
 				}
 			}
 
@@ -185,8 +188,8 @@ public class JobManagerView extends ViewPart {
 			}
 
 			ImageDescriptor desc = null;
-			if (key instanceof JobState) {
-				final JobState state = (JobState) key;
+			if (key instanceof EJobState) {
+				final EJobState state = (EJobState) key;
 
 				switch (state) {
 				case CANCELLED:
@@ -249,9 +252,9 @@ public class JobManagerView extends ViewPart {
 
 	}
 
-	private final IManagedJobListener jobListener = new IManagedJobListener() {
+	private final IJobControlListener jobListener = new IJobControlListener() {
 		@Override
-		public boolean jobStateChanged(final IManagedJob job, final JobState oldState, final JobState newState) {
+		public boolean jobStateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
 			JobManagerView.this.refresh();
 			switch (newState) {
 			case PAUSED:
@@ -271,7 +274,7 @@ public class JobManagerView extends ViewPart {
 		}
 
 		@Override
-		public boolean jobProgressUpdated(final IManagedJob job, final int progressDelta) {
+		public boolean jobProgressUpdated(final IJobControl control, final int progressDelta) {
 			JobManagerView.this.refresh();
 			return true;
 		}
@@ -330,7 +333,7 @@ public class JobManagerView extends ViewPart {
 
 								final IResource res = files[i];
 								// Use adapter factory to create a new job instance.
-								final IManagedJob job = (IManagedJob) adapterManger.getAdapter(res, IManagedJob.class);
+								final IJobDescriptor job = (IJobDescriptor) adapterManger.getAdapter(res, IJobDescriptor.class);
 
 								if (job != null) {
 
@@ -340,11 +343,11 @@ public class JobManagerView extends ViewPart {
 										continue;
 									}
 
-									jobManager.addJob(job, res);
+									jobManager.submitJob(job, res);
 
 									// Hook in a listener to automatically dispose the job once it is no
 									// longer needed
-									jobManager.addJobManagerListener(new DisposeOnRemoveListener(job));
+									jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
 
 								}
 								monitor.worked(1);
@@ -424,14 +427,13 @@ public class JobManagerView extends ViewPart {
 			}
 		});
 
-		jobManager.addJobManagerListener(jobManagerListener);
+		jobManager.addEclipseJobManagerListener(jobManagerListener);
 
 		// Register listener on existing jobs
-		for (final IManagedJob job : jobManager.getJobs()) {
-			job.addListener(jobListener);
+		for (final IJobDescriptor job : jobManager.getJobs()) {
+			final IJobControl control = jobManager.getControlForJob(job);
+			control.addListener(jobListener);
 		}
-		// // TODO: Is this required here?
-		// refresh();
 
 		// update button state
 		updateActionEnablement((IStructuredSelection) viewer.getSelection());
@@ -496,17 +498,18 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IManagedJob> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
 					// TODO: Check states
-					final IManagedJob job = itr.next();
-					if (job.getJobState() == JobState.CREATED) {
-						job.prepare();
-						job.start();
-					} else if (job.getJobState() == JobState.PAUSED) {
-						job.resume();
+					final IJobDescriptor job = itr.next();
+					final IJobControl control = jobManager.getControlForJob(job);
+					if (control.getJobState() == EJobState.CREATED) {
+						control.prepare();
+						control.start();
+					} else if (control.getJobState() == EJobState.PAUSED) {
+						control.resume();
 					} else {
-						job.start();
+						control.start();
 					}
 				}
 			}
@@ -520,11 +523,12 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IManagedJob> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
 					// TODO: Check states
-					final IManagedJob job = itr.next();
-					job.pause();
+					final IJobDescriptor job = itr.next();
+					final IJobControl control = jobManager.getControlForJob(job);
+					control.pause();
 				}
 			}
 		};
@@ -537,10 +541,11 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IManagedJob> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
-					final IManagedJob job = itr.next();
-					job.cancel();
+					final IJobDescriptor job = itr.next();
+					final IJobControl control = jobManager.getControlForJob(job);
+					control.cancel();
 				}
 			}
 		};
@@ -553,10 +558,11 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IManagedJob> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
-					final IManagedJob job = itr.next();
-					job.cancel();
+					final IJobDescriptor job = itr.next();
+					final IJobControl control = jobManager.getControlForJob(job);
+					control.cancel();
 					jobManager.removeJob(job);
 				}
 			}
@@ -570,9 +576,9 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IManagedJob> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
-					final IManagedJob job = itr.next();
+					final IJobDescriptor job = itr.next();
 					jobManager.toggleJobSelection(job);
 				}
 			}
@@ -585,11 +591,10 @@ public class JobManagerView extends ViewPart {
 
 			@Override
 			public void run() {
-				// final Iterator<IManagedJob> itr = getTableSelectionIterator();
+				// final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
 				// while (itr.hasNext()) {
-				// final Object obj = itr.next();
-				// if (obj instanceof OptManagedJob) {
-				// jobManager.toggleJobSelection((OptManagedJob) obj);
+				// final IJobDescriptor job = itr.next();
+				// jobManager.toggleJobSelection(job);
 				// }
 				// }
 			}
@@ -645,11 +650,12 @@ public class JobManagerView extends ViewPart {
 			if (selection instanceof IStructuredSelection) {
 				// Loop through jobs enabling buttons as valid. Operations
 				// will do nothing if not valid.
-				final Iterator<IManagedJob> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
 				while (itr.hasNext()) {
-					final IManagedJob job = itr.next();
+					final IJobDescriptor job = itr.next();
+					final IJobControl control = jobManager.getControlForJob(job);
 
-					switch (job.getJobState()) {
+					switch (control.getJobState()) {
 					case CREATED:
 						startEnabled = true;
 						toogleDisplayEnabled = true;
@@ -703,11 +709,12 @@ public class JobManagerView extends ViewPart {
 	@Override
 	public void dispose() {
 
-		jobManager.removeJobManagerListener(jobManagerListener);
+		jobManager.removeEclipseJobManagerListener(jobManagerListener);
 
 		// Register listener on existing jobs
-		for (final IManagedJob job : jobManager.getJobs()) {
-			job.removeListener(jobListener);
+		for (final IJobDescriptor job : jobManager.getJobs()) {
+			final IJobControl control = jobManager.getControlForJob(job);
+			control.removeListener(jobListener);
 		}
 
 		super.dispose();
@@ -718,11 +725,11 @@ public class JobManagerView extends ViewPart {
 	 * 
 	 * @return
 	 */
-	private Iterator<IManagedJob> getTableSelectionIterator() {
+	private Iterator<IJobDescriptor> getTableSelectionIterator() {
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		// We assume there is only a single type of object in the table
 		@SuppressWarnings("unchecked")
-		final Iterator<IManagedJob> itr = selection.iterator();
+		final Iterator<IJobDescriptor> itr = selection.iterator();
 		return itr;
 	}
 }
