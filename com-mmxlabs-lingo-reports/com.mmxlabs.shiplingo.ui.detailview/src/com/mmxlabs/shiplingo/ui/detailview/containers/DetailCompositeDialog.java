@@ -371,7 +371,8 @@ public class DetailCompositeDialog extends Dialog {
 			}
 			// Skip items which have not changed.
 			if (Equality.isEqual(original.eGet(feature),
-					duplicate.eGet(feature))) {
+					duplicate.eGet(feature))
+					&& (!feature.isUnsettable() || (original.eIsSet(feature) == duplicate.eIsSet(feature)))) {
 				continue;
 			}
 			if (feature.isMany()) {
