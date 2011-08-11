@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Label;
 
 import scenario.ScenarioPackage;
 
+import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.shiplingo.ui.detailview.editors.EENumInlineEditor;
@@ -42,6 +44,7 @@ import com.mmxlabs.shiplingo.ui.detailview.editors.MultiReferenceInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.NumberInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ReferenceInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.TextInlineEditor;
+import com.mmxlabs.shiplingo.ui.detailview.editors.ValueListInlineEditor;
 
 /**
  * A base class for all the object editing composites generated with Acceleo.
@@ -271,8 +274,7 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * @param label
 	 * @return
 	 */
-	public Composite createGroup(final Composite container,
-			final String label) {
+	public Composite createGroup(final Composite container, final String label) {
 		final Group g = new Group(container, getStyle());
 		g.setText(label);
 
@@ -291,9 +293,9 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * passes it to {@link #addEditor(IInlineEditor)} so that it is updated with
 	 * new values.
 	 * 
-	 * NOTE this method is public but is not intended for general use by clients.
-	 * It's public so that subclasses in another package can call it from static
-	 * methods.
+	 * NOTE this method is public but is not intended for general use by
+	 * clients. It's public so that subclasses in another package can call it
+	 * from static methods.
 	 * 
 	 * @param container
 	 * @param feature
@@ -303,7 +305,8 @@ public abstract class AbstractDetailComposite extends Composite {
 			IInlineEditor editor, final String label) {
 		if (editor != null) {
 			editor = editorWrapper.wrap(editor);
-			if (editor == null) return null; // wrapper may filter out this editor.
+			if (editor == null)
+				return null; // wrapper may filter out this editor.
 			// create label & control
 			final Label labelControl = new Label(container, SWT.NONE);
 			labelControl.setText(label);
@@ -332,9 +335,9 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * Add the given composite to the list of sub-composites, again so it is
 	 * updated for new inputs.
 	 * 
-	 * NOTE this method is public but is not intended for general use by clients.
-	 * It's public so that subclasses in another package can call it from static
-	 * methods.
+	 * NOTE this method is public but is not intended for general use by
+	 * clients. It's public so that subclasses in another package can call it
+	 * from static methods.
 	 * 
 	 * @param composite
 	 */
@@ -342,7 +345,7 @@ public abstract class AbstractDetailComposite extends Composite {
 		subEditors.add(composite);
 		myLayout.numColumns = subEditors.size() + 1;
 	}
-	
+
 	/**
 	 * Create an IIlineEditor for the given feature. This is switching on the
 	 * runtime type information provided by EMF, and so is a bit slower than
@@ -350,9 +353,9 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * time in the MTL file, but I don't know enough MTL to do that at the mo.
 	 * 
 	 * 
-	 * NOTE this method is public but is not intended for general use by clients.
-	 * It's public so that subclasses in another package can call it from static
-	 * methods.
+	 * NOTE this method is public but is not intended for general use by
+	 * clients. It's public so that subclasses in another package can call it
+	 * from static methods.
 	 * 
 	 * @param feature
 	 * @return
@@ -395,6 +398,10 @@ public abstract class AbstractDetailComposite extends Composite {
 			} else if (dataType.getInstanceClass().isEnum()) {
 				editor = new EENumInlineEditor(inputPath, (EAttribute) feature,
 						editingDomain, commandProcessor);
+			} else if (dataType == EcorePackage.eINSTANCE.getEBoolean()) {
+				editor = new ValueListInlineEditor(inputPath, feature, editingDomain, commandProcessor, 
+						CollectionsUtil.makeArrayList(new Pair<String, Object>("Yes", true), new Pair<String, Object>("No", false))
+						);
 			} else {
 				editor = null;
 			}
@@ -418,11 +425,11 @@ public abstract class AbstractDetailComposite extends Composite {
 	public ICommandProcessor getCommandProcessor() {
 		return commandProcessor;
 	}
-	
+
 	public IValueProviderProvider getValueProviderProvider() {
 		return valueProviderProvider;
 	}
-	
+
 	public EMFPath getInputPath() {
 		return inputPath;
 	}
