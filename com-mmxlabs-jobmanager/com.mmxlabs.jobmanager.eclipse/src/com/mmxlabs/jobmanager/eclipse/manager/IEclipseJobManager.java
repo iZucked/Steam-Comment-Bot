@@ -2,14 +2,16 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.manager.eclipse;
+package com.mmxlabs.jobmanager.eclipse.manager;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
 
 public interface IEclipseJobManager {
 
@@ -49,4 +51,5 @@ public interface IEclipseJobManager {
 
 	IJobControl getControlForJob(IJobDescriptor jobDescriptor);
 
+	Collection<IJobManager> getJobManagers();
 }

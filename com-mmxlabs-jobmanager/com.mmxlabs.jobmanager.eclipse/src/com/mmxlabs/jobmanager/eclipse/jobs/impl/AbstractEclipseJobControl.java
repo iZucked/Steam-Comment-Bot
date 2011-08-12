@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.mmxlabs.jobcontroller.jobs.eclipse.impl;
+package com.mmxlabs.jobmanager.eclipse.jobs.impl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,9 +14,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.mmxlabs.jobcontroller.jobs.EJobState;
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 
 /**
  * An abstract class which provides most of what you want for any job.

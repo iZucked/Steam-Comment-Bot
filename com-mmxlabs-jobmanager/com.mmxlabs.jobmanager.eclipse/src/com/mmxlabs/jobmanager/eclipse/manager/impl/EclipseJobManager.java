@@ -2,8 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.manager.eclipse.impl;
+package com.mmxlabs.jobmanager.eclipse.manager.impl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,12 +16,13 @@ import java.util.TreeSet;
 
 import org.eclipse.core.resources.IResource;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
-import com.mmxlabs.jobcontroller.manager.IJobManager;
-import com.mmxlabs.jobcontroller.manager.IJobMatcher;
-import com.mmxlabs.jobcontroller.manager.eclipse.IEclipseJobManager;
-import com.mmxlabs.jobcontroller.manager.eclipse.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
+import com.mmxlabs.jobmanager.manager.IJobMatcher;
+import com.mmxlabs.jobmanager.manager.MatchResult;
 
 /**
  * @author Simon Goodall
@@ -326,24 +328,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 	protected IJobManager findJobManager(final IJobDescriptor job) {
 
-		// TODO: Move into own implementation
 		// TODO: Make a GUI wrapper to display sorted results and let user pick
-
-		final class MatchResult implements Comparable<MatchResult> {
-
-			private final int score;
-			private final IJobManager manager;
-
-			public MatchResult(final IJobManager manager, final int score) {
-				this.manager = manager;
-				this.score = score;
-			}
-
-			@Override
-			public final int compareTo(final MatchResult o) {
-				return score - o.score;
-			}
-		}
 
 		final TreeSet<MatchResult> results = new TreeSet<MatchResult>();
 		for (final IJobManager mgr : jobManagers.values()) {
@@ -351,7 +336,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 			results.add(new MatchResult(mgr, score));
 		}
 
-		return results.first().manager;
+		return results.first().getManager();
 	}
 
 	public void init() {
@@ -361,6 +346,20 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		}
 	}
 
+	public void dispose() {
+		jobManagers.clear();
+		jobManagerListeners.clear();
+		selectedJobs.clear();
+		selectedResources.clear();
+
+		jobResourceMap.clear();
+		jobs.clear();
+		jobToControls.clear();
+		jobToManager.clear();
+
+		jobMatcher = null;
+	}
+
 	/**
 	 * Notify the {@link EclipseJobManager} that an {@link IJobManager} implementation is available to use.
 	 * 
@@ -368,7 +367,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	 */
 	public void bind(final IJobManager jobManager) {
 		// Store Job Manger reference
-		final String name = jobManager.getDescriptor().getName();
+		final String name = jobManager.getJobManagerDescriptor().getName();
 		jobManagers.put(name, jobManager);
 
 		// Attempt to restore any previous state
@@ -380,7 +379,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		// Attempt to save any related job manager state.
 		saveState(jobManager);
 
-		final String name = jobManager.getDescriptor().getName();
+		final String name = jobManager.getJobManagerDescriptor().getName();
 		jobManagers.remove(name);
 	}
 
@@ -394,8 +393,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 	@Override
 	public IJobControl getControlForJob(IJobDescriptor jobDescriptor) {
-		// TODO Auto-generated method stub
-		return null;
+		return jobToControls.get(jobDescriptor);
 	}
 
 	public final IJobMatcher getJobMatcher() {
@@ -404,5 +402,10 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 	public final void setJobMatcher(IJobMatcher jobMatcher) {
 		this.jobMatcher = jobMatcher;
+	}
+
+	@Override
+	public Collection<IJobManager> getJobManagers() {
+		return jobManagers.values();
 	}
 }

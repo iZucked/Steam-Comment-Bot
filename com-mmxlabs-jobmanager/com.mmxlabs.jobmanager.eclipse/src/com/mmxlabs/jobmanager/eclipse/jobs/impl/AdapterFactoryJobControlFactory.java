@@ -1,11 +1,11 @@
-package com.mmxlabs.jobcontroller.jobs.eclipse.impl;
+package com.mmxlabs.jobmanager.eclipse.jobs.impl;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobControlFactory;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlFactory;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 
 /**
  * Implementation of {@link IJobControlFactory} which uses the Eclipse {@link IActivityManager} to obtain a {@link IJobControl}.
