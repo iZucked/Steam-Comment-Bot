@@ -18,7 +18,7 @@
             name="Job Manager"
             icon="icons/eview16/exec_statistic_view.gif"
             category="com.mmxlabs.jobmanager"
-            class="com.mmxlabs.jobcontroller.views.JobManagerView"
+            class="com.mmxlabs.jobmanager.views.JobManagerView"
             id="com.mmxlabs.jobcontroller.views.JobManager">
       </view>
    </extension>

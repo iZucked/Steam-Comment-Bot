@@ -1,13 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse
-Bundle-SymbolicName: com.mmxlabs.jobmanager.eclipse
+Bundle-SymbolicName: com.mmxlabs.jobmanager.eclipse;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.jobmanager;bundle-version="1.0.0",
  org.eclipse.core.resources;bundle-version="3.7.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.jobcontroller.jobs.eclipse.impl,
- com.mmxlabs.jobcontroller.manager.eclipse,
- com.mmxlabs.jobcontroller.manager.eclipse.impl
+Export-Package: com.mmxlabs.jobmanager.eclipse.jobs.impl,
+ com.mmxlabs.jobmanager.eclipse.manager,
+ com.mmxlabs.jobmanager.eclipse.manager.impl
 Service-Component: OSGI-INF/*.xml
+Bundle-Activator: com.mmxlabs.jobmanager.eclipse.Activator
+Bundle-ActivationPolicy: lazy
