@@ -2,12 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.views;
+package com.mmxlabs.jobmanager.views;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
@@ -23,7 +24,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,8 +32,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -44,22 +44,23 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.jobcontroller.jobs.EJobState;
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobControlListener;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
-import com.mmxlabs.jobcontroller.manager.eclipse.IEclipseJobManager;
-import com.mmxlabs.jobcontroller.manager.eclipse.IEclipseJobManagerListener;
-import com.mmxlabs.jobcontroller.manager.eclipse.impl.DisposeOnRemoveEclipseListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.ui.Activator;
-import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view shows data obtained from the model. The sample creates a dummy model on the fly, but a real implementation would connect
@@ -77,7 +78,7 @@ public class JobManagerView extends ViewPart {
 	 */
 	public static final String ID = "com.mmxlabs.jobcontroller.views.JobManager";
 
-	private TableViewer viewer;
+	private TreeViewer viewer;
 	private Action packAction;
 	private Action startAction;
 	private Action pauseAction;
@@ -116,12 +117,24 @@ public class JobManagerView extends ViewPart {
 
 			JobManagerView.this.refresh();
 		}
+
+		@Override
+		public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
+			JobManagerView.this.refresh();
+
+		}
+
+		@Override
+		public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
+			JobManagerView.this.refresh();
+
+		}
 	};
 
 	private final IEclipseJobManager jobManager = Activator.getDefault().getEclipseJobManager();
 
 	public void submitJob(final IJobDescriptor theJob, final IResource resource) {
-		IJobControl control = jobManager.submitJob(theJob, resource);
+		final IJobControl control = jobManager.submitJob(theJob, resource);
 		control.prepare();
 	}
 
@@ -132,7 +145,12 @@ public class JobManagerView extends ViewPart {
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 
-			if (obj instanceof IJobDescriptor) {
+			if (obj instanceof IJobManager) {
+				switch (index) {
+				case 0:
+					return ((IJobManager) obj).getJobManagerDescriptor().getName();
+				}
+			} else if (obj instanceof IJobDescriptor) {
 				final IJobDescriptor job = (IJobDescriptor) obj;
 				final IJobControl control = jobManager.getControlForJob(job);
 				switch (index) {
@@ -377,34 +395,35 @@ public class JobManagerView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
-		final TableViewerColumn tvc0 = new TableViewerColumn(viewer, SWT.None);
+		final TreeViewerColumn tvc0 = new TreeViewerColumn(viewer, SWT.None);
 		tvc0.getColumn().setText("");
 
-		final TableViewerColumn tvc1 = new TableViewerColumn(viewer, SWT.None);
+		final TreeViewerColumn tvc1 = new TreeViewerColumn(viewer, SWT.None);
 		tvc1.getColumn().setText("Name");
 
-		final TableViewerColumn tvc2 = new TableViewerColumn(viewer, SWT.None);
+		final TreeViewerColumn tvc2 = new TreeViewerColumn(viewer, SWT.None);
 		tvc2.getColumn().setText("Progress");
 
-		final TableViewerColumn tvc3 = new TableViewerColumn(viewer, SWT.None);
+		final TreeViewerColumn tvc3 = new TreeViewerColumn(viewer, SWT.None);
 		tvc3.getColumn().setText("Status");
 
-		viewer.getTable().setLinesVisible(true);
-		viewer.getTable().setHeaderVisible(true);
+		viewer.getTree().setLinesVisible(true);
+		viewer.getTree().setHeaderVisible(true);
 
-		viewer.setContentProvider(ArrayContentProvider.getInstance());
+		viewer.setContentProvider(new JobManagerContentProvider());
 		viewer.setLabelProvider(new ViewLabelProvider());
 		// viewer.setSorter(new NameSorter());
-		viewer.setInput(jobManager.getJobs());
+		viewer.setInput(jobManager);
 
 		// Set initial column sizes
-		for (final TableColumn c : viewer.getTable().getColumns()) {
+		for (final TreeColumn c : viewer.getTree().getColumns()) {
 			c.pack();
 		}
 
 		// Create the help context id for the viewer's control
+
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.jobmanager.viewer");
 
 		makeActions();
@@ -492,13 +511,13 @@ public class JobManagerView extends ViewPart {
 
 	private void makeActions() {
 
-		packAction = new PackTableColumnsAction(viewer);
+		packAction = new PackTreeColumnsAction(viewer);
 
 		startAction = new Action() {
 			@Override
 			public void run() {
 
-				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
 				while (itr.hasNext()) {
 					// TODO: Check states
 					final IJobDescriptor job = itr.next();
@@ -523,7 +542,7 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
 				while (itr.hasNext()) {
 					// TODO: Check states
 					final IJobDescriptor job = itr.next();
@@ -541,7 +560,7 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
 				while (itr.hasNext()) {
 					final IJobDescriptor job = itr.next();
 					final IJobControl control = jobManager.getControlForJob(job);
@@ -558,7 +577,7 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
 				while (itr.hasNext()) {
 					final IJobDescriptor job = itr.next();
 					final IJobControl control = jobManager.getControlForJob(job);
@@ -576,7 +595,7 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public void run() {
 
-				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
 				while (itr.hasNext()) {
 					final IJobDescriptor job = itr.next();
 					jobManager.toggleJobSelection(job);
@@ -650,8 +669,9 @@ public class JobManagerView extends ViewPart {
 			if (selection instanceof IStructuredSelection) {
 				// Loop through jobs enabling buttons as valid. Operations
 				// will do nothing if not valid.
-				final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
+				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
 				while (itr.hasNext()) {
+
 					final IJobDescriptor job = itr.next();
 					final IJobControl control = jobManager.getControlForJob(job);
 
@@ -725,11 +745,48 @@ public class JobManagerView extends ViewPart {
 	 * 
 	 * @return
 	 */
-	private Iterator<IJobDescriptor> getTableSelectionIterator() {
+	private Iterator<IJobDescriptor> getTreeSelectionIterator() {
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+
+		/**
+		 * Wrapper around the tree iterator which only contains IJobDescriptors.
+		 */
+		final Iterator<IJobDescriptor> itr = new Iterator<IJobDescriptor>() {
+			final Iterator<?> selectionItr = selection.iterator();
+
+			private IJobDescriptor next = null;
+
+			@Override
+			public boolean hasNext() {
+				next = null;
+				while (selectionItr.hasNext() && next == null) {
+					final Object obj = selectionItr.next();
+					if (obj instanceof IJobDescriptor) {
+						next = (IJobDescriptor) obj;
+						return true;
+					}
+				}
+				return false;
+			}
+
+			@Override
+			public IJobDescriptor next() {
+				// Assume null means end of list.
+				if (next == null) {
+					throw new NoSuchElementException();
+				}
+
+				final IJobDescriptor job = next;
+				next = null;
+				return job;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Not implemeneted");
+			}
+		};
 		// We assume there is only a single type of object in the table
-		@SuppressWarnings("unchecked")
-		final Iterator<IJobDescriptor> itr = selection.iterator();
 		return itr;
 	}
 }
