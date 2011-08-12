@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.jobs;
+package com.mmxlabs.jobmanager.jobs;
 
 /**
  * A listener for {@link IJobControl} instances to track changes in state and progress.

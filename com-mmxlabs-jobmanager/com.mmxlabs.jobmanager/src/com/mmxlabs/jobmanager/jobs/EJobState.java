@@ -1,4 +1,4 @@
-package com.mmxlabs.jobcontroller.jobs;
+package com.mmxlabs.jobmanager.jobs;
 
 /**
  * An Enum describing the different states an {@link IJobControl} instance can be in.

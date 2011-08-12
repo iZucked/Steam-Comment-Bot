@@ -1,4 +1,4 @@
-package com.mmxlabs.jobcontroller.jobs;
+package com.mmxlabs.jobmanager.jobs;
 
 /**
  * A factory interface used to generate {@link IJobControl} instances for a given {@link IJobDescriptor}.s

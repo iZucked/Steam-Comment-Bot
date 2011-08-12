@@ -2,12 +2,12 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.manager.impl;
+package com.mmxlabs.jobmanager.manager.impl;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
-import com.mmxlabs.jobcontroller.manager.IJobManager;
-import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
+import com.mmxlabs.jobmanager.manager.IJobManagerListener;
 
 /**
  * Implementation of {@link IJobManagerListener} with stub methods. Not intended to be used directly, rather sub-classes with the relevant methods overridden.

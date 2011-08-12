@@ -1,4 +1,4 @@
-package com.mmxlabs.jobcontroller.manager;
+package com.mmxlabs.jobmanager.manager;
 
 public interface IJobManagerDescriptor {
 	

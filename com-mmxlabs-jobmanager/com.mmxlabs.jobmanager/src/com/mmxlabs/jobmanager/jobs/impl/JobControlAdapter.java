@@ -2,11 +2,11 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.jobs.impl;
+package com.mmxlabs.jobmanager.jobs.impl;
 
-import com.mmxlabs.jobcontroller.jobs.EJobState;
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 
 /**
  * Implementation of {@link IJobControlListener} with stub methods. Not intended to be used directly, rather sub-classes with the relevant methods overridden.

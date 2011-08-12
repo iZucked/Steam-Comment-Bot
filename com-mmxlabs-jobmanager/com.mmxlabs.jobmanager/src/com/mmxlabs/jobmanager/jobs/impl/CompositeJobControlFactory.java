@@ -1,13 +1,13 @@
-package com.mmxlabs.jobcontroller.jobs.impl;
+package com.mmxlabs.jobmanager.jobs.impl;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobControlFactory;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlFactory;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 
 /**
  * Implementation of {@link IJobControlFactory} which takes a {@link List} of {@link IJobControlFactory} instances and iterates over each one to try and generate a {@link IJobControl}.

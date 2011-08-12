@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.mmxlabs.jobmanager
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: MMXLABS
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.jobcontroller.jobs,
- com.mmxlabs.jobcontroller.jobs.impl,
- com.mmxlabs.jobcontroller.manager,
- com.mmxlabs.jobcontroller.manager.impl
+Export-Package: com.mmxlabs.jobmanager.jobs,
+ com.mmxlabs.jobmanager.jobs.impl,
+ com.mmxlabs.jobmanager.manager,
+ com.mmxlabs.jobmanager.manager.impl

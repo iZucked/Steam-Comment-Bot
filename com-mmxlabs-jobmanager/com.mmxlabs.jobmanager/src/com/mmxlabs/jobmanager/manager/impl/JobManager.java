@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.manager.impl;
+package com.mmxlabs.jobmanager.manager.impl;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,12 +10,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobControlFactory;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
-import com.mmxlabs.jobcontroller.manager.IJobManager;
-import com.mmxlabs.jobcontroller.manager.IJobManagerDescriptor;
-import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlFactory;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
+import com.mmxlabs.jobmanager.manager.IJobManagerDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManagerListener;
 
 /**
  * Implementation of {@link IJobManager}. This class handles the boiler-plate code for managing jobs and firing {@link IJobManagerListener} events. A {@link IJobControlFactory} instance is required to
@@ -25,7 +25,12 @@ import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
  */
 public final class JobManager implements IJobManager {
 
-	private final IJobManagerDescriptor jobManagerDescriptor;
+	private IJobManagerDescriptor jobManagerDescriptor;
+
+	/**
+	 * Factory used to create {@link IJobControl} once a {@link IJobDescriptor} has been submitted.
+	 */
+	private IJobControlFactory jobControlFactory;
 
 	/**
 	 * Mapping between a {@link IJobDescriptor} and a {@link IJobControl}. A reverse mapping is expected to be present in {@link #controlToDescriptorMap}
@@ -39,25 +44,13 @@ public final class JobManager implements IJobManager {
 
 	private final Set<IJobManagerListener> jobManagerListeners = new HashSet<IJobManagerListener>();
 
-	/**
-	 * Factory used to create {@link IJobControl} once a {@link IJobDescriptor} has been submitted.
-	 */
-	private final IJobControlFactory jobControlFactory;
+	public JobManager() {
+
+	}
 
 	public JobManager(final IJobManagerDescriptor jobManagerDescriptor, final IJobControlFactory jobControlFactory) {
 		this.jobManagerDescriptor = jobManagerDescriptor;
 		this.jobControlFactory = jobControlFactory;
-	}
-
-
-	@Override
-	public final IJobManagerDescriptor getDescriptor() {
-		return jobManagerDescriptor;
-	}
-
-	
-	public IJobControlFactory getJobControlFactory() {
-		return jobControlFactory;
 	}
 
 	@Override
@@ -143,4 +136,38 @@ public final class JobManager implements IJobManager {
 		}
 	}
 
+	public void init() {
+		if (jobControlFactory == null) {
+			throw new IllegalStateException("No IJobManagerControlFactory is registered");
+		}
+	}
+
+	public void dispose() {
+		jobManagerDescriptor = null;
+		jobControlFactory = null;
+
+		// TODO: Clean up jobs ?
+
+		controlToDescriptorMap.clear();
+		descriptorToControlMap.clear();
+		jobManagerListeners.clear();
+
+	}
+
+	public IJobControlFactory getJobControlFactory() {
+		return jobControlFactory;
+	}
+
+	@Override
+	public final IJobManagerDescriptor getJobManagerDescriptor() {
+		return jobManagerDescriptor;
+	}
+
+	public final void setJobManagerDescriptor(final IJobManagerDescriptor jobManagerDescriptor) {
+		this.jobManagerDescriptor = jobManagerDescriptor;
+	}
+
+	public final void setJobControlFactory(final IJobControlFactory jobControlFactory) {
+		this.jobControlFactory = jobControlFactory;
+	}
 }

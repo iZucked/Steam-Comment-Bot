@@ -1,9 +1,9 @@
-package com.mmxlabs.jobcontroller.manager.impl;
+package com.mmxlabs.jobmanager.manager.impl;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
-import com.mmxlabs.jobcontroller.manager.IJobManager;
-import com.mmxlabs.jobcontroller.manager.IJobManagerListener;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
+import com.mmxlabs.jobmanager.manager.IJobManagerListener;
 
 /**
  * A {@link IJobManagerListener} implementation which automatically calls {@link IJobDescriptor#dispose()} when the job is removed from the {@link IJobManager}. The listener will then remove itself

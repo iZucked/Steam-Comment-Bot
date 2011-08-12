@@ -1,6 +1,6 @@
-package com.mmxlabs.jobcontroller.manager;
+package com.mmxlabs.jobmanager.manager;
 
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 
 /**
  * Interface to apply a scoring system to determine the suitability of a {@link IJobManager} instance for the execution of a given {@link IJobDescriptor}. The scoring system is left up to the

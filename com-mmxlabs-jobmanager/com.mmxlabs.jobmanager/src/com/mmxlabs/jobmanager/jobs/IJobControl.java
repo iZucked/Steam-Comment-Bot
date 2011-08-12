@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.jobs;
+package com.mmxlabs.jobmanager.jobs;
 
 /**
  * Interface to control the lifecycle of a job. The expected lifecycle is defined as;

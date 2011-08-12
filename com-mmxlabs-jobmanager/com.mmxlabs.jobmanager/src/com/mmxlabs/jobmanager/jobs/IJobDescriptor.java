@@ -2,9 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.jobs;
+package com.mmxlabs.jobmanager.jobs;
 
-import com.mmxlabs.jobcontroller.manager.IJobManager;
+import com.mmxlabs.jobmanager.manager.IJobManager;
 
 /**
  * Interface describing the definition of a Job. This is the client's reference of a job which will be submitted to a {@link IJobManager} for execution.

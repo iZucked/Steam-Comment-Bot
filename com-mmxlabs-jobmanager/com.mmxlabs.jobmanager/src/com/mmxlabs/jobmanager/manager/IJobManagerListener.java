@@ -2,10 +2,10 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.manager;
+package com.mmxlabs.jobmanager.manager;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 
 /**
  * A listener for {@link IJobManager} instances to track addition and removal of jobs.

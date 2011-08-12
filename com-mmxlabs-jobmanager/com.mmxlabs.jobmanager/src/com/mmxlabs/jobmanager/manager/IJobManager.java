@@ -2,13 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.jobcontroller.manager;
+package com.mmxlabs.jobmanager.manager;
 
 import java.util.Collection;
 import java.util.List;
 
-import com.mmxlabs.jobcontroller.jobs.IJobControl;
-import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 
 /**
  * An {@link IJobManager} manages the execution of {@link IJobDescriptor}s. On Submission of a {@link IJobDescriptor} a {@link IJobControl} will be returned to control execution of the job.
@@ -18,7 +18,12 @@ import com.mmxlabs.jobcontroller.jobs.IJobDescriptor;
  */
 public interface IJobManager {
 
-	IJobManagerDescriptor getDescriptor();
+	/**
+	 * Return the {@link IJobManagerDescriptor} describing this job manager instance.
+	 * 
+	 * @return
+	 */
+	IJobManagerDescriptor getJobManagerDescriptor();
 
 	/**
 	 * Returns the list of {@link IManagedJob} added to the {@link IJobManager} instance. Will return an empty {@link List} if there are no {@link IManagedJob}s.
