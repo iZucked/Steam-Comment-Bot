@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
+import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
 
 /**
  * This interface defines a Port, a physical location that can be used as a
@@ -25,11 +26,19 @@ public interface IPort extends IIndexedObject {
 	/**
 	 * Some ports do not typically provide cooldown facilities to inbound
 	 * vessels. These ports will return true here, indicating that vessels
-	 * should arrive cold. If a vessel <em>cannot</em> arrive cold, because
-	 * its earlier journey does not allow any LNG to load, cooldown may still
-	 * be performed.
+	 * should arrive cold. If a vessel <em>cannot</em> arrive cold, because its
+	 * earlier journey does not allow any LNG to load, cooldown may still be
+	 * performed.
 	 * 
 	 * @return true if cooldown is not routinely provided at this port.
 	 */
 	boolean shouldVesselsArriveCold();
+
+	/**
+	 * Returns an {@link ISimpleLoadPriceCalculator} which calculates the unit
+	 * price of gas used for cooldown.
+	 * 
+	 * @return
+	 */
+	ISimpleLoadPriceCalculator getCooldownPriceCalculator();
 }
