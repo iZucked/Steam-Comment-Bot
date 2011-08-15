@@ -47,25 +47,6 @@ public interface ISchedulerBuilder {
 	IOptimisationData<ISequenceElement> getOptimisationData();
 
 	/**
-	 * Create a {@link IVesselClass} with the given parameters. Additional
-	 * parameters should be set via
-	 * {@link #setVesselClassStateParamaters(IVesselClass, VesselState, int, int, int, IConsumptionRateCalculator, int)}
-	 * for each {@link VesselState}.
-	 * 
-	 * @param name
-	 * @param minSpeed
-	 * @param maxSpeed
-	 * @param capacity
-	 * @param minHeel
-	 * @param baseFuelUnitPrice
-	 * @param baseFuelEquivalenceInM3TOMT
-	 * @return
-	 */
-	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
-			long capacity, int minHeel, int baseFuelUnitPrice,
-			int baseFuelEquivalenceInM3TOMT);
-
-	/**
 	 * Like the other {@link createVesselClass}, but with an hourly charter
 	 * price specified (defaults to zero otherwise);
 	 * 
@@ -89,7 +70,8 @@ public interface ISchedulerBuilder {
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
 			long capacity, int minHeel, int baseFuelUnitPrice,
-			int baseFuelEquivalenceInM3TOMT, int hourlyCharterPrice);
+			int baseFuelEquivalenceInM3TOMT, int hourlyCharterPrice,
+			int warmupTimeInHours, int cooldownTimeInHours, int cooldownVolumeInM3);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the
