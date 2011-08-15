@@ -300,7 +300,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				IMultiMatrixProvider.Default_Key);
 
 		// Create the anywhere port
-		ANYWHERE = createPort("ANYWHERE");
+		ANYWHERE = createPort("ANYWHERE", false);
 
 	}
 
@@ -439,11 +439,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IPort createPort(final String name) {
+	public IPort createPort(final String name, final boolean arriveCold) {
 
 		final Port port = new Port(indexingContext);
 		port.setName(name);
 
+		port.setShouldVesselsArriveCold(arriveCold);
+		
 		ports.add(port);
 
 		/*
@@ -521,13 +523,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IXYPort createPort(final String name, final float x, final float y) {
+	public IXYPort createPort(final String name, final boolean arriveCold, final float x, final float y) {
 
 		final XYPort port = new XYPort(indexingContext);
 		port.setName(name);
 		port.setX(x);
 		port.setY(y);
-
+		port.setShouldVesselsArriveCold(arriveCold);
+		
 		ports.add(port);
 
 		if (ANYWHERE != null) {

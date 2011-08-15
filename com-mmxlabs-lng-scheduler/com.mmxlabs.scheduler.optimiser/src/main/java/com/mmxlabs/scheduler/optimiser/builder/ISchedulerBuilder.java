@@ -236,12 +236,12 @@ public interface ISchedulerBuilder {
 			ITimeWindow timeWindow);
 
 	/**
-	 * Create a port with the given name.
+	 * Create a port with the given name and cooldown requirement
 	 * 
 	 * @param name
 	 * @return
 	 */
-	IPort createPort(String name);
+	IPort createPort(String name, boolean arriveCold);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -251,7 +251,7 @@ public interface ISchedulerBuilder {
 	 * @param y
 	 * @return
 	 */
-	IXYPort createPort(String name, float x, float y);
+	IXYPort createPort(String name, boolean arriveCold, float x, float y);
 
 	/**
 	 * Create a cargo with the specific from and to ports and associated time
