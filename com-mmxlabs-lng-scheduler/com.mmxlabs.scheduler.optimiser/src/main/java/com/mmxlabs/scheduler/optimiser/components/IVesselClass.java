@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
@@ -69,9 +70,9 @@ public interface IVesselClass {
 	long getPilotLightRate();
 
 	/**
-	 * Returns the idle pilot light rate in MT/Hour for vessels which require a pilot
-	 * light when running on just LNG. Vessels with no pilot light rate can
-	 * return 0.
+	 * Returns the idle pilot light rate in MT/Hour for vessels which require a
+	 * pilot light when running on just LNG. Vessels with no pilot light rate
+	 * can return 0.
 	 * 
 	 * @return
 	 */
@@ -150,9 +151,41 @@ public interface IVesselClass {
 	int getBaseFuelConversionFactor();
 
 	/**
-	 * Returns the hourly rate at which vessels of this class can be chartered in.
+	 * Returns the hourly rate at which vessels of this class can be chartered
+	 * in.
 	 * 
 	 * @return hourly charter price
 	 */
 	int getHourlyCharterInPrice();
+
+	/**
+	 * The time in hours for which these vessels can idle with no heel without
+	 * the tanks becoming warm and thus requiring a cooldown.
+	 * 
+	 * @return the time to warm up
+	 */
+	int getWarmupTime();
+
+	/**
+	 * The time in hours required for these vessels' tanks to cool down after
+	 * they have warmed up when {@link #getCooldownVolume()} M3 of gas are used
+	 * for cooling.
+	 * 
+	 * In a future version this API may take more parameters, for example an
+	 * estimate of the tanks' temperature, or the time spent warming up.
+	 * 
+	 * @return time to cool down
+	 */
+	int getCooldownTime();
+
+	/**
+	 * The volume of LNG in M3 (scaled, see {@link Calculator#ScaleFactor})
+	 * required to cool down the tanks if they have warmed up.
+	 * 
+	 * In a future version this API may take more parameters, for example an
+	 * estimate of the tanks' temperature, or the time spent warming up.
+	 * 
+	 * @return scaled M3 of LNG
+	 */
+	int getCooldownVolume();
 }

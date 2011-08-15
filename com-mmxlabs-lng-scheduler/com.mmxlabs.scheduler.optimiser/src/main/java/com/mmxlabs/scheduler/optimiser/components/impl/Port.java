@@ -18,6 +18,10 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 public final class Port extends IndexedObject implements IPort {
 
 	private String name;
+	/**
+	 * True if no cooldown is provided
+	 */
+	private boolean arriveCold;
 
 	public Port(final IIndexingContext context) {
 		super(context);
@@ -36,6 +40,8 @@ public final class Port extends IndexedObject implements IPort {
 	public void setName(final String name) {
 		this.name = name;
 	}
+	
+	
 
 	@Override
 	public boolean equals(final Object obj) {
@@ -49,5 +55,14 @@ public final class Port extends IndexedObject implements IPort {
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean shouldVesselsArriveCold() {
+		return arriveCold;
+	}
+	
+	public void setShouldVesselsArriveCold(final boolean arriveCold) {
+		this.arriveCold = arriveCold;
 	}
 }

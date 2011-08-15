@@ -50,9 +50,24 @@ public final class VesselClass implements IVesselClass {
 			VesselState.class);
 
 	/**
-	 * Stores the price per hour to charter vessels of this class.
+	 * The price per hour to charter vessels of this class.
 	 */
 	private int hourlyCharterInPrice;
+	
+	/**
+	 * The volume of LNG required to cool the tanks on vessels of this class. 
+	 */
+	private int cooldownVolume;
+	
+	/**
+	 * The time in hours required to cool the tanks on vessels of this class.
+	 */
+	private int cooldownTime;
+	
+	/**
+	 * The time in hours required for empty tanks to warm up on vessels of this class.  
+	 */
+	private int warmupTime;
 
 	@Override
 	public String getName() {
@@ -202,5 +217,32 @@ public final class VesselClass implements IVesselClass {
 
 	public final void setIdlePilotLightRate(long idlePilotLightRate) {
 		this.idlePilotLightRate = idlePilotLightRate;
+	}
+
+	@Override
+	public int getWarmupTime() {
+		return warmupTime;
+	}
+
+	@Override
+	public int getCooldownTime() {
+		return cooldownTime;
+	}
+
+	@Override
+	public int getCooldownVolume() {
+		return cooldownVolume;
+	}
+
+	public void setCooldownVolume(int cooldownVolume) {
+		this.cooldownVolume = cooldownVolume;
+	}
+
+	public void setCooldownTime(int cooldownTime) {
+		this.cooldownTime = cooldownTime;
+	}
+
+	public void setWarmupTime(int warmupTime) {
+		this.warmupTime = warmupTime;
 	}
 }
