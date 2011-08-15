@@ -4,29 +4,20 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
  * 
  */
-public class FixedPriceContract implements ILoadPriceCalculator {
+public class FixedPriceContract extends SimpleContract {
 	private final int pricePerMMBTU;
 
 	public FixedPriceContract(final int pricePerMMBTU) {
 		this.pricePerMMBTU = pricePerMMBTU;
 	}
+
 	@Override
-	public int calculateLoadUnitPrice(final int loadTime,
-			final long loadVolume, final int dischargeTime,
-			final int actualSalesPrice, final int cvValue,
-			final VoyageDetails ladenLeg, final VoyageDetails ballastLeg,
-			final IVesselClass vesselClass) {
+	public int calculateSimpleLoadUnitPrice(int loadTime) {
 		return pricePerMMBTU;
 	}
-
 }
