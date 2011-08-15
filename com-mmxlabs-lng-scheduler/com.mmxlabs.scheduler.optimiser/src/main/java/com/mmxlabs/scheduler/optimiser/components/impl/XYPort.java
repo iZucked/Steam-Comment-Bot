@@ -23,6 +23,8 @@ public final class XYPort extends IndexedObject implements IXYPort {
 
 	private float y;
 
+	private boolean arriveCold;
+
 	public XYPort(final IIndexingContext context) {
 		super(context);
 	}
@@ -81,5 +83,14 @@ public final class XYPort extends IndexedObject implements IXYPort {
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean shouldVesselsArriveCold() {
+		return arriveCold;
+	}
+	
+	public void setShouldVesselsArriveCold(final boolean arriveCold) {
+		this.arriveCold = arriveCold;
 	}
 }
