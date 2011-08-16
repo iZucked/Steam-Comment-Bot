@@ -330,6 +330,14 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 		// TODO: Make a GUI wrapper to display sorted results and let user pick
 
+		if (jobManagers.isEmpty()) {
+			return null;
+		}
+		// TODO - SHould check really
+		if (jobManagers.size() == 1) {
+			return jobManagers.values().iterator().next();
+		}
+		
 		final TreeSet<MatchResult> results = new TreeSet<MatchResult>();
 		for (final IJobManager mgr : jobManagers.values()) {
 			final int score = jobMatcher.matchJob(job, mgr);
