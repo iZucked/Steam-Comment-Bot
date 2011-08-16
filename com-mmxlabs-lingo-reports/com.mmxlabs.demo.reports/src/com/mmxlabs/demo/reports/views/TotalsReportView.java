@@ -45,7 +45,7 @@ import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.demo.reports.views.TotalsContentProvider.RowData;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
@@ -64,7 +64,7 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	
 	private Action copyTableAction;
 
-	private IJobManagerListener jobManagerListener;
+	private IEclipseJobManagerListener jobManagerListener;
 
 	static class ViewLabelProvider extends CellLabelProvider implements
 			ITableLabelProvider {

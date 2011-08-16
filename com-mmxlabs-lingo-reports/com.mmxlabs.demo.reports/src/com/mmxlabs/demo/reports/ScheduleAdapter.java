@@ -18,25 +18,22 @@ import org.eclipse.swt.widgets.Display;
 import scenario.Scenario;
 import scenario.schedule.Schedule;
 
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.impl.EclipseJobManagerAdapter;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
+import com.mmxlabs.jobmanager.manager.IJobManagerListener;
 
 public class ScheduleAdapter {
 
 	/**
-	 * Method to convert a {@link ISelection} into a {@link List} of
-	 * {@link Schedule}s. This method will check the selection for actual
-	 * {@link Schedule} objects, otherwise if the object implements
-	 * {@link IAdaptable}, {@link IAdaptable#getAdapter(Class)} will be invoked.
-	 * Otherwise the {@link Platform#getAdapterManager()} will be used to try
-	 * and adapt to a {@link Schedule}. In all cases, should a {@link Schedule}
-	 * fail to match, a {@link Scenario} will be tried, and if successful, the
-	 * last contained {@link Schedule} will be added to the returned
-	 * {@link List}
+	 * Method to convert a {@link ISelection} into a {@link List} of {@link Schedule}s. This method will check the selection for actual {@link Schedule} objects, otherwise if the object implements
+	 * {@link IAdaptable}, {@link IAdaptable#getAdapter(Class)} will be invoked. Otherwise the {@link Platform#getAdapterManager()} will be used to try and adapt to a {@link Schedule}. In all cases,
+	 * should a {@link Schedule} fail to match, a {@link Scenario} will be tried, and if successful, the last contained {@link Schedule} will be added to the returned {@link List}
 	 * 
 	 * @param selection
 	 * @return
@@ -109,12 +106,18 @@ public class ScheduleAdapter {
 	public static List<Schedule> getSelectedSchedules() {
 		final List<Schedule> schedules = new ArrayList<Schedule>();
 
-		final IJobManager jobManager = Activator.getDefault().getJobManager();
-		final List<IManagedJob> selectedJobs = jobManager.getSelectedJobs();
-		for (final IManagedJob job : selectedJobs) {
+		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+		final List<IJobDescriptor> selectedJobs = jobManager.getSelectedJobs();
+		for (final IJobDescriptor job : selectedJobs) {
 
-			if (job instanceof LNGSchedulerJob) {
-				final Scenario s = ((LNGSchedulerJob) job).getScenario();
+			// if (job instanceof LNGSchedulerJob) {
+			// // false
+			// // Need to do something here with separate descriptor/control
+			// final Scenario s = ((LNGSchedulerJob) job).getScenario();
+
+			Object jobContext = job.getJobContext();
+			if (jobContext instanceof Scenario) {
+				Scenario s = (Scenario) jobContext;
 				final Schedule schedule = getLastScheduleFromScenario(s);
 				if (schedule != null) {
 					schedules.add(schedule);
@@ -125,7 +128,7 @@ public class ScheduleAdapter {
 		if (schedules.isEmpty()) {
 			return null;
 		}
-		
+
 		return schedules;
 	}
 
@@ -136,8 +139,7 @@ public class ScheduleAdapter {
 		}
 		if (scenario.getScheduleModel() != null) {
 
-			final EList<Schedule> schedules = scenario.getScheduleModel()
-					.getSchedules();
+			final EList<Schedule> schedules = scenario.getScheduleModel().getSchedules();
 			if (schedules.isEmpty() == false) {
 				return schedules.get(schedules.size() - 1);
 			}
@@ -147,73 +149,55 @@ public class ScheduleAdapter {
 	}
 
 	/**
-	 * Creates a {@link IJobManagerListener} to call
-	 * {@link Viewer#setInput(Object)} when the currently selected
-	 * {@link IManagedJob}s state or progress changes for jobs registered with
-	 * the {@link IJobManager}. Call
-	 * {@link #deregisterView(IJobManagerListener)} with the listener when it is
-	 * no longer required. This method will call {@link Viewer#setInput(Object)}
-	 * immediately with the current job selection.
+	 * Creates a {@link IJobManagerListener} to call {@link Viewer#setInput(Object)} when the currently selected {@link IManagedJob}s state or progress changes for jobs registered with the
+	 * {@link IJobManager}. Call {@link #deregisterView(IJobManagerListener)} with the listener when it is no longer required. This method will call {@link Viewer#setInput(Object)} immediately with
+	 * the current job selection.
 	 * 
 	 * @param c
 	 * @return
 	 */
-	public static IJobManagerListener registerView(final Viewer c) {
+	public static IEclipseJobManagerListener registerView(final Viewer c) {
 
-		final IJobManager jobManager = Activator.getDefault().getJobManager();
+		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
-		final IJobManagerListener jobManagerListener;
-		final IManagedJobListener jobListener = new IManagedJobListener() {
+		final IEclipseJobManagerListener jobManagerListener;
+
+		final IJobControlListener jobListener = new IJobControlListener() {
 
 			@Override
-			public boolean jobStateChanged(final IManagedJob job,
-					final JobState oldState, final JobState newState) {
+			public boolean jobStateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
 
 				return setInput(c);
 			}
 
 			@Override
-			public boolean jobProgressUpdated(final IManagedJob job,
-					final int progressDelta) {
+			public boolean jobProgressUpdated(final IJobControl control, final int progressDelta) {
 
 				return setInput(c);
 			}
 		};
 
-		jobManagerListener = new IJobManagerListener() {
+		jobManagerListener = new EclipseJobManagerAdapter() {
 
 			@Override
-			public void jobSelected(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-				job.addListener(jobListener);
+			public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+				control.addListener(jobListener);
 				setInput(c);
 
 			}
 
 			@Override
-			public void jobRemoved(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
-			}
-
-			@Override
-			public void jobDeselected(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-				job.removeListener(jobListener);
+			public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+				control.removeListener(jobListener);
 				setInput(c);
-			}
-
-			@Override
-			public void jobAdded(final IJobManager jobManager,
-					final IManagedJob job, final IResource resource) {
-
 			}
 		};
 
-		jobManager.addJobManagerListener(jobManagerListener);
+		jobManager.addEclipseJobManagerListener(jobManagerListener);
 
-		for (final IManagedJob j : jobManager.getSelectedJobs()) {
-			j.addListener(jobListener);
+		for (final IJobDescriptor j : jobManager.getSelectedJobs()) {
+			IJobControl control = jobManager.getControlForJob(j);
+			control.addListener(jobListener);
 		}
 
 		c.setInput(getSelectedSchedules());
@@ -221,9 +205,9 @@ public class ScheduleAdapter {
 		return jobManagerListener;
 	}
 
-	public static void deregisterView(final IJobManagerListener l) {
-		final IJobManager jobManager = Activator.getDefault().getJobManager();
-		jobManager.removeJobManagerListener(l);
+	public static void deregisterView(final IEclipseJobManagerListener l) {
+		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+		jobManager.removeEclipseJobManagerListener(l);
 	}
 
 	private static boolean setInput(final Viewer viewer) {

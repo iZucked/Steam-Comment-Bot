@@ -14,7 +14,7 @@ import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
-import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -23,7 +23,7 @@ import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**
- * Simple wrapper based on {@link LNGSchedulerJob} to run an optimisation in the
+ * Simple wrapper based on {@link LNGSchedulerJobDescriptor} to run an optimisation in the
  * unit tests.
  * 
  * @author Simon Goodall

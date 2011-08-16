@@ -19,39 +19,40 @@ import org.eclipse.ui.dialogs.SaveAsDialog;
 import scenario.Scenario;
 import scenario.schedule.Schedule;
 
-public class SaveJobUtil {
+/**
+ * Utility class to help save Scenarios.
+ * 
+ * @author Simon Goodall
+ * 
+ * @noinstantiate This class is not intended to be instantiated.
+ * 
+ */
+public final class SaveJobUtil {
+
+	/**
+	 * No expected to be instantiated.
+	 */
+	private SaveJobUtil() {
+
+	}
 
 	/**
 	 * Save the current {@link Schedule} & {@link Scenario} from the optimisation job into a new resource determined by the user.
 	 * 
 	 * @param job
-	 * @param resource Existing resource to base UI on
+	 * @param resource
+	 *            Existing resource to base UI on
 	 * @return New resource {@link IPath}.
 	 */
-	public static IPath saveLNGSchedulerJob(final LNGSchedulerJob job, final IResource resource) {
+	public static IPath saveLNGSchedulerJob(final LNGSchedulerJobDescriptor job, LNGSchedulerJobControl control, final String fileExt, final IResource resource) {
 
-		// Generate a prompt to ask the user for the new resource string
-		final SaveAsDialog dialog = new SaveAsDialog(Display.getDefault().getActiveShell());
-		dialog.setBlockOnOpen(true);
-		if (resource instanceof IFile) {
-			dialog.setOriginalFile((IFile) resource);
-		}
-		// Need to create the dialog before setting strings....
-		dialog.create();
-		dialog.setTitle("Save As...");
-
-		if (dialog.open() != Window.OK) {
+		final IPath newFile = openSaveAsDialog(null, fileExt, resource);
+		if (newFile == null) {
 			return null;
 		}
 
-		IPath newFile = dialog.getResult();
-		// FIXME: Do not hardcode extension
-		if ("scenario".equals(newFile.getFileExtension()) == false) {
-			newFile = newFile.addFileExtension("scenario");
-		}
-
 		// Take copy of scenario
-		final Scenario scenario = EcoreUtil.copy((job).getScenario());
+		final Scenario scenario = EcoreUtil.copy((job).getJobContext());
 
 		// Process scenario - prune out intermediate schedules ....
 		int numSchedules = scenario.getScheduleModel().getSchedules().size();
@@ -87,5 +88,44 @@ public class SaveJobUtil {
 		}
 		return null;
 
+	}
+
+	/**
+	 * Opens a "Save As" dialog prompting the user for a new file location. A desired file extension can be provided which will be appended to the filename if missing. An {@link IResource} instance
+	 * can also be provided as the original file to point the UI at. Returns a new {@link IPath} to the specified file.
+	 * 
+	 * @param fileExtension
+	 * @param resource
+	 * @return
+	 */
+	public static IPath openSaveAsDialog(final String message, final String fileExtension, final IResource resource) {
+		// Generate a prompt to ask the user for the new resource string
+		final SaveAsDialog dialog = new SaveAsDialog(Display.getDefault().getActiveShell());
+		dialog.setBlockOnOpen(true);
+		if (resource instanceof IFile) {
+			dialog.setOriginalFile((IFile) resource);
+		}
+
+		// Need to create the dialog before setting strings....
+		dialog.create();
+		dialog.setTitle("Save As...");
+
+		if (message != null) {
+			dialog.setMessage(message);
+		}
+
+		if (dialog.open() != Window.OK) {
+			// Cancelled
+			return null;
+		}
+
+		IPath newFile = dialog.getResult();
+		// Check required fileExt is present and append if required.
+		if (fileExtension != null) {
+			if (fileExtension.equals(newFile.getFileExtension()) == false) {
+				newFile = newFile.addFileExtension(fileExtension);
+			}
+		}
+		return newFile;
 	}
 }

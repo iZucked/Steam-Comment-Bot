@@ -19,9 +19,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.mmxlabs.jobcontroller.core.IJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.lngscheduler.ui.Activator;
-import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobControl;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.lngscheduler.ui.SaveJobUtil;
 import com.mmxlabs.lngscheduler.ui.navigator.handlers.AbstractOptimisationHandler;
 
@@ -47,7 +48,7 @@ public class SaveOptimisationJobHandler extends AbstractOptimisationHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-		final IJobManager jobManager = Activator.getDefault().getJobManager();
+		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
@@ -56,9 +57,10 @@ public class SaveOptimisationJobHandler extends AbstractOptimisationHandler {
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 
-				if (obj instanceof LNGSchedulerJob) {
+				if (obj instanceof LNGSchedulerJobDescriptor) {
 
-					final LNGSchedulerJob job = (LNGSchedulerJob) obj;
+					final LNGSchedulerJobDescriptor job = (LNGSchedulerJobDescriptor) obj;
+					final LNGSchedulerJobControl control = (LNGSchedulerJobControl) jobManager.getControlForJob(job);
 					final IResource resource = jobManager.findResourceForJob(job);
 
 					final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
@@ -68,7 +70,7 @@ public class SaveOptimisationJobHandler extends AbstractOptimisationHandler {
 							monitor.beginTask("Save Scenario", 2);
 							try {
 								// Attempt to save job
-								final IPath path = SaveJobUtil.saveLNGSchedulerJob(job, resource);
+								final IPath path = SaveJobUtil.saveLNGSchedulerJob(job, control, resource.getFileExtension(), resource);
 								if (path != null) {
 									// An IPath has been returned, try and find the IResource that it corresponds to
 									final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);

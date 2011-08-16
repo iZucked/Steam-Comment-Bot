@@ -52,7 +52,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 
@@ -100,7 +100,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 	static final DecimalFormat myFormat = new DecimalFormat("$###,###,###");
 
-	private IJobManagerListener jobManagerListener;
+	private IEclipseJobManagerListener jobManagerListener;
 
 	private static class TreeData {
 
