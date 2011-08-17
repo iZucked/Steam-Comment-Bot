@@ -102,6 +102,9 @@ public class VesselClassComposite extends AbstractDetailComposite {
     createPortExclusionsEditor(composite, mainGroup);
     createInaccessiblePortsEditor(composite, mainGroup);
     createCanalCostsEditor(composite, mainGroup);
+    createWarmupTimeEditor(composite, mainGroup);
+    createCooldownTimeEditor(composite, mainGroup);
+    createCooldownVolumeEditor(composite, mainGroup);
   }
 
 	/**
@@ -284,4 +287,34 @@ public class VesselClassComposite extends AbstractDetailComposite {
 								.getValueProviderProvider()),
 				"Canal Costs");
 	}
+
+  /**
+   * Create an editor for the warmupTime feature on VesselClass
+   * @generated
+   */
+  protected static void createWarmupTimeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_WarmupTime()),
+      "Warmup Time");
+  }
+
+  /**
+   * Create an editor for the cooldownTime feature on VesselClass
+   * @generated
+   */
+  protected static void createCooldownTimeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_CooldownTime()),
+      "Cooldown Time");
+  }
+
+  /**
+   * Create an editor for the cooldownVolume feature on VesselClass
+   * @generated
+   */
+  protected static void createCooldownVolumeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_CooldownVolume()),
+      "Cooldown Volume");
+  }
 }

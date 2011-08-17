@@ -66,7 +66,7 @@ public  class IndexPricePurchaseContractComposite extends AbstractDetailComposit
 	 * @generated
 	 */
 	protected static void createFieldsFromSupers(final AbstractDetailComposite composite, final Composite mainGroup) {
-      PurchaseContractComposite.createFields(composite, mainGroup);
+      SimplePurchaseContractComposite.createFields(composite, mainGroup);
   }
 
 	/**

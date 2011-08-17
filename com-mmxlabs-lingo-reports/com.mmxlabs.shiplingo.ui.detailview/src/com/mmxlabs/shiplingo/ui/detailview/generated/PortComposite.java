@@ -99,6 +99,7 @@ public class PortComposite extends AbstractDetailComposite {
     createDefaultCVvalueEditor(composite, mainGroup);
     createDefaultWindowStartEditor(composite, mainGroup);
     createDefaultSlotDurationEditor(composite, mainGroup);
+    createShouldArriveColdEditor(composite, mainGroup);
   }
 
 	/**
@@ -171,5 +172,15 @@ public class PortComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(PortPackage.eINSTANCE.getPort_DefaultSlotDuration()),
       "Default Slot Duration");
+  }
+
+  /**
+   * Create an editor for the shouldArriveCold feature on Port
+   * @generated
+   */
+  protected static void createShouldArriveColdEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(PortPackage.eINSTANCE.getPort_ShouldArriveCold()),
+      "Should Arrive Cold");
   }
 }

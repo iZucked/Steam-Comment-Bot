@@ -75,6 +75,7 @@ public  class LoadSlotComposite extends AbstractDetailComposite {
 	 */
 	protected static void createLoadSlotFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createCargoCVvalueEditor(composite, mainGroup);
+    createArriveColdEditor(composite, mainGroup);
   }
 
 		
@@ -86,5 +87,15 @@ public  class LoadSlotComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(CargoPackage.eINSTANCE.getLoadSlot_CargoCVvalue()),
       "Cargo CV");
+  }
+
+  /**
+   * Create an editor for the arriveCold feature on LoadSlot
+   * @generated
+   */
+  protected static void createArriveColdEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(CargoPackage.eINSTANCE.getLoadSlot_ArriveCold()),
+      "Arrive Cold");
   }
 }
