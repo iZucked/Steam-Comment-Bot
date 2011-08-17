@@ -53,7 +53,7 @@ public class SchedulerBuilderTest {
 
 		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 		
-		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0);
+		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -61,12 +61,12 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		final IPort port = builder.createPort("port");
+		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
 
 		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 
-		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0);
+		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		final IPort port = builder.createPort("port");
+		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
 
 		final ICurve curve = context.mock(ICurve.class);
@@ -110,7 +110,7 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		final IPort port = builder.createPort("port");
+		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
 		final ICurve curve = context.mock(ICurve.class);
@@ -128,12 +128,12 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		final IPort port = builder.createPort("port");
+		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 
 		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window,
-				0, 0, contract, 0, 0);
+				0, 0, contract, 0, 0, false, false);
 		final IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
 
 		builder.createCargo("id", loadSlot, dischargeSlot);
@@ -197,7 +197,7 @@ public class SchedulerBuilderTest {
 		final int minHeel = 4;
 
 		final IVesselClass vesselClass = builder.createVesselClass("name",
-				minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 1234);
+				minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 1234, 35353, 80808, 10101);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, minHeel, 700;
 
@@ -209,6 +209,10 @@ public class SchedulerBuilderTest {
 		Assert.assertEquals(1000, vesselClass.getBaseFuelConversionFactor());
 		Assert.assertEquals(1234, vesselClass.getHourlyCharterInPrice());
 
+		Assert.assertEquals(35353, vesselClass.getWarmupTime());
+		Assert.assertEquals(80808, vesselClass.getCooldownTime());
+		Assert.assertEquals(10101, vesselClass.getCooldownVolume());
+		
 		fail("Not yet implemented - Internal state checks");
 	}
 
