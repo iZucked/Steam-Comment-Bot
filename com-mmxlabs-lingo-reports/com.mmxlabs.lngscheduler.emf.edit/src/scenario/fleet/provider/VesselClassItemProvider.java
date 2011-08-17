@@ -81,6 +81,9 @@ public class VesselClassItemProvider
 			addDailyCharterOutPricePropertyDescriptor(object);
 			addBaseFuelPropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
+			addWarmupTimePropertyDescriptor(object);
+			addCooldownTimePropertyDescriptor(object);
+			addCooldownVolumePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -306,6 +309,72 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Warmup Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWarmupTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_warmupTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_warmupTime_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__WARMUP_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cooldown Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCooldownTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_cooldownTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_cooldownTime_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__COOLDOWN_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cooldown Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCooldownVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_cooldownVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_cooldownVolume_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__COOLDOWN_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Base Fuel feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -406,6 +475,9 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:

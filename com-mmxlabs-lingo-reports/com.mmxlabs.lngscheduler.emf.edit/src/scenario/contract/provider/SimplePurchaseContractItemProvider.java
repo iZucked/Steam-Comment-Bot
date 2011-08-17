@@ -20,20 +20,18 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.contract.ContractPackage;
-import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.SimplePurchaseContract;
 
 /**
- * This is the item provider adapter for a {@link scenario.contract.FixedPricePurchaseContract} object.
+ * This is the item provider adapter for a {@link scenario.contract.SimplePurchaseContract} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class FixedPricePurchaseContractItemProvider
-	extends SimplePurchaseContractItemProvider
+public class SimplePurchaseContractItemProvider
+	extends PurchaseContractItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -46,7 +44,7 @@ public class FixedPricePurchaseContractItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FixedPricePurchaseContractItemProvider(AdapterFactory adapterFactory) {
+	public SimplePurchaseContractItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,42 +59,31 @@ public class FixedPricePurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addUnitPricePropertyDescriptor(object);
+			addCooldownPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Unit Price feature.
+	 * This adds a property descriptor for the Cooldown Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addUnitPricePropertyDescriptor(Object object) {
+	protected void addCooldownPortsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_FixedPricePurchaseContract_unitPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FixedPricePurchaseContract_unitPrice_feature", "_UI_FixedPricePurchaseContract_type"),
-				 ContractPackage.Literals.FIXED_PRICE_PURCHASE_CONTRACT__UNIT_PRICE,
+				 getString("_UI_SimplePurchaseContract_cooldownPorts_feature"),
+				 getString("_UI_SimplePurchaseContract_cooldownPorts_description"),
+				 ContractPackage.Literals.SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
-	}
-
-	/**
-	 * This returns FixedPricePurchaseContract.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FixedPricePurchaseContract"));
 	}
 
 	/**
@@ -107,10 +94,10 @@ public class FixedPricePurchaseContractItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((FixedPricePurchaseContract)object).getName();
+		String label = ((SimplePurchaseContract)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_FixedPricePurchaseContract_type") :
-			getString("_UI_FixedPricePurchaseContract_type") + " " + label;
+			getString("_UI_SimplePurchaseContract_type") :
+			getString("_UI_SimplePurchaseContract_type") + " " + label;
 	}
 
 	/**
@@ -123,12 +110,6 @@ public class FixedPricePurchaseContractItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(FixedPricePurchaseContract.class)) {
-			case ContractPackage.FIXED_PRICE_PURCHASE_CONTRACT__UNIT_PRICE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-		}
 		super.notifyChanged(notification);
 	}
 
