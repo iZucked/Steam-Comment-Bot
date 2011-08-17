@@ -82,10 +82,10 @@ public class TestCalculations {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		final IPort port1 = builder.createPort("port-1");
-		final IPort port2 = builder.createPort("port-2");
-		final IPort port3 = builder.createPort("port-3");
-		final IPort port4 = builder.createPort("port-4");
+		final IPort port1 = builder.createPort("port-1", false, null);
+		final IPort port2 = builder.createPort("port-2", false, null);
+		final IPort port3 = builder.createPort("port-3", false, null);
+		final IPort port4 = builder.createPort("port-4", false, null);
 
 		final int minSpeed = 12000;
 		final int maxSpeed = 20000;
@@ -93,7 +93,7 @@ public class TestCalculations {
 		final int baseFuelUnitPrice = 400000;
 		final IVesselClass vesselClass1 = builder.createVesselClass(
 				"vessel-class-1", minSpeed, maxSpeed, capacity, 0,
-				baseFuelUnitPrice, 500, 0);
+				baseFuelUnitPrice, 500, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);
@@ -124,7 +124,7 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1);
+				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
@@ -696,10 +696,10 @@ public class TestCalculations {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		final IPort port1 = builder.createPort("port-1");
-		final IPort port2 = builder.createPort("port-2");
-		final IPort port3 = builder.createPort("port-2");
-		final IPort port4 = builder.createPort("port-2");
+		final IPort port1 = builder.createPort("port-1", false, null);
+		final IPort port2 = builder.createPort("port-2", false, null);
+		final IPort port3 = builder.createPort("port-3", false, null);
+		final IPort port4 = builder.createPort("port-4", false, null);
 
 		final int minSpeed = 16000;
 		final int maxSpeed = 20000;
@@ -707,7 +707,8 @@ public class TestCalculations {
 		final int baseFuelUnitPrice = 400000;
 		final IVesselClass vesselClass1 = builder.createVesselClass(
 				"vessel-class-1", minSpeed, maxSpeed, capacity, 0,
-				baseFuelUnitPrice, 500, 0);
+				baseFuelUnitPrice, 500, 0,
+				Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);
@@ -738,7 +739,7 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1);
+				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
@@ -1314,10 +1315,10 @@ public class TestCalculations {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
-		final IPort port1 = builder.createPort("port-1");
-		final IPort port2 = builder.createPort("port-2");
-		final IPort port3 = builder.createPort("port-2");
-		final IPort port4 = builder.createPort("port-2");
+		final IPort port1 = builder.createPort("port-1", false, null);
+		final IPort port2 = builder.createPort("port-2", false, null);
+		final IPort port3 = builder.createPort("port-3", false, null);
+		final IPort port4 = builder.createPort("port-4", false, null);
 
 		final int minSpeed = 16000;
 		final int maxSpeed = 20000;
@@ -1325,7 +1326,7 @@ public class TestCalculations {
 		final int baseFuelUnitPrice = 1000;
 		final IVesselClass vesselClass1 = builder.createVesselClass(
 				"vessel-class-1", minSpeed, maxSpeed, capacity, 0,
-				baseFuelUnitPrice, 500, 0);
+				baseFuelUnitPrice, 500, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);
@@ -1356,7 +1357,7 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1);
+				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
