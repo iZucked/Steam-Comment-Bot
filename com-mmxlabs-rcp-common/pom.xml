@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mmxlabs.rcp.common</groupId>
+	<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<!-- Tycho requires maven 3.0 -->
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<parent>
+		<groupId>com.mmxlabs.parent</groupId>
+		<artifactId>mmxlabs-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<issueManagement>
+		<system>CodebaseHQ</system>
+		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
+	</issueManagement>
+	<inceptionYear>2010</inceptionYear>
+	<scm>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-rcp-common.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-rcp-common.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-rcp-common</url>
+	</scm>
+	<organization>
+		<name>Minimax Labs</name>
+		<url>http://www.minimaxlabs.com/</url>
+	</organization>
+
+
+	<properties>
+		<!-- Tycho version to use -->
+		<tycho.version>0.13.0-SNAPSHOT</tycho.version>
+
+		<!-- Continue even when tests fail -->
+		<maven.test.failure.ignore>true</maven.test.failure.ignore>
+
+		<!-- Avoid platform dependent build warning -->
+		<!-- Code files should also be in UTF-8 -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+	</properties>
+
+	<modules>
+		<!-- Platform target file - disabled as we use the repositories section 
+			below to allow local mirrors of p2 repositories -->
+		<!-- <module>target-definition</module> -->
+
+		<module>com.mmxlabs.rcp.common</module>
+		<module>com.mmxlabs.rcp.common.p2</module>
+
+		<!-- Test Plugins -->
+		<module>com.mmxlabs.rcp.common.tests</module>
+	</modules>
+
+	<build>
+		<!-- Required for some tycho workaround - may no longer be needed -->
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<!-- Enable tycho packaging types -->
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<!-- Build code for java 1.6 -->
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<!-- Tycho uses it's own compiler, so we need to set the compliance levels 
+				differently here. -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<!-- Tell the resolver to look at POM dependencies for additional bundles -->
+					<pomDependencies>consider</pomDependencies>
+
+					<resolver>p2</resolver>
+
+					<!-- Where to find the target definition -->
+					<!-- <target> <artifact> <groupId>com.mmxlabs.shiplingo</groupId> <artifactId>target-definition</artifactId> 
+						<version>0.0.1-SNAPSHOT</version> <classifier>shiplingo</classifier> </artifact> 
+						</target> -->
+
+					<!-- List of target environments. However, Tycho seems to only be able 
+						to build one at a time and complains if the product definition contains the 
+						other launcher fragments. -->
+					<environments>
+
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>carbon</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<!-- Increase max heap size and enable a debug connection to port 8998 -->
+					<!-- <argLine>-Xmx512m -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y,suspend=n</argLine> -->
+					<!-- bug in recent tycho snapshots only allow a single argument here -->
+					<argLine>${ui.test.vmargs}</argLine>
+				</configuration>
+			</plugin>
+
+			<!-- Install plugin into the OBR metadata -->
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${maven.bundle.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>install-bundle</id>
+						<phase>install</phase>
+						<goals>
+							<goal>install</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<supportedProjectTypes>
+						<supportedProjectType>eclipse-plugin</supportedProjectType>
+					</supportedProjectTypes>
+
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+
+	<profiles>
+		<profile>
+			<id>macosx</id>
+				<activation>
+					<os>
+						<name>mac os x</name>
+						<family>mac</family>
+					</os>
+				</activation>
+			<properties>
+				<ui.test.vmargs>-Xmx512m -XstartOnFirstThread</ui.test.vmargs>
+			</properties>
+		</profile>
+		<profile>
+			<id>other-os</id>
+			<activation>
+				<os>
+					<name>not-mac</name>
+          				<family>!mac</family>
+				</os>
+			</activation>
+			<properties>
+				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m</ui.test.vmargs>
+			</properties>
+		</profile>
+	</profiles>
+
+	<repositories>
+
+		<!-- We use repositories defined here rather than the platform target to 
+			allow local mirrors to be specified in settings.xml -->
+
+		<repository>
+			<id>indigo</id>
+			<url>http://download.eclipse.org/releases/indigo</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>eclipse-3.7</id>
+			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>swtbot</id>
+			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
+			<layout>p2</layout>
+		</repository>
+
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>org.sonatype.tycho</id>
+			<name>Tycho snapshot repository</name>
+			<url>https://repository.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+</project>
