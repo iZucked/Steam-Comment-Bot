@@ -51,6 +51,8 @@ import com.mmxlabs.shiplingo.ui.tableview.ValueListAttributeManipulator;
 /**
  * A {@link ScenarioObjectEditorViewerPane} for editing a port model
  * 
+ * TODO add cooldown choice
+ * 
  * @author Tom Hinton
  * 
  */
@@ -59,6 +61,14 @@ public class PortEVP extends NamedObjectEVP {
 		super(page, part);
 	}
 
+	private class DefaultContractManipulator extends ContractManipulator {
+		public DefaultContractManipulator(EditingDomain editingDomain,
+				IReferenceValueProvider valueProvider) {
+			super(editingDomain, valueProvider);
+		}
+		
+	}
+	
 	/**
 	 * A special-case column for specifying default contract from the port even
 	 * though it's an attribute on the contract really.
@@ -66,9 +76,10 @@ public class PortEVP extends NamedObjectEVP {
 	 * @author Tom Hinton
 	 * 
 	 */
-	private class DefaultContractManipulator implements ICellRenderer,
+	private class ContractManipulator implements ICellRenderer,
 			ICellManipulator {
-		public DefaultContractManipulator(final EditingDomain editingDomain,
+		
+		public ContractManipulator(final EditingDomain editingDomain,
 				final IReferenceValueProvider valueProvider) {
 			super();
 			this.editingDomain = editingDomain;
