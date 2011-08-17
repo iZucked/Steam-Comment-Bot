@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
@@ -71,7 +72,8 @@ public interface ISchedulerBuilder {
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed,
 			long capacity, int minHeel, int baseFuelUnitPrice,
 			int baseFuelEquivalenceInM3TOMT, int hourlyCharterPrice,
-			int warmupTimeInHours, int cooldownTimeInHours, int cooldownVolumeInM3);
+			int warmupTimeInHours, int cooldownTimeInHours,
+			int cooldownVolumeInM3);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the
@@ -223,7 +225,8 @@ public interface ISchedulerBuilder {
 	 * @param name
 	 * @return
 	 */
-	IPort createPort(String name, boolean arriveCold);
+	IPort createPort(String name, boolean arriveCold,
+			final ISimpleLoadPriceCalculator cooldownPriceCalculator);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -233,7 +236,9 @@ public interface ISchedulerBuilder {
 	 * @param y
 	 * @return
 	 */
-	IXYPort createPort(String name, boolean arriveCold, float x, float y);
+	IXYPort createPort(String name, boolean arriveCold,
+			final ISimpleLoadPriceCalculator cooldownPriceCalculator, float x,
+			float y);
 
 	/**
 	 * Create a cargo with the specific from and to ports and associated time
@@ -350,8 +355,8 @@ public interface ISchedulerBuilder {
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window,
 			long minVolume, long maxVolume,
 			ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationHours);
-
+			int durationHours, boolean cooldownSet, boolean cooldownForbidden);
+	
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected
 	 * to be assigned to a cargo.

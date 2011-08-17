@@ -75,6 +75,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.NetbackContract;
@@ -300,7 +301,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				IMultiMatrixProvider.Default_Key);
 
 		// Create the anywhere port
-		ANYWHERE = createPort("ANYWHERE", false);
+		ANYWHERE = createPort("ANYWHERE", false, new FixedPriceContract(0));
 
 	}
 
@@ -308,7 +309,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public ILoadSlot createLoadSlot(final String id, final IPort port,
 			final ITimeWindow window, final long minVolumeInM3,
 			final long maxVolumeInM3, final ILoadPriceCalculator loadContract,
-			final int cargoCVValue, final int durationHours) {
+			final int cargoCVValue, final int durationHours,
+			boolean cooldownSet, boolean cooldownForbidden) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException(
@@ -328,7 +330,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// slot.setPurchasePriceCurve(pricePerMMBTu);
 		slot.setLoadPriceCalculator(loadContract);
 		slot.setCargoCVValue(cargoCVValue);
-
+		slot.setCooldownForbidden(cooldownForbidden);
+		slot.setCooldownSet(cooldownSet);
+		
 		loadSlots.add(slot);
 
 		// Create a sequence element against this load slot
@@ -439,13 +443,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IPort createPort(final String name, final boolean arriveCold) {
+	public IPort createPort(final String name, final boolean arriveCold,
+			final ISimpleLoadPriceCalculator cooldownPriceCalculator) {
 
 		final Port port = new Port(indexingContext);
 		port.setName(name);
 
+		port.setCooldownPriceCalculator(cooldownPriceCalculator);
+
 		port.setShouldVesselsArriveCold(arriveCold);
-		
+
 		ports.add(port);
 
 		/*
@@ -523,14 +530,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IXYPort createPort(final String name, final boolean arriveCold, final float x, final float y) {
+	public IXYPort createPort(final String name, final boolean arriveCold,
+			final ISimpleLoadPriceCalculator cooldownPriceCalculator,
+			final float x, final float y) {
 
 		final XYPort port = new XYPort(indexingContext);
 		port.setName(name);
 		port.setX(x);
 		port.setY(y);
 		port.setShouldVesselsArriveCold(arriveCold);
-		
+		port.setCooldownPriceCalculator(cooldownPriceCalculator);
 		ports.add(port);
 
 		if (ANYWHERE != null) {
@@ -821,7 +830,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// configure constraints
 		applyAdjacencyConstraints();
 		applyVesselRestrictionConstraints();
-		
+
 		portDistanceProvider.cacheExtremalValues(ports);
 
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
@@ -918,17 +927,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IVesselClass createVesselClass(final String name,
 			final int minSpeed, final int maxSpeed, final long capacityInM3,
 			final int minHeelInM3, final int baseFuelUnitPricePerMT,
-			final int baseFuelEquivalenceInM3TOMT) {
-		return createVesselClass(name, minSpeed, maxSpeed, capacityInM3,
-				minHeelInM3, baseFuelUnitPricePerMT,
-				baseFuelEquivalenceInM3TOMT, 0);
-	}
-
-	@Override
-	public IVesselClass createVesselClass(final String name,
-			final int minSpeed, final int maxSpeed, final long capacityInM3,
-			final int minHeelInM3, final int baseFuelUnitPricePerMT,
-			final int baseFuelEquivalenceInM3TOMT, final int hourlyCharterPrice) {
+			final int baseFuelEquivalenceInM3TOMT,
+			final int hourlyCharterPrice, final int warmupTimeHours,
+			final int cooldownTimeHours, final int cooldownVolumeM3) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -943,6 +944,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setBaseFuelConversionFactor(baseFuelEquivalenceInM3TOMT);
 
 		vesselClass.setHourlyCharterInPrice(hourlyCharterPrice);
+
+		vesselClass.setCooldownTime(cooldownTimeHours);
+		vesselClass.setWarmupTime(warmupTimeHours);
+		vesselClass.setCooldownVolume(cooldownVolumeM3);
 
 		vesselClasses.add(vesselClass);
 
@@ -1353,7 +1358,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				allowedVessels = Collections.emptySet();
 			}
 
-			Set<IVesselClass> allowedVesselClasses = slotVesselClassRestrictions.get(slot);
+			Set<IVesselClass> allowedVesselClasses = slotVesselClassRestrictions
+					.get(slot);
 			if (allowedVesselClasses == null) {
 				allowedVesselClasses = Collections.emptySet();
 			}
@@ -1409,13 +1415,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final IPortSlot secondSlot) {
 		if (firstSlot == null) {
 			if (reverseAdjacencyConstraints.containsKey(secondSlot)) {
-				final IPortSlot pre = reverseAdjacencyConstraints.get(secondSlot);
+				final IPortSlot pre = reverseAdjacencyConstraints
+						.get(secondSlot);
 				forwardAdjacencyConstraints.remove(pre);
 				reverseAdjacencyConstraints.remove(secondSlot);
 			}
 		} else if (secondSlot == null) {
 			if (forwardAdjacencyConstraints.containsKey(firstSlot)) {
-				final IPortSlot post = forwardAdjacencyConstraints.get(firstSlot);
+				final IPortSlot post = forwardAdjacencyConstraints
+						.get(firstSlot);
 				forwardAdjacencyConstraints.remove(firstSlot);
 				reverseAdjacencyConstraints.remove(post);
 			}
