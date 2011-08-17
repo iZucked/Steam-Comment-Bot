@@ -54,4 +54,24 @@ public interface ILoadSlot extends IPortSlot {
 	 * @return
 	 */
 	ILoadPriceCalculator getLoadPriceCalculator();
+
+	/**
+	 * If true, {@link #isCooldownRequired()} returns true if a cooldown is to
+	 * be performed at this slot if the vessel warms up, and false if a cooldown
+	 * is not to be performed at this slot if it can be avoided.
+	 * 
+	 * Otherwise, both cooldown options will be considered
+	 * 
+	 * @return
+	 */
+	boolean isCooldownSet();
+
+	/**
+	 * If {@link #isCooldownSet()} is true, this flag constrains the cooldown
+	 * decision on arrival at this port (true => cooldown will be used if
+	 * necessary, false => cooldown will be avoided if at all possible)
+	 * 
+	 * @return
+	 */
+	boolean isCooldownForbidden();
 }

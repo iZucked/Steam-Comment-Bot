@@ -28,6 +28,10 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 	
 	private int cargoCVValue;
 
+	private boolean cooldownSet;
+	
+	private boolean cooldownForbidden;
+	
 	public LoadSlot() {
 		setPortType(PortType.Load);
 	}
@@ -35,12 +39,14 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 	public LoadSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minLoadVolume,
 			final long maxLoadVolume, final ILoadPriceCalculator loadPriceCalculator,
-			final int cargoCVValue) {
+			final int cargoCVValue, final boolean cooldownSet, final boolean cooldownForbidden) {
 		super(id, port, timwWindow);
 		this.minLoadVolume = minLoadVolume;
 		this.maxLoadVolume = maxLoadVolume;
 		this.loadPriceCalculator = loadPriceCalculator;
 		this.cargoCVValue = cargoCVValue;
+		this.cooldownSet = cooldownSet;
+		this.cooldownForbidden = cooldownForbidden;
 	}
 
 	@Override
@@ -109,5 +115,21 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 	@Override
 	public ILoadPriceCalculator getLoadPriceCalculator() {
 		return loadPriceCalculator;
+	}
+
+	public final boolean isCooldownSet() {
+		return cooldownSet;
+	}
+
+	public final void setCooldownSet(boolean cooldownSet) {
+		this.cooldownSet = cooldownSet;
+	}
+
+	public final boolean isCooldownForbidden() {
+		return cooldownForbidden;
+	}
+
+	public final void setCooldownForbidden(boolean cooldownForbidden) {
+		this.cooldownForbidden = cooldownForbidden;
 	}
 }
