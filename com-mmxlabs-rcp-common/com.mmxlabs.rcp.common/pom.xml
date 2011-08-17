@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>com.mmxlabs.shiplingo.demo</artifactId>
-		<groupId>com.mmxlabs.shiplingo</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<artifactId>com.mmxlabs.rcp.common</artifactId>
+		<groupId>com.mmxlabs.rcp.common.parent</groupId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.mmxlabs.rcp.common</groupId>
 	<artifactId>com.mmxlabs.rcp.common</artifactId>
