@@ -97,6 +97,14 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 			if (cargoCVValue != slot.cargoCVValue) {
 				return false;
 			}
+			
+			if (cooldownSet != slot.cooldownSet) {
+				return false;
+			}
+			
+			if (cooldownForbidden != slot.cooldownForbidden) {
+				return false;
+			}
 
 			return super.equals(obj);
 		}
