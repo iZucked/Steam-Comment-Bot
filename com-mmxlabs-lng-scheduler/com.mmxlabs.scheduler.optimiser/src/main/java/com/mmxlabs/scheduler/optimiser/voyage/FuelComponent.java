@@ -53,7 +53,12 @@ public enum FuelComponent {
 	 * Some vessels require a pilot light when running on base fuel only. This
 	 * tracks use during idle times.
 	 */
-	IdlePilotLight(FuelUnit.MT);
+	IdlePilotLight(FuelUnit.MT), 
+	
+	/**
+	 * Gas was purchased from the port for cooldown.
+	 */
+	Cooldown(FuelUnit.M3);
 
 	private final FuelUnit fuelUnit;
 
@@ -78,7 +83,7 @@ public enum FuelComponent {
 	}
 	
 	private static final FuelComponent[] idleFuelComponents = new FuelComponent[] {
-			FuelComponent.IdleBase, FuelComponent.IdleNBO };
+			FuelComponent.IdleBase, FuelComponent.IdleNBO, FuelComponent.Cooldown };
 	
 	public static FuelComponent[] getIdleFuelComponents() {
 		return idleFuelComponents;
