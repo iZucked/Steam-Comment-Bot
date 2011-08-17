@@ -33,7 +33,7 @@ public class LoadSlotTest {
 		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 
 		final LoadSlot slot = new LoadSlot(id, port, tw, minLoadVolume,
-				maxLoadVolume, contract, cargoCVValue);
+				maxLoadVolume, contract, cargoCVValue, false, true);
 		Assert.assertSame(id, slot.getId());
 		Assert.assertSame(port, slot.getPort());
 		Assert.assertSame(tw, slot.getTimeWindow());
@@ -42,6 +42,9 @@ public class LoadSlotTest {
 		Assert.assertEquals(maxLoadVolume, slot.getMaxLoadVolume());
 		Assert.assertSame(contract, slot.getLoadPriceCalculator());
 		Assert.assertEquals(cargoCVValue, slot.getCargoCVValue());
+		
+		Assert.assertFalse(slot.isCooldownSet());
+		Assert.assertTrue(slot.isCooldownForbidden());
 	}
 
 	@Test
@@ -94,29 +97,54 @@ public class LoadSlotTest {
 		final ILoadPriceCalculator curve2 = context.mock(ILoadPriceCalculator.class, "curve2");
 
 		final LoadSlot slot1 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
-				40);
+				40, false, false);
 		final LoadSlot slot2 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
-				40);
+				40, false, false);
 
 		final LoadSlot slot3 = new LoadSlot(id2, port1, tw1, 10l, 20l, curve1,
-				40);
+				40, false, false);
 		final LoadSlot slot4 = new LoadSlot(id1, port2, tw1, 10l, 20l, curve1,
-				40);
+				40, false, false);
 		final LoadSlot slot5 = new LoadSlot(id1, port1, tw2, 10l, 20l, curve1,
-				40);
+				40, false, false);
 		final LoadSlot slot6 = new LoadSlot(id1, port1, tw1, 210l, 20l, curve1,
-				40);
+				40, false, false);
 		final LoadSlot slot7 = new LoadSlot(id1, port1, tw1, 10l, 220l, curve1,
-				40);
+				40, false, false);
 		final LoadSlot slot8 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve2,
-				40);
+				40, false, false);
 		final LoadSlot slot9 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
-				240);
+				240, false, false);
+		
+		final LoadSlot slot10 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
+				240, false, true);
 
+		final LoadSlot slot11 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
+				240, true, true);
+		
+		final LoadSlot slot12 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
+				240, true, false);
+		
+		final LoadSlot slot13 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
+				240, true, true);
+		
 		Assert.assertTrue(slot1.equals(slot1));
 		Assert.assertTrue(slot1.equals(slot2));
 		Assert.assertTrue(slot2.equals(slot1));
+		
+		Assert.assertTrue(slot13.equals(slot11));
+		Assert.assertTrue(slot11.equals(slot13));
 
+		Assert.assertFalse(slot9.equals(slot10));
+		Assert.assertFalse(slot9.equals(slot11));
+		Assert.assertFalse(slot9.equals(slot12));
+		Assert.assertFalse(slot9.equals(slot13));
+		
+		Assert.assertFalse(slot10.equals(slot11));
+		Assert.assertFalse(slot10.equals(slot12));
+		Assert.assertFalse(slot11.equals(slot12));
+		Assert.assertFalse(slot12.equals(slot11));
+		
 		Assert.assertFalse(slot1.equals(slot3));
 		Assert.assertFalse(slot1.equals(slot4));
 		Assert.assertFalse(slot1.equals(slot5));
