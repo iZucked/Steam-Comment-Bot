@@ -236,8 +236,8 @@ public class MultiDetailDialog extends Dialog {
 				for (final EObject object : objects) {
 					cc.append(SetCommand.create(editingDomain, p.getFirst()
 							.get(object), p.getSecond(), value));
-					editingDomain.getCommandStack().execute(cc);
 				}
+				editingDomain.getCommandStack().execute(cc);
 			}
 
 		}
