@@ -51,6 +51,9 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getPortExclusions <em>Port Exclusions</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCanalCosts <em>Canal Costs</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getWarmupTime <em>Warmup Time</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCooldownTime <em>Cooldown Time</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCooldownVolume <em>Cooldown Volume</em>}</li>
  * </ul>
  * </p>
  *
@@ -305,6 +308,66 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected EList<VesselClassCost> canalCosts;
+
+	/**
+	 * The default value of the '{@link #getWarmupTime() <em>Warmup Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWarmupTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WARMUP_TIME_EDEFAULT = 24;
+
+	/**
+	 * The cached value of the '{@link #getWarmupTime() <em>Warmup Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWarmupTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected int warmupTime = WARMUP_TIME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCooldownTime() <em>Cooldown Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCooldownTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int COOLDOWN_TIME_EDEFAULT = 12;
+
+	/**
+	 * The cached value of the '{@link #getCooldownTime() <em>Cooldown Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCooldownTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected int cooldownTime = COOLDOWN_TIME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCooldownVolume() <em>Cooldown Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCooldownVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int COOLDOWN_VOLUME_EDEFAULT = 500;
+
+	/**
+	 * The cached value of the '{@link #getCooldownVolume() <em>Cooldown Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCooldownVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int cooldownVolume = COOLDOWN_VOLUME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -700,6 +763,69 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getWarmupTime() {
+		return warmupTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWarmupTime(int newWarmupTime) {
+		int oldWarmupTime = warmupTime;
+		warmupTime = newWarmupTime;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__WARMUP_TIME, oldWarmupTime, warmupTime));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCooldownTime() {
+		return cooldownTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCooldownTime(int newCooldownTime) {
+		int oldCooldownTime = cooldownTime;
+		cooldownTime = newCooldownTime;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__COOLDOWN_TIME, oldCooldownTime, cooldownTime));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCooldownVolume() {
+		return cooldownVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCooldownVolume(int newCooldownVolume) {
+		int oldCooldownVolume = cooldownVolume;
+		cooldownVolume = newCooldownVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME, oldCooldownVolume, cooldownVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public VesselFuel getBaseFuel() {
 		if (baseFuel != null && baseFuel.eIsProxy()) {
 			InternalEObject oldBaseFuel = (InternalEObject)baseFuel;
@@ -806,6 +932,12 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return getInaccessiblePorts();
 			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
 				return getCanalCosts();
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+				return getWarmupTime();
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+				return getCooldownTime();
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
+				return getCooldownVolume();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -867,6 +999,15 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				getCanalCosts().clear();
 				getCanalCosts().addAll((Collection<? extends VesselClassCost>)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+				setWarmupTime((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+				setCooldownTime((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
+				setCooldownVolume((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -924,6 +1065,15 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
 				getCanalCosts().clear();
 				return;
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+				setWarmupTime(WARMUP_TIME_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+				setCooldownTime(COOLDOWN_TIME_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
+				setCooldownVolume(COOLDOWN_VOLUME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -966,6 +1116,12 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
 			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
 				return canalCosts != null && !canalCosts.isEmpty();
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+				return warmupTime != WARMUP_TIME_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+				return cooldownTime != COOLDOWN_TIME_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
+				return cooldownVolume != COOLDOWN_VOLUME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1030,6 +1186,12 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 		result.append(dailyCharterInPrice);
 		result.append(", dailyCharterOutPrice: ");
 		if (dailyCharterOutPriceESet) result.append(dailyCharterOutPrice); else result.append("<unset>");
+		result.append(", warmupTime: ");
+		result.append(warmupTime);
+		result.append(", cooldownTime: ");
+		result.append(cooldownTime);
+		result.append(", cooldownVolume: ");
+		result.append(cooldownVolume);
 		result.append(')');
 		return result.toString();
 	}

@@ -50,7 +50,15 @@ public enum FuelType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	BASE_FUEL(2, "BaseFuel", "BaseFuel");
+	BASE_FUEL(2, "BaseFuel", "BaseFuel"), /**
+	 * The '<em><b>Cooldown</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #COOLDOWN_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	COOLDOWN(3, "Cooldown", "Cooldown");
 
 	/**
 	 * The '<em><b>FBO</b></em>' literal value.
@@ -98,6 +106,21 @@ public enum FuelType implements Enumerator {
 	public static final int BASE_FUEL_VALUE = 2;
 
 	/**
+	 * The '<em><b>Cooldown</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>Cooldown</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #COOLDOWN
+	 * @model name="Cooldown"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int COOLDOWN_VALUE = 3;
+
+	/**
 	 * An array of all the '<em><b>Fuel Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -108,6 +131,7 @@ public enum FuelType implements Enumerator {
 			FBO,
 			NBO,
 			BASE_FUEL,
+			COOLDOWN,
 		};
 
 	/**
@@ -161,6 +185,7 @@ public enum FuelType implements Enumerator {
 			case FBO_VALUE: return FBO;
 			case NBO_VALUE: return NBO;
 			case BASE_FUEL_VALUE: return BASE_FUEL;
+			case COOLDOWN_VALUE: return COOLDOWN;
 		}
 		return null;
 	}

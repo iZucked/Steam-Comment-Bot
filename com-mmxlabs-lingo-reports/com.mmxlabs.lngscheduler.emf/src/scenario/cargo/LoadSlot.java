@@ -16,6 +16,7 @@ package scenario.cargo;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}</li>
+ *   <li>{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
  * </ul>
  * </p>
  *
@@ -75,6 +76,59 @@ public interface LoadSlot extends Slot {
 	 * @generated
 	 */
 	boolean isSetCargoCVvalue();
+
+	/**
+	 * Returns the value of the '<em><b>Arrive Cold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Arrive Cold</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Arrive Cold</em>' attribute.
+	 * @see #isSetArriveCold()
+	 * @see #unsetArriveCold()
+	 * @see #setArriveCold(boolean)
+	 * @see scenario.cargo.CargoPackage#getLoadSlot_ArriveCold()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	boolean isArriveCold();
+
+	/**
+	 * Sets the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Arrive Cold</em>' attribute.
+	 * @see #isSetArriveCold()
+	 * @see #unsetArriveCold()
+	 * @see #isArriveCold()
+	 * @generated
+	 */
+	void setArriveCold(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetArriveCold()
+	 * @see #isArriveCold()
+	 * @see #setArriveCold(boolean)
+	 * @generated
+	 */
+	void unsetArriveCold();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Arrive Cold</em>' attribute is set.
+	 * @see #unsetArriveCold()
+	 * @see #isArriveCold()
+	 * @see #setArriveCold(boolean)
+	 * @generated
+	 */
+	boolean isSetArriveCold();
 
 	/**
 	 * <!-- begin-user-doc -->

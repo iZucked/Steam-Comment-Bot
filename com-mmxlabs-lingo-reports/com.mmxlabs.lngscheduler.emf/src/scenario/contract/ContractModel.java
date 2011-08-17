@@ -74,6 +74,15 @@ public interface ContractModel extends EObject {
 	Contract getDefaultContract(Port port);
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" portRequired="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (final Contract c : getPurchaseContracts()) {\n   if (c instanceof SimplePurchaseContract) {\n\tif (\n\t((SimplePurchaseContract) c).getCooldownPorts().contains(port)) return \n\t\t(SimplePurchaseContract) c;\n   }\r\n}\r\n\r\nreturn null;'"
+	 * @generated
+	 */
+	SimplePurchaseContract getCooldownContract(Port port);
+
+	/**
 	 * Returns the value of the '<em><b>Volume Constraints</b></em>' containment reference list.
 	 * The list contents are of type {@link scenario.contract.TotalVolumeLimit}.
 	 * <!-- begin-user-doc -->

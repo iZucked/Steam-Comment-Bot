@@ -27,6 +27,7 @@ import scenario.contract.NetbackPurchaseContract;
 import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.contract.SimplePurchaseContract;
 import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.impl.FleetPackageImpl;
@@ -115,6 +116,13 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * @generated
 	 */
 	private EClass profitSharingPurchaseContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass simplePurchaseContractEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -250,6 +258,15 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 */
 	public EOperation getContractModel__GetDefaultContract__Port() {
 		return contractModelEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getContractModel__GetCooldownContract__Port() {
+		return contractModelEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -491,6 +508,24 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getSimplePurchaseContract() {
+		return simplePurchaseContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSimplePurchaseContract_CooldownPorts() {
+		return (EReference)simplePurchaseContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getProfitSharingPurchaseContract_Alpha() {
 		return (EAttribute)profitSharingPurchaseContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -593,6 +628,7 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		createEReference(contractModelEClass, CONTRACT_MODEL__PURCHASE_CONTRACTS);
 		createEReference(contractModelEClass, CONTRACT_MODEL__SALES_CONTRACTS);
 		createEOperation(contractModelEClass, CONTRACT_MODEL___GET_DEFAULT_CONTRACT__PORT);
+		createEOperation(contractModelEClass, CONTRACT_MODEL___GET_COOLDOWN_CONTRACT__PORT);
 
 		totalVolumeLimitEClass = createEClass(TOTAL_VOLUME_LIMIT);
 		createEReference(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__PORTS);
@@ -633,6 +669,9 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		createEAttribute(profitSharingPurchaseContractEClass, PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA);
 		createEReference(profitSharingPurchaseContractEClass, PROFIT_SHARING_PURCHASE_CONTRACT__INDEX);
 		createEReference(profitSharingPurchaseContractEClass, PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX);
+
+		simplePurchaseContractEClass = createEClass(SIMPLE_PURCHASE_CONTRACT);
+		createEReference(simplePurchaseContractEClass, SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS);
 	}
 
 	/**
@@ -672,10 +711,11 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		contractEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 		purchaseContractEClass.getESuperTypes().add(this.getContract());
 		salesContractEClass.getESuperTypes().add(this.getContract());
-		fixedPricePurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
-		indexPricePurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
+		fixedPricePurchaseContractEClass.getESuperTypes().add(this.getSimplePurchaseContract());
+		indexPricePurchaseContractEClass.getESuperTypes().add(this.getSimplePurchaseContract());
 		netbackPurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		profitSharingPurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
+		simplePurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(contractModelEClass, ContractModel.class, "ContractModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -686,6 +726,9 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		initEReference(getContractModel_SalesContracts(), this.getSalesContract(), null, "salesContracts", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getContractModel__GetDefaultContract__Port(), this.getContract(), "getDefaultContract", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, thePortPackage.getPort(), "port", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getContractModel__GetCooldownContract__Port(), this.getSimplePurchaseContract(), "getCooldownContract", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, thePortPackage.getPort(), "port", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(totalVolumeLimitEClass, TotalVolumeLimit.class, "TotalVolumeLimit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -727,6 +770,9 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		initEAttribute(getProfitSharingPurchaseContract_Gamma(), ecorePackage.getEFloat(), "gamma", null, 1, 1, ProfitSharingPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProfitSharingPurchaseContract_Index(), theMarketPackage.getIndex(), null, "index", null, 1, 1, ProfitSharingPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProfitSharingPurchaseContract_ReferenceIndex(), theMarketPackage.getIndex(), null, "referenceIndex", null, 1, 1, ProfitSharingPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(simplePurchaseContractEClass, SimplePurchaseContract.class, "SimplePurchaseContract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSimplePurchaseContract_CooldownPorts(), thePortPackage.getPort(), null, "cooldownPorts", null, 0, -1, SimplePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //ContractPackageImpl

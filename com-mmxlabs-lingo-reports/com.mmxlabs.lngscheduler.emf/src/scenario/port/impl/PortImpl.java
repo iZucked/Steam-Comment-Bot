@@ -36,6 +36,7 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVvalue <em>Default CVvalue</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultWindowStart <em>Default Window Start</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#isShouldArriveCold <em>Should Arrive Cold</em>}</li>
  * </ul>
  * </p>
  *
@@ -181,6 +182,26 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * @ordered
 	 */
 	protected int defaultSlotDuration = DEFAULT_SLOT_DURATION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isShouldArriveCold() <em>Should Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isShouldArriveCold()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SHOULD_ARRIVE_COLD_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isShouldArriveCold() <em>Should Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isShouldArriveCold()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean shouldArriveCold = SHOULD_ARRIVE_COLD_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -362,6 +383,27 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isShouldArriveCold() {
+		return shouldArriveCold;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShouldArriveCold(boolean newShouldArriveCold) {
+		boolean oldShouldArriveCold = shouldArriveCold;
+		shouldArriveCold = newShouldArriveCold;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__SHOULD_ARRIVE_COLD, oldShouldArriveCold, shouldArriveCold));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -379,6 +421,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return getDefaultWindowStart();
 			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
 				return getDefaultSlotDuration();
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+				return isShouldArriveCold();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -411,6 +455,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
 				setDefaultSlotDuration((Integer)newValue);
+				return;
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+				setShouldArriveCold((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -445,6 +492,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
 				setDefaultSlotDuration(DEFAULT_SLOT_DURATION_EDEFAULT);
 				return;
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+				setShouldArriveCold(SHOULD_ARRIVE_COLD_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -471,6 +521,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return defaultWindowStart != DEFAULT_WINDOW_START_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
 				return defaultSlotDuration != DEFAULT_SLOT_DURATION_EDEFAULT;
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+				return shouldArriveCold != SHOULD_ARRIVE_COLD_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -593,6 +645,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		result.append(defaultWindowStart);
 		result.append(", defaultSlotDuration: ");
 		result.append(defaultSlotDuration);
+		result.append(", shouldArriveCold: ");
+		result.append(shouldArriveCold);
 		result.append(')');
 		return result.toString();
 	}

@@ -26,7 +26,7 @@ import scenario.contract.FixedPricePurchaseContract;
  *
  * @generated
  */
-public class FixedPricePurchaseContractImpl extends PurchaseContractImpl implements FixedPricePurchaseContract {
+public class FixedPricePurchaseContractImpl extends SimplePurchaseContractImpl implements FixedPricePurchaseContract {
 	/**
 	 * The default value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
 	 * <!-- begin-user-doc -->

@@ -392,13 +392,40 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__CANAL_COSTS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 14;
 
 	/**
+	 * The feature id for the '<em><b>Warmup Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__WARMUP_TIME = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 15;
+
+	/**
+	 * The feature id for the '<em><b>Cooldown Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__COOLDOWN_TIME = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 16;
+
+	/**
+	 * The feature id for the '<em><b>Cooldown Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__COOLDOWN_VOLUME = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 17;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 15;
+	int VESSEL_CLASS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -1431,6 +1458,39 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselClass_CanalCosts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getWarmupTime <em>Warmup Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Warmup Time</em>'.
+	 * @see scenario.fleet.VesselClass#getWarmupTime()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_WarmupTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getCooldownTime <em>Cooldown Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cooldown Time</em>'.
+	 * @see scenario.fleet.VesselClass#getCooldownTime()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_CooldownTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getCooldownVolume <em>Cooldown Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cooldown Volume</em>'.
+	 * @see scenario.fleet.VesselClass#getCooldownVolume()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_CooldownVolume();
+
+	/**
 	 * Returns the meta object for the reference '{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2142,6 +2202,30 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_CLASS__CANAL_COSTS = eINSTANCE.getVesselClass_CanalCosts();
+
+		/**
+		 * The meta object literal for the '<em><b>Warmup Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__WARMUP_TIME = eINSTANCE.getVesselClass_WarmupTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Cooldown Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__COOLDOWN_TIME = eINSTANCE.getVesselClass_CooldownTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Cooldown Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__COOLDOWN_VOLUME = eINSTANCE.getVesselClass_CooldownVolume();
 
 		/**
 		 * The meta object literal for the '<em><b>Base Fuel</b></em>' reference feature.

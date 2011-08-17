@@ -137,13 +137,22 @@ public interface ContractPackage extends EPackage {
 	int CONTRACT_MODEL___GET_DEFAULT_CONTRACT__PORT = 0;
 
 	/**
+	 * The operation id for the '<em>Get Cooldown Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_MODEL___GET_COOLDOWN_CONTRACT__PORT = 1;
+
+	/**
 	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_MODEL_OPERATION_COUNT = 1;
+	int CONTRACT_MODEL_OPERATION_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.ContractImpl <em>Contract</em>}' class.
@@ -547,6 +556,97 @@ public interface ContractPackage extends EPackage {
 	int SALES_CONTRACT_OPERATION_COUNT = CONTRACT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link scenario.contract.impl.SimplePurchaseContractImpl <em>Simple Purchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.SimplePurchaseContractImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getSimplePurchaseContract()
+	 * @generated
+	 */
+	int SIMPLE_PURCHASE_CONTRACT = 10;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Cooldown Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Simple Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Simple Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.contract.impl.FixedPricePurchaseContractImpl <em>Fixed Price Purchase Contract</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -563,7 +663,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+	int FIXED_PRICE_PURCHASE_CONTRACT__NAME = SIMPLE_PURCHASE_CONTRACT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -572,7 +672,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+	int FIXED_PRICE_PURCHASE_CONTRACT__ENTITY = SIMPLE_PURCHASE_CONTRACT__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
@@ -581,7 +681,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
+	int FIXED_PRICE_PURCHASE_CONTRACT__DEFAULT_PORTS = SIMPLE_PURCHASE_CONTRACT__DEFAULT_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -590,7 +690,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+	int FIXED_PRICE_PURCHASE_CONTRACT__MIN_QUANTITY = SIMPLE_PURCHASE_CONTRACT__MIN_QUANTITY;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -599,7 +699,16 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+	int FIXED_PRICE_PURCHASE_CONTRACT__MAX_QUANTITY = SIMPLE_PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Cooldown Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PURCHASE_CONTRACT__COOLDOWN_PORTS = SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
@@ -608,7 +717,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT__UNIT_PRICE = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+	int FIXED_PRICE_PURCHASE_CONTRACT__UNIT_PRICE = SIMPLE_PURCHASE_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Fixed Price Purchase Contract</em>' class.
@@ -617,7 +726,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+	int FIXED_PRICE_PURCHASE_CONTRACT_FEATURE_COUNT = SIMPLE_PURCHASE_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -626,7 +735,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
+	int FIXED_PRICE_PURCHASE_CONTRACT___GET_CONTAINER = SIMPLE_PURCHASE_CONTRACT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Fixed Price Purchase Contract</em>' class.
@@ -635,7 +744,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FIXED_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
+	int FIXED_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = SIMPLE_PURCHASE_CONTRACT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.IndexPricePurchaseContractImpl <em>Index Price Purchase Contract</em>}' class.
@@ -654,7 +763,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+	int INDEX_PRICE_PURCHASE_CONTRACT__NAME = SIMPLE_PURCHASE_CONTRACT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -663,7 +772,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+	int INDEX_PRICE_PURCHASE_CONTRACT__ENTITY = SIMPLE_PURCHASE_CONTRACT__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Default Ports</b></em>' reference list.
@@ -672,7 +781,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT__DEFAULT_PORTS = PURCHASE_CONTRACT__DEFAULT_PORTS;
+	int INDEX_PRICE_PURCHASE_CONTRACT__DEFAULT_PORTS = SIMPLE_PURCHASE_CONTRACT__DEFAULT_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -681,7 +790,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+	int INDEX_PRICE_PURCHASE_CONTRACT__MIN_QUANTITY = SIMPLE_PURCHASE_CONTRACT__MIN_QUANTITY;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -690,7 +799,16 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+	int INDEX_PRICE_PURCHASE_CONTRACT__MAX_QUANTITY = SIMPLE_PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Cooldown Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PURCHASE_CONTRACT__COOLDOWN_PORTS = SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
@@ -699,7 +817,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT__INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+	int INDEX_PRICE_PURCHASE_CONTRACT__INDEX = SIMPLE_PURCHASE_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Index Price Purchase Contract</em>' class.
@@ -708,7 +826,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+	int INDEX_PRICE_PURCHASE_CONTRACT_FEATURE_COUNT = SIMPLE_PURCHASE_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -717,7 +835,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT___GET_CONTAINER = PURCHASE_CONTRACT___GET_CONTAINER;
+	int INDEX_PRICE_PURCHASE_CONTRACT___GET_CONTAINER = SIMPLE_PURCHASE_CONTRACT___GET_CONTAINER;
 
 	/**
 	 * The number of operations of the '<em>Index Price Purchase Contract</em>' class.
@@ -726,7 +844,7 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = PURCHASE_CONTRACT_OPERATION_COUNT + 0;
+	int INDEX_PRICE_PURCHASE_CONTRACT_OPERATION_COUNT = SIMPLE_PURCHASE_CONTRACT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.contract.impl.NetbackPurchaseContractImpl <em>Netback Purchase Contract</em>}' class.
@@ -997,6 +1115,16 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getContractModel__GetDefaultContract__Port();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.contract.ContractModel#getCooldownContract(scenario.port.Port) <em>Get Cooldown Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Cooldown Contract</em>' operation.
+	 * @see scenario.contract.ContractModel#getCooldownContract(scenario.port.Port)
+	 * @generated
+	 */
+	EOperation getContractModel__GetCooldownContract__Port();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link scenario.contract.ContractModel#getVolumeConstraints <em>Volume Constraints</em>}'.
@@ -1277,6 +1405,27 @@ public interface ContractPackage extends EPackage {
 	EReference getProfitSharingPurchaseContract_ReferenceIndex();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.contract.SimplePurchaseContract <em>Simple Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Simple Purchase Contract</em>'.
+	 * @see scenario.contract.SimplePurchaseContract
+	 * @generated
+	 */
+	EClass getSimplePurchaseContract();
+
+	/**
+	 * Returns the meta object for the reference list '{@link scenario.contract.SimplePurchaseContract#getCooldownPorts <em>Cooldown Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Cooldown Ports</em>'.
+	 * @see scenario.contract.SimplePurchaseContract#getCooldownPorts()
+	 * @see #getSimplePurchaseContract()
+	 * @generated
+	 */
+	EReference getSimplePurchaseContract_CooldownPorts();
+
+	/**
 	 * Returns the meta object for the attribute '{@link scenario.contract.ProfitSharingPurchaseContract#getAlpha <em>Alpha</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1419,6 +1568,14 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation CONTRACT_MODEL___GET_DEFAULT_CONTRACT__PORT = eINSTANCE.getContractModel__GetDefaultContract__Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Cooldown Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CONTRACT_MODEL___GET_COOLDOWN_CONTRACT__PORT = eINSTANCE.getContractModel__GetCooldownContract__Port();
 
 		/**
 		 * The meta object literal for the '<em><b>Volume Constraints</b></em>' containment reference list feature.
@@ -1643,6 +1800,24 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX = eINSTANCE.getProfitSharingPurchaseContract_ReferenceIndex();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.SimplePurchaseContractImpl <em>Simple Purchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.SimplePurchaseContractImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getSimplePurchaseContract()
+		 * @generated
+		 */
+		EClass SIMPLE_PURCHASE_CONTRACT = eINSTANCE.getSimplePurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Cooldown Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS = eINSTANCE.getSimplePurchaseContract_CooldownPorts();
 
 		/**
 		 * The meta object literal for the '<em><b>Alpha</b></em>' attribute feature.

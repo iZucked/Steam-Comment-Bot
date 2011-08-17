@@ -123,6 +123,10 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 				return createProfitSharingPurchaseContractAdapter();
 			}
 			@Override
+			public Adapter caseSimplePurchaseContract(SimplePurchaseContract object) {
+				return createSimplePurchaseContractAdapter();
+			}
+			@Override
 			public Adapter caseScenarioObject(ScenarioObject object) {
 				return createScenarioObjectAdapter();
 			}
@@ -273,6 +277,20 @@ public class ContractAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createProfitSharingPurchaseContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.contract.SimplePurchaseContract <em>Simple Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.contract.SimplePurchaseContract
+	 * @generated
+	 */
+	public Adapter createSimplePurchaseContractAdapter() {
 		return null;
 	}
 

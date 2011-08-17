@@ -943,6 +943,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		addEEnumLiteral(fuelTypeEEnum, FuelType.FBO);
 		addEEnumLiteral(fuelTypeEEnum, FuelType.NBO);
 		addEEnumLiteral(fuelTypeEEnum, FuelType.BASE_FUEL);
+		addEEnumLiteral(fuelTypeEEnum, FuelType.COOLDOWN);
 	}
 
 } //EventsPackageImpl

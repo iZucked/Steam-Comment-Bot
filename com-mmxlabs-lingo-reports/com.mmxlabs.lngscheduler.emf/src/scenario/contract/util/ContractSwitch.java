@@ -131,6 +131,7 @@ public class ContractSwitch<T> extends Switch<T> {
 			case ContractPackage.FIXED_PRICE_PURCHASE_CONTRACT: {
 				FixedPricePurchaseContract fixedPricePurchaseContract = (FixedPricePurchaseContract)theEObject;
 				T result = caseFixedPricePurchaseContract(fixedPricePurchaseContract);
+				if (result == null) result = caseSimplePurchaseContract(fixedPricePurchaseContract);
 				if (result == null) result = casePurchaseContract(fixedPricePurchaseContract);
 				if (result == null) result = caseContract(fixedPricePurchaseContract);
 				if (result == null) result = caseNamedObject(fixedPricePurchaseContract);
@@ -141,6 +142,7 @@ public class ContractSwitch<T> extends Switch<T> {
 			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT: {
 				IndexPricePurchaseContract indexPricePurchaseContract = (IndexPricePurchaseContract)theEObject;
 				T result = caseIndexPricePurchaseContract(indexPricePurchaseContract);
+				if (result == null) result = caseSimplePurchaseContract(indexPricePurchaseContract);
 				if (result == null) result = casePurchaseContract(indexPricePurchaseContract);
 				if (result == null) result = caseContract(indexPricePurchaseContract);
 				if (result == null) result = caseNamedObject(indexPricePurchaseContract);
@@ -165,6 +167,16 @@ public class ContractSwitch<T> extends Switch<T> {
 				if (result == null) result = caseContract(profitSharingPurchaseContract);
 				if (result == null) result = caseNamedObject(profitSharingPurchaseContract);
 				if (result == null) result = caseScenarioObject(profitSharingPurchaseContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContractPackage.SIMPLE_PURCHASE_CONTRACT: {
+				SimplePurchaseContract simplePurchaseContract = (SimplePurchaseContract)theEObject;
+				T result = caseSimplePurchaseContract(simplePurchaseContract);
+				if (result == null) result = casePurchaseContract(simplePurchaseContract);
+				if (result == null) result = caseContract(simplePurchaseContract);
+				if (result == null) result = caseNamedObject(simplePurchaseContract);
+				if (result == null) result = caseScenarioObject(simplePurchaseContract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -304,6 +316,21 @@ public class ContractSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseProfitSharingPurchaseContract(ProfitSharingPurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple Purchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimplePurchaseContract(SimplePurchaseContract object) {
 		return null;
 	}
 

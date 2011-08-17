@@ -464,13 +464,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__CARGO_CVVALUE = SLOT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Arrive Cold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ARRIVE_COLD = SLOT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 1;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Local Window Start</em>' operation.
@@ -854,6 +863,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_CargoCVvalue();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Arrive Cold</em>'.
+	 * @see scenario.cargo.LoadSlot#isArriveCold()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_ArriveCold();
+
+	/**
 	 * Returns the meta object for the '{@link scenario.cargo.LoadSlot#getCargoOrPortCVValue() <em>Get Cargo Or Port CV Value</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1127,6 +1147,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOAD_SLOT__CARGO_CVVALUE = eINSTANCE.getLoadSlot_CargoCVvalue();
+
+		/**
+		 * The meta object literal for the '<em><b>Arrive Cold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__ARRIVE_COLD = eINSTANCE.getLoadSlot_ArriveCold();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Cargo Or Port CV Value</b></em>' operation.

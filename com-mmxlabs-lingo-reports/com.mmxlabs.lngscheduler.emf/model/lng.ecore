@@ -134,6 +134,12 @@
       </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EReference" name="canalCosts" upperBound="-1"
           eType="#//fleet/VesselClassCost" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="warmupTime" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="24"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cooldownTime" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="12"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cooldownVolume" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="500"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FuelConsumptionLine">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -433,6 +439,7 @@
         <eLiterals name="FBO" literal="FBO"/>
         <eLiterals name="NBO" value="1" literal="NBO"/>
         <eLiterals name="BaseFuel" value="2" literal="BaseFuel"/>
+        <eLiterals name="Cooldown" value="3" literal="Cooldown"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="FuelQuantity">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuelType" lowerBound="1"
@@ -637,6 +644,8 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultSlotDuration"
           lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="shouldArriveCold" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DistanceModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="distances" upperBound="-1"
@@ -737,6 +746,9 @@
           <details key="documentation" value="The energy content conversion factor for this cargo; because LNG is priced by MMBTU but measured by volume, we need to know both the energy content and volume. This value lets us derive the former from the latter."/>
         </eAnnotations>
       </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="arriveCold" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="CargoType">
       <eLiterals name="Fleet" literal="FLEET"/>
@@ -749,6 +761,12 @@
       <eOperations name="getDefaultContract" lowerBound="1" eType="#//contract/Contract">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="for (final Contract c : getPurchaseContracts()) {&#xD;&#xA;   if (c.getDefaultPorts().contains(port)) return c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;for (final Contract c : getSalesContracts()) {&#xD;&#xA;   if (c.getDefaultPorts().contains(port)) return c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;return null;"/>
+        </eAnnotations>
+        <eParameters name="port" lowerBound="1" eType="#//port/Port"/>
+      </eOperations>
+      <eOperations name="getCooldownContract" lowerBound="1" eType="#//contract/SimplePurchaseContract">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="for (final Contract c : getPurchaseContracts()) {&#xA;   if (c instanceof SimplePurchaseContract) {&#xA;&#x9;if (&#xA;&#x9;((SimplePurchaseContract) c).getCooldownPorts().contains(port)) return &#xA;&#x9;&#x9;(SimplePurchaseContract) c;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;return null;"/>
         </eAnnotations>
         <eParameters name="port" lowerBound="1" eType="#//port/Port"/>
       </eOperations>
@@ -798,11 +816,11 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1"
           eType="#//market/Index"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="FixedPricePurchaseContract" eSuperTypes="#//contract/PurchaseContract">
+    <eClassifiers xsi:type="ecore:EClass" name="FixedPricePurchaseContract" eSuperTypes="#//contract/SimplePurchaseContract">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitPrice" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IndexPricePurchaseContract" eSuperTypes="#//contract/PurchaseContract">
+    <eClassifiers xsi:type="ecore:EClass" name="IndexPricePurchaseContract" eSuperTypes="#//contract/SimplePurchaseContract">
       <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1"
           eType="#//market/Index"/>
     </eClassifiers>
@@ -823,6 +841,11 @@
           eType="#//market/Index"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="referenceIndex" lowerBound="1"
           eType="#//market/Index"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SimplePurchaseContract" abstract="true"
+        eSuperTypes="#//contract/PurchaseContract">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cooldownPorts" upperBound="-1"
+          eType="#//port/Port"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="market" nsURI="http://com.mmxlabs.lng.emf2/market" nsPrefix="com.mmxlabs.lng.emf.market">

@@ -434,6 +434,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getLoadSlot_ArriveCold() {
+		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getLoadSlot__GetCargoOrPortCVValue() {
 		return loadSlotEClass.getEOperations().get(0);
 	}
@@ -506,6 +515,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CVVALUE);
+		createEAttribute(loadSlotEClass, LOAD_SLOT__ARRIVE_COLD);
 		createEOperation(loadSlotEClass, LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE);
 
 		// Create enums
@@ -590,6 +600,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCVvalue(), ecorePackage.getEFloat(), "cargoCVvalue", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadSlot_ArriveCold(), ecorePackage.getEBoolean(), "arriveCold", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getLoadSlot__GetCargoOrPortCVValue(), ecorePackage.getEFloat(), "getCargoOrPortCVValue", 1, 1, IS_UNIQUE, IS_ORDERED);
 
