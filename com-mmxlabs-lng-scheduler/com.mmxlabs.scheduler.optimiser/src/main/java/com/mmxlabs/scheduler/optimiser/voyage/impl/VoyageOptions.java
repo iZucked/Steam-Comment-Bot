@@ -29,6 +29,18 @@ public final class VoyageOptions implements Cloneable {
 	
 	private long availableLNG;
 
+	/**
+	 * If shouldBeCold is true:
+	 * 		If true, a cooldown will be considered
+	 * 		If false, enough heel will be retained to avoid warming up
+	 * If shouldBeCold is false, this should be false and will be ignored (vessel will be allowed to warm up).
+	 */
+	private boolean cooldown;
+	/**
+	 * If true, the vessel should be cold at the end of the voyage + idle. If false, it doesn't matter.
+	 */
+	private boolean shouldBeCold;
+
 	private String route;
 
 	private VesselState vesselState;
@@ -50,6 +62,8 @@ public final class VoyageOptions implements Cloneable {
 		setRoute(options.getRoute());
 		setVesselState(options.getVesselState());
 		setAvailableLNG(options.getAvailableLNG());
+		setAllowCooldown(options.getAllowCooldown());
+		setShouldBeCold(options.shouldBeCold());
 	}
 
 	public final int getAvailableTime() {
@@ -147,6 +161,22 @@ public final class VoyageOptions implements Cloneable {
 	public void setAvailableLNG(long availableLNG) {
 		this.availableLNG = availableLNG;
 	}
+	
+	public final boolean getAllowCooldown() {
+		return cooldown;
+	}
+	
+	public final void setAllowCooldown(final boolean cooldown) {
+		this.cooldown = cooldown;
+	}
+
+	public final boolean shouldBeCold() {
+		return shouldBeCold;
+	}
+
+	public final void setShouldBeCold(boolean shouldBeCold) {
+		this.shouldBeCold = shouldBeCold;
+	}
 
 	@Override
 	public final boolean equals(final Object obj) {
@@ -191,6 +221,10 @@ public final class VoyageOptions implements Cloneable {
 
 			if (availableLNG != vo.availableLNG) return false;
 			
+			if (cooldown != vo.cooldown) return false;
+			
+			if (shouldBeCold != vo.shouldBeCold) return false;
+			
 			return true;
 		}
 		return false;
@@ -212,6 +246,4 @@ public final class VoyageOptions implements Cloneable {
 				+ ", useFBOForSupplement=" + useFBOForSupplement + ", route="
 				+ route + ", vesselState=" + vesselState + "]";
 	}
-	
-	
 }
