@@ -642,6 +642,10 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 			objectives.add(createObjective(of,
 					CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME,
 					1));
+			
+			objectives.add(createObjective(of,
+					CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME,
+					1));
 			objectives
 					.add(createObjective(
 							of,
