@@ -56,8 +56,8 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		// have an EMF representation, but we do want idle time for it
 		// so we assume if we hit a dubious port it's ANYWHERE and that
 		// we are really where we used to be.
-
-		ePort = visitExporter.getLastPortVisited();
+		if (ePort == null)
+			ePort = visitExporter.getLastPortVisited();
 		// if (ePort == null)
 		// return null;
 
@@ -82,9 +82,9 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 					event.getFuelCost(fc));
 		}
 
-//		if (idle.getPort() == null) {
-//			System.err.println("This shouldn't have happened");
-//		}
+		// if (idle.getPort() == null) {
+		// System.err.println("This shouldn't have happened");
+		// }
 
 		return idle;
 	}
