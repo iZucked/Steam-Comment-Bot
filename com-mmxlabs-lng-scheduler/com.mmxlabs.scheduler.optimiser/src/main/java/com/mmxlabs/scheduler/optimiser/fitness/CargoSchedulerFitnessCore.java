@@ -72,6 +72,11 @@ public final class CargoSchedulerFitnessCore<T> implements IFitnessCore<T> {
 						.makeArrayList(FuelComponent.Base,
 								FuelComponent.Base_Supplemental,
 								FuelComponent.IdleBase), this));
+		
+		components.add(new CostComponent<T>(
+				CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME,
+				CollectionsUtil
+						.makeArrayList(FuelComponent.Cooldown), this));
 
 		components.add(new CharterCostFitnessComponent<T>(
 				CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME,

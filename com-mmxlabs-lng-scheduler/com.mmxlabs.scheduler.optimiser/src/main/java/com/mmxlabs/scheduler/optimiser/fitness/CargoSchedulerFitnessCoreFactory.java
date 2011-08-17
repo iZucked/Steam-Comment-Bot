@@ -38,6 +38,8 @@ public final class CargoSchedulerFitnessCoreFactory implements
 
 	public static final String CHARTER_REVENUE_COMPONENT_NAME = "cargo-scheduler-charter-revenue";
 
+	public static final String COST_COOLDOWN_COMPONENT_NAME = "cargo-scheduler-cost-cooldown";
+
 	/* default scheduler factory creates default GA scheduler */
 	// TODO: Make static class
 	private ISchedulerFactory schedulerFactory = new ISchedulerFactory() {
