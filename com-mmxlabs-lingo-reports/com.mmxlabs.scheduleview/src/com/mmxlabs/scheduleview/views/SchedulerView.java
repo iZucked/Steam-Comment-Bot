@@ -40,6 +40,7 @@ import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.jobcontroller.core.IJobManagerListener;
 import com.mmxlabs.scheduleview.Activator;
+import com.mmxlabs.scheduleview.views.colourschemes.CooldownColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.FuelChoiceColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.HighSpeedColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
@@ -144,6 +145,7 @@ public class SchedulerView extends ViewPart {
 		labelProvider.addColourScheme(new FuelChoiceColourScheme());
 		labelProvider.addColourScheme(new RouteChoiceColourScheme());
 		labelProvider.addColourScheme(new HighSpeedColourScheme());
+		labelProvider.addColourScheme(new CooldownColourScheme());
 		viewer.setLabelProvider(labelProvider);
 
 		// TODO: Hook up action to alter sort behaviour
