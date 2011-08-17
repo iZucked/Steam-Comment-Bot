@@ -65,12 +65,12 @@ public class SimpleSchedulerTest {
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
-		final IPort port1 = builder.createPort("port-1", 0, 0);
-		final IPort port2 = builder.createPort("port-2", 0, 5);
-		final IPort port3 = builder.createPort("port-3", 5, 0);
-		final IPort port4 = builder.createPort("port-4", 5, 5);
-		final IPort port5 = builder.createPort("port-5", 0, 10);
-		final IPort port6 = builder.createPort("port-6", 5, 10);
+		final IPort port1 = builder.createPort("port-1", false, null, 0, 0);
+		final IPort port2 = builder.createPort("port-2", false, null, 0, 5);
+		final IPort port3 = builder.createPort("port-3", false, null, 5, 0);
+		final IPort port4 = builder.createPort("port-4", false, null, 5, 5);
+		final IPort port5 = builder.createPort("port-5", false, null, 0, 10);
+		final IPort port6 = builder.createPort("port-6", false, null, 5, 10);
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 		keypoints.put(12000, 12000l);
@@ -86,7 +86,7 @@ public class SimpleSchedulerTest {
 				keypoints);
 
 		final IVesselClass vesselClass1 = builder.createVesselClass(
-				"vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000);
+				"vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0, 0);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
 				150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor,
@@ -122,19 +122,19 @@ public class SimpleSchedulerTest {
 		final ICurve salesCurve = new ConstantValueCurve(200000);
 
 		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0,
-				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false);
 		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0,
-				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false);
 		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0,
-				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false);
 		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0,
-				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false);
 		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0,
-				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false);
 		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0,
-				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false);
 		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0,
-				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24);
+				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false);
 
 		final IDischargeSlot discharge1 = builder.createDischargeSlot(
 				"discharge1", port2, tw2, 0, 100000 * Calculator.ScaleFactor,
