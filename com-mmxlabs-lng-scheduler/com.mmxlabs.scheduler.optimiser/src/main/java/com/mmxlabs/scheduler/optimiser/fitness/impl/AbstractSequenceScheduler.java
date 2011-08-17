@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -201,6 +202,40 @@ public abstract class AbstractSequenceScheduler<T> implements
 
 					voyagePlanOptimiser.addChoice(new IdleNBOVoyagePlanChoice(
 							options));
+				}
+
+				if (thisPortSlot.getPortType() == PortType.Load) {
+					options.setShouldBeCold(true);
+					final ILoadSlot thisLoadSlot = (ILoadSlot) thisPortSlot;
+
+					if (thisLoadSlot.isCooldownSet()) {
+						if (thisLoadSlot.isCooldownForbidden()) {
+							// cooldown may still happen if circumstances allow
+							// no alternative.
+							options.setAllowCooldown(false);
+						} else {
+							options.setAllowCooldown(true);
+						}
+					} else {
+						if (useNBO) {
+							if (thisPort.shouldVesselsArriveCold()) {
+								// we don't want to use cooldown ever
+								options.setAllowCooldown(false);
+							} else {
+								// we have a choice
+								options.setAllowCooldown(false);
+								voyagePlanOptimiser
+										.addChoice(new CooldownVoyagePlanChoice(
+												options));
+							}
+						} else {
+							// we have to allow cooldown, because there is no
+							// NBO.
+							options.setAllowCooldown(true);
+						}
+					}
+				} else {
+					options.setShouldBeCold(false);
 				}
 
 				final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<IMultiMatrixProvider.MatrixEntry<IPort, Integer>>(
