@@ -30,9 +30,7 @@ import scenario.port.PortPackage;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 
 /**
- * Gadget for importing EObjects and their singly contained sub-objects. If you
- * want to override the default import / export behaviour, you can subclass
- * this.
+ * Gadget for importing EObjects and their singly contained sub-objects. If you want to override the default import / export behaviour, you can subclass this.
  * 
  * @author Tom Hinton
  * 
@@ -56,10 +54,7 @@ public class EObjectImporter {
 			for (final EClassifier classifier : ePackage.getEClassifiers()) {
 				if (classifier instanceof EClass) {
 					final EClass possibleSubClass = (EClass) classifier;
-					if (outputEClass.isSuperTypeOf(possibleSubClass)
-							&& possibleSubClass.isAbstract() == false
-							&& possibleSubClass.getName().equalsIgnoreCase(
-									fields.get("kind"))) {
+					if (outputEClass.isSuperTypeOf(possibleSubClass) && possibleSubClass.isAbstract() == false && possibleSubClass.getName().equalsIgnoreCase(fields.get("kind"))) {
 						return (EClass) classifier;
 					}
 				}
@@ -84,8 +79,7 @@ public class EObjectImporter {
 	 *            some EObjects to export
 	 * @return a map from group name to a collection of rows, in key-value form.
 	 */
-	public Map<String, Collection<Map<String, String>>> exportObjects(
-			final Collection<? extends EObject> objects) {
+	public Map<String, Collection<Map<String, String>>> exportObjects(final Collection<? extends EObject> objects) {
 
 		// default thing is to check whether the objects are variadic (for the
 		// kind column)
@@ -95,10 +89,8 @@ public class EObjectImporter {
 
 		currentExportResults.clear();
 
-		final boolean sameTypes = EMFUtils.allSameEClass(objects)
-				&& !outputEClass.isAbstract();
-		final Collection<Map<String, String>> results = addExportFile(outputEClass
-				.getName());
+		final boolean sameTypes = EMFUtils.allSameEClass(objects) && !outputEClass.isAbstract();
+		final Collection<Map<String, String>> results = addExportFile(outputEClass.getName());
 
 		new LinkedList<Map<String, String>>();
 		for (final EObject object : objects) {
@@ -118,8 +110,7 @@ public class EObjectImporter {
 	 * @param filename
 	 * @return
 	 */
-	protected Collection<Map<String, String>> addExportFile(
-			final String filename) {
+	protected Collection<Map<String, String>> addExportFile(final String filename) {
 		final LinkedList<Map<String, String>> rows = new LinkedList<Map<String, String>>();
 		currentExportResults.put(filename, rows);
 		return rows;
@@ -150,19 +141,16 @@ public class EObjectImporter {
 	}
 
 	/**
-	 * Add all of the attributes of the given object to the given output map,
-	 * prefixing field names with the prefix and SEPARATOR
+	 * Add all of the attributes of the given object to the given output map, prefixing field names with the prefix and SEPARATOR
 	 * 
 	 * @param object
 	 * @param prefix
 	 * @param output
 	 */
-	protected void flattenAttributesAndReferences(final EObject object,
-			final String prefix, final Map<String, String> output) {
+	protected void flattenAttributesAndReferences(final EObject object, final String prefix, final Map<String, String> output) {
 		String timezone = "UTC";
 		for (final EReference ref : object.eClass().getEAllReferences()) {
-			if (ref.getEReferenceType().equals(PortPackage.eINSTANCE.getPort())
-					&& ref.isContainment() == false && ref.isMany() == false) {
+			if (ref.getEReferenceType().equals(PortPackage.eINSTANCE.getPort()) && ref.isContainment() == false && ref.isMany() == false) {
 				final Port p = (Port) object.eGet(ref);
 				if (p != null) {
 					timezone = p.getTimeZone();
@@ -172,16 +160,16 @@ public class EObjectImporter {
 		}
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
-			final Object value = object.eIsSet(attribute) ? object
-					.eGet(attribute) : null;
+			final Object value = object.eIsSet(attribute) ? object.eGet(attribute) : null;
 			String svalue = "";
 			if (value instanceof Date) {
-				svalue = DateTimeParser.getInstance().formatDate((Date) value,
-						timezone);
-			} else if (attribute.getEType() == ScenarioPackage.eINSTANCE
-					.getPercentage()) {
-				svalue = String.format("%.1g",
-						((Number) value).doubleValue() * 100.0);
+				svalue = DateTimeParser.getInstance().formatDate((Date) value, timezone);
+			} else if (attribute.getEType() == ScenarioPackage.eINSTANCE.getPercentage()) {
+				if (value == null || ((Number) value).doubleValue() == 0)
+					svalue = "0";
+				else {
+					svalue = String.format("%.1g", ((Number) value).doubleValue() * 100.0);
+				}
 			} else if (value instanceof Float || value instanceof Double) {
 				svalue = String.format("%3g", ((Number) value).doubleValue());
 			} else if (value != null) {
@@ -194,21 +182,18 @@ public class EObjectImporter {
 			if (reference.isContainment())
 				continue;
 			if (reference.isMany()) {
-				final EList<EObject> values = (EList<EObject>) object
-						.eGet(reference);
+				final EList<EObject> values = (EList<EObject>) object.eGet(reference);
 
 				final StringBuffer sb = new StringBuffer();
 				boolean comma = false;
 				for (final EObject v : values) {
-					sb.append((comma ? "," : "")
-							+ NamedObjectRegistry.getName(v));
+					sb.append((comma ? "," : "") + NamedObjectRegistry.getName(v));
 					comma = true;
 				}
 				output.put(prefix + reference.getName(), sb.toString());
 			} else {
 				final EObject value = (EObject) object.eGet(reference);
-				output.put(prefix + reference.getName(),
-						NamedObjectRegistry.getName(value));
+				output.put(prefix + reference.getName(), NamedObjectRegistry.getName(value));
 			}
 		}
 	}
@@ -220,8 +205,7 @@ public class EObjectImporter {
 	 * @param prefix
 	 * @param output
 	 */
-	protected void flattenContainments(final EObject object,
-			final String prefix, final Map<String, String> output) {
+	protected void flattenContainments(final EObject object, final String prefix, final Map<String, String> output) {
 		for (final EReference ref : object.eClass().getEAllContainments()) {
 			if (ref.isMany()) {
 				flattenMultiContainment(object, prefix, ref, output);
@@ -232,47 +216,36 @@ public class EObjectImporter {
 	}
 
 	/**
-	 * Flatten a singly contained object. Default behaviour is to add more
-	 * fields.
+	 * Flatten a singly contained object. Default behaviour is to add more fields.
 	 * 
 	 * @param object
 	 * @param prefix
 	 * @param output
 	 * @param ref
 	 */
-	protected void flattenSingleContainment(final EObject object,
-			final String prefix, final Map<String, String> output,
-			final EReference ref) {
+	protected void flattenSingleContainment(final EObject object, final String prefix, final Map<String, String> output, final EReference ref) {
 		// get exporter for contained data and do the business.
-		final EObjectImporter exporter = EObjectImporterFactory.getInstance()
-				.getImporter(ref.getEReferenceType());
+		final EObjectImporter exporter = EObjectImporterFactory.getInstance().getImporter(ref.getEReferenceType());
 
 		final String prefix2 = prefix + ref.getName() + SEPARATOR;
 
-		final Map<String, String> subObject = exporter.exportObject(
-				(EObject) object.eGet(ref), prefix2);
+		final Map<String, String> subObject = exporter.exportObject((EObject) object.eGet(ref), prefix2);
 
 		for (final Map.Entry<String, String> entry : subObject.entrySet()) {
 			output.put(entry.getKey(), entry.getValue());
 		}
 	}
 
-	protected void flattenMultiContainment(final EObject object,
-			final String prefix, final EReference reference,
-			final Map<String, String> output) {
+	protected void flattenMultiContainment(final EObject object, final String prefix, final EReference reference, final Map<String, String> output) {
 		// default behaviour is to create another file
-		final EObjectImporter i2 = EObjectImporterFactory.getInstance()
-				.getImporter(reference.getEReferenceType());
+		final EObjectImporter i2 = EObjectImporterFactory.getInstance().getImporter(reference.getEReferenceType());
 
 		// i2.importObjects(reader, deferredReferences, registry)
-		final Map<String, Collection<Map<String, String>>> subObjects = i2
-				.exportObjects((Collection<EObject>) object.eGet(reference));
+		final Map<String, Collection<Map<String, String>>> subObjects = i2.exportObjects((Collection<EObject>) object.eGet(reference));
 
 		String fieldValue = "";
-		for (final Map.Entry<String, Collection<Map<String, String>>> e : subObjects
-				.entrySet()) {
-			final String adjustedName = NamedObjectRegistry.getName(object)
-					+ "-" + e.getKey();
+		for (final Map.Entry<String, Collection<Map<String, String>>> e : subObjects.entrySet()) {
+			final String adjustedName = NamedObjectRegistry.getName(object) + "-" + e.getKey();
 			Collection<Map<String, String>> extraFile = addExportFile(adjustedName);
 			if (e.getKey().equals(reference.getEReferenceType().getName())) {
 				fieldValue = adjustedName;
@@ -283,9 +256,7 @@ public class EObjectImporter {
 		output.put(prefix + reference.getName(), fieldValue);
 	}
 
-	public Collection<EObject> importObjects(final CSVReader reader,
-			final Collection<DeferredReference> deferredReferences,
-			final NamedObjectRegistry registry) {
+	public Collection<EObject> importObjects(final CSVReader reader, final Collection<DeferredReference> deferredReferences, final NamedObjectRegistry registry) {
 		currentReader = reader;
 		final LinkedList<EObject> importedObjects = new LinkedList<EObject>();
 		// open input file and retrieve fields
@@ -293,8 +264,7 @@ public class EObjectImporter {
 		try {
 			Map<String, String> row = null;
 			while ((row = reader.readRow()) != null) {
-				importedObjects.add(importObject(row, deferredReferences,
-						registry));
+				importedObjects.add(importObject(row, deferredReferences, registry));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -307,24 +277,24 @@ public class EObjectImporter {
 		return importedObjects;
 	}
 
-	private LinkedList<IImportWarningListener> warningListeners = new LinkedList<IImportWarningListener>();
+	private final LinkedList<IImportWarningListener> warningListeners = new LinkedList<IImportWarningListener>();
 
 	public void addImportWarningListener(final IImportWarningListener listener) {
 		warningListeners.add(listener);
 	}
 
-	public void removeImportWarningListener(
-			final IImportWarningListener listener) {
+	public void removeImportWarningListener(final IImportWarningListener listener) {
 		warningListeners.remove(listener);
 	}
 
-	protected void warn(final String message, final boolean includeLine,
-			final String field) {
-		final String casedField = getCurrentReader().getCasedColumnName(
-				field);
-		final ImportWarning iw = new ImportWarning(message, getCurrentReader()
-				.getFileName(), includeLine ? getCurrentReader()
-				.getLineNumber() : 0, casedField == null ? field : casedField);
+	protected void warn(final String message, final boolean includeLine, final String field) {
+		final ImportWarning iw;
+		if (getCurrentReader() == null) {
+			iw = new ImportWarning(message, "", 0, field);
+		} else {
+			final String casedField = getCurrentReader().getCasedColumnName(field);
+			iw = new ImportWarning(message, getCurrentReader().getFileName(), includeLine ? getCurrentReader().getLineNumber() : 0, casedField == null ? field : casedField);
+		}
 		for (final IImportWarningListener listener : warningListeners) {
 			listener.importWarning(iw);
 		}
@@ -337,10 +307,7 @@ public class EObjectImporter {
 	 * @param registry
 	 * @return
 	 */
-	private EObject importObject(final String prefix,
-			final Map<String, String> fields,
-			final Collection<DeferredReference> deferredReferences,
-			final NamedObjectRegistry registry) {
+	private EObject importObject(final String prefix, final Map<String, String> fields, final Collection<DeferredReference> deferredReferences, final NamedObjectRegistry registry) {
 		final EPackage ePackage = outputEClass.getEPackage();
 		final EFactory eFactory = ePackage.getEFactoryInstance();
 
@@ -353,20 +320,16 @@ public class EObjectImporter {
 
 		for (final EReference reference : trueOutputClass.getEAllReferences()) {
 			if (reference.isContainment()) {
-				populateContainment(prefix, result, reference, fields,
-						deferredReferences, registry);
+				populateContainment(prefix, result, reference, fields, deferredReferences, registry);
 			} else {
-				populateReference(prefix, result, reference, fields,
-						deferredReferences);
+				populateReference(prefix, result, reference, fields, deferredReferences);
 			}
 		}
 
 		return result;
 	}
 
-	public EObject importObject(final Map<String, String> fields,
-			final Collection<DeferredReference> deferredReferences,
-			final NamedObjectRegistry registry) {
+	public EObject importObject(final Map<String, String> fields, final Collection<DeferredReference> deferredReferences, final NamedObjectRegistry registry) {
 		return importObject("", fields, deferredReferences, registry);
 	}
 
@@ -378,42 +341,30 @@ public class EObjectImporter {
 	 * @param deferredReferences
 	 * @param registry
 	 */
-	protected void populateContainment(final String prefix,
-			final EObject result, final EReference reference,
-			final Map<String, String> fields,
-			final Collection<DeferredReference> deferredReferences,
+	protected void populateContainment(final String prefix, final EObject result, final EReference reference, final Map<String, String> fields, final Collection<DeferredReference> deferredReferences,
 			final NamedObjectRegistry registry) {
 		if (reference.isMany()) {
 			// import multiple; default behaviour is to run another session
-			final String referenceName = prefix
-					+ reference.getName().toLowerCase();
+			final String referenceName = prefix + reference.getName().toLowerCase();
 			if (fields.containsKey(referenceName)) {
 				final String filePath = fields.get(referenceName);
 
 				try {
-					final CSVReader reader = currentReader
-							.getAdjacentReader(filePath);
-					final EObjectImporter importer = EObjectImporterFactory
-							.getInstance().getImporter(
-									reference.getEReferenceType());
-					((EList<EObject>) result.eGet(reference))
-							.addAll(importer.importObjects(reader,
-									deferredReferences, registry));
+					final CSVReader reader = currentReader.getAdjacentReader(filePath);
+					final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(reference.getEReferenceType());
+					((EList<EObject>) result.eGet(reference)).addAll(importer.importObjects(reader, deferredReferences, registry));
 				} catch (IOException e) {
 
 				}
 			}
 		} else {
 			// get sub-fields
-			final String referencePrefix = prefix
-					+ reference.getName().toLowerCase() + SEPARATOR;
+			final String referencePrefix = prefix + reference.getName().toLowerCase() + SEPARATOR;
 
 			// perform import
-			final EObjectImporter importer = EObjectImporterFactory
-					.getInstance().getImporter(reference.getEReferenceType());
+			final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(reference.getEReferenceType());
 			importer.setCurrentReader(getCurrentReader());
-			final EObject value = importer.importObject(referencePrefix,
-					fields, deferredReferences, registry);
+			final EObject value = importer.importObject(referencePrefix, fields, deferredReferences, registry);
 			result.eSet(reference, value);
 		}
 	}
@@ -432,9 +383,7 @@ public class EObjectImporter {
 	 * @param fields
 	 * @param deferredReferences
 	 */
-	protected void populateReference(String prefix, final EObject target,
-			final EReference reference, final Map<String, String> fields,
-			final Collection<DeferredReference> deferredReferences) {
+	protected void populateReference(String prefix, final EObject target, final EReference reference, final Map<String, String> fields, final Collection<DeferredReference> deferredReferences) {
 
 		final String referenceName = prefix + reference.getName().toLowerCase();
 		if (fields.containsKey(referenceName)) {
@@ -443,12 +392,10 @@ public class EObjectImporter {
 			if (reference.isMany()) {
 				final String[] values = value.split(",");
 				for (final String value2 : values) {
-					deferredReferences.add(new DeferredReference(target,
-							reference, value2.trim()));
+					deferredReferences.add(new DeferredReference(target, reference, value2.trim()));
 				}
 			} else {
-				deferredReferences.add(new DeferredReference(target, reference,
-						value.trim()));
+				deferredReferences.add(new DeferredReference(target, reference, value.trim()));
 			}
 		}
 	}
@@ -459,8 +406,7 @@ public class EObjectImporter {
 	 * @param attribute
 	 * @param fields
 	 */
-	protected void populateAttribute(String prefix, final EObject target,
-			final EAttribute attribute, final Map<String, String> fields) {
+	protected void populateAttribute(String prefix, final EObject target, final EAttribute attribute, final Map<String, String> fields) {
 		final String attributeName = prefix + attribute.getName().toLowerCase();
 		if (fields.containsKey(attributeName)) {
 			final String value = fields.get(attributeName);
@@ -472,32 +418,22 @@ public class EObjectImporter {
 			try {
 				if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
 					obj = DateTimeParser.getInstance().parseDate(value);
-				} else if (dataType.equals(ScenarioPackage.eINSTANCE
-						.getDateAndOptionalTime())) {
-					obj = DateTimeParser.getInstance()
-							.parseDateAndOptionalTime(value);
-				} else if (dataType.equals(ScenarioPackage.eINSTANCE
-						.getPercentage())) {
-					obj = dataType.getEPackage().getEFactoryInstance()
-							.createFromString(dataType, value);
+				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getDateAndOptionalTime())) {
+					obj = DateTimeParser.getInstance().parseDateAndOptionalTime(value);
+				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getPercentage())) {
+					obj = dataType.getEPackage().getEFactoryInstance().createFromString(dataType, value);
 					double d = (Double) obj;
 					d /= 100.0;
 					if (d < 0) {
 						d = 0d;
-						warn("Percentage value " + value
-								+ " is negative. It has been clamped to zero.",
-								true, attributeName);
+						warn("Percentage value " + value + " is negative. It has been clamped to zero.", true, attributeName);
 					} else if (d > 1) {
 						d = 1d;
-						warn("Percentage value "
-								+ value
-								+ " is more than 100%. It has been clamped to 100%.",
-								true, attributeName);
+						warn("Percentage value " + value + " is more than 100%. It has been clamped to 100%.", true, attributeName);
 					}
 					obj = d;
 				} else {
-					obj = dataType.getEPackage().getEFactoryInstance()
-							.createFromString(dataType, value);
+					obj = dataType.getEPackage().getEFactoryInstance().createFromString(dataType, value);
 				}
 				if (!attribute.isUnsettable() || obj != null) {
 					target.eSet(attribute, obj);
@@ -505,15 +441,13 @@ public class EObjectImporter {
 					target.eUnset(attribute);
 				}
 			} catch (final Exception ex) {
-				warn("Error parsing value \"" + value + "\" - "
-						+ ex.getMessage(), true, attributeName);
+				warn("Error parsing value \"" + value + "\" - " + ex.getMessage(), true, attributeName);
 			}
 		} else {
 			// warn that the column is missing; ignore line number
 			// because it will be omitted on all lines
 			final String attributeNameCased = prefix + attribute.getName();
-			warn("Column " + attributeNameCased + " omitted",
-					false, attributeNameCased);
+			warn("Column " + attributeNameCased + " omitted", false, attributeNameCased);
 		}
 	}
 }
