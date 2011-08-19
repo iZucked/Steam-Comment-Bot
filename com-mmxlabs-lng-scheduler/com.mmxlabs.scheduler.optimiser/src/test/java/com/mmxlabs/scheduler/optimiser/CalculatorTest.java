@@ -54,7 +54,7 @@ public class CalculatorTest {
 	/**
 	 * If both inputs are negative then they will cancel out to give a
 	 * positive result. This doesn't make sense though, so an exception
-	 * should be thrown for either the negative distance or time.
+	 * should be thrown.
 	 * @author Adam Semenenko
 	 */
 	@Test(expected=ArithmeticException.class)
