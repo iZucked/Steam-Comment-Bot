@@ -75,6 +75,8 @@ public class RandomHelperTest {
 			numOfHits += distribution[i];
 		// this should equal the number of tests.
 		Assert.assertEquals(numOfTests, numOfHits);
+		
+		// TODO test each one has been hit equally.
 
 	}
 
@@ -107,7 +109,7 @@ public class RandomHelperTest {
 
 		// number of time to perform test
 		final int numOfTests = 1000;
-		// the wrong limits
+		
 		final int[] maxes = {100, 0, -50};
 		final int negMin = -100;
 
@@ -116,11 +118,10 @@ public class RandomHelperTest {
 			
 			for (int j = 0; j < maxes.length; j++) {
 				
-				final int difference = maxes[j] - negMin;
-				final float differenceDiv2 = (float)difference / 2f;
-				final float middle = (float)maxes[j] - differenceDiv2;
+				final float halfDifference = ((float)maxes[j] - (float)negMin) / 2f;
+				final float midPoint = (float)maxes[j] - halfDifference;
 				
-				Assert.assertEquals(middle, RandomHelper.nextIntBetween(random, negMin, maxes[j]), differenceDiv2);
+				Assert.assertEquals(midPoint, RandomHelper.nextIntBetween(random, negMin, maxes[j]), halfDifference);
 			}
 		}
 			
