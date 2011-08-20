@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser;
 
 import static org.junit.Assert.fail;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class CalculatorTest {
