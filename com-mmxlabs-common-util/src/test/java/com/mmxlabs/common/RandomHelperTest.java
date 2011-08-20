@@ -7,8 +7,7 @@ package com.mmxlabs.common;
 import java.util.List;
 import java.util.Random;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class RandomHelperTest {
@@ -54,7 +53,7 @@ public class RandomHelperTest {
 		final int max = 100;
 
 		// Test normal cases are within range.
-		
+
 		// TODO max/2 is not the middle.
 		for (int i = 0; i < numOfTests; i++)
 			Assert.assertEquals(max / 2,
@@ -63,11 +62,24 @@ public class RandomHelperTest {
 		// No difference between min and max, should return the minimum.
 		for (int i = 0; i < numOfTests; i++)
 			Assert.assertEquals(i, RandomHelper.nextIntBetween(random, i, i));
+	}
+
+	@Test
+	public void testNextIntBetweenDistribution() {
+
+		Random random = new Random(1);
+		// number of time to perform tests in each case.
+		final int numOfTests = 10000;
+		// the maximum the random number can be.
+		final int max = 10;
+		final int min = 0;
 
 		// Test the distribution is the same.
-		int[] distribution = new int[max + 1]; // add one because max of nextIntBetween is inclusive of max
+		int[] distribution = new int[max + 1];
+		// add one because max of nextIntBetween is inclusive of max
+
 		for (int i = 0; i < numOfTests; i++)
-			distribution[RandomHelper.nextIntBetween(random, 0, max)]++;
+			distribution[RandomHelper.nextIntBetween(random, min, max)]++;
 
 		// get the sum of all the hits
 		int numOfHits = 0;
@@ -75,9 +87,13 @@ public class RandomHelperTest {
 			numOfHits += distribution[i];
 		// this should equal the number of tests.
 		Assert.assertEquals(numOfTests, numOfHits);
-		
-		// TODO test each one has been hit equally.
 
+		// test each one has been hit equally.
+		for (int i = 0; i < distribution.length; i++) {
+
+			Assert.assertEquals(1 / (double) numOfTests, distribution[i]
+					/ (double) numOfTests, 0.1d);
+		}
 	}
 
 	/**
@@ -85,7 +101,7 @@ public class RandomHelperTest {
 	 * 
 	 * e.g. Max: 0, Min: 10
 	 */
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testNextIntBetweenInvalidRange() {
 
 		Random random = new Random(1);
@@ -109,21 +125,23 @@ public class RandomHelperTest {
 
 		// number of time to perform test
 		final int numOfTests = 1000;
-		
-		final int[] maxes = {100, 0, -50};
+
+		final int[] maxes = { 100, 0, -50 };
 		final int negMin = -100;
 
 		// Test cases are within range.
 		for (int i = 0; i < numOfTests; i++) {
-			
+
 			for (int j = 0; j < maxes.length; j++) {
-				
-				final float halfDifference = ((float)maxes[j] - (float)negMin) / 2f;
-				final float midPoint = (float)maxes[j] - halfDifference;
-				
-				Assert.assertEquals(midPoint, RandomHelper.nextIntBetween(random, negMin, maxes[j]), halfDifference);
+
+				final float halfDifference = ((float) maxes[j] - (float) negMin) / 2f;
+				final float midPoint = (float) maxes[j] - halfDifference;
+
+				Assert.assertEquals(midPoint,
+						RandomHelper.nextIntBetween(random, negMin, maxes[j]),
+						halfDifference);
 			}
 		}
-			
+
 	}
 }
