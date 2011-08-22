@@ -37,9 +37,12 @@ public class RandomHelperTest {
 			hits[list.indexOf(o)]++;
 		}
 
-		Assert.assertEquals(1 / 3.0, hits[0] / (double) tests, tests / 50.0);
-		Assert.assertEquals(1 / 3.0, hits[1] / (double) tests, tests / 50.0);
-		Assert.assertEquals(1 / 3.0, hits[2] / (double) tests, tests / 50.0);
+		// Test to see if objects are each hit 33% with an error margin of 0.01
+		final double errorMargin = 0.01;
+		
+		Assert.assertEquals(1 / 3.0, hits[0] / (double) tests, errorMargin);
+		Assert.assertEquals(1 / 3.0, hits[1] / (double) tests, errorMargin);
+		Assert.assertEquals(1 / 3.0, hits[2] / (double) tests, errorMargin);
 	}
 
 	@Test
