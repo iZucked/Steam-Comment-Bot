@@ -39,7 +39,7 @@ public class RandomHelperTest {
 
 		// Test to see if objects are each hit 33% with an error margin of 0.01
 		final double errorMargin = 0.01;
-		
+
 		Assert.assertEquals(1 / 3.0, hits[0] / (double) tests, errorMargin);
 		Assert.assertEquals(1 / 3.0, hits[1] / (double) tests, errorMargin);
 		Assert.assertEquals(1 / 3.0, hits[2] / (double) tests, errorMargin);
@@ -52,15 +52,15 @@ public class RandomHelperTest {
 
 		// number of time to perform tests in each case.
 		final int numOfTests = 1000;
-		// the maximum the random number can be.
+		// the max/min the random number can be.
 		final int max = 100;
+		final int min = 0;
 
-		// Test normal cases are within range.
+		// Test normal cases are within the range max/2 +- max/2
 
-		// TODO max/2 is not the middle.
 		for (int i = 0; i < numOfTests; i++)
 			Assert.assertEquals(max / 2,
-					RandomHelper.nextIntBetween(random, 0, max), max / 2);
+					RandomHelper.nextIntBetween(random, min, max), max / 2);
 
 		// No difference between min and max, should return the minimum.
 		for (int i = 0; i < numOfTests; i++)
