@@ -11,28 +11,39 @@ import org.junit.Test;
 
 public class CalculatorTest {
 
-	/**
-	 * A division by zero should throw an exception, except for the case where
-	 * the distance is zero (so that 0 / 0 equals 0).
-	 * @author Adam Semenenko
-	 */
-	@Test(expected=ArithmeticException.class)
+	@Test(expected = ArithmeticException.class)
 	public void testSpeedFromDistanceTimeForDivideByZero() {
-		
+
 		// Testing for divide by zero error for a non-zero distance.
 		Calculator.speedFromDistanceTime(1, 0);
-		Calculator.speedFromDistanceTime(-1, 0);
-		
-		// A zero distance should return zero iff the time is zero.
-		Assert.assertEquals(0, Calculator.speedFromDistanceTime(0, 0)); 
 	}
 
 	/**
-	 * Should you expect an Exception if a negative time is 
-	 * input, because it gives a negative speed?
-	 * @author Adam Semenenko
+	 * A division by zero should throw an exception even if the distance is
+	 * invalid.
 	 */
-	@Test(expected=ArithmeticException.class)
+	@Test(expected = ArithmeticException.class)
+	public void testSpeedFromDistanceTimeForNegDistanceAndDivideByZero() {
+
+		Calculator.speedFromDistanceTime(-1, 0);
+	}
+
+	/**
+	 * A division by zero should throw an exception, except for the case where
+	 * the distance is zero (so that 0 / 0 equals 0).
+	 */
+	@Test
+	public void testSpeedFromDistanceTimeAndDistanceZero() {
+
+		// A zero distance should return zero iff the time is zero.
+		Assert.assertEquals(0, Calculator.speedFromDistanceTime(0, 0));
+	}
+
+	/**
+	 * Should you expect an Exception if a negative time is input, because it
+	 * gives a negative speed?
+	 */
+	@Test(expected = ArithmeticException.class)
 	public void testSpeedFromDistanceTimeForNegTimeInput() {
 
 		// Negative time?
@@ -40,26 +51,23 @@ public class CalculatorTest {
 	}
 
 	/**
-	 * Should you expect an Exception if a negative distance is 
-	 * input, because it gives a negative speed?
-	 * @author Adam Semenenko
+	 * Should you expect an Exception if a negative distance is input, because
+	 * it gives a negative speed?
 	 */
-	@Test(expected=ArithmeticException.class)
+	@Test(expected = ArithmeticException.class)
 	public void testSpeedFromDistanceTimeForNegDistanceInput() {
 
 		// Negative distance?
 		Calculator.speedFromDistanceTime(-1, 1);
 	}
-	
+
 	/**
-	 * If both inputs are negative then they will cancel out to give a
-	 * positive result. This doesn't make sense though, so an exception
-	 * should be thrown.
-	 * @author Adam Semenenko
+	 * If both inputs are negative then they will cancel out to give a positive
+	 * result. This doesn't make sense though, so an exception should be thrown.
 	 */
-	@Test(expected=ArithmeticException.class)
-	public void testSpeedFromDistanceTimeForNegInput(){
-		
+	@Test(expected = ArithmeticException.class)
+	public void testSpeedFromDistanceTimeForNegInput() {
+
 		Calculator.speedFromDistanceTime(-1, -1);
 	}
 
