@@ -74,4 +74,41 @@ public class PairTest {
 		Assert.assertSame(o, pair.getSecond());
 		Assert.assertSame(m, pair.getFirst());
 	}
+	
+	/**
+	 * Test to make sure toString returns a string.
+	 * A pair with objects should return a non-null non-empty string.
+	 */
+	@Test
+	public void testToString() {
+
+		// initialise a variety of non-null & null pairs.
+		final Object o = new Object();
+		final Object m = new Object();
+		
+		// Neither object null
+		final Pair<Object, Object> pairNonNull = new Pair<Object, Object>(o, m);
+		Assert.assertNotNull(pairNonNull.toString());
+		Assert.assertTrue(pairNonNull.toString().length() > 0);
+		
+		// first object null
+		final Pair<Object, Object> pairFirstNull = new Pair<Object, Object>(null, m);
+		Assert.assertNotNull(pairFirstNull.toString());
+		Assert.assertTrue(pairFirstNull.toString().length() > 0);
+		
+		// second object null
+		final Pair<Object, Object> pairSecondNull = new Pair<Object, Object>(o, null);
+		Assert.assertNotNull(pairSecondNull.toString());
+		Assert.assertTrue(pairSecondNull.toString().length() > 0);
+		
+		// both objects null
+		final Pair<Object, Object> pairBothNull = new Pair<Object, Object>(null, null);
+		Assert.assertNotNull(pairBothNull.toString());
+		Assert.assertTrue(pairBothNull.toString().length() > 0);
+		
+		// blank pair null
+		final Pair<Object, Object> pairBlank = new Pair<Object, Object>();
+		Assert.assertNotNull(pairBlank.toString());
+		Assert.assertTrue(pairBlank.toString().length() > 0);
+	}
 }
