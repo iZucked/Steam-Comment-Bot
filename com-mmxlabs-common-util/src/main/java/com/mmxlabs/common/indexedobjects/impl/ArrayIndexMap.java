@@ -22,6 +22,11 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	private U[] contents;
 	private boolean[] isSet;
 	
+	/**
+	 * The default capacity when not specified in constructor. 
+	 */
+	private static final int defaultInitialCapacity = 128;
+	
 	@SuppressWarnings("unchecked")
 	public ArrayIndexMap(final int initialCapacity) {
 		contents = (U[]) new Object[initialCapacity];
@@ -29,7 +34,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	}
 	
 	public ArrayIndexMap() {
-		this(128);
+		this(defaultInitialCapacity);
 	}
 	
 	private synchronized void ensure(final int index) {
@@ -124,7 +129,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void clear() {
-		contents = (U[]) new Object[128];
-		isSet = new boolean[128];
+		contents = (U[]) new Object[defaultInitialCapacity];
+		isSet = new boolean[defaultInitialCapacity];
 	}
 }
