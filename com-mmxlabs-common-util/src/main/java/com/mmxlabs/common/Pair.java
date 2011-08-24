@@ -59,9 +59,7 @@ public class Pair<A, B> {
 	 */
 	@Override
 	public final String toString() {
-		String firstString = first == null ? "null" : first.toString();
-		String secondString = second == null ? "null" : second.toString();
-		return "(" + firstString + ", " + secondString + ")";
+		return "(" + first + ", " + second + ")";
 	}
 
 	@Override
