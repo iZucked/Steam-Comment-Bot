@@ -5,3 +5,5 @@ syntax: regexp
 ^com\.mmxlabs\.jobmanager\.ui/target$
 syntax: regexp
 ^com\.mmxlabs\.jobmanager\.eclipse/target$
+syntax: regexp
+^com\.mmxlabs\.jobmanager\.tests/target$
