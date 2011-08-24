@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 public class DistanceImporter {
 
 	protected TableImporter ti;
@@ -24,40 +23,51 @@ public class DistanceImporter {
 		importDistances(is);
 	}
 
-	public DistanceImporter(final String s) throws FileNotFoundException, IOException {
-		this(new FileInputStream(new File(s)));
+	/**
+	 * Uses pathname to create a new File instance (see
+	 * {@link File#File(String)}).
+	 * 
+	 * @param pathname
+	 *            A pathname string.
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public DistanceImporter(final String pathname)
+			throws FileNotFoundException, IOException {
+		this(new FileInputStream(new File(pathname)));
 	}
 
-	//	Map<String, Map<String, Integer>> distanceMap = new HashMap<String, Map<String, Integer>>();
+	// Map<String, Map<String, Integer>> distanceMap = new HashMap<String,
+	// Map<String, Integer>>();
 
 	public void importDistances(final InputStream is) throws IOException {
 		ti = new TableImporter(is);
 	}
 
-	//	public void putEntry(String A, String B, Integer D) {
-	//		putEntryInt(A, B, D);
-	//		putEntryInt(B, A, D);
-	//	}
+	// public void putEntry(String A, String B, Integer D) {
+	// putEntryInt(A, B, D);
+	// putEntryInt(B, A, D);
+	// }
 	//
-	//	void putEntryInt(String A, String B, Integer D) {
-	//		Map<String, Integer> m;
-	//		if (distanceMap.containsKey(A)) {
-	//			m = distanceMap.get(A);
-	//		} else {
-	//			m = new HashMap<String, Integer>();
-	//			distanceMap.put(A, m);
-	//		}
-	//		m.put(B, D);
-	//	}
+	// void putEntryInt(String A, String B, Integer D) {
+	// Map<String, Integer> m;
+	// if (distanceMap.containsKey(A)) {
+	// m = distanceMap.get(A);
+	// } else {
+	// m = new HashMap<String, Integer>();
+	// distanceMap.put(A, m);
+	// }
+	// m.put(B, D);
+	// }
 
 	public Integer getDistance(final String A, final String B) {
-		//		if (distanceMap.containsKey(A)) {
-		//			Map<String, Integer> m = distanceMap.get(A);
-		//			if (m.containsKey(B)) {
-		//				return m.get(B);
-		//			}
-		//		}
-		//		
+		// if (distanceMap.containsKey(A)) {
+		// Map<String, Integer> m = distanceMap.get(A);
+		// if (m.containsKey(B)) {
+		// return m.get(B);
+		// }
+		// }
+		//
 		try {
 			if (ti.contains(A, B)) {
 				return Integer.parseInt(ti.getCell(A, B));
