@@ -53,9 +53,15 @@ public class Pair<A, B> {
 		setSecond(j);
 	}
 
+	/**
+	 * Represents the pair as a string in the form (first, second). If first or second are null
+	 * the string <code>"null"</code> is used instead of their <code>toString()</code> representation.
+	 */
 	@Override
 	public final String toString() {
-		return "(" + first.toString() + ", " + second.toString() + ")";
+		String firstString = first == null ? "null" : first.toString();
+		String secondString = second == null ? "null" : second.toString();
+		return "(" + firstString + ", " + secondString + ")";
 	}
 
 	@Override
