@@ -54,8 +54,7 @@ public class Pair<A, B> {
 	}
 
 	/**
-	 * Represents the pair as a string in the form (first, second). If first or second are null
-	 * the string <code>"null"</code> is used instead of their <code>toString()</code> representation.
+	 * Represents the pair as a string in the form (first, second).
 	 */
 	@Override
 	public final String toString() {
