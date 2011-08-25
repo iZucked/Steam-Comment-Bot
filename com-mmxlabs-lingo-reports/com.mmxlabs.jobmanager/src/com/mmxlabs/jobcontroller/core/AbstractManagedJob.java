@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.mmxlabs.jobcontoller.Activator;
+
 /**
  * An abstract class which provides most of what you want for any job.
  * 
@@ -31,6 +33,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		}
 
 		private boolean paused = false;
+
 		@Override
 		public IStatus run(final IProgressMonitor monitor) {
 			try {
@@ -51,12 +54,13 @@ public abstract class AbstractManagedJob implements IManagedJob {
 						final int p0 = getProgress();
 						final boolean more = step();
 						final int p1 = getProgress();
-						if (p1 > p0) monitor.worked(p1 - p0);
+						if (p1 > p0)
+							monitor.worked(p1 - p0);
 						if (more == false) {
 							setJobState(JobState.COMPLETED);
 							return Status.OK_STATUS;
 						}
-						
+
 					}
 				}
 			} catch (final InterruptedException e) {
@@ -69,7 +73,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 				monitor.done();
 			}
 		}
-		
+
 		public synchronized void pause() {
 			paused = true;
 		}
@@ -92,14 +96,12 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	private JobState currentState = JobState.UNKNOWN;
 	private int progress = 0;
 
-	
 	public AbstractManagedJob(final String jobName) {
 		super();
 		this.jobName = jobName;
 		runner = new Runner(jobName);
 		currentState = JobState.CREATED;
 	}
-	
 
 	@Override
 	public String getJobName() {
@@ -109,12 +111,12 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	private synchronized void setJobState(final JobState newState) {
 		final JobState oldState = currentState;
 		if (oldState != newState) {
-			
+
 			currentState = newState;
-			
-			// Take copy to avoid concurrent modification exceptions. 
+
+			// Take copy to avoid concurrent modification exceptions.
 			final List<IManagedJobListener> copy = new ArrayList<IManagedJobListener>(listeners);
-			
+
 			for (final IManagedJobListener mjl : copy) {
 				if (!mjl.jobStateChanged(this, oldState, newState)) {
 					listeners.remove(mjl);
@@ -128,6 +130,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	}
 
 	private void die(final Throwable ex) {
+		Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, "An error occurred running a job", ex));
 		causeOfDeath = ex;
 		kill();
 		setJobState(JobState.ERROR);
@@ -150,15 +153,14 @@ public abstract class AbstractManagedJob implements IManagedJob {
 			// we are probably preparing, so add a listener which waits
 			this.addListener(new IManagedJobListener() {
 				@Override
-				public boolean jobStateChanged(IManagedJob job, JobState oldState,
-						JobState newState) {
+				public boolean jobStateChanged(IManagedJob job, JobState oldState, JobState newState) {
 					if (newState == JobState.INITIALISED) {
 						runner.schedule();
 						return false; // return false to avoid getting any more events
 					}
 					return true;
 				}
-				
+
 				@Override
 				public boolean jobProgressUpdated(IManagedJob job, int progressDelta) {
 					return false;
@@ -171,8 +173,11 @@ public abstract class AbstractManagedJob implements IManagedJob {
 
 	@Override
 	public void cancel() {
-		runner.cancel();
-		setJobState(JobState.CANCELLING);
+		if (runner.cancel()) {
+			setJobState(JobState.CANCELLED);
+		} else {
+			setJobState(JobState.CANCELLING);
+		}
 	}
 
 	@Override
@@ -212,9 +217,9 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	protected void setProgress(final int newProgress) {
 		final int delta = newProgress - progress;
 		progress = newProgress;
-		// Take copy to avoid concurrent modification exceptions. 
+		// Take copy to avoid concurrent modification exceptions.
 		final List<IManagedJobListener> copy = new ArrayList<IManagedJobListener>(listeners);
-		
+
 		for (final IManagedJobListener mjl : copy) {
 			if (!mjl.jobProgressUpdated(this, delta)) {
 				listeners.remove(mjl);
@@ -224,13 +229,13 @@ public abstract class AbstractManagedJob implements IManagedJob {
 
 	@Override
 	public void dispose() {
-		
+
 		runner.cancel();
 		// TODO: this.runner = null;
 		this.currentState = JobState.UNKNOWN;
 		this.listeners.clear();
 	}
-	
+
 	/**
 	 * This method should prepare the job for execution
 	 */
@@ -239,14 +244,12 @@ public abstract class AbstractManagedJob implements IManagedJob {
 	/**
 	 * This method should do a reasonably-sized unit of work
 	 * 
-	 * @return whether there are more units of work to do; return value of false
-	 *         means finished.
+	 * @return whether there are more units of work to do; return value of false means finished.
 	 */
 	protected abstract boolean step();
 
 	/**
-	 * This method will be called if the job gets killed; clean up any
-	 * resources.
+	 * This method will be called if the job gets killed; clean up any resources.
 	 */
 	protected abstract void kill();
 }
