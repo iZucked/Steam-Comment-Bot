@@ -23,6 +23,8 @@ import org.eclipse.core.runtime.jobs.Job;
  * 
  */
 public abstract class AbstractManagedJob implements IManagedJob {
+	private Throwable causeOfDeath = null;
+
 	private class Runner extends Job {
 		public Runner(final String name) {
 			super(name);
@@ -60,9 +62,8 @@ public abstract class AbstractManagedJob implements IManagedJob {
 			} catch (final InterruptedException e) {
 				kill();
 				return Status.CANCEL_STATUS;
-			} catch (final Exception ex) {
-				kill();
-				setJobState(JobState.ERROR);
+			} catch (final Throwable ex) {
+				die(ex);
 				return Status.CANCEL_STATUS;
 			} finally {
 				monitor.done();
@@ -122,15 +123,24 @@ public abstract class AbstractManagedJob implements IManagedJob {
 		}
 	}
 
+	public Throwable getCauseOfError() {
+		return causeOfDeath;
+	}
+
+	private void die(final Throwable ex) {
+		causeOfDeath = ex;
+		kill();
+		setJobState(JobState.ERROR);
+	}
+
 	@Override
 	public void prepare() {
 		try {
 			setJobState(JobState.INITIALISING);
 			reallyPrepare();
 			setJobState(JobState.INITIALISED);
-		} catch (final Exception ex) {
-			kill();
-			setJobState(JobState.ERROR);
+		} catch (final Throwable ex) {
+			die(ex);
 		}
 	}
 
