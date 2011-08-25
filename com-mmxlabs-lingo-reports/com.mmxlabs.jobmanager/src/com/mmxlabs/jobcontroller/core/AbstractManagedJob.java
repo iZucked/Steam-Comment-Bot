@@ -62,6 +62,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 				return Status.CANCEL_STATUS;
 			} catch (final Exception ex) {
 				kill();
+				setJobState(JobState.ERROR);
 				return Status.CANCEL_STATUS;
 			} finally {
 				monitor.done();
@@ -129,7 +130,7 @@ public abstract class AbstractManagedJob implements IManagedJob {
 			setJobState(JobState.INITIALISED);
 		} catch (final Exception ex) {
 			kill();
-			setJobState(JobState.CANCELLED);
+			setJobState(JobState.ERROR);
 		}
 	}
 

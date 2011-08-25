@@ -190,6 +190,7 @@ public class JobManagerView extends ViewPart {
 
 				switch (state) {
 				case CANCELLED:
+				case ERROR:
 					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_ERROR);
 				case CANCELLING:
 					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_ERROR);
@@ -434,7 +435,7 @@ public class JobManagerView extends ViewPart {
 		// refresh();
 
 		// update button state
-		updateActionEnablement((IStructuredSelection) viewer.getSelection());
+		updateActionEnablement(viewer.getSelection());
 
 		// Make the table a selection provider
 		getSite().setSelectionProvider(viewer);
