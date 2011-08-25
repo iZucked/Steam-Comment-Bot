@@ -33,8 +33,7 @@ import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
- * A device which takes a {@link Schedule}, and does some additional computation
- * to compute the profit and loss for the different corporate entities involved.
+ * A device which takes a {@link Schedule}, and does some additional computation to compute the profit and loss for the different corporate entities involved.
  * 
  * TODO allow this to be included in the main optimisation loop.
  * 
@@ -43,15 +42,13 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  */
 public class ProfitAndLossCalculator {
 	final SchedulePackage schedulePackage = SchedulePackage.eINSTANCE;
-	final ScheduleFactory scheduleFactory = schedulePackage
-			.getScheduleFactory();
+	final ScheduleFactory scheduleFactory = schedulePackage.getScheduleFactory();
 
 	public ProfitAndLossCalculator() {
 
 	}
 
-	public void addProfitAndLoss(final Scenario scenario,
-			final Schedule schedule, final ModelEntityMap entities) {
+	public void addProfitAndLoss(final Scenario scenario, final Schedule schedule, final ModelEntityMap entities) {
 		for (final Sequence seq : schedule.getSequences()) {
 			boolean getNextLeg = false;
 			BookedRevenue lastRevenue = null;
@@ -60,32 +57,22 @@ public class ProfitAndLossCalculator {
 					final CharterOutVisit visit = (CharterOutVisit) evt;
 
 					// add revenue for charter out
-					final CharterOutRevenue revenue = scheduleFactory
-							.createCharterOutRevenue();
+					final CharterOutRevenue revenue = scheduleFactory.createCharterOutRevenue();
 
 					visit.setRevenue(revenue);
 
 					revenue.setCharterOut(visit);
 
-					revenue.setEntity(scenario.getContractModel()
-							.getShippingEntity());
+					revenue.setEntity(scenario.getContractModel().getShippingEntity());
 					revenue.setDate(visit.getEndTime());
 
 					final LineItem li = scheduleFactory.createLineItem();
 					li.setName("Charter out revenue");
 					li.setParty(null);
 
-					final FleetVessel fleetVessel = (FleetVessel) seq
-							.getVessel();
-					final int dailyCharterPrice = fleetVessel.getVessel()
-							.isSetDailyCharterOutPrice() ? fleetVessel
-							.getVessel().getDailyCharterOutPrice()
-							: (fleetVessel.getVessel().getClass_()
-									.isSetDailyCharterOutPrice() ? fleetVessel
-									.getVessel().getClass_()
-									.getDailyCharterOutPrice() : fleetVessel
-									.getVessel().getClass_()
-									.getDailyCharterInPrice());
+					final FleetVessel fleetVessel = (FleetVessel) seq.getVessel();
+					final int dailyCharterPrice = fleetVessel.getVessel().isSetDailyCharterOutPrice() ? fleetVessel.getVessel().getDailyCharterOutPrice() : (fleetVessel.getVessel().getClass_()
+							.isSetDailyCharterOutPrice() ? fleetVessel.getVessel().getClass_().getDailyCharterOutPrice() : fleetVessel.getVessel().getClass_().getDailyCharterInPrice());
 
 					li.setValue((evt.getEventDuration() * dailyCharterPrice) / 24);
 
@@ -120,23 +107,17 @@ public class ProfitAndLossCalculator {
 			final LoadSlot loadSlot = allocation.getLoadSlot();
 			final Slot dischargeSlot = allocation.getDischargeSlot();
 
-			final Contract loadContract = loadSlot
-					.getSlotOrPortContract(scenario);
-			final SalesContract dischargeContract = (SalesContract) dischargeSlot
-					.getSlotOrPortContract(scenario);
+			final Contract loadContract = loadSlot.getSlotOrPortContract(scenario);
+			final SalesContract dischargeContract = (SalesContract) dischargeSlot.getSlotOrPortContract(scenario);
 
 			final Entity loadEntity = loadContract.getEntity();
 			final Entity dischargeEntity = dischargeContract.getEntity();
 
-			final Entity shippingEntity = scenario.getContractModel()
-					.getShippingEntity();
+			final Entity shippingEntity = scenario.getContractModel().getShippingEntity();
 
-			final CargoRevenue dischargeRevenue = scheduleFactory
-					.createCargoRevenue();
-			final CargoRevenue shippingRevenue = scheduleFactory
-					.createCargoRevenue();
-			final CargoRevenue loadRevenue = scheduleFactory
-					.createCargoRevenue();
+			final CargoRevenue dischargeRevenue = scheduleFactory.createCargoRevenue();
+			final CargoRevenue shippingRevenue = scheduleFactory.createCargoRevenue();
+			final CargoRevenue loadRevenue = scheduleFactory.createCargoRevenue();
 
 			dischargeRevenue.setEntity(dischargeEntity);
 			shippingRevenue.setEntity(shippingEntity);
@@ -144,54 +125,36 @@ public class ProfitAndLossCalculator {
 
 			// item 1; value of selling LNG
 			final long dischargedM3 = allocation.getDischargeVolume();
-			final long saleableM3 = (long) Math.floor(dischargeSlot.getPort()
-					.getRegasEfficiency() * allocation.getDischargeVolume());
+			final long saleableM3 = (long) Math.floor(dischargeSlot.getPort().getRegasEfficiency() * allocation.getDischargeVolume());
 
 			// * dischargeSlot.getPort().getRegasEfficiency());
 
 			// divide by CV value to get mmbtu
-			final long saleableMMBTU = (long) Math.floor(saleableM3
-					* loadSlot.getCargoOrPortCVValue());
-			final long lostMMBTU = (long) (dischargedM3 * loadSlot
-					.getCargoOrPortCVValue()) - saleableMMBTU;
+			final long saleableMMBTU = (long) Math.floor(saleableM3 * loadSlot.getCargoOrPortCVValue());
+			final long lostMMBTU = (long) (dischargedM3 * loadSlot.getCargoOrPortCVValue()) - saleableMMBTU;
 
 			// lookup the final market sales price
-			final float salesPricePerMMBTU = dischargeContract.getIndex()
-					.getPriceCurve()
+			final float salesPricePerMMBTU = dischargeSlot.isSetFixedPrice() ? dischargeSlot.getFixedPrice() : dischargeContract.getIndex().getPriceCurve()
 					.getValueAtDate(allocation.getDischargeDate());
 
 			// compute how much money the discharge entity will have made
-			final int salesRevenueToShippingEntity = (int) Math
-					.floor(salesPricePerMMBTU * saleableMMBTU);
+			final int salesRevenueToShippingEntity = (int) Math.floor(salesPricePerMMBTU * saleableMMBTU);
 
-			final int salesRevenueToDischargeEntity = (int) Math
-					.floor(salesRevenueToShippingEntity
-							* dischargeContract.getMarkup());
+			final int salesRevenueToDischargeEntity = (int) Math.floor(salesRevenueToShippingEntity * dischargeContract.getMarkup());
 
-			final int potentialSalesRevenueToShippingEntity = (int) Math
-					.floor(salesPricePerMMBTU * (saleableMMBTU + lostMMBTU));
-			final int regasLossesToShippingEntity = potentialSalesRevenueToShippingEntity
-					- salesRevenueToShippingEntity;
+			final int potentialSalesRevenueToShippingEntity = (int) Math.floor(salesPricePerMMBTU * (saleableMMBTU + lostMMBTU));
+			final int regasLossesToShippingEntity = potentialSalesRevenueToShippingEntity - salesRevenueToShippingEntity;
 
 			// set revenues and costs
 			{
-				dischargeRevenue.getLineItems().add(
-						createLineItem("Sale to market", null,
-								salesRevenueToDischargeEntity));
+				dischargeRevenue.getLineItems().add(createLineItem("Sale to market", null, salesRevenueToDischargeEntity));
 
-				dischargeRevenue.getLineItems().add(
-						createLineItem("Purchase from shipping",
-								shippingEntity, -salesRevenueToShippingEntity));
+				dischargeRevenue.getLineItems().add(createLineItem("Purchase from shipping", shippingEntity, -salesRevenueToShippingEntity));
 
-				shippingRevenue.getLineItems().add(
-						createLineItem("Value of discharged cargo",
-								dischargeEntity, salesRevenueToShippingEntity
-										+ regasLossesToShippingEntity));
+				shippingRevenue.getLineItems().add(createLineItem("Value of discharged cargo", dischargeEntity, salesRevenueToShippingEntity + regasLossesToShippingEntity));
 
 				if (CargoType.FLEET.equals(allocation.getCargoType())) {
-					shippingRevenue.getLineItems().add(
-							createLineItem("Regas losses", dischargeEntity,
-									-regasLossesToShippingEntity));
+					shippingRevenue.getLineItems().add(createLineItem("Regas losses", dischargeEntity, -regasLossesToShippingEntity));
 				}
 			}
 
@@ -201,33 +164,26 @@ public class ProfitAndLossCalculator {
 				// laden costs only, and ballast costs are booked at a later
 				// date (not associated with a cargo?)
 
-				final int totalNonLNGFuelCost = getTotalNonLNGFuelCost(allocation
-						.getLadenLeg())
-						+ getTotalNonLNGFuelCost(allocation.getBallastLeg())
-						+ getTotalNonLNGFuelCost(allocation.getLadenIdle())
-						+ getTotalNonLNGFuelCost(allocation.getBallastIdle());
+				final Journey ladenLeg = allocation.getLadenLeg();
+				final Journey ballastLeg = allocation.getBallastLeg();
+				final Idle ladenIdle = allocation.getLadenIdle();
+				final Idle ballastIdle = allocation.getBallastIdle();
+
+				final int totalNonLNGFuelCost = getTotalNonLNGFuelCost(ladenLeg) + getTotalNonLNGFuelCost(ballastLeg) + getTotalNonLNGFuelCost(ladenIdle) + getTotalNonLNGFuelCost(ballastIdle);
 
 				if (totalNonLNGFuelCost != 0)
-					shippingRevenue.getLineItems().add(
-							createLineItem("Base fuel cost", null,
-									-totalNonLNGFuelCost));
+					shippingRevenue.getLineItems().add(createLineItem("Base fuel cost", null, -totalNonLNGFuelCost));
 
-				final int canalCost = (int) (allocation.getLadenLeg()
-						.getRouteCost() + allocation.getBallastLeg()
-						.getRouteCost());
+				final int canalCost = (int) ((ladenLeg == null ? 0 : ladenLeg.getRouteCost()) + (ballastLeg == null ? 0 : ballastLeg.getRouteCost()));
 
 				if (canalCost != 0)
-					shippingRevenue.getLineItems().add(
-							createLineItem("Canal cost", null, -canalCost));
+					shippingRevenue.getLineItems().add(createLineItem("Canal cost", null, -canalCost));
 
-				final int hireCost = (int) (allocation.getLadenLeg()
-						.getHireCost()
-						+ allocation.getBallastLeg().getHireCost()
-						+ allocation.getBallastIdle().getHireCost() + allocation
-						.getLadenIdle().getHireCost());
+				final int hireCost = (int) ((ladenLeg == null ? 0 : ladenLeg.getHireCost()) + (ladenIdle == null ? 0 : ladenIdle.getHireCost()) + (ballastLeg == null ? 0 : ballastLeg.getHireCost()) + (ballastIdle == null ? 0
+						: ballastIdle.getHireCost()));
+
 				if (hireCost != 0)
-					shippingRevenue.getLineItems().add(
-							createLineItem("Hire cost", null, -hireCost));
+					shippingRevenue.getLineItems().add(createLineItem("Hire cost", null, -hireCost));
 			}
 
 			// now do load-side stuff
@@ -235,14 +191,9 @@ public class ProfitAndLossCalculator {
 				// TODO convert to floats in VisitEventExporter rather than
 				// un-scaling here
 
-				final int loadValue = (int) ((allocation.getLoadPriceM3() * allocation
-						.getLoadVolume()) / Calculator.ScaleFactor);
-				loadRevenue.getLineItems().add(
-						createLineItem("Sales to shipping", shippingEntity,
-								loadValue));
-				shippingRevenue.getLineItems().add(
-						createLineItem("Purchase of cargo", loadEntity,
-								-loadValue));
+				final int loadValue = (int) ((allocation.getLoadPriceM3() * allocation.getLoadVolume()) / Calculator.ScaleFactor);
+				loadRevenue.getLineItems().add(createLineItem("Sales to shipping", shippingEntity, loadValue));
+				shippingRevenue.getLineItems().add(createLineItem("Purchase of cargo", loadEntity, -loadValue));
 			}
 
 			// don't forget to set the dates at which revenue is booked,
@@ -268,18 +219,18 @@ public class ProfitAndLossCalculator {
 	}
 
 	private int getTotalNonLNGFuelCost(final FuelMixture mix) {
+		if (mix == null)
+			return 0; // null means there's no onward leg there.
 		int total = 0;
 		for (final FuelQuantity fq : mix.getFuelUsage()) {
-			if (fq.getFuelType().equals(FuelType.FBO)
-					|| fq.getFuelType().equals(FuelType.NBO)) {
+			if (fq.getFuelType().equals(FuelType.FBO) || fq.getFuelType().equals(FuelType.NBO)) {
 				total += fq.getTotalPrice();
 			}
 		}
 		return total;
 	}
 
-	private LineItem createLineItem(final String name, final Entity party,
-			final int value) {
+	private LineItem createLineItem(final String name, final Entity party, final int value) {
 		final LineItem item = scheduleFactory.createLineItem();
 		item.setName(name);
 		item.setParty(party);
