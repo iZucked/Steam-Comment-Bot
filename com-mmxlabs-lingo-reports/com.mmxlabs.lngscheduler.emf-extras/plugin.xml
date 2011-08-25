@@ -330,6 +330,23 @@
             </constraint>
             
              <constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.StartEndRequirementDateConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.start_end_requirement_date_order"
+            	lang="Java"
+            	mode="Batch"
+            	name="Start / End Date Consistency"
+            	severity="ERROR"
+            	statusCode="1">
+            	<message>
+            		Vessel {0}'s {1} requirement has inconsistent start and end dates set (the start date is after the end date).
+            	</message>
+            	<description>
+            		The start end end window of a vessel event must be set and consistent.
+            	</description>
+            	<target class="PortAndTime" />
+            </constraint>
+            
+             <constraint
             	class="com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDateConstraint"
             	id="com.mmxlabs.lngscheduler.emf-extras.constraints.vessel_event_date_order"
             	lang="Java"
