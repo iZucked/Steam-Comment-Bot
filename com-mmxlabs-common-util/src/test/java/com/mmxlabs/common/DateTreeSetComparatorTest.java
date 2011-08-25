@@ -44,21 +44,22 @@ public class DateTreeSetComparatorTest {
 		Assert.assertEquals(cmp.compare(d1, obj2), cmp.compare(obj1, d2));
 		Assert.assertEquals(cmp.compare(d2, d1), cmp.compare(obj2, obj1));
 		Assert.assertEquals(cmp.compare(d2, obj1), cmp.compare(obj2, d1));
-		
-		
+
 		//
 		Assert.assertEquals(cmp.compare(d1, d2), -cmp.compare(d2, d1));
 		Assert.assertEquals(cmp.compare(d1, obj1), -cmp.compare(obj1, d1));
 		Assert.assertEquals(cmp.compare(d1, obj2), -cmp.compare(obj2, d1));
-		//....
-		
+		// ....
+
 		// Test equality
 		Assert.assertEquals(0, cmp.compare(d1, d1));
 		Assert.assertEquals(0, cmp.compare(d2, d2));
 		Assert.assertEquals(0, cmp.compare(obj1, obj1));
 		Assert.assertEquals(0, cmp.compare(obj2, obj2));
-		
-		Assert.assertEquals(0, cmp.compare(d1, obj1));
-		Assert.assertEquals(0, cmp.compare(d2, obj2));
+
+		// the two entered objects are different (because they have different
+		// hash codes, so expect them not to be the same.
+		Assert.assertTrue(0 != cmp.compare(d1, obj1));
+		Assert.assertTrue(0 != cmp.compare(d2, obj2));
 	}
 }
