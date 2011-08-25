@@ -130,6 +130,10 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 			}
 			intermediateSchedule = null;
 			saveSolution("optimised", optimiser.getBestSolution(true));
+
+			// lose optimiser reference, for GC to clear up.
+			optimiser = null;
+
 			return false;
 		} else {
 			return true;
