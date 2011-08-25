@@ -22,8 +22,8 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
  * 
  */
 public class ShipFillPercentageConstraint extends AbstractModelConstraint {
-	private static final String VALIDITY_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_validity";
-	private static final String SANITY_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_sanity";
+	public static final String VALIDITY_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_validity";
+	public static final String SANITY_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_sanity";
 	private static final double MIN_SENSIBLE_SFC = 0.8;
 
 	/*
