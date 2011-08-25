@@ -25,28 +25,24 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ICommandProcessor;
 
 /**
- * A property sheet page for displaying detail composites. 
+ * A property sheet page for displaying detail composites.
  * 
  * @author Tom Hinton
  * 
  */
-public class DetailCompositePropertySheetPage extends DetailCompositeContainer
-		implements IPropertySheetPage {
+public class DetailCompositePropertySheetPage extends DetailCompositeContainer implements IPropertySheetPage {
 	private Composite control;// , top;
 	private ScrolledComposite sc;
 
-	public DetailCompositePropertySheetPage(final EditingDomain editingDomain,
-			final IValueProviderProvider valueProviderProvider) {
+	public DetailCompositePropertySheetPage(final EditingDomain editingDomain, final IValueProviderProvider valueProviderProvider) {
 		super(valueProviderProvider, editingDomain, new ICommandProcessor() {
 			@Override
-			public void processCommand(final Command command,
-					final EObject target, final EStructuralFeature feature) {
+			public void processCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 				editingDomain.getCommandStack().execute(command);
 			}
 		});
@@ -88,8 +84,7 @@ public class DetailCompositePropertySheetPage extends DetailCompositeContainer
 	private boolean selectionChanging = false;
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part,
-			final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		// watch out of re-entry
 		if (selectionChanging) {
 			System.err.println("re-entrant selection?");
@@ -98,12 +93,10 @@ public class DetailCompositePropertySheetPage extends DetailCompositeContainer
 		selectionChanging = true;
 		try {
 			if (selection instanceof IStructuredSelection) {
-				final Object object = ((IStructuredSelection) selection)
-						.getFirstElement();
+				final Object object = ((IStructuredSelection) selection).getFirstElement();
 
 				if (object instanceof EObject) {
-					final AbstractDetailComposite eodv = getDetailView(
-							((EObject) object).eClass(), control);
+					final AbstractDetailComposite eodv = getDetailView(((EObject) object).eClass(), control);
 					if (eodv != activeDetailView) {
 						// make view visible
 						if (activeDetailView != null) {
@@ -126,10 +119,30 @@ public class DetailCompositePropertySheetPage extends DetailCompositeContainer
 				}
 				final Point p;
 				if (activeDetailView != null) {
-					p = activeDetailView.getPreferredSize(sc.getSize().x - 16);
+					final Point scSize = sc.getSize();
+					final int preferredWidth = activeDetailView.getPreferredWidth();
+
+					if (scSize.x >= preferredWidth) {
+						// wide
+						activeDetailView.setOrientation(SWT.HORIZONTAL);
+					} else {
+						activeDetailView.setOrientation(SWT.VERTICAL);
+					}
+
+					p = control.computeSize(scSize.x - 16, SWT.DEFAULT);
+
+					// p = activeDetailView.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+					// } else {
 				} else {
 					p = control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 				}
+				//
+				// final Point p;
+				// if (activeDetailView != null) {
+				// p = activeDetailView.getPreferredSize(sc.getSize().x - 16);
+				// } else {
+				// p = control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				// }
 				control.setSize(p);
 				sc.setMinSize(p);
 				control.layout(true);

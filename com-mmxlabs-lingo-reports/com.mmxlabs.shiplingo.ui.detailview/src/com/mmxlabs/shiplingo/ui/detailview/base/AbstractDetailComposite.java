@@ -163,6 +163,27 @@ public abstract class AbstractDetailComposite extends Composite {
 		return new Point(width, getPreferredHeight(width));
 	}
 
+	@Override
+	public void setOrientation(final int swtOrientation) {
+		if ((swtOrientation & SWT.VERTICAL) != 0) {
+			myLayout.numColumns = 1;
+		} else {
+			myLayout.numColumns = 1 + subEditors.size();
+		}
+	}
+
+	public int getPreferredWidth() {
+		int result = 0;
+		for (final Control c : getChildren()) {
+			final Point p = c.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			result = Math.max(result, p.x);
+		}
+
+		System.err.println(result);
+
+		return result * (1 + subEditors.size());
+	}
+
 	public int getPreferredHeight(final int width) {
 		int heightSum = 0;
 		int heightMax = 0;
