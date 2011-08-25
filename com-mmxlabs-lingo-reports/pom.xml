@@ -274,6 +274,12 @@
 		</repository>
 
 		<repository>
+			<id>eclipse-3.7</id>
+			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
 			<id>swtbot</id>
 			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
 			<layout>p2</layout>
