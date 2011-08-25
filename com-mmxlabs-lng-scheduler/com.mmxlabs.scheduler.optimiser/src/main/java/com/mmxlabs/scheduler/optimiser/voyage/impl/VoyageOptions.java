@@ -10,8 +10,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
- * Default implementation of {@link VoyageOptions}.
- * This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
+ * Default implementation of {@link VoyageOptions}. This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
+ * 
  * @author Simon Goodall
  * 
  */
@@ -26,14 +26,12 @@ public final class VoyageOptions implements Cloneable {
 	private boolean useNBOForIdle;
 	private boolean useNBOForTravel;
 	private boolean useFBOForSupplement;
-	
+
 	private long availableLNG;
 
 	/**
-	 * If shouldBeCold is true:
-	 * 		If true, a cooldown will be considered
-	 * 		If false, enough heel will be retained to avoid warming up
-	 * If shouldBeCold is false, this should be false and will be ignored (vessel will be allowed to warm up).
+	 * If shouldBeCold is true: If true, a cooldown will be considered If false, enough heel will be retained to avoid warming up If shouldBeCold is false, this should be false and will be ignored
+	 * (vessel will be allowed to warm up).
 	 */
 	private boolean cooldown;
 	/**
@@ -46,9 +44,9 @@ public final class VoyageOptions implements Cloneable {
 	private VesselState vesselState;
 
 	public VoyageOptions() {
-		
+
 	}
-	
+
 	public VoyageOptions(VoyageOptions options) {
 		setAvailableTime(options.getAvailableTime());
 		setDistance(options.getDistance());
@@ -159,13 +157,14 @@ public final class VoyageOptions implements Cloneable {
 	}
 
 	public void setAvailableLNG(long availableLNG) {
+		assert availableLNG >= 0 : "available LNG should be non-negative for every voyage";
 		this.availableLNG = availableLNG;
 	}
-	
+
 	public final boolean getAllowCooldown() {
 		return cooldown;
 	}
-	
+
 	public final void setAllowCooldown(final boolean cooldown) {
 		this.cooldown = cooldown;
 	}
@@ -219,12 +218,15 @@ public final class VoyageOptions implements Cloneable {
 				return false;
 			}
 
-			if (availableLNG != vo.availableLNG) return false;
-			
-			if (cooldown != vo.cooldown) return false;
-			
-			if (shouldBeCold != vo.shouldBeCold) return false;
-			
+			if (availableLNG != vo.availableLNG)
+				return false;
+
+			if (cooldown != vo.cooldown)
+				return false;
+
+			if (shouldBeCold != vo.shouldBeCold)
+				return false;
+
 			return true;
 		}
 		return false;
@@ -238,12 +240,8 @@ public final class VoyageOptions implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyageOptions [availableTime=" + availableTime + ", distance="
-				+ distance + ", vessel=" + vessel + ", fromPortSlot="
-				+ fromPortSlot + ", toPortSlot=" + toPortSlot + ", nboSpeed="
-				+ nboSpeed + ", useNBOForIdle=" + useNBOForIdle
-				+ ", useNBOForTravel=" + useNBOForTravel
-				+ ", useFBOForSupplement=" + useFBOForSupplement + ", route="
-				+ route + ", vesselState=" + vesselState + "]";
+		return "VoyageOptions [availableTime=" + availableTime + ", distance=" + distance + ", vessel=" + vessel + ", fromPortSlot=" + fromPortSlot + ", toPortSlot=" + toPortSlot + ", nboSpeed="
+				+ nboSpeed + ", useNBOForIdle=" + useNBOForIdle + ", useNBOForTravel=" + useNBOForTravel + ", useFBOForSupplement=" + useFBOForSupplement + ", route=" + route + ", vesselState="
+				+ vesselState + "]";
 	}
 }
