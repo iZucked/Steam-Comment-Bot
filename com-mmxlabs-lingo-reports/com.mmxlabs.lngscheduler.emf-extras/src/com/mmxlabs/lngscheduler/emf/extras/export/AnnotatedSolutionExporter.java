@@ -18,9 +18,9 @@ import org.eclipse.emf.common.util.EList;
 import scenario.Scenario;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoType;
+import scenario.contract.Contract;
 import scenario.contract.FixedPricePurchaseContract;
 import scenario.contract.IndexPricePurchaseContract;
-import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
@@ -55,19 +55,16 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
- * A utility class for turning an annotated solution into some EMF
- * representation, for the presentation layer.
+ * A utility class for turning an annotated solution into some EMF representation, for the presentation layer.
  * 
- * At the moment this has the simplistic idea that every annotation corresponds
- * to a scheduled event in the EMF output, which is almost certainly not true.
+ * At the moment this has the simplistic idea that every annotation corresponds to a scheduled event in the EMF output, which is almost certainly not true.
  * 
  * @author hinton
  * 
  */
 public class AnnotatedSolutionExporter {
-	private List<IAnnotationExporter> exporters = new LinkedList<IAnnotationExporter>();
-	final ScheduleFactory factory = SchedulePackage.eINSTANCE
-			.getScheduleFactory();
+	private final List<IAnnotationExporter> exporters = new LinkedList<IAnnotationExporter>();
+	final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
 	private boolean exportRuntimeAndFitness = false;
 
@@ -86,15 +83,10 @@ public class AnnotatedSolutionExporter {
 		exporters.add(visitExporter);
 	}
 
-	public Schedule exportAnnotatedSolution(final Scenario inputScenario,
-			final ModelEntityMap entities,
-			final IAnnotatedSolution<ISequenceElement> annotatedSolution) {
-		final IOptimisationData<ISequenceElement> data = annotatedSolution
-				.getContext().getOptimisationData();
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		final IAnnotations<ISequenceElement> elementAnnotations = annotatedSolution
-				.getElementAnnotations();
+	public Schedule exportAnnotatedSolution(final Scenario inputScenario, final ModelEntityMap entities, final IAnnotatedSolution<ISequenceElement> annotatedSolution) {
+		final IOptimisationData<ISequenceElement> data = annotatedSolution.getContext().getOptimisationData();
+		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		final IAnnotations<ISequenceElement> elementAnnotations = annotatedSolution.getElementAnnotations();
 
 		final Schedule output = factory.createSchedule();
 
@@ -112,34 +104,28 @@ public class AnnotatedSolutionExporter {
 		}
 
 		final List<Sequence> sequences = output.getSequences();
-		final List<IResource> resources = annotatedSolution.getSequences()
-				.getResources();
+		final List<IResource> resources = annotatedSolution.getSequences().getResources();
 		// Create sequences and run other exporters
 
 		final Map<IVesselClass, AtomicInteger> counter = new HashMap<IVesselClass, AtomicInteger>();
 		@SuppressWarnings("unchecked")
-		final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution
-				.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute,
-						Map.class);
+		final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
 		for (final IResource resource : resources) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 			final AllocatedVessel outputVessel;
 			switch (vessel.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
-				final FleetVessel fv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE
-						.getFleetallocationFactory().createFleetVessel();
+				final FleetVessel fv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE.getFleetallocationFactory().createFleetVessel();
 
 				fv.setVessel(entities.getModelObject(vessel, Vessel.class));
 
 				outputVessel = fv;
 				break;
 			case SPOT_CHARTER:
-				if (annotatedSolution.getSequences().getSequence(resource)
-						.size() < 2)
+				if (annotatedSolution.getSequences().getSequence(resource).size() < 2)
 					continue;
-				final SpotVessel sv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE
-						.getFleetallocationFactory().createSpotVessel();
+				final SpotVessel sv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE.getFleetallocationFactory().createSpotVessel();
 
 				final AtomicInteger ai = counter.get(vessel.getVesselClass());
 				int ix = 0;
@@ -150,8 +136,7 @@ public class AnnotatedSolutionExporter {
 					ix = ai.incrementAndGet();
 				}
 
-				sv.setVesselClass(entities.getModelObject(
-						vessel.getVesselClass(), VesselClass.class));
+				sv.setVesselClass(entities.getModelObject(vessel.getVesselClass(), VesselClass.class));
 
 				sv.setIndex(ix);
 
@@ -167,14 +152,10 @@ public class AnnotatedSolutionExporter {
 
 			{
 				// set sequence fitness values
-				final EList<ScheduleFitness> eSequenceFitness = eSequence
-						.getFitness();
-				final Map<String, Long> sequenceFitness = sequenceFitnesses
-						.get(resource);
-				for (final Map.Entry<String, Long> e : sequenceFitness
-						.entrySet()) {
-					final ScheduleFitness sf = ScheduleFactory.eINSTANCE
-							.createScheduleFitness();
+				final EList<ScheduleFitness> eSequenceFitness = eSequence.getFitness();
+				final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
+				for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
+					final ScheduleFitness sf = ScheduleFactory.eINSTANCE.createScheduleFitness();
 					sf.setName(e.getKey());
 					sf.setValue(e.getValue());
 					eSequenceFitness.add(sf);
@@ -209,23 +190,17 @@ public class AnnotatedSolutionExporter {
 				}
 			};
 
-			final IPortTypeProvider<ISequenceElement> portTypeProvider = data
-					.getDataComponentProvider(
-							SchedulerConstants.DCP_portTypeProvider,
-							IPortTypeProvider.class);
+			final IPortTypeProvider<ISequenceElement> portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 
 			final List<ScheduledEvent> eventsForElement = new ArrayList<ScheduledEvent>();
-			for (final ISequenceElement element : annotatedSolution
-					.getSequences().getSequence(resource)) {
+			for (final ISequenceElement element : annotatedSolution.getSequences().getSequence(resource)) {
 				// get annotations for this element
-				final Map<String, Object> annotations = elementAnnotations
-						.getAnnotations(element);
+				final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
 
 				// filter virtual ports out here?
-				
+
 				for (final IAnnotationExporter exporter : exporters) {
-					final ScheduledEvent result = exporter.export(element,
-							annotations, outputVessel);
+					final ScheduledEvent result = exporter.export(element, annotations, outputVessel);
 					if (result != null)
 						eventsForElement.add(result);
 				}
@@ -237,7 +212,7 @@ public class AnnotatedSolutionExporter {
 				eventsForElement.clear();
 			}
 		}
-		
+
 		// patch up idle events with no port
 		for (final Sequence eSequence : output.getSequences()) {
 			Idle firstIdle = null;
@@ -255,7 +230,7 @@ public class AnnotatedSolutionExporter {
 				}
 			}
 		}
-		
+
 		// now patch up laden/ballast journey references in the cargos
 		for (final Sequence eSequence : output.getSequences()) {
 			CargoAllocation allocation = null;
@@ -276,23 +251,16 @@ public class AnnotatedSolutionExporter {
 						allocation.setBallastIdle((Idle) event);
 					}
 				}
-				if (allocation != null && allocation.getBallastLeg() != null
-						&& allocation.getLadenLeg() != null
-						&& allocation.getLadenIdle() != null
-						&& allocation.getBallastIdle() != null)
+				if (allocation != null && allocation.getBallastLeg() != null && allocation.getLadenLeg() != null && allocation.getLadenIdle() != null && allocation.getBallastIdle() != null)
 					allocation = null;
 			}
 		}
 
 		@SuppressWarnings("unchecked")
-		final Map<String, Long> fitnesses = annotatedSolution
-				.getGeneralAnnotation(
-						OptimiserConstants.G_AI_fitnessComponents, Map.class);
+		final Map<String, Long> fitnesses = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, Map.class);
 
-		final Long runtime = annotatedSolution.getGeneralAnnotation(
-				OptimiserConstants.G_AI_runtime, Long.class);
-		final Integer iterations = annotatedSolution.getGeneralAnnotation(
-				OptimiserConstants.G_AI_iterations, Integer.class);
+		final Long runtime = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_runtime, Long.class);
+		final Integer iterations = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_iterations, Integer.class);
 
 		final EList<ScheduleFitness> outputFitnesses = output.getFitness();
 
@@ -324,42 +292,33 @@ public class AnnotatedSolutionExporter {
 				// we can create a dummy cargo allocation
 				// for the P&L calculator to work on
 
-				final CargoAllocation allocation = ScheduleFactory.eINSTANCE
-						.createCargoAllocation();
+				final CargoAllocation allocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
 
 				allocation.setCargoType(CargoType.DES);
 
 				allocation.setLoadSlot(cargo.getLoadSlot());
+				allocation.setLoadDate(cargo.getLoadSlot().getWindowStart());
 				allocation.setDischargeSlot(cargo.getDischargeSlot());
-				allocation.setDischargeDate(cargo.getDischargeSlot()
-						.getWindowStart());
+				allocation.setDischargeDate(cargo.getDischargeSlot().getWindowStart());
 				// TODO check this makes sense
-				allocation.setDischargeVolume(cargo.getDischargeSlot()
-						.getMaxQuantity());
+				allocation.setDischargeVolume(cargo.getDischargeSlot().getMaxQuantity());
 				// find discharge price per mmbtu
-				final SalesContract dischargeContract = (SalesContract) cargo
-						.getDischargeSlot().getSlotOrPortContract(inputScenario);
-				final float salesPricePerMMBTU = dischargeContract.getIndex()
-						.getPriceCurve()
+				final SalesContract dischargeContract = (SalesContract) cargo.getDischargeSlot().getSlotOrPortContract(inputScenario);
+				final float salesPricePerMMBTU = cargo.getDischargeSlot().isSetFixedPrice() ? cargo.getDischargeSlot().getFixedPrice() : dischargeContract.getIndex().getPriceCurve()
 						.getValueAtDate(allocation.getDischargeDate());
 				// * dischargeContract.getRegasEfficiency();
 
-				final PurchaseContract purchaseContract = (PurchaseContract) cargo
-						.getLoadSlot().getSlotOrPortContract(inputScenario);
+				final Contract purchaseContract = cargo.getLoadSlot().getSlotOrPortContract(inputScenario);
 				final float purchasePricePerMMBTU;
-				if (purchaseContract instanceof FixedPricePurchaseContract) {
-					purchasePricePerMMBTU = ((FixedPricePurchaseContract) purchaseContract)
-							.getUnitPrice();
+				if (cargo.getLoadSlot().isSetFixedPrice()) {
+					purchasePricePerMMBTU = cargo.getLoadSlot().getFixedPrice();
+				} else if (purchaseContract instanceof FixedPricePurchaseContract) {
+					purchasePricePerMMBTU = ((FixedPricePurchaseContract) purchaseContract).getUnitPrice();
 				} else if (purchaseContract instanceof IndexPricePurchaseContract) {
-					purchasePricePerMMBTU = ((IndexPricePurchaseContract) purchaseContract)
-							.getIndex().getPriceCurve()
-							.getValueAtDate(allocation.getDischargeDate());
+					purchasePricePerMMBTU = ((IndexPricePurchaseContract) purchaseContract).getIndex().getPriceCurve().getValueAtDate(allocation.getDischargeDate());
 				} else {
 					// FIXME: for P&L opt - DES cargoes will have a purchase contract (probably based on a price curve) & possibly a fixed price & quantity
-					System.err
-							.println("A DES load slot should not have a "
-									+ purchaseContract.eClass().getName()
-									+ " contract");
+					System.err.println("A DES load slot should not have a " + purchaseContract.eClass().getName() + " contract");
 					continue;
 				}
 
@@ -367,15 +326,11 @@ public class AnnotatedSolutionExporter {
 				// sense)
 				// TODO this may not be a sensible way of doing a DES cargo
 
-				final float salesPricePerM3 = salesPricePerMMBTU
-						/ cargo.getLoadSlot().getCargoOrPortCVValue();
-				final float purchasePricePerM3 = purchasePricePerMMBTU
-						/ cargo.getLoadSlot().getCargoOrPortCVValue();
+				final float salesPricePerM3 = salesPricePerMMBTU / cargo.getLoadSlot().getCargoOrPortCVValue();
+				final float purchasePricePerM3 = purchasePricePerMMBTU / cargo.getLoadSlot().getCargoOrPortCVValue();
 
-				allocation.setDischargePriceM3(Calculator
-						.scaleToInt(salesPricePerM3));
-				allocation.setLoadPriceM3(Calculator
-						.scaleToInt(purchasePricePerM3));
+				allocation.setDischargePriceM3(Calculator.scaleToInt(salesPricePerM3));
+				allocation.setLoadPriceM3(Calculator.scaleToInt(purchasePricePerM3));
 
 				output.getCargoAllocations().add(allocation);
 			}
