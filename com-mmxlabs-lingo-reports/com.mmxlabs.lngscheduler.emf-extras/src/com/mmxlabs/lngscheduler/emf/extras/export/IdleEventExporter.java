@@ -74,9 +74,6 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		}
 
 		for (final FuelComponent fc : FuelComponent.getIdleFuelComponents()) {
-			if (event.getFuelConsumption(fc, fc.getDefaultFuelUnit()) > 0 && event.getFuelCost(fc) <= 0) {
-				System.err.println("Getting free " + fc);
-			}
 			addFuelQuantity(idle, fc, event.getFuelConsumption(fc, fc.getDefaultFuelUnit()), event.getFuelCost(fc));
 		}
 
